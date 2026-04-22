@@ -53,6 +53,41 @@ cultural_hegemony_foreign_benchmark_max = 3
 # Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
 cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
 
+# Cultural program funding cap and live level
+ch_program_funding_max_level = {
+	value = 0
+	add = modifier:country_cultural_program_max_funding_add
+}
+
+ch_program_funding_level_value = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_program_funding_level }
+		add = var:ch_program_funding_level
+	}
+	max = ch_program_funding_max_level
+	min = 0
+}
+
+ch_program_funding_cost_mult = {
+	value = 0
+	owner = {
+		add = gdp
+	}
+	multiply = 0.00005
+	min = 0
+}
+
+ch_program_funding_level_display = {
+	value = ch_program_funding_level_value
+	round = yes
+}
+
+ch_program_funding_cap_display = {
+	value = ch_program_funding_max_level
+	round = yes
+}
+
 # ============================================================================
 # SECTION 2: GLOBAL TOTALS (used for share calculations)
 # ============================================================================
@@ -194,13 +229,14 @@ cultural_pull_from_tech_leadership = {
 	}
 }
 
-# Monument / wonder bonus: counts ALL buildings in bg_monuments group
+# Monument / wonder bonus: counts monument-group wonders, excluding power bloc statues
 cultural_pull_from_monuments = {
 	value = 0
 	every_scope_state = {
 		every_scope_building = {
 			limit = {
 				is_building_group = bg_monuments
+				NOT = { is_building_type = building_power_bloc_statue }
 				level >= 1
 			}
 			add = cultural_pull_monument_bonus

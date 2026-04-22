@@ -39,6 +39,7 @@ international_relations_events.1 = {
 	}
 
 	immediate = {
+		save_scope_as = arms_race_instigator
 		random_country = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -75,13 +76,9 @@ international_relations_events.1 = {
 			ANTI_AMOUNT = 1
 			FACTOR = appeasement_relations_decreased
 		}
+		custom_tooltip = IR_ARMS_RACE_RIVAL_PRESSURE_TT
 		scope:arms_race_rival = {
-			post_notification = arms_race_pressure
-			add_modifier = {
-				name = arms_race_rival_pressure_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
+			trigger_event = { id = international_relations_events.105 days = 3 }
 		}
 		# Armed forces approve, but raises military costs
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -238,13 +235,9 @@ international_relations_events.2 = {
 			value = -30
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:proxy_rival }
+		custom_tooltip = IR_PROXY_CONFLICT_RIVAL_EFFECT_TT
 		scope:proxy_rival = {
 			trigger_event = { id = international_relations_events.101 days = 14 }
-			add_modifier = {
-				name = proxy_conflict_destabilized_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -433,6 +426,7 @@ international_relations_events.4 = {
 	}
 
 	immediate = {
+		save_scope_as = propaganda_instigator
 		random_country = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -462,13 +456,9 @@ international_relations_events.4 = {
 			country = scope:propaganda_rival
 			value = -20
 		}
+		custom_tooltip = IR_PROPAGANDA_RIVAL_BACKLASH_TT
 		scope:propaganda_rival = {
-			post_notification = counter_propaganda_backlash
-			add_modifier = {
-				name = counter_propaganda_backlash_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
+			trigger_event = { id = international_relations_events.106 days = 3 }
 		}
 	}
 
@@ -554,13 +544,9 @@ international_relations_events.5 = {
 			value = -30
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:embargo_rival }
+		custom_tooltip = IR_TRADE_EMBARGO_RIVAL_EFFECT_TT
 		scope:embargo_rival = {
 			trigger_event = { id = international_relations_events.102 days = 14 }
-			add_modifier = {
-				name = trade_embargo_suffered_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -636,13 +622,9 @@ international_relations_events.6 = {
 			value = -30
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:espionage_rival }
+		custom_tooltip = IR_ESPIONAGE_EXPOSED_RIVAL_EFFECT_TT
 		scope:espionage_rival = {
 			trigger_event = { id = international_relations_events.103 days = 14 }
-			add_modifier = {
-				name = espionage_agent_exposed_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		add_loyalists = { value = small_radicals }
 		# Lose diplomatic access
@@ -674,13 +656,9 @@ international_relations_events.6 = {
 			country = scope:espionage_rival
 			value = 5
 		}
+		custom_tooltip = IR_ESPIONAGE_QUIET_EXPOSURE_RIVAL_EFFECT_TT
 		scope:espionage_rival = {
-			post_notification = espionage_agent_quietly_exposed
-			add_modifier = {
-				name = espionage_agent_exposed_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
+			trigger_event = { id = international_relations_events.107 days = 3 }
 		}
 		add_radicals = { value = very_small_radicals }
 	}
@@ -694,13 +672,9 @@ international_relations_events.6 = {
 			value = -50
 		}
 		create_diplomatic_catalyst = { type = catalyst_diplomatic_incident target = scope:espionage_rival }
+		custom_tooltip = IR_ESPIONAGE_EXPOSED_RIVAL_EFFECT_TT
 		scope:espionage_rival = {
 			trigger_event = { id = international_relations_events.103 days = 14 }
-			add_modifier = {
-				name = espionage_agent_exposed_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -844,14 +818,10 @@ international_relations_events.8 = {
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:nuclear_rival }
 		add_radicals = { value = medium_radicals }
+		custom_tooltip = IR_NUCLEAR_RIVAL_TENSION_TT
 		scope:nuclear_rival = {
+			set_variable = { name = ir_nuclear_standoff_outcome value = 1 days = 30 }
 			trigger_event = { id = international_relations_events.104 days = 3 }
-			add_modifier = {
-				name = nuclear_standoff_tension_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-			add_radicals = { value = medium_radicals }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -873,13 +843,10 @@ international_relations_events.8 = {
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:nuclear_rival }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		custom_tooltip = IR_NUCLEAR_RIVAL_RELIEF_TT
 		scope:nuclear_rival = {
+			set_variable = { name = ir_nuclear_standoff_outcome value = 2 days = 30 }
 			trigger_event = { id = international_relations_events.104 days = 3 }
-			add_modifier = {
-				name = nuclear_standoff_relief_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 	}
 
@@ -898,14 +865,10 @@ international_relations_events.8 = {
 		}
 		create_diplomatic_catalyst = { type = catalyst_diplomatic_incident target = scope:nuclear_rival }
 		add_radicals = { value = large_radicals }
+		custom_tooltip = IR_NUCLEAR_RIVAL_TERROR_TT
 		scope:nuclear_rival = {
+			set_variable = { name = ir_nuclear_standoff_outcome value = 3 days = 30 }
 			trigger_event = { id = international_relations_events.104 days = 3 }
-			add_modifier = {
-				name = nuclear_standoff_terror_modifier
-				days = short_modifier_time
-				is_decaying = yes
-			}
-			add_radicals = { value = large_radicals }
 		}
 	}
 }
@@ -935,6 +898,11 @@ international_relations_events.101 = {
 		name = international_relations_events.101.a
 		default_option = yes
 		ai_chance = { base = 100 }
+		add_modifier = {
+			name = proxy_conflict_destabilized_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 	}
 }
 
@@ -959,6 +927,11 @@ international_relations_events.102 = {
 		name = international_relations_events.102.a
 		default_option = yes
 		ai_chance = { base = 100 }
+		add_modifier = {
+			name = trade_embargo_suffered_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 	}
 }
 
@@ -983,6 +956,11 @@ international_relations_events.103 = {
 		name = international_relations_events.103.a
 		default_option = yes
 		ai_chance = { base = 100 }
+		add_modifier = {
+			name = espionage_agent_exposed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 	}
 }
 
@@ -998,14 +976,222 @@ international_relations_events.104 = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	title = international_relations_events.104.t
-	desc = international_relations_events.104.d
-	flavor = international_relations_events.104.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = ir_nuclear_standoff_outcome
+					var:ir_nuclear_standoff_outcome = 1
+				}
+				desc = international_relations_events.104.d_tension
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = ir_nuclear_standoff_outcome
+					var:ir_nuclear_standoff_outcome = 2
+				}
+				desc = international_relations_events.104.d_relief
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = ir_nuclear_standoff_outcome
+					var:ir_nuclear_standoff_outcome = 3
+				}
+				desc = international_relations_events.104.d_terror
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = international_relations_events.104.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = ir_nuclear_standoff_outcome
+					var:ir_nuclear_standoff_outcome = 1
+				}
+				desc = international_relations_events.104.f_tension
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = ir_nuclear_standoff_outcome
+					var:ir_nuclear_standoff_outcome = 2
+				}
+				desc = international_relations_events.104.f_relief
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = ir_nuclear_standoff_outcome
+					var:ir_nuclear_standoff_outcome = 3
+				}
+				desc = international_relations_events.104.f_terror
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = international_relations_events.104.f
+			}
+		}
+	}
 
 	duration = 3
 
 	option = {
-		name = international_relations_events.104.a
+		name = international_relations_events.104.a_tension
+		trigger = {
+			has_variable = ir_nuclear_standoff_outcome
+			var:ir_nuclear_standoff_outcome = 1
+		}
 		default_option = yes
 		ai_chance = { base = 100 }
+		add_modifier = {
+			name = nuclear_standoff_tension_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = medium_radicals }
+		remove_variable = ir_nuclear_standoff_outcome
+	}
+
+	option = {
+		name = international_relations_events.104.b_relief
+		trigger = {
+			has_variable = ir_nuclear_standoff_outcome
+			var:ir_nuclear_standoff_outcome = 2
+		}
+		default_option = yes
+		ai_chance = { base = 100 }
+		add_modifier = {
+			name = nuclear_standoff_relief_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		remove_variable = ir_nuclear_standoff_outcome
+	}
+
+	option = {
+		name = international_relations_events.104.c_terror
+		trigger = {
+			has_variable = ir_nuclear_standoff_outcome
+			var:ir_nuclear_standoff_outcome = 3
+		}
+		default_option = yes
+		ai_chance = { base = 100 }
+		add_modifier = {
+			name = nuclear_standoff_terror_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = large_radicals }
+		remove_variable = ir_nuclear_standoff_outcome
+	}
+
+	option = {
+		name = international_relations_events.104.a
+		trigger = {
+			OR = {
+				NOT = { has_variable = ir_nuclear_standoff_outcome }
+				AND = {
+					has_variable = ir_nuclear_standoff_outcome
+					NOT = { var:ir_nuclear_standoff_outcome = 1 }
+					NOT = { var:ir_nuclear_standoff_outcome = 2 }
+					NOT = { var:ir_nuclear_standoff_outcome = 3 }
+				}
+			}
+		}
+		default_option = yes
+		ai_chance = { base = 100 }
+		if = {
+			limit = { has_variable = ir_nuclear_standoff_outcome }
+			remove_variable = ir_nuclear_standoff_outcome
+		}
+	}
+}
+
+# Notification 105: Rival matches our arms buildup
+international_relations_events.105 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/arms_race_factories.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = international_relations_events.105.t
+	desc = international_relations_events.105.d
+	flavor = international_relations_events.105.f
+
+	duration = 3
+
+	option = {
+		name = international_relations_events.105.a
+		default_option = yes
+		ai_chance = { base = 100 }
+		add_modifier = {
+			name = arms_race_rival_pressure_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Notification 106: Counter-propaganda backlash
+international_relations_events.106 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.106.t
+	desc = international_relations_events.106.d
+	flavor = international_relations_events.106.f
+
+	duration = 3
+
+	option = {
+		name = international_relations_events.106.a
+		default_option = yes
+		ai_chance = { base = 100 }
+		add_modifier = {
+			name = counter_propaganda_backlash_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Notification 107: Agent quietly exchanged
+international_relations_events.107 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/diplomatic_espionage_scandal.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.107.t
+	desc = international_relations_events.107.d
+	flavor = international_relations_events.107.f
+
+	duration = 3
+
+	option = {
+		name = international_relations_events.107.a
+		default_option = yes
+		ai_chance = { base = 100 }
+		add_modifier = {
+			name = espionage_agent_exposed_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
 	}
 }

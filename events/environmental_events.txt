@@ -141,6 +141,10 @@ environmental_events.2 = {
 			value = very_small_radicals
 			pop_type = academics
 		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
 		add_modifier = {
 			name = environmental_concessions_modifier
 			days = normal_modifier_time
@@ -163,6 +167,10 @@ environmental_events.2 = {
 			value = small_radicals
 			pop_type = academics
 		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
+		}
 		# Environmental lobby appeasement: dispersing protesters pleases fossil lobby
 		add_environmental_lobby_appeasement = {
 			COUNTRY = root
@@ -184,8 +192,12 @@ environmental_events.2 = {
 			is_decaying = yes
 		}
 		add_radicals = {
-			value = very_small_radicals
+			value = small_radicals
 			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
 		}
 	}
 }

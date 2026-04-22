@@ -489,7 +489,7 @@ REPLACE_OR_CREATE:building_electrics_industry_radio = {
 }
 
 REPLACE_OR_CREATE:building_electrics_industry_appliances = {
-	building_group = bg_heavy_industry
+	building_group = bg_high_tech
 	icon = "gfx/interface/icons/building_icons/appliance.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -618,7 +618,7 @@ REPLACE_OR_CREATE:building_highway = {
 }
 
 REPLACE_OR_CREATE:building_software_industry = {
-	building_group = bg_light_industry
+	building_group = bg_high_tech
 	icon = "gfx/interface/icons/building_icons/software.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -759,7 +759,7 @@ REPLACE_OR_CREATE:building_renewable_energy_plant = {
 }
 
 REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
-	building_group = bg_heavy_industry	
+	building_group = bg_high_tech	
 	icon = "gfx/interface/icons/building_icons/semiconductor.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -791,7 +791,7 @@ REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
 }
 
 REPLACE_OR_CREATE:building_robotics_industry = {
-	building_group = bg_heavy_industry	
+	building_group = bg_high_tech	
 	icon = "gfx/interface/icons/building_icons/robot.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -823,7 +823,7 @@ REPLACE_OR_CREATE:building_robotics_industry = {
 }
 
 REPLACE_OR_CREATE:building_advanced_material_fabricator = {
-	building_group = bg_heavy_industry	
+	building_group = bg_high_tech	
 	icon = "gfx/interface/icons/building_icons/advanced_materials.dds"
 	city_type = city
 	levels_per_mesh = -1

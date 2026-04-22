@@ -136,6 +136,63 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
 	if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
 	if = { limit = { has_modifier = un_humanitarian_aid_cost } remove_modifier = un_humanitarian_aid_cost }
+	# One-shot membership program modifiers moved to JE scope
+	if = {
+		limit = { has_modifier = un_human_rights_declaration_modifier }
+		remove_modifier = un_human_rights_declaration_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+		}
+	}
+	if = {
+		limit = { has_modifier = un_nonproliferation_modifier }
+		remove_modifier = un_nonproliferation_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+		}
+	}
+	if = {
+		limit = { has_modifier = un_climate_binding_modifier }
+		remove_modifier = un_climate_binding_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+		}
+	}
+	if = {
+		limit = { has_modifier = un_heritage_program_modifier }
+		remove_modifier = un_heritage_program_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+		}
+	}
+	if = {
+		limit = { has_modifier = un_pandemic_cooperation_modifier }
+		remove_modifier = un_pandemic_cooperation_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+		}
+	}
+	if = {
+		limit = { has_modifier = un_refugee_program_modifier }
+		remove_modifier = un_refugee_program_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+		}
+	}
+	if = {
+		limit = { has_modifier = un_space_partnership_modifier }
+		remove_modifier = un_space_partnership_modifier
+		if = {
+			limit = { has_journal_entry = je_united_nations }
+			je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+		}
+	}
 
 	# ── Space Race (je:je_space_race_*) ──
 	if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }

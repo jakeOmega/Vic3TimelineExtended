@@ -1057,7 +1057,6 @@ INJECT:company_basic_food = {
 		state_building_generic_cold_storage_max_level_add = 1
 	}
 }
-
 # Generic Steel - Unique: Foundry Complex
 INJECT:company_basic_steel = {
 	building_types = {

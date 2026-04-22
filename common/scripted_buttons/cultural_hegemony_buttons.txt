@@ -1,0 +1,338 @@
+﻿ch_increase_program_funding_button = {
+	name = "CH_INCREASE_PROGRAM_FUNDING"
+	desc = "CH_INCREASE_PROGRAM_FUNDING_DESC"
+
+	visible = {
+		has_law = law_type:law_ministry_of_culture
+		has_journal_entry = je_cultural_hegemony
+		modifier:country_cultural_program_max_funding_add >= 1
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 10 }
+			add = 20
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total < 5 }
+			add = 10
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CH_PROGRAM_FUNDING_NOT_MAX
+			OR = {
+				NOT = { has_variable = ch_program_funding_level }
+				var:ch_program_funding_level < ch_program_funding_max_level
+			}
+		}
+	}
+
+	effect = {
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_variable = ch_program_funding_level } }
+				set_variable = { name = ch_program_funding_level value = 1 }
+			}
+			else = {
+				change_variable = { name = ch_program_funding_level add = 1 }
+				clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
+			}
+
+			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
+			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
+			if = {
+				limit = { ch_program_funding_level_value >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
+			}
+		}
+	}
+}
+
+ch_decrease_program_funding_button = {
+	name = "CH_DECREASE_PROGRAM_FUNDING"
+	desc = "CH_DECREASE_PROGRAM_FUNDING_DESC"
+
+	visible = {
+		has_law = law_type:law_ministry_of_culture
+		has_journal_entry = je_cultural_hegemony
+		has_variable = ch_program_funding_level
+		var:ch_program_funding_level > 0
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_variable = ch_total var:ch_total < 2 }
+			add = 35
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 15 }
+			add = -20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CH_PROGRAM_FUNDING_NOT_MIN
+			has_variable = ch_program_funding_level
+			var:ch_program_funding_level > 0
+		}
+	}
+
+	effect = {
+		hidden_effect = {
+			change_variable = { name = ch_program_funding_level subtract = 1 }
+			clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
+
+			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
+			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
+			if = {
+				limit = { ch_program_funding_level_value >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
+			}
+		}
+	}
+}
+
+ch_world_exposition_button = {
+	name = "CH_WORLD_EXPOSITION"
+	desc = "CH_WORLD_EXPOSITION_DESC"
+
+	visible = {
+		has_law = law_type:law_ministry_of_culture
+		has_technology_researched = mass_media
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 10 }
+			add = 25
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 15 }
+			add = 15
+		}
+	}
+
+	possible = {
+		has_law = law_type:law_ministry_of_culture
+		has_technology_researched = mass_media
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
+	}
+
+	effect = {
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition days = short_modifier_time is_decaying = yes } }
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult days = short_modifier_time is_decaying = yes } }
+	}
+}
+
+ch_cultural_institutes_button = {
+	name = "CH_CULTURAL_INSTITUTES"
+	desc = "CH_CULTURAL_INSTITUTES_DESC"
+
+	visible = {
+		has_law = law_type:law_ministry_of_culture
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 5 }
+			add = 20
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total < 2 }
+			add = 10
+		}
+	}
+
+	possible = {
+		has_law = law_type:law_ministry_of_culture
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_institutes_program } }
+	}
+}
+
+ch_disable_cultural_institutes_button = {
+	name = "CH_DISABLE_CULTURAL_INSTITUTES"
+	desc = "CH_DISABLE_CULTURAL_INSTITUTES_DESC"
+
+	visible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
+			add = 100
+		}
+	}
+
+	possible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
+	}
+}
+
+ch_global_media_campaign_button = {
+	name = "CH_GLOBAL_MEDIA_CAMPAIGN"
+	desc = "CH_GLOBAL_MEDIA_CAMPAIGN_DESC"
+
+	visible = {
+		has_law = law_type:law_ministry_of_culture
+		has_technology_researched = mass_media
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 10 }
+			add = 30
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 15 }
+			add = 20
+		}
+		if = {
+			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			add = -30
+		}
+	}
+
+	possible = {
+		has_law = law_type:law_ministry_of_culture
+		has_technology_researched = mass_media
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { add_modifier = { name = ch_global_media_campaign } }
+	}
+}
+
+ch_disable_global_media_campaign_button = {
+	name = "CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN"
+	desc = "CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN_DESC"
+
+	visible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
+			add = 100
+		}
+		if = {
+			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			add = 40
+		}
+	}
+
+	possible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
+	}
+}
+
+ch_cultural_protectionism_button = {
+	name = "CH_CULTURAL_PROTECTIONISM"
+	desc = "CH_CULTURAL_PROTECTIONISM_DESC"
+
+	visible = {
+		has_law = law_type:law_ministry_of_culture
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			add = 35
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total < 5 }
+			add = 20
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 10 }
+			add = -25
+		}
+	}
+
+	possible = {
+		has_law = law_type:law_ministry_of_culture
+		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_protectionism_program } }
+	}
+}
+
+ch_disable_cultural_protectionism_button = {
+	name = "CH_DISABLE_CULTURAL_PROTECTIONISM"
+	desc = "CH_DISABLE_CULTURAL_PROTECTIONISM_DESC"
+
+	visible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
+			add = 100
+		}
+		if = {
+			limit = { has_variable = ch_total var:ch_total >= 10 }
+			add = 45
+		}
+	}
+
+	possible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
+	}
+}

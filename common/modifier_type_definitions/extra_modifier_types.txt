@@ -2092,6 +2092,15 @@ building_group_bg_power_construction_efficiency_add = {
 	}
 }
 
+building_group_bg_high_tech_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 country_combined_arms_bonus_enabled_bool = {
 	color = good
 	boolean = yes

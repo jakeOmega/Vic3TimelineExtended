@@ -16,7 +16,7 @@ je_covert_warfare = {
 	}
 
 	possible = {
-		has_technology_researched = television
+		covert_operation_max_slots >= 1
 	}
 
 	status_desc = {
@@ -407,7 +407,7 @@ je_covert_warfare = {
 
 			# ---- Track global max IC for relative tier display ----
 			ordered_country = {
-				limit = { has_technology_researched = television }
+				limit = { intelligence_capacity_total >= 1 }
 				order_by = intelligence_capacity_total
 				max = 1
 				position = 0

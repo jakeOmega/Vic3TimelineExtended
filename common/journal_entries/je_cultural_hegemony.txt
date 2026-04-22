@@ -24,6 +24,16 @@ je_cultural_hegemony = {
 		has_technology_researched = romanticism
 	}
 
+	scripted_button = ch_increase_program_funding_button
+	scripted_button = ch_decrease_program_funding_button
+	scripted_button = ch_world_exposition_button
+	scripted_button = ch_cultural_institutes_button
+	scripted_button = ch_disable_cultural_institutes_button
+	scripted_button = ch_global_media_campaign_button
+	scripted_button = ch_disable_global_media_campaign_button
+	scripted_button = ch_cultural_protectionism_button
+	scripted_button = ch_disable_cultural_protectionism_button
+
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
@@ -55,6 +65,33 @@ je_cultural_hegemony = {
 		triggered_desc = {
 			desc = je_ch_share_info
 			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_ch_policy_header
+			trigger = {
+				OR = {
+					has_law = law_type:law_ministry_of_culture
+					je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+					je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+					je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+				}
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_policy_program_funding
+			trigger = { has_law = law_type:law_ministry_of_culture }
+		}
+		triggered_desc = {
+			desc = je_ch_policy_cultural_institutes
+			trigger = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+		}
+		triggered_desc = {
+			desc = je_ch_policy_media_campaign
+			trigger = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+		}
+		triggered_desc = {
+			desc = je_ch_policy_cultural_protectionism
+			trigger = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
 		}
 		# Raw score breakdown
 		triggered_desc = {
@@ -162,6 +199,11 @@ je_cultural_hegemony = {
 	}
 
 	immediate = {
+		if = {
+			limit = { NOT = { has_variable = ch_program_funding_level } }
+			set_variable = { name = ch_program_funding_level value = 0 }
+		}
+
 		# Variables are already populated by on_actions before JE activates.
 		# Initialize any that might not exist (safety fallback).
 		if = {
@@ -189,6 +231,25 @@ je_cultural_hegemony = {
 
 	on_monthly_pulse = {
         effect = {
+			if = {
+				limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
+				set_variable = { name = ch_program_funding_level value = 0 }
+				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_institutes_program }
+				je:je_cultural_hegemony ?= { remove_modifier = ch_global_media_campaign }
+				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_protectionism_program }
+			}
+
+			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
+			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
+			if = {
+				limit = {
+					has_law = law_type:law_ministry_of_culture
+					ch_program_funding_level_value >= 1
+				}
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
+			}
+
             # Apply/remove cultural hegemony modifier (hegemon bonus)
             je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
             if = {

@@ -159,7 +159,7 @@ covert_operations_available_slots = {
 
 covert_operations_cost_scale = {
 	value = gdp
-	multiply = 0.00001 # small, but multiplied by funding level and number of ops, so it adds up for big economies
+	multiply = 0.00005 # small, but multiplied by funding level and number of ops, so it adds up for big economies
 }
 
 # Funding cost: multiplier for the covert_operation_funding_cost modifier

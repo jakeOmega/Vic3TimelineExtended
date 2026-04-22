@@ -393,14 +393,14 @@ un_leave_button = {
 			je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
 			je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
 			# Remove permanent treaty commitments
-			remove_modifier = un_human_rights_declaration_modifier
+			je:je_united_nations ?= { remove_modifier = un_human_rights_declaration_modifier }
 			remove_modifier = un_human_rights_reservations_modifier
-			remove_modifier = un_nonproliferation_modifier
-			remove_modifier = un_climate_binding_modifier
-			remove_modifier = un_heritage_program_modifier
-			remove_modifier = un_pandemic_cooperation_modifier
-			remove_modifier = un_refugee_program_modifier
-			remove_modifier = un_space_partnership_modifier
+			je:je_united_nations ?= { remove_modifier = un_nonproliferation_modifier }
+			je:je_united_nations ?= { remove_modifier = un_climate_binding_modifier }
+			je:je_united_nations ?= { remove_modifier = un_heritage_program_modifier }
+			je:je_united_nations ?= { remove_modifier = un_pandemic_cooperation_modifier }
+			je:je_united_nations ?= { remove_modifier = un_refugee_program_modifier }
+			je:je_united_nations ?= { remove_modifier = un_space_partnership_modifier }
 			# If we host the HQ, reassign it
 			if = {
 				limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }

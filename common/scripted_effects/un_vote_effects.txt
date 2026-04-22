@@ -59,23 +59,23 @@ un_vote_apply_resolution_compliance = {
 	if = {
 		limit = {
 			has_variable = un_topic_human_rights
-			NOT = { has_modifier = un_human_rights_declaration_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		}
-		add_modifier = { name = un_human_rights_declaration_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
 	}
 	if = {
 		limit = {
 			has_variable = un_topic_npt
-			NOT = { has_modifier = un_nonproliferation_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
 		}
-		add_modifier = { name = un_nonproliferation_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
 	}
 	if = {
 		limit = {
 			has_variable = un_topic_climate
-			NOT = { has_modifier = un_climate_binding_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
 		}
-		add_modifier = { name = un_climate_binding_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
 	}
 	if = {
 		limit = {
@@ -91,9 +91,9 @@ un_vote_apply_resolution_compliance = {
 	if = {
 		limit = {
 			has_variable = un_topic_heritage
-			NOT = { has_modifier = un_heritage_program_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		}
-		add_modifier = { name = un_heritage_program_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
 	}
 	if = {
 		limit = {
@@ -109,23 +109,23 @@ un_vote_apply_resolution_compliance = {
 	if = {
 		limit = {
 			has_variable = un_topic_pandemic
-			NOT = { has_modifier = un_pandemic_cooperation_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
 		}
-		add_modifier = { name = un_pandemic_cooperation_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
 	}
 	if = {
 		limit = {
 			has_variable = un_topic_refugee
-			NOT = { has_modifier = un_refugee_program_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 		}
-		add_modifier = { name = un_refugee_program_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
 	}
 	if = {
 		limit = {
 			has_variable = un_topic_space
-			NOT = { has_modifier = un_space_partnership_modifier }
+			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
 		}
-		add_modifier = { name = un_space_partnership_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
 	}
 	if = {
 		limit = {

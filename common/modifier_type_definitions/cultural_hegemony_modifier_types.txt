@@ -23,3 +23,9 @@ country_cultural_hegemony_art_mult = {
 	percent = yes
 	decimals = 0
 }
+
+country_cultural_program_max_funding_add = {
+	color = good
+	percent = no
+	decimals = 0
+}

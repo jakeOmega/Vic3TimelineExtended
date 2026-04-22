@@ -278,7 +278,7 @@ un_events.3 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { has_modifier = un_human_rights_declaration_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		has_technology_researched = human_rights
 		var:un_authority >= 40
 		NOT = { has_global_variable = un_vote_active }
@@ -313,7 +313,7 @@ un_events.3 = {
 		save_scope_as = un_vote_proposer
 		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		# Proposer adopts immediately
-		add_modifier = { name = un_human_rights_declaration_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
 		# Progressives love it
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
@@ -1040,7 +1040,7 @@ un_events.9 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 40
-		NOT = { has_modifier = un_heritage_program_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		NOT = { has_modifier = un_heritage_token_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -1070,7 +1070,7 @@ un_events.9 = {
 		save_scope_as = un_vote_proposer
 		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		# Proposer adopts immediately
-		add_modifier = { name = un_heritage_program_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
 		hidden_effect = {
@@ -1634,7 +1634,7 @@ un_events.14 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 40
 		has_technology_researched = nuclear_weapons
-		NOT = { has_modifier = un_nonproliferation_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
 		NOT = { has_modifier = un_nonproliferation_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -1664,7 +1664,7 @@ un_events.14 = {
 		save_scope_as = un_vote_proposer
 		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		# Proposer adopts immediately
-		add_modifier = { name = un_nonproliferation_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
@@ -1879,7 +1879,7 @@ un_events.16 = {
 		country_rank >= rank_value:major_power
 		var:un_authority >= 20
 		has_technology_researched = antibiotics
-		NOT = { has_modifier = un_pandemic_cooperation_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
 		NOT = { has_modifier = un_pandemic_isolationist_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -1908,7 +1908,7 @@ un_events.16 = {
 		save_scope_as = un_vote_proposer
 		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		# Proposer cooperates immediately
-		add_modifier = { name = un_pandemic_cooperation_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
@@ -1991,7 +1991,7 @@ un_events.17 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 30
 		has_technology_researched = environmental_movement
-		NOT = { has_modifier = un_climate_binding_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
 		NOT = { has_modifier = un_climate_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2021,7 +2021,7 @@ un_events.17 = {
 		save_scope_as = un_vote_proposer
 		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		# Proposer adopts immediately
-		add_modifier = { name = un_climate_binding_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
@@ -2102,7 +2102,7 @@ un_events.18 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 20
-		NOT = { has_modifier = un_refugee_program_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 		NOT = { has_modifier = un_refugee_closed_modifier }
 		NOT = { has_global_variable = un_vote_active }
 		any_country = {
@@ -2154,7 +2154,7 @@ un_events.18 = {
 			set_global_variable = { name = un_vote_target_country value = scope:refugee_source }
 		}
 		# Proposer commits to resettlement
-		add_modifier = { name = un_refugee_program_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = {
 			value = small_radicals
@@ -2257,7 +2257,7 @@ un_events.19 = {
 		var:un_authority >= 40
 		has_technology_researched = space_exploration
 		country_rank >= rank_value:major_power
-		NOT = { has_modifier = un_space_partnership_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
 		NOT = { has_modifier = un_space_independent_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2286,7 +2286,7 @@ un_events.19 = {
 		save_scope_as = un_vote_proposer
 		set_global_variable = { name = un_vote_proposer_country value = ROOT }
 		# Proposer commits to partnership immediately
-		add_modifier = { name = un_space_partnership_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
 		hidden_effect = {
@@ -2636,7 +2636,7 @@ un_events.103 = {
 	immediate = {
 		random_country = {
 			limit = {
-				has_modifier = un_refugee_program_modifier
+				je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
 				NOT = { this = ROOT }
 			}
 			save_scope_as = resettlement_host

@@ -1,6 +1,6 @@
 ﻿############################################
 # Space Race Journal Entries
-# Semi-parallel milestone competition system
+# Linear milestone competition system
 ############################################
 
 # ===========================================
@@ -470,7 +470,7 @@ je_space_race_moon_landing = {
 # ===========================================
 # 4. OUTER SOLAR SYSTEM PROBE
 # Prereq: space_exploration tech + Orbital complete
-# Parallel with Moon Landing
+# Linear after the prior milestone chain
 # ===========================================
 je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
@@ -486,6 +486,7 @@ je_space_race_probe = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = space_exploration
 		modifier:country_sr_moon_mission_program_bool = yes
+		has_variable = sr_completed_moon_landing
 		NOT = { has_variable = sr_completed_probe }
 		OR = {
 			country_rank = rank_value:great_power
@@ -783,7 +784,7 @@ je_space_race_moon_base = {
 # ===========================================
 # 6. MARS LANDING
 # Prereq: reusable_rocketry tech + Orbital complete
-# Parallel with Moon Base
+# Linear after the prior milestone chain
 # ===========================================
 je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
@@ -799,6 +800,7 @@ je_space_race_mars_landing = {
 		has_variable = sr_completed_orbital
 		has_technology_researched = knowledge_economy
 		modifier:country_sr_mars_mission_program_bool = yes
+		has_variable = sr_completed_moon_landing
 		NOT = { has_variable = sr_completed_mars_landing }
 		OR = {
 			country_rank = rank_value:great_power

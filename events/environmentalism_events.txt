@@ -328,7 +328,7 @@ environmentalism_events.5 = {
 
 	option = {
 		name = environmentalism_events.5.b
-		ai_chance = { base = 1 }
+		ai_chance = { base = 2 }
 		# Endure the crisis - no spending saves bureaucracy
 		add_modifier = {
 			name = crop_failure_modifier
@@ -340,8 +340,8 @@ environmentalism_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = medium_radicals strata = lower }
-		add_loyalists = { value = very_small_radicals strata = upper }
+		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = upper }
 	}
 
 	option = {
@@ -682,14 +682,15 @@ environmentalism_events.9 = {
 
 	option = {
 		name = environmentalism_events.9.b
-		ai_chance = { base = 1 }
+		ai_chance = { base = 2 }
 		# Relocate coastal populations inland
 		add_modifier = {
 			name = coastal_relocation_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals }
+		add_radicals = { value = small_radicals strata = lower }
+		add_loyalists = { value = very_small_radicals pop_type = academics }
 	}
 
 	option = {

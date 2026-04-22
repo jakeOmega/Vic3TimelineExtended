@@ -185,6 +185,8 @@
  country_sol_expectations_upper_offset_mult_desc:0 "Percentage scaling of the upper class expectation offset. Positive values amplify their expectations; negative values dampen them."
  country_solar_receiver_max_level_add:0 "Available Solar Receiver Slots"
  country_solar_receiver_max_level_add_desc:0 "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot."
+ country_cultural_program_max_funding_add:0 "Cultural Program Maximum Funding Level"
+ country_cultural_program_max_funding_add_desc:0 "Increases the maximum funding level available for state-backed cultural programs in the Cultural Hegemony journal entry."
  country_space_race_max_funding_add:0 "[concept_space_race] Maximum Funding Level"
  country_space_race_max_funding_add_desc:0 "Increases the maximum funding level available for the [concept_space_race] program"
  country_space_race_progress_add:0 "[concept_space_race] Monthly Progress"

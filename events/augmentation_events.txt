@@ -407,8 +407,12 @@ augmentation_events.5 = {
 			is_decaying = yes
 		}
 		add_radicals = {
-			value = small_radicals
+			value = very_small_radicals
 			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = upper
 		}
 	}
 

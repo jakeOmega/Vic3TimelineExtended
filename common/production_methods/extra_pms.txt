@@ -13705,7 +13705,7 @@ pm_no_rockets = {
 pm_chemical_rockets = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p2.dds"
 	unlocking_technologies = {
-		space_exploration
+		guided_missiles
 	}
 
 	building_modifiers = {

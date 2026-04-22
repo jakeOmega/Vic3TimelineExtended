@@ -67,5 +67,9 @@ REPLACE_OR_CREATE:bg_megastructure_capped_private = {
 }
 
 REPLACE_OR_CREATE:bg_biotechnology = {
+	parent_group = bg_high_tech
+}
+
+REPLACE_OR_CREATE:bg_high_tech = {
 	parent_group = bg_heavy_industry
 }

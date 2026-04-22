@@ -1338,6 +1338,14 @@ banking_contagion_crash_check = {
 				else = {
 					add = 5
 				}
+				if = {
+					limit = { has_law = law_type:law_command_economy }
+					multiply = 0.20
+				}
+				else_if = {
+					limit = { has_law = law_type:law_cooperative_ownership }
+					multiply = 0.55
+				}
 				multiply = banking_crash_chance_multiplier_value
 				min = 0
 			}
@@ -1375,6 +1383,14 @@ banking_contagion_crash_check = {
 			20 = { change_variable = { name = crash_severity multiply = 1.5 } }
 			10 = { change_variable = { name = crash_severity multiply = 2 } }
 		}
+		if = {
+			limit = { has_law = law_type:law_command_economy }
+			change_variable = { name = crash_severity multiply = 0.45 }
+		}
+		else_if = {
+			limit = { has_law = law_type:law_cooperative_ownership }
+			change_variable = { name = crash_severity multiply = 0.75 }
+		}
 		# Clamp severity to 100
 		if = {
 			limit = { var:crash_severity > 100 }
@@ -1394,14 +1410,38 @@ apply_banking_contagion_effects = {
 		apply_banking_crash_origin_effects = yes
 	}
 	else = {
-		# Scare — minor market jitters, no crash
-		custom_tooltip = {
-			text = CONTAGION_SCARE_CYCLE_DESC
-			change_variable = { name = finance_cycle_value add = -3 }
+		# Scare — spillovers are muted in more state-directed systems.
+		if = {
+			limit = { has_law = law_type:law_command_economy }
+			custom_tooltip = {
+				text = CONTAGION_SCARE_CYCLE_CMD_DESC
+				change_variable = { name = finance_cycle_value add = -1 }
+			}
+			custom_tooltip = {
+				text = CONTAGION_SCARE_MOMENTUM_CMD_DESC
+				change_variable = { name = finance_cycle_momentum add = -0.5 }
+			}
 		}
-		custom_tooltip = {
-			text = CONTAGION_SCARE_MOMENTUM_DESC
-			change_variable = { name = finance_cycle_momentum add = -1 }
+		else_if = {
+			limit = { has_law = law_type:law_cooperative_ownership }
+			custom_tooltip = {
+				text = CONTAGION_SCARE_CYCLE_COOP_DESC
+				change_variable = { name = finance_cycle_value add = -2 }
+			}
+			custom_tooltip = {
+				text = CONTAGION_SCARE_MOMENTUM_COOP_DESC
+				change_variable = { name = finance_cycle_momentum add = -0.5 }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = CONTAGION_SCARE_CYCLE_DESC
+				change_variable = { name = finance_cycle_value add = -3 }
+			}
+			custom_tooltip = {
+				text = CONTAGION_SCARE_MOMENTUM_DESC
+				change_variable = { name = finance_cycle_momentum add = -1 }
+			}
 		}
 		# Clamp
 		if = {
@@ -1598,6 +1638,14 @@ banking_cycle_check_and_execute_crash = {
 					subtract = 75
 					multiply = 0.02
 				}
+					if = {
+						limit = { has_law = law_type:law_command_economy }
+						multiply = 0.35
+					}
+					else_if = {
+						limit = { has_law = law_type:law_cooperative_ownership }
+						multiply = 0.65
+					}
 				min = 0
 				# Scale crash probability by the crash chance modifier
 				multiply = banking_crash_chance_multiplier_value
@@ -1619,6 +1667,18 @@ banking_cycle_check_and_execute_crash = {
 			40 = { }
 			20 = { change_variable = { name = crash_severity multiply = 1.5 } }
 			10 = { change_variable = { name = crash_severity multiply = 2 } }
+		}
+		if = {
+			limit = { has_law = law_type:law_command_economy }
+			change_variable = { name = crash_severity multiply = 0.6 }
+		}
+		else_if = {
+			limit = { has_law = law_type:law_cooperative_ownership }
+			change_variable = { name = crash_severity multiply = 0.8 }
+		}
+		if = {
+			limit = { var:crash_severity > 100 }
+			set_variable = { name = crash_severity value = 100 }
 		}
 
 		# Initialize crisis wave tracking for Great Depression mechanic

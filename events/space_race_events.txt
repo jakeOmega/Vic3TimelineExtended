@@ -2447,7 +2447,7 @@ space_race_events.52 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { has_modifier = un_space_partnership_modifier }
+				trigger = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
 				add = 3
 			}
 		}
