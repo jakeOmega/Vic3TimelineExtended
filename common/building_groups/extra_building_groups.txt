@@ -72,4 +72,10 @@ REPLACE_OR_CREATE:bg_biotechnology = {
 
 REPLACE_OR_CREATE:bg_high_tech = {
 	parent_group = bg_heavy_industry
+
+	construction_efficiency_modifier = yes
+}
+
+INJECT:bg_power = {
+	construction_efficiency_modifier = yes
 }

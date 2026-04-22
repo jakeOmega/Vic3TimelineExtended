@@ -4305,16 +4305,17 @@ pm_department_stores = {
 			# Profit: 1205.0
 			# Profit margin: 202.52%
 			# Zero profit price multiplier: 0.33
-			# Employment: 4000
-			# Wage breakeven: 0.30
+			# Employment: 6000
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {
-			building_employment_clerks_add = 2400
-			building_employment_shopkeepers_add = 900
-			building_employment_engineers_add = 200
+			building_employment_clerks_add = 3000
+			building_employment_shopkeepers_add = 1200
+			building_employment_laborers_add = 1200
+			building_employment_engineers_add = 150
 			building_employment_machinists_add = 50
-			building_employment_academics_add = 450
+			building_employment_academics_add = 400
 		}
 	}
 
@@ -4356,16 +4357,17 @@ pm_shopping_malls = {
 			# Profit: 2790.0
 			# Profit margin: 344.44%
 			# Zero profit price multiplier: 0.23
-			# Employment: 4000
-			# Wage breakeven: 0.70
+			# Employment: 7000
+			# Wage breakeven: 0.40
 		}
 
 		level_scaled = {
-			building_employment_clerks_add = 2200
-			building_employment_shopkeepers_add = 950
-			building_employment_engineers_add = 220
-			building_employment_machinists_add = 80
-			building_employment_academics_add = 550
+			building_employment_clerks_add = 3200
+			building_employment_shopkeepers_add = 1300
+			building_employment_laborers_add = 1500
+			building_employment_engineers_add = 200
+			building_employment_machinists_add = 100
+			building_employment_academics_add = 700
 		}
 	}
 
@@ -14023,8 +14025,8 @@ pm_space_elevator = {
 			# Profit: 179036000.0
 			# Profit margin: 854.02%
 			# Zero profit price multiplier: 0.10
-			# Employment: 10000
-			# Wage breakeven: 17903.60
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -14433,14 +14435,14 @@ REPLACE:pm_wooden_buildings = {
 			# Profit: 0.0
 			# Profit margin: 0.00%
 			# Zero profit price multiplier: 1.00
-			# Employment: 5000
+			# Employment: 6000
 			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
-			building_employment_bureaucrats_add = 500
-			building_employment_clerks_add = 500
-			building_employment_laborers_add = 4000
+			building_employment_bureaucrats_add = 600
+			building_employment_clerks_add = 600
+			building_employment_laborers_add = 4800
 		}
 		unscaled = {
 			building_laborers_mortality_mult = 0.1
@@ -14476,15 +14478,15 @@ REPLACE:pm_iron_frame_buildings = {
 			# Profit: 535.0
 			# Profit margin: 36.52%
 			# Zero profit price multiplier: 0.73
-			# Employment: 5000
-			# Wage breakeven: 0.11
+			# Employment: 6500
+			# Wage breakeven: 0.08
 		}
 
 		level_scaled = {
-			building_employment_bureaucrats_add = 500
-			building_employment_clerks_add = 500
-			building_employment_machinists_add = 250
-			building_employment_laborers_add = 3750
+			building_employment_bureaucrats_add = 650
+			building_employment_clerks_add = 650
+			building_employment_machinists_add = 350
+			building_employment_laborers_add = 4850
 		}
 		unscaled = {
 			building_laborers_mortality_mult = 0.1
@@ -14520,15 +14522,15 @@ REPLACE:pm_steel_frame_buildings = {
 			# Profit: 840.0
 			# Profit margin: 31.58%
 			# Zero profit price multiplier: 0.76
-			# Employment: 5000
-			# Wage breakeven: 0.17
+			# Employment: 7000
+			# Wage breakeven: 0.12
 		}
 
 		level_scaled = {
-			building_employment_bureaucrats_add = 500
-			building_employment_clerks_add = 500
-			building_employment_machinists_add = 750
-			building_employment_laborers_add = 3250
+			building_employment_bureaucrats_add = 700
+			building_employment_clerks_add = 700
+			building_employment_machinists_add = 1050
+			building_employment_laborers_add = 4550
 		}
 		unscaled = {
 			building_laborers_mortality_mult = 0.1
@@ -14565,16 +14567,16 @@ REPLACE:pm_arc_welded_buildings = {
 			# Profit: 840.0
 			# Profit margin: 20.19%
 			# Zero profit price multiplier: 0.83
-			# Employment: 5000
-			# Wage breakeven: 0.17
+			# Employment: 7000
+			# Wage breakeven: 0.12
 		} 
 
 		level_scaled = {
-			building_employment_bureaucrats_add = 500
-			building_employment_clerks_add = 500
-			building_employment_engineers_add = 250
-			building_employment_machinists_add = 750
-			building_employment_laborers_add = 3000
+			building_employment_bureaucrats_add = 700
+			building_employment_clerks_add = 700
+			building_employment_engineers_add = 350
+			building_employment_machinists_add = 1050
+			building_employment_laborers_add = 4200
 		}
 		unscaled = {
 			building_laborers_mortality_mult = 0.1
@@ -14614,16 +14616,16 @@ pm_reinforced_concrete_buildings = {
 			# Profit: 1470.0
 			# Profit margin: 32.45%
 			# Zero profit price multiplier: 0.76
-			# Employment: 5000
-			# Wage breakeven: 0.29
+			# Employment: 7000
+			# Wage breakeven: 0.21
 		}
 
 		level_scaled = {
-			building_employment_bureaucrats_add = 400
-			building_employment_clerks_add = 500
-			building_employment_engineers_add = 500
-			building_employment_machinists_add = 500
-			building_employment_laborers_add = 3000
+			building_employment_bureaucrats_add = 600
+			building_employment_clerks_add = 700
+			building_employment_engineers_add = 700
+			building_employment_machinists_add = 700
+			building_employment_laborers_add = 4200
 			building_employment_academics_add = 100
 		}
 		unscaled = {
@@ -14749,14 +14751,14 @@ pm_prefabricated_building_components = {
 			# Profit: -310.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -1200
-			# Wage breakeven: 0.26
+			# Employment: -1000
+			# Wage breakeven: 0.31
 		}
 
 		level_scaled = {
 			building_employment_bureaucrats_add = -100
 			building_employment_clerks_add = -100
-			building_employment_laborers_add = -1000
+			building_employment_laborers_add = -800
 		}
 	}
 }
@@ -14781,14 +14783,14 @@ pm_tower_cranes = {
 			# Profit: -750.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -2400
-			# Wage breakeven: 0.31
+			# Employment: -1800
+			# Wage breakeven: 0.42
 		}
 
 		level_scaled = {
-			building_employment_bureaucrats_add = -200
-			building_employment_clerks_add = -200
-			building_employment_laborers_add = -2000
+			building_employment_bureaucrats_add = -150
+			building_employment_clerks_add = -150
+			building_employment_laborers_add = -1500
 		}
 	}
 }
@@ -14815,16 +14817,16 @@ pm_computer_aided_design = {
 			# Profit: -1230.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3600
-			# Wage breakeven: 0.34
+			# Employment: -2600
+			# Wage breakeven: 0.47
 		}
 
 		level_scaled = {
-			building_employment_bureaucrats_add = -300
-			building_employment_clerks_add = -300
-			building_employment_laborers_add = -2500
-			building_employment_machinists_add = -250
-			building_employment_engineers_add = -250
+			building_employment_bureaucrats_add = -200
+			building_employment_clerks_add = -200
+			building_employment_laborers_add = -1800
+			building_employment_machinists_add = -200
+			building_employment_engineers_add = -200
 		}
 	}
 }
@@ -15620,12 +15622,12 @@ pm_mars_mission = {
 			goods_input_launch_capacity_add = 10000              # Price:  200, Total cost: 2000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 2000000.0
-			# Total output cost: 400.0
-			# Profit: -1999600.0
-			# Profit margin: -99.98%
-			# Zero profit price multiplier: 5000.00
+			# Total output cost: 0
+			# Profit: -2000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -49.99
+			# Wage breakeven: -50.00
 		}
 
 		level_scaled = {
@@ -15663,12 +15665,12 @@ pm_solar_colonization = {
 			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 10000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 10000000.0
-			# Total output cost: 21200.0
-			# Profit: -9978800.0
-			# Profit margin: -99.79%
-			# Zero profit price multiplier: 471.70
+			# Total output cost: 0
+			# Profit: -10000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -249.47
+			# Wage breakeven: -250.00
 		}
 
 		level_scaled = {
@@ -15707,12 +15709,12 @@ pm_deep_space_exploration = {
 			goods_input_launch_capacity_add = 75000              # Price:  200, Total cost: 15000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 15000000.0
-			# Total output cost: 31600.0
-			# Profit: -14968400.0
-			# Profit margin: -99.79%
-			# Zero profit price multiplier: 474.68
+			# Total output cost: 0
+			# Profit: -15000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -374.21
+			# Wage breakeven: -375.00
 		}
 
 		level_scaled = {
@@ -15752,12 +15754,12 @@ pm_interstellar_mission = {
 			goods_input_launch_capacity_add = 100000             # Price:  200, Total cost: 20000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 20000000.0
-			# Total output cost: 42000.0
-			# Profit: -19958000.0
-			# Profit margin: -99.79%
-			# Zero profit price multiplier: 476.19
+			# Total output cost: 0
+			# Profit: -20000000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -498.95
+			# Wage breakeven: -500.00
 		}
 
 		level_scaled = {
@@ -15793,15 +15795,15 @@ pm_national_park = {
 			# Input goods
 			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fine_art_add = 1                        # Price:  200, Total cost:   200.0 (57.14%)
-			goods_output_tourism_add = 1                        # Price:   30, Total cost:   150.0 (42.86%)
+			goods_output_fine_art_add = 1                        # Price:  200, Total cost:   200.0 (66.67%)
+			goods_output_tourism_add = 1                         # Price:  100, Total cost:   100.0 (33.33%)
 			# Total input cost: 300.0
-			# Total output cost: 350.0
-			# Profit: 50.0
-			# Profit margin: 16.67%
-			# Zero profit price multiplier: 0.86
+			# Total output cost: 300.0
+			# Profit: 0.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 1.00
 			# Employment: 1000
-			# Wage breakeven: 0.05
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -15828,15 +15830,15 @@ pm_national_forest = {
 			# Input goods
 			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_wood_add = 20                           # Price:   20, Total cost:   200.0 (58.82%)
-			goods_output_hardwood_add = 4                        # Price:   40, Total cost:    80.0 (23.53%)
+			goods_output_wood_add = 20                           # Price:   20, Total cost:   400.0 (71.43%)
+			goods_output_hardwood_add = 4                        # Price:   40, Total cost:   160.0 (28.57%)
 			# Total input cost: 300.0
-			# Total output cost: 340.0
-			# Profit: 40.0
-			# Profit margin: 13.33%
-			# Zero profit price multiplier: 0.88
+			# Total output cost: 560.0
+			# Profit: 260.0
+			# Profit margin: 86.67%
+			# Zero profit price multiplier: 0.54
 			# Employment: 1000
-			# Wage breakeven: 0.04
+			# Wage breakeven: 0.26
 		}
 
 		level_scaled = {
@@ -15865,16 +15867,16 @@ pm_national_wildlife_refuge = {
 			# Input goods
 			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			goods_output_fine_art_add = 2                        # Price:  200, Total cost:   200.0 (57.14%)
-			goods_output_tourism_add = 2                        # Price:   30, Total cost:   60.0 (17.65%)
-			goods_output_meat_add = 5                            # Price:   30, Total cost:   150.0 (42.86%)
+			goods_output_fine_art_add = 2                        # Price:  200, Total cost:   400.0 (53.33%)
+			goods_output_tourism_add = 2                         # Price:  100, Total cost:   200.0 (26.67%)
+			goods_output_meat_add = 5                            # Price:   30, Total cost:   150.0 (20.00%)
 			# Total input cost: 300.0
-			# Total output cost: 350.0
-			# Profit: 50.0
-			# Profit margin: 16.67%
-			# Zero profit price multiplier: 0.86
+			# Total output cost: 750.0
+			# Profit: 450.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
 			# Employment: 1000
-			# Wage breakeven: 0.05
+			# Wage breakeven: 0.45
 		}
 
 		level_scaled = {
@@ -17866,8 +17868,8 @@ pm_solar_collector = {
 			# Profit: -655000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 4000
-			# Wage breakeven: -163.75
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -17899,8 +17901,8 @@ pm_solar_receiver = {
 			# Profit: 29989500.0
 			# Profit margin: 285614.29%
 			# Zero profit price multiplier: 0.00
-			# Employment: 1000
-			# Wage breakeven: 29989.50
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -18065,8 +18067,8 @@ pm_orbital_battlestation = {
 			# Profit: -2280000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 6000
-			# Wage breakeven: -380.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -18232,8 +18234,8 @@ pm_mind_upload_nexus = {
 			# Profit: 5960000.0
 			# Profit margin: 278.50%
 			# Zero profit price multiplier: 0.26
-			# Employment: 10000
-			# Wage breakeven: 596.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -18396,8 +18398,8 @@ pm_antimatter_facility = {
 			# Profit: -2334000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 6000
-			# Wage breakeven: -389.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -18657,8 +18659,8 @@ pm_nanofabrication_center = {
 			# Profit: -105000.0
 			# Profit margin: -1.04%
 			# Zero profit price multiplier: 1.01
-			# Employment: 6000
-			# Wage breakeven: -17.50
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -18836,8 +18838,8 @@ pm_consciousness_network = {
 			# Profit: -1880000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 6000
-			# Wage breakeven: -313.33
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
 		level_scaled = {
@@ -18921,8 +18923,17 @@ pm_military_base = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_small_arms_add = 5
-			goods_input_ammunition_add = 5
+			# Input goods
+			goods_input_small_arms_add = 5                       # Price:   60, Total cost:   300.0 (54.55%)
+			goods_input_ammunition_add = 5                       # Price:   50, Total cost:   250.0 (45.45%)
+			# Output goods
+			# Total input cost: 550.0
+			# Total output cost: 0
+			# Profit: -550.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 250
+			# Wage breakeven: -2.20
 		}
 		level_scaled = {
 			building_employment_soldiers_add = 200
@@ -18958,7 +18969,16 @@ pm_concrete_bunkers = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_steel_add = 5
+			# Input goods
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (100.00%)
+			# Output goods
+			# Total input cost: 250.0
+			# Total output cost: 0
+			# Profit: -250.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 50
+			# Wage breakeven: -5.00
 		}
 		level_scaled = {
 			building_employment_laborers_add = 50
@@ -18983,8 +19003,17 @@ pm_hardened_positions = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_steel_add = 10
-			goods_input_explosives_add = 5
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (66.67%)
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (33.33%)
+			# Output goods
+			# Total input cost: 750.0
+			# Total output cost: 0
+			# Profit: -750.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 125
+			# Wage breakeven: -6.00
 		}
 		level_scaled = {
 			building_employment_laborers_add = 100

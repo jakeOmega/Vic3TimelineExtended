@@ -43,7 +43,29 @@ nuclear_weapon_events.1 = {
 		highlighted_option = yes
 
 		ai_chance = {
-			base = 10
+			base = 8
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 8
+			}
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile <= nuclear_ai_desired_stockpile
+				}
+				add = 10
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile < 6 }
+				add = 6
+			}
+			modifier = {
+				trigger = {
+					ruler_is_aggressive = yes
+					var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile
+				}
+				add = -6
+			}
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
@@ -65,7 +87,31 @@ nuclear_weapon_events.1 = {
 		highlighted_option = yes
 
 		ai_chance = {
-			base = 20
+			base = 3
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 10
+			}
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 8
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile }
+				add = 12
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile > 10 }
+				add = 8
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = -10
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile <= nuclear_ai_desired_stockpile }
+				add = -8
+			}
 		}
 
 		scope:attacking_country = {
@@ -499,7 +545,29 @@ nuclear_weapon_events.11 = {
 		custom_tooltip = nuclear_retaliation_single_tt
 
 		ai_chance = {
-			base = 10
+			base = 6
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 6
+			}
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile <= nuclear_ai_desired_stockpile
+				}
+				add = 8
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile < 6 }
+				add = 4
+			}
+			modifier = {
+				trigger = {
+					ruler_is_aggressive = yes
+					var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile
+				}
+				add = -4
+			}
 		}
 		scope:target_country = {
 			ordered_scope_state = {
@@ -521,7 +589,31 @@ nuclear_weapon_events.11 = {
 		custom_tooltip = nuclear_retaliation_full_tt
 
 		ai_chance = {
-			base = 30
+			base = 5
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 12
+			}
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 6
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile }
+				add = 10
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile > 10 }
+				add = 8
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = -10
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile <= nuclear_ai_desired_stockpile }
+				add = -6
+			}
 		}
 		scope:target_country = {
 			ordered_scope_state = {
@@ -726,7 +818,20 @@ nuclear_weapon_events.17 = {
 		add_radicals = {
 			value = very_small_radicals
 		}
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 6
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 4
+			}
+		}
 	}
 
 	# "History will judge us."
@@ -802,7 +907,20 @@ nuclear_weapon_events.18 = {
 		trigger = { has_modifier = nuclear_power }
 		default_option = yes
 		add_modifier = { name = nuclear_event_prestige multiplier = 10 days = normal_modifier_time is_decaying = yes }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 6
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 4
+			}
+		}
 	}
 
 	# Has a nuclear program but no nukes yet: "We cannot fall behind."
@@ -818,7 +936,33 @@ nuclear_weapon_events.18 = {
 			text = NW_PROGRESS_ADD_5_TT
 			change_variable = { name = nuclear_weapon_program_progress add = 5 }
 		}
-		ai_chance = { base = 7 }
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				add = 12
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 6
+			}
+			modifier = {
+				trigger = { scope:proliferating_country = { country_rank >= rank_value:great_power } }
+				add = 4
+			}
+			modifier = {
+				trigger = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
+				add = 8
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 4
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = -2
+			}
+		}
 	}
 
 	# Anyone: "Push for non-proliferation."
@@ -836,6 +980,17 @@ nuclear_weapon_events.18 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 6
+			}
+			modifier = {
+				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				add = -8
+			}
 		}
 	}
 }
@@ -881,7 +1036,18 @@ nuclear_weapon_events.19 = {
 			change_variable = { name = nuclear_weapon_program_progress max = 0 }
 		}
 		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ruler_is_cautious = yes } add = 4 }
+			modifier = { trigger = { radical_population_fraction > 0.1 } add = 3 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 4
+			}
+		}
 	}
 
 	# "This was an acceptable risk. Continue." — small progress loss, radicals
@@ -903,6 +1069,19 @@ nuclear_weapon_events.19 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 5 }
+			modifier = { trigger = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile } add = 6 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					any_rival_country = {
+						has_modifier = nuclear_power
+						has_variable = nuclear_weapon_stockpile
+						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+					}
+				}
+				add = 4
+			}
+			modifier = { trigger = { is_at_war = yes } add = 4 }
 		}
 	}
 
@@ -922,6 +1101,25 @@ nuclear_weapon_events.19 = {
 		ai_chance = {
 			base = 2
 			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+			modifier = { trigger = { radical_population_fraction > 0.2 } add = 5 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 6
+			}
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					any_rival_country = {
+						has_modifier = nuclear_power
+						has_variable = nuclear_weapon_stockpile
+						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+					}
+				}
+				add = -4
+			}
 		}
 	}
 }
@@ -970,6 +1168,14 @@ nuclear_weapon_events.20 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { ruler_is_cautious = yes } add = 3 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 6
+			}
+			modifier = { trigger = { country_innovation < 150 } add = 4 }
 		}
 	}
 
@@ -984,6 +1190,19 @@ nuclear_weapon_events.20 = {
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+			modifier = { trigger = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile } add = 6 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					any_rival_country = {
+						has_modifier = nuclear_power
+						has_variable = nuclear_weapon_stockpile
+						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+					}
+				}
+				add = 5
+			}
+			modifier = { trigger = { is_at_war = yes } add = 4 }
 		}
 	}
 
@@ -996,7 +1215,11 @@ nuclear_weapon_events.20 = {
 			change_variable = { name = nuclear_weapon_program_progress max = 0 }
 		}
 		add_modifier = { name = nuclear_civilian_applications days = short_modifier_time is_decaying = yes }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { country_innovation >= 250 } add = 3 }
+			modifier = { trigger = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile } add = 2 }
+		}
 	}
 }
 
@@ -1039,7 +1262,11 @@ nuclear_weapon_events.21 = {
 		default_option = yes
 		add_modifier = { name = nuclear_event_prestige multiplier = -20 days = normal_modifier_time is_decaying = yes }
 		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ruler_is_cautious = yes } add = 4 }
+			modifier = { trigger = { radical_population_fraction > 0.1 } add = 4 }
+		}
 	}
 
 	# "Tighten military oversight." — armed forces happy, intelligentsia unhappy
@@ -1056,13 +1283,30 @@ nuclear_weapon_events.21 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					any_rival_country = {
+						has_modifier = nuclear_power
+						has_variable = nuclear_weapon_stockpile
+						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+					}
+				}
+				add = 5
+			}
+			modifier = { trigger = { is_at_war = yes } add = 3 }
 		}
 	}
 
 	# "This must never be spoken of." — no cost, but no benefit
 	option = {
 		name = nuclear_weapon_events.21.c
-		ai_chance = { base = 2 }
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { ruler_is_aggressive = yes } add = 2 }
+			modifier = { trigger = { is_at_war = yes } add = 4 }
+			modifier = { trigger = { radical_population_fraction < 0.05 } add = 2 }
+		}
 	}
 }
 
@@ -1111,7 +1355,18 @@ nuclear_weapon_events.22 = {
 			limit = { is_interest_group_type = ig_armed_forces }
 			add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
 		}
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ruler_is_cautious = yes } add = 4 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				}
+				add = 5
+			}
+			modifier = { trigger = { radical_population_fraction > 0.1 } add = 3 }
+		}
 	}
 
 	# "The program is vital to national security." — armed forces happy, lower strata radicals
@@ -1128,6 +1383,19 @@ nuclear_weapon_events.22 = {
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+			modifier = { trigger = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile } add = 6 }
+			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					any_rival_country = {
+						has_modifier = nuclear_power
+						has_variable = nuclear_weapon_stockpile
+						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+					}
+				}
+				add = 5
+			}
+			modifier = { trigger = { is_at_war = yes } add = 4 }
 		}
 	}
 
@@ -1144,6 +1412,9 @@ nuclear_weapon_events.22 = {
 		ai_chance = {
 			base = 2
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
+			modifier = { trigger = { is_at_war = yes } add = 4 }
+			modifier = { trigger = { radical_population_fraction < 0.08 } add = 3 }
+			modifier = { trigger = { radical_population_fraction > 0.2 } add = -4 }
 		}
 	}
 }

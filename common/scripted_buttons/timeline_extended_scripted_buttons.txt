@@ -8,18 +8,59 @@ increase_funding_nuclear_program = {
 	#Country scope
 	ai_chance = {
 		value = 0
-        if = { 
+        if = {
             limit = { country_innovation > nuclear_weapon_program_funding_step }
-            add = 50
+            add = 15
         }
-        if = { 
+        if = {
+            limit = { country_innovation >= 200 }
+            add = 10
+        }
+        if = {
+            limit = { country_innovation >= 300 }
+            add = 10
+        }
+        if = {
             limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
-            add = 25
+            add = 30
         }
-
-        if = { 
-            limit = { var:nuclear_weapon_stockpile > 10 }
-            add = -50
+        if = {
+            limit = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
+            add = 35
+        }
+        if = {
+            limit = {
+                var:nuclear_weapons_program_first_nuke_done = 0
+                var:nuclear_weapon_program_progress >= 75
+            }
+            add = 20
+        }
+        if = {
+            limit = {
+                has_variable = nuclear_weapon_stockpile
+                any_rival_country = {
+                    has_modifier = nuclear_power
+                    has_variable = nuclear_weapon_stockpile
+                    var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+                }
+            }
+            add = 20
+        }
+        if = {
+            limit = { is_at_war = yes }
+            add = 10
+        }
+        if = {
+            limit = { country_innovation < 150 }
+            add = -15
+        }
+        if = {
+            limit = { country_innovation < nuclear_weapons_program_current_cost }
+            add = -20
+        }
+        if = {
+            limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
+            add = -45
         }
     }
 
@@ -63,19 +104,51 @@ decrease_funding_nuclear_program = {
 	#Country scope
 	ai_chance = {
 		value = 0
-        if = { 
-            limit = { country_innovation < modifier:country_weekly_innovation_max_add }
+        if = {
+            limit = { country_innovation < 150 }
+            add = 20
+        }
+        if = {
+            limit = { country_innovation < nuclear_weapons_program_current_cost }
             add = 25
         }
-
-        if = { 
-            limit = { NOT = { var:nuclear_weapons_program_first_nuke_done = 0 }}
-            add = 25
+        if = {
+            limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
+            add = 35
         }
-
-        if = { 
-            limit = { var:nuclear_weapon_stockpile > 10 }
-            add = 50
+        if = {
+            limit = { var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile }
+            add = 15
+        }
+        if = {
+            limit = {
+                var:nuclear_weapons_program_first_nuke_done > 0
+                country_innovation < 250
+            }
+            add = 10
+        }
+        if = {
+            limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+            add = -40
+        }
+        if = {
+            limit = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
+            add = -35
+        }
+        if = {
+            limit = {
+                has_variable = nuclear_weapon_stockpile
+                any_rival_country = {
+                    has_modifier = nuclear_power
+                    has_variable = nuclear_weapon_stockpile
+                    var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+                }
+            }
+            add = -20
+        }
+        if = {
+            limit = { is_at_war = yes }
+            add = -15
         }
     }
 

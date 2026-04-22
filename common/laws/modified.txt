@@ -2,6 +2,7 @@
 	modifier = {
 		country_institution_migration_controls_max_investment_add = 9
 		country_institution_cost_institution_migration_controls_mult = -0.9
+		country_migration_restrictiveness_add = -60 # Cancel base value
 	}
 
 	institution = institution_migration_controls

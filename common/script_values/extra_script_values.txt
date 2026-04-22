@@ -326,6 +326,115 @@ nuclear_weapons_program_current_cost = {
 	multiply = nuclear_weapon_program_funding_step
 }
 
+nuclear_ai_desired_stockpile = {
+	value = 1
+
+	if = {
+		limit = { country_rank = rank_value:great_power }
+		add = 4
+	}
+	else_if = {
+		limit = { country_rank = rank_value:major_power }
+		add = 2
+	}
+	else_if = {
+		limit = { country_rank = rank_value:minor_power }
+		add = 1
+	}
+
+	if = {
+		limit = { has_global_highest_gdp = yes }
+		add = 2
+	}
+	if = {
+		limit = { has_global_highest_innovation = yes }
+		add = 2
+	}
+	if = {
+		limit = { is_at_war = yes }
+		add = 2
+	}
+
+	if = {
+		limit = { country_innovation >= 200 }
+		add = 1
+	}
+	if = {
+		limit = { country_innovation >= 300 }
+		add = 2
+	}
+	if = {
+		limit = { country_innovation >= 500 }
+		add = 3
+	}
+	if = {
+		limit = { country_innovation < 150 }
+		add = -1
+	}
+	if = {
+		limit = { country_innovation < 120 }
+		add = -2
+	}
+
+	if = {
+		limit = { radical_population_fraction > 0.15 }
+		add = -1
+	}
+	if = {
+		limit = { radical_population_fraction > 0.25 }
+		add = -2
+	}
+
+	if = {
+		limit = { any_rival_country = { has_modifier = nuclear_power } }
+		add = 2
+	}
+	if = {
+		limit = {
+			any_rival_country = {
+				has_modifier = nuclear_power
+				country_rank >= rank_value:great_power
+			}
+		}
+		add = 2
+	}
+	if = {
+		limit = {
+			any_rival_country = {
+				has_modifier = nuclear_power
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile > 5
+			}
+		}
+		add = 2
+	}
+	if = {
+		limit = {
+			any_rival_country = {
+				has_modifier = nuclear_power
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile > 15
+			}
+		}
+		add = 3
+	}
+	if = {
+		limit = {
+			has_variable = nuclear_weapon_stockpile
+			any_rival_country = {
+				has_modifier = nuclear_power
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+			}
+		}
+		add = 2
+	}
+
+	min = 1
+	max = 25
+	round = yes
+}
+
 nuclear_industrial_strike_killed_population = {
 	value = state_population
 	multiply = 0.1
