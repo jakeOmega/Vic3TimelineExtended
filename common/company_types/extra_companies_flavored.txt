@@ -131,6 +131,7 @@ company_samsung = {
 		building_software_industry
 		building_network_infrastructure
 		building_electronic_components_and_semiconductor_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -184,6 +185,7 @@ company_hp = {
 	extension_building_types = {
 		building_software_industry
 		building_robotics_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -237,6 +239,7 @@ company_sony = {
 	}
 	extension_building_types = {
 		building_software_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -343,6 +346,7 @@ company_intel = {
 	extension_building_types = {
 		building_software_industry
 		building_robotics_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -449,6 +453,7 @@ company_apple = {
 		building_network_infrastructure # Digital Access
 		building_electronic_components_and_semiconductor_industry
 		building_electrics_industry_radio
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -502,6 +507,7 @@ company_tsmc = {
 	extension_building_types = {
 		building_software_industry # For software development
 		building_robotics_industry # For manufacturing automation
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -557,6 +563,7 @@ company_huawei = {
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
 		building_software_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -667,6 +674,7 @@ company_nvidia = {
 		building_software_industry # For CUDA and AI software
 		building_robotics_industry
 		building_mind_upload_nexus
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -1059,6 +1067,7 @@ company_boston_dynamics = {
 	extension_building_types = {
 		building_software_industry
 		building_arms_industry # For potential military applications
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -1114,6 +1123,7 @@ company_asml = {
 	extension_building_types = {
 		building_advanced_material_fabricator
 		building_nanofabrication_center
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -1683,6 +1693,7 @@ company_nintendo = {
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -2328,6 +2339,7 @@ company_verizon = {
 	}
 	extension_building_types = {
 		building_software_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -2439,6 +2451,7 @@ company_fanuc = {
 	extension_building_types = {
 		building_software_industry
 		building_construction_sector
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -2611,6 +2624,7 @@ company_blackberry = {
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -2803,6 +2817,7 @@ company_cochlear = {
 	}
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -3026,6 +3041,7 @@ company_neurovault = {
 		building_nanofabrication_center
 		building_robotics_industry
 		building_network_infrastructure
+		building_glassworks
 	}
 	potential = {
 		always = yes
@@ -3200,6 +3216,7 @@ company_hanka_precision = {
 	extension_building_types = {
 		building_mind_upload_nexus
 		building_robotics_industry
+		building_glassworks
 	}
 	potential = {
 		always = yes

@@ -1,297 +1,3071 @@
 ﻿# ============================================================================
 # COMPANY BUILDING CLEANUP
-# Called from on_company_disbanded to remove company-unique buildings.
-# Scope: state | scope:company = the disbanded company
+# Generated from common/buildings/company_buildings.txt by
+# gen_company_building_cleanup.py.
+# Removes company buildings that are no longer valid for the state's owner.
 # ============================================================================
-remove_disbanded_company_buildings_effect = {
-	# --- Named company buildings ---
+remove_invalid_company_buildings_effect = {
 	if = {
-		limit = { scope:company.type = company_type:company_volkswagen }
-		remove_building = building_volkswagen_autostadt
+		limit = {
+			has_building = building_afghan_nassaji_kabul_mills
+			NOT = {
+				owner = {
+					has_company = company_da_afghan_nassaji_sherkat
+				}
+			}
+		}
+		remove_building = building_afghan_nassaji_kabul_mills
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_toyota }
-		remove_building = building_toyota_kaikan_plant
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_samsung }
-		remove_building = building_samsung_digital_city
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_hp }
-		remove_building = building_hp_labs
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_sony }
-		remove_building = building_sony_pictures_studios
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_ikea }
-		remove_building = building_ikea_almhult_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_intel }
-		remove_building = building_intel_ronler_acres
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_microsoft }
-		remove_building = building_microsoft_redmond_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_apple }
-		remove_building = building_apple_park
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_tsmc }
-		remove_building = building_tsmc_fab_18
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_huawei }
-		remove_building = building_huawei_ox_horn_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_amazon }
-		remove_building = building_amazon_fulfillment_center
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_nvidia }
-		remove_building = building_nvidia_endeavor_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_google }
-		remove_building = building_googleplex
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_netflix }
-		remove_building = building_netflix_animation_studios
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_spacex }
-		remove_building = building_spacex_starbase
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_bytedance }
-		remove_building = building_bytedance_data_fortress
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_openai }
-		remove_building = building_openai_research_lab
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_catl }
-		remove_building = building_catl_gigafactory
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_boston_dynamics }
-		remove_building = building_boston_dynamics_ai_institute
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_asml }
-		remove_building = building_asml_veldhoven_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_lockheed_martin }
-		remove_building = building_lockheed_skunk_works
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_bae_systems }
-		remove_building = building_bae_samlesbury_aerodrome
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_roscosmos }
-		remove_building = building_roscosmos_vostochny_cosmodrome
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_airbus }
+	if = {
+		limit = {
+			has_building = building_airbus_lagardere_plant
+			NOT = {
+				owner = {
+					has_company = company_airbus
+				}
+			}
+		}
 		remove_building = building_airbus_lagardere_plant
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_dassault_aviation }
-		remove_building = building_dassault_merignac_plant
+	if = {
+		limit = {
+			has_building = building_aker_oslo_shipyard
+			NOT = {
+				owner = {
+					has_company = company_aker_mek
+				}
+			}
+		}
+		remove_building = building_aker_oslo_shipyard
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_hyundai }
-		remove_building = building_hyundai_ulsan_factory
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_sap }
-		remove_building = building_sap_headquarters
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_tencent }
-		remove_building = building_tencent_seafront_towers
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_alibaba }
+	if = {
+		limit = {
+			has_building = building_alibaba_cainiao_park
+			NOT = {
+				owner = {
+					has_company = company_alibaba
+				}
+			}
+		}
 		remove_building = building_alibaba_cainiao_park
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_nintendo }
-		remove_building = building_nintendo_development_center
+	if = {
+		limit = {
+			has_building = building_allatini_thessaloniki_flour_mill
+			NOT = {
+				owner = {
+					has_company = company_allatini_mills
+				}
+			}
+		}
+		remove_building = building_allatini_thessaloniki_flour_mill
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_gazprom }
-		remove_building = building_gazprom_lakhta_center
+	if = {
+		limit = {
+			has_building = building_alpine_donawitz_steelworks
+			NOT = {
+				owner = {
+					has_company = company_oesterreichisch_alpine_montangesellschaft
+				}
+			}
+		}
+		remove_building = building_alpine_donawitz_steelworks
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_saudi_aramco }
-		remove_building = building_saudi_aramco_abqaiq_plant
+	if = {
+		limit = {
+			has_building = building_altos_hornos_baracaldo_furnaces
+			NOT = {
+				owner = {
+					has_company = company_altos_hornos_de_vizcaya
+				}
+			}
+		}
+		remove_building = building_altos_hornos_baracaldo_furnaces
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_petrobras }
-		remove_building = building_petrobras_cenpes_center
+	if = {
+		limit = {
+			has_building = building_amazon_fulfillment_center
+			NOT = {
+				owner = {
+					has_company = company_amazon
+				}
+			}
+		}
+		remove_building = building_amazon_fulfillment_center
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_rosatom }
-		remove_building = building_rosatom_mayak_association
+	if = {
+		limit = {
+			has_building = building_anglo_persian_abadan_refinery
+			NOT = {
+				owner = {
+					has_company = company_anglo_persian_oil
+				}
+			}
+		}
+		remove_building = building_anglo_persian_abadan_refinery
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_oracle }
-		remove_building = building_oracle_cloud_data_center
+	if = {
+		limit = {
+			has_building = building_anglo_sicilian_licata_wharf
+			NOT = {
+				owner = {
+					has_company = company_anglo_sicilian_sulphur_company
+				}
+			}
+		}
+		remove_building = building_anglo_sicilian_licata_wharf
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_softbank }
-		remove_building = building_softbank_vision_fund_hq
+	if = {
+		limit = {
+			has_building = building_ansaldo_sestri_ponente_works
+			NOT = {
+				owner = {
+					has_company = company_ansaldo
+				}
+			}
+		}
+		remove_building = building_ansaldo_sestri_ponente_works
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_roche }
-		remove_building = building_roche_tower
+	if = {
+		limit = {
+			has_building = building_anzin_colliery
+			NOT = {
+				owner = {
+					has_company = company_mines_anzin
+				}
+			}
+		}
+		remove_building = building_anzin_colliery
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_pfizer }
-		remove_building = building_pfizer_rd_campus
+	if = {
+		limit = {
+			has_building = building_ap_moller_copenhagen_wharf
+			NOT = {
+				owner = {
+					has_company = company_ap_moller
+				}
+			}
+		}
+		remove_building = building_ap_moller_copenhagen_wharf
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_vale }
-		remove_building = building_vale_carajas_mine
+	if = {
+		limit = {
+			has_building = building_apple_park
+			NOT = {
+				owner = {
+					has_company = company_apple
+				}
+			}
+		}
+		remove_building = building_apple_park
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_disney }
-		remove_building = building_disney_world
+	if = {
+		limit = {
+			has_building = building_argentinian_wine_mendoza_bodega
+			NOT = {
+				owner = {
+					has_company = company_argentinian_wine
+				}
+			}
+		}
+		remove_building = building_argentinian_wine_mendoza_bodega
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_universal }
-		remove_building = building_universal_studios_hollywood
+	if = {
+		limit = {
+			has_building = building_armstrong_elswick_works
+			NOT = {
+				owner = {
+					has_company = company_armstrong_whitworth
+				}
+			}
+		}
+		remove_building = building_armstrong_elswick_works
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_verizon }
-		remove_building = building_verizon_building
+	if = {
+		limit = {
+			has_building = building_asml_veldhoven_campus
+			NOT = {
+				owner = {
+					has_company = company_asml
+				}
+			}
+		}
+		remove_building = building_asml_veldhoven_campus
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_reliance }
-		remove_building = building_reliance_jamnagar_refinery
+	if = {
+		limit = {
+			has_building = building_assam_company_nazira_tea_estate
+			NOT = {
+				owner = {
+					has_company = company_assam_company
+				}
+			}
+		}
+		remove_building = building_assam_company_nazira_tea_estate
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_fanuc }
-		remove_building = building_fanuc_forest
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_eni }
-		remove_building = building_eni_palazzo
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_ferrari }
-		remove_building = building_ferrari_maranello_factory
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_blackberry }
-		remove_building = building_blackberry_rim_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_shopify }
-		remove_building = building_shopify_fulfillment_hub
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_bhp_group }
-		remove_building = building_bhp_mount_whaleback_mine
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_cochlear }
-		remove_building = building_cochlear_global_hq
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_infosys }
-		remove_building = building_infosys_mysore_campus
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_jsw_steel }
-		remove_building = building_jsw_vijayanagar_works
-	}
-	# --- Generic company buildings ---
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_biotechnology }
-		remove_building = building_generic_rd_complex
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_infrastructure }
-		remove_building = building_generic_logistics_hub
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_electrics }
-		remove_building = building_generic_hq_skyscraper
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_construction_power_bloc }
-		remove_building = building_generic_industrial_zone
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_advanced_materials }
-		remove_building = building_generic_materials_lab
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_electronics }
-		remove_building = building_generic_robotics_institute
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_software }
-		remove_building = building_generic_data_fortress
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_entertainment }
-		remove_building = building_generic_media_hq
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_power }
-		remove_building = building_generic_power_hub
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_aerospace }
-		remove_building = building_generic_proving_grounds
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_basic_autarky }
-		remove_building = building_generic_resource_depository
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_megastructure_consortium }
-		remove_building = building_megastructure_consortium_hq
-	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_axiom_space }
+	if = {
+		limit = {
+			has_building = building_axiom_space_hq
+			NOT = {
+				owner = {
+					has_company = company_axiom_space
+				}
+			}
+		}
 		remove_building = building_axiom_space_hq
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_neurovault }
-		remove_building = building_neurovault_hq
+	if = {
+		limit = {
+			has_building = building_b_grimm_bangkok_warehouse
+			NOT = {
+				owner = {
+					has_company = company_b_grimm
+				}
+			}
+		}
+		remove_building = building_b_grimm_bangkok_warehouse
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_tycho_manufacturing }
-		remove_building = building_tycho_manufacturing_hq
+	if = {
+		limit = {
+			has_building = building_bacardi_santiago_distillery
+			NOT = {
+				owner = {
+					has_company = company_bacardi
+				}
+			}
+		}
+		remove_building = building_bacardi_santiago_distillery
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_tessier_ashpool }
-		remove_building = building_tessier_ashpool_hq
+	if = {
+		limit = {
+			has_building = building_bae_samlesbury_aerodrome
+			NOT = {
+				owner = {
+					has_company = company_bae_systems
+				}
+			}
+		}
+		remove_building = building_bae_samlesbury_aerodrome
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_hanka_precision }
+	if = {
+		limit = {
+			has_building = building_basf_ludwigshafen_plant
+			NOT = {
+				owner = {
+					has_company = company_basf
+				}
+			}
+		}
+		remove_building = building_basf_ludwigshafen_plant
+	}
+	if = {
+		limit = {
+			has_building = building_basileiades_piraeus_works
+			NOT = {
+				owner = {
+					has_company = company_basileiades
+				}
+			}
+		}
+		remove_building = building_basileiades_piraeus_works
+	}
+	if = {
+		limit = {
+			has_building = building_bengal_coal_raniganj_mine
+			NOT = {
+				owner = {
+					has_company = company_bengal_coal_company
+				}
+			}
+		}
+		remove_building = building_bengal_coal_raniganj_mine
+	}
+	if = {
+		limit = {
+			has_building = building_bhp_mount_whaleback_mine
+			NOT = {
+				owner = {
+					has_company = company_bhp_group
+				}
+			}
+		}
+		remove_building = building_bhp_mount_whaleback_mine
+	}
+	if = {
+		limit = {
+			has_building = building_blackberry_rim_campus
+			NOT = {
+				owner = {
+					has_company = company_blackberry
+				}
+			}
+		}
+		remove_building = building_blackberry_rim_campus
+	}
+	if = {
+		limit = {
+			has_building = building_bolckow_eston_ironworks
+			NOT = {
+				owner = {
+					has_company = company_bolckow_vaughan
+				}
+			}
+		}
+		remove_building = building_bolckow_eston_ironworks
+	}
+	if = {
+		limit = {
+			has_building = building_bombay_burmah_rangoon_timber_depot
+			NOT = {
+				owner = {
+					has_company = company_bombay_burmah_trading_corporation
+				}
+			}
+		}
+		remove_building = building_bombay_burmah_rangoon_timber_depot
+	}
+	if = {
+		limit = {
+			has_building = building_bombay_dyeing_spring_mills
+			NOT = {
+				owner = {
+					has_company = company_bombay_dyeing_company
+				}
+			}
+		}
+		remove_building = building_bombay_dyeing_spring_mills
+	}
+	if = {
+		limit = {
+			has_building = building_boston_dynamics_ai_institute
+			NOT = {
+				owner = {
+					has_company = company_boston_dynamics
+				}
+			}
+		}
+		remove_building = building_boston_dynamics_ai_institute
+	}
+	if = {
+		limit = {
+			has_building = building_bunge_born_buenos_aires_grain_silo
+			NOT = {
+				owner = {
+					has_company = company_bunge_born
+				}
+			}
+		}
+		remove_building = building_bunge_born_buenos_aires_grain_silo
+	}
+	if = {
+		limit = {
+			has_building = building_bytedance_data_fortress
+			NOT = {
+				owner = {
+					has_company = company_bytedance
+				}
+			}
+		}
+		remove_building = building_bytedance_data_fortress
+	}
+	if = {
+		limit = {
+			has_building = building_calcutta_electric_victoria_house
+			NOT = {
+				owner = {
+					has_company = company_calcutta_electric
+				}
+			}
+		}
+		remove_building = building_calcutta_electric_victoria_house
+	}
+	if = {
+		limit = {
+			has_building = building_caribbean_petroleum_maracaibo_depot
+			NOT = {
+				owner = {
+					has_company = company_caribbean_petroleum
+				}
+			}
+		}
+		remove_building = building_caribbean_petroleum_maracaibo_depot
+	}
+	if = {
+		limit = {
+			has_building = building_carnegie_homestead_mill
+			NOT = {
+				owner = {
+					has_company = company_us_steel
+				}
+			}
+		}
+		remove_building = building_carnegie_homestead_mill
+	}
+	if = {
+		limit = {
+			has_building = building_catl_gigafactory
+			NOT = {
+				owner = {
+					has_company = company_catl
+				}
+			}
+		}
+		remove_building = building_catl_gigafactory
+	}
+	if = {
+		limit = {
+			has_building = building_ccci_leopoldville_depot
+			NOT = {
+				owner = {
+					has_company = company_ccci
+				}
+			}
+		}
+		remove_building = building_ccci_leopoldville_depot
+	}
+	if = {
+		limit = {
+			has_building = building_cfr_bucharest_railway_works
+			NOT = {
+				owner = {
+					has_company = company_cfr
+				}
+			}
+		}
+		remove_building = building_cfr_bucharest_railway_works
+	}
+	if = {
+		limit = {
+			has_building = building_cgv_haut_brion_estate
+			NOT = {
+				owner = {
+					has_company = company_cgv
+				}
+			}
+		}
+		remove_building = building_cgv_haut_brion_estate
+	}
+	if = {
+		limit = {
+			has_building = building_chr_hansen_copenhagen_laboratory
+			NOT = {
+				owner = {
+					has_company = company_chr_hansens
+				}
+			}
+		}
+		remove_building = building_chr_hansen_copenhagen_laboratory
+	}
+	if = {
+		limit = {
+			has_building = building_coats_ferguslie_mills
+			NOT = {
+				owner = {
+					has_company = company_j_p_coats
+				}
+			}
+		}
+		remove_building = building_coats_ferguslie_mills
+	}
+	if = {
+		limit = {
+			has_building = building_cochlear_global_hq
+			NOT = {
+				owner = {
+					has_company = company_cochlear
+				}
+			}
+		}
+		remove_building = building_cochlear_global_hq
+	}
+	if = {
+		limit = {
+			has_building = building_cockerill_seraing_works
+			NOT = {
+				owner = {
+					has_company = company_john_cockerill
+				}
+			}
+		}
+		remove_building = building_cockerill_seraing_works
+	}
+	if = {
+		limit = {
+			has_building = building_colt_hartford_armory
+			NOT = {
+				owner = {
+					has_company = company_colt_firearms
+				}
+			}
+		}
+		remove_building = building_colt_hartford_armory
+	}
+	if = {
+		limit = {
+			has_building = building_cordoba_railway_alta_gracia_works
+			NOT = {
+				owner = {
+					has_company = company_cordoba_railway
+				}
+			}
+		}
+		remove_building = building_cordoba_railway_alta_gracia_works
+	}
+	if = {
+		limit = {
+			has_building = building_cramp_philadelphia_shipyard
+			NOT = {
+				owner = {
+					has_company = company_william_cramp
+				}
+			}
+		}
+		remove_building = building_cramp_philadelphia_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_csfa_sicilian_sulfur_depot
+			NOT = {
+				owner = {
+					has_company = company_csfa
+				}
+			}
+		}
+		remove_building = building_csfa_sicilian_sulfur_depot
+	}
+	if = {
+		limit = {
+			has_building = building_dassault_merignac_plant
+			NOT = {
+				owner = {
+					has_company = company_dassault_aviation
+				}
+			}
+		}
+		remove_building = building_dassault_merignac_plant
+	}
+	if = {
+		limit = {
+			has_building = building_de_beers_sorting_office
+			NOT = {
+				owner = {
+					has_company = company_de_beers
+				}
+			}
+		}
+		remove_building = building_de_beers_sorting_office
+	}
+	if = {
+		limit = {
+			has_building = building_disney_world
+			NOT = {
+				owner = {
+					has_company = company_disney
+				}
+			}
+		}
+		remove_building = building_disney_world
+	}
+	if = {
+		limit = {
+			has_building = building_dmc_mulhouse_mills
+			NOT = {
+				owner = {
+					has_company = company_dmc
+				}
+			}
+		}
+		remove_building = building_dmc_mulhouse_mills
+	}
+	if = {
+		limit = {
+			has_building = building_douro_wine_lodge
+			NOT = {
+				owner = {
+					has_company = company_douro_wine_company
+				}
+			}
+		}
+		remove_building = building_douro_wine_lodge
+	}
+	if = {
+		limit = {
+			has_building = building_duro_la_felguera_steelworks
+			NOT = {
+				owner = {
+					has_company = company_duro_y_compania
+				}
+			}
+		}
+		remove_building = building_duro_la_felguera_steelworks
+	}
+	if = {
+		limit = {
+			has_building = building_eea_dock_sud_power_station
+			NOT = {
+				owner = {
+					has_company = company_eea
+				}
+			}
+		}
+		remove_building = building_eea_dock_sud_power_station
+	}
+	if = {
+		limit = {
+			has_building = building_egyptian_rail_cairo_central
+			NOT = {
+				owner = {
+					has_company = company_egyptian_rail
+				}
+			}
+		}
+		remove_building = building_egyptian_rail_cairo_central
+	}
+	if = {
+		limit = {
+			has_building = building_eic_trading_house
+			NOT = {
+				owner = {
+					has_company = company_east_india_company
+				}
+			}
+		}
+		remove_building = building_eic_trading_house
+	}
+	if = {
+		limit = {
+			has_building = building_el_aguila_tampico_refinery
+			NOT = {
+				owner = {
+					has_company = company_el_aguila
+				}
+			}
+		}
+		remove_building = building_el_aguila_tampico_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_electricidad_caracas_power_house
+			NOT = {
+				owner = {
+					has_company = company_electricidad_de_caracas
+				}
+			}
+		}
+		remove_building = building_electricidad_caracas_power_house
+	}
+	if = {
+		limit = {
+			has_building = building_elso_budapesti_steam_mill
+			NOT = {
+				owner = {
+					has_company = company_elso_budapesti_gozmalom
+				}
+			}
+		}
+		remove_building = building_elso_budapesti_steam_mill
+	}
+	if = {
+		limit = {
+			has_building = building_eni_palazzo
+			NOT = {
+				owner = {
+					has_company = company_eni
+				}
+			}
+		}
+		remove_building = building_eni_palazzo
+	}
+	if = {
+		limit = {
+			has_building = building_ericsson_telefonplan
+			NOT = {
+				owner = {
+					has_company = company_ericsson
+				}
+			}
+		}
+		remove_building = building_ericsson_telefonplan
+	}
+	if = {
+		limit = {
+			has_building = building_erste_brunner_maschinenwerk
+			NOT = {
+				owner = {
+					has_company = company_erste_brunner
+				}
+			}
+		}
+		remove_building = building_erste_brunner_maschinenwerk
+	}
+	if = {
+		limit = {
+			has_building = building_espana_industrial_sants_mills
+			NOT = {
+				owner = {
+					has_company = company_espana_industrial
+				}
+			}
+		}
+		remove_building = building_espana_industrial_sants_mills
+	}
+	if = {
+		limit = {
+			has_building = building_estaleiro_maua_niteroi_dockyard
+			NOT = {
+				owner = {
+					has_company = company_estaleiro_maua
+				}
+			}
+		}
+		remove_building = building_estaleiro_maua_niteroi_dockyard
+	}
+	if = {
+		limit = {
+			has_building = building_estanifera_llallagua_tin_concentrator
+			NOT = {
+				owner = {
+					has_company = company_estanifera_llallagua
+				}
+			}
+		}
+		remove_building = building_estanifera_llallagua_tin_concentrator
+	}
+	if = {
+		limit = {
+			has_building = building_ethiopian_railway_dire_dawa_depot
+			NOT = {
+				owner = {
+					has_company = company_imperial_ethiopian_railways
+				}
+			}
+		}
+		remove_building = building_ethiopian_railway_dire_dawa_depot
+	}
+	if = {
+		limit = {
+			has_building = building_famae_santiago_arsenal
+			NOT = {
+				owner = {
+					has_company = company_famae
+				}
+			}
+		}
+		remove_building = building_famae_santiago_arsenal
+	}
+	if = {
+		limit = {
+			has_building = building_fanuc_forest
+			NOT = {
+				owner = {
+					has_company = company_fanuc
+				}
+			}
+		}
+		remove_building = building_fanuc_forest
+	}
+	if = {
+		limit = {
+			has_building = building_fcm_la_seyne_shipyard
+			NOT = {
+				owner = {
+					has_company = company_fcm
+				}
+			}
+		}
+		remove_building = building_fcm_la_seyne_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_ferrari_maranello_factory
+			NOT = {
+				owner = {
+					has_company = company_ferrari
+				}
+			}
+		}
+		remove_building = building_ferrari_maranello_factory
+	}
+	if = {
+		limit = {
+			has_building = building_fiat_lingotto_factory
+			NOT = {
+				owner = {
+					has_company = company_fiat
+				}
+			}
+		}
+		remove_building = building_fiat_lingotto_factory
+	}
+	if = {
+		limit = {
+			has_building = building_foochow_mawei_dockyard
+			NOT = {
+				owner = {
+					has_company = company_foochow_arsenal
+				}
+			}
+		}
+		remove_building = building_foochow_mawei_dockyard
+	}
+	if = {
+		limit = {
+			has_building = building_ford_rouge_plant
+			NOT = {
+				owner = {
+					has_company = company_ford_motor
+				}
+			}
+		}
+		remove_building = building_ford_rouge_plant
+	}
+	if = {
+		limit = {
+			has_building = building_franco_belge_raismes_works
+			NOT = {
+				owner = {
+					has_company = company_franco_belge
+				}
+			}
+		}
+		remove_building = building_franco_belge_raismes_works
+	}
+	if = {
+		limit = {
+			has_building = building_fundicao_ipanema_sorocaba_foundry
+			NOT = {
+				owner = {
+					has_company = company_fundicao_ipanema
+				}
+			}
+		}
+		remove_building = building_fundicao_ipanema_sorocaba_foundry
+	}
+	if = {
+		limit = {
+			has_building = building_fundidora_monterrey_blast_furnace
+			NOT = {
+				owner = {
+					has_company = company_fundidora_monterrey
+				}
+			}
+		}
+		remove_building = building_fundidora_monterrey_blast_furnace
+	}
+	if = {
+		limit = {
+			has_building = building_galician_boryslaw_oil_field
+			NOT = {
+				owner = {
+					has_company = company_galician_carpathian_oil
+				}
+			}
+		}
+		remove_building = building_galician_boryslaw_oil_field
+	}
+	if = {
+		limit = {
+			has_building = building_gavrilovic_petrinja_meatworks
+			NOT = {
+				owner = {
+					has_company = company_mate_gavrilovic
+				}
+			}
+		}
+		remove_building = building_gavrilovic_petrinja_meatworks
+	}
+	if = {
+		limit = {
+			has_building = building_gazprom_lakhta_center
+			NOT = {
+				owner = {
+					has_company = company_gazprom
+				}
+			}
+		}
+		remove_building = building_gazprom_lakhta_center
+	}
+	if = {
+		limit = {
+			has_building = building_ge_schenectady_works
+			NOT = {
+				owner = {
+					has_company = company_general_electric
+				}
+			}
+		}
+		remove_building = building_ge_schenectady_works
+	}
+	if = {
+		limit = {
+			has_building = building_generic_arsenal
+			NOT = {
+				owner = {
+					has_company = company_basic_weapons
+				}
+			}
+		}
+		remove_building = building_generic_arsenal
+	}
+	if = {
+		limit = {
+			has_building = building_generic_assay_office
+			NOT = {
+				owner = {
+					has_company = company_basic_gold_mining
+				}
+			}
+		}
+		remove_building = building_generic_assay_office
+	}
+	if = {
+		limit = {
+			has_building = building_generic_chem_works
+			NOT = {
+				owner = {
+					has_company = company_basic_chemicals
+				}
+			}
+		}
+		remove_building = building_generic_chem_works
+	}
+	if = {
+		limit = {
+			has_building = building_generic_cold_storage
+			NOT = {
+				owner = {
+					has_company = company_basic_food
+				}
+			}
+		}
+		remove_building = building_generic_cold_storage
+	}
+	if = {
+		limit = {
+			has_building = building_generic_colonial_depot
+			NOT = {
+				owner = {
+					has_company = company_basic_colonial_plantations_1
+				}
+			}
+		}
+		remove_building = building_generic_colonial_depot
+	}
+	if = {
+		limit = {
+			has_building = building_generic_corporate_university
+		}
+		remove_building = building_generic_corporate_university
+	}
+	if = {
+		limit = {
+			has_building = building_generic_data_fortress
+			NOT = {
+				owner = {
+					has_company = company_basic_software
+				}
+			}
+		}
+		remove_building = building_generic_data_fortress
+	}
+	if = {
+		limit = {
+			has_building = building_generic_dry_dock
+			NOT = {
+				owner = {
+					has_company = company_basic_shipyards
+				}
+			}
+		}
+		remove_building = building_generic_dry_dock
+	}
+	if = {
+		limit = {
+			has_building = building_generic_electronics_lab
+			NOT = {
+				owner = {
+					has_company = company_basic_electrics
+				}
+			}
+		}
+		remove_building = building_generic_electronics_lab
+	}
+	if = {
+		limit = {
+			has_building = building_generic_exhibition_centre
+		}
+		remove_building = building_generic_exhibition_centre
+	}
+	if = {
+		limit = {
+			has_building = building_generic_export_warehouse
+			NOT = {
+				owner = {
+					has_company = company_basic_colonial_plantations_2
+				}
+			}
+		}
+		remove_building = building_generic_export_warehouse
+	}
+	if = {
+		limit = {
+			has_building = building_generic_financial_center
+		}
+		remove_building = building_generic_financial_center
+	}
+	if = {
+		limit = {
+			has_building = building_generic_fish_market
+			NOT = {
+				owner = {
+					has_company = company_basic_fishing
+				}
+			}
+		}
+		remove_building = building_generic_fish_market
+	}
+	if = {
+		limit = {
+			has_building = building_generic_foundry_complex
+			NOT = {
+				owner = {
+					has_company = company_basic_steel
+				}
+			}
+		}
+		remove_building = building_generic_foundry_complex
+	}
+	if = {
+		limit = {
+			has_building = building_generic_granary_complex
+			NOT = {
+				owner = {
+					OR = {
+						has_company = company_basic_agriculture_1
+						has_company = company_basic_agriculture_2
+					}
+				}
+			}
+		}
+		remove_building = building_generic_granary_complex
+	}
+	if = {
+		limit = {
+			has_building = building_generic_hq_skyscraper
+			NOT = {
+				owner = {
+					has_company = company_basic_electrics
+				}
+			}
+		}
+		remove_building = building_generic_hq_skyscraper
+	}
+	if = {
+		limit = {
+			has_building = building_generic_industrial_city
+		}
+		remove_building = building_generic_industrial_city
+	}
+	if = {
+		limit = {
+			has_building = building_generic_industrial_zone
+			NOT = {
+				owner = {
+					has_company = company_construction_power_bloc
+				}
+			}
+		}
+		remove_building = building_generic_industrial_zone
+	}
+	if = {
+		limit = {
+			has_building = building_generic_logistics_hub
+			NOT = {
+				owner = {
+					has_company = company_infrastructure
+				}
+			}
+		}
+		remove_building = building_generic_logistics_hub
+	}
+	if = {
+		limit = {
+			has_building = building_generic_machine_shop
+			NOT = {
+				owner = {
+					has_company = company_basic_metalworks
+				}
+			}
+		}
+		remove_building = building_generic_machine_shop
+	}
+	if = {
+		limit = {
+			has_building = building_generic_materials_lab
+			NOT = {
+				owner = {
+					has_company = company_basic_advanced_materials
+				}
+			}
+		}
+		remove_building = building_generic_materials_lab
+	}
+	if = {
+		limit = {
+			has_building = building_generic_media_hq
+			NOT = {
+				owner = {
+					has_company = company_basic_entertainment
+				}
+			}
+		}
+		remove_building = building_generic_media_hq
+	}
+	if = {
+		limit = {
+			has_building = building_generic_mega_factory
+		}
+		remove_building = building_generic_mega_factory
+	}
+	if = {
+		limit = {
+			has_building = building_generic_mineral_refinery
+			NOT = {
+				owner = {
+					has_company = company_basic_mineral_mining
+				}
+			}
+		}
+		remove_building = building_generic_mineral_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_generic_monument_to_industry
+		}
+		remove_building = building_generic_monument_to_industry
+	}
+	if = {
+		limit = {
+			has_building = building_generic_motor_works
+			NOT = {
+				owner = {
+					has_company = company_basic_motors
+				}
+			}
+		}
+		remove_building = building_generic_motor_works
+	}
+	if = {
+		limit = {
+			has_building = building_generic_ordnance_depot
+			NOT = {
+				owner = {
+					has_company = company_basic_munitions
+				}
+			}
+		}
+		remove_building = building_generic_ordnance_depot
+	}
+	if = {
+		limit = {
+			has_building = building_generic_ore_processing
+			NOT = {
+				owner = {
+					has_company = company_basic_metal_mining
+				}
+			}
+		}
+		remove_building = building_generic_ore_processing
+	}
+	if = {
+		limit = {
+			has_building = building_generic_paper_mill_complex
+			NOT = {
+				owner = {
+					has_company = company_basic_paper
+				}
+			}
+		}
+		remove_building = building_generic_paper_mill_complex
+	}
+	if = {
+		limit = {
+			has_building = building_generic_pipeline_terminus
+		}
+		remove_building = building_generic_pipeline_terminus
+	}
+	if = {
+		limit = {
+			has_building = building_generic_power_hub
+			NOT = {
+				owner = {
+					has_company = company_basic_power
+				}
+			}
+		}
+		remove_building = building_generic_power_hub
+	}
+	if = {
+		limit = {
+			has_building = building_generic_proving_grounds
+			NOT = {
+				owner = {
+					has_company = company_basic_aerospace
+				}
+			}
+		}
+		remove_building = building_generic_proving_grounds
+	}
+	if = {
+		limit = {
+			has_building = building_generic_rail_nexus
+		}
+		remove_building = building_generic_rail_nexus
+	}
+	if = {
+		limit = {
+			has_building = building_generic_rd_complex
+			NOT = {
+				owner = {
+					has_company = company_basic_biotechnology
+				}
+			}
+		}
+		remove_building = building_generic_rd_complex
+	}
+	if = {
+		limit = {
+			has_building = building_generic_resource_depository
+			NOT = {
+				owner = {
+					has_company = company_basic_autarky
+				}
+			}
+		}
+		remove_building = building_generic_resource_depository
+	}
+	if = {
+		limit = {
+			has_building = building_generic_robotics_institute
+			NOT = {
+				owner = {
+					has_company = company_basic_electronics
+				}
+			}
+		}
+		remove_building = building_generic_robotics_institute
+	}
+	if = {
+		limit = {
+			has_building = building_generic_shipping_terminal
+		}
+		remove_building = building_generic_shipping_terminal
+	}
+	if = {
+		limit = {
+			has_building = building_generic_silk_exchange
+			NOT = {
+				owner = {
+					has_company = company_basic_silk_and_dye
+				}
+			}
+		}
+		remove_building = building_generic_silk_exchange
+	}
+	if = {
+		limit = {
+			has_building = building_generic_spaceport
+		}
+		remove_building = building_generic_spaceport
+	}
+	if = {
+		limit = {
+			has_building = building_generic_tank_farm
+			NOT = {
+				owner = {
+					has_company = company_basic_oil
+				}
+			}
+		}
+		remove_building = building_generic_tank_farm
+	}
+	if = {
+		limit = {
+			has_building = building_generic_textile_depot
+			NOT = {
+				owner = {
+					OR = {
+						has_company = company_basic_fabrics
+						has_company = company_basic_textiles
+					}
+				}
+			}
+		}
+		remove_building = building_generic_textile_depot
+	}
+	if = {
+		limit = {
+			has_building = building_generic_vintner_hall
+			NOT = {
+				owner = {
+					has_company = company_basic_wine_and_fruit
+				}
+			}
+		}
+		remove_building = building_generic_vintner_hall
+	}
+	if = {
+		limit = {
+			has_building = building_getzner_bludenz_textile_works
+			NOT = {
+				owner = {
+					has_company = company_getzner_mutter
+				}
+			}
+		}
+		remove_building = building_getzner_bludenz_textile_works
+	}
+	if = {
+		limit = {
+			has_building = building_googleplex
+			NOT = {
+				owner = {
+					has_company = company_google
+				}
+			}
+		}
+		remove_building = building_googleplex
+	}
+	if = {
+		limit = {
+			has_building = building_gotaverken_gothenburg_shipyard
+			NOT = {
+				owner = {
+					has_company = company_gotaverken
+				}
+			}
+		}
+		remove_building = building_gotaverken_gothenburg_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_gran_azucarera_aranjuez_refinery
+			NOT = {
+				owner = {
+					has_company = company_gran_azucarera
+				}
+			}
+		}
+		remove_building = building_gran_azucarera_aranjuez_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_great_indian_railway_jamalpur_works
+			NOT = {
+				owner = {
+					has_company = company_great_indian_railway
+				}
+			}
+		}
+		remove_building = building_great_indian_railway_jamalpur_works
+	}
+	if = {
+		limit = {
+			has_building = building_guinness_st_james_gate_brewery
+			NOT = {
+				owner = {
+					has_company = company_guinness
+				}
+			}
+		}
+		remove_building = building_guinness_st_james_gate_brewery
+	}
+	if = {
+		limit = {
+			has_building = building_gwr_swindon_works
+			NOT = {
+				owner = {
+					has_company = company_gwr
+				}
+			}
+		}
+		remove_building = building_gwr_swindon_works
+	}
+	if = {
+		limit = {
+			has_building = building_hanka_precision_hq
+			NOT = {
+				owner = {
+					has_company = company_hanka_precision
+				}
+			}
+		}
 		remove_building = building_hanka_precision_hq
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_yoyodyne_propulsion }
-		remove_building = building_yoyodyne_propulsion_hq
+	if = {
+		limit = {
+			has_building = building_hanseong_jeongi_gwanghwamun_station
+			NOT = {
+				owner = {
+					has_company = company_hanseong_jeongi_hoesa
+				}
+			}
+		}
+		remove_building = building_hanseong_jeongi_gwanghwamun_station
 	}
-	else_if = {
-		limit = { scope:company.type = company_type:company_rekal }
+	if = {
+		limit = {
+			has_building = building_hanyang_arsenal_iron_works
+			NOT = {
+				owner = {
+					has_company = company_hanyang_arsenal
+				}
+			}
+		}
+		remove_building = building_hanyang_arsenal_iron_works
+	}
+	if = {
+		limit = {
+			has_building = building_hbc_york_factory
+			NOT = {
+				owner = {
+					has_company = company_hbc
+				}
+			}
+		}
+		remove_building = building_hbc_york_factory
+	}
+	if = {
+		limit = {
+			has_building = building_hispano_suiza_barcelona_factory
+			NOT = {
+				owner = {
+					has_company = company_hispano_suiza
+				}
+			}
+		}
+		remove_building = building_hispano_suiza_barcelona_factory
+	}
+	if = {
+		limit = {
+			has_building = building_hp_labs
+			NOT = {
+				owner = {
+					has_company = company_hp
+				}
+			}
+		}
+		remove_building = building_hp_labs
+	}
+	if = {
+		limit = {
+			has_building = building_huawei_ox_horn_campus
+			NOT = {
+				owner = {
+					has_company = company_huawei
+				}
+			}
+		}
+		remove_building = building_huawei_ox_horn_campus
+	}
+	if = {
+		limit = {
+			has_building = building_hughes_yuzovka_steelworks
+			NOT = {
+				owner = {
+					has_company = company_john_hughes
+				}
+			}
+		}
+		remove_building = building_hughes_yuzovka_steelworks
+	}
+	if = {
+		limit = {
+			has_building = building_hyundai_ulsan_factory
+			NOT = {
+				owner = {
+					has_company = company_hyundai
+				}
+			}
+		}
+		remove_building = building_hyundai_ulsan_factory
+	}
+	if = {
+		limit = {
+			has_building = building_ikea_almhult_campus
+			NOT = {
+				owner = {
+					has_company = company_ikea
+				}
+			}
+		}
+		remove_building = building_ikea_almhult_campus
+	}
+	if = {
+		limit = {
+			has_building = building_ilva_bagnoli_steelworks
+			NOT = {
+				owner = {
+					has_company = company_ilva
+				}
+			}
+		}
+		remove_building = building_ilva_bagnoli_steelworks
+	}
+	if = {
+		limit = {
+			has_building = building_imperial_arsenal_golden_horn
+			NOT = {
+				owner = {
+					has_company = company_imperial_arsenal
+				}
+			}
+		}
+		remove_building = building_imperial_arsenal_golden_horn
+	}
+	if = {
+		limit = {
+			has_building = building_imperial_tobacco_wills_factory
+			NOT = {
+				owner = {
+					has_company = company_imperial_tobacco
+				}
+			}
+		}
+		remove_building = building_imperial_tobacco_wills_factory
+	}
+	if = {
+		limit = {
+			has_building = building_infosys_mysore_campus
+			NOT = {
+				owner = {
+					has_company = company_infosys
+				}
+			}
+		}
+		remove_building = building_infosys_mysore_campus
+	}
+	if = {
+		limit = {
+			has_building = building_ingolstadt_power_station
+			NOT = {
+				owner = {
+					has_company = company_ingolstadt_electrical_company
+				}
+			}
+		}
+		remove_building = building_ingolstadt_power_station
+	}
+	if = {
+		limit = {
+			has_building = building_intel_ronler_acres
+			NOT = {
+				owner = {
+					has_company = company_intel
+				}
+			}
+		}
+		remove_building = building_intel_ronler_acres
+	}
+	if = {
+		limit = {
+			has_building = building_iranian_state_railway_veresk_station
+			NOT = {
+				owner = {
+					has_company = company_iranian_state_railway
+				}
+			}
+		}
+		remove_building = building_iranian_state_railway_veresk_station
+	}
+	if = {
+		limit = {
+			has_building = building_izhevsk_arms_factory
+			NOT = {
+				owner = {
+					has_company = company_izhevsk_arms_plant
+				}
+			}
+		}
+		remove_building = building_izhevsk_arms_factory
+	}
+	if = {
+		limit = {
+			has_building = building_jiangnan_nanjing_brocade_hall
+			NOT = {
+				owner = {
+					has_company = company_jiangnan_weaving_bureaus
+				}
+			}
+		}
+		remove_building = building_jiangnan_nanjing_brocade_hall
+	}
+	if = {
+		limit = {
+			has_building = building_jingdezhen_imperial_kiln
+			NOT = {
+				owner = {
+					has_company = company_jingdezhen
+				}
+			}
+		}
+		remove_building = building_jingdezhen_imperial_kiln
+	}
+	if = {
+		limit = {
+			has_building = building_john_brown_clydebank_yard
+			NOT = {
+				owner = {
+					has_company = company_john_brown
+				}
+			}
+		}
+		remove_building = building_john_brown_clydebank_yard
+	}
+	if = {
+		limit = {
+			has_building = building_john_holt_lagos_trading_house
+			NOT = {
+				owner = {
+					has_company = company_john_holt
+				}
+			}
+		}
+		remove_building = building_john_holt_lagos_trading_house
+	}
+	if = {
+		limit = {
+			has_building = building_jsw_vijayanagar_works
+			NOT = {
+				owner = {
+					has_company = company_jsw_steel
+				}
+			}
+		}
+		remove_building = building_jsw_vijayanagar_works
+	}
+	if = {
+		limit = {
+			has_building = building_kablin_zarate_paper_mill
+			NOT = {
+				owner = {
+					has_company = company_kablin
+				}
+			}
+		}
+		remove_building = building_kablin_zarate_paper_mill
+	}
+	if = {
+		limit = {
+			has_building = building_kaiping_tangshan_colliery
+			NOT = {
+				owner = {
+					has_company = company_kaiping_mining
+				}
+			}
+		}
+		remove_building = building_kaiping_tangshan_colliery
+	}
+	if = {
+		limit = {
+			has_building = building_kinkozan_kiyomizu_kiln
+			NOT = {
+				owner = {
+					has_company = company_kinkozan_sobei
+				}
+			}
+		}
+		remove_building = building_kinkozan_kiyomizu_kiln
+	}
+	if = {
+		limit = {
+			has_building = building_kirgizian_copper_smelter
+			NOT = {
+				owner = {
+					has_company = company_kirgizian_mining_company
+				}
+			}
+		}
+		remove_building = building_kirgizian_copper_smelter
+	}
+	if = {
+		limit = {
+			has_building = building_klanicko_belgrade_slaughterhouse
+			NOT = {
+				owner = {
+					has_company = company_klanicko_drustvo
+				}
+			}
+		}
+		remove_building = building_klanicko_belgrade_slaughterhouse
+	}
+	if = {
+		limit = {
+			has_building = building_klein_galician_paper_mill
+			NOT = {
+				owner = {
+					has_company = company_jakub_klein
+				}
+			}
+		}
+		remove_building = building_klein_galician_paper_mill
+	}
+	if = {
+		limit = {
+			has_building = building_kouppas_piraeus_foundry
+			NOT = {
+				owner = {
+					has_company = company_kouppas
+				}
+			}
+		}
+		remove_building = building_kouppas_piraeus_foundry
+	}
+	if = {
+		limit = {
+			has_building = building_krupp_essen_works
+			NOT = {
+				owner = {
+					has_company = company_krupp
+				}
+			}
+		}
+		remove_building = building_krupp_essen_works
+	}
+	if = {
+		limit = {
+			has_building = building_la_rosada_buenos_aires_arsenal
+			NOT = {
+				owner = {
+					has_company = company_la_rosada
+				}
+			}
+		}
+		remove_building = building_la_rosada_buenos_aires_arsenal
+	}
+	if = {
+		limit = {
+			has_building = building_lanfang_pontianak_kongsi_house
+			NOT = {
+				owner = {
+					has_company = company_lanfang_kongsi
+				}
+			}
+		}
+		remove_building = building_lanfang_pontianak_kongsi_house
+	}
+	if = {
+		limit = {
+			has_building = building_lee_wilson_plantation_depot
+			NOT = {
+				owner = {
+					has_company = company_lee_wilson
+				}
+			}
+		}
+		remove_building = building_lee_wilson_plantation_depot
+	}
+	if = {
+		limit = {
+			has_building = building_lilpop_warsaw_metalworks
+			NOT = {
+				owner = {
+					has_company = company_lilpop
+				}
+			}
+		}
+		remove_building = building_lilpop_warsaw_metalworks
+	}
+	if = {
+		limit = {
+			has_building = building_lkab_kiruna_mine
+			NOT = {
+				owner = {
+					has_company = company_lkab
+				}
+			}
+		}
+		remove_building = building_lkab_kiruna_mine
+	}
+	if = {
+		limit = {
+			has_building = building_lockheed_skunk_works
+			NOT = {
+				owner = {
+					has_company = company_lockheed_martin
+				}
+			}
+		}
+		remove_building = building_lockheed_skunk_works
+	}
+	if = {
+		limit = {
+			has_building = building_madura_mills_madurai_complex
+			NOT = {
+				owner = {
+					has_company = company_madura_mills
+				}
+			}
+		}
+		remove_building = building_madura_mills_madurai_complex
+	}
+	if = {
+		limit = {
+			has_building = building_manfred_weiss_csepel_works
+			NOT = {
+				owner = {
+					has_company = company_manfred_weiss
+				}
+			}
+		}
+		remove_building = building_manfred_weiss_csepel_works
+	}
+	if = {
+		limit = {
+			has_building = building_mantero_como_silk_mill
+			NOT = {
+				owner = {
+					has_company = company_mantero_seta
+				}
+			}
+		}
+		remove_building = building_mantero_como_silk_mill
+	}
+	if = {
+		limit = {
+			has_building = building_mantetsu_dalian_railway_hub
+			NOT = {
+				owner = {
+					has_company = company_mantetsu
+				}
+			}
+		}
+		remove_building = building_mantetsu_dalian_railway_hub
+	}
+	if = {
+		limit = {
+			has_building = building_maple_tottenham_court_showroom
+			NOT = {
+				owner = {
+					has_company = company_maple_and_co
+				}
+			}
+		}
+		remove_building = building_maple_tottenham_court_showroom
+	}
+	if = {
+		limit = {
+			has_building = building_massey_harris_toronto_implement_works
+			NOT = {
+				owner = {
+					has_company = company_massey_harris
+				}
+			}
+		}
+		remove_building = building_massey_harris_toronto_implement_works
+	}
+	if = {
+		limit = {
+			has_building = building_mav_budapest_locomotive_works
+			NOT = {
+				owner = {
+					has_company = company_mav
+				}
+			}
+		}
+		remove_building = building_mav_budapest_locomotive_works
+	}
+	if = {
+		limit = {
+			has_building = building_megastructure_consortium_hq
+			NOT = {
+				owner = {
+					has_company = company_megastructure_consortium
+				}
+			}
+		}
+		remove_building = building_megastructure_consortium_hq
+	}
+	if = {
+		limit = {
+			has_building = building_meissen_porcelain_manufactory
+			NOT = {
+				owner = {
+					has_company = company_konigliche_porzellan_manufaktur_meissen
+				}
+			}
+		}
+		remove_building = building_meissen_porcelain_manufactory
+	}
+	if = {
+		limit = {
+			has_building = building_microsoft_redmond_campus
+			NOT = {
+				owner = {
+					has_company = company_microsoft
+				}
+			}
+		}
+		remove_building = building_microsoft_redmond_campus
+	}
+	if = {
+		limit = {
+			has_building = building_misr_mahalla_textile_complex
+			NOT = {
+				owner = {
+					has_company = company_misr
+				}
+			}
+		}
+		remove_building = building_misr_mahalla_textile_complex
+	}
+	if = {
+		limit = {
+			has_building = building_mitsubishi_nagasaki_shipyard
+			NOT = {
+				owner = {
+					has_company = company_mitsubishi
+				}
+			}
+		}
+		remove_building = building_mitsubishi_nagasaki_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_mitsui_trading_house
+			NOT = {
+				owner = {
+					has_company = company_mitsui
+				}
+			}
+		}
+		remove_building = building_mitsui_trading_house
+	}
+	if = {
+		limit = {
+			has_building = building_mokta_el_hadid_beni_saf_mine
+			NOT = {
+				owner = {
+					has_company = company_societe_mokta_el_hadid
+				}
+			}
+		}
+		remove_building = building_mokta_el_hadid_beni_saf_mine
+	}
+	if = {
+		limit = {
+			has_building = building_morozov_orekhovo_zuevo_mills
+			NOT = {
+				owner = {
+					has_company = company_savva_morozov
+				}
+			}
+		}
+		remove_building = building_morozov_orekhovo_zuevo_mills
+	}
+	if = {
+		limit = {
+			has_building = building_moscow_irrigation_cotton_depot
+			NOT = {
+				owner = {
+					has_company = company_moscow_irrigation_company
+				}
+			}
+		}
+		remove_building = building_moscow_irrigation_cotton_depot
+	}
+	if = {
+		limit = {
+			has_building = building_moser_karlsbad_glass_works
+			NOT = {
+				owner = {
+					has_company = company_ludwig_moser_and_sons
+				}
+			}
+		}
+		remove_building = building_moser_karlsbad_glass_works
+	}
+	if = {
+		limit = {
+			has_building = building_mozambique_company_beira_concession
+			NOT = {
+				owner = {
+					has_company = company_mozambique_company
+				}
+			}
+		}
+		remove_building = building_mozambique_company_beira_concession
+	}
+	if = {
+		limit = {
+			has_building = building_nam_dinh_textile_plant
+			NOT = {
+				owner = {
+					has_company = company_nam_dinh
+				}
+			}
+		}
+		remove_building = building_nam_dinh_textile_plant
+	}
+	if = {
+		limit = {
+			has_building = building_nederlandse_petroleum_pangkalan_depot
+			NOT = {
+				owner = {
+					has_company = company_nederlandse_petroleum
+				}
+			}
+		}
+		remove_building = building_nederlandse_petroleum_pangkalan_depot
+	}
+	if = {
+		limit = {
+			has_building = building_netflix_animation_studios
+			NOT = {
+				owner = {
+					has_company = company_netflix
+				}
+			}
+		}
+		remove_building = building_netflix_animation_studios
+	}
+	if = {
+		limit = {
+			has_building = building_neurovault_hq
+			NOT = {
+				owner = {
+					has_company = company_neurovault
+				}
+			}
+		}
+		remove_building = building_neurovault_hq
+	}
+	if = {
+		limit = {
+			has_building = building_nintendo_development_center
+			NOT = {
+				owner = {
+					has_company = company_nintendo
+				}
+			}
+		}
+		remove_building = building_nintendo_development_center
+	}
+	if = {
+		limit = {
+			has_building = building_nioc_masjed_soleyman_field
+			NOT = {
+				owner = {
+					has_company = company_national_iranian_oil
+				}
+			}
+		}
+		remove_building = building_nioc_masjed_soleyman_field
+	}
+	if = {
+		limit = {
+			has_building = building_nobel_baku_refinery
+			NOT = {
+				owner = {
+					has_company = company_branobel
+				}
+			}
+		}
+		remove_building = building_nobel_baku_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_nokia_cable_works
+			NOT = {
+				owner = {
+					has_company = company_nokia
+				}
+			}
+		}
+		remove_building = building_nokia_cable_works
+	}
+	if = {
+		limit = {
+			has_building = building_norsk_hydro_rjukan_plant
+			NOT = {
+				owner = {
+					has_company = company_norsk_hydro
+				}
+			}
+		}
+		remove_building = building_norsk_hydro_rjukan_plant
+	}
+	if = {
+		limit = {
+			has_building = building_nvidia_endeavor_campus
+			NOT = {
+				owner = {
+					has_company = company_nvidia
+				}
+			}
+		}
+		remove_building = building_nvidia_endeavor_campus
+	}
+	if = {
+		limit = {
+			has_building = building_ocp_khouribga_mine
+			NOT = {
+				owner = {
+					has_company = company_office_cherifien_des_phosphates
+				}
+			}
+		}
+		remove_building = building_ocp_khouribga_mine
+	}
+	if = {
+		limit = {
+			has_building = building_oevg_steyr_arms_works
+			NOT = {
+				owner = {
+					has_company = company_oevg
+				}
+			}
+		}
+		remove_building = building_oevg_steyr_arms_works
+	}
+	if = {
+		limit = {
+			has_building = building_ong_lung_sheng_tea_warehouse
+			NOT = {
+				owner = {
+					has_company = company_ong_lung_sheng_tea_company
+				}
+			}
+		}
+		remove_building = building_ong_lung_sheng_tea_warehouse
+	}
+	if = {
+		limit = {
+			has_building = building_openai_research_lab
+			NOT = {
+				owner = {
+					has_company = company_openai
+				}
+			}
+		}
+		remove_building = building_openai_research_lab
+	}
+	if = {
+		limit = {
+			has_building = building_opium_ghazipur_factory
+			NOT = {
+				owner = {
+					has_company = company_opium_export_monopoly
+				}
+			}
+		}
+		remove_building = building_opium_ghazipur_factory
+	}
+	if = {
+		limit = {
+			has_building = building_oracle_cloud_data_center
+			NOT = {
+				owner = {
+					has_company = company_oracle
+				}
+			}
+		}
+		remove_building = building_oracle_cloud_data_center
+	}
+	if = {
+		limit = {
+			has_building = building_orient_express_sirkeci_terminal
+			NOT = {
+				owner = {
+					has_company = company_orient_express
+				}
+			}
+		}
+		remove_building = building_orient_express_sirkeci_terminal
+	}
+	if = {
+		limit = {
+			has_building = building_oriental_dev_kunsan_granary
+			NOT = {
+				owner = {
+					has_company = company_oriental_development_company
+				}
+			}
+		}
+		remove_building = building_oriental_dev_kunsan_granary
+	}
+	if = {
+		limit = {
+			has_building = building_panama_company_culebra_cut
+			NOT = {
+				owner = {
+					has_company = company_panama_company
+				}
+			}
+		}
+		remove_building = building_panama_company_culebra_cut
+	}
+	if = {
+		limit = {
+			has_building = building_paradox_kvarnholmen_studio
+			NOT = {
+				owner = {
+					has_company = company_paradox
+				}
+			}
+		}
+		remove_building = building_paradox_kvarnholmen_studio
+	}
+	if = {
+		limit = {
+			has_building = building_pedro_domecq_jerez_bodega
+			NOT = {
+				owner = {
+					has_company = company_pedro_domecq
+				}
+			}
+		}
+		remove_building = building_pedro_domecq_jerez_bodega
+	}
+	if = {
+		limit = {
+			has_building = building_pernambuco_recife_cotton_mill
+			NOT = {
+				owner = {
+					has_company = company_pernambuco_textiles
+				}
+			}
+		}
+		remove_building = building_pernambuco_recife_cotton_mill
+	}
+	if = {
+		limit = {
+			has_building = building_perskhlopok_cotton_combines
+			NOT = {
+				owner = {
+					has_company = company_perskhlopok
+				}
+			}
+		}
+		remove_building = building_perskhlopok_cotton_combines
+	}
+	if = {
+		limit = {
+			has_building = building_persshelk_silk_reeling_house
+			NOT = {
+				owner = {
+					has_company = company_persshelk
+				}
+			}
+		}
+		remove_building = building_persshelk_silk_reeling_house
+	}
+	if = {
+		limit = {
+			has_building = building_peruvian_amazon_iquitos_depot
+			NOT = {
+				owner = {
+					has_company = company_peruvian_amazon
+				}
+			}
+		}
+		remove_building = building_peruvian_amazon_iquitos_depot
+	}
+	if = {
+		limit = {
+			has_building = building_petrobras_cenpes_center
+			NOT = {
+				owner = {
+					has_company = company_petrobras
+				}
+			}
+		}
+		remove_building = building_petrobras_cenpes_center
+	}
+	if = {
+		limit = {
+			has_building = building_pfizer_rd_campus
+			NOT = {
+				owner = {
+					has_company = company_pfizer
+				}
+			}
+		}
+		remove_building = building_pfizer_rd_campus
+	}
+	if = {
+		limit = {
+			has_building = building_philips_eindhoven_natlab
+			NOT = {
+				owner = {
+					has_company = company_philips
+				}
+			}
+		}
+		remove_building = building_philips_eindhoven_natlab
+	}
+	if = {
+		limit = {
+			has_building = building_portalis_lyon_silk_house
+			NOT = {
+				owner = {
+					has_company = company_nicolas_portalis
+				}
+			}
+		}
+		remove_building = building_portalis_lyon_silk_house
+	}
+	if = {
+		limit = {
+			has_building = building_prussian_railway_directorate
+			NOT = {
+				owner = {
+					has_company = company_prussian_state_railways
+				}
+			}
+		}
+		remove_building = building_prussian_railway_directorate
+	}
+	if = {
+		limit = {
+			has_building = building_putilov_works
+			NOT = {
+				owner = {
+					has_company = company_putilov_company
+				}
+			}
+		}
+		remove_building = building_putilov_works
+	}
+	if = {
+		limit = {
+			has_building = building_rac_sitka_trading_post
+			NOT = {
+				owner = {
+					has_company = company_russian_american_company
+				}
+			}
+		}
+		remove_building = building_rac_sitka_trading_post
+	}
+	if = {
+		limit = {
+			has_building = building_ralli_odessa_grain_elevator
+			NOT = {
+				owner = {
+					has_company = company_ralli_brothers
+				}
+			}
+		}
+		remove_building = building_ralli_odessa_grain_elevator
+	}
+	if = {
+		limit = {
+			has_building = building_rekal_hq
+			NOT = {
+				owner = {
+					has_company = company_rekal
+				}
+			}
+		}
 		remove_building = building_rekal_hq
 	}
+	if = {
+		limit = {
+			has_building = building_reliance_jamnagar_refinery
+			NOT = {
+				owner = {
+					has_company = company_reliance
+				}
+			}
+		}
+		remove_building = building_reliance_jamnagar_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_rheinmetall_unterluss_proving_ground
+			NOT = {
+				owner = {
+					has_company = company_rheinmetall
+				}
+			}
+		}
+		remove_building = building_rheinmetall_unterluss_proving_ground
+	}
+	if = {
+		limit = {
+			has_building = building_ricordi_galleria_vittorio_emanuele
+			NOT = {
+				owner = {
+					has_company = company_ricordi
+				}
+			}
+		}
+		remove_building = building_ricordi_galleria_vittorio_emanuele
+	}
+	if = {
+		limit = {
+			has_building = building_roche_tower
+			NOT = {
+				owner = {
+					has_company = company_roche
+				}
+			}
+		}
+		remove_building = building_roche_tower
+	}
+	if = {
+		limit = {
+			has_building = building_rodriguez_arguelles_havana_tobacco_house
+			NOT = {
+				owner = {
+					has_company = company_rodriguez_arguelles_y_cia
+				}
+			}
+		}
+		remove_building = building_rodriguez_arguelles_havana_tobacco_house
+	}
+	if = {
+		limit = {
+			has_building = building_romanian_star_ploiesti_refinery
+			NOT = {
+				owner = {
+					has_company = company_romanian_star
+				}
+			}
+		}
+		remove_building = building_romanian_star_ploiesti_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_rosatom_mayak_association
+			NOT = {
+				owner = {
+					has_company = company_rosatom
+				}
+			}
+		}
+		remove_building = building_rosatom_mayak_association
+	}
+	if = {
+		limit = {
+			has_building = building_roscosmos_vostochny_cosmodrome
+			NOT = {
+				owner = {
+					has_company = company_roscosmos
+				}
+			}
+		}
+		remove_building = building_roscosmos_vostochny_cosmodrome
+	}
+	if = {
+		limit = {
+			has_building = building_rossi_sao_leopoldo_arms_factory
+			NOT = {
+				owner = {
+					has_company = company_rossi
+				}
+			}
+		}
+		remove_building = building_rossi_sao_leopoldo_arms_factory
+	}
+	if = {
+		limit = {
+			has_building = building_saint_etienne_arms_manufactory
+			NOT = {
+				owner = {
+					has_company = company_saint_etienne
+				}
+			}
+		}
+		remove_building = building_saint_etienne_arms_manufactory
+	}
+	if = {
+		limit = {
+			has_building = building_samsung_digital_city
+			NOT = {
+				owner = {
+					has_company = company_samsung
+				}
+			}
+		}
+		remove_building = building_samsung_digital_city
+	}
+	if = {
+		limit = {
+			has_building = building_san_miguel_manila_brewery
+			NOT = {
+				owner = {
+					has_company = company_san_miguel
+				}
+			}
+		}
+		remove_building = building_san_miguel_manila_brewery
+	}
+	if = {
+		limit = {
+			has_building = building_sandford_newcastle_natal_ironworks
+			NOT = {
+				owner = {
+					has_company = company_william_sandford
+				}
+			}
+		}
+		remove_building = building_sandford_newcastle_natal_ironworks
+	}
+	if = {
+		limit = {
+			has_building = building_sansinena_avellaneda_frigorifico
+			NOT = {
+				owner = {
+					has_company = company_compania_sansinena_de_carnes_congeladas
+				}
+			}
+		}
+		remove_building = building_sansinena_avellaneda_frigorifico
+	}
+	if = {
+		limit = {
+			has_building = building_sao_paulo_railway_paranapiacaba_workshop
+			NOT = {
+				owner = {
+					has_company = company_sao_paulo_railway
+				}
+			}
+		}
+		remove_building = building_sao_paulo_railway_paranapiacaba_workshop
+	}
+	if = {
+		limit = {
+			has_building = building_sap_headquarters
+			NOT = {
+				owner = {
+					has_company = company_sap
+				}
+			}
+		}
+		remove_building = building_sap_headquarters
+	}
+	if = {
+		limit = {
+			has_building = building_sassoon_bombay_docks
+			NOT = {
+				owner = {
+					has_company = company_david_sassoon
+				}
+			}
+		}
+		remove_building = building_sassoon_bombay_docks
+	}
+	if = {
+		limit = {
+			has_building = building_saudi_aramco_abqaiq_plant
+			NOT = {
+				owner = {
+					has_company = company_saudi_aramco
+				}
+			}
+		}
+		remove_building = building_saudi_aramco_abqaiq_plant
+	}
+	if = {
+		limit = {
+			has_building = building_schichau_elbing_shipyard
+			NOT = {
+				owner = {
+					has_company = company_schichau
+				}
+			}
+		}
+		remove_building = building_schichau_elbing_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_schneider_le_creusot
+			NOT = {
+				owner = {
+					has_company = company_schneider_creusot
+				}
+			}
+		}
+		remove_building = building_schneider_le_creusot
+	}
+	if = {
+		limit = {
+			has_building = building_secn_ferrol_shipyard
+			NOT = {
+				owner = {
+					has_company = company_secn
+				}
+			}
+		}
+		remove_building = building_secn_ferrol_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_sherkat_shemali_cotton_gin
+			NOT = {
+				owner = {
+					has_company = company_sherkat_shemali
+				}
+			}
+		}
+		remove_building = building_sherkat_shemali_cotton_gin
+	}
+	if = {
+		limit = {
+			has_building = building_sherkate_eslamiya_isfahan_mill
+			NOT = {
+				owner = {
+					has_company = company_sherkate_eslamiya
+				}
+			}
+		}
+		remove_building = building_sherkate_eslamiya_isfahan_mill
+	}
+	if = {
+		limit = {
+			has_building = building_shopify_fulfillment_hub
+			NOT = {
+				owner = {
+					has_company = company_shopify
+				}
+			}
+		}
+		remove_building = building_shopify_fulfillment_hub
+	}
+	if = {
+		limit = {
+			has_building = building_siemens_erlangen_campus
+			NOT = {
+				owner = {
+					has_company = company_siemens_and_halske
+				}
+			}
+		}
+		remove_building = building_siemens_erlangen_campus
+	}
+	if = {
+		limit = {
+			has_building = building_skoda_pilsen_works
+			NOT = {
+				owner = {
+					has_company = company_skoda
+				}
+			}
+		}
+		remove_building = building_skoda_pilsen_works
+	}
+	if = {
+		limit = {
+			has_building = building_softbank_vision_fund_hq
+			NOT = {
+				owner = {
+					has_company = company_softbank
+				}
+			}
+		}
+		remove_building = building_softbank_vision_fund_hq
+	}
+	if = {
+		limit = {
+			has_building = building_sony_pictures_studios
+			NOT = {
+				owner = {
+					has_company = company_sony
+				}
+			}
+		}
+		remove_building = building_sony_pictures_studios
+	}
+	if = {
+		limit = {
+			has_building = building_spacex_starbase
+			NOT = {
+				owner = {
+					has_company = company_spacex
+				}
+			}
+		}
+		remove_building = building_spacex_starbase
+	}
+	if = {
+		limit = {
+			has_building = building_standard_oil_refinery
+			NOT = {
+				owner = {
+					has_company = company_standard_oil
+				}
+			}
+		}
+		remove_building = building_standard_oil_refinery
+	}
+	if = {
+		limit = {
+			has_building = building_steel_brothers_syriam_depot
+			NOT = {
+				owner = {
+					has_company = company_steel_brothers
+				}
+			}
+		}
+		remove_building = building_steel_brothers_syriam_depot
+	}
+	if = {
+		limit = {
+			has_building = building_stf_fiume_torpedo_works
+			NOT = {
+				owner = {
+					has_company = company_stabilimento_tecnico_di_fiume
+				}
+			}
+		}
+		remove_building = building_stf_fiume_torpedo_works
+	}
+	if = {
+		limit = {
+			has_building = building_stt_haskoy_shipyard
+			NOT = {
+				owner = {
+					has_company = company_stt
+				}
+			}
+		}
+		remove_building = building_stt_haskoy_shipyard
+	}
+	if = {
+		limit = {
+			has_building = building_sudamericana_valparaiso_pier
+			NOT = {
+				owner = {
+					has_company = company_sudamericana_de_vapores
+				}
+			}
+		}
+		remove_building = building_sudamericana_valparaiso_pier
+	}
+	if = {
+		limit = {
+			has_building = building_suez_company_ismailia_hq
+			NOT = {
+				owner = {
+					has_company = company_suez_company
+				}
+			}
+		}
+		remove_building = building_suez_company_ismailia_hq
+	}
+	if = {
+		limit = {
+			has_building = building_sunhwaguk_seoul_tobacco_factory
+			NOT = {
+				owner = {
+					has_company = company_sunhwaguk
+				}
+			}
+		}
+		remove_building = building_sunhwaguk_seoul_tobacco_factory
+	}
+	if = {
+		limit = {
+			has_building = building_tashkent_railroad_workshops
+			NOT = {
+				owner = {
+					has_company = company_tashkent_railroad
+				}
+			}
+		}
+		remove_building = building_tashkent_railroad_workshops
+	}
+	if = {
+		limit = {
+			has_building = building_tata_jamshedpur_works
+			NOT = {
+				owner = {
+					has_company = company_tata
+				}
+			}
+		}
+		remove_building = building_tata_jamshedpur_works
+	}
+	if = {
+		limit = {
+			has_building = building_tencent_seafront_towers
+			NOT = {
+				owner = {
+					has_company = company_tencent
+				}
+			}
+		}
+		remove_building = building_tencent_seafront_towers
+	}
+	if = {
+		limit = {
+			has_building = building_tessier_ashpool_hq
+			NOT = {
+				owner = {
+					has_company = company_tessier_ashpool
+				}
+			}
+		}
+		remove_building = building_tessier_ashpool_hq
+	}
+	if = {
+		limit = {
+			has_building = building_thonet_bystrice_bentwood_factory
+			NOT = {
+				owner = {
+					has_company = company_gebruder_thonet
+				}
+			}
+		}
+		remove_building = building_thonet_bystrice_bentwood_factory
+	}
+	if = {
+		limit = {
+			has_building = building_tobacco_regie_cibali_factory
+			NOT = {
+				owner = {
+					has_company = company_ottoman_tobacco_regie
+				}
+			}
+		}
+		remove_building = building_tobacco_regie_cibali_factory
+	}
+	if = {
+		limit = {
+			has_building = building_toyota_kaikan_plant
+			NOT = {
+				owner = {
+					has_company = company_toyota
+				}
+			}
+		}
+		remove_building = building_toyota_kaikan_plant
+	}
+	if = {
+		limit = {
+			has_building = building_trubia_cannon_foundry
+			NOT = {
+				owner = {
+					has_company = company_trubia
+				}
+			}
+		}
+		remove_building = building_trubia_cannon_foundry
+	}
+	if = {
+		limit = {
+			has_building = building_tsmc_fab_18
+			NOT = {
+				owner = {
+					has_company = company_tsmc
+				}
+			}
+		}
+		remove_building = building_tsmc_fab_18
+	}
+	if = {
+		limit = {
+			has_building = building_turkish_petroleum_kirkuk_depot
+			NOT = {
+				owner = {
+					has_company = company_turkish_petroleum
+				}
+			}
+		}
+		remove_building = building_turkish_petroleum_kirkuk_depot
+	}
+	if = {
+		limit = {
+			has_building = building_tycho_manufacturing_hq
+			NOT = {
+				owner = {
+					has_company = company_tycho_manufacturing
+				}
+			}
+		}
+		remove_building = building_tycho_manufacturing_hq
+	}
+	if = {
+		limit = {
+			has_building = building_uniao_fabril_barreiro_plant
+			NOT = {
+				owner = {
+					has_company = company_uniao_fabril
+				}
+			}
+		}
+		remove_building = building_uniao_fabril_barreiro_plant
+	}
+	if = {
+		limit = {
+			has_building = building_united_fruit_great_white_fleet_terminal
+			NOT = {
+				owner = {
+					has_company = company_united_fruit
+				}
+			}
+		}
+		remove_building = building_united_fruit_great_white_fleet_terminal
+	}
+	if = {
+		limit = {
+			has_building = building_united_tobacco_moscow_plant
+			NOT = {
+				owner = {
+					has_company = company_united_tobacco_factories
+				}
+			}
+		}
+		remove_building = building_united_tobacco_moscow_plant
+	}
+	if = {
+		limit = {
+			has_building = building_universal_studios_hollywood
+			NOT = {
+				owner = {
+					has_company = company_universal
+				}
+			}
+		}
+		remove_building = building_universal_studios_hollywood
+	}
+	if = {
+		limit = {
+			has_building = building_ursus_warsaw_tractor_plant
+			NOT = {
+				owner = {
+					has_company = company_ursus
+				}
+			}
+		}
+		remove_building = building_ursus_warsaw_tractor_plant
+	}
+	if = {
+		limit = {
+			has_building = building_vale_carajas_mine
+			NOT = {
+				owner = {
+					has_company = company_vale
+				}
+			}
+		}
+		remove_building = building_vale_carajas_mine
+	}
+	if = {
+		limit = {
+			has_building = building_verizon_building
+			NOT = {
+				owner = {
+					has_company = company_verizon
+				}
+			}
+		}
+		remove_building = building_verizon_building
+	}
+	if = {
+		limit = {
+			has_building = building_vodka_monopoly_warehouse
+			NOT = {
+				owner = {
+					has_company = company_vodka_monopoly
+				}
+			}
+		}
+		remove_building = building_vodka_monopoly_warehouse
+	}
+	if = {
+		limit = {
+			has_building = building_volkswagen_autostadt
+			NOT = {
+				owner = {
+					has_company = company_volkswagen
+				}
+			}
+		}
+		remove_building = building_volkswagen_autostadt
+	}
+	if = {
+		limit = {
+			has_building = building_wadia_bombay_dockyard
+			NOT = {
+				owner = {
+					has_company = company_wadia_shipbuilders
+				}
+			}
+		}
+		remove_building = building_wadia_bombay_dockyard
+	}
+	if = {
+		limit = {
+			has_building = building_west_ural_oil_depot
+			NOT = {
+				owner = {
+					has_company = company_west_ural_petroleum
+				}
+			}
+		}
+		remove_building = building_west_ural_oil_depot
+	}
+	if = {
+		limit = {
+			has_building = building_witkowitzer_ostrava_ironworks
+			NOT = {
+				owner = {
+					has_company = company_witkowitzer_bergbau_und_huttengewerkschaft
+				}
+			}
+		}
+		remove_building = building_witkowitzer_ostrava_ironworks
+	}
+	if = {
+		limit = {
+			has_building = building_worth_rue_de_la_paix_atelier
+			NOT = {
+				owner = {
+					has_company = company_maison_worth
+				}
+			}
+		}
+		remove_building = building_worth_rue_de_la_paix_atelier
+	}
+	if = {
+		limit = {
+			has_building = building_ynchausti_manila_trading_house
+			NOT = {
+				owner = {
+					has_company = company_ynchausti_y_compania
+				}
+			}
+		}
+		remove_building = building_ynchausti_manila_trading_house
+	}
+	if = {
+		limit = {
+			has_building = building_yoyodyne_propulsion_hq
+			NOT = {
+				owner = {
+					has_company = company_yoyodyne_propulsion
+				}
+			}
+		}
+		remove_building = building_yoyodyne_propulsion_hq
+	}
+	if = {
+		limit = {
+			has_building = building_zastava_kragujevac_arsenal
+			NOT = {
+				owner = {
+					has_company = company_zastava
+				}
+			}
+		}
+		remove_building = building_zastava_kragujevac_arsenal
+	}
+}
+
+# Backward-compatible wrapper used by on_company_disbanded.
+remove_disbanded_company_buildings_effect = {
+	remove_invalid_company_buildings_effect = yes
 }

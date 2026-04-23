@@ -490,6 +490,7 @@ ministry_of_thought_control_on_action = {
 remove_invalid_buildings = {
 	effect = {
 		every_scope_state = {
+			remove_invalid_company_buildings_effect = yes
 			limit = {
 				AND = {
 					NOT = { owner.market_capital = THIS }

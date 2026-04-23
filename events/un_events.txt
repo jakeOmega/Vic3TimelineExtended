@@ -2528,7 +2528,7 @@ un_events.101 = {
 		}
 		# Benefits already applied by giver event with GDP scaling
 		add_loyalists = {
-			value = very_small_radicals
+			value = small_radicals
 			strata = upper
 		}
 	}

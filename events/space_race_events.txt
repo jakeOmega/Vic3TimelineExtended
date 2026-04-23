@@ -1502,6 +1502,12 @@ space_race_events.41 = {
 	}
 
 	option = {
+		trigger = {
+			any_scope_building = {
+				is_building_type = building_space_elevator
+			}
+		}
+		highlighted_option = yes
 		name = space_race_events.41.b
 		ai_chance = {
 			base = 3
@@ -1562,10 +1568,6 @@ space_race_events.41 = {
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			change_variable = { name = sr_progress_mars_landing add = 5 }
-		}
-		add_modifier = {
-			name = sr_space_program_funding
-			multiplier = 1
 		}
 	}
 }
@@ -2486,8 +2488,8 @@ space_race_events.52 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = SR_PROGRESS_ADD_3_TT
-		set_variable = { name = sr_progress_boost value = 3 }
+		custom_tooltip = SR_PROGRESS_ADD_5_TT
+		set_variable = { name = sr_progress_boost value = 5 }
 		sr_boost_active_milestones = yes
 	}
 }
@@ -3394,8 +3396,8 @@ space_race_events.24 = {
 		name = space_race_events.24.b
 		ai_chance = { base = 3 }
 		# Propose cost-cutting measures: faster resolution but engineers resent cuts
-		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
-		set_variable = { name = sr_progress_boost value = -4 }
+		custom_tooltip = SR_PROGRESS_SUBTRACT_3_TT
+		set_variable = { name = sr_progress_boost value = -3 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals pop_type = academics }
 	}

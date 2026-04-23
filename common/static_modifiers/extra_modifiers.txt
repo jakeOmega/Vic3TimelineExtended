@@ -5338,7 +5338,7 @@ iw_domestic_defense = {
 	country_intelligence_capacity_add = 2
 	country_support_separatism_resistance_mult = 0.03
 	country_coup_resistance_add = 0.1
-	state_radicals_from_political_movements_mult = -0.03
+	political_movement_radicalism_add = -0.05
 }
 
 # Applied to SELF when espionage target has NO tech advantage (base bonus only)

@@ -1999,11 +1999,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
     # ---- response helpers -------------------------------------------------
     def _respond_json(self, data, status=200):
         body = json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        except (ConnectionAbortedError, BrokenPipeError) as e:
+            # Client disconnected while we were writing headers/body. Log at debug and continue.
+            logger.debug(f"Client disconnected while writing response: {e}")
 
     def log_message(self, format, *args):
         # Log requests at DEBUG level to the file (suppresses console spam)

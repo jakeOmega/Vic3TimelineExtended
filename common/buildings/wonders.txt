@@ -967,6 +967,8 @@ building_wonder_continental_union_hq = {
             }
             AND = {
                 state_is_in_recognized_continent = yes
+                # Only allow if this state is on the same continent as the owner's capital
+                is_overseas_from_capital = no
                 continent_has_no_building_of_type = { BUILDING_TYPE = building_wonder_continental_union_hq }
             }
         }
