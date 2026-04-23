@@ -281,8 +281,8 @@ sr_probe_target_mars = {
 }
 sr_probe_target_asteroid = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	building_space_mine_throughput_add = 0.05
-	goods_output_advanced_materials_mult = 0.02
+	country_space_race_progress_add = 0.4
+	country_weekly_innovation_max_add = 25
 }
 
 # --- Moon Base Purpose ---

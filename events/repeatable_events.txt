@@ -18,7 +18,7 @@ repeatable_events.10 = {
     }
     flavor = repeatable_events.10.f
 
-    event_image = { texture = "gfx/event_pictures/supply_chain_disruption.dds" }
+    event_image = { texture = "gfx/event_pictures/election_debate_stage.dds" }
     on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
     icon = "gfx/interface/icons/event_icons/event_election.dds"
 

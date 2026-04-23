@@ -272,7 +272,7 @@ environmentalism_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/anti_nuclear_energy_march.dds" }
+	event_image = { texture = "gfx/event_pictures/drought_devastation.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

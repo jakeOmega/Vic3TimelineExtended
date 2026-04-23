@@ -235,7 +235,7 @@ movement_events_te.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_renaissance.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -323,7 +323,7 @@ movement_events_te.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
+	event_image = { texture = "gfx/event_pictures/human_rights_declaration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

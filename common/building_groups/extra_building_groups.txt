@@ -24,7 +24,7 @@ REPLACE:bg_construction = {
 
 
 REPLACE_OR_CREATE:bg_space = {
-	parent_group = bg_heavy_industry
+	parent_group = bg_high_tech
 	economy_of_scale = no
 }
 

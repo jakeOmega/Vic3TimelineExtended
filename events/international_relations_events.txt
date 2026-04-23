@@ -268,7 +268,7 @@ international_relations_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_espionage_scandal.dds" }
+	event_image = { texture = "gfx/event_pictures/detente_summit_meeting.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -402,7 +402,7 @@ international_relations_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+	event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -486,7 +486,7 @@ international_relations_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/detente_summit_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/trade_embargo.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -579,7 +579,7 @@ international_relations_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_rivalry_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_espionage_scandal.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -687,7 +687,7 @@ international_relations_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/trade_war_sanctions.dds" }
+	event_image = { texture = "gfx/event_pictures/space_rivalry_celebration.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -760,7 +760,7 @@ international_relations_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cyber_warfare_operations.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -882,7 +882,7 @@ international_relations_events.101 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/detente_summit_meeting.dds" }
+	event_image = { texture = "gfx/event_pictures/cold_war_proxy_competition.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -911,7 +911,7 @@ international_relations_events.102 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/trade_war_sanctions.dds" }
+	event_image = { texture = "gfx/event_pictures/sanctions_cargo_inspection.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -969,7 +969,7 @@ international_relations_events.104 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/trade_war_sanctions.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1143,7 +1143,7 @@ international_relations_events.106 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+	event_image = { texture = "gfx/event_pictures/misinformation_spreading.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1172,7 +1172,7 @@ international_relations_events.107 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/diplomatic_espionage_scandal.dds" }
+	event_image = { texture = "gfx/event_pictures/intelligence_dead_drop.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
