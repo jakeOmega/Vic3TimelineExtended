@@ -484,7 +484,7 @@ je_covert_warfare = {
 			set_variable = { name = target_max_ic value = 0 }
 			every_scope_diplomatic_pact = {
 				limit = {
-					first_country = { this = ROOT }
+					first_country = ROOT
 					OR = {
 						is_diplomatic_action_type = covert_election_interference_action
 						is_diplomatic_action_type = covert_financial_subversion_action

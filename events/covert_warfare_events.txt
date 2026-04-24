@@ -29,7 +29,7 @@ covert_warfare.1 = {
 		# Pick a random active operation pact where ROOT is the initiator and save its target
 		random_scope_diplomatic_pact = {
 			limit = {
-				first_country = { this = ROOT }
+				first_country = ROOT
 				OR = {
 					is_diplomatic_action_type = covert_election_interference_action
 					is_diplomatic_action_type = covert_financial_subversion_action

@@ -27,7 +27,7 @@ covert_op_track_targets = {
 	set_variable = { name = iw_slot_counter value = 0 }
 
 	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = $ACTION$ first_country = { this = ROOT } }
+		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
 			# Set target IC + type defense for detection calculation (PREV = target country)
@@ -165,7 +165,7 @@ covert_op_update_duration = {
 	# New targets (not in any old slot) start at 1.
 	set_variable = { name = iw_dur_slot value = 0 }
 	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = $ACTION$ first_country = { this = ROOT } }
+		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
 			ROOT = { change_variable = { name = iw_dur_slot add = 1 } }
@@ -246,7 +246,7 @@ covert_ops_update_all_durations = {
 covert_op_apply_target_effect = {
 	set_variable = { name = iw_effect_slot value = 0 }
 	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = $ACTION$ first_country = { this = ROOT } }
+		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
 			ROOT = { change_variable = { name = iw_effect_slot add = 1 } }
@@ -332,7 +332,7 @@ covert_ops_apply_all_phase_effects = {
 	# Per-slot phase: each target checked against its own slot's duration.
 	set_variable = { name = iw_effect_slot value = 0 }
 	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = covert_infrastructure_sabotage_action first_country = { this = ROOT } }
+		limit = { is_diplomatic_action_type = covert_infrastructure_sabotage_action first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
 			ROOT = { change_variable = { name = iw_effect_slot add = 1 } }
@@ -418,7 +418,7 @@ covert_ops_apply_all_phase_effects = {
 			}
 		}
 		every_scope_diplomatic_pact = {
-			limit = { is_diplomatic_action_type = covert_military_espionage_action first_country = { this = ROOT } }
+			limit = { is_diplomatic_action_type = covert_military_espionage_action first_country = ROOT }
 			every_participant = {
 				limit = { NOT = { this = ROOT } }
 				save_scope_as = espionage_target
@@ -454,7 +454,7 @@ covert_ops_apply_all_phase_effects = {
 	# Movement pressure: per-slot phase
 	set_variable = { name = iw_effect_slot value = 0 }
 	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = covert_ideological_subversion_action first_country = { this = ROOT } }
+		limit = { is_diplomatic_action_type = covert_ideological_subversion_action first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
 			ROOT = {
@@ -496,7 +496,7 @@ covert_ops_apply_all_phase_effects = {
 	covert_op_apply_target_effect = { ACTION = covert_destabilization_action TYPE = destabilization MODIFIER = covert_destabilization_resist }
 	set_variable = { name = iw_effect_slot value = 0 }
 	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = covert_destabilization_action first_country = { this = ROOT } }
+		limit = { is_diplomatic_action_type = covert_destabilization_action first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
 			ROOT = { change_variable = { name = iw_effect_slot add = 1 } }

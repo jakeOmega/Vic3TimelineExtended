@@ -668,69 +668,6 @@ humanitarian_aid = {
 	}
 }
 
-fund_resistance = {
-	groups= {
-		general
-	}
-	requires_approval = no
-	show_confirmation_box = yes
-
-	state_selection = second_required
-    second_state_list = second_country
-	
-	selectable = {
-		always = no
-		has_technology_researched = terrorism_and_anti_terrorism
-	}
-
-	potential = {
-		scope:target_country = {
-			has_diplomatic_relevance = ROOT
-		}
-	}
-
-	possible = {
-		always = yes
-	}
-
-	second_state_trigger = {
-        NOT = {
-            is_homeland_of_country_cultures = owner
-        }
-    }
-
-	accept_effect = {
-        # TODO
-    }
-
-	is_hostile = yes
-
-    ai = {
-		evaluation_chance = {
-            value = 1
-        }
-
-		will_select_as_second_state = {
-            always = yes
-        }
-	
-		will_propose = {
-            has_law = law_type:law_total_war
-            has_diplomatic_pact = {
-                type = rivalry
-                who = scope:target_country
-            }
-            NOT = { infamy > 75 }
-        }
-
-		propose_score = {
-            scope:second_state = {
-                value = nuclear_industrial_strike_target_score
-            }
-        }
-	}
-}
-
 force_cultural_acceptance = {
 	groups= {
 		power_bloc_leader
