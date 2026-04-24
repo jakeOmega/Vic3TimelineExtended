@@ -852,6 +852,8 @@
  state_building_spacex_starbase_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_spacex_starbase').GetName] can expand to in this state"
  state_building_standard_oil_refinery_max_level_add:0 "[GetBuildingType('building_standard_oil_refinery').GetName] Max Level"
  state_building_standard_oil_refinery_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_standard_oil_refinery').GetName] can expand to in this state"
+ state_building_strategic_reserve_hub_max_level_add:0 "[GetBuildingType('building_strategic_reserve_hub').GetName] Max Level"
+ state_building_strategic_reserve_hub_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_strategic_reserve_hub').GetName] can expand to in this state"
  state_building_state_youth_centers_max_level_add:0 "[GetBuildingType('building_state_youth_centers').GetName] Max Level"
  state_building_state_youth_centers_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_state_youth_centers').GetName] can expand to in this state"
  state_building_steel_brothers_syriam_depot_max_level_add:0 "[GetBuildingType('building_steel_brothers_syriam_depot').GetName] Max Level"

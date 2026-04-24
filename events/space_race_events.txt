@@ -2947,7 +2947,8 @@ space_race_events.14 = {
 		name = space_race_events.14.b
 		ai_chance = { base = 3 }
 		# Evacuate to backup shelter: redesign the habitat module
-		sr_mission_catastrophic_failure_effect = yes
+		sr_mission_failure_effect = yes
+		sr_switch_to_safe_effect = yes
 	}
 
 	option = {

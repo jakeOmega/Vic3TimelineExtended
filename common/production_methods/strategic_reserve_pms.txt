@@ -1,144 +1,64 @@
 ﻿# ============================================================================
 # Strategic Reserve Production Methods
 # ============================================================================
-# Each PMG has three modes controlled by the je_strategic_reserve JE:
-#   idle       - no market interaction
-#   store      - building visuals and mode state for positive configured flow
-#   withdraw   - building visuals and mode state for negative configured flow
-# Actual market goods flow now comes from dynamic building modifiers applied by
-# sr_refresh_hub_flow_effect so the player can fine-tune signed weekly rates.
-# Capacity (country_sr_X_capacity_add) is provided in ALL three PMs so the
-# storage ceiling is the same regardless of mode. Base capacity = 500/level/good.
+# Each reserve-good PMG has one non-interactive PM. It carries a base 1-unit
+# goods input and 1-unit goods output, while sr_refresh_hub_flow_effect applies
+# dynamic +mult and -100% disable modifiers to choose the active direction and
+# scale that side up to the configured weekly rate.
+# PMG definitions live in common/production_method_groups/strategic_reserve_pmgs.txt.
 # ============================================================================
 
 # ---------------- GRAIN ----------------
-pm_sr_grain_idle = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
-		level_scaled = {
-			country_sr_grain_capacity_add = 500
-		}
-	}
-}
-
-pm_sr_grain_store = {
+pm_sr_grain_reserve = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
 			country_sr_grain_capacity_add = 500
 		}
 	}
-}
-
-pm_sr_grain_withdraw = {
-	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
-	country_modifiers = {
+	building_modifiers = {
 		level_scaled = {
-			country_sr_grain_capacity_add = 500
+			goods_input_grain_add = 1
+			goods_output_grain_add = 1
 		}
-	}
-}
-
-pmg_sr_grain = {
-	texture = "gfx/interface/icons/goods_icons/grain.dds"
-	production_methods = {
-		pm_sr_grain_idle
-		pm_sr_grain_store
-		pm_sr_grain_withdraw
 	}
 }
 
 # ---------------- AMMUNITION ----------------
-pm_sr_ammunition_idle = {
+pm_sr_ammunition_reserve = {
 	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
 	country_modifiers = {
 		level_scaled = {
 			country_sr_ammunition_capacity_add = 500
 		}
 	}
-	unlocking_technologies = {
-		nitroglycerin
-	}
-}
-
-pm_sr_ammunition_store = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
+	building_modifiers = {
 		level_scaled = {
-			country_sr_ammunition_capacity_add = 500
+			goods_input_ammunition_add = 1
+			goods_output_ammunition_add = 1
 		}
 	}
 	unlocking_technologies = {
 		nitroglycerin
-	}
-}
-
-pm_sr_ammunition_withdraw = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
-		level_scaled = {
-			country_sr_ammunition_capacity_add = 500
-		}
-	}
-	unlocking_technologies = {
-		nitroglycerin
-	}
-}
-
-pmg_sr_ammunition = {
-	texture = "gfx/interface/icons/goods_icons/ammunition.dds"
-	is_hidden_when_unavailable = yes
-	production_methods = {
-		pm_sr_ammunition_idle
-		pm_sr_ammunition_store
-		pm_sr_ammunition_withdraw
 	}
 }
 
 # ---------------- OIL ----------------
-pm_sr_oil_idle = {
+pm_sr_oil_reserve = {
 	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
 	country_modifiers = {
 		level_scaled = {
 			country_sr_oil_capacity_add = 500
 		}
 	}
-	unlocking_technologies = {
-		oil_rig
-	}
-}
-
-pm_sr_oil_store = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
+	building_modifiers = {
 		level_scaled = {
-			country_sr_oil_capacity_add = 500
+			goods_input_oil_add = 1
+			goods_output_oil_add = 1
 		}
 	}
 	unlocking_technologies = {
 		oil_rig
-	}
-}
-
-pm_sr_oil_withdraw = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
-		level_scaled = {
-			country_sr_oil_capacity_add = 500
-		}
-	}
-	unlocking_technologies = {
-		oil_rig
-	}
-}
-
-pmg_sr_oil = {
-	texture = "gfx/interface/icons/goods_icons/oil.dds"
-	is_hidden_when_unavailable = yes
-	production_methods = {
-		pm_sr_oil_idle
-		pm_sr_oil_store
-		pm_sr_oil_withdraw
 	}
 }
 
@@ -154,13 +74,5 @@ pm_sr_silo_capacity = {
 			country_sr_ammunition_capacity_add = 200
 			country_sr_oil_capacity_add = 200
 		}
-	}
-}
-
-pmg_sr_silo_capacity = {
-	texture = "gfx/interface/icons/goods_icons/grain.dds"
-	is_hidden_when_unavailable = no
-	production_methods = {
-		pm_sr_silo_capacity
 	}
 }

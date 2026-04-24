@@ -2,6 +2,7 @@
 	building_port_throughput_add = -0.5
 	country_bubble_pressure_monthly_add = -1
 	state_building_state_youth_centers_max_level_add = 1
+	state_building_strategic_reserve_hub_max_level_add = 1
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
@@ -5839,27 +5840,53 @@ env_crisis_reform_window = {
 # Strategic Reserve — Dynamic Hub Flow Modifiers
 # ============================================================================
 # Applied directly to the hub building by sr_refresh_hub_flow_effect.
+# These scale the active reserve PM's base 1-unit goods input/output and shut
+# off the inactive side with a fixed -100% multiplier.
 
 sr_grain_store_flow = {
-goods_input_grain_add = 1
+	goods_input_grain_mult = 1
 }
 
 sr_grain_withdraw_flow = {
-goods_output_grain_add = 1
+	goods_output_grain_mult = 1
+}
+
+sr_grain_disable_input_flow = {
+	goods_input_grain_mult = -1
+}
+
+sr_grain_disable_output_flow = {
+	goods_output_grain_mult = -1
 }
 
 sr_ammunition_store_flow = {
-goods_input_ammunition_add = 1
+	goods_input_ammunition_mult = 1
 }
 
 sr_ammunition_withdraw_flow = {
-goods_output_ammunition_add = 1
+	goods_output_ammunition_mult = 1
+}
+
+sr_ammunition_disable_input_flow = {
+	goods_input_ammunition_mult = -1
+}
+
+sr_ammunition_disable_output_flow = {
+	goods_output_ammunition_mult = -1
 }
 
 sr_oil_store_flow = {
-goods_input_oil_add = 1
+	goods_input_oil_mult = 1
 }
 
 sr_oil_withdraw_flow = {
-goods_output_oil_add = 1
+	goods_output_oil_mult = 1
+}
+
+sr_oil_disable_input_flow = {
+	goods_input_oil_mult = -1
+}
+
+sr_oil_disable_output_flow = {
+	goods_output_oil_mult = -1
 }

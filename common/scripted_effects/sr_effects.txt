@@ -61,17 +61,24 @@ sr_reset_vars_effect = {
 
 # --------------------------------------------------------------------------
 # sr_refresh_hub_flow_effect — Remove and re-apply the dynamic building
-# modifiers that drive actual hub market flow from the configured rate vars.
-# Positive rates store goods, negative rates withdraw them.
+# modifiers that scale the reserve PM's base 1-unit market flow from the
+# configured rate vars. Positive rates store goods, negative rates withdraw
+# them, and the inactive side is forced to 0 with a fixed -100% modifier.
 # --------------------------------------------------------------------------
 sr_refresh_hub_flow_effect = {
 	sr_init_effect = yes
 	set_local_variable = { name = sr_grain_rate_local value = var:sr_grain_rate }
 	set_local_variable = { name = sr_grain_rate_base_local value = sr_grain_rate_base_applied }
+	set_local_variable = { name = sr_grain_rate_mult_local value = sr_grain_rate_base_applied }
+	change_local_variable = { name = sr_grain_rate_mult_local subtract = 1 }
 	set_local_variable = { name = sr_ammunition_rate_local value = var:sr_ammunition_rate }
 	set_local_variable = { name = sr_ammunition_rate_base_local value = sr_ammunition_rate_base_applied }
+	set_local_variable = { name = sr_ammunition_rate_mult_local value = sr_ammunition_rate_base_applied }
+	change_local_variable = { name = sr_ammunition_rate_mult_local subtract = 1 }
 	set_local_variable = { name = sr_oil_rate_local value = var:sr_oil_rate }
 	set_local_variable = { name = sr_oil_rate_base_local value = sr_oil_rate_base_applied }
+	set_local_variable = { name = sr_oil_rate_mult_local value = sr_oil_rate_base_applied }
+	change_local_variable = { name = sr_oil_rate_mult_local subtract = 1 }
 
 	if = {
 		limit = {
@@ -84,156 +91,123 @@ sr_refresh_hub_flow_effect = {
 
 			if = { limit = { has_modifier = sr_grain_store_flow } remove_modifier = sr_grain_store_flow }
 			if = { limit = { has_modifier = sr_grain_withdraw_flow } remove_modifier = sr_grain_withdraw_flow }
+			if = { limit = { has_modifier = sr_grain_disable_input_flow } remove_modifier = sr_grain_disable_input_flow }
+			if = { limit = { has_modifier = sr_grain_disable_output_flow } remove_modifier = sr_grain_disable_output_flow }
 			if = { limit = { has_modifier = sr_ammunition_store_flow } remove_modifier = sr_ammunition_store_flow }
 			if = { limit = { has_modifier = sr_ammunition_withdraw_flow } remove_modifier = sr_ammunition_withdraw_flow }
+			if = { limit = { has_modifier = sr_ammunition_disable_input_flow } remove_modifier = sr_ammunition_disable_input_flow }
+			if = { limit = { has_modifier = sr_ammunition_disable_output_flow } remove_modifier = sr_ammunition_disable_output_flow }
 			if = { limit = { has_modifier = sr_oil_store_flow } remove_modifier = sr_oil_store_flow }
 			if = { limit = { has_modifier = sr_oil_withdraw_flow } remove_modifier = sr_oil_withdraw_flow }
+			if = { limit = { has_modifier = sr_oil_disable_input_flow } remove_modifier = sr_oil_disable_input_flow }
+			if = { limit = { has_modifier = sr_oil_disable_output_flow } remove_modifier = sr_oil_disable_output_flow }
 
 			if = {
 				limit = {
 					local_var:sr_grain_rate_local > 0
 					local_var:sr_grain_rate_base_local > 0
+					var:sr_grain_stored < sr_grain_capacity
 				}
-				add_modifier = { name = sr_grain_store_flow multiplier = local_var:sr_grain_rate_base_local }
+				add_modifier = { name = sr_grain_disable_output_flow }
+				if = {
+					limit = { local_var:sr_grain_rate_base_local > 1 }
+					add_modifier = { name = sr_grain_store_flow multiplier = local_var:sr_grain_rate_mult_local }
+				}
 			}
 			else_if = {
 				limit = {
 					local_var:sr_grain_rate_local < 0
 					local_var:sr_grain_rate_base_local > 0
+					var:sr_grain_stored > 0
 				}
-				add_modifier = { name = sr_grain_withdraw_flow multiplier = local_var:sr_grain_rate_base_local }
+				add_modifier = { name = sr_grain_disable_input_flow }
+				if = {
+					limit = { local_var:sr_grain_rate_base_local > 1 }
+					add_modifier = { name = sr_grain_withdraw_flow multiplier = local_var:sr_grain_rate_mult_local }
+				}
+			}
+			else = {
+				add_modifier = { name = sr_grain_disable_input_flow }
+				add_modifier = { name = sr_grain_disable_output_flow }
 			}
 
 			if = {
 				limit = {
 					local_var:sr_ammunition_rate_local > 0
 					local_var:sr_ammunition_rate_base_local > 0
+					var:sr_ammunition_stored < sr_ammunition_capacity
 				}
-				add_modifier = { name = sr_ammunition_store_flow multiplier = local_var:sr_ammunition_rate_base_local }
+				add_modifier = { name = sr_ammunition_disable_output_flow }
+				if = {
+					limit = { local_var:sr_ammunition_rate_base_local > 1 }
+					add_modifier = { name = sr_ammunition_store_flow multiplier = local_var:sr_ammunition_rate_mult_local }
+				}
 			}
 			else_if = {
 				limit = {
 					local_var:sr_ammunition_rate_local < 0
 					local_var:sr_ammunition_rate_base_local > 0
+					var:sr_ammunition_stored > 0
 				}
-				add_modifier = { name = sr_ammunition_withdraw_flow multiplier = local_var:sr_ammunition_rate_base_local }
+				add_modifier = { name = sr_ammunition_disable_input_flow }
+				if = {
+					limit = { local_var:sr_ammunition_rate_base_local > 1 }
+					add_modifier = { name = sr_ammunition_withdraw_flow multiplier = local_var:sr_ammunition_rate_mult_local }
+				}
+			}
+			else = {
+				add_modifier = { name = sr_ammunition_disable_input_flow }
+				add_modifier = { name = sr_ammunition_disable_output_flow }
 			}
 
 			if = {
 				limit = {
 					local_var:sr_oil_rate_local > 0
 					local_var:sr_oil_rate_base_local > 0
+					var:sr_oil_stored < sr_oil_capacity
 				}
-				add_modifier = { name = sr_oil_store_flow multiplier = local_var:sr_oil_rate_base_local }
+				add_modifier = { name = sr_oil_disable_output_flow }
+				if = {
+					limit = { local_var:sr_oil_rate_base_local > 1 }
+					add_modifier = { name = sr_oil_store_flow multiplier = local_var:sr_oil_rate_mult_local }
+				}
 			}
 			else_if = {
 				limit = {
 					local_var:sr_oil_rate_local < 0
 					local_var:sr_oil_rate_base_local > 0
+					var:sr_oil_stored > 0
 				}
-				add_modifier = { name = sr_oil_withdraw_flow multiplier = local_var:sr_oil_rate_base_local }
+				add_modifier = { name = sr_oil_disable_input_flow }
+				if = {
+					limit = { local_var:sr_oil_rate_base_local > 1 }
+					add_modifier = { name = sr_oil_withdraw_flow multiplier = local_var:sr_oil_rate_mult_local }
+				}
+			}
+			else = {
+				add_modifier = { name = sr_oil_disable_input_flow }
+				add_modifier = { name = sr_oil_disable_output_flow }
 			}
 		}
 	}
 }
 
 # --------------------------------------------------------------------------
-# sr_apply_modes_effect — Sync the hub's active PMs to the configured rate and
-# the current stockpile bounds. Called after any button press and on the
-# weekly pulse.
+# sr_apply_modes_effect — Clamp stockpile variables to their legal bounds.
+# Direction control now lives entirely in sr_refresh_hub_flow_effect so the
+# player never gets a manually switchable reserve PM choice.
 # --------------------------------------------------------------------------
 sr_apply_modes_effect = {
 	sr_init_effect = yes
 	clamp_variable = { name = sr_grain_stored min = 0 max = sr_grain_capacity }
 	clamp_variable = { name = sr_ammunition_stored min = 0 max = sr_ammunition_capacity }
 	clamp_variable = { name = sr_oil_stored min = 0 max = sr_oil_capacity }
-
-	if = {
-		limit = {
-			var:sr_grain_rate > 0
-			var:sr_grain_stored < sr_grain_capacity
-		}
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_grain_store
-		}
-	}
-	else_if = {
-		limit = {
-			var:sr_grain_rate < 0
-			var:sr_grain_stored > 0
-		}
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_grain_withdraw
-		}
-	}
-	else = {
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_grain_idle
-		}
-	}
-
-	if = {
-		limit = {
-			var:sr_ammunition_rate > 0
-			var:sr_ammunition_stored < sr_ammunition_capacity
-		}
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_ammunition_store
-		}
-	}
-	else_if = {
-		limit = {
-			var:sr_ammunition_rate < 0
-			var:sr_ammunition_stored > 0
-		}
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_ammunition_withdraw
-		}
-	}
-	else = {
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_ammunition_idle
-		}
-	}
-
-	if = {
-		limit = {
-			var:sr_oil_rate > 0
-			var:sr_oil_stored < sr_oil_capacity
-		}
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_oil_store
-		}
-	}
-	else_if = {
-		limit = {
-			var:sr_oil_rate < 0
-			var:sr_oil_stored > 0
-		}
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_oil_withdraw
-		}
-	}
-	else = {
-		activate_production_method = {
-			building_type = building_strategic_reserve_hub
-			production_method = pm_sr_oil_idle
-		}
-	}
 }
 
 # --------------------------------------------------------------------------
 # sr_weekly_update_effect — Called from on_weekly_pulse_country.
 # Applies one week of configured signed flow plus one week of decay, clamps the
-# stockpile to [0, capacity], then refreshes hub modifiers and PM state.
+# stockpile to [0, capacity], then refreshes hub flow modifiers.
 # --------------------------------------------------------------------------
 sr_weekly_update_effect = {
 	sr_init_effect = yes

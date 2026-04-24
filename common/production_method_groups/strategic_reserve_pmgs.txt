@@ -1,0 +1,34 @@
+# ============================================================================
+# Strategic Reserve Production Method Groups
+# ============================================================================
+
+pmg_sr_grain = {
+	texture = "gfx/interface/icons/goods_icons/grain.dds"
+	production_methods = {
+		pm_sr_grain_reserve
+	}
+}
+
+pmg_sr_ammunition = {
+	texture = "gfx/interface/icons/goods_icons/ammunition.dds"
+	is_hidden_when_unavailable = yes
+	production_methods = {
+		pm_sr_ammunition_reserve
+	}
+}
+
+pmg_sr_oil = {
+	texture = "gfx/interface/icons/goods_icons/oil.dds"
+	is_hidden_when_unavailable = yes
+	production_methods = {
+		pm_sr_oil_reserve
+	}
+}
+
+pmg_sr_silo_capacity = {
+	texture = "gfx/interface/icons/goods_icons/grain.dds"
+	is_hidden_when_unavailable = no
+	production_methods = {
+		pm_sr_silo_capacity
+	}
+}
