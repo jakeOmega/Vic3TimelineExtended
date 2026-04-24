@@ -1,183 +1,114 @@
 ﻿# ============================================================================
 # Strategic Reserve — Scripted Buttons
 # ============================================================================
-# Mode-cycle buttons (one per good): idle → store → withdraw → idle.
-# Rate-tier buttons: step the global rate multiplier up/down.
-# See sr_l_english.yml for labels.
+# Signed rate buttons (one increase/decrease pair per good): change the chosen
+# weekly reserve rate by the current shared step size. Positive values store
+# goods, negative values withdraw them.
+# Step-size button: cycles 1 → 10 → 100 → 1000 → 10000 → 1.
+# See te_strategic_reserve_l_english.yml for labels.
 
-# ---------------- MODE CYCLE BUTTONS ----------------
-sr_cycle_grain_button = {
-name = "sr_cycle_grain_button"
-desc = "sr_cycle_grain_button_desc"
-visible = {
-has_journal_entry = je_strategic_reserve
-}
-ai_chance = {
-value = 0
-if = {
-limit = {
-var:sr_grain_mode = 0
-is_at_war = no
-sr_grain_fill_pct < 30
-}
-add = 40
-}
-if = {
-limit = {
-var:sr_grain_mode = 1
-sr_grain_fill_pct > 90
-}
-add = 60
-}
-if = {
-limit = {
-var:sr_grain_mode != 2
-is_at_war = yes
-sr_grain_fill_pct > 10
-}
-add = 50
-}
-}
-effect = {
-sr_cycle_grain_mode_effect = yes
-}
+# ---------------- STEP SIZE BUTTON ----------------
+sr_cycle_step_size_button = {
+	name = "sr_cycle_step_size_button"
+	desc = "sr_cycle_step_size_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_cycle_step_size_effect = yes
+	}
 }
 
-sr_cycle_ammunition_button = {
-name = "sr_cycle_ammunition_button"
-desc = "sr_cycle_ammunition_button_desc"
-visible = {
-has_journal_entry = je_strategic_reserve
-has_technology_researched = nitroglycerin
-}
-ai_chance = {
-value = 0
-if = {
-limit = {
-var:sr_ammunition_mode = 0
-is_at_war = no
-sr_ammunition_fill_pct < 50
-}
-add = 60
-}
-if = {
-limit = {
-var:sr_ammunition_mode = 1
-sr_ammunition_fill_pct > 90
-}
-add = 80
-}
-if = {
-limit = {
-var:sr_ammunition_mode != 2
-is_at_war = yes
-sr_ammunition_fill_pct > 5
-}
-add = 100
-}
-}
-effect = {
-sr_cycle_ammunition_mode_effect = yes
-}
+# ---------------- GRAIN RATE BUTTONS ----------------
+sr_increase_grain_rate_button = {
+	name = "sr_increase_grain_rate_button"
+	desc = "sr_increase_grain_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_increase_grain_rate_effect = yes
+	}
 }
 
-sr_cycle_oil_button = {
-name = "sr_cycle_oil_button"
-desc = "sr_cycle_oil_button_desc"
-visible = {
-has_journal_entry = je_strategic_reserve
-has_technology_researched = oil_rig
-}
-ai_chance = {
-value = 0
-if = {
-limit = {
-var:sr_oil_mode = 0
-is_at_war = no
-sr_oil_fill_pct < 40
-}
-add = 50
-}
-if = {
-limit = {
-var:sr_oil_mode = 1
-sr_oil_fill_pct > 90
-}
-add = 70
-}
-if = {
-limit = {
-var:sr_oil_mode != 2
-is_at_war = yes
-sr_oil_fill_pct > 10
-}
-add = 80
-}
-}
-effect = {
-sr_cycle_oil_mode_effect = yes
-}
+sr_decrease_grain_rate_button = {
+	name = "sr_decrease_grain_rate_button"
+	desc = "sr_decrease_grain_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_decrease_grain_rate_effect = yes
+	}
 }
 
-# ---------------- RATE TIER BUTTONS ----------------
-# These scale the hub's throughput_add modifier via sr_rate_slow / sr_rate_fast
-# static modifiers, which directly affects market goods_input/output and is
-# mirrored in the stockpile bookkeeping via sr_throughput_factor.
-sr_increase_rate_button = {
-name = "sr_increase_rate_button"
-desc = "sr_increase_rate_button_desc"
-visible = {
-has_journal_entry = je_strategic_reserve
-}
-possible = {
-custom_tooltip = {
-text = sr_rate_tier_not_max_tt
-var:sr_rate_tier < 2
-}
-}
-ai_chance = {
-value = 0
-if = {
-limit = {
-is_at_war = yes
-var:sr_rate_tier < 2
-OR = {
-var:sr_ammunition_mode = 1
-var:sr_oil_mode = 1
-var:sr_grain_mode = 1
-}
-}
-add = 80
-}
-}
-effect = {
-sr_increase_rate_effect = yes
-}
+# ---------------- AMMUNITION RATE BUTTONS ----------------
+sr_increase_ammunition_rate_button = {
+	name = "sr_increase_ammunition_rate_button"
+	desc = "sr_increase_ammunition_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = nitroglycerin
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_increase_ammunition_rate_effect = yes
+	}
 }
 
-sr_decrease_rate_button = {
-name = "sr_decrease_rate_button"
-desc = "sr_decrease_rate_button_desc"
-visible = {
-has_journal_entry = je_strategic_reserve
+sr_decrease_ammunition_rate_button = {
+	name = "sr_decrease_ammunition_rate_button"
+	desc = "sr_decrease_ammunition_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = nitroglycerin
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_decrease_ammunition_rate_effect = yes
+	}
 }
-possible = {
-custom_tooltip = {
-text = sr_rate_tier_not_min_tt
-var:sr_rate_tier > 0
+
+# ---------------- OIL RATE BUTTONS ----------------
+sr_increase_oil_rate_button = {
+	name = "sr_increase_oil_rate_button"
+	desc = "sr_increase_oil_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = oil_rig
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_increase_oil_rate_effect = yes
+	}
 }
-}
-ai_chance = {
-value = 0
-if = {
-limit = {
-is_at_war = no
-var:sr_rate_tier > 0
-}
-add = 30
-}
-}
-effect = {
-sr_decrease_rate_effect = yes
-}
+
+sr_decrease_oil_rate_button = {
+	name = "sr_decrease_oil_rate_button"
+	desc = "sr_decrease_oil_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = oil_rig
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		sr_decrease_oil_rate_effect = yes
+	}
 }

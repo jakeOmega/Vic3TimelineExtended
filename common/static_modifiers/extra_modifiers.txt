@@ -5836,19 +5836,30 @@ env_crisis_reform_window = {
 }
 
 # ============================================================================
-# Strategic Reserve — Rate Tier Modifiers
+# Strategic Reserve — Dynamic Hub Flow Modifiers
 # ============================================================================
-# Applied to je:je_strategic_reserve by sr_apply_rate_effect based on
-# var:sr_rate_tier. The hub-specific throughput_add scales store/withdraw
-# flow; the script value sr_hub_throughput reads the resulting total so
-# variable bookkeeping matches the market flow exactly.
+# Applied directly to the hub building by sr_refresh_hub_flow_effect.
 
-sr_rate_slow = {
-icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-building_strategic_reserve_hub_throughput_add = -0.5
+sr_grain_store_flow = {
+goods_input_grain_add = 1
 }
 
-sr_rate_fast = {
-icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-building_strategic_reserve_hub_throughput_add = 1.0
+sr_grain_withdraw_flow = {
+goods_output_grain_add = 1
+}
+
+sr_ammunition_store_flow = {
+goods_input_ammunition_add = 1
+}
+
+sr_ammunition_withdraw_flow = {
+goods_output_ammunition_add = 1
+}
+
+sr_oil_store_flow = {
+goods_input_oil_add = 1
+}
+
+sr_oil_withdraw_flow = {
+goods_output_oil_add = 1
 }

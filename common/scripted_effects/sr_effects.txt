@@ -3,323 +3,313 @@
 # ============================================================================
 
 # --------------------------------------------------------------------------
-# sr_init_effect — Initialize vars to 0 if missing. Called on JE immediate
-# and monthly pulse as a safety net. sr_rate_tier defaults to 1 (normal).
+# sr_init_effect — Initialize vars if missing. Called on JE immediate and the
+# weekly pulse as a safety net. Existing saves keep their stockpile values and
+# start with zero configured flow. The shared step-size tier defaults to 1,
+# which means 10-unit adjustments.
 # --------------------------------------------------------------------------
 sr_init_effect = {
-if = {
-limit = { NOT = { has_variable = sr_grain_stored } }
-set_variable = { name = sr_grain_stored value = 0 }
-}
-if = {
-limit = { NOT = { has_variable = sr_grain_mode } }
-set_variable = { name = sr_grain_mode value = 0 }
-}
-if = {
-limit = { NOT = { has_variable = sr_ammunition_stored } }
-set_variable = { name = sr_ammunition_stored value = 0 }
-}
-if = {
-limit = { NOT = { has_variable = sr_ammunition_mode } }
-set_variable = { name = sr_ammunition_mode value = 0 }
-}
-if = {
-limit = { NOT = { has_variable = sr_oil_stored } }
-set_variable = { name = sr_oil_stored value = 0 }
-}
-if = {
-limit = { NOT = { has_variable = sr_oil_mode } }
-set_variable = { name = sr_oil_mode value = 0 }
-}
-if = {
-limit = { NOT = { has_variable = sr_rate_tier } }
-set_variable = { name = sr_rate_tier value = 1 }
-}
+	if = {
+		limit = { NOT = { has_variable = sr_grain_stored } }
+		set_variable = { name = sr_grain_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_grain_rate } }
+		set_variable = { name = sr_grain_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_ammunition_stored } }
+		set_variable = { name = sr_ammunition_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_ammunition_rate } }
+		set_variable = { name = sr_ammunition_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_oil_stored } }
+		set_variable = { name = sr_oil_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_oil_rate } }
+		set_variable = { name = sr_oil_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_adjust_step_tier } }
+		set_variable = { name = sr_adjust_step_tier value = 1 }
+	}
 }
 
 # --------------------------------------------------------------------------
-# sr_reset_vars_effect — Zero all SR vars. Called from on_invalid so a
-# rebuilt hub starts from a clean slate rather than inheriting stale data.
+# sr_reset_vars_effect — Zero all SR vars. Called from on_invalid so a rebuilt
+# hub starts from a clean slate rather than inheriting stale data.
 # --------------------------------------------------------------------------
 sr_reset_vars_effect = {
-set_variable = { name = sr_grain_stored value = 0 }
-set_variable = { name = sr_grain_mode value = 0 }
-set_variable = { name = sr_ammunition_stored value = 0 }
-set_variable = { name = sr_ammunition_mode value = 0 }
-set_variable = { name = sr_oil_stored value = 0 }
-set_variable = { name = sr_oil_mode value = 0 }
-set_variable = { name = sr_rate_tier value = 1 }
-if = {
-limit = { has_journal_entry = je_strategic_reserve }
-je:je_strategic_reserve = {
-if = {
-limit = { has_modifier = sr_rate_slow }
-remove_modifier = sr_rate_slow
-}
-if = {
-limit = { has_modifier = sr_rate_fast }
-remove_modifier = sr_rate_fast
-}
-}
-}
+	set_variable = { name = sr_grain_stored value = 0 }
+	set_variable = { name = sr_grain_rate value = 0 }
+	set_variable = { name = sr_grain_target value = 0 }
+	set_variable = { name = sr_grain_mode value = 0 }
+	set_variable = { name = sr_ammunition_stored value = 0 }
+	set_variable = { name = sr_ammunition_rate value = 0 }
+	set_variable = { name = sr_ammunition_target value = 0 }
+	set_variable = { name = sr_ammunition_mode value = 0 }
+	set_variable = { name = sr_oil_stored value = 0 }
+	set_variable = { name = sr_oil_rate value = 0 }
+	set_variable = { name = sr_oil_target value = 0 }
+	set_variable = { name = sr_oil_mode value = 0 }
+	set_variable = { name = sr_adjust_step_tier value = 1 }
 }
 
 # --------------------------------------------------------------------------
-# sr_apply_rate_effect — Mirror var:sr_rate_tier onto JE-scoped modifiers.
-# Removes both modifiers first, then applies at most one based on tier:
-#   tier 0 (slow)   → sr_rate_slow    (throughput_add = -0.5, ≈ 0.5×)
-#   tier 1 (normal) → neither modifier (throughput contribution 0, ≈ 1.0×)
-#   tier 2 (fast)   → sr_rate_fast    (throughput_add = +1.0, ≈ 2.0×)
-# Called from buttons and from the monthly pulse for save-game safety.
+# sr_refresh_hub_flow_effect — Remove and re-apply the dynamic building
+# modifiers that drive actual hub market flow from the configured rate vars.
+# Positive rates store goods, negative rates withdraw them.
 # --------------------------------------------------------------------------
-sr_apply_rate_effect = {
-if = {
-limit = { has_journal_entry = je_strategic_reserve }
-je:je_strategic_reserve = {
-if = {
-limit = { has_modifier = sr_rate_slow }
-remove_modifier = sr_rate_slow
-}
-if = {
-limit = { has_modifier = sr_rate_fast }
-remove_modifier = sr_rate_fast
-}
-}
-if = {
-limit = { var:sr_rate_tier = 0 }
-je:je_strategic_reserve = {
-add_modifier = { name = sr_rate_slow }
-}
-}
-if = {
-limit = { var:sr_rate_tier = 2 }
-je:je_strategic_reserve = {
-add_modifier = { name = sr_rate_fast }
-}
-}
-}
+sr_refresh_hub_flow_effect = {
+	sr_init_effect = yes
+	set_local_variable = { name = sr_grain_rate_local value = var:sr_grain_rate }
+	set_local_variable = { name = sr_grain_rate_base_local value = sr_grain_rate_base_applied }
+	set_local_variable = { name = sr_ammunition_rate_local value = var:sr_ammunition_rate }
+	set_local_variable = { name = sr_ammunition_rate_base_local value = sr_ammunition_rate_base_applied }
+	set_local_variable = { name = sr_oil_rate_local value = var:sr_oil_rate }
+	set_local_variable = { name = sr_oil_rate_base_local value = sr_oil_rate_base_applied }
+
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_strategic_reserve_hub
+			}
+		}
+		random_scope_building = {
+			limit = { is_building_type = building_strategic_reserve_hub }
+
+			if = { limit = { has_modifier = sr_grain_store_flow } remove_modifier = sr_grain_store_flow }
+			if = { limit = { has_modifier = sr_grain_withdraw_flow } remove_modifier = sr_grain_withdraw_flow }
+			if = { limit = { has_modifier = sr_ammunition_store_flow } remove_modifier = sr_ammunition_store_flow }
+			if = { limit = { has_modifier = sr_ammunition_withdraw_flow } remove_modifier = sr_ammunition_withdraw_flow }
+			if = { limit = { has_modifier = sr_oil_store_flow } remove_modifier = sr_oil_store_flow }
+			if = { limit = { has_modifier = sr_oil_withdraw_flow } remove_modifier = sr_oil_withdraw_flow }
+
+			if = {
+				limit = {
+					local_var:sr_grain_rate_local > 0
+					local_var:sr_grain_rate_base_local > 0
+				}
+				add_modifier = { name = sr_grain_store_flow multiplier = local_var:sr_grain_rate_base_local }
+			}
+			else_if = {
+				limit = {
+					local_var:sr_grain_rate_local < 0
+					local_var:sr_grain_rate_base_local > 0
+				}
+				add_modifier = { name = sr_grain_withdraw_flow multiplier = local_var:sr_grain_rate_base_local }
+			}
+
+			if = {
+				limit = {
+					local_var:sr_ammunition_rate_local > 0
+					local_var:sr_ammunition_rate_base_local > 0
+				}
+				add_modifier = { name = sr_ammunition_store_flow multiplier = local_var:sr_ammunition_rate_base_local }
+			}
+			else_if = {
+				limit = {
+					local_var:sr_ammunition_rate_local < 0
+					local_var:sr_ammunition_rate_base_local > 0
+				}
+				add_modifier = { name = sr_ammunition_withdraw_flow multiplier = local_var:sr_ammunition_rate_base_local }
+			}
+
+			if = {
+				limit = {
+					local_var:sr_oil_rate_local > 0
+					local_var:sr_oil_rate_base_local > 0
+				}
+				add_modifier = { name = sr_oil_store_flow multiplier = local_var:sr_oil_rate_base_local }
+			}
+			else_if = {
+				limit = {
+					local_var:sr_oil_rate_local < 0
+					local_var:sr_oil_rate_base_local > 0
+				}
+				add_modifier = { name = sr_oil_withdraw_flow multiplier = local_var:sr_oil_rate_base_local }
+			}
+		}
+	}
 }
 
 # --------------------------------------------------------------------------
-# sr_increase_rate_effect / sr_decrease_rate_effect — Step the rate tier
-# up/down with clamping (0..2). Called from JE buttons.
-# --------------------------------------------------------------------------
-sr_increase_rate_effect = {
-sr_init_effect = yes
-if = {
-limit = { var:sr_rate_tier < 2 }
-change_variable = { name = sr_rate_tier add = 1 }
-}
-sr_apply_rate_effect = yes
-}
-
-sr_decrease_rate_effect = {
-sr_init_effect = yes
-if = {
-limit = { var:sr_rate_tier > 0 }
-change_variable = { name = sr_rate_tier subtract = 1 }
-}
-sr_apply_rate_effect = yes
-}
-
-# --------------------------------------------------------------------------
-# sr_apply_modes_effect — Sync the hub's active PMs to the mode variables.
-# Also forces idle when the stockpile hits capacity (storing) or zero
-# (withdrawing) so the market doesn't keep consuming once full/empty.
-# Called after any button press and on monthly pulse.
+# sr_apply_modes_effect — Sync the hub's active PMs to the configured rate and
+# the current stockpile bounds. Called after any button press and on the
+# weekly pulse.
 # --------------------------------------------------------------------------
 sr_apply_modes_effect = {
-# Auto-idle guards: storing while full / withdrawing while empty.
-if = {
-limit = {
-var:sr_grain_mode = 1
-var:sr_grain_stored >= sr_grain_capacity
-}
-set_variable = { name = sr_grain_mode value = 0 }
-}
-if = {
-limit = {
-var:sr_grain_mode = 2
-var:sr_grain_stored <= 0
-}
-set_variable = { name = sr_grain_mode value = 0 }
-}
-if = {
-limit = {
-var:sr_ammunition_mode = 1
-var:sr_ammunition_stored >= sr_ammunition_capacity
-}
-set_variable = { name = sr_ammunition_mode value = 0 }
-}
-if = {
-limit = {
-var:sr_ammunition_mode = 2
-var:sr_ammunition_stored <= 0
-}
-set_variable = { name = sr_ammunition_mode value = 0 }
-}
-if = {
-limit = {
-var:sr_oil_mode = 1
-var:sr_oil_stored >= sr_oil_capacity
-}
-set_variable = { name = sr_oil_mode value = 0 }
-}
-if = {
-limit = {
-var:sr_oil_mode = 2
-var:sr_oil_stored <= 0
-}
-set_variable = { name = sr_oil_mode value = 0 }
-}
+	sr_init_effect = yes
+	clamp_variable = { name = sr_grain_stored min = 0 max = sr_grain_capacity }
+	clamp_variable = { name = sr_ammunition_stored min = 0 max = sr_ammunition_capacity }
+	clamp_variable = { name = sr_oil_stored min = 0 max = sr_oil_capacity }
 
-# Grain PMs
-if = {
-limit = { var:sr_grain_mode = 0 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_grain_idle
-}
-}
-if = {
-limit = { var:sr_grain_mode = 1 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_grain_store
-}
-}
-if = {
-limit = { var:sr_grain_mode = 2 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_grain_withdraw
-}
-}
+	if = {
+		limit = {
+			var:sr_grain_rate > 0
+			var:sr_grain_stored < sr_grain_capacity
+		}
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_grain_store
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_grain_rate < 0
+			var:sr_grain_stored > 0
+		}
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_grain_withdraw
+		}
+	}
+	else = {
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_grain_idle
+		}
+	}
 
-# Ammunition PMs
-if = {
-limit = { var:sr_ammunition_mode = 0 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_ammunition_idle
-}
-}
-if = {
-limit = { var:sr_ammunition_mode = 1 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_ammunition_store
-}
-}
-if = {
-limit = { var:sr_ammunition_mode = 2 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_ammunition_withdraw
-}
-}
+	if = {
+		limit = {
+			var:sr_ammunition_rate > 0
+			var:sr_ammunition_stored < sr_ammunition_capacity
+		}
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_ammunition_store
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ammunition_rate < 0
+			var:sr_ammunition_stored > 0
+		}
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_ammunition_withdraw
+		}
+	}
+	else = {
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_ammunition_idle
+		}
+	}
 
-# Oil PMs
-if = {
-limit = { var:sr_oil_mode = 0 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_oil_idle
-}
-}
-if = {
-limit = { var:sr_oil_mode = 1 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_oil_store
-}
-}
-if = {
-limit = { var:sr_oil_mode = 2 }
-activate_production_method = {
-building_type = building_strategic_reserve_hub
-production_method = pm_sr_oil_withdraw
-}
-}
+	if = {
+		limit = {
+			var:sr_oil_rate > 0
+			var:sr_oil_stored < sr_oil_capacity
+		}
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_oil_store
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_oil_rate < 0
+			var:sr_oil_stored > 0
+		}
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_oil_withdraw
+		}
+	}
+	else = {
+		activate_production_method = {
+			building_type = building_strategic_reserve_hub
+			production_method = pm_sr_oil_idle
+		}
+	}
 }
 
 # --------------------------------------------------------------------------
-# sr_monthly_update_effect — Called from on_monthly_pulse_country.
-# Updates each stockpile variable by (store/withdraw delta) - decay,
-# clamps to [0, capacity], then re-applies rate + PM modes.
+# sr_weekly_update_effect — Called from on_weekly_pulse_country.
+# Applies one week of configured signed flow plus one week of decay, clamps the
+# stockpile to [0, capacity], then refreshes hub modifiers and PM state.
 # --------------------------------------------------------------------------
-sr_monthly_update_effect = {
-sr_init_effect = yes
+sr_weekly_update_effect = {
+	sr_init_effect = yes
 
-# Only run if a hub exists; otherwise everything is zero anyway.
-if = {
-limit = {
-any_scope_building = {
-is_building_type = building_strategic_reserve_hub
-}
-}
-change_variable = { name = sr_grain_stored add = sr_grain_monthly_delta }
-clamp_variable = { name = sr_grain_stored min = 0 max = sr_grain_capacity }
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_strategic_reserve_hub
+			}
+		}
+		change_variable = { name = sr_grain_stored add = sr_grain_weekly_delta }
+		clamp_variable = { name = sr_grain_stored min = 0 max = sr_grain_capacity }
 
-change_variable = { name = sr_ammunition_stored add = sr_ammunition_monthly_delta }
-clamp_variable = { name = sr_ammunition_stored min = 0 max = sr_ammunition_capacity }
+		change_variable = { name = sr_ammunition_stored add = sr_ammunition_weekly_delta }
+		clamp_variable = { name = sr_ammunition_stored min = 0 max = sr_ammunition_capacity }
 
-change_variable = { name = sr_oil_stored add = sr_oil_monthly_delta }
-clamp_variable = { name = sr_oil_stored min = 0 max = sr_oil_capacity }
+		change_variable = { name = sr_oil_stored add = sr_oil_weekly_delta }
+		clamp_variable = { name = sr_oil_stored min = 0 max = sr_oil_capacity }
 
-sr_apply_rate_effect = yes
-sr_apply_modes_effect = yes
-}
+		sr_refresh_hub_flow_effect = yes
+		sr_apply_modes_effect = yes
+	}
 }
 
 # --------------------------------------------------------------------------
-# sr_cycle_X_mode_effect — Cycle a good's mode: 0 → 1 → 2 → 0.
-# Used by JE buttons so the player can step through idle/store/withdraw.
+# Step and rate adjustment effects.
 # --------------------------------------------------------------------------
-sr_cycle_grain_mode_effect = {
-sr_init_effect = yes
-if = {
-limit = { var:sr_grain_mode = 0 }
-set_variable = { name = sr_grain_mode value = 1 }
-}
-else_if = {
-limit = { var:sr_grain_mode = 1 }
-set_variable = { name = sr_grain_mode value = 2 }
-}
-else = {
-set_variable = { name = sr_grain_mode value = 0 }
-}
-sr_apply_modes_effect = yes
+sr_cycle_step_size_effect = {
+	sr_init_effect = yes
+	if = {
+		limit = { var:sr_adjust_step_tier < 4 }
+		change_variable = { name = sr_adjust_step_tier add = 1 }
+	}
+	else = {
+		set_variable = { name = sr_adjust_step_tier value = 0 }
+	}
 }
 
-sr_cycle_ammunition_mode_effect = {
-sr_init_effect = yes
-if = {
-limit = { var:sr_ammunition_mode = 0 }
-set_variable = { name = sr_ammunition_mode value = 1 }
-}
-else_if = {
-limit = { var:sr_ammunition_mode = 1 }
-set_variable = { name = sr_ammunition_mode value = 2 }
-}
-else = {
-set_variable = { name = sr_ammunition_mode value = 0 }
-}
-sr_apply_modes_effect = yes
+sr_increase_grain_rate_effect = {
+	sr_init_effect = yes
+	change_variable = { name = sr_grain_rate add = sr_adjust_step_value }
+	sr_refresh_hub_flow_effect = yes
+	sr_apply_modes_effect = yes
 }
 
-sr_cycle_oil_mode_effect = {
-sr_init_effect = yes
-if = {
-limit = { var:sr_oil_mode = 0 }
-set_variable = { name = sr_oil_mode value = 1 }
+sr_decrease_grain_rate_effect = {
+	sr_init_effect = yes
+	change_variable = { name = sr_grain_rate subtract = sr_adjust_step_value }
+	sr_refresh_hub_flow_effect = yes
+	sr_apply_modes_effect = yes
 }
-else_if = {
-limit = { var:sr_oil_mode = 1 }
-set_variable = { name = sr_oil_mode value = 2 }
+
+sr_increase_ammunition_rate_effect = {
+	sr_init_effect = yes
+	change_variable = { name = sr_ammunition_rate add = sr_adjust_step_value }
+	sr_refresh_hub_flow_effect = yes
+	sr_apply_modes_effect = yes
 }
-else = {
-set_variable = { name = sr_oil_mode value = 0 }
+
+sr_decrease_ammunition_rate_effect = {
+	sr_init_effect = yes
+	change_variable = { name = sr_ammunition_rate subtract = sr_adjust_step_value }
+	sr_refresh_hub_flow_effect = yes
+	sr_apply_modes_effect = yes
 }
-sr_apply_modes_effect = yes
+
+sr_increase_oil_rate_effect = {
+	sr_init_effect = yes
+	change_variable = { name = sr_oil_rate add = sr_adjust_step_value }
+	sr_refresh_hub_flow_effect = yes
+	sr_apply_modes_effect = yes
+}
+
+sr_decrease_oil_rate_effect = {
+	sr_init_effect = yes
+	change_variable = { name = sr_oil_rate subtract = sr_adjust_step_value }
+	sr_refresh_hub_flow_effect = yes
+	sr_apply_modes_effect = yes
 }

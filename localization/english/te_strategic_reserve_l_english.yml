@@ -2,7 +2,7 @@
 
  # Buildings
  building_strategic_reserve_hub:0 "Strategic Reserve Hub"
- building_strategic_reserve_hub_desc:0 "A national stockpile facility for grain, ammunition, and oil. Each level provides +500 capacity per reserve good and can store or release 10 goods per level each week (at normal rate tier)."
+ building_strategic_reserve_hub_desc:0 "A national stockpile facility for grain, ammunition, and oil. Each level provides +500 capacity per reserve good and up to 10 goods per level each week of reserve flow, which can be fine-tuned separately for each good in the Strategic Reserve journal entry."
  building_strategic_reserve_silo:0 "Strategic Reserve Silo"
  building_strategic_reserve_silo_desc:0 "A distributed storage depot that adds +200 capacity per level for each reserve good. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile."
 
@@ -58,50 +58,54 @@
  country_sr_oil_decay_add_desc:0 "Fraction of the oil stockpile lost to evaporation and sludge each month."
 
  # Hub throughput modifier (shown as rate tier)
- building_strategic_reserve_hub_throughput_add:0 "Strategic Reserve Rate"
- building_strategic_reserve_hub_throughput_add_desc:0 "Scales the hub's store/withdraw throughput. Adjustable via the rate tier buttons in the Strategic Reserve journal entry."
-
- # Rate tier static modifiers
- sr_rate_slow:0 "Slow Rate"
- sr_rate_slow_desc:0 "The hub is moving goods at half the normal pace."
- sr_rate_fast:0 "Fast Rate"
- sr_rate_fast_desc:0 "The hub is moving goods at twice the normal pace."
+ building_strategic_reserve_hub_throughput_add:0 "Strategic Reserve Throughput"
+ building_strategic_reserve_hub_throughput_add_desc:0 "Scales the hub's maximum reserve flow capacity."
 
  # Journal Entry
  je_strategic_reserve:0 "Strategic Reserve"
- je_strategic_reserve_desc:0 "Manage the national stockpile of grain, ammunition, and oil. Switch each good between idle, storing, and withdrawing to buffer against shortages, wars, and price spikes."
- je_strategic_reserve_reason:0 "Your Strategic Reserve Hub lets you physically hoard strategic goods. Storing consumes goods from the market (raising prices); withdrawing releases them (lowering prices). Stored goods decay slowly, so a large reserve is not free."
+ je_strategic_reserve_desc:0 "Manage the national stockpile of grain, ammunition, and oil. Set a signed weekly reserve rate for each good: positive values store goods, negative values withdraw them, and zero idles that lane."
+ je_strategic_reserve_reason:0 "Your Strategic Reserve Hub lets you physically hoard strategic goods. Positive reserve rates make the hub buy from the market and add to the stockpile; negative rates make it release goods from the stockpile back onto the market. Stored goods decay slowly, so a large reserve is not free."
 
  je_strategic_reserve_status_no_hub:0 "No Strategic Reserve Hub exists. Build one in your capital to begin operations."
  je_strategic_reserve_status_active:0 "National Stockpile — Hub level: [ROOT.GetCountry.MakeScope.ScriptValue('sr_hub_level')|0]"
 
- je_strategic_reserve_rate_line:0 "\n#bold Rate:#! [ROOT.GetCountry.sr_rate_tier_text] (throughput: [ROOT.GetCountry.MakeScope.ScriptValue('sr_hub_throughput')|%0])"
- je_strategic_reserve_grain_line:0 "\n#bold Grain:#! [ROOT.GetCountry.MakeScope.Var('sr_grain_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_grain_capacity_add')] — Status: [ROOT.GetCountry.sr_grain_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_grain_decay_add')]"
- je_strategic_reserve_ammunition_line:0 "\n#bold Ammunition:#! [ROOT.GetCountry.MakeScope.Var('sr_ammunition_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_ammunition_capacity_add')] — Status: [ROOT.GetCountry.sr_ammunition_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_ammunition_decay_add')]"
- je_strategic_reserve_oil_line:0 "\n#bold Oil:#! [ROOT.GetCountry.MakeScope.Var('sr_oil_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_oil_capacity_add')] — Status: [ROOT.GetCountry.sr_oil_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_oil_decay_add')]"
+ je_strategic_reserve_rate_line:0 "\n#bold Hub Flow Cap:#! [ROOT.GetCountry.MakeScope.ScriptValue('sr_weekly_rate_cap_actual')|0] / week per good"
+ je_strategic_reserve_step_line:0 "\n#bold Adjustment Step:#! [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]"
+ je_strategic_reserve_grain_line:0 "\n#bold Grain:#! [ROOT.GetCountry.MakeScope.Var('sr_grain_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_grain_capacity_add')] — Rate Setting: [ROOT.GetCountry.MakeScope.Var('sr_grain_rate').GetValue|0] / week — Active: [ROOT.GetCountry.MakeScope.ScriptValue('sr_grain_effective_rate')|0] / week — Status: [ROOT.GetCountry.sr_grain_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_grain_decay_add')]"
+ je_strategic_reserve_ammunition_line:0 "\n#bold Ammunition:#! [ROOT.GetCountry.MakeScope.Var('sr_ammunition_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_ammunition_capacity_add')] — Rate Setting: [ROOT.GetCountry.MakeScope.Var('sr_ammunition_rate').GetValue|0] / week — Active: [ROOT.GetCountry.MakeScope.ScriptValue('sr_ammunition_effective_rate')|0] / week — Status: [ROOT.GetCountry.sr_ammunition_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_ammunition_decay_add')]"
+ je_strategic_reserve_oil_line:0 "\n#bold Oil:#! [ROOT.GetCountry.MakeScope.Var('sr_oil_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_oil_capacity_add')] — Rate Setting: [ROOT.GetCountry.MakeScope.Var('sr_oil_rate').GetValue|0] / week — Active: [ROOT.GetCountry.MakeScope.ScriptValue('sr_oil_effective_rate')|0] / week — Status: [ROOT.GetCountry.sr_oil_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_oil_decay_add')]"
 
- # Mode cycle buttons
- sr_cycle_grain_button:0 "Cycle Grain Mode"
- sr_cycle_grain_button_desc:0 "Current: [ROOT.sr_grain_mode_text]. Click to advance: Idle -> Storing -> Withdrawing -> Idle. Storing consumes grain from the market; withdrawing releases it."
- sr_cycle_ammunition_button:0 "Cycle Ammunition Mode"
- sr_cycle_ammunition_button_desc:0 "Current: [ROOT.sr_ammunition_mode_text]. Click to advance: Idle -> Storing -> Withdrawing -> Idle. Storing consumes ammunition from the market; withdrawing releases it."
- sr_cycle_oil_button:0 "Cycle Oil Mode"
- sr_cycle_oil_button_desc:0 "Current: [ROOT.sr_oil_mode_text]. Click to advance: Idle -> Storing -> Withdrawing -> Idle. Storing consumes oil from the market; withdrawing releases it."
+ # Rate buttons
+ sr_cycle_step_size_button:0 "Cycle Step Size"
+ sr_cycle_step_size_button_desc:0 "Change the reserve rate adjustment step. Current step: [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Cycles 1 -> 10 -> 100 -> 1000 -> 10000 -> 1."
+ sr_increase_grain_rate_button:0 "Increase Grain Rate"
+ sr_increase_grain_rate_button_desc:0 "Increase the grain reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Positive values store grain, negative values withdraw it. Current setting: [ROOT.GetCountry.MakeScope.Var('sr_grain_rate').GetValue|0] / week."
+ sr_decrease_grain_rate_button:0 "Decrease Grain Rate"
+ sr_decrease_grain_rate_button_desc:0 "Decrease the grain reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Positive values store grain, negative values withdraw it. Current setting: [ROOT.GetCountry.MakeScope.Var('sr_grain_rate').GetValue|0] / week."
+ sr_increase_ammunition_rate_button:0 "Increase Ammunition Rate"
+ sr_increase_ammunition_rate_button_desc:0 "Increase the ammunition reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Positive values store ammunition, negative values withdraw it. Current setting: [ROOT.GetCountry.MakeScope.Var('sr_ammunition_rate').GetValue|0] / week."
+ sr_decrease_ammunition_rate_button:0 "Decrease Ammunition Rate"
+ sr_decrease_ammunition_rate_button_desc:0 "Decrease the ammunition reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Positive values store ammunition, negative values withdraw it. Current setting: [ROOT.GetCountry.MakeScope.Var('sr_ammunition_rate').GetValue|0] / week."
+ sr_increase_oil_rate_button:0 "Increase Oil Rate"
+ sr_increase_oil_rate_button_desc:0 "Increase the oil reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Positive values store oil, negative values withdraw it. Current setting: [ROOT.GetCountry.MakeScope.Var('sr_oil_rate').GetValue|0] / week."
+ sr_decrease_oil_rate_button:0 "Decrease Oil Rate"
+ sr_decrease_oil_rate_button_desc:0 "Decrease the oil reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('sr_adjust_step_value')|0]. Positive values store oil, negative values withdraw it. Current setting: [ROOT.GetCountry.MakeScope.Var('sr_oil_rate').GetValue|0] / week."
 
- # Rate tier buttons
- sr_increase_rate_button:0 "Increase Rate"
- sr_increase_rate_button_desc:0 "Step the reserve hub's store/withdraw rate up by one tier. Current rate: [ROOT.sr_rate_tier_text]."
- sr_decrease_rate_button:0 "Decrease Rate"
- sr_decrease_rate_button_desc:0 "Step the reserve hub's store/withdraw rate down by one tier. Current rate: [ROOT.sr_rate_tier_text]."
- sr_rate_tier_not_max_tt:0 "Rate is already at the maximum tier (Fast)."
- sr_rate_tier_not_min_tt:0 "Rate is already at the minimum tier (Slow)."
+ # Dynamic hub flow modifiers
+ sr_grain_store_flow:0 "Strategic Reserve Grain Intake"
+ sr_grain_store_flow_desc:0 "This hub is purchasing grain for the strategic reserve."
+ sr_grain_withdraw_flow:0 "Strategic Reserve Grain Release"
+ sr_grain_withdraw_flow_desc:0 "This hub is releasing grain from the strategic reserve."
+ sr_ammunition_store_flow:0 "Strategic Reserve Ammunition Intake"
+ sr_ammunition_store_flow_desc:0 "This hub is purchasing ammunition for the strategic reserve."
+ sr_ammunition_withdraw_flow:0 "Strategic Reserve Ammunition Release"
+ sr_ammunition_withdraw_flow_desc:0 "This hub is releasing ammunition from the strategic reserve."
+ sr_oil_store_flow:0 "Strategic Reserve Oil Intake"
+ sr_oil_store_flow_desc:0 "This hub is purchasing oil for the strategic reserve."
+ sr_oil_withdraw_flow:0 "Strategic Reserve Oil Release"
+ sr_oil_withdraw_flow_desc:0 "This hub is releasing oil from the strategic reserve."
 
  # Mode labels (used by custom_loc)
  sr_mode_idle:0 "#Y Idle#!"
  sr_mode_storing:0 "#G Storing#!"
  sr_mode_withdrawing:0 "#O Withdrawing#!"
-
- # Rate tier labels (used by custom_loc)
- sr_rate_slow_label:0 "#R Slow (0.5x)#!"
- sr_rate_normal_label:0 "#Y Normal (1x)#!"
- sr_rate_fast_label:0 "#G Fast (2x)#!"

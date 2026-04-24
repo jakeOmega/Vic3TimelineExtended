@@ -3,8 +3,10 @@
 # ============================================================================
 # Each PMG has three modes controlled by the je_strategic_reserve JE:
 #   idle       - no market interaction
-#   store      - hub consumes 10 goods/level/week from the market
-#   withdraw   - hub produces 10 goods/level/week into the market
+#   store      - building visuals and mode state for positive configured flow
+#   withdraw   - building visuals and mode state for negative configured flow
+# Actual market goods flow now comes from dynamic building modifiers applied by
+# sr_refresh_hub_flow_effect so the player can fine-tune signed weekly rates.
 # Capacity (country_sr_X_capacity_add) is provided in ALL three PMs so the
 # storage ceiling is the same regardless of mode. Base capacity = 500/level/good.
 # ============================================================================
@@ -26,11 +28,6 @@ pm_sr_grain_store = {
 			country_sr_grain_capacity_add = 500
 		}
 	}
-	building_modifiers = {
-		level_scaled = {
-			goods_input_grain_add = 10
-		}
-	}
 }
 
 pm_sr_grain_withdraw = {
@@ -38,11 +35,6 @@ pm_sr_grain_withdraw = {
 	country_modifiers = {
 		level_scaled = {
 			country_sr_grain_capacity_add = 500
-		}
-	}
-	building_modifiers = {
-		level_scaled = {
-			goods_output_grain_add = 10
 		}
 	}
 }
@@ -76,11 +68,6 @@ pm_sr_ammunition_store = {
 			country_sr_ammunition_capacity_add = 500
 		}
 	}
-	building_modifiers = {
-		level_scaled = {
-			goods_input_ammunition_add = 10
-		}
-	}
 	unlocking_technologies = {
 		nitroglycerin
 	}
@@ -91,11 +78,6 @@ pm_sr_ammunition_withdraw = {
 	country_modifiers = {
 		level_scaled = {
 			country_sr_ammunition_capacity_add = 500
-		}
-	}
-	building_modifiers = {
-		level_scaled = {
-			goods_output_ammunition_add = 10
 		}
 	}
 	unlocking_technologies = {
@@ -133,11 +115,6 @@ pm_sr_oil_store = {
 			country_sr_oil_capacity_add = 500
 		}
 	}
-	building_modifiers = {
-		level_scaled = {
-			goods_input_oil_add = 10
-		}
-	}
 	unlocking_technologies = {
 		oil_rig
 	}
@@ -148,11 +125,6 @@ pm_sr_oil_withdraw = {
 	country_modifiers = {
 		level_scaled = {
 			country_sr_oil_capacity_add = 500
-		}
-	}
-	building_modifiers = {
-		level_scaled = {
-			goods_output_oil_add = 10
 		}
 	}
 	unlocking_technologies = {
@@ -175,20 +147,20 @@ pmg_sr_oil = {
 # Single idle PM that provides +200 per good per level of silo. Ammunition
 # and oil capacity contributions are hidden behind their respective techs.
 pm_sr_silo_capacity = {
-texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
-country_modifiers = {
-level_scaled = {
-country_sr_grain_capacity_add = 200
-country_sr_ammunition_capacity_add = 200
-country_sr_oil_capacity_add = 200
-}
-}
+	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_grain_capacity_add = 200
+			country_sr_ammunition_capacity_add = 200
+			country_sr_oil_capacity_add = 200
+		}
+	}
 }
 
 pmg_sr_silo_capacity = {
-texture = "gfx/interface/icons/goods_icons/grain.dds"
-is_hidden_when_unavailable = no
-production_methods = {
-pm_sr_silo_capacity
-}
+	texture = "gfx/interface/icons/goods_icons/grain.dds"
+	is_hidden_when_unavailable = no
+	production_methods = {
+		pm_sr_silo_capacity
+	}
 }

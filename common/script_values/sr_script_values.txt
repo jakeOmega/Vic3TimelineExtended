@@ -1,200 +1,354 @@
 ﻿# ============================================================================
 # Strategic Reserve — Script Values
 # ============================================================================
-# Monthly delta (goods stored or withdrawn per month). Building PMs consume
-# 10 goods/level/week when storing; 10/level/week * 4.333 weeks/month ≈ 43.33
-# goods/level/month, scaled by (1 + hub throughput_add). The stockpile
-# variable is updated monthly from this SV.
-# Mode values on country vars: 0 = idle, 1 = storing, 2 = withdrawing.
-# Rate tier values on country var sr_rate_tier: 0 = slow, 1 = normal, 2 = fast.
+# Weekly signed-flow bookkeeping. Positive configured rates store goods,
+# negative configured rates withdraw them. The hub applies the chosen base rate
+# up to its own throughput cap (10 goods/level/week), and generic building
+# throughput modifiers scale the active market flow from there.
 # ============================================================================
+
+sr_weeks_per_month = 4.333
 
 # Hub level — 0 if no hub exists.
 sr_hub_level = {
-value = 0
-if = {
-limit = {
-any_scope_building = {
-is_building_type = building_strategic_reserve_hub
-}
-}
-add = {
-value = 0
-random_scope_building = {
-limit = { is_building_type = building_strategic_reserve_hub }
-add = level
-}
-}
-}
+	value = 0
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_strategic_reserve_hub
+			}
+		}
+		add = {
+			value = 0
+			random_scope_building = {
+				limit = { is_building_type = building_strategic_reserve_hub }
+				add = level
+			}
+		}
+	}
 }
 
-# Monthly throughput per hub level per good (weeks per month × rate per week).
-sr_monthly_throughput_per_level = 43.33
+# Weekly base throughput per hub level per good before building throughput.
+sr_weekly_throughput_per_level = 10
 
-# Total throughput_add modifier on the hub, summing all contributions
-# (state, country, PM modifiers, sr_rate_slow/sr_rate_fast, tech, etc.).
-# Used as a multiplier (1 + this) so the script-value delta matches what
-# the market actually sees. Returns 0 when no hub exists.
+sr_weekly_base_rate_cap = {
+	value = sr_hub_level
+	multiply = sr_weekly_throughput_per_level
+}
+
+# Total throughput_add modifier on the hub, summing all contributions.
 sr_hub_throughput = {
-value = 0
-if = {
-limit = {
-any_scope_building = {
-is_building_type = building_strategic_reserve_hub
-}
-}
-add = {
-value = 0
-random_scope_building = {
-limit = { is_building_type = building_strategic_reserve_hub }
-add = modifier:building_throughput_add
-}
-}
-}
+	value = 0
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_strategic_reserve_hub
+			}
+		}
+		add = {
+			value = 0
+			random_scope_building = {
+				limit = { is_building_type = building_strategic_reserve_hub }
+				add = modifier:building_throughput_add
+			}
+		}
+	}
 }
 
 # Throughput scaling factor — clamped at 0.1x so a negative pile-on of
 # debuffs can't flip the delta sign or zero out flow entirely.
 sr_throughput_factor = {
-value = 1
-add = sr_hub_throughput
-min = 0.1
-max = 5
+	value = 1
+	add = sr_hub_throughput
+	min = 0.1
+	max = 5
+}
+
+sr_weekly_rate_cap_actual = {
+	value = sr_weekly_base_rate_cap
+	multiply = sr_throughput_factor
+}
+
+# Shared button step size. Tier 0 = 1, 1 = 10, 2 = 100, 3 = 1000, 4 = 10000.
+sr_adjust_step_value = {
+	value = 10
+	if = {
+		limit = { var:sr_adjust_step_tier = 0 }
+		value = 1
+	}
+	else_if = {
+		limit = { var:sr_adjust_step_tier = 1 }
+		value = 10
+	}
+	else_if = {
+		limit = { var:sr_adjust_step_tier = 2 }
+		value = 100
+	}
+	else_if = {
+		limit = { var:sr_adjust_step_tier = 3 }
+		value = 1000
+	}
+	else = {
+		value = 10000
+	}
 }
 
 # --- GRAIN ---
 sr_grain_decay_rate = {
-value = 0
-add = modifier:country_sr_grain_decay_add
-min = 0
-max = 1
+	value = 0
+	add = modifier:country_sr_grain_decay_add
+	min = 0
+	max = 1
 }
 
-sr_grain_monthly_delta = {
-value = 0
-if = {
-limit = { var:sr_grain_mode = 1 }
-add = {
-value = sr_hub_level
-multiply = sr_monthly_throughput_per_level
-multiply = sr_throughput_factor
+sr_grain_weekly_decay = {
+	value = var:sr_grain_stored
+	multiply = sr_grain_decay_rate
+	divide = sr_weeks_per_month
 }
+
+sr_grain_rate_abs = {
+	value = 0
+	if = {
+		limit = { var:sr_grain_rate > 0 }
+		add = var:sr_grain_rate
+	}
+	else_if = {
+		limit = { var:sr_grain_rate < 0 }
+		add = {
+			value = 0
+			subtract = var:sr_grain_rate
+		}
+	}
 }
-if = {
-limit = { var:sr_grain_mode = 2 }
-subtract = {
-value = sr_hub_level
-multiply = sr_monthly_throughput_per_level
-multiply = sr_throughput_factor
+
+sr_grain_rate_base_applied = {
+	value = sr_grain_rate_abs
+	max = sr_weekly_base_rate_cap
 }
+
+sr_grain_effective_rate = {
+	value = 0
+	if = {
+		limit = {
+			var:sr_grain_rate > 0
+			var:sr_grain_stored < sr_grain_capacity
+		}
+		add = sr_grain_rate_base_applied
+		multiply = sr_throughput_factor
+	}
+	else_if = {
+		limit = {
+			var:sr_grain_rate < 0
+			var:sr_grain_stored > 0
+		}
+		add = sr_grain_rate_base_applied
+		multiply = sr_throughput_factor
+	}
 }
-subtract = {
-value = var:sr_grain_stored
-multiply = sr_grain_decay_rate
-}
+
+sr_grain_weekly_delta = {
+	value = 0
+	if = {
+		limit = {
+			var:sr_grain_rate > 0
+			var:sr_grain_stored < sr_grain_capacity
+		}
+		add = sr_grain_effective_rate
+	}
+	else_if = {
+		limit = {
+			var:sr_grain_rate < 0
+			var:sr_grain_stored > 0
+		}
+		subtract = sr_grain_effective_rate
+	}
+	subtract = sr_grain_weekly_decay
 }
 
 sr_grain_capacity = {
-value = 0
-add = modifier:country_sr_grain_capacity_add
+	value = 0
+	add = modifier:country_sr_grain_capacity_add
 }
 
 # --- AMMUNITION ---
 sr_ammunition_decay_rate = {
-value = 0
-add = modifier:country_sr_ammunition_decay_add
-min = 0
-max = 1
+	value = 0
+	add = modifier:country_sr_ammunition_decay_add
+	min = 0
+	max = 1
 }
 
-sr_ammunition_monthly_delta = {
-value = 0
-if = {
-limit = { var:sr_ammunition_mode = 1 }
-add = {
-value = sr_hub_level
-multiply = sr_monthly_throughput_per_level
-multiply = sr_throughput_factor
+sr_ammunition_weekly_decay = {
+	value = var:sr_ammunition_stored
+	multiply = sr_ammunition_decay_rate
+	divide = sr_weeks_per_month
 }
+
+sr_ammunition_rate_abs = {
+	value = 0
+	if = {
+		limit = { var:sr_ammunition_rate > 0 }
+		add = var:sr_ammunition_rate
+	}
+	else_if = {
+		limit = { var:sr_ammunition_rate < 0 }
+		add = {
+			value = 0
+			subtract = var:sr_ammunition_rate
+		}
+	}
 }
-if = {
-limit = { var:sr_ammunition_mode = 2 }
-subtract = {
-value = sr_hub_level
-multiply = sr_monthly_throughput_per_level
-multiply = sr_throughput_factor
+
+sr_ammunition_rate_base_applied = {
+	value = sr_ammunition_rate_abs
+	max = sr_weekly_base_rate_cap
 }
+
+sr_ammunition_effective_rate = {
+	value = 0
+	if = {
+		limit = {
+			var:sr_ammunition_rate > 0
+			var:sr_ammunition_stored < sr_ammunition_capacity
+		}
+		add = sr_ammunition_rate_base_applied
+		multiply = sr_throughput_factor
+	}
+	else_if = {
+		limit = {
+			var:sr_ammunition_rate < 0
+			var:sr_ammunition_stored > 0
+		}
+		add = sr_ammunition_rate_base_applied
+		multiply = sr_throughput_factor
+	}
 }
-subtract = {
-value = var:sr_ammunition_stored
-multiply = sr_ammunition_decay_rate
-}
+
+sr_ammunition_weekly_delta = {
+	value = 0
+	if = {
+		limit = {
+			var:sr_ammunition_rate > 0
+			var:sr_ammunition_stored < sr_ammunition_capacity
+		}
+		add = sr_ammunition_effective_rate
+	}
+	else_if = {
+		limit = {
+			var:sr_ammunition_rate < 0
+			var:sr_ammunition_stored > 0
+		}
+		subtract = sr_ammunition_effective_rate
+	}
+	subtract = sr_ammunition_weekly_decay
 }
 
 sr_ammunition_capacity = {
-value = 0
-add = modifier:country_sr_ammunition_capacity_add
+	value = 0
+	add = modifier:country_sr_ammunition_capacity_add
 }
 
 # --- OIL ---
 sr_oil_decay_rate = {
-value = 0
-add = modifier:country_sr_oil_decay_add
-min = 0
-max = 1
+	value = 0
+	add = modifier:country_sr_oil_decay_add
+	min = 0
+	max = 1
 }
 
-sr_oil_monthly_delta = {
-value = 0
-if = {
-limit = { var:sr_oil_mode = 1 }
-add = {
-value = sr_hub_level
-multiply = sr_monthly_throughput_per_level
-multiply = sr_throughput_factor
+sr_oil_weekly_decay = {
+	value = var:sr_oil_stored
+	multiply = sr_oil_decay_rate
+	divide = sr_weeks_per_month
 }
+
+sr_oil_rate_abs = {
+	value = 0
+	if = {
+		limit = { var:sr_oil_rate > 0 }
+		add = var:sr_oil_rate
+	}
+	else_if = {
+		limit = { var:sr_oil_rate < 0 }
+		add = {
+			value = 0
+			subtract = var:sr_oil_rate
+		}
+	}
 }
-if = {
-limit = { var:sr_oil_mode = 2 }
-subtract = {
-value = sr_hub_level
-multiply = sr_monthly_throughput_per_level
-multiply = sr_throughput_factor
+
+sr_oil_rate_base_applied = {
+	value = sr_oil_rate_abs
+	max = sr_weekly_base_rate_cap
 }
+
+sr_oil_effective_rate = {
+	value = 0
+	if = {
+		limit = {
+			var:sr_oil_rate > 0
+			var:sr_oil_stored < sr_oil_capacity
+		}
+		add = sr_oil_rate_base_applied
+		multiply = sr_throughput_factor
+	}
+	else_if = {
+		limit = {
+			var:sr_oil_rate < 0
+			var:sr_oil_stored > 0
+		}
+		add = sr_oil_rate_base_applied
+		multiply = sr_throughput_factor
+	}
 }
-subtract = {
-value = var:sr_oil_stored
-multiply = sr_oil_decay_rate
-}
+
+sr_oil_weekly_delta = {
+	value = 0
+	if = {
+		limit = {
+			var:sr_oil_rate > 0
+			var:sr_oil_stored < sr_oil_capacity
+		}
+		add = sr_oil_effective_rate
+	}
+	else_if = {
+		limit = {
+			var:sr_oil_rate < 0
+			var:sr_oil_stored > 0
+		}
+		subtract = sr_oil_effective_rate
+	}
+	subtract = sr_oil_weekly_decay
 }
 
 sr_oil_capacity = {
-value = 0
-add = modifier:country_sr_oil_capacity_add
+	value = 0
+	add = modifier:country_sr_oil_capacity_add
 }
 
 # --- Capacity utilization (for AI hints / loc) ---
 sr_grain_fill_pct = {
-value = var:sr_grain_stored
-divide = {
-value = sr_grain_capacity
-min = 1
-}
-multiply = 100
+	value = var:sr_grain_stored
+	divide = {
+		value = sr_grain_capacity
+		min = 1
+	}
+	multiply = 100
 }
 sr_ammunition_fill_pct = {
-value = var:sr_ammunition_stored
-divide = {
-value = sr_ammunition_capacity
-min = 1
-}
-multiply = 100
+	value = var:sr_ammunition_stored
+	divide = {
+		value = sr_ammunition_capacity
+		min = 1
+	}
+	multiply = 100
 }
 sr_oil_fill_pct = {
-value = var:sr_oil_stored
-divide = {
-value = sr_oil_capacity
-min = 1
-}
-multiply = 100
+	value = var:sr_oil_stored
+	divide = {
+		value = sr_oil_capacity
+		min = 1
+	}
+	multiply = 100
 }
