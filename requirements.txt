@@ -1,0 +1,17 @@
+# Python dependencies for the Vic3TimelineExtended mod tooling.
+# Install with: pip install -r requirements.txt
+#
+# Core (mod state server, parsers, generators):
+requests
+
+# Image generation (gen_image.py); optional for headless / non-GPU setups.
+# Comment out on machines without CUDA or a HuggingFace account.
+# torch
+# torchvision
+# torchaudio
+# diffusers
+# transformers
+# accelerate
+# sentencepiece
+# pillow
+# huggingface_hub

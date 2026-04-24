@@ -1,8 +1,5 @@
-
 path_constants.py
 *.pyc
-*.pyc
-path_constants.py
 *__pycache__
 .github/
 *.exe
@@ -12,3 +9,9 @@ path_constants.py
 *.log.*
 *.pid
 generated_images/
+.venv/
+/tests/
+rules_found.txt
+generate_images.log
+*.code-workspace
+.DS_Store
