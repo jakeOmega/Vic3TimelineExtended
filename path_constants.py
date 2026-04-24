@@ -1,5 +1,6 @@
-mod_path = (
-    r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended"
-)
-base_game_path = r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3"
-doc_path = r"C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\mod\Vic3TimelineExtended\docs"
+mod_path = r"/home/jakef/src/Vic3TimelineExtended"
+base_game_path = r"/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3"
+doc_path = r"/home/jakef/src/Vic3TimelineExtended/docs"
+mod_deploy_target = r"/mnt/c/Users/jakef/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended"
+vanilla_docs_path = r"/mnt/c/Users/jakef/OneDrive/Documents/Paradox Interactive/Victoria 3/docs"
+game_logs_path = r"/mnt/c/Users/jakef/OneDrive/Documents/Paradox Interactive/Victoria 3/logs"
