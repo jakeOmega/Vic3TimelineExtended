@@ -159,3 +159,24 @@ INJECT:concrete_fortifications = {
 	}
 }
 
+
+
+# Strategic Reserve: decay rate reductions from preservation / refining tech.
+# Base decay values are set in INJECT:base_values in extra_modifiers.txt.
+INJECT:vacuum_canning = {
+modifier = {
+country_sr_grain_decay_add = -0.01
+}
+}
+
+INJECT:bolt_action_rifles = {
+modifier = {
+country_sr_ammunition_decay_add = -0.001
+}
+}
+
+INJECT:fractional_distillation = {
+modifier = {
+country_sr_oil_decay_add = -0.0025
+}
+}

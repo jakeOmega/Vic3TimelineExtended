@@ -1,0 +1,194 @@
+﻿# ============================================================================
+# Strategic Reserve Production Methods
+# ============================================================================
+# Each PMG has three modes controlled by the je_strategic_reserve JE:
+#   idle       - no market interaction
+#   store      - hub consumes 10 goods/level/week from the market
+#   withdraw   - hub produces 10 goods/level/week into the market
+# Capacity (country_sr_X_capacity_add) is provided in ALL three PMs so the
+# storage ceiling is the same regardless of mode. Base capacity = 500/level/good.
+# ============================================================================
+
+# ---------------- GRAIN ----------------
+pm_sr_grain_idle = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_grain_capacity_add = 500
+		}
+	}
+}
+
+pm_sr_grain_store = {
+	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_grain_capacity_add = 500
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			goods_input_grain_add = 10
+		}
+	}
+}
+
+pm_sr_grain_withdraw = {
+	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_grain_capacity_add = 500
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			goods_output_grain_add = 10
+		}
+	}
+}
+
+pmg_sr_grain = {
+	texture = "gfx/interface/icons/goods_icons/grain.dds"
+	production_methods = {
+		pm_sr_grain_idle
+		pm_sr_grain_store
+		pm_sr_grain_withdraw
+	}
+}
+
+# ---------------- AMMUNITION ----------------
+pm_sr_ammunition_idle = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_ammunition_capacity_add = 500
+		}
+	}
+	unlocking_technologies = {
+		nitroglycerin
+	}
+}
+
+pm_sr_ammunition_store = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_ammunition_capacity_add = 500
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			goods_input_ammunition_add = 10
+		}
+	}
+	unlocking_technologies = {
+		nitroglycerin
+	}
+}
+
+pm_sr_ammunition_withdraw = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_ammunition_capacity_add = 500
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			goods_output_ammunition_add = 10
+		}
+	}
+	unlocking_technologies = {
+		nitroglycerin
+	}
+}
+
+pmg_sr_ammunition = {
+	texture = "gfx/interface/icons/goods_icons/ammunition.dds"
+	is_hidden_when_unavailable = yes
+	production_methods = {
+		pm_sr_ammunition_idle
+		pm_sr_ammunition_store
+		pm_sr_ammunition_withdraw
+	}
+}
+
+# ---------------- OIL ----------------
+pm_sr_oil_idle = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_oil_capacity_add = 500
+		}
+	}
+	unlocking_technologies = {
+		oil_rig
+	}
+}
+
+pm_sr_oil_store = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_oil_capacity_add = 500
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			goods_input_oil_add = 10
+		}
+	}
+	unlocking_technologies = {
+		oil_rig
+	}
+}
+
+pm_sr_oil_withdraw = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	country_modifiers = {
+		level_scaled = {
+			country_sr_oil_capacity_add = 500
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			goods_output_oil_add = 10
+		}
+	}
+	unlocking_technologies = {
+		oil_rig
+	}
+}
+
+pmg_sr_oil = {
+	texture = "gfx/interface/icons/goods_icons/oil.dds"
+	is_hidden_when_unavailable = yes
+	production_methods = {
+		pm_sr_oil_idle
+		pm_sr_oil_store
+		pm_sr_oil_withdraw
+	}
+}
+
+
+# ---------------- SILO (capacity-only) ----------------
+# Single idle PM that provides +200 per good per level of silo. Ammunition
+# and oil capacity contributions are hidden behind their respective techs.
+pm_sr_silo_capacity = {
+texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
+country_modifiers = {
+level_scaled = {
+country_sr_grain_capacity_add = 200
+country_sr_ammunition_capacity_add = 200
+country_sr_oil_capacity_add = 200
+}
+}
+}
+
+pmg_sr_silo_capacity = {
+texture = "gfx/interface/icons/goods_icons/grain.dds"
+is_hidden_when_unavailable = no
+production_methods = {
+pm_sr_silo_capacity
+}
+}

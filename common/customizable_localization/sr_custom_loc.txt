@@ -1,0 +1,71 @@
+﻿sr_grain_mode_text = {
+type = country
+random_valid = no
+
+text = {
+trigger = { var:sr_grain_mode = 1 }
+localization_key = sr_mode_storing
+}
+text = {
+trigger = { var:sr_grain_mode = 2 }
+localization_key = sr_mode_withdrawing
+}
+text = {
+trigger = { always = yes }
+localization_key = sr_mode_idle
+}
+}
+
+sr_ammunition_mode_text = {
+type = country
+random_valid = no
+
+text = {
+trigger = { var:sr_ammunition_mode = 1 }
+localization_key = sr_mode_storing
+}
+text = {
+trigger = { var:sr_ammunition_mode = 2 }
+localization_key = sr_mode_withdrawing
+}
+text = {
+trigger = { always = yes }
+localization_key = sr_mode_idle
+}
+}
+
+sr_oil_mode_text = {
+type = country
+random_valid = no
+
+text = {
+trigger = { var:sr_oil_mode = 1 }
+localization_key = sr_mode_storing
+}
+text = {
+trigger = { var:sr_oil_mode = 2 }
+localization_key = sr_mode_withdrawing
+}
+text = {
+trigger = { always = yes }
+localization_key = sr_mode_idle
+}
+}
+
+sr_rate_tier_text = {
+type = country
+random_valid = no
+
+text = {
+trigger = { var:sr_rate_tier = 0 }
+localization_key = sr_rate_slow_label
+}
+text = {
+trigger = { var:sr_rate_tier = 2 }
+localization_key = sr_rate_fast_label
+}
+text = {
+trigger = { always = yes }
+localization_key = sr_rate_normal_label
+}
+}

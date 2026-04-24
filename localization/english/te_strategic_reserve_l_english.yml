@@ -1,0 +1,107 @@
+﻿l_english:
+
+ # Buildings
+ building_strategic_reserve_hub:0 "Strategic Reserve Hub"
+ building_strategic_reserve_hub_desc:0 "A national stockpile facility for grain, ammunition, and oil. Each level provides +500 capacity per reserve good and can store or release 10 goods per level each week (at normal rate tier)."
+ building_strategic_reserve_silo:0 "Strategic Reserve Silo"
+ building_strategic_reserve_silo_desc:0 "A distributed storage depot that adds +200 capacity per level for each reserve good. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile."
+
+ # Production Method Groups
+ pmg_sr_grain:0 "Grain Reserve"
+ pmg_sr_grain_desc:0 "Control whether the reserve is storing or releasing grain."
+ pmg_sr_ammunition:0 "Ammunition Reserve"
+ pmg_sr_ammunition_desc:0 "Control whether the reserve is storing or releasing ammunition."
+ pmg_sr_oil:0 "Oil Reserve"
+ pmg_sr_oil_desc:0 "Control whether the reserve is storing or releasing oil."
+ pmg_sr_silo_capacity:0 "Silo Storage"
+ pmg_sr_silo_capacity_desc:0 "Passive storage. Adds capacity for all reserve goods."
+
+ # Production Methods
+ pm_sr_grain_idle:0 "Grain: Idle"
+ pm_sr_grain_idle_desc:0 "No grain is being moved into or out of the reserve."
+ pm_sr_grain_store:0 "Grain: Storing"
+ pm_sr_grain_store_desc:0 "The hub is buying grain from the market and moving it into the stockpile."
+ pm_sr_grain_withdraw:0 "Grain: Withdrawing"
+ pm_sr_grain_withdraw_desc:0 "The hub is releasing grain from the stockpile onto the market."
+
+ pm_sr_ammunition_idle:0 "Ammunition: Idle"
+ pm_sr_ammunition_idle_desc:0 "No ammunition is being moved into or out of the reserve."
+ pm_sr_ammunition_store:0 "Ammunition: Storing"
+ pm_sr_ammunition_store_desc:0 "The hub is buying ammunition from the market and moving it into the stockpile."
+ pm_sr_ammunition_withdraw:0 "Ammunition: Withdrawing"
+ pm_sr_ammunition_withdraw_desc:0 "The hub is releasing ammunition from the stockpile onto the market."
+
+ pm_sr_oil_idle:0 "Oil: Idle"
+ pm_sr_oil_idle_desc:0 "No oil is being moved into or out of the reserve."
+ pm_sr_oil_store:0 "Oil: Storing"
+ pm_sr_oil_store_desc:0 "The hub is buying oil from the market and moving it into the stockpile."
+ pm_sr_oil_withdraw:0 "Oil: Withdrawing"
+ pm_sr_oil_withdraw_desc:0 "The hub is releasing oil from the stockpile onto the market."
+
+ pm_sr_silo_capacity:0 "Silo Storage"
+ pm_sr_silo_capacity_desc:0 "Stores grain, ammunition, and oil for the national strategic reserve."
+
+ # Capacity modifiers
+ country_sr_grain_capacity_add:0 "Grain Reserve Capacity"
+ country_sr_grain_capacity_add_desc:0 "Maximum grain that can be held in the national strategic reserve."
+ country_sr_ammunition_capacity_add:0 "Ammunition Reserve Capacity"
+ country_sr_ammunition_capacity_add_desc:0 "Maximum ammunition that can be held in the national strategic reserve."
+ country_sr_oil_capacity_add:0 "Oil Reserve Capacity"
+ country_sr_oil_capacity_add_desc:0 "Maximum oil that can be held in the national strategic reserve."
+
+ # Decay rate modifiers
+ country_sr_grain_decay_add:0 "Grain Reserve Decay"
+ country_sr_grain_decay_add_desc:0 "Fraction of the grain stockpile lost to spoilage each month."
+ country_sr_ammunition_decay_add:0 "Ammunition Reserve Decay"
+ country_sr_ammunition_decay_add_desc:0 "Fraction of the ammunition stockpile lost to degradation each month."
+ country_sr_oil_decay_add:0 "Oil Reserve Decay"
+ country_sr_oil_decay_add_desc:0 "Fraction of the oil stockpile lost to evaporation and sludge each month."
+
+ # Hub throughput modifier (shown as rate tier)
+ building_strategic_reserve_hub_throughput_add:0 "Strategic Reserve Rate"
+ building_strategic_reserve_hub_throughput_add_desc:0 "Scales the hub's store/withdraw throughput. Adjustable via the rate tier buttons in the Strategic Reserve journal entry."
+
+ # Rate tier static modifiers
+ sr_rate_slow:0 "Slow Rate"
+ sr_rate_slow_desc:0 "The hub is moving goods at half the normal pace."
+ sr_rate_fast:0 "Fast Rate"
+ sr_rate_fast_desc:0 "The hub is moving goods at twice the normal pace."
+
+ # Journal Entry
+ je_strategic_reserve:0 "Strategic Reserve"
+ je_strategic_reserve_desc:0 "Manage the national stockpile of grain, ammunition, and oil. Switch each good between idle, storing, and withdrawing to buffer against shortages, wars, and price spikes."
+ je_strategic_reserve_reason:0 "Your Strategic Reserve Hub lets you physically hoard strategic goods. Storing consumes goods from the market (raising prices); withdrawing releases them (lowering prices). Stored goods decay slowly, so a large reserve is not free."
+
+ je_strategic_reserve_status_no_hub:0 "No Strategic Reserve Hub exists. Build one in your capital to begin operations."
+ je_strategic_reserve_status_active:0 "National Stockpile — Hub level: [ROOT.GetCountry.MakeScope.ScriptValue('sr_hub_level')|0]"
+
+ je_strategic_reserve_rate_line:0 "\n#bold Rate:#! [ROOT.GetCountry.sr_rate_tier_text] (throughput: [ROOT.GetCountry.MakeScope.ScriptValue('sr_hub_throughput')|%0])"
+ je_strategic_reserve_grain_line:0 "\n#bold Grain:#! [ROOT.GetCountry.MakeScope.Var('sr_grain_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_grain_capacity_add')] — Status: [ROOT.GetCountry.sr_grain_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_grain_decay_add')]"
+ je_strategic_reserve_ammunition_line:0 "\n#bold Ammunition:#! [ROOT.GetCountry.MakeScope.Var('sr_ammunition_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_ammunition_capacity_add')] — Status: [ROOT.GetCountry.sr_ammunition_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_ammunition_decay_add')]"
+ je_strategic_reserve_oil_line:0 "\n#bold Oil:#! [ROOT.GetCountry.MakeScope.Var('sr_oil_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_oil_capacity_add')] — Status: [ROOT.GetCountry.sr_oil_mode_text] — Decay: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_sr_oil_decay_add')]"
+
+ # Mode cycle buttons
+ sr_cycle_grain_button:0 "Cycle Grain Mode"
+ sr_cycle_grain_button_desc:0 "Current: [ROOT.sr_grain_mode_text]. Click to advance: Idle -> Storing -> Withdrawing -> Idle. Storing consumes grain from the market; withdrawing releases it."
+ sr_cycle_ammunition_button:0 "Cycle Ammunition Mode"
+ sr_cycle_ammunition_button_desc:0 "Current: [ROOT.sr_ammunition_mode_text]. Click to advance: Idle -> Storing -> Withdrawing -> Idle. Storing consumes ammunition from the market; withdrawing releases it."
+ sr_cycle_oil_button:0 "Cycle Oil Mode"
+ sr_cycle_oil_button_desc:0 "Current: [ROOT.sr_oil_mode_text]. Click to advance: Idle -> Storing -> Withdrawing -> Idle. Storing consumes oil from the market; withdrawing releases it."
+
+ # Rate tier buttons
+ sr_increase_rate_button:0 "Increase Rate"
+ sr_increase_rate_button_desc:0 "Step the reserve hub's store/withdraw rate up by one tier. Current rate: [ROOT.sr_rate_tier_text]."
+ sr_decrease_rate_button:0 "Decrease Rate"
+ sr_decrease_rate_button_desc:0 "Step the reserve hub's store/withdraw rate down by one tier. Current rate: [ROOT.sr_rate_tier_text]."
+ sr_rate_tier_not_max_tt:0 "Rate is already at the maximum tier (Fast)."
+ sr_rate_tier_not_min_tt:0 "Rate is already at the minimum tier (Slow)."
+
+ # Mode labels (used by custom_loc)
+ sr_mode_idle:0 "#Y Idle#!"
+ sr_mode_storing:0 "#G Storing#!"
+ sr_mode_withdrawing:0 "#O Withdrawing#!"
+
+ # Rate tier labels (used by custom_loc)
+ sr_rate_slow_label:0 "#R Slow (0.5x)#!"
+ sr_rate_normal_label:0 "#Y Normal (1x)#!"
+ sr_rate_fast_label:0 "#G Fast (2x)#!"

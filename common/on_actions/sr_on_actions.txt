@@ -1,0 +1,17 @@
+﻿# ============================================================================
+# Strategic Reserve — On-Actions
+# ============================================================================
+# Monthly: update stockpile variables, apply decay, re-sync PMs.
+# Gated by has_journal_entry so it's a no-op for countries without a hub.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	effect = {
+		if = {
+			limit = {
+				has_journal_entry = je_strategic_reserve
+			}
+			sr_monthly_update_effect = yes
+		}
+	}
+}

@@ -17,6 +17,12 @@
 	# Covert Warfare: base operation slot and intelligence capacity for all countries
 	country_covert_operation_slot_add = 1
 	country_intelligence_capacity_add = 5
+
+	# Strategic Reserve: base monthly decay rates for stockpiled goods.
+	# Tech (vacuum_canning, bolt_action_rifles, fractional_distillation) reduces these.
+	country_sr_grain_decay_add = 0.02
+	country_sr_ammunition_decay_add = 0.002
+	country_sr_oil_decay_add = 0.005
 }
 
 INJECT:country_literacy_rate = {
@@ -5827,4 +5833,22 @@ banking_crisis_protectionism_modifier = {
 env_crisis_reform_window = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_law_enactment_time_mult = -0.05
+}
+
+# ============================================================================
+# Strategic Reserve — Rate Tier Modifiers
+# ============================================================================
+# Applied to je:je_strategic_reserve by sr_apply_rate_effect based on
+# var:sr_rate_tier. The hub-specific throughput_add scales store/withdraw
+# flow; the script value sr_hub_throughput reads the resulting total so
+# variable bookkeeping matches the market flow exactly.
+
+sr_rate_slow = {
+icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+building_strategic_reserve_hub_throughput_add = -0.5
+}
+
+sr_rate_fast = {
+icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+building_strategic_reserve_hub_throughput_add = 1.0
 }

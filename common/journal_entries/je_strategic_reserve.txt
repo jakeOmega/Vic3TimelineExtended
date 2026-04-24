@@ -1,0 +1,83 @@
+﻿# ============================================================================
+# Strategic Reserve Journal Entry
+# ============================================================================
+# Activates automatically when a country builds a Strategic Reserve Hub.
+# Displays current stockpile vs capacity for each good and exposes cycle
+# buttons to switch between idle / storing / withdrawing, plus rate tier
+# buttons that scale the store/withdraw speed. All stockpile bookkeeping
+# runs in on_monthly_pulse_country (sr_on_actions).
+# ============================================================================
+
+je_strategic_reserve = {
+icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+group = je_group_internal_affairs
+
+is_shown_when_inactive = {
+has_technology_researched = logistics
+}
+
+possible = {
+any_scope_building = {
+is_building_type = building_strategic_reserve_hub
+}
+}
+
+immediate = {
+sr_init_effect = yes
+sr_apply_rate_effect = yes
+sr_apply_modes_effect = yes
+}
+
+invalid = {
+NOT = {
+any_scope_building = {
+is_building_type = building_strategic_reserve_hub
+}
+}
+}
+
+on_invalid = {
+sr_reset_vars_effect = yes
+}
+
+scripted_button = sr_cycle_grain_button
+scripted_button = sr_cycle_ammunition_button
+scripted_button = sr_cycle_oil_button
+scripted_button = sr_decrease_rate_button
+scripted_button = sr_increase_rate_button
+
+status_desc = {
+first_valid = {
+triggered_desc = {
+desc = je_strategic_reserve_status_no_hub
+trigger = {
+NOT = {
+any_scope_building = { is_building_type = building_strategic_reserve_hub }
+}
+}
+}
+triggered_desc = {
+desc = je_strategic_reserve_status_active
+trigger = { always = yes }
+}
+}
+triggered_desc = {
+desc = je_strategic_reserve_rate_line
+trigger = { always = yes }
+}
+triggered_desc = {
+desc = je_strategic_reserve_grain_line
+trigger = { always = yes }
+}
+triggered_desc = {
+desc = je_strategic_reserve_ammunition_line
+trigger = { has_technology_researched = nitroglycerin }
+}
+triggered_desc = {
+desc = je_strategic_reserve_oil_line
+trigger = { has_technology_researched = oil_rig }
+}
+}
+
+weight = 500
+}

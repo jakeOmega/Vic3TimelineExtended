@@ -1,0 +1,58 @@
+﻿# ============================================================================
+# Strategic Reserve — Custom Modifier Types
+# ============================================================================
+# Capacity modifiers (country-scope, flat additive, per good).
+country_sr_grain_capacity_add = {
+good = 1
+decimals = 0
+percent = no
+color = good
+}
+
+country_sr_ammunition_capacity_add = {
+good = 1
+decimals = 0
+percent = no
+color = good
+}
+
+country_sr_oil_capacity_add = {
+good = 1
+decimals = 0
+percent = no
+color = good
+}
+
+# Decay rate modifiers (country-scope, fraction of stockpile lost per month).
+# Base values are set in INJECT:base_values in extra_modifiers.txt; tech
+# reductions are applied via INJECT:<tech_name> entries in technology files.
+# A lower value is better, hence color = bad.
+country_sr_grain_decay_add = {
+decimals = 3
+percent = yes
+color = bad
+neutral = yes
+}
+
+country_sr_ammunition_decay_add = {
+decimals = 3
+percent = yes
+color = bad
+neutral = yes
+}
+
+country_sr_oil_decay_add = {
+decimals = 3
+percent = yes
+color = bad
+neutral = yes
+}
+
+# Hub-specific throughput modifier, used by the rate-tier buttons to speed
+# up or slow down store/withdraw flow. Registering the dynamic form so the
+# engine accepts add_modifier = { name = sr_rate_slow ... }.
+building_strategic_reserve_hub_throughput_add = {
+decimals = 2
+percent = yes
+color = good
+}
