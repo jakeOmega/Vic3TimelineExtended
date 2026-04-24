@@ -15536,7 +15536,7 @@ pm_earth_orbit = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 1000               # Price:  200, Total cost: 200000.0 (100.00%)
+			goods_input_launch_capacity_add = 500               # Price:  200, Total cost: 200000.0 (100.00%)
 			# Output goods
 			# Total input cost: 200000.0
 			# Total output cost: 0
@@ -15555,14 +15555,14 @@ pm_earth_orbit = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 100
-			country_weekly_innovation_max_add = 100
-			country_prestige_add = 500
-			goods_output_launch_capacity_mult = 0.1
+			country_weekly_innovation_add = 50
+			country_weekly_innovation_max_add = 50
+			country_prestige_add = 250
+			country_space_race_progress_add = 1
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
-			country_space_race_progress_add = 1
+			goods_output_launch_capacity_mult = 0.05
 		}
 	}
 }
@@ -15577,7 +15577,7 @@ pm_moon_mission = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 3000               # Price:  200, Total cost: 600000.0 (100.00%)
+			goods_input_launch_capacity_add = 1500               # Price:  200, Total cost: 600000.0 (100.00%)
 			# Output goods
 			# Total input cost: 600000.0
 			# Total output cost: 0
@@ -15596,15 +15596,15 @@ pm_moon_mission = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 150
-			country_weekly_innovation_max_add = 150
-			country_prestige_add = 1000
-			goods_output_launch_capacity_mult = 0.2
+			country_weekly_innovation_add = 75
+			country_weekly_innovation_max_add = 75
+			country_prestige_add = 500
+			country_space_race_progress_add = 2
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
-			country_space_race_progress_add = 2
+			goods_output_launch_capacity_mult = 0.1
 		}
 	}
 }
@@ -15619,7 +15619,7 @@ pm_mars_mission = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 10000              # Price:  200, Total cost: 2000000.0 (100.00%)
+			goods_input_launch_capacity_add = 5000              # Price:  200, Total cost: 2000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 2000000.0
 			# Total output cost: 0
@@ -15638,16 +15638,16 @@ pm_mars_mission = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 200
-			country_weekly_innovation_max_add = 200
-			country_prestige_add = 2000
-			goods_output_launch_capacity_mult = 0.3
+			country_weekly_innovation_add = 100
+			country_weekly_innovation_max_add = 100
+			country_prestige_add = 1000
+			country_space_race_progress_add = 3
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
 			country_sr_mars_mission_program_bool = yes
-			country_space_race_progress_add = 3
+			goods_output_launch_capacity_mult = 0.15
 		}
 	}
 }
@@ -15662,7 +15662,7 @@ pm_solar_colonization = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 10000000.0 (100.00%)
+			goods_input_launch_capacity_add = 25000              # Price:  200, Total cost: 10000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 10000000.0
 			# Total output cost: 0
@@ -15681,17 +15681,17 @@ pm_solar_colonization = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 400
-			country_weekly_innovation_max_add = 400
-			country_prestige_add = 5000
-			goods_output_launch_capacity_mult = 0.4
+			country_weekly_innovation_add = 200
+			country_weekly_innovation_max_add = 200
+			country_prestige_add = 2500
+			country_space_race_progress_add = 4
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
 			country_sr_moon_mission_program_bool = yes
 			country_sr_mars_mission_program_bool = yes
 			country_sr_solar_colonization_program_bool = yes
-			country_space_race_progress_add = 4
+			goods_output_launch_capacity_mult = 0.2
 		}
 	}
 }
@@ -15706,7 +15706,7 @@ pm_deep_space_exploration = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 75000              # Price:  200, Total cost: 15000000.0 (100.00%)
+			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 15000000.0 (100.00%)
 			# Output goods
 			# Total input cost: 15000000.0
 			# Total output cost: 0
@@ -15725,10 +15725,10 @@ pm_deep_space_exploration = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 600
-			country_weekly_innovation_max_add = 600
-			country_prestige_add = 7500
-			goods_output_launch_capacity_mult = 0.45
+			country_weekly_innovation_add = 300
+			country_weekly_innovation_max_add = 300
+			country_prestige_add = 5000
+			country_space_race_progress_add = 4
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15736,7 +15736,7 @@ pm_deep_space_exploration = {
 			country_sr_mars_mission_program_bool = yes
 			country_sr_solar_colonization_program_bool = yes
 			country_sr_deep_space_exploration_program_bool = yes
-			country_space_race_progress_add = 4
+			goods_output_launch_capacity_mult = 0.25
 		}
 	}
 }
@@ -15770,10 +15770,10 @@ pm_interstellar_mission = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_add = 800
-			country_weekly_innovation_max_add = 800
+			country_weekly_innovation_add = 400
+			country_weekly_innovation_max_add = 400
 			country_prestige_add = 10000
-			goods_output_launch_capacity_mult = 0.5
+			country_space_race_progress_add = 5
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15782,7 +15782,7 @@ pm_interstellar_mission = {
 			country_sr_solar_colonization_program_bool = yes
 			country_sr_deep_space_exploration_program_bool = yes
 			country_sr_interstellar_mission_program_bool = yes
-			country_space_race_progress_add = 5
+			goods_output_launch_capacity_mult = 0.3
 		}
 	}
 }

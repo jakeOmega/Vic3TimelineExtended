@@ -644,7 +644,7 @@ space_race_events.10 = {
 		ai_chance = { base = 3 }
 		# Switch to safe approach
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
+		sr_temporary_safety_review_effect = yes
 	}
 
 	option = {
@@ -2857,7 +2857,7 @@ space_race_events.12 = {
 		ai_chance = { base = 3 }
 		# Redesign the fuel system entirely: slower but safer
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
+		sr_temporary_safety_review_effect = yes
 	}
 
 	option = {
@@ -2903,7 +2903,7 @@ space_race_events.13 = {
 		ai_chance = { base = 3 }
 		# Build a redundant backup probe: expensive but insurance against total loss
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
+		sr_temporary_safety_review_effect = yes
 	}
 
 	option = {
@@ -2948,7 +2948,7 @@ space_race_events.14 = {
 		ai_chance = { base = 3 }
 		# Evacuate to backup shelter: redesign the habitat module
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
+		sr_temporary_safety_review_effect = yes
 	}
 
 	option = {
@@ -3015,7 +3015,7 @@ space_race_events.15 = {
 		ai_chance = { base = 3 }
 		# Switch to safe approach: recalibrate everything
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
+		sr_temporary_safety_review_effect = yes
 	}
 }
 
@@ -3050,7 +3050,7 @@ space_race_events.16 = {
 		ai_chance = { base = 3 }
 		# Redesign the interstage mechanism
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
+		sr_temporary_safety_review_effect = yes
 	}
 
 	option = {
@@ -3546,7 +3546,8 @@ space_race_events.70 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Rebuild the pad: full safety overhaul before resuming
-		sr_mission_catastrophic_failure_effect = yes
+		sr_mission_failure_effect = yes
+		sr_temporary_safety_review_effect = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3554,6 +3555,7 @@ space_race_events.70 = {
 			random_scope_building = {
 				limit = { is_building_type = building_space_program }
 				add_modifier = { name = sr_launch_pad_damage months = 12 }
+				add_modifier = { name = sr_improved_safety_protocols months = 36 }
 			}
 			kill_population_in_state = { value = 500 pop_type = engineers }
 		}
@@ -3602,7 +3604,8 @@ space_race_events.71 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Ground all capsules: redesign the pressure system
-		sr_mission_catastrophic_failure_effect = yes
+		sr_mission_failure_effect = yes
+		sr_temporary_safety_review_effect = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3614,9 +3617,8 @@ space_race_events.71 = {
 	option = {
 		name = space_race_events.71.b
 		ai_chance = { base = 3 }
-		# Implement the fix and switch to a cautious approach
+		# Implement the fix and resume testing quickly
 		sr_mission_failure_effect = yes
-		sr_switch_to_safe_effect = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }

@@ -7,10 +7,16 @@ sr_ambitious_approach = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_space_race_progress_mult = 0.5
 }
+sr_temporary_safety_review = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_space_race_progress_mult = -0.1
+	country_space_race_risk_mult = -0.25
+}
 # ======= Space Race - Funding Progress Modifier (applied per-JE, multiplier = funding level)
 sr_funding_progress = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_space_race_progress_add = 0.5
+	building_space_program_throughput_add = 0.25
 }
 
 # ======= Space Race - Milestone Achievement Modifiers (First Nation)

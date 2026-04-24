@@ -95,85 +95,90 @@ sr_recalculate_cost = {
 	}
 }
 
-# Switch the last-failed milestone to safe approach
-# Uses sr_last_failed_milestone marker set before firing failure events
-# Switch failed milestone(s) to safe approach using per-JE flags
-# Each flag sr_failed_<m> is set in the monthly pulse before firing failure events
-# Uses if (not else_if) so multiple simultaneous failures are all processed
-sr_switch_to_safe_effect = {
+# Apply a temporary safety review to the last-failed milestone.
+# Each flag sr_failed_<m> is set in the monthly pulse before firing failure events.
+# Uses if (not else_if) so multiple simultaneous failures are all processed.
+sr_temporary_safety_review_effect = {
 	if = {
 		limit = { has_variable = sr_failed_suborbital }
-		if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
-		set_variable = { name = sr_safe_suborbital value = yes }
 		remove_variable = sr_failed_suborbital
 		if = { limit = { has_journal_entry = je_space_race_suborbital }
-			je:je_space_race_suborbital = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_suborbital = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_orbital }
-		if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
-		set_variable = { name = sr_safe_orbital value = yes }
 		remove_variable = sr_failed_orbital
 		if = { limit = { has_journal_entry = je_space_race_orbital }
-			je:je_space_race_orbital = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_orbital = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_moon_landing }
-		if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
-		set_variable = { name = sr_safe_moon_landing value = yes }
 		remove_variable = sr_failed_moon_landing
 		if = { limit = { has_journal_entry = je_space_race_moon_landing }
-			je:je_space_race_moon_landing = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_moon_landing = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_probe }
-		if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
-		set_variable = { name = sr_safe_probe value = yes }
 		remove_variable = sr_failed_probe
 		if = { limit = { has_journal_entry = je_space_race_probe }
-			je:je_space_race_probe = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_probe = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_moon_base }
-		if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
-		set_variable = { name = sr_safe_moon_base value = yes }
 		remove_variable = sr_failed_moon_base
 		if = { limit = { has_journal_entry = je_space_race_moon_base }
-			je:je_space_race_moon_base = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_moon_base = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_mars_landing }
-		if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
-		set_variable = { name = sr_safe_mars_landing value = yes }
 		remove_variable = sr_failed_mars_landing
 		if = { limit = { has_journal_entry = je_space_race_mars_landing }
-			je:je_space_race_mars_landing = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_mars_landing = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_interstellar_probe }
-		if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
-		set_variable = { name = sr_safe_interstellar_probe value = yes }
 		remove_variable = sr_failed_interstellar_probe
 		if = { limit = { has_journal_entry = je_space_race_interstellar_probe }
-			je:je_space_race_interstellar_probe = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_interstellar_probe = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
 	if = {
 		limit = { has_variable = sr_failed_solar_colonization }
-		if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-		set_variable = { name = sr_safe_solar_colonization value = yes }
 		remove_variable = sr_failed_solar_colonization
 		if = { limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { remove_modifier = sr_ambitious_approach add_modifier = sr_safe_approach }
+			je:je_space_race_solar_colonization = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
 		}
 	}
-	sr_recalculate_cost = yes
 }
 
 

@@ -64,7 +64,7 @@ sr_interstellar_transit_value = {
 # Monthly progress value (unified for both approaches)
 # Base progress from space program PM, techs, buildings, companies, partnerships, AND funding
 # All contribute via country_space_race_progress_add modifier (visible in tooltip breakdown)
-# Funding: sr_funding_progress modifier on each JE (0.5 per funding level, stacks across JEs)
+# Funding: sr_funding_progress modifier on each JE (0.5 per funding level and +25% building_space_program throughput per funding level, stacks across JEs)
 # Approach: ambitious gives country_space_race_progress_mult = 0.5 per JE
 sr_progress = {
 	value = modifier:country_space_race_progress_add
