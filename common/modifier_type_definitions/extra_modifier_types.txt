@@ -272,7 +272,52 @@ goods_output_telephones_mult = {
     }
 }
 
+goods_input_grain_mult = {
+	color = bad
+	percent = yes
+	
+	game_data = {
+	    ai_value = 250
+    }
+}
+
 goods_output_grain_mult = {
+	color = good
+	percent = yes
+	
+	game_data = {
+	    ai_value = 250
+    }
+}
+
+goods_input_ammunition_mult = {
+	color = bad
+	percent = yes
+	
+	game_data = {
+	    ai_value = 250
+    }
+}
+
+goods_output_ammunition_mult = {
+	color = good
+	percent = yes
+	
+	game_data = {
+	    ai_value = 250
+    }
+}
+
+goods_input_oil_mult = {
+	color = bad
+	percent = yes
+	
+	game_data = {
+	    ai_value = 250
+    }
+}
+
+goods_output_oil_mult = {
 	color = good
 	percent = yes
 	

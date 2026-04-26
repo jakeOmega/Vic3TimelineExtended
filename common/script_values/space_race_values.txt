@@ -96,14 +96,6 @@ sr_success_weight = {
 	min = 50
 }
 
-sr_current_milestone_progress = {
-	value = 0
-	if = {
-		limit = { has_variable = sr_milestone_progress }
-		add = var:sr_milestone_progress
-	}
-}
-
 # ======= Per-JE System Values =======
 
 # Maximum funding level (base 3, increased by technology)

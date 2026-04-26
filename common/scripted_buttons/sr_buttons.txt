@@ -57,7 +57,7 @@ sr_increase_ammunition_rate_button = {
 	desc = "sr_increase_ammunition_rate_button_desc"
 	visible = {
 		has_journal_entry = je_strategic_reserve
-		has_technology_researched = nitroglycerin
+		has_technology_researched = bolt_action_rifles
 	}
 	ai_chance = {
 		value = 0
@@ -72,7 +72,7 @@ sr_decrease_ammunition_rate_button = {
 	desc = "sr_decrease_ammunition_rate_button_desc"
 	visible = {
 		has_journal_entry = je_strategic_reserve
-		has_technology_researched = nitroglycerin
+		has_technology_researched = bolt_action_rifles
 	}
 	ai_chance = {
 		value = 0
@@ -88,7 +88,7 @@ sr_increase_oil_rate_button = {
 	desc = "sr_increase_oil_rate_button_desc"
 	visible = {
 		has_journal_entry = je_strategic_reserve
-		has_technology_researched = oil_rig
+		has_technology_researched = fractional_distillation
 	}
 	ai_chance = {
 		value = 0
@@ -103,7 +103,7 @@ sr_decrease_oil_rate_button = {
 	desc = "sr_decrease_oil_rate_button_desc"
 	visible = {
 		has_journal_entry = je_strategic_reserve
-		has_technology_researched = oil_rig
+		has_technology_researched = fractional_distillation
 	}
 	ai_chance = {
 		value = 0

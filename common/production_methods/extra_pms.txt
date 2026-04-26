@@ -9957,6 +9957,7 @@ pm_spaceport = {
 			state_infrastructure_add = 100
 			state_infrastructure_from_aeroplanes_consumption_add = 2
 			goods_output_tourism_mult = 0.15
+			building_space_mine_throughput_add = 0.01
 		}
 	}
 
@@ -10002,6 +10003,7 @@ pm_civil_highway = {
 			state_max_trade_advantage_from_capacity_add = 0.05
 			goods_output_transportation_mult = 0.1
 			state_migration_crowding_density_mult = 0.1
+			building_economy_of_scale_level_cap_add = 5
 		}
 	}
 
@@ -10041,6 +10043,7 @@ pm_industrial_highway = {
 			state_infrastructure_add = 25
 			state_max_trade_advantage_from_capacity_add = 0.05
 			state_trade_capacity_mult = 0.2
+			building_economy_of_scale_level_cap_add = 5
 		}
 	}
 
@@ -10109,6 +10112,7 @@ pm_electric_civil_highway = {
 			state_max_trade_advantage_from_capacity_add = 0.05
 			goods_output_transportation_mult = 0.1
 			state_migration_crowding_density_mult = 0.1
+			building_economy_of_scale_level_cap_add = 5
 		}
 	}
 
@@ -10153,6 +10157,7 @@ pm_electric_industrial_highway = {
 			state_infrastructure_from_automobiles_consumption_add = 0.25
 			state_trade_capacity_mult = 0.2
 			state_max_trade_advantage_from_capacity_add = 0.05
+			building_economy_of_scale_level_cap_add = 5
 		}
 	}
 
@@ -10200,6 +10205,7 @@ pm_autonomous_highway = {
 			state_trade_capacity_mult = 0.2
 			goods_output_transportation_mult = 0.1
 			state_migration_crowding_density_mult = 0.1
+			building_economy_of_scale_level_cap_add = 5
 		}
 	}
 }
@@ -15558,7 +15564,7 @@ pm_earth_orbit = {
 			country_weekly_innovation_add = 50
 			country_weekly_innovation_max_add = 50
 			country_prestige_add = 250
-			country_space_race_progress_add = 1
+			country_space_race_progress_add = 0.5
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15599,7 +15605,7 @@ pm_moon_mission = {
 			country_weekly_innovation_add = 75
 			country_weekly_innovation_max_add = 75
 			country_prestige_add = 500
-			country_space_race_progress_add = 2
+			country_space_race_progress_add = 1
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15641,7 +15647,7 @@ pm_mars_mission = {
 			country_weekly_innovation_add = 100
 			country_weekly_innovation_max_add = 100
 			country_prestige_add = 1000
-			country_space_race_progress_add = 3
+			country_space_race_progress_add = 1
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15684,7 +15690,7 @@ pm_solar_colonization = {
 			country_weekly_innovation_add = 200
 			country_weekly_innovation_max_add = 200
 			country_prestige_add = 2500
-			country_space_race_progress_add = 4
+			country_space_race_progress_add = 1
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15728,7 +15734,7 @@ pm_deep_space_exploration = {
 			country_weekly_innovation_add = 300
 			country_weekly_innovation_max_add = 300
 			country_prestige_add = 5000
-			country_space_race_progress_add = 4
+			country_space_race_progress_add = 1
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes
@@ -15773,7 +15779,7 @@ pm_interstellar_mission = {
 			country_weekly_innovation_add = 400
 			country_weekly_innovation_max_add = 400
 			country_prestige_add = 10000
-			country_space_race_progress_add = 5
+			country_space_race_progress_add = 1
 		}
 		unscaled = {
 			country_sr_earth_orbit_program_bool = yes

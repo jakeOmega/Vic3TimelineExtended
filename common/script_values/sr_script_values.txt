@@ -12,20 +12,7 @@ sr_weeks_per_month = 4.333
 # Hub level — 0 if no hub exists.
 sr_hub_level = {
 	value = 0
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_strategic_reserve_hub
-			}
-		}
-		add = {
-			value = 0
-			random_scope_building = {
-				limit = { is_building_type = building_strategic_reserve_hub }
-				add = level
-			}
-		}
-	}
+	add = var:sr_hub_level_cached
 }
 
 # Weekly base throughput per hub level per good before building throughput.
@@ -39,20 +26,7 @@ sr_weekly_base_rate_cap = {
 # Total throughput_add modifier on the hub, summing all contributions.
 sr_hub_throughput = {
 	value = 0
-	if = {
-		limit = {
-			any_scope_building = {
-				is_building_type = building_strategic_reserve_hub
-			}
-		}
-		add = {
-			value = 0
-			random_scope_building = {
-				limit = { is_building_type = building_strategic_reserve_hub }
-				add = modifier:building_throughput_add
-			}
-		}
-	}
+	add = var:sr_hub_throughput_cached
 }
 
 # Throughput scaling factor — clamped at 0.1x so a negative pile-on of

@@ -39,7 +39,7 @@ pm_sr_ammunition_reserve = {
 		}
 	}
 	unlocking_technologies = {
-		nitroglycerin
+		bolt_action_rifles
 	}
 }
 
@@ -58,7 +58,7 @@ pm_sr_oil_reserve = {
 		}
 	}
 	unlocking_technologies = {
-		oil_rig
+		fractional_distillation
 	}
 }
 

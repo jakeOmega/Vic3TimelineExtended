@@ -1,5 +1,47 @@
 ﻿# Wonders / Megastructures
-wonder_construction_complete = {
+wonder_construction_complete_antimatter_facility = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/buildings.dds"
+    notification_type = toast
+    color = good
+}
+
+wonder_construction_complete_consciousness_network = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/buildings.dds"
+    notification_type = toast
+    color = good
+}
+
+wonder_construction_complete_mind_upload_nexus = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/buildings.dds"
+    notification_type = toast
+    color = good
+}
+
+wonder_construction_complete_nanofabrication_center = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/buildings.dds"
+    notification_type = toast
+    color = good
+}
+
+wonder_construction_complete_orbital_battlestation = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/buildings.dds"
+    notification_type = toast
+    color = good
+}
+
+wonder_construction_complete_solar_collector = {
+    type = country
+    texture = "gfx/interface/icons/notification_icons/buildings.dds"
+    notification_type = toast
+    color = good
+}
+
+wonder_construction_complete_space_elevator = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/buildings.dds"
 	notification_type = toast

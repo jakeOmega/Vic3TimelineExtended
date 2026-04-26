@@ -37,6 +37,14 @@ sr_init_effect = {
 		limit = { NOT = { has_variable = sr_adjust_step_tier } }
 		set_variable = { name = sr_adjust_step_tier value = 1 }
 	}
+	if = {
+		limit = { NOT = { has_variable = sr_hub_level_cached } }
+		set_variable = { name = sr_hub_level_cached value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_hub_throughput_cached } }
+		set_variable = { name = sr_hub_throughput_cached value = 0 }
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -46,17 +54,43 @@ sr_init_effect = {
 sr_reset_vars_effect = {
 	set_variable = { name = sr_grain_stored value = 0 }
 	set_variable = { name = sr_grain_rate value = 0 }
-	set_variable = { name = sr_grain_target value = 0 }
-	set_variable = { name = sr_grain_mode value = 0 }
+	remove_variable = sr_grain_target
+	remove_variable = sr_grain_mode
 	set_variable = { name = sr_ammunition_stored value = 0 }
 	set_variable = { name = sr_ammunition_rate value = 0 }
-	set_variable = { name = sr_ammunition_target value = 0 }
-	set_variable = { name = sr_ammunition_mode value = 0 }
+	remove_variable = sr_ammunition_target
+	remove_variable = sr_ammunition_mode
 	set_variable = { name = sr_oil_stored value = 0 }
 	set_variable = { name = sr_oil_rate value = 0 }
-	set_variable = { name = sr_oil_target value = 0 }
-	set_variable = { name = sr_oil_mode value = 0 }
+	remove_variable = sr_oil_target
+	remove_variable = sr_oil_mode
 	set_variable = { name = sr_adjust_step_tier value = 1 }
+	set_variable = { name = sr_hub_level_cached value = 0 }
+	set_variable = { name = sr_hub_throughput_cached value = 0 }
+}
+
+# --------------------------------------------------------------------------
+# sr_refresh_hub_cache_effect — Cache the hub level and throughput modifier on
+# country variables so script values can stay in country scope.
+# --------------------------------------------------------------------------
+sr_refresh_hub_cache_effect = {
+	set_variable = { name = sr_hub_level_cached value = 0 }
+	set_variable = { name = sr_hub_throughput_cached value = 0 }
+
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_strategic_reserve_hub
+			}
+		}
+		random_scope_building = {
+			limit = { is_building_type = building_strategic_reserve_hub }
+			owner = {
+				set_variable = { name = sr_hub_level_cached value = prev.level }
+				set_variable = { name = sr_hub_throughput_cached value = prev.modifier:building_throughput_add }
+			}
+		}
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -67,6 +101,7 @@ sr_reset_vars_effect = {
 # --------------------------------------------------------------------------
 sr_refresh_hub_flow_effect = {
 	sr_init_effect = yes
+	sr_refresh_hub_cache_effect = yes
 	set_local_variable = { name = sr_grain_rate_local value = var:sr_grain_rate }
 	set_local_variable = { name = sr_grain_rate_base_local value = sr_grain_rate_base_applied }
 	set_local_variable = { name = sr_grain_rate_mult_local value = sr_grain_rate_base_applied }
@@ -211,6 +246,7 @@ sr_apply_modes_effect = {
 # --------------------------------------------------------------------------
 sr_weekly_update_effect = {
 	sr_init_effect = yes
+	sr_refresh_hub_cache_effect = yes
 
 	if = {
 		limit = {

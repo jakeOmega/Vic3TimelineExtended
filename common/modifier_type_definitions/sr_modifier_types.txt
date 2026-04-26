@@ -3,21 +3,18 @@
 # ==========================================================================
 # Capacity modifiers (country-scope, flat additive, per good).
 country_sr_grain_capacity_add = {
-	good = 1
 	decimals = 0
 	percent = no
 	color = good
 }
 
 country_sr_ammunition_capacity_add = {
-	good = 1
 	decimals = 0
 	percent = no
 	color = good
 }
 
 country_sr_oil_capacity_add = {
-	good = 1
 	decimals = 0
 	percent = no
 	color = good
@@ -31,19 +28,16 @@ country_sr_grain_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad
-	neutral = yes
 }
 
 country_sr_ammunition_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad
-	neutral = yes
 }
 
 country_sr_oil_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad
-	neutral = yes
 }

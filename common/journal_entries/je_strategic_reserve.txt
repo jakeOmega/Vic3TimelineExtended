@@ -78,11 +78,11 @@ je_strategic_reserve = {
 		}
 		triggered_desc = {
 			desc = je_strategic_reserve_ammunition_line
-			trigger = { has_technology_researched = nitroglycerin }
+			trigger = { has_technology_researched = bolt_action_rifles }
 		}
 		triggered_desc = {
 			desc = je_strategic_reserve_oil_line
-			trigger = { has_technology_researched = oil_rig }
+			trigger = { has_technology_researched = fractional_distillation }
 		}
 	}
 

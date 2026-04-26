@@ -10,6 +10,10 @@ on_monthly_pulse_country = {
 space_race_on_action = {
 	effect = {
 		if = {
+			limit = { NOT = { has_variable = sr_failure_cooldown } }
+			set_variable = { name = sr_failure_cooldown value = 0 }
+		}
+		if = {
 			limit = { sr_has_failure_cooldown = yes }
 			change_variable = { name = sr_failure_cooldown subtract = 1 }
 		}

@@ -856,7 +856,7 @@ REPLACE_OR_CREATE:building_advanced_material_fabricator = {
 }
 
 REPLACE_OR_CREATE:building_aerospace_industry = {
-	building_group = bg_space	
+	building_group = bg_high_tech	
 	icon = "gfx/interface/icons/building_icons/space.dds"
 	city_type = city
 	levels_per_mesh = -1
