@@ -1,0 +1,32 @@
+sr_grain_fill_bar = {
+	name = "sr_grain_fill_bar_name"
+	desc = "sr_grain_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}
+
+sr_ammunition_fill_bar = {
+	name = "sr_ammunition_fill_bar_name"
+	desc = "sr_ammunition_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}
+
+sr_oil_fill_bar = {
+	name = "sr_oil_fill_bar_name"
+	desc = "sr_oil_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}

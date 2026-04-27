@@ -1,12 +1,12 @@
-﻿# ============================================================================
+# ============================================================================
 # Strategic Reserve Journal Entry
 # ============================================================================
 # Activates automatically when a country builds a Strategic Reserve Hub.
 # Displays current stockpile vs capacity for each good and exposes signed rate
 # controls plus a shared step-size selector. Positive rates store goods,
 # negative rates withdraw them, and the hub follows the chosen weekly rate for
-# each good. All stockpile bookkeeping runs in on_weekly_pulse_country
-# (sr_on_actions).
+# each good. Persistent reserve state lives on country vars; this JE only owns
+# visibility, buttons, and lifecycle entry points into the SR wrapper effects.
 # ============================================================================
 
 je_strategic_reserve = {
@@ -24,9 +24,7 @@ je_strategic_reserve = {
 	}
 
 	immediate = {
-		sr_init_effect = yes
-		sr_refresh_hub_flow_effect = yes
-		sr_apply_modes_effect = yes
+		sr_je_immediate_effect = yes
 	}
 
 	invalid = {
@@ -38,10 +36,15 @@ je_strategic_reserve = {
 	}
 
 	on_invalid = {
-		sr_reset_vars_effect = yes
+		sr_je_invalid_effect = yes
 	}
 
+	scripted_progress_bar = sr_grain_fill_bar
+	scripted_progress_bar = sr_ammunition_fill_bar
+	scripted_progress_bar = sr_oil_fill_bar
+
 	scripted_button = sr_cycle_step_size_button
+	scripted_button = sr_reset_rates_button
 	scripted_button = sr_decrease_grain_rate_button
 	scripted_button = sr_increase_grain_rate_button
 	scripted_button = sr_decrease_ammunition_rate_button
@@ -57,6 +60,12 @@ je_strategic_reserve = {
 					NOT = {
 						any_scope_building = { is_building_type = building_strategic_reserve_hub }
 					}
+				}
+			}
+			triggered_desc = {
+				desc = je_strategic_reserve_status_deactivated
+				trigger = {
+					var:sr_hub_workforce_cached <= 0.99
 				}
 			}
 			triggered_desc = {
@@ -78,11 +87,18 @@ je_strategic_reserve = {
 		}
 		triggered_desc = {
 			desc = je_strategic_reserve_ammunition_line
-			trigger = { has_technology_researched = bolt_action_rifles }
+			trigger = { has_technology_researched = percussion_cap }
 		}
 		triggered_desc = {
 			desc = je_strategic_reserve_oil_line
 			trigger = { has_technology_researched = fractional_distillation }
+		}
+	}
+
+	# Weekly bookkeeping lives on country vars; the JE only provides the pulse.
+	on_weekly_pulse = {
+		effect = {
+			sr_je_weekly_pulse_effect = yes
 		}
 	}
 

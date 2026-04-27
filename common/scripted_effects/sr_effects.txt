@@ -1,6 +1,12 @@
 ﻿# ============================================================================
 # Strategic Reserve — Scripted Effects
 # ============================================================================
+# Scope contract:
+# - Country scope owns all persistent Strategic Reserve vars and script values.
+# - Building scope is only used to read live hub data and apply transient flow
+#   modifiers to the hub itself.
+# - Journal entries and scripted buttons should call the wrapper effects in the
+#   lower half of this file rather than the low-level scope-bridge helpers.
 
 # --------------------------------------------------------------------------
 # sr_init_effect — Initialize vars if missing. Called on JE immediate and the
@@ -45,37 +51,52 @@ sr_init_effect = {
 		limit = { NOT = { has_variable = sr_hub_throughput_cached } }
 		set_variable = { name = sr_hub_throughput_cached value = 0 }
 	}
+	if = {
+		limit = { NOT = { has_variable = sr_hub_workforce_cached } }
+		set_variable = { name = sr_hub_workforce_cached value = 1 }
+	}
 }
 
 # --------------------------------------------------------------------------
-# sr_reset_vars_effect — Zero all SR vars. Called from on_invalid so a rebuilt
-# hub starts from a clean slate rather than inheriting stale data.
+# sr_reset_legacy_vars_effect — Remove old vars kept only for save cleanup.
+# --------------------------------------------------------------------------
+sr_reset_legacy_vars_effect = {
+	remove_variable = sr_grain_target
+	remove_variable = sr_grain_mode
+	remove_variable = sr_ammunition_target
+	remove_variable = sr_ammunition_mode
+	remove_variable = sr_oil_target
+	remove_variable = sr_oil_mode
+}
+
+# --------------------------------------------------------------------------
+# sr_reset_vars_effect — Zero all live SR vars. Called from JE invalidation so
+# a rebuilt hub starts from a clean slate rather than inheriting stale data.
+# Legacy mode/target vars are cleared separately for save compatibility.
 # --------------------------------------------------------------------------
 sr_reset_vars_effect = {
 	set_variable = { name = sr_grain_stored value = 0 }
 	set_variable = { name = sr_grain_rate value = 0 }
-	remove_variable = sr_grain_target
-	remove_variable = sr_grain_mode
 	set_variable = { name = sr_ammunition_stored value = 0 }
 	set_variable = { name = sr_ammunition_rate value = 0 }
-	remove_variable = sr_ammunition_target
-	remove_variable = sr_ammunition_mode
 	set_variable = { name = sr_oil_stored value = 0 }
 	set_variable = { name = sr_oil_rate value = 0 }
-	remove_variable = sr_oil_target
-	remove_variable = sr_oil_mode
 	set_variable = { name = sr_adjust_step_tier value = 1 }
 	set_variable = { name = sr_hub_level_cached value = 0 }
 	set_variable = { name = sr_hub_throughput_cached value = 0 }
+	set_variable = { name = sr_hub_workforce_cached value = 1 }
+	sr_reset_legacy_vars_effect = yes
 }
 
 # --------------------------------------------------------------------------
-# sr_refresh_hub_cache_effect — Cache the hub level and throughput modifier on
-# country variables so script values can stay in country scope.
+# sr_refresh_hub_cache_effect — Bridge building -> country scope.
+# Reads the live hub's level and throughput modifier from building scope and
+# caches them on country vars so the rest of the system can stay country-scoped.
 # --------------------------------------------------------------------------
 sr_refresh_hub_cache_effect = {
 	set_variable = { name = sr_hub_level_cached value = 0 }
 	set_variable = { name = sr_hub_throughput_cached value = 0 }
+	set_variable = { name = sr_hub_workforce_cached value = 1 }
 
 	if = {
 		limit = {
@@ -88,32 +109,95 @@ sr_refresh_hub_cache_effect = {
 			owner = {
 				set_variable = { name = sr_hub_level_cached value = prev.level }
 				set_variable = { name = sr_hub_throughput_cached value = prev.modifier:building_throughput_add }
+				set_variable = { name = sr_hub_workforce_cached value = prev.occupancy }
 			}
 		}
 	}
 }
 
 # --------------------------------------------------------------------------
-# sr_refresh_hub_flow_effect — Remove and re-apply the dynamic building
-# modifiers that scale the reserve PM's base 1-unit market flow from the
-# configured rate vars. Positive rates store goods, negative rates withdraw
-# them, and the inactive side is forced to 0 with a fixed -100% modifier.
+# sr_startup_good_setup_effect — Country-scoped per-good startup helper.
+# Parameter: GOOD = grain | ammunition | oil.
+# Populates local vars the building-scoped helpers expect before the
+# country -> building scope bridge.
 # --------------------------------------------------------------------------
-sr_refresh_hub_flow_effect = {
-	sr_init_effect = yes
-	sr_refresh_hub_cache_effect = yes
-	set_local_variable = { name = sr_grain_rate_local value = var:sr_grain_rate }
-	set_local_variable = { name = sr_grain_rate_base_local value = sr_grain_rate_base_applied }
-	set_local_variable = { name = sr_grain_rate_mult_local value = sr_grain_rate_base_applied }
-	change_local_variable = { name = sr_grain_rate_mult_local subtract = 1 }
-	set_local_variable = { name = sr_ammunition_rate_local value = var:sr_ammunition_rate }
-	set_local_variable = { name = sr_ammunition_rate_base_local value = sr_ammunition_rate_base_applied }
-	set_local_variable = { name = sr_ammunition_rate_mult_local value = sr_ammunition_rate_base_applied }
-	change_local_variable = { name = sr_ammunition_rate_mult_local subtract = 1 }
-	set_local_variable = { name = sr_oil_rate_local value = var:sr_oil_rate }
-	set_local_variable = { name = sr_oil_rate_base_local value = sr_oil_rate_base_applied }
-	set_local_variable = { name = sr_oil_rate_mult_local value = sr_oil_rate_base_applied }
-	change_local_variable = { name = sr_oil_rate_mult_local subtract = 1 }
+sr_startup_good_setup_effect = {
+	# Parameter: GOOD = grain | ammunition | oil
+	set_local_variable = { name = sr_$GOOD$_rate_local value = sr_$GOOD$_actual_rate }
+	set_local_variable = { name = sr_$GOOD$_good_mult_local value = sr_$GOOD$_good_mult }
+	set_local_variable = { name = sr_$GOOD$_can_store_local value = 0 }
+	set_local_variable = { name = sr_$GOOD$_can_withdraw_local value = 0 }
+
+	if = {
+		limit = {
+			local_var:sr_$GOOD$_rate_local > 0
+			var:sr_$GOOD$_stored < sr_$GOOD$_capacity
+			var:sr_hub_workforce_cached > 0.99
+		}
+		set_local_variable = { name = sr_$GOOD$_can_store_local value = 1 }
+	}
+	if = {
+		limit = {
+			local_var:sr_$GOOD$_rate_local < 0
+			var:sr_$GOOD$_stored > 0
+			var:sr_hub_workforce_cached > 0.99
+		}
+		set_local_variable = { name = sr_$GOOD$_can_withdraw_local value = 1 }
+	}
+}
+
+# --------------------------------------------------------------------------
+# sr_rebuild_good_flow_modifiers_effect — Building-scoped per-good helper.
+# Parameter: GOOD = grain | ammunition | oil.
+# Expects the corresponding sr_$GOOD$_*_local values to already be populated in
+# the calling effect before the country -> building scope bridge.
+# --------------------------------------------------------------------------
+sr_rebuild_good_flow_modifiers_effect = {
+	if = { limit = { has_modifier = sr_$GOOD$_store_flow } remove_modifier = sr_$GOOD$_store_flow }
+	if = { limit = { has_modifier = sr_$GOOD$_withdraw_flow } remove_modifier = sr_$GOOD$_withdraw_flow }
+
+	if = {
+		limit = {
+			local_var:sr_$GOOD$_can_store_local > 0
+		}
+		add_modifier = { name = sr_$GOOD$_withdraw_flow multiplier = -1 }
+		add_modifier = { name = sr_$GOOD$_store_flow multiplier = local_var:sr_$GOOD$_good_mult_local }
+	}
+	else_if = {
+		limit = {
+			local_var:sr_$GOOD$_can_withdraw_local > 0
+		}
+		add_modifier = { name = sr_$GOOD$_store_flow multiplier = -1 }
+		add_modifier = { name = sr_$GOOD$_withdraw_flow multiplier = local_var:sr_$GOOD$_good_mult_local }
+	}
+	else = {
+		add_modifier = { name = sr_$GOOD$_store_flow multiplier = -1 }
+		add_modifier = { name = sr_$GOOD$_withdraw_flow multiplier = -1 }
+	}
+}
+
+sr_rebuild_grain_flow_modifiers_effect = {
+	sr_rebuild_good_flow_modifiers_effect = { GOOD = grain }
+}
+
+sr_rebuild_ammunition_flow_modifiers_effect = {
+	sr_rebuild_good_flow_modifiers_effect = { GOOD = ammunition }
+}
+
+sr_rebuild_oil_flow_modifiers_effect = {
+	sr_rebuild_good_flow_modifiers_effect = { GOOD = oil }
+}
+
+# --------------------------------------------------------------------------
+# sr_rebuild_hub_flow_modifiers_effect — Bridge country -> building scope.
+# Expects country vars and the hub cache to already be current. Applies the
+# transient hub modifiers that translate the signed reserve rates into market
+# input/output flow on the building itself.
+# --------------------------------------------------------------------------
+sr_rebuild_hub_flow_modifiers_effect = {
+	sr_startup_good_setup_effect = { GOOD = grain }
+	sr_startup_good_setup_effect = { GOOD = ammunition }
+	sr_startup_good_setup_effect = { GOOD = oil }
 
 	if = {
 		limit = {
@@ -124,125 +208,55 @@ sr_refresh_hub_flow_effect = {
 		random_scope_building = {
 			limit = { is_building_type = building_strategic_reserve_hub }
 
-			if = { limit = { has_modifier = sr_grain_store_flow } remove_modifier = sr_grain_store_flow }
-			if = { limit = { has_modifier = sr_grain_withdraw_flow } remove_modifier = sr_grain_withdraw_flow }
-			if = { limit = { has_modifier = sr_grain_disable_input_flow } remove_modifier = sr_grain_disable_input_flow }
-			if = { limit = { has_modifier = sr_grain_disable_output_flow } remove_modifier = sr_grain_disable_output_flow }
-			if = { limit = { has_modifier = sr_ammunition_store_flow } remove_modifier = sr_ammunition_store_flow }
-			if = { limit = { has_modifier = sr_ammunition_withdraw_flow } remove_modifier = sr_ammunition_withdraw_flow }
-			if = { limit = { has_modifier = sr_ammunition_disable_input_flow } remove_modifier = sr_ammunition_disable_input_flow }
-			if = { limit = { has_modifier = sr_ammunition_disable_output_flow } remove_modifier = sr_ammunition_disable_output_flow }
-			if = { limit = { has_modifier = sr_oil_store_flow } remove_modifier = sr_oil_store_flow }
-			if = { limit = { has_modifier = sr_oil_withdraw_flow } remove_modifier = sr_oil_withdraw_flow }
-			if = { limit = { has_modifier = sr_oil_disable_input_flow } remove_modifier = sr_oil_disable_input_flow }
-			if = { limit = { has_modifier = sr_oil_disable_output_flow } remove_modifier = sr_oil_disable_output_flow }
-
-			if = {
-				limit = {
-					local_var:sr_grain_rate_local > 0
-					local_var:sr_grain_rate_base_local > 0
-					var:sr_grain_stored < sr_grain_capacity
-				}
-				add_modifier = { name = sr_grain_disable_output_flow }
-				if = {
-					limit = { local_var:sr_grain_rate_base_local > 1 }
-					add_modifier = { name = sr_grain_store_flow multiplier = local_var:sr_grain_rate_mult_local }
-				}
-			}
-			else_if = {
-				limit = {
-					local_var:sr_grain_rate_local < 0
-					local_var:sr_grain_rate_base_local > 0
-					var:sr_grain_stored > 0
-				}
-				add_modifier = { name = sr_grain_disable_input_flow }
-				if = {
-					limit = { local_var:sr_grain_rate_base_local > 1 }
-					add_modifier = { name = sr_grain_withdraw_flow multiplier = local_var:sr_grain_rate_mult_local }
-				}
-			}
-			else = {
-				add_modifier = { name = sr_grain_disable_input_flow }
-				add_modifier = { name = sr_grain_disable_output_flow }
-			}
-
-			if = {
-				limit = {
-					local_var:sr_ammunition_rate_local > 0
-					local_var:sr_ammunition_rate_base_local > 0
-					var:sr_ammunition_stored < sr_ammunition_capacity
-				}
-				add_modifier = { name = sr_ammunition_disable_output_flow }
-				if = {
-					limit = { local_var:sr_ammunition_rate_base_local > 1 }
-					add_modifier = { name = sr_ammunition_store_flow multiplier = local_var:sr_ammunition_rate_mult_local }
-				}
-			}
-			else_if = {
-				limit = {
-					local_var:sr_ammunition_rate_local < 0
-					local_var:sr_ammunition_rate_base_local > 0
-					var:sr_ammunition_stored > 0
-				}
-				add_modifier = { name = sr_ammunition_disable_input_flow }
-				if = {
-					limit = { local_var:sr_ammunition_rate_base_local > 1 }
-					add_modifier = { name = sr_ammunition_withdraw_flow multiplier = local_var:sr_ammunition_rate_mult_local }
-				}
-			}
-			else = {
-				add_modifier = { name = sr_ammunition_disable_input_flow }
-				add_modifier = { name = sr_ammunition_disable_output_flow }
-			}
-
-			if = {
-				limit = {
-					local_var:sr_oil_rate_local > 0
-					local_var:sr_oil_rate_base_local > 0
-					var:sr_oil_stored < sr_oil_capacity
-				}
-				add_modifier = { name = sr_oil_disable_output_flow }
-				if = {
-					limit = { local_var:sr_oil_rate_base_local > 1 }
-					add_modifier = { name = sr_oil_store_flow multiplier = local_var:sr_oil_rate_mult_local }
-				}
-			}
-			else_if = {
-				limit = {
-					local_var:sr_oil_rate_local < 0
-					local_var:sr_oil_rate_base_local > 0
-					var:sr_oil_stored > 0
-				}
-				add_modifier = { name = sr_oil_disable_input_flow }
-				if = {
-					limit = { local_var:sr_oil_rate_base_local > 1 }
-					add_modifier = { name = sr_oil_withdraw_flow multiplier = local_var:sr_oil_rate_mult_local }
-				}
-			}
-			else = {
-				add_modifier = { name = sr_oil_disable_input_flow }
-				add_modifier = { name = sr_oil_disable_output_flow }
-			}
+			sr_rebuild_grain_flow_modifiers_effect = yes
+			sr_rebuild_ammunition_flow_modifiers_effect = yes
+			sr_rebuild_oil_flow_modifiers_effect = yes
 		}
 	}
 }
 
 # --------------------------------------------------------------------------
-# sr_apply_modes_effect — Clamp stockpile variables to their legal bounds.
-# Direction control now lives entirely in sr_refresh_hub_flow_effect so the
-# player never gets a manually switchable reserve PM choice.
+# sr_refresh_hub_flow_effect — Refresh hub cache, then rebuild the transient
+# building modifiers that express the current country-owned reserve settings.
 # --------------------------------------------------------------------------
-sr_apply_modes_effect = {
+sr_refresh_hub_flow_effect = {
+	sr_init_effect = yes
+	sr_refresh_hub_cache_effect = yes
+
+	# Cache the computed actual gross flow on country vars so UI/tooltips and
+	# button gating can read a stable numeric value without re-evaluating
+	# script-values in JE/button scope (avoids 'none').
+	set_variable = { name = sr_grain_actual_rate_cached value = sr_grain_actual_rate }
+	set_variable = { name = sr_ammunition_actual_rate_cached value = sr_ammunition_actual_rate }
+	set_variable = { name = sr_oil_actual_rate_cached value = sr_oil_actual_rate }
+	sr_rebuild_hub_flow_modifiers_effect = yes
+	sr_apply_sell_profit_effect = yes
+}
+
+# --------------------------------------------------------------------------
+# sr_clamp_stockpiles_effect — Clamp stockpile variables to their legal bounds.
+# Mode text is derived on demand in sr_custom_loc.txt, so no live mode vars are
+# written here.
+# --------------------------------------------------------------------------
+sr_clamp_stockpiles_effect = {
 	sr_init_effect = yes
 	clamp_variable = { name = sr_grain_stored min = 0 max = sr_grain_capacity }
 	clamp_variable = { name = sr_ammunition_stored min = 0 max = sr_ammunition_capacity }
 	clamp_variable = { name = sr_oil_stored min = 0 max = sr_oil_capacity }
+
+	clamp_variable = { name = sr_grain_rate min = sr_neg_weekly_base_rate_cap max = sr_weekly_base_rate_cap }
+	clamp_variable = { name = sr_grain_rate min = sr_grain_max_withdrawable max = sr_grain_max_storable }
+	clamp_variable = { name = sr_ammunition_rate min = sr_neg_weekly_base_rate_cap max = sr_weekly_base_rate_cap }
+	clamp_variable = { name = sr_ammunition_rate min = sr_ammunition_max_withdrawable max = sr_ammunition_max_storable }
+	clamp_variable = { name = sr_oil_rate min = sr_neg_weekly_base_rate_cap max = sr_weekly_base_rate_cap }
+	clamp_variable = { name = sr_oil_rate min = sr_oil_max_withdrawable max = sr_oil_max_storable }
 }
 
 # --------------------------------------------------------------------------
-# sr_weekly_update_effect — Called from on_weekly_pulse_country.
+# sr_weekly_update_effect — Country-scoped weekly bookkeeping for one SR tick.
 # Applies one week of configured signed flow plus one week of decay, clamps the
-# stockpile to [0, capacity], then refreshes hub flow modifiers.
+# stockpile to [0, capacity], then refreshes hub flow modifiers. JE pulses
+# should call sr_je_weekly_pulse_effect instead of wiring this helper directly.
 # --------------------------------------------------------------------------
 sr_weekly_update_effect = {
 	sr_init_effect = yes
@@ -264,12 +278,57 @@ sr_weekly_update_effect = {
 		clamp_variable = { name = sr_oil_stored min = 0 max = sr_oil_capacity }
 
 		sr_refresh_hub_flow_effect = yes
-		sr_apply_modes_effect = yes
+		sr_clamp_stockpiles_effect = yes
+		sr_apply_sell_profit_effect = yes
 	}
 }
 
 # --------------------------------------------------------------------------
-# Step and rate adjustment effects.
+# JE entry points. Journal entries should call only these wrapper effects so
+# the JE stays at the lifecycle layer rather than the helper layer.
+# --------------------------------------------------------------------------
+sr_je_immediate_effect = {
+	sr_init_effect = yes
+	sr_refresh_hub_flow_effect = yes
+	sr_clamp_stockpiles_effect = yes
+
+	# Compute per-good fill % into temporary vars so the journal-entry scope
+	# can read concrete numeric values (avoids 'none' when evaluated in JE scope).
+	set_variable = { name = sr_grain_fill_for_bar value = sr_grain_fill_pct }
+	set_variable = { name = sr_ammunition_fill_for_bar value = sr_ammunition_fill_pct }
+	set_variable = { name = sr_oil_fill_for_bar value = sr_oil_fill_pct }
+
+	scope:journal_entry = {
+		set_bar_progress = { name = sr_grain_fill_bar value = ROOT.var:sr_grain_fill_for_bar }
+		set_bar_progress = { name = sr_ammunition_fill_bar value = ROOT.var:sr_ammunition_fill_for_bar }
+		set_bar_progress = { name = sr_oil_fill_bar value = ROOT.var:sr_oil_fill_for_bar }
+	}
+}
+
+sr_je_weekly_pulse_effect = {
+	sr_weekly_update_effect = yes
+
+	# Refresh the JE bars after weekly bookkeeping. Compute temp vars first so
+	# the journal-entry scope reads concrete numeric values.
+	set_variable = { name = sr_grain_fill_for_bar value = sr_grain_fill_pct }
+	set_variable = { name = sr_ammunition_fill_for_bar value = sr_ammunition_fill_pct }
+	set_variable = { name = sr_oil_fill_for_bar value = sr_oil_fill_pct }
+
+	scope:journal_entry = {
+		set_bar_progress = { name = sr_grain_fill_bar value = ROOT.var:sr_grain_fill_for_bar }
+		set_bar_progress = { name = sr_ammunition_fill_bar value = ROOT.var:sr_ammunition_fill_for_bar }
+		set_bar_progress = { name = sr_oil_fill_bar value = ROOT.var:sr_oil_fill_for_bar }
+	}
+}
+
+sr_je_invalid_effect = {
+	sr_reset_vars_effect = yes
+}
+
+# --------------------------------------------------------------------------
+# Step and rate adjustment entry points for scripted buttons.
+# These effects mutate country vars, then hand off to the shared hub refresh
+# and stockpile clamp helpers.
 # --------------------------------------------------------------------------
 sr_cycle_step_size_effect = {
 	sr_init_effect = yes
@@ -282,44 +341,63 @@ sr_cycle_step_size_effect = {
 	}
 }
 
+# ---------------- RESET RATES ----------------
+sr_reset_rates_effect = {
+	sr_init_effect = yes
+	set_variable = { name = sr_grain_rate value = 0 }
+	set_variable = { name = sr_ammunition_rate value = 0 }
+	set_variable = { name = sr_oil_rate value = 0 }
+	sr_refresh_hub_flow_effect = yes
+	sr_clamp_stockpiles_effect = yes
+}
+
 sr_increase_grain_rate_effect = {
 	sr_init_effect = yes
 	change_variable = { name = sr_grain_rate add = sr_adjust_step_value }
 	sr_refresh_hub_flow_effect = yes
-	sr_apply_modes_effect = yes
+	sr_clamp_stockpiles_effect = yes
 }
 
 sr_decrease_grain_rate_effect = {
 	sr_init_effect = yes
 	change_variable = { name = sr_grain_rate subtract = sr_adjust_step_value }
 	sr_refresh_hub_flow_effect = yes
-	sr_apply_modes_effect = yes
+	sr_clamp_stockpiles_effect = yes
 }
 
 sr_increase_ammunition_rate_effect = {
 	sr_init_effect = yes
 	change_variable = { name = sr_ammunition_rate add = sr_adjust_step_value }
 	sr_refresh_hub_flow_effect = yes
-	sr_apply_modes_effect = yes
+	sr_clamp_stockpiles_effect = yes
 }
 
 sr_decrease_ammunition_rate_effect = {
 	sr_init_effect = yes
 	change_variable = { name = sr_ammunition_rate subtract = sr_adjust_step_value }
 	sr_refresh_hub_flow_effect = yes
-	sr_apply_modes_effect = yes
+	sr_clamp_stockpiles_effect = yes
 }
 
 sr_increase_oil_rate_effect = {
 	sr_init_effect = yes
 	change_variable = { name = sr_oil_rate add = sr_adjust_step_value }
 	sr_refresh_hub_flow_effect = yes
-	sr_apply_modes_effect = yes
+	sr_clamp_stockpiles_effect = yes
 }
 
 sr_decrease_oil_rate_effect = {
 	sr_init_effect = yes
 	change_variable = { name = sr_oil_rate subtract = sr_adjust_step_value }
 	sr_refresh_hub_flow_effect = yes
-	sr_apply_modes_effect = yes
+	sr_clamp_stockpiles_effect = yes
+}
+
+sr_apply_sell_profit_effect = {
+	remove_modifier = sr_sell_profit_modifier
+	set_variable = { name = sr_sell_profit value = 0 }
+	change_variable = { name = sr_sell_profit add = sr_grain_sale_profit }
+	change_variable = { name = sr_sell_profit add = sr_ammunition_sale_profit }
+	change_variable = { name = sr_sell_profit add = sr_oil_sale_profit }
+	add_modifier = { name = sr_sell_profit_modifier multiplier = var:sr_sell_profit }
 }

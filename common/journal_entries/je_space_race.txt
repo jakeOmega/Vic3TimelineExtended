@@ -122,11 +122,9 @@ je_space_race_suborbital = {
 							set_variable = { name = sr_failed_suborbital value = yes }
 							if = {
 								limit = { has_variable = sr_ambitious_suborbital }
-								change_variable = { name = sr_progress_suborbital multiply = 0.75 }
 								sr_fire_ambitious_failure_event = yes
 							}
 							else = {
-								change_variable = { name = sr_progress_suborbital multiply = 0.85 }
 								sr_fire_safe_setback_event = yes
 							}
 						}
@@ -279,11 +277,9 @@ je_space_race_orbital = {
 						set_variable = { name = sr_failed_orbital value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_orbital }
-							change_variable = { name = sr_progress_orbital multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_orbital multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -441,11 +437,9 @@ je_space_race_moon_landing = {
 						set_variable = { name = sr_failed_moon_landing value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_moon_landing }
-							change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -599,11 +593,9 @@ je_space_race_probe = {
 						set_variable = { name = sr_failed_probe value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_probe }
-							change_variable = { name = sr_progress_probe multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_probe multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -755,11 +747,9 @@ je_space_race_moon_base = {
 						set_variable = { name = sr_failed_moon_base value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_moon_base }
-							change_variable = { name = sr_progress_moon_base multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_moon_base multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -913,11 +903,9 @@ je_space_race_mars_landing = {
 						set_variable = { name = sr_failed_mars_landing value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_mars_landing }
-							change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -1058,11 +1046,9 @@ je_space_race_interstellar_probe = {
 						set_variable = { name = sr_failed_interstellar_probe value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_interstellar_probe }
-							change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}
@@ -1335,11 +1321,9 @@ je_space_race_solar_colonization = {
 						set_variable = { name = sr_failed_solar_colonization value = yes }
 						if = {
 							limit = { has_variable = sr_ambitious_solar_colonization }
-							change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
 							sr_fire_ambitious_failure_event = yes
 						}
 						else = {
-							change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
 							sr_fire_safe_setback_event = yes
 						}
 					}

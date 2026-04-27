@@ -208,7 +208,7 @@ space_race_colony_events.4 = {
 		# Agricultural domes - first Martian farmland
 		je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_agriculture } }
 		add_loyalists = { value = medium_radicals }
-		add_loyalists = { value = small_radicals pop_type = farmers }
+		add_loyalists = { value = small_radicals pop_type = engineers }
 	}
 
 	after = {

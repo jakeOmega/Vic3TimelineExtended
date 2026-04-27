@@ -21,8 +21,8 @@
 
 	# Strategic Reserve: base monthly decay rates for stockpiled goods.
 	# Tech (vacuum_canning, bolt_action_rifles, fractional_distillation) reduces these.
-	country_sr_grain_decay_add = 0.02
-	country_sr_ammunition_decay_add = 0.002
+	country_sr_grain_decay_add = 0.25
+	country_sr_ammunition_decay_add = 0.02
 	country_sr_oil_decay_add = 0.005
 }
 
@@ -5844,49 +5844,56 @@ env_crisis_reform_window = {
 # off the inactive side with a fixed -100% multiplier.
 
 sr_grain_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_input_grain_mult = 1
 }
 
 sr_grain_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_grain_mult = 1
 }
 
 sr_grain_disable_input_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_input_grain_mult = -1
 }
 
 sr_grain_disable_output_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_grain_mult = -1
 }
 
 sr_ammunition_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_input_ammunition_mult = 1
 }
 
 sr_ammunition_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_ammunition_mult = 1
 }
 
 sr_ammunition_disable_input_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_input_ammunition_mult = -1
 }
 
 sr_ammunition_disable_output_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_ammunition_mult = -1
 }
 
 sr_oil_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_input_oil_mult = 1
 }
 
 sr_oil_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_oil_mult = 1
 }
 
-sr_oil_disable_input_flow = {
-	goods_input_oil_mult = -1
-}
-
-sr_oil_disable_output_flow = {
-	goods_output_oil_mult = -1
+sr_sell_profit_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tax_income_add = 1
 }

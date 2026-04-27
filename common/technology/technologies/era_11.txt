@@ -384,6 +384,7 @@ lab-grown_food = {
 
 	modifier = {
 		country_max_companies_add = 1
+		country_sr_grain_decay_add = -0.05
 	}
 	
 	ai_weight = {

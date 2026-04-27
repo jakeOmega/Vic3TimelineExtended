@@ -436,22 +436,21 @@ sr_colony_valles_marineris_research = {
 sr_colony_valles_marineris_mining = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.05
-	country_prestige_mult = 0.003
+	goods_output_advanced_materials_mult = 0.02
 }
 sr_colony_olympus_mons_atmospheric = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 sr_colony_olympus_mons_geothermal = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_fusion_plant_throughput_add = 0.03
-	country_prestige_mult = 0.002
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_hellas_settlement = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.004
-	country_cultural_pull_mult = 0.03
+	country_cultural_pull_mult = 0.04
 }
 sr_colony_hellas_astrobiology = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -461,17 +460,17 @@ sr_colony_hellas_astrobiology = {
 sr_colony_utopia_ice = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.05
-	country_space_race_progress_add = 0.2
+	country_space_race_progress_add = 0.15
 }
 sr_colony_utopia_agriculture = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.005
-	country_cultural_pull_mult = 0.03
+	goods_output_launch_capacity_mult = 0.02
+	country_cultural_pull_mult = 0.04
+	country_space_race_progress_add = 0.1
 }
 sr_colony_arcadia_civilian = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.006
-	country_cultural_pull_mult = 0.05
+	country_cultural_pull_mult = 0.08
 }
 sr_colony_arcadia_military = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -486,12 +485,12 @@ sr_colony_ceres_waystation = {
 sr_colony_ceres_observatory = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_mult = 0.003
+	country_weekly_innovation_max_add = 25
 }
 sr_colony_vesta_mining = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.07
-	country_prestige_mult = 0.003
+	goods_output_advanced_materials_mult = 0.02
 }
 sr_colony_vesta_science = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -507,7 +506,7 @@ sr_colony_psyche_careful = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
 	building_space_mine_throughput_add = 0.04
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 sr_colony_pallas_composites = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -517,7 +516,7 @@ sr_colony_pallas_composites = {
 sr_colony_pallas_observatory = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 sr_colony_hygiea_volatiles = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -527,14 +526,14 @@ sr_colony_hygiea_volatiles = {
 sr_colony_hygiea_automated = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_launch_capacity_mult = 0.03
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 
 # --- Stage 2: Jupiter System & Venus ---
 sr_colony_io_mining = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.07
-	country_prestige_mult = 0.003
+	goods_output_advanced_materials_mult = 0.02
 }
 sr_colony_io_research = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -549,12 +548,11 @@ sr_colony_europa_drilling = {
 sr_colony_europa_surface = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_mult = 0.005
+	country_space_race_progress_add = 0.1
 }
 sr_colony_ganymede_settlement = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.006
-	country_cultural_pull_mult = 0.05
+	country_cultural_pull_mult = 0.1
 }
 sr_colony_ganymede_command = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -569,12 +567,12 @@ sr_colony_callisto_gateway = {
 sr_colony_callisto_agricultural = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.05
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 sr_colony_himalia_telescope = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.03
-	country_prestige_mult = 0.003
+	country_weekly_innovation_max_add = 25
 }
 sr_colony_himalia_depot = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -588,8 +586,8 @@ sr_colony_amalthea_physics = {
 }
 sr_colony_amalthea_rings = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_prestige_mult = 0.004
 	goods_output_advanced_materials_mult = 0.02
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_venus_atmospheric = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -606,7 +604,7 @@ sr_colony_venus_extraction = {
 sr_colony_mercury_solar = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_solar_collector_throughput_add = 0.15
-	country_prestige_mult = 0.005
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_mercury_ice = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -616,7 +614,7 @@ sr_colony_mercury_ice = {
 sr_colony_titan_hydrocarbons = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.07
-	country_prestige_mult = 0.004
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_titan_prebiotic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -631,7 +629,7 @@ sr_colony_enceladus_astrobiology = {
 sr_colony_enceladus_water = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.05
-	country_prestige_mult = 0.003
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_rhea_propellant = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -641,12 +639,12 @@ sr_colony_rhea_propellant = {
 sr_colony_rhea_observation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 sr_colony_mimas_installation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.004
-	country_influence_mult = 0.02
+	country_diplomatic_reputation_add = 1
+	country_military_goods_cost_mult = -0.01
 }
 sr_colony_mimas_gravity = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -656,7 +654,7 @@ sr_colony_mimas_gravity = {
 sr_colony_iapetus_ridge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
-	country_prestige_mult = 0.003
+	country_space_race_progress_add = 0.1
 }
 sr_colony_iapetus_organics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -668,7 +666,7 @@ sr_colony_iapetus_organics = {
 sr_colony_titania_mining = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.07
-	country_prestige_mult = 0.004
+	goods_output_advanced_materials_mult = 0.02
 }
 sr_colony_titania_geophysics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -683,12 +681,11 @@ sr_colony_oberon_relay = {
 sr_colony_oberon_research = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.03
-	country_prestige_mult = 0.004
+	country_weekly_innovation_max_add = 25
 }
 sr_colony_miranda_rupes = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.006
-	country_cultural_pull_mult = 0.05
+	country_cultural_pull_mult = 0.07
 }
 sr_colony_miranda_drilling = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -703,7 +700,7 @@ sr_colony_ariel_cryovolcanic = {
 sr_colony_ariel_quarrying = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.07
-	country_prestige_mult = 0.003
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_triton_geyser = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -723,25 +720,25 @@ sr_colony_proteus_probe = {
 sr_colony_proteus_extraction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.07
-	country_prestige_mult = 0.004
+	goods_output_advanced_materials_mult = 0.02
 }
 
 # --- Stage 5: Kuiper Belt & Beyond ---
 sr_colony_pluto_research = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.04
-	country_prestige_mult = 0.006
 	country_space_race_progress_add = 0.5
+	country_weekly_innovation_max_add = 25
 }
 sr_colony_pluto_harvesting = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.08
-	country_prestige_mult = 0.004
+	goods_output_launch_capacity_mult = 0.02
 }
 sr_colony_eris_selfsufficiency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.008
-	country_cultural_pull_mult = 0.07
+	goods_output_launch_capacity_mult = 0.02
+	country_cultural_pull_mult = 0.08
 }
 sr_colony_eris_monitoring = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -755,8 +752,8 @@ sr_colony_makemake_chemistry = {
 }
 sr_colony_makemake_solarwind = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_military_tech_research_speed_mult = 0.03
-	country_prestige_mult = 0.004
+	country_military_tech_research_speed_mult = 0.04
+	country_space_race_progress_add = 0.1
 }
 sr_colony_haumea_dynamics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -765,13 +762,12 @@ sr_colony_haumea_dynamics = {
 }
 sr_colony_haumea_rings = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.006
+	goods_output_advanced_materials_mult = 0.02
 	goods_output_launch_capacity_mult = 0.04
 }
 sr_colony_sedna_outpost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.010
-	country_cultural_pull_mult = 0.10
+	country_cultural_pull_mult = 0.12
 }
 sr_colony_sedna_interstellar = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds

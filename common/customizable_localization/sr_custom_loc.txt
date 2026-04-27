@@ -1,4 +1,7 @@
-﻿sr_grain_mode_text = {
+﻿# Mode text is derived from country vars at display time. The live Strategic
+# Reserve system no longer maintains persistent sr_*_mode variables.
+
+sr_grain_mode_text = {
 	type = country
 	random_valid = no
 

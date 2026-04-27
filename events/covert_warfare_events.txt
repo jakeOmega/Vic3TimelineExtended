@@ -54,12 +54,12 @@ covert_warfare.1 = {
 		name = covert_warfare.1.a
 		default_option = yes
 
-		# Acknowledge — lower infamy, bigger relations hit, clean break
+		# Acknowledge — more infamy, smaller relations hit, clean break
 		custom_tooltip = covert_op_burned_tt
-		change_infamy = 1
+		change_infamy = 2
 		if = {
 			limit = { exists = scope:detected_by_country }
-			change_relations = { country = scope:detected_by_country value = -30 }
+			change_relations = { country = scope:detected_by_country value = -15 }
 		}
 
 		ai_chance = {
@@ -74,12 +74,12 @@ covert_warfare.1 = {
 	option = {
 		name = covert_warfare.1.b
 
-		# Deny — more infamy, less relations hit, but target hardens defenses
+		# Deny — less infamy, more relations hit, but target hardens defenses
 		custom_tooltip = covert_op_burned_tt
-		change_infamy = 2
+		change_infamy = 1
 		if = {
 			limit = { exists = scope:detected_by_country }
-			change_relations = { country = scope:detected_by_country value = -15 }
+			change_relations = { country = scope:detected_by_country value = -30 }
 			scope:detected_by_country = {
 				add_modifier = {
 					name = covert_op_heightened_vigilance_modifier

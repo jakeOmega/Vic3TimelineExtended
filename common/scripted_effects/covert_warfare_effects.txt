@@ -481,11 +481,10 @@ covert_ops_apply_all_phase_effects = {
 							}
 						}
 					}
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
 				}
 				else = {
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
 				}
 			}
 		}

@@ -28,6 +28,228 @@ ch_monthly_country_update = {
 	}
 }
 
+# ---- YEARLY: Ideology alignment cache for JE transparency ----
+# Scope: Country
+# Classifies the current country into the same broad ideological families used
+# by hegemon movement pressure and increments the matching global counter.
+ch_add_country_to_ideology_alignment_totals = {
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_council_republic
+				AND = {
+					has_law = law_type:law_single_party_state
+					has_law = law_type:law_command_economy
+				}
+			}
+		}
+		change_global_variable = { name = ch_ideology_communist_count add = 1 }
+	}
+	else_if = {
+		limit = { has_law = law_type:law_anarchy }
+		change_global_variable = { name = ch_ideology_anarchist_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_ethnostate
+				AND = {
+					has_law = law_type:law_national_supremacy
+					OR = {
+						has_law = law_type:law_single_party_state
+						has_law = law_type:law_autocracy
+					}
+				}
+			}
+		}
+		change_global_variable = { name = ch_ideology_fascist_count add = 1 }
+	}
+	else_if = {
+		limit = { has_law = law_type:law_corporate_state }
+		change_global_variable = { name = ch_ideology_corporatist_count add = 1 }
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		change_global_variable = { name = ch_ideology_socialist_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_monarchy
+			has_law = law_type:law_autocracy
+		}
+		change_global_variable = { name = ch_ideology_royalist_absolutist_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_monarchy
+			NOT = { has_law = law_type:law_autocracy }
+		}
+		change_global_variable = { name = ch_ideology_royalist_constitutional_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_theocracy
+			has_law = law_type:law_state_religion
+		}
+		change_global_variable = { name = ch_ideology_religious_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_autocracy
+			has_law = law_type:law_state_religion
+		}
+		change_global_variable = { name = ch_ideology_reactionary_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_autocracy
+				has_law = law_type:law_single_party_state
+			}
+			has_law = law_type:law_professional_army
+			OR = {
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_militarized_police
+			}
+		}
+		change_global_variable = { name = ch_ideology_military_junta_count add = 1 }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_universal_suffrage
+			OR = {
+				has_law = law_type:law_protected_speech
+				has_law = law_type:law_right_of_assembly
+			}
+		}
+		change_global_variable = { name = ch_ideology_liberal_count add = 1 }
+	}
+	else = {
+		change_global_variable = { name = ch_ideology_other_count add = 1 }
+	}
+}
+
+# Scope: Country (the current rank-1 hegemon)
+# Stores the hegemon's ideological family and the number of countries that
+# currently share it so the JE can show a stable yearly snapshot.
+ch_cache_rank_1_ideology_alignment_summary = {
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_council_republic
+				AND = {
+					has_law = law_type:law_single_party_state
+					has_law = law_type:law_command_economy
+				}
+			}
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 1 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_communist_count }
+	}
+	else_if = {
+		limit = { has_law = law_type:law_anarchy }
+		set_global_variable = { name = ch_rank_1_ideology value = 2 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_anarchist_count }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_ethnostate
+				AND = {
+					has_law = law_type:law_national_supremacy
+					OR = {
+						has_law = law_type:law_single_party_state
+						has_law = law_type:law_autocracy
+					}
+				}
+			}
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 3 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_fascist_count }
+	}
+	else_if = {
+		limit = { has_law = law_type:law_corporate_state }
+		set_global_variable = { name = ch_rank_1_ideology value = 4 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_corporatist_count }
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		set_global_variable = { name = ch_rank_1_ideology value = 5 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_socialist_count }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_monarchy
+			has_law = law_type:law_autocracy
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 6 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_royalist_absolutist_count }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_monarchy
+			NOT = { has_law = law_type:law_autocracy }
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 7 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_royalist_constitutional_count }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_theocracy
+			has_law = law_type:law_state_religion
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 8 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_religious_count }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_autocracy
+			has_law = law_type:law_state_religion
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 9 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_reactionary_count }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_autocracy
+				has_law = law_type:law_single_party_state
+			}
+			has_law = law_type:law_professional_army
+			OR = {
+				has_law = law_type:law_secret_police
+				has_law = law_type:law_militarized_police
+			}
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 10 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_military_junta_count }
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_universal_suffrage
+			OR = {
+				has_law = law_type:law_protected_speech
+				has_law = law_type:law_right_of_assembly
+			}
+		}
+		set_global_variable = { name = ch_rank_1_ideology value = 11 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_liberal_count }
+	}
+	else = {
+		set_global_variable = { name = ch_rank_1_ideology value = 12 }
+		set_global_variable = { name = ch_rank_1_ideology_aligned_count value = global_var:ch_ideology_other_count }
+	}
+
+	if = {
+		limit = {
+			has_global_variable = ch_ideology_country_total
+			has_global_variable = ch_rank_1_ideology_aligned_count
+		}
+		set_global_variable = { name = ch_rank_1_ideology_other_count value = global_var:ch_ideology_country_total }
+		change_global_variable = { name = ch_rank_1_ideology_other_count subtract = global_var:ch_rank_1_ideology_aligned_count }
+	}
+}
+
 # ---- YEARLY: Refresh global caches + build leaderboard ----
 # Scope: Country (uses lock guard, only first caller runs leaderboard)
 ch_yearly_global_update = {
@@ -258,6 +480,34 @@ ch_yearly_global_update = {
 			change_global_variable = { name = ch_rank_10_delta subtract = global_var:ch_rank_10_prev }
 		}
 
+		# Rebuild yearly ideology alignment totals for JE transparency.
+		remove_global_variable = ch_rank_1_ideology
+		remove_global_variable = ch_rank_1_ideology_aligned_count
+		remove_global_variable = ch_rank_1_ideology_other_count
+		set_global_variable = { name = ch_ideology_country_total value = 0 }
+		set_global_variable = { name = ch_ideology_communist_count value = 0 }
+		set_global_variable = { name = ch_ideology_anarchist_count value = 0 }
+		set_global_variable = { name = ch_ideology_fascist_count value = 0 }
+		set_global_variable = { name = ch_ideology_corporatist_count value = 0 }
+		set_global_variable = { name = ch_ideology_socialist_count value = 0 }
+		set_global_variable = { name = ch_ideology_royalist_absolutist_count value = 0 }
+		set_global_variable = { name = ch_ideology_royalist_constitutional_count value = 0 }
+		set_global_variable = { name = ch_ideology_religious_count value = 0 }
+		set_global_variable = { name = ch_ideology_reactionary_count value = 0 }
+		set_global_variable = { name = ch_ideology_military_junta_count value = 0 }
+		set_global_variable = { name = ch_ideology_liberal_count value = 0 }
+		set_global_variable = { name = ch_ideology_other_count value = 0 }
+		every_country = {
+			change_global_variable = { name = ch_ideology_country_total add = 1 }
+			ch_add_country_to_ideology_alignment_totals = yes
+		}
+		if = {
+			limit = { has_global_variable = ch_rank_1 }
+			global_var:ch_rank_1 = {
+				ch_cache_rank_1_ideology_alignment_summary = yes
+			}
+		}
+
 		# Decay tech firsts counter for all countries (inside lock guard so it
 		# runs exactly once per cycle, even when triggered by war-end recalc)
 		every_country = {
@@ -271,16 +521,137 @@ ch_yearly_global_update = {
 	}
 }
 
+# Applies a movement modifier if the requested movement exists in the target.
+# Any matching pressure modifiers passed in CLEAR_MODIFIER_1/2 are removed
+# first so repeat calls refresh duration instead of layering duplicates.
+# Parameters: $MOVEMENT$ (movement type), $MODIFIER$ (modifier name),
+# $CLEAR_MODIFIER_1$/$CLEAR_MODIFIER_2$ (modifier names to refresh),
+# $MONTHS$ (duration), $DECAYING$ (yes/no)
+ch_clear_movement_pressure_if_present = {
+	if = {
+		limit = {
+			any_political_movement = {
+				is_political_movement_type = $MOVEMENT$
+			}
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = $MOVEMENT$ }
+			if = {
+				limit = { has_modifier = $CLEAR_MODIFIER_1$ }
+				remove_modifier = $CLEAR_MODIFIER_1$
+			}
+			if = {
+				limit = { has_modifier = $CLEAR_MODIFIER_2$ }
+				remove_modifier = $CLEAR_MODIFIER_2$
+			}
+		}
+	}
+}
+
+ch_apply_movement_pressure_if_present = {
+	if = {
+		limit = {
+			any_political_movement = {
+				is_political_movement_type = $MOVEMENT$
+			}
+		}
+		ch_clear_movement_pressure_if_present = {
+			MOVEMENT = $MOVEMENT$
+			CLEAR_MODIFIER_1 = $CLEAR_MODIFIER_1$
+			CLEAR_MODIFIER_2 = $CLEAR_MODIFIER_2$
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = $MOVEMENT$ }
+			add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+		}
+	}
+}
+
+# Applies full pressure to the primary movement when it exists; otherwise it
+# falls back to aligned movements in priority order using a weaker modifier.
+# Parameters: $PRIMARY$ (primary movement type), $FALLBACK_1$/$FALLBACK_2$
+# (aligned fallback movement types), $MODIFIER$ (primary modifier name),
+# $FALLBACK_MODIFIER$ (fallback modifier name), $MONTHS$ (duration),
+# $DECAYING$ (yes/no)
+ch_apply_primary_or_fallback_movement_pressure = {
+	# Clear stale pressure from the full family before choosing the current
+	# target, so a newly created primary movement replaces any old fallback.
+	ch_clear_movement_pressure_if_present = {
+		MOVEMENT = $PRIMARY$
+		CLEAR_MODIFIER_1 = $MODIFIER$
+		CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+	}
+	ch_clear_movement_pressure_if_present = {
+		MOVEMENT = $FALLBACK_1$
+		CLEAR_MODIFIER_1 = $MODIFIER$
+		CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+	}
+	ch_clear_movement_pressure_if_present = {
+		MOVEMENT = $FALLBACK_2$
+		CLEAR_MODIFIER_1 = $MODIFIER$
+		CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+	}
+
+	if = {
+		limit = {
+			any_political_movement = {
+				is_political_movement_type = $PRIMARY$
+			}
+		}
+		ch_apply_movement_pressure_if_present = {
+			MOVEMENT = $PRIMARY$
+			MODIFIER = $MODIFIER$
+			CLEAR_MODIFIER_1 = $MODIFIER$
+			CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+			MONTHS = $MONTHS$
+			DECAYING = $DECAYING$
+		}
+	}
+	else_if = {
+		limit = {
+			any_political_movement = {
+				is_political_movement_type = $FALLBACK_1$
+			}
+		}
+		ch_apply_movement_pressure_if_present = {
+			MOVEMENT = $FALLBACK_1$
+			MODIFIER = $FALLBACK_MODIFIER$
+			CLEAR_MODIFIER_1 = $MODIFIER$
+			CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+			MONTHS = $MONTHS$
+			DECAYING = $DECAYING$
+		}
+	}
+	else_if = {
+		limit = {
+			any_political_movement = {
+				is_political_movement_type = $FALLBACK_2$
+			}
+		}
+		ch_apply_movement_pressure_if_present = {
+			MOVEMENT = $FALLBACK_2$
+			MODIFIER = $FALLBACK_MODIFIER$
+			CLEAR_MODIFIER_1 = $MODIFIER$
+			CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+			MONTHS = $MONTHS$
+			DECAYING = $DECAYING$
+		}
+	}
+}
+
 # ---- HEGEMON IDEOLOGY → MOVEMENT PRESSURE ----
 # Scope: Country (the target being influenced)
 # Requires scope:cultural_hegemon to be set.
 # Detects the hegemon's ideological profile from laws and boosts
 # the matching political movements in this country.
-# Parameters: $MODIFIER$ (modifier name), $MONTHS$ (duration), $DECAYING$ (yes/no)
+# Parameters: $MODIFIER$ (primary modifier name), $FALLBACK_MODIFIER$
+# (fallback modifier name), $MONTHS$ (duration), $DECAYING$ (yes/no)
 #
 # Structure: EXCLUSIVE governance checks (else_if chain — pick one primary
 # political model) PLUS NON-EXCLUSIVE social policy checks (independent if
 # blocks — e.g. tolerant + feminist + environmentalist can all fire).
+# Fallback only runs when the primary movement is absent; it does not stack
+# as spillover when the exact ideological movement already exists.
 ch_apply_hegemon_movement_pressure = {
 	if = {
 		limit = { NOT = { exists = scope:cultural_hegemon } }
@@ -303,9 +674,14 @@ ch_apply_hegemon_movement_pressure = {
 					}
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_communist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_communist
+				FALLBACK_1 = movement_socialist
+				FALLBACK_2 = movement_labor
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Anarchist hegemon
@@ -313,9 +689,14 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = { has_law = law_type:law_anarchy }
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_anarchist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_anarchist
+				FALLBACK_1 = movement_socialist
+				FALLBACK_2 = movement_labor
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Fascist/Ethnonationalist hegemon
@@ -334,9 +715,14 @@ ch_apply_hegemon_movement_pressure = {
 					}
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_fascist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_fascist
+				FALLBACK_1 = movement_reactionary
+				FALLBACK_2 = movement_corporatist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Corporatist hegemon
@@ -344,9 +730,14 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = { has_law = law_type:law_corporate_state }
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_corporatist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_corporatist
+				FALLBACK_1 = movement_reactionary
+				FALLBACK_2 = movement_fascist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Socialist hegemon (cooperative ownership, not communist/anarchist)
@@ -354,9 +745,14 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = { has_law = law_type:law_cooperative_ownership }
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_socialist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_socialist
+				FALLBACK_1 = movement_labor
+				FALLBACK_2 = movement_communist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Absolutist monarchist hegemon
@@ -367,9 +763,14 @@ ch_apply_hegemon_movement_pressure = {
 					has_law = law_type:law_autocracy
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_royalist_absolutist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_royalist_absolutist
+				FALLBACK_1 = movement_royalist_constitutional
+				FALLBACK_2 = movement_reactionary
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Constitutional monarchist hegemon
@@ -380,9 +781,14 @@ ch_apply_hegemon_movement_pressure = {
 					NOT = { has_law = law_type:law_autocracy }
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_royalist_constitutional }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_royalist_constitutional
+				FALLBACK_1 = movement_liberal
+				FALLBACK_2 = movement_royalist_absolutist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Theocratic/religious hegemon
@@ -393,9 +799,14 @@ ch_apply_hegemon_movement_pressure = {
 					has_law = law_type:law_state_religion
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_religious_majority }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_religious_majority
+				FALLBACK_1 = movement_reactionary
+				FALLBACK_2 = movement_royalist_absolutist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Reactionary/authoritarian hegemon (autocracy + state religion, not monarchy/theocracy)
@@ -406,9 +817,14 @@ ch_apply_hegemon_movement_pressure = {
 					has_law = law_type:law_state_religion
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_reactionary }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_reactionary
+				FALLBACK_1 = movement_religious_majority
+				FALLBACK_2 = movement_fascist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Military junta hegemon (autocracy/single-party + professional army + secret police)
@@ -427,9 +843,14 @@ ch_apply_hegemon_movement_pressure = {
 				}
 			}
 			# Military juntas inspire reactionary movements abroad
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_reactionary }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_reactionary
+				FALLBACK_1 = movement_fascist
+				FALLBACK_2 = movement_corporatist
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 		# Liberal/Progressive democratic hegemon
@@ -443,9 +864,14 @@ ch_apply_hegemon_movement_pressure = {
 					}
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_liberal }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_primary_or_fallback_movement_pressure = {
+				PRIMARY = movement_liberal
+				FALLBACK_1 = movement_civil_rights
+				FALLBACK_2 = movement_minority_rights
+				MODIFIER = $MODIFIER$
+				FALLBACK_MODIFIER = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -458,9 +884,13 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = { has_law = law_type:law_womens_suffrage }
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_feminist }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_feminist
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -469,14 +899,21 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = { has_law = law_type:law_multicultural }
 			}
-			every_political_movement = {
-				limit = {
-					OR = {
-						is_political_movement_type = movement_civil_rights
-						is_political_movement_type = movement_minority_rights
-					}
-				}
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_civil_rights
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
+			}
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_minority_rights
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -485,9 +922,13 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = { has_law = law_type:law_ministry_of_the_environment }
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_environmental }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_environmental
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -499,9 +940,13 @@ ch_apply_hegemon_movement_pressure = {
 					NOT = { has_law = law_type:law_mass_conscription }
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_anti_war }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_anti_war
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -511,9 +956,13 @@ ch_apply_hegemon_movement_pressure = {
 				scope:cultural_hegemon = { has_law = law_type:law_slavery_banned }
 				NOT = { has_law = law_type:law_slavery_banned }
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_anti_slavery }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_anti_slavery
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -527,9 +976,13 @@ ch_apply_hegemon_movement_pressure = {
 					}
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_labor }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_labor
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 
@@ -543,9 +996,13 @@ ch_apply_hegemon_movement_pressure = {
 					}
 				}
 			}
-			every_political_movement = {
-				limit = { is_political_movement_type = movement_land_reform }
-				add_modifier = { name = $MODIFIER$ months = $MONTHS$ is_decaying = $DECAYING$ }
+			ch_apply_movement_pressure_if_present = {
+				MOVEMENT = movement_land_reform
+				MODIFIER = $MODIFIER$
+				CLEAR_MODIFIER_1 = $MODIFIER$
+				CLEAR_MODIFIER_2 = $FALLBACK_MODIFIER$
+				MONTHS = $MONTHS$
+				DECAYING = $DECAYING$
 			}
 		}
 	}

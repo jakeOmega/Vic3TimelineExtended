@@ -275,7 +275,6 @@ ch_cultural_protectionism_button = {
 		has_law = law_type:law_ministry_of_culture
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
 	}
 
 	ai_chance = {
@@ -298,7 +297,11 @@ ch_cultural_protectionism_button = {
 		has_law = law_type:law_ministry_of_culture
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+
+		custom_tooltip = {
+			text = CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA
+			NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+		}
 	}
 
 	effect = {

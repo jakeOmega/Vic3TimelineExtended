@@ -71,7 +71,7 @@ covert_warfare_rule = {
 }
 
 heir_education_rule = {
-    default = heir_education_enabled
+    default = heir_education_disabled
 
     heir_education_enabled = {
         flag = heir_education_enabled

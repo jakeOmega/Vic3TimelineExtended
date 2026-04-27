@@ -9,56 +9,30 @@
 # ============================================================================
 
 # ---------------- GRAIN ----------------
-pm_sr_grain_reserve = {
+pm_sr_hub_reserve = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
 			country_sr_grain_capacity_add = 500
+			country_sr_ammunition_capacity_add = 500
+			country_sr_oil_capacity_add = 500
+			country_sr_weekly_rate_cap_add = 10
 		}
 	}
 	building_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			goods_input_grain_add = 1
 			goods_output_grain_add = 1
-		}
-	}
-}
-
-# ---------------- AMMUNITION ----------------
-pm_sr_ammunition_reserve = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
-		level_scaled = {
-			country_sr_ammunition_capacity_add = 500
-		}
-	}
-	building_modifiers = {
-		level_scaled = {
 			goods_input_ammunition_add = 1
 			goods_output_ammunition_add = 1
-		}
-	}
-	unlocking_technologies = {
-		bolt_action_rifles
-	}
-}
-
-# ---------------- OIL ----------------
-pm_sr_oil_reserve = {
-	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
-	country_modifiers = {
-		level_scaled = {
-			country_sr_oil_capacity_add = 500
-		}
-	}
-	building_modifiers = {
-		level_scaled = {
 			goods_input_oil_add = 1
 			goods_output_oil_add = 1
 		}
-	}
-	unlocking_technologies = {
-		fractional_distillation
+		level_scaled = {
+			bbuilding_employment_bureaucrats_add = 1000
+			building_employment_clerks_add = 1000
+			building_employment_laborers_add = 3000
+		}
 	}
 }
 
@@ -73,6 +47,15 @@ pm_sr_silo_capacity = {
 			country_sr_grain_capacity_add = 200
 			country_sr_ammunition_capacity_add = 200
 			country_sr_oil_capacity_add = 200
+			building_employment_bureaucrats_add = 1000
+			country_sr_weekly_rate_cap_add = 10
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_bureaucrats_add = 100
+			building_employment_clerks_add = 100
+			building_employment_laborers_add = 300
 		}
 	}
 }

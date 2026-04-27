@@ -151,6 +151,126 @@ je_cultural_hegemony = {
         desc = je_ce_raw_score
         desc = je_ce_global_raw_score
         desc = je_ch_leaderboard_delimiter
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_header
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				has_global_variable = ch_rank_1_ideology
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_counts
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				has_global_variable = ch_rank_1_ideology_aligned_count
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_other
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				has_global_variable = ch_rank_1_ideology_other_count
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_communist
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 1
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_anarchist
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 2
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_fascist
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 3
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_corporatist
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 4
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_socialist
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 5
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_royalist_absolutist
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 6
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_royalist_constitutional
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 7
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_religious
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 8
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_reactionary
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 9
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_military_junta
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 10
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_liberal
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 11
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_ideology_alignment_other_model
+			trigger = {
+				has_global_variable = ch_rank_1
+				global_var:ch_rank_1 = ROOT
+				global_var:ch_rank_1_ideology = 12
+			}
+		}
 		# Top 10 Cultural Powers leaderboard
 		triggered_desc = {
 			desc = je_ch_leaderboard_header

@@ -41,3 +41,9 @@ country_sr_oil_decay_add = {
 	percent = yes
 	color = bad
 }
+
+country_sr_weekly_rate_cap_add = {
+	decimals = 0
+	percent = no
+	color = good
+}

@@ -728,7 +728,7 @@ cultural_hegemony.7 = {
 		}
 
 		# Full political movement pressure from hegemon's ideology
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure MONTHS = 60 DECAYING = yes }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
 
 		# Radicals among pops disturbed by foreign ideology
 		every_scope_state = {
@@ -826,7 +826,7 @@ cultural_hegemony.7 = {
 		}
 
 		# Reduced political movement pressure (weaker modifier, shorter duration)
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = yes }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = yes }
 
 		every_scope_state = {
 			limit = { state_population > 50000 }
@@ -854,7 +854,7 @@ cultural_hegemony.7 = {
 		} }
 
 		# Reduced political movement pressure (you're not suppressing, just redirecting)
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
 
 		ai_chance = {
 			base = 3
@@ -1537,7 +1537,7 @@ cultural_hegemony.15 = {
 		# Hegemon's ideology seeps through the education system
 		if = {
 			limit = { exists = scope:cultural_hegemon }
-			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
+			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
 		}
 		every_scope_state = {
 			limit = { state_population > 50000 }
@@ -1848,6 +1848,9 @@ cultural_hegemony.16 = {
 			exists = scope:ch_pressure_law_type
 		}
 
+		# Externally imposed reforms should not immediately retrigger the generic
+		# radical-law backlash event chain during the same adoption window.
+		set_variable = { name = ch_hegemonic_law_backlash_immunity days = normal_modifier_time }
 		activate_law = scope:ch_pressure_law_type
 		je:je_cultural_hegemony ?= { add_modifier = {
 			name = ch_hegemonic_law_adopted

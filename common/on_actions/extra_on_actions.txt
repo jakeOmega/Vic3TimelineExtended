@@ -376,6 +376,7 @@ radical_law_backlash_on_action = {
 				is_radical_law_activated = yes
 				owner = {
 					is_exempt_from_radical_backlash = no
+					NOT = { has_variable = ch_hegemonic_law_backlash_immunity }
 				}
 			}
 			# Identify which radical law was activated (ROOT = law scope)

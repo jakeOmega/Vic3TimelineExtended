@@ -12,7 +12,7 @@
 
 # ---------------- HUB ----------------
 building_strategic_reserve_hub = {
-	building_group = bg_government
+	building_group = bg_public_infrastructure
 	city_type = city
 	levels_per_mesh = -1
 
@@ -23,9 +23,7 @@ building_strategic_reserve_hub = {
 	}
 
 	production_method_groups = {
-		pmg_sr_grain
-		pmg_sr_ammunition
-		pmg_sr_oil
+		pmg_sr_hub
 	}
 
 	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
@@ -64,7 +62,7 @@ building_strategic_reserve_hub = {
 # capacity for all three goods at each level. Expandable up to a high cap
 # so large empires can pile up reserves.
 building_strategic_reserve_silo = {
-	building_group = bg_government
+	building_group = bg_public_infrastructure
 	city_type = city
 	levels_per_mesh = 3
 

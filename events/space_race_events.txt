@@ -636,15 +636,20 @@ space_race_events.10 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Investigate and rebuild - moderate setback
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.10.b
 		ai_chance = { base = 3 }
 		# Switch to safe approach
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 	}
 
 	option = {
@@ -652,11 +657,14 @@ space_race_events.10 = {
 		ai_chance = { base = 1 }
 		# Double down - accept the loss, push harder
 		# Only minor setback but adds radicals
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -683,19 +691,25 @@ space_race_events.11 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Careful review - accept the setback
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.11.b
 		ai_chance = { base = 3 }
 		# Redirect resources - recover faster but engineers grumble
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -2845,26 +2859,34 @@ space_race_events.12 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Rebuild the pad and investigate root cause
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.12.b
 		ai_chance = { base = 3 }
 		# Redesign the fuel system entirely: slower but safer
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.12.c
 		ai_chance = { base = 1 }
 		# Rush a replacement vehicle: accept the risk
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -2883,7 +2905,18 @@ space_race_events.13 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		OR = {
+			AND = {
+				has_journal_entry = je_space_race_probe
+				has_variable = sr_active_probe
+			}
+			AND = {
+				has_journal_entry = je_space_race_interstellar_probe
+				has_variable = sr_active_interstellar_probe
+			}
+		}
+	}
 	immediate = { }
 
 	option = {
@@ -2891,25 +2924,33 @@ space_race_events.13 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Attempt signal recovery: reorient deep-space antenna network
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.13.b
 		ai_chance = { base = 3 }
 		# Build a redundant backup probe: expensive but insurance against total loss
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.13.c
 		ai_chance = { base = 1 }
 		# Assume the probe is still on course: wait and hope
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -2936,25 +2977,33 @@ space_race_events.14 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Emergency seal and full structural review
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.14.b
 		ai_chance = { base = 3 }
 		# Evacuate to backup shelter: redesign the habitat module
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.14.c
 		ai_chance = { base = 2 }
 		# Patch and continue: the crew is brave
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = large_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -2981,13 +3030,18 @@ space_race_events.15 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Abort the landing attempt: bring the crew home safely
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.15.b
 		ai_chance = { base = 2 }
 		# Manual override: let the pilot take control
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		random_list = {
 			50 = {
 				# Pilot succeeds!
@@ -3004,14 +3058,17 @@ space_race_events.15 = {
 				}
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.15.c
 		ai_chance = { base = 3 }
 		# Switch to safe approach: recalibrate everything
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 	}
 }
 
@@ -3038,25 +3095,33 @@ space_race_events.16 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Activate emergency separation bolts: jettison the stage
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.16.b
 		ai_chance = { base = 3 }
 		# Redesign the interstage mechanism
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 	}
 
 	option = {
 		name = space_race_events.16.c
 		ai_chance = { base = 1 }
 		# Fly the next mission with the same design: anomaly, not systemic
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = large_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3083,24 +3148,32 @@ space_race_events.17 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Emergency medical evacuation: bring the crew member home
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.17.b
 		ai_chance = { base = 3 }
 		# Treat in place with telemedicine: risky but keeps the mission alive
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = small_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.17.c
 		ai_chance = { base = 2 }
 		# Invest in advanced space medicine: slower, but it hardens future missions
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
@@ -3132,29 +3205,38 @@ space_race_events.18 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Launch a public inquiry: restore confidence through transparency
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
 		add_loyalists = { value = small_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.18.b
 		ai_chance = { base = 3 }
 		# Quietly restructure management: minimize political damage
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_10_TT
 		set_variable = { name = sr_progress_boost value = -10 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals strata = lower }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.18.c
 		ai_chance = { base = 1 }
 		# Blame foreign agents: deflect and accelerate
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3181,26 +3263,35 @@ space_race_events.19 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full security review: sweep every system
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.19.b
 		ai_chance = { base = 3 }
 		# Counterintelligence investigation: find the mole
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals pop_type = officers }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.19.c
 		ai_chance = { base = 2 }
 		# Harden systems and press on: waste no time on paranoia
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = large_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3232,29 +3323,38 @@ space_race_events.21 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the parts: accept the setback
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.21.b
 		ai_chance = { base = 3 }
 		# Source from alternative suppliers: faster but untested quality
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.21.c
 		ai_chance = { base = 2 }
 		# Develop domestic manufacturing capability: long-term investment
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3281,15 +3381,20 @@ space_race_events.22 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the next window: run more simulations in the meantime
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.22.b
 		ai_chance = { base = 2 }
 		# Launch in marginal conditions: the schedule demands it
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		random_list = {
 			70 = {
 				# Successful launch despite weather
@@ -3308,6 +3413,7 @@ space_race_events.22 = {
 				}
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3334,29 +3440,38 @@ space_race_events.23 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Full code audit: find and fix every instance
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.23.b
 		ai_chance = { base = 3 }
 		# Patch the specific bug and continue testing
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.23.c
 		ai_chance = { base = 2 }
 		# Rewrite the flight software from scratch: radical but thorough
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3383,31 +3498,40 @@ space_race_events.24 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Defend the program before the committee: absorb the slowdown
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.24.b
 		ai_chance = { base = 3 }
 		# Propose cost-cutting measures: faster resolution but engineers resent cuts
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_3_TT
 		set_variable = { name = sr_progress_boost value = -3 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.24.c
 		ai_chance = { base = 2 }
 		# Appeal directly to the public: generate grassroots support
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = medium_radicals strata = upper }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3434,20 +3558,26 @@ space_race_events.25 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Return the defective parts: demand replacements (quicker but frustrating)
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.25.b
 		ai_chance = { base = 3 }
 		# Bring manufacturing in-house: much slower, but builds capability and trust
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_10_TT
 		set_variable = { name = sr_progress_boost value = -10 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3474,26 +3604,34 @@ space_race_events.26 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Absorb the disruption: space transcends politics
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.26.b
 		ai_chance = { base = 3 }
 		# Leverage the crisis: rally national pride but alienate internationalists
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = medium_radicals interest_group = ig:ig_intelligentsia }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.26.c
 		ai_chance = { base = 2 }
 		# Use the space program as a diplomatic olive branch
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
@@ -3508,6 +3646,7 @@ space_race_events.26 = {
 				change_relations = { country = ROOT value = 10 }
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3542,8 +3681,10 @@ space_race_events.70 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Rebuild the pad: full safety overhaul before resuming
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3561,6 +3702,8 @@ space_race_events.70 = {
 		name = space_race_events.70.b
 		ai_chance = { base = 2 }
 		# Rush repairs: we can't afford to fall behind
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
 		random_scope_state = {
 			limit = {
@@ -3573,6 +3716,7 @@ space_race_events.70 = {
 			kill_population_in_state = { value = 500 pop_type = engineers }
 		}
 		add_radicals = { value = large_radicals pop_type = engineers }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3600,8 +3744,10 @@ space_race_events.71 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Ground all capsules: redesign the pressure system
-		sr_mission_failure_effect = yes
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_temporary_safety_review_effect = yes
+		sr_mission_failure_effect = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3614,6 +3760,8 @@ space_race_events.71 = {
 		name = space_race_events.71.b
 		ai_chance = { base = 3 }
 		# Implement the fix and resume testing quickly
+		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
+		sr_apply_ambitious_failure_progress_loss = yes
 		sr_mission_failure_effect = yes
 		random_scope_state = {
 			limit = {
@@ -3621,6 +3769,7 @@ space_race_events.71 = {
 			}
 			kill_population_in_state = { value = 200 pop_type = academics }
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3648,6 +3797,8 @@ space_race_events.72 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Replace the damaged equipment and improve fire suppression
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
@@ -3660,12 +3811,15 @@ space_race_events.72 = {
 				add_modifier = { name = sr_facility_fire_damage months = 6 }
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.72.b
 		ai_chance = { base = 3 }
 		# Use insurance payout: invest in better safety systems
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
@@ -3679,6 +3833,7 @@ space_race_events.72 = {
 				add_modifier = { name = sr_improved_safety_protocols months = 36 }
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3706,27 +3861,35 @@ space_race_events.73 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Launch a public inquiry: restore trust through transparency
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals pop_type = engineers }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.73.b
 		ai_chance = { base = 3 }
 		# Suppress the story: national security demands secrecy
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
 		add_radicals = { value = large_radicals }
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.73.c
 		ai_chance = { base = 2 }
 		# Restructure the program: bring in new leadership
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
@@ -3740,6 +3903,7 @@ space_race_events.73 = {
 			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 
@@ -3822,6 +3986,8 @@ space_race_events.75 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Wait for the original suppliers: quality matters
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
 		sr_boost_active_milestones = yes
@@ -3834,12 +4000,15 @@ space_race_events.75 = {
 				add_modifier = { name = sr_supply_chain_disruption months = 6 }
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.75.b
 		ai_chance = { base = 3 }
 		# Source alternative suppliers: faster but lower quality causes more issues
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
 		sr_boost_active_milestones = yes
@@ -3852,16 +4021,20 @@ space_race_events.75 = {
 				add_modifier = { name = sr_supply_chain_disruption months = 9 }
 			}
 		}
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
 		name = space_race_events.75.c
 		ai_chance = { base = 2 }
 		# Develop domestic production capacity
+		custom_tooltip = SR_PROGRESS_LOSE_15_PERCENT_TT
+		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
 		sr_boost_active_milestones = yes
 		add_loyalists = { value = small_radicals pop_type = engineers }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 

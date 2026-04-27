@@ -33,6 +33,7 @@ ruler_terrible_administrator = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -83,6 +84,7 @@ ruler_poor_administrator = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -136,6 +138,7 @@ ruler_average_administrator = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -187,6 +190,7 @@ ruler_skilled_administrator = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -249,6 +253,7 @@ ruler_exceptional_administrator = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -315,6 +320,7 @@ ruler_terrible_diplomat = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -364,6 +370,7 @@ ruler_poor_diplomat = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -417,6 +424,7 @@ ruler_average_diplomat = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -468,6 +476,7 @@ ruler_skilled_diplomat = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -530,6 +539,7 @@ ruler_exceptional_diplomat = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -598,6 +608,7 @@ ruler_terrible_commander = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -651,6 +662,7 @@ ruler_poor_commander = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -710,6 +722,7 @@ ruler_average_commander = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -766,6 +779,7 @@ ruler_skilled_commander = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
@@ -838,6 +852,7 @@ ruler_exceptional_commander = {
 	}
 
 	possible = {
+		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
 			has_role = politician
