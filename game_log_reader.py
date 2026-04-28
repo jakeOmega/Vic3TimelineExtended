@@ -1,0 +1,478 @@
+"""Vic3 game-log reader: parsing, classification, dedup, mod-only filtering.
+
+All log files live under `path_constants.game_logs_path`. Filenames follow
+two conventions:
+
+  <family>.log         → current run
+  <family>.<n>.log     → rotated backups (n=1 newest, higher = older)
+  <family>-<sess>.log  → multi-player session backups (excluded by default)
+
+Each log line typically looks like
+  [HH:MM:SS][engine_file.ext:LINE]: message ...
+
+Continuation lines (without the `[..][..]` prefix) extend the previous entry,
+which is how stack traces / multi-line error messages appear.
+
+The reader is consumed by mod_state_server's `/logs/*` endpoints. It caches
+parsed results keyed on (path, mtime) so repeated requests don't re-parse.
+"""
+from __future__ import annotations
+
+import fnmatch
+import os
+import re
+from collections import defaultdict, OrderedDict
+from datetime import datetime, timezone
+
+
+# ---------------------------------------------------------------------------
+# Categorization (source-file → coarse error category)
+# ---------------------------------------------------------------------------
+SOURCE_CATEGORY_PREFIX: dict[str, str] = {
+    "gamedatabase.h:378": "duplicated_key",
+    "gamedatabase.h:395": "inject_to_missing",
+    "pdx_persistent_reader.cpp:268": "script_parse_error",
+    "jomini_trigger.cpp:721": "inconsistent_trigger_scope",
+    "jomini_effect.cpp:752": "inconsistent_effect_scope",
+    "virtualfilesystem.cpp:569": "missing_file",
+    "virtualfilesystem_physfs.cpp:": "vfs_mount",
+    "guitexturehandler.h:155": "missing_texture_for_entity",
+    "gfx_dds_loader.cpp:442": "dds_dimensions",
+}
+# Source file (without :line) → category. Used as a fallback when the exact
+# `file:line` entry isn't in the more specific table above.
+SOURCE_CATEGORY_FILE: dict[str, str] = {
+    "pdx_gui_factory.cpp": "gui_parse_error",
+    "pdx_gui_widget.cpp": "gui_widget_error",
+    "pdx_persistent_reader.cpp": "script_parse_error",
+    "gamedatabase.h": "gamedatabase_other",
+    "jomini_trigger.cpp": "inconsistent_trigger_scope",
+    "jomini_effect.cpp": "inconsistent_effect_scope",
+    "virtualfilesystem.cpp": "missing_file",
+    "guitexturehandler.h": "missing_texture_for_entity",
+    "gfx_dds_loader.cpp": "dds_dimensions",
+    "ai_strategy.cpp": "ai",
+    "localization_database.cpp": "localization",
+}
+
+PARSED_FAMILIES = frozenset({
+    "error", "debug", "game", "gui", "graphics", "event_scopes", "dedicated_server",
+})
+
+# Substring matched against a log line to decide whether it references something
+# inside the active mod. We extract the first path that looks like a mod-tree
+# relative path (common/ events/ gui/ localization/ gfx/ map_data/) and treat
+# any line that hits this regex as mod-relevant.
+_MOD_PATH_RE = re.compile(
+    r"(?:(?:\b|/)(?:common|events|gui|localization|gfx|map_data)/[A-Za-z0-9_./-]+\.(?:txt|gui|yml|yaml|dds|asset|info))"
+)
+_LINE_RE = re.compile(r"^\[(?P<time>\d\d:\d\d:\d\d)\]\[(?P<source>[^\]]+)\]:\s*(?P<message>.*)$")
+
+
+# ---------------------------------------------------------------------------
+# Public types
+# ---------------------------------------------------------------------------
+class LogEntry:
+    __slots__ = ("time", "source", "source_file", "message", "category", "files")
+
+    def __init__(self, time: str, source: str, message: str):
+        self.time = time
+        self.source = source
+        # Strip ":line" so callers can filter by source file alone
+        if ":" in source:
+            self.source_file = source.split(":", 1)[0]
+        else:
+            self.source_file = source
+        self.message = message
+        self.category = _classify(source, message)
+        # All paths referenced inside the message body
+        self.files = sorted(set(_MOD_PATH_RE.findall(message)))
+
+    def to_dict(self, include_message: bool = True) -> dict:
+        d = {
+            "time": self.time,
+            "source": self.source,
+            "source_file": self.source_file,
+            "category": self.category,
+            "files": self.files,
+        }
+        if include_message:
+            d["message"] = self.message
+        return d
+
+
+class LogFileInfo:
+    __slots__ = ("family", "generation", "path", "mtime", "size", "line_count", "label")
+
+    def __init__(self, family, generation, path, mtime, size, line_count, label):
+        self.family = family
+        self.generation = generation
+        self.path = path
+        self.mtime = mtime
+        self.size = size
+        self.line_count = line_count
+        self.label = label
+
+    def to_dict(self) -> dict:
+        return {
+            "family": self.family,
+            "generation": self.generation,
+            "path": self.path,
+            "label": self.label,
+            "mtime": (
+                datetime.fromtimestamp(self.mtime, tz=timezone.utc).isoformat(timespec="seconds")
+                if self.mtime else None
+            ),
+            "size_bytes": self.size,
+            "line_count": self.line_count,
+            "parsed": self.family in PARSED_FAMILIES,
+        }
+
+
+# ---------------------------------------------------------------------------
+# Index: walk the logs dir and group rotated backups by family
+# ---------------------------------------------------------------------------
+_FAMILY_RE = re.compile(r"^(?P<family>[a-zA-Z_]+)(?:\.(?P<gen>\d+))?\.log$")
+
+
+def list_logs(logs_dir: str, include_mp_sessions: bool = False) -> list[LogFileInfo]:
+    out: list[LogFileInfo] = []
+    if not logs_dir or not os.path.isdir(logs_dir):
+        return out
+    for fname in sorted(os.listdir(logs_dir)):
+        if not fname.endswith(".log"):
+            continue
+        path = os.path.join(logs_dir, fname)
+        try:
+            stat = os.stat(path)
+        except OSError:
+            continue
+        if stat.st_size == 0:
+            continue
+        m = _FAMILY_RE.match(fname)
+        if not m:
+            # Includes -Manfred / -pickle session-suffixed files.
+            if not include_mp_sessions:
+                continue
+            family = fname[:-4]  # strip .log
+            generation = None
+        else:
+            family = m.group("family")
+            generation = int(m.group("gen") or "0")
+        line_count = _quick_line_count(path)
+        out.append(
+            LogFileInfo(
+                family=family,
+                generation=generation if generation is not None else 0,
+                path=path,
+                mtime=stat.st_mtime,
+                size=stat.st_size,
+                line_count=line_count,
+                label=fname,
+            )
+        )
+    return out
+
+
+def _quick_line_count(path: str) -> int:
+    """Cheap line count via `wc -l`-style buffered read."""
+    try:
+        count = 0
+        with open(path, "rb") as f:
+            buf = bytearray(65536)
+            view = memoryview(buf)
+            while True:
+                read = f.readinto(buf)
+                if not read:
+                    break
+                count += view[:read].tobytes().count(b"\n")
+        return count
+    except OSError:
+        return 0
+
+
+# ---------------------------------------------------------------------------
+# Parser (cached on (path, mtime))
+# ---------------------------------------------------------------------------
+_parse_cache: "OrderedDict[tuple[str, float], list[LogEntry]]" = OrderedDict()
+_PARSE_CACHE_MAX = 16  # keep ~16 most-recently parsed logs in memory
+
+
+def parse_log(path: str) -> list[LogEntry]:
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return []
+    key = (path, mtime)
+    cached = _parse_cache.get(key)
+    if cached is not None:
+        _parse_cache.move_to_end(key)
+        return cached
+    entries: list[LogEntry] = []
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            current: LogEntry | None = None
+            for line in f:
+                line = line.rstrip("\n")
+                m = _LINE_RE.match(line)
+                if m:
+                    if current is not None:
+                        entries.append(current)
+                    current = LogEntry(m.group("time"), m.group("source"), m.group("message"))
+                elif current is not None:
+                    # Continuation of the previous entry
+                    if line.strip():
+                        current.message = current.message + "\n" + line
+                else:
+                    # Header / non-prefixed lines (e.g. game.log perf headers)
+                    # are kept as their own entries with no time/source.
+                    entries.append(LogEntry("", "", line))
+            if current is not None:
+                entries.append(current)
+    except OSError:
+        return []
+    _parse_cache[key] = entries
+    while len(_parse_cache) > _PARSE_CACHE_MAX:
+        _parse_cache.popitem(last=False)
+    return entries
+
+
+def _classify(source: str, message: str) -> str:
+    cat = SOURCE_CATEGORY_PREFIX.get(source)
+    if cat:
+        return cat
+    file_part = source.split(":", 1)[0]
+    return SOURCE_CATEGORY_FILE.get(file_part, "other")
+
+
+# ---------------------------------------------------------------------------
+# Filtering / dedup / diff
+# ---------------------------------------------------------------------------
+def filter_mod_only(entries: list[LogEntry]) -> list[LogEntry]:
+    return [e for e in entries if e.files]
+
+
+def filter_entries(
+    entries: list[LogEntry],
+    *,
+    q: str | None = None,
+    file_glob: str | None = None,
+    source: str | None = None,
+    category: str | None = None,
+    since: str | None = None,
+) -> list[LogEntry]:
+    out = entries
+    if q:
+        ql = q.lower()
+        out = [e for e in out if ql in e.message.lower()]
+    if file_glob:
+        out = [e for e in out if any(fnmatch.fnmatch(f, file_glob) for f in e.files)]
+    if source:
+        out = [e for e in out if source in e.source]
+    if category:
+        out = [e for e in out if e.category == category]
+    if since:
+        out = [e for e in out if e.time and e.time >= since]
+    return out
+
+
+def dedupe(
+    entries: list[LogEntry],
+    key: str = "message+file",
+) -> list[dict]:
+    """Collapse runs of identical lines. Returns a list of dicts with
+    `first_seen`, `last_seen`, `repeated_times`, plus the entry data."""
+    groups: "OrderedDict[tuple, list[LogEntry]]" = OrderedDict()
+    for e in entries:
+        if key == "exact":
+            k = (e.time, e.source, e.message)
+        elif key == "message":
+            k = (e.message,)
+        elif key == "message+file":
+            # Normalize line numbers in messages so "near line: 32" != "near line: 64"
+            normalized_msg = re.sub(r"\d+", "<n>", e.message)
+            k = (e.category, normalized_msg, tuple(e.files))
+        elif key == "category":
+            k = (e.category,)
+        else:
+            k = (e.message,)
+        groups.setdefault(k, []).append(e)
+    out: list[dict] = []
+    for group in groups.values():
+        first = group[0]
+        last = group[-1]
+        rep = len(group)
+        d = first.to_dict(include_message=True)
+        d["first_seen"] = first.time
+        d["last_seen"] = last.time
+        d["repeated_times"] = rep
+        out.append(d)
+    return out
+
+
+def summarize(entries: list[LogEntry]) -> dict:
+    """Category histogram + top-N most-repeated messages, for ?summary=true."""
+    cats: dict[str, int] = defaultdict(int)
+    for e in entries:
+        cats[e.category] += 1
+    deduped = dedupe(entries, key="message+file")
+    top_repeats = sorted(
+        ({**d, "repeated_times": d["repeated_times"]} for d in deduped if d["repeated_times"] > 1),
+        key=lambda d: -d["repeated_times"],
+    )[:25]
+    return {
+        "total_entries": len(entries),
+        "categories": dict(sorted(cats.items(), key=lambda kv: -kv[1])),
+        "top_repeats": [
+            {
+                "category": d["category"],
+                "source": d["source"],
+                "message": d["message"][:200],
+                "repeated_times": d["repeated_times"],
+                "first_seen": d.get("first_seen"),
+                "last_seen": d.get("last_seen"),
+            }
+            for d in top_repeats
+        ],
+    }
+
+
+def diff_against_backup(current_entries: list[LogEntry], backup_entries: list[LogEntry]) -> dict:
+    """Return entries new in `current` vs entries no longer present in `backup`.
+
+    Comparison is on (category, normalized_message, files) so unrelated
+    timestamps and line numbers don't trip the diff.
+    """
+    def _key(e: LogEntry):
+        normalized_msg = re.sub(r"\d+", "<n>", e.message)
+        return (e.category, normalized_msg, tuple(e.files))
+
+    current_keys = {_key(e) for e in current_entries}
+    backup_keys = {_key(e) for e in backup_entries}
+
+    new_only = [e.to_dict() for e in current_entries if _key(e) not in backup_keys]
+    gone = [e.to_dict() for e in backup_entries if _key(e) not in current_keys]
+    # Dedup the "new" list so a single new error appearing 100x doesn't flood the diff.
+    seen: set[tuple] = set()
+    deduped_new: list[dict] = []
+    for entry in new_only:
+        k = (entry["category"], entry.get("message", ""), tuple(entry.get("files", [])))
+        if k not in seen:
+            seen.add(k)
+            deduped_new.append(entry)
+    return {
+        "added": deduped_new,
+        "removed_categories": _category_histogram(gone),
+        "added_count_raw": len(new_only),
+        "added_count_unique": len(deduped_new),
+        "removed_count": len(gone),
+    }
+
+
+def _category_histogram(entries: list[dict]) -> dict[str, int]:
+    out: dict[str, int] = defaultdict(int)
+    for e in entries:
+        out[e.get("category", "other")] += 1
+    return dict(sorted(out.items(), key=lambda kv: -kv[1]))
+
+
+# ---------------------------------------------------------------------------
+# Sessions: cluster mtimes (within 5 min of each other) into runs.
+# ---------------------------------------------------------------------------
+def cluster_sessions(infos: list[LogFileInfo], window_seconds: float = 300.0) -> list[dict]:
+    sorted_infos = sorted(infos, key=lambda i: i.mtime or 0.0, reverse=True)
+    sessions: list[list[LogFileInfo]] = []
+    for info in sorted_infos:
+        if not info.mtime:
+            continue
+        if not sessions:
+            sessions.append([info])
+            continue
+        last_mtime = sessions[-1][-1].mtime
+        if abs(info.mtime - last_mtime) <= window_seconds:
+            sessions[-1].append(info)
+        else:
+            sessions.append([info])
+    out: list[dict] = []
+    for s in sessions:
+        latest = max(i.mtime for i in s)
+        earliest = min(i.mtime for i in s)
+        out.append({
+            "started": datetime.fromtimestamp(earliest, tz=timezone.utc).isoformat(timespec="seconds"),
+            "last_write": datetime.fromtimestamp(latest, tz=timezone.utc).isoformat(timespec="seconds"),
+            "files": [i.label for i in s],
+            "families": sorted({i.family for i in s}),
+        })
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Markdown digest (called by /reload)
+# ---------------------------------------------------------------------------
+def render_error_log_digest(logs_dir: str, mod_path: str) -> str:
+    """Produce docs/error_log_digest.md from the current error.log + diff vs error.1.log."""
+    infos = list_logs(logs_dir)
+    by_gen = {(i.family, i.generation): i for i in infos if i.family == "error"}
+    current = by_gen.get(("error", 0))
+    prev = by_gen.get(("error", 1))
+    if current is None:
+        return "# Error Log Digest\n\nNo current `error.log` found.\n"
+
+    current_entries = parse_log(current.path)
+    current_mod = filter_mod_only(current_entries)
+    summary = summarize(current_mod)
+
+    out: list[str] = []
+    out.append("<!-- Auto-generated by mod_state_server. Do not hand-edit. -->")
+    out.append("")
+    out.append(f"# Error Log Digest — `{current.label}`")
+    out.append("")
+    if current.mtime:
+        ts = datetime.fromtimestamp(current.mtime, tz=timezone.utc).isoformat(timespec="seconds")
+        out.append(f"Source: `{current.path}` (mtime {ts})")
+        out.append("")
+    out.append(
+        f"Total parsed lines: **{summary['total_entries']}** "
+        f"(of which **{len(current_mod)}** reference mod files)."
+    )
+    out.append("")
+    out.append("## Categories")
+    out.append("")
+    out.append("| Category | Count |")
+    out.append("|---|---|")
+    for cat, n in summary["categories"].items():
+        out.append(f"| `{cat}` | {n} |")
+    out.append("")
+    if summary["top_repeats"]:
+        out.append("## Most-repeated lines (top 25)")
+        out.append("")
+        for r in summary["top_repeats"]:
+            out.append(
+                f"- ×{r['repeated_times']} [{r['category']}] `{r['source']}` — "
+                f"{r['message']}"
+            )
+        out.append("")
+    if prev is not None:
+        prev_entries = parse_log(prev.path)
+        prev_mod = filter_mod_only(prev_entries)
+        diff = diff_against_backup(current_mod, prev_mod)
+        out.append(f"## Diff vs `{prev.label}`")
+        out.append("")
+        out.append(
+            f"- Added (unique): **{diff['added_count_unique']}** "
+            f"(raw count {diff['added_count_raw']})"
+        )
+        out.append(f"- Removed: **{diff['removed_count']}**")
+        out.append("")
+        if diff["added"]:
+            out.append("### New since last launch")
+            out.append("")
+            for entry in diff["added"][:50]:
+                out.append(
+                    f"- [{entry.get('category', 'other')}] `{entry.get('source', '')}` — "
+                    f"{(entry.get('message') or '')[:200]}"
+                )
+            if len(diff["added"]) > 50:
+                out.append(f"- … and {len(diff['added']) - 50} more")
+            out.append("")
+    return "\n".join(out) + "\n"

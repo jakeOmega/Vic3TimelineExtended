@@ -1,75 +1,66 @@
+import os
 from collections import defaultdict
 
 from mod_state import ModState
 from path_constants import base_game_path, doc_path, mod_path
 
+_BASE_COMMON = os.path.join(base_game_path, "game", "common")
+_MOD_COMMON = os.path.join(mod_path, "common")
+
 base_game_paths = {
-    "Building Groups": base_game_path + r"\game\common\building_groups",
-    "Buildings": base_game_path + r"\game\common\buildings",
-    "Technologies": base_game_path + r"\game\common\technology\technologies",
-    "PM Groups": base_game_path + r"\game\common\production_method_groups",
-    "PMs": base_game_path + r"\game\common\production_methods",
-    "Ideologies": base_game_path + r"\game\common\ideologies",
-    "Buy Packages": base_game_path + r"\game\common\buy_packages",
-    "Character Interactions": base_game_path + r"\game\common\character_interactions",
-    "Character Traits": base_game_path + r"\game\common\character_traits",
-    "Combat Unit Groups": base_game_path + r"\game\common\combat_unit_groups",
-    "Combat Unit Types": base_game_path + r"\game\common\combat_unit_types",
-    "Company Types": base_game_path + r"\game\common\company_types",
-    # "Customizable Localization": base_game_path + r"\game\common\customizable_localization",
-    # "Decisions": base_game_path + r"\game\common\decisions",
-    # "Defines": base_game_path + r"\game\common\defines",
-    "Diplomatic Actions": base_game_path + r"\game\common\diplomatic_actions",
-    "Diplomatic Plays": base_game_path + r"\game\common\diplomatic_plays",
-    "Goods": base_game_path + r"\game\common\goods",
-    "Institutions": base_game_path + r"\game\common\institutions",
-    "Interest Groups": base_game_path + r"\game\common\interest_groups",
-    "Law Groups": base_game_path + r"\game\common\law_groups",
-    "Laws": base_game_path + r"\game\common\laws",
-    "Mobilization Option Groups": base_game_path
-    + r"\game\common\mobilization_option_groups",
-    "Mobilization Options": base_game_path + r"\game\common\mobilization_options",
-    "Modifier Types": base_game_path + r"\game\common\modifier_type_definitions",
-    "Modifiers": base_game_path + r"\game\common\static_modifiers",
-    # "On Actions": base_game_path + r"\game\common\on_actions",
-    "Pop Needs": base_game_path + r"\game\common\pop_needs",
-    # "Script Values": base_game_path + r"\game\common\script_values",
-    # "Scripted Effects": base_game_path + r"\game\common\scripted_effects",
-    "Subject Types": base_game_path + r"\game\common\subject_types",
+    "Building Groups": os.path.join(_BASE_COMMON, "building_groups"),
+    "Buildings": os.path.join(_BASE_COMMON, "buildings"),
+    "Technologies": os.path.join(_BASE_COMMON, "technology", "technologies"),
+    "PM Groups": os.path.join(_BASE_COMMON, "production_method_groups"),
+    "PMs": os.path.join(_BASE_COMMON, "production_methods"),
+    "Ideologies": os.path.join(_BASE_COMMON, "ideologies"),
+    "Buy Packages": os.path.join(_BASE_COMMON, "buy_packages"),
+    "Character Interactions": os.path.join(_BASE_COMMON, "character_interactions"),
+    "Character Traits": os.path.join(_BASE_COMMON, "character_traits"),
+    "Combat Unit Groups": os.path.join(_BASE_COMMON, "combat_unit_groups"),
+    "Combat Unit Types": os.path.join(_BASE_COMMON, "combat_unit_types"),
+    "Company Types": os.path.join(_BASE_COMMON, "company_types"),
+    "Diplomatic Actions": os.path.join(_BASE_COMMON, "diplomatic_actions"),
+    "Diplomatic Plays": os.path.join(_BASE_COMMON, "diplomatic_plays"),
+    "Goods": os.path.join(_BASE_COMMON, "goods"),
+    "Institutions": os.path.join(_BASE_COMMON, "institutions"),
+    "Interest Groups": os.path.join(_BASE_COMMON, "interest_groups"),
+    "Law Groups": os.path.join(_BASE_COMMON, "law_groups"),
+    "Laws": os.path.join(_BASE_COMMON, "laws"),
+    "Mobilization Option Groups": os.path.join(_BASE_COMMON, "mobilization_option_groups"),
+    "Mobilization Options": os.path.join(_BASE_COMMON, "mobilization_options"),
+    "Modifier Types": os.path.join(_BASE_COMMON, "modifier_type_definitions"),
+    "Modifiers": os.path.join(_BASE_COMMON, "static_modifiers"),
+    "Pop Needs": os.path.join(_BASE_COMMON, "pop_needs"),
+    "Subject Types": os.path.join(_BASE_COMMON, "subject_types"),
 }
 
 mod_paths = {
-    "Building Groups": mod_path + r"\common\building_groups",
-    "Buildings": mod_path + r"\common\buildings",
-    "Technologies": mod_path + r"\common\technology\technologies",
-    "PM Groups": mod_path + r"\common\production_method_groups",
-    "PMs": mod_path + r"\common\production_methods",
-    "Ideologies": mod_path + r"\common\ideologies",
-    "Buy Packages": mod_path + r"\common\buy_packages",
-    "Character Interactions": mod_path + r"\common\character_interactions",
-    "Character Traits": mod_path + r"\common\character_traits",
-    "Combat Unit Groups": mod_path + r"\common\combat_unit_groups",
-    "Combat Unit Types": mod_path + r"\common\combat_unit_types",
-    "Company Types": mod_path + r"\common\company_types",
-    # "Customizable Localization": mod_path + r"\common\customizable_localization",
-    # "Decisions": mod_path + r"\common\decisions",
-    # "Defines": mod_path + r"\common\defines",
-    "Diplomatic Actions": mod_path + r"\common\diplomatic_actions",
-    "Diplomatic Plays": mod_path + r"\common\diplomatic_plays",
-    "Goods": mod_path + r"\common\goods",
-    "Institutions": mod_path + r"\common\institutions",
-    "Interest Groups": mod_path + r"\common\interest_groups",
-    "Laws": mod_path + r"\common\laws",
-    "Law Groups": mod_path + r"\common\law_groups",
-    "Mobilization Option Groups": mod_path + r"\common\mobilization_option_groups",
-    "Mobilization Options": mod_path + r"\common\mobilization_options",
-    "Modifier Types": mod_path + r"\common\modifier_type_definitions",
-    "Modifiers": mod_path + r"\common\static_modifiers",
-    # "On Actions": mod_path + r"\common\on_actions",
-    "Pop Needs": mod_path + r"\common\pop_needs",
-    # "Script Values": mod_path + r"\common\script_values",
-    # "Scripted Effects": mod_path + r"\common\scripted_effects",
-    "Subject Types": mod_path + r"\common\subject_types",
+    "Building Groups": os.path.join(_MOD_COMMON, "building_groups"),
+    "Buildings": os.path.join(_MOD_COMMON, "buildings"),
+    "Technologies": os.path.join(_MOD_COMMON, "technology", "technologies"),
+    "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
+    "PMs": os.path.join(_MOD_COMMON, "production_methods"),
+    "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
+    "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
+    "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
+    "Character Traits": os.path.join(_MOD_COMMON, "character_traits"),
+    "Combat Unit Groups": os.path.join(_MOD_COMMON, "combat_unit_groups"),
+    "Combat Unit Types": os.path.join(_MOD_COMMON, "combat_unit_types"),
+    "Company Types": os.path.join(_MOD_COMMON, "company_types"),
+    "Diplomatic Actions": os.path.join(_MOD_COMMON, "diplomatic_actions"),
+    "Diplomatic Plays": os.path.join(_MOD_COMMON, "diplomatic_plays"),
+    "Goods": os.path.join(_MOD_COMMON, "goods"),
+    "Institutions": os.path.join(_MOD_COMMON, "institutions"),
+    "Interest Groups": os.path.join(_MOD_COMMON, "interest_groups"),
+    "Laws": os.path.join(_MOD_COMMON, "laws"),
+    "Law Groups": os.path.join(_MOD_COMMON, "law_groups"),
+    "Mobilization Option Groups": os.path.join(_MOD_COMMON, "mobilization_option_groups"),
+    "Mobilization Options": os.path.join(_MOD_COMMON, "mobilization_options"),
+    "Modifier Types": os.path.join(_MOD_COMMON, "modifier_type_definitions"),
+    "Modifiers": os.path.join(_MOD_COMMON, "static_modifiers"),
+    "Pop Needs": os.path.join(_MOD_COMMON, "pop_needs"),
+    "Subject Types": os.path.join(_MOD_COMMON, "subject_types"),
 }
 
 def generate_docs(mod_state):
@@ -86,7 +77,7 @@ def generate_docs(mod_state):
 
 
 def _generate_laws(mod_state):
-    laws_path = doc_path + r"\laws.txt"
+    laws_path = os.path.join(doc_path, "laws.txt")
     laws_output = ""
     laws = mod_state.get_data("Laws")
     laws_dict = {}
@@ -125,7 +116,7 @@ def _generate_laws(mod_state):
 
 
 def _generate_technologies(mod_state):
-    tech_path = doc_path + r"\technologies.txt"
+    tech_path = os.path.join(doc_path, "technologies.txt")
     tech_output = ""
     tech = mod_state.get_data("Technologies")
     tech_dict = defaultdict(list)
@@ -155,7 +146,7 @@ def _generate_technologies(mod_state):
 
 
 def _generate_buildings(mod_state):
-    building_path = doc_path + r"\buildings.txt"
+    building_path = os.path.join(doc_path, "buildings.txt")
     building_output = ""
     buildings_data = mod_state.get_data("Buildings")
     pmg_groups = mod_state.get_data("PM Groups")
@@ -201,7 +192,7 @@ def _generate_buildings(mod_state):
 
 
 def _generate_goods(mod_state):
-    goods_path = doc_path + r"\goods.txt"
+    goods_path = os.path.join(doc_path, "goods.txt")
     goods_output = ""
     goods = mod_state.get_data("Goods")
     for good_id, _ in goods.items():
@@ -212,7 +203,7 @@ def _generate_goods(mod_state):
 
 
 def _generate_combat_units(mod_state):
-    combat_units_path = doc_path + r"\combat_units.txt"
+    combat_units_path = os.path.join(doc_path, "combat_units.txt")
     combat_units_output = ""
     combat_unit_groups = mod_state.get_data("Combat Unit Groups")
     combat_unit_types = mod_state.get_data("Combat Unit Types")
@@ -250,8 +241,8 @@ def _generate_combat_units(mod_state):
 
 if __name__ == "__main__":
     ms = ModState(base_game_paths, mod_paths)
-    ms.add_localization(base_game_path + r"\game\localization\english")
-    ms.add_localization(mod_path + r"\localization\english")
-    ms.add_localization(mod_path + r"\localization\english\replace")
+    ms.add_localization(os.path.join(base_game_path, "game", "localization", "english"))
+    ms.add_localization(os.path.join(mod_path, "localization", "english"))
+    ms.add_localization(os.path.join(mod_path, "localization", "english", "replace"))
     generate_docs(ms)
     print("Done!")

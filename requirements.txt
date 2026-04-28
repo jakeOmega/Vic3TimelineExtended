@@ -3,6 +3,7 @@
 #
 # Core (mod state server, parsers, generators):
 requests
+pyyaml
 
 # Image generation (gen_image.py); optional for headless / non-GPU setups.
 # Comment out on machines without CUDA or a HuggingFace account.

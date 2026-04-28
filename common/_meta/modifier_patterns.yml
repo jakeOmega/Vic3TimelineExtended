@@ -1,0 +1,240 @@
+# Modifier pattern catalog — guaranteed-tracked dynamic modifier templates.
+#
+# Each entry maps a modifier-name pattern (with one `{placeholder}` token) to
+# the placeholder name and the vocabulary that supplies valid values. The
+# mod state server consumes this on startup and on `POST /reload` to:
+#   1. classify engine-doc modifier names into pattern families,
+#   2. group modifiers in the rendered modifier reference,
+#   3. validate mod-defined modifier names that match a pattern but use a
+#      placeholder value not in the vocabulary (likely typos).
+#
+# An auto-discovery pass extends this set with patterns the server infers
+# from the engine docs that aren't listed here. Promote desirable
+# discoveries into this file by hand.
+#
+# Schema:
+#   pattern:     full modifier name with `{placeholder}` substituted in.
+#   placeholder: human-readable token name appearing in `pattern`.
+#   vocab:       VOCABULARY_TYPES key (good, building, bg, ig, poptype, …).
+#   scope:       free-form mask hint, used for sectioning the rendered MD.
+#   family:      free-form group name (production_output, throughput, …).
+#   notes:       optional one-liner shown in modifier_patterns.md.
+
+patterns:
+
+  # --- Goods (per-good output / input) ---
+  - pattern: "goods_output_{good}_add"
+    placeholder: good
+    vocab: good
+    scope: goods
+    family: production_output
+    notes: "Flat additive to the output of a specific good across the economy."
+
+  - pattern: "goods_output_{good}_mult"
+    placeholder: good
+    vocab: good
+    scope: goods
+    family: production_output
+    notes: "Multiplicative bonus to a specific good's output."
+
+  - pattern: "goods_input_{good}_add"
+    placeholder: good
+    vocab: good
+    scope: goods
+    family: production_input
+    notes: "Extra flat input consumption of a specific good."
+
+  - pattern: "goods_input_{good}_mult"
+    placeholder: good
+    vocab: good
+    scope: goods
+    family: production_input
+
+  - pattern: "goods_sales_tax_{good}_add"
+    placeholder: good
+    vocab: good
+    scope: goods
+    family: tax
+
+  # --- Buildings (per-building throughput / employees / level cap) ---
+  - pattern: "building_{building}_throughput_add"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: throughput
+
+  - pattern: "building_{building}_throughput_mult"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: throughput
+
+  - pattern: "building_{building}_max_level_add"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: level_cap
+
+  - pattern: "building_{building}_employees_add"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: employment
+
+  - pattern: "building_{building}_employees_mult"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: employment
+
+  - pattern: "building_{building}_mortality_mult"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: mortality
+
+  - pattern: "building_{building}_unincorporated_throughput_add"
+    placeholder: building
+    vocab: building
+    scope: building
+    family: throughput
+
+  - pattern: "state_building_{building}_max_level_add"
+    placeholder: building
+    vocab: building
+    scope: state
+    family: level_cap
+    notes: "State-scoped cap on a specific building's level."
+
+  # --- Building groups ---
+  - pattern: "building_group_bg_{bg}_throughput_add"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: throughput
+
+  - pattern: "building_group_bg_{bg}_throughput_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: throughput
+
+  - pattern: "building_group_bg_{bg}_tax_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: tax
+
+  - pattern: "building_group_bg_{bg}_employee_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: employment
+
+  - pattern: "building_group_bg_{bg}_urbanization_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: urbanization
+
+  - pattern: "building_group_bg_{bg}_wages_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: wages
+
+  - pattern: "building_group_bg_{bg}_fertility_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: fertility
+
+  - pattern: "building_group_bg_{bg}_expected_sol_mult"
+    placeholder: bg
+    vocab: bg
+    scope: building_group
+    family: expected_sol
+
+  # --- Interest groups ---
+  - pattern: "interest_group_ig_{ig}_pol_str_mult"
+    placeholder: ig
+    vocab: ig
+    scope: country
+    family: ig_strength
+
+  - pattern: "interest_group_ig_{ig}_approval_add"
+    placeholder: ig
+    vocab: ig
+    scope: country
+    family: ig_approval
+
+  - pattern: "interest_group_ig_{ig}_pop_attraction_mult"
+    placeholder: ig
+    vocab: ig
+    scope: country
+    family: ig_attraction
+
+  # --- Pop types / strata ---
+  - pattern: "pop_{poptype}_political_strength_mult"
+    placeholder: poptype
+    vocab: poptype
+    scope: pop
+    family: pop_pol_str
+
+  - pattern: "pop_{poptype}_mortality_mult"
+    placeholder: poptype
+    vocab: poptype
+    scope: pop
+    family: pop_mortality
+
+  - pattern: "state_pop_type_{poptype}_mortality_mult"
+    placeholder: poptype
+    vocab: poptype
+    scope: state
+    family: pop_mortality
+
+  - pattern: "state_pop_qualifications_{poptype}_mult"
+    placeholder: poptype
+    vocab: poptype
+    scope: state
+    family: pop_qualifications
+
+  # --- Institutions ---
+  - pattern: "country_institution_impact_{institution}_mult"
+    placeholder: institution
+    vocab: institution
+    scope: country
+    family: institution_impact
+
+  # --- Cultures (per-culture acceptance / migration) ---
+  - pattern: "country_{culture}_pop_attraction_mult"
+    placeholder: culture
+    vocab: culture
+    scope: country
+    family: culture_attraction
+    notes: "Per-culture migration pull modifier; instantiated for every culture used in modifiers."
+
+  # --- Combat units (per-unit offense / defense / morale) ---
+  - pattern: "unit_{combat_unit}_offense_add"
+    placeholder: combat_unit
+    vocab: combat_unit
+    scope: combat_unit
+    family: unit_combat
+
+  - pattern: "unit_{combat_unit}_defense_add"
+    placeholder: combat_unit
+    vocab: combat_unit
+    scope: combat_unit
+    family: unit_combat
+
+  - pattern: "unit_{combat_unit}_morale_loss_mult"
+    placeholder: combat_unit
+    vocab: combat_unit
+    scope: combat_unit
+    family: unit_morale
+
+  - pattern: "country_{combat_unit_group}_max_size_mult"
+    placeholder: combat_unit_group
+    vocab: combat_unit_group
+    scope: country
+    family: unit_max_size
