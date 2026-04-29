@@ -864,9 +864,18 @@ _VALIDATION_SKIP_TYPES = frozenset({
     "Pop Types", "Religions", "Goods", "Buy Packages",
     "Combat Unit Experience Levels", "Mobilization Option Groups",
     "Mobilization Options",
+    # Pop Needs use modifier-shaped field names (`obsession_demand_mult`,
+    # `goods_demand_mult`) that are pop-need DSL keys, not country/state
+    # modifier reads. Skipping avoids false positives.
+    "Pop Needs",
     # Modifier-type definitions ARE the registry, so don't validate names
     # against themselves.
     "Modifier Types",
+    # Script values are scalars, not modifiers — their names appear in
+    # `multiplier =` and `limit = { X > 0 }` contexts and look modifier-shaped
+    # only because authors suffix them with `_mult`/`_add`. Walking them as
+    # modifier candidates produces only noise.
+    "Script Values",
 })
 
 
@@ -965,7 +974,24 @@ def _validate_engine_coverage() -> dict:
     if not ms or not engine_docs:
         return {"error": "Mod state or engine docs not loaded"}
 
+    # The "valid modifier name" set is the union of:
+    #   (a) vanilla engine-doc modifiers (modifiers.log)
+    #   (b) modifier-type definitions registered by the mod (or vanilla) under
+    #       common/modifier_type_definitions/. Without (b) every dynamic-pattern
+    #       registration and every custom mod modifier looks "unknown" even
+    #       though the engine accepts it.
     modifiers_set = {e.get("name", "") for e in engine_docs.get("modifiers", [])}
+    mod_types = ms.get_data("Modifier Types") or {}
+    modifiers_set.update(mod_types.keys())
+
+    # Script values are scalars referenced by name in `multiplier = X` and
+    # `limit = { X > 0 }`. They look modifier-shaped (`_mult`, `_add` suffixes)
+    # but they're not modifiers — they're computed scalars. Suppress them so
+    # the report doesn't drown in false positives like `migration_crowding_mult`
+    # being read as a modifier when it's really a script value scaling the
+    # `migration_crowding` modifier via `multiplier =`.
+    script_values = ms.get_data("Script Values") or {}
+    script_values_set = set(script_values.keys())
 
     # Pre-compile catalog patterns for the suspicious-match check.
     catalog_pairs = []
@@ -1014,6 +1040,11 @@ def _validate_engine_coverage() -> dict:
                 if isinstance(actual_val, (dict, list)):
                     # A `modifier = { foo_add = 1 }` block would land at this dict;
                     # skip the outer key, but recursion will catch the inner one.
+                    continue
+                # Suppress names that are defined as script values — they're
+                # scalars referenced in `multiplier =` / `limit = { X > 0 }`,
+                # not modifier names.
+                if key in script_values_set:
                     continue
                 status, info = _classify_modifier_name(key, modifiers_set, catalog_pairs)
                 if status in ("engine", "pattern"):
@@ -2577,17 +2608,20 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         Cached on first call after each /reload. Use ?refresh=true to force.
 
+        The default report already cross-references the mod's own
+        common/modifier_type_definitions/ and Script Values, so mod-registered
+        names and script-value scalars no longer surface as unknowns.
+
         Filters:
-          ?filter=vanilla_breakages — exclude unknowns that are defined in the
-            mod's own common/modifier_type_definitions/. Reduces noise to
-            modifiers that are GENUINELY missing from both vanilla engine docs
-            AND the mod's modifier-type registry.
+          ?filter=vanilla_breakages — kept for backwards compatibility; now a
+            no-op since mod-registered modifier types are folded into the
+            base `modifiers_set` before classification.
           ?summary=true — return only the file/summary header, no entity lists.
         """
         if not parts:
             return {
                 "available": ["engine-coverage"],
-                "hint": "GET /validate/engine-coverage[?filter=vanilla_breakages]",
+                "hint": "GET /validate/engine-coverage[?summary=true]",
             }
         check = parts[0]
         if check != "engine-coverage":
