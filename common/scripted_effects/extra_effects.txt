@@ -302,69 +302,90 @@ queue_more_private_investment = {
 	}
 }
 
-update_countrys_bloc_principles_unity = {
+# Swap a country's bloc cultural-plurality/unity principles to the opposite
+# tier-by-tier, called when the bloc leader's policy lever flips. Country scope.
+#   $REMOVE$ — principle stem to strip (plurality | unity)
+#   $ADD$    — principle stem to install (the other one)
+update_countrys_bloc_principle_base = {
 	if = {
 		limit = { is_power_bloc_leader = yes }
 		power_bloc = {
 			if = {
-				limit = { has_principle = principle:principle_cultural_plurality_1 }
-				remove_principle = principle_cultural_plurality_1
-				add_principle = principle_cultural_unity_1
+				limit = { has_principle = principle:principle_cultural_$REMOVE$_1 }
+				remove_principle = principle_cultural_$REMOVE$_1
+				add_principle = principle_cultural_$ADD$_1
 			}
 			else_if = {
-				limit = { has_principle = principle:principle_cultural_plurality_2 }
-				remove_principle = principle_cultural_plurality_2
-				add_principle = principle_cultural_unity_2
+				limit = { has_principle = principle:principle_cultural_$REMOVE$_2 }
+				remove_principle = principle_cultural_$REMOVE$_2
+				add_principle = principle_cultural_$ADD$_2
 			}
 			else_if = {
-				limit = { has_principle = principle:principle_cultural_plurality_3 }
-				remove_principle = principle_cultural_plurality_3
-				add_principle = principle_cultural_unity_3
+				limit = { has_principle = principle:principle_cultural_$REMOVE$_3 }
+				remove_principle = principle_cultural_$REMOVE$_3
+				add_principle = principle_cultural_$ADD$_3
 			}
 			else_if = {
-				limit = { has_principle = principle:principle_cultural_plurality_4 }
-				remove_principle = principle_cultural_plurality_4
-				add_principle = principle_cultural_unity_4
+				limit = { has_principle = principle:principle_cultural_$REMOVE$_4 }
+				remove_principle = principle_cultural_$REMOVE$_4
+				add_principle = principle_cultural_$ADD$_4
 			}
 			else_if = {
-				limit = { has_principle = principle:principle_cultural_plurality_5 }
-				remove_principle = principle_cultural_plurality_5
-				add_principle = principle_cultural_unity_5
+				limit = { has_principle = principle:principle_cultural_$REMOVE$_5 }
+				remove_principle = principle_cultural_$REMOVE$_5
+				add_principle = principle_cultural_$ADD$_5
 			}
 		}
 	}
 }
-update_countrys_bloc_principles_plurality = {
-	if = {
-		limit = { is_power_bloc_leader = yes }
-		power_bloc = {
-			if = {
-				limit = { has_principle = principle:principle_cultural_unity_1 }
-				remove_principle = principle_cultural_unity_1
-				add_principle = principle_cultural_plurality_1
-			}
-			else_if = {
-				limit = { has_principle = principle:principle_cultural_unity_2 }
-				remove_principle = principle_cultural_unity_2
-				add_principle = principle_cultural_plurality_2
-			}
-			else_if = {
-				limit = { has_principle = principle:principle_cultural_unity_3 }
-				remove_principle = principle_cultural_unity_3
-				add_principle = principle_cultural_plurality_3
-			}
-			else_if = {
-				limit = { has_principle = principle:principle_cultural_unity_4 }
-				remove_principle = principle_cultural_unity_4
-				add_principle = principle_cultural_plurality_4
-			}
-			else_if = {
-				limit = { has_principle = principle:principle_cultural_unity_5 }
-				remove_principle = principle_cultural_unity_5
-				add_principle = principle_cultural_plurality_5
-			}
-		}
-	}
+
+update_countrys_bloc_principles_unity     = { update_countrys_bloc_principle_base = { REMOVE = plurality ADD = unity     } }
+update_countrys_bloc_principles_plurality = { update_countrys_bloc_principle_base = { REMOVE = unity     ADD = plurality } }
+
+# --- Banking JE law-change cleanup bundles ---------------------------------
+# When a country's economic law flips between market/command/cooperative,
+# the modifiers that the OTHER intervention toolkit posted on
+# je:je_banking_cycle must be cleared. These helpers list each toolkit's
+# modifiers in one place so te_banking_law_change_cleanup stays scannable.
+# Country scope; the JE must be active (caller checks).
+
+remove_banking_planning_modifiers_effect = {
+	je:je_banking_cycle = { remove_modifier = planning_plan_revision }
+	je:je_banking_cycle = { remove_modifier = planning_emergency_allocation }
+	je:je_banking_cycle = { remove_modifier = planning_target_reduction }
+	je:je_banking_cycle = { remove_modifier = planning_strategic_stockpile }
+	je:je_banking_cycle = { remove_modifier = planning_distribution_upgrade }
+	je:je_banking_cycle = { remove_modifier = planning_admin_campaign }
+	je:je_banking_cycle = { remove_modifier = planning_coordination_protocol }
+	je:je_banking_cycle = { remove_modifier = planning_consolidation_order }
+}
+
+remove_banking_cooperative_modifiers_effect = {
+	je:je_banking_cycle = { remove_modifier = cooperative_dividend_restraint }
+	je:je_banking_cycle = { remove_modifier = cooperative_mutual_aid }
+	je:je_banking_cycle = { remove_modifier = cooperative_capital_plan }
+	je:je_banking_cycle = { remove_modifier = cooperative_solidarity_campaign }
+	je:je_banking_cycle = { remove_modifier = cooperative_credit_expansion }
+	je:je_banking_cycle = { remove_modifier = cooperative_consumption_ceiling }
+	je:je_banking_cycle = { remove_modifier = cooperative_council_directive }
+	je:je_banking_cycle = { remove_modifier = cooperative_worker_buyout }
+}
+
+remove_banking_market_modifiers_effect = {
+	je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
+	je:je_banking_cycle = { remove_modifier = banking_open_market_ops }
+	je:je_banking_cycle = { remove_modifier = banking_countercyclical_capital_buffer }
+	je:je_banking_cycle = { remove_modifier = banking_expand_deposit_guarantee }
+	je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
+	je:je_banking_cycle = { remove_modifier = banking_emergency_liquidity_program }
+	je:je_banking_cycle = { remove_modifier = banking_moral_suasion }
+	je:je_banking_cycle = { remove_modifier = banking_raise_margin_requirements }
+	je:je_banking_cycle = { remove_modifier = banking_fx_devaluation }
+	je:je_banking_cycle = { remove_modifier = banking_fx_support }
+	je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
+	je:je_banking_cycle = { remove_modifier = banking_fx_swap_lines }
+	je:je_banking_cycle = { remove_modifier = banking_export_credit_facility }
+	je:je_banking_cycle = { remove_modifier = banking_asset_relief_program }
 }
 
 nuclear_industrial_strike = {
