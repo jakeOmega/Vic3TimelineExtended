@@ -151,6 +151,18 @@ Where a given modifier or trigger can be used:
 - **Static modifiers (`common/static_modifiers/`)**: any scope's modifiers — but the static modifier must be applied at a matching scope (country / state / character).
 - **`INJECT:` / `REPLACE:` / `REPLACE_OR_CREATE:` directive prefixes** on entity keys (e.g. `INJECT:building_shipyard = { ... }`) are **engine-native** in Vic3 (Clausewitz). The mod uses them throughout. They merge or replace into the matching vanilla entity at load time. Don't try to "expand" them in tooling.
 
+### Recording lessons learned
+When you (Claude or future Claude instances) discover something generally applicable — a working trigger syntax, an engine quirk, a refactor pattern, a tool behavior, a validation rule that bites — write it into the appropriate doc in the same session, don't let it die in conversation history. Natural homes:
+- Engine syntax, scope rules, modifier validation, scripting gotchas → `docs/scripting_best_practices.md`
+- Refactor patterns and the helper inventory → `docs/script_parameterization_audit.md`
+- Mod-state-server / tooling behavior → `docs/python_tools.md`
+- Cross-cutting workflow notes → this file (`CLAUDE.md`)
+- Per-helper context (parameters, scope contract, edge cases) → the helper's own comment header in `common/scripted_*/`. These propagate across clones.
+
+Note that `docs/` is gitignored (see `.gitignore`), so doc edits help the current local environment but don't propagate. For lessons that need to survive a fresh clone, either commit them to `CLAUDE.md` or to the helper's own file header. Don't repeat in both places — pick the natural home and link.
+
+Keep additions short — one paragraph or a bullet, not a treatise. The bar is: would the next Claude instance hit the same gotcha or solve the same problem from scratch without this note? If yes, write it down.
+
 ### Editing conventions
 - Brace-based Paradox files use **tab** indentation. After large edits run `python scripts/format_paradox_tabs.py <files>` (or `--check` in CI-style flows).
 - After editing mod files, `POST /reload` to refresh the server's view (the auto-deploy watcher will already have synced files into the Paradox mod folder).
