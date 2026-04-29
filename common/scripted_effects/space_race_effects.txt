@@ -1,5 +1,51 @@
 ﻿# Space Race Scripted Effects
 
+# Per-JE on_monthly_pulse body for the milestone progress tick. Country scope.
+# Drives 7 of the 8 milestone JEs (solar_colonization has a structurally
+# different progress loop and stays inline). The base risk literal is read
+# by the `sr_failure_weight` script value via `var:sr_base_risk`.
+#
+# Parameters:
+#   $MILESTONE$ — milestone token (suborbital, orbital, moon_landing, probe,
+#                 moon_base, mars_landing, interstellar_probe). Resolves the
+#                 sr_safe_/sr_ambitious_/sr_progress_/sr_failed_ variable
+#                 namespace.
+#   $RISK$      — base failure-roll risk for this milestone (5..10). Set on
+#                 sr_base_risk before the failure_weight roll fires.
+sr_monthly_progress_update_effect = {
+	if = {
+		limit = { sr_ai_should_participate = yes }
+		if = {
+			limit = {
+				OR = {
+					has_variable = sr_safe_$MILESTONE$
+					has_variable = sr_ambitious_$MILESTONE$
+				}
+			}
+			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
+			if = {
+				limit = { NOT = { sr_has_failure_cooldown = yes } }
+				set_variable = { name = sr_base_risk value = $RISK$ }
+				random = {
+					chance = sr_failure_weight
+					set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+					if = {
+						limit = { has_variable = sr_ambitious_$MILESTONE$ }
+						sr_fire_ambitious_failure_event = yes
+					}
+					else = {
+						sr_fire_safe_setback_event = yes
+					}
+				}
+			}
+		}
+		else = {
+			# Default (no approach selected) — minimal progress drift.
+			change_variable = { name = sr_progress_$MILESTONE$ add = 0.5 }
+		}
+	}
+}
+
 # Recalculate space program cost modifiers on each active JE
 # Called whenever funding/approach changes or a milestone completes
 sr_recalculate_cost = {

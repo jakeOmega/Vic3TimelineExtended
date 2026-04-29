@@ -91,43 +91,7 @@ je_space_race_suborbital = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-				# Progress based on approach
-				if = {
-					limit = {
-						OR = {
-							has_variable = sr_safe_suborbital
-							has_variable = sr_ambitious_suborbital
-						}
-					}
-					change_variable = { name = sr_progress_suborbital add = sr_progress }
-					if = {
-						limit = { NOT = { sr_has_failure_cooldown = yes } }
-						set_variable = { name = sr_base_risk value = 5 }
-						random = {
-							chance = sr_failure_weight
-							set_variable = { name = sr_failed_suborbital value = yes }
-							if = {
-								limit = { has_variable = sr_ambitious_suborbital }
-								sr_fire_ambitious_failure_event = yes
-							}
-							else = {
-								sr_fire_safe_setback_event = yes
-							}
-						}
-					}
-				}
-				else = {
-					# Default (no approach selected) - minimal progress
-					change_variable = {
-						name = sr_progress_suborbital
-						add = 0.5
-					}
-				}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital RISK = 5 } }
 	}
 
 	weight = 100
@@ -235,41 +199,7 @@ je_space_race_orbital = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_orbital
-						has_variable = sr_ambitious_orbital
-					}
-				}
-				change_variable = { name = sr_progress_orbital add = sr_progress }
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					set_variable = { name = sr_base_risk value = 6 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_orbital value = yes }
-						if = {
-							limit = { has_variable = sr_ambitious_orbital }
-							sr_fire_ambitious_failure_event = yes
-						}
-						else = {
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-			}
-				else = {
-					change_variable = {
-						name = sr_progress_orbital
-						add = 0.5
-					}
-				}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital RISK = 6 } }
 	}
 
 	weight = 100
@@ -382,42 +312,7 @@ je_space_race_moon_landing = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_moon_landing
-						has_variable = sr_ambitious_moon_landing
-					}
-				}
-				change_variable = { name = sr_progress_moon_landing add = sr_progress }
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					# Site risk is now handled by JE-scoped choice modifiers (sr_choice_site_*)
-					set_variable = { name = sr_base_risk value = 6 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_moon_landing value = yes }
-						if = {
-							limit = { has_variable = sr_ambitious_moon_landing }
-							sr_fire_ambitious_failure_event = yes
-						}
-						else = {
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_moon_landing
-					add = 0.5
-				}
-			}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing RISK = 6 } }
 	}
 
 	weight = 100
@@ -527,41 +422,7 @@ je_space_race_probe = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_probe
-						has_variable = sr_ambitious_probe
-					}
-				}
-				change_variable = { name = sr_progress_probe add = sr_progress }
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					set_variable = { name = sr_base_risk value = 6 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_probe value = yes }
-						if = {
-							limit = { has_variable = sr_ambitious_probe }
-							sr_fire_ambitious_failure_event = yes
-						}
-						else = {
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-			}
-				else = {
-					change_variable = {
-						name = sr_progress_probe
-						add = 0.5
-					}
-				}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe RISK = 6 } }
 	}
 
 	weight = 90
@@ -669,41 +530,7 @@ je_space_race_moon_base = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_moon_base
-						has_variable = sr_ambitious_moon_base
-					}
-				}
-				change_variable = { name = sr_progress_moon_base add = sr_progress }
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					set_variable = { name = sr_base_risk value = 8 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_moon_base value = yes }
-						if = {
-							limit = { has_variable = sr_ambitious_moon_base }
-							sr_fire_ambitious_failure_event = yes
-						}
-						else = {
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-			}
-				else = {
-					change_variable = {
-						name = sr_progress_moon_base
-						add = 0.5
-					}
-				}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_base RISK = 8 } }
 	}
 
 	weight = 95
@@ -813,41 +640,7 @@ je_space_race_mars_landing = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_mars_landing
-						has_variable = sr_ambitious_mars_landing
-					}
-				}
-				change_variable = { name = sr_progress_mars_landing add = sr_progress }
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					set_variable = { name = sr_base_risk value = 9 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_mars_landing value = yes }
-						if = {
-							limit = { has_variable = sr_ambitious_mars_landing }
-							sr_fire_ambitious_failure_event = yes
-						}
-						else = {
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-			}
-				else = {
-					change_variable = {
-						name = sr_progress_mars_landing
-						add = 0.5
-					}
-				}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing RISK = 9 } }
 	}
 
 	weight = 95
@@ -948,41 +741,7 @@ je_space_race_interstellar_probe = {
 	}
 
 	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_interstellar_probe
-						has_variable = sr_ambitious_interstellar_probe
-					}
-				}
-				change_variable = { name = sr_progress_interstellar_probe add = sr_progress }
-				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					set_variable = { name = sr_base_risk value = 9 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_interstellar_probe value = yes }
-						if = {
-							limit = { has_variable = sr_ambitious_interstellar_probe }
-							sr_fire_ambitious_failure_event = yes
-						}
-						else = {
-							sr_fire_safe_setback_event = yes
-						}
-					}
-				}
-			}
-				else = {
-					change_variable = {
-						name = sr_progress_interstellar_probe
-						add = 0.5
-					}
-				}
-			}
-		}
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = interstellar_probe RISK = 9 } }
 	}
 
 	weight = 90
