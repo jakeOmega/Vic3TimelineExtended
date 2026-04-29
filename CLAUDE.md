@@ -157,9 +157,9 @@ When you (Claude or future Claude instances) discover something generally applic
 - Refactor patterns and the helper inventory → `docs/script_parameterization_audit.md`
 - Mod-state-server / tooling behavior → `docs/python_tools.md`
 - Cross-cutting workflow notes → this file (`CLAUDE.md`)
-- Per-helper context (parameters, scope contract, edge cases) → the helper's own comment header in `common/scripted_*/`. These propagate across clones.
+- Per-helper context (parameters, scope contract, edge cases) → the helper's own comment header in `common/scripted_*/`.
 
-Note that `docs/` is gitignored (see `.gitignore`), so doc edits help the current local environment but don't propagate. For lessons that need to survive a fresh clone, either commit them to `CLAUDE.md` or to the helper's own file header. Don't repeat in both places — pick the natural home and link.
+`docs/` is tracked in the repo, so additions there propagate to fresh clones. The exception is `docs/error_log_digest.md`, which reflects the local game's runtime `error.log` and is gitignored. Don't repeat the same lesson in multiple homes — pick the natural one and link from the others.
 
 Keep additions short — one paragraph or a bullet, not a treatise. The bar is: would the next Claude instance hit the same gotcha or solve the same problem from scratch without this note? If yes, write it down.
 
