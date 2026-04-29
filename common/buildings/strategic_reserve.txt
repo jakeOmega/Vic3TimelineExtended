@@ -40,10 +40,7 @@ building_strategic_reserve_hub = {
 		if = {
 			limit = {
 				owner = {
-					OR = {
-						country_rank = rank_value:great_power
-						country_rank = rank_value:major_power
-					}
+					is_great_or_major_power = yes
 				}
 			}
 			add = 50
@@ -86,10 +83,7 @@ building_strategic_reserve_silo = {
 					any_scope_building = {
 						is_building_type = building_strategic_reserve_hub
 					}
-					OR = {
-						country_rank = rank_value:great_power
-						country_rank = rank_value:major_power
-					}
+					is_great_or_major_power = yes
 				}
 			}
 			add = 25

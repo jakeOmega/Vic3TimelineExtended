@@ -37,14 +37,7 @@ REPLACE:building_synthetics_plant = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -69,14 +62,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_silk = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -102,14 +88,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_oil = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -134,14 +113,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_rubber = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -166,14 +138,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -198,14 +163,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_coal = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -230,14 +188,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_wood = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -262,14 +213,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_sugar = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -294,14 +238,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_meat = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -326,14 +263,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_fruit = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -358,14 +288,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_drinks = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -390,14 +313,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_biomass = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -443,14 +359,7 @@ REPLACE:building_electrics_industry = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -475,14 +384,7 @@ REPLACE_OR_CREATE:building_electrics_industry_radio = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -507,14 +409,7 @@ REPLACE_OR_CREATE:building_electrics_industry_appliances = {
 	required_construction = construction_cost_super_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -550,14 +445,7 @@ REPLACE:building_automotive_industry = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
 
@@ -777,14 +665,7 @@ REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
 	required_construction = construction_cost_extreme
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -809,14 +690,7 @@ REPLACE_OR_CREATE:building_robotics_industry = {
 	required_construction = construction_cost_mega_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -842,14 +716,7 @@ REPLACE_OR_CREATE:building_advanced_material_fabricator = {
 	required_construction = construction_cost_extreme
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-					has_law_or_variant = law_type:law_extraction_economy
-				}
-			}
-		}
+		is_industrial_production_allowed = yes
 	}
 	ownership_type = self
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -1325,13 +1192,7 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 	
 	ownership_type = self
@@ -1359,13 +1220,7 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1393,13 +1248,7 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1427,13 +1276,7 @@ REPLACE_OR_CREATE:building_copper_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1461,13 +1304,7 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1495,13 +1332,7 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1529,13 +1360,7 @@ REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1563,13 +1388,7 @@ REPLACE_OR_CREATE:building_lithium_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1597,13 +1416,7 @@ REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1631,13 +1444,7 @@ REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
 	required_construction = construction_cost_very_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1665,13 +1472,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1699,13 +1500,7 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1733,13 +1528,7 @@ REPLACE_OR_CREATE:building_potash_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self
@@ -1767,13 +1556,7 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 	required_construction = construction_cost_high
 
 	possible = {
-		owner = {
-			NOT = {
-				OR = {
-					has_law_or_variant = law_type:law_industry_banned
-				}
-			}
-		}
+		is_extraction_industry_allowed = yes
 	}
 
 	ownership_type = self

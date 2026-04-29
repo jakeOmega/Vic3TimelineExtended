@@ -51,25 +51,7 @@ demilitarized_zone = {
 	can_ratify = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
-			NOT = {
-				scope:source_country = {
-					any_scope_treaty = {
-						binds = scope:target_country
-						hidden_trigger = {
-							OR = {
-								scope:treaty = {
-									is_renegotiation = no
-								}
-								scope:treaty.amended_treaty != this
-							}
-						}
-						any_scope_article = {
-							has_type = demilitarized_zone
-							source_country = scope:source_country
-						}
-					}
-				}
-			}
+			no_duplicate_treaty_article = { ARTICLE_TYPE = demilitarized_zone }
 		}
 	}
 
@@ -356,25 +338,7 @@ forced_disarmament = {
 	can_ratify = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
-			NOT = {
-				scope:source_country = {
-					any_scope_treaty = {
-						binds = scope:target_country
-						hidden_trigger = {
-							OR = {
-								scope:treaty = {
-									is_renegotiation = no
-								}
-								scope:treaty.amended_treaty != this
-							}
-						}
-						any_scope_article = {
-							has_type = forced_disarmament
-							source_country = scope:source_country
-						}
-					}
-				}
-			}
+			no_duplicate_treaty_article = { ARTICLE_TYPE = forced_disarmament }
 		}
 	}
 

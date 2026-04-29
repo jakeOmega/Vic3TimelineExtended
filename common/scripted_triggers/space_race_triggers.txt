@@ -21,10 +21,7 @@ sr_ai_should_participate = {
 
 sr_can_start_space_race = {
 	has_technology_researched = rocketry
-	OR = {
-		country_rank = rank_value:great_power
-		country_rank = rank_value:major_power
-	}
+	is_great_or_major_power = yes
 	NOT = { has_variable = sr_active_milestone }
 }
 

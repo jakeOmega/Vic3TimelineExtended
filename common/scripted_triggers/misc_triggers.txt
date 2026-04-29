@@ -160,3 +160,59 @@ is_top_innovation_country = {
 		}
 	}
 }
+
+# True if the building's owner country can build industrial production buildings
+# (i.e. is NOT under law_industry_banned or law_extraction_economy).
+# Building scope. Use for synthetics, chemicals, factories — anything that
+# extraction-only economies should not have access to.
+is_industrial_production_allowed = {
+	owner = {
+		NOT = {
+			OR = {
+				has_law_or_variant = law_type:law_industry_banned
+				has_law_or_variant = law_type:law_extraction_economy
+			}
+		}
+	}
+}
+
+# True if the country is a Great Power or a Major Power. Country scope.
+is_great_or_major_power = {
+	OR = {
+		country_rank = rank_value:great_power
+		country_rank = rank_value:major_power
+	}
+}
+
+# True if scope:source_country has no live treaty article of $ARTICLE_TYPE$
+# already binding scope:target_country. Used inside treaty-article can_ratify
+# blocks to prevent the same demanding side from stacking the same article
+# in multiple concurrent treaties on the same target.
+no_duplicate_treaty_article = {
+	NOT = {
+		scope:source_country = {
+			any_scope_treaty = {
+				binds = scope:target_country
+				hidden_trigger = {
+					OR = {
+						scope:treaty = { is_renegotiation = no }
+						scope:treaty.amended_treaty != this
+					}
+				}
+				any_scope_article = {
+					has_type = $ARTICLE_TYPE$
+					source_country = scope:source_country
+				}
+			}
+		}
+	}
+}
+
+# True if the building's owner country can build industrial-grade mining/extraction.
+# Building scope. Allows law_extraction_economy (which is the whole point) but
+# blocks law_industry_banned. Use for mines and similar discoverable extractors.
+is_extraction_industry_allowed = {
+	owner = {
+		NOT = { has_law_or_variant = law_type:law_industry_banned }
+	}
+}

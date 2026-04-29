@@ -54,25 +54,7 @@ enforce_privatization = {
 	can_ratify = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
-			NOT = {
-				scope:source_country = {
-					any_scope_treaty = {
-						binds = scope:target_country
-						hidden_trigger = {
-							OR = {
-								scope:treaty = {
-									is_renegotiation = no
-								}
-								scope:treaty.amended_treaty != this
-							}
-						}
-						any_scope_article = {
-							has_type = enforce_privatization
-							source_country = scope:source_country
-						}
-					}
-				}
-			}
+			no_duplicate_treaty_article = { ARTICLE_TYPE = enforce_privatization }
 		}
 		scope:source_country = {
 			# The demanding side must itself be capitalist (privatization is an

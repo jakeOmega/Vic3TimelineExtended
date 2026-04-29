@@ -14,19 +14,13 @@ je_space_race_suborbital = {
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
 		has_technology_researched = rocketry
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	possible = {
 		has_technology_researched = rocketry
 		modifier:country_sr_earth_orbit_program_bool = yes
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 		NOT = { has_variable = sr_completed_suborbital }
 	}
 
@@ -166,10 +160,7 @@ je_space_race_orbital = {
 		has_technology_researched = guided_missiles
 		modifier:country_sr_earth_orbit_program_bool = yes
 		NOT = { has_variable = sr_completed_orbital }
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	immediate = {
@@ -321,10 +312,7 @@ je_space_race_moon_landing = {
 		has_technology_researched = space_exploration
 		modifier:country_sr_moon_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_moon_landing }
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	immediate = {
@@ -482,10 +470,7 @@ je_space_race_probe = {
 		modifier:country_sr_moon_mission_program_bool = yes
 		has_variable = sr_completed_moon_landing
 		NOT = { has_variable = sr_completed_probe }
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	immediate = {
@@ -636,10 +621,7 @@ je_space_race_moon_base = {
 		has_technology_researched = reusable_rocketry
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_moon_base }
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	immediate = {
@@ -792,10 +774,7 @@ je_space_race_mars_landing = {
 		modifier:country_sr_mars_mission_program_bool = yes
 		has_variable = sr_completed_moon_landing
 		NOT = { has_variable = sr_completed_mars_landing }
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	immediate = {
@@ -949,10 +928,7 @@ je_space_race_interstellar_probe = {
 		has_technology_researched = compact_fusion_reactors
 		modifier:country_sr_interstellar_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_interstellar_probe }
-		OR = {
-			country_rank = rank_value:great_power
-			country_rank = rank_value:major_power
-		}
+		is_great_or_major_power = yes
 	}
 
 	immediate = {
@@ -1181,10 +1157,7 @@ je_space_race_solar_colonization = {
 					}
 				}
 				NOT = { has_global_variable = sr_all_colonies_complete }
-				OR = {
-					country_rank = rank_value:great_power
-					country_rank = rank_value:major_power
-				}
+				is_great_or_major_power = yes
 			}
 		}
 	}

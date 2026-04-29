@@ -59,25 +59,7 @@ religious_mission_rights = {
 	can_ratify = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
-			NOT = {
-				scope:source_country = {
-					any_scope_treaty = {
-						binds = scope:target_country
-						hidden_trigger = {
-							OR = {
-								scope:treaty = {
-									is_renegotiation = no
-								}
-								scope:treaty.amended_treaty != this
-							}
-						}
-						any_scope_article = {
-							has_type = religious_mission_rights
-							source_country = scope:source_country
-						}
-					}
-				}
-			}
+			no_duplicate_treaty_article = { ARTICLE_TYPE = religious_mission_rights }
 		}
 	}
 

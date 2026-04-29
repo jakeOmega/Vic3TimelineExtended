@@ -1,4 +1,13 @@
-﻿space_elevator_construction = {
+﻿# Removes $MODIFIER$ from the current scope only if present. Safe to call
+# unconditionally — emits no fail-tooltip when the modifier isn't there.
+remove_modifier_if_exists_effect = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		remove_modifier = $MODIFIER$
+	}
+}
+
+space_elevator_construction = {
 	if = {
 		limit = {
 			NOT = { has_variable = space_elevator_progress_var }

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl *localhost:8950*)",
+      "Bash(curl *127.0.0.1:8950*)",
+      "Bash(awk *)"
+    ]
+  }
+}
