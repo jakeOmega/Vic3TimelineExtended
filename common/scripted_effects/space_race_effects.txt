@@ -624,203 +624,77 @@ sr_notify_milestone_achievement = {
 	}
 }
 
-# Suborbital completion
-sr_complete_suborbital_effect = {
-	set_variable = { name = sr_completed_suborbital value = yes }
+# --- Per-milestone completion / reward / cleanup helpers ---------------------
+# Each milestone exposes three named entry points (sr_complete_<X>_effect,
+# sr_apply_<X>_reward, and the JE-driven sr_cleanup_milestone_variables_effect)
+# so callers in events/ and journal_entries/ can grep for the concrete name.
+# All three delegate to a single $MILESTONE$-parameterized base.
+#
+# Supported $MILESTONE$ values (must match a corresponding sr_<X> /
+# sr_first_<X> static modifier and the per-JE variable namespace):
+#   suborbital | orbital | moon_landing | probe | moon_base | mars_landing |
+#   interstellar_probe
+
+sr_complete_milestone_effect_base = {
+	set_variable = { name = sr_completed_$MILESTONE$ value = yes }
 	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_suborbital } }
-		set_global_variable = { name = sr_global_first_suborbital value = yes }
-		set_variable = { name = sr_was_first_suborbital value = yes }
+		limit = { NOT = { has_global_variable = sr_global_first_$MILESTONE$ } }
+		set_global_variable = { name = sr_global_first_$MILESTONE$ value = yes }
+		set_variable = { name = sr_was_first_$MILESTONE$ value = yes }
 		set_variable = { name = sr_is_world_first value = yes }
 	}
-	sr_notify_milestone_achievement = { MILESTONE = suborbital }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
-	if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
-	if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
-	if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
+	sr_notify_milestone_achievement = { MILESTONE = $MILESTONE$ }
+	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
+	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
+	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
+	if = { limit = { has_variable = sr_progress_$MILESTONE$ } remove_variable = sr_progress_$MILESTONE$ }
 	sr_complete_milestone_effect = yes
 }
 
-# Orbital completion
-sr_complete_orbital_effect = {
-	set_variable = { name = sr_completed_orbital value = yes }
+sr_apply_milestone_reward_base = {
 	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_orbital } }
-		set_global_variable = { name = sr_global_first_orbital value = yes }
-		set_variable = { name = sr_was_first_orbital value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
+		limit = { has_variable = sr_was_first_$MILESTONE$ }
+		add_modifier = { name = sr_first_$MILESTONE$ }
 	}
-	sr_notify_milestone_achievement = { MILESTONE = orbital }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
-	if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
-	if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
-	if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
-	sr_complete_milestone_effect = yes
+	else = {
+		add_modifier = { name = sr_$MILESTONE$ }
+	}
 }
 
-# Moon Landing completion
-sr_complete_moon_landing_effect = {
-	set_variable = { name = sr_completed_moon_landing value = yes }
-	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_moon_landing } }
-		set_global_variable = { name = sr_global_first_moon_landing value = yes }
-		set_variable = { name = sr_was_first_moon_landing value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
-	}
-	sr_notify_milestone_achievement = { MILESTONE = moon_landing }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
-	if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
-	if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
-	if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
-	sr_complete_milestone_effect = yes
+# Used by JE on_fail blocks. Removes per-milestone variables (sr_active_X is
+# JE-only, so it appears here but not in the completion path) and reposts cost.
+sr_cleanup_milestone_variables_effect = {
+	if = { limit = { has_variable = sr_active_$MILESTONE$ } remove_variable = sr_active_$MILESTONE$ }
+	if = { limit = { has_variable = sr_progress_$MILESTONE$ } remove_variable = sr_progress_$MILESTONE$ }
+	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
+	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
+	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
+	sr_recalculate_cost = yes
 }
 
-# Probe completion
-sr_complete_probe_effect = {
-	set_variable = { name = sr_completed_probe value = yes }
-	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_probe } }
-		set_global_variable = { name = sr_global_first_probe value = yes }
-		set_variable = { name = sr_was_first_probe value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
-	}
-	sr_notify_milestone_achievement = { MILESTONE = probe }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
-	if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
-	if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
-	if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
-	sr_complete_milestone_effect = yes
-}
+# --- Concrete per-milestone wrappers (kept as named entry points) ------------
 
-# Moon Base completion
-sr_complete_moon_base_effect = {
-	set_variable = { name = sr_completed_moon_base value = yes }
-	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_moon_base } }
-		set_global_variable = { name = sr_global_first_moon_base value = yes }
-		set_variable = { name = sr_was_first_moon_base value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
-	}
-	sr_notify_milestone_achievement = { MILESTONE = moon_base }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
-	if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
-	if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
-	if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
-	sr_complete_milestone_effect = yes
-}
+sr_complete_suborbital_effect       = { sr_complete_milestone_effect_base = { MILESTONE = suborbital       } }
+sr_complete_orbital_effect          = { sr_complete_milestone_effect_base = { MILESTONE = orbital          } }
+sr_complete_moon_landing_effect     = { sr_complete_milestone_effect_base = { MILESTONE = moon_landing     } }
+sr_complete_probe_effect            = { sr_complete_milestone_effect_base = { MILESTONE = probe            } }
+sr_complete_moon_base_effect        = { sr_complete_milestone_effect_base = { MILESTONE = moon_base        } }
+sr_complete_mars_landing_effect     = { sr_complete_milestone_effect_base = { MILESTONE = mars_landing     } }
 
-# Mars Landing completion
-sr_complete_mars_landing_effect = {
-	set_variable = { name = sr_completed_mars_landing value = yes }
-	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_mars_landing } }
-		set_global_variable = { name = sr_global_first_mars_landing value = yes }
-		set_variable = { name = sr_was_first_mars_landing value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
-	}
-	sr_notify_milestone_achievement = { MILESTONE = mars_landing }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
-	if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
-	if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
-	if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
-	sr_complete_milestone_effect = yes
-}
-
-# Interstellar Probe completion
+# Interstellar probe is the same shape but additionally raises the
+# sr_probe_launched flag used by downstream colony-establishment logic.
 sr_complete_interstellar_probe_effect = {
-	set_variable = { name = sr_completed_interstellar_probe value = yes }
 	set_variable = { name = sr_probe_launched value = yes }
-	if = {
-		limit = { NOT = { has_global_variable = sr_global_first_interstellar_probe } }
-		set_global_variable = { name = sr_global_first_interstellar_probe value = yes }
-		set_variable = { name = sr_was_first_interstellar_probe value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
-	}
-	sr_notify_milestone_achievement = { MILESTONE = interstellar_probe }
-	# Clean up per-JE variables
-	if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
-	if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
-	if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
-	if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
-	sr_complete_milestone_effect = yes
+	sr_complete_milestone_effect_base = { MILESTONE = interstellar_probe }
 }
 
-# Milestone reward effects - called from event options for tooltip visibility
-sr_apply_suborbital_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_suborbital }
-		add_modifier = { name = sr_first_suborbital }
-	}
-	else = {
-		add_modifier = { name = sr_suborbital }
-	}
-}
-
-sr_apply_orbital_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_orbital }
-		add_modifier = { name = sr_first_orbital }
-	}
-	else = {
-		add_modifier = { name = sr_orbital }
-	}
-}
-
-sr_apply_moon_landing_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_moon_landing }
-		add_modifier = { name = sr_first_moon_landing }
-	}
-	else = {
-		add_modifier = { name = sr_moon_landing }
-	}
-}
-
-sr_apply_probe_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_probe }
-		add_modifier = { name = sr_first_probe }
-	}
-	else = {
-		add_modifier = { name = sr_probe }
-	}
-}
-
-sr_apply_moon_base_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_moon_base }
-		add_modifier = { name = sr_first_moon_base }
-	}
-	else = {
-		add_modifier = { name = sr_moon_base }
-	}
-}
-
-sr_apply_mars_landing_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_mars_landing }
-		add_modifier = { name = sr_first_mars_landing }
-	}
-	else = {
-		add_modifier = { name = sr_mars_landing }
-	}
-}
-
-sr_apply_interstellar_probe_reward = {
-	if = {
-		limit = { has_variable = sr_was_first_interstellar_probe }
-		add_modifier = { name = sr_first_interstellar_probe }
-	}
-	else = {
-		add_modifier = { name = sr_interstellar_probe }
-	}
-}
+sr_apply_suborbital_reward         = { sr_apply_milestone_reward_base = { MILESTONE = suborbital         } }
+sr_apply_orbital_reward            = { sr_apply_milestone_reward_base = { MILESTONE = orbital            } }
+sr_apply_moon_landing_reward       = { sr_apply_milestone_reward_base = { MILESTONE = moon_landing       } }
+sr_apply_probe_reward              = { sr_apply_milestone_reward_base = { MILESTONE = probe              } }
+sr_apply_moon_base_reward          = { sr_apply_milestone_reward_base = { MILESTONE = moon_base          } }
+sr_apply_mars_landing_reward       = { sr_apply_milestone_reward_base = { MILESTONE = mars_landing       } }
+sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILESTONE = interstellar_probe } }
 
 # Solar System Colonization - establish a colony at a random unclaimed location
 sr_establish_colony_effect = {
