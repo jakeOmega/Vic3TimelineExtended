@@ -1,0 +1,1576 @@
+# Scripting Best Practices & Debugging
+
+Lessons learned from developing the Vic3TimelineExtended mod. Covers modifier validation, scope issues, debugging, and common engine quirks.
+
+## Placeholder-Parameterized Script Helpers (`$GOOD$`, `$TYPE$`, `$RANK$`)
+
+When several scripted effects, triggers, or script values are structurally identical and only the identifiers differ, prefer one shared helper parameterized with uppercase placeholders plus thin explicit wrappers or unrolled call sites.
+
+### Repo examples
+
+- `covert_op_track_targets` in `common/scripted_effects/covert_warfare_effects.txt` uses `$TYPE$`, `$ACTION$`, and `$DEFENSE_MOD$`.
+- `st_res_rebuild_good_flow_modifiers_effect` in `common/scripted_effects/st_res_effects.txt` uses `$GOOD$` behind explicit grain/ammunition/oil wrapper effects while keeping the hub scope bridge in the outer orchestrator.
+- `covert_ops_type_below_cap` in `common/scripted_triggers/covert_warfare_triggers.txt` uses `$TYPE$`.
+- `ch_apply_primary_or_fallback_movement_pressure` in `common/scripted_effects/cultural_hegemony_effects.txt` uses `$PRIMARY$`, `$FALLBACK_1$`, `$FALLBACK_2$`, `$MODIFIER$`, and related parameters.
+- `store_trade_partner_data` in `common/scripted_effects/trade_partner_effects.txt` uses `$RANK$`.
+- `generic_wonder_construction_base` in `common/scripted_effects/extra_effects.txt` uses `$WONDER$` and `$MAX_LEVEL$` to drive 7 wonder construction effects with a single 19-branch level-up chain. See "Numeric placeholder substitution into trigger guards" below.
+
+### Numeric placeholder substitution into trigger guards
+
+`$X$` substitution is direct text replacement before tokenization, so a numeric placeholder can sit inside a trigger comparator and tokenize as a literal integer:
+
+```
+if = { limit = { b:building_$WONDER$.level = 5 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { ... level = 6 } }
+```
+
+Calling `generic_wonder_construction_base = { WONDER = solar_collector MAX_LEVEL = 10 }` resolves the guard to `b:building_solar_collector.level < 10`, which is valid engine syntax (also used in vanilla and `extra_buildings.txt` construction-site `possible` clauses). This lets one shared chain handle wonders capped at any level — branches with `level = N` where N ≥ MAX_LEVEL silently never match.
+
+The same trick works for `RISK = 5..10` in `sr_monthly_progress_update_effect` (`set_variable = { name = sr_base_risk value = $RISK$ }` becomes `value = 5`) and for `MAX_LEVEL` in similar bounded chains. Don't try to do arithmetic on placeholders — there's no `$N$+1`, only direct text substitution.
+
+### Conventions
+
+- Use short, descriptive uppercase placeholder names such as `$GOOD$`, `$TYPE$`, or `$MODIFIER$`.
+- Document the scope contract and every parameter immediately above the shared helper.
+- Pass arguments by name at the call site: `my_effect = { GOOD = grain }`, not by position.
+- Keep thin explicit wrappers or unrolled callers when the engine does not provide a safe data-driven loop. They make the supported concrete types grep-able and easy to audit.
+- If the repeated logic includes a scope bridge, do the bridge once in the outer orchestrator and call the typed wrappers after entering the target scope. Do not duplicate the same `owner = {}` or `random_scope_building = {}` hop inside every wrapper unless each wrapper genuinely needs its own scope selection.
+
+### Practical rule
+
+Use placeholder helpers for maintenance, not cleverness. If a refactor would hide the controlling scope hop, obscure the concrete modifier names, or make validation harder, keep the repetition.
+
+For concrete examples and remaining candidate refactors in this repo, see `docs/script_parameterization_audit.md`.
+
+## Modifier & Cooldown Duration Units: `days` vs `months`
+
+**CRITICAL:** The `X_modifier_time` script values (`short_modifier_time`, `normal_modifier_time`, `long_modifier_time`, `very_long_modifier_time`) are defined in **DAYS** (e.g. `normal_modifier_time = 1825` = 5 years). Always use `days = X_modifier_time` in `add_modifier` and `cooldown` blocks, **NEVER** `months = X_modifier_time`.
+
+| Wrong (152 years!) | Correct (5 years) |
+|---|---|
+| `add_modifier = { name = X months = normal_modifier_time }` | `add_modifier = { name = X days = normal_modifier_time }` |
+| `cooldown = { months = normal_modifier_time }` | `cooldown = { days = normal_modifier_time }` |
+
+When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemon_movement_pressure`), callers must pass **literal month counts** (e.g. `MONTHS = 60` for 5 years, `MONTHS = 30` for 2.5 years), NOT script value names.
+
+## Modifier Design: Don't Borrow Modifiers from Other Systems
+
+Each mod system should define its own modifiers. Do NOT reuse modifiers from another system (e.g. using `intelligence_capacity_defense` from covert warfare in a cultural hegemony event). Cross-system modifier sharing:
+- Creates confusion about what system is applying effects
+- Breaks modifier tooltips (wrong icon, wrong description context)
+- Makes it impossible to balance systems independently
+
+## Expense Scaling with GDP
+
+- **Never use flat `country_expenses_add` values** (e.g., `country_expenses_add = 50000`). Flat values don't scale with country or economy size.
+- **Pattern:** Set `country_expenses_add = 1` in the static modifier, then use `add_modifier = { name = X multiplier = <gdp_script_value> }` in the event.
+- **GDP script values** (defined in `extra_script_values.txt`): `banking_event_expense_small` (0.5% GDP), `banking_event_expense_medium` (1% GDP), `banking_event_expense_large` (2% GDP), `banking_event_expense_huge` (3% GDP).
+- **When a modifier has BOTH expenses and gameplay effects**, split into two modifiers: one for gameplay (applied without multiplier) and one `_cost` modifier with `country_expenses_add = 1` (applied with GDP multiplier).
+- **Avoid negative `country_expenses_add`**. For austerity/savings, use `country_loan_interest_rate_mult`, `country_minting_add`, or `country_tax_income_add`.
+
+## Scaling vs Non-Scaling Values
+
+- **Values that scale with country size/time** (need scaling): `prestige`, `bureaucracy`, `country_expenses_add`, `country_tax_income_add`, flat money amounts. Never use flat amounts for these — scale via script value or use `_mult` modifiers.
+- **Values that do NOT scale much** (safe as flat values): `authority`, `influence`, `cultural_acceptance`, `legitimacy`, `diplomatic_reputation`, `leverage`, `standard_of_living`, `migration_pull`, multiplier/percentage modifiers.
+- `add_prestige` is not a valid static modifier field — use `country_prestige_add`.
+- `add_authority` and `add_influence` are NOT valid effects — these are rate-based resources that can only be affected through modifiers (`country_authority_add`, `country_influence_add`).
+
+## Authority Cost Compensation (Inverse `country_authority_mult`)
+
+`country_authority_add` in a static modifier is multiplied by the country's `country_authority_mult` before being applied. So if a country has a +50% authority mult, a flat `country_authority_add = -250` becomes -375 effective. For *cost* modifiers (where the player intent is "spend exactly 250 authority"), this is wrong: high-mult countries pay more for the same option.
+
+**Compensation pattern** — apply the modifier with a script-value multiplier that inverts the country's authority mult:
+
+```
+forced_law_through_event_authority_multiplier_small = {
+    value = 1
+    divide = { value = 1 add = modifier:country_authority_mult min = 0.01 }
+}
+```
+
+Then `add_modifier = { name = forced_law_through_event multiplier = forced_law_through_event_authority_multiplier_small }`. The two effects compose to a flat -250 regardless of mult.
+
+Reuse via composition for tier scaling:
+```
+forced_law_through_event_authority_multiplier_large = {
+    value = forced_law_through_event_authority_multiplier_small
+    multiply = 3
+}
+```
+
+The same pattern works for any flat-cost-via-`_mult`-modifier interaction. **Don't apply this pattern to gameplay-effect modifiers** — only to ones that represent a fixed "cost" of an action.
+
+## Modifier Name Validation
+
+**Always verify modifier names exist** before using them. The engine silently ignores invalid modifiers.
+
+Known invalid names:
+- `country_trade_route_cost_mult` — does NOT exist. Use `building_group_bg_trade_throughput_add`, `state_trade_advantage_mult`, or `state_trade_capacity_add/mult`.
+- `country_trade_route_quantity_mult` — does NOT exist (removed or never existed). Use `state_trade_capacity_add`, `state_trade_quantity_mult`, or `state_trade_advantage_mult` for state-level trade bonuses.
+- `state_radicals_from_sol_change_mult` — does NOT exist. Use `state_radicals_from_political_movements_mult`. An invalid modifier in a PM file causes **cascading parse failures** for the entire file.
+- `is_owned_by_company` — does NOT exist as a trigger. Use `exists = owning_company` (building scope).
+- `company` — does NOT exist as a trigger to match a specific company. Use `owning_company = <company_scope>`.
+
+**Use specific building modifiers** when possible: `building_railway_throughput_add` targets only railways, while `building_group_bg_public_infrastructure_throughput_add` applies to ALL public infrastructure. Be intentional about scope.
+
+**Validation methods:**
+- Use the mod state server `/modifier-search?q=<name>` endpoint.
+- Search base game: `Get-ChildItem "C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common" -Recurse -Filter "*.txt" | Select-String "modifier_name"`.
+
+## Dynamic Modifier Type Definitions
+
+Many modifiers follow **naming patterns** where the engine recognizes a common prefix/suffix but requires a **per-entity registration** in `common/modifier_type_definitions/` before the modifier works. Vanilla pre-registers these for base game buildings and goods; **modded buildings and goods need their own registrations.**
+
+If you reference a dynamic modifier (e.g. `building_robotics_industry_throughput_add`) without registering it, the engine **silently ignores** it — no error in logs, just no effect. Don't assume a modifier doesn't exist because you can't find it in the base game; it may simply need to be registered.
+
+### Pattern Families
+
+| Pattern | Example | Scope | Use for |
+|---|---|---|---|
+| `building_{name}_throughput_add` | `building_tourism_industry_throughput_add` | building | Specific building throughput bonus |
+| `building_group_{bg}_throughput_add` | `building_group_bg_manufacturing_throughput_add` | building group | All buildings in a group |
+| `goods_output_{good}_mult` | `goods_output_tourism_mult` | goods | Production output bonus for a specific good |
+| `goods_input_{good}_add` | `goods_input_electronic_components_add` | goods | Extra input consumption |
+| `state_building_{name}_max_level_add` | `state_building_space_mine_max_level_add` | state | Level cap for company/gated buildings |
+| `building_group_{bg}_{poptype}_mortality_mult` | `building_group_bg_agriculture_laborers_mortality_mult` | building group | Pop mortality in specific building groups |
+| `ship_battle_against_ship_type_{ship}_{accuracy\|hull_damage}_{add\|mult}` | `ship_battle_against_ship_type_nuclear_submarine_accuracy_mult` | country (applied to ships) | Combat-axis bonus when attacking a specific ship type. **Partial vanilla coverage:** vanilla only registers the axis combos it uses — e.g. `submarine`/`torpedo_boat`/`destroyer` get `_accuracy_*` but NOT `_hull_damage_mult`; `dreadnought`/`super_dreadnought`/`modern_ironclad`/`pre_dreadnought` get `_hull_damage_mult` but NOT `_accuracy_mult`. Always cross-check against `/mnt/c/Program Files (x86)/Steam/.../game/common/modifier_type_definitions/00_modifier_types.txt`; register any missing combo in the mod even when targeting a vanilla ship type. |
+| `country_ship_type_{ship}_construction_efficiency_add` | `country_ship_type_destroyer_construction_efficiency_add` | country (applied to ship construction) | Reduces shipyard build time for a specific ship type. **Partial vanilla coverage:** vanilla registers it only for `troop_ship`/`protected_cruiser`/`armored_cruiser`/`light_cruiser`. `destroyer` and most modern types are NOT pre-registered; mod must register them in `extra_modifier_types.txt` even though they target vanilla ship types. |
+| `goods_input_{good}_add` / `goods_output_{good}_add` | `goods_input_motor_ships_add` | building (in PM) | Flat input/output amount for a modded good. **Mod-defined goods need BOTH `_input_*_add` and `_output_*_add` registered explicitly** — vanilla auto-generates these only for vanilla goods. The `_mult` variants follow the same rule. Symptom of missing registration: `Unknown modifier type` in debug.log and the PM silently produces/consumes nothing. |
+
+### Registration Format
+
+```
+# In common/modifier_type_definitions/extra_modifier_types.txt
+
+# Building throughput (percentage)
+building_my_custom_building_throughput_add = {
+    color = good
+    percent = yes
+    decimals = 0
+}
+
+# Goods output multiplier (percentage, with AI weight)
+goods_output_my_custom_good_mult = {
+    color = good
+    percent = yes
+    game_data = {
+        ai_value = 250
+    }
+}
+
+# Level cap (flat integer, not percentage)
+state_building_my_building_max_level_add = {
+    color = good
+    percent = no
+    decimals = 0
+}
+```
+
+### Key Properties
+- `color`: `good` (green), `bad` (red), `neutral` (yellow/grey)
+- `percent`: `yes` = displayed as percentage, `no` = displayed as integer
+- `decimals`: Number of decimal places (0 for integers)
+- `game_data = { ai_value = N }`: Optional AI weight for PM selection
+- `boolean = yes`: For yes/no flag modifiers
+- `script_only = yes`: For modifiers used only by scripted effects (no PM/modifier display)
+
+### Localization
+
+Every registered modifier needs two loc keys:
+```
+modifier_name:0 "Display Name"
+modifier_name_desc:0 "Tooltip description explaining what this modifier does."
+```
+
+### Checklist for New Buildings/Goods
+
+When adding a new building or good, always check:
+1. Does any PM, static modifier, or event use a `building_{name}_throughput_add` modifier? → Register it.
+2. Does any PM produce or consume a new good? → Register `goods_output_{good}_mult` and/or `goods_input_{good}_add`.
+3. Does the building use the `has_max_level` pattern? → Register `state_building_{name}_max_level_add`.
+4. Add localization for all registered modifier names.
+
+### Script-Only Modifiers as Cross-System Tags / Capability Bands
+
+A `script_only = yes` modifier has no native engine effect — it's just a value the engine sums across all sources, surfaces in tooltips wherever it's contributed, and can be read in triggers as `"modifier:X" >= N`. This makes it the right tool when you want a system whose behavior depends on **a combination of laws / techs / decrees / buildings**, AND want the player to discover those dependencies from the ordinary law/tech/etc. tooltip — not from reading event source.
+
+**The pattern:**
+1. Define the modifier type: `country_X_capacity_add = { color = neutral percent = no decimals = 0 game_data = { ai_value = 50 } script_only = yes }` in `common/modifier_type_definitions/extra_modifier_types.txt`. Localize the name + `_desc` in `localization/english/te_modifiers_l_english.yml`.
+2. Add positive/negative contributions to the `modifier = { ... }` block of every law/tech/decree where it's thematically warranted, via `INJECT:` for vanilla entries.
+3. Read it from triggers: `"modifier:country_X_capacity_add" >= 4`. The value is the sum of all contributions; works fine with negative values.
+4. Optionally name banded thresholds with scripted triggers, e.g. `banking_points_low = { "modifier:country_banking_intervention_max_add" <= 2 }`.
+
+**Repo examples:**
+- `country_banking_intervention_max_add` (`common/modifier_type_definitions/extra_modifier_types.txt:876`) — banded by `banking_points_none / low / med / high` in `common/scripted_triggers/market_triggers.txt:29-32`. Contributions live on banking-related laws.
+- `country_legislative_override_capacity_add` — gates the Forced a Law Through event (small / medium / large tiers at thresholds 0 / 2 / 4), with contributions across Distribution of Power, Bureaucracy, Free Speech, and Internal Security laws (`common/laws/legislative_override_capacity.txt`). Surplus above the highest threshold also feeds a script-value cost discount.
+
+**When to prefer this over direct `has_law` triggers:** any time the gate is best expressed as a *combination* of multiple laws, or when you want the player to see which laws move the needle. Direct `has_law` checks are invisible to the player and require enumerating every law variant by hand.
+
+## Effect/Trigger Scope Requirements
+
+- **`any_` triggers do NOT accept `limit`.** In trigger context, conditions go directly as siblings: `any_scope_diplomatic_pact = { count >= 3 is_diplomatic_action_type = X }`. The `limit = { }` sub-block is ONLY valid in effect iterators (`every_X`, `random_X`, `ordered_X`). Using `limit` inside `any_` produces "Unknown trigger type: limit" in debug.log and silently breaks the trigger evaluation (may match ALL pacts instead of filtered ones).
+- **`add_homeland = <culture>`** — called from **state_region scope** with a culture argument. NOT from culture scope.
+- **`add_arable_land` is state_region-scoped, so never recalculate it by blindly iterating `every_scope_state` on a fully owned split state.** Once a country owns all pieces of a formerly split region, `every_scope_state` will still visit each owned state scope, and `state_region = { add_arable_land = ... }` will over-apply if each visit mutates the shared region. Gate the recalculation to one representative state per fully owned state region, and if you cache `arable_land_added` on state scope, sum that cache across same-owner states in the region when deriving base arable land or tooltip breakdowns.
+- **`is_on_front`** — a **military_formation/character scope** trigger, NOT a state scope trigger. For state, use `devastation > 0` or `is_target_of_wargoal`.
+- **`is_primary_culture_of`** — requires **culture scope**, NOT pop scope. From pop scope, wrap in `culture = { is_primary_culture_of = ROOT }`.
+- **`country_type = recognized` in `create_dynamic_country`** — causes errors. Remove `country_type` and use `set_country_type = recognized` inside `on_created = { }` instead.
+
+## Scope Chain Issues with `add_modifier` + Script Values
+
+- When `add_modifier = { name = X multiplier = <script_value> }` is used, the engine evaluates the script value in the calling scope chain, not just the immediate scope.
+- Script values that use `state_region = s:STATE_X` will fail when called from `on_law_activated`, `on_acquired_technology`, or `on_investment_changed` hooks — even wrapped in `every_scope_state { }`.
+- **Building/institution scope chains are also problematic:** `on_building_built`/`on_building_expanded` ROOT is a building object. These hooks have been removed — yearly pulse hooks are sufficient.
+- **Solution:** Move state-scoped modifier updates that use complex script values to `on_yearly_pulse_state`, which guarantees a clean state scope chain. This is how `migration_crowding` and `tourism` are handled.
+- **`has_variable` also fails on law and treaty scopes.** `on_law_activated` ROOT = Law, and the engine traces parent scope through the law for any nested script value's `has_variable` calls. Treaty article `on_entry_into_force` has the same issue. Remove ALL state modifier updates from law/treaty hooks — yearly pulse handles them within 1 year.
+
+## Modifier Values Are NOT Recalculated Within a Single Effect Block
+
+`remove_modifier` and `add_modifier` changes only take effect **after the entire effect block completes**. Reading `modifier:X` within the same effect still sees the pre-removal/pre-addition values. This is critical when an effect needs to read a country's "base" modifier values (without its own contribution) before computing a new value.
+
+**Broken pattern:**
+```
+remove_modifier = my_shield                          # queued, not applied yet
+set_variable = { name = x value = modifier:my_stat } # still includes my_shield!
+add_modifier = { name = my_shield multiplier = ... } # based on wrong x
+```
+
+**Correct pattern:** Store the prior multiplier as a persistent variable and subtract it from the `modifier:` read:
+```
+# In the effect:
+set_variable = { name = x value = modifier:my_stat }
+if = {
+    limit = { has_variable = prior_shield }
+    change_variable = { name = x subtract = var:prior_shield }  # back out our contribution
+}
+# ... compute new_multiplier ...
+remove_modifier = my_shield
+add_modifier = { name = my_shield multiplier = var:new_multiplier }
+set_variable = { name = prior_shield value = var:new_multiplier }  # remember for next tick
+```
+
+**Mod examples:** `prior_pollution_reduction` (pollution generation), `prior_free_port_import_cap` / `prior_free_port_export_cap` (free port tariffs), `intel_shield_mult` (intelligence sharing defense shield). The script values for pollution and free port tariffs also subtract the prior value so they compute clean base values.
+
+**Corollary for cross-country reads:** When reading a partner country's `modifier:X` via scope chains (e.g., `PREV.modifier:country_covert_defense_economic_add`), the partner's own shield/contribution is also baked in. You must subtract the partner's stored prior value (`PREV.var:prior_shield`) to get their base value too.
+
+## `ig:` Accessor Requires Country Scope
+
+- `ig:<ig_id>` (e.g., `ig:ig_devout`) only works from **country scope**. Using it from state scope returns 'none' silently.
+- **Fix:** Use `ROOT.owner.ig:ig_devout` from state scope.
+- **General rule:** Verify ROOT scope type: `on_monthly_pulse_state` → ROOT=state, `on_yearly_pulse_country` → ROOT=country, `on_building_built` → ROOT=building.
+- **Equivalent in country scope:** `every_interest_group = { limit = { is_interest_group_type = $IG$ } ... }` reaches the same single IG and is what `ig_approval_effect` (in `common/scripted_effects/ig_approval_effects.txt`) uses behind a `$IG$ $MODIFIER$ $DAYS$` placeholder. Prefer this helper for IG-approval modifiers — it's reusable across systems and handles the iterator/limit boilerplate once.
+
+## Industry-Ban Triggers for New Buildings
+
+Modded industrial / extraction buildings should declare their `possible` clause through one of two scripted_triggers in `common/scripted_triggers/misc_triggers.txt`, not by inlining the `has_law_or_variant` check:
+
+- `is_industrial_production_allowed` — country is NOT under `law_industry_banned` or `law_extraction_economy`. Use for synthetics, chemicals, factories, and similar industrial-track buildings (extraction-only economies block construction).
+- `is_extraction_industry_allowed` — country is NOT under `law_industry_banned`. Use for mines and other discoverable extractors that are still allowed under extraction-economy laws.
+
+Inlining the check is silently buggy in two directions: it's easy to forget `law_extraction_economy` (over-permissive) and easy to typo a law id (under-permissive — engine ignores unknown law names in `has_law_or_variant`).
+
+## Diplomatic Pact Iterators: `first_country` / `second_country` Filtering
+
+**CRITICAL:** `any_scope_diplomatic_pact`, `every_scope_diplomatic_pact`, and `random_scope_diplomatic_pact` iterate ALL pacts a country participates in — both as **initiator** (`first_country`) and as **target** (`second_country`). For one-way pacts (like covert operations), you MUST filter by direction.
+
+- **To find pacts you initiated:** Use `first_country = prev` (non-block form) at the pact scope level. In effects where ROOT = the country, `first_country = ROOT` also works.
+- **To find pacts targeting you:** Use `second_country = prev` (non-block form) at the pact scope level.
+- **NEVER use `first_country = { this = PREV }`** — entering the `first_country = { }` subscope shifts PREV to the diplomatic_pact (the enclosing scope), NOT the calling country. This causes a type mismatch error ("left was 'country', right was 'diplomatic_pact'") and **silent failure** (comparison always false). The non-block `first_country = prev` compares at the pact scope where PREV still references the calling country.
+- **Why `first_country = { this = ROOT }` works in effects:** ROOT is stable across all scope levels (it never shifts). But this approach is fragile if ROOT changes context (e.g., JE scope). Prefer `first_country = prev` for triggers/SVs, and `first_country = ROOT` for effects only if ROOT is guaranteed to be the country.
+- `first_country` / `second_country` are scope accessors on `diplomatic_pact` scope (confirmed in `event_targets.log`).
+- **Vanilla pattern:** `any_scope_diplomatic_pact = { is_diplomatic_action_type = support_separatism second_country = prev }` (from `02_cultural_movement.txt`).
+
+**Symptoms of missing filter:**
+- Detection events fire on the wrong country (target gets "Operation Compromised" instead of attacker)
+- Slot counts inflated by enemy operations targeting you
+- Per-type caps blocked by enemy operations
+- Effects misdirected (debuffs on attackers, self-buffs on victims)
+- Cost scaling includes ops you didn't launch
+
+## `interest_group =` Parameter in Effects Requires `ig:` Prefix
+
+- In `add_radicals`, `add_loyalists`, and similar effects, the `interest_group` parameter requires the `ig:` prefix: `interest_group = ig:ig_devout`.
+- **Using bare `interest_group = ig_devout`** causes `Failed to find a valid event target link 'ig_devout'` — the engine tries to resolve it as a saved scope, not a database key.
+- This is different from `is_interest_group_type = ig_devout` (a trigger that accepts bare keys) and `ig_approval_effect = { IG = ig_devout }` (a scripted effect parameter).
+
+## Loyalist/Radical Spectrum Mechanics
+
+- Pops exist on a spectrum: **radical ↔ neutral ↔ loyalist**.
+- `add_loyalists` moves targeted pops one step toward loyal: **radical → neutral**, or **neutral → loyalist**. It does NOT directly create loyalists from radicals.
+- `add_radicals` moves targeted pops one step toward radical: **loyalist → neutral**, or **neutral → radical**. It does NOT directly create radicals from loyalists.
+- **Overlapping effects cancel out.** If the same pop receives both `add_loyalists` and `add_radicals` (e.g., via overlapping strata/pop_type/IG filters), the effects partially or fully neutralize each other instead of creating a mixed result.
+- **Common trap:** `add_loyalists = { value = medium_radicals }` (all pops) + `add_radicals = { value = medium_radicals pop_type = soldiers }` — soldiers receive both and end up roughly unchanged, not "loyal soldiers who are also a bit radical."
+- **Strata overlap:** When using `strata = lower` for radicals alongside `pop_type = soldiers` for loyalists, remember soldiers ARE lower strata — the effects cancel on them. Use `pop_type` filters on both, or separate the strata targets to avoid overlap.
+
+## JE Localization Scope: ROOT = JournalEntry, NOT Country
+
+- In journal entry `status_desc`, `reason`, and custom tooltip loc strings, `ROOT` is the **JournalEntry scope**, not the country.
+- **Invalid:** `[ROOT.GetName]` — returns the JE name, not country name.
+- **Valid:** `[ROOT.GetCountry.GetName]`, `[ROOT.GetCountry.GetAdjective]`.
+- For script values: vanilla uses `[GetPlayer.MakeScope.ScriptValue('...')]`, though `[ROOT.ScriptValue('...')]` appears to work in some contexts.
+
+## `GetAdjective` Requires `.GetCountry` Accessor
+
+`GetAdjective` and `GetAdjectiveNoFormatting` are methods on the **Country data type**, NOT on ROOT directly. Even in country_events where ROOT = country, you must use `.GetCountry` to access country-type methods.
+
+- **Invalid (0 vanilla uses):** `[ROOT.GetAdjective]`, `[ROOT.GetAdjectiveNoFormatting]`
+- **Valid (267 + 216 vanilla uses):** `[ROOT.GetCountry.GetAdjective]`, `[ROOT.GetCountry.GetAdjectiveNoFormatting]`
+- **Also valid with scoped countries:** `[SCOPE.sCountry('my_scope').GetAdjective]`, `[scope:cultural_hegemon.GetAdjective]`
+
+## Saved Scopes vs Variables in Localization
+
+### Variables CAN Store Scope References
+- **`set_variable = { name = X value = PREV }`** stores a **scope reference** when the value is a scope (country, state, character, etc.).
+- **`Var('X')` can chain type-specific accessors** to navigate to the stored scope:
+  - `.GetState.GetStateRegion.GetName` — state stored in variable (PROVEN in vanilla)
+  - `.GetState.GetCountry.GetName` — state stored in variable → owner country name (PROVEN chain)
+  - `.GetCharacter.GetFullName` — character stored in variable (PROVEN in vanilla)
+  - `.GetInterestGroup.GetName` — IG stored in variable (PROVEN in vanilla)
+  - `.GetLaw.GetName` — law stored in variable (PROVEN in vanilla)
+  - `.GetBuildingType.GetName` — building type in variable (PROVEN in vanilla)
+  - `.GetValue|0` — numeric value (PROVEN in vanilla)
+  - `.GetCountry.GetName` — **UNVERIFIED; did not work in testing.** Use the capital workaround below.
+- **`.GetName` directly on `Var()` does NOT work** — you must chain the type accessor first (e.g., `.GetState.GetName`, not just `.GetName`).
+- **Error symptom:** `Could not find data system function 'GetName' in '....MakeScope.Var('my_var').GetName'` — means you forgot the type accessor (`.GetCountry`, `.GetState`, etc.).
+
+### Workaround: Displaying a Country Name from a Variable
+`Var('X').GetCountry.GetName` does not work in practice (produces blank output). **Workaround:** store the target country's `capital` (a state) in the variable, then chain `.GetState.GetCountry.GetName`:
+```
+# Script: scope into target country's capital before storing
+every_participant = {
+    limit = { NOT = { this = ROOT } }
+    capital = {
+        ROOT = { set_variable = { name = my_target value = PREV } }  # PREV = capital state
+    }
+}
+
+# Loc: chain state → country
+[ROOT.GetCountry.MakeScope.Var('my_target').GetState.GetCountry.GetName]
+# Or show capital name ("our spies in Moscow"):
+[ROOT.GetCountry.MakeScope.Var('my_target').GetState.GetStateRegion.GetName]
+```
+
+### `save_scope_as` vs `set_variable` for Scope References
+Both can store scope references, but they differ in persistence and loc access:
+
+| Method | Persistence | Loc access pattern |
+|---|---|---|
+| `save_scope_as = X` in JE `immediate` | Persists on JE instance | `[SCOPE.sCountry('X').GetName]` |
+| `save_scope_as = X` in `on_monthly_pulse` | **Transient** — dies with effect chain | Only usable in `custom_tooltip`/`post_notification` within same effect chain |
+| `set_variable = { name = X value = PREV }` (state) | Persists on country | `[ROOT.GetCountry.MakeScope.Var('X').GetState.GetCountry.GetName]` |
+
+### Correct Patterns
+| Purpose | Script | Loc |
+|---|---|---|
+| Display country via capital | Store `capital` state: `capital = { ROOT = { set_variable = { name = X value = PREV } } }` | `[ROOT.GetCountry.MakeScope.Var('X').GetState.GetCountry.GetName]` |
+| Display state from variable | `set_variable = { name = X value = PREV }` | `[ROOT.Var('X').GetState.GetStateRegion.GetName]` |
+| Display character from variable | `set_variable = { name = X value = PREV }` | `[ROOT.Var('X').GetCharacter.GetFullName]` |
+| Display country from immediate scope | `save_scope_as = X` | `[SCOPE.sCountry('X').GetName]` |
+| Display numeric variable | `set_variable = { name = X value = 5 }` | `[ROOT.GetCountry.MakeScope.Var('X').GetValue\|0]` |
+
+### Vanilla Examples
+- **Country in `immediate` scope:** `c:PRG ?= { save_scope_as = paraguay_scope }` → `[SCOPE.sCountry('paraguay_scope').GetName]` (brazil_2_l_english.yml).
+- **State in variable:** `set_variable = { name = current_expedition_location_var value = prev }` → `[ROOT.Var('current_expedition_location_var').GetState.GetStateRegion.GetName]` (expeditions).
+- **Character in variable:** `set_variable = { name = expedition_leader_storage_var value = ... }` → `[ROOT.Var('expedition_leader_storage_var').GetCharacter.GetFullName]` (expeditions).
+- **Numeric display:** `[Country.MakeScope.Var('bonapartist_progress_from_characters').GetValue\|+=]` (agitators_1_l_english.yml).
+- **Scope in pulse for tooltip:** `save_scope_as = expulsion_destination_state` in `on_monthly_pulse` → `[SCOPE.sState('expulsion_destination_state').GetName]` in `custom_tooltip` within the same effect (03_russia.txt circassian expulsion).
+
+## `random_list` Requires Literal Integer Weights
+
+- `random_list` weight keys must be **literal integers**: `10 = { ... }`, `90 = { ... }`.
+- **Script value names as weight keys are INVALID**: `random_list = { my_weight_sv = { ... } }` silently breaks — the branch never fires.
+- All vanilla `random_list` usage confirms literal integers only. Use `modifier = { if = { limit = { ... } add = N } }` inside each branch for conditional weight adjustment.
+- **Alternative for dynamic chance:** Use `random = { chance = <script_value> ... }` instead. The `chance` parameter (0-100 percent) explicitly supports script values and complex math. This is cleaner when you only need a pass/fail roll (no multi-branch weighting).
+
+## `random` Effect Modifier Blocks Require `trigger`
+
+- In `random = { chance = X modifier = { ... } }` blocks (effects, not MTTH), every `modifier` block must contain a `trigger` sub-block.
+- **Invalid:** `modifier = { add = my_script_value }` → "Malformed token" error.
+- **Valid:** `modifier = { trigger = { always = yes } add = my_script_value }`.
+
+## Named Script Values in Weight/Random Modifier `add =`
+
+- In `random_country`/`random_X` weight modifier blocks AND `random` effect modifier blocks, `add = named_script_value` causes **"Malformed token"** errors.
+- **Invalid:** `modifier = { trigger = { always = yes } add = my_script_value }` (named SV reference)
+- **Valid (inline):** `modifier = { trigger = { always = yes } add = { value = X divide = Y } }` (inline SV)
+- **Valid (variable):** `modifier = { trigger = { always = yes } add = var:my_var }` (direct variable ref)
+- If the limit block already guarantees a variable exists, use `add = var:X` directly instead of referencing a named SV that wraps `var:X`.
+
+## `owner = {}` Pattern for JE-Scope Script Values
+
+Script values using `multiplier =` in `add_modifier` applied to a JE are known to evaluate to 0. However, **`modifier:country_X` and `var:X` reads work correctly from JE `on_monthly_pulse` scope** — the JE correctly resolves country-prefixed modifiers and variables set on itself.
+
+The `owner = { }` wrapper is **only needed** for cases where reads genuinely fail (e.g., `multiplier =` in `add_modifier`). Don't apply it preemptively.
+
+**When you DO need it** (e.g., `add_modifier` multiplier):
+```
+my_script_value = {
+    value = 0
+    owner = {
+        add = covert_operations_active
+        multiply = banking_event_expense_small
+    }
+    min = 0
+}
+```
+
+**Why it works:** The `owner` accessor outputs `country` from both:
+- JE scope: `journal_entry → country` (extracts the JE's owning country)
+- Country scope: `country → country` (no-op, returns self)
+
+**Failed alternatives (do NOT use):**
+1. `set_variable` in `on_monthly_pulse` + `ROOT.var:X` in `multiplier =` → `multiplier` doesn't accept scope chain variable references
+2. Separate `_je` wrapper SVs like `my_sv_je = { value = 0; owner = { add = my_sv } }` → still evaluates to 0 (unknown reason, possibly double scope indirection)
+
+## `requirement_to_maintain` in Diplomatic Actions
+
+- `possible` blocks gate **initial creation** of a diplomatic pact
+- `requirement_to_maintain` blocks control **auto-cancellation** (checked every tick)
+- If `possible` has a condition (e.g., `NOT = { has_war_with = scope:target_country }`), add a matching `requirement_to_maintain` or the pact won't auto-cancel when conditions change
+- **War and truce checks:** Peacetime diplomatic actions need both war AND truce checks in `requirement_to_maintain`, not just in `possible`
+- Format: `requirement_to_maintain = { trigger = { custom_tooltip = { text = tooltip_key NOT = { condition } } } }`
+
+## Building Group Trigger Name
+
+- The trigger to check a building's group is `is_building_group = bg_X`, NOT `building_group = bg_X`.
+
+## History File Country References
+
+- Use `c:TAG ?= { }` (null-safe) instead of `c:TAG = { }` for countries that may not exist at game start or in save games. Especially important for countries that can be annexed (like Peru).
+
+## Guard Scope References in Triggers
+
+- **Always guard `has_attitude`** with `exists = scope:X` when the scope might not be set.
+- **Treaty article `visible` blocks** are evaluated when `scope:source_country`/`scope:target_country` may not be set — always wrap with `trigger_if = { limit = { exists = scope:source_country } ... }`.
+- **On_action scopes like `on_revolution_start`** may not always set `scope:target` — guard with `if = { limit = { exists = scope:target } }`.
+- **`any_scope_state` in harvest conditions** — inner blocks can match DIFFERENT states than outer guards. Add `has_variable = X` to EACH inner block.
+- **Always guard `var:X` with `has_variable = X`** when the variable may not be set on all entities in scope. This is especially critical in `any_country` iterators where a variable is set only on one country (e.g., JE owner). Without the guard, every non-matching country generates "Failed to fetch variable" + "Invalid left side during comparison 'var'" errors that spam every tick.
+- **Pattern:**
+  ```
+  evaluation_chance = {
+      value = 100
+      if = {
+          limit = {
+              exists = scope:target_country
+              has_attitude = { who = scope:target_country attitude = domineering }
+          }
+          add = 50
+      }
+  }
+  ```
+
+## IG Scope vs Country Scope Modifiers
+
+- `country_law_enactment_success_add` is **country-scoped** — does NOT work inside `every_scope_interest_group` blocks.
+- **General rule:** Country modifiers (`country_*`) only work on countries, state modifiers (`state_*`) only on states.
+
+## Production Method Modifier Scope Rules
+
+PM modifier blocks have strict scope rules:
+
+| Block | Valid modifier prefixes | Examples |
+|---|---|---|
+| `state_modifiers` | `state_*`, `building_*_throughput_add`, `goods_output_*_mult`, `interest_group_*` | `state_infrastructure_add`, `building_steel_mill_throughput_add` |
+| `country_modifiers` | `country_*`, `unit_*`, `interest_group_*`, `state_*`, `building_*_throughput_add` | `country_authority_add`, `unit_kill_rate_add` |
+| `building_modifiers.unscaled` | `unit_*` | `unit_morale_loss_mult` |
+
+**Critical:** `unit_*` and `country_*` modifiers NEVER go in `state_modifiers`. Place them in `country_modifiers.workforce_scaled` instead.
+
+**When adding state-level trade bonuses**, use: `state_trade_capacity_add`, `state_trade_quantity_mult`, `state_trade_advantage_mult`, or `building_port_throughput_add`.
+
+## Company Building Requirements
+
+Every company building needs:
+1. **Building definition** in `common/buildings/company_buildings.txt` (with `potential` gating on `has_company`)
+2. **PM + PMG** in `common/production_methods/unique_pms.txt` and `unique_pm_groups.txt`
+3. **Modifier type definition** for `state_building_<name>_max_level_add` in `common/modifier_type_definitions/extra_modifier_types.txt`
+4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`
+5. **Localization** — building name, building desc, PM name, PMG name, max level modifier name
+
+Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies without overwriting their entire definition.
+
+If an `INJECT` block adds `prosperity_modifier = { state_building_<name>_max_level_add = 1 }`, that exact modifier key must also exist in `common/modifier_type_definitions/extra_modifier_types.txt` with `color = good`, `percent = no`, and `decimals = 0`. Defining the prosperity modifier in the company file alone is not enough.
+
+Before finishing company-building work, compare every `state_building_*_max_level_add` key in `common/company_types/extra_companies_vanilla_updates.txt` against `common/modifier_type_definitions/extra_modifier_types.txt` and add any missing definitions in the same change.
+
+## Portrait Modifier Files
+
+Portrait modifier files (in `gfx/portraits/portrait_modifiers/`) require a wrapper block:
+```
+clothes = {
+    usage = game
+    selection_behavior = weighted_random
+
+    my_custom_entry = {
+        dna_modifiers = { ... }
+        weight = { ... }
+    }
+}
+```
+Without the `clothes = { usage = game ... }` wrapper, entries will not load.
+
+## Production Method `ai_value`
+
+- **`ai_value` only accepts flat numbers** (e.g., `ai_value = 100`), NOT script value blocks. Using a block causes parse errors that silently break the PM and others in the same file.
+- Vanilla pattern: `ai_value = -1000` (flat number).
+
+## V3 Market Pricing Model
+
+- **Price formula:** `price = base_price × [1 + PRICE_RANGE × clamp((BUY - SELL) / min(BUY, SELL), -1, +1)]`
+- `PRICE_RANGE` = 0.999 (mod, via define), 0.75 (vanilla). Price always in range `[base_price × 0.001, base_price × 1.999]`.
+- `BUY` = total buy orders (domestic consumption + export orders). `SELL` = total sell orders (domestic production + import orders). These are NOT supply/demand — they include trade route orders.
+- **Key implication:** Supply ≠ demand in equilibrium. Buy/sell orders don't directly map to monetary flows. `market_imports_reliance` gives fraction of buy orders filled by imports from a partner, NOT a monetary import value.
+- **Do NOT attempt to convert reliance to monetary values.** The reliance denominator (total buy orders) includes domestic production which has no direct price relationship to trade flows. Show reliance percentages directly instead.
+- **Reliance triggers:** `market_imports_reliance`, `market_exports_reliance`, `market_trade_reliance` — all market scope, accept optional `target` (market) and `goods` params. Used as values in SVs: `value = "market_imports_reliance(scope:partner)"`.
+- **Per-good reliance:** Inside `ordered_market_goods`, `order_by = "market.market_imports_reliance(scope:partner)"` auto-evaluates per-good reliance using the implicit goods context.
+
+## Country Type Mechanics
+
+- `set_country_type = decentralized` turns a country into uncolonized land.
+- There is NO `kill_country` effect. To remove a country: `annex` it or `set_country_type = decentralized`.
+- Country types: `recognized`, `colonial`, `unrecognized`, `decentralized`, `company`.
+
+## Monument vs Expandable Buildings
+
+- **Monuments** have `expandable = no` and are permanently level 1. Never check `level >= 2` or higher on a monument — it will always be false.
+- Examples: `building_space_program` (monument, market capital only).
+- **Expandable buildings** (default, or `expandable = yes`) can have multiple levels. Use these for level-scaled bonuses: `building_aerospace_industry`, `building_space_mine`.
+- **Key pattern:** Check `has_building = building_type:building_foo` for monument existence. Use `any_scope_building = { is_building_type = foo AND level >= N }` only for expandable buildings.
+- **Building groups matter:** `bg_monuments`, `bg_military`, `bg_heavy_industry` etc. affect subsidy eligibility, UI grouping, and construction rules. Check a building's group before writing level-based logic.
+
+### When to Use `has_max_level`
+
+This pattern applies specifically to buildings that can (unless there are other restrictions) be **privately owned by companies** while also being **level-capped** (i.e., not freely expandable):
+```
+expandable = yes
+downsizeable = yes
+has_max_level = yes
+buildable = no        # if the building should only be created via on_action
+```
+The building's operational PM then grants `state_building_X_max_level_add = 1` per level (in `state_modifiers > level_scaled`), so the max level only increases in the state where the building exists. This means the on_action construction system is the only way to add levels — the player/AI cannot manually expand the building, but companies can still buy ownership of it.
+
+**Why `state_modifiers`, not `country_modifiers`?** `state_building_X_max_level_add` is a state-scoped modifier. If placed in `country_modifiers`, it would apply to ALL states — so two states each with a level-1 building would give every state a max level of 2, allowing manual expansion that bypasses the on_action construction gating.
+
+**When NOT to use `has_max_level`:** If a building is meant to be a non-buyable unique monument (`buildable = no`, `expandable = no`), it cannot be purchased by companies — no `has_max_level` pattern is needed. The old `buildable = no` + `expandable = no` pattern is correct for buildings you never want companies to acquire.
+
+**Megastructure buildings** (`building_space_elevator`, `building_solar_collector`, `building_orbital_battlestation`, `building_mind_upload_nexus`, `building_antimatter_facility`, `building_nanofabrication_center`, `building_consciousness_network`) use `has_max_level` because they were deliberately converted to allow company ownership while retaining on_action level gating.
+
+## Production Method Modifier Scaling Blocks
+
+PMs can define modifiers under three scaling blocks, each with different behavior:
+
+| Block | Scales with | Affected by throughput? | Use for |
+|---|---|---|---|
+| `workforce_scaled` | Building level × throughput | **Yes** — throughput modifiers, shortages, etc. multiply the values | Goods I/O, employment, economic modifiers that should scale with productivity |
+| `level_scaled` | Building level only | **No** — always exactly `value × level` | Max level caps, employment, fixed per-level bonuses that must not fluctuate |
+| `unscaled` | Nothing (flat) | **No** — constant regardless of level or throughput | One-time flat bonuses, `unit_*` modifiers |
+
+**Critical:** `state_building_X_max_level_add` and similar state-scoped cap modifiers **must** go in `state_modifiers > level_scaled`, never `country_modifiers` and never `workforce_scaled`. Placing them in `country_modifiers` makes the cap apply to every state (so multiple buildings across states stack their caps everywhere). Placing them in `workforce_scaled` makes the cap fluctuate with throughput, causing erratic downsizing.
+
+These blocks can appear inside `building_modifiers`, `country_modifiers`, or `state_modifiers`:
+```
+state_modifiers = {
+    level_scaled = { ... }       # state-scoped caps (state_building_X_max_level_add here)
+    workforce_scaled = { ... }   # state economic effects that scale with throughput
+}
+country_modifiers = {
+    workforce_scaled = { ... }   # country-wide effects that scale with throughput
+    level_scaled = { ... }       # fixed per-level country effects
+}
+building_modifiers = {
+    workforce_scaled = { ... }   # goods I/O, employment scaling
+    level_scaled = { ... }       # fixed employment
+    unscaled = { ... }           # flat bonuses
+}
+```
+
+## `create_building` Does NOT Accept Variables for `level`
+
+- **`create_building = { building = X level = variable:foo }` will PostValidate-fail.** The `level` parameter only accepts literal integers, NOT variables or script values.
+- Error signature: `PostValidate of effect 'create_building' returned false`.
+- **Workaround:** Use `extended_timeline_build_specified_building_level` (in `common/scripted_effects/build_effects.txt`), which uses a `switch` statement to map each integer 1–100 to a hardcoded `create_building` call.
+- **Convenience wrapper:** `extended_timeline_add_specified_building_level` handles subject/overlord ownership routing automatically. Call from state scope:
+  ```
+  extended_timeline_add_specified_building_level = {
+      ADD_LEVEL = var:lvl_tmp    # or a script value name
+      SPEC_TYPE = building_foo
+  }
+  ```
+- The `ADD_LEVEL` parameter is used as a `switch` trigger, so `variable:foo` and script value names both work — they resolve to an integer which the switch matches against cases 1–100.
+
+## Code Generators and Generated Files
+
+- **`gen_ministry_events.py`** generates `events/ministry_law_events.txt`. **`gen_loc_files.py`** generates localization for `extra_law_events` and `ministry_law_events`.
+- Running generators **overwrites the entire output file**. Never make manual edits to generated files without also updating the generator.
+- Before running any generator, check for uncommitted manual changes with `git diff <file>`.
+
+## Notification Messages for Cross-Country Alerts
+
+- `post_notification = <message_type>` sends a notification. Define message types in `common/messages/extra_messages.txt`.
+- **Pattern:**
+  ```
+  message_name = {
+      type = country
+      texture = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+      group = feed
+      severity = neutral
+  }
+  ```
+- Loc keys: `notification_{message_type}_title` and `notification_{message_type}_desc`.
+
+## File Writing Best Practices
+
+- **PowerShell heredoc strings (`@"..."@`) strip tab indentation.** Prefer Python with `\t` for file generation.
+- **Always verify tab indentation** after writing files.
+- **For large file rewrites** (500+ lines), prefer a Python script over heredoc strings.
+
+## Shared Variable Hazards in Parallel Journal Entries
+
+When multiple JEs can be active simultaneously (like the space race), shared variables cause subtle bugs:
+
+### Multi-Decrement Bug
+If multiple JE `on_monthly_pulse` blocks each decrement a shared counter (e.g. `sr_failure_cooldown`), the counter ticks N times per month with N active JEs. **Fix:** Move the decrement to a single `on_monthly_pulse_country` on_action instead of per-JE pulse.
+
+### Weekly Pulse Emulation
+There is no engine-provided weekly pulse on_action. If you need effectively weekly behavior, schedule a custom on_action from a monthly pulse with delayed `trigger_event` calls:
+
+```txt
+set_weekly_on_action = {
+    effect = {
+        trigger_event = { on_action = on_action_weekly days = 0 }
+        trigger_event = { on_action = on_action_weekly days = 7 }
+        trigger_event = { on_action = on_action_weekly days = 14 }
+        trigger_event = { on_action = on_action_weekly days = 21 }
+    }
+}
+```
+
+Use `on_monthly_pulse_country` or `on_monthly_pulse_state` as the scheduler depending on which scope you need, and keep the scheduled on_action compatible with that same scope.
+
+### Async Marker Overwrite
+If a shared marker variable (e.g. `sr_last_failed_milestone`) is set synchronously in the monthly pulse but read asynchronously by events fired later, a second JE's pulse can overwrite the marker before the first event processes it. **Fix:** Use per-JE boolean flags (e.g. `sr_failed_suborbital`, `sr_failed_orbital`) instead of a single integer. Process ALL set flags in the handler effect (using `if` not `else_if`).
+
+### Dead Shared Variables After Per-JE Refactor
+When converting from a single-milestone to a per-JE architecture, ALL references to the old shared variable must be updated — not just the JE definitions. Events fired from `on_yearly_events` have their own triggers and effects that also reference shared variables. Check: `grep -c "old_var_name" events/*.txt`
+
+### Safe Proxy Pattern
+Setting a shared variable as a proxy (e.g. `sr_funding_level = var:sr_funding_<m>`) before using it in a script value IS safe IF:
+1. The JE pulse sets and consumes the proxy within the same effect block
+2. Script values evaluate immediately at `change_variable add =` time
+3. No async events read the proxy value later
+
+**Rule of thumb:** Any variable that is SET by one JE pulse and READ by an async event (fired via `trigger_event`) must be per-JE, not a proxy.
+
+### Per-JE Helper Effects
+For events that don't know which milestone they're associated with (generic failure events, cross-milestone events), use helper effects with proxy values:
+- `sr_boost_active_milestones`: Set `sr_progress_boost`, call effect — adds to ALL active milestones
+- Per-JE boolean flags (`sr_failed_<m>`): Set in pulse, checked by effects in events
+- Multi-milestone events: Expand single `change_variable` into per-JE `if` blocks checking `has_variable = sr_active_<m>`
+
+## Event Architecture
+
+- **Extract large logic blocks into scripted effects.** Event-triggering logic (weighted random_list with many entries) belongs in `common/scripted_effects/`, not inlined in journal entries.
+- Banking cycle events use `banking_cycle_random_event_effect` in `common/scripted_effects/banking_cycle_effects.txt`.
+
+## Game Rule Lifecycle
+
+- **Removing a game rule requires searching ALL files for `has_game_rule` references.** `has_game_rule = <deleted_flag>` silently evaluates to **false**, so guarded logic stops executing without any error in logs. This is especially dangerous for core systems like FMC where `has_game_rule` guards on_actions, scripted effects, and company potentials — the system appears to load fine but does nothing at runtime.
+- **Duplicate entities gated by game rules** (e.g., `company_X` + `company_X_standard` with opposite `has_game_rule` checks) must be consolidated when the rule is removed, along with their localization keys.
+- **Save game compatibility:** Existing saves referencing a deleted game rule flag (e.g., `free_market_construction_disabled`) will log "Failed to read key reference" warnings in `debug.log`. These are harmless but expected.
+- **Construction via `country_construction_add` is fundamentally unworkable as a building output.** Buildings producing construction points directly have zero revenue, making private investment impossible — the building fires all workers or requires subsidies where the government pays and private investment is "free."
+
+## Runtime Debugging with `debug_log`
+
+- **Syntax:** `debug_log = "My message with [Scope.Function] interpolation"` — used inside `effect = { }` blocks.
+- **Output goes to:** `debug.log` (in game logs directory).
+- **Scope interpolation:**
+  - `This`, `ROOT`, and bare scope accessors do NOT work. Only named scopes work: `[SCOPE.sType('name').Method]`.
+  - Pattern: First `save_scope_as = my_scope`, then `debug_log = "[SCOPE.sState('my_scope').GetName]"`.
+  - Scope type accessors: `sState`, `sCountry`, `sParty`, `sCharacter`, `sPop`, `sInterestGroup`, etc.
+  - Global variables: `[GetGlobalVariable('var_name').GetValue]`.
+  - Plain strings always work: `debug_log = "Effect fired"`.
+  - State/country names don't render properly in `debug_log` — use plain-text markers + `debug_log_scopes = yes`.
+- **Important:** `debug_log` is an **effect**, not a trigger — it can only appear inside `effect` blocks.
+- **JE pulse effects** only fire if the JE is active. To debug activation issues, add logging to separate on_actions.
+
+## Event Targets vs Triggers/Effects Reference
+
+Not all properties usable in script appear in the triggers/effects reference docs. The engine provides two distinct documentation sources:
+
+- **`triggers.log` / `effects.log`** (→ `docs/vic3_triggers_effects_reference.md`): Named triggers, effects, and iterators. These are standalone commands (`is_building_type`, `country_has_building_type_levels`, `every_scope_building`, etc.).
+- **`event_targets.log`**: Scope-to-scope accessors and value properties. These are properties on scoped objects — e.g. `level` (building scope → value), `level_after_queued_constructions` (building scope → value), `training_rate` (building scope → value), `controller` (state scope → country), `participants` (market scope → value).
+
+**Where to find `event_targets.log`:** `C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\docs\event_targets.log` (engine-generated, 1798 lines, organized as `### property_name` with Input/Output scope annotations).
+
+**When to search `event_targets.log`:**
+- You need a building property like `level`, `level_after_queued_constructions`, `training_rate`
+- You need a scope accessor like `controller`, `interest_group`, `ideology`
+- A property you expect to exist isn't found in `vic3_triggers_effects_reference.md`
+- You're writing a script value and need to access a numeric property of a scoped entity
+
+**Example usage in script values:**
+```
+# event_targets.log properties are used directly in scope:
+every_scope_building = {
+    limit = { is_building_type = building_solar_receiver }
+    subtract = level_after_queued_constructions  # from event_targets.log (building → value)
+    add = level                                   # from event_targets.log (building → value)
+}
+```
+
+## `highlighted_option` vs `custom_tooltip` in Event Options
+
+- **`highlighted_option = yes`** auto-generates a tooltip showing an option's trigger conditions. It dynamically updates if triggers change and shows which conditions in an `OR` are met.
+- **`custom_tooltip`** provides a manually-written tooltip string (via localization key).
+- **Do NOT use both together.** When `highlighted_option = yes` is present, `custom_tooltip` is redundant — the engine already displays the trigger conditions.
+- **Prefer `highlighted_option = yes`** for options gated by triggers (tech requirements, law prerequisites, ministry levels). It stays in sync with the actual triggers automatically.
+- **Use `custom_tooltip` only** when: (a) you need to explain an effect rather than a trigger condition, or (b) the option has no `trigger` block but needs explanatory text for other reasons.
+
+## Mandatory Reference Doc Consultation
+
+**Before implementing ANY game mechanic**, search the reference docs by SCOPE TYPE to discover all available tools:
+
+1. **Effects/Triggers:** Search `docs/vic3_triggers_effects_reference.md` for "Supported Scopes: <scope>" (e.g., "company", "country", "building") to find ALL effects and triggers for that scope.
+2. **Modifiers:** Search `docs/vic3_modifier_type_definitions_reference.md` by modifier category to find all valid modifier names.
+3. **Engine docs:** Cross-reference `effects.log` / `triggers.log` when reference docs are ambiguous.
+
+**Why this matters:** Effects like `add_owned_country` (company scope — links a company to a country-subject for colonial companies) can be misread if you only see the name. Always read the full description and confirm the effect does what you expect before scripting.
+
+## Treaty Article Scoping
+
+### `on_entry_into_force` Requires `scope:article_options`
+
+Inside `on_entry_into_force`, `on_break`, and `on_withdrawal` blocks, countries are accessed via `scope:article_options.source_country` and `scope:article_options.target_country` (NOT `scope:source_country` directly). Vanilla `transfer_state` confirms this pattern. To call scripted effects that expect `scope:source_country`/`scope:target_country`, save them first:
+
+```
+on_entry_into_force = {
+    scope:article_options = {
+        source_country = { save_scope_as = source_country }
+        target_country = { save_scope_as = target_country }
+    }
+    my_scripted_effect = yes
+}
+```
+
+**Outside** `on_entry_into_force` (in `visible`, `possible`, `ai` blocks), `scope:source_country` and `scope:target_country` ARE directly available.
+
+### `state_population` Is a Trigger, Not a Script Value
+
+`state_population` is a **trigger** (comparison operator: `state_population >= 100000`). It CANNOT be used as a value in script value / weight blocks (e.g., `add = state_population` causes "Malformed token"). For population-weighted `random_scope_state`, use tiered modifiers:
+
+```
+random_scope_state = {
+    weight = {
+        base = 1
+        modifier = { add = 50    state_population >= 500000 }
+        modifier = { add = 200   state_population >= 1000000 }
+        modifier = { add = 500   state_population >= 5000000 }
+    }
+    ...
+}
+```
+
+Alternatively, use `PREV.state_population` when adding to a VARIABLE in a parent scope (as in vanilla `02_south_america_migration.txt`).
+
+### `count_scope_state` Does Not Exist
+
+There is no `count_scope_state` trigger. To count states matching conditions, use `any_scope_state` with the `count` parameter:
+
+```
+any_scope_state = {
+    count >= 5
+    has_building = building_arms_industry
+}
+```
+
+### Journal Entries Don't Support `title`
+
+JEs get their display name from a localization key matching their ID (e.g., `je_banking_cycle:0 "Banking Cycle"`). Adding `title = je_banking_cycle` causes a parse error. Remove it.
+
+### Treaty Article Localization Keys
+
+Treaty articles need at minimum: `<article_id>:0 "Display Name"` and `<article_id>_desc:0 "Description"`. Without these, the article shows raw key text in the UI. The `_desc` key appears at the bottom of the article tooltip.
+
+## Treaty Article Duplication Prevention
+
+### Mutual Articles Need `scope:second_country`
+For mutual treaty articles (where both parties gain the effect), the `on_entry_into_force` block should use `scope:first_country` and `scope:second_country` (NOT `scope:target_country`). Using `scope:target_country` causes one party to get double effects.
+
+### `DUPLICATE_ARTICLE_SAME_INPUTS` Guard
+Directed articles (like `suppress_subject_liberty`, `intelligence_sharing_pact`, `joint_military_exercises`) need `DUPLICATE_ARTICLE_SAME_INPUTS = yes` in their definition to prevent stacking the same article multiple times in one treaty for combined effects.
+
+## Dynamic Tariff Modifier Pattern
+
+The `free_port_state_modifier` required a remove-then-reapply pattern because the modifier's tariff values couldn't dynamically update when rates changed. The solution uses `on_actions` (monthly pulse) to:
+1. Check if the state has the modifier
+2. Remove it
+3. Re-add it with current calculated values via script values
+
+Key pattern: `remove_modifier` + `add_modifier` with `multiplier` calculated from current game state.
+
+## `change_variable` Operations
+
+`change_variable` supports: `add`, `subtract`, `multiply`, `divide`, `modulo`, `min`, `max`. The `multiply = -1` pattern is valid for negating a variable's value (used in heir education rebel child mechanic). All operations are applied to the variable's current value.
+
+## Character Trait `replace` Block
+
+When adding a new tier to a mutually exclusive trait group (e.g., adding "terrible" tier to the ruler_poor/average/skilled/exceptional series), EVERY existing trait's `replace = { ... }` block must be updated to include the new trait. Otherwise two traits from the same group can coexist on a character. The `replace` list causes the engine to automatically remove any listed trait when the new one is added.
+
+## Hidden Variable Design Pattern
+
+For mechanics where the player shouldn't see exact values (like intelligence), set the variable on the country scope and don't reference it in tooltips. Use `triggered_desc` blocks in the JE's `status_desc` to show subtle hints based on variable thresholds (e.g., `var:heir_ed_intelligence >= 4` → "quick study" message).
+
+## Simulation-Driven Balancing
+
+For complex probability systems (multi-tier trait resolution, intelligence modifiers, monthly pulses), write a Python Monte Carlo simulation FIRST. Run 10,000+ iterations per scenario to validate distributions before implementing in Paradox script. This catches non-obvious outcomes like:
+- Combined probability of focused vs unfocused categories
+- Impact of intelligence variance on extreme outcomes
+- Expected total progress over different education durations
+
+## Event Option Tradeoff Patterns
+
+Every event option should have a meaningful cost or tradeoff — no "free" good options (or if there are, all options must be competitive, comparably good, and clearly presented as such). Examples of tradeoff patterns:
+
+- **Spending options** (subsidies, funding programs, UBI expansion, military equipment): Add `add_treasury = { value = yearly_gross_income multiply = -0.03 }` (3-5% of yearly income).
+- **Progressive options** (reforms, protections, whistleblower protection): Add `add_radicals` targeting the opposed group (upper strata, ig_devout).
+- **Regressive options** (crackdowns, bans, suppression): Add `add_radicals` targeting academics/lower strata, optionally `add_loyalists` for the benefiting group.
+- **Middle-ground options** (compromise, study the issue): Can have lighter costs — the tradeoff is not getting the bigger modifier. Still should have `very_small_radicals` from *someone*.
+- **Greenwash/co-opt options**: Add `very_small_radicals pop_type = academics` (people see through it).
+
+## Fire-Once Event Pattern
+
+For events representing one-time policy debates or historical moments:
+```
+trigger = {
+    # ... other triggers ...
+    NOT = { has_global_variable = event_name_happened }
+}
+immediate = {
+    set_global_variable = event_name_happened
+}
+```
+Use `global_variable` (not `variable`) so it persists across all countries. Combine with `cooldown = { days = long_modifier_time }` for fire-once events.
+
+## Law-Gated AI Chance
+
+Make AI contextually prefer options matching their current laws:
+```
+ai_chance = {
+    base = 1
+    modifier = {
+        trigger = {
+            OR = {
+                has_law = law_type:law_relevant_law1
+                has_law = law_type:law_relevant_law2
+            }
+        }
+        add = 3
+    }
+}
+```
+This ensures repressive governments pick repressive options, liberal governments pick liberal options, etc.
+
+## Pop Scope Properties
+
+- **`total_size`** — valid pop scope accessor for the total size (headcount) of a pop. Found in `event_targets.log`. Used in vanilla events (e.g., `max = scope:relevant_pop.total_size`). Use this when you need the population of a specific pop in script values.
+- **`THIS.size`** — NOT a valid accessor. Will cause runtime errors. Use `total_size` instead.
+- **`pop_weight_modifier_scale`** — exists in pop scope but is NOT the pop's headcount. It's a modifier scale factor. Do NOT use it as a proxy for pop size.
+- **`state_population`** — trigger only (comparison operator), NOT a script value. Cannot be used as `add = state_population`. See "Treaty Article Scoping" section above.
+
+## Interest Group Effects
+
+- **`set_interest_group`** (character scope) — assigns a character to an interest group. Requires `ig:ig_name` prefix (e.g., `set_interest_group = ig:ig_landowners`).
+- **`set_interest_group_type`** — does NOT exist as an effect. Always use `set_interest_group`.
+- **`ig_type:ig_name`** — NOT a valid scope prefix. Use `ig:ig_name` (e.g., `ig:ig_devout`, not `ig_type:ig_devout`).
+
+## Script Values Are NOT Effect Blocks
+
+Script values (`common/script_values/`) evaluate mathematical expressions with triggers/iterators — they are NOT effect blocks. Key restrictions:
+
+- **`save_scope_as` does NOT work** in script values. It's an effect, not available in script value context. Vanilla never uses it in script values.
+- **`set_variable`, `set_global_variable`** — also effects, not available in script values.
+- **Scope references (`scope:X`)** only work if set by the calling context (e.g., `scope:source_country` from a treaty article, `scope:actor` from a diplomatic action). You cannot create new named scopes inside a script value.
+- **Prefer implicit scope chains** — inside an iterator like `every_primary_culture`, the current scope IS the culture object. Use triggers like `is_primary_culture_of` directly on the implicit scope instead of trying to save and compare scopes.
+- **Correct pattern:** `every_scope_pop = { limit = { culture = { is_primary_culture_of = scope:target_country } } add = total_size }` — uses pre-existing `scope:target_country` and implicit culture scope.
+- **Wrong pattern:** `every_primary_culture = { save_scope_as = my_culture ... scope:my_culture }` — `save_scope_as` silently fails, `scope:my_culture` is always invalid.
+
+## Reusable Scripted Triggers & Effects
+
+**Before writing a trigger or effect block, check whether a scripted trigger or effect already exists.** The mod has a growing library of reusable scripted triggers (`common/scripted_triggers/`) and scripted effects (`common/scripted_effects/`) that encapsulate common patterns. Using them:
+- Reduces code duplication and file size
+- Makes future changes easier (update one definition instead of 20+ call sites)
+- Reduces risk of inconsistency when law/tech/trait sets change
+
+**When to create a new scripted trigger/effect:**
+- A trigger or effect block (3+ lines) appears **3 or more times** across different files
+- The block checks a **conceptual category** (e.g., "discriminatory laws", "augmentation tech", "aggressive ruler") rather than a one-off condition
+- The block is likely to need updating if game mechanics change (e.g., a new minority rights law is added)
+
+**When NOT to extract:**
+- Single-line checks (`has_modifier = X`) — too simple, extraction adds overhead for no gain
+- Blocks that appear only 1-2 times — not worth the indirection
+- Context-specific logic where the "same" lines serve different semantic purposes
+- Ideology law approval mappings (individual `has_law` lines serving as a full enumeration, not an OR check)
+
+### Available Scripted Triggers (by file)
+
+**`civil_rights_triggers.txt`** — Minority rights & civil rights movement checks (country scope):
+- `has_discriminatory_minority_law` — OR of the 4 discriminatory minority rights laws (violent_hostility, ghettoization, cultural_assimilation, discrimination)
+- `has_severe_discriminatory_minority_law` — OR of the 2 worst laws (violent_hostility, ghettoization)
+- `has_progressive_minority_law` — OR of 3 progressive laws (protection, affirmative_action, multicultural)
+- `has_active_civil_rights_movement` — `any_political_movement = { is_political_movement_type = movement_civil_rights }`
+- `has_augmentation_tech` — OR of biohacking_and_human_augmentation / brain_computer_interfaces
+
+**`nuke_triggers.txt`** — Nuclear diplomacy AI logic (country scope, requires `scope:country`):
+- `enemy_has_existential_war_goal` — scope:country has make_protectorate/dominion/tributary/annex_country war goals against ROOT
+- `enemy_has_subjugation_war_goal` — subset: annex/protectorate/dominion (excludes tributary)
+- `ruler_is_aggressive` — ruler has reckless/wrathful/war_criminal traits
+- `ruler_is_cautious` — ruler has cautious/honorable traits
+- `was_nuked_by_enemy` — `has_variable = nuked_by_country` and `var:nuked_by_country = scope:country`
+
+**`world_war_triggers.txt`** — Ideology classification (country scope):
+- `country_is_democratic`, `country_is_communist`, `country_is_fascist`, `country_is_authoritarian`
+- `country_has_opposed_ideology`, `world_war_conditions_met`, `can_join_world_war`
+- `country_is_ww_belligerent`, `country_is_ww_aggressor`, `country_is_ww_defender`
+
+**`market_triggers.txt`** — Banking cycle phase checks (country scope):
+- `banking_cycle_is_panic`, `banking_cycle_is_downturn`, `banking_cycle_is_stagnation`, etc.
+- `banking_tool_*_active` — per-tool activation checks
+
+**`misc_triggers.txt`** — Miscellaneous (country/building scope):
+- `has_any_langreform_modifier`, `is_radical_law_activated`, `is_exempt_from_radical_backlash`
+- `country_has_any_custom_religion`, `is_privately_expandable_building_type`
+
+**`colonial_empire_triggers.txt`** — Geographic macroregion checks (state_region scope):
+- `is_in_colonial_macroregion_*` and `is_in_or_adjacent_colonial_macroregion_*` for 14 regions
+
+**`space_race_triggers.txt`** — Space race checks (country scope):
+- `sr_has_space_program`, `sr_is_pursuing_milestone`, `sr_can_start_space_race`, `sr_has_failure_cooldown`
+
+**`wonder_triggers.txt`** — Wonder building checks:
+- `state_is_in_recognized_continent`, `continent_has_no_building_of_type`, `building_unique_per_owner_potential`
+
+**`combined_arms_triggers.txt`** — Combat unit classification:
+- `combat_unit_is_infantry_group`, `combat_unit_is_artillery_group`, `combat_unit_is_cavalry_group`, etc.
+
+### Available Scripted Effects (by file)
+
+**`civil_rights_effects.txt`** — Civil rights event helpers:
+- `save_civil_rights_movement_scope` — Saves the active civil rights movement as `scope:civil_rights_movement`
+
+**`space_race_effects.txt`** — Space race milestone effects:
+- `sr_complete_milestone_effect`, `sr_complete_*_effect` (per-milestone), `sr_recalculate_cost`, etc.
+
+**`build_effects.txt`** — Building construction:
+- `extended_timeline_add_specified_building_level` — Creates building with correct ownership (handles subjects)
+
+**`extra_effects.txt`** — Wonder construction, private investment, bloc unity:
+- `space_elevator_construction`, `solar_collector_construction`, `orbital_battlestation_construction`, `mind_upload_nexus_construction`
+- `expand_building_private_construction`, `expand_random_building`, `queue_more_private_investment`
+
+**`banking_cycle_effects.txt`** — `banking_cycle_random_event_effect`, `banking_cycle_advance_variables` (uses `banking_random_nudge_down/up_value`), `banking_cycle_check_and_execute_crash` (uses `banking_crash_chance_multiplier_value`)
+
+**`sol_expectations_effects.txt`** — `sol_expectations_monthly_update` (monthly convergence of adaptive expectations toward actual SoL)
+
+**`heir_education_effects.txt`** — Heir education stat gains and resolution effects
+
+**`colonial_collapse_effects.txt`** — `colonial_collapse_effect`
+
+**`combined_arms_effects.txt`** — `apply_combined_arms_bonuses`
+
+## Custom Script-Only Modifier Types
+
+These `script_only = yes` modifiers can be applied from laws, technologies, PMs, traits, etc. via `modifier = { name = value }` blocks. They are consumed by script values and scripted effects — not by the engine directly.
+
+### Banking Cycle
+| Modifier | Type | Effect |
+|---|---|---|
+| `country_banking_random_momentum_mult` | percent, neutral | Scales random cycle momentum nudges (volatility). 0 = normal, +0.5 = 50% more volatile. |
+| `country_banking_crash_chance_mult` | percent, bad | Scales crash probability. 0 = normal, +0.25 = 25% higher crash chance, -0.3 = 30% lower. |
+| `country_finance_momentum_monthly_add` | flat, neutral | Direct monthly addition to cycle momentum. |
+| `country_bubble_pressure_monthly_add` | flat, neutral | Direct monthly addition to bubble pressure. |
+| `country_finance_value_monthly_add` | flat, neutral | Direct monthly addition to cycle value. |
+| `country_banking_intervention_max_add` | flat, good | Banking intervention points available per activation. |
+
+### SoL Expectations
+| Modifier | Type | Effect |
+|---|---|---|
+| `country_sol_expectation_adaptation_rate_mult` | percent, neutral | Scales how fast expectations converge to actual SoL. +0.5 = 50% faster (shorter memory). |
+
+### Nuclear Weapons
+| Modifier | Type | Effect |
+|---|---|---|
+| `country_nuclear_weapon_attack_success_add` | flat, good | Base attack success chance (from techs: nuclear_weapons +1.0, ICBMs +0.5, hypersonic_weapons +0.5, orbital_weapon_platforms +0.5). |
+| `country_nuclear_weapon_defense_chance_add` | flat, good | Base defense chance (from techs: military_aviation +0.25, radar +0.25, missile_defense_systems +0.5, directed_energy_defenses +0.5, orbital_weapon_platforms +0.5). |
+
+### Economy
+| Modifier | Type | Effect |
+|---|---|---|
+| `country_monthly_investment_pool_add` | flat, good | Direct monthly investment pool income addition. |
+| `country_monthly_investment_pool_mult` | percent, good | Scales monthly investment pool income. |
+
+## Modifier Value Breakdowns with `GetValueWithBreakdownFor`
+
+### What It Does
+`GetValueWithBreakdownFor` generates an engine-formatted breakdown showing all sources contributing to a modifier value. When hovered, it displays a vertical list of each source (PM, tech, law, etc.) with its contribution, a separator, and the total. This is far superior to displaying a raw number because the player can see exactly why the value is what it is.
+
+### Syntax
+```
+[SCOPE.GetModifier.GetValueWithBreakdownFor('modifier_key')]
+```
+
+**SCOPE** must be a scope that has modifiers (usually Country, State, or Building).
+
+### Common Patterns in JE/Tooltip Context
+
+**In journal entries** (ROOT = JournalEntry):
+```
+[ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_cultural_pull_add')]
+```
+
+**In country-scoped tooltips/events** (ROOT = Country):
+```
+[ROOT.GetModifier.GetValueWithBreakdownFor('country_finance_value_monthly_add')]
+```
+
+**In banking JE** (SCOPE.GetRootScope = Country):
+```
+[SCOPE.GetRootScope.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]
+```
+
+### When to Use
+- **Always prefer `GetValueWithBreakdownFor`** over script value display (`ScriptValue('my_display_val')`) when showing a modifier's current value. The breakdown is free — no extra script value needed.
+- Works for **any registered modifier**, including custom `modifier_type_definitions`.
+- Especially valuable for modifiers that have multiple contributing sources (techs, PMs, laws, etc.).
+
+### When NOT to Use
+- For **computed values** that aren't directly a modifier (e.g., a script value that computes `art_production / global_art_production`). These require `ScriptValue()`.
+- `GetValueWithBreakdownFor` only works on modifier keys, not arbitrary script values.
+
+### Vanilla Examples
+Vanilla uses this for economy of scale, power bloc mandate, suppression/bolster effects, and building level caps:
+```
+[Country.GetModifier.GetValueWithBreakdownFor('country_economy_of_scale_add')]
+[Country.GetModifier.GetValueWithBreakdownFor('country_power_bloc_mandate_progress_add')]
+```
+
+### State Panel GUI Usage
+In the state panel (`gui/states_panel.gui`), buttons/textboxes use `State` as the data context. For state-scoped modifiers:
+```
+[State.GetModifier.GetValueWithBreakdownFor('state_arable_land_mult')]
+[State.GetModifier.GetValueWithBreakdownFor('state_homeland_creation_threshold_add')]
+[State.GetModifier.GetValueWithBreakdownFor('state_migration_crowding_density_mult')]
+```
+For country-scoped modifiers accessed from state context:
+```
+[State.GetOwner.GetModifier.GetValueWithBreakdownFor('country_solar_receiver_max_level_add')]
+```
+This works in loc keys referenced by `text = "LOC_KEY"` or `tooltip = "LOC_KEY"` in the GUI file.
+
+## Game Concept Tooltips for Breakdowns
+
+### Purpose
+Game concepts (`common/game_concepts/`) create hoverable tooltip links in loc strings. When a player hovers over a concept-linked word, a tooltip appears with the concept's description. This is ideal for explaining score components in breakdown displays.
+
+### Registration
+1. Define in `common/game_concepts/` (e.g., `extra_game_concepts.txt`):
+```
+concept_ch_art_production = {
+    texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+    desc = concept_ch_art_production_desc    # points to a loc key
+}
+```
+2. Add loc keys in localization:
+```
+concept_ch_art_production:0 "Art Production"
+concept_ch_art_production_desc:0 "Calculated from your share of global Fine Art production, multiplied by art effectiveness modifiers."
+```
+
+### Usage in Loc Strings
+Reference with `[concept_NAME]`:
+```
+je_ch_breakdown_art:0 "#variable [VALUE]#! [concept_ch_art_production] (details)"
+```
+This renders "Art Production" as a hoverable link with the description tooltip.
+
+### Best Practice
+When displaying a multi-component breakdown (like Cultural Hegemony score), create a game concept for **each component** so players can hover to understand what drives each line. Include the formula or key drivers in the concept description.
+
+## Localization Formatting Codes
+
+### Text Formatting
+| Code | Effect |
+|---|---|
+| `#bold text#!` | Bold text |
+| `#title text#!` | Title/header-styled text (larger, styled) |
+| `#v text#!` | Value-colored text (green for positive context) |
+| `#variable text#!` | Variable/value-colored text (same as `#v`) |
+| `#G text#!` | Green text |
+| `#R text#!` | Red text |
+| `#Y text#!` | Yellow text |
+| `#N text#!` | Neutral-colored text |
+| `#B text#!` | Blue text |
+| `#white text#!` | White text |
+| `#o text#!` | Orange text |
+
+### Layout
+| Code | Effect |
+|---|---|
+| `\n` | Newline |
+| `#indent_newline:N content#!` | Indented block, N character widths deep |
+| `$TAB$` | 3 spaces |
+| `$TOOLTIP_DELIMITER$` | Horizontal divider line (graphical) |
+| `[Nbsp]` | Non-breaking space |
+| `$EFFECT_LIST_BULLET$` | Bullet point marker |
+
+### Tooltips
+| Code | Effect |
+|---|---|
+| `#tooltip_header text#!` | Header line in a tooltip |
+| `#tooltippable #tooltip:SCOPE,key text#!#!` | Inline hoverable text with custom tooltip |
+
+### Value Formatting
+| Code | Effect |
+|---|---|
+| `[value\|V]` | Percentage format |
+| `[value\|0]` | Integer (0 decimals) |
+| `[value\|1]` | 1 decimal place |
+| `[value\|2]` | 2 decimal places |
+| `[value\|+=0%]` | Signed percentage (+5%, -3%) |
+| `[value\|D]` | Detailed format |
+| `[value\|=v]` | Equals-prefixed value format |
+
+### Breakdown Display Pattern (Vanilla Convention)
+The standard way to display a value+label breakdown line:
+```
+#variable [VALUE|+=]#! description text
+```
+This renders the value in variable color followed by the label — e.g., `+5.0 from character popularity`. Used extensively in vanilla JE tooltips (e.g., `je_divided_monarchists_bonapartist_var_tooltip`).
+
+Full breakdown block pattern:
+```
+"#tooltip_header Changes monthly:#!\n$TOOLTIP_DELIMITER$\n#variable [VALUE1|+=]#! from source 1\n#variable [VALUE2|+=]#! from source 2"
+```
+
+### Important Limitation: No Column Alignment
+Victoria 3 uses a **proportional font** (not monospace) for all text rendering. This means:
+- Space-padding for column alignment is unreliable — characters have different widths.
+- There is **no tab-stop or two-column grid mechanism** in the loc system.
+- The best approach for structured data is `#variable VALUE#! label` (value-first) with newlines, not label-then-value with alignment padding.
+- `#indent_newline:N` provides visual structure but doesn't enable column alignment.
+
+## AI Diplomatic Action Best Practices
+
+### Anti-Spam: Low `evaluation_chance`
+Togglable pact-based diplomatic actions (like covert operations, increase_relations) are re-evaluated every tick. High `evaluation_chance` (0.1+) causes the AI to rapidly toggle pacts on/off. Use **0.02–0.05** for strategic decisions. Adjust with conditionals:
+```
+evaluation_chance = {
+    value = 0.03
+    if = {
+        limit = { ruler_is_aggressive = yes }
+        add = 0.02
+    }
+    if = {
+        limit = { ruler_is_cautious = yes }
+        multiply = 0.5
+    }
+}
+```
+
+### Financial Health Guards
+AI should never propose expensive diplomatic actions while in financial distress:
+```
+will_propose = {
+    in_default = no
+    # ... other conditions
+}
+```
+
+### Meaningful `propose_score`
+Flat `propose_score` values make all targets equally attractive. Use conditional modifiers:
+```
+propose_score = {
+    value = 5
+    if = {
+        limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+        add = 10
+    }
+    if = {
+        limit = { country_rank = rank_value:great_power }
+        add = 5
+    }
+}
+```
+
+### AI-Only Logic in JE Pulses
+Scripted buttons have no AI support. For player-facing controls (funding levels, priorities) that the AI also needs to manage, add AI-only logic blocks in the JE's `on_monthly_pulse`:
+```
+if = {
+    limit = { is_player = no }
+    # AI-specific management
+    set_variable = { name = funding_level value = 1 }
+}
+```
+
+### Loc Keys for Effect Display
+Diplomatic action confirmation dialogs show "Effects:" using `<action_name>_effect_desc_global:0` loc keys. Also provide `_effect_desc_first:0` and `_effect_desc_third:0` for notification messages.
+
+## Extending Vanilla On-Actions Safely
+
+**Never add `effect = { }` directly to a vanilla on-action.** Adding `effect` to a vanilla on_action (e.g. `on_yearly_pulse_country`, `on_election_campaign_end`) **overwrites** the vanilla effect block, silently breaking base-game logic.
+
+**Safe pattern — use `on_actions` sub-action:**
+```
+on_election_campaign_end = {
+    on_actions = {
+        my_custom_election_end_handler
+    }
+}
+
+my_custom_election_end_handler = {
+    effect = {
+        # Your custom logic here — vanilla effect block is preserved
+    }
+}
+```
+
+The `events` and `on_actions` lists are **additive** and safe to extend; `effect` is **not**.
+
+**Known vanilla `effect` blocks that would be overwritten:**
+- `on_election_campaign_end`: Sets `brz_election_done` variable, removes `modifier_government_recently_couped`.
+- Many `on_yearly_pulse_*` and `on_monthly_pulse_*` actions have vanilla effects.
+
+## Comparing State References Across Scopes
+
+When comparing stored state references (e.g. `iw_target_election_interference_<slot>` stores a capital state) against another entity's capital:
+1. Save the reference state as a scope: `capital = { save_scope_as = my_capital }`
+2. Inside nested scopes, compare using `scope:my_capital = { this = PREV.var:stored_state_var }`
+3. Be careful with PREV chains — `PREV` inside a `scope:X = { }` trigger block refers to the scope **before entering** the block, not the pact scope.
+
+## `add_amendment` Requirements
+
+The `add_amendment` effect has **two required parameters** beyond `type`:
+
+```
+add_amendment = {
+    type = amendment_example
+    sponsor = interest_group   # REQUIRED — the IG sponsoring the amendment
+    cooldown = 120             # REQUIRED — months before it can be revoked/replaced (0 = no cooldown)
+}
+```
+
+**Sponsor scoping:** In history files using `active_law:lawgroup_X ?= { }`, the scope is the law and PREV is the country, so use `sponsor = PREV.ig:ig_X`. In events using `every_scope_law = { }`, ROOT is the country, so use `sponsor = ROOT.ig:ig_X`.
+
+**`possible = { always = no }` blocks `add_amendment`.** The engine checks the amendment's `possible` trigger when `add_amendment` is called. If it evaluates to false, the amendment silently fails to apply (no error, no PostValidate — just doesn't show up). For event-only amendments that shouldn't be proposed through IG activism, use `possible = { always = yes }` combined with `amendment_activism_multiplier = 0`. The `amendment_activism_multiplier` controls IG proposal behavior independently.
+
+## Journal Entry Modifier Scoping
+
+Modifiers applied by journal entry buttons or JE monthly/weekly pulse should be applied to the **journal entry scope** rather than directly to the country. This causes the modifier to appear in the JE's modifier panel instead of cluttering the country's general modifier list.
+
+### Pattern
+
+```
+# GOOD: Apply modifier to JE scope (displays in JE panel)
+je:je_my_journal_entry = { add_modifier = { name = my_modifier } }
+je:je_my_journal_entry = { add_modifier = { name = my_scaled_modifier multiplier = my_script_value } }
+
+# Check if JE has the modifier
+je:je_my_journal_entry = { has_modifier = my_modifier }
+
+# Remove modifier from JE
+je:je_my_journal_entry = { remove_modifier = my_modifier }
+
+# BAD: Apply directly to country (shows in country modifier list)
+add_modifier = { name = my_modifier }
+```
+
+The modifier's effects (e.g., `country_loan_interest_rate_mult`) still apply to the country — only the **display location** changes.
+
+### When to Use JE Scope
+
+| Context | Scope to JE? | Reason |
+|---|---|---|
+| **Button toggle modifiers** (banking tools, climate policies, wartime toggles) | ✅ Yes | Player policy choices specific to the JE system |
+| **Monthly pulse dynamic modifiers** (phase modifiers, funding costs, scaled benefits) | ✅ Yes | JE-specific mechanic modifiers recalculated each tick |
+| **Event-applied one-time bonuses** (ww_fresh_forces, arsenal_of_democracy) | ❌ No | Standalone event rewards, not JE-managed toggles |
+| **Event-applied modifiers re-applying a JE-managed modifier** (e.g., event adds ww_rearmament) | ✅ Yes | Same modifier managed by JE; keep consistent scope |
+| **Permanent status modifiers** (nuclear_power, nuclear_disarmament) | ❌ No | Status persists after JE completes/deactivates |
+| **on_complete/on_fail modifiers** (colonial_empire_solidified, failed_state) | ❌ No | JE disappears on completion; modifier must outlive it |
+| **Cross-country modifiers** (contagion effects on other countries) | ❌ No | Target country may not have the JE |
+| **Movement-scoped modifiers** (colonial_pressure_movement_radicalism) | ❌ No | Applied to political movement scope, not country |
+| **Status modifiers checked cross-entity** (un_member, un_security_council) | ❌ No | Checked in 40+ places across events, treaty articles, on_actions |
+| **Social movement modifiers** (modifiers_while_active) | N/A | Already a JE property, not `add_modifier` |
+
+### Scripted Trigger Updates
+
+When moving modifiers to JE scope, update associated scripted triggers:
+```
+# Before
+banking_tool_rate_hike_active = { has_modifier = banking_policy_rate_hike }
+
+# After
+banking_tool_rate_hike_active = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
+```
+
+### Systems Using JE-Scoped Modifiers
+
+| System | JE Name | Modifiers |
+|---|---|---|
+| Nuclear Weapons | `je_nuclear_program` | `nuclear_weapon_program_funding` |
+| Banking Cycle | `je_banking_cycle` | All intervention tools (14 market, 8 command, 8 cooperative), phase modifiers (18), bubble inertia (3), fiscal policy, `planning_treasury_pool_balance` (command-economy auto-balance) |
+| Global Warming | `je_global_warming` | `global_warming`, 8 climate policy modifiers |
+| Covert Warfare | `je_covert_warfare` | `intelligence_capacity_defense`, `iw_domestic_defense`, `iw_funding_defense`, `covert_operation_funding_cost` |
+| World War | `je_world_war` | 9 modifiers: `ww_rising_tensions`, `ww_rearmament`, `ww_appeasement`, `ww_lend_lease`, `ww_total_war_economy`, `ww_war_propaganda`, `ww_wartime_rationing`, `ww_home_front_strain`, `ww_prolonged_war_exhaustion`. NOT: `ww_fresh_forces`, `ww_arsenal_of_democracy` (event-applied one-time bonuses) |
+| United Nations | `je_united_nations` | 6 modifiers: `un_membership_benefits`, `un_high_authority_infamy`, `un_npt_disarmament`, `un_nonmember_pariah`, `un_champion_order_cost`, `un_undermine_order_cost`. NOT: `un_member`, `un_security_council`, `un_headquarters` (status modifiers checked cross-entity) |
+| Colonial Empire | `je_colonial_empire` | 2 modifiers: `colonial_empire_under_pressure`, `colonial_empire_crumbling`. NOT: `colonial_empire_solidified`, `colonial_empire_collapsed` (on_complete/on_fail), movement radicalism modifiers (movement-scoped) |
+| Space Race Colonization | `je_space_race_solar_colonization` | 68 colony modifiers (`sr_colony_*`), `sr_solar_system_trade`. NOT: milestone modifiers like `sr_first_*`, approach/failure modifiers (country-scoped, not JE-managed) |
+
+### Important: Update ALL References
+
+When moving a modifier to JE scope, update **every** reference across the codebase:
+- Scripted triggers (`has_modifier` checks)
+- Scripted buttons (visible/possible/effect blocks)
+- Scripted effects (add/remove/check)
+- On_actions (cleanup on law change)
+- Script values (counting countries with a policy)
+- Treaty articles (checks and applications)
+- Events (trigger conditions)
+- Political movements (support conditions)
+
+### JE Lifecycle: `invalid` + `on_invalid` Cleanup
+
+A JE with only an `invalid` trigger will disappear when the trigger fires, but **country-scoped state (variables, modifiers applied outside the JE scope) is not cleaned up**. Always pair `invalid` with `on_invalid` when the JE sets country variables or applies country-scoped modifiers that should be removed on invalidation.
+
+```
+je_my_je = {
+    invalid = { NOT = { has_law = law_type:law_monarchy } }
+    on_invalid = { my_je_cleanup_effect = yes }  # remove country vars, remove leftover modifiers
+    ...
+}
+```
+
+Observed failure: `je_heir_education` had `invalid = { NOT = { has_law = law_type:law_monarchy } }` but no `on_invalid`. Switching government type invalidated the JE but left the `heir_education_innovation_cost` authority modifier (applied to country by the heir-education monthly pulse) permanently stuck on the country. Fix: add `on_invalid = { heir_education_cleanup_effect = yes }` to the JE, and add a one-shot safety-net cleanup to `legacy_modifier_cleanup.txt` for existing saves.
+
+### Auto-Balancing Modifier Pattern (Multiplier Derived From Live State)
+
+When a JE-scoped modifier must scale to counteract a live game value (e.g., "transfer from treasury to investment pool to keep pool net income at zero"), you can compute the multiplier directly by negating the live read — **unless** your modifier's key is included in that read, in which case you must subtract out your prior contribution (see "Prior-Multiplier Subtraction" note below).
+
+**Simple case (modifier key NOT included in the target value):**
+
+```
+# Script value — just negate the live engine read directly
+my_balance_multiplier = {
+    value = 0
+    subtract = live_engine_value    # e.g. investment_pool_net_income
+}
+
+# Scripted effect (monthly + button-triggered)
+my_balance_update = {
+    if = {
+        limit = { <applicability trigger> }
+        je:je_my_je = {
+            if = {
+                limit = { has_modifier = my_balance_modifier }
+                remove_modifier = my_balance_modifier
+            }
+            add_modifier = { name = my_balance_modifier multiplier = my_balance_multiplier }
+        }
+    }
+    else = {
+        if = { limit = { je:je_my_je ?= { has_modifier = my_balance_modifier } } je:je_my_je = { remove_modifier = my_balance_modifier } }
+    }
+}
+```
+
+**When prior-multiplier subtraction IS needed:** If your modifier key is included in the live engine read (e.g., a vanilla `country_monthly_X` key that the engine sums into the matching income/expense value), then removing and re-adding within the same effect still shows the old value in the read. In that case, cache the last-applied multiplier in `var:my_prior_mult` and subtract it: `add = var:my_prior_mult; subtract = live_engine_value`. See the "Modifier values are NOT recalculated within a single effect block" entry in `.github/copilot-instructions.md` for the general pattern.
+
+Used by: `banking_cycle_update_ce_pool_balance` (command economy investment-pool balance, `planning_treasury_pool_balance` modifier). `country_weekly_investment_pool_add` is a mod-created key not included in `investment_pool_net_income`, so the simple direct-negate form is used with no prior-variable caching.
+
+## Useful Triggers & Accessors Reference
+
+Triggers and scope accessors that are easy to overlook or hard to discover:
+
+### Country Ranking
+- **`global_country_ranking`** — Country-scope trigger. Returns prestige-based global rank (1 = highest). Useful for "top N countries" checks: `global_country_ranking <= 3`. Cheaper than counting countries with `any_country = { count >= N ... }`.
+
+### Law Iterators
+- **`any_active_law`** — Country→Law trigger iterator. Iterates over all of a country's currently active laws. Use for finding law mismatches, checking groups, etc.
+- **`random_active_law`** / **`every_active_law`** / **`ordered_active_law`** — Effect variants of the above.
+- **`active_law:lawgroup_X`** — Country→Law accessor. Scopes to a specific law group's active law directly.
+- **`law_type`** — Law→LawType scope accessor. Gets the law_type key from a law scope.
+- **`is_same_law_group_as`** — LawType trigger. Compares whether two law types belong to the same law group. Accepts a scope reference to another law_type.
+- **`activate_law`** — Country effect. Accepts scope references to law_type: `activate_law = scope:saved_law_type`.
+- **`enacting_any_law`** — Country trigger. Checks if the country is currently in the process of enacting any law. Useful to gate events that would force law adoption.
+
+### Authority Triggers — `authority` vs `produced_authority`
+Four country-scope authority triggers, easy to confuse:
+- **`authority`** — *available* (free / uncommitted) authority. The pool the country could spend on a new decree right now. Use this when gating "can the player or AI afford to spend N authority?".
+- **`authority_usage`** — *consumed* authority (sum of decrees, institutions, etc.).
+- **`produced_authority`** — *generated* authority over time (effectively used + free). High in almost every late-game country regardless of how much is actually spendable.
+- **`relative_authority`** — unused fraction (`authority / produced_authority`, 0–1). Useful for "do I have plenty of headroom?" checks.
+
+**Common pitfall:** using `produced_authority > N` to gate an option that costs authority. Once a country has been generating authority for a few decades, `produced_authority` is essentially always `> N` even if every drop is already committed to existing decrees. AI weights tied to `produced_authority` cause AI to dump authority it doesn't actually have. Use `authority > N` for cost gates and AI-spend decisions.
+
+### Lawgroup Orthogonality
+**Distribution of Power and Governance Principles are different axes.** A country has one law from each lawgroup; they coexist independently:
+- **`lawgroup_distribution_of_power`** — who holds power: Autocracy / Oligarchy / various Voting laws / Universal Suffrage / Single-Party State / etc. The "concentration of power" axis.
+- **`lawgroup_governance_principles`** — head-of-state structure: Monarchy / Presidential Republic / Parliamentary Republic / Theocracy / Council Republic / mod-added `law_direct_democracy` / `law_neocameralism` / etc.
+
+When designing a system that responds to "how authoritarian is this country", contribute modifier values across the *distribution-of-power* axis (and possibly free-speech / internal-security), not governance-principles. Don't mix law contributions across the two axes — the result is an incoherent gate where (e.g.) Direct Democracy lowers a value that Parliamentary Republic doesn't touch.
+
+## Legacy Modifier Cleanup Pattern
+
+When migrating modifiers from country scope to JE scope, existing save games still have the old country-level modifiers. A cleanup scripted effect (`legacy_je_modifier_cleanup_effect`) runs once via `on_game_start` to remove these stale modifiers.
+
+**File:** `common/scripted_effects/legacy_modifier_cleanup.txt` + `common/on_actions/legacy_modifier_cleanup.txt`
+
+### Simple Cleanup (toggle/pulse modifiers)
+
+For modifiers that a JE monthly pulse or scripted button will re-apply to JE scope automatically on the next tick:
+```
+# Just remove from country — the JE pulse/button will re-add to JE scope
+if = { limit = { has_modifier = banking_policy_rate_hike } remove_modifier = banking_policy_rate_hike }
+```
+
+### Re-Apply Cleanup (one-shot event modifiers)
+
+For modifiers applied by one-time events (not re-applied by any pulse), the cleanup must also re-add the modifier to the JE scope:
+```
+# Remove from country AND re-apply to JE scope (guarded by has_journal_entry)
+if = {
+    limit = { has_modifier = sr_colony_europa }
+    remove_modifier = sr_colony_europa
+    if = {
+        limit = { has_journal_entry = je_space_race_solar_colonization }
+        je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa } }
+    }
+}
+```
+The inner `has_journal_entry` guard is critical — if the country doesn't have the JE (e.g., it completed or was never started), the `je:` accessor would error.
+
+### Lifecycle
+- Safe to delete cleanup files once no save games from before the migration exist.
+- Delete BOTH the scripted effect file AND the on_action file (`common/on_actions/legacy_modifier_cleanup.txt`).
+
+## Localization Validation
+
+### Server Endpoint
+
+Use `GET /unlocalized` to find all entities missing localization keys:
+```powershell
+# All unlocalized entities (mod-only by default)
+Invoke-RestMethod http://localhost:8950/unlocalized
+
+# Filter to one type
+Invoke-RestMethod "http://localhost:8950/unlocalized?type=Modifiers"
+
+# Include vanilla entities too
+Invoke-RestMethod "http://localhost:8950/unlocalized?mod_only=false"
+```
+
+### Localization Key Requirements by Entity Type
+
+| Entity Type | Required Keys |
+|---|---|
+| Static modifiers | `modifier_name:0`, `modifier_name_desc:0` |
+| Modifier type definitions | `modifier_name:0`, `modifier_name_desc:0` |
+| Technologies | `tech_id:0` |
+| Buildings | `building_id:0` |
+| Laws | `law_id:0` |
+| Decrees | `decree_id:0` |
+| Events | `namespace.N.t`, `namespace.N.d`, option keys (`.a`, `.b`, `.c`, etc.) |
+
+### Workflow
+1. Run `/unlocalized?type=Modifiers` (or other type) to find missing keys
+2. Add keys to the relevant loc file (or `te_miscellaneous_l_english.yml` as a catch-all)
+3. Run `python organize_loc.py` to sort and categorize all keys
+4. Verify with another `/unlocalized` call
+
+## Top-Level Database Collisions: Use `INJECT:` Instead of Re-Declaring
+
+The Clausewitz database is keyed by the **top-level identifier** of each entry. If a mod file declares the same top-level key vanilla already defines, the engine emits `Duplicated key X will not be created` in `debug.log` and **drops the mod copy entirely**. This applies to anything stored in `gamedatabase` — portrait modifiers, technology entries, buildings, ideologies, modifier type definitions, etc.
+
+**Symptom:** mod file looks correct, individual entries inside it look right, but none of the entries take effect in-game.
+
+**The bug:** the file uses a top-level wrapper key that vanilla also uses (`clothes`, `modifier`, etc.) and the entire wrapper gets dropped.
+
+**Wrong (mod's `te_clothes.txt` was doing this):**
+```
+clothes = {
+    usage = game
+    selection_behavior = weighted_random
+
+    te_european_female_ruler_suit = { ... }
+    te_other_entry = { ... }
+}
+```
+Vanilla `01_clothes.txt` already has `clothes = { ... }`, so the mod's whole block is dropped silently.
+
+**Correct:**
+```
+INJECT:clothes = {
+    te_european_female_ruler_suit = { ... }
+    te_other_entry = { ... }
+}
+```
+
+`INJECT:` (and `REPLACE:` / `REPLACE_OR_CREATE:`) are engine-native directives that merge or replace into the matching vanilla entry. Don't re-declare `usage` or `selection_behavior` inside the inject block — vanilla already supplies those, and overriding them risks resetting unrelated fields.
+
+The same rule applies any time the wrapper key collides with vanilla: e.g. you cannot define a fresh `country_modifiers = { ... }` block in `common/static_modifiers/` if vanilla already owns the same modifier name; use `INJECT:vanilla_modifier_name = { ... }`.
+
+**How to spot it:** grep `debug.log` for `Duplicated key`. Cross-reference against vanilla's `gfx/portraits/portrait_modifiers/`, `common/modifier_type_definitions/`, etc. If the duplicated key matches a vanilla file, switch the mod file to `INJECT:`.
+
+## Global Variable Initialization Timing: Use `on_game_started`
+
+A journal entry's `possible` clause runs on game start (and whenever the engine re-evaluates JE eligibility). If `possible` reads a `global_var:foo` that hasn't been set yet, the engine logs `Value of wrong type in '<file>:<line>'. Got value of type 'none'` and the JE silently fails to appear.
+
+**Pattern that broke `je_global_warming`:**
+```
+# je_global_warming.txt
+possible = {
+    temperature_anomaly_display >= 0.1   # script value reads global_var:greenhouse_gas_emissions
+}
+
+# extra_on_actions.txt — only initializer
+on_yearly_pulse_state = {
+    on_actions = { global_warming_update_on_action }   # initializes the var, but only on the first yearly pulse
+}
+```
+
+At t=0 the global var doesn't exist → `global_var:greenhouse_gas_emissions` evaluates to `none` → the script value chain returns `none` → `none >= 0.1` errors → JE never shows up until the first yearly pulse fires (months in).
+
+**Fix: initialize during `on_game_started` so the var exists before any `possible` clause is evaluated.** Mods may safely add custom on-actions to vanilla's `on_game_started` and `on_game_started_after_lobby` via the `on_actions = { ... }` form (vanilla declares both with placeholder bodies; the engine merges across files):
+
+```
+# extra_on_actions.txt
+on_game_started = {
+    on_actions = {
+        te_init_global_state
+    }
+}
+
+te_init_global_state = {
+    effect = {
+        if = {
+            limit = { NOT = { has_global_variable = greenhouse_gas_emissions } }
+            set_global_variable = { name = greenhouse_gas_emissions value = 0 }
+        }
+    }
+}
+```
+
+**Do NOT redefine `on_game_started_after_lobby = { effect = { ... } }` directly** — vanilla's `00_code_on_actions.txt` body has substantial logic (Ripper, electoral confidence, great-power list, etc.) that gets clobbered. Always use the `on_actions = { custom_action_name }` extension form, never `effect = { ... }`, on top-level vanilla on-action keys.
+
+**General principle:** if a script value, custom localization, or trigger reads a `global_var:` or `global_variable_list:`, ensure the variable is initialized in `on_game_started` (or earlier than any reader). Don't rely on `on_yearly_pulse_*` or `on_monthly_pulse_*` to be the first writer — JE `possible` clauses evaluate before either.
+
+## Event Targets vs Free-Form Names: Validate Before Use
+
+Like modifiers, **event-target names are looked up in a fixed engine vocabulary**. The engine logs `Unknown trigger type: <name>` and silently skips the entire surrounding block.
+
+Common confusion is naming intuitive-but-wrong identifiers:
+
+| Wrong | Correct | Notes |
+|---|---|---|
+| `highest_ranked_commander` | `commander` | From `military_formation` scope, walks to its commander character. There is no separate "highest-ranked" target — `commander` already returns the formation's lead character. |
+| `military_commander` | `commander_military_formation` | From `character` scope back to the formation. |
+| `enemy_commander` | `opposing_commander` | From a character in battle. |
+
+**Validation:** `curl 'http://localhost:8950/engine-docs/event-targets?q=<keyword>'` — returns the vocabulary with input/output scopes for each target. Use this before introducing any new target reference; the engine's silent-failure mode makes typos very expensive to debug.

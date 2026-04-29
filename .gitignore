@@ -4,7 +4,8 @@ path_constants.py
 .github/
 *.exe
 /.vscode
-/docs
+# docs/ is tracked; the only exception is the runtime-derived error log digest
+docs/error_log_digest.md
 *.log
 *.log.*
 *.pid

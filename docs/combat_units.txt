@@ -1,0 +1,93 @@
+Infantry:
+	Irregular Infantry
+	Line Infantry
+		Unlocking Technology: Line Infantry
+	Skirmish Infantry
+		Unlocking Technology: General Staff
+	Trench Infantry
+		Unlocking Technology: Trench Works
+	Squad Infantry
+		Unlocking Technology: NCO Training
+	Mechanized Infantry
+		Unlocking Technology: Mobile Armor
+	Armored Infantry
+		Unlocking Technology: Combined Arms
+	Robotic Soldiers
+		Unlocking Technology: Joint All-Domain Command and Control (JADC2)
+	Swarm Bots
+		Unlocking Technology: Swarm Technology
+	Grey Goo
+		Unlocking Technology: Molecular Assemblers
+Artillery:
+	Cannon Artillery
+		Unlocking Technology: Artillery
+	Mobile Artillery
+		Unlocking Technology: Napoleonic Warfare
+	Shrapnel Artillery
+		Unlocking Technology: Breech-Loading Artillery
+	Siege Artillery
+		Unlocking Technology: Defense in Depth
+	Motorized Artillery
+		Unlocking Technology: Motorized Artillery
+	Guided Artillery Projectiles
+		Unlocking Technology: Guided Missiles
+	Networked Guided Artillery Projectiles
+		Unlocking Technology: Network Centric Warfare
+	Orbital Bombardment
+		Unlocking Technology: Space Militarization
+	Orbital Precision Antimatter Strikes
+		Unlocking Technology: Antimatter Production
+Cavalry:
+	Hussars
+		Unlocking Technology: Standing Army
+	Dragoons
+		Unlocking Technology: Line Infantry
+	Cuirassiers
+		Unlocking Technology: Line Infantry
+	Lancers
+		Unlocking Technology: Napoleonic Warfare
+	Light Tanks
+		Unlocking Technology: Mobile Armor
+	Modern Scout Tank
+		Unlocking Technology: Inertial Navigation Systems
+	Stealth Reconnaissance Drone Carrier
+		Unlocking Technology: Rapid Deployment Forces
+	Holographic Ambush Combat Vehicle
+		Unlocking Technology: Augmented Reality Warfare
+Marines:
+	Shipboard Marines
+		Unlocking Technology: Line Infantry
+	Landing Marines
+		Unlocking Technology: Power of the Purse
+	Assault Marines
+		Unlocking Technology: Landing Craft
+	Combined Arms Marines
+		Unlocking Technology: Combined Arms
+	Stealth Marines
+		Unlocking Technology: Stealth Technology
+	Networked Marines
+		Unlocking Technology: Joint All-Domain Command and Control (JADC2)
+	Bioenhanced Marines
+		Unlocking Technology: Bioenhanced Soldiers
+Heavy Tanks:
+	Heavy Tanks
+		Unlocking Technology: Mobile Armor
+	Main Battle Tanks
+		Unlocking Technology: Guided Missiles
+	Reactive Armor Tank
+		Unlocking Technology: Advanced Materials Armor
+	Railgun Tank
+		Unlocking Technology: Hypersonic Weapons
+	DEW Tank
+		Unlocking Technology: Muon-Catalyzed Fusion Reactors
+Aircraft:
+	Propeller Aircraft
+		Unlocking Technology: Bombing Aircraft
+	Jet-Powered Aircraft
+		Unlocking Technology: Jet Engine Technology
+	Stealth Aircraft
+		Unlocking Technology: Stealth Technology
+	Orbital Tactical Vehicles
+		Unlocking Technology: Space Militarization
+	Orbital Weapons Platforms
+		Unlocking Technology: Orbital Weapon Platforms

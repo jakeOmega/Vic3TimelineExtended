@@ -1,0 +1,65 @@
+Ammunition
+Small Arms
+Artillery
+Tanks
+Aeroplanes
+Man-o-Wars
+Ironclads
+Grain
+Fish
+Fabric
+Wood
+Groceries
+Clothes
+Furniture
+Paper
+Services
+Personal Transportation
+Electricity
+Bulk Transportation
+Clippers
+Steamers
+Silk
+Dye
+Chemical and Industrial Minerals
+Energy and Carbon Minerals
+Structural Metals
+Conductive and Base Metals
+Hardwood
+Rubber
+Oil
+Engines
+Steel
+Glass and Plastics
+Chemicals
+Tools
+Explosives
+Porcelain
+Meat
+Fruit
+Liquor
+Wine
+Tea
+Coffee
+Sugar
+Tobacco
+Drugs
+Automobiles
+Wired Telecommunication Gear
+Wireless Telecommunication Gear
+Luxury Clothes
+Luxury Furniture
+Gold
+Art and Entertainment
+Consumer Appliances
+Electronic Components
+Industrial Robotics
+Software
+Digital Access
+Launch Capacity
+Advanced Materials
+Construction Services
+Tourism
+Tech-Critical Metals
+Motor Ships
+Magnetic Drive Ships

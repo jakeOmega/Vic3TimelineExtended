@@ -1,0 +1,4669 @@
+Food Industries:
+	Unlocking Technology: Manufacturies
+	$pm_base$:
+		Bakeries
+		Sweeteners
+		Baking Powder
+		Food Additives
+			Monthly Pollution: 5
+		Programmable Food Synthesis
+	Canning:
+		Jars
+		Canned Meat
+		Canned Fish
+		Vacuum Packaging
+		Efficient Canning Practices
+		Flexible Packaging
+		Self-Healing Packaging
+	Distilleries:
+		Prioritize Grocery Production
+		Pot Stills
+		Patent Stills
+	Automation:
+		Manual Dough Processing
+		Automated Bakery
+		Mass-Produced Packaged Food
+			Monthly Pollution: 5
+		Robotic Food Processing
+	Maintenance:
+		Maintenance
+
+Textile Mills:
+	Unlocking Technology: Manufacturies
+	$pm_base$:
+		Handsewn Clothes
+		Dye Workshops
+		Sewing Machines
+		Electric Sewing Machines
+		Programmable Matter
+	Luxury Production:
+		Prioritize Non-Luxury Clothing
+		Craftsman Sewing
+		Elastics
+		Customized Clothing
+	Automation:
+		Traditional Looms
+		Mechanized Looms
+		Automatic Power Looms
+		Textile Finishing Machinery
+		AI-Managed Textile Factory
+	Branding:
+		Local Recognition
+		Regional Marketing
+		Mass Marketing
+	Maintenance:
+		Maintenance
+
+Furniture Manufacturies:
+	Unlocking Technology: Manufacturies
+	$pm_base$:
+		Handcrafted Furniture
+		Lathes
+		Mechanized Workshops
+			Monthly Pollution: 5
+		Programmable Matter
+	Luxury Production:
+		Prioritize Non-Luxury Furniture
+		Luxury Furniture Production
+		Precision Tools
+	Automation:
+		Hand Assembly
+		Water-tube Boiler
+			Monthly Pollution: 5
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Assembly Lines
+			Monthly Pollution: 10
+		Advanced Assembly Lines
+			Monthly Pollution: 10
+		Robotic Assembly Lines
+			Monthly Pollution: 10
+		AI-Managed Furniture Manufactories
+	Branding:
+		Local Recognition
+		Regional Marketing
+		Mass Marketing
+	Maintenance:
+		Maintenance
+
+Glassworks:
+	Unlocking Technology: Manufacturies
+	$pm_base$:
+		Forest Glass
+		Leaded Glass
+			Monthly Pollution: 5
+		Crystal Glass
+			Monthly Pollution: 10
+		Houseware Plastics
+			Monthly Pollution: 15
+		Injection Molding
+			Monthly Pollution: 18
+		Blow Molding
+			Monthly Pollution: 20
+		Bioplastics
+	Luxury Production:
+		Prioritize Glass Production
+		Ceramics
+		Bone China
+		Modern Design Porcelain
+		3D Printed Porcelain
+	Glassblowing:
+		Manual Glassblowing
+		Automatic Bottle Blowers
+			Monthly Pollution: 5
+		Mass-Produced Plastics
+			Monthly Pollution: 5
+		Programmable Plastics
+	Fume Ventilation:
+		No Fume Ventilation
+		Fume Extraction
+			Monthly Pollution: -5
+		Closed-Loop Recycling
+			Monthly Pollution: -10
+	Maintenance:
+		Maintenance
+
+Tooling Workshops:
+	Unlocking Technology: Manufacturies
+	$pm_base$:
+		Crude Tools
+		Wrought Iron Tools
+		Steel Tools
+		Machined Steel Tools
+		Material Handling Equipment
+			Monthly Pollution: 5
+		Electrochemical Machining
+		Industrial Robotics
+		Nanobot Assemblers
+	Automation:
+		Hand Assembly
+		Water-tube Boiler
+			Monthly Pollution: 5
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Assembly Lines
+			Monthly Pollution: 5
+		Advanced Assembly Lines
+			Monthly Pollution: 10
+		Robotic Assembly Lines
+			Monthly Pollution: 10
+		AI-Managed Tooling Workshops
+	Facility Emission Standards:
+		No Facility Emission Standards
+		Ventilation Systems
+			Monthly Pollution: -5
+		Green Assembly
+			Monthly Pollution: -10
+	Maintenance:
+		Maintenance
+
+Paper Mills:
+	Unlocking Technology: Manufacturies
+	$pm_base$:
+		Pulp Pressing
+		Sulfite Pulping
+			Monthly Pollution: 3
+		Paper Bleaching
+			Monthly Pollution: 5
+		Kraft Pulping
+			Monthly Pollution: 8
+		Calendered & Coated Paper
+			Monthly Pollution: 8
+		Self-Growing Paper
+	Automation:
+		Hand Assembly
+		Water-tube Boiler
+			Monthly Pollution: 5
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Continuous Bleaching
+			Monthly Pollution: 5
+		Programmable Paper
+	Effluent Filtration:
+		No Effluent Filtration
+		Waste Fiber Recovery
+			Monthly Pollution: -3
+		Effluent Filtration
+			Monthly Pollution: -5
+	Maintenance:
+		Maintenance
+
+Chemical Plants:
+	Unlocking Technology: Intensive Agriculture
+	Chemicals Production:
+		Basic Chemical Production
+			Monthly Pollution: 5
+		Refined Chemical Processes
+			Monthly Pollution: 10
+		Synthetic Nitrogen Production
+			Monthly Pollution: 15
+		Catalytic Cracking
+			Monthly Pollution: 20
+		Polymerization Processes
+			Monthly Pollution: 25
+		Automated Chemical Reactors
+			Monthly Pollution: 15
+		Flow Chemistry Production
+			Monthly Pollution: 5
+		Molecular Foundry
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Industrial Synthesis Scrubbing:
+		No Synthesis Scrubbing
+		Basic Fume Scrubbers
+			Monthly Pollution: -10
+		Closed-Loop Synthesis
+			Monthly Pollution: -15
+	Maintenance:
+		Maintenance
+
+Explosives Factory:
+	Unlocking Technology: Intensive Agriculture
+	$pm_base$:
+		Leblanc Process
+			Monthly Pollution: 10
+		Ammonia-soda Process
+			Monthly Pollution: 15
+		Vacuum Evaporation
+			Monthly Pollution: 20
+		Brine Electrolysis
+			Monthly Pollution: 25
+		Ammonium Nitrate Explosives
+		Metamaterial Explosives
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Synthetic Dyes Industries:
+	Unlocking Technology: Aniline
+	Synthetic Dyes:
+		Synthetic Dye
+			Monthly Pollution: 5
+		Petroleum Dyes
+			Monthly Pollution: 10
+		Biotech Dyes
+		Quantum Dot Pigments
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Steel Mills:
+	Unlocking Technology: Steelworking
+	Steelmaking Process:
+		Blister Steel Process
+			Monthly Pollution: 10
+		Bessemer Process
+			Monthly Pollution: 15
+		Open Hearth Process
+			Monthly Pollution: 20
+		Electric Arc Process
+			Monthly Pollution: 25
+		Aluminum Substitution
+			Monthly Pollution: 20
+		Chromium Substitution
+			Monthly Pollution: 20
+		Microgravity Alloying
+			Monthly Pollution: 20
+	Automation:
+		Hand Assembly
+		Water-tube Boiler
+			Monthly Pollution: 5
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Bespoke Alloys
+	Emissions Control:
+		No Emissions Control
+		Basic Emissions Control
+			Monthly Pollution: -10
+		Advanced Emissions Control
+			Monthly Pollution: -20
+	Maintenance:
+		Maintenance
+
+Motor Industries:
+	Unlocking Technology: Atmospheric Engine
+	$pm_base$:
+		Steam Engines
+			Monthly Pollution: 10
+		Electric Engines
+			Monthly Pollution: 5
+		Diesel Engines
+			Monthly Pollution: 10
+		Gas Turbine Engines
+			Monthly Pollution: 10
+		Hydrogen Fuel Cell Engines
+		Graphene Electric Motors
+		Fusion Battery Motors
+	Automation:
+		Hand Assembly
+		Water-tube Boiler
+			Monthly Pollution: 5
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Assembly Lines
+			Monthly Pollution: 15
+		Advanced Assembly Lines
+			Monthly Pollution: 10
+		Robotic Assembly Lines
+			Monthly Pollution: 10
+		AI Managed Factory
+	Maintenance:
+		Maintenance
+
+Shipyards:
+	Unlocking Technology: Navigation
+	$pm_base$:
+		Wooden Ships
+		Reinforced Wooden Ships
+		Steamships
+			Monthly Pollution: 10
+		Arc-Welded Steamships
+			Monthly Pollution: 20
+		Modular Shipbuilding
+		Diesel-Powered Shipbuilding
+		Robotic Ship Assembly
+		Advanced Metamaterials Shipbuilding
+	Maintenance:
+		Maintenance
+
+Automotive Industries:
+	Unlocking Technology: Combustion Engine
+	Automobile Production:
+		Automobile Production
+			Monthly Pollution: 10
+		Mass Production
+			Monthly Pollution: 10
+		Modern Automobiles
+			Monthly Pollution: 15
+		Electric Car Production
+			Monthly Pollution: 10
+		Fusion Battery Vehicles
+	Tanks:
+		No Tank Production
+		Tank Production
+		Advanced Composite Armor
+		Active Protection Systems
+		Swarm-Coordinated Tanks
+	$pmg_automation$:
+		Hand Assembly
+		Assembly Lines
+			Monthly Pollution: 15
+		Robotic Assembly Lines
+			Monthly Pollution: 10
+		Intelligent Manufacturing Systems
+			Monthly Pollution: 5
+		Self-Optimizing Production
+	Emissions Control:
+		No Emissions Control
+		Basic Emissions Control
+			Monthly Pollution: -10
+		Advanced Emissions Control
+			Monthly Pollution: -20
+	Maintenance:
+		Maintenance
+
+Wired Telecommunications Industries:
+	Unlocking Technology: Telephone
+	Telephones:
+		Telephone Production
+		Twisted Pair Copper Cables
+		Fiber Optics
+		Integrated Optical Chip Networks
+		Superconducting Networks
+		Neural Lace Communications
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Arms Industries:
+	Unlocking Technology: Gunsmithing
+	Firearms Manufacturing:
+		Muskets
+		Rifles
+		Repeating Rifles
+		Bolt Action Rifles
+		Semi-automatic Rifles
+		Networked Small Arms
+		Programmable Matter Small Arms
+	Automation:
+		Hand Assembly
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Assembly Lines
+			Monthly Pollution: 10
+		Advanced Assembly
+			Monthly Pollution: 10
+		AI-Managed Arms Industry
+	Facility Emission Standards:
+		No Facility Emission Standards
+		Ventilation Systems
+			Monthly Pollution: -5
+		Green Assembly
+			Monthly Pollution: -10
+	Maintenance:
+		Maintenance
+
+Artillery Foundry:
+	Unlocking Technology: Gunsmithing
+	Foundries:
+		Cannons
+		Smoothbores
+		Breech Loaders
+		Recoil Mechanisms
+		Rocket Artillery
+		Precision-Guided Shells
+			Monthly Pollution: 10
+		Electromagnetic Projectors
+		Programmable-Matter Artillery
+	Automation:
+		Hand Assembly
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Assembly Lines
+			Monthly Pollution: 10
+		Advanced Assembly
+			Monthly Pollution: 10
+		AI-Managed Arms Industry
+	Maintenance:
+		Maintenance
+
+Munition Plants:
+	Unlocking Technology: Percussion Cap
+	$pm_base$:
+		Percussion Caps
+			Monthly Pollution: 10
+		Explosive Shells
+			Monthly Pollution: 15
+		Modern Cartridges
+		Smart Fuzes
+			Monthly Pollution: 10
+		Networked Munitions
+			Monthly Pollution: 10
+		Swarm-Release Munitions
+		Programmable Munitions
+	Automation:
+		Hand Assembly
+		Rotary Valve Engine
+			Monthly Pollution: 10
+		Assembly Lines
+			Monthly Pollution: 10
+		Advanced Assembly Lines
+			Monthly Pollution: 10
+		AI-Managed Munition Plants
+	Facility Emission Standards:
+		No Facility Emission Standards
+		Ventilation Systems
+			Monthly Pollution: -5
+		Green Assembly
+			Monthly Pollution: -10
+	Maintenance:
+		Maintenance
+
+Rye Farms:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Simple Farming
+		Soil-Enriching Farming
+		Fertilizers
+		Chemical Fertilizers
+		Modern Farming
+		Designed Crops
+	Secondary:
+		Maintain Single Crop
+		Potatoes
+		Apple Orchards
+		Sugar Beets
+		Modern Potatoes
+		Modern Apple Orchards
+		Designed Potatoes
+		Designed Apple Orchards
+	$pmg_harvesting_process$:
+		Ox-Powered Plows
+		Harvesting Tools
+		Steam-Powered Thresher Machines
+			Monthly Pollution: 10
+		Tractors
+			Monthly Pollution: 15
+		Compression Ignition Tractors
+			Monthly Pollution: 20
+		Hydraulic Equipment
+			Monthly Pollution: 20
+		Automated Mechanical Harvesters
+			Monthly Pollution: 20
+		Automated Harvesters and Planters
+			Monthly Pollution: 20
+	Precision Environmental Management:
+		No Environmental Management
+		Improved Crop Rotation
+			Monthly Pollution: -5
+		Precision Agriculture
+			Monthly Pollution: -10
+
+Wheat Farms:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Simple Farming
+		Fish Fertilizers
+		Soil-Enriching Farming
+		Fertilizers
+		Chemical Fertilizers
+		Modern Farming
+		Designed Crops
+	Secondary:
+		Maintain Single Crop
+		Citrus Orchards
+		Sugar Beets
+		Modern Citrus Orchards
+		Designed Citrus Orchards
+	$pmg_harvesting_process$:
+		Ox-Powered Plows
+		Harvesting Tools
+		Steam-Powered Thresher Machines
+			Monthly Pollution: 10
+		Tractors
+			Monthly Pollution: 15
+		Compression Ignition Tractors
+			Monthly Pollution: 20
+		Hydraulic Equipment
+			Monthly Pollution: 20
+		Automated Mechanical Harvesters
+			Monthly Pollution: 20
+		Automated Harvesters and Planters
+			Monthly Pollution: 20
+	Precision Environmental Management:
+		No Environmental Management
+		Improved Crop Rotation
+			Monthly Pollution: -5
+		Precision Agriculture
+			Monthly Pollution: -10
+
+Rice Farms:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Simple Farming
+		$pm_herring_meal_farming$
+		Soil-Enriching Farming
+		Fertilizers
+		Chemical Fertilizers
+		Modern Farming
+		Designed Crops Rice Farm
+	Secondary:
+		Maintain Single Crop
+		Fig Orchards
+		Modern Fig Orchards
+		Designed Fig Orchards
+	$pmg_harvesting_process$:
+		Ox-Powered Plows
+		Harvesting Tools
+		Steam-Powered Thresher Machines
+			Monthly Pollution: 10
+	Precision Environmental Management:
+		No Environmental Management
+		Improved Crop Rotation
+			Monthly Pollution: -5
+		Precision Agriculture
+			Monthly Pollution: -10
+
+Maize Farms:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Simple Farming
+		Soil-Enriching Farming
+		Fertilizers
+		Chemical Fertilizers
+		Modern Farming
+		Designed Crops
+	Secondary:
+		Maintain Single Crop
+		Citrus Orchards
+		Modern Citrus Orchards
+		Designed Citrus Orchards
+	$pmg_harvesting_process$:
+		Ox-Powered Plows
+		Harvesting Tools
+		Steam-Powered Thresher Machines
+			Monthly Pollution: 10
+		Tractors
+			Monthly Pollution: 15
+		Compression Ignition Tractors
+			Monthly Pollution: 20
+		Hydraulic Equipment
+			Monthly Pollution: 20
+		Automated Mechanical Harvesters
+			Monthly Pollution: 20
+		Automated Harvesters and Planters
+			Monthly Pollution: 20
+	Precision Environmental Management:
+		No Environmental Management
+		Improved Crop Rotation
+			Monthly Pollution: -5
+		Precision Agriculture
+			Monthly Pollution: -10
+
+Millet Farms:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Simple Farming
+		Soil-Enriching Farming
+		Fertilizers
+		Chemical Fertilizers
+		Modern Farming
+		Designed Crops
+	Secondary:
+		Maintain Single Crop
+		Fig Orchards
+		Modern Fig Orchards
+		Designed Fig Orchards
+	$pmg_harvesting_process$:
+		Ox-Powered Plows
+		Harvesting Tools
+		Steam-Powered Thresher Machines
+			Monthly Pollution: 10
+		Tractors
+			Monthly Pollution: 15
+		Compression Ignition Tractors
+			Monthly Pollution: 20
+		Hydraulic Equipment
+			Monthly Pollution: 20
+		Automated Mechanical Harvesters
+			Monthly Pollution: 20
+		Automated Harvesters and Planters
+			Monthly Pollution: 20
+	Precision Environmental Management:
+		No Environmental Management
+		Improved Crop Rotation
+			Monthly Pollution: -5
+		Precision Agriculture
+			Monthly Pollution: -10
+
+Livestock Ranches:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Open Air Stockyards
+		Butchering Tools
+		Slaughterhouses
+			Monthly Pollution: 10
+		Mechanized Slaughterhouses
+			Monthly Pollution: 15
+	Wool Production:
+		Sheep Ranch
+		Increased Wool Gathering
+		Intensive Wool Gathering
+		Antibiotic Growth Promoters
+	Fencing:
+		Standard Fences
+		Barbed Wire Fences
+		Electric Fences
+	Refrigeration:
+		Unrefrigerated
+		Refrigerated Storage
+		Refrigerated Rail Cars
+
+Vineyards:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+		GMO Plantation
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Coal Mines:
+	Unlocking Technology: Shaft Mining
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Iron Mines:
+	Unlocking Technology: Shaft Mining
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Lead Mines:
+	Unlocking Technology: Shaft Mining
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Sulfur Mines:
+	Unlocking Technology: Shaft Mining
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Gold Mines:
+	Unlocking Technology: Prospecting
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Gold Fields:
+	Unlocking Technology: Prospecting
+	$pm_base$:
+		$pm_default$
+
+Coffee Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		Dry Process
+		Wet Process - Manual Pulping
+			Monthly Pollution: 5
+		Wet Process - Mechanical Pulping
+			Monthly Pollution: 10
+		Mechanized Farm
+			Monthly Pollution: 10
+		GMO Plantation
+	Drying Method:
+		Patio Drying
+		Mechanical Dryers
+			Monthly Pollution: 5
+	$pmg_exploitation_sugar$:
+		Standard Labor
+		$slave_exploitation_sugar$
+		$worker_exploitation_sugar$
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Cotton Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+	$pmg_exploitation_sugar$:
+		Standard Labor
+		$slave_exploitation_sugar$
+		$worker_exploitation_sugar$
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Dye Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+	$pmg_exploitation_sugar$:
+		Standard Labor
+		$slave_exploitation_sugar$
+		$worker_exploitation_sugar$
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Opium Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Tea Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+		GMO Plantation
+	$pmg_exploitation_sugar$:
+		Standard Labor
+		$slave_exploitation_sugar$
+		$worker_exploitation_sugar$
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Tobacco Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+		GMO Plantation
+	Manufacturing:
+		Hand-Rolled
+		Molds
+		Electric Rollers
+	$pmg_exploitation_sugar$:
+		Exploited Rollers
+		Standard Labor
+		Lectors
+		Factory Radios
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Sugar Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+		GMO Plantation
+	Refinement:
+		Ox-Driven Rollers
+		Vacuum Pans
+		Steam-Powered Mills
+		Centrifugal Machines
+	Working Conditions:
+		Violent Treatment
+		Exploitative Practices
+		Standard Labor
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Banana Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+		GMO Plantation
+	$pmg_exploitation_sugar$:
+		Standard Labor
+		$slave_exploitation_sugar$
+		$worker_exploitation_sugar$
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Silk Plantations:
+	Unlocking Technology: Enclosure
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		Rail Transportation
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+
+Barracks:
+	Unlocking Technology: Standing Army
+	Training:
+		No Organized Training
+		Samurai Training
+		General Training
+		Advanced Tactics Training
+		Training Method Streamlining
+		NCO Incorporation
+		Mobile Warfare Tactics
+	Engineering and Logisitics Principle Group:
+		Engineering and Logisitics Principle 1
+		No Effect
+
+Conscription Center:
+	$pmg_training$:
+		$pm_no_organization$
+		$pm_general_training$
+		$pm_advanced_tactics_training$
+		$pm_training_streamlining$
+		$pm_nco_incorporation$
+		$pm_mobile_warfare_tactics$
+
+Naval Fortification:
+	Fortification:
+		Basic Fortification
+		Reinforced Fortification
+		Advanced Fortification
+
+Naval Administration:
+	Unlocking Technology: Admiralty
+	Recruitment:
+		Simple Recruitment
+
+Naval Logistics Center:
+	$building_naval_logistics_center$:
+		$pm_base$
+
+Land Logistics Center:
+	$building_land_logistics_center$:
+		$pm_base$
+
+Urban Center:
+	Unlocking Technology: Urbanization
+	Amenities:
+		Market Stalls
+		Market Squares
+		Covered Markets
+		Arcades
+		Department Stores
+			Monthly Pollution: 1
+		Shopping Malls
+			Monthly Pollution: 2
+		E-Commerce
+			Monthly Pollution: 3
+		Drone Delivery Systems
+			Monthly Pollution: 2
+		Robotic Service Providers
+			Monthly Pollution: 1
+	Street Lighting:
+		Unlit Streets
+		Gas Streetlights
+		Electric Streetlights
+		High Pressure Sodium Streetlights
+		LED Streetlights
+		Smart LED Streetlights
+	Public Transport:
+		Personal Transportation Only
+		Public Trams
+			Monthly Pollution: 10
+		Public Motor Carriages
+			Monthly Pollution: 10
+		Multimodal Transit
+			Monthly Pollution: 1
+		Remote Work
+	Urban Churches:
+		State-Run Churches
+		Free Churches
+		State Atheism
+		Decentralized Religious Structures
+		Secular Society
+
+Creative Industries:
+	Unlocking Technology: Romanticism
+	$pm_base$:
+		Traditional Art
+		Realist Art
+		Photography
+		Moving Pictures
+		Sound Film
+		Broadcast Television
+		Video Games
+		Digital Streaming
+		Neurostimulation
+	Patronage:
+		Traditional Patronage
+		Bourgeoisie Patronage
+		Independent Artists
+		State-Directed Media
+		Media Corporations
+		Decentralized Digital Media
+		Artificial Personalities
+	Freedom of Movement:
+		Increased Exchange
+		No effect
+	Artistic Expression Principle Group:
+		Artistic Expression Principle 2
+		No Effect
+	Maintenance:
+		Maintenance
+
+Power Plants:
+	Unlocking Technology: Electrical Generation
+	$pm_base$:
+		Early Power Plant
+			Monthly Pollution: 25
+		Coal-Fired Plant
+			Monthly Pollution: 50
+		Oil-Fired Plant
+			Monthly Pollution: 40
+		Modern Coal-Fired Plant
+			Monthly Pollution: 30
+		Modern Oil-Fired Plant
+			Monthly Pollution: 25
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+	Emissions Control:
+		No Emissions Control
+		Basic Emissions Control
+			Monthly Pollution: -10
+		Advanced Emissions Control
+			Monthly Pollution: -20
+	Maintenance:
+		Maintenance
+
+Government Administration:
+	Unlocking Technology: Bureaucracy
+	$pm_base$:
+		Simple Organization
+		Filing Cabinets
+		Standardized Filing System
+		Telephone Switchboards
+		Teletype Communications
+		Internet Communications
+		AI Governance
+	Professionalism:
+		Hereditary Bureaucrats
+		Professional Bureaucrats
+	Secularism:
+		Administrative Clergy
+		Secular Administration
+
+University:
+	Unlocking Technology: Academia
+	$pm_base$:
+		Scholastic Education
+		Philosophy Department
+		Analytical Philosophy Department
+		National Labs
+		Academic Computing
+		AI Assisted Research
+	Secularism:
+		Clerical Educators
+		Secular Academia
+		Military Research
+		Automated Labs
+	Freedom of Movement:
+		Increased Exchange
+		No effect
+	Education:
+		Education Principle 4
+		No Effect
+
+Skyscraper:
+	Skyscraper:
+		Bureaucratic Nexus
+		Trade Nexus
+	Airships:
+		No Airships
+		Airship Mooring Post
+	Maintenance:
+		Maintenance
+
+The Eiffel Tower:
+	Unlocking Technology: Steel-Frame Buildings
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Angkor Wat:
+	Base:
+		Angkor Wat
+		Prestige
+		No Effect
+
+Big Ben:
+	Base:
+		Big Ben
+		Prestige
+		No Effect
+
+Forbidden City:
+	Base:
+		Forbidden City
+		Prestige
+		No Effect
+
+Hagia Sophia:
+	Base:
+		Hagia Sophia
+		Prestige
+		No Effect
+
+Mosque of Djenne:
+	Base:
+		Mosque of Djenne
+		Prestige
+		No Effect
+
+Saint Basil’s Cathedral:
+	Base:
+		Saint Basil’s Cathedral
+		Prestige
+		No Effect
+
+Statue of Liberty:
+	Unlocking Technology: Steel-Frame Buildings
+	Base:
+		Statue of Liberty
+		Prestige
+		No Effect
+
+Taj Mahal:
+	Base:
+		Taj Mahal
+		Prestige
+		No Effect
+
+Vatican City:
+	Base:
+		Vatican City
+		$pm_monument_prestige_only$
+		Prestige
+		No Effect
+
+White House:
+	Base:
+		White House
+		Prestige
+		No Effect
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+Cristo Redentor:
+	Unlocking Technology: Pneumatic Tools
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Power Bloc Statue:
+	Power Bloc Statue:
+		$identity_sovereign_empire$
+		$identity_military_treaty_organization$
+		$identity_ideological_union$
+		$identity_trade_league$
+		$identity_religious$
+		Prestige Only
+		No Effect
+		Cultural Coalition
+		Diplomatic Framework
+
+Castle Dracula:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+Victoria Terminus:
+	Unlocking Technology: Steel-Frame Buildings
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Kaiserforum:
+	Unlocking Technology: Reinforced Concrete
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Kaiserforum:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Kaiserforum:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Kaiserforum:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Sagrada Família Cathedral:
+	Unlocking Technology: Reinforced Concrete
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Sagrada Família Cathedral:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Sagrada Família Cathedral:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Pena Convent:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Pena Palace:
+	Unlocking Technology: Mechanical Tools
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Grand Theater of Havana:
+	Unlocking Technology: Pneumatic Tools
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Atocha Railway Station:
+	Unlocking Technology: Steel-Frame Buildings
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Manila Cathedral:
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+Manila Cathedral:
+	Unlocking Technology: Reinforced Concrete
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Manila Cathedral Ruins:
+	$pm_base$:
+		Default Production
+		Prestige
+		No Effect
+
+Logging Camps:
+	$pm_base$:
+		Simple Forestry
+		Saw Mills
+		Electric Saw Mills
+		Debarkers and Chippers
+			Monthly Pollution: 5
+	Hardwood Production:
+		Prioritize Softwood Production
+		Hardwood Production
+		Focused Hardwood Production
+	Special Equipment:
+		Horse Drawn
+		Steam Donkey
+		Chainsaws
+		Skidders and Forwarders
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		$pm_rail_transport$
+			Monthly Pollution: 15
+		Rail Log Carts
+			Monthly Pollution: 15
+
+Rubber Plantations:
+	Unlocking Technology: Rubber Mastication
+	$pm_base$:
+		$pm_default$
+		$automatic_irrigation$
+			Monthly Pollution: 5
+		Mechanized Farm
+			Monthly Pollution: 10
+	$pmg_exploitation_sugar$:
+		Standard Labor
+		$slave_exploitation_sugar$
+		$worker_exploitation_sugar$
+	$pmg_train_automation$:
+		Road Carts
+		Rail Transportation
+			Monthly Pollution: 10
+
+Fishing Wharves:
+	$pm_base$:
+		Simple Fishing
+		Fishing Trawlers
+		Steam Trawlers
+			Monthly Pollution: 10
+		Purse Seine Nets
+	Refrigeration:
+		Unrefrigerated
+		Refrigerated Storage
+		Refrigerated Rail Cars
+			Monthly Pollution: 15
+		Flash Freezing
+
+Whaling Stations:
+	Unlocking Technology: Navigation
+	$pm_base$:
+		Simple Whaling
+		Whaling Fleet
+		Steam-Powered Whalers
+			Monthly Pollution: 10
+	Refrigeration:
+		Unrefrigerated
+		Refrigerated Storage
+		Refrigerated Rail Cars
+			Monthly Pollution: 15
+		Flash Freezing
+
+Oil Rigs:
+	Unlocking Technology: Pumpjacks
+	$pm_base$:
+		Steam-Powered Derricks
+			Monthly Pollution: 10
+		Combustion Engine Derricks
+			Monthly Pollution: 15
+		Electrified Rotary Drilling Rigs
+			Monthly Pollution: 15
+		Offshore Rigs
+			Monthly Pollution: 15
+		Directional Drilling Rigs
+			Monthly Pollution: 10
+		Fracking
+			Monthly Pollution: 15
+		Intelligent Drilling Rigs
+			Monthly Pollution: 10
+	Transportation:
+		Road Carts
+		$pm_rail_transport$
+			Monthly Pollution: 5
+		Tanker Cars
+			Monthly Pollution: 10
+	Well Depth:
+		Shallow Well
+		Medium Well
+			Monthly Pollution: 5
+		Deep Well
+			Monthly Pollution: 10
+		Ultradeep Well
+			Monthly Pollution: 15
+
+Suez Canal:
+	Unlocking Technology: Colonization
+	Canal:
+		Canal
+
+Panama Canal:
+	Unlocking Technology: Civilizing Mission
+	Canal:
+		Canal
+
+Port:
+	Unlocking Technology: Navigation
+	$pm_base$:
+		Anchorage
+		Cargo Port
+		Industrial Port
+		Modern Port
+		Container Ports
+			Monthly Pollution: 20
+		Global Ports
+			Monthly Pollution: 20
+	Water Personal Transport:
+		No Water Personal Transport
+		Sailing Ships
+		Steam Paddleboats
+		Diesel-Electric Ferries
+		Modern Cruise Ships
+	Emissions Control:
+		No Emissions Control
+		Basic Emissions Control
+			Monthly Pollution: -10
+		Advanced Emissions Control
+			Monthly Pollution: -20
+	Maintenance:
+		Maintenance
+
+Railway:
+	Unlocking Technology: Railways
+	$pm_base$:
+		Experimental Trains
+			Monthly Pollution: 25
+		Steam Trains
+			Monthly Pollution: 20
+		Joint Steam Trains
+			Monthly Pollution: 25
+		Electric Trains
+		Joint Electric Trains
+		Diesel Trains
+			Monthly Pollution: 15
+		Joint Diesel Trains
+			Monthly Pollution: 20
+		Centralized Traffic Control
+			Monthly Pollution: 15
+		Containerized Cargo
+			Monthly Pollution: 15
+		Automated Loading and Unloading
+			Monthly Pollution: 15
+		Autonomous Trains
+	Passenger Trains:
+		Cargo Prioritization
+		Wooden Passenger Carriages
+		Steel Passenger Carriages
+		Double-Decker Passenger Carriages
+		Bullet Trains
+		Maglev Trains
+	Maintenance:
+		Maintenance
+
+Trade Center:
+	$pm_base$:
+		International Trading
+		Influential Trade Center
+	Trade Quantity:
+		Small-Scale Trading
+		Regular Trading
+		Bulk Trading
+		Mass-Scale Trading
+		Managed Global Trade
+		High-Volume Logistics
+		Just-in-Time Logistics
+		Autonomous Logistics
+	Maintenance:
+		Maintenance
+
+Manor Houses:
+	$pmg_ownership$:
+		$pm_privately_owned$
+		Increased Clergy Oversight
+		Rural Principle Manor House
+		Hobbyist Management
+	Additional $pmg_ownership$:
+		Clergy Oversight
+		Bureaucrat Oversight
+		AI Management
+
+Financial Districts:
+	$pmg_ownership$:
+		$pm_privately_owned$
+		$pm_publicly_traded$
+		Increased Clergy Oversight
+		Electronic Brokarage
+		Digital Trading
+		Automated Trading
+		Hobbyist Management
+
+Subsistence Farms:
+	$pm_base$:
+		$pm_default$
+	$pmg_home_workshops$:
+		$pm_home_workshops_no$
+		$pm_home_workshops$
+	$pm_serfdom$:
+		Free Peasants
+		Serfdom
+		Corvée Labor
+		Homesteading
+		$law_peasant_proprietorship$
+
+Subsistence Orchards:
+	$pm_base$:
+		$pm_default$
+	$pmg_home_workshops$:
+		$pm_home_workshops_no$
+		$pm_home_workshops$
+	$pm_serfdom$:
+		Free Peasants
+		Corvée Labor
+		$pm_serfdom$
+		Homesteading
+		$law_peasant_proprietorship$
+
+Subsistence Pastures:
+	$pm_base$:
+		$pm_default$
+	$pmg_home_workshops$:
+		$pm_home_workshops_no$
+		$pm_home_workshops$
+	$pm_serfdom$:
+		Free Peasants
+		Corvée Labor
+		$pm_serfdom$
+		Homesteading
+		$law_peasant_proprietorship$
+
+Subsistence Fishing Villages:
+	$pm_base$:
+		$pm_default$
+	$pmg_home_workshops$:
+		$pm_home_workshops_no$
+		$pm_home_workshops$
+	$pm_serfdom$:
+		Free Peasants
+		Corvée Labor
+		$pm_serfdom$
+		Homesteading
+		$law_peasant_proprietorship$
+
+Subsistence Rice Paddies:
+	$pm_base$:
+		$pm_default$
+	$pmg_home_workshops$:
+		$pm_home_workshops_no$
+		$pm_home_workshops$
+	$pm_serfdom$:
+		Free Peasants
+		Corvée Labor
+		$pm_serfdom$
+		Homesteading
+		$law_peasant_proprietorship$
+
+Construction Sector:
+	Unlocking Technology: Urbanization
+	$pm_base$:
+		Wooden Buildings
+		Iron-Frame Buildings
+		Steel-Frame Buildings
+		Arc-Welded Buildings
+		Reinforced Concrete Buildings
+		Advanced Construction
+		Nanomaterial Buildings
+	Construction Automation:
+		No Construction Automation
+		Prefabricated Building Components
+		Tower Cranes
+		Computer-Aided Design
+		3D Printed Buildings
+	Construction Principle Group:
+		Construction Principle 2
+		No Effect
+	Maintenance:
+		Maintenance
+
+Company Headquarter:
+	$pmg_ownership$:
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_government_run$
+		$pm_worker_cooperative$
+		Electronic Brokarage
+		Digital Trading
+		Automated Trading
+		Hobbyist Management
+
+Regional Company Headquarter:
+	$pmg_ownership$:
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_privately_owned$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_manor_house_principle_divine_economics_2$
+		$pm_government_run$
+		$pm_worker_cooperative$
+		Electronic Brokarage
+		Digital Trading
+		Automated Trading
+		Hobbyist Management
+
+Construction Site:
+	Construction Site:
+		Base
+
+Strategic Reserve Hub:
+	Unlocking Technology: Logistics
+	Hub Reserve:
+		Grain Reserve Control
+
+Strategic Reserve Silo:
+	Unlocking Technology: Logistics
+	Silo Storage:
+		Silo Storage
+
+Volkswagen Autostadt:
+	Volkswagen Autostadt:
+		Volkswagen Autostadt
+
+Toyota Kaikan Museum & Plant:
+	Toyota Kaikan Museum & Plant:
+		Toyota Kaikan Museum & Plant
+
+Samsung Digital City:
+	Samsung Digital City:
+		Samsung Digital City
+
+HP Labs:
+	HP Labs:
+		HP Labs
+
+Sony Pictures Studios:
+	Sony Pictures Studios:
+		Sony Pictures Studios
+
+IKEA Älmhult Campus:
+	IKEA Älmhult Campus:
+		IKEA Älmhult Campus
+
+Intel Ronler Acres Campus:
+	Intel Ronler Acres Campus:
+		Intel Ronler Acres Campus
+
+Microsoft Redmond Campus:
+	Microsoft Redmond Campus:
+		Microsoft Redmond Campus
+
+Apple Park:
+	Apple Park:
+		Apple Park
+
+TSMC Fab 18:
+	TSMC Fab 18:
+		TSMC Fab 18
+
+Huawei Ox Horn Campus:
+	Huawei Ox Horn Campus:
+		Huawei Ox Horn Campus
+
+Automated Fulfillment Center:
+	Automated Fulfillment Center:
+		Automated Fulfillment Center
+
+Nvidia Endeavor Campus:
+	Nvidia Endeavor Campus:
+		Nvidia Endeavor Campus
+
+The Googleplex:
+	The Googleplex:
+		The Googleplex
+
+Netflix Animation Studios:
+	Netflix Animation Studios:
+		Netflix Animation Studios
+
+Starbase:
+	Starbase:
+		Starbase
+
+TikTok Data Fortress:
+	TikTok Data Fortress:
+		TikTok Data Fortress
+
+OpenAI Research Laboratory:
+	OpenAI Research Laboratory:
+		OpenAI Research Laboratory
+
+CATL Gigafactory:
+	CATL Gigafactory:
+		CATL Gigafactory
+
+Boston Dynamics AI Institute:
+	Boston Dynamics AI Institute:
+		Boston Dynamics AI Institute
+
+ASML Veldhoven Campus:
+	ASML Veldhoven Campus:
+		ASML Veldhoven Campus
+
+Skunk Works:
+	Skunk Works:
+		Skunk Works
+
+BAE Systems Samlesbury Aerodrome:
+	BAE Systems Samlesbury Aerodrome:
+		BAE Systems Samlesbury Aerodrome
+
+Vostochny Cosmodrome:
+	Vostochny Cosmodrome:
+		Vostochny Cosmodrome
+
+Jean-Luc Lagardère Plant:
+	Jean-Luc Lagardère Plant:
+		Jean-Luc Lagardère Plant
+
+Dassault Merignac Plant:
+	Dassault Merignac Plant:
+		Dassault Merignac Plant
+
+Hyundai Ulsan Factory:
+	Hyundai Ulsan Factory:
+		Hyundai Ulsan Factory
+
+SAP SE Headquarters:
+	SAP SE Headquarters:
+		SAP SE Headquarters
+
+Tencent Seafront Towers:
+	Tencent Seafront Towers:
+		Tencent Seafront Towers
+
+Cainiao Logistics Park:
+	Cainiao Logistics Park:
+		Cainiao Logistics Park
+
+Nintendo Development Center:
+	Nintendo Development Center:
+		Nintendo Development Center
+
+The Lakhta Center:
+	The Lakhta Center:
+		The Lakhta Center
+
+Abqaiq Plant:
+	Abqaiq Plant:
+		Abqaiq Plant
+
+Cenpes Research Center:
+	Cenpes Research Center:
+		Cenpes Research Center
+
+Mayak Production Association:
+	Mayak Production Association:
+		Mayak Production Association
+
+Oracle Cloud Data Center:
+	Oracle Cloud Data Center:
+		Oracle Cloud Data Center
+
+The Vision Fund Headquarters:
+	The Vision Fund Headquarters:
+		The Vision Fund Headquarters
+
+The Roche Tower:
+	The Roche Tower:
+		The Roche Tower
+
+Pfizer Global R&D Campus:
+	Pfizer Global R&D Campus:
+		Pfizer Global R&D Campus
+
+Carajás Mine:
+	Carajás Mine:
+		Carajás Mine
+
+Disney World:
+	Disney World:
+		Disney World
+
+Universal Studios Hollywood:
+	Universal Studios Hollywood:
+		Universal Studios Hollywood
+
+The Verizon Building:
+	The Verizon Building:
+		The Verizon Building
+
+Jamnagar Refinery:
+	Jamnagar Refinery:
+		Jamnagar Refinery
+
+The FANUC Forest:
+	The FANUC Forest:
+		The FANUC Forest
+
+Palazzo ENI:
+	Palazzo ENI:
+		Palazzo ENI
+
+Ferrari Maranello Factory:
+	Ferrari Maranello Factory:
+		Ferrari Maranello Factory
+
+RIM Campus:
+	RIM Campus:
+		RIM Campus
+
+Shopify Fulfillment Network Hub:
+	Shopify Fulfillment Network Hub:
+		Shopify Fulfillment Network Hub
+
+Mount Whaleback Mine:
+	Mount Whaleback Mine:
+		Mount Whaleback Mine
+
+Cochlear Global Headquarters:
+	Cochlear Global Headquarters:
+		Cochlear Global Headquarters
+
+Infosys Mysore Campus:
+	Infosys Mysore Campus:
+		Infosys Mysore Campus
+
+JSW Vijayanagar Works:
+	JSW Vijayanagar Works:
+		JSW Vijayanagar Works
+
+Central R&D Complex:
+	Central R&D Complex:
+		Central R&D Complex
+
+National Logistics Hub:
+	National Logistics Hub:
+		National Logistics Hub
+
+Corporate Headquarters Skyscraper:
+	Corporate Headquarters Skyscraper:
+		Corporate Headquarters Skyscraper
+
+Specialized Industrial Zone:
+	Specialized Industrial Zone:
+		Specialized Industrial Zone
+
+Mega-Factory Complex:
+	Mega-Factory Complex:
+		Mega-Factory Complex
+
+National Exhibition Centre:
+	National Exhibition Centre:
+		National Exhibition Centre
+
+Global Shipping Terminal:
+	Global Shipping Terminal:
+		Global Shipping Terminal
+
+Advanced Materials Laboratory:
+	Advanced Materials Laboratory:
+		Advanced Materials Laboratory
+
+Automation & Robotics Institute:
+	Automation & Robotics Institute:
+		Automation & Robotics Institute
+
+Corporate University:
+	Corporate University:
+		Corporate University
+
+National Data Fortress:
+	National Data Fortress:
+		National Data Fortress
+
+Private Industrial City:
+	Private Industrial City:
+		Private Industrial City
+
+Global Media Headquarters:
+	Global Media Headquarters:
+		Global Media Headquarters
+
+High-Efficiency Power Hub:
+	High-Efficiency Power Hub:
+		High-Efficiency Power Hub
+
+Cross-Continental Pipeline Terminus:
+	Cross-Continental Pipeline Terminus:
+		Cross-Continental Pipeline Terminus
+
+Intercontinental Rail Nexus:
+	Intercontinental Rail Nexus:
+		Intercontinental Rail Nexus
+
+Strategic Proving Grounds:
+	Strategic Proving Grounds:
+		Strategic Proving Grounds
+
+National Resource Depository:
+	National Resource Depository:
+		National Resource Depository
+
+International Financial Center:
+	International Financial Center:
+		International Financial Center
+
+Monument to Industry:
+	Monument to Industry:
+		Monument to Industry
+
+Spaceport:
+	Spaceport:
+		Spaceport
+
+Krupp Essen Works:
+	Krupp Essen Works:
+		Krupp Essen Works
+
+Standard Oil Refinery:
+	Standard Oil Refinery:
+		Standard Oil Refinery
+
+Carnegie Homestead Mill:
+	Carnegie Homestead Mill:
+		Carnegie Homestead Mill
+
+Ford Rouge Plant:
+	Ford Rouge Plant:
+		Ford Rouge Plant
+
+East India Company Trading House:
+	East India Company Trading House:
+		East India Company Trading House
+
+Schneider Le Creusot Works:
+	Schneider Le Creusot Works:
+		Schneider Le Creusot Works
+
+Putilov Works:
+	Putilov Works:
+		Putilov Works
+
+Mitsubishi Nagasaki Shipyard:
+	Mitsubishi Nagasaki Shipyard:
+		Mitsubishi Nagasaki Shipyard
+
+Tata Jamshedpur Works:
+	Tata Jamshedpur Works:
+		Tata Jamshedpur Works
+
+Siemens Erlangen Campus:
+	Siemens Erlangen Campus:
+		Siemens Erlangen Campus
+
+De Beers Sorting Office:
+	De Beers Sorting Office:
+		De Beers Sorting Office
+
+Nobel Baku Refinery:
+	Nobel Baku Refinery:
+		Nobel Baku Refinery
+
+GE Schenectady Works:
+	GE Schenectady Works:
+		GE Schenectady Works
+
+Mitsui Trading House:
+	Mitsui Trading House:
+		Mitsui Trading House
+
+FIAT Lingotto Factory:
+	FIAT Lingotto Factory:
+		FIAT Lingotto Factory
+
+Granary Complex:
+	Granary Complex:
+		Granary Complex
+
+Textile Depot:
+	Textile Depot:
+		Textile Depot
+
+Cold Storage Facility:
+	Cold Storage:
+		Cold Storage
+
+Paper Mill Complex:
+	Paper Mill Complex:
+		Paper Mill Complex
+
+Foundry Complex:
+	Foundry Complex:
+		Foundry Complex
+
+Machine Shop:
+	Machine Shop:
+		Machine Shop
+
+Chemical Works:
+	Chemical Works:
+		Chemical Works
+
+Tank Farm:
+	Tank Farm:
+		Tank Farm
+
+Ordnance Depot:
+	Ordnance Depot:
+		Ordnance Depot
+
+Motor Works:
+	Motor Works:
+		Motor Works
+
+Dry Dock:
+	Dry Dock:
+		Dry Dock
+
+Arsenal:
+	Arsenal:
+		Arsenal
+
+Fish Market:
+	Fish Market:
+		Fish Market
+
+Colonial Depot:
+	Colonial Depot Operations:
+		Colonial Commodity Trade
+
+Export Warehouse:
+	Export Warehouse Operations:
+		Cash Crop Export
+
+Electronics Laboratory:
+	Electronics Lab Operations:
+		Electronics Research
+
+Assay Office:
+	Assay Office Operations:
+		Precious Metal Assaying
+
+Ore Processing Plant:
+	Ore Processing Operations:
+		Ore Smelting
+
+Mineral Refinery:
+	Mineral Refinery Operations:
+		Mineral Refining
+
+Silk Exchange:
+	Silk Exchange Operations:
+		Silk and Dye Trade
+
+Vintner's Hall:
+	Vintner's Hall Operations:
+		Wine and Fruit Processing
+
+Aker Oslo Shipyard:
+	Aker Oslo Shipyard:
+		Aker Oslo Shipyard
+
+Allatini Thessaloniki Flour Mill:
+	Allatini Thessaloniki Flour Mill:
+		Allatini Thessaloniki Flour Mill
+
+Altos Hornos Baracaldo Furnaces:
+	Altos Hornos de Baracaldo Furnaces:
+		Altos Hornos de Baracaldo Furnaces
+
+Anglo-Persian Abadan Refinery:
+	Anglo-Persian Abadan Refinery:
+		Anglo-Persian Abadan Refinery
+
+Anglo-Sicilian Licata Wharf:
+	Anglo-Sicilian Licata Wharf:
+		Anglo-Sicilian Licata Wharf
+
+Ansaldo Sestri Ponente Works:
+	Ansaldo Sestri Ponente Works:
+		Ansaldo Sestri Ponente Works
+
+A.P. Møller Copenhagen Wharf:
+	A.P. Møller Copenhagen Wharf:
+		A.P. Møller Copenhagen Wharf
+
+Argentine Wine Mendoza Bodega:
+	Argentine Wine Mendoza Bodega:
+		Argentine Wine Mendoza Bodega
+
+Armstrong Elswick Works:
+	Armstrong Elswick Works:
+		Armstrong Elswick Works
+
+Assam Company Nazira Tea Estate:
+	Assam Company Nazira Tea Estate:
+		Assam Company Nazira Tea Estate
+
+B. Grimm Bangkok Warehouse:
+	B. Grimm Bangkok Warehouse:
+		B. Grimm Bangkok Warehouse
+
+Bacardí Santiago Distillery:
+	Bacardí Santiago Distillery:
+		Bacardí Santiago Distillery
+
+BASF Ludwigshafen Works:
+	BASF Ludwigshafen Plant:
+		BASF Ludwigshafen Plant
+
+Basileiades Piraeus Works:
+	Basileiades Piraeus Works:
+		Basileiades Piraeus Works
+
+Bengal Coal Raniganj Mine:
+	Bengal Coal Raniganj Mine:
+		Bengal Coal Raniganj Mine
+
+Bolckow Vaughan Eston Ironworks:
+	Bolckow Eston Ironworks:
+		Bolckow Eston Ironworks
+
+Bombay Burmah Rangoon Timber Depot:
+	Bombay Burmah Rangoon Timber Depot:
+		Bombay Burmah Rangoon Timber Depot
+
+Bombay Dyeing Spring Mills:
+	Bombay Dyeing Spring Mills:
+		Bombay Dyeing Spring Mills
+
+Bunge & Born Buenos Aires Grain Silo:
+	Bunge & Born Buenos Aires Grain Silo:
+		Bunge & Born Buenos Aires Grain Silo
+
+Calcutta Electric Victoria House:
+	Calcutta Electric Victoria House:
+		Calcutta Electric Victoria House
+
+Caribbean Petroleum Maracaibo Depot:
+	Caribbean Petroleum Maracaibo Depot:
+		Caribbean Petroleum Maracaibo Depot
+
+CCCI Léopoldville Rubber Depot:
+	CCCI Léopoldville Depot:
+		CCCI Léopoldville Depot
+
+CFR Bucharest Railway Works:
+	CFR Bucharest Railway Works:
+		CFR Bucharest Railway Works
+
+CGV Haut-Brion Estate:
+	CGV Haut-Brion Estate:
+		CGV Haut-Brion Estate
+
+Chr. Hansen Copenhagen Laboratory:
+	Chr. Hansen Copenhagen Laboratory:
+		Chr. Hansen Copenhagen Laboratory
+
+Colt Hartford Armory:
+	Colt Hartford Armory:
+		Colt Hartford Armory
+
+Sansinena Avellaneda Frigorífico:
+	Sansinena Avellaneda Frigorífico:
+		Sansinena Avellaneda Frigorífico
+
+Córdoba Railway Alta Gracia Works:
+	Córdoba Railway Alta Gracia Works:
+		Córdoba Railway Alta Gracia Works
+
+CSFA Sicilian Sulfur Depot:
+	CSFA Sicilian Sulfur Depot:
+		CSFA Sicilian Sulfur Depot
+
+Afghan Nassaji Kabul Mills:
+	Afghan Nassaji Kabul Mills:
+		Afghan Nassaji Kabul Mills
+
+Sassoon Bombay Docks:
+	Sassoon Bombay Docks:
+		Sassoon Bombay Docks
+
+DMC Mulhouse Thread Mills:
+	DMC Mulhouse Mills:
+		DMC Mulhouse Mills
+
+Douro Wine Lodge:
+	Douro Wine Lodge:
+		Douro Wine Lodge
+
+Duro La Felguera Steelworks:
+	Duro La Felguera Steelworks:
+		Duro La Felguera Steelworks
+
+EEA Dock Sud Power Station:
+	EEA Dock Sud Power Station:
+		EEA Dock Sud Power Station
+
+Egyptian Railway Cairo Central Station:
+	Egyptian Rail Cairo Central:
+		Egyptian Rail Cairo Central
+
+El Águila Tampico Refinery:
+	El Águila Tampico Refinery:
+		El Águila Tampico Refinery
+
+Electricidad de Caracas Power House:
+	Electricidad de Caracas Power House:
+		Electricidad de Caracas Power House
+
+Első Budapesti Steam Mill:
+	Első Budapesti Steam Mill:
+		Első Budapesti Steam Mill
+
+Ericsson Telefonplan:
+	Ericsson Telefonplan:
+		Ericsson Telefonplan
+
+Erste Brünner Maschinenwerk:
+	Erste Brünner Maschinenwerk:
+		Erste Brünner Maschinenwerk
+
+España Industrial Sants Mills:
+	España Industrial Sants Mills:
+		España Industrial Sants Mills
+
+Estaleiro Mauá Niterói Dockyard:
+	Estaleiro Mauá Niterói Dockyard:
+		Estaleiro Mauá Niterói Dockyard
+
+Estannífera Llallagua Tin Concentrator:
+	Estañífera Llallagua Tin Concentrator:
+		Estañífera Llallagua Tin Concentrator
+
+FAMAE Santiago Arsenal:
+	FAMAE Santiago Arsenal:
+		FAMAE Santiago Arsenal
+
+FCM La Seyne Shipyard:
+	FCM La Seyne Shipyard:
+		FCM La Seyne Shipyard
+
+Foochow Mawei Dockyard:
+	Foochow Mawei Dockyard:
+		Foochow Mawei Dockyard
+
+Franco-Belge Raismes Works:
+	Franco-Belge Raismes Works:
+		Franco-Belge Raismes Works
+
+Fundição Ipanema Sorocaba Foundry:
+	Fundição Ipanema Sorocaba Foundry:
+		Fundição Ipanema Sorocaba Foundry
+
+Fundidora Monterrey Blast Furnace:
+	Fundidora Monterrey Blast Furnace:
+		Fundidora Monterrey Blast Furnace
+
+Galician Borysław Oil Field:
+	Galician Borysław Oil Field:
+		Galician Borysław Oil Field
+
+Thonet Bystřice Bentwood Factory:
+	Thonet Bystřice Bentwood Factory:
+		Thonet Bystřice Bentwood Factory
+
+Getzner Bludenz Textile Works:
+	Getzner Bludenz Textile Works:
+		Getzner Bludenz Textile Works
+
+Götaverken Gothenburg Shipyard:
+	Götaverken Gothenburg Shipyard:
+		Götaverken Gothenburg Shipyard
+
+Gran Azucarera Aranjuez Refinery:
+	Gran Azucarera Aranjuez Refinery:
+		Gran Azucarera Aranjuez Refinery
+
+Great Indian Railway Jamalpur Works:
+	Great Indian Railway Jamalpur Works:
+		Great Indian Railway Jamalpur Works
+
+Guinness St. James's Gate Brewery:
+	Guinness St. James's Gate Brewery:
+		Guinness St. James's Gate Brewery
+
+GWR Swindon Works:
+	GWR Swindon Works:
+		GWR Swindon Works
+
+Hanseong Electric Gwanghwamun Station:
+	Hanseong Jeongi Gwanghwamun Station:
+		Hanseong Jeongi Gwanghwamun Station
+
+Hanyang Arsenal Iron Works:
+	Hanyang Arsenal Iron Works:
+		Hanyang Arsenal Iron Works
+
+Hudson's Bay York Factory:
+	HBC York Factory:
+		HBC York Factory
+
+Hispano-Suiza Barcelona Factory:
+	Hispano-Suiza Barcelona Factory:
+		Hispano-Suiza Barcelona Factory
+
+ILVA Bagnoli Steelworks:
+	ILVA Bagnoli Steelworks:
+		ILVA Bagnoli Steelworks
+
+Imperial Arsenal Golden Horn:
+	Imperial Arsenal Golden Horn:
+		Imperial Arsenal Golden Horn
+
+Ethiopian Railway Dire Dawa Depot:
+	Ethiopian Railway Dire Dawa Depot:
+		Ethiopian Railway Dire Dawa Depot
+
+Imperial Tobacco Wills Factory:
+	Imperial Tobacco Wills' Factory:
+		Imperial Tobacco Wills' Factory
+
+Ingolstadt Power Station:
+	Ingolstadt Power Station:
+		Ingolstadt Power Station
+
+Iranian State Railway Veresk Station:
+	Iranian State Railway Veresk Station:
+		Iranian State Railway Veresk Station
+
+Izhevsk Arms Factory:
+	Izhevsk Arms Factory:
+		Izhevsk Arms Factory
+
+J&P Coats Ferguslie Thread Mills:
+	Coats Ferguslie Mills:
+		Coats Ferguslie Mills
+
+Klein Galician Paper Mill:
+	Klein Galician Paper Mill:
+		Klein Galician Paper Mill
+
+Jiangnan Nanjing Brocade Hall:
+	Jiangnan Nanjing Brocade Hall:
+		Jiangnan Nanjing Brocade Hall
+
+Jingdezhen Imperial Kiln:
+	Jingdezhen Imperial Kiln:
+		Jingdezhen Imperial Kiln
+
+John Brown Clydebank Shipyard:
+	John Brown Clydebank Yard:
+		John Brown Clydebank Yard
+
+Cockerill Seraing Works:
+	Cockerill Seraing Works:
+		Cockerill Seraing Works
+
+John Holt Lagos Trading House:
+	John Holt Lagos Trading House:
+		John Holt Lagos Trading House
+
+Hughes Yuzovka Steelworks:
+	Hughes Yuzovka Steelworks:
+		Hughes Yuzovka Steelworks
+
+Kablín Zárate Paper Mill:
+	Kablín Zárate Paper Mill:
+		Kablín Zárate Paper Mill
+
+Kaiping Tangshan Colliery:
+	Kaiping Tangshan Colliery:
+		Kaiping Tangshan Colliery
+
+Kinkozan Kiyomizu Kiln:
+	Kinkozan Kiyomizu Kiln:
+		Kinkozan Kiyomizu Kiln
+
+Kirgizian Copper Smelter:
+	Kirgizian Copper Smelter:
+		Kirgizian Copper Smelter
+
+Klanično Belgrade Slaughterhouse:
+	Klaničko Belgrade Slaughterhouse:
+		Klaničko Belgrade Slaughterhouse
+
+Meissen Porcelain Manufactory:
+	Meissen Porcelain Manufactory:
+		Meissen Porcelain Manufactory
+
+Kouppas Piraeus Foundry:
+	Kouppas Piraeus Foundry:
+		Kouppas Piraeus Foundry
+
+La Rosada Buenos Aires Arsenal:
+	La Rosada Buenos Aires Arsenal:
+		La Rosada Buenos Aires Arsenal
+
+Lanfang Pontianak Kongsi House:
+	Lanfang Pontianak Kongsi House:
+		Lanfang Pontianak Kongsi House
+
+Lee Wilson Plantation Depot:
+	Lee Wilson Plantation Depot:
+		Lee Wilson Plantation Depot
+
+Lilpop Warsaw Metalworks:
+	Lilpop Warsaw Metalworks:
+		Lilpop Warsaw Metalworks
+
+LKAB Kiruna Iron Mine:
+	LKAB Kiruna Mine:
+		LKAB Kiruna Mine
+
+Moser Karlsbad Glass Works:
+	Moser Karlsbad Glass Works:
+		Moser Karlsbad Glass Works
+
+Madura Mills Madurai Complex:
+	Madura Mills Madurai Complex:
+		Madura Mills Madurai Complex
+
+Worth Rue de la Paix Atelier:
+	Worth Rue de la Paix Atelier:
+		Worth Rue de la Paix Atelier
+
+Manfred Weiss Csepel Works:
+	Manfred Weiss Csepel Works:
+		Manfred Weiss Csepel Works
+
+Mantero Como Silk Mill:
+	Mantero Como Silk Mill:
+		Mantero Como Silk Mill
+
+Mantetsu Dalian Railway Hub:
+	Mantetsu Dalian Railway Hub:
+		Mantetsu Dalian Railway Hub
+
+Maple & Co Tottenham Court Road:
+	Maple Tottenham Court Showroom:
+		Maple Tottenham Court Showroom
+
+Massey-Harris Toronto Implement Works:
+	Massey-Harris Toronto Implement Works:
+		Massey-Harris Toronto Implement Works
+
+Gavrilović Petrinja Meatworks:
+	Gavrilović Petrinja Meatworks:
+		Gavrilović Petrinja Meatworks
+
+MÁV Budapest Locomotive Works:
+	MÁV Budapest Locomotive Works:
+		MÁV Budapest Locomotive Works
+
+Mines d'Anzin Colliery:
+	Anzin Colliery:
+		Anzin Colliery
+
+Misr Mahalla Textile Complex:
+	Misr Mahalla Textile Complex:
+		Misr Mahalla Textile Complex
+
+Moscow Irrigation Cotton Depot:
+	Moscow Irrigation Cotton Depot:
+		Moscow Irrigation Cotton Depot
+
+Mozambique Company Beira Concession:
+	Mozambique Company Beira Concession:
+		Mozambique Company Beira Concession
+
+Nam Định Textile Plant:
+	Nam Định Textile Plant:
+		Nam Định Textile Plant
+
+NIOC Masjed Soleyman Oil Field:
+	NIOC Masjed Soleyman Field:
+		NIOC Masjed Soleyman Field
+
+NedPetroleum Pangkalan Brandan Depot:
+	Nederlandse Petroleum Pangkalan Depot:
+		Nederlandse Petroleum Pangkalan Depot
+
+Portalis Lyon Silk House:
+	Portalis Lyon Silk House:
+		Portalis Lyon Silk House
+
+Nokia Cable Works:
+	Nokia Cable Works:
+		Nokia Cable Works
+
+Norsk Hydro Rjukan Plant:
+	Norsk Hydro Rjukan Plant:
+		Norsk Hydro Rjukan Plant
+
+Alpine Donawitz Steelworks:
+	Alpine Donawitz Steelworks:
+		Alpine Donawitz Steelworks
+
+OEVG Steyr Arms Works:
+	OEWG Steyr Arms Works:
+		OEWG Steyr Arms Works
+
+OCP Khouribga Phosphate Mine:
+	OCP Khouribga Mine:
+		OCP Khouribga Mine
+
+Ong Lung Sheng Tea Warehouse:
+	Ong Lung Sheng Tea Warehouse:
+		Ong Lung Sheng Tea Warehouse
+
+Opium Ghazipur Factory:
+	Opium Ghazipur Factory:
+		Opium Ghazipur Factory
+
+Orient Express Sirkeci Terminal:
+	Orient Express Sirkeci Terminal:
+		Orient Express Sirkeci Terminal
+
+Oriental Development Kunsan Granary:
+	Oriental Development Kunsan Granary:
+		Oriental Development Kunsan Granary
+
+Tobacco Régie Cibali Factory:
+	Tobacco Régie Cibali Factory:
+		Tobacco Régie Cibali Factory
+
+Panama Company Culebra Cut:
+	Panama Company Culebra Cut:
+		Panama Company Culebra Cut
+
+Paradox Kvarnholmen Studio:
+	Paradox Kvarnholmen Studio:
+		Paradox Kvarnholmen Studio
+
+Pedro Domecq Jerez Bodega:
+	Pedro Domecq Jerez Bodega:
+		Pedro Domecq Jerez Bodega
+
+Pernambuco Recife Cotton Mill:
+	Pernambuco Recife Cotton Mill:
+		Pernambuco Recife Cotton Mill
+
+Perskhlopok Cotton Combines:
+	Perskhlopok Cotton Combines:
+		Perskhlopok Cotton Combines
+
+Persshelk Silk Reeling House:
+	Persshëlk Silk Reeling House:
+		Persshëlk Silk Reeling House
+
+Peruvian Amazon Iquitos Rubber Depot:
+	Peruvian Amazon Iquitos Depot:
+		Peruvian Amazon Iquitos Depot
+
+Philips Eindhoven NatLab:
+	Philips Eindhoven NatLab:
+		Philips Eindhoven NatLab
+
+Prussian Railway Directorate:
+	Prussian Railway Directorate:
+		Prussian Railway Directorate
+
+Ralli Odessa Grain Elevator:
+	Ralli Odessa Grain Elevator:
+		Ralli Odessa Grain Elevator
+
+Rheinmetall Unterlüss Proving Ground:
+	Rheinmetall Unterlüß Proving Ground:
+		Rheinmetall Unterlüß Proving Ground
+
+Ricordi Galleria Publishing House:
+	Ricordi Galleria Vittorio Emanuele:
+		Ricordi Galleria Vittorio Emanuele
+
+Rodríguez Argüelles Havana Tobacco House:
+	Rodríguez Argüelles Havana Tobacco House:
+		Rodríguez Argüelles Havana Tobacco House
+
+Romanian Star Ploiești Refinery:
+	Romanian Star Ploiești Refinery:
+		Romanian Star Ploiești Refinery
+
+Rossi São Leopoldo Arms Factory:
+	Rossi São Leopoldo Arms Factory:
+		Rossi São Leopoldo Arms Factory
+
+Russian-American Company Sitka Trading Post:
+	RAC Sitka Trading Post:
+		RAC Sitka Trading Post
+
+Saint-Étienne Arms Manufactory:
+	Saint-Étienne Arms Manufactory:
+		Saint-Étienne Arms Manufactory
+
+San Miguel Manila Brewery:
+	San Miguel Manila Brewery:
+		San Miguel Manila Brewery
+
+São Paulo Railway Paranapiacaba Workshop:
+	São Paulo Railway Paranapiacaba Workshop:
+		São Paulo Railway Paranapiacaba Workshop
+
+Morozov Orekhovo-Zuevo Mills:
+	Morozov Orekhovo-Zuevo Mills:
+		Morozov Orekhovo-Zuevo Mills
+
+Schichau-Werke Elbing:
+	Schichau Elbing Shipyard:
+		Schichau Elbing Shipyard
+
+SECN Ferrol Shipyard:
+	SECN Ferrol Shipyard:
+		SECN Ferrol Shipyard
+
+Sherkat-e Shemali Cotton Gin:
+	Sherkat-e Shemali Cotton Gin:
+		Sherkat-e Shemali Cotton Gin
+
+Sherkat-e Eslāmiyyeh Isfahan Mill:
+	Sherkat-e Eslamiya Isfahan Mill:
+		Sherkat-e Eslamiya Isfahan Mill
+
+Škoda Pilsen Works:
+	Škoda Pilsen Works:
+		Škoda Pilsen Works
+
+Mokta el Hadid Beni Saf Mine:
+	Mokta el Hadid Beni Saf Mine:
+		Mokta el Hadid Beni Saf Mine
+
+STF Fiume Torpedo Works:
+	STF Fiume Torpedo Works:
+		STF Fiume Torpedo Works
+
+Steel Brothers Syriam Depot:
+	Steel Brothers Syriam Depot:
+		Steel Brothers Syriam Depot
+
+STT Hasköy Shipyard:
+	STT Hasköy Shipyard:
+		STT Hasköy Shipyard
+
+Sudamericana Valparaíso Pier:
+	Sudamericana Valparaíso Pier:
+		Sudamericana Valparaíso Pier
+
+Suez Company Ismailia Headquarters:
+	Suez Company Ismailia HQ:
+		Suez Company Ismailia HQ
+
+Sunhwaguk Seoul Tobacco Factory:
+	Sunhwaguk Seoul Tobacco Factory:
+		Sunhwaguk Seoul Tobacco Factory
+
+Tashkent Railroad Workshops:
+	Tashkent Railroad Workshops:
+		Tashkent Railroad Workshops
+
+Trubia Cannon Foundry:
+	Trubia Cannon Foundry:
+		Trubia Cannon Foundry
+
+Turkish Petroleum Kirkuk Depot:
+	Turkish Petroleum Kirkuk Depot:
+		Turkish Petroleum Kirkuk Depot
+
+União Fabril Barreiro Plant:
+	União Fabril Barreiro Plant:
+		União Fabril Barreiro Plant
+
+United Fruit Terminal:
+	United Fruit Great White Fleet Terminal:
+		United Fruit Great White Fleet Terminal
+
+United Tobacco Moscow Plant:
+	United Tobacco Moscow Plant:
+		United Tobacco Moscow Plant
+
+Ursus Warsaw Tractor Plant:
+	Ursus Warsaw Tractor Plant:
+		Ursus Warsaw Tractor Plant
+
+State Vodka Monopoly Warehouse:
+	Vodka Monopoly Warehouse:
+		Vodka Monopoly Warehouse
+
+Wadia Bombay Dockyard:
+	Wadia Bombay Dockyard:
+		Wadia Bombay Dockyard
+
+West Ural Oil Depot:
+	West Ural Oil Depot:
+		West Ural Oil Depot
+
+Cramp Philadelphia Shipyard:
+	Cramp Philadelphia Shipyard:
+		Cramp Philadelphia Shipyard
+
+Sandford Newcastle-Natal Ironworks:
+	Sandford Newcastle Natal Ironworks:
+		Sandford Newcastle Natal Ironworks
+
+Witkowitzer Ostrava Ironworks:
+	Witkowitzer Ostrava Ironworks:
+		Witkowitzer Ostrava Ironworks
+
+Ynchausti Manila Trading House:
+	Ynchausti Manila Trading House:
+		Ynchausti Manila Trading House
+
+Zastava Kragujevac Arsenal:
+	Zastava Kragujevac Arsenal:
+		Zastava Kragujevac Arsenal
+
+Megastructure Consortium HQ:
+	Megastructure Operations:
+		Megastructure Operations
+
+Axiom Space Station:
+	Axiom Station Operations:
+		Axiom Station Operations
+
+Neurovault Research Complex:
+	Neurovault Research:
+		Neurovault Research
+
+Tycho Orbital Works:
+	Tycho Orbital Construction:
+		Tycho Orbital Construction
+
+Tessier-Ashpool Orbital:
+	Tessier-Ashpool Operations:
+		Tessier-Ashpool Operations
+
+Hanka Precision Laboratory:
+	Hanka Cybernetics Division:
+		Hanka Cybernetics Division
+
+Yoyodyne Propulsion Lab:
+	Yoyodyne Propulsion Research:
+		Yoyodyne Propulsion Research
+
+Rekal Memory Center:
+	Rekal Memory Services:
+		Rekal Memory Services
+
+Synthetic Clothes Industries:
+	Unlocking Technology: Art Silk
+	Synthetic Silk:
+		Rayon
+		Polyester Production
+		Nylon Production
+		Microfiber Blends
+			Monthly Pollution: 5
+		Elastomeric Blends
+			Monthly Pollution: 10
+		Performance Textiles
+			Monthly Pollution: 10
+		Advanced Material Fibers
+		Programmable Fibers
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Synthetic Fuel Works:
+	Unlocking Technology: Bergius Process
+	Synthetic Oil:
+		Synthetic Oil
+			Monthly Pollution: 50
+		Oil-Producing Bacteria
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Synthetic Rubber Works:
+	Unlocking Technology: Isoprene
+	Synthetic Rubber:
+		Polyisoprene Rubber
+			Monthly Pollution: 20
+		Styrene-Butadiene Rubber
+			Monthly Pollution: 20
+		Ziegler–Natta Catalyzation SBR
+			Monthly Pollution: 20
+		Neodymium Catalyzation SBR
+			Monthly Pollution: 20
+		Bioengineered Rubber
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Pharmaceutical Industries:
+	Unlocking Technology: Modern Pharmaceuticals
+	Pharmaceuticals:
+		Pharmaceuticals
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Carbon Conversion Works:
+	Unlocking Technology: Genetic Engineering
+	Synthetic Coal:
+		Synthetic Coal
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Phenolic Resin Panels Plant:
+	Unlocking Technology: Biotechnology
+	Synthetic Wood:
+		Synthetic Wood
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Artificial Sweeteners Plant:
+	Unlocking Technology: Green Revolution
+	Synthetic Sugar:
+		High-Fructose Syrup
+			Monthly Pollution: 5
+		Cellulosic Hydrolysis
+			Monthly Pollution: 10
+		Electroenzymatic Synthesis
+			Monthly Pollution: 10
+		Programmable Sweetness
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Cultured Meat Plant:
+	Unlocking Technology: Lab-Grown Food
+	Synthetic Meat:
+		Synthetic Meat
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Cultured Produce Facility:
+	Unlocking Technology: Lab-Grown Food
+	Synthetic Fruit:
+		Synthetic Fruit
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Beverage Concentrates Plant:
+	Unlocking Technology: Biotechnology
+	Synthetic Drinks:
+		Synthetic Drinks
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Integrated Biorefinery:
+	Unlocking Technology: Genetic Engineering
+	Synthetic Biomass:
+		Synthetic Biomass
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Wireless Telecommunications Industries:
+	Unlocking Technology: Radio
+	Radios:
+		Radio Production
+		VHF and UHF Transmission
+		Satellite Communications
+		Quantum Communications
+		Neural Lace Telepathy
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Consumer Appliance Industries:
+	Unlocking Technology: Personal Appliances
+	Consumer Appliances:
+		Consumer Appliances Production
+			Monthly Pollution: 10
+		Television Production
+			Monthly Pollution: 10
+		Personal Electronics
+			Monthly Pollution: 10
+		Smart Phones
+			Monthly Pollution: 10
+		Virtual Reality Headsets
+			Monthly Pollution: 10
+		Bioelectronic Implants
+		Fusion Battery Appliances
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Airport:
+	Unlocking Technology: Commercial Aviation
+	Airport:
+		Airport
+			Monthly Pollution: 100
+		Spaceport
+			Monthly Pollution: 50
+	Maintenance:
+		Maintenance
+
+Highway:
+	Unlocking Technology: Paved Roads
+	Highway:
+		Civil Highway
+			Monthly Pollution: 40
+		Industrial Highway
+			Monthly Pollution: 40
+		Electric Civil Highway
+		Electric Industrial Highway
+		Autonomous Highway
+	Maintenance:
+		Maintenance
+
+Software Industry:
+	Unlocking Technology: Computer Networks
+	Software Industry:
+		Punchcards
+		Web 1.0
+		Cloud Computing
+		ML Assisted Code Generation
+		Self-Improving AI Systems
+	Automation Building Network:
+		Digital Creation Tools
+		Version Control and Distribution Platforms
+		Advanced Workflow Optimization
+		Fully Automated Content Creation
+		AI-Mediated Mind Sharing
+	Maintenance:
+		Maintenance
+
+Network Infrastructure:
+	Unlocking Technology: Computer Networks
+	Base Building Network:
+		Local Network
+		Low Bandwidth
+		Medium Bandwidth
+		High Bandwidth
+		Extreme Bandwidth
+		Semi-Infinite Bandwidth
+	Network Maintenance Automation:
+		Automated Routing Protocols
+		Predictive Maintenance Systems
+		Autonomous Networks
+	Maintenance:
+		Maintenance
+
+Hydro Plant:
+	Unlocking Technology: Public Works Programs
+	Hydro Power:
+		Hydro Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+	Maintenance:
+		Maintenance
+
+Nuclear Plant:
+	Unlocking Technology: Nuclear Energy
+	Nuclear Power:
+		Nuclear Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+	Maintenance:
+		Maintenance
+
+Fusion Plant:
+	Unlocking Technology: Fusion Power
+	Fusion Power:
+		Tokamak Fusion Power
+		Inertial Fusion Power
+		Muon-Catalyzed Fusion Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+	Maintenance:
+		Maintenance
+
+Renewable Energy Plant:
+	Unlocking Technology: Clean Energy Technologies
+	Renewable Power:
+		Renewable Power
+		Advanced Renewable Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+	Maintenance:
+		Maintenance
+
+Electronic Components and Semiconductor Industry:
+	Unlocking Technology: Transistor Technology
+	Electronic Components:
+		Transistors
+		Integrated Circuits
+		Modern Microprocessors
+		Multicore Processors
+		Neuromorphic Computing
+		Orbital Nanolithography
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Robotics Industry:
+	Unlocking Technology: Industrial Robotics
+	Base Building Robotics:
+		Robots
+		Smart Robots
+		Nanorobots
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+
+Advanced Material Fabricator:
+	Unlocking Technology: Modern Material Science
+	Advanced Material Fabricator:
+		Basic AM Fabrication
+		Advanced AM Fabrication
+		Self-Replicating Assemblers
+		Advanced Self-Replicating Assemblers
+	Automation:
+		Lab Advanced Material Fabrication
+		Synthetic Bacteria Advanced Material Fabrication
+		Automated AM Fabrication
+	Location:
+		Basic Production
+		Orbital Fabrication
+	Maintenance:
+		Maintenance
+
+Aerospace Industry:
+	Unlocking Technology: Military Aviation
+	Aeroplanes:
+		Aeroplane Production
+			Monthly Pollution: 10
+		Advanced Aeroplane Production
+			Monthly Pollution: 10
+		Modern Aeroplane Production
+			Monthly Pollution: 10
+	Aerospace Industry:
+		Aircraft Only
+		Chemical Rockets
+		Reusable Rockets
+		Ablative Rockets
+		Fusion SSTO Craft
+	Automation:
+		Manual Production & Operations
+		Standardized Production
+		Packet-Switched Control Links
+		Robotic Assembly & Handling
+		AI-Optimized Operations
+	Maintenance:
+		Maintenance
+
+Space Elevator Construction Site:
+	Unlocking Technology: Space Elevator
+	Space Elevator Construction Site:
+		Space Elevator Construction (Paused)
+		Space Elevator Construction (4 years)
+		Space Elevator Construction (2 years)
+		Space Elevator Construction (1 year)
+
+Space Elevator:
+	Space Elevator:
+		Space Elevator
+
+Extraplanetary Base:
+	Unlocking Technology: Asteroid Mining
+	Base Building Space Mine:
+		Asteroid Mine
+		Mining Colony
+		Resort Colony
+	Maintenance:
+		Maintenance
+
+Deep-Sea Mine:
+	Unlocking Technology: Abyssal Plain Mining
+	Deep-Sea Mine:
+		Deep-Sea Mining
+		Advanced Deep-Sea Mining
+		Automated Deep-Sea Mining
+	Maintenance:
+		Maintenance
+
+Space Program:
+	Unlocking Technology: Guided Missiles
+	Space Program:
+		Earth Orbit
+		Moon Mission
+		Mars Mission
+		Solar Colonization
+		Deep Space Exploration
+		Interstellar Mission
+
+National Park:
+	National Park:
+		National Park
+			Monthly Pollution: -500
+		National Forest
+			Monthly Pollution: -250
+		National Wildlife Refuge
+			Monthly Pollution: -500
+
+Tourism Industry:
+	Unlocking Technology: Romanticism
+	Tourism:
+		Tourism
+		Mass Tourism
+		Jet Age Tourism
+		Modern Tourism
+		Space Tourism
+	Maintenance:
+		Maintenance
+
+State Youth Centers:
+	Philosophy:
+		Voluntary Daycare
+		Communal Child-Rearing
+		Youth Cadre Programs
+		Behavioral Conditioning
+		Eugenics Programs
+	Advanced Nurturing:
+		Natural Nurturing
+		Assisted Postnatal Care
+		Ectogenesis
+		Cloning Vats
+	Maintenance:
+		Maintenance
+
+Manganese Mine:
+	Unlocking Technology: Modern Tools
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Chromium Mine:
+	Unlocking Technology: Stainless Steel Mass Production
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Specialty Alloy Metal Mine:
+	Unlocking Technology: Jet Engine Technology
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Copper Mine:
+	Unlocking Technology: Rural Electrification
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Bauxite Mine:
+	Unlocking Technology: Aluminum Mass Production
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Precious and Minor Base Metal Mine:
+	Unlocking Technology: Advanced Automotive Production Techniques
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Nickel and Cobalt Mine:
+	Unlocking Technology: Modern Materials
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Lithium Mine:
+	Unlocking Technology: Modern Chemical Processes
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Rare Earth Metals Mine:
+	Unlocking Technology: Laser Technology
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Platinum Group Metals Mine:
+	Unlocking Technology: Pollution Control
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Graphite Mine:
+	Unlocking Technology: Nuclear Energy
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Phosphate Mine:
+	Unlocking Technology: Green Revolution
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Potash Mine:
+	Unlocking Technology: Advanced Agricultural Statistics
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+0 "Industrial Mineral and Salt Mine
+:
+	Unlocking Technology: Modern Skyscrapers
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+
+Solar Collector Construction Site:
+	Unlocking Technology: Space-Based Solar Power
+	Solar Collector Construction:
+		Solar Collector Construction (Paused)
+		Solar Collector Construction (4 years)
+		Solar Collector Construction (2 years)
+		Solar Collector Construction (1 years)
+
+Orbital Solar Collector:
+	Solar Collector:
+		Solar Collector Maintenance
+
+Solar Power Receiver:
+	Unlocking Technology: Space-Based Solar Power
+	Solar Power Receiver:
+		Solar Power Receiver
+
+Orbital Battlestation Construction Site:
+	Unlocking Technology: Orbital Weapon Platforms
+	Orbital Battlestation Construction:
+		Orbital Battlestation Construction (Paused)
+		Orbital Battlestation Construction (4 years)
+		Orbital Battlestation Construction (2 years)
+		Orbital Battlestation Construction (1 year)
+
+Orbital Battlestation:
+	Orbital Battlestation:
+		Orbital Battlestation
+
+Mind Upload Nexus Construction Site:
+	Unlocking Technology: Mind Backups
+	Mind Upload Nexus Construction:
+		Mind Upload Nexus Construction (Paused)
+		Mind Upload Nexus Construction (4 years)
+		Mind Upload Nexus Construction (2 years)
+		Mind Upload Nexus Construction (1 year)
+
+Mind Upload Nexus:
+	Mind Upload Nexus:
+		Mind Upload Nexus
+
+Antimatter Facility Construction Site:
+	Unlocking Technology: Antimatter Production
+	Antimatter Facility Construction:
+		Antimatter Facility Construction (Paused)
+		Antimatter Facility Construction (4 years)
+		Antimatter Facility Construction (2 years)
+		Antimatter Facility Construction (1 year)
+
+Antimatter Containment Facility:
+	Antimatter Containment Facility:
+		Antimatter Containment Facility
+
+Antimatter Engine:
+	Unlocking Technology: Antimatter Production
+	Antimatter Engine:
+		Antimatter Engine
+
+Antimatter Warhead Plant:
+	Unlocking Technology: Antimatter Production
+	Antimatter Warhead Plant:
+		Antimatter Warhead Plant
+
+Nanofabrication Center Construction Site:
+	Unlocking Technology: Molecular Assemblers
+	Nanofabrication Center Construction:
+		Nanofabrication Center Construction (Paused)
+		Nanofabrication Center Construction (4 years)
+		Nanofabrication Center Construction (2 years)
+		Nanofabrication Center Construction (1 year)
+
+Nanofabrication Center:
+	Nanofabrication Center:
+		Nanofabrication Center
+
+Consciousness Network Construction Site:
+	Unlocking Technology: Telepathic Communities
+	Consciousness Network Construction:
+		Consciousness Network Construction (Paused)
+		Consciousness Network Construction (4 years)
+		Consciousness Network Construction (2 years)
+		Consciousness Network Construction (1 year)
+
+Consciousness Network:
+	Consciousness Network:
+		Consciousness Network
+	Network Mode:
+		Open Network
+		Social Control Network
+
+Military Base:
+	Unlocking Technology: Trench Works
+	Military Base:
+		Military Base Operations
+	Fortification Type:
+		Earthwork Fortifications
+		Concrete Bunkers
+		Hardened Positions
+	Base Purpose:
+		Garrison Duty
+		Territorial Defense
+		Logistics Hub
+
+United Nations Headquarters:
+	International Diplomacy:
+		Host Nation
+
+Power Bloc Headquarters:
+	Unlocking Technology: Intergovernmental Organizations
+	Power Bloc Headquarters:
+		Seat of the Empire
+		Alliance Command
+		Global Trade Center
+		Seat of the Faith
+		Central Committee Headquarters
+		World Cultural Center
+		Palace of Nations
+
+Golden Gate Bridge:
+	Unlocking Technology: Marketing Research
+	Golden Gate Bridge:
+		Golden Gate Bridge
+
+Empire State Building:
+	Unlocking Technology: Modern Skyscrapers
+	Empire State Building:
+		Empire State Building
+
+Sydney Opera House:
+	Unlocking Technology: Art Deco Architecture
+	Sydney Opera House:
+		Sydney Opera House
+
+CN Tower:
+	Unlocking Technology: Modern Skyscrapers
+	CN Tower:
+		CN Tower
+
+Hoover Dam:
+	Unlocking Technology: Public Works Programs
+	Hoover Dam:
+		Hoover Dam
+
+The Pentagon:
+	Unlocking Technology: Combined Arms
+	The Pentagon:
+		The Pentagon
+
+Kennedy Space Center:
+	Unlocking Technology: Space Exploration
+	Kennedy Space Center:
+		Kennedy Space Center
+
+Aswan High Dam:
+	Unlocking Technology: Nuclear Energy
+	Aswan High Dam:
+		Aswan High Dam
+
+Tokyo Tower:
+	Unlocking Technology: Television Broadcasting
+	Tokyo Tower:
+		Tokyo Tower
+
+Moscow State University:
+	Unlocking Technology: Mainframe Computers
+	Moscow State University:
+		Moscow State University
+
+Berlin TV Tower:
+	Unlocking Technology: Transistor Technology
+	Berlin TV Tower:
+		Berlin TV Tower
+
+Azadi Tower:
+	Unlocking Technology: Decolonization
+	Azadi Tower:
+		Azadi Tower
+
+Kenyatta International Convention Centre:
+	Unlocking Technology: Decolonization
+	Kenyatta ICC:
+		Kenyatta ICC
+
+Burj Khalifa:
+	Unlocking Technology: Computer-Aided Design
+	Burj Khalifa:
+		Burj Khalifa
+
+World Trade Center:
+	Unlocking Technology: Containerization
+	World Trade Center:
+		World Trade Center
+
+Lotus Temple:
+	Unlocking Technology: Pop Culture
+	Lotus Temple:
+		Lotus Temple
+
+Itaipu Dam:
+	Unlocking Technology: Industrial Robotics
+	Itaipu Dam:
+		Itaipu Dam
+
+Petronas Towers:
+	Unlocking Technology: Cellular Networks
+	Petronas Towers:
+		Petronas Towers
+
+Basilica of Our Lady of Peace:
+	Unlocking Technology: Pop Culture
+	Basilica of Our Lady of Peace:
+		Basilica of Our Lady of Peace
+
+Three Gorges Dam:
+	Unlocking Technology: Clean Energy Technologies
+	Three Gorges Dam:
+		Three Gorges Dam
+
+Channel Tunnel:
+	Unlocking Technology: Globalization
+	Channel Tunnel:
+		Channel Tunnel
+
+Taipei 101:
+	Unlocking Technology: Digital Telecommunications
+	Taipei 101:
+		Taipei 101
+
+Lotte World Tower:
+	Unlocking Technology: World Wide Web
+	Lotte World Tower:
+		Lotte World Tower
+
+Gardens by the Bay:
+	Unlocking Technology: Clean Energy Technologies
+	Gardens by the Bay:
+		Gardens by the Bay
+
+Abraj Al-Bait Clock Tower:
+	Unlocking Technology: Globalization
+	Abraj Al-Bait Clock Tower:
+		Abraj Al-Bait Clock Tower
+
+Shanghai Tower:
+	Unlocking Technology: Advanced Structural Engineering
+	Shanghai Tower:
+		Shanghai Tower
+
+FAST Telescope:
+	Unlocking Technology: Machine Learning
+	FAST Telescope:
+		FAST Telescope
+
+Statue of Unity:
+	Unlocking Technology: Advanced Structural Engineering
+	Statue of Unity:
+		Statue of Unity
+
+Golden Bridge:
+	Unlocking Technology: Advanced Structural Engineering
+	Golden Bridge:
+		Golden Bridge
+
+Large Hadron Collider:
+	Unlocking Technology: World Wide Web
+	Large Hadron Collider:
+		Large Hadron Collider
+
+International Space Station:
+	Unlocking Technology: Satellite Communications
+	International Space Station:
+		International Space Station
+
+ITER Fusion Reactor:
+	Unlocking Technology: Fusion Power
+	ITER Fusion Reactor:
+		ITER Fusion Reactor
+
+Svalbard Global Seed Vault:
+	Unlocking Technology: Biotechnology
+	Svalbard Global Seed Vault:
+		Svalbard Global Seed Vault
+
+LIGO Observatory:
+	Unlocking Technology: Fiber Optics
+	LIGO Observatory:
+		LIGO Observatory
+
+Continental Union Headquarters:
+	Unlocking Technology: Globalization
+	Continental Union Headquarters:
+		Continental Union Headquarters
+
+Peace Palace:
+	Unlocking Technology: Intergovernmental Organizations
+	Peace Palace:
+		Peace Palace
+
+Palais des Nations:
+	Palais des Nations:
+		Palais des Nations
+
+Resettlement Camp:
+	Unlocking Technology: Nationalism
+	Resettlement Method:
+		Homesteading Program
+		Organized Colonization
+		Forced Resettlement
+		Penal Transportation
+		Incentivized Relocation
+
+Resettlement Colony:
+	Unlocking Technology: Nationalism
+	Settlement Type:
+		Settler Homesteads
+		Planned Settlement
+		Administered Territory
+		Development Zone
+	Transportation:
+		Overland Transport
+		Railway Transport
+		Steamship Passage
+		Airlift
+

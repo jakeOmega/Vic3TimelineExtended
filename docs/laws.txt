@@ -1,0 +1,329 @@
+Army Model:
+	Peasant Levies
+	Warrior Caste (Variant of Peasant Levies)
+	Professional Army - Unlocking Technology: Military Drill
+	National Militia - Unlocking Technology: Mandatory Service
+	Mass Conscription - Unlocking Technology: Enlistment Offices
+	Private Military Contractors - Unlocking Technology: Guided Missiles
+Bureaucracy:
+	Hereditary Bureaucrats
+	Crownland Diets (Variant of Hereditary Bureaucrats)
+	Appointed Bureaucrats
+	Elected Bureaucrats
+Caste Hegemony:
+	Caste System Enforced
+	Caste System Codified
+	Caste Not Enforced
+	Affirmative Action
+Edo Status System:
+	Rigid Status Order
+	Loosened Status Order
+	Lax Status Order
+Children's Rights:
+	Child Labor Allowed
+	Restricted Child Labor - Unlocking Technology: Labor Movement
+	Compulsory Primary School - Unlocking Technology: Human Rights
+Church and State:
+	State Religion
+	Millet System (Variant of State Religion)
+	People of the Book (Variant of State Religion)
+	Freedom of Conscience - Unlocking Technology: Rationalism
+	Total Separation - Unlocking Technology: Empiricism
+	State Atheism - Unlocking Technology: Empiricism
+Citizenship:
+	Sovereign Subjecthood
+	Ancestral Citizenship - Unlocking Technology: Nationalism
+	Cultural Citizenship
+	Racialized Citizenship
+	Assimilatory Citizenship
+	Universal Citizenship - Unlocking Technology: Human Rights
+Colonization:
+	No Colonial Affairs
+	Frontier Colonization - Unlocking Technology: Colonization
+	Colonial Resettlement - Unlocking Technology: Colonization
+	Colonial Exploitation - Unlocking Technology: Colonization
+	Neocolonialism - Unlocking Technology: Decolonization
+Distribution of Power:
+	Autocracy
+	Bakufu (Variant of Autocracy)
+	Neo-Absolutism (Variant of Autocracy)
+	Technocracy - Unlocking Technology: Central Archives
+	Oligarchy
+	Organic Regulation (Variant of Oligarchy)
+	Elder Council
+	Landed Voting - Unlocking Technology: Democracy
+	Wealth Voting - Unlocking Technology: Democracy
+	Census Suffrage - Unlocking Technology: Democracy
+	Universal Suffrage - Unlocking Technology: Egalitarianism
+	Anarchy - Unlocking Technology: Anarchism
+	Single-Party State - Unlocking Technology: Political Agitation
+	Algorithmic Governance - Unlocking Technology: Machine Learning
+Economic System:
+	Traditionalism
+	Interventionism - Unlocking Technology: Manufacturies
+	Agrarianism - Unlocking Technology: Romanticism
+	Industry Banned - Unlocking Technology: Romanticism
+	Extraction Economy - Unlocking Technology: Colonization
+	Laissez-Faire - Unlocking Technology: International Trade
+	Cooperative Ownership
+	Command Economy - Unlocking Technology: Central Planning
+Education System:
+	No Schools
+	Religious Schools - Unlocking Technology: Rationalism
+	Private Schools - Unlocking Technology: Academia
+	Terakoya (Variant of Private Schools) - Unlocking Technology: Academia
+	Public Schools - Unlocking Technology: Empiricism
+Free Speech:
+	Outlawed Dissent - Unlocking Technology: Political Agitation
+	Censorship - Unlocking Technology: Law Enforcement
+	Right of Assembly
+	Protected Speech - Unlocking Technology: Human Rights
+Governance Principles:
+	Chiefdom
+	Monarchy
+	Colonial Administration (Variant of Monarchy)
+	Presidential Republic - Unlocking Technology: Democracy
+	Parliamentary Republic - Unlocking Technology: Democracy
+	Theocracy
+	Council Republic - Unlocking Technology: Socialism
+	Corporate State - Unlocking Technology: Corporatism
+	Social Monarchy - Unlocking Technology: Corporatism
+	Neocameralism - Unlocking Technology: Marketing Research
+	Direct Democracy - Unlocking Technology: Mass Media
+Health System:
+	No Health System
+	Charity Hospitals - Unlocking Technology: Medical Degrees
+	Private Health Insurance - Unlocking Technology: Pharmaceuticals
+	Public Health Insurance - Unlocking Technology: Pharmaceuticals
+Internal Security:
+	No Home Affairs
+	National Guard - Unlocking Technology: Law Enforcement
+	Secret Police - Unlocking Technology: Central Archives
+	Shinsengumi (Variant of Secret Police) - Unlocking Technology: Law Enforcement
+	Guaranteed Liberties
+Labor Rights:
+	No Workers' Rights
+	Regulatory Bodies - Unlocking Technology: Labor Movement
+	Workers' Protections - Unlocking Technology: Human Rights
+Labor Associations:
+	Guild System
+	Combination Acts
+	Anti-Strike Laws
+	Right to Associate
+	Corporatized Unions - Unlocking Technology: Corporatism
+	Factory Councils - Unlocking Technology: Socialism
+Land Reform:
+	Serfdom
+	Manorialism (Variant of Serfdom)
+	Tenant Farmers
+	Latifundias (Variant of Tenant Farmers)
+	Expanded Latifundias (Variant of Tenant Farmers)
+	Commercialized Agriculture - Unlocking Technology: Mutual Funds
+	Peasant Proprietorship
+	Homesteading (Variant of Peasant Proprietorship)
+	Collectivized Agriculture - Unlocking Technology: Socialism
+Migration:
+	No Migration Controls
+	Migration Controls
+	Closed Borders
+Navy Model:
+	Merchant Navy
+	Jeune École - Unlocking Technology: Jeune École
+	Capital Fleet - Unlocking Technology: Military Drill
+	Diplomatic Fleet - Unlocking Technology: Military Drill
+	Littoral Defense - Unlocking Technology: Naval Convoy Defense
+	Auxiliary Fleet - Unlocking Technology: Predictive Logistics
+Policing:
+	No Police
+	Local Police Force - Unlocking Technology: Bureaucracy
+	Dedicated Police Force - Unlocking Technology: Law Enforcement
+	Militarized Police Force - Unlocking Technology: Mass Surveillance
+Rights of Women:
+	Legal Guardianship
+	Women in the Fields (Variant of Legal Guardianship)
+	Propertied Women
+	Women in the Workplace - Unlocking Technology: Feminism
+	Women’s Suffrage - Unlocking Technology: Feminism
+	Protected Class - Unlocking Technology: Sexual Revolution
+Slavery:
+	Slavery Banned
+	Colonial Slavery
+	Debt Slavery
+	Slave Trade
+	Legacy Slavery
+Taxation:
+	Consumption-Based Taxation
+	Land-Based Taxation
+	Per-Capita Taxation - Unlocking Technology: Currency Standards
+	Proportional Taxation - Unlocking Technology: Egalitarianism
+	Graduated Taxation - Unlocking Technology: Socialism
+Trade Policy:
+	Mercantilism - Unlocking Technology: International Trade
+	Protectionism - Unlocking Technology: Stock Exchange
+	Free Trade - Unlocking Technology: International Trade
+	Isolationism
+	Canton System (Variant of Isolationism)
+	Sakoku (Variant of Isolationism)
+Welfare:
+	No Social Security
+	Šef Paternalism (Variant of No Social Security)
+	Poor Laws - Unlocking Technology: Democracy
+	Wage Subsidies - Unlocking Technology: Labor Movement
+	Old Age Pension - Unlocking Technology: Human Rights
+	Universal Basic Income - Unlocking Technology: Universal Basic Income
+	Post-Scarcity Economy - Unlocking Technology: Post-Scarcity Economy
+Privacy Rights:
+	Intrusive Surveillance System - Unlocking Technology: Social Media
+	Minimal Privacy Protection
+	Moderate Data Privacy - Unlocking Technology: Knowledge Economy
+	Strong Privacy Rights - Unlocking Technology: Cybersecurity
+Inheritance Laws:
+	Primogeniture
+	Partible Inheritance
+	Equal Inheritance - Unlocking Technology: Egalitarianism
+	Non-Inheritable Usage Rights
+Rules of War:
+	Total War - Unlocking Technology: Bombing Aircraft
+	Traditional Rules of War
+	War Crimes Forbidden - Unlocking Technology: Wargaming
+	Humanitarian Regulations - Unlocking Technology: Nuclear Weapons
+	Limited War - Unlocking Technology: Intercontinental Ballistic Missiles
+Intellectual Property:
+	No IP Protection
+	Creative Commons - Unlocking Technology: Analytical Philosophy
+	Traditional IP Protection - Unlocking Technology: Mutual Funds
+	Strict IP Protection - Unlocking Technology: Corporate Governance
+	Open Source Innovation - Unlocking Technology: Knowledge Economy
+Monetary Policy:
+	Commodity Money
+	Gold Standard - Unlocking Technology: International Exchange Standards
+	Fiat Money - Unlocking Technology: Keynesian Economics
+	Digital Currency - Unlocking Technology: Cybersecurity
+	Decentralized Cryptocurrency - Unlocking Technology: Cybersecurity
+Right to Information:
+	State Secrets - Unlocking Technology: Cryptography
+	Informal Government Secrecy
+	Freedom of Information - Unlocking Technology: Decolonization
+	Open Government - Unlocking Technology: Knowledge Economy
+Criminal Justice:
+	Punishment-Focused Criminal Justice
+	Restorative Justice - Unlocking Technology: Behaviorism
+	Rehabilitation-Focused Criminal Justice - Unlocking Technology: Mental Health Awareness
+LGBTQ+ Rights:
+	Active Persecution
+	Legal Limbo - Unlocking Technology: Romanticism
+	Basic Protections - Unlocking Technology: Human Rights
+	Anti-Discrimination Laws - Unlocking Technology: Sexual Revolution
+	Full Equality and Protection - Unlocking Technology: LGBTQ+ Rights Movement
+Human Augmentation:
+	No Augmentation
+	Unrestricted Augmentation - Unlocking Technology: Brain-Computer Interfaces
+	Human Purity - Unlocking Technology: Brain-Computer Interfaces
+	Medical Augmentation Only - Unlocking Technology: Brain-Computer Interfaces
+	Regulated Augmentation Market - Unlocking Technology: Human Augmentation
+	Mandatory Augmentation - Unlocking Technology: Bioenhanced Soldiers
+Minority Rights:
+	Violent Hostility
+	Ghettoization - Unlocking Technology: Urbanization
+	Cultural Assimilation - Unlocking Technology: Urbanization
+	Discrimination
+	Indifference
+	Protection - Unlocking Technology: Human Rights
+	Affirmative Action - Unlocking Technology: Civil Rights Movement
+State Power:
+	Traditional Vassalage
+	Unitary State
+	Federal System
+	Devolved Administration
+Electoral Finance:
+	No Campaign Finance Laws
+	Unregulated Donations
+	Donation Limits - Unlocking Technology: Mass Media
+	Publicly Funded Elections - Unlocking Technology: Keynesian Economics
+Family & Reproductive Policy:
+	Traditional Family Structure
+	Pro-Natalist Subsidies - Unlocking Technology: Mass Propaganda
+	State-Sponsored Family Planning - Unlocking Technology: Second Wave Feminism
+	Population Control Measures - Unlocking Technology: Mass Surveillance
+	Communal Child-Rearing - Unlocking Technology: Anarchism
+Financial Regulation:
+	Unregulated Banking
+	Free & Mutual Banking - Unlocking Technology: Postal Savings
+	Universal Banking (Light Prudence) - Unlocking Technology: Central Banking
+	Prudential / Narrow Banking - Unlocking Technology: Modern Financial Instruments
+	Directed Credit & Development Banks - Unlocking Technology: Central Planning
+	Central Bank Independence - Unlocking Technology: Keynesian Economics
+Internet Governance:
+	No Internet Policy
+	Unregulated Internet - Unlocking Technology: World Wide Web
+	State-Controlled Internet - Unlocking Technology: World Wide Web
+	Net Neutrality - Unlocking Technology: World Wide Web
+Genetic Rights:
+	Traditional Heredity
+	Ban on Genetic Modification - Unlocking Technology: Gene Splicing
+	Corporate Genetic Licensing - Unlocking Technology: Biotechnology
+	Open-Source Genetics - Unlocking Technology: Synthetic Biology
+	State Eugenics Program - Unlocking Technology: Genetic Engineering
+Language Policy:
+	Local Vernacular
+	Civic Monolingualism - Unlocking Technology: Nationalism
+	Multilingual Federalism - Unlocking Technology: Human Rights
+	Linguistic Purity - Unlocking Technology: Mass Propaganda
+	State-Led Language Reform - Unlocking Technology: Mass Media
+	Ubiquitous Translation - Unlocking Technology: Machine Learning
+Antitrust & Market Structure:
+	Guilds and Chartered Monopolies
+	Freedom of Contract - Unlocking Technology: International Trade
+	Antitrust Enforcement - Unlocking Technology: Corporate Governance
+	Regulated Utilities - Unlocking Technology: Central Planning
+	Dirigiste Policy - Unlocking Technology: Mass Propaganda
+	Command/Cooperative Economy
+Ministry of Foreign Affairs:
+	No Ministry of Foreign Affairs
+	Ministry of Foreign Affairs Established - Unlocking Technology: International Relations
+Ministry of War:
+	No Ministry of War
+	Ministry of War Established - Unlocking Technology: Wargaming
+Ministry of Commerce:
+	No Ministry of Commerce
+	Ministry of Commerce Established - Unlocking Technology: International Exchange Standards
+National Bank:
+	No National Bank
+	National Bank Established - Unlocking Technology: Central Banking
+Ministry of Culture:
+	No Ministry of Culture
+	Ministry of Culture Established - Unlocking Technology: Mass Propaganda
+Ministry of Labor:
+	No Ministry of Labor
+	Pro-Labor Ministry of Labor Established - Unlocking Technology: Public Works Programs
+	Pro-Capital Ministry of Labor Established - Unlocking Technology: Marketing Research
+Ministry of the Environment:
+	No Ministry of the Environment
+	Ministry of the Environment Established - Unlocking Technology: Pollution Control
+Ministry of Intelligence and Security:
+	No Ministry of Intelligence and Security
+	Ministry of Intelligence and Security Established - Unlocking Technology: Mass Surveillance
+Ministry of Refugee Affairs:
+	No Ministry of Refugee Affairs
+	Ministry of Refugee Affairs Established - Unlocking Technology: Civil Rights Movement
+Ministry of Propaganda:
+	No Ministry of Propaganda
+	Ministry of Propaganda Established - Unlocking Technology: Mass Media
+Ministry of Science:
+	No Ministry of Science
+	Ministry of Science Established - Unlocking Technology: Nuclear Weapons
+Ministry of Thought Control:
+	No Ministry of Thought Control
+	Ministry of Thought Control Established - Unlocking Technology: Automated Surveillance
+Ministry of Consumer Protection:
+	No Ministry of Consumer Protection
+	Ministry of Consumer Protection Established - Unlocking Technology: Consumer Credit
+Ministry of Urban Planning:
+	No Ministry of Urban Planning
+	Ministry of Urban Planning Established - Unlocking Technology: Urbanization
+Ministry of Religion:
+	No Ministry of Religion
+	Ministry of Religion Established - Unlocking Technology: Mass Media
+Ministry of International Aid:
+	No Ministry of International Aid
+	Ministry of International Aid Established - Unlocking Technology: Intergovernmental Organizations
