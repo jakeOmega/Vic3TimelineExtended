@@ -142,7 +142,7 @@ je_space_race_suborbital = {
 	}
 
 	weight = 100
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -296,7 +296,7 @@ je_space_race_orbital = {
 	}
 
 	weight = 100
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -456,7 +456,7 @@ je_space_race_moon_landing = {
 	}
 
 	weight = 100
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -612,7 +612,7 @@ je_space_race_probe = {
 	}
 
 	weight = 90
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -766,7 +766,7 @@ je_space_race_moon_base = {
 	}
 
 	weight = 95
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -922,7 +922,7 @@ je_space_race_mars_landing = {
 	}
 
 	weight = 95
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -1065,7 +1065,7 @@ je_space_race_interstellar_probe = {
 	}
 
 	weight = 90
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -1131,7 +1131,7 @@ je_space_race_interstellar_results = {
 	}
 
 	weight = 100
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }
@@ -1367,7 +1367,7 @@ je_space_race_solar_colonization = {
 	}
 
 	weight = 85
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
 }

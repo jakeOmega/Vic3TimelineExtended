@@ -157,14 +157,9 @@ INJECT:pmg_automation_building_motor_industry = {
 INJECT:pmg_base_building_shipyard = {
     production_methods = {
         pm_modular_shipbuilding
+        pm_diesel_shipbuilding
         pm_robotic_ship_assembly
         pm_advanced_metamaterials_shipbuilding
-    }
-}
-INJECT:pmg_military_base = {
-    production_methods = {
-        pm_military_shipbuilding_modern
-        pm_military_shipbuilding_modern_2
     }
 }
 REPLACE:pmg_aeroplanes = {

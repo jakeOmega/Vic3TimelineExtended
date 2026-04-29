@@ -304,12 +304,10 @@ principle_group_welfare = {
 	}
 }
 
-principle_group_navy = {
-	primary_for_identity = identity_military_treaty_organization
+### Vanilla 1.13 (The Great Wave) provides principle_navy_1..3.
+### Mod extends with two additional tiers (navy_4, navy_5) gated on mod tech.
+INJECT:principle_group_navy = {
 	levels = {
-		principle_navy_1
-		principle_navy_2
-		principle_navy_3
 		principle_navy_4
 		principle_navy_5
 	}

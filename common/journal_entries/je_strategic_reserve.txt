@@ -24,7 +24,7 @@ je_strategic_reserve = {
 	}
 
 	immediate = {
-		sr_je_immediate_effect = yes
+		st_res_je_immediate_effect = yes
 	}
 
 	invalid = {
@@ -36,21 +36,21 @@ je_strategic_reserve = {
 	}
 
 	on_invalid = {
-		sr_je_invalid_effect = yes
+		st_res_je_invalid_effect = yes
 	}
 
-	scripted_progress_bar = sr_grain_fill_bar
-	scripted_progress_bar = sr_ammunition_fill_bar
-	scripted_progress_bar = sr_oil_fill_bar
+	scripted_progress_bar = st_res_grain_fill_bar
+	scripted_progress_bar = st_res_ammunition_fill_bar
+	scripted_progress_bar = st_res_oil_fill_bar
 
-	scripted_button = sr_cycle_step_size_button
-	scripted_button = sr_reset_rates_button
-	scripted_button = sr_decrease_grain_rate_button
-	scripted_button = sr_increase_grain_rate_button
-	scripted_button = sr_decrease_ammunition_rate_button
-	scripted_button = sr_increase_ammunition_rate_button
-	scripted_button = sr_decrease_oil_rate_button
-	scripted_button = sr_increase_oil_rate_button
+	scripted_button = st_res_cycle_step_size_button
+	scripted_button = st_res_reset_rates_button
+	scripted_button = st_res_decrease_grain_rate_button
+	scripted_button = st_res_increase_grain_rate_button
+	scripted_button = st_res_decrease_ammunition_rate_button
+	scripted_button = st_res_increase_ammunition_rate_button
+	scripted_button = st_res_decrease_oil_rate_button
+	scripted_button = st_res_increase_oil_rate_button
 
 	status_desc = {
 		first_valid = {
@@ -65,7 +65,7 @@ je_strategic_reserve = {
 			triggered_desc = {
 				desc = je_strategic_reserve_status_deactivated
 				trigger = {
-					var:sr_hub_workforce_cached <= 0.99
+					var:st_res_hub_workforce_cached <= 0.99
 				}
 			}
 			triggered_desc = {
@@ -98,7 +98,7 @@ je_strategic_reserve = {
 	# Weekly bookkeeping lives on country vars; the JE only provides the pulse.
 	on_weekly_pulse = {
 		effect = {
-			sr_je_weekly_pulse_effect = yes
+			st_res_je_weekly_pulse_effect = yes
 		}
 	}
 

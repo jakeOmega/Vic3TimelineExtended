@@ -100,6 +100,8 @@ types TooltipTypes
 						fonttintcolor = "[TooltipInfo.GetTintColor]"
 					}
 
+					block "tooltip_content_after" {}
+
 					caligula_table = {
 						block "table_visibility" {
 							visible = no
@@ -117,8 +119,6 @@ types TooltipTypes
 						maximumsize = { @tooltip_max_width -1 }
 						fonttintcolor = "[TooltipInfo.GetTintColor]"
 					}
-
-					block "tooltip_content_after" {}
 
 					DefaultTooltipTextBox = {
 						name = "TooltipTextShortcut"
@@ -297,7 +297,7 @@ types TooltipTypes
 								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
 							}
-							
+
 							DefaultTooltipTextBox = {
 								name = "TooltipTextDelayed"
 								autoresize = yes
@@ -306,12 +306,6 @@ types TooltipTypes
 								multiline = yes
 								maximumsize = { @fancy_tooltip_content_max_width -1 }
 								fonttintcolor = "[TooltipInfo.GetTintColor]"
-							}
-
-							caligula_table = {
-								block "table_visibility" {
-									visible = no
-								}
 							}
 
 							DefaultTooltipTextBox = {
@@ -327,6 +321,12 @@ types TooltipTypes
 							}
 
 							block "tooltip_content_after" {}
+
+							caligula_table = {
+								block "table_visibility" {
+									visible = no
+								}
+							}
 
 							DefaultTooltipTextBox = {
 								name = "TooltipTextShortcut"
@@ -420,33 +420,40 @@ types TooltipTypes
 				}
 			}
 				
-			### ICON	
-			icon = {
-				block "icon_background_texture" {
-					texture = "gfx/interface/tooltip/tooltip_icon_bg.dds"
-				}
-				position = { 3 3 }
-				size = { 57 57 }
-				block "color" {
-					color = { 0.5 0.5 0.5 1 }
-				}
-				
-				block "icon_frame" {
-					icon = {
-						texture = "gfx/interface/tooltip/tooltip_icon_frame.dds"
-						size = { 100% 100% }
+			### ICON
+			block "whole_icon" {
+				icon = {
+					size = { 57 57 }
+
+					block "icon_background_texture" {
+						texture = "gfx/interface/tooltip/tooltip_icon_bg.dds"
 					}
-				}
-				
-				block "replace_icon" {
-					icon = {
-						block "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/generic_concept_icon.dds"
+
+					block "tooltip_icon_position"{
+						position = { 3 3 }
+					}
+
+					block "color" {
+						color = { 0.5 0.5 0.5 1 }
+					}
+					
+					block "icon_frame" {
+						icon = {
+							texture = "gfx/interface/tooltip/tooltip_icon_frame.dds"
+							size = { 100% 100% }
 						}
-						block "icon_size" {
-							size = { 45 45 }
+					}
+					
+					block "replace_icon" {
+						icon = {
+							block "icon_texture" {
+								texture = "gfx/interface/icons/generic_icons/generic_concept_icon.dds"
+							}
+							block "icon_size" {
+								size = { 45 45 }
+							}
+							parentanchor = center
 						}
-						parentanchor = center
 					}
 				}
 			}
@@ -457,13 +464,15 @@ types TooltipTypes
 				position = { 0 0 }
 				
 				hbox = {
-					margin_left = 64
 					margin_right = 15
 					spacing = 5
+
+					block "header_text_margin_left" {
+						margin_left = 64
+					}
 					
 					layoutpolicy_horizontal = expanding
 					layoutpolicy_vertical = expanding
-
 
 					textbox = {
 						layoutpolicy_horizontal = expanding
@@ -610,6 +619,7 @@ types Tables {
 	type caligula_table = margin_widget {
 		vbox = {
 			set_parent_size_to_minimum = yes
+			block "table_margins" {}
 
 			textbox = {
 				autoresize = yes
@@ -629,20 +639,21 @@ types Tables {
 					
 					textbox = {
 						using = table_header
+						align = left|nobaseline
+						margin_left = 0
 						
 						block "table_header_1" {
 							visible = no
 							# raw_text = "header 1"
 						}
-						
-						align = left|nobaseline
-						margin_left = 0
 					}
 
 					block "table_datamodel" {}
 					item = {
 						textbox = {
 							using = table_cell
+							align = left|nobaseline
+							margin_left = 0
 
 							block "table_value_1" {
 								visible = no
@@ -650,8 +661,9 @@ types Tables {
 								# raw_text = "value 1"
 							}
 
-							align = left|nobaseline
-							margin_left = 0
+							blockoverride "row_background_properties" {
+								margin_left = 5
+							}
 						}
 					}
 				}
@@ -662,28 +674,26 @@ types Tables {
 					
 					textbox = {
 						using = table_header
+						align = right|nobaseline
 						
 						block "table_header_2" {
 							visible = no
 							# raw_text = "header 2"
 						}
-						
-						align = right|nobaseline
 					}
 
 					block "table_datamodel" {}
 					item = {
 						textbox = {
 							using = table_cell
+							align = right|nobaseline
 
 							block "table_value_2" {
 								visible = no
 								margin_left = 0
 								# raw_text = "value 2"
 							}
-
-							align = right|nobaseline
-						}				
+						}
 					}
 				}
 
@@ -693,13 +703,12 @@ types Tables {
 					
 					textbox = {
 						using = table_header
+						align = right|nobaseline
 						
 						block "table_header_3" {
 							visible = no
 							# raw_text = "header 3"
 						}
-						
-						align = right|nobaseline
 					}
 
 					block "table_datamodel" {}
@@ -707,14 +716,13 @@ types Tables {
 					item = {
 						textbox = {
 							using = table_cell
+							align = right|nobaseline
 
 							block "table_value_3" {
 								visible = no
 								margin_left = 0
 								# raw_text = "value 3"
 							}
-
-							align = right|nobaseline
 						}
 					}
 				}
@@ -725,13 +733,12 @@ types Tables {
 					
 					textbox = {
 						using = table_header
+						align = right|nobaseline
 						
 						block "table_header_4" {
 							visible = no
 							# raw_text = "header 4"
 						}
-						
-						align = right|nobaseline
 					}
 
 					block "table_datamodel" {}
@@ -740,14 +747,14 @@ types Tables {
 						textbox = {
 							using = table_cell
 
+							block "table_value_4_alignment" {
+								align = right|nobaseline
+							}
+
 							block "table_value_4" {
 								visible = no
 								margin_left = 0
 								# raw_text = "value 4"
-							}
-
-							block "table_value_4_alignment" {
-								align = right|nobaseline
 							}
 						}
 					}
@@ -759,13 +766,12 @@ types Tables {
 					
 					textbox = {
 						using = table_header
+						align = right|nobaseline
 						
 						block "table_header_5" {
 							visible = no
 							# raw_text = "header 5"
 						}
-						
-						align = right|nobaseline
 					}
 
 					block "table_datamodel" {}
@@ -773,14 +779,13 @@ types Tables {
 					item = {
 						textbox = {
 							using = table_cell
+							align = right|nobaseline
 
 							block "table_value_5" {
 								visible = no
 								margin_left = 0
 								# raw_text = "value 5"
 							}
-
-							align = right|nobaseline
 						}
 					}
 				}
@@ -791,13 +796,12 @@ types Tables {
 					
 					textbox = {
 						using = table_header
+						align = right|nobaseline
 						
 						block "table_header_6" {
 							visible = no
 							# raw_text = "header 6"
 						}
-						
-						align = right|nobaseline
 					}
 
 					block "table_datamodel" {}
@@ -805,20 +809,21 @@ types Tables {
 					item = {
 						textbox = {
 							using = table_cell
+							block "table_value_6_alignment" {
+								align = right|nobaseline
+							}
 
 							block "table_value_6" {
 								visible = no
 								margin_left = 0
 								# raw_text = "value 6"
 							}
-
-							block "table_value_6_alignment" {
-								align = right|nobaseline
-							}
 						}
 					}
 				}
 			}
+
+			block "content_after_table" {}
 		}	
 	}
 }
@@ -835,6 +840,7 @@ template table_header {
 	minimumsize = { -1 26 }
 	maximumsize = { -1 26 }
 	margin_bottom = 3
+	using = tooltip_font
 	
 	divider_clean = {
 		parentanchor = bottom|hcenter
@@ -864,6 +870,8 @@ template table_cell {
 		}
 
 		block "row_background" {}
+
+		block "row_background_properties" {}
 	}
 }
 

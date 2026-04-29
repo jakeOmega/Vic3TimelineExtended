@@ -31,6 +31,7 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder. Se
   - **Modifier patterns**: `/modifier-patterns[?source=catalog|discovered|all]`, `/modifier-patterns/<pattern>` (members + missing vocab values), `/modifier-patterns?expand=<pattern>&<placeholder>=<value>`. Catalog seed at `common/_meta/modifier_patterns.yml`; auto-discovery extends it.
   - **Engine docs**: `/engine-docs/<type>` (effects, triggers, modifiers, event-targets, on-actions, custom-localization). `?group=true` on modifiers uses the §3 pattern catalog.
   - **Validation**: `/validate/engine-coverage` walks every loaded mod entity and flags `unknown_modifiers` / `suspicious_modifiers` (pattern matched but placeholder not in vocab, with did-you-mean suggestions). Cross-references `error.log` lines as `confirmed_by_engine_log`.
+  - **Event balance**: `/event-balance/<id>` (or `?ids=` / `?prefix=` / `?file=`) expands each option's `add_modifier` and `add_enactment_modifier` effects and tags every field with its `color` good/bad/neutral plus a player-perspective polarity. `/event-balance/issues` audits the mod for dominated options — `?mode=strict` (default) flags pure-positive vs pure-negative pairs; `?mode=soft&threshold=N` (default 2) catches mixed-vs-mixed dominance on polarity counts. Always run after editing or adding a multi-option event. Append `?format=text` for skimmable output. The audit only sees modifier-field polarity, so verify flags against the source `.txt` — many false positives come from `add_treasury` / `add_momentum` / `change_variable` / `add_radicals` / scope-changes to rivals / scripted effects / `activate_law` / trigger-gated alternatives that the tool can't classify. See `docs/event_creation_guide.md` § Verifying Option Balance for the full list.
   - **Game logs**: `/logs` (index of error/debug/game/gui/etc. with rotated backups), `/logs/<family>?gen=N&q=&file=&source=&category=&since=&dedupe=&dedupe_key=&summary=&raw=&mod_only=`, `/logs/<family>/diff?against=N` (what's new since last launch), `/logs/sessions` (cluster mtimes into runs).
   - **Search / lookup**: `/search?q=`, `/localize/<key>`, `/unlocalize/<text>`, `/references/<key>`, `/modifier-search?q=`, `/unlocked-by/<tech>`, `/technology-effects/<tech>`, `/tech-tree/<tech>`, `/dev-docs/...`.
 - **Auto-generated docs** rebuilt on startup and `/reload` (do not hand-edit):
@@ -106,8 +107,8 @@ A recurring idiom: define a static modifier with unit values (e.g. `state_migrat
 
 ### Read the docs before scripting
 `docs/README.md` is the index. The docs most likely to matter:
-- `docs/scripting_best_practices.md` — modifier validation, `days` vs `months` units, scope chain pitfalls, expense scaling, registration of dynamic modifier types, `any_` triggers don't take `limit`, modifier-after-effect read ordering, scripted-trigger/effect catalog.
-- `docs/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, `on_yearly_events` wiring, style.
+- `docs/scripting_best_practices.md` — modifier validation, `days` vs `months` units, scope chain pitfalls, expense scaling, registration of dynamic modifier types, `any_` triggers don't take `limit`, modifier-after-effect read ordering, scripted-trigger/effect catalog. Also: `authority` vs `produced_authority` triggers, the inverse-`country_authority_mult` cost-compensation pattern, and the script-only-modifier-as-cross-system-tag pattern (`country_banking_intervention_max_add`, `country_legislative_override_capacity_add`) for gating events on combinations of laws/techs/decrees while staying visible in player tooltips.
+- `docs/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, `on_yearly_events` wiring, style. Also: AI-weight pitfalls for authority-spending options, and the difference between amenability (IGs willing to talk) vs `country_law_enactment_success_add` / `country_law_enactment_stall_mult` / `add_enactment_phase` (mechanics that actually push a law through).
 - `docs/mod_systems.md` — every gameplay system's files and mechanics.
 - `docs/journal_entry_systems.md` — the 10+ JE systems in detail.
 - `docs/python_tools.md` — full server endpoint list and AI-agent workflow.
@@ -116,17 +117,56 @@ A recurring idiom: define a static modifier with unit values (e.g. `state_migrat
 
 ### Validation rules that bite if ignored
 - The Clausewitz engine **silently ignores invalid modifier names**. Validate via `/modifier-search?q=` or `/engine-docs/modifiers?q=` before introducing one. Known-bad names are listed in `docs/scripting_best_practices.md`.
-- Dynamic modifier patterns (`building_<name>_throughput_add`, `goods_output_<good>_mult`, `state_building_<name>_max_level_add`, etc.) require **per-entity registration** in `common/modifier_type_definitions/extra_modifier_types.txt` for any modded building/good. Without registration the modifier silently no-ops.
+- Dynamic modifier patterns (`building_<name>_throughput_add`, `goods_output_<good>_mult`, `state_building_<name>_max_level_add`, `ship_battle_against_ship_type_<ship>_<accuracy|hull_damage>_<add|mult>`, etc.) require **per-entity registration** in `common/modifier_type_definitions/extra_modifier_types.txt` for any modded building/good/ship type. Without registration the modifier silently no-ops. Note that vanilla also only auto-registers *specific axis combinations* per entity (e.g. `ship_type_submarine` gets `_accuracy_*` but NOT `_hull_damage_mult`; `ship_type_dreadnought` gets `_hull_damage_mult` but NOT `_accuracy_mult`) — even when targeting a vanilla type, the specific combo you want may need its own mod-side registration.
 - Time units: `short_modifier_time` / `normal_modifier_time` / `long_modifier_time` / `very_long_modifier_time` are in **days**. Always `days = ...`, never `months = ...` (off by 30×).
 - `any_*` triggers do NOT accept a `limit = { }` block — siblings only. `limit` is for effect iterators (`every_*`, `random_*`, `ordered_*`).
 - `add_modifier` / `remove_modifier` results are not visible inside the same effect block. To recompute a modifier from "base" values, store the prior contribution as a variable and subtract it from the `modifier:X` read. Examples: `prior_pollution_reduction`, `intel_shield_mult`.
 - State-scoped script-value updates that traverse `state_region` should be wired to `on_yearly_pulse_state`, not `on_law_activated` / `on_acquired_technology` / treaty entry hooks (broken parent scope chain).
+- **Modifier stacking is additive across all sources.** Both `_add` and `_mult` modifiers from different sources (buildings, PMs, traits, laws, events) **sum**, they do not multiply. So a per-building `country_X_mult = -0.02` becomes `-2.0` (200% reduction) when 100 instances of the building exist — pathological. Per-building modifiers in `country_modifiers = { workforce_scaled = { ... } }` blocks must be `_add` with small values, OR use country-scope `_mult` only in places that are applied once (event-applied static modifiers, law modifiers, power-bloc member_modifier). When migrating a removed `_add` modifier, do NOT translate it 1:1 to a `_mult`; either find an `_add` analog or drop the per-building bonus entirely.
+- **Top-level entity collisions get silently dropped.** If a mod file declares a top-level key vanilla already owns (`clothes`, a vanilla modifier name, etc.), `debug.log` says `Duplicated key X will not be created` and the mod's whole block is ignored. Use `INJECT:X = { ... }` to extend rather than redeclare. See `docs/scripting_best_practices.md` § "Top-Level Database Collisions".
+- **Global variables read by JE `possible` clauses must be initialized in `on_game_started`.** A `possible` block evaluates at game start, before any `on_*_pulse_*` fires. If it reads `global_var:foo` that doesn't exist yet, debug.log shows `Got value of type 'none'` and the JE silently fails to surface. Wire initialization through `on_game_started = { on_actions = { my_init_action } }` (extension form — never `effect = { }`, which clobbers vanilla's body). See `docs/scripting_best_practices.md` § "Global Variable Initialization Timing".
+
+### Triage workflow for log issues
+**Look at `debug.log` first, not `error.log`.** Vic3's `error.log` only contains a small subset of the engine's diagnostic output (mostly script-value type errors). The real signal — `script_parse_error`, `Unknown modifier type`, `Duplicated key`, `inject/replace to a non-existing entry`, `Unknown trigger type`, `Got value of type 'none'`, missing-texture warnings — lives in `debug.log`.
+
+Use the categorized digest:
+```bash
+curl -s "http://localhost:8950/logs/debug?summary=false&dedupe=true" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(f'{e[\"category\"]} | {(e[\"files\"] or [\"?\"])[0]} | {e[\"message\"][:200]}') for e in d['entries']]"
+```
+
+Common categories to triage:
+- `script_parse_error` — broken token (vanilla rename), unknown modifier (registration missing), unknown trigger (typo or rename).
+- `inject_to_missing` — vanilla renamed/removed the INJECT: target. Check `docs/vanilla_patch_runbook.md` § "Known vanilla renames".
+- `duplicated_key` — top-level entity collision; convert mod's declaration to `INJECT:`.
+- `missing_file` — referenced asset (usually `gfx/event_pictures/*.dds`) doesn't exist; substitute with a thematically similar existing asset or remove the reference.
+- `dds_dimensions` — image not multiple of 4; non-blocking visual warning, fixable only by re-exporting the DDS.
+
+Vanilla-file errors (e.g. `headlines_on_actions.txt`, `command_values.txt`) are not the mod's problem — record them in `docs/vanilla_known_bugs.md` and skip.
+
+### System-scope cheat sheet
+Where a given modifier or trigger can be used:
+- **`mobilization_options/*`** `unit_modifier`: armies only. Don't use `military_formation_fleet_*` or `ship_*` modifiers here.
+- **Tech `modifier = { ... }`** (in `common/technology/technologies/`): country-scope. `character_*` modifiers do NOT apply here — they only work in scopes that target a character (character traits, character-applied static modifiers, etc.). `ship_*` modifiers DO work in tech scope and apply as a country-wide buff to all ships (vanilla `paddle_steamer` uses `ship_hull_damage_mult` / `ship_crew_damage_mult` from a tech `modifier` block; `ship_battle_against_ship_type_*` patterns also work). Use `country_*`, `state_*`, `unit_*`, `building_*`, `ship_*`, or pre-defined country booleans (`country_<feature>_pb_principles_bool`) that are read elsewhere.
+- **Power bloc `member_modifier` / `leader_modifier`**: country-scope. `character_*` modifiers cascade to all the country's characters.
+- **Static modifiers (`common/static_modifiers/`)**: any scope's modifiers — but the static modifier must be applied at a matching scope (country / state / character).
+- **`INJECT:` / `REPLACE:` / `REPLACE_OR_CREATE:` directive prefixes** on entity keys (e.g. `INJECT:building_shipyard = { ... }`) are **engine-native** in Vic3 (Clausewitz). The mod uses them throughout. They merge or replace into the matching vanilla entity at load time. Don't try to "expand" them in tooling.
 
 ### Editing conventions
 - Brace-based Paradox files use **tab** indentation. After large edits run `python scripts/format_paradox_tabs.py <files>` (or `--check` in CI-style flows).
 - After editing mod files, `POST /reload` to refresh the server's view (the auto-deploy watcher will already have synced files into the Paradox mod folder).
 - Localization keys: prefer adding to existing `*_l_english.yml` files and run `python organize_loc.py` to sort and detect unused keys.
-- Don't hand-edit auto-generated files: `docs/laws.txt`, `docs/technologies.txt`, `docs/buildings.txt`, `docs/goods.txt`, `docs/combat_units.txt`, and anything produced by `gen_*.py` (re-run the generator).
+- Don't hand-edit auto-generated files. **Always edit the generator's input and re-run the generator.** Authoritative ownership map (also in `docs/auto_generated_files.md`):
+  - `common/ideologies/modified.txt` — owned by `apply_ideologies.py`; input is `ideology_modifications.py` plus vanilla ideology files. Re-run after vanilla updates to pick up new vanilla content (e.g. patches that add new laws or change attitudes).
+  - `common/interest_groups/00_*.txt` (8 files) — owned by `ig_feminism.py`.
+  - `common/buy_packages/00_buy_packages.txt` — owned by `pop_needs_curves.py`.
+  - `map_data/state_regions/*.txt` — owned by `resources.py`; input is `deposits_config.json` plus vanilla `game/map_data/state_regions/`. After a vanilla map change, update `deposits_config.json` to point old/removed states at successors and re-run.
+  - `docs/laws.txt`, `docs/technologies.txt`, `docs/buildings.txt`, `docs/goods.txt`, `docs/combat_units.txt` — owned by `mod_state_script.py`; rebuilt automatically on `POST /reload`.
+  - `docs/vic3_*_reference.md`, `docs/triggers_summary.txt`, `docs/effects_summary.txt`, etc. — owned by `engine_docs_render.py`.
+  - `docs/engine_coverage_report.md` — owned by `mod_state_server.py /validate/engine-coverage`.
+  - `docs/error_log_digest.md` — owned by `game_log_reader.py`.
+  - Files produced by `gen_*.py` scripts may or may not be auto-managed. If a file's first 5 lines contain `# AUTO-GENERATED` or `do not edit manually`, treat it as owned. Otherwise, it's a one-shot generator output that's been committed; check the script to decide.
+  - Quick check: `git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localization/`.
+- Use `python3` on this system (no `python` alias). The README/CLAUDE.md `python <script>.py` invocations all work as `python3 <script>.py`.
 
 ## Deployment topology
 - This repo is on the WSL/Linux side (`/home/jakef/src/Vic3TimelineExtended`).

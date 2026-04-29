@@ -972,7 +972,6 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 			state_region = s:STATE_MINDANAO
 			state_region = s:STATE_SOLOMON_ISLANDS
 			state_region = s:STATE_NAURU
-			state_region = s:STATE_HORN_OF_AFRICA
 			state_region = s:STATE_ZULIA
 			state_region = s:STATE_MIRANDA
 			state_region = s:STATE_BOLIVAR
@@ -1226,12 +1225,6 @@ INJECT:building_steel_mill = {
 }
 
 INJECT:building_shipyard = {
-	production_method_groups = {
-		pmg_maintenance
-	}
-}
-
-INJECT:building_military_shipyard = {
 	production_method_groups = {
 		pmg_maintenance
 	}

@@ -4,3 +4,7 @@
 # GOODS_AND_NEEDS
 #
  popneed_convenience:0 "Convenience"
+ motor_ships:0 "Motor Ships"
+ motor_ships_desc:0 "Diesel- and turbine-powered oceangoing vessels — supertankers, container ships, and modern liners that displaced coal-fired steamers in the post-war era."
+ magnetic_drive_ships:0 "Magnetic Drive Ships"
+ magnetic_drive_ships_desc:0 "Vessels propelled by magnetohydrodynamic drives — superconducting magnets accelerate seawater through electromagnetic conduits, eliminating propellers and bearings entirely. The exotic apex of civilian shipbuilding."

@@ -41,7 +41,7 @@ STATE_KUBAN = {
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
-    naval_exit_id = 3036
+    naval_exit_id = 3094
 }
 
 STATE_ARMENIA = {
@@ -106,7 +106,7 @@ STATE_GREATER_CAUCASUS = {
         type = "building_manganese_mine"
         undiscovered_amount = 115
     }
-    naval_exit_id = 3036
+    naval_exit_id = 3094
 }
 
 STATE_SAMARA = {

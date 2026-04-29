@@ -1129,7 +1129,7 @@ un_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/un_crisis_empty_seats.dds" }
+	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

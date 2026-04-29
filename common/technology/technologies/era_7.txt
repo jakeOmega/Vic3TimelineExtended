@@ -227,8 +227,9 @@ guided_missiles = {
 	}
 
 	modifier = {
-		state_building_naval_base_max_level_add = 20
 		state_building_military_base_max_level_add = 1
+		ship_hull_damage_mult = 0.05
+		ship_battle_against_ship_type_dreadnought_accuracy_mult = 0.20
 	}
 	
 	ai_weight = {
@@ -373,10 +374,12 @@ anti_sub_warfare = {
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
+
 	modifier = {
-		unit_convoy_defense_mult = 0.5
-		state_building_naval_base_max_level_add = 20
+		country_ship_type_destroyer_construction_efficiency_add = 0.5
+		country_admiral_rank_impact_mult = 0.5
+		ship_battle_against_ship_type_submarine_accuracy_mult = 0.30
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.30
 	}
 	
 	unlocking_technologies = {	
@@ -464,8 +467,9 @@ inertial_navigation_systems = {
 	}
 
 	modifier = {
-		state_building_naval_base_max_level_add = 20
 		country_institution_ministry_of_war_max_investment_add = 1
+		ship_max_distance_to_port_mult = 0.20
+		ship_movement_speed_mult = 0.05
 	}
 	
 	ai_weight = {

@@ -1,0 +1,194 @@
+# Contributions to country_legislative_override_capacity_add — read by the
+# Forced a Law Through event (minor_events_timelineextended.2) to gate which
+# tier of bypass options the player can use, and to scale the authority cost.
+#
+# This file holds INJECTs into VANILLA laws only. Contributions on mod-defined
+# laws live inline in their own definitions in extra_laws.txt — INJECTing into
+# a mod-defined law from a separate file is fragile because file load order is
+# not guaranteed, and the law's plain definition can overwrite the merged result.
+
+# Distribution of Power
+INJECT:law_autocracy = {
+	modifier = {
+		country_legislative_override_capacity_add = 3
+	}
+}
+
+INJECT:law_bakufu = {
+	modifier = {
+		country_legislative_override_capacity_add = 3
+	}
+}
+
+INJECT:law_neo_absolutism = {
+	modifier = {
+		country_legislative_override_capacity_add = 3
+	}
+}
+
+INJECT:law_single_party_state = {
+	modifier = {
+		country_legislative_override_capacity_add = 3
+	}
+}
+
+INJECT:law_technocracy = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_oligarchy = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_organic_regulation = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_elder_council = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_wealth_voting = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_census_voting = {
+	modifier = {
+		country_legislative_override_capacity_add = -2
+	}
+}
+
+INJECT:law_universal_suffrage = {
+	modifier = {
+		country_legislative_override_capacity_add = -3
+	}
+}
+
+INJECT:law_anarchy = {
+	modifier = {
+		country_legislative_override_capacity_add = -3
+	}
+}
+
+# Bureaucracy
+INJECT:law_appointed_bureaucrats = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_elected_bureaucrats = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+# Free Speech
+INJECT:law_outlawed_dissent = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_right_of_assembly = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_protected_speech = {
+	modifier = {
+		country_legislative_override_capacity_add = -2
+	}
+}
+
+# Internal Security
+INJECT:law_secret_police = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_shinsengumi = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_guaranteed_liberties = {
+	modifier = {
+		country_legislative_override_capacity_add = -2
+	}
+}
+
+# Economic System — only the laws with clearest power-distribution implications
+INJECT:law_traditionalism = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_agrarianism = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_laissez_faire = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_command_economy = {
+	modifier = {
+		country_legislative_override_capacity_add = 2
+	}
+}
+
+# Land Reform — feudal/landed-elite arrangements decentralize political authority
+INJECT:law_serfdom = {
+	modifier = {
+		country_legislative_override_capacity_add = -2
+	}
+}
+
+INJECT:law_manorialism = {
+	modifier = {
+		country_legislative_override_capacity_add = -2
+	}
+}
+
+INJECT:law_tenant_farmers = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_latifundias = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_expanded_latifundias = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_collectivized_agriculture = {
+	modifier = {
+		country_legislative_override_capacity_add = 2
+	}
+}

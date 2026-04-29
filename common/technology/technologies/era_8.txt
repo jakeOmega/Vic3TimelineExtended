@@ -52,7 +52,9 @@ predictive_logistics = {
 	modifier = {
 		unit_supply_consumption_mult = -0.1
 		military_formation_organization_gain_mult = 0.1
-		country_sr_oil_decay_add = -0.001
+		country_st_res_oil_decay_add = -0.001
+		country_general_rank_impact_mult = 0.5
+		country_admiral_rank_impact_mult = 0.5
 	}
 	
 	ai_weight = {
@@ -442,10 +444,11 @@ precision_guided_munitions = {
 	}
 
 	modifier = {
-		state_building_naval_base_max_level_add = 20
 		country_weekly_innovation_max_add = 50
 		state_building_barrack_max_level_add = 50
 		state_building_military_base_max_level_add = 1
+		ship_hull_damage_mult = 0.10
+		ship_accuracy_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -465,8 +468,9 @@ infrared_night_vision = {
 
 	modifier = {
 		unit_army_defense_add = 10
-		state_building_naval_base_max_level_add = 20
 		country_institution_ministry_of_war_max_investment_add = 1
+		ship_detection_mult = 0.15
+		ship_visibility_mult = -0.10
 	}
 	
 	ai_weight = {

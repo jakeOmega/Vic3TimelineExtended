@@ -122,7 +122,7 @@ re_spectrum_public_grid = {
 re_spectrum_foreign_relays = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
     country_bureaucracy_mult = -0.05
-    country_convoys_capacity_mult = 0.05
+    country_port_connection_cost_mult = -0.05
     country_improve_relations_speed_mult = 0.10
 }
 
@@ -173,6 +173,7 @@ re_sbsp_blackouts = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
     goods_output_electricity_mult = -0.10
     country_radicals_from_legitimacy_mult = 0.05
+    country_authority_add = 50
 }
 re_sbsp_imports = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -940,8 +941,9 @@ we_am_annihilation_military = {
 }
 we_am_annihilation_propulsion = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    military_formation_movement_speed_mult = 0.1
-    country_convoys_capacity_mult = 0.05
+    military_formation_army_movement_speed_mult = 0.1
+    military_formation_fleet_movement_speed_mult = 0.1
+    country_port_connection_cost_mult = -0.05
 }
 we_am_diplomacy_arsenal = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -965,8 +967,9 @@ we_am_incident_suppress = {
 }
 we_am_propulsion_military = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-    military_formation_movement_speed_mult = 0.15
-    country_convoys_capacity_mult = 0.1
+    military_formation_army_movement_speed_mult = 0.15
+    military_formation_fleet_movement_speed_mult = 0.15
+    country_supply_ship_construction_progress_max_mult = 0.1
 }
 we_am_propulsion_civilian = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds

@@ -1,0 +1,307 @@
+# =============================================================================
+# Vic3TimelineExtended — fallback name lists for mod-added ship types
+# =============================================================================
+# Vanilla's 99_ship_name_definitions_fallbacks.txt only lists vanilla
+# ship_type_* values in its allowed_ship_types blocks, so mod-added ships
+# (asw_destroyer, nuclear_submarine, guided_missile_ship, nuclear_supercarrier,
+# arsenal_ship, expeditionary_sea_base, hypersonic_missile_platform,
+# pulsed_laser_escort, swarm_coordination_vessel) match no fallback and ship
+# unnamed.
+#
+# These entries reuse vanilla loc keys (shipname_default_format,
+# shipname_fallback_ordinal_generic, shipname_fallback_submarine) and the
+# shipname_prefixes_clone_template defined in vanilla — no new loc required.
+#
+# Selection-weight tiering mirrors vanilla:
+#   capital ships    high=states  med=hubs  low=surnames
+#   cruisers         high=hubs    med=states low=surnames
+#   torpedo craft    high=surnames med=hubs  low=states
+# =============================================================================
+
+
+### Ordinal fallbacks (always usable, infinite supply)
+
+shipname_fallback_ordinal_te_capital_ships = {
+	name = "shipname_fallback_ordinal_generic" # SHIP_TYPE No. 1
+	selection_weight = 1
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_arsenal_ship
+		ship_type_hypersonic_missile_platform
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = ship_type
+			key = "SHIP_TYPE_NAME"
+		}
+		{
+			type = ordinal_number
+			key = "NUM"
+		}
+	}
+}
+
+shipname_fallback_ordinal_te_cruisers = {
+	name = "shipname_fallback_ordinal_generic"
+	selection_weight = 1
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_nuclear_supercarrier
+		ship_type_expeditionary_sea_base
+		ship_type_pulsed_laser_escort
+		ship_type_swarm_coordination_vessel
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = ship_type
+			key = "SHIP_TYPE_NAME"
+		}
+		{
+			type = ordinal_number
+			key = "NUM"
+		}
+	}
+}
+
+shipname_fallback_ordinal_te_torpedo_craft = {
+	name = "shipname_fallback_ordinal_generic"
+	selection_weight = 1
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_asw_destroyer
+		ship_type_guided_missile_ship
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = ship_type
+			key = "SHIP_TYPE_NAME"
+		}
+		{
+			type = ordinal_number
+			key = "NUM"
+		}
+	}
+}
+
+shipname_fallback_ordinal_te_submarine = { # S-1
+	name = "shipname_fallback_submarine"
+	selection_weight = 1
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_nuclear_submarine
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = ordinal_number
+			key = "NUM"
+		}
+	}
+}
+
+
+### Gamestate-tied fallbacks (preferred — produce evocative names while supply lasts)
+
+# Capital ships: state names → hub names → surnames
+shipname_fallback_te_capital_ships_high = {
+	name = "shipname_default_format"
+	selection_weight = 5
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_arsenal_ship
+		ship_type_hypersonic_missile_platform
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = owned_states
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+shipname_fallback_te_capital_ships_medium = {
+	name = "shipname_default_format"
+	selection_weight = 4
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_arsenal_ship
+		ship_type_hypersonic_missile_platform
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = owned_hubs
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+shipname_fallback_te_capital_ships_low = {
+	name = "shipname_default_format"
+	selection_weight = 3
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_arsenal_ship
+		ship_type_hypersonic_missile_platform
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = culture_surnames
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+# Cruisers: hub names → state names → surnames
+shipname_fallback_te_cruisers_high = {
+	name = "shipname_default_format"
+	selection_weight = 5
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_nuclear_supercarrier
+		ship_type_expeditionary_sea_base
+		ship_type_pulsed_laser_escort
+		ship_type_swarm_coordination_vessel
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = owned_hubs
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+shipname_fallback_te_cruisers_medium = {
+	name = "shipname_default_format"
+	selection_weight = 4
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_nuclear_supercarrier
+		ship_type_expeditionary_sea_base
+		ship_type_pulsed_laser_escort
+		ship_type_swarm_coordination_vessel
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = owned_states
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+shipname_fallback_te_cruisers_low = {
+	name = "shipname_default_format"
+	selection_weight = 3
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_nuclear_supercarrier
+		ship_type_expeditionary_sea_base
+		ship_type_pulsed_laser_escort
+		ship_type_swarm_coordination_vessel
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = culture_surnames
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+# Torpedo craft: surnames → hub names → state names
+shipname_fallback_te_torpedo_craft_high = {
+	name = "shipname_default_format"
+	selection_weight = 5
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_asw_destroyer
+		ship_type_guided_missile_ship
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = culture_surnames
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+shipname_fallback_te_torpedo_craft_medium = {
+	name = "shipname_default_format"
+	selection_weight = 4
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_asw_destroyer
+		ship_type_guided_missile_ship
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = owned_hubs
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}
+
+shipname_fallback_te_torpedo_craft_low = {
+	name = "shipname_default_format"
+	selection_weight = 3
+	fallback = yes
+
+	allowed_ship_types = {
+		ship_type_asw_destroyer
+		ship_type_guided_missile_ship
+	}
+
+	clone_properties = shipname_prefixes_clone_template
+
+	properties = {
+		{
+			type = owned_states
+			key = "SHIP_NAMESAKE"
+		}
+	}
+}

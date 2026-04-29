@@ -155,6 +155,8 @@ jadc2 = {
 		unit_offense_mult = 0.1
 		unit_defense_mult = 0.1
 		country_institution_ministry_of_war_max_investment_add = 1
+		country_general_rank_impact_mult = 1.0
+		country_admiral_rank_impact_mult = 1.0
 	}
 	
 	ai_weight = {
@@ -199,9 +201,11 @@ electronic_warfare = {
 
 	modifier = {
 		state_building_barrack_max_level_add = 50
-		state_building_naval_base_max_level_add = 20
 		country_intelligence_capacity_add = 2
 		country_covert_operation_efficiency_mult = 0.10
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.20
+		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.15
+		ship_visibility_mult = -0.10
 	}
 	
 	ai_weight = {

@@ -41,9 +41,12 @@ enforce_privatization = {
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
-			NOR = {
-				has_law = law_type:law_laissez_faire
-				has_law = law_type:law_command_economy
+			# Target must have a state-heavy economy worth privatizing.
+			# Interventionism is mostly-private already, so excluded.
+			OR = {
+				has_law = law_type:law_cooperative_ownership
+				has_law = law_type:law_agrarianism
+				has_law = law_type:law_traditionalism
 			}
 		}
 	}
@@ -72,9 +75,19 @@ enforce_privatization = {
 			}
 		}
 		scope:source_country = {
-			NOR = {
+			# The demanding side must itself be capitalist (privatization is an
+			# ideological export, not a power play of state-led economies).
+			OR = {
 				has_law = law_type:law_laissez_faire
-				has_law = law_type:law_command_economy
+				has_law = law_type:law_interventionism
+			}
+		}
+		# Target must still have state-heavy economy at ratification time.
+		scope:target_country = {
+			OR = {
+				has_law = law_type:law_cooperative_ownership
+				has_law = law_type:law_agrarianism
+				has_law = law_type:law_traditionalism
 			}
 		}
 	}
@@ -84,7 +97,7 @@ enforce_privatization = {
 		article_ai_usage = { request }
 
 		evaluation_chance = {
-			value = 0.05
+			value = 0.01
 			# Non-capitalist countries have no interest in demanding privatization
 			if = {
 				limit = {
@@ -102,7 +115,19 @@ enforce_privatization = {
 						has_law = law_type:law_interventionism
 					}
 				}
-				add = 0.1
+				add = 0.03
+			}
+			# Only meaningful if the target actually has substantial state-owned economy
+			if = {
+				limit = {
+					scope:other_country = {
+						OR = {
+							has_law = law_type:law_cooperative_ownership
+							has_law = law_type:law_traditionalism
+						}
+					}
+				}
+				add = 0.04
 			}
 			if = {
 				limit = {
@@ -110,13 +135,22 @@ enforce_privatization = {
 						is_in_government = yes
 					}
 				}
-				add = 0.1
+				add = 0.03
 			}
 			if = {
 				limit = {
 					has_attitude = { who = scope:other_country attitude = domineering }
 				}
-				add = 0.1
+				add = 0.03
+			}
+			# AI mostly does not bring this article during a war — it's a
+			# peace-time ideological imposition, not a wargoal substitute.
+			# Applied at the end so it scales the FINAL chance down 90%.
+			if = {
+				limit = {
+					is_at_war = yes
+				}
+				multiply = 0.1
 			}
 		}
 

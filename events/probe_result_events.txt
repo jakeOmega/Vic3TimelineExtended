@@ -232,7 +232,7 @@ space_race_events.604 = {
 space_race_events.605 = {
 	type = country_event
 	placement = root
-	event_image = { texture = "gfx/event_pictures/probe_asteroid_belts.dds" }
+	event_image = { texture = "gfx/event_pictures/probe_orbital_debris.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.605.t
@@ -501,7 +501,7 @@ space_race_events.609 = {
 space_race_events.610 = {
 	type = country_event
 	placement = root
-	event_image = { texture = "gfx/event_pictures/probe_volcanic_world.dds" }
+	event_image = { texture = "gfx/event_pictures/probe_scorched_rock.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.610.t
@@ -1357,7 +1357,7 @@ space_race_events.625 = {
 space_race_events.626 = {
 	type = country_event
 	placement = root
-	event_image = { texture = "gfx/event_pictures/probe_industrial_atmosphere.dds" }
+	event_image = { texture = "gfx/event_pictures/probe_greenhouse_world.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.626.t

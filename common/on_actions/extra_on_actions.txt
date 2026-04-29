@@ -10,6 +10,27 @@ on_law_enactment_pass = {
 	}
 }
 
+# Initialize globals before any journal-entry `possible` clause reads them.
+# je_global_warming.possible reads global_var:greenhouse_gas_emissions, which
+# would otherwise return 'none' until on_yearly_pulse_state first fires.
+on_game_started = {
+	on_actions = {
+		te_init_global_state
+	}
+}
+
+te_init_global_state = {
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = greenhouse_gas_emissions } }
+			set_global_variable = {
+				name = greenhouse_gas_emissions
+				value = 0
+			}
+		}
+	}
+}
+
 te_banking_law_change_cleanup = {
 	effect = {
 		# Only run if the banking cycle JE is active
@@ -1023,7 +1044,7 @@ violent_hostility_on_action = {
 					}
 				}
 			}
-			
+
 			every_scope_culture = {
 				limit = {
 					scope:curr_state = {

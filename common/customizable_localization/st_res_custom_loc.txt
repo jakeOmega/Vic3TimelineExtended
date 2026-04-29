@@ -1,0 +1,74 @@
+﻿# Mode text is derived from country vars at display time. The live Strategic
+# Reserve system no longer maintains persistent sr_*_mode variables.
+
+st_res_grain_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_grain_rate > 0
+			var:st_res_grain_stored < st_res_grain_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_grain_rate < 0
+			var:st_res_grain_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}
+
+st_res_ammunition_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_ammunition_rate > 0
+			var:st_res_ammunition_stored < st_res_ammunition_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_ammunition_rate < 0
+			var:st_res_ammunition_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}
+
+st_res_oil_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_oil_rate > 0
+			var:st_res_oil_stored < st_res_oil_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_oil_rate < 0
+			var:st_res_oil_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}

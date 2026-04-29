@@ -151,3 +151,25 @@ tech_metals = {
 	prestige_factor = 20
 	traded_quantity = 5
 }
+
+motor_ships = {
+	texture = "gfx/interface/icons/goods_icons/motor_ships.dds"
+	cost = 90
+	category = industrial
+
+	obsession_chance = 0.5
+	prestige_factor = 8
+	traded_quantity = 3
+	convoy_cost_multiplier = 0.20
+}
+
+magnetic_drive_ships = {
+	texture = "gfx/interface/icons/goods_icons/magnetic_drive_ships.dds"
+	cost = 130
+	category = industrial
+
+	obsession_chance = 0.5
+	prestige_factor = 12
+	traded_quantity = 3
+	convoy_cost_multiplier = 0.30
+}

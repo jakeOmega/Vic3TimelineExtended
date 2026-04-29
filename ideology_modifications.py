@@ -565,9 +565,35 @@ antitrust_traditional = [
     ("law_command_cooperative_economy", "disapprove"),
 ]
 
+# Army Model: Private Military Contractors attitudes
+pmc_strongly_approve = [("law_private_military_contractors", "strongly_approve")]
+pmc_approve = [("law_private_military_contractors", "approve")]
+pmc_disapprove = [("law_private_military_contractors", "disapprove")]
+pmc_strongly_disapprove = [("law_private_military_contractors", "strongly_disapprove")]
+
+# Navy Model: Littoral Defense + Auxiliary Fleet attitudes (paired)
+navy_pacifist = [
+    ("law_littoral_defense", "strongly_approve"),
+    ("law_auxiliary_fleet", "strongly_disapprove"),
+]
+navy_defensive = [
+    ("law_littoral_defense", "approve"),
+    ("law_auxiliary_fleet", "disapprove"),
+]
+navy_imperialist = [
+    ("law_littoral_defense", "disapprove"),
+    ("law_auxiliary_fleet", "approve"),
+]
+navy_jingoist = [
+    ("law_littoral_defense", "strongly_disapprove"),
+    ("law_auxiliary_fleet", "strongly_approve"),
+]
+
 
 modifications = {
     "ideology_paternalistic": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": anti_privacy_entry,
         "lawgroup_human_augmentation": highly_regulated_augmentation,
         "lawgroup_ministry_of_thought_control": ministry_constructor(
@@ -615,6 +641,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_dirigiste,
     },
     "ideology_particularist": {
+        "lawgroup_navy_model": navy_defensive,
         "lawgroup_privacy_rights": pro_privacy_entry,
         "lawgroup_monetary_policy": simple_currency,
         "lawgroup_national_bank": ministry_constructor("national_bank", "--"),
@@ -638,6 +665,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_traditional,
     },
     "ideology_patriotic": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": anti_privacy_entry,
         "lawgroup_rules_of_war": aggressive_rules_of_war,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
@@ -790,6 +819,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_market_liberal": {
+        "lawgroup_army_model": pmc_approve,
+        "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
@@ -827,6 +858,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_laissez_faire,
     },
     "ideology_traditionalist": {
+        "lawgroup_army_model": pmc_disapprove,
         "lawgroup_privacy_rights": trad_privacy_entry,
         "lawgroup_human_augmentation": anti_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
@@ -868,6 +900,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_populist": {
+        "lawgroup_army_model": pmc_disapprove,
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_human_augmentation": populist_augmentation,
@@ -915,6 +948,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_social_democrat": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_defensive,
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_human_augmentation": medical_augmentation,
         "lawgroup_intellectual_property": loose_ip_laws,
@@ -965,6 +1000,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_vanguardist": {
+        "lawgroup_army_model": pmc_strongly_disapprove,
+        "lawgroup_navy_model": navy_defensive,
         "lawgroup_privacy_rights": extremist_privacy_entry,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_rules_of_war": aggressive_rules_of_war,
@@ -1006,6 +1043,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_fascist": {
+        "lawgroup_army_model": pmc_strongly_disapprove,
+        "lawgroup_navy_model": navy_jingoist,
         "lawgroup_privacy_rights": extremist_privacy_entry,
         "lawgroup_human_augmentation": extremist_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_hate,
@@ -1063,6 +1102,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_corporatist_nat,
     },
     "ideology_anarchist": {
+        "lawgroup_army_model": pmc_strongly_disapprove,
+        "lawgroup_navy_model": navy_defensive,
         "lawgroup_privacy_rights": pro_privacy_entry,
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_intellectual_property": communal_ip_laws,
@@ -1118,6 +1159,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_laissez_faire": {
+        "lawgroup_army_model": pmc_strongly_approve,
+        "lawgroup_navy_model": navy_imperialist,
         "lawgroup_ministry_of_commerce": ministry_constructor(
             "ministry_of_commerce", "++"
         ),
@@ -1168,6 +1211,7 @@ modifications = {
         ],
     },
     "ideology_moralist": {
+        "lawgroup_army_model": pmc_strongly_disapprove,
         "lawgroup_human_augmentation": anti_augmentation,
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "++"
@@ -1256,6 +1300,8 @@ modifications = {
         "lawgroup_financial_regulation": finreg_meritocratic,
     },
     "ideology_jingoist": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_jingoist,
         "lawgroup_human_augmentation": militarist_augmentation,
         "lawgroup_right_to_information": pro_secrecy,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
@@ -1281,6 +1327,8 @@ modifications = {
         ],
     },
     "ideology_jingoist_leader": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_jingoist,
         "lawgroup_human_augmentation": militarist_augmentation,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "++"
@@ -1300,6 +1348,7 @@ modifications = {
         ],
     },
     "ideology_individualist": {
+        "lawgroup_army_model": pmc_approve,
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_welfare": [
             ("law_no_social_security", "neutral"),
@@ -1318,6 +1367,8 @@ modifications = {
         "lawgroup_inheritance": moderate_inheritance,
     },
     "ideology_proletarian": {
+        "lawgroup_army_model": pmc_strongly_disapprove,
+        "lawgroup_navy_model": navy_defensive,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
@@ -1350,6 +1401,8 @@ modifications = {
         "lawgroup_financial_regulation": finreg_socialist,
     },
     "ideology_communist": {
+        "lawgroup_army_model": pmc_strongly_disapprove,
+        "lawgroup_navy_model": navy_defensive,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "+"
@@ -1380,6 +1433,8 @@ modifications = {
         "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_pacifist": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_pacifist,
         "lawgroup_ministry_of_war": ministry_constructor("ministry_of_war", "--"),
         "lawgroup_ministry_of_international_aid": ministry_constructor(
             "ministry_of_international_aid", "++"
@@ -1388,6 +1443,8 @@ modifications = {
         "lawgroup_colonization": [("law_neocolonialism", "neutral")],
     },
     "ideology_plutocratic": {
+        "lawgroup_army_model": pmc_strongly_approve,
+        "lawgroup_navy_model": navy_imperialist,
         "lawgroup_intellectual_property": strict_ip_laws,
         "lawgroup_monetary_policy": advanced_curency,
         "lawgroup_ministry_of_culture": ministry_constructor(

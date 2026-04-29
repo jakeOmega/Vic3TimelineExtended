@@ -1,0 +1,353 @@
+﻿# ============================================================================
+# Strategic Reserve — Script Values
+# ============================================================================
+# Weekly signed-flow bookkeeping. Positive configured rates store goods,
+# negative configured rates withdraw them. The hub applies the chosen base rate
+# up to its own throughput cap (10 goods/level/week), and generic building
+# throughput modifiers scale the active market flow from there.
+# Scope contract: these values are evaluated in country scope. Live hub data is
+# bridged in from building scope by st_res_refresh_hub_cache_effect, which writes
+# st_res_hub_level_cached and st_res_hub_throughput_cached before these values are
+# consumed by the JE, buttons, or hub-flow refresh helpers.
+# ============================================================================
+
+# Hub level — 0 if no hub exists.
+st_res_hub_level = {
+	value = 0
+	add = var:st_res_hub_level_cached
+}
+
+st_res_weekly_base_rate_cap = {
+	value = 0
+	add = modifier:country_st_res_weekly_rate_cap_add
+	min = 1
+}
+
+st_res_neg_weekly_base_rate_cap = {
+	value = st_res_weekly_base_rate_cap
+	multiply = -1
+}
+
+# Total throughput_add modifier on the hub, summing all contributions.
+st_res_hub_throughput = {
+	value = 0
+	add = var:st_res_hub_throughput_cached
+}
+
+# Throughput scaling factor — clamped at 0.1x so a negative pile-on of
+# debuffs can't flip the delta sign or zero out flow entirely.
+st_res_throughput_factor = {
+	value = 1
+	add = st_res_hub_throughput
+	min = 0.1
+	max = 5
+}
+
+# Shared button step size. Tier 0 = 1, 1 = 10, 2 = 100, 3 = 1000, 4 = 10000.
+st_res_adjust_step_value = {
+	value = 1
+	if = {
+		limit = { var:st_res_adjust_step_tier = 0 }
+		value = 1
+	}
+	else_if = {
+		limit = { var:st_res_adjust_step_tier = 1 }
+		value = 10
+	}
+	else_if = {
+		limit = { var:st_res_adjust_step_tier = 2 }
+		value = 100
+	}
+	else_if = {
+		limit = { var:st_res_adjust_step_tier = 3 }
+		value = 1000
+	}
+	else = {
+		value = 10000
+	}
+}
+
+# --- GRAIN ---
+st_res_grain_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_grain_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_grain_weekly_decay = {
+	value = var:st_res_grain_stored
+	multiply = st_res_grain_decay_rate
+}
+
+# Actual gross flow the hub must apply to achieve the configured target net change
+# (includes decay replenishment). Positive = hub buying, negative = hub selling.
+st_res_grain_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_grain_rate
+	}
+	add = st_res_grain_weekly_decay
+}
+
+st_res_grain_actual_rate_base_applied = {
+	value = st_res_grain_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_grain_weekly_delta = {
+	value = 0
+	add = st_res_grain_actual_rate_base_applied
+	subtract = st_res_grain_weekly_decay
+}
+
+st_res_grain_capacity = {
+	value = 0
+	add = modifier:country_st_res_grain_capacity_add
+}
+
+st_res_grain_good_mult = {
+	value = 0
+	if = {
+		limit = { st_res_grain_actual_rate_base_applied > 0 }
+		add = st_res_grain_actual_rate_base_applied
+	}
+	else = {
+		subtract = st_res_grain_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_grain_max_withdrawable = {
+	value = 0
+	add = var:st_res_grain_stored
+	subtract = st_res_grain_weekly_decay
+	multiply = -1
+}
+
+st_res_grain_max_storable = {
+	value = 0
+	add = st_res_grain_capacity
+	subtract = var:st_res_grain_stored
+	subtract = st_res_grain_weekly_decay
+}
+
+st_res_grain_sale_profit = {
+	value = 0
+	if = {
+		limit = { st_res_grain_actual_rate_base_applied < 0 }
+		subtract = st_res_grain_actual_rate_base_applied
+		g:grain = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:grain.market_goods_pricier
+		}
+	}
+}
+
+# --- AMMUNITION ---
+st_res_ammunition_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_ammunition_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_ammunition_weekly_decay = {
+	value = var:st_res_ammunition_stored
+	multiply = st_res_ammunition_decay_rate
+}
+
+# Actual gross flow the hub must apply to achieve the configured target net change
+# (includes decay replenishment). Positive = hub buying, negative = hub selling.
+st_res_ammunition_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_ammunition_rate
+	}
+	add = st_res_ammunition_weekly_decay
+}
+
+st_res_ammunition_actual_rate_base_applied = {
+	value = st_res_ammunition_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_ammunition_weekly_delta = {
+	value = 0
+	add = st_res_ammunition_actual_rate_base_applied
+	subtract = st_res_ammunition_weekly_decay
+}
+
+st_res_ammunition_capacity = {
+	value = 0
+	add = modifier:country_st_res_ammunition_capacity_add
+}
+
+st_res_ammunition_good_mult = {
+	value = 0
+	if = {
+		limit = { st_res_ammunition_actual_rate_base_applied > 0 }
+		add = st_res_ammunition_actual_rate_base_applied
+	}
+	else = {
+		subtract = st_res_ammunition_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_ammunition_max_withdrawable = {
+	value = 0
+	add = var:st_res_ammunition_stored
+	subtract = st_res_ammunition_weekly_decay
+	multiply = -1
+}
+
+st_res_ammunition_max_storable = {
+	value = 0
+	add = st_res_ammunition_capacity
+	subtract = var:st_res_ammunition_stored
+	subtract = st_res_ammunition_weekly_decay
+}
+
+st_res_ammunition_sale_profit = {
+	value = 0
+	if = {
+		limit = { st_res_ammunition_actual_rate_base_applied < 0 }
+		subtract = st_res_ammunition_actual_rate_base_applied
+		g:ammunition = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:ammunition.market_goods_pricier
+		}
+	}
+}
+
+# --- OIL ---
+st_res_oil_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_oil_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_oil_weekly_decay = {
+	value = var:st_res_oil_stored
+	multiply = st_res_oil_decay_rate
+}
+
+st_res_oil_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_oil_rate
+	}
+	add = st_res_oil_weekly_decay
+}
+
+st_res_oil_actual_rate_base_applied = {
+	value = st_res_oil_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_oil_weekly_delta = {
+	value = 0
+	add = st_res_oil_actual_rate_base_applied
+	subtract = st_res_oil_weekly_decay
+}
+
+st_res_oil_capacity = {
+	value = 0
+	add = modifier:country_st_res_oil_capacity_add
+}
+
+st_res_oil_good_mult = {
+	value = 0
+	if = {
+		limit = { st_res_oil_actual_rate_base_applied > 0 }
+		add = st_res_oil_actual_rate_base_applied
+	}
+	else = {
+		subtract = st_res_oil_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_oil_max_withdrawable = {
+	value = 0
+	add = var:st_res_oil_stored
+	subtract = st_res_oil_weekly_decay
+	multiply = -1
+}
+
+st_res_oil_max_storable = {
+	value = 0
+	add = st_res_oil_capacity
+	subtract = var:st_res_oil_stored
+	subtract = st_res_oil_weekly_decay
+}
+
+st_res_oil_sale_profit = {
+	value = 0
+	if = {
+		limit = { st_res_oil_actual_rate_base_applied < 0 }
+		subtract = st_res_oil_actual_rate_base_applied
+		g:oil = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:oil.market_goods_pricier
+		}
+	}
+}
+
+# --- Capacity utilization (for AI hints / loc) ---
+st_res_grain_fill_pct = {
+	value = var:st_res_grain_stored
+	divide = {
+		value = st_res_grain_capacity
+		min = 1
+	}
+	multiply = 100
+}
+st_res_ammunition_fill_pct = {
+	value = var:st_res_ammunition_stored
+	divide = {
+		value = st_res_ammunition_capacity
+		min = 1
+	}
+	multiply = 100
+}
+st_res_oil_fill_pct = {
+	value = var:st_res_oil_stored
+	divide = {
+		value = st_res_oil_capacity
+		min = 1
+	}
+	multiply = 100
+}

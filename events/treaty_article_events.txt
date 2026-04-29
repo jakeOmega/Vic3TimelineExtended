@@ -78,7 +78,7 @@ treaty_article_events.1 = {
 		default_option = yes
 		add_modifier = {
 			name = intelligence_tip_off_modifier
-			days = normal_modifier_time
+			days = long_modifier_time
 			is_decaying = yes
 		}
 		change_relations = {

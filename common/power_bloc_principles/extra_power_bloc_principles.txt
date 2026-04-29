@@ -55,7 +55,6 @@ principle_internal_trade_4 = {
 
 	member_modifier = {
 		country_company_throughput_bonus_add = 0.05
-		country_convoy_contribution_to_market_owner_add = 0.4
 		state_infrastructure_mult = 0.1
 		country_port_connection_cost_mult = -0.25
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
@@ -83,7 +82,6 @@ principle_internal_trade_5 = {
 
 	member_modifier = {
 		country_company_throughput_bonus_add = 0.1
-		country_convoy_contribution_to_market_owner_add = 0.5
 		state_infrastructure_mult = 0.1
 		country_port_connection_cost_mult = -0.25
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
@@ -112,12 +110,11 @@ principle_market_unification_4 = {
 	}
 
 	leader_modifier = {
-		country_convoys_capacity_mult = 0.2
+		country_port_connection_cost_mult = -0.2
 	}
 
 	member_modifier = {
 		state_infrastructure_mult = 0.2
-		country_convoy_contribution_to_market_owner_add = 0.3
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
@@ -147,12 +144,11 @@ principle_market_unification_5 = {
 	}
 
 	leader_modifier = {
-		country_convoys_capacity_mult = 0.4
+		country_port_connection_cost_mult = -0.4
 	}
 
 	member_modifier = {
 		state_infrastructure_mult = 0.3
-		country_convoy_contribution_to_market_owner_add = 0.4
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
@@ -783,9 +779,9 @@ principle_military_industry_4 = {
 		building_automotive_industry_throughput_add = 0.15
 		building_arms_industry_throughput_add = 0.15
 		building_artillery_foundry_throughput_add = 0.15
-		building_military_shipyard_throughput_add = 0.15
+		building_shipyard_throughput_add = 0.15
 		country_military_goods_cost_mult = -0.15
-		character_supply_route_cost_mult = -0.33
+		unit_supply_consumption_mult = -0.15
 		building_mobilization_cost_mult = -0.1
 	}
 	
@@ -807,9 +803,9 @@ principle_military_industry_5 = {
 		building_automotive_industry_throughput_add = 0.25
 		building_arms_industry_throughput_add = 0.25
 		building_artillery_foundry_throughput_add = 0.25
-		building_military_shipyard_throughput_add = 0.25
+		building_shipyard_throughput_add = 0.25
 		country_military_goods_cost_mult = -0.25
-		character_supply_route_cost_mult = -0.5
+		unit_supply_consumption_mult = -0.25
 		building_mobilization_cost_mult = -0.1
 		country_military_tech_spread_mult = 0.25
 	}
@@ -3637,8 +3633,8 @@ principle_engineering_and_logistics_3 = {
 		character_battle_condition_charted_terrain_mult = 0.2
 		character_battle_condition_dug_in_mult = 0.5
 
-		unit_convoy_defense_mult = 0.5
-		unit_convoy_raiding_interception_mult = 0.5
+		character_convoy_protection_mult = 0.5
+		character_convoy_protection_mult = 0.5
 	}
 
 	ai_weight = {
@@ -3662,8 +3658,8 @@ principle_engineering_and_logistics_4 = {
 
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
-		unit_convoy_defense_mult = 1
-		unit_convoy_raiding_interception_mult = 1
+		character_convoy_protection_mult = 1
+		character_convoy_protection_mult = 1
 		unit_morale_recovery_mult = 0.25
 	}
 
@@ -3687,8 +3683,8 @@ principle_engineering_and_logistics_5 = {
 		character_battle_condition_dug_in_mult = 0.5
 		state_building_airport_max_level_add = 2
 		state_building_highway_max_level_add = 2
-		unit_convoy_defense_mult = 1
-		unit_convoy_raiding_interception_mult = 1
+		character_convoy_protection_mult = 1
+		character_convoy_protection_mult = 1
 		unit_morale_recovery_mult = 0.25
 
 		unit_morale_loss_mult = -0.1
@@ -3699,149 +3695,52 @@ principle_engineering_and_logistics_5 = {
 	}
 }
 
-principle_navy_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
-	
-	visible = {
-		has_dlc_feature = power_bloc_features
-	}
-
-	member_modifier = {
-		unit_navy_experience_gain_mult = 0.25
-	}
-	
-	ai_weight = {
-		value = 50
-
-		if = {
-			limit = {
-				NOT = {
-					any_scope_state = {
-						is_coastal = yes
-					}
-				}
-			}
-			multiply = 0
-		}
-
-		every_scope_state = {
-			if = {
-				limit = {
-					is_coastal = yes
-				}
-				add = 1
-			}
-			else = {
-				subtract = 1
-			}
-		}
-
-		min = 5
-		max = 100
-		
-		if = {
-			limit = {
-				OR = {
-					has_strategy = ai_strategy_nationalist_agenda
-					has_strategy = ai_strategy_colonial_expansion
-					has_strategy = ai_strategy_armed_isolationism
-				}
-			}
-			multiply = 2.0
-		}
-
-		if = {
-			limit = {
-				has_strategy = ai_strategy_economic_imperialism
-			}
-			multiply = 2.0
-		}
-
-		if = {
-			limit = {
-				has_law = law_type:law_ministry_of_war
-			}
-			multiply = 2.0
-		}	
-		if = {
-			limit = {
-				has_law = law_type:law_professional_army
-			}
-			multiply = 3
-		}
-		if = {
-			limit = {
-				has_law = law_type:law_mass_conscription
-			}
-			multiply = 2
-		}		
-	}
-}
-
-principle_navy_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
-
-	member_modifier = {
-		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.25
-
-		unit_convoy_defense_mult = 0.25
-		unit_convoy_raiding_mult = 0.25
-	}
-
-	ai_weight = {
-		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
-	}
-}
-
-principle_navy_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
-	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
-
-	member_modifier = {
-		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.25
-		unit_convoy_defense_mult = 0.25
-		unit_convoy_raiding_mult = 0.25
-		country_prestige_from_navy_power_projection_mult = 0.1
-	}
-
-	institution = institution_ministry_of_war
-	institution_modifier = {
-		unit_navy_experience_gain_mult = 0.1
-		unit_convoy_defense_mult = 0.1
-		unit_convoy_raiding_mult = 0.1
-	}
-
-	ai_weight = {
-		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
-	}
-}
+# Navy principles 1-3 are now provided by vanilla 1.13 (The Great Wave).
+# The mod adds principle_navy_4 and principle_navy_5 as tech-gated extensions
+# that build on top of vanilla's cumulative tier 3.
+#
+# Vanilla's tier-3 cumulative:
+#   ship_interest_gain_mult = 0.1
+#   country_flagship_interest_gain_mult = 0.1
+#   country_ship_construction_progress_max_add = 5
+#   country_navy_goods_cost_mult = -0.1
+#   power_bloc_allow_port_access_bool = yes (power_bloc_modifier)
 
 principle_navy_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	visible = {
+		has_dlc_feature = ep2_content
+	}
 
 	possible = {
 		modifier:country_sonar_pb_principles_bool = yes
 	}
 
 	member_modifier = {
-		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.5
-		unit_convoy_defense_mult = 0.25
-		unit_convoy_raiding_mult = 0.25
+		# Vanilla tier-3 cumulative
+		ship_interest_gain_mult = 0.1
+		country_flagship_interest_gain_mult = 0.1
+		country_ship_construction_progress_max_add = 5
+		country_navy_goods_cost_mult = -0.1
+
+		# Mod tier-4 additions: ASW-era admiralty + convoy protection
+		country_admiral_rank_impact_mult = 0.25
+		character_convoy_protection_mult = 0.25
+		character_convoy_raiding_mult = 0.25
 		country_prestige_from_navy_power_projection_mult = 0.1
-		building_port_throughput_add = 0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_allow_port_access_bool = yes
 	}
 
 	institution = institution_ministry_of_war
 	institution_modifier = {
-		unit_navy_experience_gain_mult = 0.1
-		unit_convoy_defense_mult = 0.1
-		unit_convoy_raiding_mult = 0.1
+		country_admiral_rank_impact_mult = 0.1
+		character_convoy_protection_mult = 0.1
+		character_convoy_raiding_mult = 0.1
 	}
 
 	ai_weight = {
@@ -3850,27 +3749,41 @@ principle_navy_4 = {
 }
 
 principle_navy_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/fleet_unification.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	visible = {
+		has_dlc_feature = ep2_content
+	}
 
 	possible = {
 		modifier:country_missile_defense_pb_principles_bool = yes
 	}
 
 	member_modifier = {
-		# Modifiers from previous level(s)	
-		unit_navy_experience_gain_mult = 0.5
-		unit_convoy_defense_mult = 0.25
-		unit_convoy_raiding_mult = 0.25
-		country_prestige_from_navy_power_projection_mult = 0.1
+		# Vanilla tier-3 cumulative
+		ship_interest_gain_mult = 0.1
+		country_flagship_interest_gain_mult = 0.1
+		country_ship_construction_progress_max_add = 5
+		country_navy_goods_cost_mult = -0.1
+
+		# Mod tier-5: peak naval doctrine (modern missile-era escort + harbor capacity)
+		country_admiral_rank_impact_mult = 0.5
+		character_convoy_protection_mult = 0.5
+		character_convoy_raiding_mult = 0.5
+		country_prestige_from_navy_power_projection_mult = 0.2
 		building_port_throughput_add = 0.25
+	}
+
+	power_bloc_modifier = {
+		power_bloc_allow_port_access_bool = yes
 	}
 
 	institution = institution_ministry_of_war
 	institution_modifier = {
-		unit_navy_experience_gain_mult = 0.1
-		unit_convoy_defense_mult = 0.2
-		unit_convoy_raiding_mult = 0.2
+		country_admiral_rank_impact_mult = 0.2
+		character_convoy_protection_mult = 0.2
+		character_convoy_raiding_mult = 0.2
 	}
 
 	ai_weight = {

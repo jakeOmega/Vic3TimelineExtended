@@ -944,17 +944,13 @@ types building_browser_panel_types
 									flowcontainer = {
 										visible = "[GetVariableSystem.Exists( 'building_browser_filter_building_type' )]" 
 										using = pop_browser_filter_section
-
 										spacing = 10
 
 										flowcontainer = {
-											
 											direction = horizontal
-
 											spacing = 7
 
 											flowcontainer = {
-												
 												direction = horizontal
 
 												button = {
@@ -2385,7 +2381,6 @@ types building_browser_panel_types
 					parentanchor = hcenter
 					margin_bottom = 10
 					margin_top = 5
-					using = default_list_position
 					direction = vertical
 					minimumsize = { @panel_width_plus_14 -1 }
 
@@ -3382,8 +3377,7 @@ types building_browser_panel_types {
 
 			icon = {
 				parentanchor = right
-				size = { 1340 244 }
-
+				size = { 204 80 }
 				texture = "[BuildingBrowserBuildingTypeItem.GetBuildingType.GetBackground]"
 				alpha = 0.3
 			}
@@ -3481,7 +3475,7 @@ types building_browser_panel_types {
 
 								onclick = "[BuildingType.ActivateExpansionLens]"
 								using = select_button_sound
-								visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.IsMilitaryBuilding))]"
+								visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.GeneratesCombatUnits))]"
 								tooltip = "EXPAND"
 							}
 						}

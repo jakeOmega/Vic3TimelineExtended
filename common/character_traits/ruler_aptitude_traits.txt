@@ -36,10 +36,10 @@ ruler_terrible_administrator = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -87,10 +87,10 @@ ruler_poor_administrator = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -98,7 +98,7 @@ ruler_poor_administrator = {
 		value = 0
 		if = {
 			limit = {
-				is_ruler = yes
+				has_role_of_type = ruler
 				NOR = {
 					has_trait = ruler_skilled_administrator
 					has_trait = ruler_exceptional_administrator
@@ -141,10 +141,10 @@ ruler_average_administrator = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -193,10 +193,10 @@ ruler_skilled_administrator = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -204,7 +204,7 @@ ruler_skilled_administrator = {
 		value = 0
 		if = {
 			limit = {
-				is_ruler = yes
+				has_role_of_type = ruler
 				age >= 35
 				NOR = {
 					has_trait = ruler_poor_administrator
@@ -256,10 +256,10 @@ ruler_exceptional_administrator = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -267,7 +267,7 @@ ruler_exceptional_administrator = {
 		value = 0
 		if = {
 			limit = {
-				is_ruler = yes
+				has_role_of_type = ruler
 				age >= 40
 				NOR = {
 					has_trait = ruler_poor_administrator
@@ -323,10 +323,10 @@ ruler_terrible_diplomat = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -373,10 +373,10 @@ ruler_poor_diplomat = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -384,7 +384,7 @@ ruler_poor_diplomat = {
 		value = 0
 		if = {
 			limit = {
-				is_ruler = yes
+				has_role_of_type = ruler
 				NOR = {
 					has_trait = ruler_skilled_diplomat
 					has_trait = ruler_exceptional_diplomat
@@ -427,10 +427,10 @@ ruler_average_diplomat = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -479,10 +479,10 @@ ruler_skilled_diplomat = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -490,7 +490,7 @@ ruler_skilled_diplomat = {
 		value = 0
 		if = {
 			limit = {
-				is_ruler = yes
+				has_role_of_type = ruler
 				age >= 35
 				NOR = {
 					has_trait = ruler_poor_diplomat
@@ -542,10 +542,10 @@ ruler_exceptional_diplomat = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -553,7 +553,7 @@ ruler_exceptional_diplomat = {
 		value = 0
 		if = {
 			limit = {
-				is_ruler = yes
+				has_role_of_type = ruler
 				age >= 40
 				NOR = {
 					has_trait = ruler_poor_diplomat
@@ -611,12 +611,12 @@ ruler_terrible_commander = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			has_role = general
-			has_role = admiral
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = general
+			has_role_of_type = admiral
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -665,12 +665,12 @@ ruler_poor_commander = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			has_role = general
-			has_role = admiral
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = general
+			has_role_of_type = admiral
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -679,9 +679,9 @@ ruler_poor_commander = {
 		if = {
 			limit = {
 				OR = {
-					is_ruler = yes
-					has_role = general
-					has_role = admiral
+					has_role_of_type = ruler
+					has_role_of_type = general
+					has_role_of_type = admiral
 				}
 				NOR = {
 					has_trait = ruler_skilled_commander
@@ -725,12 +725,12 @@ ruler_average_commander = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			has_role = general
-			has_role = admiral
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = general
+			has_role_of_type = admiral
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -782,12 +782,12 @@ ruler_skilled_commander = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			has_role = general
-			has_role = admiral
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = general
+			has_role_of_type = admiral
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -796,9 +796,9 @@ ruler_skilled_commander = {
 		if = {
 			limit = {
 				OR = {
-					is_ruler = yes
-					has_role = general
-					has_role = admiral
+					has_role_of_type = ruler
+					has_role_of_type = general
+					has_role_of_type = admiral
 				}
 				age >= 35
 				NOR = {
@@ -855,12 +855,12 @@ ruler_exceptional_commander = {
 		has_game_rule = heir_education_enabled
 		NOT = { age < define:NCharacters|ADULT_AGE }
 		OR = {
-			has_role = politician
-			has_role = agitator
-			has_role = general
-			has_role = admiral
-			is_ruler = yes
-			is_heir = yes
+			has_role_of_type = politician
+			has_role_of_type = agitator
+			has_role_of_type = general
+			has_role_of_type = admiral
+			has_role_of_type = ruler
+			has_role_of_type = heir
 		}
 	}
 
@@ -869,9 +869,9 @@ ruler_exceptional_commander = {
 		if = {
 			limit = {
 				OR = {
-					is_ruler = yes
-					has_role = general
-					has_role = admiral
+					has_role_of_type = ruler
+					has_role_of_type = general
+					has_role_of_type = admiral
 				}
 				age >= 40
 				NOR = {

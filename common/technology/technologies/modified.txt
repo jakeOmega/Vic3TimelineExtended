@@ -93,7 +93,7 @@ INJECT:urbanization = {
 }
 
 # Intelligence Capacity contributions from vanilla techs
-INJECT:telecommunications = {
+INJECT:telephone = {
 	modifier = {
 		country_intelligence_capacity_add = 2
 	}
@@ -163,37 +163,37 @@ INJECT:concrete_fortifications = {
 
 # Strategic Reserve: decay rate reductions from preservation / refining tech.
 # Base decay values are set in INJECT:base_values in extra_modifiers.txt.
-INJECT:canning = {
+INJECT:canneries = {
 	modifier = {
-		country_sr_grain_decay_add = -0.05
+		country_st_res_grain_decay_add = -0.05
 	}
 }
 INJECT:vacuum_canning = {
 	modifier = {
-		country_sr_grain_decay_add = -0.05
+		country_st_res_grain_decay_add = -0.05
 	}
 }
 
 INJECT:pasteurization = {
 	modifier = {
-		country_sr_grain_decay_add = -0.05
+		country_st_res_grain_decay_add = -0.05
 	}
 }
 
 INJECT:flash_freezing = {
 	modifier = {
-		country_sr_grain_decay_add = -0.05
+		country_st_res_grain_decay_add = -0.05
 	}
 }
 
 INJECT:dynamite = {
 	modifier = {
-		country_sr_ammunition_decay_add = -0.005
+		country_st_res_ammunition_decay_add = -0.005
 	}
 }
 
 INJECT:fractional_distillation = {
 	modifier = {
-		country_sr_oil_decay_add = -0.0005
+		country_st_res_oil_decay_add = -0.0005
 	}
 }

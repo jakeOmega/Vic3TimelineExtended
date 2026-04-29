@@ -2,19 +2,19 @@
 # Strategic Reserve — Custom Modifier Types
 # ==========================================================================
 # Capacity modifiers (country-scope, flat additive, per good).
-country_sr_grain_capacity_add = {
+country_st_res_grain_capacity_add = {
 	decimals = 0
 	percent = no
 	color = good
 }
 
-country_sr_ammunition_capacity_add = {
+country_st_res_ammunition_capacity_add = {
 	decimals = 0
 	percent = no
 	color = good
 }
 
-country_sr_oil_capacity_add = {
+country_st_res_oil_capacity_add = {
 	decimals = 0
 	percent = no
 	color = good
@@ -24,25 +24,25 @@ country_sr_oil_capacity_add = {
 # Base values are set in INJECT:base_values in extra_modifiers.txt; tech
 # reductions are applied via INJECT:<tech_name> entries in technology files.
 # A lower value is better, hence color = bad.
-country_sr_grain_decay_add = {
+country_st_res_grain_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad
 }
 
-country_sr_ammunition_decay_add = {
+country_st_res_ammunition_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad
 }
 
-country_sr_oil_decay_add = {
+country_st_res_oil_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad
 }
 
-country_sr_weekly_rate_cap_add = {
+country_st_res_weekly_rate_cap_add = {
 	decimals = 0
 	percent = no
 	color = good

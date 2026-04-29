@@ -280,29 +280,14 @@
 				multiply = 1.5
 			}
 		}
-		combat_unit_group_light_ship = {
-			value = 100
-		}
-		combat_unit_group_capital_ship = {
-			value = 0
+		# Naval combat_unit_groups removed in 1.13 (ships are no longer combat_unit_types).
+		# Ship-type AI preferences are handled by the new ship_types/ system in vanilla;
+		# the mod's modern ships (Phase B) will plug in there.
+		combat_unit_group_marines = {
+			value = 5
 			if = {
-				limit = { country_rank = rank_value:great_power }
-				add = 30
-			}
-			if = {
-				limit = { country_rank = rank_value:major_power }
-				add = 10
-			}
-		}
-		combat_unit_group_support_ship = {
-			value = 0
-			if = {
-				limit = { has_technology_researched = submarine }
-				add = 10
-			}
-			if = {
-				limit = { has_technology_researched = carrier_tech }
-				add = 10
+				limit = { has_technology_researched = navigation }
+				add = 5
 			}
 		}
 		combat_unit_group_tanks = {

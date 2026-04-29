@@ -31,7 +31,7 @@ institution_ministry_of_foreign_affairs = {
 		country_influence_add = 100
 		country_influence_mult = 0.1
 		country_leverage_generation_mult = 0.05
-		country_max_declared_interests_add = 1
+		military_formation_interest_gain_mult = 0.1
 		country_infamy_decay_mult = 0.05
 	}
 }

@@ -131,340 +131,304 @@ goods_input_coffee_add = {
 goods_output_luxury_furniture_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_furniture_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_services_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_consumer_appliances_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_construction_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_digital_access_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_fine_art_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_clothes_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_luxury_clothes_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_glass_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_steel_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_groceries_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_porcelain_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_fertilizer_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_explosives_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_telephones_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_input_grain_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_grain_mult = {
 	color = good
 	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
-}
 
-goods_input_ammunition_mult = {
-	color = bad
-	percent = yes
-	
 	game_data = {
-	    ai_value = 250
-    }
-}
-
-goods_output_ammunition_mult = {
-	color = good
-	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
-}
-
-goods_input_oil_mult = {
-	color = bad
-	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
-}
-
-goods_output_oil_mult = {
-	color = good
-	percent = yes
-	
-	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_fish_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_meat_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_wood_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_coal_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_iron_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_lead_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_gold_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_sulfur_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_rubber_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_coffee_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_dye_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_opium_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_tea_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_tobacco_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_paper_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_transportation_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
 		ai_value = 250
 	}
@@ -473,118 +437,118 @@ goods_output_transportation_mult = {
 goods_output_advanced_materials_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_tourism_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_input_coal_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -250
-}
+		ai_value = -250
+	}
 }
 
 goods_input_electricity_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -250
-}
+		ai_value = -250
+	}
 }
 
 goods_input_construction_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -250
-}
+		ai_value = -250
+	}
 }
 
 goods_input_wood_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -250
-}
+		ai_value = -250
+	}
 }
 
 goods_output_launch_capacity_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_electronic_components_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_tech_metals_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_robotics_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_digital_assets_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_trade_advantage_digital_assets_mult = {
 	color = good
 	percent = yes
-	
+
 	game_data = {
-	    ai_value = 250
-    }
+		ai_value = 250
+	}
 }
 
 goods_output_merchant_marine_mult = {
-    color = good
-        percent = yes
+	color = good
+	percent = yes
 
-        game_data = {
-            ai_value = 250
-    }
+	game_data = {
+		ai_value = 250
+	}
 }
 
 building_space_program_throughput_add = {
@@ -605,46 +569,46 @@ building_oil_rig_throughput_add = {
 building_employment_clerks_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -2500
-}
+		ai_value = -2500
+	}
 }
 
 building_employment_engineers_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -2500
-}
+		ai_value = -2500
+	}
 }
 
 building_employment_farmers_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -2500
-}
+		ai_value = -2500
+	}
 }
 
 building_employment_machinists_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -2500
-}
+		ai_value = -2500
+	}
 }
 
 building_employment_shopkeepers_mult = {
 	color = bad
 	percent = yes
-	
+
 	game_data = {
-	ai_value = -2500
-}
+		ai_value = -2500
+	}
 }
 
 state_building_hydro_plant_max_level_add = {
@@ -914,6 +878,14 @@ country_banking_intervention_max_add = {
 	percent = no
 	decimals = 0
 	game_data = { ai_value = 100 }
+	script_only = yes
+}
+
+country_legislative_override_capacity_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	game_data = { ai_value = 50 }
 	script_only = yes
 }
 
@@ -2064,12 +2036,12 @@ state_building_resettlement_colony_max_level_add = {
 
 # ----- Global Warming -----
 country_greenhouse_gas_emissions_mult = {
-color = bad
-percent = yes
-script_only = yes
-game_data = {
-ai_value = 0
-}
+	color = bad
+	percent = yes
+	script_only = yes
+	game_data = {
+		ai_value = 0
+	}
 }
 
 country_building_airport_require_subsidies_bool = {
@@ -3429,4 +3401,180 @@ state_fortification_level_add = {
 	color = good
 	percent = no
 	decimals = 0
+}
+
+# Ship-vs-ship counter modifiers for mod-defined ship types.
+# Vanilla auto-registers these for vanilla ship types; mod-added ship types must
+# register their own _accuracy_mult and _hull_damage_mult patterns here so the
+# engine recognizes them when used in ship_type modifier blocks, utility mods,
+# tech blocks, etc. Mirrors vanilla's syntax in 00_modifier_types.txt.
+
+ship_battle_against_ship_type_asw_destroyer_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_asw_destroyer_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_guided_missile_ship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_arsenal_ship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_expeditionary_sea_base_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_expeditionary_sea_base_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_pulsed_laser_escort_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla auto-registers some ship_battle_against patterns but not all combos.
+# The two below are vanilla ship types that vanilla skipped registering for the
+# specific combat axis the mod uses, so we register them here.
+
+# Vanilla registers submarine_accuracy_{add,mult} but not _hull_damage_mult.
+# Used by ASW destroyer (mod ship) for damage-vs-subs role.
+ship_battle_against_ship_type_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla registers dreadnought_hull_damage_mult but not _accuracy_mult.
+# Used by guided_missiles tech to model precision-guided naval strikes vs capital ships.
+ship_battle_against_ship_type_dreadnought_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla skips destroyer in country_ship_type_*_construction_efficiency_add registrations.
+# Used by era_6/era_7 destroyer-focused techs.
+country_ship_type_destroyer_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Modded goods motor_ships and magnetic_drive_ships need explicit goods_input/output_*_add registrations.
+goods_input_motor_ships_add = {
+	decimals = 1
+	color = bad
+	game_data = { ai_value = 0 }
+}
+goods_output_motor_ships_add = {
+	decimals = 1
+	color = good
+	game_data = { ai_value = 0 }
+}
+goods_input_magnetic_drive_ships_add = {
+	decimals = 1
+	color = bad
+	game_data = { ai_value = 0 }
+}
+goods_output_magnetic_drive_ships_add = {
+	decimals = 1
+	color = good
+	game_data = { ai_value = 0 }
 }

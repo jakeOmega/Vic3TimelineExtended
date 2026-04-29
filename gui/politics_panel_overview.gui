@@ -393,7 +393,6 @@ types politics_panel_types
 				using = tooltip_below
 				blockoverride "show_hat" {}
 				blockoverride "highlight" {}
-				blockoverride "commander_order_icon" {}
 			}
 
 			vbox = {
@@ -494,6 +493,7 @@ types politics_panel_types
 								size = { 30 42 }
 								texture = "[CharacterTrait.GetTexture]"
 								visible = "[Not(Or(Or(Or(Or(Or(Or(Or(Or(Or(Or(Or(Or(Or(Or(EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Terrible Administrator'), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Poor Administrator')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Average Administrator')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Skilled Administrator')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Exceptional Administrator')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Terrible Diplomat')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Inept Diplomat')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Average Diplomat')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Skilled Diplomat')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Master Diplomat')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Terrible Commander')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Inept Commander')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Adequate Commander')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Skilled Commander')), EqualTo_string(CharacterTrait.GetNameNoFormatting, 'Military Genius')))]"
+								alpha = "[TransparentIfTrue(CharacterTrait.IsDisabled)]"
 								using = tooltip_above
 
 								tooltipwidget = {
@@ -846,34 +846,19 @@ types politics_panel_types
 												widget = {
 													size = { 35 35 }
 													icon = {
-														visible = "[And(Character.IsPolitician,And(Not(Character.IsRuler),Not(Character.IsHeir)))]"
+														visible = "[Character.GetPrimaryRole.IsValid]"
 														size = { 100% 100% }
-														texture = "gfx/interface/icons/character_role_icons/politician.dds"
+														texture = "[Character.GetPrimaryRole.GetTexture]"
 													}
 													icon = {
-														visible = "[Character.IsRuler]"
+														visible = "[Not(Character.GetPrimaryRole.IsValid)]"
 														size = { 100% 100% }
-														texture = "gfx/interface/icons/character_role_icons/ruler.dds"
-													}
-													icon = {
-														visible = "[Character.IsHeir]"
-														size = { 100% 100% }
-														texture = "gfx/interface/icons/character_role_icons/heir.dds"
-													}
-													icon = {
-														visible = "[And(Not(Or(Character.IsPolitician, Or(Character.IsRuler, Character.IsHeir))), Character.IsGeneral)]"
-														size = { 100% 100% }
-														texture = "gfx/interface/icons/character_role_icons/general.dds"
-													}
-													icon = {
-														visible = "[And(Not(Or(Character.IsPolitician, Or(Character.IsRuler, Character.IsHeir))), Character.IsAdmiral)]"
-														size = { 100% 100% }
-														texture = "gfx/interface/icons/character_role_icons/admiral.dds"
+														texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
 													}
 												}
 											}
 											blockoverride "label" {
-												text = "[Concept('concept_ruler', Character.GetPrimaryRoleTitle)]"
+												text = "[Character.GetPrimaryRoleTitle]"
 											}
 											blockoverride "text" {
 												text = "[Character.GetFullName]"
@@ -1661,7 +1646,7 @@ types politics_panel_types
 													autoresize = yes
 													align = hcenter|nobaseline
 													alpha = "[TransparentIfZero_int32(GetExilePool.GetNumInviteableExiles)]"
-													raw_text = "#variable [GetExilePool.GetNumInviteableExiles]#! / [GetDataModelSize(GetExilePool.GetAllExiles)|v]"
+													raw_text = "[GetExilePool.GetNumInviteableExiles|v] / [GetExilePool.GetNumAllExiles|v]"
 													parentanchor = right|vcenter
 													margin = { 15 15 }
 													tooltip = "TOOLTIP_NUM_INVITEABLE_EXILES"

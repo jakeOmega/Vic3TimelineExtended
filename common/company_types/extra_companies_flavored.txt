@@ -63,7 +63,7 @@ company_toyota = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CHUBU # Central Japan, Toyota's home region
+        STATE_TOKAI # Aichi prefecture, Toyota's home region (was STATE_CHUBU before 1.13)
 	}
 	building_types = {
 		building_automotive_industry
@@ -1208,7 +1208,7 @@ company_lockheed_martin = {
 	}
 	prosperity_modifier = {
 		unit_army_offense_mult = 0.1
-		unit_navy_offense_mult = 0.1
+		country_admiral_rank_impact_mult = 0.1
 		country_military_tech_research_speed_mult = 0.1
 		state_building_lockheed_skunk_works_max_level_add = 1
 		country_space_race_progress_add = 0.3
@@ -1240,7 +1240,7 @@ company_bae_systems = {
 		building_aerospace_industry
 		building_arms_industry
 		building_artillery_foundry
-		building_military_shipyard
+		building_shipyard
 		building_bae_samlesbury_aerodrome
 	}
 	extension_building_types = {
@@ -1269,7 +1269,7 @@ company_bae_systems = {
 	}
 	prosperity_modifier = {
 		unit_army_defense_mult = 0.1
-		unit_navy_defense_mult = 0.1
+		country_admiral_rank_impact_mult = 0.1
 		state_building_bae_samlesbury_aerodrome_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -1487,7 +1487,7 @@ company_hyundai = {
 	}
 	possible = {
 		"goods_production_rank(g:automobiles)" <= 5
-		"goods_production_rank(g:ironclads)" <= 5
+		"goods_production_rank(g:steamers)" <= 5
 		any_scope_state = {
 			any_scope_building = {
 				is_building_type = building_automotive_industry
@@ -2440,8 +2440,8 @@ company_fanuc = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds" 
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
-		STATE_CHUBU
+	preferred_headquarters = {
+		STATE_HOKUSHINETSU # Yamanashi prefecture (was part of old STATE_CHUBU)
 	}
 	building_types = {
 		building_robotics_industry

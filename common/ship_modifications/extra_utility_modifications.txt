@@ -1,0 +1,227 @@
+# =============================================================================
+# Vic3TimelineExtended — modern ship utility wildcards (Phase D1)
+# =============================================================================
+# Utility modifications that mod-specific ship types can equip via the Ship
+# Designer. Each is gated by a mod tech and tuned to the ship's role.
+# =============================================================================
+
+
+### Sonar Suite — anti-submarine specialization
+utility_mod_sonar_suite = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { sonar }
+
+	modifier = {
+		ship_battle_against_ship_type_submarine_accuracy_mult = 0.5
+		ship_detection_add = 100
+	}
+
+	construction_goods = {
+		goods_input_radios_add = 8
+		goods_input_electronic_components_add = 3
+	}
+
+	ai_weight = {
+		value = 2
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Drone Complement — fleet-multiplier drone control
+utility_mod_drone_complement = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { swarm_technology }
+
+	modifier = {
+		ship_accuracy_mult = 0.3
+		ship_screening_mult = 0.25
+		ship_detection_add = 200
+	}
+
+	construction_goods = {
+		goods_input_electronic_components_add = 12
+		goods_input_radios_add = 6
+	}
+
+	ai_weight = {
+		value = 3
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Ballistic Missile Bay — coastal-bombardment specialist
+utility_mod_ballistic_missile_bay = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { precision_guided_munitions }
+
+	modifier = {
+		ship_blockade_strength_mult = 0.5
+		ship_hull_damage_mult = 0.15
+	}
+
+	construction_goods = {
+		goods_input_ammunition_add = 12
+		goods_input_explosives_add = 6
+	}
+
+	ai_weight = {
+		value = 3
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### DEW Point Defense — directed-energy interception
+utility_mod_dew_point_defense = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { directed_energy_weapons }
+
+	modifier = {
+		ship_vulnerability_mult = -0.25
+		ship_screening_add = 200
+	}
+
+	construction_goods = {
+		goods_input_electronic_components_add = 10
+		goods_input_steel_add = 6
+	}
+
+	ai_weight = {
+		value = 3
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Nuclear Propulsion — extreme speed + supply endurance
+utility_mod_nuclear_propulsion = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { nuclear_energy }
+
+	modifier = {
+		ship_movement_speed_mult = 0.25
+		ship_supply_capacity_mult = 0.3
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 14
+		goods_input_engines_add = 10
+	}
+
+	ai_weight = {
+		value = 3
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Aegis Air Defense — networked air-defense / missile-shootdown
+utility_mod_aegis_air_defense = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { network_centric_warfare }
+
+	modifier = {
+		ship_screening_add = 200
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.3
+		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.2
+	}
+
+	construction_goods = {
+		goods_input_electronic_components_add = 10
+		goods_input_radios_add = 5
+	}
+
+	ai_weight = {
+		value = 3
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Composite Armor Plating — survivability against modern weapons
+utility_mod_composite_armor_plating = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { modern_material_science }
+
+	modifier = {
+		ship_armor_add = 200
+		ship_suffered_hull_damage_mult = -0.15
+		ship_suffered_crit_chance_mult = -0.20
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 12
+		goods_input_advanced_materials_add = 1
+	}
+
+	ai_weight = {
+		value = 3
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Helicopter Pad — amphibious / vertical-lift capacity
+utility_mod_helicopter_pad = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { rapid_deployment_forces }
+
+	modifier = {
+		ship_marine_capacity_add = 0.10
+		ship_carrying_capacity_add = 0.20
+		ship_naval_invasion_efficiency_mult = 0.15
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 6
+		goods_input_aeroplanes_add = 4
+	}
+
+	ai_weight = {
+		value = 2
+		multiply = ship_mod_market_multiplier
+	}
+}
+
+
+### Underway Replenishment — extended-deployment supply systems
+utility_mod_underway_replenishment = {
+	type = ship_mod_slot_utility_1
+	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
+
+	unlocking_technologies = { containerization }
+
+	modifier = {
+		ship_supply_capacity_add = 100
+		ship_supply_efficiency_add = 0.25
+		ship_max_distance_to_port_mult = 0.30
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 8
+		goods_input_motor_ships_add = 2
+	}
+
+	ai_weight = {
+		value = 2
+		multiply = ship_mod_market_multiplier
+	}
+}

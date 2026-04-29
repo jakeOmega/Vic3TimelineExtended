@@ -228,7 +228,7 @@ secular_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = {
+		add_loyalists = {
 			value = very_small_radicals
 			interest_group = ig:ig_devout
 		}

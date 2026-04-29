@@ -22,6 +22,19 @@ adjusted_produced_authority = {
 	}
 }
 
+forced_law_through_event_capacity_discount = {
+	# Diminishing returns: capacity ≤ 4 = full cost, capacity ≥ 5 = 4/capacity
+	# (e.g., +5 → 0.80, +6 → 0.67, +8 → 0.50, +16 → 0.25). Approaches 0 but never reaches it.
+	value = 1
+	if = {
+		limit = { "modifier:country_legislative_override_capacity_add" >= 5 }
+		multiply = 4
+		divide = {
+			value = modifier:country_legislative_override_capacity_add
+		}
+	}
+}
+
 forced_law_through_event_authority_multiplier_small = {
 	value = 1
 	divide = {
@@ -29,6 +42,7 @@ forced_law_through_event_authority_multiplier_small = {
 		add = modifier:country_authority_mult
 		min = 0.01
 	}
+	multiply = forced_law_through_event_capacity_discount
 }
 
 forced_law_through_event_authority_multiplier_medium = {
@@ -210,7 +224,7 @@ accepted_culture_state_count = {
 		every_scope_state = {
 			limit = {
 				any_scope_culture = {
-					NOT = { 
+					NOT = {
 						PREV.owner.power_bloc.power_bloc_leader = {cultural_acceptance_base = {target = PREV value < 40}}
 					}
 					PREV = {
@@ -1385,7 +1399,7 @@ country_max_state_gdp = {
 
 nuclear_industrial_strike_target_score = {
 	value = 1
-	
+
 	multiply = {
 		value = gdp
 		owner = {
@@ -1876,40 +1890,40 @@ construction_cost_scaling_adjusted_mult = {
 		}
 	}
 	min = 0
-	}
+}
 
-	# ====================================================================================
-	# MIGRATION CROWDING
-	# ====================================================================================
-	# Purpose: reduces migration pull to heavily populated states using population
-	# density (population per arable land) as a proxy for geographic capacity.
-	# Applied via `on_yearly_pulse_state` → `migration_crowding_on_action`.
-	# Modifier: `migration_crowding` (base: state_migration_pull_mult = -0.1,
-	# multiplier computed below).
-	#
-	# Tuning:
-	# - `migration_crowding_density_reference`: population per unit arable land
-	#   for a "normally full" state (e.g., 100 arable & 5M people → density 50000).
-	# - `floor_ratio`: multiple of reference below which no penalty applies (1 = no penalty).
-	# - `ceiling_ratio`: multiple of reference where linear phase begins (default 10).
-	# - Arable land ranges: small ~20–50, medium ~80–150, large ~200–500+.
-	#
-	# Behavior / formula (normalized ratio r):
-	# - Compute `state_population_density` = state_population /
-	#   (arable_land - same_owner_state_region_arable_land_added) × density_mult.
-	# - Normalize: r = (density - floor) / (ceiling - floor). r = 0 at floor, r = 1 at ceiling.
-	# - Multiplier M (continuous piecewise):
-	#     * r <= 0:         M = 0
-	#     * 0 < r < 1:       M = 4.5 * r^2        (gradual quadratic; M=4.5 at r=1 → 45%)
-	#     * r >= 1:          M = 9 * r - 4.5      (linear continuation; slope 9)
-	# - Actual migration pull reduction percent = M * 0.1
-	#   (since modifier base is -0.1, M=4.5 → 45% reduction; M=14.5 → 145% reduction).
-	#
-	# Notes:
-	# - Uses `same_owner_state_region_arable_land_added` to isolate base arable land
-	#   so split states don't undercount geographic base.
-	# - Ratio capping is intentionally removed to allow linear scaling above the ceiling.
-	# ====================================================================================
+# ====================================================================================
+# MIGRATION CROWDING
+# ====================================================================================
+# Purpose: reduces migration pull to heavily populated states using population
+# density (population per arable land) as a proxy for geographic capacity.
+# Applied via `on_yearly_pulse_state` → `migration_crowding_on_action`.
+# Modifier: `migration_crowding` (base: state_migration_pull_mult = -0.1,
+# multiplier computed below).
+#
+# Tuning:
+# - `migration_crowding_density_reference`: population per unit arable land
+#   for a "normally full" state (e.g., 100 arable & 5M people → density 50000).
+# - `floor_ratio`: multiple of reference below which no penalty applies (1 = no penalty).
+# - `ceiling_ratio`: multiple of reference where linear phase begins (default 10).
+# - Arable land ranges: small ~20–50, medium ~80–150, large ~200–500+.
+#
+# Behavior / formula (normalized ratio r):
+# - Compute `state_population_density` = state_population /
+#   (arable_land - same_owner_state_region_arable_land_added) × density_mult.
+# - Normalize: r = (density - floor) / (ceiling - floor). r = 0 at floor, r = 1 at ceiling.
+# - Multiplier M (continuous piecewise):
+#     * r <= 0:         M = 0
+#     * 0 < r < 1:       M = 4.5 * r^2        (gradual quadratic; M=4.5 at r=1 → 45%)
+#     * r >= 1:          M = 9 * r - 4.5      (linear continuation; slope 9)
+# - Actual migration pull reduction percent = M * 0.1
+#   (since modifier base is -0.1, M=4.5 → 45% reduction; M=14.5 → 145% reduction).
+#
+# Notes:
+# - Uses `same_owner_state_region_arable_land_added` to isolate base arable land
+#   so split states don't undercount geographic base.
+# - Ratio capping is intentionally removed to allow linear scaling above the ceiling.
+# ====================================================================================
 migration_crowding_density_reference = 10000
 migration_crowding_floor_ratio = 1
 migration_crowding_ceiling_ratio = 10 # Linear growth kicks in here
@@ -1975,7 +1989,7 @@ migration_crowding_mult = {
 		multiply = 9
 		subtract = 4.5
 	}
-	
+
 	min = 0
 }
 

@@ -724,7 +724,7 @@ types treaty_panel_types
 				parentanchor = center
 				size = { 25 25 }
 				texture = "gfx/interface/icons/topbar/influence_icon.dds"
-				position = { -15 0 }
+				position = { -17 0 }
 			}
 		}
 
@@ -734,7 +734,7 @@ types treaty_panel_types
 
 			miniature_flag_no_interact = {
 				parentanchor = center
-				position = { -2 0 }
+				position = { -7 0 }
 				blockoverride "tooltip" {}
 			}
 		}
@@ -933,6 +933,9 @@ types treaty_panel_types
 				### COUNTRY INPUT
 				country_input_article = {}
 
+				### SHIP INPUT
+				ship_input_article = {}
+
 				### STRATEGIC REGION INPUT
 				strategic_region_input_article = {}
 
@@ -1111,6 +1114,56 @@ types treaty_panel_types
 
 				block "text_format" {
 					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	type ship_input_article = widget {
+		visible = "[Article.RequiresInput('ship')]"
+		size = { 140 75 }
+		datacontext = "[Article.GetShip]"
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = vcenter
+			margin = { 5 0 }
+			spacing = 5
+
+			textbox = {
+				parentanchor = hcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 135
+				using = elide_fontsize_min
+				raw_text = "[Ship.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+
+			button = {
+				size = { 100 25 }
+				alwaystransparent = yes
+
+				background = {
+					fittype = center
+					texture = "[Ship.GetType.GetProfileTexture]"
+				}
+			}
+
+			flowcontainer = {
+				datacontext = "[Ship.GetTemplate]"
+				spacing = 2
+				parentanchor = hcenter
+				datamodel = "[ShipTemplate.GetModifications]"
+
+				item = {
+					icon = {
+						size = { 20 20 }
+						texture = "[ShipModificationType.GetIcon]"
+					}
 				}
 			}
 		}

@@ -218,7 +218,9 @@ tactical_nuke_diplo_action = {
         }
         OR = {
             has_building = building_barrack
-            has_building = building_naval_base
+            has_building = building_naval_administration
+            has_building = building_naval_fortification
+            has_building = building_naval_logistics_center
             has_building = building_conscription_center
         }
     }
@@ -300,7 +302,9 @@ tactical_nuke_diplo_action = {
 		will_select_as_second_state = {
             OR = {
                 has_building = building_barrack
-                has_building = building_naval_base
+                has_building = building_naval_administration
+                has_building = building_naval_fortification
+                has_building = building_naval_logistics_center
                 has_building = building_conscription_center
             }
         }
@@ -364,10 +368,19 @@ tactical_nuke_diplo_action = {
                     }
                     if = {
                         limit = {
-                            has_building = building_naval_base
+                            has_building = building_naval_administration
                         }
                         add = {
-                            value = b:building_naval_base.level
+                            value = b:building_naval_administration.level
+                            divide = 100
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_naval_fortification
+                        }
+                        add = {
+                            value = b:building_naval_fortification.level
                             divide = 100
                         }
                     }

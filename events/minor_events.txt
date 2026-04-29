@@ -1,11 +1,11 @@
 ﻿namespace = minor_events_timelineextended
 
 minor_events_timelineextended.1 = {
-    type = country_event
-    hidden = yes
+	type = country_event
+	hidden = yes
 
-    immediate = {
-        every_scope_state = {
+	immediate = {
+		every_scope_state = {
 			limit = {
 				NOT = {
 					state_region = {
@@ -15,145 +15,186 @@ minor_events_timelineextended.1 = {
 					}
 				}
 			}
-            if = {
-                limit = {
-                    NOT = { has_variable = arable_land_added }
-                }
-                set_variable = {
-                    name = arable_land_added
-                    value = 0
-                }
-            }
-            add_arable_land_effect = {
-                AMOUNT = state_arable_land_add_script_value
-            }
+			if = {
+				limit = {
+					NOT = { has_variable = arable_land_added }
+				}
+				set_variable = {
+					name = arable_land_added
+					value = 0
+				}
+			}
+			add_arable_land_effect = {
+				AMOUNT = state_arable_land_add_script_value
+			}
 		}
-    }
+	}
 }
 
 minor_events_timelineextended.2 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/victorian_gentleman_duel.dds" }
+	event_image = { texture = "gfx/event_pictures/victorian_gentleman_duel.dds" }
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
- 	title = minor_events_timelineextended.2.t
- 	desc = minor_events_timelineextended.2.d
- 	flavor = minor_events_timelineextended.2.f
+	title = minor_events_timelineextended.2.t
+	desc = minor_events_timelineextended.2.d
+	flavor = minor_events_timelineextended.2.f
 
-    trigger = {
-        produced_authority > 250
-    }
+	trigger = {
+		produced_authority > 250
+		"modifier:country_legislative_override_capacity_add" >= 0
+	}
 
-    cancellation_trigger = {
-        NOT = { enacting_any_law = yes }
-    }
+	cancellation_trigger = {
+		NOT = { enacting_any_law = yes }
+	}
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    duration = 3
-    is_popup = yes
+	duration = 3
+	is_popup = yes
 
-    option = {
-        name = minor_events_timelineextended.2.a
-        default_option = yes
-        ai_chance = {
-			base = 1
+	option = {
+		name = minor_events_timelineextended.2.a
+		default_option = yes
+		ai_chance = {
+			base = 2
 		}
-    }
+	}
 
-    option = {
-        name = minor_events_timelineextended.2.b
+	option = {
+		name = minor_events_timelineextended.2.b
 
-        add_modifier = {
-            name = forced_law_through_event
-            years = 5
-            multiplier = forced_law_through_event_authority_multiplier_small
-            is_decaying = yes
-        }
-        add_enactment_modifier = {
-            name = forced_law_through_event_enactment_small
-        }
-        ai_chance = {
+		add_modifier = {
+			name = forced_law_through_event
+			years = 5
+			multiplier = forced_law_through_event_authority_multiplier_small
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = forced_law_through_event_consequences_small
+			years = 5
+			is_decaying = yes
+		}
+		add_enactment_modifier = {
+			name = forced_law_through_event_enactment_small
+		}
+		ai_chance = {
 			base = 0
-            modifier = {
-                trigger = {
-                    produced_authority > 250
-                }
-                add = 2
-            }
+			modifier = {
+				trigger = { authority > 250 }
+				add = 1
+			}
+			modifier = {
+				trigger = { authority > 500 }
+				add = 1
+			}
+			modifier = {
+				trigger = { authority > 1000 }
+				add = 1
+			}
 		}
-    }
+	}
 
-    option = {
-        trigger = {
-            produced_authority > 500
-        }
-        highlighted_option = yes
-        name = minor_events_timelineextended.2.c
+	option = {
+		trigger = {
+			produced_authority > 500
+			"modifier:country_legislative_override_capacity_add" >= 2
+		}
+		highlighted_option = yes
+		name = minor_events_timelineextended.2.c
 
-        add_modifier = {
-            name = forced_law_through_event
-            years = 5
-            multiplier = forced_law_through_event_authority_multiplier_medium
-            is_decaying = yes
-        }
-        add_enactment_modifier = {
-            name = forced_law_through_event_enactment_medium
-        }
-        ai_chance = {
-            base = 0
-            modifier = {
-                trigger = {
-                    produced_authority > 500
-                }
-                add = 4
-            }
-        }
-    }
+		add_modifier = {
+			name = forced_law_through_event
+			years = 5
+			multiplier = forced_law_through_event_authority_multiplier_medium
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = forced_law_through_event_consequences_medium
+			years = 5
+			is_decaying = yes
+		}
+		add_enactment_modifier = {
+			name = forced_law_through_event_enactment_medium
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 500 }
+				add = 1
+			}
+			modifier = {
+				trigger = { authority > 1000 }
+				add = 1
+			}
+			modifier = {
+				trigger = { authority > 1500 }
+				add = 1
+			}
+		}
+	}
 
-    option = {
-        trigger = {
-            produced_authority > 750
-        }
-        highlighted_option = yes
-        name = minor_events_timelineextended.2.e
+	option = {
+		trigger = {
+			produced_authority > 750
+			"modifier:country_legislative_override_capacity_add" >= 4
+		}
+		highlighted_option = yes
+		name = minor_events_timelineextended.2.e
 
-        add_modifier = {
-            name = forced_law_through_event
-            years = 5
-            multiplier = forced_law_through_event_authority_multiplier_large
-            is_decaying = yes
-        }
-        add_enactment_modifier = {
-            name = forced_law_through_event_enactment_large
-        }
-        ai_chance = {
-            base = 0
-            modifier = {
-                trigger = {
-                    produced_authority > 750
-                }
-                add = 6
-            }
-        }
-    }
+		add_modifier = {
+			name = forced_law_through_event
+			years = 5
+			multiplier = forced_law_through_event_authority_multiplier_large
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = forced_law_through_event_consequences_large
+			years = 5
+			is_decaying = yes
+		}
+		add_enactment_modifier = {
+			name = forced_law_through_event_enactment_large
+		}
+		add_enactment_phase = 1
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 750 }
+				add = 1
+			}
+			modifier = {
+				trigger = { authority > 1500 }
+				add = 1
+			}
+			modifier = {
+				trigger = { authority > 2500 }
+				add = 1
+			}
+		}
+	}
 }
 
 
 # Post-Independence Setup Event - fired by form_decolonized_country scripted effect
 minor_events_timelineextended.3 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/expedition_explorer.dds" }
+	event_image = { texture = "gfx/event_pictures/expedition_explorer.dds" }
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -161,15 +202,15 @@ minor_events_timelineextended.3 = {
 	desc = minor_events_timelineextended.3.d
 	flavor = minor_events_timelineextended.3.f
 
-    duration = 3
+	duration = 3
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    option = {
-        name = minor_events_timelineextended.3.a
-        default_option = yes
-        ai_chance = {
+	option = {
+		name = minor_events_timelineextended.3.a
+		default_option = yes
+		ai_chance = {
 			base = 3
 		}
 		# Chart our own course - nation building
@@ -179,11 +220,11 @@ minor_events_timelineextended.3 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = medium_radicals }
-    }
+	}
 
-    option = {
-        name = minor_events_timelineextended.3.b
-        ai_chance = {
+	option = {
+		name = minor_events_timelineextended.3.b
+		ai_chance = {
 			base = 2
 		}
 		# Seek support from the international community
@@ -192,17 +233,17 @@ minor_events_timelineextended.3 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-    }
+	}
 }
 
 
 minor_events_timelineextended.6 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/minor_event_generic.dds" }
+	event_image = { texture = "gfx/event_pictures/minor_event_generic.dds" }
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -234,16 +275,16 @@ minor_events_timelineextended.6 = {
 		}
 	}
 
-    immediate = {
-    }
+	immediate = {
+	}
 
-    duration = 3
-    is_popup = yes
+	duration = 3
+	is_popup = yes
 
 	# Option A: Weather the storm - accept the pain
-    option = {
-        name = minor_events_timelineextended.6.a
-        default_option = yes
+	option = {
+		name = minor_events_timelineextended.6.a
+		default_option = yes
 		apply_banking_crash_origin_effects = yes
 		add_radicals = {
 			value = medium_radicals
@@ -253,10 +294,10 @@ minor_events_timelineextended.6 = {
 			value = small_radicals
 			strata = middle
 		}
-        ai_chance = {
+		ai_chance = {
 			base = 50
 		}
-    }
+	}
 
 	# Option B: Emergency fiscal response - spend to cushion the blow
 	option = {
@@ -287,12 +328,12 @@ minor_events_timelineextended.6 = {
 }
 
 minor_events_timelineextended.7 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/world_exhibition_fair.dds" }
+	event_image = { texture = "gfx/event_pictures/world_exhibition_fair.dds" }
 
-    on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -322,17 +363,17 @@ minor_events_timelineextended.7 = {
 		}
 	}
 
-    immediate = {
+	immediate = {
 		banking_contagion_crash_check = yes
-    }
+	}
 
-    duration = 3
-    is_popup = yes
+	duration = 3
+	is_popup = yes
 
 	# Option A: Protect domestic banks — trade penalty for weaker impact
-    option = {
-        name = minor_events_timelineextended.7.a
-        default_option = yes
+	option = {
+		name = minor_events_timelineextended.7.a
+		default_option = yes
 		apply_banking_contagion_effects = yes
 		# Protectionist measures: contain the crisis but hurt trade
 		add_modifier = {
@@ -353,10 +394,10 @@ minor_events_timelineextended.7 = {
 				strata = upper
 			}
 		}
-        ai_chance = {
+		ai_chance = {
 			base = 50
 		}
-    }
+	}
 
 	# Option B: Ride it out — maintain open markets, take the full hit
 	option = {

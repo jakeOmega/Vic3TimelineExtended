@@ -715,12 +715,12 @@ pm_bae_samlesbury_aerodrome = {
 	state_modifiers = {
 		workforce_scaled = {
 			goods_output_aeroplanes_mult = 0.35
-			building_military_shipyard_throughput_add = 0.35
+			building_shipyard_throughput_add = 0.35
 		}
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			unit_navy_defense_mult = 0.05
+			country_admiral_rank_impact_mult = 0.05
 			unit_army_defense_mult = 0.05
 		}
 	}
@@ -2372,7 +2372,7 @@ pm_hq_military_treaty = {
             building_training_rate_mult = 1.0
 			building_arms_industry_throughput_add = 0.25
 			building_artillery_foundry_throughput_add = 0.25
-			building_military_shipyard_throughput_add = 0.25
+			building_shipyard_throughput_add = 0.25
 			building_munition_plant_throughput_add = 0.25
         }
 	}
@@ -3462,13 +3462,12 @@ pm_mitsubishi_nagasaki_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_shipyard_throughput_add = 0.15
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.25 # was civilian 0.15 + military 0.1; merged in 1.13
 		}
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			unit_navy_defense_mult = 0.05
+			country_admiral_rank_impact_mult = 0.05
 		}
 	}
 	building_modifiers = {
@@ -4476,7 +4475,7 @@ pm_aker_oslo_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -4485,7 +4484,7 @@ pm_aker_oslo_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -5907,7 +5906,7 @@ pm_estaleiro_maua_niteroi_dockyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -5916,7 +5915,7 @@ pm_estaleiro_maua_niteroi_dockyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -6008,7 +6007,7 @@ pm_fcm_la_seyne_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -6017,7 +6016,7 @@ pm_fcm_la_seyne_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -6042,7 +6041,7 @@ pm_foochow_mawei_dockyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -6051,7 +6050,7 @@ pm_foochow_mawei_dockyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -6284,7 +6283,7 @@ pm_gotaverken_gothenburg_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -6293,7 +6292,7 @@ pm_gotaverken_gothenburg_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -6622,7 +6621,7 @@ pm_imperial_arsenal_golden_horn = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -6631,7 +6630,7 @@ pm_imperial_arsenal_golden_horn = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -6966,7 +6965,7 @@ pm_john_brown_clydebank_yard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -6975,7 +6974,7 @@ pm_john_brown_clydebank_yard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -9164,7 +9163,7 @@ pm_schichau_elbing_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -9173,7 +9172,7 @@ pm_schichau_elbing_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -9198,7 +9197,7 @@ pm_secn_ferrol_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -9207,7 +9206,7 @@ pm_secn_ferrol_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -9367,7 +9366,7 @@ pm_stf_fiume_torpedo_works = {
 	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -9376,7 +9375,7 @@ pm_stf_fiume_torpedo_works = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -9434,7 +9433,7 @@ pm_stt_haskoy_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -9443,7 +9442,7 @@ pm_stt_haskoy_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -9839,7 +9838,7 @@ pm_wadia_bombay_dockyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -9848,7 +9847,7 @@ pm_wadia_bombay_dockyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0
@@ -9906,7 +9905,7 @@ pm_cramp_philadelphia_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_military_shipyard_throughput_add = 0.1
+			building_shipyard_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -9915,7 +9914,7 @@ pm_cramp_philadelphia_shipyard = {
 			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (55.56%)
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (44.44%)
 			# Output goods
-			goods_output_manowars_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
+			goods_output_steamers_add = 20                       # Price:   70, Total cost:  1400.0 (70.00%)
 			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (30.00%)
 			# Total input cost: 1350.0
 			# Total output cost: 2000.0

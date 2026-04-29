@@ -161,17 +161,12 @@ hellenic_union = {
 atlantic_charter = {
 	trigger = {
 		OR = {
-			capital.region = sr:region_england
-			capital.region = sr:region_iberia
-			capital.region = sr:region_france
-			capital.region = sr:region_occitania
-			capital.region = sr:region_rhine
-			capital.region = sr:region_north_germany
-			capital.region = sr:region_north_sea_coast
-			capital.region = sr:region_baltic
+			capital.region = sr:region_western_europe
+			capital.region = sr:region_southern_europe
+			capital.region = sr:region_central_europe
+			capital.region = sr:region_northern_europe
 			capital.region = sr:region_canada
-			capital.region = sr:region_new_england
-			capital.region = sr:region_dixie
+			capital.region = sr:region_atlantic_coast
 		}
 	}
 }
@@ -180,7 +175,7 @@ pacific_rim_pact = {
 	trigger = {
 		OR = {
 			capital.region = sr:region_pacific_coast
-			capital.region = sr:region_japan
+			capital.region = sr:region_northeast_asia
 			capital.region = sr:region_oceania
 			capital.region = sr:region_indonesia
 			capital.region = sr:region_andes
@@ -203,26 +198,13 @@ european_union = {
 		scope:selected_identity = identity:identity_diplomatic
 		OR = {
 			capital = {
-				region = sr:region_england
-				region = sr:region_north_sea_coast
-				region = sr:region_iberia
-				region = sr:region_france
-				region = sr:region_occitania
-				region = sr:region_rhine
-				region = sr:region_italy
+				region = sr:region_western_europe
+				region = sr:region_southern_europe
+				region = sr:region_central_europe
+				region = sr:region_northern_europe
 				region = sr:region_balkans
-				region = sr:region_north_germany
-				region = sr:region_south_germany
-				region = sr:region_baltic
-				region = sr:region_danubia
-				region = sr:region_poland
+				region = sr:region_eastern_europe
 				region = sr:region_russia
-				region = sr:region_dnieper
-				region = sr:region_belarus
-				region = sr:region_baltic_states
-				region = sr:region_finland
-				region = sr:region_arctic_russia
-				region = sr:region_urals
 			}
 		}
 	}

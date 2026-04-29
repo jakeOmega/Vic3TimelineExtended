@@ -576,14 +576,14 @@ types state_panel_types {
 
 						header_building_item = {
 							visible = no
-							datacontext = "[StatesPanel.AccessBuilding('building_naval_base')]"
+							datacontext = "[StatesPanel.AccessBuilding('building_naval_administration')]"
 
 							tooltipwidget = {
 								FancyTooltip_Building = {}
 							}
 
 							blockoverride "text" {
-								text = "TOTAL_NAVAL_BASE"
+								text = "TOTAL_NAVAL_ADMINISTRATION"
 							}					
 						}
 
@@ -948,7 +948,7 @@ types state_buildings
 						parentanchor = left|vcenter
 						size = { 30 30 }
 						tooltip = "[Building.GetCancelConstructionTooltip]"
-						visible = "[And(IsValid( Building.CancelConstruction ), Not(Building.IsMilitaryBuilding))]"
+						visible = "[And(IsValid( Building.CancelConstruction ), Not(Building.GeneratesCombatUnits))]"
 						onclick = "[Execute( Building.CancelConstruction )]"
 						using = tooltip_below
 					}

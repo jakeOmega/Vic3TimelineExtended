@@ -1544,7 +1544,7 @@ space_race_colony_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/colony_pluto_charon.dds" }
+	event_image = { texture = "gfx/event_pictures/colony_deep_kuiper.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 

@@ -2,21 +2,21 @@
 # Strategic Reserve Production Methods
 # ============================================================================
 # Each reserve-good PMG has one non-interactive PM. It carries a base 1-unit
-# goods input and 1-unit goods output, while sr_refresh_hub_flow_effect applies
+# goods input and 1-unit goods output, while st_res_refresh_hub_flow_effect applies
 # dynamic +mult and -100% disable modifiers to choose the active direction and
 # scale that side up to the configured weekly rate.
 # PMG definitions live in common/production_method_groups/strategic_reserve_pmgs.txt.
 # ============================================================================
 
 # ---------------- GRAIN ----------------
-pm_sr_hub_reserve = {
+pm_st_res_hub_reserve = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
-			country_sr_grain_capacity_add = 500
-			country_sr_ammunition_capacity_add = 500
-			country_sr_oil_capacity_add = 500
-			country_sr_weekly_rate_cap_add = 10
+			country_st_res_grain_capacity_add = 500
+			country_st_res_ammunition_capacity_add = 500
+			country_st_res_oil_capacity_add = 500
+			country_st_res_weekly_rate_cap_add = 10
 		}
 	}
 	building_modifiers = {
@@ -29,7 +29,7 @@ pm_sr_hub_reserve = {
 			goods_output_oil_add = 1
 		}
 		level_scaled = {
-			bbuilding_employment_bureaucrats_add = 1000
+			building_employment_bureaucrats_add = 1000
 			building_employment_clerks_add = 1000
 			building_employment_laborers_add = 3000
 		}
@@ -40,15 +40,15 @@ pm_sr_hub_reserve = {
 # ---------------- SILO (capacity-only) ----------------
 # Single idle PM that provides +200 per good per level of silo. Ammunition
 # and oil capacity contributions are hidden behind their respective techs.
-pm_sr_silo_capacity = {
+pm_st_res_silo_capacity = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
-			country_sr_grain_capacity_add = 200
-			country_sr_ammunition_capacity_add = 200
-			country_sr_oil_capacity_add = 200
+			country_st_res_grain_capacity_add = 200
+			country_st_res_ammunition_capacity_add = 200
+			country_st_res_oil_capacity_add = 200
 			building_employment_bureaucrats_add = 1000
-			country_sr_weekly_rate_cap_add = 10
+			country_st_res_weekly_rate_cap_add = 10
 		}
 	}
 	building_modifiers = {

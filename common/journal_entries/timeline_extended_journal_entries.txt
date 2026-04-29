@@ -239,7 +239,7 @@
 			trigger = { has_global_variable = nuke_rank_10 }
 		}
 	}
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
     can_revolution_inherit = yes
     can_deactivate = yes
 }
@@ -302,7 +302,7 @@ je_state_collapse = {
         }
 	}
     weight = 10
-    should_be_pinned_by_default = yes
+    should_be_pinned_by_default_uninvolved_or_context = yes
 
     progressbar = yes
 
@@ -496,6 +496,6 @@ je_create_new_religion = {
     }
 
     weight = 10
-    should_be_pinned_by_default = yes
+    should_be_pinned_by_default_uninvolved_or_context = yes
     can_deactivate = yes
 }

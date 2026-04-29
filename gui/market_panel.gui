@@ -2233,8 +2233,15 @@ types market_panel
 			onclick = "[Market.TogglePinInOutliner]"
 		}
 
-		block "text" {
-			text = "ALL"
+		textbox = {
+			parentanchor = center
+			size = { 90% 100% }
+			align = hcenter|nobaseline
+			using = elide_fontsize_min
+			
+			block "text" {
+				text = "ALL"
+			}
 		}
 	}
 	

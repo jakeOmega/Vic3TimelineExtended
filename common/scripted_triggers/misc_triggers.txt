@@ -144,7 +144,6 @@ is_privately_expandable_building_type = {
 		is_building_type = building_tooling_workshop
 		is_building_type = building_paper_mill
 		is_building_type = building_shipyard
-		is_building_type = building_military_shipyard
 		is_building_type = building_arms_industry
 		is_building_type = building_artillery_foundry
 		is_building_type = building_munition_plant

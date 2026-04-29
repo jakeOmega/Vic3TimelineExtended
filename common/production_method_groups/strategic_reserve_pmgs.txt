@@ -2,17 +2,17 @@
 # Strategic Reserve Production Method Groups
 # ============================================================================
 
-pmg_sr_hub = {
+pmg_st_res_hub = {
 	texture = "gfx/interface/icons/goods_icons/grain.dds"
 	production_methods = {
-		pm_sr_hub_reserve
+		pm_st_res_hub_reserve
 	}
 }
 
-pmg_sr_silo_capacity = {
+pmg_st_res_silo_capacity = {
 	texture = "gfx/interface/icons/goods_icons/grain.dds"
 	is_hidden_when_unavailable = no
 	production_methods = {
-		pm_sr_silo_capacity
+		pm_st_res_silo_capacity
 	}
 }

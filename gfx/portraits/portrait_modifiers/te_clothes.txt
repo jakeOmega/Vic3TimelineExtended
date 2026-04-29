@@ -1,6 +1,4 @@
-﻿clothes = {
-	usage = game
-	selection_behavior = weighted_random
+﻿INJECT:clothes = {
 
 	# Late-game female suits for European politician/ruler characters
 	# When women_in_the_workplace is researched, female rulers and politicians
@@ -44,8 +42,8 @@
 							republic_clothes_trigger = yes
 						}
 						AND = {
-							has_role = politician
-							is_ruler = no
+							has_role = character_role_politician
+							is_ruler_of_own_country = no
 						}
 					}
 				}
@@ -80,7 +78,7 @@
 				scope:character = {
 					is_female = yes
 					age >= define:NCharacters|ADULT_AGE
-					is_ruler = yes
+					is_ruler_of_own_country = yes
 					exists = owner
 					owner ?= {
 						has_technology_researched = second_wave_feminism

@@ -914,130 +914,132 @@ assign_aptitude_traits_effect = {
 	# When universal_aptitude_traits_enabled game rule is active, the role filter is bypassed
 	# and every adult character gets aptitude traits. When disabled (default), only rulers,
 	# politicians, agitators, generals, and admirals qualify.
-	every_scope_character = {
-		limit = {
-			NOT = { age < define:NCharacters|ADULT_AGE }
-			OR = {
-				has_game_rule = universal_aptitude_traits_enabled
-				is_ruler = yes
-				has_role = politician
-				has_role = agitator
-				has_role = general
-				has_role = admiral
-			}
-			NOR = {
-				has_trait = ruler_terrible_administrator
-				has_trait = ruler_poor_administrator
-				has_trait = ruler_average_administrator
-				has_trait = ruler_skilled_administrator
-				has_trait = ruler_exceptional_administrator
-			}
-		}
-		random_list = {
-			20 = { add_trait = ruler_terrible_administrator }
-			30 = { add_trait = ruler_poor_administrator }
-			35 = { add_trait = ruler_average_administrator }
-			12 = { add_trait = ruler_skilled_administrator }
-			3 = { add_trait = ruler_exceptional_administrator }
-		}
-	}
-
-	# Diplomatic trait
-	every_scope_character = {
-		limit = {
-			NOT = { age < define:NCharacters|ADULT_AGE }
-			OR = {
-				has_game_rule = universal_aptitude_traits_enabled
-				is_ruler = yes
-				has_role = politician
-				has_role = agitator
-				has_role = general
-				has_role = admiral
-			}
-			NOR = {
-				has_trait = ruler_terrible_diplomat
-				has_trait = ruler_poor_diplomat
-				has_trait = ruler_average_diplomat
-				has_trait = ruler_skilled_diplomat
-				has_trait = ruler_exceptional_diplomat
-			}
-		}
-		random_list = {
-			20 = { add_trait = ruler_terrible_diplomat }
-			30 = { add_trait = ruler_poor_diplomat }
-			35 = { add_trait = ruler_average_diplomat }
-			12 = { add_trait = ruler_skilled_diplomat }
-			3 = { add_trait = ruler_exceptional_diplomat }
-		}
-	}
-
-	# Military trait - biased toward skilled/exceptional for generals/admirals
-	every_scope_character = {
-		limit = {
-			NOT = { age < define:NCharacters|ADULT_AGE }
-			OR = {
-				has_game_rule = universal_aptitude_traits_enabled
-				is_ruler = yes
-				has_role = politician
-				has_role = agitator
-				has_role = general
-				has_role = admiral
-			}
-			NOR = {
-				has_trait = ruler_terrible_commander
-				has_trait = ruler_poor_commander
-				has_trait = ruler_average_commander
-				has_trait = ruler_skilled_commander
-				has_trait = ruler_exceptional_commander
-			}
-		}
-		if = {
+	if = {
+		limit = { has_game_rule = universal_aptitude_traits_enabled }
+		every_scope_character = {
 			limit = {
+				NOT = { age < define:NCharacters|ADULT_AGE }
 				OR = {
-					has_role = general
-					has_role = admiral
+					has_role_of_type = ruler
+					has_role_of_type = politician
+					has_role_of_type = agitator
+					has_role_of_type = general
+					has_role_of_type = admiral
+				}
+				NOR = {
+					has_trait = ruler_terrible_administrator
+					has_trait = ruler_poor_administrator
+					has_trait = ruler_average_administrator
+					has_trait = ruler_skilled_administrator
+					has_trait = ruler_exceptional_administrator
 				}
 			}
 			random_list = {
-				5 = { add_trait = ruler_terrible_commander }
-				15 = { add_trait = ruler_poor_commander }
-				30 = { add_trait = ruler_average_commander }
-				35 = { add_trait = ruler_skilled_commander }
-				15 = { add_trait = ruler_exceptional_commander }
+				20 = { add_trait = ruler_terrible_administrator }
+				30 = { add_trait = ruler_poor_administrator }
+				35 = { add_trait = ruler_average_administrator }
+				12 = { add_trait = ruler_skilled_administrator }
+				3 = { add_trait = ruler_exceptional_administrator }
 			}
 		}
-		else = {
-			random_list = {
-				20 = { add_trait = ruler_terrible_commander }
-				30 = { add_trait = ruler_poor_commander }
-				35 = { add_trait = ruler_average_commander }
-				12 = { add_trait = ruler_skilled_commander }
-				3 = { add_trait = ruler_exceptional_commander }
-			}
-		}
-	}
 
-	# Set GUI display variables for all characters with aptitude traits
-	every_scope_character = {
-		limit = {
-			NOT = { age < define:NCharacters|ADULT_AGE }
-			OR = {
-				has_game_rule = universal_aptitude_traits_enabled
-				is_ruler = yes
-				has_role = politician
-				has_role = agitator
-				has_role = general
-				has_role = admiral
+		# Diplomatic trait
+		every_scope_character = {
+			limit = {
+				NOT = { age < define:NCharacters|ADULT_AGE }
+				OR = {
+					has_game_rule = universal_aptitude_traits_enabled
+					has_role_of_type = ruler
+					has_role_of_type = politician
+					has_role_of_type = agitator
+					has_role_of_type = general
+					has_role_of_type = admiral
+				}
+				NOR = {
+					has_trait = ruler_terrible_diplomat
+					has_trait = ruler_poor_diplomat
+					has_trait = ruler_average_diplomat
+					has_trait = ruler_skilled_diplomat
+					has_trait = ruler_exceptional_diplomat
+				}
 			}
-			OR = {
-				has_trait = ruler_terrible_administrator
-				has_trait = ruler_poor_administrator
-				has_trait = ruler_average_administrator
-				has_trait = ruler_skilled_administrator
-				has_trait = ruler_exceptional_administrator
+			random_list = {
+				20 = { add_trait = ruler_terrible_diplomat }
+				30 = { add_trait = ruler_poor_diplomat }
+				35 = { add_trait = ruler_average_diplomat }
+				12 = { add_trait = ruler_skilled_diplomat }
+				3 = { add_trait = ruler_exceptional_diplomat }
 			}
-			NOT = { has_variable = ruler_admin_tier }
 		}
-		set_aptitude_trait_vars_effect = yes
+
+		# Military trait - biased toward skilled/exceptional for generals/admirals
+		every_scope_character = {
+			limit = {
+				NOT = { age < define:NCharacters|ADULT_AGE }
+				OR = {
+					has_game_rule = universal_aptitude_traits_enabled
+					has_role_of_type = ruler
+					has_role_of_type = politician
+					has_role_of_type = agitator
+					has_role_of_type = general
+					has_role_of_type = admiral
+				}
+				NOR = {
+					has_trait = ruler_terrible_commander
+					has_trait = ruler_poor_commander
+					has_trait = ruler_average_commander
+					has_trait = ruler_skilled_commander
+					has_trait = ruler_exceptional_commander
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_role_of_type = general
+						has_role_of_type = admiral
+					}
+				}
+				random_list = {
+					5 = { add_trait = ruler_terrible_commander }
+					15 = { add_trait = ruler_poor_commander }
+					30 = { add_trait = ruler_average_commander }
+					35 = { add_trait = ruler_skilled_commander }
+					15 = { add_trait = ruler_exceptional_commander }
+				}
+			}
+			else = {
+				random_list = {
+					20 = { add_trait = ruler_terrible_commander }
+					30 = { add_trait = ruler_poor_commander }
+					35 = { add_trait = ruler_average_commander }
+					12 = { add_trait = ruler_skilled_commander }
+					3 = { add_trait = ruler_exceptional_commander }
+				}
+			}
+		}
+
+		# Set GUI display variables for all characters with aptitude traits
+		every_scope_character = {
+			limit = {
+				NOT = { age < define:NCharacters|ADULT_AGE }
+				OR = {
+					has_game_rule = universal_aptitude_traits_enabled
+					has_role_of_type = ruler
+					has_role_of_type = politician
+					has_role_of_type = agitator
+					has_role_of_type = general
+					has_role_of_type = admiral
+				}
+				OR = {
+					has_trait = ruler_terrible_administrator
+					has_trait = ruler_poor_administrator
+					has_trait = ruler_average_administrator
+					has_trait = ruler_skilled_administrator
+					has_trait = ruler_exceptional_administrator
+				}
+				NOT = { has_variable = ruler_admin_tier }
+			}
+			set_aptitude_trait_vars_effect = yes
+		}
 	}
 }

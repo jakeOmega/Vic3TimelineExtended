@@ -203,7 +203,9 @@ demilitarized_zone = {
 						scope:article.input_state = {
 							OR = {
 								has_building = building_barrack
-								has_building = building_naval_base
+								has_building = building_naval_administration
+								has_building = building_naval_fortification
+								has_building = building_naval_logistics_center
 							}
 						}
 					}
@@ -383,7 +385,9 @@ forced_disarmament = {
 					if = { limit = { has_building = building_arms_industry } remove_building = building_arms_industry }
 					if = { limit = { has_building = building_artillery_foundry } remove_building = building_artillery_foundry }
 					if = { limit = { has_building = building_munition_plant } remove_building = building_munition_plant }
-					if = { limit = { has_building = building_military_shipyard } remove_building = building_military_shipyard }
+					if = { limit = { has_building = building_naval_administration } remove_building = building_naval_administration }
+					if = { limit = { has_building = building_naval_fortification } remove_building = building_naval_fortification }
+					if = { limit = { has_building = building_naval_logistics_center } remove_building = building_naval_logistics_center }
 				}
 			}
 		}
@@ -447,7 +451,9 @@ forced_disarmament = {
 								has_building = building_arms_industry
 								has_building = building_artillery_foundry
 								has_building = building_munition_plant
-								has_building = building_military_shipyard
+								has_building = building_naval_administration
+								has_building = building_naval_fortification
+								has_building = building_naval_logistics_center
 							}
 						}
 					}
@@ -464,7 +470,9 @@ forced_disarmament = {
 								has_building = building_arms_industry
 								has_building = building_artillery_foundry
 								has_building = building_munition_plant
-								has_building = building_military_shipyard
+								has_building = building_naval_administration
+								has_building = building_naval_fortification
+								has_building = building_naval_logistics_center
 							}
 						}
 					}
@@ -481,7 +489,9 @@ forced_disarmament = {
 								has_building = building_arms_industry
 								has_building = building_artillery_foundry
 								has_building = building_munition_plant
-								has_building = building_military_shipyard
+								has_building = building_naval_administration
+								has_building = building_naval_fortification
+								has_building = building_naval_logistics_center
 							}
 						}
 					}

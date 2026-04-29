@@ -94,7 +94,7 @@
 	}
 
 	weight = 1000
-	should_be_pinned_by_default = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = no
 }

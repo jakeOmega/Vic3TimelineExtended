@@ -522,8 +522,8 @@ modern_chemical_processes = {
 	modifier = {
 		country_weekly_innovation_max_add = 25
 		state_arable_land_mult = 0.2
-		country_sr_ammunition_decay_add = -0.005
-		country_sr_oil_decay_add = -0.001
+		country_st_res_ammunition_decay_add = -0.005
+		country_st_res_oil_decay_add = -0.001
 	}
 	
 	unlocking_technologies = {	
@@ -591,9 +591,10 @@ naval_convoy_defense = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/sea_lane_strategies.dds"
 	category = military
-	
+
 	modifier = {
-		country_convoy_damage_taken_mult = -0.75
+		country_ship_group_supply_ships_construction_efficiency_add = 0.5
+		country_supply_ship_construction_progress_max_mult = 0.25
 	}
 	
 	unlocking_technologies = {	
@@ -606,14 +607,14 @@ naval_convoy_defense = {
 }
 
 sonar = {
-	# ASW Destroyers unit
+	# ASW capability — boosts destroyer construction (the primary ASW platform) + admiral effects
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/radio.dds"
 	category = military
-	
+
 	modifier = {
-		unit_convoy_raiding_interception_mult = 0.5
-		unit_convoy_defense_mult = 0.5
+		country_ship_type_destroyer_construction_efficiency_add = 0.25
+		country_admiral_rank_impact_mult = 0.25
 		country_sonar_pb_principles_bool = yes
 	}
 	
@@ -630,9 +631,10 @@ naval_fire_control_systems = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/battleship_tech.dds"
 	category = military
-	
+
 	modifier = {
-		state_building_naval_base_max_level_add = 20
+		ship_accuracy_mult = 0.10
+		ship_critical_hit_chance_add = 0.05
 	}
 	
 	unlocking_technologies = {	

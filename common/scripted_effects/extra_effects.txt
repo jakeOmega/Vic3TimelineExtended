@@ -520,10 +520,6 @@ expand_building_private_construction = {
 		state = { start_privately_funded_building_construction = building_shipyard }
 	}
 	else_if = {
-		limit = { is_building_type = building_military_shipyard }
-		state = { start_privately_funded_building_construction = building_military_shipyard }
-	}
-	else_if = {
 		limit = { is_building_type = building_arms_industry }
 		state = { start_privately_funded_building_construction = building_arms_industry }
 	}
@@ -1119,40 +1115,10 @@ update_characters = {
 			remove_trait = mind_backups
 		}
 
-		if = {
-			limit = { owner = { has_technology_researched = swarm_technology }}
-			remove_trait = trait_predictive_logistics
-			remove_trait = trait_military_grade_cybersecurity
-			remove_trait = trait_jadc2
-			add_trait = trait_swarm_technology
-		}
-		else_if = {
-			limit = { owner = { has_technology_researched = jadc2 }}
-			remove_trait = trait_predictive_logistics
-			remove_trait = trait_military_grade_cybersecurity
-			remove_trait = trait_swarm_technology
-			add_trait = trait_jadc2
-		}
-		else_if = {
-			limit = { owner = { has_technology_researched = military_grade_cybersecurity }}
-			remove_trait = trait_predictive_logistics
-			remove_trait = trait_jadc2
-			remove_trait = trait_swarm_technology
-			add_trait = trait_military_grade_cybersecurity
-		}
-		else_if = {
-			limit = { owner = { has_technology_researched = predictive_logistics }}
-			remove_trait = trait_military_grade_cybersecurity
-			remove_trait = trait_jadc2
-			remove_trait = trait_swarm_technology
-			add_trait = trait_predictive_logistics
-		}
-		else = {
-			remove_trait = trait_predictive_logistics
-			remove_trait = trait_military_grade_cybersecurity
-			remove_trait = trait_jadc2
-			remove_trait = trait_swarm_technology
-		}
+		# Tech-gated command-limit traits (predictive_logistics, military_grade_cybersecurity,
+		# jadc2, swarm_technology) removed in 1.13 cleanup. Vanilla 1.13 supports
+		# country_general_rank_impact_mult / country_admiral_rank_impact_mult directly on
+		# the techs, so per-character traits are no longer needed.
 	}
 }
 
@@ -1254,7 +1220,9 @@ te_update_state_modifiers = {
 # Used during state collapse events.
 state_collapse_remove_infrastructure = {
 	if = { limit = { has_building = building_barrack } remove_building = building_barrack }
-	if = { limit = { has_building = building_naval_base } remove_building = building_naval_base }
+	if = { limit = { has_building = building_naval_administration } remove_building = building_naval_administration }
+	if = { limit = { has_building = building_naval_fortification } remove_building = building_naval_fortification }
+	if = { limit = { has_building = building_naval_logistics_center } remove_building = building_naval_logistics_center }
 	if = { limit = { has_building = building_port } remove_building = building_port }
 	if = { limit = { has_building = building_railway } remove_building = building_railway }
 	if = { limit = { has_building = building_university } remove_building = building_university }

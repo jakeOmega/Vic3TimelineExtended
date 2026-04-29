@@ -21,7 +21,7 @@ battle_condition_fortified_position = {
 		scope:is_advancing_side = no
 		exists = scope:character
 		scope:character = {
-			has_role = general
+			has_role_of_type = general
 		}
 		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
 		NOT = { has_battle_condition = battle_condition_fortified_stronghold }
@@ -94,7 +94,7 @@ battle_condition_fortified_stronghold = {
 		scope:is_advancing_side = no
 		exists = scope:character
 		scope:character = {
-			has_role = general
+			has_role_of_type = general
 		}
 		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
 		NOT = { has_battle_condition = battle_condition_fortified_bastion }
@@ -167,7 +167,7 @@ battle_condition_fortified_bastion = {
 		scope:is_advancing_side = no
 		exists = scope:character
 		scope:character = {
-			has_role = general
+			has_role_of_type = general
 		}
 		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
 		NOT = { has_battle_condition = battle_condition_impregnable_fortress }
@@ -239,7 +239,7 @@ battle_condition_impregnable_fortress = {
 		scope:is_advancing_side = no
 		exists = scope:character
 		scope:character = {
-			has_role = general
+			has_role_of_type = general
 		}
 		NOT = { has_battle_condition = battle_condition_aggressive_maneuver }
 		province = {

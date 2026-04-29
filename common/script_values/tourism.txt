@@ -1813,7 +1813,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HOKKAIDO }
-		value = 75 # Wild, volcanic landscapes and national parks. Known for its winter scenery.
+		value = 75 # Wild, volcanic landscapes and national parks. Known for its winter scenery. (Kuril Islands are part of Hokkaido in 1.13.)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TOHOKU }
@@ -1824,12 +1824,20 @@
 		value = 90 # Contains Edo/Tokyo and nearby attractions like Nikko and Mount Fuji.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_CHUBU }
-		value = 85 # "Japanese Alps," historic villages (Shirakawa-go), and the Sea of Japan coast.
+		limit = { state_region = s:STATE_TOKAI }
+		value = 80 # Pacific coast of central Japan: Mt. Fuji, Nagoya area, hot springs, and the Tokaido road's historic post towns.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HOKUSHINETSU }
+		value = 80 # "Japanese Alps," historic villages (Shirakawa-go), and the Sea of Japan coast.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KYOTO }
+		value = 100 # Imperial capital of Kyoto and the first capital of Nara. The cultural and historical heart of Japan.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KANSAI }
-		value = 100 # Imperial capital of Kyoto, first capital of Nara, vibrant Osaka. The cultural and historical heart of Japan.
+		value = 90 # Vibrant Osaka and the Inland Sea coast.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KYUSHU }

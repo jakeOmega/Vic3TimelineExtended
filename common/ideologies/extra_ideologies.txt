@@ -48,7 +48,7 @@
 
 	non_interest_group_leader_trigger = {
 		NAND = {
-			has_role = agitator
+			has_role_of_type = agitator
 			owner = {
 				has_law = law_type:law_ministry_of_the_environment
 			}
@@ -495,6 +495,7 @@ ideology_corporate = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
+		law_social_monarchy = disapprove
 	}
 	
 	lawgroup_economic_system = {	
@@ -1721,6 +1722,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = disapprove
 		law_direct_democracy = disapprove
+		law_social_monarchy = strongly_approve
 	}
 	
 	lawgroup_distribution_of_power = {
@@ -1793,6 +1795,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = neutral
 		law_direct_democracy = disapprove
+		law_social_monarchy = disapprove
 	}
 	
 	lawgroup_distribution_of_power = {
@@ -1865,6 +1868,7 @@ ideology_custom_religion_republican_governance = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = disapprove
 		law_direct_democracy = approve
+		law_social_monarchy = strongly_disapprove
 	}
 	
 	lawgroup_distribution_of_power = {
@@ -1937,6 +1941,7 @@ ideology_custom_religion_corporate_governance = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
+		law_social_monarchy = disapprove
 	}
 	
 	lawgroup_distribution_of_power = {
@@ -2009,6 +2014,7 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = strongly_disapprove
 		law_direct_democracy = strongly_disapprove
+		law_social_monarchy = strongly_approve
 	}
 	
 	lawgroup_distribution_of_power = {
@@ -2081,6 +2087,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_council_republic = strongly_disapprove
 		law_neocameralism = disapprove
 		law_direct_democracy = disapprove
+		law_social_monarchy = neutral
 	}
 	
 	lawgroup_distribution_of_power = {

@@ -1,0 +1,173 @@
+﻿# ============================================================================
+# Strategic Reserve — Scripted Buttons
+# ============================================================================
+# Buttons call country-side wrapper effects in sr_effects.txt. Low-level hub
+# scope bridges stay inside the SR scripted effects file.
+# Signed rate buttons (one increase/decrease pair per good): change the chosen
+# weekly reserve rate by the current shared step size. Positive values store
+# goods, negative values withdraw them.
+# Step-size button: cycles 1 → 10 → 100 → 1000 → 10000 → 1.
+# See te_strategic_reserve_l_english.yml for labels.
+
+# ---------------- STEP SIZE BUTTON ----------------
+st_res_cycle_step_size_button = {
+	name = "st_res_cycle_step_size_button"
+	desc = "st_res_cycle_step_size_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		st_res_cycle_step_size_effect = yes
+	}
+}
+
+# ---------------- RESET RATES BUTTON ----------------
+st_res_reset_rates_button = {
+	name = "st_res_reset_rates_button"
+	desc = "st_res_reset_rates_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	effect = {
+		st_res_reset_rates_effect = yes
+	}
+}
+
+# ---------------- GRAIN RATE BUTTONS ----------------
+st_res_increase_grain_rate_button = {
+	name = "st_res_increase_grain_rate_button"
+	desc = "st_res_increase_grain_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_grain_rate < st_res_grain_max_storable
+			var:st_res_grain_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_grain_rate_effect = yes
+	}
+}
+
+st_res_decrease_grain_rate_button = {
+	name = "st_res_decrease_grain_rate_button"
+	desc = "st_res_decrease_grain_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_grain_rate > st_res_grain_max_withdrawable
+			var:st_res_grain_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_grain_rate_effect = yes
+	}
+}
+
+# ---------------- AMMUNITION RATE BUTTONS ----------------
+st_res_increase_ammunition_rate_button = {
+	name = "st_res_increase_ammunition_rate_button"
+	desc = "st_res_increase_ammunition_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = percussion_cap
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_ammunition_rate < st_res_ammunition_max_storable
+			var:st_res_ammunition_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_ammunition_rate_effect = yes
+	}
+}
+
+st_res_decrease_ammunition_rate_button = {
+	name = "st_res_decrease_ammunition_rate_button"
+	desc = "st_res_decrease_ammunition_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = percussion_cap
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_ammunition_rate > st_res_ammunition_max_withdrawable
+			var:st_res_ammunition_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_ammunition_rate_effect = yes
+	}
+}
+
+# ---------------- OIL RATE BUTTONS ----------------
+st_res_increase_oil_rate_button = {
+	name = "st_res_increase_oil_rate_button"
+	desc = "st_res_increase_oil_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = fractional_distillation
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_oil_rate < st_res_oil_max_storable
+			var:st_res_oil_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_oil_rate_effect = yes
+	}
+}
+
+st_res_decrease_oil_rate_button = {
+	name = "st_res_decrease_oil_rate_button"
+	desc = "st_res_decrease_oil_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = fractional_distillation
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_oil_rate > st_res_oil_max_withdrawable
+			var:st_res_oil_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_oil_rate_effect = yes
+	}
+}

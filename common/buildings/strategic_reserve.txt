@@ -23,7 +23,7 @@ building_strategic_reserve_hub = {
 	}
 
 	production_method_groups = {
-		pmg_sr_hub
+		pmg_st_res_hub
 	}
 
 	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
@@ -71,7 +71,7 @@ building_strategic_reserve_silo = {
 	}
 
 	production_method_groups = {
-		pmg_sr_silo_capacity
+		pmg_st_res_silo_capacity
 	}
 
 	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"

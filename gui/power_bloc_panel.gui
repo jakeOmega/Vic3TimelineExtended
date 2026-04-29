@@ -837,7 +837,7 @@ types power_bloc_panel_types
 				}
 			}
 
-			### TOTAL NUMBER OF FLOTILLAS
+			### TOTAL NUMBER OF SHIPS
 			power_bloc_header_grid_item = {
 				using = tooltip_se
 				tooltip = "POWER_BLOC_NAVY_NUMBERS_TOOLTIP"
@@ -848,11 +848,11 @@ types power_bloc_panel_types
 				}
 
 				blockoverride "text" {
-					raw_text = "[PowerBloc.GetFlotillas|v]"
+					raw_text = "[PowerBloc.GetShips|v]"
 				}
 
 				blockoverride "icon" {
-					raw_text = "@flotillas!"
+					raw_text = "@ships!"
 				}
 			}
 		}
@@ -1042,7 +1042,7 @@ types power_bloc_panel_types
 								size = { 100% 100% }
 
 								block "portrait_button_onclick" {
-									onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+									onclick = "[InformationPanelBar.OpenCharacterPanel(Character.AccessSelf)]"
 								}
 
 								block "portrait_button_onrightclick" {
@@ -1111,7 +1111,7 @@ types power_bloc_panel_types
 								size = { 100% 100% }
 
 								block "portrait_button_onclick" {
-									onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+									onclick = "[InformationPanelBar.OpenCharacterPanel(Character.AccessSelf)]"
 								}
 
 								block "portrait_button_onrightclick" {
@@ -1191,7 +1191,7 @@ types power_bloc_panel_types
 								size = { 100% 100% }
 
 								block "portrait_button_onclick" {
-									onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+									onclick = "[InformationPanelBar.OpenCharacterPanel(Character.AccessSelf)]"
 								}
 
 								block "portrait_button_onrightclick" {
@@ -1256,7 +1256,7 @@ types power_bloc_panel_types
 								size = { 100% 100% }
 
 								block "portrait_button_onclick" {
-									onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+									onclick = "[InformationPanelBar.OpenCharacterPanel(Character.AccessSelf)]"
 								}
 
 								block "portrait_button_onrightclick" {
@@ -1336,7 +1336,7 @@ types power_bloc_panel_types
 								size = { 100% 100% }
 
 								block "portrait_button_onclick" {
-									onclick = "[InformationPanelBar.OpenCommanderPanel(Character.AccessSelf)]"
+									onclick = "[InformationPanelBar.OpenCharacterPanel(Character.AccessSelf)]"
 								}
 
 								block "portrait_button_onrightclick" {
@@ -1915,17 +1915,17 @@ types power_bloc_panel_types
 						}
 					}
 
-					### TOTAL NUMBER OF FLOTILLAS
+					### TOTAL NUMBER OF SHIPS
 					power_bloc_header_grid_item = {
 						using = tooltip_se
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_FLOTILLAS_TOOLTIP"
+						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
 
 						blockoverride "text" {
-							raw_text = "#v [Country.GetWarships|0]#!"
+							raw_text = "#v [Country.GetNumShips|0]#!"
 						}
 
 						blockoverride "icon" {
-							raw_text = "@flotillas!"
+							raw_text = "@ships!"
 						}
 					}
 				}
@@ -2242,7 +2242,7 @@ types power_bloc_panel_types
 		}
 
 		blockoverride "power_blocs_datamodel" {
-			datamodel = "[Country.GetPowerBlocsWithLeverage]"
+			datamodel = "[Country.GetPowerBlocsWithTargetLeverage]"
 		}
 
 		blockoverride "power_blocs_item_stretchfactor" {
@@ -2471,17 +2471,17 @@ types power_bloc_panel_types
 						}
 					}
 
-					### TOTAL NUMBER OF FLOTILLAS
+					### TOTAL NUMBER OF SHIPS
 					power_bloc_header_grid_item = {
 						using = tooltip_se
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_FLOTILLAS_TOOLTIP"
+						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
 
 						blockoverride "text" {
-							raw_text = "#v [Country.GetWarships|0]#!"
+							raw_text = "#v [Country.GetNumShips|0]#!"
 						}
 
 						blockoverride "icon" {
-							raw_text = "@flotillas!"
+							raw_text = "@ships!"
 						}
 					}
 				}

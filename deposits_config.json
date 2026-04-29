@@ -60,7 +60,7 @@
   "STATE_SHAN_STATES": {
     "Rare Earth Elements": 5
   },
-  "STATE_CUBA": {
+  "STATE_EASTERN_CUBA": {
     "Manganese": 3,
     "Nickel & Cobalt": 8
   },
@@ -133,7 +133,7 @@
     "Specialty Alloys": 4,
     "Precious & Minor Base Metals": 5
   },
-  "STATE_CHUBU": {
+  "STATE_HOKUSHINETSU": {
     "Specialty Alloys": 3
   },
   "STATE_ANTOFAGASTA": {
@@ -204,7 +204,7 @@
   "STATE_BRITISH_COLUMBIA": {
     "Copper": 6
   },
-  "STATE_ANDALUSIA": {
+  "STATE_LOWER_ANDALUSIA": {
     "Copper": 5
   },
   "STATE_RIO_NEGRO": {

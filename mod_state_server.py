@@ -29,6 +29,7 @@ from urllib.request import urlopen
 from urllib.error import URLError
 
 from mod_state import ModState
+from paradox_file_parser import ParadoxFileParser
 from path_constants import (
     base_game_path,
     doc_path,
@@ -100,6 +101,11 @@ base_game_paths = {
     "Subject Types": os.path.join(_BASE_COMMON, "subject_types"),
     "Script Values": os.path.join(_BASE_COMMON, "script_values"),
     "Scripted Buttons": os.path.join(_BASE_COMMON, "scripted_buttons"),
+    "Ship Types": os.path.join(_BASE_COMMON, "ship_types"),
+    "Ship Groups": os.path.join(_BASE_COMMON, "ship_groups"),
+    "Ship Modifications": os.path.join(_BASE_COMMON, "ship_modifications"),
+    "Ship Modification Slots": os.path.join(_BASE_COMMON, "ship_modification_slots"),
+    "Ship Name Definitions": os.path.join(_BASE_COMMON, "ship_name_definitions"),
     "Journal Entries": os.path.join(_BASE_COMMON, "journal_entries"),
     "Journal Entry Groups": os.path.join(_BASE_COMMON, "journal_entry_groups"),
     "Decisions": os.path.join(_BASE_COMMON, "decisions"),
@@ -144,6 +150,11 @@ mod_paths = {
     "Scripted Effects": os.path.join(_MOD_COMMON, "scripted_effects"),
     "Scripted Triggers": os.path.join(_MOD_COMMON, "scripted_triggers"),
     "Scripted Buttons": os.path.join(_MOD_COMMON, "scripted_buttons"),
+    "Ship Types": os.path.join(_MOD_COMMON, "ship_types"),
+    "Ship Groups": os.path.join(_MOD_COMMON, "ship_groups"),
+    "Ship Modifications": os.path.join(_MOD_COMMON, "ship_modifications"),
+    "Ship Modification Slots": os.path.join(_MOD_COMMON, "ship_modification_slots"),
+    "Ship Name Definitions": os.path.join(_MOD_COMMON, "ship_name_definitions"),
     "Journal Entries": os.path.join(_MOD_COMMON, "journal_entries"),
     "Journal Entry Groups": os.path.join(_MOD_COMMON, "journal_entry_groups"),
     "Decisions": os.path.join(_MOD_COMMON, "decisions"),
@@ -1545,6 +1556,524 @@ def _extract_modifier_fields(obj, prefix=""):
 
 
 # ---------------------------------------------------------------------------
+# Event balance helpers — resolve option effects and tag modifier polarity.
+# ---------------------------------------------------------------------------
+
+# Keys inside an option block that don't represent player-facing effects.
+EVENT_BALANCE_OPTION_META_KEYS = frozenset({
+    "name", "default_option", "ai_chance", "trigger", "highlighted_option",
+    "clicksound", "exclusive", "fallback", "is_locked", "soundeffect",
+})
+
+# Container/control-flow keys whose body should be recursed into (with breadcrumb).
+EVENT_BALANCE_CONTAINER_KEYS = frozenset({
+    "if", "else", "else_if", "random", "random_list", "random_valid",
+    "hidden_effect", "show_as_tooltip", "custom_tooltip", "tooltip",
+    "switch", "while", "limit",
+})
+
+
+def _iter_field_values(value):
+    """Yield (operator, inner) for either a single ('=', val) tuple or a list of such tuples."""
+    if isinstance(value, tuple) and len(value) >= 2:
+        yield value[0], value[1]
+    elif isinstance(value, list):
+        for item in value:
+            if isinstance(item, tuple) and len(item) >= 2:
+                yield item[0], item[1]
+
+
+def _flatten_entity_data(raw):
+    """Return a flat dict of (key -> value-or-list-of-values) from a parsed entity tuple/dict/list."""
+    data = raw
+    if isinstance(data, tuple) and len(data) >= 2:
+        data = data[1]
+    if isinstance(data, dict):
+        return data
+    if isinstance(data, list):
+        flat = {}
+        for item in data:
+            if isinstance(item, dict):
+                for k, v in item.items():
+                    if k in flat:
+                        existing = flat[k]
+                        if isinstance(existing, list) and all(
+                            isinstance(e, tuple) for e in existing
+                        ):
+                            existing.append(v if isinstance(v, tuple) else ("=", v))
+                        else:
+                            flat[k] = [existing, v]
+                    else:
+                        flat[k] = v
+        return flat
+    return {}
+
+
+def _try_float(s):
+    if isinstance(s, (int, float)):
+        return float(s)
+    if isinstance(s, str):
+        try:
+            return float(s)
+        except ValueError:
+            return None
+    return None
+
+
+def _modifier_color_lookup(mod_name):
+    """Return 'good'/'bad'/'neutral'/None for a modifier_type name (e.g. country_bureaucracy_mult)."""
+    mod_types = ms.get_data("Modifier Types")
+    if not mod_types or mod_name not in mod_types:
+        return None
+    data = _flatten_entity_data(mod_types[mod_name])
+    color = get_field(data, "color")
+    if isinstance(color, str):
+        return color
+    return None
+
+
+def _resolve_static_modifier(name):
+    """Look up a static modifier and return list of {modifier, value} pairs (numeric fields only)."""
+    mods = ms.get_data("Modifiers")
+    if not mods or name not in mods:
+        return None
+    data = _flatten_entity_data(mods[name])
+    fields = []
+    skip_keys = {"icon", "name", "color", "stack", "stacking"}
+    for k, v in data.items():
+        if k in skip_keys:
+            continue
+        for _op, val in _iter_field_values(v):
+            num = _try_float(val)
+            if num is not None:
+                fields.append({"modifier": k, "value": num})
+    return fields
+
+
+def _polarity(value, color):
+    """Player-perspective polarity of applying `value` to a modifier with the given color."""
+    if value == 0 or color is None or color == "neutral":
+        return "neutral" if color == "neutral" else "unknown" if color is None else "neutral"
+    if color == "good":
+        return "positive" if value > 0 else "negative"
+    if color == "bad":
+        return "positive" if value < 0 else "negative"
+    return "neutral"
+
+
+def _describe_add_modifier(value, scope):
+    """Build an annotated effect dict for an add_modifier effect."""
+    if isinstance(value, str):
+        mod_name = value
+        block = {}
+    else:
+        block = _flatten_entity_data(value) if not isinstance(value, dict) else value
+        mod_name = get_field(block, "name")
+        if isinstance(mod_name, str):
+            mod_name = mod_name.strip('"')
+    duration = get_field(block, "days") or get_field(block, "months") or get_field(block, "years")
+    multiplier = get_field(block, "multiplier")
+    is_decaying = get_field(block, "is_decaying")
+    fields_raw = _resolve_static_modifier(mod_name) if mod_name else None
+    annotated = []
+    counts = {"positive": 0, "negative": 0, "neutral": 0, "unknown": 0}
+    if fields_raw is None:
+        resolved = "missing"
+    else:
+        resolved = "ok"
+        for f in fields_raw:
+            color = _modifier_color_lookup(f["modifier"])
+            polarity = _polarity(f["value"], color)
+            annotated.append({
+                "modifier": f["modifier"],
+                "value": f["value"],
+                "color": color or "unknown",
+                "polarity": polarity,
+            })
+            counts[polarity] = counts.get(polarity, 0) + 1
+    out = {
+        "kind": "add_modifier",
+        "name": mod_name,
+        "duration": duration,
+        "is_decaying": is_decaying,
+        "multiplier": multiplier,
+        "resolved": resolved,
+        "fields": annotated,
+        "polarity_counts": counts,
+    }
+    if scope:
+        out["scope"] = list(scope)
+    return out
+
+
+def _describe_change_variable(value, scope):
+    block = _flatten_entity_data(value) if not isinstance(value, dict) else value
+    var_name = get_field(block, "name")
+    add = get_field(block, "add")
+    subtract = get_field(block, "subtract")
+    multiply = get_field(block, "multiply")
+    out = {"kind": "change_variable", "variable": var_name}
+    if add is not None:
+        out["add"] = _try_float(add) if _try_float(add) is not None else add
+    if subtract is not None:
+        out["subtract"] = _try_float(subtract) if _try_float(subtract) is not None else subtract
+    if multiply is not None:
+        out["multiply"] = _try_float(multiply) if _try_float(multiply) is not None else multiply
+    if scope:
+        out["scope"] = list(scope)
+    return out
+
+
+def _walk_event_effects(node, scope, out):
+    """Recursively walk an option body (or sub-block), appending effect dicts to *out*."""
+    data = _flatten_entity_data(node) if not isinstance(node, dict) else node
+    if not isinstance(data, dict):
+        return
+    for key, val in data.items():
+        if key in EVENT_BALANCE_OPTION_META_KEYS:
+            continue
+        for _op, inner in _iter_field_values(val):
+            _emit_event_effect(key, inner, scope, out)
+
+
+def _emit_event_effect(key, value, scope, out):
+    # `add_modifier` and `add_enactment_modifier` resolve the same way — both
+    # take a static-modifier name and apply that modifier's fields to the
+    # current scope, so we expand them identically.
+    if key in ("add_modifier", "add_enactment_modifier"):
+        described = _describe_add_modifier(value, scope)
+        described["kind"] = key
+        out.append(described)
+        return
+    if key == "change_variable":
+        out.append(_describe_change_variable(value, scope))
+        return
+
+    # Container / control-flow blocks: descend with breadcrumb noting the wrapper.
+    is_container = (
+        key in EVENT_BALANCE_CONTAINER_KEYS
+        or key.startswith("every_")
+        or key.startswith("ordered_")
+        or key.startswith("random_")
+    )
+    # Scope-change: keys with ":" (e.g. je:je_id, ig:ig_intelligentsia, s:STATE_X, c:TAG)
+    is_scope_change = ":" in key
+    # Heuristic scope traversals (single-target scope changes by name).
+    scope_words = {
+        "country", "owner", "ruler", "heir", "currency", "current_law",
+        "state_region", "capital", "primary_culture", "religion", "region",
+        "interest_group", "interest_group_leader", "overlord", "top_overlord",
+        "head_of_state", "trade_center", "scope_state",
+    }
+    is_scope_word = key in scope_words
+
+    if isinstance(value, dict) and (is_container or is_scope_change or is_scope_word):
+        _walk_event_effects(value, scope + [key], out)
+        return
+
+    # random_list children: numeric weight keys with sub-blocks. Already handled above
+    # because random_list is in CONTAINER_KEYS — its children are numeric-keyed dicts
+    # which we'll surface as generic, but we also recurse the dict body so add_modifier
+    # inside the weighted branch surfaces.
+    if isinstance(value, dict) and key.isdigit():
+        _walk_event_effects(value, scope + [f"weight={key}"], out)
+        return
+
+    # Generic / unrecognized effect — surface verbatim.
+    entry = {"kind": key, "args": serialize(value)}
+    if scope:
+        entry["scope"] = list(scope)
+    out.append(entry)
+
+
+def _summarize_polarity(effects):
+    """Aggregate add_modifier / add_enactment_modifier polarity counts across an option's effects."""
+    total = {"positive": 0, "negative": 0, "neutral": 0, "unknown": 0}
+    for eff in effects:
+        if eff.get("kind") in ("add_modifier", "add_enactment_modifier"):
+            for k, v in eff.get("polarity_counts", {}).items():
+                total[k] = total.get(k, 0) + v
+    return total
+
+
+def _extract_event_ids_from_file(file_path):
+    """Parse a .txt event file and return the list of event IDs declared at top level."""
+    if not os.path.isabs(file_path):
+        file_path = os.path.join(mod_path, file_path)
+    if not os.path.isfile(file_path):
+        return None, f"File not found: {file_path}"
+    try:
+        parser = ParadoxFileParser()
+        parser.parse_file(file_path, apply_directives=False)
+    except Exception as exc:
+        return None, f"Failed to parse {file_path}: {exc}"
+    ids = [k for k in parser.data.keys() if k != "namespace"]
+    return ids, None
+
+
+_POLARITY_GLYPHS = {"positive": "+", "negative": "-", "neutral": "·", "unknown": "?"}
+
+
+def _format_value(v):
+    if isinstance(v, float):
+        if v == int(v):
+            return f"{int(v)}"
+        return f"{v:g}"
+    return str(v)
+
+
+def _classify_option_polarity(option):
+    """Classify one option's polarity profile from its `polarity_totals`.
+
+    Returns one of: 'pure_positive', 'pure_negative', 'mixed', 'empty'.
+    'pure_positive' = ≥1 positive modifier-effect AND 0 negatives.
+    'pure_negative' = 0 positives AND ≥1 negative.
+    'empty' = no polarized modifier effects at all (may still have non-modifier effects).
+    """
+    totals = option.get("polarity_totals", {})
+    pos = totals.get("positive", 0)
+    neg = totals.get("negative", 0)
+    if pos and not neg:
+        return "pure_positive"
+    if neg and not pos:
+        return "pure_negative"
+    if pos and neg:
+        return "mixed"
+    return "empty"
+
+
+def _summarize_balance_option(opt):
+    """Compact option summary used in dominance-issue payloads."""
+    return {
+        "name_key": opt.get("name_key"),
+        "name": opt.get("name"),
+        "default_option": opt.get("default_option"),
+        "polarity_totals": opt.get("polarity_totals"),
+        "modifiers": [
+            {
+                "name": e.get("name"),
+                "fields": e.get("fields"),
+                "polarity_counts": e.get("polarity_counts"),
+            }
+            for e in opt.get("effects", [])
+            if e.get("kind") in ("add_modifier", "add_enactment_modifier")
+        ],
+    }
+
+
+def _find_dominance_issues(event_balance):
+    """Strict pure-positive vs pure-negative dominance (first-pass heuristic)."""
+    pure_pos = []
+    pure_neg = []
+    for opt in event_balance.get("options", []):
+        cls = _classify_option_polarity(opt)
+        if cls == "pure_positive":
+            pure_pos.append(opt)
+        elif cls == "pure_negative":
+            pure_neg.append(opt)
+    if not pure_pos or not pure_neg:
+        return None
+    pos_label = pure_pos[0].get("name_key") or pure_pos[0].get("name") or "?"
+    neg_label = pure_neg[0].get("name_key") or pure_neg[0].get("name") or "?"
+    reason = (
+        f"option '{pos_label}' has only positive modifier effects; "
+        f"option '{neg_label}' has only negative modifier effects"
+    )
+    return {
+        "id": event_balance.get("id"),
+        "name": event_balance.get("name"),
+        "reason": reason,
+        "options_pure_positive": [_summarize_balance_option(o) for o in pure_pos],
+        "options_pure_negative": [_summarize_balance_option(o) for o in pure_neg],
+    }
+
+
+def _find_soft_dominance_issues(event_balance, threshold=2):
+    """Pairwise polarity-count dominance.
+
+    Flags when one option (the *better*) has at least as many positives AND at
+    most as many negatives as another (the *worse*), with their combined count
+    gap meeting or exceeding `threshold` and at least one strict inequality.
+    Catches "mixed-vs-mixed" cases where the strict pure-positive/pure-negative
+    test misses a clear winner — e.g. A: pos=3 neg=1 vs B: pos=1 neg=2.
+    """
+    options = event_balance.get("options", [])
+    if len(options) < 2:
+        return None
+    pairs = []
+    n = len(options)
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            a = options[i]
+            b = options[j]
+            ap = a.get("polarity_totals") or {}
+            bp = b.get("polarity_totals") or {}
+            pos_diff = ap.get("positive", 0) - bp.get("positive", 0)   # A more positives than B
+            neg_diff = bp.get("negative", 0) - ap.get("negative", 0)   # A fewer negatives than B
+            if pos_diff < 0 or neg_diff < 0:
+                continue
+            if pos_diff == 0 and neg_diff == 0:
+                continue
+            if (pos_diff + neg_diff) < threshold:
+                continue
+            # Skip if the "better" option has zero polarized modifier effects
+            # (it's an empty option dominating because the worse option is bad,
+            # which is usually fine — empty options have non-modifier effects).
+            if ap.get("positive", 0) == 0 and ap.get("negative", 0) == 0:
+                continue
+            pairs.append({
+                "better": _summarize_balance_option(a),
+                "worse": _summarize_balance_option(b),
+                "pos_diff": pos_diff,
+                "neg_diff": neg_diff,
+            })
+    if not pairs:
+        return None
+    # Deduplicate transitively: if A>B>C, we'd report (A,B), (B,C), (A,C) — keep
+    # only the worst dominated option per "better" anchor to keep the report
+    # readable.
+    return {
+        "id": event_balance.get("id"),
+        "name": event_balance.get("name"),
+        "reason": (
+            f"option '{pairs[0]['better'].get('name_key')}' dominates "
+            f"option '{pairs[0]['worse'].get('name_key')}' "
+            f"(+{pairs[0]['pos_diff']} pos, +{pairs[0]['neg_diff']} fewer neg)"
+        ),
+        "pairs": pairs,
+    }
+
+
+def _render_event_balance_issues_text(scanned, flagged, mode="strict"):
+    lines = [
+        f"event-balance issues ({mode}) — scanned {scanned} events, flagged {len(flagged)}",
+        "",
+    ]
+    for f in flagged:
+        lines.append("=" * 78)
+        lines.append(f"{f['id']}  —  {f.get('name') or ''}")
+        lines.append(f"  {f['reason']}")
+        if mode == "soft":
+            for pair in f.get("pairs", []):
+                better = pair["better"]
+                worse = pair["worse"]
+                lines.append(
+                    f"  [+] {better.get('name') or better.get('name_key')}  "
+                    f"totals={better.get('polarity_totals')}"
+                )
+                for m in better.get("modifiers", []):
+                    lines.append(f"        add_modifier {m.get('name')}")
+                    for fld in (m.get("fields") or []):
+                        lines.append(
+                            f"          {fld['polarity']:<8}  {fld['modifier']} = {fld['value']}  "
+                            f"(color={fld['color']})"
+                        )
+                lines.append(
+                    f"  [-] {worse.get('name') or worse.get('name_key')}  "
+                    f"totals={worse.get('polarity_totals')}  "
+                    f"(+{pair['pos_diff']} pos, +{pair['neg_diff']} fewer neg)"
+                )
+                for m in worse.get("modifiers", []):
+                    lines.append(f"        add_modifier {m.get('name')}")
+                    for fld in (m.get("fields") or []):
+                        lines.append(
+                            f"          {fld['polarity']:<8}  {fld['modifier']} = {fld['value']}  "
+                            f"(color={fld['color']})"
+                        )
+                lines.append("")
+        else:
+            for o in f.get("options_pure_positive", []):
+                lines.append(f"  [+] {o.get('name') or o.get('name_key')}  totals={o.get('polarity_totals')}")
+                for m in o.get("modifiers", []):
+                    lines.append(f"        add_modifier {m.get('name')}")
+                    for fld in (m.get("fields") or []):
+                        lines.append(f"          {fld['polarity']:<8}  {fld['modifier']} = {fld['value']}  (color={fld['color']})")
+            for o in f.get("options_pure_negative", []):
+                lines.append(f"  [-] {o.get('name') or o.get('name_key')}  totals={o.get('polarity_totals')}")
+                for m in o.get("modifiers", []):
+                    lines.append(f"        add_modifier {m.get('name')}")
+                    for fld in (m.get("fields") or []):
+                        lines.append(f"          {fld['polarity']:<8}  {fld['modifier']} = {fld['value']}  (color={fld['color']})")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def _render_event_balance_text(events, missing=None):
+    """Pretty-print event balance results as plain text."""
+    lines = []
+    for ev in events:
+        lines.append("=" * 78)
+        lines.append(f"{ev['id']}  —  {ev.get('name') or ev.get('title_key')}")
+        lines.append("=" * 78)
+        for i, opt in enumerate(ev["options"]):
+            tag = " [default]" if opt.get("default_option") else ""
+            ai = f" ai_base={opt['ai_chance_base']}" if opt.get("ai_chance_base") is not None else ""
+            label = opt.get("name") or opt.get("name_key") or f"option {i+1}"
+            lines.append(f"\n  Option {i+1}: {label}{tag}{ai}")
+            totals = opt.get("polarity_totals", {})
+            lines.append(
+                "    polarity: "
+                f"+{totals.get('positive', 0)}  "
+                f"-{totals.get('negative', 0)}  "
+                f"·{totals.get('neutral', 0)}  "
+                f"?{totals.get('unknown', 0)}"
+            )
+            for eff in opt["effects"]:
+                _render_effect_text(eff, indent=4, lines=lines)
+        lines.append("")
+    if missing:
+        lines.append(f"missing: {', '.join(missing)}")
+    return "\n".join(lines)
+
+
+def _render_effect_text(eff, indent, lines):
+    pad = " " * indent
+    scope = eff.get("scope")
+    scope_str = f" [{' > '.join(scope)}]" if scope else ""
+    kind = eff.get("kind")
+    if kind == "add_modifier":
+        dur = eff.get("duration")
+        mult = eff.get("multiplier")
+        decay = " decaying" if eff.get("is_decaying") == "yes" else ""
+        suffix = []
+        if dur:
+            suffix.append(f"days={dur}")
+        if mult:
+            suffix.append(f"×{mult}")
+        suf = f" ({', '.join(suffix)}{decay})" if suffix or decay else ""
+        lines.append(f"{pad}add_modifier {eff.get('name')}{suf}{scope_str}")
+        if eff.get("resolved") == "missing":
+            lines.append(f"{pad}  (modifier definition not found)")
+        for f in eff.get("fields", []):
+            glyph = _POLARITY_GLYPHS.get(f["polarity"], "?")
+            lines.append(
+                f"{pad}  [{glyph} {f['polarity']:<8}]"
+                f"  {f['modifier']} = {_format_value(f['value'])}"
+                f"   (color={f['color']})"
+            )
+    elif kind == "change_variable":
+        parts = []
+        if "add" in eff:
+            parts.append(f"add={_format_value(eff['add'])}")
+        if "subtract" in eff:
+            parts.append(f"subtract={_format_value(eff['subtract'])}")
+        if "multiply" in eff:
+            parts.append(f"multiply={_format_value(eff['multiply'])}")
+        lines.append(f"{pad}change_variable {eff.get('variable')} {' '.join(parts)}{scope_str}")
+    else:
+        args = eff.get("args")
+        if isinstance(args, (str, int, float, bool)) or args is None:
+            lines.append(f"{pad}{kind} = {args}{scope_str}")
+        else:
+            args_str = json.dumps(args, ensure_ascii=False)
+            if len(args_str) > 120:
+                args_str = args_str[:117] + "..."
+            lines.append(f"{pad}{kind} = {args_str}{scope_str}")
+
+
+# ---------------------------------------------------------------------------
 # Request handler
 # ---------------------------------------------------------------------------
 class ModStateHandler(BaseHTTPRequestHandler):
@@ -1608,6 +2137,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "filter": lambda: self._filter(rest, params),
             # New structured endpoints
             "events": lambda: self._events(rest, params),
+            "event-balance": lambda: self._event_balance(rest, params),
             "institutions": lambda: self._institutions(rest),
             "production-methods": lambda: self._production_methods(rest, params),
             "journal-entries": lambda: self._journal_entries(rest),
@@ -1629,6 +2159,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "modifier-patterns": lambda: self._modifier_patterns(rest, params),
             # Mod-vs-engine validation
             "validate": lambda: self._validate(rest, params),
+            # Generator-ownership map for auto-generated mod files
+            "auto-generated": lambda: self._auto_generated(),
             # Game logs (debug.log, error.log, game.log, …)
             "logs": lambda: self._logs(rest, params),
             # Convenience endpoints — thin wrappers over /keys/<EntityType>.
@@ -1913,15 +2445,149 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "entries": [e.to_dict() for e in chunk],
         }
 
+    def _auto_generated(self):
+        """GET /auto-generated — return the file → generator-script ownership map.
+
+        Helps Claude / devs answer "is this file safe to hand-edit?" in one
+        request. The authoritative source is `docs/auto_generated_files.md`;
+        this endpoint mirrors the table in machine-readable form.
+        """
+        # Curated list mirroring docs/auto_generated_files.md.
+        # `pattern` is a glob relative to the mod root.
+        # `header_marker` indicates whether the file carries an # AUTO-GENERATED
+        # header (true) or relies solely on this map (false).
+        return {
+            "auto_generated": [
+                {
+                    "pattern": "common/ideologies/modified.txt",
+                    "owner": "apply_ideologies.py",
+                    "input": "ideology_modifications.py",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "common/interest_groups/00_*.txt",
+                    "owner": "ig_feminism.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "common/buy_packages/00_buy_packages.txt",
+                    "owner": "pop_needs_curves.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "map_data/state_regions/*.txt",
+                    "owner": "resources.py",
+                    "input": "deposits_config.json + vanilla state_regions",
+                    "header_marker": False,
+                },
+                {
+                    "pattern": "docs/laws.txt",
+                    "owner": "mod_state_script.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/technologies.txt",
+                    "owner": "mod_state_script.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/buildings.txt",
+                    "owner": "mod_state_script.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/goods.txt",
+                    "owner": "mod_state_script.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/combat_units.txt",
+                    "owner": "mod_state_script.py",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/vic3_*_reference.md",
+                    "owner": "engine_docs_render.py",
+                    "input": "vanilla engine logs",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/*_summary.txt",
+                    "owner": "engine_docs_render.py",
+                    "input": "vanilla engine logs",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/engine_coverage_report.md",
+                    "owner": "mod_state_server.py /validate/engine-coverage",
+                    "input": "mod state",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "docs/error_log_digest.md",
+                    "owner": "game_log_reader.py",
+                    "input": "game logs",
+                    "header_marker": True,
+                },
+            ],
+            "one_shot_generators": [
+                {
+                    "pattern": "common/buildings/company_buildings.txt",
+                    "owner": "gen_vanilla_company_buildings.py",
+                    "note": "One-shot bootstrap; output is committed and may be hand-edited afterwards.",
+                },
+                {
+                    "pattern": "common/production_method_groups/unique_pm_groups.txt",
+                    "owner": "gen_vanilla_company_buildings.py",
+                    "note": "One-shot.",
+                },
+                {
+                    "pattern": "common/production_methods/unique_pms.txt",
+                    "owner": "gen_vanilla_company_buildings.py",
+                    "note": "One-shot. Was hand-edited during the 1.13 migration; running the generator would overwrite those edits.",
+                },
+                {
+                    "pattern": "common/company_types/extra_companies_vanilla_updates.txt",
+                    "owner": "gen_vanilla_company_injects.py + gen_vanilla_company_buildings.py",
+                    "note": "Both scripts write here; coordinate runs.",
+                },
+                {
+                    "pattern": "localization/english/te_buildings_l_english.yml",
+                    "owner": "gen_vanilla_company_buildings.py",
+                    "note": "One-shot.",
+                },
+            ],
+            "hint": (
+                "Treat anything in `auto_generated` as read-only — edit the input "
+                "and re-run the generator. `one_shot_generators` are committed "
+                "outputs that can be hand-edited but be aware that re-running "
+                "the script will overwrite hand edits."
+            ),
+        }
+
     def _validate(self, parts, params):
         """GET /validate/engine-coverage — run mod-vs-engine modifier check.
 
         Cached on first call after each /reload. Use ?refresh=true to force.
+
+        Filters:
+          ?filter=vanilla_breakages — exclude unknowns that are defined in the
+            mod's own common/modifier_type_definitions/. Reduces noise to
+            modifiers that are GENUINELY missing from both vanilla engine docs
+            AND the mod's modifier-type registry.
+          ?summary=true — return only the file/summary header, no entity lists.
         """
         if not parts:
             return {
                 "available": ["engine-coverage"],
-                "hint": "GET /validate/engine-coverage",
+                "hint": "GET /validate/engine-coverage[?filter=vanilla_breakages]",
             }
         check = parts[0]
         if check != "engine-coverage":
@@ -1930,7 +2596,44 @@ class ModStateHandler(BaseHTTPRequestHandler):
         force = (params.get("refresh") or ["false"])[0].lower() == "true"
         if force or _last_validation_report is None:
             _last_validation_report = _validate_engine_coverage()
-        return _last_validation_report
+        report = _last_validation_report
+
+        filt = (params.get("filter") or [""])[0]
+        summary_only = (params.get("summary") or ["false"])[0].lower() == "true"
+
+        if filt == "vanilla_breakages":
+            # Collect mod-defined modifier-type names from the mod's
+            # `common/modifier_type_definitions/` parser.
+            mod_defined: set[str] = set()
+            mod_types = ms.get_data("Modifier Types") if ms else None
+            if mod_types:
+                mod_defined = set(mod_types.keys())
+            unknown = [
+                u for u in report.get("unknown_modifiers", [])
+                if u["name"] not in mod_defined
+            ]
+            suspicious = [
+                u for u in report.get("suspicious_modifiers", [])
+                if u["name"] not in mod_defined
+            ]
+            mod_defined_count = sum(
+                1 for u in report.get("unknown_modifiers", [])
+                if u["name"] in mod_defined
+            )
+            report = {
+                **{k: v for k, v in report.items() if k not in ("unknown_modifiers", "suspicious_modifiers", "summary")},
+                "summary": {
+                    "unknown_modifiers": len(unknown),
+                    "suspicious_modifiers": len(suspicious),
+                    "mod_defined_excluded": mod_defined_count,
+                },
+                "unknown_modifiers": unknown,
+                "suspicious_modifiers": suspicious,
+            }
+
+        if summary_only:
+            return {k: v for k, v in report.items() if k not in ("unknown_modifiers", "suspicious_modifiers")}
+        return report
 
     def _modifier_pattern_expand(self, pattern, params):
         """Instantiate a pattern with a given placeholder value."""
@@ -2510,6 +3213,179 @@ class ModStateHandler(BaseHTTPRequestHandler):
         info["options"] = options
         info["raw"] = serialize(raw)
         return info
+
+    # ---- analytical: event balance ----------------------------------------
+    def _event_balance(self, parts, params):
+        """GET /event-balance/<event_id>            - annotate one event's options
+        GET /event-balance?ids=<id>,<id>,…         - annotate a comma-separated list
+        GET /event-balance?prefix=<namespace>      - annotate every event whose id starts with prefix
+        GET /event-balance?file=events/foo.txt     - annotate every event declared in a file
+        GET /event-balance/issues[?mode=&threshold=&prefix=&file=]
+                                                   - audit for dominated options (see _event_balance_issues)
+        Optional: ?format=text  to get a human-readable rendering instead of JSON.
+
+        For each option, every effect is surfaced. Effects of kind `add_modifier` and
+        `add_enactment_modifier` are expanded: the named static modifier is looked up,
+        each numeric field is paired with its `color` (good/bad/neutral) from the
+        modifier-type definition, and a per-field polarity (positive/negative/neutral)
+        is computed from value sign × color.
+
+        The walker descends into `if`/`else_if`/`else`, `random_list`, `every_*` /
+        `ordered_*` / `random_*` scope iterators, scope-change keys (`je:je_X`,
+        `ig:ig_X`, `s:STATE_X`), `custom_tooltip`, and `hidden_effect`. Skips
+        `name`, `default_option`, `ai_chance`, `trigger`. Limitations: counts modifier
+        FIELDS not durations or magnitudes; doesn't track scope changes that target
+        OTHER countries (a modifier applied to `scope:rival = { ... }` is counted as
+        a positive on the player's option even though it benefits the rival); doesn't
+        classify non-modifier effects (`add_treasury`, `add_radicals`, `add_loyalists`,
+        `add_momentum`, `change_variable`, `change_relations`, scripted effects).
+        """
+        events = ms.get_data("Events")
+        if not events:
+            return {"error": "Events data not loaded"}
+
+        fmt = params.get("format", ["json"])[0]
+
+        if parts and parts[0] == "issues":
+            return self._event_balance_issues(params, fmt)
+
+        if parts:
+            eid = parts[0]
+            if eid not in events:
+                raise KeyError(eid)
+            built = self._build_event_balance(eid, events[eid])
+            if fmt == "text":
+                return {"text": _render_event_balance_text([built])}
+            return built
+
+        ids_param = params.get("ids", [None])[0]
+        prefix = params.get("prefix", [None])[0]
+        file_param = params.get("file", [None])[0]
+
+        if ids_param:
+            ids = [i.strip() for i in ids_param.split(",") if i.strip()]
+        elif prefix:
+            ids = [eid for eid in events if eid != "namespace" and eid.startswith(prefix)]
+        elif file_param:
+            extracted, err = _extract_event_ids_from_file(file_param)
+            if err:
+                return {"error": err}
+            ids = extracted
+        else:
+            return {
+                "error": "Provide an event id (e.g. /event-balance/banking_cycle_events.10), "
+                         "or ?ids=, ?prefix=, ?file=",
+            }
+
+        results = []
+        missing = []
+        for eid in ids:
+            if eid not in events:
+                missing.append(eid)
+                continue
+            results.append(self._build_event_balance(eid, events[eid]))
+        if fmt == "text":
+            return {"text": _render_event_balance_text(results, missing=missing)}
+        return {"count": len(results), "missing": missing, "events": results}
+
+    def _build_event_balance(self, eid, raw):
+        ed = get_entity_data(raw)
+        info = {
+            "id": eid,
+            "name": ms.localize(eid + ".t"),
+            "title_key": eid + ".t",
+        }
+        opt_field = ed.get("option") if isinstance(ed, dict) else None
+        options_out = []
+        for _op, opt in _iter_field_values(opt_field) if opt_field is not None else []:
+            options_out.append(self._format_option_balance(eid, opt))
+        info["options"] = options_out
+        info["totals"] = {
+            "options": len(options_out),
+            **{
+                k: sum(o["polarity_totals"].get(k, 0) for o in options_out)
+                for k in ("positive", "negative", "neutral", "unknown")
+            },
+        }
+        return info
+
+    def _format_option_balance(self, eid, opt):
+        opt_data = _flatten_entity_data(opt) if not isinstance(opt, dict) else opt
+        name_key = get_field(opt_data, "name")
+        default_opt = get_field(opt_data, "default_option")
+        ai_chance_block = get_field(opt_data, "ai_chance")
+        ai_base = None
+        if isinstance(ai_chance_block, dict):
+            ai_base = get_field(ai_chance_block, "base")
+            if ai_base is not None:
+                ai_base = _try_float(ai_base) if _try_float(ai_base) is not None else ai_base
+        effects = []
+        _walk_event_effects(opt_data, [], effects)
+        polarity_totals = _summarize_polarity(effects)
+        return {
+            "name_key": name_key,
+            "name": ms.localize(name_key) if name_key else None,
+            "default_option": default_opt == "yes",
+            "ai_chance_base": ai_base,
+            "effects": effects,
+            "polarity_totals": polarity_totals,
+        }
+
+    def _event_balance_issues(self, params, fmt):
+        """GET /event-balance/issues[?mode=strict|soft&threshold=&prefix=&file=&format=text]
+        Audit every loaded event (or a filtered subset) and flag dominated options.
+
+        mode=strict (default): one option pure-positive and another pure-negative.
+        mode=soft: pairwise polarity-count dominance (one option has ≥ as many
+        positives AND ≤ as many negatives as another, with combined gap ≥
+        threshold; default threshold=2). Catches mixed-vs-mixed cases the strict
+        check misses.
+        """
+        events = ms.get_data("Events")
+        if not events:
+            return {"error": "Events data not loaded"}
+
+        mode = params.get("mode", ["strict"])[0]
+        try:
+            threshold = int(params.get("threshold", ["2"])[0])
+        except ValueError:
+            threshold = 2
+
+        prefix = params.get("prefix", [None])[0]
+        file_param = params.get("file", [None])[0]
+
+        if file_param:
+            extracted, err = _extract_event_ids_from_file(file_param)
+            if err:
+                return {"error": err}
+            ids = [e for e in extracted if e in events]
+        elif prefix:
+            ids = [eid for eid in events if eid != "namespace" and eid.startswith(prefix)]
+        else:
+            ids = [eid for eid in events if eid != "namespace"]
+
+        flagged = []
+        for eid in ids:
+            built = self._build_event_balance(eid, events[eid])
+            if len(built.get("options", [])) < 2:
+                continue
+            if mode == "soft":
+                issue = _find_soft_dominance_issues(built, threshold=threshold)
+            else:
+                issue = _find_dominance_issues(built)
+            if issue:
+                flagged.append(issue)
+
+        result = {
+            "mode": mode,
+            "threshold": threshold if mode == "soft" else None,
+            "scanned": len(ids),
+            "flagged_count": len(flagged),
+            "flagged": flagged,
+        }
+        if fmt == "text":
+            return {"text": _render_event_balance_issues_text(len(ids), flagged, mode=mode)}
+        return result
 
     # ---- structured: institutions -----------------------------------------
     def _institutions(self, parts):
@@ -3210,7 +4086,9 @@ def main():
     print("Endpoints: /status  /laws  /technologies  /buildings  /goods")
     print("           /combat-units  /ideologies  /keys/<type>  /raw/<type>")
     print("           /localize/<key>  /unlocalize/<text>  /search?q=...")
-    print("           /events  /institutions  /production-methods  /journal-entries")
+    print("           /events  /event-balance/<id>?ids=&prefix=&file=&format=text")
+    print("           /event-balance/issues?mode=strict|soft&threshold=&prefix=&file=")
+    print("           /institutions  /production-methods  /journal-entries")
     print("           /decisions  /script-values  /decrees  /on-actions")
     print("           /references/<key>  /tech-tree/<id>  /modifier-search?q=...")
     print("           /unlocked-by/<tech>  /filter/<type>?field=&value=")

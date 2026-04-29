@@ -133,12 +133,14 @@ compact_fusion_reactors = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 50
-		state_building_naval_base_max_level_add = 60
-		military_formation_movement_speed_mult = 1
+		military_formation_army_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		state_building_barrack_max_level_add = 200
 		country_space_race_max_funding_add = 2
+		ship_max_distance_to_port_mult = 0.50
+		ship_supply_efficiency_mult = 0.20
+		ship_movement_speed_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -160,11 +162,12 @@ fusion_batteries = {
 	modifier = {
 		state_market_access_price_impact = 0.01
 		building_group_bg_trade_employee_mult = -0.04
-		state_building_naval_base_max_level_add = 60
-		military_formation_movement_speed_mult = 1
+		military_formation_army_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		country_space_race_max_funding_add = 2
+		ship_movement_speed_mult = 0.10
+		ship_supply_efficiency_mult = 0.20
 	}
 	
 	ai_weight = {
@@ -238,8 +241,10 @@ antimatter_production = {
 	
 	modifier = {
 		building_aerospace_industry_throughput_add = 0.25
-		state_building_naval_base_max_level_add = 60
-		military_formation_movement_speed_mult = 1
+		military_formation_army_movement_speed_mult = 1
+		ship_hull_damage_mult = 0.20
+		ship_critical_hit_chance_add = 0.10
+		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.30
 	}
 	
 	ai_weight = {

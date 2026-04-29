@@ -169,10 +169,11 @@ directed_energy_weapons = {
 	}
 
 	modifier = {
-		state_building_naval_base_max_level_add = 40
 		country_space_race_max_funding_add = 1
+		ship_screening_mult = 0.30
+		ship_accuracy_mult = 0.10
 	}
-	
+
 	ai_weight = {
 		value = 3
 	}
@@ -210,8 +211,11 @@ swarm_technology = {
 	}
 
 	modifier = {
-		state_building_naval_base_max_level_add = 40
 		state_building_barrack_max_level_add = 100
+		country_general_rank_impact_mult = 1.5
+		country_admiral_rank_impact_mult = 1.5
+		ship_hull_damage_mult = 0.10
+		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.20
 	}
 	
 	ai_weight = {
@@ -311,13 +315,14 @@ fusion_power = {
 	}
 
 	modifier = {
-		state_building_naval_base_max_level_add = 40
 		country_weekly_innovation_max_add = 100
-		military_formation_movement_speed_mult = 1
+		military_formation_army_movement_speed_mult = 1
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		country_space_race_max_funding_add = 1
+		ship_max_distance_to_port_mult = 0.30
+		ship_movement_speed_mult = 0.05
 	}
 	
 	ai_weight = {
@@ -384,7 +389,7 @@ lab-grown_food = {
 
 	modifier = {
 		country_max_companies_add = 1
-		country_sr_grain_decay_add = -0.05
+		country_st_res_grain_decay_add = -0.05
 	}
 	
 	ai_weight = {

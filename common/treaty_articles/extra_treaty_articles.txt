@@ -1765,9 +1765,9 @@ joint_military_exercises = {
 
     # Mutual modifier applies to both signatories.
     mutual_modifier = {
-        # The core benefit: Armies gain experience faster.
+        # The core benefit: Armies gain experience faster, admirals gain command capacity.
         unit_army_experience_gain_mult = 0.25
-        unit_navy_experience_gain_mult = 0.25
+        country_admiral_rank_impact_mult = 0.25
 
         # The trade-off: A small increase in military goods cost, representing the ammunition, fuel,
         # and equipment consumed during large-scale training exercises.

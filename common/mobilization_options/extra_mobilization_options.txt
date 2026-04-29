@@ -339,7 +339,7 @@ REPLACE:mobilization_option_forced_march = {
 		# Total cost: 50.0
 	}
 	unit_modifier = {
-		military_formation_movement_speed_mult = 0.1
+		military_formation_army_movement_speed_mult = 0.1
 		military_formation_mobilization_speed_mult = 0.25
 		unit_morale_loss_mult = 0.1
 	}
@@ -349,7 +349,7 @@ REPLACE:mobilization_option_forced_march = {
 		if = {
 			limit = {
 				scope:military_formation = {
-					highest_ranked_commander ?= {
+					commander ?= {
 						OR = {
 							has_trait = cruel
 							has_trait = reckless
@@ -412,7 +412,7 @@ REPLACE:mobilization_option_truck_transport = {
 		# Total cost: 50.0
 	}
 	unit_modifier = {
-		military_formation_movement_speed_mult = 0.3
+		military_formation_army_movement_speed_mult = 0.3
 		military_formation_mobilization_speed_mult = 0.4
 	}
 	ai_weight = {
@@ -469,7 +469,7 @@ REPLACE:mobilization_option_rail_transport = {
 		# Total cost: 30.0
 	}
 	unit_modifier = {
-		military_formation_movement_speed_mult = 0.2
+		military_formation_army_movement_speed_mult = 0.2
 	}
 	ai_weight = {
 		value = 1
@@ -525,7 +525,7 @@ mobilization_option_air_transport = {
 		# Total cost: 800.0
 	}
 	unit_modifier = {
-		military_formation_movement_speed_mult = 1.5
+		military_formation_army_movement_speed_mult = 1.5
 		military_formation_mobilization_speed_mult = 1
 	}
 	ai_weight = {
@@ -583,7 +583,7 @@ mobilization_option_space_transport = {
 		# Total cost: 2800.0
 	}
 	unit_modifier = {
-		military_formation_movement_speed_mult = 3
+		military_formation_army_movement_speed_mult = 3
 		military_formation_mobilization_speed_mult = 3
 	}
 	ai_weight = {
@@ -635,7 +635,7 @@ mobilization_option_entrenchment = {
 		unit_provinces_lost_mult = -0.5
 		unit_provinces_captured_mult = -0.5
 		unit_army_defense_mult = 0.25
-		military_formation_movement_speed_mult = -0.5
+		military_formation_army_movement_speed_mult = -0.5
 
 	}
 	ai_weight = {
