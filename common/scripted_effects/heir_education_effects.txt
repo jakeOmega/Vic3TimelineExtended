@@ -11,20 +11,27 @@
 #   Medium intelligence (3): standard +1 gain
 #   High intelligence (4-5): 30% chance of double gain (+2)
 
-heir_ed_gain_admin = {
-	# Intelligence modifies gain amount:
-	#   High (4-5): 30% chance of double gain (+2)
-	#   Medium (3): standard gain (+1)
-	#   Low (1-2): 25% chance of wasted opportunity (+0)
+# Shared base for the 7 positive-add gain effects. Country scope, called from
+# the JE on_monthly_pulse focus rolls. Intelligence (heir_ed_intelligence)
+# modifies the per-tick gain:
+#   High (4-5): 30% chance of double gain (+2)
+#   Medium (3): standard gain (+1)
+#   Low  (1-2): 25% chance of wasted opportunity (+0)
+# Parameters:
+#   $VAR$    — heir-track variable to bump (heir_ed_admin/diplo/military,
+#              heir_ed_ideology, heir_ed_ig_radical/moderate/regressive)
+#   $TRAIT$  — concrete focus name; resolves the IG reaction call
+#              `heir_education_$TRAIT$_ig_reaction = yes`
+heir_ed_gain_base = {
 	if = {
 		limit = { var:heir_ed_intelligence >= 4 }
 		random_list = {
 			30 = {
-				change_variable = { name = heir_ed_admin add = 2 }
+				change_variable = { name = $VAR$ add = 2 }
 				change_variable = { name = heir_ed_total add = 2 }
 			}
 			70 = {
-				change_variable = { name = heir_ed_admin add = 1 }
+				change_variable = { name = $VAR$ add = 1 }
 				change_variable = { name = heir_ed_total add = 1 }
 			}
 		}
@@ -34,132 +41,43 @@ heir_ed_gain_admin = {
 		random_list = {
 			25 = { }
 			75 = {
-				change_variable = { name = heir_ed_admin add = 1 }
+				change_variable = { name = $VAR$ add = 1 }
 				change_variable = { name = heir_ed_total add = 1 }
 			}
 		}
 	}
 	else = {
-		change_variable = { name = heir_ed_admin add = 1 }
+		change_variable = { name = $VAR$ add = 1 }
 		change_variable = { name = heir_ed_total add = 1 }
 	}
 	scope:journal_entry = {
 		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 	}
+	heir_education_$TRAIT$_ig_reaction = yes
+}
+
+# Aptitude track: admin / diplo / military. Identical to base plus the
+# heir_education_innovation_cost cooldown that gates re-rolls.
+heir_ed_gain_admin = {
+	heir_ed_gain_base = { VAR = heir_ed_admin TRAIT = admin }
 	add_modifier = { name = heir_education_innovation_cost days = 30 }
-	heir_education_admin_ig_reaction = yes
 }
 
 heir_ed_gain_diplo = {
-	# Intelligence modifies gain amount:
-	#   High (4-5): 30% chance of double gain (+2)
-	#   Medium (3): standard gain (+1)
-	#   Low (1-2): 25% chance of wasted opportunity (+0)
-	if = {
-		limit = { var:heir_ed_intelligence >= 4 }
-		random_list = {
-			30 = {
-				change_variable = { name = heir_ed_diplo add = 2 }
-				change_variable = { name = heir_ed_total add = 2 }
-			}
-			70 = {
-				change_variable = { name = heir_ed_diplo add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else_if = {
-		limit = { var:heir_ed_intelligence <= 2 }
-		random_list = {
-			25 = { }
-			75 = {
-				change_variable = { name = heir_ed_diplo add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else = {
-		change_variable = { name = heir_ed_diplo add = 1 }
-		change_variable = { name = heir_ed_total add = 1 }
-	}
-	scope:journal_entry = {
-		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-	}
+	heir_ed_gain_base = { VAR = heir_ed_diplo TRAIT = diplo }
 	add_modifier = { name = heir_education_innovation_cost days = 30 }
-	heir_education_diplo_ig_reaction = yes
 }
 
 heir_ed_gain_military = {
-	# Intelligence modifies gain amount:
-	#   High (4-5): 30% chance of double gain (+2)
-	#   Medium (3): standard gain (+1)
-	#   Low (1-2): 25% chance of wasted opportunity (+0)
-	if = {
-		limit = { var:heir_ed_intelligence >= 4 }
-		random_list = {
-			30 = {
-				change_variable = { name = heir_ed_military add = 2 }
-				change_variable = { name = heir_ed_total add = 2 }
-			}
-			70 = {
-				change_variable = { name = heir_ed_military add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else_if = {
-		limit = { var:heir_ed_intelligence <= 2 }
-		random_list = {
-			25 = { }
-			75 = {
-				change_variable = { name = heir_ed_military add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else = {
-		change_variable = { name = heir_ed_military add = 1 }
-		change_variable = { name = heir_ed_total add = 1 }
-	}
-	scope:journal_entry = {
-		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-	}
+	heir_ed_gain_base = { VAR = heir_ed_military TRAIT = military }
 	add_modifier = { name = heir_education_innovation_cost days = 30 }
-	heir_education_military_ig_reaction = yes
 }
 
+# Ideology track: progressive uses the base directly; conservative stays
+# inline because it's the only effect that bumps heir_ed_ideology *negative*
+# and the placeholder pattern can't safely produce signed numeric literals.
 heir_ed_gain_progressive = {
-	if = {
-		limit = { var:heir_ed_intelligence >= 4 }
-		random_list = {
-			30 = {
-				change_variable = { name = heir_ed_ideology add = 2 }
-				change_variable = { name = heir_ed_total add = 2 }
-			}
-			70 = {
-				change_variable = { name = heir_ed_ideology add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else_if = {
-		limit = { var:heir_ed_intelligence <= 2 }
-		random_list = {
-			25 = { }
-			75 = {
-				change_variable = { name = heir_ed_ideology add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else = {
-		change_variable = { name = heir_ed_ideology add = 1 }
-		change_variable = { name = heir_ed_total add = 1 }
-	}
-	scope:journal_entry = {
-		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-	}
-	heir_education_progressive_ig_reaction = yes
+	heir_ed_gain_base = { VAR = heir_ed_ideology TRAIT = progressive }
 }
 
 heir_ed_gain_conservative = {
@@ -196,106 +114,17 @@ heir_ed_gain_conservative = {
 	heir_education_conservative_ig_reaction = yes
 }
 
+# IG track: each focus pulls a different ideological IG cluster.
 heir_ed_gain_radical = {
-	if = {
-		limit = { var:heir_ed_intelligence >= 4 }
-		random_list = {
-			30 = {
-				change_variable = { name = heir_ed_ig_radical add = 2 }
-				change_variable = { name = heir_ed_total add = 2 }
-			}
-			70 = {
-				change_variable = { name = heir_ed_ig_radical add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else_if = {
-		limit = { var:heir_ed_intelligence <= 2 }
-		random_list = {
-			25 = { }
-			75 = {
-				change_variable = { name = heir_ed_ig_radical add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else = {
-		change_variable = { name = heir_ed_ig_radical add = 1 }
-		change_variable = { name = heir_ed_total add = 1 }
-	}
-	scope:journal_entry = {
-		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-	}
-	heir_education_radical_ig_reaction = yes
+	heir_ed_gain_base = { VAR = heir_ed_ig_radical TRAIT = radical }
 }
 
 heir_ed_gain_moderate = {
-	if = {
-		limit = { var:heir_ed_intelligence >= 4 }
-		random_list = {
-			30 = {
-				change_variable = { name = heir_ed_ig_moderate add = 2 }
-				change_variable = { name = heir_ed_total add = 2 }
-			}
-			70 = {
-				change_variable = { name = heir_ed_ig_moderate add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else_if = {
-		limit = { var:heir_ed_intelligence <= 2 }
-		random_list = {
-			25 = { }
-			75 = {
-				change_variable = { name = heir_ed_ig_moderate add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else = {
-		change_variable = { name = heir_ed_ig_moderate add = 1 }
-		change_variable = { name = heir_ed_total add = 1 }
-	}
-	scope:journal_entry = {
-		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-	}
-	heir_education_moderate_ig_reaction = yes
+	heir_ed_gain_base = { VAR = heir_ed_ig_moderate TRAIT = moderate }
 }
 
 heir_ed_gain_regressive = {
-	if = {
-		limit = { var:heir_ed_intelligence >= 4 }
-		random_list = {
-			30 = {
-				change_variable = { name = heir_ed_ig_regressive add = 2 }
-				change_variable = { name = heir_ed_total add = 2 }
-			}
-			70 = {
-				change_variable = { name = heir_ed_ig_regressive add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else_if = {
-		limit = { var:heir_ed_intelligence <= 2 }
-		random_list = {
-			25 = { }
-			75 = {
-				change_variable = { name = heir_ed_ig_regressive add = 1 }
-				change_variable = { name = heir_ed_total add = 1 }
-			}
-		}
-	}
-	else = {
-		change_variable = { name = heir_ed_ig_regressive add = 1 }
-		change_variable = { name = heir_ed_total add = 1 }
-	}
-	scope:journal_entry = {
-		set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
-	}
-	heir_education_regressive_ig_reaction = yes
+	heir_ed_gain_base = { VAR = heir_ed_ig_regressive TRAIT = regressive }
 }
 
 # ──────────────────────── ADULT HEIR INITIALIZATION ────────────────────────
@@ -773,105 +602,53 @@ set_aptitude_trait_vars_effect = {
 }
 
 heir_education_admin_ig_reaction = {
-	ig:ig_industrialists = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_armed_forces = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 heir_education_diplo_ig_reaction = {
-	ig:ig_intelligentsia = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_industrialists = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 heir_education_military_ig_reaction = {
-	ig:ig_armed_forces = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_intelligentsia = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 heir_education_progressive_ig_reaction = {
-	ig:ig_intelligentsia = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_trade_unions = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_devout = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_landowners = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 heir_education_conservative_ig_reaction = {
-	ig:ig_devout = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_landowners = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_intelligentsia = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_trade_unions = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 heir_education_radical_ig_reaction = {
-	ig:ig_intelligentsia = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_rural_folk = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_trade_unions = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_landowners = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_devout = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 heir_education_moderate_ig_reaction = {
-	ig:ig_industrialists = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_petty_bourgeoisie = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_armed_forces = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 }
 
 heir_education_regressive_ig_reaction = {
-	ig:ig_landowners = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_devout = {
-		add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_intelligentsia = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
-	ig:ig_trade_unions = {
-		add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes }
-	}
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 }
 
 # ──────────────────────── CLEANUP ────────────────────────
