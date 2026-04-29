@@ -7,30 +7,38 @@ remove_modifier_if_exists_effect = {
 	}
 }
 
-space_elevator_construction = {
+# Country-scope wonder construction tick. Called from each wonder's monthly
+# pulse (the wonder's named wrapper). Tracks progress against the construction
+# site's annual-progress modifier; on completion, removes the site, posts the
+# wonder-complete notification, and either bumps the wonder one level (capped
+# at $MAX_LEVEL$) or creates the level-1 wonder if none exists yet.
+#
+# Parameters:
+#   $WONDER$    — wonder building base name (e.g. space_elevator). The
+#                 progress variable, construction site, annual-progress
+#                 modifier, and notification key all use this token.
+#   $MAX_LEVEL$ — wonder's level cap. The single shared 19-branch chain
+#                 below guards each branch on `level < $MAX_LEVEL$`, so a
+#                 wonder at its cap silently no-ops on completion.
+generic_wonder_construction_base = {
 	if = {
-		limit = {
-			NOT = { has_variable = space_elevator_progress_var }
-		}
-		set_variable = {
-			name = space_elevator_progress_var
-			value = 0
-		}
+		limit = { NOT = { has_variable = $WONDER$_progress_var } }
+		set_variable = { name = $WONDER$_progress_var value = 0 }
 	}
 	if = {
 		limit = {
-			has_variable = space_elevator_progress_var
+			has_variable = $WONDER$_progress_var
 			any_scope_building = {
-				is_building_type = building_space_elevator_construction_site
+				is_building_type = building_$WONDER$_construction_site
 				building_has_goods_shortage = no
 			}
 		}
 		change_variable = {
-			name = space_elevator_progress_var
+			name = $WONDER$_progress_var
 			add = {
-				value = b:building_space_elevator_construction_site.occupancy
+				value = b:building_$WONDER$_construction_site.occupancy
 				divide = 12
-				multiply = b:building_space_elevator_construction_site.modifier:building_annual_space_elevator_progress
+				multiply = b:building_$WONDER$_construction_site.modifier:building_annual_$WONDER$_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
@@ -38,330 +46,46 @@ space_elevator_construction = {
 		}
 	}
 	if = {
-		limit = {
-			var:space_elevator_progress_var >= 1
-		}
-		set_variable = {
-			name = space_elevator_progress_var
-			value = 0
-		}
-		remove_building = building_space_elevator_construction_site
+		limit = { var:$WONDER$_progress_var >= 1 }
+		set_variable = { name = $WONDER$_progress_var value = 0 }
+		remove_building = building_$WONDER$_construction_site
 		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_space_elevator }
+		owner = { post_notification = wonder_construction_complete_$WONDER$ }
 		if = {
-			limit = { has_building = building_space_elevator }
-			if = {
-				limit = { b:building_space_elevator.level = 19 }
-				create_building = { building = building_space_elevator level = 20 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 18 }
-				create_building = { building = building_space_elevator level = 19 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 17 }
-				create_building = { building = building_space_elevator level = 18 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 16 }
-				create_building = { building = building_space_elevator level = 17 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 15 }
-				create_building = { building = building_space_elevator level = 16 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 14 }
-				create_building = { building = building_space_elevator level = 15 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 13 }
-				create_building = { building = building_space_elevator level = 14 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 12 }
-				create_building = { building = building_space_elevator level = 13 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 11 }
-				create_building = { building = building_space_elevator level = 12 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 10 }
-				create_building = { building = building_space_elevator level = 11 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 9 }
-				create_building = { building = building_space_elevator level = 10 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 8 }
-				create_building = { building = building_space_elevator level = 9 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 7 }
-				create_building = { building = building_space_elevator level = 8 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 6 }
-				create_building = { building = building_space_elevator level = 7 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 5 }
-				create_building = { building = building_space_elevator level = 6 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 4 }
-				create_building = { building = building_space_elevator level = 5 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 3 }
-				create_building = { building = building_space_elevator level = 4 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 2 }
-				create_building = { building = building_space_elevator level = 3 }
-			}
-			else_if = {
-				limit = { b:building_space_elevator.level = 1 }
-				create_building = { building = building_space_elevator level = 2 }
-			}
+			limit = { has_building = building_$WONDER$ }
+			if = { limit = { b:building_$WONDER$.level = 19 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 20 } }
+			else_if = { limit = { b:building_$WONDER$.level = 18 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 19 } }
+			else_if = { limit = { b:building_$WONDER$.level = 17 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 18 } }
+			else_if = { limit = { b:building_$WONDER$.level = 16 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 17 } }
+			else_if = { limit = { b:building_$WONDER$.level = 15 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 16 } }
+			else_if = { limit = { b:building_$WONDER$.level = 14 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 15 } }
+			else_if = { limit = { b:building_$WONDER$.level = 13 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 14 } }
+			else_if = { limit = { b:building_$WONDER$.level = 12 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 13 } }
+			else_if = { limit = { b:building_$WONDER$.level = 11 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 12 } }
+			else_if = { limit = { b:building_$WONDER$.level = 10 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 11 } }
+			else_if = { limit = { b:building_$WONDER$.level = 9 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 10 } }
+			else_if = { limit = { b:building_$WONDER$.level = 8 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 9 } }
+			else_if = { limit = { b:building_$WONDER$.level = 7 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 8 } }
+			else_if = { limit = { b:building_$WONDER$.level = 6 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 7 } }
+			else_if = { limit = { b:building_$WONDER$.level = 5 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 6 } }
+			else_if = { limit = { b:building_$WONDER$.level = 4 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 5 } }
+			else_if = { limit = { b:building_$WONDER$.level = 3 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 4 } }
+			else_if = { limit = { b:building_$WONDER$.level = 2 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 3 } }
+			else_if = { limit = { b:building_$WONDER$.level = 1 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 2 } }
 		}
 		else = {
-			create_building = {
-				building = building_space_elevator
-				level = 1
-			}
+			create_building = { building = building_$WONDER$ level = 1 }
 		}
 	}
 }
 
-solar_collector_construction = {
-	if = {
-		limit = {
-			NOT = { has_variable = solar_collector_progress_var }
-		}
-		set_variable = {
-			name = solar_collector_progress_var
-			value = 0
-		}
-	}
-	if = {
-		limit = {
-			has_variable = solar_collector_progress_var
-			any_scope_building = {
-				is_building_type = building_solar_collector_construction_site
-				building_has_goods_shortage = no
-			}
-		}
-		change_variable = {
-			name = solar_collector_progress_var
-			add = {
-				value = b:building_solar_collector_construction_site.occupancy
-				divide = 12
-				multiply = b:building_solar_collector_construction_site.modifier:building_annual_solar_collector_progress
-				multiply = 1000
-				ceiling = yes
-				divide = 1000
-			}
-		}
-	}
-	if = {
-		limit = {
-			var:solar_collector_progress_var >= 1
-		}
-		set_variable = {
-			name = solar_collector_progress_var
-			value = 0
-		}
-		remove_building = building_solar_collector_construction_site
-		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_solar_collector }
-		if = {
-			limit = { has_building = building_solar_collector }
-			if = {
-				limit = { b:building_solar_collector.level = 9 }
-				create_building = { building = building_solar_collector level = 10 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 8 }
-				create_building = { building = building_solar_collector level = 9 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 7 }
-				create_building = { building = building_solar_collector level = 8 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 6 }
-				create_building = { building = building_solar_collector level = 7 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 5 }
-				create_building = { building = building_solar_collector level = 6 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 4 }
-				create_building = { building = building_solar_collector level = 5 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 3 }
-				create_building = { building = building_solar_collector level = 4 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 2 }
-				create_building = { building = building_solar_collector level = 3 }
-			}
-			else_if = {
-				limit = { b:building_solar_collector.level = 1 }
-				create_building = { building = building_solar_collector level = 2 }
-			}
-		}
-		else = {
-			create_building = {
-				building = building_solar_collector
-				level = 1
-			}
-		}
-	}
-}
+space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 } }
 
-orbital_battlestation_construction = {
-	if = {
-		limit = {
-			NOT = { has_variable = orbital_battlestation_progress_var }
-		}
-		set_variable = {
-			name = orbital_battlestation_progress_var
-			value = 0
-		}
-	}
-	if = {
-		limit = {
-			has_variable = orbital_battlestation_progress_var
-			any_scope_building = {
-				is_building_type = building_orbital_battlestation_construction_site
-				building_has_goods_shortage = no
-			}
-		}
-		change_variable = {
-			name = orbital_battlestation_progress_var
-			add = {
-				value = b:building_orbital_battlestation_construction_site.occupancy
-				divide = 12
-				multiply = b:building_orbital_battlestation_construction_site.modifier:building_annual_orbital_battlestation_progress
-				multiply = 1000
-				ceiling = yes
-				divide = 1000
-			}
-		}
-	}
-	if = {
-		limit = {
-			var:orbital_battlestation_progress_var >= 1
-		}
-		set_variable = {
-			name = orbital_battlestation_progress_var
-			value = 0
-		}
-		remove_building = building_orbital_battlestation_construction_site
-		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_orbital_battlestation }
-		if = {
-			limit = { has_building = building_orbital_battlestation }
-			if = {
-				limit = { b:building_orbital_battlestation.level = 4 }
-				create_building = { building = building_orbital_battlestation level = 5 }
-			}
-			else_if = {
-				limit = { b:building_orbital_battlestation.level = 3 }
-				create_building = { building = building_orbital_battlestation level = 4 }
-			}
-			else_if = {
-				limit = { b:building_orbital_battlestation.level = 2 }
-				create_building = { building = building_orbital_battlestation level = 3 }
-			}
-			else_if = {
-				limit = { b:building_orbital_battlestation.level = 1 }
-				create_building = { building = building_orbital_battlestation level = 2 }
-			}
-		}
-		else = {
-			create_building = {
-				building = building_orbital_battlestation
-				level = 1
-			}
-		}
-	}
-}
+solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 } }
 
-mind_upload_nexus_construction = {
-	if = {
-		limit = {
-			NOT = { has_variable = mind_upload_nexus_progress_var }
-		}
-		set_variable = {
-			name = mind_upload_nexus_progress_var
-			value = 0
-		}
-	}
-	if = {
-		limit = {
-			has_variable = mind_upload_nexus_progress_var
-			any_scope_building = {
-				is_building_type = building_mind_upload_nexus_construction_site
-				building_has_goods_shortage = no
-			}
-		}
-		change_variable = {
-			name = mind_upload_nexus_progress_var
-			add = {
-				value = b:building_mind_upload_nexus_construction_site.occupancy
-				divide = 12
-				multiply = b:building_mind_upload_nexus_construction_site.modifier:building_annual_mind_upload_nexus_progress
-				multiply = 1000
-				ceiling = yes
-				divide = 1000
-			}
-		}
-	}
-	if = {
-		limit = {
-			var:mind_upload_nexus_progress_var >= 1
-		}
-		set_variable = {
-			name = mind_upload_nexus_progress_var
-			value = 0
-		}
-		remove_building = building_mind_upload_nexus_construction_site
-		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_mind_upload_nexus }
-		if = {
-			limit = { has_building = building_mind_upload_nexus }
-			if = {
-				limit = { b:building_mind_upload_nexus.level = 4 }
-				create_building = { building = building_mind_upload_nexus level = 5 }
-			}
-			else_if = {
-				limit = { b:building_mind_upload_nexus.level = 3 }
-				create_building = { building = building_mind_upload_nexus level = 4 }
-			}
-			else_if = {
-				limit = { b:building_mind_upload_nexus.level = 2 }
-				create_building = { building = building_mind_upload_nexus level = 3 }
-			}
-			else_if = {
-				limit = { b:building_mind_upload_nexus.level = 1 }
-				create_building = { building = building_mind_upload_nexus level = 2 }
-			}
-		}
-		else = {
-			create_building = {
-				building = building_mind_upload_nexus
-				level = 1
-			}
-		}
-	}
-}
+orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 } }
+
+mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 } }
 
 thought_control_loyalists_update = {
 	if = {
@@ -1391,94 +1115,7 @@ resettlement_transfer_effect = {
 # Antimatter Facility Construction Effect
 #==================================================
 
-antimatter_facility_construction = {
-	if = {
-		limit = {
-			NOT = { has_variable = antimatter_facility_progress_var }
-		}
-		set_variable = {
-			name = antimatter_facility_progress_var
-			value = 0
-		}
-	}
-	if = {
-		limit = {
-			has_variable = antimatter_facility_progress_var
-			any_scope_building = {
-				is_building_type = building_antimatter_facility_construction_site
-				building_has_goods_shortage = no
-			}
-		}
-		change_variable = {
-			name = antimatter_facility_progress_var
-			add = {
-				value = b:building_antimatter_facility_construction_site.occupancy
-				divide = 12
-				multiply = b:building_antimatter_facility_construction_site.modifier:building_annual_antimatter_facility_progress
-				multiply = 1000
-				ceiling = yes
-				divide = 1000
-			}
-		}
-	}
-	if = {
-		limit = {
-			var:antimatter_facility_progress_var >= 1
-		}
-		set_variable = {
-			name = antimatter_facility_progress_var
-			value = 0
-		}
-		remove_building = building_antimatter_facility_construction_site
-		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_antimatter_facility }
-		if = {
-			limit = { has_building = building_antimatter_facility }
-			if = {
-				limit = { b:building_antimatter_facility.level = 9 }
-				create_building = { building = building_antimatter_facility level = 10 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 8 }
-				create_building = { building = building_antimatter_facility level = 9 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 7 }
-				create_building = { building = building_antimatter_facility level = 8 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 6 }
-				create_building = { building = building_antimatter_facility level = 7 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 5 }
-				create_building = { building = building_antimatter_facility level = 6 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 4 }
-				create_building = { building = building_antimatter_facility level = 5 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 3 }
-				create_building = { building = building_antimatter_facility level = 4 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 2 }
-				create_building = { building = building_antimatter_facility level = 3 }
-			}
-			else_if = {
-				limit = { b:building_antimatter_facility.level = 1 }
-				create_building = { building = building_antimatter_facility level = 2 }
-			}
-		}
-		else = {
-			create_building = {
-				building = building_antimatter_facility
-				level = 1
-			}
-		}
-	}
-}
+antimatter_facility_construction       = { generic_wonder_construction_base = { WONDER = antimatter_facility       MAX_LEVEL = 10 } }
 
 # Population Transfer: Moves primary culture pops of target_country from source_country to target_country
 # Scope: country (either source or target, called from treaty on_entry_into_force)
@@ -1624,184 +1261,10 @@ te_remove_pm_retooling_from_zero_level_state_buildings = {
 # Nanofabrication Center Construction Effect
 #==================================================
 
-nanofabrication_center_construction = {
-	if = {
-		limit = {
-			NOT = { has_variable = nanofabrication_center_progress_var }
-		}
-		set_variable = {
-			name = nanofabrication_center_progress_var
-			value = 0
-		}
-	}
-	if = {
-		limit = {
-			has_variable = nanofabrication_center_progress_var
-			any_scope_building = {
-				is_building_type = building_nanofabrication_center_construction_site
-				building_has_goods_shortage = no
-			}
-		}
-		change_variable = {
-			name = nanofabrication_center_progress_var
-			add = {
-				value = b:building_nanofabrication_center_construction_site.occupancy
-				divide = 12
-				multiply = b:building_nanofabrication_center_construction_site.modifier:building_annual_nanofabrication_center_progress
-				multiply = 1000
-				ceiling = yes
-				divide = 1000
-			}
-		}
-	}
-	if = {
-		limit = {
-			var:nanofabrication_center_progress_var >= 1
-		}
-		set_variable = {
-			name = nanofabrication_center_progress_var
-			value = 0
-		}
-		remove_building = building_nanofabrication_center_construction_site
-		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_nanofabrication_center }
-		if = {
-			limit = { has_building = building_nanofabrication_center }
-			if = {
-				limit = { b:building_nanofabrication_center.level = 9 }
-				create_building = { building = building_nanofabrication_center level = 10 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 8 }
-				create_building = { building = building_nanofabrication_center level = 9 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 7 }
-				create_building = { building = building_nanofabrication_center level = 8 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 6 }
-				create_building = { building = building_nanofabrication_center level = 7 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 5 }
-				create_building = { building = building_nanofabrication_center level = 6 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 4 }
-				create_building = { building = building_nanofabrication_center level = 5 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 3 }
-				create_building = { building = building_nanofabrication_center level = 4 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 2 }
-				create_building = { building = building_nanofabrication_center level = 3 }
-			}
-			else_if = {
-				limit = { b:building_nanofabrication_center.level = 1 }
-				create_building = { building = building_nanofabrication_center level = 2 }
-			}
-		}
-		else = {
-			create_building = {
-				building = building_nanofabrication_center
-				level = 1
-			}
-		}
-	}
-}
+nanofabrication_center_construction    = { generic_wonder_construction_base = { WONDER = nanofabrication_center    MAX_LEVEL = 10 } }
 
 #==================================================
 # Consciousness Network Construction Effect
 #==================================================
 
-consciousness_network_construction = {
-	if = {
-		limit = {
-			NOT = { has_variable = consciousness_network_progress_var }
-		}
-		set_variable = {
-			name = consciousness_network_progress_var
-			value = 0
-		}
-	}
-	if = {
-		limit = {
-			has_variable = consciousness_network_progress_var
-			any_scope_building = {
-				is_building_type = building_consciousness_network_construction_site
-				building_has_goods_shortage = no
-			}
-		}
-		change_variable = {
-			name = consciousness_network_progress_var
-			add = {
-				value = b:building_consciousness_network_construction_site.occupancy
-				divide = 12
-				multiply = b:building_consciousness_network_construction_site.modifier:building_annual_consciousness_network_progress
-				multiply = 1000
-				ceiling = yes
-				divide = 1000
-			}
-		}
-	}
-	if = {
-		limit = {
-			var:consciousness_network_progress_var >= 1
-		}
-		set_variable = {
-			name = consciousness_network_progress_var
-			value = 0
-		}
-		remove_building = building_consciousness_network_construction_site
-		save_scope_as = wonder_complete_state
-		owner = { post_notification = wonder_construction_complete_consciousness_network }
-		if = {
-			limit = { has_building = building_consciousness_network }
-			if = {
-				limit = { b:building_consciousness_network.level = 9 }
-				create_building = { building = building_consciousness_network level = 10 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 8 }
-				create_building = { building = building_consciousness_network level = 9 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 7 }
-				create_building = { building = building_consciousness_network level = 8 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 6 }
-				create_building = { building = building_consciousness_network level = 7 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 5 }
-				create_building = { building = building_consciousness_network level = 6 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 4 }
-				create_building = { building = building_consciousness_network level = 5 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 3 }
-				create_building = { building = building_consciousness_network level = 4 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 2 }
-				create_building = { building = building_consciousness_network level = 3 }
-			}
-			else_if = {
-				limit = { b:building_consciousness_network.level = 1 }
-				create_building = { building = building_consciousness_network level = 2 }
-			}
-		}
-		else = {
-			create_building = {
-				building = building_consciousness_network
-				level = 1
-			}
-		}
-	}
-}
+consciousness_network_construction     = { generic_wonder_construction_base = { WONDER = consciousness_network     MAX_LEVEL = 10 } }
