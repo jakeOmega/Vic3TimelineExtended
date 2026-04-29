@@ -16,4 +16,5 @@ rules_found.txt
 generate_images.log
 *.code-workspace
 .DS_Store
-.claude/
+.claude/*
+!.claude/skills/
