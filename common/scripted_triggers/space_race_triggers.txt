@@ -25,6 +25,17 @@ sr_can_start_space_race = {
 	NOT = { has_variable = sr_active_milestone }
 }
 
+# is_shown_when_inactive composer for follow-up space race milestones —
+# milestones that gate on a prior milestone's completion variable plus a
+# tech. Saves 3 lines per use across ~5 milestones.
+#   $PREREQ$  — prior milestone token (e.g. suborbital, orbital, moon_landing)
+#   $TECH$    — technology required (e.g. guided_missiles, space_exploration)
+sr_milestone_followup_is_shown = {
+	has_game_rule = space_race_enabled
+	has_variable = sr_completed_$PREREQ$
+	has_technology_researched = $TECH$
+}
+
 sr_has_failure_cooldown = {
 	has_variable = sr_failure_cooldown
 	var:sr_failure_cooldown > 0

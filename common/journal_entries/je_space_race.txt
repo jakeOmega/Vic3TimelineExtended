@@ -144,11 +144,7 @@ je_space_race_orbital = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
-	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
-		has_variable = sr_completed_suborbital
-		has_technology_researched = guided_missiles
-	}
+	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = suborbital TECH = guided_missiles } }
 
 	possible = {
 		has_variable = sr_completed_suborbital
@@ -291,11 +287,7 @@ je_space_race_moon_landing = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
-	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
-		has_variable = sr_completed_orbital
-		has_technology_researched = space_exploration
-	}
+	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
 		has_variable = sr_completed_orbital
@@ -443,11 +435,7 @@ je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
-	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
-		has_variable = sr_completed_orbital
-		has_technology_researched = space_exploration
-	}
+	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
 		has_variable = sr_completed_orbital
@@ -590,11 +578,7 @@ je_space_race_moon_base = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
-	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
-		has_variable = sr_completed_moon_landing
-		has_technology_researched = reusable_rocketry
-	}
+	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = moon_landing TECH = reusable_rocketry } }
 
 	possible = {
 		has_variable = sr_completed_moon_landing
@@ -737,11 +721,7 @@ je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
-	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
-		has_variable = sr_completed_orbital
-		has_technology_researched = knowledge_economy
-	}
+	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = knowledge_economy } }
 
 	possible = {
 		has_variable = sr_completed_orbital
