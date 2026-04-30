@@ -61,6 +61,25 @@ Each mod system should define its own modifiers. Do NOT reuse modifiers from ano
 - Breaks modifier tooltips (wrong icon, wrong description context)
 - Makes it impossible to balance systems independently
 
+## Modifier Design: Relative vs Absolute Mechanics
+
+Some modifiers contribute to **relative** comparisons; others to **absolute** thresholds. The cascade behavior of country-scope modifier blocks (techs, laws, PB principles, country-scope static modifiers) applies the value to *every* eligible scope (every character, every state) — which is fine for absolute mechanics but a **wash for relative ones**.
+
+**Relative-only modifiers (don't cascade-buff via country-scope blocks):**
+- `character_popularity_add` — the IG that benefits is the one whose leader is more popular than the others. Adding +5 to every character changes nothing.
+- `character_prominence_add` — leader-selection picks the top-N most prominent of an eligible pool. Uniform boosts don't move the ranking.
+- Similar relative effects: anything that drives "who's #1 / who's most attractive / who's selected from a pool."
+
+For these, apply **targeted via `every_scope_character = { limit = { ... } add_modifier = { ... } }`** so only a subset (one gender, one culture, one IG, the head-of-state) gets the bonus. The asymmetry is what produces game effect. See `events/feminist_events.txt:200/100` for the pattern (female-only cascade on the success and backlash branches of the feminism JE).
+
+**Absolute-mechanic modifiers (country-scope cascade is fine):**
+- `character_loyalty_add` — loyalty thresholds are absolute (low loyalty triggers events / coup eligibility regardless of how loyal others are).
+- `character_coup_strength_mult` — multiplier on a per-character coup score; absolute.
+- `character_command_limit_*`, `character_advancement_speed_*`, `character_battle_condition_*_mult`, naval `character_blockade_mult` / `character_naval_mission_area_add` / `character_max_offensive_battles_add` / `character_interception_add` — all per-character absolute caps and probabilities.
+- `character_health_add` — life expectancy ceiling, absolute.
+
+When in doubt, ask: "if this modifier moved the same amount on every character in the country, would that produce a different gameplay state?" If no — it's relative; needs targeting. If yes — it's absolute; cascade is fine.
+
 ## Expense Scaling with GDP
 
 - **Never use flat `country_expenses_add` values** (e.g., `country_expenses_add = 50000`). Flat values don't scale with country or economy size.
@@ -219,6 +238,23 @@ Both fail without a parse error and without a debug.log warning, so the system d
 **Validation now covers this.** `/validate/engine-coverage` checks both modifier-use sites and `modifier:NAME = yes` trigger references for booleans (suffix `_bool` / `_boolean`). Any boolean referenced but not declared in the engine modifiers catalog or in a `Modifier Types` entry surfaces in `unknown_modifiers`. Unit + integration tests in `test_engine_coverage_validator.py` freeze the country_sr_* case as a regression test.
 
 **Practical rule.** Declare every mod-side boolean modifier in `common/modifier_type_definitions/` (`extra_modifier_types.txt` or topical files like `tech_gate_modifier_types.txt`). When in doubt: `curl 'http://localhost:8950/raw/Modifier%20Types/<name>'` will return the definition or a `Not found` error.
+
+### Mod-Added Political Movements Need Modifier Type Registration
+
+Vanilla auto-registers `state_pop_support_movement_<X>_(add|mult)` and `country_pop_support_movement_<X>_(add|mult)` for every vanilla movement (in `common/modifier_type_definitions/08_movement_modifier_types.txt`). **Mod-added movements** defined in `common/political_movements/` get no such treatment — their support modifiers must be registered explicitly, otherwise references in laws / techs / events produce `Unknown modifier type: state_pop_support_movement_<X>_mult` and silently no-op (per the same rule as `_bool` modifiers).
+
+The mod hit this with `movement_civil_rights`, `movement_anti_war`, and `movement_transhumanist` — all referenced in `common/laws/movement_attraction_modifiers.txt` and `common/laws/extra_laws.txt` for several commits before validation surfaced the issue. Fix lives in `common/modifier_type_definitions/movement_modifier_types.txt`.
+
+When introducing any new mod-side movement, also register the modifier types you intend to use (state-scope and/or country-scope, `_add` / `_mult`). Vanilla shape:
+
+```
+state_pop_support_movement_<name>_mult = {
+    decimals = 0
+    color = neutral
+    percent = yes
+    game_data = { ai_value = 0 }
+}
+```
 
 ## Effect/Trigger Scope Requirements
 
@@ -876,6 +912,8 @@ Earlier in mod development this was treated as a silent no-op — that's why som
 - Not every `character_*` modifier may be wired in country scope yet. When introducing a new one, do a quick in-game test the first time: apply the tech/law to a country, open a character panel, confirm the modifier shows up in the character's tooltip stack.
 - `/validate/engine-coverage` can flag unknown names but cannot tell you a known-name modifier is silently dropped at the cascade boundary. The empirical test is the only sure check.
 - Where the design needs the modifier scoped to a *specific* character (only the ruler, only commanders, only heirs), keep using `every_scope_character = { limit = { ... } add_modifier = { ... } }` with a static modifier — the country-scope cascade applies to every character indiscriminately.
+
+**Audit existing trait-based workarounds when engine behavior shifts.** When a previously broken cascade (or any silent-no-op feature) starts working, *both* paths can now apply simultaneously, double-counting their effect. Pattern: (1) identify the workaround (often `every_scope_character` adding a trait whose only modifier was the same `character_*` value the tech/law now sets directly), (2) confirm the trait has no other behavioral effect (empty `command_modifier {}`, empty `country_modifier {}`, no triggers depending on it), (3) delete the trait + the dispatcher. The mod's `update_characters` effect + `biological_immortality` / `mind_backups` traits were exactly this case; their `character_health_add` values had been doubling on every character ever since the cascade started working.
 
 ## Hidden Variable Design Pattern
 
@@ -1609,6 +1647,8 @@ INJECT:clothes = {
 The same rule applies any time the wrapper key collides with vanilla: e.g. you cannot define a fresh `country_modifiers = { ... }` block in `common/static_modifiers/` if vanilla already owns the same modifier name; use `INJECT:vanilla_modifier_name = { ... }`.
 
 **How to spot it:** grep `debug.log` for `Duplicated key`. Cross-reference against vanilla's `gfx/portraits/portrait_modifiers/`, `common/modifier_type_definitions/`, etc. If the duplicated key matches a vanilla file, switch the mod file to `INJECT:`.
+
+**Tooling caveat:** any Python audit / walker tool that scans `common/` files needs to handle these prefixes. A naïve identifier regex (`[A-Za-z_]…`) won't match `REPLACE_OR_CREATE:foo` and the entity silently drops out of the walk. See `docs/python_tools.md` § "Gotchas when writing tooling that walks `common/`" for the canonical fix and a regression test.
 
 ## Global Variable Initialization Timing: Use `on_game_started`
 

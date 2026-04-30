@@ -21,6 +21,8 @@ If that fails, the mod state server isn't running. Start it yourself with `.venv
 
 After mod-file edits: `curl -X POST http://localhost:8950/reload`. After only re-launching the game with no mod-file changes: `curl -X POST 'http://localhost:8950/reload?engine_only=true'` (skips the slow ModState rebuild).
 
+**`/logs/*` reads runtime logs, not parse-time output.** A fix that resolves a `script_parse_error` won't disappear from `/logs/debug` until the **game is re-launched** and writes a new `debug.log`. `/validate/engine-coverage` reports go clean immediately on `POST /reload`, but log entries are stale until the user runs the game. Don't chase phantom failures by re-fixing what's already fixed — confirm via `/validate/engine-coverage` (immediate) and `/logs/debug/diff?against=1` (after next launch).
+
 ## Canonical first command
 
 Always start with `debug.log`, never `error.log` — Vic3's `error.log` only carries a small subset of engine diagnostics (mostly script-value type errors); the actionable signal lives in `debug.log`.
