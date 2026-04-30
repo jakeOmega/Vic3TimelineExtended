@@ -2,6 +2,38 @@
 # These make technology requirements for scripted buttons and
 # power bloc principles visible in the tech tree.
 
+# Space Program building PM unlock modifiers
+# These appear in PM tooltips so players know which journal entries each PM unlocks.
+# REQUIRED: PMs in extra_pms.txt grant these via country_modifiers blocks, and
+# je_space_race.txt `possible` clauses gate on them. Without these definitions
+# the engine silently no-ops the boolean — PMs apply nothing, JE triggers always
+# evaluate false, and the space race system never activates. /modifier-search?q=
+# is the canonical check; /validate/engine-coverage now flags missing booleans.
+country_sr_earth_orbit_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_moon_mission_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_mars_mission_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_solar_colonization_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_deep_space_exploration_program_bool = {
+	color = good
+	boolean = yes
+}
+country_sr_interstellar_mission_program_bool = {
+	color = good
+	boolean = yes
+}
+
 # Power bloc principle technology requirements
 country_icbm_pb_principles_bool = {
 	color = good
