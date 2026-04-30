@@ -576,7 +576,7 @@
 	Paved Roads - Dirt roads are bumpy, uneven, and at the slightest hint of water they become horrible muddy traps for heavy vehicles. Paving roads, providing a solid surface that won't wear and tear so quickly as dirt and gravel, helps provide a nicer experience for road-users and improve the flow of freight and passenger traffic.
 		Unlocking Technologies:
 			Elevators
-6: 37 technologies
+6: 38 technologies
 	Bergius Process - By hydrogenating coal at high temperatures and pressures, we can create synthetic fuel. A useful trick to have up our sleeve when oil is scarce.
 		Unlocking Technologies:
 			Aniline
@@ -691,7 +691,10 @@
 	Intergovernmental Organizations - Formal institutions where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.
 		Unlocking Technologies:
 			Modern Financial Instruments
-7: 26 technologies
+	Decolonization - The dismantling of colonial empires has led to the birth of new nations and a redrawing of the world map. A messy but necessary process of change.
+		Unlocking Technologies:
+			Intergovernmental Organizations
+7: 25 technologies
 	Transistor Technology - The transistor is the tiny switch that makes all of our modern electronics possible. Its invention has led to a revolution in computing and communication, changing the world in countless ways.
 		Unlocking Technologies:
 			Modern Tools
@@ -729,9 +732,6 @@
 	Guided Missiles - Now our missiles can find their own way to the target. This makes them much more accurate and effective, which is bad news for the enemy.
 		Unlocking Technologies:
 			Inertial Navigation Systems
-	Decolonization - The dismantling of colonial empires has led to the birth of new nations and a redrawing of the world map. A messy but necessary process of change.
-		Unlocking Technologies:
-			Civil Rights Movement
 	Plastic Mass Production - The mass production of plastic has given us a wide range of new, lightweight, and durable products. It has also given us a massive environmental problem to deal with.
 		Unlocking Technologies:
 			Bergius Process
