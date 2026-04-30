@@ -34,6 +34,31 @@ Error: has_strategic_region_interest_tier trigger [ Invalid Country or Strategic
 
 The `colonial_claims_check` on-action has `has_strategic_region_interest_tier = { strategic_region = root.region ... }` where `root.region` is sometimes invalid. Vanilla bug. **10 occurrences.**
 
+### `common/script_values/command_values.txt:373` — `naval_battle_size` produces type-none and Div/0
+
+```
+Value of wrong type in 'common/script_values/command_values.txt:373'. Got value of type 'none'
+Div/0 near common/script_values/command_values.txt:373
+```
+
+The `naval_battle_size` script value reads `scope:military_formation.num_ships_not_in_battle` and later divides by it; in some evaluation contexts the formation/ship count is unset, producing a none-typed value and a divide-by-zero. Vanilla bug. **136 occurrences (124 type-none + 12 div/0)** in a single 1.13 mod session.
+
+### `common/naval_battle_conditions/00_naval_battle_conditions.txt:210, 263` — `fixed_range` in non-random context
+
+```
+range directive used, but no randomization is available! Might be in a trigger rather than effect.
+```
+
+Multiple naval conditions use `intensity = { fixed_range = { min = X max = Y } }` (line 210 = `naval_condition_squall`/similar, line 263 = a later condition). The engine evaluates these in a context it doesn't consider randomized. Vanilla bug, same root cause across all `fixed_range` uses in this file. **9+ occurrences per session.**
+
+### `common/treaty_articles/05_transfer_money.txt:149` — Div/0 in `inherent_accept_score`
+
+```
+Div/0 near common/treaty_articles/05_transfer_money.txt:149
+```
+
+Vanilla's `inherent_accept_score` script value contains `divide = scope:article.input_quantity` calls gated by `if = { limit = { exists = scope:article.input_quantity } }`, but the engine evaluates the full script-value tree before applying the `if` gate (same family as the `command_values.txt:373` bug above). Mod also adds `divide = gdp` tier blocks in the same script value, which may amplify the count when source/target country has near-zero GDP. Reports the line of the containing `inherent_accept_score = { ... }` block, not the actual divide line. **160 occurrences** in a single 1.13 mod session.
+
 ### `common/ideologies/01_character_ideologies.txt:1781` — `ig_approval` in wrong scope
 
 ```
