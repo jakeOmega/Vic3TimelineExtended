@@ -1,0 +1,36 @@
+### Strategic Reserve JE widgets
+### Renders a small badge showing the current rate-adjustment step tier.
+### Wired via `widget = { name = "widget_je_strategic_reserve_step_size" container = "custom_widget_container_1" }` in je_strategic_reserve.
+
+types strategic_reserve_widget_types
+{
+	type widget_je_strategic_reserve_step_size_type = flowcontainer {
+		direction = horizontal
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		layoutpolicy_horizontal = expanding
+
+		background = {
+			using = blurry_dark_background
+			alpha = 0.85
+			margin = { 6 4 }
+		}
+
+		textbox = {
+			text = "je_strategic_reserve_widget_step_badge"
+			default_format = "#header"
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 360
+			margin = { 12 6 }
+		}
+	}
+}
+
+
+### WIDGETS
+flowcontainer = {
+	name = "widget_je_strategic_reserve_step_size"
+
+	widget_je_strategic_reserve_step_size_type = {}
+}

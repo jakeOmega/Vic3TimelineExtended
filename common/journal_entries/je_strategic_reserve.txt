@@ -39,6 +39,12 @@ je_strategic_reserve = {
 		st_res_je_invalid_effect = yes
 	}
 
+	widget = {
+		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
+		name = "widget_je_strategic_reserve_step_size"
+		container = "custom_widget_container_1"
+	}
+
 	scripted_progress_bar = st_res_grain_fill_bar
 	scripted_progress_bar = st_res_ammunition_fill_bar
 	scripted_progress_bar = st_res_oil_fill_bar
