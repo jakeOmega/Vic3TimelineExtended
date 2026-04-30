@@ -770,6 +770,43 @@ random_scope_state = {
 
 Alternatively, use `PREV.state_population` when adding to a VARIABLE in a parent scope (as in vanilla `02_south_america_migration.txt`).
 
+### Pick a Destination Once — Don't Call Destination-Picking Scripted Effects Inside `every_scope_pop`
+
+If a scripted effect picks a destination via `ordered_state` / `random_scope_state` and announces it through a notification, call it **once from state (or country) scope** — not from inside an `every_scope_pop` / `every_scope_state` iterator.
+
+```
+# WRONG — destination is re-picked for every pop
+every_scope_pop = {
+    limit = { culture = scope:curr_culture }
+    trigger_mass_migration = { POP_RATIO = 0.8 }
+}
+
+# RIGHT — pick once, move all matching pops, notify once
+trigger_mass_migration = { POP_RATIO = 0.8 }   # internally does ordered_state + every_scope_pop + post_notification
+```
+
+The wrong form has two failure modes:
+1. The notification fires during the first pop's call (gated by a `sent_message` variable) and announces THAT iteration's `migration_target`. Later iterations may save a different `migration_target` because attraction scores change as pops move, so most pops end up in a state different from the one announced.
+2. Even if the destination were stable, you pay N redundant `ordered_state` global iterations.
+
+When refactoring, also make sure the `ordered_state.limit` matches the outer `any_state` existence check exactly. The original `trigger_mass_migration` had an outer "is there a foreign state to flee to?" check but the inner `ordered_state` lacked the `NOT = { owner = PREV.owner }` filter, so it could rank a same-country state highest and pops shuffled internally instead of fleeing.
+
+### Empty `random_scope_*` Leaves the `save_scope_as` Target Undefined
+
+`random_scope_state` / `random_scope_pop` / etc. only fire `save_scope_as = X` if the iterator finds a match. When the parent scope has zero candidates (e.g. a country with no states, a state with no pops of that culture), the inner block doesn't execute and `scope:X` is **not set** for code that follows. Consuming it directly (`move_pop = scope:destination_state`, `change_relations country = scope:winner`, etc.) then yields a `Got value of type 'none'` warning in `debug.log`, reported at the line of the containing scripted effect / event option.
+
+Always gate the consumer:
+
+```
+random_scope_state = { ... save_scope_as = destination_state }
+if = {
+    limit = { exists = scope:destination_state }
+    move_pop = scope:destination_state
+}
+```
+
+Don't rely on the saved scope persisting from a prior loop iteration — even when it does, that's wrong-by-coincidence behavior.
+
 ### `count_scope_state` Does Not Exist
 
 There is no `count_scope_state` trigger. To count states matching conditions, use `any_scope_state` with the `count` parameter:
