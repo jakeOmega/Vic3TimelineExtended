@@ -1116,6 +1116,7 @@ types building_panels
 						}
 						blockoverride "text" {
 							text = "MILITARY_SHIP_MAINTENANCE_REVENUE"
+							fontsize = 14
 						}
 						blockoverride "text_right" {
 							raw_text = "#variable @money![Building.GetMilitaryShipMaintenanceRevenue|K]#!"
@@ -4479,13 +4480,14 @@ types building_panels
 				}
 			}
 
-			### Supply ship maintenance revenue
+			### Military ship maintenance revenue
 			building_process_entry_small = {
 				blockoverride "visible" {
 					visible = "[GreaterThan_CFixedPoint(Building.GetMilitaryShipMaintenanceRevenue, '(CFixedPoint)0')]"
 				}
 				blockoverride "text" {
 					text = "MILITARY_SHIP_MAINTENANCE_REVENUE"
+					fontsize = 13
 				}
 				blockoverride "text_right" {
 					raw_text = "#variable @money![Building.GetMilitaryShipMaintenanceRevenue|K]#!"

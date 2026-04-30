@@ -4280,7 +4280,7 @@ right_click_menu = {
 
 	blockoverride "items" {
 		dynamicgridbox = {
-			datamodel = "[AccessPlayer.GetMilitaryFormationsFleet]"
+			datamodel = "[MilitaryFormationWrapped.GetFleetsSortedByMarineCapacity]"
 			flipdirection = yes
 			datamodel_wrap = 2
 
@@ -4289,6 +4289,10 @@ right_click_menu = {
 					using = standard_formation_item_size
 					military_formation_right_click_item = {
 						visible = yes
+
+						blockoverride "unit_count_text" {
+							text = "MILITARY_FORMATION_MARINE_CAPACITY_WITH_ICON"
+						}
 
 						blockoverride "tooltip" {
 							tooltipwidget = {
