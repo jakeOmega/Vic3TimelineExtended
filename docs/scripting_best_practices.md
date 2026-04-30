@@ -205,6 +205,19 @@ A `script_only = yes` modifier has no native engine effect — it's just a value
 
 **When to prefer this over direct `has_law` triggers:** any time the gate is best expressed as a *combination* of multiple laws, or when you want the player to see which laws move the needle. Direct `has_law` checks are invisible to the player and require enumerating every law variant by hand.
 
+### Boolean Modifier Types Must Be Explicitly Declared
+
+Boolean modifiers (`name = { color = good; boolean = yes }` in `common/modifier_type_definitions/`) follow the same silent-no-op rule as dynamic-pattern modifiers, even when the name is fully spelled out — there is no auto-registration from reference sites. If the type isn't declared:
+
+- A PM that grants `country_X_program_bool = yes` in its `country_modifiers = { unscaled = { ... } }` block applies *nothing*.
+- A trigger reading `modifier:country_X_program_bool = yes` (e.g. in a JE `possible` clause) always evaluates to **false**.
+
+Both fail without a parse error and without a debug.log warning, so the system depending on the boolean silently never activates. The country_sr_*_program_bool regression of 2026-04-29 was exactly this — six space-program booleans were deleted from `tech_gate_modifier_types.txt` on the (incorrect) theory that the engine auto-registers booleans, and the entire space race system stopped activating until restored.
+
+**Validation now covers this.** `/validate/engine-coverage` checks both modifier-use sites and `modifier:NAME = yes` trigger references for booleans (suffix `_bool` / `_boolean`). Any boolean referenced but not declared in the engine modifiers catalog or in a `Modifier Types` entry surfaces in `unknown_modifiers`. Unit + integration tests in `test_engine_coverage_validator.py` freeze the country_sr_* case as a regression test.
+
+**Practical rule.** Declare every mod-side boolean modifier in `common/modifier_type_definitions/` (`extra_modifier_types.txt` or topical files like `tech_gate_modifier_types.txt`). When in doubt: `curl 'http://localhost:8950/raw/Modifier%20Types/<name>'` will return the definition or a `Not found` error.
+
 ## Effect/Trigger Scope Requirements
 
 - **`any_` triggers do NOT accept `limit`.** In trigger context, conditions go directly as siblings: `any_scope_diplomatic_pact = { count >= 3 is_diplomatic_action_type = X }`. The `limit = { }` sub-block is ONLY valid in effect iterators (`every_X`, `random_X`, `ordered_X`). Using `limit` inside `any_` produces "Unknown trigger type: limit" in debug.log and silently breaks the trigger evaluation (may match ALL pacts instead of filtered ones).
@@ -1421,6 +1434,35 @@ my_balance_update = {
 
 Used by: `banking_cycle_update_ce_pool_balance` (command economy investment-pool balance, `planning_treasury_pool_balance` modifier). `country_weekly_investment_pool_add` is a mod-created key not included in `investment_pool_net_income`, so the simple direct-negate form is used with no prior-variable caching.
 
+## Journal Entry 1.13 Display Surface
+
+Vic3 1.13 added a rich set of JE-display fields, documented canonically in vanilla's `common/journal_entries/journal_entries.md`. Rather than restate the spec, this is a quick map of what the mod uses and where to find vanilla examples for each.
+
+| Field | Purpose | Vanilla example |
+|---|---|---|
+| `should_update_on_player_command = yes` | Refresh the JE panel on player action instead of waiting for monthly tick. | `00_grunderzeit.txt`, `00_meiji_restoration.txt` |
+| `event_outcome_completed_effect_desc { header effect }` | Auto-generated tooltip preview of completion. Effect block is descriptive only; not executed. Multiple per JE allowed (cf. meiji.1.a / meiji.1.b). | `00_meiji_restoration.txt` |
+| `event_outcome_failed_effect_desc` / `_invalidated_effect_desc` / `_timeout_effect_desc` | Same shape, for the matching transitions. Effect body of just `custom_tooltip = X` is legal. | `00_meiji_restoration.txt` |
+| `event_outcome_activated_effect_desc` | Preview blocks shown at activation time — useful for perpetual JEs that have no completion transition (membership-tier rewards, etc.). | none in vanilla; mod uses on `je_united_nations`. |
+| `custom_completion_header` / `_failure_header` / `_on_completion_header` / `_on_failure_header` | Loc-key overrides for the generic banner / popup headers. | `00_meiji_restoration.txt` (per-victory-path flavor) |
+| `widget = { gui = ... name = ... container = ... }` | Embed a custom GUI panel in one of the 8 anchor slots (`custom_widget_container_je_icon`, `_1`–`_7`). The 7 slots are interleaved with built-in JE elements (icon, status, scripted_buttons, progress_bars, description, involved_countries, completion block). | `00_meiji_restoration.txt` + `gui/journal_entry_widgets/ep2_japan_widgets.gui` (emperor portrait + daimyos list). Mod pilot: `je_strategic_reserve` + `gui/journal_entry_widgets/strategic_reserve_widget.gui`. |
+| `display_progressbar_as_months = yes` | Render numeric goal as months instead of raw count. | unused in mod. |
+| `should_be_pinned_by_default_involved` / `_uninvolved_or_context` | Default-pin the JE in the outliner. | widely vanilla; mod sets `_uninvolved_or_context = yes` on every JE. |
+| `transferable` / `can_revolution_inherit` | Whether the JE follows the player on country switch / revolution. | widely vanilla. |
+
+**Widget loc binding pattern.** Inside a widget loc string anchored to a JE panel, the data context is the JournalEntry. To read a country-scope variable or script value, use:
+
+```
+[JournalEntry.GetCountry.MakeScope.Var('foo').GetValue]
+[JournalEntry.GetCountry.MakeScope.ScriptValue('foo')|0]
+```
+
+Mirrors the established `[ROOT.GetCountry.MakeScope.ScriptValue('foo')]` pattern used in the mod's `status_desc` / `progress_desc` loc strings, but `JournalEntry.GetCountry` is unambiguous in widget context. See the `je_strategic_reserve_widget_step_badge` loc key for a working example, and vanilla `gui/journal_entry_widgets/ep2_japan_widgets.gui` for richer patterns (portraits, fixed-grid lists, scripted-GUI bindings).
+
+**`event_outcome_*_effect_desc` blocks: effect bodies are tooltips, not behavior.** Per the vanilla doc: "the effects here are only used for description purposes and will not actually happen." A body of just `custom_tooltip = SOME_KEY` is a valid descriptive block — the engine renders it as the tooltip text alongside the auto-generated change preview. Use this when there's no clean modifier or variable mutation to preview (cf. the interstellar_results JE, where the reward is randomized across 30+ flavor sub-events).
+
+**Perpetual JEs need `event_outcome_activated_effect_desc`, not the completed/failed variants.** Perpetual JEs (`complete = { always = no }`) never fire completion or failure transitions, so the `_completed_effect_desc` / `_failed_effect_desc` blocks are dead text. Use `_activated_effect_desc` for previewing tier-threshold rewards or other "once you join, here's what unlocks" semantics.
+
 ## Useful Triggers & Accessors Reference
 
 Triggers and scope accessors that are easy to overlook or hard to discover:
@@ -1611,3 +1653,127 @@ Common confusion is naming intuitive-but-wrong identifiers:
 | `enemy_commander` | `opposing_commander` | From a character in battle. |
 
 **Validation:** `curl 'http://localhost:8950/engine-docs/event-targets?q=<keyword>'` — returns the vocabulary with input/output scopes for each target. Use this before introducing any new target reference; the engine's silent-failure mode makes typos very expensive to debug.
+
+## Checking the Type of the Law in `on_law_activated`
+
+`on_law_activated` fires with **ROOT = the law instance**, not the country. Inside the on_action effect, `owner` resolves to the country and `type = law_type:law_X` matches the law itself by type:
+
+```
+on_law_activated = {
+    on_actions = {
+        my_law_cascade
+    }
+}
+
+my_law_cascade = {
+    effect = {
+        if = {
+            limit = {
+                type = law_type:law_command_economy
+                owner = { NOT = { has_law = law_type:law_state_owned_banking } }
+            }
+            owner = { activate_law = law_type:law_state_owned_banking }
+        }
+    }
+}
+```
+
+Vanilla precedent: `00_ip4_victoria_scripted_triggers.txt` uses `scope:law.type = law_type:law_X` for the same comparison from a country scope (where the law is in a saved scope variable). Inside `on_law_activated` the law IS root, so `type = law_type:X` works directly.
+
+**Repo example:** `banking_law_cascade_on_law_activated` in `common/on_actions/extra_on_actions.txt` — auto-enacts `law_state_owned_banking` when `law_command_economy` activates.
+
+## `create_dynamic_country.on_created`: Save Parent Scope BEFORE the Call
+
+Inside `on_created`, the scope is the new country and **the original creator country is not directly accessible** — `owner` of any state passed in is now the new country (the cede happened as part of the create). To reference the parent (e.g. to apply path-dependent legacy modifiers, set initial diplomatic relations, or read parent variables), `save_scope_as = X` on the parent **before** the create_dynamic_country block:
+
+```
+form_decolonized_country = {
+    save_scope_as = new_country_capital
+    owner = { save_scope_as = decolonizing_parent }   # save BEFORE create
+
+    create_dynamic_country = {
+        ...
+        on_created = {
+            ...
+            scope:decolonizing_parent = {
+                change_relations = { country = ROOT value = -50 }
+            }
+        }
+    }
+}
+```
+
+**Repo example:** `apply_decolonization_path` + `form_decolonized_country` in `common/scripted_effects/decolonization.txt` — reads `scope:decolonizing_parent.var:colonial_garrison_months` etc. inside the new country's `on_created` to apply the right legacy modifier.
+
+## Path-Dependent JE Resolution Pattern
+
+To make a journal entry's `on_complete` / `on_fail` event branch by which policy the player leaned on, **count months active** in country variables in the JE's `on_monthly_pulse`, then dispatch in the resolution effect. Country vars survive across the entire JE lifetime (whereas `has_modifier` only sees the current frame).
+
+```
+on_monthly_pulse = {
+    effect = {
+        if = { limit = { NOT = { has_variable = colonial_invest_months } }
+               set_variable = { name = colonial_invest_months value = 0 } }
+        if = { limit = { has_modifier = colonial_development_investment_modifier }
+               change_variable = { name = colonial_invest_months add = 1 } }
+        # ... repeat per policy
+    }
+}
+
+on_complete = {
+    if = { limit = { var:colonial_garrison_months > 24
+                     var:colonial_garrison_months >= var:colonial_invest_months }
+           trigger_event = { id = decolonization_events.203 } }   # Iron Fist
+    else_if = { ... }                                              # Commonwealth, etc.
+    else = { trigger_event = { id = decolonization_events.200 } } # generic
+}
+```
+
+**Repo example:** `je_colonial_empire` in `common/journal_entries/je_colonial_empire.txt` dispatches across 5 resolution events (200/202/203/204/205) based on policy-time counters.
+
+## Per-State-Limit-1 Buildings: `NOT has_building` AI Clauses Are Noise
+
+If a building has `has_max_level = yes` and `levels_per_mesh = -1` (single-level, single-instance per state), then a clause like:
+
+```
+if = {
+    limit = { NOT = { has_building = building_X } }
+    add = N
+}
+```
+
+inside its `ai_value` **always fires when construction is being evaluated** — because the building can only be evaluated for construction when it doesn't already exist in the state. The clause becomes always-true noise rather than a real conditional.
+
+For per-state-limit-1 buildings, drop the `NOT has_building` clause; use law / JE / tech context to differentiate priority instead. For multi-level buildings (where additional levels can stack), `NOT has_building` IS meaningful (it distinguishes "build the first one" from "expand existing").
+
+## Concept Link Localization Syntax
+
+Two forms work for hyperlinking concepts in tooltip / modifier descriptions:
+
+| Form | When to use |
+|---|---|
+| `[concept_X]` | Plain hyperlink that displays the concept's own loc name (e.g. `[concept_authority]` displays "Authority"). |
+| `[Concept('concept_X', '$display_text$')]` | Hyperlink with a custom display text — useful when the surrounding sentence needs a different word (e.g. plural form, possessive). |
+
+**Repo example:** `country_legislative_override_capacity_add` in `te_modifiers_l_english.yml` uses the second form for the modifier name itself: `"[Concept('concept_legislative_override_capacity','Legislative Override Capacity')]"`.
+
+Vanilla concept names like `concept_interest_group`, `concept_authority`, `concept_country` are always available — no need to redefine. Only define new concepts in `common/game_concepts/` when introducing genuinely new gameplay terminology.
+
+## Defined-But-Unused Modifiers
+
+A static modifier definition in `common/static_modifiers/` is dead code unless it appears in at least one `add_modifier`, `add_static_modifier`, or `name = X` reference somewhere. The mod's `colonial_empire_solidified_modifier` was defined but never applied (the JE's monthly pulse only added `_under_pressure` and `_crumbling`) — easy to miss.
+
+**Audit:** `grep -rln "name = my_modifier_name" common/ events/` should produce at least one hit per defined static modifier. Zero hits means the modifier exists in name only.
+
+## Vanilla Ship Slot Mods Are Referenced by Parent Type
+
+Vanilla ship modifications like `ship_mod_destroyer_armor_light/medium/high`, `ship_mod_aircraft_carrier_*`, `ship_mod_super_dreadnought_*` are keyed by **parent ship type**, not by the modded ship type. When a mod ship reuses a parent's `modifications` block, it gets the parent's mods verbatim — including their thematic mismatch (a 2010-era arsenal ship using "super dreadnought guns") and their construction goods (which scale with the parent's economy, not the modern ship's).
+
+To give a mod ship its own slot mods:
+
+1. Create new mods in `common/ship_modifications/` keyed by the mod ship type — e.g. `ship_mod_arsenal_ship_armor_light`.
+2. Mirror the vanilla parent's modifier values to preserve combat balance (or retune deliberately).
+3. Scale construction goods proportionally to the modern ship's base cost — don't inherit vanilla's 19th-century goods totals.
+4. Update the ship's `modifications = { ... }` block to point at the new IDs.
+
+**Repo example:** `common/ship_modifications/extra_ship_modifications.txt` — 108 mods across 9 modern ships, with construction goods scaled 2×–4× over vanilla parent values.
