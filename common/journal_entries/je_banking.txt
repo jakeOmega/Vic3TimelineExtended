@@ -87,6 +87,7 @@
 
     should_be_pinned_by_default_uninvolved_or_context = yes
     can_revolution_inherit      = yes
+    should_update_on_player_command = yes
 
     immediate = {
         # Cycle state vars

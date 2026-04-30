@@ -103,4 +103,6 @@ je_strategic_reserve = {
 	}
 
 	weight = 500
+	should_be_pinned_by_default_uninvolved_or_context = yes
+	should_update_on_player_command = yes
 }

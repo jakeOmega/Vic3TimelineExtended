@@ -98,6 +98,7 @@ je_space_race_suborbital = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -206,6 +207,7 @@ je_space_race_orbital = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -319,6 +321,7 @@ je_space_race_moon_landing = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -429,6 +432,7 @@ je_space_race_probe = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -537,6 +541,7 @@ je_space_race_moon_base = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -647,6 +652,7 @@ je_space_race_mars_landing = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -748,6 +754,7 @@ je_space_race_interstellar_probe = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -814,6 +821,7 @@ je_space_race_interstellar_results = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
 
 # ===========================================
@@ -1042,4 +1050,5 @@ je_space_race_solar_colonization = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
+	should_update_on_player_command = yes
 }
