@@ -645,6 +645,16 @@ nuclear_tactical_strike = {
 	}
 }
 
+# Called from state scope with scope:curr_culture set (the persecuted minority).
+# Picks one foreign state (highest migration_attraction_script_value, owner accepts
+# the culture, not closed-borders) and moves every matching pop in this state there.
+# Posts the violence_against_minorities notification once per state per yearly pulse.
+#
+# Must be called ONCE per culture from state scope — NOT inside every_scope_pop.
+# Calling from pop scope re-picks the destination on every iteration, so the
+# notification announces a state different from where most pops actually arrive.
+# The outer any_state check guarantees ordered_state will save migration_target,
+# so no stale-scope handling is needed when called multiple times per pulse.
 trigger_mass_migration = {
 	if = {
 		limit = {
@@ -657,36 +667,35 @@ trigger_mass_migration = {
 				NOT = { owner = PREV.owner }
 			}
 		}
-		owner = {
-			ordered_state = {
-				limit = {
-					NOT = { owner = { has_law = law_type:law_closed_borders } }
-					state_cultural_acceptance = {
-						target = scope:curr_culture
-						value > owner.modifier:country_migration_restrictiveness_add
-					}
+		ordered_state = {
+			limit = {
+				NOT = { owner = { has_law = law_type:law_closed_borders } }
+				state_cultural_acceptance = {
+					target = scope:curr_culture
+					value > owner.modifier:country_migration_restrictiveness_add
 				}
-				order_by = migration_attraction_script_value
-				position = 0
-
-				save_scope_as = migration_target
+				NOT = { owner = PREV.owner }
 			}
-		}
-	
+			order_by = migration_attraction_script_value
+			position = 0
 
-		move_partial_pop = {
-			state = scope:migration_target
-			population_ratio = $POP_RATIO$
+			save_scope_as = migration_target
 		}
 
-		state = {
-			if = {
-				limit = {
-					NOT = { has_variable = sent_message }
-				}
-				post_notification = violence_against_minorities
-				set_variable = sent_message
+		every_scope_pop = {
+			limit = { culture = scope:curr_culture }
+			move_partial_pop = {
+				state = scope:migration_target
+				population_ratio = $POP_RATIO$
 			}
+		}
+
+		if = {
+			limit = {
+				NOT = { has_variable = sent_message }
+			}
+			post_notification = violence_against_minorities
+			set_variable = sent_message
 		}
 	}
 }
@@ -1201,7 +1210,10 @@ population_transfer_effect = {
 								save_scope_as = destination_state
 							}
 						}
-						move_pop = scope:destination_state
+						if = {
+							limit = { exists = scope:destination_state }
+							move_pop = scope:destination_state
+						}
 					}
 				}
 			}
