@@ -432,6 +432,38 @@
 		}
 	}
 
+	# Activation-time previews of the authority-tier rewards that come into play
+	# as un_authority crosses thresholds in on_monthly_pulse. The effects below
+	# are descriptive — the engine tooltips them but does not run them.
+	event_outcome_activated_effect_desc = {
+		header = je_un_preview_membership_benefits_header
+		effect = {
+			custom_tooltip = je_un_preview_membership_benefits_tt
+			add_modifier = { name = un_membership_benefits_modifier }
+		}
+	}
+	event_outcome_activated_effect_desc = {
+		header = je_un_preview_high_authority_infamy_header
+		effect = {
+			custom_tooltip = je_un_preview_high_authority_infamy_tt
+			add_modifier = { name = un_high_authority_infamy_modifier }
+		}
+	}
+	event_outcome_activated_effect_desc = {
+		header = je_un_preview_npt_header
+		effect = {
+			custom_tooltip = je_un_preview_npt_tt
+			add_modifier = { name = un_npt_disarmament_modifier }
+		}
+	}
+	event_outcome_activated_effect_desc = {
+		header = je_un_preview_pariah_header
+		effect = {
+			custom_tooltip = je_un_preview_pariah_tt
+			add_modifier = { name = un_nonmember_pariah_modifier }
+		}
+	}
+
 	weight = 500
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
