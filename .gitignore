@@ -4,8 +4,11 @@ path_constants.py
 .github/
 *.exe
 /.vscode
-# docs/ is tracked; the only exception is the runtime-derived error log digest
+# docs/ is tracked; only runtime-derived dumps from auto-run generators are
+# excluded (regenerated on every server /reload, so they'd churn constantly).
 docs/error_log_digest.md
+docs/commented_vanilla_pms.txt
+docs/commented_vanilla_military_units.txt
 *.log
 *.log.*
 *.pid

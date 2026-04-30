@@ -94,3 +94,4 @@ The bar is: would the next Claude rediscover this from scratch? If yes, write it
 Workflow- and tooling-level lessons accrue here. Engine/scripting lessons go to `docs/scripting_best_practices.md` instead.
 
 - 2026-04-29: `debug.log` is the primary signal; `error.log` only surfaces a small subset (mostly script-value type errors). Always start with the canonical debug.log curl above. Source: `CLAUDE.md` § "Triage workflow for log issues".
+- 2026-04-29: `category=other` entries with `source=jomini_effect_impl.cpp:454` and a message body that's a plain English phrase (e.g. "Election Campaign Started", "Conservative Party Created", "Revolutionary Coalition Disbanded") are **intentional vanilla `debug_log = "..."` calls** in `common/on_actions/00_code_on_actions.txt`, not bugs. They dominate `mod_only=true` triage results during election cycles because the categorizer can't distinguish them from real errors. Recognize and skip; don't dig into vanilla source for them.
