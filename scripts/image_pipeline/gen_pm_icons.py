@@ -46,7 +46,8 @@ from PIL import Image, ImageFilter
 
 # ── paths ────────────────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
-OUTPUT_DIR = SCRIPT_DIR / "gfx" / "interface" / "icons" / "production_method_icons"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+OUTPUT_DIR = REPO_ROOT / "gfx" / "interface" / "icons" / "production_method_icons"
 
 # ── color presets (matched from vanilla icon analysis) ───────────────────
 # These are the *mid-tone* base colors.  The emboss pipeline generates
@@ -364,7 +365,7 @@ def main() -> None:
         for item in items:
             input_path = Path(item["input"])
             if not input_path.is_absolute():
-                input_path = SCRIPT_DIR / input_path
+                input_path = REPO_ROOT / input_path
             output_name = item["output"]
             color = parse_color(item.get("color", "gold"))
             size = item.get("size", 104)
@@ -378,7 +379,7 @@ def main() -> None:
         # Single icon mode
         input_path = Path(args.input)
         if not input_path.is_absolute():
-            input_path = SCRIPT_DIR / input_path
+            input_path = REPO_ROOT / input_path
         color = parse_color(args.color)
         outline = not args.no_outline
 

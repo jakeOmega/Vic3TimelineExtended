@@ -31,7 +31,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-MOD_ROOT = Path(__file__).resolve().parent
+SCRIPT_DIR = Path(__file__).resolve().parent
+MOD_ROOT = Path(__file__).resolve().parents[2]
 GEN_DIR = MOD_ROOT / "generated_images"
 GFX_DIR = MOD_ROOT / "gfx" / "event_pictures"
 EVENTS_DIR = MOD_ROOT / "events"
@@ -59,7 +60,7 @@ def phase_generate(images: dict, dry_run: bool = False) -> None:
     print(f"{'=' * 60}")
 
     GEN_DIR.mkdir(exist_ok=True)
-    gen_script = MOD_ROOT / "gen_image.py"
+    gen_script = SCRIPT_DIR / "gen_image.py"
 
     total = len(images)
     skipped = 0
@@ -118,7 +119,7 @@ def phase_convert(images: dict, dry_run: bool = False) -> None:
     print(f"{'=' * 60}")
 
     GFX_DIR.mkdir(parents=True, exist_ok=True)
-    convert_script = MOD_ROOT / "convert_event_image.py"
+    convert_script = SCRIPT_DIR / "convert_event_image.py"
 
     total = len(images)
     skipped = 0

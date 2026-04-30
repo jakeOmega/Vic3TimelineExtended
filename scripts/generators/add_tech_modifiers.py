@@ -8,7 +8,11 @@ when browsing the tech tree.
 
 import os
 import re
-from path_constants import mod_path
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from path_constants import mod_path  # noqa: E402
 
 # ============================================================================
 # CONFIGURATION: Maps each technology to its modifier(s) and what it gates

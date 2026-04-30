@@ -15,8 +15,11 @@ import os
 import re
 import sys
 from pathlib import Path
-from mod_state import ModState
-from path_constants import base_game_path, mod_path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from mod_state import ModState  # noqa: E402
+from path_constants import base_game_path, mod_path  # noqa: E402
 
 # Companies that already have unique buildings
 ALREADY_HAS_UNIQUE = {

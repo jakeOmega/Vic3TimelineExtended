@@ -356,7 +356,7 @@ def main():
 
     content = "\n".join(output_lines)
 
-    mod_root = os.path.dirname(os.path.abspath(__file__))
+    mod_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     out_path = os.path.join(mod_root, "common", "company_types", "extra_companies_vanilla_updates.txt")
 
     import codecs

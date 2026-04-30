@@ -8,8 +8,8 @@ Run: python gen_banking_events.py
 
 import os, sys
 
-# Path constants
-MOD = os.path.dirname(os.path.abspath(__file__))
+# Path constants — repo root is two levels above this script (scripts/generators/)
+MOD = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 EVENTS_FILE = os.path.join(MOD, "events", "banking_cycle_events.txt")
 MODIFIERS_FILE = os.path.join(MOD, "common", "static_modifiers", "extra_modifiers.txt")
 EFFECTS_FILE = os.path.join(MOD, "common", "scripted_effects", "banking_cycle_effects.txt")

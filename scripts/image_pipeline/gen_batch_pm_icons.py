@@ -29,6 +29,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from gen_pm_icons import (
@@ -59,7 +60,7 @@ PLACEHOLDER_SET = {"base1.dds", "base2.dds", "base3.dds", "base4.dds", "base5.dd
 # Pattern matching previously-generated wrong icons (cat_{shape}_t{tier}.dds)
 CAT_REGEN_PATTERN = re.compile(r"cat_\w+_[tp]\d+\.dds")
 
-PM_DIR = SCRIPT_DIR / "common" / "production_methods"
+PM_DIR = REPO_ROOT / "common" / "production_methods"
 
 
 # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

@@ -30,6 +30,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from gen_pm_icons import (
@@ -41,8 +42,8 @@ from gen_pm_icons import (
 )
 
 # ── paths ────────────────────────────────────────────────────────────────
-OUTPUT_DIR = SCRIPT_DIR / "gfx" / "interface" / "icons" / "law_icons"
-LAW_DIR = SCRIPT_DIR / "common" / "laws"
+OUTPUT_DIR = REPO_ROOT / "gfx" / "interface" / "icons" / "law_icons"
+LAW_DIR = REPO_ROOT / "common" / "laws"
 ICON_SIZE = 256  # vanilla law icons are 256×256 or 302×302; 256 is the newer standard.
 
 # ── silhouette canvas ────────────────────────────────────────────────────

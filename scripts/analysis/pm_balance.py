@@ -15,9 +15,12 @@ Functions are importable:
 import argparse
 import os
 import sys
+from pathlib import Path
 from typing import List, Tuple
 
-from path_constants import base_game_path, mod_path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from path_constants import base_game_path, mod_path  # noqa: E402
 
 
 # ── Goods Parsing ─────────────────────────────────────────────────────────────

@@ -87,7 +87,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-MOD_ROOT = Path(__file__).resolve().parent
+MOD_ROOT = Path(__file__).resolve().parents[2]
 EVENTS_DIR = MOD_ROOT / "events"
 LOC_FILE = MOD_ROOT / "localization" / "english" / "te_events_l_english.yml"
 LETTERS = "abcdefghijklmnopqrstuvwxyz"

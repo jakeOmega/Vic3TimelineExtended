@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 
-from paradox_file_parser import ParadoxFileParser
-from path_constants import mod_path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from paradox_file_parser import ParadoxFileParser  # noqa: E402
+from path_constants import mod_path  # noqa: E402
 
 
 BUILDINGS_PATH = Path(mod_path) / "common" / "buildings" / "company_buildings.txt"
