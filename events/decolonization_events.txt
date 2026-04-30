@@ -2898,3 +2898,373 @@ decolonization_events.201 = {
 		}
 	}
 }
+
+# ============================================================================
+# Path-dependent resolution events (202–205)
+# Triggered by je_colonial_empire on_complete / on_fail based on which policy
+# the empire spent the most months under (tracked in country variables).
+# ============================================================================
+
+# Event 202: The Commonwealth Path — invest-dominant success
+decolonization_events.202 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.202.t
+	desc = decolonization_events.202.d
+	flavor = decolonization_events.202.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.202.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Permanent solidified modifier with a Commonwealth-style cultural pull bonus
+		add_modifier = {
+			name = colonial_empire_solidified_modifier
+			days = -1
+		}
+		add_modifier = {
+			name = commonwealth_path_modifier
+			days = -1
+		}
+		# Grant homeland to colonial states with high acceptance
+		every_scope_state = {
+			limit = {
+				NOT = { is_homeland_of_country_cultures = ROOT }
+				state_population >= 100000
+				is_overseas_from_capital = yes
+				NOT = {
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_4
+					}
+				}
+			}
+			state_region = {
+				save_scope_as = integration_state_region
+				ROOT = {
+					every_primary_culture = {
+						save_scope_as = current_culture
+						scope:integration_state_region = {
+							add_homeland = scope:current_culture
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Event 203: The Iron Fist — garrison-dominant success
+decolonization_events.203 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.203.t
+	desc = decolonization_events.203.d
+	flavor = decolonization_events.203.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.203.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Solidified, but with infamy and ongoing radicalism — empire by force
+		add_modifier = {
+			name = colonial_empire_solidified_modifier
+			days = -1
+		}
+		add_modifier = {
+			name = iron_fist_path_modifier
+			days = -1
+		}
+		add_infamy = 25
+	}
+}
+
+# Event 204: Negotiated Withdrawal — invest+assimilate-dominant failure
+decolonization_events.204 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.204.t
+	desc = decolonization_events.204.d
+	flavor = decolonization_events.204.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.204.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Same liquidation as event 201, but no infamy and a softer pull —
+		# successor states retain ties.
+		custom_tooltip = {
+			text = je_colonial_empire_negotiated_tt
+			every_scope_state = {
+				limit = {
+					NOT = { is_homeland_of_country_cultures = ROOT }
+					is_overseas_from_capital = yes
+				}
+				set_variable = decolonization_marker
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			random_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+			}
+			every_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				remove_variable = decolonization_marker
+			}
+		}
+		add_modifier = {
+			name = negotiated_withdrawal_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 205: Quiet Assimilation — assimilate-dominant success
+decolonization_events.205 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.205.t
+	desc = decolonization_events.205.d
+	flavor = decolonization_events.205.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.205.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Strongest acceptance / homeland integration outcome
+		add_modifier = {
+			name = colonial_empire_solidified_modifier
+			days = -1
+		}
+		add_modifier = {
+			name = quiet_assimilation_path_modifier
+			days = -1
+		}
+		# Grant homeland aggressively — colonial states with population >= 75k
+		# (lower than event 200's 100k) get integrated. The path was about
+		# making them part of the metropole.
+		every_scope_state = {
+			limit = {
+				NOT = { is_homeland_of_country_cultures = ROOT }
+				state_population >= 75000
+				is_overseas_from_capital = yes
+			}
+			state_region = {
+				save_scope_as = integration_state_region
+				ROOT = {
+					every_primary_culture = {
+						save_scope_as = current_culture
+						scope:integration_state_region = {
+							add_homeland = scope:current_culture
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# Metropole-side pressure events (50–52)
+# These drain the colonial stability bar from DOMESTIC conditions in the
+# imperial core, not from the colonies themselves. They model the historical
+# reality that decolonization was driven as much by metropole exhaustion
+# (treasury, conscription, intelligentsia opposition) as by colonial unrest.
+# ============================================================================
+
+# Event 50: The Treasury Says No — fires when the empire is bleeding money
+decolonization_events.50 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_money.dds"
+
+	title = decolonization_events.50.t
+	desc = decolonization_events.50.d
+	flavor = decolonization_events.50.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		any_scope_state = { is_overseas_colonial_state = yes }
+		scaled_debt > 0.4
+	}
+
+	# Option A: Hold the line — keep funding the empire, but stability still suffers
+	option = {
+		name = decolonization_events.50.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_powerful = yes } }
+				add = 3
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 90 }
+		add_modifier = { name = treasury_strain_persistence_modifier days = normal_modifier_time is_decaying = yes }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Cut colonial spending — recover money but stability craters
+	option = {
+		name = decolonization_events.50.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { scaled_debt > 0.7 }
+				add = 5
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 240 }
+		add_treasury = 50000
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 51: Conscription Crisis — fires after long wars where the army's been bled
+decolonization_events.51 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.51.t
+	desc = decolonization_events.51.d
+	flavor = decolonization_events.51.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		any_scope_state = { is_overseas_colonial_state = yes }
+		any_war = {
+			is_war_participant = root
+		}
+	}
+
+	# Option A: Tighten conscription — bar suffers; army holds together
+	option = {
+		name = decolonization_events.51.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		add_modifier = { name = colonial_stability_negative_event days = 150 }
+		add_radicals = { value = 0.05 }
+	}
+
+	# Option B: Demobilize colonial garrisons — bar suffers more; war effort weakens
+	option = {
+		name = decolonization_events.51.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { leader = { has_ideology = ideology:ideology_anti_colonialist } } }
+				add = 4
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 240 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 52: The Intelligentsia Petition — fires when domestic intelligentsia is anti-colonialist
+decolonization_events.52 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.52.t
+	desc = decolonization_events.52.d
+	flavor = decolonization_events.52.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		any_scope_state = { is_overseas_colonial_state = yes }
+		ig:ig_intelligentsia ?= {
+			leader = { has_ideology = ideology:ideology_anti_colonialist }
+		}
+	}
+
+	# Option A: Ignore the petition — bar drains significantly; intelligentsia resents
+	option = {
+		name = decolonization_events.52.a
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_powerful = yes } }
+				add = 3
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 240 }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Convene a public response — small bar drain; intelligentsia is mollified
+	option = {
+		name = decolonization_events.52.b
+		default_option = yes
+		ai_chance = { base = 3 }
+		add_modifier = { name = colonial_stability_negative_event days = 90 }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+}

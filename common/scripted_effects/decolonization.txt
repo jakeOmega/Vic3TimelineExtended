@@ -1,19 +1,86 @@
-﻿form_decolonized_country = { # scope is capital state of new country, must be a homeland of something
+# Path-dependent legacy applied to a newly decolonized country.
+# Scope: the new country (called from create_dynamic_country.on_created).
+# Reads the decolonizing parent's policy-time variables to decide which
+# legacy modifier and starting diplomatic relations to apply.
+apply_decolonization_path = {
+	if = {
+		limit = {
+			exists = scope:decolonizing_parent
+		}
+		# Iron Fist legacy — parent leaned hardest on garrison
+		if = {
+			limit = {
+				scope:decolonizing_parent = {
+					var:colonial_garrison_months >= var:colonial_invest_months
+					var:colonial_garrison_months >= var:colonial_assimilate_months
+					var:colonial_garrison_months > 24
+				}
+			}
+			add_modifier = {
+				name = bloody_decolonization_legacy_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			scope:decolonizing_parent = {
+				change_relations = { country = ROOT value = -50 }
+			}
+		}
+		# Commonwealth legacy — parent leaned hardest on investment
+		else_if = {
+			limit = {
+				scope:decolonizing_parent = {
+					var:colonial_invest_months > var:colonial_garrison_months
+					var:colonial_invest_months >= var:colonial_assimilate_months
+					var:colonial_invest_months > 24
+				}
+			}
+			add_modifier = {
+				name = commonwealth_legacy_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			scope:decolonizing_parent = {
+				change_relations = { country = ROOT value = 30 }
+			}
+		}
+		# Quiet Assimilation legacy — parent leaned hardest on assimilation
+		else_if = {
+			limit = {
+				scope:decolonizing_parent = {
+					var:colonial_assimilate_months > var:colonial_garrison_months
+					var:colonial_assimilate_months > var:colonial_invest_months
+					var:colonial_assimilate_months > 24
+				}
+			}
+			add_modifier = {
+				name = assimilation_legacy_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			scope:decolonizing_parent = {
+				change_relations = { country = ROOT value = 15 }
+			}
+		}
+	}
+}
+
+form_decolonized_country = { # scope is capital state of new country, must be a homeland of something
 	save_scope_as = new_country_capital
+	owner = { save_scope_as = decolonizing_parent }
 	random_scope_culture = {
 		limit = {
 			has_homeland = scope:new_country_capital
 		}
 		save_scope_as = new_country_culture
 	}
-	
+
 	random_list = {
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -24,16 +91,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -44,16 +112,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -64,16 +133,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -84,16 +154,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -104,16 +175,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -124,16 +196,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -144,16 +217,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -164,16 +238,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -184,16 +259,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -204,16 +280,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -224,16 +301,17 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
 		}
 		1 = {
-			create_dynamic_country = {  
+			create_dynamic_country = {
 				origin = owner
-				tier = principality  
-				culture = scope:new_country_culture  
-				religion = owner.religion 
+				tier = principality
+				culture = scope:new_country_culture
+				religion = owner.religion
 				capital = THIS
 				cede_state_trigger = {
 					has_variable = decolonization_marker
@@ -244,6 +322,7 @@
 					every_scope_state = {
 						remove_variable = decolonization_marker
 					}
+					apply_decolonization_path = yes
 					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}

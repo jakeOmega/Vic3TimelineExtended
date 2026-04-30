@@ -349,3 +349,99 @@ ce_planned_decolonization = {
 		}
 	}
 }
+
+# ------ Round Table Conference ------
+# A negotiated transition for ONE colony at a time. Costs authority + prestige
+# up front, but produces a high-acceptance independent country with the
+# Commonwealth Legacy modifier — friendly diplomatic relations, technological
+# cooperation, and no infamy hit. Distinct from "Release Colonial Territory"
+# (which is a unilateral grant) and "Planned Full Decolonization" (which
+# liquidates the entire empire). The Round Table is for the colony you want
+# to leave on good terms while keeping the rest.
+ce_round_table_conference = {
+	name = "CE_ROUND_TABLE_CONFERENCE"
+	desc = "CE_ROUND_TABLE_CONFERENCE_DESC"
+
+	visible = {
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+			NOT = {
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_2
+				}
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				colonial_high_acceptance_count >= 1
+				colonial_gp_condemners_count >= 2
+			}
+			add = 30
+		}
+		# Intelligentsia leadership pushes for negotiated transitions
+		if = {
+			limit = {
+				ig:ig_intelligentsia ?= {
+					leader = { has_ideology = ideology:ideology_anti_colonialist }
+				}
+			}
+			add = 20
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CE_ROUND_TABLE_REQUIRES_ACCEPTABLE_COLONY
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+				NOT = {
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_2
+					}
+				}
+			}
+		}
+		authority > 200
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CE_ROUND_TABLE_CONFERENCE_DESC"
+			# Pick the highest-acceptance colonial state — the diplomatic
+			# transition has to land on a colony where there's a real
+			# negotiating partner, not on a tinderbox.
+			ordered_scope_state = {
+				limit = {
+					is_overseas_colonial_state = yes
+					NOT = {
+						any_scope_pop = {
+							pop_acceptance < acceptance_status_2
+						}
+					}
+				}
+				order_by = state_population
+				max = 1
+				set_variable = decolonization_marker
+				form_decolonized_country = yes
+			}
+		}
+		add_authority = -200
+		# Bar push: a negotiated transition reduces ongoing pressure
+		add_modifier = {
+			name = colonial_stability_positive_event
+			months = 12
+		}
+		add_modifier = {
+			name = peaceful_decolonization_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		# Intelligentsia loves it; landowners hate it
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}

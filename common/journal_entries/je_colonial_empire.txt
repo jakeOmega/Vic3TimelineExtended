@@ -27,6 +27,7 @@
 	scripted_button = ce_cultural_assimilation
 	scripted_button = ce_remove_cultural_assimilation
 	scripted_button = ce_release_colonial_territory
+	scripted_button = ce_round_table_conference
 	scripted_button = ce_planned_decolonization
 
 	immediate = {
@@ -98,8 +99,33 @@
 		}
 	}
 
+	# Path-dependent resolution: which policy did the empire lean on?
+	# Months tracked in vars colonial_invest_months / colonial_garrison_months /
+	# colonial_assimilate_months by the monthly pulse below. The dispatch
+	# picks the dominant path and triggers a flavor-matched event.
 	on_complete = {
-		trigger_event = { id = decolonization_events.200 }
+		if = {
+			limit = {
+				var:colonial_garrison_months >= var:colonial_invest_months
+				var:colonial_garrison_months >= var:colonial_assimilate_months
+				var:colonial_garrison_months > 24
+			}
+			trigger_event = { id = decolonization_events.203 }   # Iron Fist
+		}
+		else_if = {
+			limit = {
+				var:colonial_invest_months >= var:colonial_assimilate_months
+				var:colonial_invest_months > 24
+			}
+			trigger_event = { id = decolonization_events.202 }   # Commonwealth Path
+		}
+		else_if = {
+			limit = { var:colonial_assimilate_months > 24 }
+			trigger_event = { id = decolonization_events.205 }   # Quiet Assimilation
+		}
+		else = {
+			trigger_event = { id = decolonization_events.200 }   # generic Empire Endures
+		}
 	}
 
 	fail = {
@@ -108,13 +134,61 @@
 		}
 	}
 
+	# Path-dependent failure: did the empire bleed out (garrison-only) or
+	# negotiate its way out (invest + assimilate)?
 	on_fail = {
-		trigger_event = { id = decolonization_events.201 }
+		if = {
+			limit = {
+				NAND = {
+					var:colonial_garrison_months >= var:colonial_invest_months
+					var:colonial_garrison_months >= var:colonial_assimilate_months
+				}
+				OR = {
+					var:colonial_invest_months > 24
+					var:colonial_assimilate_months > 24
+				}
+			}
+			trigger_event = { id = decolonization_events.204 }   # Negotiated Withdrawal
+		}
+		else = {
+			trigger_event = { id = decolonization_events.201 }   # The Empire Crumbles (bloody)
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
-			# Phase modifiers based on current bar value
+			# --- Path-dependence tracking ---
+			# Count months each policy is active. Read at on_complete / on_fail
+			# to choose the appropriate resolution event.
+			if = {
+				limit = { NOT = { has_variable = colonial_invest_months } }
+				set_variable = { name = colonial_invest_months value = 0 }
+			}
+			if = {
+				limit = { NOT = { has_variable = colonial_garrison_months } }
+				set_variable = { name = colonial_garrison_months value = 0 }
+			}
+			if = {
+				limit = { NOT = { has_variable = colonial_assimilate_months } }
+				set_variable = { name = colonial_assimilate_months value = 0 }
+			}
+			if = {
+				limit = { has_modifier = colonial_development_investment_modifier }
+				change_variable = { name = colonial_invest_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = colonial_military_garrison_modifier }
+				change_variable = { name = colonial_garrison_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = colonial_cultural_assimilation_modifier }
+				change_variable = { name = colonial_assimilate_months add = 1 }
+			}
+
+			# Phase modifiers based on current bar value (five status bands)
+			je:je_colonial_empire = { remove_modifier = colonial_empire_solidified_modifier }
+			je:je_colonial_empire = { remove_modifier = colonial_empire_stable_modifier }
+			je:je_colonial_empire = { remove_modifier = colonial_empire_strained_modifier }
 			je:je_colonial_empire = { remove_modifier = colonial_empire_under_pressure_modifier }
 			je:je_colonial_empire = { remove_modifier = colonial_empire_crumbling_modifier }
 
@@ -129,6 +203,21 @@
 					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 40 }
 				}
 				je:je_colonial_empire = { add_modifier = { name = colonial_empire_under_pressure_modifier } }
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 65 }
+				}
+				je:je_colonial_empire = { add_modifier = { name = colonial_empire_strained_modifier } }
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 90 }
+				}
+				je:je_colonial_empire = { add_modifier = { name = colonial_empire_stable_modifier } }
+			}
+			else = {
+				je:je_colonial_empire = { add_modifier = { name = colonial_empire_solidified_modifier } }
 			}
 
 			# Apply radicalism to civil rights movement specifically (not all movements)

@@ -1595,26 +1595,63 @@ foreign_property_protected_modifier = {
 # COLONIAL EMPIRE JOURNAL ENTRY MODIFIERS
 # ============================================================================
 
-# Toggle policies (permanent while active, applied via scripted buttons)
+# Toggle policies (permanent while active, applied via scripted buttons).
+# Each is the right pick in different circumstances:
+#   - Invest: slow bar push, but pays for itself in economic terms. Right when
+#     stability is OK and you want to grow the empire long-term.
+#   - Garrison: fast bar push, but burns prestige and projection. Right when
+#     you need to stop bleeding now and can afford the prestige hit.
+#   - Assimilate: medium bar push, gains acceptance, but radicalizes pops
+#     opposed to assimilation. Risk/reward: the more you push, the more the
+#     resistance grows.
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_bureaucracy_mult = -0.05
 	country_prestige_add = -25
+	# Side benefit: investment IS infrastructure
+	state_migration_pull_mult = 0.05
+	building_group_bg_extraction_throughput_add = 0.02
 }
 
 colonial_military_garrison_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_prestige_from_army_power_projection_mult = -0.05
+	country_prestige_from_army_power_projection_mult = -0.10
 	country_bureaucracy_mult = -0.03
+	# Larger prestige hit reflects the international optics of armed garrison rule
+	country_prestige_add = -50
 }
 
 colonial_cultural_assimilation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_bureaucracy_mult = -0.04
 	country_acceptance_not_homeland_add = 10
+	# Risk: the policy itself radicalizes opposition
+	state_radicals_from_political_movements_mult = 0.10
 }
 
-# Phase modifiers (applied automatically by JE pulse based on stability level)
+# Phase modifiers (applied automatically by JE pulse based on stability level).
+# Five tiers, mapped to the status_desc bands:
+#   >=90  Solidified    : strong positive
+#   65-89 Stable        : mild positive
+#   40-64 Strained      : mild negative (note name kept for compatibility)
+#   20-39 Crumbling     : strong negative — uses _under_pressure_modifier
+#   <20   Collapsing    : worst negative — uses _crumbling_modifier
+# (The legacy modifier names _under_pressure / _crumbling don't match the
+# status labels exactly; renaming would break existing saves, so they stay.)
+
+colonial_empire_stable_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 75
+	country_acceptance_not_homeland_add = 5
+	state_loyalists_from_political_movements_mult = 0.10
+}
+
+colonial_empire_strained_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_add = -25
+	country_bureaucracy_mult = -0.01
+}
+
 colonial_empire_under_pressure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -50
@@ -1628,11 +1665,68 @@ colonial_empire_crumbling_modifier = {
 	state_radicals_from_political_movements_mult = 0.20
 }
 
+# Metropole-side pressure: persistent debt strain after the Treasury Says No event
+treasury_strain_persistence_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_loan_interest_rate_add = 0.005
+	country_bureaucracy_mult = -0.02
+}
+
+# Path-dependent resolution flavor modifiers (events 202–205)
+# Applied alongside colonial_empire_solidified_modifier for path-specific flavor.
+commonwealth_path_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.05
+	country_diplomatic_reputation_add = 5
+	country_acceptance_not_homeland_add = 5
+}
+
+iron_fist_path_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_diplomatic_reputation_add = -10
+	state_radicals_from_political_movements_mult = 0.10
+	country_authority_mult = 0.05
+}
+
+quiet_assimilation_path_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_acceptance_not_homeland_add = 10
+	state_pop_qualifications_mult = 0.05
+}
+
+negotiated_withdrawal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 5
+	country_cultural_pull_mult = 0.03
+}
+
+# Legacy modifiers applied to newly decolonized countries based on the
+# parent's path (set in apply_decolonization_path).
+bloody_decolonization_legacy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+	state_radicals_from_political_movements_mult = 0.10
+	country_prestige_add = 25
+}
+
+commonwealth_legacy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_spread_mult = 0.05
+	country_diplomatic_reputation_add = 5
+}
+
+assimilation_legacy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_acceptance_state_religion_add = 5
+	state_pop_qualifications_mult = 0.03
+}
+
 # End-state modifiers
 colonial_empire_solidified_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 200
 	country_acceptance_not_homeland_add = 15
+	state_loyalists_from_political_movements_mult = 0.20
 }
 
 colonial_empire_collapsed_modifier = {
