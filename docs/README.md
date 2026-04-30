@@ -44,6 +44,7 @@ This folder contains reference documents for Victoria 3 modding and this mod's c
 
 | File | Contents | Read When... |
 |------|----------|--------------|
+| `vanilla_economy_reference.md` | Concept primer on vanilla Vic3 economy (pops, ownership/IP, markets/MAPI, companies, power blocs, naval economy) | Need shared context on how the base game economy works before touching mod content that hooks into it |
 | `treaty_articles_reference.md` | Treaty article engine constraints + all implemented article designs | Implementing new treaty articles |
 | `wonder_buildings_reference.md` | Two-phase construction pattern + all implemented wonder designs | Implementing new wonder/megastructure buildings |
 | `vanilla_company_buildings_reference.md` | System architecture + all implemented vanilla company buildings | Implementing company buildings for vanilla companies |

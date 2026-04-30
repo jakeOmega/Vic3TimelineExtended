@@ -113,6 +113,16 @@ For each entry:
 2. If the file is a vanilla path that doesn't exist in mod, it's a vanilla bug. Cross-reference `docs/vanilla_known_bugs.md` and add new entries as discovered.
 3. If the file is mod-owned (or mod-auto-generated), trace the source.
 
+## 8b. Refresh `docs/vanilla_economy_reference.md`
+
+That file captures vanilla economic concepts (pops/IP, markets/MAPI, companies, power blocs, naval economy) for AI-agent context. It carries a "Last verified against vanilla: X" banner. After the migration:
+
+- Update the banner to the new vanilla version.
+- Skim the doc against this patch's release notes and the engine-doc diff (step 3). Edit any section where 1.x semantics changed — new resource types, removed mechanics, restructured ownership, new principle families, ship-designer changes, etc.
+- Don't fork a "1.14 economy" copy. Overwrite. Old versions live in git history.
+
+If nothing changed, just bump the banner — that's the signal to future agents that the doc has been actively re-validated, not just stale.
+
 ## 9. Validator regression bar
 
 Final validator run:
