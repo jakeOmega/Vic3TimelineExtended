@@ -1007,7 +1007,35 @@ REPLACE_OR_CREATE:building_national_park = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 
 	ai_value = {
-		value = 5000
+		value = 1000
+		# Strongly preferred under environmental governance
+		if = {
+			limit = { owner = { has_law = law_type:law_ministry_of_the_environment } }
+			add = 4000
+		}
+		# Strongly preferred when this state is heavily polluted
+		if = {
+			limit = { state_region = { pollution_amount > 150 } }
+			add = 4000
+		}
+		# Modest pull when polluted at all
+		if = {
+			limit = {
+				state_region = { pollution_amount > 50 }
+				NOT = { state_region = { pollution_amount > 150 } }
+			}
+			add = 2000
+		}
+		# Tourism synergy: parks drive tourism revenue where the tourism industry exists
+		if = {
+			limit = { has_building = building_tourism_industry }
+			add = 1500
+		}
+		# Wartime countries deprioritize parks
+		if = {
+			limit = { owner = { is_at_war = yes } }
+			add = -2000
+		}
 	}
 }
 
@@ -1167,7 +1195,27 @@ building_state_youth_centers = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 
 	ai_value = {
-		value = 5000
+		value = 1000
+		if = {
+			limit = { owner = { has_law = law_type:law_communal_child_rearing } }
+			add = 8000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_state_eugenics_program } }
+			add = 6000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_mandatory_augmentation } }
+			add = 5000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_state_sponsored_family_planning } }
+			add = 3000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_pro_natalist_subsidies } }
+			add = 1000
+		}
 	}
 }
 

@@ -48,7 +48,32 @@ REPLACE:building_construction_sector = {
 		pmg_maintenance
 	}
 	
-	ai_value = 3000 # Construction sector should generally be preferred over other equal-priority spending items
+	# Construction sector should generally be preferred over other equal-priority spending items.
+	# Conditional bumps reflect: a long queue = need more capacity; war / banking stress
+	# = don't pile on more construction debt right now.
+	ai_value = {
+		value = 2500
+		# Queue is long: more construction capacity is the right answer
+		if = {
+			limit = { owner = { construction_queue_num_queued_government_levels > 30 } }
+			add = 2000
+		}
+		# Queue is empty: don't keep stockpiling construction
+		if = {
+			limit = { owner = { construction_queue_num_queued_government_levels < 5 } }
+			add = -1500
+		}
+		# At war: deprioritize construction expansion (focus existing capacity on war effort)
+		if = {
+			limit = { owner = { is_at_war = yes } }
+			add = -500
+		}
+		# Active banking-cycle stress: don't add construction during a financial crunch
+		if = {
+			limit = { owner = { var:bubble_pressure >= 60 } }
+			add = -500
+		}
+	}
 	
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
 }

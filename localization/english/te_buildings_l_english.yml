@@ -428,6 +428,8 @@
  building_stf_fiume_torpedo_works:0 "STF Fiume Torpedo Works"
  building_strategic_reserve_hub:0 "Strategic Reserve Hub"
  building_strategic_reserve_hub_desc:0 "A national stockpile facility for grain, ammunition, and oil. Each level provides +500 capacity per reserve good and up to 10 goods per level each week of reserve flow, which can be fine-tuned separately for each good in the Strategic Reserve journal entry."
+ building_strategic_reserve_hub_throughput_add:0 "Strategic Reserve Throughput"
+ building_strategic_reserve_hub_throughput_add_desc:0 "Scales the hub's maximum reserve flow capacity."
  building_strategic_reserve_silo:0 "Strategic Reserve Silo"
  building_strategic_reserve_silo_desc:0 "A distributed storage depot that adds +200 capacity per level for each reserve good. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile."
  building_stt_haskoy_shipyard:0 "STT Hasköy Shipyard"
