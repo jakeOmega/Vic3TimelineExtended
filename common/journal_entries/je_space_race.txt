@@ -1000,6 +1000,20 @@ je_space_race_interstellar_results = {
 		}
 	}
 
+	# When the probe finishes its 132-month transit, what it sends back is
+	# random across 30+ flavor sub-events (space_race_events.601–630) covering
+	# dead worlds, astrophysical wonders, exotic phenomena, and rare contact
+	# scenarios. No single reward modifier — preview narrates the uncertainty.
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_interstellar_results_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_interstellar_results_outcome_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_interstellar_results_completion_header
+	custom_on_completion_header = je_space_race_interstellar_results_on_completion_header
+
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
