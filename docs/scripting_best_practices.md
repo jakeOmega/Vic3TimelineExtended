@@ -52,6 +52,8 @@ For concrete examples and remaining candidate refactors in this repo, see `docs/
 
 When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemon_movement_pressure`), callers must pass **literal month counts** (e.g. `MONTHS = 60` for 5 years, `MONTHS = 30` for 2.5 years), NOT script value names.
 
+**Both `days = N` and `months = N` are valid `add_modifier` / `cooldown` syntax** when N is a literal integer (vanilla uses `months = 12`, `months = 120`, etc. — see `paris_commune_pulse_events.txt`, `alaska_events.txt`, `canal_events.txt`). The bug pattern this section warns about is *only* mixing the `*_modifier_time` script values (defined in days) with the `months =` keyword. A code review that flags every `months = N` as a bug will produce false positives — verify against vanilla precedent before "fixing".
+
 ## Modifier Design: Don't Borrow Modifiers from Other Systems
 
 Each mod system should define its own modifiers. Do NOT reuse modifiers from another system (e.g. using `intelligence_capacity_defense` from covert warfare in a cultural hegemony event). Cross-system modifier sharing:
@@ -863,6 +865,17 @@ Key pattern: `remove_modifier` + `add_modifier` with `multiplier` calculated fro
 ## Character Trait `replace` Block
 
 When adding a new tier to a mutually exclusive trait group (e.g., adding "terrible" tier to the ruler_poor/average/skilled/exceptional series), EVERY existing trait's `replace = { ... }` block must be updated to include the new trait. Otherwise two traits from the same group can coexist on a character. The `replace` list causes the engine to automatically remove any listed trait when the new one is added.
+
+## `character_*` Modifiers in Country Scope (Tech, Laws, etc.)
+
+**Status (post-1.13):** `character_*` modifiers in country-scope `modifier = { ... }` blocks (techs, laws, INJECTed laws, power bloc `member_modifier` / `leader_modifier`, country-scope static modifiers) **work** — the engine cascades them to every character belonging to the country. Verified empirically with `character_popularity_add` from a tech.
+
+Earlier in mod development this was treated as a silent no-op — that's why some systems ended up with country-level workarounds (e.g. country-scope `country_authority_add` instead of per-character `character_popularity_add`, or only applying char effects via static modifiers attached in `every_scope_character`). Those workarounds may now be redundant.
+
+**Caveats / verification protocol:**
+- Not every `character_*` modifier may be wired in country scope yet. When introducing a new one, do a quick in-game test the first time: apply the tech/law to a country, open a character panel, confirm the modifier shows up in the character's tooltip stack.
+- `/validate/engine-coverage` can flag unknown names but cannot tell you a known-name modifier is silently dropped at the cascade boundary. The empirical test is the only sure check.
+- Where the design needs the modifier scoped to a *specific* character (only the ruler, only commanders, only heirs), keep using `every_scope_character = { limit = { ... } add_modifier = { ... } }` with a static modifier — the country-scope cascade applies to every character indiscriminately.
 
 ## Hidden Variable Design Pattern
 

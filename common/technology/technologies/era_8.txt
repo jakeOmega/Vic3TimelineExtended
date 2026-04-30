@@ -56,8 +56,10 @@ predictive_logistics = {
 		country_st_res_oil_decay_add = -0.001
 		country_general_rank_impact_mult = 0.5
 		country_admiral_rank_impact_mult = 0.5
+		character_advancement_speed_mult = 0.25
+		character_battle_condition_logistics_secured_mult = 0.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -478,6 +480,8 @@ infrared_night_vision = {
 		country_institution_ministry_of_war_max_investment_add = 1
 		ship_detection_mult = 0.15
 		ship_visibility_mult = -0.10
+		character_battle_condition_camouflaged_mult = 0.5
+		character_battle_condition_lost_mult = -0.5
 	}
 	
 	ai_weight = {

@@ -632,6 +632,7 @@ sonar = {
 		country_admiral_rank_impact_mult = 0.25
 		country_sonar_pb_principles_bool = yes
 		country_sonar_pb_principles_bool = yes
+		character_interception_add = 0.5
 	}
 	
 	unlocking_technologies = {	
@@ -651,9 +652,10 @@ naval_fire_control_systems = {
 	modifier = {
 		ship_accuracy_mult = 0.10
 		ship_critical_hit_chance_add = 0.05
+		character_blockade_mult = 0.10
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		battlefleet_tactics
 	}
 	

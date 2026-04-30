@@ -3729,6 +3729,7 @@ principle_navy_4 = {
 		country_admiral_rank_impact_mult = 0.25
 		character_convoy_protection_mult = 0.25
 		character_convoy_raiding_mult = 0.25
+		character_naval_mission_area_add = 1
 		country_prestige_from_navy_power_projection_mult = 0.1
 	}
 
@@ -3771,6 +3772,8 @@ principle_navy_5 = {
 		country_admiral_rank_impact_mult = 0.5
 		character_convoy_protection_mult = 0.5
 		character_convoy_raiding_mult = 0.5
+		character_naval_mission_area_add = 2
+		character_blockade_mult = 0.15
 		country_prestige_from_navy_power_projection_mult = 0.2
 		building_port_throughput_add = 0.25
 	}

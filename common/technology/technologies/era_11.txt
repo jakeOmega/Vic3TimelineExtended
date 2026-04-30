@@ -216,6 +216,7 @@ swarm_technology = {
 		country_admiral_rank_impact_mult = 1.5
 		ship_hull_damage_mult = 0.10
 		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.20
+		character_command_limit_mult = 0.10
 	}
 	
 	ai_weight = {
@@ -238,6 +239,7 @@ quantum_communications = {
 		country_weekly_innovation_max_add = 100
 		country_intelligence_capacity_add = 4
 		country_covert_operation_efficiency_mult = 0.15
+		character_coup_strength_mult = -0.05
 	}
 	
 	ai_weight = {
@@ -262,6 +264,7 @@ bioenhanced_soldiers = {
 		unit_army_defense_mult = 0.1
 		country_institution_ministry_of_war_max_investment_add = 1
 		state_building_barrack_max_level_add = 100
+		character_battle_condition_exhausted_mult = -0.5
 	}
 	
 	ai_weight = {
@@ -346,6 +349,7 @@ brain_computer_interfaces = {
 		country_institution_ministry_of_thought_control_max_investment_add = 2
 		country_intelligence_capacity_add = 2
 		country_covert_operation_efficiency_mult = 0.10
+		character_coup_strength_mult = -0.15
 	}
 	
 	unlocking_technologies = {	

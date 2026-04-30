@@ -3575,6 +3575,9 @@ law_littoral_defense = {
 		# Small-craft yards favored, blue-water officer prestige diminished
 		country_shopkeepers_pol_str_mult = 0.1
 		country_officers_pol_str_mult = -0.1
+
+		# Coastal flagships own home waters: blockade specialist admirals
+		character_blockade_mult = 0.15
 	}
 
 	on_activate = {}
@@ -3642,6 +3645,9 @@ law_auxiliary_fleet = {
 
 		# Shipping/industrial interests favored
 		interest_group_ig_industrialists_pol_str_mult = 0.1
+
+		# Sustained overseas operations need extended admiral patrol radii
+		character_naval_mission_area_add = 2
 	}
 
 	on_activate = {}

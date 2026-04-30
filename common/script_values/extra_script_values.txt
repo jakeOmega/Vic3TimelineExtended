@@ -1610,8 +1610,7 @@ sol_expectations_shift_clamped_value = {
 # compares to the rest of the world. Positive when world is richer than us
 # (expectations rise — our pops feel poor), negative when world is poorer
 # (expectations fall — our pops feel content). Scaled by literacy so only
-# educated populations carry the signal. Sensitivity coefficient 0.5 is a
-# placeholder; tune after playtest.
+# educated populations carry the signal.
 #
 # global_average_sol is defined in cultural_hegemony_script_values.txt as the
 # population-weighted world mean — reused here, no new aggregation needed.
@@ -1619,7 +1618,7 @@ sol_expectations_global_awareness_value = {
 	value = global_average_sol
 	subtract = average_sol
 	multiply = literacy_rate
-	multiply = 0.5
+	multiply = 0.2
 }
 
 # Per-class total shift values: clamped adaptive shift + class-specific offset

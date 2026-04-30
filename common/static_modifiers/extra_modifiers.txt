@@ -1686,6 +1686,7 @@ iron_fist_path_modifier = {
 	country_diplomatic_reputation_add = -10
 	state_radicals_from_political_movements_mult = 0.10
 	country_authority_mult = 0.05
+	character_coup_strength_mult = -0.10
 }
 
 quiet_assimilation_path_modifier = {
@@ -1698,6 +1699,7 @@ negotiated_withdrawal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_diplomatic_reputation_add = 5
 	country_cultural_pull_mult = 0.03
+	character_loyalty_add = 1
 }
 
 # Legacy modifiers applied to newly decolonized countries based on the
@@ -1707,18 +1709,21 @@ bloody_decolonization_legacy_modifier = {
 	country_authority_add = -50
 	state_radicals_from_political_movements_mult = 0.10
 	country_prestige_add = 25
+	character_loyalty_add = -2
 }
 
 commonwealth_legacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_tech_spread_mult = 0.05
 	country_diplomatic_reputation_add = 5
+	character_loyalty_add = 2
 }
 
 assimilation_legacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_acceptance_state_religion_add = 5
 	state_pop_qualifications_mult = 0.03
+	character_loyalty_add = 1
 }
 
 # End-state modifiers
@@ -4453,6 +4458,22 @@ feminism_movement_crushed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_add = -25
 	state_turmoil_effects_mult = -0.05
+}
+
+# Targeted: applied to female characters when the feminism JE completes (event 200).
+# Shifts the relative ranking of women in IG influence and leader-selection pools.
+feminism_emancipated_character_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	character_popularity_add = 5
+	character_prominence_add = 3
+}
+
+# Targeted: applied to female characters when the feminism JE fails into the
+# explicit traditionalist-backlash branch (event 100, option a).
+feminism_backlash_character_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	character_popularity_add = -5
+	character_prominence_add = -3
 }
 
 # Event 3: Reproductive rights debate

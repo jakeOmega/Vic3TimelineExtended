@@ -861,30 +861,6 @@ fix_incompatible_laws = {
 	}
 }
 
-update_characters = {
-	every_scope_character = {
-		if = {
-			limit = { owner = { has_technology_researched = mind_backups }}
-			remove_trait = biological_immortality
-			add_trait = mind_backups
-		}
-		else_if = {
-			limit = { owner = { has_technology_researched = biological_immortality }}
-			remove_trait = mind_backups
-			add_trait = biological_immortality
-		}
-		else = {
-			remove_trait = biological_immortality
-			remove_trait = mind_backups
-		}
-
-		# Tech-gated command-limit traits (predictive_logistics, military_grade_cybersecurity,
-		# jadc2, swarm_technology) removed in 1.13 cleanup. Vanilla 1.13 supports
-		# country_general_rank_impact_mult / country_admiral_rank_impact_mult directly on
-		# the techs, so per-character traits are no longer needed.
-	}
-}
-
 # ============================================================================
 # STATE MODIFIER REFRESH (state scope)
 # Individual scripted effects hold the actual modifier logic so they can be

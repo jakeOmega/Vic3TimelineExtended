@@ -530,6 +530,14 @@ feminist_events.100 = {
 			value = small_radicals
 			interest_group = ig:ig_devout
 		}
+		every_scope_character = {
+			limit = { is_female = yes }
+			add_modifier = {
+				name = feminism_backlash_character_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	# A quiet setback
@@ -582,6 +590,14 @@ feminist_events.200 = {
 			name = feminism_triumph_modifier
 			days = long_modifier_time
 			is_decaying = yes
+		}
+		every_scope_character = {
+			limit = { is_female = yes }
+			add_modifier = {
+				name = feminism_emancipated_character_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
 		}
 	}
 }

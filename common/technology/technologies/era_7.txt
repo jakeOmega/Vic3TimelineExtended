@@ -313,6 +313,7 @@ anti_sub_warfare = {
 		country_admiral_rank_impact_mult = 0.5
 		ship_battle_against_ship_type_submarine_accuracy_mult = 0.30
 		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.30
+		character_interception_add = 0.5
 	}
 	
 	unlocking_technologies = {	

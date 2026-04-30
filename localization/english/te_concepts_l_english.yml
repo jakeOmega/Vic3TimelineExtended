@@ -946,6 +946,8 @@
  faith_tradition_modifier_desc:0 "The government has sided with religious tradition over social reform, pleasing the devout but slowing modernization."
  famrep_demographic_debate_advance_desc:0 "A strong positive boost to law enactment progress from a recent event."
  famrep_demographic_debate_cautious_desc:0 "A smaller positive boost to law enactment progress from a recent event."
+ feminism_backlash_character_modifier_desc:0 "Traditionalist victory has rolled back women's public standing. Female characters are seen as less popular and less qualified to lead."
+ feminism_emancipated_character_modifier_desc:0 "Hard-won emancipation has lifted the public standing of women. Female characters are more popular and more credible candidates for leadership."
  feminism_movement_crushed_modifier_desc:0 "The feminist movement has collapsed. Traditional gender roles are reinforced."
  feminism_stagnation_modifier:0 "Feminist Stagnation"
  feminism_stagnation_modifier_desc:0 "The unresolved gender equality question damages national prestige."

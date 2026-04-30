@@ -3192,9 +3192,7 @@ decolonization_events.51 = {
 	trigger = {
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
-		any_war = {
-			is_war_participant = root
-		}
+		is_at_war = yes
 	}
 
 	# Option A: Tighten conscription — bar suffers; army holds together
@@ -3245,7 +3243,8 @@ decolonization_events.52 = {
 		}
 	}
 
-	# Option A: Ignore the petition — bar drains significantly; intelligentsia resents
+	# Option A: Ignore the petition — bar drains significantly; intelligentsia resents,
+	# but landowners (who oppose decolonization) appreciate the firm hand.
 	option = {
 		name = decolonization_events.52.a
 		ai_chance = {
@@ -3257,6 +3256,7 @@ decolonization_events.52 = {
 		}
 		add_modifier = { name = colonial_stability_negative_event days = 240 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Convene a public response — small bar drain; intelligentsia is mollified

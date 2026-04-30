@@ -1303,6 +1303,8 @@
  factory_farm_building_vineyard:0 "Mechanized Farm"
  famrep_demographic_debate_advance:0 "Family Policy: Demographic Debate Advance"
  famrep_demographic_debate_cautious:0 "Family Policy: Demographic Debate Cautious Advance"
+ feminism_backlash_character_modifier:0 "Feminist Backlash"
+ feminism_emancipated_character_modifier:0 "Feminist Emancipation"
  feminism_movement_crushed_modifier:0 "Feminist Movement Collapsed"
  feminism_struggle_active_modifier:0 "Feminist Movement Active"
  feminist_literature_banned_modifier:0 "Feminist Literature Banned"

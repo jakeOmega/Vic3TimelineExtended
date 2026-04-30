@@ -1,92 +1,15 @@
-﻿biological_immortality = {
-	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
-
-	character_modifier = {
-		character_health_add = 100
-	}
-
-	command_modifier = {
-	}
-
-	country_modifier = {
-	}
-
-	agitator_modifier = {
-	}
-
-	interest_group_modifier = {
-	}
-
-	possible = {
-	}
-
-	weight = {
-		value = -1000
-		
-		if = {
-			limit = {
-                owner = {
-                    has_technology_researched = biological_immortality
-                    NOT = { has_technology_researched = mind_backups }
-                }
-			}
-			add = 10000
-		}
-	}
-
-	replace = {
-	}
-}
-
-mind_backups = {
-	type = condition
-	texture = "gfx/interface/icons/character_trait_icons/honorable.dds"
-
-	character_modifier = {
-		character_health_add = 10000
-	}
-
-	command_modifier = {
-	}
-
-	country_modifier = {
-	}
-
-	agitator_modifier = {
-	}
-
-	interest_group_modifier = {
-	}
-
-	possible = {
-	}
-
-	weight = {
-		value = -1000
-		
-		if = {
-			limit = {
-                owner = {
-                    has_technology_researched = mind_backups
-                }
-			}
-			add = 10000
-		}
-	}
-
-	replace = {
-        biological_immortality
-	}
-}
-
-# trait_predictive_logistics, trait_military_grade_cybersecurity, trait_jadc2,
+﻿# trait_predictive_logistics, trait_military_grade_cybersecurity, trait_jadc2,
 # trait_swarm_technology removed in 1.13 cleanup pass: vanilla 1.13 introduces
 # country_general_rank_impact_mult / country_admiral_rank_impact_mult, which give
 # every general/admiral additional command capacity scaling with their rank.
 # These are now applied as country-level modifiers on the predictive_logistics,
 # military_grade_cybersecurity, jadc2, and swarm_technology techs themselves
 # (see common/technology/technologies/era_8.txt..era_11.txt).
+#
+# trait_biological_immortality, trait_mind_backups removed for the same reason:
+# post-1.13 the era_12 immortality techs apply character_health_add directly
+# via tech-scope cascade, so the per-character trait wrapper was redundant
+# (and was double-counting the modifier on every character).
 
 # ----- Banking cycle: ruler personality effects on bubble pressure / momentum -----
 INJECT:reckless = {

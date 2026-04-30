@@ -1,0 +1,39 @@
+# Mod-added movement attraction modifier registrations.
+#
+# Vanilla auto-registers state_pop_support_movement_<X>_(add|mult) for every
+# vanilla movement, but mod-added movements (defined in
+# common/political_movements/new_ideological_movements.txt) need explicit
+# registration here. Without this, references in extra_laws.txt and
+# movement_attraction_modifiers.txt produce "Unknown modifier type" parse
+# errors and the modifier silently does nothing.
+#
+# Shape mirrors vanilla 08_movement_modifier_types.txt: percent=yes, decimals=0
+# for _mult; we don't define _add variants since the mod doesn't currently use
+# them.
+
+state_pop_support_movement_civil_rights_mult = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_pop_support_movement_anti_war_mult = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_pop_support_movement_transhumanist_mult = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}

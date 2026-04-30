@@ -120,7 +120,6 @@ on_monthly_pulse_country = {
 		cheaty_on_action
 		combined_arms_update_on_action
 		investment_pool_setup_on_action
-		character_update_on_action
 		international_relations_events_on_action
 		decolonization_events_on_action
 		movement_events_te_on_action
@@ -216,7 +215,6 @@ on_acquired_technology = {
 	on_actions = {
 		add_arable_land_effect_on_action
 		fix_incompatible_laws
-		character_update_on_action
 		te_modifier_update_on_technology_on_action
 		cultural_hegemony_tech_first_on_action
 	}
@@ -301,7 +299,6 @@ on_character_recruitment = {
 te_on_character_recruitment = {
 	effect = {
 		owner = {
-			update_characters = yes
 			if = {
 				limit = { modifier:country_combined_arms_bonus_enabled_bool = yes }
 				apply_combined_arms_bonuses = yes
@@ -1217,12 +1214,6 @@ city_rank_on_action = {
 	}
 }
 
-character_update_on_action = {
-	effect = {
-		update_characters = yes
-	}
-}
-
 # ============================================================================
 # INTERNATIONAL RELATIONS EVENTS - monthly chance for eligible countries
 # ============================================================================
@@ -1599,7 +1590,7 @@ decolonization_events_on_action = {
 				12 = {
 					trigger = {
 						any_scope_state = { is_overseas_colonial_state = yes }
-						any_war = { is_war_participant = root }
+						is_at_war = yes
 					}
 					trigger_event = { id = decolonization_events.51 }
 				}

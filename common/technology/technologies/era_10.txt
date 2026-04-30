@@ -157,6 +157,9 @@ jadc2 = {
 		country_institution_ministry_of_war_max_investment_add = 1
 		country_general_rank_impact_mult = 1.0
 		country_admiral_rank_impact_mult = 1.0
+		character_command_limit_add = 1
+		character_advancement_speed_mult = 0.25
+		character_max_offensive_battles_add = 1
 	}
 	
 	ai_weight = {
@@ -178,6 +181,7 @@ cyber_warfare = {
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.15
 		country_covert_operation_slot_add = 1
+		character_coup_strength_mult = -0.10
 	}
 	
 	unlocking_technologies = {	
@@ -206,6 +210,7 @@ electronic_warfare = {
 		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.20
 		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.15
 		ship_visibility_mult = -0.10
+		character_naval_mission_area_add = 1
 	}
 	
 	ai_weight = {

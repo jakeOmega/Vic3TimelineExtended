@@ -240,6 +240,7 @@ unmanned_aerial_vehicles = {
 		goods_output_aeroplanes_mult = 0.2
 		ship_detection_mult = 0.20
 		ship_screening_add = 50
+		character_battle_condition_aggressive_maneuver_mult = 0.25
 	}
 	
 	ai_weight = {
@@ -263,8 +264,9 @@ military_grade_cybersecurity = {
 		country_st_res_ammunition_decay_add = -0.005
 		country_general_rank_impact_mult = 0.5
 		country_admiral_rank_impact_mult = 0.5
+		character_loyalty_add = 5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -284,6 +286,8 @@ network_centric_warfare = {
 		ship_accuracy_mult = 0.10
 		ship_readiness_gain_add = 5
 		country_ncw_pb_principles_bool = yes
+		character_command_limit_add = 1
+		character_advancement_speed_mult = 0.15
 	}
 	
 	unlocking_technologies = {	
@@ -333,6 +337,7 @@ automated_surveillance = {
 		country_institution_police_max_investment_add = 1
 		country_auto_surveillance_pb_principles_bool = yes
 		country_auto_surveillance_pb_principles_bool = yes
+		character_coup_strength_mult = -0.10
 	}
 	
 	ai_weight = {
@@ -377,6 +382,7 @@ rapid_deployment_forces = {
 		ship_marine_capacity_mult = 0.20
 		ship_supply_efficiency_mult = 0.10
 		country_rapid_deploy_pb_principles_bool = yes
+		character_battle_condition_rapid_advance_mult = 1.0
 	}
 	
 	ai_weight = {
