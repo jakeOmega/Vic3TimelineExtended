@@ -234,6 +234,25 @@ on_law_activated = {
 		language_reform_law_on_action
 		te_modifier_update_on_law_on_action
 		radical_law_backlash_on_action
+		banking_law_cascade_on_law_activated
+	}
+}
+
+# When command economy activates, force-enact state-owned banking.
+# ROOT = law scope; owner = country.
+banking_law_cascade_on_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				type = law_type:law_command_economy
+				owner = {
+					NOT = { has_law = law_type:law_state_owned_banking }
+				}
+			}
+			owner = {
+				activate_law = law_type:law_state_owned_banking
+			}
+		}
 	}
 }
 
@@ -1086,13 +1105,8 @@ violent_hostility_on_action = {
 								value = 1.0
 							}
 							state_region = { add_devastation = 0.25 }
-							every_scope_pop = {
-								limit = {
-									culture = scope:curr_culture
-								}
-								trigger_mass_migration = {
-									POP_RATIO = 0.8
-								}
+							trigger_mass_migration = {
+								POP_RATIO = 0.8
 							}
 						}
 					}
@@ -1147,13 +1161,8 @@ violent_hostility_on_action = {
 								value = 0.25
 							}
 							state_region = { add_devastation = 0.1 }
-							every_scope_pop = {
-								limit = {
-									culture = scope:curr_culture
-								}
-								trigger_mass_migration = {
-									POP_RATIO = 0.5
-								}
+							trigger_mass_migration = {
+								POP_RATIO = 0.5
 							}
 						}
 					}
@@ -1334,8 +1343,10 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.1 }
 				}
-				# International Pressure to Decolonize
-				10 = {
+				# International Pressure to Decolonize — bumped weight 10→15 because
+				# this is a marquee event (the international-system push) that
+				# wasn't firing as often as its narrative weight suggests.
+				15 = {
 					trigger = {
 						has_technology_researched = intergovernmental_organizations
 						any_subject_or_below = { always = yes }
@@ -1575,6 +1586,32 @@ decolonization_events_on_action = {
 						}
 					}
 					trigger_event = { id = decolonization_events.21 }
+				}
+				# Metropole pressure: The Treasury Says No (high debt + colonial empire)
+				12 = {
+					trigger = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						scaled_debt > 0.4
+					}
+					trigger_event = { id = decolonization_events.50 }
+				}
+				# Metropole pressure: Conscription Crisis (long war + colonial empire)
+				12 = {
+					trigger = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						any_war = { is_war_participant = root }
+					}
+					trigger_event = { id = decolonization_events.51 }
+				}
+				# Metropole pressure: The Intelligentsia Petition (anti-colonialist intelligentsia)
+				12 = {
+					trigger = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						ig:ig_intelligentsia ?= {
+							leader = { has_ideology = ideology:ideology_anti_colonialist }
+						}
+					}
+					trigger_event = { id = decolonization_events.52 }
 				}
 			}
 		}
