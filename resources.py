@@ -246,7 +246,7 @@ def process_state_block(block_text: str, state_name: str, mapping: dict) -> str:
     return block_text
 
 
-def process_file(in_path: Path, out_path: Path, mapping: dict):
+def process_file(in_path: Path, out_path: Path, mapping: dict, verbose: bool = True):
     text = in_path.read_text(encoding="utf-8")
     pieces = []
     last = 0
@@ -267,8 +267,9 @@ def process_file(in_path: Path, out_path: Path, mapping: dict):
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(out_text, encoding="utf-8")
 
-    action = "modified" if changed_any else "copied"
-    print(f"[{action}] {in_path} -> {out_path}")
+    if verbose:
+        action = "modified" if changed_any else "copied"
+        print(f"[{action}] {in_path} -> {out_path}")
 
 
 def discover_files(root: Path, recursive: bool):
@@ -278,32 +279,32 @@ def discover_files(root: Path, recursive: bool):
         yield from (p for p in root.glob("*.txt") if p.is_file())
 
 
-def main():
-    deposits_by_type = defaultdict(list)
-    amount_by_type = defaultdict(int)
+def _run(verbose: bool):
     mapping = load_mapping(mod_path / "deposits_config.json")
-    for key, val in mapping.items():
-        for subgood, amount in val.items():
-            processed_amount = new_amount(amount, subgood)
-            deposits_by_type[subgood].append((key, processed_amount))
-            amount_by_type[subgood] += processed_amount
-
     input = base_game_path / "game" / "map_data" / "state_regions"
     output = mod_path / "map_data" / "state_regions"
-    recursive = True
 
-    files = list(discover_files(input, recursive))
-    if not files:
+    files = list(discover_files(input, recursive=True))
+    if not files and verbose:
         print(f"[INFO] No .txt files found in {input}", file=sys.stderr)
 
     for in_path in files:
         rel = in_path.relative_to(input)
         out_path = output / rel
-        process_file(in_path, out_path, mapping)
+        process_file(in_path, out_path, mapping, verbose=verbose)
+
+
+def main():
+    _run(verbose=True)
 
 
 mod_path = Path(mod_path)
 base_game_path = Path(base_game_path)
+
+
+def regenerate(mod_state=None):
+    """Auto-run entrypoint invoked by mod_state_server post-load."""
+    _run(verbose=False)
 
 
 def print_score_table():

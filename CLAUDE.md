@@ -21,7 +21,7 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder. Se
 - **Auto-deploy on edit** runs automatically when VS Code opens this workspace (`.vscode/tasks.json` → `scripts/watch_deploy_on_edit.sh`, uses `inotifywait` with a polling fallback).
 
 ### Mod state server (the primary lookup tool)
-- Start: `python mod_state_server.py` (listens on `http://127.0.0.1:8950`, ~50s startup). Auto-starts under VS Code.
+- Start: `.venv/bin/python mod_state_server.py` (listens on `http://127.0.0.1:8950`, ~60–110s startup). Auto-starts under VS Code. Use the venv Python — system `python3` is missing the `regex` package needed by `ig_feminism` (one of the post-load generators).
 - Status check: `curl http://localhost:8950/status`. Returns engine-doc snapshot timestamps and pattern-catalog counts. **Always verify the server is running before doing game-data lookups.**
 - Reload after editing mod files: `curl -X POST http://localhost:8950/reload`. After regenerating engine logs in-game with no mod-file changes: `curl -X POST 'http://localhost:8950/reload?engine_only=true'` (skips the slow ModState rebuild). Neither picks up Python source changes — restart the process for those.
 - CLI client: `python mod_state_client.py <command> [args]`.
@@ -44,18 +44,20 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder. Se
 - Tests for the parser: `python test_paradox_file_parser.py`
 - Tab-normalize Paradox files: `python scripts/format_paradox_tabs.py [--check] common/path/to/file.txt ...` — only for brace-based `.txt`; never run on YAML/JSON/Python.
 - Sort/clean localization: `python organize_loc.py`
-- Localization YAML generation: `python gen_loc_files.py`
-- Production methods: `python pm_costs.py [--dry-run]`, `python pm_balance.py --inputs steel:11 --outputs services:1000 --profit 1000`
+- Localization YAML generation: `python scripts/generators/gen_loc_files.py`
+- Production methods: `python pm_costs.py [--dry-run]`, `python scripts/analysis/pm_balance.py --inputs steel:11 --outputs services:1000 --profit 1000`
 - Resource deposits from `deposits_config.json`: `python resources.py [--table]`
-- Pop balance models: `python pop_growth.py [--plot]`, `python pop_needs_curves.py [--table]`
+- Pop balance models: `python scripts/analysis/pop_growth.py [--plot]`, `python pop_needs_curves.py [--table]`
 - Ideology attitudes: `python apply_ideologies.py [--dry-run]`
 - Event scaffolding (auto-IDs, BOM, loc keys) — see `docs/python_tools.md` for spec format:
-  - `python gen_event.py next-id <namespace> --after N --count K`
-  - `python gen_event.py batch spec.json [--dry-run]`
-  - `python gen_event.py scaffold --namespace ... --title ... --desc ... --options ...`
+  - `python scripts/generators/gen_event.py next-id <namespace> --after N --count K`
+  - `python scripts/generators/gen_event.py batch spec.json [--dry-run]`
+  - `python scripts/generators/gen_event.py scaffold --namespace ... --title ... --desc ... --options ...`
+
+The six scripts that regenerate mod content from configs + vanilla data — `pop_needs_curves.py`, `apply_ideologies.py`, `ig_feminism.py`, `pm_costs.py`, `resources.py`, `organize_loc.py` — also auto-run inside `mod_state_server.py` after every full `/reload` (the server logs `[post-load] <name> ok (Xs)`). The standalone CLIs above remain available for manual / dry-run use. Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable the auto-run while iterating on one of those scripts. The auto-run does **not** fire on `/reload?engine_only=true`.
 
 ### Dependencies
-`pip install -r requirements.txt` (only `requests` is required for the core tooling; the image-generation pipeline pulls in `torch`/`diffusers`/etc. and is commented out by default).
+`.venv/bin/pip install -r requirements.txt`. Core (`requests`, `pyyaml`, `regex`, `numpy`) is required for `mod_state_server.py` plus its post-load generators. The image-generation pipeline (`torch`/`diffusers`/etc.) stays commented out by default. Always run server-touching commands through `.venv/bin/python` so the post-load generators can resolve their deps; `python3` (system) is acceptable for one-off CLI scripts but not for the server.
 
 ## Where things live
 
@@ -101,7 +103,7 @@ A recurring idiom: define a static modifier with unit values (e.g. `state_migrat
 - `mod_state_server.py` — long-running HTTP service over `ModState` (port 8950). Logs to console (INFO) and `mod_state_server.log` (DEBUG). Events, scripted_effects, scripted_triggers, on_actions are **mod-only**; everything else is mod ∪ vanilla.
 - `mod_state_script.py` — regenerates the `docs/*.txt` reference files (also runs on server start/reload).
 - `mod_state_client.py` — thin CLI over the server.
-- Generators (`gen_event.py`, `gen_loc_files.py`, `gen_pm_icons.py`, `gen_law_icons.py`, `gen_aptitude_icons.py`, `gen_vanilla_company_buildings.py`, `gen_banking_events.py`, etc.) consume parsed `ModState` data and emit Paradox `.txt` / YAML / DDS.
+- One-shot scaffolders live under `scripts/generators/` (`gen_event.py`, `gen_loc_files.py`, `gen_banking_events.py`, `gen_vanilla_company_buildings.py`, `assimilation_cultures.py`, `add_tech_modifiers.py`, etc.). Image / video pipelines live under `scripts/image_pipeline/` (`gen_image.py`, `gen_pm_icons.py`, `gen_law_icons.py`, `gen_aptitude_icons.py`, `convert_event_image.py`, etc.). Math / CLI tools live under `scripts/analysis/` (`pop_growth.py`, `pm_balance.py`).
 
 ## Working in this repo
 
@@ -109,6 +111,7 @@ A recurring idiom: define a static modifier with unit values (e.g. `state_migrat
 `docs/README.md` is the index. The docs most likely to matter:
 - `docs/scripting_best_practices.md` — modifier validation, `days` vs `months` units, scope chain pitfalls, expense scaling, registration of dynamic modifier types, `any_` triggers don't take `limit`, modifier-after-effect read ordering, scripted-trigger/effect catalog. Also: `authority` vs `produced_authority` triggers, the inverse-`country_authority_mult` cost-compensation pattern, and the script-only-modifier-as-cross-system-tag pattern (`country_banking_intervention_max_add`, `country_legislative_override_capacity_add`) for gating events on combinations of laws/techs/decrees while staying visible in player tooltips.
 - `docs/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, `on_yearly_events` wiring, style. Also: AI-weight pitfalls for authority-spending options, and the difference between amenability (IGs willing to talk) vs `country_law_enactment_success_add` / `country_law_enactment_stall_mult` / `add_enactment_phase` (mechanics that actually push a law through).
+- `docs/vanilla_economy_reference.md` — concept primer on vanilla Vic3 economy (pops + buy packages, ownership / Investment Pool, market access / MAPI, companies & charters, power-bloc principles, 1.13 naval economy). Read before touching mod content that hooks the vanilla economy if you don't already have the mental model. Carries a "Last verified against vanilla: X" banner — refresh it on every vanilla bump per `docs/vanilla_patch_runbook.md` § 8b.
 - `docs/mod_systems.md` — every gameplay system's files and mechanics.
 - `docs/journal_entry_systems.md` — the 10+ JE systems in detail.
 - `docs/python_tools.md` — full server endpoint list and AI-agent workflow.
@@ -167,11 +170,13 @@ Keep additions short — one paragraph or a bullet, not a treatise. The bar is: 
 - Brace-based Paradox files use **tab** indentation. After large edits run `python scripts/format_paradox_tabs.py <files>` (or `--check` in CI-style flows).
 - After editing mod files, `POST /reload` to refresh the server's view (the auto-deploy watcher will already have synced files into the Paradox mod folder).
 - Localization keys: prefer adding to existing `*_l_english.yml` files and run `python organize_loc.py` to sort and detect unused keys.
-- Don't hand-edit auto-generated files. **Always edit the generator's input and re-run the generator.** Authoritative ownership map (also in `docs/auto_generated_files.md`):
+- Don't hand-edit auto-generated files. **Always edit the generator's input and re-run the generator.** The six idempotent transformers below also auto-run on every mod state server reload (see `_run_post_load_generators` in `mod_state_server.py`); manual invocation is still useful for `--dry-run`. Authoritative ownership map (also in `docs/auto_generated_files.md`):
   - `common/ideologies/modified.txt` — owned by `apply_ideologies.py`; input is `ideology_modifications.py` plus vanilla ideology files. Re-run after vanilla updates to pick up new vanilla content (e.g. patches that add new laws or change attitudes).
   - `common/interest_groups/00_*.txt` (8 files) — owned by `ig_feminism.py`.
   - `common/buy_packages/00_buy_packages.txt` — owned by `pop_needs_curves.py`.
+  - `common/production_methods/extra_pms.txt` & `unique_pms.txt` cost-comment headers + `commented_vanilla_military_units.txt` — owned by `pm_costs.py`.
   - `map_data/state_regions/*.txt` — owned by `resources.py`; input is `deposits_config.json` plus vanilla `game/map_data/state_regions/`. After a vanilla map change, update `deposits_config.json` to point old/removed states at successors and re-run.
+  - `localization/english/te_*_l_english.yml` (24 category files) — owned by `organize_loc.py`; categorises and sorts every key. Add new category prefixes to `categorize_key` (e.g. the `ship_type_*` / `utility_mod_*` rules) when introducing whole new content families, otherwise the keys land in MISCELLANEOUS.
   - `docs/laws.txt`, `docs/technologies.txt`, `docs/buildings.txt`, `docs/goods.txt`, `docs/combat_units.txt` — owned by `mod_state_script.py`; rebuilt automatically on `POST /reload`.
   - `docs/vic3_*_reference.md`, `docs/triggers_summary.txt`, `docs/effects_summary.txt`, etc. — owned by `engine_docs_render.py`.
   - `docs/engine_coverage_report.md` — owned by `mod_state_server.py /validate/engine-coverage`.

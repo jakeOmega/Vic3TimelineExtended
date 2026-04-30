@@ -13,7 +13,6 @@ Functions are importable:
 
 import os
 import copy
-import regex
 from path_constants import mod_path, base_game_path
 
 
@@ -25,6 +24,7 @@ def modify_interest_group_files(input_dir, output_dir, modification_dict):
     :param output_dir: Directory where the modified files will be saved.
     :param modification_dict: Dictionary with modifications for each role, condition, and type (tech or law).
     """
+    import regex  # third-party PCRE-style regex (recursive patterns); see requirements.txt
     # Ensure output directory exists
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -192,6 +192,11 @@ modifications = {
 }
 
 # print(json.dumps(modifications, indent=4))
+
+def regenerate(mod_state=None):
+    """Auto-run entrypoint invoked by mod_state_server post-load."""
+    modify_interest_group_files(input_directory, output_directory, modifications)
+
 
 def main():
     modify_interest_group_files(input_directory, output_directory, modifications)

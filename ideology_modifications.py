@@ -260,6 +260,7 @@ strict_ip_laws = [
     ("law_traditional_ip_protection", "approve"),
     ("law_strict_ip_protection", "strongly_approve"),
     ("law_open_source_innovation", "disapprove"),
+    ("law_state_intellectual_property", "disapprove"),
 ]
 moderate_ip_laws = [
     ("law_no_ip_protection", "disapprove"),
@@ -267,6 +268,7 @@ moderate_ip_laws = [
     ("law_traditional_ip_protection", "strongly_approve"),
     ("law_strict_ip_protection", "approve"),
     ("law_open_source_innovation", "neutral"),
+    ("law_state_intellectual_property", "disapprove"),
 ]
 loose_ip_laws = [
     ("law_no_ip_protection", "neutral"),
@@ -274,6 +276,7 @@ loose_ip_laws = [
     ("law_traditional_ip_protection", "disapprove"),
     ("law_strict_ip_protection", "disapprove"),
     ("law_open_source_innovation", "approve"),
+    ("law_state_intellectual_property", "neutral"),
 ]
 communal_ip_laws = [
     ("law_no_ip_protection", "approve"),
@@ -281,6 +284,15 @@ communal_ip_laws = [
     ("law_traditional_ip_protection", "disapprove"),
     ("law_strict_ip_protection", "disapprove"),
     ("law_open_source_innovation", "strongly_approve"),
+    ("law_state_intellectual_property", "approve"),
+]
+state_ip_laws = [
+    ("law_no_ip_protection", "disapprove"),
+    ("law_creative_commons", "disapprove"),
+    ("law_traditional_ip_protection", "neutral"),
+    ("law_strict_ip_protection", "disapprove"),
+    ("law_open_source_innovation", "disapprove"),
+    ("law_state_intellectual_property", "strongly_approve"),
 ]
 lgbtq_hate = [
     ("law_active_persecution", "strongly_approve"),
@@ -362,6 +374,7 @@ finreg_laissez_faire = [
     ("law_prudential_narrow_banking", "disapprove"),
     ("law_directed_credit_development_banks", "strongly_disapprove"),
     ("law_central_bank_independence", "approve"),
+    ("law_state_owned_banking", "strongly_disapprove"),
 ]
 
 finreg_market_liberal = [
@@ -371,6 +384,7 @@ finreg_market_liberal = [
     ("law_prudential_narrow_banking", "disapprove"),
     ("law_directed_credit_development_banks", "disapprove"),
     ("law_central_bank_independence", "strongly_approve"),
+    ("law_state_owned_banking", "strongly_disapprove"),
 ]
 
 finreg_liberal = [
@@ -380,6 +394,7 @@ finreg_liberal = [
     ("law_prudential_narrow_banking", "approve"),
     ("law_directed_credit_development_banks", "disapprove"),
     ("law_central_bank_independence", "strongly_approve"),
+    ("law_state_owned_banking", "disapprove"),
 ]
 
 finreg_social_dem = [
@@ -389,6 +404,7 @@ finreg_social_dem = [
     ("law_prudential_narrow_banking", "strongly_approve"),
     ("law_directed_credit_development_banks", "approve"),
     ("law_central_bank_independence", "strongly_approve"),
+    ("law_state_owned_banking", "neutral"),
 ]
 
 finreg_socialist = [
@@ -398,6 +414,7 @@ finreg_socialist = [
     ("law_prudential_narrow_banking", "approve"),
     ("law_directed_credit_development_banks", "strongly_approve"),
     ("law_central_bank_independence", "neutral"),
+    ("law_state_owned_banking", "approve"),
 ]
 
 finreg_communist = [
@@ -405,8 +422,9 @@ finreg_communist = [
     ("law_free_mutual_banking", "disapprove"),
     ("law_universal_banking_light_prudence", "strongly_disapprove"),
     ("law_prudential_narrow_banking", "approve"),
-    ("law_directed_credit_development_banks", "strongly_approve"),
+    ("law_directed_credit_development_banks", "approve"),
     ("law_central_bank_independence", "strongly_disapprove"),
+    ("law_state_owned_banking", "strongly_approve"),
 ]
 
 finreg_anarchist = [
@@ -416,6 +434,7 @@ finreg_anarchist = [
     ("law_prudential_narrow_banking", "strongly_disapprove"),
     ("law_directed_credit_development_banks", "strongly_disapprove"),
     ("law_central_bank_independence", "strongly_disapprove"),
+    ("law_state_owned_banking", "strongly_disapprove"),
 ]
 
 finreg_paternalistic = [
@@ -425,6 +444,7 @@ finreg_paternalistic = [
     ("law_prudential_narrow_banking", "strongly_approve"),
     ("law_directed_credit_development_banks", "neutral"),
     ("law_central_bank_independence", "approve"),
+    ("law_state_owned_banking", "disapprove"),
 ]
 
 finreg_fascist = [
@@ -434,6 +454,7 @@ finreg_fascist = [
     ("law_prudential_narrow_banking", "disapprove"),
     ("law_directed_credit_development_banks", "strongly_approve"),
     ("law_central_bank_independence", "neutral"),
+    ("law_state_owned_banking", "approve"),
 ]
 
 finreg_populist = [
@@ -443,6 +464,7 @@ finreg_populist = [
     ("law_prudential_narrow_banking", "approve"),
     ("law_directed_credit_development_banks", "strongly_approve"),
     ("law_central_bank_independence", "neutral"),
+    ("law_state_owned_banking", "approve"),
 ]
 
 finreg_meritocratic = [
@@ -452,6 +474,7 @@ finreg_meritocratic = [
     ("law_prudential_narrow_banking", "approve"),
     ("law_directed_credit_development_banks", "disapprove"),
     ("law_central_bank_independence", "strongly_approve"),
+    ("law_state_owned_banking", "disapprove"),
 ]
 
 language_traditionalist = [

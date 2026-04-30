@@ -217,6 +217,8 @@ CATEGORIES = [
     "POWER_BLOCS",
     "PRODUCTION_METHODS",
     "RELIGION",
+    "SHIP_MODIFICATIONS",
+    "SHIP_TYPES",
     "TECHNOLOGIES",
     "MISCELLANEOUS",
     "UNUSED",
@@ -241,6 +243,12 @@ def categorize_key(key, technology_keys):
         return "PRODUCTION_METHODS"
     if key.startswith("combat_unit_"):
         return "COMBAT_UNITS"
+    if key.startswith("ship_type_"):
+        return "SHIP_TYPES"
+    if key.startswith("ship_group_"):
+        return "SHIP_TYPES"
+    if key.startswith("utility_mod_") or key.startswith("ship_mod_"):
+        return "SHIP_MODIFICATIONS"
     if key.startswith("mobilization_option_"):
         return "MOBILIZATION_OPTIONS"
     if key.startswith("building_"):
@@ -495,6 +503,14 @@ def organize_all(project_directory, dry_run=False):
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
+def regenerate(mod_state=None):
+    """Auto-run entrypoint invoked by mod_state_server post-load."""
+    import contextlib
+    import io
+    with contextlib.redirect_stdout(io.StringIO()):
+        organize_all(mod_path, dry_run=False)
+
 
 def main():
     parser = argparse.ArgumentParser(

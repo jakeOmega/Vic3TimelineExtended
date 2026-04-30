@@ -214,23 +214,36 @@ def write_to_file(file_path, entries):
                 f.write(f"{key} = {value}\n")
 
 
+def _build_modified_entries(verbose: bool = False):
+    entries = {}
+    ideologies_dir = os.path.join(base_game_path, "game", "common", "ideologies")
+    filenames = next(walk(ideologies_dir), (None, None, []))[2]
+    for file in filenames:
+        if verbose:
+            print("Parsing: ", file)
+        new_entries = parse_file(os.path.join(ideologies_dir, file))
+        if verbose:
+            print("Found ", len(new_entries.keys()), " new entries")
+        entries.update(new_entries)
+
+    modified_entries = modify_entries(entries, modifications)
+    modified_entries = update_law_reqs(modified_entries)
+    return modified_entries
+
+
+def regenerate(mod_state=None):
+    """Auto-run entrypoint invoked by mod_state_server post-load."""
+    modified_entries = _build_modified_entries(verbose=False)
+    output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
+    write_to_file(output_path, modified_entries)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Apply ideology modifications to vanilla files")
     parser.add_argument("--dry-run", action="store_true", help="Show what would change without writing")
     args = parser.parse_args()
 
-    entries = {}
-    ideologies_dir = os.path.join(base_game_path, "game", "common", "ideologies")
-    filenames = next(walk(ideologies_dir), (None, None, []))[2]
-    for file in filenames:
-        print("Parsing: ", file)
-        new_entries = parse_file(os.path.join(ideologies_dir, file))
-        print("Found ", len(new_entries.keys()), " new entries")
-        entries.update(new_entries)
-
-    modified_entries = modify_entries(entries, modifications)
-    modified_entries = update_law_reqs(modified_entries)
-
+    modified_entries = _build_modified_entries(verbose=True)
     output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
     if args.dry_run:
         inject_count = sum(1 for v in modified_entries.values() if isinstance(v, tuple) and v[0] == "INJECT")

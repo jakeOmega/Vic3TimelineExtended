@@ -6,6 +6,25 @@ Reference for all Python utility scripts and the background data server.
 
 `path_constants.py` — Defines `mod_path`, `base_game_path`, `doc_path`. Imported by nearly all other scripts.
 
+## Auto-run on server reload
+
+`mod_state_server.py` runs six idempotent transformers after every full ModState load (server startup and `POST /reload`). Each must expose `regenerate(mod_state=None)` and finish in well under a second; failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. The `?engine_only=true` reload path bypasses `_load_mod_state` and so skips these.
+
+| Module | Output |
+|---|---|
+| `pop_needs_curves` | `common/buy_packages/00_buy_packages.txt` |
+| `apply_ideologies` | `common/ideologies/modified.txt` |
+| `ig_feminism` | `common/interest_groups/00_*.txt` |
+| `pm_costs` | cost-comment headers in `common/production_methods/extra_pms.txt` & `unique_pms.txt`; `docs/commented_vanilla_pms.txt`; `docs/commented_vanilla_military_units.txt` |
+| `resources` | `map_data/state_regions/*.txt` |
+| `organize_loc` | `localization/english/te_*_l_english.yml` (24 category files) |
+
+**Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).
+
+**Watcher safety:** The deploy watcher (`scripts/watch_deploy_on_edit.sh`) only rsyncs to the Paradox mod folder; it does **not** call `/reload`. So a generator writing into `common/` or `map_data/` triggers exactly one extra rsync after the reload completes, never an infinite loop. **Do not wire `/reload` into the watcher.**
+
+The five scripts retain their standalone CLI entrypoints (with `--dry-run` flags where applicable); auto-run uses a quiet code path that suppresses the verbose progress output.
+
 ## Core Infrastructure
 
 | Script | Purpose | Run |
@@ -14,7 +33,7 @@ Reference for all Python utility scripts and the background data server.
 | `test_paradox_file_parser.py` | 12 unit tests for the parser. | `python test_paradox_file_parser.py` |
 | `test_event_balance.py` | 53 unit tests for the `/event-balance` helpers (polarity arithmetic, modifier color lookup, static-modifier resolution, option-body walker, `add_enactment_modifier` expansion, change_variable parsing, file id extraction, text rendering, strict and soft dominance helpers). | `python -m unittest test_event_balance` |
 | `mod_state.py` | `ModState` class wrapping the parser. Loads all entity types and localization. Provides `localize()`, `unlocalize()`, `search_localization()`, `build_reverse_localization()`. | Library (import) |
-| `mod_state_server.py` | Persistent HTTP server (port 8950) serving parsed mod data as JSON. See **Mod State Server** section. | `python mod_state_server.py` |
+| `mod_state_server.py` | Persistent HTTP server (port 8950) serving parsed mod data as JSON. See **Mod State Server** section. | `.venv/bin/python mod_state_server.py` |
 | `mod_state_client.py` | CLI client for the mod state server. | `python mod_state_client.py <command> [args]` |
 | `mod_state_script.py` | Generates text reference docs (`docs/laws.txt`, `docs/technologies.txt`, `docs/buildings.txt`, `docs/goods.txt`, `docs/combat_units.txt`) from parsed mod state. This is also called automatically when the mod state server starts or reloads. | `python mod_state_script.py` |
 
@@ -46,34 +65,34 @@ Notes:
 
 | Script | Purpose | Run |
 |--------|---------|-----|
-| `organize_loc.py` | Sorts localization keys alphabetically, detects unused keys, finds implicit keys. | `python organize_loc.py` |
+| `organize_loc.py` | Sorts localization keys alphabetically, detects unused keys, finds implicit keys. **Auto-runs on every server reload.** When introducing a new content family, add its prefix to `categorize_key` (e.g. `ship_type_*` → `SHIP_TYPES`) so its keys don't fall into MISCELLANEOUS. | `python organize_loc.py` |
 | `gen_ministry_events.py` | Generates `events/ministry_law_events.txt` (ministry law events). | `python gen_ministry_events.py` |
-| `gen_loc_files.py` | Generates localization YAML for `extra_law_events` and `ministry_law_events`. | `python gen_loc_files.py` |
-| `gen_event.py` | Event scaffolding tool. Generates boilerplate event definitions + loc entries from compact JSON specs or CLI args. Handles ID allocation, BOM encoding, and triggered_desc chains. Three subcommands: `next-id`, `batch`, `scaffold`. | See **Event Scaffolding** section below. |
+| `scripts/generators/gen_loc_files.py` | Generates localization YAML for `extra_law_events` and `ministry_law_events`. | `python scripts/generators/gen_loc_files.py` |
+| `scripts/generators/gen_event.py` | Event scaffolding tool. Generates boilerplate event definitions + loc entries from compact JSON specs or CLI args. Handles ID allocation, BOM encoding, and triggered_desc chains. Three subcommands: `next-id`, `batch`, `scaffold`. | See **Event Scaffolding** section below. |
 
 ## Production Method Tools
 
 | Script | Purpose | Run |
 |--------|---------|-----|
-| `pm_costs.py` | Annotates PM files with cost/revenue comments. | `python pm_costs.py` (supports `--dry-run`) |
-| `pm_balance.py` | Newton-Raphson solver for PM input amounts. | `python pm_balance.py --inputs steel:11 --outputs services:1000 --profit 1000` |
-| `apply_ideologies.py` | Applies ideology attitude modifications from `ideology_modifications.py`. | `python apply_ideologies.py` (supports `--dry-run`) |
+| `pm_costs.py` | Annotates PM files with cost/revenue comments. **Auto-runs on every server reload.** | `python pm_costs.py` (supports `--dry-run`) |
+| `scripts/analysis/pm_balance.py` | Newton-Raphson solver for PM input amounts. | `python scripts/analysis/pm_balance.py --inputs steel:11 --outputs services:1000 --profit 1000` |
+| `apply_ideologies.py` | Applies ideology attitude modifications from `ideology_modifications.py`. **Auto-runs on every server reload.** | `python apply_ideologies.py` (supports `--dry-run`) |
 
 ## Balance & Analysis
 
 | Script | Purpose | Run |
 |--------|---------|-----|
-| `pop_growth.py` | Pop growth model (birthrate, mortality vs SoL). | `python pop_growth.py` (text table), `--plot` for chart |
-| `pop_needs_curves.py` | Pop needs curve definitions and buy_packages generator. | `python pop_needs_curves.py` (generate), `--table` for display only |
+| `scripts/analysis/pop_growth.py` | Pop growth model (birthrate, mortality vs SoL). | `python scripts/analysis/pop_growth.py` (text table), `--plot` for chart |
+| `pop_needs_curves.py` | Pop needs curve definitions and buy_packages generator. **Auto-runs on every server reload.** | `python pop_needs_curves.py` (generate), `--table` for display only |
 
 ## Content Generation
 
 | Script | Purpose | Run |
 |--------|---------|-----|
-| `resources.py` | Injects resource deposits into state region files from `deposits_config.json`. | `python resources.py` (`--table` for dry run) |
-| `ig_feminism.py` | Adjusts female leader/commander probability in IG files. | `python ig_feminism.py` |
-| `event_image_prompts.py` | Maps all mod events to image/video assets. Defines AI image generation prompts. Used by `generate_event_images.py`. | Library (import) |
-| `generate_event_images.py` | 3-phase pipeline: generate AI images (FLUX.1-schnell), convert to DDS, create event videos. | `python generate_event_images.py --phase generate` |
+| `resources.py` | Injects resource deposits into state region files from `deposits_config.json`. **Auto-runs on every server reload.** | `python resources.py` (`--table` for dry run) |
+| `ig_feminism.py` | Adjusts female leader/commander probability in IG files. **Auto-runs on every server reload.** | `python ig_feminism.py` |
+| `scripts/image_pipeline/event_image_prompts.py` | Maps all mod events to image/video assets. Defines AI image generation prompts. Used by `generate_event_images.py`. | Library (import) |
+| `scripts/image_pipeline/generate_event_images.py` | 3-phase pipeline: generate AI images (FLUX.1-schnell), convert to DDS, create event videos. | `python scripts/image_pipeline/generate_event_images.py --phase generate` |
 
 ## Event Scaffolding (`gen_event.py`)
 
@@ -172,11 +191,11 @@ These files should NOT be manually edited — they are regenerated from parsed g
 
 The server **auto-starts when the VS Code workspace opens** via a VS Code task in `.vscode/tasks.json`. It runs in a background terminal labeled "Mod State Server".
 
-To start manually:
-```powershell
-python mod_state_server.py
+To start manually (use the venv Python so the post-load generators resolve their deps):
+```bash
+.venv/bin/python mod_state_server.py
 ```
-Loads in ~40 seconds, then listens on `http://127.0.0.1:8950`.
+Loads in ~60–110 seconds, then listens on `http://127.0.0.1:8950`.
 
 ### Checking If the Server Is Running
 ```powershell

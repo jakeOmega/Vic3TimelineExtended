@@ -11,6 +11,7 @@ Query:  Invoke-RestMethod http://localhost:8950/status
 Logs:   mod_state_server.log (rotated each startup, previous kept as .log.1)
 """
 
+import importlib
 import json
 import logging
 import logging.handlers
@@ -267,9 +268,15 @@ def _kill_existing_server() -> bool:
 
 
 def _check_port_available() -> bool:
-    """Check if the port is available for binding."""
+    """Check if the port is available for binding.
+
+    Sets SO_REUSEADDR to mirror what HTTPServer does at bind time, so a
+    lingering TIME_WAIT socket from a just-killed server doesn't make us
+    return False when the real bind would succeed.
+    """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("127.0.0.1", PORT))
         return True
     except OSError:
@@ -2571,27 +2578,27 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "one_shot_generators": [
                 {
                     "pattern": "common/buildings/company_buildings.txt",
-                    "owner": "gen_vanilla_company_buildings.py",
+                    "owner": "scripts/generators/gen_vanilla_company_buildings.py",
                     "note": "One-shot bootstrap; output is committed and may be hand-edited afterwards.",
                 },
                 {
                     "pattern": "common/production_method_groups/unique_pm_groups.txt",
-                    "owner": "gen_vanilla_company_buildings.py",
+                    "owner": "scripts/generators/gen_vanilla_company_buildings.py",
                     "note": "One-shot.",
                 },
                 {
                     "pattern": "common/production_methods/unique_pms.txt",
-                    "owner": "gen_vanilla_company_buildings.py",
+                    "owner": "scripts/generators/gen_vanilla_company_buildings.py",
                     "note": "One-shot. Was hand-edited during the 1.13 migration; running the generator would overwrite those edits.",
                 },
                 {
                     "pattern": "common/company_types/extra_companies_vanilla_updates.txt",
-                    "owner": "gen_vanilla_company_injects.py + gen_vanilla_company_buildings.py",
+                    "owner": "scripts/generators/gen_vanilla_company_injects.py + scripts/generators/gen_vanilla_company_buildings.py",
                     "note": "Both scripts write here; coordinate runs.",
                 },
                 {
                     "pattern": "localization/english/te_buildings_l_english.yml",
-                    "owner": "gen_vanilla_company_buildings.py",
+                    "owner": "scripts/generators/gen_vanilla_company_buildings.py",
                     "note": "One-shot.",
                 },
             ],
@@ -4027,6 +4034,37 @@ class ModStateHandler(BaseHTTPRequestHandler):
 # ---------------------------------------------------------------------------
 # Initialization
 # ---------------------------------------------------------------------------
+
+# Idempotent transformers run after ModState loads on startup and /reload.
+# Each module must expose `regenerate(mod_state)` and finish in well under a
+# second. Set VIC3_SKIP_POST_LOAD_GENERATORS=1 to disable while iterating on
+# one of these scripts. Failures are logged and skipped — they don't block
+# server startup. The /reload?engine_only=true path bypasses _load_mod_state
+# entirely, so these don't run there.
+POST_LOAD_GENERATORS = [
+    ("pop_needs_curves", "pop_needs_curves"),
+    ("apply_ideologies", "apply_ideologies"),
+    ("ig_feminism",      "ig_feminism"),
+    ("pm_costs",         "pm_costs"),
+    ("resources",        "resources"),
+    ("organize_loc",     "organize_loc"),
+]
+
+
+def _run_post_load_generators(mod_state):
+    if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
+        logger.info("[post-load] skipped via VIC3_SKIP_POST_LOAD_GENERATORS")
+        return
+    for label, module_name in POST_LOAD_GENERATORS:
+        t0 = time.monotonic()
+        try:
+            mod = importlib.import_module(module_name)
+            mod.regenerate(mod_state)
+            logger.info(f"[post-load] {label} ok ({time.monotonic() - t0:.2f}s)")
+        except Exception:
+            logger.exception(f"[post-load] {label} FAILED — continuing")
+
+
 def _load_mod_state():
     global ms, startup_elapsed
     logger.info("Loading mod state… (this may take a minute)")
@@ -4075,6 +4113,11 @@ def _load_mod_state():
         generate_docs(ms)
     except Exception as e:
         logger.error(f"Failed to regenerate docs: {e}\n{traceback.format_exc()}")
+
+    # Run idempotent transformers that regenerate mod content from configs
+    # + vanilla data (e.g. pop_needs_curves, apply_ideologies). See
+    # POST_LOAD_GENERATORS above and docs/python_tools.md for details.
+    _run_post_load_generators(ms)
 
 
 def main():

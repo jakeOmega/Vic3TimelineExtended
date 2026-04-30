@@ -10,6 +10,8 @@ git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localizatio
 
 ## Mod scripting & data
 
+The five scripts in this section also auto-run inside `mod_state_server.py` after every full `/reload` (see `_run_post_load_generators`). Manual invocation remains useful for `--dry-run` or when iterating on the script itself; set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable the auto-run.
+
 | File / glob | Owner script | Input | Notes |
 |---|---|---|---|
 | `common/ideologies/modified.txt` | `apply_ideologies.py` | `ideology_modifications.py` + vanilla `common/ideologies/*.txt` | Re-run after vanilla updates to pull in new vanilla laws/attitudes (e.g. 1.13 added `law_social_monarchy`). The python file holds the *delta* the mod imposes; vanilla files are the baseline. |
@@ -22,7 +24,9 @@ git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localizatio
 | `common/interest_groups/00_rural_folk.txt` | `ig_feminism.py` | mod state | (see armed_forces) |
 | `common/interest_groups/00_trade_unions.txt` | `ig_feminism.py` | mod state | (see armed_forces) |
 | `common/buy_packages/00_buy_packages.txt` | `pop_needs_curves.py` | mod state | |
+| `common/production_methods/extra_pms.txt` & `unique_pms.txt` (cost-comment headers only); `docs/commented_vanilla_pms.txt`; `docs/commented_vanilla_military_units.txt` | `pm_costs.py` | `common/goods/*.txt` + PM files themselves | Replaces existing comment anchors in the `workforce_scaled` block; idempotent across runs. The `docs/commented_vanilla_*` reference dumps are gitignored. |
 | `map_data/state_regions/*.txt` (17 files) | `resources.py` | `deposits_config.json` + vanilla `game/map_data/state_regions/` | After a vanilla map change, update `deposits_config.json` to point old/removed states at successors and re-run. Files do **not** carry the AUTO-GENERATED header — verify by reading `resources.py` before editing. |
+| `localization/english/te_*_l_english.yml` (24 category files) | `organize_loc.py` | every other `*_l_english.yml` under `localization/english/` | Categorises and sorts every key. When you introduce a brand-new content family (new key prefix), add a `startswith` rule in `categorize_key` and a category in `CATEGORIES` — otherwise its keys silently land in MISCELLANEOUS and any pre-existing dedicated file gets dropped on next run. |
 
 ## Docs
 
@@ -40,11 +44,11 @@ These are written by scripts that the team runs occasionally to *bootstrap* cont
 
 | File | Generator | Notes |
 |---|---|---|
-| `common/buildings/company_buildings.txt` | `gen_vanilla_company_buildings.py` | |
-| `common/production_method_groups/unique_pm_groups.txt` | `gen_vanilla_company_buildings.py` | |
-| `common/production_methods/unique_pms.txt` | `gen_vanilla_company_buildings.py` | Note: was hand-edited during the 1.13 migration. If running the generator again, propagate hand edits via the script's templates first. |
-| `common/company_types/extra_companies_vanilla_updates.txt` | `gen_vanilla_company_injects.py` AND `gen_vanilla_company_buildings.py` (both write here) | Coordinate runs to avoid one overwriting the other. |
-| `localization/english/te_buildings_l_english.yml` | `gen_vanilla_company_buildings.py` | |
-| `gfx/interface/icons/character_trait_icons/aptitude_*` (DDS) | `gen_aptitude_icons.py` | |
-| `gfx/interface/icons/production_method_icons/*` (DDS) | `gen_pm_icons.py` | |
-| `gfx/interface/icons/law_icons/*` (DDS) | `gen_law_icons.py` | |
+| `common/buildings/company_buildings.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | |
+| `common/production_method_groups/unique_pm_groups.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | |
+| `common/production_methods/unique_pms.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | Note: was hand-edited during the 1.13 migration. If running the generator again, propagate hand edits via the script's templates first. |
+| `common/company_types/extra_companies_vanilla_updates.txt` | `scripts/generators/gen_vanilla_company_injects.py` AND `scripts/generators/gen_vanilla_company_buildings.py` (both write here) | Coordinate runs to avoid one overwriting the other. |
+| `localization/english/te_buildings_l_english.yml` | `scripts/generators/gen_vanilla_company_buildings.py` | |
+| `gfx/interface/icons/character_trait_icons/aptitude_*` (DDS) | `scripts/image_pipeline/gen_aptitude_icons.py` | |
+| `gfx/interface/icons/production_method_icons/*` (DDS) | `scripts/image_pipeline/gen_pm_icons.py` | |
+| `gfx/interface/icons/law_icons/*` (DDS) | `scripts/image_pipeline/gen_law_icons.py` | |

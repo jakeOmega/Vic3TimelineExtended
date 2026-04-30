@@ -4,6 +4,12 @@
 # Core (mod state server, parsers, generators):
 requests
 pyyaml
+# regex: used by ig_feminism.py (auto-run on server reload). Install or the
+# server will log "[post-load] ig_feminism FAILED" and continue without it.
+regex
+# numpy: used by pop_needs_curves.py for power-law extrapolation in the
+# auto-run buy_packages regenerator. matplotlib is only needed for --plot.
+numpy
 
 # Image generation (gen_image.py); optional for headless / non-GPU setups.
 # Comment out on machines without CUDA or a HuggingFace account.

@@ -20,11 +20,15 @@ import math
 import os
 import re
 import sys
-import matplotlib
 import numpy as np
-matplotlib.use("TkAgg")
 
 from path_constants import base_game_path, mod_path
+
+
+def _setup_matplotlib():
+    """Lazy import — matplotlib is only needed for --plot / --plot-political."""
+    import matplotlib
+    matplotlib.use("TkAgg")
 
 
 # ── Need Curve Functions ──────────────────────────────────────────────────────
@@ -476,6 +480,7 @@ def print_expenditure_table():
 
 def plot_expenditure():
     """Show matplotlib plots comparing vanilla vs modded expenditure."""
+    _setup_matplotlib()
     import matplotlib.pyplot as plt
 
     vanilla_path = os.path.join(base_game_path, "game", "common", "buy_packages", "00_buy_packages.txt")
@@ -565,6 +570,7 @@ def extract_political_strengths_from_buy_packages(content: str) -> dict:
 
 def plot_political_strength():
     """Extract vanilla political strength per wealth level and plot it."""
+    _setup_matplotlib()
     import matplotlib.pyplot as plt
 
     vanilla_path = os.path.join(base_game_path, "game", "common", "buy_packages", "00_buy_packages.txt")
@@ -599,6 +605,14 @@ def plot_political_strength():
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
+
+def regenerate(mod_state=None):
+    """Auto-run entrypoint invoked by mod_state_server post-load."""
+    import contextlib
+    import io
+    with contextlib.redirect_stdout(io.StringIO()):
+        generate_buy_packages(dry_run=False, replace_political=True)
+
 
 def main():
     parser = argparse.ArgumentParser(

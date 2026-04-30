@@ -226,8 +226,15 @@ def process_and_update_military_costs(
         military_file_list = military_file_path
     mil_cost_data = ""
     for file_path in military_file_list:
+        # Tolerate vanilla files that have been split/renamed across patches —
+        # e.g. 01_navy_combat_unit_types.txt was removed when ship_types/ was
+        # introduced. Skipping is fine: nothing to annotate from a missing file.
+        if not os.path.exists(file_path):
+            continue
         with open(file_path, "r") as file:
             mil_cost_data += file.read() + "\n"
+    if not mil_cost_data.strip():
+        return
 
     updated_mil_cost_data = mil_cost_data
     mil_cost_pattern = re.compile(
@@ -273,11 +280,7 @@ def process_and_update_military_costs(
             file.write(updated_mil_cost_data)
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Annotate PM files with cost/revenue comments")
-    parser.add_argument("--dry-run", action="store_true", help="Print actions without writing files")
-    args = parser.parse_args()
-
+def _run(dry_run: bool, verbose: bool):
     goods_file_paths = [
         os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
         os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
@@ -292,20 +295,20 @@ def main():
         for f in os.listdir(vanilla_pms_file_loc)
         if f.endswith(".txt")
     ]
-    output_file_path = os.path.join(mod_path, "commented_vanilla_pms.txt")
+    output_file_path = os.path.join(mod_path, "docs", "commented_vanilla_pms.txt")
     goods_dict = parse_goods(goods_file_paths)
 
-    if args.dry_run:
-        print("[dry-run] Would annotate mod PM files:")
-        for fp in pms_file_paths:
-            print(f"  {fp}")
-        print(f"[dry-run] Would write commented vanilla PMs to: {output_file_path}")
+    if dry_run:
+        if verbose:
+            print("[dry-run] Would annotate mod PM files:")
+            for fp in pms_file_paths:
+                print(f"  {fp}")
+            print(f"[dry-run] Would write commented vanilla PMs to: {output_file_path}")
     else:
         for file_path in pms_file_paths:
             process_and_update_production_methods_grouped(
                 file_path, goods_dict, calculate_costs, calculate_employment
             )
-
         process_and_update_production_methods_grouped(
             vanilla_pm_file_paths,
             goods_dict,
@@ -313,22 +316,23 @@ def main():
             calculate_employment,
             output_file_path,
         )
-        print("Production methods file updated successfully.")
+        if verbose:
+            print("Production methods file updated successfully.")
 
-    # Military costs
     vanilla_military_unit_file_path = [
         os.path.join(base_game_path, "game", "common", "combat_unit_types", "00_land_combat_unit_types.txt"),
         os.path.join(base_game_path, "game", "common", "combat_unit_types", "01_navy_combat_unit_types.txt"),
     ]
     military_unit_file_path = os.path.join(mod_path, "common", "combat_unit_types", "extra_combat_units.txt")
     mobilization_file_path = os.path.join(mod_path, "common", "mobilization_options", "extra_mobilization_options.txt")
-    mil_output_path = os.path.join(mod_path, "commented_vanilla_military_units.txt")
+    mil_output_path = os.path.join(mod_path, "docs", "commented_vanilla_military_units.txt")
 
-    if args.dry_run:
-        print(f"[dry-run] Would annotate military files:")
-        print(f"  {military_unit_file_path}")
-        print(f"  {mobilization_file_path}")
-        print(f"[dry-run] Would write commented vanilla military units to: {mil_output_path}")
+    if dry_run:
+        if verbose:
+            print(f"[dry-run] Would annotate military files:")
+            print(f"  {military_unit_file_path}")
+            print(f"  {mobilization_file_path}")
+            print(f"[dry-run] Would write commented vanilla military units to: {mil_output_path}")
     else:
         process_and_update_military_costs(military_unit_file_path, goods_dict)
         process_and_update_military_costs(mobilization_file_path, goods_dict)
@@ -337,7 +341,20 @@ def main():
             goods_dict,
             write_path=mil_output_path,
         )
-        print("Military costs file updated successfully.")
+        if verbose:
+            print("Military costs file updated successfully.")
+
+
+def regenerate(mod_state=None):
+    """Auto-run entrypoint invoked by mod_state_server post-load."""
+    _run(dry_run=False, verbose=False)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Annotate PM files with cost/revenue comments")
+    parser.add_argument("--dry-run", action="store_true", help="Print actions without writing files")
+    args = parser.parse_args()
+    _run(dry_run=args.dry_run, verbose=True)
 
 
 if __name__ == "__main__":

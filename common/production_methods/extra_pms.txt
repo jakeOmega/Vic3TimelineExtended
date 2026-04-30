@@ -14333,7 +14333,7 @@ pm_advanced_ocean_mine  = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (7.06%)
-			goods_input_magnetic_drive_ships_add = 10                   # Price:  130, Total cost:  1300.0 (5.10%)
+			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (5.10%)
 			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.35%)
 			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.92%)
 			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (9.41%)
@@ -14377,7 +14377,7 @@ pm_automated_ocean_mine  = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (5.94%)
-			goods_input_magnetic_drive_ships_add = 10                   # Price:  130, Total cost:  1300.0 (4.29%)
+			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (4.29%)
 			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (1.98%)
 			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.30%)
 			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (7.92%)
@@ -15017,7 +15017,7 @@ pm_advanced_metamaterials_shipbuilding = {
 			goods_input_robotics_add = 20                        # Price:   80, Total cost:  1600.0 (18.60%)
 			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (46.51%)
 			# Output goods
-			goods_output_magnetic_drive_ships_add = 100                 # Price:  130, Total cost: 13000.0 (100.00%)
+			goods_output_magnetic_drive_ships_add = 100          # Price:  130, Total cost: 13000.0 (100.00%)
 			# Total input cost: 8600.0
 			# Total output cost: 13000.0
 			# Profit: 4400.0
@@ -15523,15 +15523,15 @@ pm_earth_orbit = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 500               # Price:  200, Total cost: 200000.0 (100.00%)
+			goods_input_launch_capacity_add = 500                # Price:  200, Total cost: 100000.0 (100.00%)
 			# Output goods
-			# Total input cost: 200000.0
+			# Total input cost: 100000.0
 			# Total output cost: 0
-			# Profit: -200000.0
+			# Profit: -100000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -5.00
+			# Wage breakeven: -2.50
 		}
 
 		level_scaled = {
@@ -15564,15 +15564,15 @@ pm_moon_mission = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 1500               # Price:  200, Total cost: 600000.0 (100.00%)
+			goods_input_launch_capacity_add = 1500               # Price:  200, Total cost: 300000.0 (100.00%)
 			# Output goods
-			# Total input cost: 600000.0
+			# Total input cost: 300000.0
 			# Total output cost: 0
-			# Profit: -600000.0
+			# Profit: -300000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -15.00
+			# Wage breakeven: -7.50
 		}
 
 		level_scaled = {
@@ -15606,15 +15606,15 @@ pm_mars_mission = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 5000              # Price:  200, Total cost: 2000000.0 (100.00%)
+			goods_input_launch_capacity_add = 5000               # Price:  200, Total cost: 1000000.0 (100.00%)
 			# Output goods
-			# Total input cost: 2000000.0
+			# Total input cost: 1000000.0
 			# Total output cost: 0
-			# Profit: -2000000.0
+			# Profit: -1000000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -50.00
+			# Wage breakeven: -25.00
 		}
 
 		level_scaled = {
@@ -15649,15 +15649,15 @@ pm_solar_colonization = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 25000              # Price:  200, Total cost: 10000000.0 (100.00%)
+			goods_input_launch_capacity_add = 25000              # Price:  200, Total cost: 5000000.0 (100.00%)
 			# Output goods
-			# Total input cost: 10000000.0
+			# Total input cost: 5000000.0
 			# Total output cost: 0
-			# Profit: -10000000.0
+			# Profit: -5000000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -250.00
+			# Wage breakeven: -125.00
 		}
 
 		level_scaled = {
@@ -15693,15 +15693,15 @@ pm_deep_space_exploration = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 15000000.0 (100.00%)
+			goods_input_launch_capacity_add = 50000              # Price:  200, Total cost: 10000000.0 (100.00%)
 			# Output goods
-			# Total input cost: 15000000.0
+			# Total input cost: 10000000.0
 			# Total output cost: 0
-			# Profit: -15000000.0
+			# Profit: -10000000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -375.00
+			# Wage breakeven: -250.00
 		}
 
 		level_scaled = {
