@@ -135,6 +135,9 @@ concept_target_defenses = {}
 # Institutions
 concept_ministry_system = {}
 
+# Government & Lawmaking
+concept_legislative_override_capacity = {}
+
 # Other
 concept_religious_revival = {}
 concept_custom_religion = {}

@@ -194,6 +194,7 @@ Intellectual Property:
 	Traditional IP Protection - Unlocking Technology: Mutual Funds
 	Strict IP Protection - Unlocking Technology: Corporate Governance
 	Open Source Innovation - Unlocking Technology: Knowledge Economy
+	State Intellectual Property
 Monetary Policy:
 	Commodity Money
 	Gold Standard - Unlocking Technology: International Exchange Standards
@@ -252,6 +253,7 @@ Financial Regulation:
 	Universal Banking (Light Prudence) - Unlocking Technology: Central Banking
 	Prudential / Narrow Banking - Unlocking Technology: Modern Financial Instruments
 	Directed Credit & Development Banks - Unlocking Technology: Central Planning
+	State-Owned Banking
 	Central Bank Independence - Unlocking Technology: Keynesian Economics
 Internet Governance:
 	No Internet Policy
