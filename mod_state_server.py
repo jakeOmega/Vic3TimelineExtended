@@ -851,7 +851,11 @@ def _build_pattern_indexes(
 # ---------------------------------------------------------------------------
 # Suffix heuristic for detecting modifier-use keys. Keys ending with these
 # suffixes that aren't in the engine modifier set are validation candidates.
-_MODIFIER_SUFFIX_RE = re.compile(r"_(add|mult|max_levels|max_level|set)$")
+# `_bool` / `_boolean` are included so missing boolean modifier type definitions
+# get caught — vanilla and mod conventionally suffix booleans this way, and the
+# engine silently no-ops references to undeclared booleans (the country_sr_*
+# regression of 2026-04-29).
+_MODIFIER_SUFFIX_RE = re.compile(r"_(add|mult|max_levels|max_level|set|bool|boolean)$")
 
 # Container keys whose children we walk into but never count as
 # effect / trigger / modifier names themselves.
@@ -1033,10 +1037,34 @@ def _validate_engine_coverage() -> dict:
                     continue
                 if key in _CONTAINER_KEYS:
                     continue
-                # Skip scope/value accessors: `modifier:KEY`, `var:KEY`, `c:TAG`,
-                # `s:STATE_X`, `scope:saved`, `cu:culture`, etc. These contain
-                # a colon and aren't modifier names.
+                # Scope accessors (`var:KEY`, `c:TAG`, `s:STATE_X`, `scope:saved`,
+                # `cu:culture`, `je:foo`, …) are not modifier names. The one
+                # exception: `modifier:NAME` triggers (used in JE possible /
+                # scripted_triggers / etc.) read a country/state modifier by
+                # name, so the suffix after `modifier:` IS a modifier name and
+                # should be validated. Caught here so the country_sr_* regression
+                # would be flagged in either the PM or the JE possible-clause path.
                 if ":" in key:
+                    if key.startswith("modifier:"):
+                        bool_name = key[len("modifier:"):]
+                        if bool_name and not any(c in bool_name for c in ":${}/") \
+                                and bool_name not in script_values_set:
+                            tstatus, tinfo = _classify_modifier_name(
+                                bool_name, modifiers_set, catalog_pairs)
+                            if tstatus not in ("engine", "pattern"):
+                                used_in = (
+                                    f"{etype}/{entity_id} → "
+                                    + " → ".join(str(p) for p in path)
+                                    + f" → modifier:{bool_name}"
+                                )
+                                bucket = (unknown_modifiers
+                                          if tstatus == "unknown"
+                                          else suspicious_modifiers)
+                                if bool_name not in bucket:
+                                    bucket[bool_name] = {
+                                        "name": bool_name, "used_in": [], **tinfo,
+                                    }
+                                bucket[bool_name]["used_in"].append(used_in)
                     continue
                 # Only flag keys that LOOK like modifier names: ends in _add/_mult/_max/_set
                 if not _MODIFIER_SUFFIX_RE.search(key):
