@@ -1606,9 +1606,25 @@ sol_expectations_shift_clamped_value = {
 	}
 }
 
-# Per-class total shift values: clamped adaptive shift + class-specific offset.
-# Overall mult scales the base shift before per-strata adjustments.
-# Each is the multiplier for its respective strata static modifier.
+# Global awareness term: literate populations are aware of how their SoL
+# compares to the rest of the world. Positive when world is richer than us
+# (expectations rise — our pops feel poor), negative when world is poorer
+# (expectations fall — our pops feel content). Scaled by literacy so only
+# educated populations carry the signal. Sensitivity coefficient 0.5 is a
+# placeholder; tune after playtest.
+#
+# global_average_sol is defined in cultural_hegemony_script_values.txt as the
+# population-weighted world mean — reused here, no new aggregation needed.
+sol_expectations_global_awareness_value = {
+	value = global_average_sol
+	subtract = average_sol
+	multiply = literacy_rate
+	multiply = 0.5
+}
+
+# Per-class total shift values: clamped adaptive shift + class-specific offset
+# + global awareness term. Each is the multiplier for its respective strata
+# static modifier.
 sol_expectations_upper_shift_value = {
 	value = sol_expectations_shift_clamped_value
 	multiply = {
@@ -1620,6 +1636,7 @@ sol_expectations_upper_shift_value = {
 		value = 1
 		add = modifier:country_sol_expectations_upper_offset_mult
 	}
+	add = sol_expectations_global_awareness_value
 }
 
 sol_expectations_middle_shift_value = {
@@ -1633,6 +1650,7 @@ sol_expectations_middle_shift_value = {
 		value = 1
 		add = modifier:country_sol_expectations_middle_offset_mult
 	}
+	add = sol_expectations_global_awareness_value
 }
 
 sol_expectations_lower_shift_value = {
@@ -1646,6 +1664,7 @@ sol_expectations_lower_shift_value = {
 		value = 1
 		add = modifier:country_sol_expectations_lower_offset_mult
 	}
+	add = sol_expectations_global_awareness_value
 }
 
 # ========== End SoL Expectations ==========
