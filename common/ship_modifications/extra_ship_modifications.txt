@@ -1,0 +1,1520 @@
+# =============================================================================
+# Vic3TimelineExtended — modern ship modifications
+# =============================================================================
+# Replaces the vanilla parent-ship slot mods (e.g. ship_mod_super_dreadnought_*)
+# that the modern ships were using. Each modern ship now has its own
+# thematically-modern slot mods. Modifier values match the vanilla parent's
+# (preserves balance); construction goods are modernized; names + flavor are
+# updated to fit the era.
+#
+# Tier scaling matches vanilla pattern: light/medium/high are scalar steps on
+# the same modifier axes. Some tiers add a small extra effect where the theme
+# justifies (e.g. heavy carrier propulsion adding small blockade strength).
+# =============================================================================
+
+
+# =============================================================================
+# ASW DESTROYER (era 6, sonar) — based on vanilla destroyer slots
+# =============================================================================
+
+ship_mod_asw_destroyer_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 15
+		ship_hit_points_max_add = 250
+	}
+	construction_goods = {
+		goods_input_steel_add = 10
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 35
+		ship_hit_points_max_add = 675
+	}
+	construction_goods = {
+		goods_input_steel_add = 20
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 70
+		ship_hit_points_max_add = 1250
+		ship_visibility_add = -5
+	}
+	construction_goods = {
+		goods_input_steel_add = 32
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_asw_destroyer_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 35
+		ship_crew_damage_add = 10
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 16
+		goods_input_electronic_components_add = 4
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 80
+		ship_crew_damage_add = 20
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 12
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 24
+		goods_input_electronic_components_add = 8
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 160
+		ship_crew_damage_add = 50
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 25
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.15
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 30
+		goods_input_electronic_components_add = 14
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_asw_destroyer_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 8 }
+	construction_goods = {
+		goods_input_engines_add = 24
+		goods_input_oil_add = 10
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 36
+		goods_input_oil_add = 16
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = {
+		ship_movement_speed_add = 12
+		ship_visibility_add = -3
+	}
+	construction_goods = {
+		goods_input_engines_add = 50
+		goods_input_oil_add = 24
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_asw_destroyer_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_marine_capacity_add = 0.05
+		ship_supply_capacity_add = 20
+	}
+	construction_goods = { goods_input_groceries_add = 16 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_supply_capacity_add = 55
+		ship_carrying_capacity_add = 0.25
+		ship_marine_capacity_add = 0.125
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 34 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_asw_destroyer_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_supply_capacity_add = 110
+		ship_carrying_capacity_add = 0.5
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 52 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# NUCLEAR SUBMARINE (era 7, advanced_submarine_technology) — submarine slots
+# =============================================================================
+
+ship_mod_nuclear_submarine_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 7
+		ship_hit_points_max_add = 250
+	}
+	construction_goods = { goods_input_steel_add = 12 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 20
+		ship_hit_points_max_add = 675
+	}
+	construction_goods = { goods_input_steel_add = 25 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 35
+		ship_hit_points_max_add = 1250
+		ship_visibility_add = -2
+	}
+	construction_goods = { goods_input_steel_add = 40 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_nuclear_submarine_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 35
+		ship_crew_damage_add = 10
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 0.5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 20
+		goods_input_electronic_components_add = 5
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 80
+		ship_crew_damage_add = 20
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 1
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 30
+		goods_input_electronic_components_add = 10
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 160
+		ship_crew_damage_add = 50
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 2.5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 38
+		goods_input_electronic_components_add = 18
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_nuclear_submarine_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 5.5 }
+	construction_goods = {
+		goods_input_engines_add = 30
+		goods_input_oil_add = 12
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 6.5 }
+	construction_goods = {
+		goods_input_engines_add = 45
+		goods_input_oil_add = 20
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = {
+		ship_movement_speed_add = 8
+		ship_visibility_add = -2
+	}
+	construction_goods = {
+		goods_input_engines_add = 62
+		goods_input_oil_add = 30
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_nuclear_submarine_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = { ship_supply_capacity_add = 6 }
+	construction_goods = { goods_input_groceries_add = 15 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_supply_capacity_add = 15
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 30 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_submarine_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_supply_capacity_add = 30
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 50 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# GUIDED MISSILE SHIP (era 7, guided_missiles) — destroyer slots
+# =============================================================================
+
+ship_mod_guided_missile_ship_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 15
+		ship_hit_points_max_add = 250
+	}
+	construction_goods = { goods_input_steel_add = 12 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 35
+		ship_hit_points_max_add = 675
+	}
+	construction_goods = { goods_input_steel_add = 25 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 70
+		ship_hit_points_max_add = 1250
+	}
+	construction_goods = { goods_input_steel_add = 40 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_guided_missile_ship_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 35
+		ship_crew_damage_add = 10
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 20
+		goods_input_electronic_components_add = 5
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 80
+		ship_crew_damage_add = 20
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 12
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 30
+		goods_input_electronic_components_add = 10
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 160
+		ship_crew_damage_add = 50
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 25
+		ship_accuracy_add = 25
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 38
+		goods_input_electronic_components_add = 18
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_guided_missile_ship_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 8 }
+	construction_goods = {
+		goods_input_engines_add = 30
+		goods_input_oil_add = 12
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 45
+		goods_input_oil_add = 20
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = { ship_movement_speed_add = 12 }
+	construction_goods = {
+		goods_input_engines_add = 62
+		goods_input_oil_add = 30
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_guided_missile_ship_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_marine_capacity_add = 0.05
+		ship_supply_capacity_add = 20
+	}
+	construction_goods = { goods_input_groceries_add = 20 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_supply_capacity_add = 55
+		ship_carrying_capacity_add = 0.25
+		ship_marine_capacity_add = 0.125
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 42 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_guided_missile_ship_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_supply_capacity_add = 110
+		ship_carrying_capacity_add = 0.5
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 65 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# NUCLEAR SUPERCARRIER (era 7, nuclear_energy) — aircraft_carrier slots
+# =============================================================================
+
+ship_mod_nuclear_supercarrier_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 59
+		ship_hit_points_max_add = 175
+	}
+	construction_goods = {
+		goods_input_steel_add = 12
+		goods_input_electronic_components_add = 8
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 144
+		ship_hit_points_max_add = 550
+	}
+	construction_goods = {
+		goods_input_steel_add = 30
+		goods_input_electronic_components_add = 15
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 300
+		ship_hit_points_max_add = 1100
+	}
+	construction_goods = {
+		goods_input_steel_add = 55
+		goods_input_electronic_components_add = 25
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_nuclear_supercarrier_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 90
+		ship_crew_damage_add = 8
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 10
+	}
+	construction_goods = {
+		goods_input_aeroplanes_add = 25
+		goods_input_electronic_components_add = 8
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 200
+		ship_crew_damage_add = 20
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 25
+	}
+	construction_goods = {
+		goods_input_aeroplanes_add = 50
+		goods_input_electronic_components_add = 15
+		goods_input_ammunition_add = 12
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 400
+		ship_crew_damage_add = 100
+		ship_critical_hit_chance_add = 0.25
+		ship_vulnerability_add = 100
+		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.1
+	}
+	construction_goods = {
+		goods_input_aeroplanes_add = 88
+		goods_input_electronic_components_add = 30
+		goods_input_ammunition_add = 25
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_nuclear_supercarrier_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 38
+		goods_input_oil_add = 15
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 12.5 }
+	construction_goods = {
+		goods_input_engines_add = 55
+		goods_input_oil_add = 25
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = {
+		ship_movement_speed_add = 15
+		ship_blockade_strength_add = 75
+	}
+	construction_goods = {
+		goods_input_engines_add = 75
+		goods_input_oil_add = 38
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_nuclear_supercarrier_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = { ship_supply_capacity_add = 45 }
+	construction_goods = { goods_input_groceries_add = 30 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_supply_capacity_add = 110
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 55 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_nuclear_supercarrier_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_supply_capacity_add = 225
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 95 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# ARSENAL SHIP (era 8, precision_guided_munitions) — super_dreadnought slots
+# =============================================================================
+
+ship_mod_arsenal_ship_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 70
+		ship_hit_points_max_add = 475
+	}
+	construction_goods = {
+		goods_input_steel_add = 54
+		goods_input_electronic_components_add = 12
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 170
+		ship_hit_points_max_add = 1150
+	}
+	construction_goods = {
+		goods_input_steel_add = 96
+		goods_input_electronic_components_add = 21
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 340
+		ship_hit_points_max_add = 2400
+	}
+	construction_goods = {
+		goods_input_steel_add = 150
+		goods_input_electronic_components_add = 36
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_arsenal_ship_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 85
+		ship_crew_damage_add = 30
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 10
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 36
+		goods_input_electronic_components_add = 15
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 210
+		ship_crew_damage_add = 85
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 25
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 66
+		goods_input_electronic_components_add = 27
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 420
+		ship_crew_damage_add = 160
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 50
+		ship_blockade_strength_add = 200
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 108
+		goods_input_electronic_components_add = 48
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_arsenal_ship_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 45
+		goods_input_oil_add = 18
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 12.5 }
+	construction_goods = {
+		goods_input_engines_add = 66
+		goods_input_oil_add = 30
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = { ship_movement_speed_add = 15 }
+	construction_goods = {
+		goods_input_engines_add = 90
+		goods_input_oil_add = 45
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_arsenal_ship_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_marine_capacity_add = 0.05
+		ship_supply_capacity_add = 45
+	}
+	construction_goods = { goods_input_groceries_add = 36 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_carrying_capacity_add = 0.25
+		ship_supply_capacity_add = 110
+		ship_marine_capacity_add = 0.125
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 66 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_arsenal_ship_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_carrying_capacity_add = 0.5
+		ship_supply_capacity_add = 225
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 114 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# EXPEDITIONARY SEA BASE (era 9, rapid_deployment_forces) — troop_ship slots
+# =============================================================================
+
+ship_mod_expeditionary_sea_base_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 4
+		ship_hit_points_max_add = 150
+	}
+	construction_goods = { goods_input_steel_add = 15 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 10
+		ship_hit_points_max_add = 375
+	}
+	construction_goods = { goods_input_steel_add = 30 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 20
+		ship_hit_points_max_add = 750
+	}
+	construction_goods = { goods_input_steel_add = 48 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_expeditionary_sea_base_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 13
+		ship_crew_damage_add = 4
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 10
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 15
+		goods_input_electronic_components_add = 3
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 37
+		ship_crew_damage_add = 10
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 25
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 27
+		goods_input_electronic_components_add = 9
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 67
+		ship_crew_damage_add = 20
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 50
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 39
+		goods_input_electronic_components_add = 15
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_expeditionary_sea_base_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 8.5 }
+	construction_goods = {
+		goods_input_engines_add = 42
+		goods_input_oil_add = 18
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 11 }
+	construction_goods = {
+		goods_input_engines_add = 60
+		goods_input_oil_add = 27
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = { ship_movement_speed_add = 13 }
+	construction_goods = {
+		goods_input_engines_add = 81
+		goods_input_oil_add = 39
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_expeditionary_sea_base_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_supply_capacity_add = 35
+	}
+	construction_goods = { goods_input_groceries_add = 30 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_carrying_capacity_add = 0.25
+		ship_supply_capacity_add = 90
+		ship_marine_capacity_add = 0.1
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 54 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_expeditionary_sea_base_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_carrying_capacity_add = 0.5
+		ship_supply_capacity_add = 170
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 90 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# HYPERSONIC MISSILE PLATFORM (era 10, hypersonic_weapons) — super_dreadnought slots
+# =============================================================================
+
+ship_mod_hypersonic_missile_platform_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 70
+		ship_hit_points_max_add = 475
+	}
+	construction_goods = {
+		goods_input_steel_add = 72
+		goods_input_electronic_components_add = 24
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 170
+		ship_hit_points_max_add = 1150
+	}
+	construction_goods = {
+		goods_input_steel_add = 128
+		goods_input_electronic_components_add = 40
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 340
+		ship_hit_points_max_add = 2400
+		ship_visibility_add = -10
+	}
+	construction_goods = {
+		goods_input_steel_add = 200
+		goods_input_electronic_components_add = 64
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_hypersonic_missile_platform_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 85
+		ship_crew_damage_add = 30
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 10
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 56
+		goods_input_electronic_components_add = 28
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 210
+		ship_crew_damage_add = 85
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 25
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 104
+		goods_input_electronic_components_add = 48
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 420
+		ship_crew_damage_add = 160
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 50
+		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.1
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 168
+		goods_input_electronic_components_add = 80
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_hypersonic_missile_platform_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 64
+		goods_input_oil_add = 28
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 12.5 }
+	construction_goods = {
+		goods_input_engines_add = 96
+		goods_input_oil_add = 44
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = {
+		ship_movement_speed_add = 15
+		ship_visibility_add = -5
+	}
+	construction_goods = {
+		goods_input_engines_add = 128
+		goods_input_oil_add = 64
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_hypersonic_missile_platform_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_marine_capacity_add = 0.05
+		ship_supply_capacity_add = 45
+	}
+	construction_goods = { goods_input_groceries_add = 56 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_carrying_capacity_add = 0.25
+		ship_supply_capacity_add = 110
+		ship_marine_capacity_add = 0.125
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 104 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_hypersonic_missile_platform_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_carrying_capacity_add = 0.5
+		ship_supply_capacity_add = 225
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 176 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# PULSED LASER ESCORT (era 11, directed_energy_weapons) — light_cruiser slots
+# =============================================================================
+
+ship_mod_pulsed_laser_escort_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 50
+		ship_hit_points_max_add = 175
+	}
+	construction_goods = {
+		goods_input_steel_add = 21
+		goods_input_electronic_components_add = 14
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 131
+		ship_hit_points_max_add = 475
+	}
+	construction_goods = {
+		goods_input_steel_add = 42
+		goods_input_electronic_components_add = 28
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 250
+		ship_hit_points_max_add = 925
+	}
+	construction_goods = {
+		goods_input_steel_add = 77
+		goods_input_electronic_components_add = 46
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_pulsed_laser_escort_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 75
+		ship_crew_damage_add = 15
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 0.5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 14
+		goods_input_electronic_components_add = 28
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 180
+		ship_crew_damage_add = 30
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 1.5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 24
+		goods_input_electronic_components_add = 49
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 350
+		ship_crew_damage_add = 70
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 3
+		ship_accuracy_add = 50
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 42
+		goods_input_electronic_components_add = 77
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_pulsed_laser_escort_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 49
+		goods_input_oil_add = 21
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 12.5 }
+	construction_goods = {
+		goods_input_engines_add = 77
+		goods_input_oil_add = 35
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = { ship_movement_speed_add = 15 }
+	construction_goods = {
+		goods_input_engines_add = 105
+		goods_input_oil_add = 52
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_pulsed_laser_escort_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_marine_capacity_add = 0.05
+		ship_supply_capacity_add = 40
+	}
+	construction_goods = { goods_input_groceries_add = 42 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_carrying_capacity_add = 0.25
+		ship_supply_capacity_add = 105
+		ship_marine_capacity_add = 0.125
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 77 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_pulsed_laser_escort_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_carrying_capacity_add = 0.5
+		ship_supply_capacity_add = 190
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 133 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+
+# =============================================================================
+# SWARM COORDINATION VESSEL (era 11, swarm_technology) — light_cruiser slots
+# =============================================================================
+
+ship_mod_swarm_coordination_vessel_armor_light = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_light"
+	modifier = {
+		ship_armor_add = 50
+		ship_hit_points_max_add = 175
+	}
+	construction_goods = {
+		goods_input_steel_add = 21
+		goods_input_electronic_components_add = 18
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_armor_medium = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_medium"
+	modifier = {
+		ship_armor_add = 131
+		ship_hit_points_max_add = 475
+	}
+	construction_goods = {
+		goods_input_steel_add = 42
+		goods_input_electronic_components_add = 32
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_armor_high = {
+	type = ship_mod_slot_armor
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_armor_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_armor_heavy"
+	modifier = {
+		ship_armor_add = 250
+		ship_hit_points_max_add = 925
+	}
+	construction_goods = {
+		goods_input_steel_add = 77
+		goods_input_electronic_components_add = 52
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_swarm_coordination_vessel_guns_light = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_light"
+	modifier = {
+		ship_hull_damage_add = 75
+		ship_crew_damage_add = 15
+		ship_critical_hit_chance_add = 0.1
+		ship_vulnerability_add = 0.5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 21
+		goods_input_electronic_components_add = 32
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_guns_medium = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_medium"
+	modifier = {
+		ship_hull_damage_add = 180
+		ship_crew_damage_add = 30
+		ship_critical_hit_chance_add = 0.15
+		ship_vulnerability_add = 1.5
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 38
+		goods_input_electronic_components_add = 56
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_guns_high = {
+	type = ship_mod_slot_guns
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_guns_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_guns_heavy"
+	modifier = {
+		ship_hull_damage_add = 350
+		ship_crew_damage_add = 70
+		ship_critical_hit_chance_add = 0.2
+		ship_vulnerability_add = 3
+		ship_screening_add = 100
+	}
+	construction_goods = {
+		goods_input_ammunition_add = 63
+		goods_input_electronic_components_add = 91
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_swarm_coordination_vessel_propulsion_light = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
+	modifier = { ship_movement_speed_add = 10 }
+	construction_goods = {
+		goods_input_engines_add = 49
+		goods_input_oil_add = 21
+	}
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_propulsion_medium = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
+	modifier = { ship_movement_speed_add = 12.5 }
+	construction_goods = {
+		goods_input_engines_add = 77
+		goods_input_oil_add = 35
+	}
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_propulsion_high = {
+	type = ship_mod_slot_propulsion
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_propulsion_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
+	modifier = { ship_movement_speed_add = 15 }
+	construction_goods = {
+		goods_input_engines_add = 105
+		goods_input_oil_add = 52
+	}
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}
+
+ship_mod_swarm_coordination_vessel_range_light = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
+	modifier = {
+		ship_carrying_capacity_add = 0.1
+		ship_marine_capacity_add = 0.05
+		ship_supply_capacity_add = 40
+	}
+	construction_goods = { goods_input_groceries_add = 42 }
+	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_range_medium = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_mid.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_medium"
+	modifier = {
+		ship_carrying_capacity_add = 0.25
+		ship_supply_capacity_add = 105
+		ship_marine_capacity_add = 0.125
+		ship_supply_efficiency_add = 0.1
+	}
+	construction_goods = { goods_input_groceries_add = 77 }
+	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
+}
+ship_mod_swarm_coordination_vessel_range_high = {
+	type = ship_mod_slot_range
+	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_high.dds"
+	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_long"
+	modifier = {
+		ship_carrying_capacity_add = 0.5
+		ship_supply_capacity_add = 190
+		ship_marine_capacity_add = 0.25
+		ship_supply_efficiency_add = 0.25
+	}
+	construction_goods = { goods_input_groceries_add = 133 }
+	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
+}

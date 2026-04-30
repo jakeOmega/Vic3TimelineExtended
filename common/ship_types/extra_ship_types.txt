@@ -75,24 +75,24 @@ ship_type_asw_destroyer = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_destroyer_armor_light
-			ship_mod_destroyer_armor_medium
-			ship_mod_destroyer_armor_high
+			ship_mod_asw_destroyer_armor_light
+			ship_mod_asw_destroyer_armor_medium
+			ship_mod_asw_destroyer_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_destroyer_guns_light
-			ship_mod_destroyer_guns_medium
-			ship_mod_destroyer_guns_high
+			ship_mod_asw_destroyer_guns_light
+			ship_mod_asw_destroyer_guns_medium
+			ship_mod_asw_destroyer_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_destroyer_propulsion_light
-			ship_mod_destroyer_propulsion_medium
-			ship_mod_destroyer_propulsion_high
+			ship_mod_asw_destroyer_propulsion_light
+			ship_mod_asw_destroyer_propulsion_medium
+			ship_mod_asw_destroyer_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_destroyer_range_light
-			ship_mod_destroyer_range_medium
-			ship_mod_destroyer_range_high
+			ship_mod_asw_destroyer_range_light
+			ship_mod_asw_destroyer_range_medium
+			ship_mod_asw_destroyer_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_sonar_suite
@@ -159,24 +159,24 @@ ship_type_nuclear_submarine = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_submarine_armor_light
-			ship_mod_submarine_armor_medium
-			ship_mod_submarine_armor_high
+			ship_mod_nuclear_submarine_armor_light
+			ship_mod_nuclear_submarine_armor_medium
+			ship_mod_nuclear_submarine_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_submarine_guns_light
-			ship_mod_submarine_guns_medium
-			ship_mod_submarine_guns_high
+			ship_mod_nuclear_submarine_guns_light
+			ship_mod_nuclear_submarine_guns_medium
+			ship_mod_nuclear_submarine_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_submarine_propulsion_light
-			ship_mod_submarine_propulsion_medium
-			ship_mod_submarine_propulsion_high
+			ship_mod_nuclear_submarine_propulsion_light
+			ship_mod_nuclear_submarine_propulsion_medium
+			ship_mod_nuclear_submarine_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_submarine_range_light
-			ship_mod_submarine_range_medium
-			ship_mod_submarine_range_high
+			ship_mod_nuclear_submarine_range_light
+			ship_mod_nuclear_submarine_range_medium
+			ship_mod_nuclear_submarine_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_nuclear_propulsion
@@ -241,24 +241,24 @@ ship_type_guided_missile_ship = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_destroyer_armor_light
-			ship_mod_destroyer_armor_medium
-			ship_mod_destroyer_armor_high
+			ship_mod_guided_missile_ship_armor_light
+			ship_mod_guided_missile_ship_armor_medium
+			ship_mod_guided_missile_ship_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_destroyer_guns_light
-			ship_mod_destroyer_guns_medium
-			ship_mod_destroyer_guns_high
+			ship_mod_guided_missile_ship_guns_light
+			ship_mod_guided_missile_ship_guns_medium
+			ship_mod_guided_missile_ship_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_destroyer_propulsion_light
-			ship_mod_destroyer_propulsion_medium
-			ship_mod_destroyer_propulsion_high
+			ship_mod_guided_missile_ship_propulsion_light
+			ship_mod_guided_missile_ship_propulsion_medium
+			ship_mod_guided_missile_ship_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_destroyer_range_light
-			ship_mod_destroyer_range_medium
-			ship_mod_destroyer_range_high
+			ship_mod_guided_missile_ship_range_light
+			ship_mod_guided_missile_ship_range_medium
+			ship_mod_guided_missile_ship_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_ballistic_missile_bay
@@ -272,6 +272,7 @@ ship_type_guided_missile_ship = {
 
 ### NUCLEAR SUPERCARRIER — era 7, nuclear_energy
 ### Pre-update mod stats: 700 atk / 350 def — capital-class fleet flagship (~7x vanilla super_dreadnought)
+### 1.13.1 rebalance: armor 360 → 200 (ratio 0.80) to match vanilla's new ~0.83 armor:damage target for late-game capitals.
 ship_type_nuclear_supercarrier = {
 	ship_group = ship_group_cruisers
 	modification_construction_cost = 240
@@ -286,7 +287,7 @@ ship_type_nuclear_supercarrier = {
 		ship_supply_capacity_add = 250
 		ship_hull_damage_add = 250
 		ship_crew_damage_add = 80
-		ship_armor_add = 360
+		ship_armor_add = 200
 		ship_critical_hit_chance_add = 0.35
 		ship_critical_hit_multiplier_add = 2.5
 		ship_vulnerability_add = 100
@@ -323,24 +324,24 @@ ship_type_nuclear_supercarrier = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_aircraft_carrier_armor_light
-			ship_mod_aircraft_carrier_armor_medium
-			ship_mod_aircraft_carrier_armor_high
+			ship_mod_nuclear_supercarrier_armor_light
+			ship_mod_nuclear_supercarrier_armor_medium
+			ship_mod_nuclear_supercarrier_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_aircraft_carrier_guns_light
-			ship_mod_aircraft_carrier_guns_medium
-			ship_mod_aircraft_carrier_guns_high
+			ship_mod_nuclear_supercarrier_guns_light
+			ship_mod_nuclear_supercarrier_guns_medium
+			ship_mod_nuclear_supercarrier_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_aircraft_carrier_propulsion_light
-			ship_mod_aircraft_carrier_propulsion_medium
-			ship_mod_aircraft_carrier_propulsion_high
+			ship_mod_nuclear_supercarrier_propulsion_light
+			ship_mod_nuclear_supercarrier_propulsion_medium
+			ship_mod_nuclear_supercarrier_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_aircraft_carrier_range_light
-			ship_mod_aircraft_carrier_range_medium
-			ship_mod_aircraft_carrier_range_high
+			ship_mod_nuclear_supercarrier_range_light
+			ship_mod_nuclear_supercarrier_range_medium
+			ship_mod_nuclear_supercarrier_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_nuclear_propulsion
@@ -413,24 +414,24 @@ ship_type_arsenal_ship = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_super_dreadnought_armor_light
-			ship_mod_super_dreadnought_armor_medium
-			ship_mod_super_dreadnought_armor_high
+			ship_mod_arsenal_ship_armor_light
+			ship_mod_arsenal_ship_armor_medium
+			ship_mod_arsenal_ship_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_super_dreadnought_guns_light
-			ship_mod_super_dreadnought_guns_medium
-			ship_mod_super_dreadnought_guns_high
+			ship_mod_arsenal_ship_guns_light
+			ship_mod_arsenal_ship_guns_medium
+			ship_mod_arsenal_ship_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_super_dreadnought_propulsion_light
-			ship_mod_super_dreadnought_propulsion_medium
-			ship_mod_super_dreadnought_propulsion_high
+			ship_mod_arsenal_ship_propulsion_light
+			ship_mod_arsenal_ship_propulsion_medium
+			ship_mod_arsenal_ship_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_super_dreadnought_range_light
-			ship_mod_super_dreadnought_range_medium
-			ship_mod_super_dreadnought_range_high
+			ship_mod_arsenal_ship_range_light
+			ship_mod_arsenal_ship_range_medium
+			ship_mod_arsenal_ship_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_ballistic_missile_bay
@@ -503,24 +504,24 @@ ship_type_expeditionary_sea_base = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_troop_ship_armor_light
-			ship_mod_troop_ship_armor_medium
-			ship_mod_troop_ship_armor_high
+			ship_mod_expeditionary_sea_base_armor_light
+			ship_mod_expeditionary_sea_base_armor_medium
+			ship_mod_expeditionary_sea_base_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_troop_ship_guns_light
-			ship_mod_troop_ship_guns_medium
-			ship_mod_troop_ship_guns_high
+			ship_mod_expeditionary_sea_base_guns_light
+			ship_mod_expeditionary_sea_base_guns_medium
+			ship_mod_expeditionary_sea_base_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_troop_ship_propulsion_light
-			ship_mod_troop_ship_propulsion_medium
-			ship_mod_troop_ship_propulsion_high
+			ship_mod_expeditionary_sea_base_propulsion_light
+			ship_mod_expeditionary_sea_base_propulsion_medium
+			ship_mod_expeditionary_sea_base_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_troop_ship_range_light
-			ship_mod_troop_ship_range_medium
-			ship_mod_troop_ship_range_high
+			ship_mod_expeditionary_sea_base_range_light
+			ship_mod_expeditionary_sea_base_range_medium
+			ship_mod_expeditionary_sea_base_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_landing_skiffs
@@ -589,24 +590,24 @@ ship_type_hypersonic_missile_platform = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_super_dreadnought_armor_light
-			ship_mod_super_dreadnought_armor_medium
-			ship_mod_super_dreadnought_armor_high
+			ship_mod_hypersonic_missile_platform_armor_light
+			ship_mod_hypersonic_missile_platform_armor_medium
+			ship_mod_hypersonic_missile_platform_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_super_dreadnought_guns_light
-			ship_mod_super_dreadnought_guns_medium
-			ship_mod_super_dreadnought_guns_high
+			ship_mod_hypersonic_missile_platform_guns_light
+			ship_mod_hypersonic_missile_platform_guns_medium
+			ship_mod_hypersonic_missile_platform_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_super_dreadnought_propulsion_light
-			ship_mod_super_dreadnought_propulsion_medium
-			ship_mod_super_dreadnought_propulsion_high
+			ship_mod_hypersonic_missile_platform_propulsion_light
+			ship_mod_hypersonic_missile_platform_propulsion_medium
+			ship_mod_hypersonic_missile_platform_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_super_dreadnought_range_light
-			ship_mod_super_dreadnought_range_medium
-			ship_mod_super_dreadnought_range_high
+			ship_mod_hypersonic_missile_platform_range_light
+			ship_mod_hypersonic_missile_platform_range_medium
+			ship_mod_hypersonic_missile_platform_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_ballistic_missile_bay
@@ -673,24 +674,24 @@ ship_type_pulsed_laser_escort = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_light_cruiser_armor_light
-			ship_mod_light_cruiser_armor_medium
-			ship_mod_light_cruiser_armor_high
+			ship_mod_pulsed_laser_escort_armor_light
+			ship_mod_pulsed_laser_escort_armor_medium
+			ship_mod_pulsed_laser_escort_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_light_cruiser_guns_light
-			ship_mod_light_cruiser_guns_medium
-			ship_mod_light_cruiser_guns_high
+			ship_mod_pulsed_laser_escort_guns_light
+			ship_mod_pulsed_laser_escort_guns_medium
+			ship_mod_pulsed_laser_escort_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_light_cruiser_propulsion_light
-			ship_mod_light_cruiser_propulsion_medium
-			ship_mod_light_cruiser_propulsion_high
+			ship_mod_pulsed_laser_escort_propulsion_light
+			ship_mod_pulsed_laser_escort_propulsion_medium
+			ship_mod_pulsed_laser_escort_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_light_cruiser_range_light
-			ship_mod_light_cruiser_range_medium
-			ship_mod_light_cruiser_range_high
+			ship_mod_pulsed_laser_escort_range_light
+			ship_mod_pulsed_laser_escort_range_medium
+			ship_mod_pulsed_laser_escort_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_dew_point_defense
@@ -757,24 +758,24 @@ ship_type_swarm_coordination_vessel = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_light_cruiser_armor_light
-			ship_mod_light_cruiser_armor_medium
-			ship_mod_light_cruiser_armor_high
+			ship_mod_swarm_coordination_vessel_armor_light
+			ship_mod_swarm_coordination_vessel_armor_medium
+			ship_mod_swarm_coordination_vessel_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_light_cruiser_guns_light
-			ship_mod_light_cruiser_guns_medium
-			ship_mod_light_cruiser_guns_high
+			ship_mod_swarm_coordination_vessel_guns_light
+			ship_mod_swarm_coordination_vessel_guns_medium
+			ship_mod_swarm_coordination_vessel_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_light_cruiser_propulsion_light
-			ship_mod_light_cruiser_propulsion_medium
-			ship_mod_light_cruiser_propulsion_high
+			ship_mod_swarm_coordination_vessel_propulsion_light
+			ship_mod_swarm_coordination_vessel_propulsion_medium
+			ship_mod_swarm_coordination_vessel_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_light_cruiser_range_light
-			ship_mod_light_cruiser_range_medium
-			ship_mod_light_cruiser_range_high
+			ship_mod_swarm_coordination_vessel_range_light
+			ship_mod_swarm_coordination_vessel_range_medium
+			ship_mod_swarm_coordination_vessel_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_drone_complement

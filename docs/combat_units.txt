@@ -16,7 +16,7 @@ Infantry:
 		Unlocking Technology: Joint All-Domain Command and Control (JADC2)
 	Swarm Bots
 		Unlocking Technology: Swarm Technology
-	Grey Goo
+	Utility Fog Phalanx
 		Unlocking Technology: Molecular Assemblers
 Artillery:
 	Cannon Artillery
