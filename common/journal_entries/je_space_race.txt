@@ -94,6 +94,33 @@ je_space_race_suborbital = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital RISK = 5 } }
 	}
 
+	# Outcome previews — engine auto-tooltips the effect block; effects do not run.
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_suborbital_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_suborbital_first_outcome_tt
+			add_modifier = { name = sr_first_suborbital }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_suborbital_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_suborbital_subsequent_outcome_tt
+			add_modifier = { name = sr_suborbital }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_suborbital_setback_header
+		effect = {
+			custom_tooltip = je_space_race_suborbital_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_suborbital_completion_header
+	custom_failure_header       = je_space_race_suborbital_failure_header
+	custom_on_completion_header = je_space_race_suborbital_on_completion_header
+	custom_on_failure_header    = je_space_race_suborbital_on_failure_header
+
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
@@ -202,6 +229,32 @@ je_space_race_orbital = {
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital RISK = 6 } }
 	}
+
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_orbital_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_orbital_first_outcome_tt
+			add_modifier = { name = sr_first_orbital }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_orbital_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_orbital_subsequent_outcome_tt
+			add_modifier = { name = sr_orbital }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_orbital_setback_header
+		effect = {
+			custom_tooltip = je_space_race_orbital_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_orbital_completion_header
+	custom_failure_header       = je_space_race_orbital_failure_header
+	custom_on_completion_header = je_space_race_orbital_on_completion_header
+	custom_on_failure_header    = je_space_race_orbital_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -317,6 +370,32 @@ je_space_race_moon_landing = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing RISK = 6 } }
 	}
 
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_moon_landing_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_moon_landing_first_outcome_tt
+			add_modifier = { name = sr_first_moon_landing }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_moon_landing_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_moon_landing_subsequent_outcome_tt
+			add_modifier = { name = sr_moon_landing }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_moon_landing_setback_header
+		effect = {
+			custom_tooltip = je_space_race_moon_landing_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_moon_landing_completion_header
+	custom_failure_header       = je_space_race_moon_landing_failure_header
+	custom_on_completion_header = je_space_race_moon_landing_on_completion_header
+	custom_on_failure_header    = je_space_race_moon_landing_on_failure_header
+
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
@@ -428,6 +507,32 @@ je_space_race_probe = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe RISK = 6 } }
 	}
 
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_probe_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_probe_first_outcome_tt
+			add_modifier = { name = sr_first_probe }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_probe_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_probe_subsequent_outcome_tt
+			add_modifier = { name = sr_probe }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_probe_setback_header
+		effect = {
+			custom_tooltip = je_space_race_probe_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_probe_completion_header
+	custom_failure_header       = je_space_race_probe_failure_header
+	custom_on_completion_header = je_space_race_probe_on_completion_header
+	custom_on_failure_header    = je_space_race_probe_on_failure_header
+
 	weight = 90
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
@@ -536,6 +641,32 @@ je_space_race_moon_base = {
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_base RISK = 8 } }
 	}
+
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_moon_base_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_moon_base_first_outcome_tt
+			add_modifier = { name = sr_first_moon_base }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_moon_base_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_moon_base_subsequent_outcome_tt
+			add_modifier = { name = sr_moon_base }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_moon_base_setback_header
+		effect = {
+			custom_tooltip = je_space_race_moon_base_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_moon_base_completion_header
+	custom_failure_header       = je_space_race_moon_base_failure_header
+	custom_on_completion_header = je_space_race_moon_base_on_completion_header
+	custom_on_failure_header    = je_space_race_moon_base_on_failure_header
 
 	weight = 95
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -648,6 +779,32 @@ je_space_race_mars_landing = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing RISK = 9 } }
 	}
 
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_mars_landing_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_mars_landing_first_outcome_tt
+			add_modifier = { name = sr_first_mars_landing }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_mars_landing_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_mars_landing_subsequent_outcome_tt
+			add_modifier = { name = sr_mars_landing }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_mars_landing_setback_header
+		effect = {
+			custom_tooltip = je_space_race_mars_landing_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_mars_landing_completion_header
+	custom_failure_header       = je_space_race_mars_landing_failure_header
+	custom_on_completion_header = je_space_race_mars_landing_on_completion_header
+	custom_on_failure_header    = je_space_race_mars_landing_on_failure_header
+
 	weight = 95
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
@@ -749,6 +906,32 @@ je_space_race_interstellar_probe = {
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = interstellar_probe RISK = 9 } }
 	}
+
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_interstellar_probe_first_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_interstellar_probe_first_outcome_tt
+			add_modifier = { name = sr_first_interstellar_probe }
+		}
+	}
+	event_outcome_completed_effect_desc = {
+		header = je_space_race_interstellar_probe_subsequent_outcome_header
+		effect = {
+			custom_tooltip = je_space_race_interstellar_probe_subsequent_outcome_tt
+			add_modifier = { name = sr_interstellar_probe }
+		}
+	}
+	event_outcome_failed_effect_desc = {
+		header = je_space_race_interstellar_probe_setback_header
+		effect = {
+			custom_tooltip = je_space_race_interstellar_probe_setback_tt
+		}
+	}
+
+	custom_completion_header    = je_space_race_interstellar_probe_completion_header
+	custom_failure_header       = je_space_race_interstellar_probe_failure_header
+	custom_on_completion_header = je_space_race_interstellar_probe_on_completion_header
+	custom_on_failure_header    = je_space_race_interstellar_probe_on_failure_header
 
 	weight = 90
 	should_be_pinned_by_default_uninvolved_or_context = yes
