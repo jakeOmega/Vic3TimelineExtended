@@ -17,7 +17,7 @@ description: Triage Victoria 3 game logs (debug.log first, then error.log) in th
 curl -s http://localhost:8950/status
 ```
 
-If that fails, the mod state server isn't running. Ask the user to start it (`python mod_state_server.py`, ~50s warmup) — don't fall back to grepping log files by hand; the categorization, mod-only filtering, and dedupe live in the server.
+If that fails, the mod state server isn't running. Start it yourself with `.venv/bin/python mod_state_server.py` via Bash `run_in_background: true` (use the venv Python — system `python3` is missing the `regex` package). Warmup is ~60–110s; poll `curl -s http://localhost:8950/status` until it returns before continuing. Don't fall back to grepping log files by hand; the categorization, mod-only filtering, and dedupe live in the server.
 
 After mod-file edits: `curl -X POST http://localhost:8950/reload`. After only re-launching the game with no mod-file changes: `curl -X POST 'http://localhost:8950/reload?engine_only=true'` (skips the slow ModState rebuild).
 

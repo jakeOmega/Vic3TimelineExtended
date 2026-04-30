@@ -59,6 +59,14 @@ Div/0 near common/treaty_articles/05_transfer_money.txt:149
 
 Vanilla's `inherent_accept_score` script value contains `divide = scope:article.input_quantity` calls gated by `if = { limit = { exists = scope:article.input_quantity } }`, but the engine evaluates the full script-value tree before applying the `if` gate (same family as the `command_values.txt:373` bug above). Mod also adds `divide = gdp` tier blocks in the same script value, which may amplify the count when source/target country has near-zero GDP. Reports the line of the containing `inherent_accept_score = { ... }` block, not the actual divide line. **160 occurrences** in a single 1.13 mod session.
 
+### `events/iberia_events/ip4_coup_events.txt:562` — Div/0 in `add_radicals` divisor
+
+```
+Div/0 near events/iberia_events/ip4_coup_events.txt:562
+```
+
+The Spanish-coup (`ip4`) golpista-radicalisation block computes `add_radicals = { value = { add = scope:golpista_general.num_units_share divide = owner.army_size } }` and `owner.army_size` is 0 in some evaluation contexts (e.g. owner has no standing army at coup-resolution time). Vanilla bug. **6 occurrences** in a single 1.13 mod session.
+
 ### `common/ideologies/01_character_ideologies.txt:1781` — `ig_approval` in wrong scope
 
 ```
