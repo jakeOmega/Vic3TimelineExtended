@@ -1,0 +1,80 @@
+﻿# Custom geographic_region for the Pan-Slavic Union (PSU). Tighter than
+# vanilla geographic_region_europe so the 0.5 required_states_fraction
+# corresponds to actually unifying the Slavic core, not "control half of
+# Europe". Mirrors the mod's own geographic_region_intermarium pattern in
+# te_formable_regions.txt.
+
+geographic_region_pan_slavic = {
+	short_key = "pan_slavic"
+
+	state_regions = {
+		# Russian core (East Slavic)
+		STATE_MOSCOW
+		STATE_TVER
+		STATE_NOVGOROD
+		STATE_INGRIA
+		STATE_PSKOV
+		STATE_SMOLENSK
+		STATE_ORYOL
+		STATE_KURSK
+		STATE_TAMBOV
+		STATE_RYAZAN
+		STATE_YAROSLAVL
+		STATE_NIZHNY_NOVGOROD
+		STATE_VYATKA
+		STATE_ARKHANGELSK
+		STATE_NENETSIA
+		STATE_KALMYKIA
+		STATE_NORTH_CAUCASUS
+		STATE_ROSTOV
+		STATE_TAURIDA
+		STATE_CRIMEA
+		STATE_KAZAN
+		STATE_CHUVASHIA
+		STATE_PERM
+		STATE_UFA
+		STATE_CHELYABINSK
+		# Belarusian
+		STATE_MINSK
+		STATE_MOGILEV
+		STATE_VITEBSK
+		STATE_BREST
+		# Ukrainian
+		STATE_KIEV
+		STATE_VOLHYNIA
+		STATE_CHERNIHIV
+		STATE_KHARKOV
+		STATE_CHERSON
+		STATE_GALICH
+		STATE_EAST_GALICIA
+		# Polish
+		STATE_MAZOVIA
+		STATE_GREATER_POLAND
+		STATE_LESSER_POLAND
+		STATE_WEST_GALICIA
+		STATE_POSEN
+		STATE_WEST_PRUSSIA
+		STATE_LOWER_SILESIA
+		STATE_UPPER_SILESIA
+		# Czech / Slovak
+		STATE_BOHEMIA
+		STATE_MORAVIA
+		STATE_SLOVAKIA
+		STATE_RUTHENIA
+		# South Slavic — Yugoslav core
+		STATE_SLOVENIA
+		STATE_CROATIA
+		STATE_SLAVONIA
+		STATE_DALMATIA
+		STATE_ISTRIA
+		STATE_BOSNIA
+		STATE_WESTERN_SERBIA
+		STATE_EASTERN_SERBIA
+		STATE_KOSOVO
+		STATE_MONTENEGRO
+		STATE_SKOPIA
+		# Bulgarian
+		STATE_BULGARIA
+		STATE_NORTHERN_THRACE
+	}
+}

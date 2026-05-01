@@ -1,0 +1,72 @@
+﻿# Geographic regions used by the new formable countries in
+# common/country_formation/te_formable_countries.txt.
+#
+# AFU uses vanilla geographic_region_africa (whole continent).
+# EUN uses vanilla geographic_region_europe.
+# BHT uses vanilla geographic_region_india.
+# IDN uses an explicit state list — no region needed.
+# EAF uses an explicit state list in country_formation — no region needed.
+
+geographic_region_united_north_america = {
+	short_key = "united_north_america"
+
+	strategic_regions = {
+		sr:region_canada
+		sr:region_atlantic_coast
+		sr:region_pacific_coast
+		sr:region_great_plains
+		sr:region_central_america
+	}
+}
+
+geographic_region_intermarium = {
+	short_key = "intermarium"
+
+	state_regions = {
+		# Polish core
+		STATE_MAZOVIA
+		STATE_GREATER_POLAND
+		STATE_LESSER_POLAND
+		STATE_WEST_GALICIA
+		STATE_EAST_GALICIA
+		STATE_POSEN
+		STATE_WEST_PRUSSIA
+		STATE_LOWER_SILESIA
+		STATE_UPPER_SILESIA
+		# Baltic
+		STATE_TALINN
+		STATE_TARTU
+		STATE_RIGA
+		STATE_COURLAND
+		STATE_KAUNAS
+		STATE_VILNIUS
+		# Belarus / Ukraine
+		STATE_BREST
+		STATE_MINSK
+		STATE_MOGILEV
+		STATE_VITEBSK
+		STATE_VOLHYNIA
+		STATE_KIEV
+		# Visegrad
+		STATE_BOHEMIA
+		STATE_MORAVIA
+		STATE_SLOVAKIA
+		STATE_RUTHENIA
+		# Hungary
+		STATE_CENTRAL_HUNGARY
+		STATE_BANAT
+		STATE_BEKES
+		STATE_TRANSDANUBIA
+		STATE_DELVIDEK
+		STATE_NORTHERN_TRANSYLVANIA
+		STATE_SOUTHERN_TRANSYLVANIA
+		# Romania
+		STATE_MOLDAVIA
+		STATE_WALLACHIA
+		STATE_BUKOVINA
+		# South Slavic
+		STATE_SLOVENIA
+		STATE_CROATIA
+		STATE_SLAVONIA
+	}
+}

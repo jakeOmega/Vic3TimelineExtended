@@ -1,0 +1,22 @@
+{
+  "eval_id": 1,
+  "eval_name": "greater-bulgaria-minor",
+  "expectations": [
+    {"text": "1.1 tag is unused in vanilla and mod", "passed": true, "evidence": "Subagent grepped vanilla 00_countries.txt (BUL exists) and chose GBL (unused). SUMMARY documents the rejection of BUL with file:line."},
+    {"text": "1.2 country_definitions delta defines tag with tier=kingdom, capital=STATE_BULGARIA, cultures includes bulgarian", "passed": true, "evidence": "Verified in delta file: tier = kingdom, capital = STATE_BULGARIA, cultures = { bulgarian }."},
+    {"text": "1.3 bulgarian culture exists in vanilla 00_cultures.txt", "passed": true, "evidence": "Cited in SUMMARY; manually re-verified."},
+    {"text": "1.4 All required states exist in vanilla", "passed": true, "evidence": "STATE_BULGARIA / STATE_MACEDONIA / STATE_EASTERN_THRACE confirmed in map_data."},
+    {"text": "1.5 country_formation uses states list, fraction = 1.0, possible requires nationalism", "passed": true, "evidence": "delta file: states = { … }, required_states_fraction = 1.0, possible has has_technology_researched = nationalism + country_has_primary_culture = cu:bulgarian guard."},
+    {"text": "1.6 No major-formation fields", "passed": true, "evidence": "No is_major_formation, no unification_play, no candidacy fields."},
+    {"text": "1.7 Four dynamic-name entries: republic default, monarchy, communist, fascist", "passed": true, "evidence": "All 4 present in dynamic_country_names delta."},
+    {"text": "1.8 Each entry has is_main_tag_only = yes and a coa_def_*_flag_trigger", "passed": true, "evidence": "All 4 entries set the flag and use coa_def_republic/communist/fascist/monarchy_flag_trigger."},
+    {"text": "1.9 Republic default excludes communist + technocracy with NOTs", "passed": true, "evidence": "Trigger has both NOT clauses, mirrors vanilla USA pattern."},
+    {"text": "1.10 Localization has TAG, TAG_ADJ, and one key per dynamic-name reference", "passed": true, "evidence": "GBL, GBL_ADJ, dyn_c_republic_of_bulgaria, dyn_c_peoples_republic_of_bulgaria, dyn_c_bulgarian_national_state, dyn_c_tsardom_of_bulgaria — 6 keys, all referenced names accounted for."},
+    {"text": "1.11 organize_loc_diff adds the new tag and _ADJ to FORMABLE_COUNTRIES", "passed": true, "evidence": "Snippet adds 'GBL', 'GBL_ADJ' to the registered set."},
+    {"text": "1.12 Brace-based files start with UTF-8 BOM", "passed": true, "evidence": "SUMMARY explicitly notes BOM; subagent followed convention."}
+  ],
+  "spec_deviations": [
+    "Required-states list became 3 instead of 4 (vanilla has only STATE_BULGARIA, no NORTHERN/SOUTHERN split). Documented in SUMMARY.md, called out as a CLAUDE.md state-naming-pitfall — appropriate response."
+  ],
+  "overall": "PASS — all 12 assertions met. Deviation is a correct interpretation of the spec given vanilla constraints."
+}

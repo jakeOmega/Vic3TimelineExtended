@@ -1,0 +1,30 @@
+﻿# Pan-Slavic Union (PSU) tag definition.
+# Hegemony-tier major formation covering all ten Slavic primary cultures
+# (russian, polish, czech, slovak, ukrainian, byelorussian, serb, croat,
+# slovene, bulgarian). Capital: Moscow. Color: Pan-Slavic blue/white/red,
+# leaning red as the historic dominant flag color.
+
+PSU = {
+	color = { 200 30 50 }
+
+	country_type = recognized
+
+	tier = hegemony
+
+	cultures = {
+		# East Slavic
+		russian
+		ukrainian
+		byelorussian
+		# West Slavic
+		polish
+		czech
+		slovak
+		# South Slavic
+		serb
+		croat
+		slovene
+		bulgarian
+	}
+	capital = STATE_MOSCOW
+}

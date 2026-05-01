@@ -1,0 +1,467 @@
+﻿# Government-flavored dynamic names for the seven new formable countries.
+#
+# All entries use is_main_tag_only = yes (only the formed tag uses these,
+# not subject states with the same tag).
+#
+# Trigger pattern follows vanilla USA (00_dynamic_country_names.txt:2785):
+#   - The default / republic entry guards against communist + technocracy
+#     to avoid double-matches against the more specific entries.
+#   - Each ideology trigger uses the canonical coa_def_*_flag_trigger.
+#
+# When no entry's trigger matches, the engine falls back to the tag's
+# localization key (e.g. AFU:0 "African Union").
+#
+# BHT and IDN entries here APPEND to vanilla's. Vanilla BHT has one
+# priority-1 "Dominion of India" entry gated on subject status — independent
+# BHT falls through to vanilla's tag name; our priority-0 entries fire only
+# when independent and a flavor trigger matches. Vanilla IDN has two
+# priority-0 monarchy entries (Majapahit, Srivijaya) gated on Javan/Malay/
+# Sumatran ruler culture — our entries are mutually exclusive with those by
+# trigger conditions (no monarchy entry from us; the vanilla flavor stays).
+
+# === African Union ===
+
+AFU = {
+	dynamic_country_name = { # Default / republic / federation
+		name = dyn_c_african_union
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist
+		name = dyn_c_pan_african_socialist_federation
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist
+		name = dyn_c_african_imperium
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Solomonic flavor — Ethiopian-led monarchy
+		name = dyn_c_solomonic_african_empire
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					OR = {
+						has_culture = cu:amhara
+						has_culture = cu:tigray
+					}
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy
+		name = dyn_c_african_empire
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy
+		name = dyn_c_pan_african_theocracy
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_african_technate
+		adjective = AFU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === Intermarium ===
+
+INM = {
+	dynamic_country_name = { # Default
+		name = dyn_c_intermarium
+		adjective = INM_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist
+		name = dyn_c_three_seas_socialist_federation
+		adjective = dyn_c_three_seas_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist — Promethean Empire (Piłsudski)
+		name = dyn_c_promethean_empire
+		adjective = dyn_c_promethean_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Hungarian-led monarchy — Crown of Saint Stephen
+		name = dyn_c_crown_of_saint_stephen
+		adjective = dyn_c_crown_of_saint_stephen_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				was_formed_from = HUN
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy — Polish-Lithuanian Commonwealth
+		name = dyn_c_polish_lithuanian_commonwealth
+		adjective = dyn_c_commonwealth_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy
+		name = dyn_c_catholic_federation_of_three_seas
+		adjective = dyn_c_three_seas_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_three_seas_technical_union
+		adjective = dyn_c_three_seas_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === East African Federation ===
+
+EAF = {
+	dynamic_country_name = { # Default
+		name = dyn_c_east_african_federation
+		adjective = EAF_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist — Ujamaa (Nyerere)
+		name = dyn_c_ujamaa_federation
+		adjective = dyn_c_ujamaa_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist
+		name = dyn_c_east_african_imperium
+		adjective = EAF_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Ethiopian-led monarchy
+		name = dyn_c_empire_of_greater_ethiopia
+		adjective = dyn_c_greater_ethiopian_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					OR = {
+						has_culture = cu:amhara
+						has_culture = cu:oromo
+						has_culture = cu:tigray
+					}
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy
+		name = dyn_c_east_african_confederation
+		adjective = EAF_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy
+		name = dyn_c_imamate_of_east_africa
+		adjective = EAF_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_east_african_technate
+		adjective = EAF_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === India / Bharat (BHT) — APPENDS to vanilla, which keeps "Dominion of India" at priority 1 ===
+
+BHT = {
+	dynamic_country_name = { # Communist
+		name = dyn_c_peoples_republic_of_bharat
+		adjective = dyn_c_bharati_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist — Akhand Bharat (real Hindu nationalist concept)
+		name = dyn_c_akhand_bharat
+		adjective = dyn_c_akhand_bharati_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Monarchy — Bharatiya Samrajya
+		name = dyn_c_bharatiya_samrajya
+		adjective = dyn_c_bharatiya_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy — Hindu Rashtra (only when leader is Hindu)
+		name = dyn_c_hindu_rashtra
+		adjective = dyn_c_hindu_rashtra_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					religion = rel:hindu
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_bharatiya_vigyan_sangha
+		adjective = dyn_c_bharatiya_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === Indonesia (IDN) — APPENDS to vanilla, which keeps Majapahit/Srivijaya monarchy entries ===
+
+IDN = {
+	dynamic_country_name = { # Communist
+		name = dyn_c_peoples_republic_of_indonesia
+		adjective = IDN_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist — Indonesia Raya (real movement)
+		name = dyn_c_indonesia_raya
+		adjective = dyn_c_indonesia_raya_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy — Negara Islam Indonesia (Sunni)
+		name = dyn_c_negara_islam_indonesia
+		adjective = dyn_c_negara_islam_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+			scope:actor ?= {
+				state_religion = rel:sunni
+			}
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_indonesian_technical_union
+		adjective = IDN_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === European Union ===
+
+EUN = {
+	dynamic_country_name = { # Default
+		name = dyn_c_european_union
+		adjective = EUN_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist — UESSR
+		name = dyn_c_union_of_european_socialist_republics
+		adjective = dyn_c_european_soviet_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist
+		name = dyn_c_european_imperium
+		adjective = EUN_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Monarchy
+		name = dyn_c_european_imperial_federation
+		adjective = dyn_c_european_imperial_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_european_technate
+		adjective = EUN_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === United North America ===
+
+UNA = {
+	dynamic_country_name = { # Default
+		name = dyn_c_north_american_union
+		adjective = UNA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist
+		name = dyn_c_soviet_federation_of_north_america
+		adjective = dyn_c_north_american_soviet_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist
+		name = dyn_c_american_imperial_union
+		adjective = dyn_c_american_imperial_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Mexican-led monarchy — Empire of the Americas
+		name = dyn_c_empire_of_the_americas
+		adjective = dyn_c_imperial_mexican_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					has_culture = cu:mexican
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy
+		name = dyn_c_united_crowns_of_north_america
+		adjective = dyn_c_north_american_royal_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_continental_technate
+		adjective = dyn_c_continental_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}

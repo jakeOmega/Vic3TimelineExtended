@@ -1,0 +1,184 @@
+﻿# Tag definitions for the seven new formable countries added by this mod.
+# BHT (India / Bharat) and IDN (Indonesia) reuse vanilla tag definitions —
+# only their formation rules are overridden in common/country_formation/.
+
+AFU = {
+	color = { 0 130 70 }
+
+	country_type = recognized
+
+	tier = hegemony
+
+	cultures = {
+		# North Africa
+		maghrebi
+		misri
+		berber
+		# West Africa
+		yoruba
+		ibo
+		hausa
+		fulbe
+		mande
+		akan
+		wolof
+		bambara
+		mossi
+		songhai
+		kanuri
+		# Central Africa
+		fang
+		fluvian_bantu
+		equatorial_bantu
+		kavango_bantu
+		bakongo
+		mongo
+		sara
+		# East Africa & Horn
+		swahili
+		kikuyu
+		baganda
+		maasai
+		nilotic
+		lacustrine_bantu
+		ruanda
+		rundi
+		somali
+		amhara
+		tigray
+		oromo
+		dinka
+		nuer
+		beja
+		nyamwezi
+		sukuma
+		malagasy
+		# Southern Africa
+		zulu
+		xhosa
+		nguni
+		shona
+		herero
+		sotho
+		tswana
+	}
+	capital = STATE_OROMIA
+}
+
+INM = {
+	color = { 140 30 60 }
+
+	country_type = recognized
+
+	tier = empire
+
+	cultures = {
+		polish
+		lithuanian
+		latvian
+		estonian
+		byelorussian
+		ukrainian
+		czech
+		slovak
+		hungarian
+		romanian
+		slovene
+		croat
+	}
+	capital = STATE_MAZOVIA
+}
+
+EAF = {
+	color = { 180 90 50 }
+
+	country_type = recognized
+
+	tier = kingdom
+
+	cultures = {
+		swahili
+		kikuyu
+		baganda
+		maasai
+		nilotic
+		lacustrine_bantu
+		ruanda
+		rundi
+		somali
+		amhara
+		oromo
+		tigray
+		dinka
+		nuer
+		nyamwezi
+		sukuma
+		malagasy
+	}
+	capital = STATE_KENYA
+}
+
+EUN = {
+	color = { 0 51 153 }
+
+	country_type = recognized
+
+	tier = hegemony
+
+	cultures = {
+		french
+		north_german
+		south_german
+		north_italian
+		south_italian
+		polish
+		czech
+		slovak
+		hungarian
+		romanian
+		dutch
+		flemish
+		wallonian
+		danish
+		swedish
+		norwegian
+		finnish
+		spanish
+		portuguese
+		irish
+		british
+		scottish
+		greek
+		bulgarian
+		serb
+		croat
+		slovene
+		albanian
+		byelorussian
+		ukrainian
+		lithuanian
+		latvian
+		estonian
+		icelandic
+	}
+	capital = STATE_FLANDERS
+}
+
+UNA = {
+	color = { 100 130 180 }
+
+	country_type = recognized
+
+	tier = hegemony
+
+	cultures = {
+		yankee
+		dixie
+		anglo_canadian
+		franco_canadian
+		mexican
+		central_american
+		metis
+	}
+	capital = STATE_DISTRICT_OF_COLUMBIA
+}

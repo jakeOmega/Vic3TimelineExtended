@@ -1,0 +1,11 @@
+﻿
+GBL = {
+	color = { 0 145 80 }
+
+	country_type = recognized
+
+	tier = kingdom
+
+	cultures = { bulgarian }
+	capital = STATE_BULGARIA
+}

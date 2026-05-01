@@ -1,0 +1,43 @@
+﻿
+# === Greater Bulgaria ===
+
+GBL = {
+	dynamic_country_name = { # Default / republic
+		name = dyn_c_republic_of_bulgaria
+		adjective = GBL_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist
+		name = dyn_c_peoples_republic_of_bulgaria
+		adjective = GBL_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist
+		name = dyn_c_bulgarian_national_state
+		adjective = GBL_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Monarchy — Tsardom
+		name = dyn_c_tsardom_of_bulgaria
+		adjective = GBL_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+}

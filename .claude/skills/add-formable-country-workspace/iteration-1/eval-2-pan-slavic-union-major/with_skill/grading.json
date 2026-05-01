@@ -1,0 +1,25 @@
+{
+  "eval_id": 2,
+  "eval_name": "pan-slavic-union-major",
+  "expectations": [
+    {"text": "2.1 PSU tag is unused in vanilla and mod", "passed": true, "evidence": "Verified by SUMMARY's grep cite."},
+    {"text": "2.2 country_definitions defines PSU with tier=hegemony, capital=STATE_MOSCOW, all 10 Slavic cultures", "passed": true, "evidence": "Delta lists all 10 (russian, ukrainian, byelorussian, polish, czech, slovak, serb, croat, slovene, bulgarian) with tier = hegemony, capital = STATE_MOSCOW."},
+    {"text": "2.3 Each of the 10 cultures exists in vanilla (byelorussian not belarusian)", "passed": true, "evidence": "Subagent used 'byelorussian' (vanilla form) — matches mod convention. SUMMARY explicitly flags this."},
+    {"text": "2.4 country_formation has all major-formation fields", "passed": true, "evidence": "is_major_formation = yes, unification_play = dp_unify_pan_slavic_union, leadership_play = dp_leadership_pan_slavic_union, max_num_formation_candidates = 3, can_be_formation_candidate guards rank ≥ major_power."},
+    {"text": "2.5 country_formation possible requires pan-nationalism + decolonization", "passed": true, "evidence": "Both has_technology_researched = present in possible block."},
+    {"text": "2.6 dp_unify_pan_slavic_union exists with war_goal=unification, vanilla unification.dds", "passed": true, "evidence": "Confirmed verbatim, possible block requires decolonization + pan-nationalism."},
+    {"text": "2.7 dp_leadership_pan_slavic_union exists with war_goal=unification_leadership, mirror_war_goal=yes", "passed": true, "evidence": "Confirmed."},
+    {"text": "2.8 Seven dynamic-name variants present", "passed": true, "evidence": "Default, communist, fascist, generic monarchy (priority 0), Russian-led monarchy (priority 5), Orthodox theocracy (priority 5), technocracy — all 7."},
+    {"text": "2.9 Russian-led monarchy uses was_formed_from = RUS OR ruler.has_culture = cu:russian, priority 5+", "passed": true, "evidence": "Trigger uses OR { was_formed_from = RUS, ruler ?= { has_culture = cu:russian } } at priority 5."},
+    {"text": "2.10 Each dynamic name has is_main_tag_only = yes", "passed": true, "evidence": "All 7 entries have it."},
+    {"text": "2.11 Republic default excludes communist + technocracy", "passed": true, "evidence": "Trigger has both NOT clauses."},
+    {"text": "2.12 Localization has all dp_*, dyn_c_*, PSU, PSU_ADJ", "passed": true, "evidence": "Loc delta: PSU, PSU_ADJ, 9 dyn_c_* keys (some adjectives shared), 6 dp_* keys (3 each for unify and leadership)."},
+    {"text": "2.13 dp_*_tooltip and dp_*_desc present", "passed": true, "evidence": "Loc has dp_unify_pan_slavic_union_desc, _tooltip; dp_leadership_pan_slavic_union_desc, _tooltip_desc."},
+    {"text": "2.14 organize_loc_diff adds PSU and PSU_ADJ", "passed": true, "evidence": "Snippet adds both."},
+    {"text": "2.15 Brace-based files have UTF-8 BOM", "passed": true, "evidence": "SUMMARY confirms; subagent followed mod convention."}
+  ],
+  "judgment_calls": [
+    "Defined custom geographic_region_pan_slavic (60 states across Slavic homelands) instead of using vanilla geographic_region_europe. Trade-off documented — avoids forcing the unifier to control half of Iberia/France/Britain. Strong, defensible call. All 25 spot-checked states verified in vanilla."
+  ],
+  "overall": "PASS — all 15 assertions met. The custom geographic_region judgment is a meaningful improvement over a literal reading of the spec."
+}

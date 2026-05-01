@@ -1,0 +1,180 @@
+﻿# Formation rules for the seven new formable countries.
+#
+# AFU/BHT/IDN/EUN/UNA are major formations (candidates compete via
+# leadership/unification plays); INM/EAF are minor formations (whoever
+# directly controls enough of the required states/region).
+#
+# All require the era_6 `decolonization` mod tech (era_6.txt:785).
+# BHT and IDN re-declare the vanilla tags so this file's entries override
+# vanilla `00_formable_countries.txt` (last-wins by file load order).
+
+# === Major formations ===
+
+AFU = {
+	geographic_region = geographic_region_africa
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_african_union
+	leadership_play = dp_leadership_african_union
+
+	required_states_fraction = 0.5
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:minor_power
+	}
+}
+
+BHT = {
+	use_culture_states = yes
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_india
+	leadership_play = dp_leadership_india
+
+	required_states_fraction = 0.75
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+IDN = {
+	states = {
+		STATE_ACEH
+		STATE_CENTRAL_JAVA
+		STATE_EAST_BORNEO
+		STATE_EAST_JAVA
+		STATE_MALAYA
+		STATE_MOLUCCAS
+		STATE_CELEBES
+		STATE_NORTH_BORNEO
+		STATE_NORTH_SUMATRA
+		STATE_SOUTH_SUMATRA
+		STATE_SUNDA_ISLANDS
+		STATE_WEST_BORNEO
+		STATE_WESTERN_NEW_GUINEA
+		STATE_WEST_JAVA
+	}
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_indonesia
+	leadership_play = dp_leadership_indonesia
+
+	required_states_fraction = 0.65
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+EUN = {
+	geographic_region = geographic_region_europe
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_european_union
+	leadership_play = dp_leadership_european_union
+
+	required_states_fraction = 0.5
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+UNA = {
+	geographic_region = geographic_region_united_north_america
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_united_north_america
+	leadership_play = dp_leadership_united_north_america
+
+	required_states_fraction = 0.65
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+# === Minor formations ===
+
+INM = {
+	geographic_region = geographic_region_intermarium
+
+	required_states_fraction = 0.65
+
+	ai_will_do = { always = yes }
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+}
+
+EAF = {
+	states = {
+		STATE_KENYA
+		STATE_UGANDA
+		STATE_TANGANYIKA
+		STATE_ZANZIBAR
+		STATE_RIFT_VALLEY
+		STATE_KAZEMBE
+		STATE_LINDI
+		STATE_EQUATORIA
+		STATE_AMHARA
+		STATE_OROMIA
+		STATE_GONDER
+		STATE_ERITREA
+		STATE_SOMALILAND
+		STATE_NORTH_MADAGASCAR
+		STATE_SOUTH_MADAGASCAR
+	}
+
+	required_states_fraction = 0.65
+
+	ai_will_do = { always = yes }
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+}

@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "greater-bulgaria-minor",
+  "prompt": "Add a Greater Bulgaria formable country to the Vic3TimelineExtended mod. Bulgarian primary culture, kingdom tier, capital Sofia (STATE_NORTHERN_BULGARIA in vanilla). Must control STATE_NORTHERN_BULGARIA, STATE_SOUTHERN_BULGARIA, STATE_MACEDONIA, and STATE_EASTERN_THRACE — 100% required (San Stefano-line claim). Tech gate: nationalism. Dynamic names: republic default (Republic of Bulgaria), monarchy (Tsardom of Bulgaria), communist (People's Republic of Bulgaria), fascist (Bulgarian National State).",
+  "assertions": []
+}

@@ -1,0 +1,86 @@
+﻿# Government-flavored dynamic names for the Pan-Slavic Union (PSU).
+#
+# Structure mirrors the canonical USA block
+# (vanilla 00_dynamic_country_names.txt:2785) and the mod's existing AFU/INM
+# entries: default-republic guard via NOT communist + NOT technocracy,
+# explicit coa_def_*_flag_trigger per ideology, is_main_tag_only on every
+# entry. Russian-led monarchy at priority 5 beats the generic monarchy
+# (priority 0) when its extra trigger (formed from RUS or Russian-cultured
+# ruler) matches.
+
+PSU = {
+	dynamic_country_name = { # Default / republic — Pan-Slavic Federation
+		name = dyn_c_pan_slavic_federation
+		adjective = PSU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist — Union of Soviet Socialist Republics
+		name = dyn_c_union_of_soviet_socialist_republics
+		adjective = dyn_c_soviet_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist — Slavic Imperium
+		name = dyn_c_slavic_imperium
+		adjective = PSU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # 2nd axis: Russian-led monarchy — Empire of All the Russias
+		name = dyn_c_empire_of_all_the_russias
+		adjective = dyn_c_all_russian_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				OR = {
+					was_formed_from = RUS
+					ruler ?= { has_culture = cu:russian }
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy — Slavic Empire
+		name = dyn_c_slavic_empire
+		adjective = PSU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy — Orthodox Slavic Patriarchate
+		name = dyn_c_orthodox_slavic_patriarchate
+		adjective = dyn_c_orthodox_slavic_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+			scope:actor ?= {
+				state_religion = rel:orthodox
+			}
+		}
+	}
+	dynamic_country_name = { # Technocracy — Pan-Slavic Technate
+		name = dyn_c_pan_slavic_technate
+		adjective = PSU_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}

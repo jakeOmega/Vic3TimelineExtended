@@ -1,0 +1,37 @@
+In organize_loc.py `categorize_key` (around line 270, just after the IDEOLOGIES check),
+extend the FORMABLE_COUNTRIES tag set to include PSU.
+
+Replace:
+
+    if (
+        key.startswith("dyn_c_")
+        or key.startswith("dp_unify_")
+        or key.startswith("dp_leadership_")
+        or key in {
+            "AFU", "INM", "EAF", "EUN", "UNA",
+            "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ",
+        }
+    ):
+        return "FORMABLE_COUNTRIES"
+
+With:
+
+    if (
+        key.startswith("dyn_c_")
+        or key.startswith("dp_unify_")
+        or key.startswith("dp_leadership_")
+        or key in {
+            "AFU", "INM", "EAF", "EUN", "UNA", "PSU",
+            "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ", "PSU_ADJ",
+        }
+    ):
+        return "FORMABLE_COUNTRIES"
+
+Notes:
+- The dp_* prefixes already route the unify/leadership keys for PSU.
+- The dyn_c_* prefix already routes the dynamic name + adjective keys.
+- Only the bare PSU and PSU_ADJ tag-display keys need an explicit entry to
+  avoid landing in MISCELLANEOUS.
+- Per docs/loc_routing.md, dp_*_tooltip keys may still land in
+  te_unused_l_english.yml until find_diplomatic_play_keys is added — they
+  still load at runtime regardless of file name.

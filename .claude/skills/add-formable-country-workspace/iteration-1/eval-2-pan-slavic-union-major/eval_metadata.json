@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "pan-slavic-union-major",
+  "prompt": "Add a major-formation Pan-Slavic Union (PSU) to the Vic3TimelineExtended mod. Hegemony tier. Primary cultures: all Slavic (russian, polish, czech, slovak, ukrainian, byelorussian, serb, croat, slovene, bulgarian — verify against vanilla). Capital Moscow (STATE_MOSCOW). Geographic anchor: 50% of geographic_region_europe (or define a tighter region if appropriate). Tech gate: pan-nationalism + decolonization. Major-formation candidacy: rank ≥ major_power. Dynamic names: federation default (Pan-Slavic Federation), monarchy (Slavic Empire / Russian-led variant: Empire of All the Russias), communist (Union of Soviet Socialist Republics), fascist (Slavic Imperium), theocracy (Orthodox Slavic Patriarchate when state religion is orthodox), technocracy (Pan-Slavic Technate). Use 2nd-axis flavor for the Russian-led monarchy.",
+  "assertions": []
+}

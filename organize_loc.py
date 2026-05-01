@@ -203,6 +203,7 @@ CATEGORIES = [
     "DECREES",
     "DIPLOMACY",
     "EVENTS",
+    "FORMABLE_COUNTRIES",
     "GAME_RULES",
     "GOODS_AND_NEEDS",
     "IDEOLOGIES",
@@ -265,6 +266,16 @@ def categorize_key(key, technology_keys):
         return "COMPANIES"
     if key.startswith("ideology_"):
         return "IDEOLOGIES"
+    if (
+        key.startswith("dyn_c_")
+        or key.startswith("dp_unify_")
+        or key.startswith("dp_leadership_")
+        or key in {
+            "AFU", "INM", "EAF", "EUN", "UNA",
+            "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ",
+        }
+    ):
+        return "FORMABLE_COUNTRIES"
     if key.startswith("decree_"):
         return "DECREES"
     if key.startswith("je_"):

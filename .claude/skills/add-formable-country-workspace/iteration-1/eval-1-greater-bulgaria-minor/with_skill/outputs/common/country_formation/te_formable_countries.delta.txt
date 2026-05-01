@@ -1,0 +1,20 @@
+﻿
+# Greater Bulgaria — minor formation, San Stefano-line claim.
+# All required states must be controlled (required_states_fraction = 1.0).
+# Tech gate: nationalism (vanilla, era-4).
+GBL = {
+	states = {
+		STATE_BULGARIA
+		STATE_MACEDONIA
+		STATE_EASTERN_THRACE
+	}
+
+	required_states_fraction = 1.0
+
+	ai_will_do = { has_technology_researched = nationalism }
+
+	possible = {
+		country_has_primary_culture = cu:bulgarian
+		has_technology_researched = nationalism
+	}
+}

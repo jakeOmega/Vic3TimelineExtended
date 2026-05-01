@@ -1,0 +1,31 @@
+# Diff to apply to /home/jakef/src/Vic3TimelineExtended/organize_loc.py
+#
+# In categorize_key (around line 269-278), extend the FORMABLE_COUNTRIES rule's
+# bare-tag set to include "GBL" and "GBL_ADJ". The dyn_c_* prefix already
+# routes the four dyn_c_* keys automatically.
+#
+# Before:
+#     if (
+#         key.startswith("dyn_c_")
+#         or key.startswith("dp_unify_")
+#         or key.startswith("dp_leadership_")
+#         or key in {
+#             "AFU", "INM", "EAF", "EUN", "UNA",
+#             "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ",
+#         }
+#     ):
+#         return "FORMABLE_COUNTRIES"
+#
+# After:
+    if (
+        key.startswith("dyn_c_")
+        or key.startswith("dp_unify_")
+        or key.startswith("dp_leadership_")
+        or key in {
+            "AFU", "INM", "EAF", "EUN", "UNA", "GBL",
+            "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ", "GBL_ADJ",
+        }
+    ):
+        return "FORMABLE_COUNTRIES"
+
+# Set entries to add: "GBL" and "GBL_ADJ".

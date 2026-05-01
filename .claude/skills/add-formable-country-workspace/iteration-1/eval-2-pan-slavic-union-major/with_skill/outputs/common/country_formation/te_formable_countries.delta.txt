@@ -1,0 +1,37 @@
+﻿# Formation rule for the Pan-Slavic Union (PSU).
+#
+# Major formation: candidates compete via leadership/unification plays
+# (dp_leadership_pan_slavic_union / dp_unify_pan_slavic_union). Tech-gated on
+# the era_6 mod tech `decolonization` (era_6.txt:785) plus vanilla
+# `pan-nationalism` (vanilla 30_society.txt:1180). Anchored on the
+# mod-side `geographic_region_pan_slavic` (Russia + Polish + Czech/Slovak +
+# Ukrainian + Belarusian + Yugoslav + Bulgarian states; see
+# geographic_regions/te_formable_regions.delta.txt).
+#
+# Structure mirrors vanilla GER (00_major_formables.txt:Germany) — the
+# canonical major-formation block with geographic_region anchor,
+# is_major_formation = yes, dual play references, fraction threshold,
+# possible/can_be_formation_candidate guards.
+
+PSU = {
+	geographic_region = geographic_region_pan_slavic
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_pan_slavic_union
+	leadership_play = dp_leadership_pan_slavic_union
+
+	required_states_fraction = 0.5
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
