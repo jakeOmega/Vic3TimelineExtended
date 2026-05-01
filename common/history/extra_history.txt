@@ -59,16 +59,33 @@ GLOBAL = {
 			value = 0
 		}
 	}
+	# Only the Great Powers had Western-style ministerial bureaucracies of meaningful
+	# scale by 1836. Smaller recognized states had foreign/war ministers but with
+	# minimal staff (a handful of clerks). UK's War Office is fragmented at this
+	# point (not unified until 1854) but the Crown's war administration is real.
 	c:FRA = {
 		activate_law = law_type:law_equal_inheritance
 		activate_law = law_type:law_minority_rights_cultural_assimilation
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_national_bank # Banque de France, 1800
+		activate_law = law_type:law_traditional_ip_protection # Patent Law 1791, Copyright 1793
+		activate_law = law_type:law_ministry_of_foreign_affairs # Quai d'Orsay, 1547
+		activate_law = law_type:law_ministry_of_war # Ministère de la Guerre, 1791
 		activate_law = law_type:law_legal_limbo # Decriminalized during Revolution, 1791
 	}
 	c:GBR = {
 		activate_law = law_type:law_primogeniture
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_national_bank # Bank of England, 1694
+		activate_law = law_type:law_traditional_ip_protection # Statute of Monopolies 1624, Statute of Anne 1710
+		activate_law = law_type:law_ministry_of_foreign_affairs # Foreign Office, 1782
+		activate_law = law_type:law_ministry_of_war # Distributed war administration; unified as War Office 1854
 		activate_law = law_type:law_gold_standard # Gold Standard Act 1816
+	}
+	c:PRU = { # Prussia
+		activate_law = law_type:law_traditional_ip_protection # Prussian Patent Law, 1815
+		activate_law = law_type:law_ministry_of_foreign_affairs
+		activate_law = law_type:law_ministry_of_war # Kriegsministerium 1808 (Scharnhorst reforms)
 	}
 	c:JAP = {
 		activate_law = law_type:law_primogeniture
@@ -77,11 +94,14 @@ GLOBAL = {
 		activate_law = law_type:law_primogeniture
 		activate_law = law_type:law_minority_rights_ghettoization
 		activate_law = law_type:law_feudal_contracts
+		activate_law = law_type:law_ministry_of_foreign_affairs # Russian MFA, 1802 reforms
+		activate_law = law_type:law_ministry_of_war # Ministry of War, 1802
 	}
 	c:USA = {
 		activate_law = law_type:law_minority_rights_violent_hostility
 		activate_law = law_type:law_federal_system
 		activate_law = law_type:law_free_mutual_banking
+		activate_law = law_type:law_traditional_ip_protection # Copyright Act 1790, Patent Act 1790
 	}
 	c:SIA = { # Siam
 		activate_law = law_type:law_minority_rights_indifference
@@ -102,6 +122,9 @@ GLOBAL = {
 	}
 	c:AUS = { # Austria
 		activate_law = law_type:law_feudal_contracts
+		activate_law = law_type:law_national_bank # Oesterreichische Nationalbank, 1816
+		activate_law = law_type:law_ministry_of_foreign_affairs # Staatskanzlei (Metternich era)
+		activate_law = law_type:law_ministry_of_war # Hofkriegsrat
 	}
 	c:TUR = { # Turkey/Ottoman Empire
 		activate_law = law_type:law_feudal_contracts
@@ -180,13 +203,16 @@ GLOBAL = {
 	}
 	c:SWE = { # Sweden
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_national_bank # Sveriges Riksbank, 1668 (oldest central bank in the world)
 	}
 	c:NET = { # Netherlands
 		activate_law = law_type:law_universal_banking_light_prudence
+		activate_law = law_type:law_national_bank # De Nederlandsche Bank, 1814
 		activate_law = law_type:law_legal_limbo # Decriminalized 1811 under Napoleonic code
 	}
 	c:DEN = { # Denmark
 		activate_law = law_type:law_civic_monolingualism
+		activate_law = law_type:law_national_bank # Danmarks Nationalbank, 1818
 	}
 	c:GRE = { # Greece - Katharevousa (Classical Greek revival)
 		activate_law = law_type:law_state_led_language_reform

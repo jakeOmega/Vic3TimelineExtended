@@ -195,9 +195,14 @@ cultural_pull_from_prestige = {
 
 # Standard of Living: delta from global average, capped
 # Scaled by country rank: GP=full, major=half, minor=quarter, less=none
+# Returns 0 before the yearly pulse populates the cache (matches cultural_pull_total).
 cultural_pull_from_sol = {
-	value = average_sol
-	subtract = global_var:ch_cached_sol_avg
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_cached_sol_avg }
+		add = average_sol
+		subtract = global_var:ch_cached_sol_avg
+	}
 	min = cultural_pull_sol_min
 	max = cultural_pull_sol_max
 	# Scale by country rank
@@ -334,10 +339,16 @@ cultural_pull_raw = {
 
 # Final cultural pull: this country's SHARE of global raw cultural pull
 # Range: 0–100 (percentage of global cultural influence)
+# Returns 0 before ch_yearly_pulse populates the global cache (avoids 'none'
+# during the first monthly pulse, which can fire before any yearly pulse).
 cultural_pull_total = {
-	value = cultural_pull_raw
-	divide = global_var:ch_cached_global_raw
-	multiply = 100
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_cached_global_raw }
+		add = cultural_pull_raw
+		divide = global_var:ch_cached_global_raw
+		multiply = 100
+	}
 	min = 0
 	max = 100
 }

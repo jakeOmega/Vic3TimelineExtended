@@ -1347,7 +1347,6 @@
  fossil_fuel_divestment_modifier:0 "Fossil Fuel Divestment"
  fossil_lobby_concessions_modifier:0 "Fossil Fuel Lobby Concessions"
  fossil_lobby_concessions_no_gw_modifier:0 "Fossil Fuel Lobby Concessions"
- free_market_construction_modifier:0 "Free Market Construction"
  free_port_state_modifier:0 "Free Port"
  free_port_tariff_export_modifier:0 "Free Port (Export Tariff Reduction)"
  free_port_tariff_import_modifier:0 "Free Port (Import Tariff Reduction)"

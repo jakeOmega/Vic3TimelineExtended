@@ -579,9 +579,13 @@ un_peacekeeping_mission_button = {
 			}
 			change_variable = { name = un_authority add = 3 }
 		}
+		# Cache expense in country scope; JE scope can't read gdp directly
+		# (the modifier multiplier is re-evaluated continuously and would
+		# otherwise return 'none'). Refreshed monthly in je_united_nations.
+		set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
 		je:je_united_nations ?= { add_modifier = {
 			name = un_peacekeeping_contributor_cost
-			multiplier = un_program_expense_value
+			multiplier = root.var:un_peacekeeping_expense_cached
 		} }
 	}
 }
@@ -656,9 +660,11 @@ un_fund_development_button = {
 			je:je_united_nations ?= { add_modifier = { name = un_development_contributor_modifier } }
 			change_variable = { name = un_authority add = 2 }
 		}
+		# Cache expense in country scope; see un_peacekeeping_mission_button.
+		set_variable = { name = un_development_expense_cached value = un_program_expense_value }
 		je:je_united_nations ?= { add_modifier = {
 			name = un_development_contributor_cost
-			multiplier = un_program_expense_value
+			multiplier = root.var:un_development_expense_cached
 		} }
 	}
 }

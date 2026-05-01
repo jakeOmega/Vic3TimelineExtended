@@ -429,7 +429,6 @@ ce_round_table_conference = {
 				form_decolonized_country = yes
 			}
 		}
-		add_authority = -200
 		# Bar push: a negotiated transition reduces ongoing pressure
 		add_modifier = {
 			name = colonial_stability_positive_event

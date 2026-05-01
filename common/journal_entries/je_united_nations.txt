@@ -315,6 +315,18 @@
 					set_variable = { name = un_authority value = 0 }
 				}
 
+				# Refresh contributor-cost cached expense vars so the JE-scoped
+				# add_modifier multipliers track current GDP. JE scope can't read
+				# country properties like gdp directly inside multiplier blocks.
+				if = {
+					limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+					set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+				}
+				if = {
+					limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+					set_variable = { name = un_development_expense_cached value = un_program_expense_value }
+				}
+
 				# Sync progress bar
 				scope:journal_entry = {
 					set_bar_progress = { name = un_authority_bar value = root.var:un_authority }

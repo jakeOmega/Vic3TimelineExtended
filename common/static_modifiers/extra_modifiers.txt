@@ -44,6 +44,11 @@ solar_collector_progress = {
 	building_total_solar_collector_progress = 1
 }
 
+# pollution_generation_mult_effect synthesizes a "pollution_generation_mult" lever
+# that vanilla doesn't expose. An on-action applies this modifier with a per-state
+# multiplier sourced from the script-only pollution_generation_mult value, so the
+# net effect at runtime is state_pollution_generation_add = <multiplier>. Don't
+# rename the modifier or change the field — both halves are load-bearing.
 pollution_generation_mult_effect = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_pollution_generation_add = 1
@@ -52,21 +57,6 @@ pollution_generation_mult_effect = {
 cheaty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_tech_research_speed_mult = 10
-}
-
-extra_training_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_training_rate_add = -1
-}
-
-free_market_construction_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	#country_construction_add = -10
-}
-
-accepted_cultures_cost = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_authority_add = -1
 }
 
 nuclear_weapon_program_funding = {
@@ -281,11 +271,18 @@ INJECT:state_region_pollution_health = {
 	state_pollution_generation_mult = -0.9 # nonlinear scaling
 }
 
-# Tourism penalties from pollution, turmoil, and obstinance
-# These code static modifiers are scaled by the engine:
+# Tourism penalties from pollution, turmoil, and obstinance.
+# These vanilla state modifiers are scaled by the engine:
 #   state_region_pollution_general: multiplied by pollution_amount / 255
 #   state_turmoil: multiplied by turmoil (0-1)
 #   state_obstinance: multiplied by obstinance value
+# All three goods_output_tourism_mult contributions stack additively at state
+# scope. A maximally polluted, high-turmoil, high-obstinance state could land
+# at -2.0 + -1.0 + -0.5 = -3.5 raw — engine clamps to -1.0 (zero output).
+# Zeroing tourism under crisis is intentional. At very high SoL tourism is a
+# major pop-spending category, so the design choice is: prosperity buys you
+# tourism, crisis shuts it off. The clamp at -1.0 is load-bearing; if engine
+# clamp semantics ever change, revisit.
 INJECT:state_region_pollution_general = {
 	goods_output_tourism_mult = -2
 }
@@ -321,6 +318,13 @@ overinvestment_modifier = {
 	state_soldiers_investment_pool_contribution_add = -1
 }
 
+# pm_retooling is auto-applied by the engine when a building changes PM. Vanilla
+# leaves the modifier empty (no penalty). This REPLACE imposes a 10× multiplier
+# on the building's construction-good consumption while retooling — representing
+# the real-world cost of switching how a factory operates. Construction is a
+# small input on most buildings via the maintenance PM, so 10× is a meaningful
+# but not crippling switching tax. INJECT would be cleaner but the rebalance
+# work is the same either way if vanilla ever sets this field. Keep as REPLACE.
 REPLACE:pm_retooling = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
 	goods_input_construction_mult = 10
@@ -1521,6 +1525,7 @@ peaceful_decolonization_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_add = 100
 	country_influence_add = 50
+	country_authority_add = -200
 }
 
 colonial_war_exhaustion_modifier = {

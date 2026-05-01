@@ -237,7 +237,20 @@ pm_incentivized_relocation = {
 # =====================================================================
 # DESTINATION BUILDING PMs: Resettlement Colony
 # =====================================================================
-
+#
+# STACKING NOTE: pm_planned_settlement and pm_administered_territory below
+# both apply state_migration_pull_mult inside state_modifiers.workforce_scaled.
+# This is per-building-level × workforce-fraction; multiple Resettlement
+# Colony levels in the same state SUM their _mult contributions. Currently
+# safe because INJECT:base_values caps state_building_resettlement_colony_max_level_add
+# at 1, so each state has at most one level. If any law/tech/decree/etc.
+# raises that cap above 1, this _mult becomes pathological (a state with
+# 5 levels at full workforce running pm_administered_territory would have
+# state_migration_pull_mult = -1.25, killing all migration pull). The
+# country_bureaucracy_add penalties in country_modifiers are _add and
+# therefore safe under any cap. Per CLAUDE.md § "Modifier stacking is
+# additive across all sources".
+#
 # ----- PM Group: Settlement Type (pmg_resettlement_settlement) -----
 
 # Basic homesteading settlement with land grants and minimal infrastructure

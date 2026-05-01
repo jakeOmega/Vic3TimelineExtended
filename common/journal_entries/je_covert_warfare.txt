@@ -15,8 +15,24 @@ je_covert_warfare = {
 		has_game_rule = covert_warfare_enabled
 	}
 
+	# Activate only when slots exceed the base (1) + rank bonus (GP +2, Major +1):
+	# tech / law / institution has granted at least one extra slot beyond what
+	# every country of this rank gets for free.
 	possible = {
-		covert_operation_max_slots >= 1
+		OR = {
+			AND = {
+				country_rank = rank_value:great_power
+				covert_operation_max_slots >= 4
+			}
+			AND = {
+				country_rank = rank_value:major_power
+				covert_operation_max_slots >= 3
+			}
+			AND = {
+				NOT = { country_rank >= rank_value:major_power }
+				covert_operation_max_slots >= 2
+			}
+		}
 	}
 
 	status_desc = {

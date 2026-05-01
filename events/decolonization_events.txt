@@ -2994,7 +2994,7 @@ decolonization_events.203 = {
 			name = iron_fist_path_modifier
 			days = -1
 		}
-		add_infamy = 25
+		change_infamy = 25
 	}
 }
 
@@ -3126,7 +3126,7 @@ decolonization_events.50 = {
 
 	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_money.dds"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = decolonization_events.50.t
 	desc = decolonization_events.50.d

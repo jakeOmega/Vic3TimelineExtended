@@ -115,10 +115,14 @@ st_res_grain_capacity = {
 st_res_grain_good_mult = {
 	value = 0
 	if = {
-		limit = { st_res_grain_actual_rate_base_applied > 0 }
+		limit = {
+			has_variable = st_res_grain_stored
+			st_res_grain_actual_rate_base_applied > 0
+		}
 		add = st_res_grain_actual_rate_base_applied
 	}
-	else = {
+	else_if = {
+		limit = { has_variable = st_res_grain_stored }
 		subtract = st_res_grain_actual_rate_base_applied
 	}
 	# Compensate for throughput modifiers, so total rate equals desired rate
@@ -142,7 +146,10 @@ st_res_grain_max_storable = {
 st_res_grain_sale_profit = {
 	value = 0
 	if = {
-		limit = { st_res_grain_actual_rate_base_applied < 0 }
+		limit = {
+			has_variable = st_res_grain_stored
+			st_res_grain_actual_rate_base_applied < 0
+		}
 		subtract = st_res_grain_actual_rate_base_applied
 		g:grain = {
 			multiply = base_price
@@ -202,10 +209,14 @@ st_res_ammunition_capacity = {
 st_res_ammunition_good_mult = {
 	value = 0
 	if = {
-		limit = { st_res_ammunition_actual_rate_base_applied > 0 }
+		limit = {
+			has_variable = st_res_ammunition_stored
+			st_res_ammunition_actual_rate_base_applied > 0
+		}
 		add = st_res_ammunition_actual_rate_base_applied
 	}
-	else = {
+	else_if = {
+		limit = { has_variable = st_res_ammunition_stored }
 		subtract = st_res_ammunition_actual_rate_base_applied
 	}
 	# Compensate for throughput modifiers, so total rate equals desired rate
@@ -229,7 +240,10 @@ st_res_ammunition_max_storable = {
 st_res_ammunition_sale_profit = {
 	value = 0
 	if = {
-		limit = { st_res_ammunition_actual_rate_base_applied < 0 }
+		limit = {
+			has_variable = st_res_ammunition_stored
+			st_res_ammunition_actual_rate_base_applied < 0
+		}
 		subtract = st_res_ammunition_actual_rate_base_applied
 		g:ammunition = {
 			multiply = base_price
@@ -287,10 +301,14 @@ st_res_oil_capacity = {
 st_res_oil_good_mult = {
 	value = 0
 	if = {
-		limit = { st_res_oil_actual_rate_base_applied > 0 }
+		limit = {
+			has_variable = st_res_oil_stored
+			st_res_oil_actual_rate_base_applied > 0
+		}
 		add = st_res_oil_actual_rate_base_applied
 	}
-	else = {
+	else_if = {
+		limit = { has_variable = st_res_oil_stored }
 		subtract = st_res_oil_actual_rate_base_applied
 	}
 	# Compensate for throughput modifiers, so total rate equals desired rate
@@ -314,7 +332,10 @@ st_res_oil_max_storable = {
 st_res_oil_sale_profit = {
 	value = 0
 	if = {
-		limit = { st_res_oil_actual_rate_base_applied < 0 }
+		limit = {
+			has_variable = st_res_oil_stored
+			st_res_oil_actual_rate_base_applied < 0
+		}
 		subtract = st_res_oil_actual_rate_base_applied
 		g:oil = {
 			multiply = base_price
