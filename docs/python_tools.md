@@ -266,9 +266,38 @@ Invoke-RestMethod http://localhost:8950/status
 | `/references/<key>` | GET | Find all entities referencing a given key |
 | `/tech-tree/<tech_id>` | GET | Full prerequisite chain + unlocks |
 | `/modifier-search?q=<pattern>` | GET | Find modifier field names matching pattern |
-| `/unlocked-by/<tech_id>` | GET | All laws, buildings, PMs, units unlocked by a tech |
+| `/unlocked-by/<tech_id>` | GET | All laws, buildings, PMs, units unlocked by a tech (each entry now carries a `type` field — required by the universal `?annotate=` post-processor; see below). |
+| `/tech-unlocks` | GET | Bulk inverted index: every mod-side tech mapped to the entities that depend on it (`Buildings`, `Combat Unit Types`, `Decrees`, `Laws`, `Mobilization Options`, `Parties`, `PMs`, `Ship Modifications`, `Ship Types`). Per-tech shape is `{by_type: {<EntityType>: [{type,id,file,source}]}, summary: {<EntityType>: count}, n_total: int}`. Filters: `?source=mod\|vanilla\|all` (default `mod`), `?era=era_6` / `?eras=era_6,era_7` to filter by source-tech era, `?summary=true` drops `by_type` lists, `?refresh=true` rebuilds the cache. Combine with `?annotate=` for inline strength signals (e.g. PM `flag` / `margin_pct` via the `balance` annotator). Cached on first call after each `/reload`. **Clausewitz merge-directive prefixes (`INJECT:foo`, `REPLACE:foo`, `REPLACE_OR_CREATE:foo`) are stripped before indexing**, so an entity declared as `REPLACE_OR_CREATE:building_synthetics_plant_rubber` correctly attributes to its underlying `building_synthetics_plant_rubber` id. |
+| `/tech-unlocks/<tech_id>` | GET | Single-tech entry from the inverted index — same shape as one value of `/tech-unlocks`. |
+| `/annotators` | GET | List every registered annotator with its `name`, `entity_type`, `fields`, and `description`. Use to discover what `?annotate=<name>` values are valid against entity-listing endpoints. Today: `balance` for `PMs`. New annotators register at server startup by importing their owning module. |
 | `/filter/<EntityType>?field=<name>&value=<val>` | GET | Filter entities by field value |
 | `/unlocalized` | GET | Find all entities missing localization keys. `?type=Modifiers` filters to one type. `?mod_only=false` includes vanilla. Returns structured JSON with `total_entities_with_missing_loc`, `total_missing_keys`, and `by_type` breakdown. Supported types: Modifiers, Technologies, Buildings, Building Groups, Laws, Institutions, Decrees, Events, PMs, PM Groups, Modifier Types, and more (24 total). |
+
+##### Annotator post-processor (`?annotate=<name>[,<name>...]` or `?annotate=all`)
+
+Wired centrally into `route()`. Walks the response tree, finds every dict
+that carries both a `type` field and an `id` field, and merges fields
+from the requested annotators into each match. Unknown annotator names
+are silently skipped, so `?annotate=all` is a forward-compatible "give
+me everything that applies" idiom.
+
+- Default request (no `?annotate=`) is a pure pass-through: zero
+  overhead.
+- All entity-listing endpoints participate — `/laws`, `/buildings`,
+  `/technologies`, `/production-methods`, `/raw/<type>/<id>`,
+  `/references/<key>`, `/tech-tree/<id>`, `/unlocked-by/<id>`,
+  `/tech-unlocks`, `/keys/<EntityType>`, etc. Future entity-list
+  endpoints just need to set `type=<EntityType>` on their entries.
+- Adding a new annotator is import-time only: write a
+  `<thing>_balance_lib.py` that calls `annotators.register(...)`, import
+  it once in `mod_state_server.py`, and `?annotate=<name>` works
+  everywhere immediately. No endpoint changes required.
+
+Today's registered annotator: `balance` for `PMs` — adds
+`flag` (`HIGH-PROFIT` / `DEEP-LOSS` / `THROUGHPUT` / `HIGH-WAGE` /
+`LOW-WAGE` / `OK` / `NO-COSTS`), `margin_pct`, `wage_be`. Computed
+from the auto-generated cost-comment block in PM bodies via
+`pm_balance_lib.build_pm_balance_map`.
 
 #### Technology & Engine Research Endpoints
 
@@ -431,3 +460,39 @@ def get_field(data, key, default=None):
 These helpers are defined in `mod_state_server.py` but are simple enough to copy into generator scripts. See `gen_building_transfer.py` for a complete example.
 
 > **Rule of thumb:** Use HTTP for quick interactive lookups (1–10 queries). Use direct `ModState` import for batch operations (iterating entire entity types).
+
+### Gotchas when writing tooling that walks `common/`
+
+Three things that have bitten audit scripts and the inverted-index walker
+in this repo. Worth knowing before writing a new walker.
+
+**1. Strip Clausewitz merge-directive prefixes before matching IDs.** The
+mod uses `INJECT:foo`, `REPLACE:foo`, and `REPLACE_OR_CREATE:foo`
+extensively (~250 entities across the unlock-source dirs alone). A
+naïve identifier regex like `[A-Za-z_][A-Za-z0-9_]*` won't match
+`REPLACE_OR_CREATE:building_synthetics_plant_rubber` and that entity
+silently falls out of the walk — its `unlocking_technologies` (and any
+other field) goes uncounted. The engine resolves directive-prefixed
+keys to the underlying entity, so tooling should too. Reference
+implementation: `tech_unlocks_lib.iter_top_level_blocks` (`tech_unlocks_lib.py`).
+Test: `test_tech_unlocks_lib.test_clausewitz_merge_directive_prefixes`.
+
+**2. `ms.mod_parsers` keys are space-separated, not directory-named.**
+`production_methods/` → `"PMs"`, `combat_unit_types/` → `"Combat Unit Types"`,
+`mobilization_options/` → `"Mobilization Options"`, `ship_types/` →
+`"Ship Types"`, etc. (See `base_game_paths` / `mod_paths` at the top of
+`mod_state_server.py` for the full list.) When registering an
+annotator, tagging entries with `type=<EntityType>`, or calling
+`ms.get_data(<EntityType>)`, use these exact keys — the post-processor
+matches strings, so `"ProductionMethods"` silently mismatches `"PMs"`
+with no error.
+
+**3. Cost comments are stripped by `paradox_file_parser`.** PMs ship
+with auto-generated cost summaries (`# Total input cost: ...`,
+`# Profit margin: ...`, `# Wage breakeven: ...`) emitted by
+`pm_costs.py`, but the parser tokenizer drops comments at load time.
+Tooling that needs cost data — including the `balance` annotator's
+`compute()` — must re-read PM files directly off disk rather than
+going through `ms.get_data("PMs")`. `pm_balance_lib.build_pm_balance_map`
+is the canonical implementation; reuse it via the annotator registry
+rather than re-parsing comments.

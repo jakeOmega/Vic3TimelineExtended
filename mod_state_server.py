@@ -25,6 +25,7 @@ import traceback
 from collections import defaultdict
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from pathlib import Path
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 from urllib.error import URLError
@@ -38,6 +39,14 @@ from path_constants import (
     vanilla_docs_path,
     game_logs_path,
 )
+
+# Annotator registry — importing pm_balance_lib triggers registration of the
+# `balance` annotator for production methods. Keep this import grouped with
+# other annotator-owning libraries; new ones get added by importing them
+# here so their registrations happen before any request runs.
+import annotators
+import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
+import tech_unlocks_lib
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -682,6 +691,14 @@ modifier_to_pattern: dict = {}    # {full_modifier_name: (pattern, placeholder_v
 PATTERN_CATALOG_PATH = os.path.join(mod_path, "common", "_meta", "modifier_patterns.yml")
 DISCOVERY_MIN_MEMBERS = 3  # auto-discovered patterns need at least this many to register
 _last_validation_report: dict | None = None  # cached /validate/engine-coverage output
+# Per-load cache for annotator compute() results. Keyed by
+# (annotator.name, annotator.entity_type) -> {entity_id: fields}. Populated
+# lazily on first request that asks for `?annotate=`. Reset whenever the
+# mod state reloads so stale PM flags (etc.) don't survive a /reload.
+_annotator_compute_cache: dict[tuple[str, str], dict] = {}
+# Cached tech → unlocks inverted index. Same lifecycle as
+# `_annotator_compute_cache`.
+_tech_unlocks_index_cache: dict[str, dict] | None = None
 
 
 def _load_pattern_catalog() -> list[dict]:
@@ -2200,6 +2217,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
             "unlocked-by": lambda: self._unlocked_by(rest),
+            "tech-unlocks": lambda: self._tech_unlocks(rest, params),
+            "annotators": lambda: self._annotators(),
             "filter": lambda: self._filter(rest, params),
             # New structured endpoints
             "events": lambda: self._events(rest, params),
@@ -2243,7 +2262,19 @@ class ModStateHandler(BaseHTTPRequestHandler):
         handler = dispatch.get(ep)
         if handler is None:
             raise KeyError(ep)
-        return handler()
+        result = handler()
+        # Optional post-process: ?annotate=<name>[,<name>...] enriches every
+        # entity entry shaped like {type, id, ...} in the response. When the
+        # param is absent or empty the post-processor never runs — pure
+        # pass-through. Enables future annotators to plug in without touching
+        # any endpoint handler.
+        annotate_param = (params.get("annotate") or [""])[0]
+        if annotate_param:
+            annotators.apply_to_response(
+                result, annotate_param, Path(mod_path),
+                cache=_annotator_compute_cache,
+            )
+        return result
 
     # ---- endpoints --------------------------------------------------------
     def _status(self):
@@ -2282,7 +2313,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if data is None:
             raise KeyError(etype)
         return [
-            {"id": eid, "name": ms.localize(eid)}
+            {"type": etype, "id": eid, "name": ms.localize(eid)}
             for eid in data.keys()
         ]
 
@@ -2806,19 +2837,20 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return groups
 
     def _format_law_summary(self, law_id, ld):
-        info: dict = {"id": law_id, "name": ms.localize(law_id)}
+        info: dict = {"type": "Laws", "id": law_id, "name": ms.localize(law_id)}
         tech = get_field(ld, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         parent = get_field(ld, "parent")
         if parent:
-            info["parent"] = {"id": parent, "name": ms.localize(parent)}
+            info["parent"] = {"type": "Laws", "id": parent, "name": ms.localize(parent)}
         return info
 
     def _format_law_detail(self, law_id, raw):
         ld = get_entity_data(raw)
         group_id = get_field(ld, "group", "")
         info: dict = {
+            "type": "Laws",
             "id": law_id,
             "name": ms.localize(law_id),
             "group_id": group_id,
@@ -2826,10 +2858,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
         }
         tech = get_field(ld, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         parent = get_field(ld, "parent")
         if parent:
-            info["parent"] = {"id": parent, "name": ms.localize(parent)}
+            info["parent"] = {"type": "Laws", "id": parent, "name": ms.localize(parent)}
         modifiers = get_field(ld, "modifier")
         if modifiers and isinstance(modifiers, dict):
             info["modifiers"] = {}
@@ -2869,7 +2901,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         }
 
     def _format_tech_summary(self, tid, td):
-        info: dict = {"id": tid, "name": ms.localize(tid)}
+        info: dict = {"type": "Technologies", "id": tid, "name": ms.localize(tid)}
         desc = ms.get_description(tid)
         if desc:
             info["description"] = desc
@@ -2878,7 +2910,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         tech = get_field(td, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
             info["unlocking_technologies"] = [
-                {"id": t, "name": ms.localize(t)} for t in tech
+                {"type": "Technologies", "id": t, "name": ms.localize(t)} for t in tech
             ]
         return info
 
@@ -2948,10 +2980,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _format_building_summary(self, bid, raw):
         bd = get_entity_data(raw)
-        info: dict = {"id": bid, "name": ms.localize(bid)}
+        info: dict = {"type": "Buildings", "id": bid, "name": ms.localize(bid)}
         tech = get_field(bd, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         pmg_ids = get_field(bd, "production_method_groups")
         if pmg_ids and isinstance(pmg_ids, list):
             info["pm_group_count"] = len(pmg_ids)
@@ -2959,10 +2991,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _format_building_detail(self, bid, raw):
         bd = get_entity_data(raw)
-        info: dict = {"id": bid, "name": ms.localize(bid)}
+        info: dict = {"type": "Buildings", "id": bid, "name": ms.localize(bid)}
         tech = get_field(bd, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
 
         pmg_data = ms.get_data("PM Groups")
         pm_data = ms.get_data("PMs")
@@ -2970,13 +3002,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if pmg_ids and isinstance(pmg_ids, list) and pmg_data and pm_data:
             info["pm_groups"] = []
             for pmg_id in pmg_ids:
-                pmg_entry: dict = {"id": pmg_id, "name": ms.localize(pmg_id)}
+                pmg_entry: dict = {
+                    "type": "PM Groups", "id": pmg_id, "name": ms.localize(pmg_id),
+                }
                 if pmg_id in pmg_data:
                     pmg_inner = get_entity_data(pmg_data[pmg_id])
                     pm_ids = get_field(pmg_inner, "production_methods")
                     if pm_ids and isinstance(pm_ids, list):
                         pmg_entry["production_methods"] = [
-                            {"id": pid, "name": ms.localize(pid)} for pid in pm_ids
+                            {"type": "PMs", "id": pid, "name": ms.localize(pid)}
+                            for pid in pm_ids
                         ]
                 info["pm_groups"].append(pmg_entry)
 
@@ -2989,7 +3024,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         goods = ms.get_data("Goods")
         if not goods:
             return {"error": "Goods data not loaded"}
-        return [{"id": gid, "name": ms.localize(gid)} for gid in goods]
+        return [{"type": "Goods", "id": gid, "name": ms.localize(gid)} for gid in goods]
 
     # ---- structured: combat units -----------------------------------------
     def _combat_units(self):
@@ -3003,10 +3038,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         for tid, raw in types.items():
             td = get_entity_data(raw)
             gid = get_field(td, "group", "unknown")
-            unit_info: dict = {"id": tid, "name": ms.localize(tid)}
+            unit_info: dict = {
+                "type": "Combat Unit Types", "id": tid, "name": ms.localize(tid),
+            }
             tech = get_field(td, "unlocking_technologies")
             if tech and isinstance(tech, list) and tech:
-                unit_info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+                unit_info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
             by_group[gid].append(unit_info)
 
         return {
@@ -3024,8 +3061,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
             iid = parts[0]
             if iid not in ideologies:
                 raise KeyError(iid)
-            return {"id": iid, "name": ms.localize(iid), "raw": serialize(ideologies[iid])}
-        return [{"id": iid, "name": ms.localize(iid)} for iid in ideologies]
+            return {
+                "type": "Ideologies", "id": iid,
+                "name": ms.localize(iid), "raw": serialize(ideologies[iid]),
+            }
+        return [
+            {"type": "Ideologies", "id": iid, "name": ms.localize(iid)}
+            for iid in ideologies
+        ]
 
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
@@ -3040,7 +3083,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 continue
             for eid, raw in data.items():
                 if _data_contains_string(raw, key):
-                    results[etype].append({"id": eid, "name": ms.localize(eid)})
+                    results[etype].append(
+                        {"type": etype, "id": eid, "name": ms.localize(eid)}
+                    )
         return dict(results) if results else {"message": f"No references found for '{key}'"}
 
     # ---- analytical: tech tree --------------------------------------------
@@ -3066,6 +3111,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         td = get_entity_data(techs[tid])
         era_str = get_field(td, "era", "era_0")
         return {
+            "type": "Technologies",
             "id": tid,
             "name": ms.localize(tid),
             "era": int(era_str.split("_")[-1]),
@@ -3093,13 +3139,20 @@ class ModStateHandler(BaseHTTPRequestHandler):
                         pt_td = get_entity_data(pt_raw)
                         era_str = get_field(pt_td, "era", "era_0")
                     prereqs.append({
+                        "type": "Technologies",
                         "id": pt,
                         "name": ms.localize(pt),
                         "era": int(era_str.split("_")[-1]),
                     })
 
     def _find_unlocked_by_tech(self, tid):
-        """Find all entities unlocked by a technology across all entity types."""
+        """Find all entities unlocked by a technology across all entity types.
+
+        Each entry carries a `type` field matching its mod_parsers key, so the
+        centralized `?annotate=<name>` post-processor in route() picks them up
+        automatically (e.g. PM entries gain balance flags when the request
+        includes ?annotate=balance).
+        """
         unlocked = defaultdict(list)
         for etype in ms.mod_parsers:
             data = ms.get_data(etype)
@@ -3109,7 +3162,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 ed = get_entity_data(raw)
                 ut = get_field(ed, "unlocking_technologies")
                 if ut and isinstance(ut, list) and tid in ut:
-                    unlocked[etype].append({"id": eid, "name": ms.localize(eid)})
+                    unlocked[etype].append(
+                        {"type": etype, "id": eid, "name": ms.localize(eid)}
+                    )
         return dict(unlocked)
 
     # ---- analytical: modifier search --------------------------------------
@@ -3159,6 +3214,154 @@ class ModStateHandler(BaseHTTPRequestHandler):
             raise KeyError(tid)
         return self._find_unlocked_by_tech(tid)
 
+    # ---- analytical: tech-unlocks (bulk inverted index) -------------------
+    def _tech_unlocks(self, parts, params):
+        """GET /tech-unlocks                          - bulk inverted index
+        GET /tech-unlocks/<tech_id>               - single-tech entry
+        ?source=mod|vanilla|all  (default mod)    - which side of the tree
+        ?era=era_6  / ?eras=era_6,era_7           - filter by source tech's era
+        ?summary=true                             - drop by_type lists, keep summary
+        ?refresh=true                             - rebuild the index cache
+
+        For per-entry annotation (e.g. PM balance flags), append the
+        universal `?annotate=<name>[,<name>...]` or `?annotate=all` —
+        applied by the centralized post-processor in route().
+        """
+        global _tech_unlocks_index_cache
+        force = (params.get("refresh") or ["false"])[0].lower() == "true"
+        source = (params.get("source") or ["mod"])[0].lower()
+        era_param = params.get("era", [None])[0]
+        eras_param = params.get("eras", [None])[0]
+        summary_only = (params.get("summary") or ["false"])[0].lower() == "true"
+
+        # Build (and cache) the full mod-only index. Vanilla side is opt-in
+        # via ?source=vanilla|all and rebuilds each request — vanilla data
+        # rarely changes during a session so we don't cache it separately.
+        if force or _tech_unlocks_index_cache is None:
+            _tech_unlocks_index_cache = tech_unlocks_lib.build_tech_unlock_index(
+                Path(mod_path),
+            )
+
+        # Combine mod + vanilla as requested.
+        index: dict[str, dict] = {}
+        if source in ("mod", "all"):
+            for tid, rec in _tech_unlocks_index_cache.items():
+                index[tid] = self._copy_unlocks_record(rec)
+        if source in ("vanilla", "all"):
+            vanilla_root = Path(base_game_path) / "game" / "common"
+            vanilla_idx = tech_unlocks_lib.build_tech_unlock_index(
+                Path(mod_path),
+                include_vanilla=True,
+                vanilla_common_root=vanilla_root,
+            )
+            for tid, rec in vanilla_idx.items():
+                if source == "vanilla":
+                    # Filter to vanilla-source entries only.
+                    rec = self._filter_unlocks_by_source(rec, "vanilla")
+                    if rec["n_total"] == 0:
+                        continue
+                merged = index.get(tid)
+                if merged is None:
+                    index[tid] = self._copy_unlocks_record(rec)
+                else:
+                    self._merge_unlocks_records(merged, rec, source_filter="vanilla")
+
+        # Era filter — applied to the source tech, not the unlocked entries.
+        wanted_eras = self._collect_wanted_eras(era_param, eras_param)
+        if wanted_eras:
+            techs = ms.get_data("Technologies") or {}
+            kept = {}
+            for tid, rec in index.items():
+                td = techs.get(tid)
+                if td is None:
+                    continue
+                era_str = get_field(get_entity_data(td), "era", "era_0")
+                if era_str in wanted_eras:
+                    kept[tid] = rec
+            index = kept
+
+        if parts:
+            tid = parts[0]
+            rec = index.get(tid)
+            if rec is None:
+                # Empty record so callers can still see the shape.
+                rec = {"by_type": {}, "summary": {}, "n_total": 0}
+            if summary_only:
+                rec = {"summary": rec["summary"], "n_total": rec["n_total"]}
+            return rec
+
+        if summary_only:
+            return {
+                tid: {"summary": rec["summary"], "n_total": rec["n_total"]}
+                for tid, rec in index.items()
+            }
+        return index
+
+    @staticmethod
+    def _copy_unlocks_record(rec: dict) -> dict:
+        return {
+            "by_type": {k: list(v) for k, v in rec["by_type"].items()},
+            "summary": dict(rec["summary"]),
+            "n_total": rec["n_total"],
+        }
+
+    @staticmethod
+    def _filter_unlocks_by_source(rec: dict, src: str) -> dict:
+        out = {"by_type": {}, "summary": {}, "n_total": 0}
+        for etype, entries in rec["by_type"].items():
+            kept = [e for e in entries if e.get("source") == src]
+            if kept:
+                out["by_type"][etype] = kept
+                out["summary"][etype] = len(kept)
+                out["n_total"] += len(kept)
+        return out
+
+    @staticmethod
+    def _merge_unlocks_records(dst: dict, src: dict, source_filter: str | None = None) -> None:
+        """Merge `src` into `dst` in place. If `source_filter` is set,
+        only entries whose `source` matches it are merged (used to avoid
+        double-counting when ?source=all combines mod + vanilla)."""
+        for etype, entries in src["by_type"].items():
+            for e in entries:
+                if source_filter and e.get("source") != source_filter:
+                    continue
+                dst["by_type"].setdefault(etype, []).append(e)
+                dst["summary"][etype] = dst["summary"].get(etype, 0) + 1
+                dst["n_total"] += 1
+
+    @staticmethod
+    def _collect_wanted_eras(era_param: str | None, eras_param: str | None) -> set[str]:
+        out: set[str] = set()
+        if era_param:
+            out.add(era_param if era_param.startswith("era_") else f"era_{era_param}")
+        if eras_param:
+            for e in eras_param.split(","):
+                e = e.strip()
+                if not e:
+                    continue
+                out.add(e if e.startswith("era_") else f"era_{e}")
+        return out
+
+    # ---- analytical: annotators -------------------------------------------
+    def _annotators(self):
+        """GET /annotators  - list every registered annotator and its
+        produced field names. Use to discover what `?annotate=<name>`
+        values are valid against entity-listing endpoints."""
+        return {
+            "annotators": [
+                {
+                    "name": a.name,
+                    "entity_type": a.entity_type,
+                    "fields": list(a.fields),
+                    "description": a.description,
+                }
+                for a in sorted(
+                    annotators.all_registered(),
+                    key=lambda a: (a.entity_type, a.name),
+                )
+            ],
+        }
+
     # ---- analytical: filter -----------------------------------------------
     def _filter(self, parts, params):
         """GET /filter/<EntityType>?field=<name>&value=<val>
@@ -3191,12 +3394,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             fv = get_field(ed, field)
             if check_exists:
                 if fv is not None:
-                    results.append({"id": eid, "name": ms.localize(eid)})
+                    results.append({"type": etype, "id": eid, "name": ms.localize(eid)})
             else:
                 if fv is not None:
                     fv_str = str(fv).lower() if not isinstance(fv, list) else " ".join(str(x) for x in fv).lower()
                     if value in fv_str:
-                        results.append({"id": eid, "name": ms.localize(eid), field: serialize(fv)})
+                        results.append({
+                            "type": etype, "id": eid, "name": ms.localize(eid),
+                            field: serialize(fv),
+                        })
             if len(results) >= limit:
                 break
         return {"type": etype, "field": field, "count": len(results), "results": results}
@@ -3241,6 +3447,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return {"count": len(results), "events": results}
 
     def _format_event_summary(self, eid, ed):
+        # Events keep their pre-existing `type` field (country_event /
+        # state_event / etc.) for backward compatibility with /events?type=
+        # filtering. Tagging events with `type="Events"` for the universal
+        # annotator post-processor would clobber that meaning. If/when an
+        # annotator targets events, rename this field to `event_type` here
+        # and in the filter logic at the same time.
         info = {"id": eid, "name": ms.localize(eid + ".t")}
         etype = get_field(ed, "type")
         if etype:
@@ -3476,18 +3688,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _format_institution_summary(self, iid, raw):
         ed = get_entity_data(raw)
-        info = {"id": iid, "name": ms.localize(iid)}
+        info = {"type": "Institutions", "id": iid, "name": ms.localize(iid)}
         tech = get_field(ed, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         return info
 
     def _format_institution_detail(self, iid, raw):
         ed = get_entity_data(raw)
-        info = {"id": iid, "name": ms.localize(iid)}
+        info = {"type": "Institutions", "id": iid, "name": ms.localize(iid)}
         tech = get_field(ed, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         # Extract modifier data
         modifier = get_field(ed, "modifier")
         if modifier and isinstance(modifier, dict):
@@ -3524,18 +3736,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _format_pm_summary(self, pid, raw):
         ed = get_entity_data(raw)
-        info = {"id": pid, "name": ms.localize(pid)}
+        info = {"type": "PMs", "id": pid, "name": ms.localize(pid)}
         tech = get_field(ed, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         return info
 
     def _format_pm_detail(self, pid, raw):
         ed = get_entity_data(raw)
-        info = {"id": pid, "name": ms.localize(pid)}
+        info = {"type": "PMs", "id": pid, "name": ms.localize(pid)}
         tech = get_field(ed, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
-            info["unlocking_technology"] = {"id": tech[0], "name": ms.localize(tech[0])}
+            info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
         # Building modifiers
         for mod_key in ("building_modifiers", "country_modifiers", "state_modifiers"):
             mod_data = get_field(ed, mod_key)
@@ -3569,7 +3781,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         result_groups = []
         for pmg_id in pmg_ids:
-            group = {"id": pmg_id, "name": ms.localize(pmg_id), "pms": []}
+            group = {
+                "type": "PM Groups", "id": pmg_id,
+                "name": ms.localize(pmg_id), "pms": [],
+            }
             if pmg_id in pmg_data:
                 pmg_inner = get_entity_data(pmg_data[pmg_id])
                 pm_ids = get_field(pmg_inner, "production_methods")
@@ -3578,9 +3793,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
                         if pid in pm_data:
                             group["pms"].append(self._format_pm_detail(pid, pm_data[pid]))
                         else:
-                            group["pms"].append({"id": pid, "name": ms.localize(pid)})
+                            group["pms"].append({
+                                "type": "PMs", "id": pid, "name": ms.localize(pid),
+                            })
             result_groups.append(group)
-        return {"building": building_id, "name": ms.localize(building_id), "pm_groups": result_groups}
+        return {
+            "type": "Buildings", "id": building_id,
+            "name": ms.localize(building_id), "pm_groups": result_groups,
+        }
 
     # ---- structured: journal entries --------------------------------------
     def _journal_entries(self, parts):
@@ -3602,7 +3822,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _format_je_summary(self, jeid, raw):
         ed = get_entity_data(raw)
-        info = {"id": jeid, "name": ms.localize(jeid)}
+        info = {"type": "Journal Entries", "id": jeid, "name": ms.localize(jeid)}
         group = get_field(ed, "group")
         if group:
             info["group"] = group
@@ -3610,7 +3830,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _format_je_detail(self, jeid, raw):
         ed = get_entity_data(raw)
-        info = {"id": jeid, "name": ms.localize(jeid)}
+        info = {"type": "Journal Entries", "id": jeid, "name": ms.localize(jeid)}
         group = get_field(ed, "group")
         if group:
             info["group"] = group
@@ -3632,9 +3852,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if did not in decisions:
                 raise KeyError(did)
             ed = get_entity_data(decisions[did])
-            return {"id": did, "name": ms.localize(did), "raw": serialize(decisions[did])}
+            return {
+                "type": "Decisions", "id": did,
+                "name": ms.localize(did), "raw": serialize(decisions[did]),
+            }
 
-        return [{"id": did, "name": ms.localize(did)} for did in decisions]
+        return [
+            {"type": "Decisions", "id": did, "name": ms.localize(did)}
+            for did in decisions
+        ]
 
     # ---- structured: script values ----------------------------------------
     def _script_values(self, parts):
@@ -3647,9 +3873,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             svid = parts[0]
             if svid not in svs:
                 raise KeyError(svid)
-            return {"id": svid, "raw": serialize(svs[svid])}
+            return {"type": "Script Values", "id": svid, "raw": serialize(svs[svid])}
 
-        return [{"id": svid} for svid in svs]
+        return [{"type": "Script Values", "id": svid} for svid in svs]
 
     # ---- structured: decrees ----------------------------------------------
     def _decrees(self, parts):
@@ -3663,7 +3889,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if did not in decrees:
                 raise KeyError(did)
             ed = get_entity_data(decrees[did])
-            info = {"id": did, "name": ms.localize(did)}
+            info = {"type": "Decrees", "id": did, "name": ms.localize(did)}
             modifier = get_field(ed, "modifier")
             if modifier and isinstance(modifier, dict):
                 info["modifier"] = {
@@ -3673,7 +3899,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
             info["raw"] = serialize(decrees[did])
             return info
 
-        return [{"id": did, "name": ms.localize(did)} for did in decrees]
+        return [
+            {"type": "Decrees", "id": did, "name": ms.localize(did)}
+            for did in decrees
+        ]
 
     # ---- structured: on-actions -------------------------------------------
     def _on_actions(self, parts):
@@ -3686,9 +3915,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             oaid = parts[0]
             if oaid not in oas:
                 raise KeyError(oaid)
-            return {"id": oaid, "raw": serialize(oas[oaid])}
+            return {"type": "On Actions", "id": oaid, "raw": serialize(oas[oaid])}
 
-        return [{"id": oaid} for oaid in oas]
+        return [{"type": "On Actions", "id": oaid} for oaid in oas]
 
     # ---- technology effects -----------------------------------------------
     def _technology_effects(self, parts):
@@ -3708,6 +3937,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         td = get_entity_data(techs[tid])
         era_str = get_field(td, "era", "era_0")
         info: dict = {
+            "type": "Technologies",
             "id": tid,
             "name": ms.localize(tid),
             "era": int(era_str.split("_")[-1]),
@@ -3728,7 +3958,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
         prereqs = get_field(td, "unlocking_technologies")
         if prereqs and isinstance(prereqs, list):
             info["prerequisites"] = [
-                {"id": pt, "name": ms.localize(pt)} for pt in prereqs
+                {"type": "Technologies", "id": pt, "name": ms.localize(pt)}
+                for pt in prereqs
             ]
 
         # Find everything this tech unlocks across all entity types
@@ -3755,7 +3986,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 ed = get_entity_data(raw)
                 ut = get_field(ed, "unlocking_technologies")
                 if ut and isinstance(ut, list) and tid in ut:
-                    entry = {"id": eid, "name": ms.localize(eid)}
+                    entry = {"type": etype, "id": eid, "name": ms.localize(eid)}
                     # For PMs, include modifier details
                     if etype == "PMs":
                         for mod_key in ("building_modifiers", "country_modifiers", "state_modifiers"):
@@ -3786,6 +4017,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if other_prereqs and isinstance(other_prereqs, list) and tid in other_prereqs:
                 other_era = get_field(other_td, "era", "era_0")
                 dependents.append({
+                    "type": "Technologies",
                     "id": other_tid,
                     "name": ms.localize(other_tid),
                     "era": int(other_era.split("_")[-1]),
@@ -4094,7 +4326,7 @@ def _run_post_load_generators(mod_state):
 
 
 def _load_mod_state():
-    global ms, startup_elapsed
+    global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
     logger.info("Loading mod state… (this may take a minute)")
     t0 = time.time()
     try:
@@ -4102,6 +4334,12 @@ def _load_mod_state():
     except Exception as e:
         logger.error(f"Failed to initialize ModState: {e}\n{traceback.format_exc()}")
         raise
+
+    # Invalidate per-load caches so stale annotator outputs / inverted-index
+    # entries don't leak across reloads.
+    _last_validation_report = None
+    _tech_unlocks_index_cache = None
+    _annotator_compute_cache.clear()
 
     # Load localization — wrap each call so one bad directory doesn't kill everything
     for loc_dir in [

@@ -28,11 +28,17 @@ extracts per-unit:
    (10–25), which inflates per-1000-man cost dramatically — these
    units are *meant* to be one-or-two-per-formation specialists.
    So a low ptc on a 10-man unit is intentional, not a bug.
-3. Era mapping uses a manual tech→era table at the top of the script;
-   if a tech is missing, the unit is bucketed as `?`. Four units
-   (jet_powered_fighters, stealth_aircraft, orbital_weapons_platforms,
-   stealth_marines) currently fall through — quick fix in the script's
-   `TECH_ERA` dict to assign their actual eras.
+3. Era mapping is now read directly from the tech files
+   (`build_tech_era_map()` walks `common/technology/technologies/` plus
+   the vanilla `game/common/technology/technologies/` tree and pulls
+   each tech's `era = era_X` field). The previous hand-curated dict had
+   drifted: four units (`jet_powered_fighters`, `stealth_aircraft`,
+   `orbital_weapons_platforms`, `stealth_marines`) fell through entirely,
+   and the dict had `swarm_technology` / `space_militarization` /
+   `augmented_reality_warfare` at era_10 when their tech files actually
+   place them in era_11. Several units' inline `# era N` comments are
+   also now known to lag the tech-file truth — trust the audit, not the
+   comment.
 
 **Mod design philosophy reminder (from user):** combat units should
 get *much better* with tech AND *much more expensive*. Power-to-cost
@@ -46,23 +52,23 @@ ratio should stay roughly constant or favor cost-cutting at lower tech
 ### Theme 1: Tank chain is exemplary balance
 
 `combat_unit_group_tanks` maintains a **perfectly flat power-per-cost
-ratio of 0.04** across eras 7, 8, 10, and 11:
+ratio of 0.04** across eras 7, 8, 10, and 12:
 
 | Unit | Era | Power | ptc |
 |---|---|---|---|
 | `combat_unit_type_main_battle_tank` | 7 | 400 | 0.04 |
 | `combat_unit_type_reactive_armor_tank` | 8 | 640 | 0.04 |
 | `combat_unit_type_railgun_tank` | 10 | 2000 | 0.04 |
-| `combat_unit_type_DEW_tank` | 11 | 4000 | 0.04 |
+| `combat_unit_type_DEW_tank` | 12 | 4000 | 0.04 |
 
-Power doubles every era; cost doubles in lockstep. This is the
+Power doubles every two eras; cost doubles in lockstep. This is the
 **reference standard** the mod's design philosophy describes —
 units get much better and much more expensive in lockstep.
 
 ### Theme 2: Cavalry chain is also flat at 0.04
 
 `combat_unit_group_cavalry` (light_scout_tanks → stealth_reconnaissance
-→ holographic_ambush) holds 0.04 ptc across all three known tiers.
+→ holographic_ambush) holds 0.04 ptc across eras 7 / 9 / 11.
 
 These two groups (tanks + cavalry) are the design baseline.
 
@@ -72,8 +78,8 @@ These two groups (tanks + cavalry) are the design baseline.
 |---|---|---|---|---|---|
 | `combat_unit_type_armored_infantry` | 6 | 160 | 1000 | 1,200 | 0.13 |
 | `combat_unit_type_robotic_soldiers` | 10 | 470 | 100 | 62,000 | 0.01 |
-| `combat_unit_type_swarm_bots` | 10 | 940 | 25 | 506,400 | 0.00 |
-| `combat_unit_type_grey_goo` *(now Utility Fog Phalanx)* | 11 | 1880 | 10 | 2,490,000 | 0.00 |
+| `combat_unit_type_swarm_bots` | 11 | 940 | 25 | 506,400 | 0.00 |
+| `combat_unit_type_grey_goo` *(now Utility Fog Phalanx)* | 12 | 1880 | 10 | 2,490,000 | 0.00 |
 
 Two interpretations:
 
@@ -101,8 +107,8 @@ infantry/artillery — rather than treating it as one rule.
 | `combat_unit_type_motorized_artillery` | 6 | 200 | 1000 | 0.10 |
 | `combat_unit_type_guided_artillery_projectiles` | 7 | 300 | 1000 | 0.07 |
 | `combat_unit_type_networked_guided_artillery_projectiles` | 9 | 660 | 500 | 0.03 |
-| `combat_unit_type_orbital_bombardment` | 10 | 1320 | 10 | 0.00 |
-| `combat_unit_type_orbital_precision_antimatter_strikes` | 11 | 2640 | 10 | 0.00 |
+| `combat_unit_type_orbital_bombardment` | 11 | 1320 | 10 | 0.00 |
+| `combat_unit_type_orbital_precision_antimatter_strikes` | 12 | 2640 | 10 | 0.00 |
 
 Same pattern: progressive elite-specialization. Orbital bombardment
 and antimatter strikes are functionally a different category from
@@ -113,24 +119,38 @@ field artillery.
 | Unit | Era | Power | mp | ptc |
 |---|---|---|---|---|
 | `combat_unit_type_combined_arms_marines` | 6 | 120 | 1000 | 0.13 |
+| `combat_unit_type_stealth_marines` | 8 | 280 | 500 | 0.08 |
 | `combat_unit_type_networked_marines` | 10 | 350 | 500 | 0.04 |
 | `combat_unit_type_bioenhanced_marines` | 11 | 705 | 200 | 0.02 |
-| `combat_unit_type_stealth_marines` | ? | 280 | 500 | 0.08 |
 
 Marines elite-specialize less aggressively than infantry. The drop
-from 0.13 to 0.02 across 5 eras is meaningful but not extreme.
+from 0.13 to 0.02 across 5 eras is meaningful but not extreme. With
+era assignments now resolved, the chain shows a clean monotonic ptc
+decay (0.13 → 0.08 → 0.04 → 0.02) rather than an out-of-order
+`stealth_marines = ?` outlier.
 
-### Theme 6: Aircraft (group) lacks era assignments
+### Theme 6: Aircraft chain holds 0.01 ptc across all eras
 
-Four units currently bucketed `?`:
-`jet_powered_fighters`, `stealth_aircraft`, `orbital_weapons_platforms`,
-`stealth_marines`. Their unlocking techs aren't in the audit's `TECH_ERA`
-table. Quick fix in the auditor; these are the rest of the data,
-already filed properly.
+With era resolution now reading directly from the tech files, all
+five aircraft are filed:
 
-`orbital_weapons_platforms` at power 4600 / 200 manpower is the
-strongest single unit in the dataset — should land somewhere in era
-10 or 11. Worth specifically vetting once placed.
+| Unit | Era | Power | mp | ptc |
+|---|---|---|---|---|
+| `combat_unit_type_bomber_aircraft` | 6 | 500 | 200 | 0.01 |
+| `combat_unit_type_jet_powered_fighters` | 7 | 750 | 200 | 0.01 |
+| `combat_unit_type_stealth_aircraft` | 8 | 1150 | 200 | 0.01 |
+| `combat_unit_type_orbital_tactical_vehicles` | 11 | 2300 | 100 | 0.00 |
+| `combat_unit_type_orbital_weapons_platforms` | 12 | 4600 | 10 | 0.00 |
+
+Era 6–8 conventional aircraft hold a flat 0.01 ptc — internally
+consistent with each other, but an order of magnitude below the
+0.04–0.13 ground-unit baseline. See T3.
+
+The two orbital aircraft drop into the elite-specialist regime —
+`orbital_weapons_platforms` is the highest single-unit power in the
+dataset (4600) at the lowest manpower (10), giving it the highest
+per-unit cost (~14M per individual). Functionally a different category
+from atmospheric aircraft.
 
 ### Theme 7: Era 6 ptc range is 0.10–0.13 (relatively tight)
 
@@ -142,47 +162,46 @@ consistent. The divergence opens up in mid-game (era 7+).
 
 ## Per-group power progression table
 
-(re-run the auditor to refresh; eras for `?` units to be filled in
-during the manual review pass)
-
 ```
 combat_unit_group_tanks
   era_7  main_battle_tank          pwr= 400  ptc=0.04
   era_8  reactive_armor_tank       pwr= 640  ptc=0.04
   era_10 railgun_tank              pwr=2000  ptc=0.04
-  era_11 DEW_tank                  pwr=4000  ptc=0.04
+  era_12 DEW_tank                  pwr=4000  ptc=0.04
 
 combat_unit_group_cavalry
   era_7  light_scout_tanks         pwr= 300  ptc=0.04
   era_9  stealth_reconnaissance    pwr= 640  ptc=0.04
-  era_10 holographic_ambush        pwr=1280  ptc=0.04
+  era_11 holographic_ambush        pwr=1280  ptc=0.04
 
 combat_unit_group_infantry
   era_6  armored_infantry          pwr= 160  ptc=0.13
   era_10 robotic_soldiers          pwr= 470  ptc=0.01
-  era_10 swarm_bots                pwr= 940  ptc=0.00
-  era_11 grey_goo (Utility Fog)    pwr=1880  ptc=0.00
+  era_11 swarm_bots                pwr= 940  ptc=0.00
+  era_12 grey_goo (Utility Fog)    pwr=1880  ptc=0.00
 
 combat_unit_group_artillery
   era_6  motorized_artillery       pwr= 200  ptc=0.10
   era_7  guided_artillery          pwr= 300  ptc=0.07
   era_9  networked_guided_artil    pwr= 660  ptc=0.03
-  era_10 orbital_bombardment       pwr=1320  ptc=0.00
-  era_11 orbital_antimatter        pwr=2640  ptc=0.00
+  era_11 orbital_bombardment       pwr=1320  ptc=0.00
+  era_12 orbital_antimatter        pwr=2640  ptc=0.00
 
 combat_unit_group_marines
   era_6  combined_arms_marines     pwr= 120  ptc=0.13
+  era_8  stealth_marines           pwr= 280  ptc=0.08
   era_10 networked_marines         pwr= 350  ptc=0.04
   era_11 bioenhanced_marines       pwr= 705  ptc=0.02
-  ?      stealth_marines           pwr= 280  ptc=0.08
 
 combat_unit_group_aircraft
   era_6  bomber_aircraft           pwr= 500  ptc=0.01
-  ?      jet_powered_fighters      pwr= 750  ptc=0.01
-  ?      stealth_aircraft          pwr=1150  ptc=0.01
-  ?      orbital_weapons_platforms pwr=4600  ptc=0.00
-  era_10 orbital_tactical_vehicles pwr=2300  ptc=0.00
+  era_7  jet_powered_fighters      pwr= 750  ptc=0.01
+  era_8  stealth_aircraft          pwr=1150  ptc=0.01
+  era_11 orbital_tactical_vehicles pwr=2300  ptc=0.00
+  era_12 orbital_weapons_platforms pwr=4600  ptc=0.00
 ```
+
+Refresh by running `.venv/bin/python scripts/analysis/combat_unit_balance_audit.py`.
 
 ---
 
@@ -202,8 +221,9 @@ combat_unit_group_aircraft
    `orbital_tactical_vehicles`) is an order of magnitude above ground
    units. This matches their "small handful per nation" theme but worth
    confirming.
-5. **T5**: The auditor's TECH_ERA mapping has gaps for 4 units. Quick
-   to fix; do it before next pass.
+5. **T5 (resolved):** the auditor now reads `era = era_X` directly
+   from each tech file rather than relying on a hand-curated dict, so
+   newly added techs/units are picked up automatically.
 6. **Concrete first edit candidate:** `combat_unit_type_swarm_bots` at
    max_manpower 25 with 506,400/1k cost is striking. Is the 25 number
    deliberate (you fielded it out of the gate as elite-from-start), or
@@ -213,7 +233,8 @@ combat_unit_group_aircraft
 
 ## Recommended follow-up workflow
 
-1. Fix the `TECH_ERA` lookup gaps and re-run.
+1. ~~Fix the `TECH_ERA` lookup gaps and re-run.~~ Done — eras now
+   auto-resolve from the tech files.
 2. Walk the per-group table and decide for each group: flat-ptc design
    target, or elite-specialist drift. Tanks/cavalry are clearly flat;
    infantry/artillery clearly aren't. Pick the rule per group.

@@ -16,7 +16,12 @@ parses the auto-generated cost-comment block that `pm_costs.py` emits
 in front of every PM and tabulates profit, margin %, and wage breakeven.
 Outliers are flagged as `HIGH-PROFIT` (margin > 100%), `DEEP-LOSS`
 (margin < -50%), `HIGH-WAGE` (wage breakeven > 0.30), `LOW-WAGE`
-(margin > 0 but breakeven < 0.01).
+(margin > 0 but breakeven < 0.01), or `THROUGHPUT` (modifier-only PM
+with zero goods output and at least one non-goods modifier line).
+THROUGHPUT PMs are excluded from the outlier table and from the median
+margin to keep the noise out — they're correct-by-design rather than
+broken. PMs that need to override the auto-detection can add a
+`# AUDIT: throughput-pm` comment in their body.
 
 Buildings (rough scope):
 - `extra_buildings.txt`, `fmc_construction.txt`, `strategic_reserve.txt`,
@@ -35,30 +40,30 @@ flagging here is **within-mod relative**, not vs vanilla.
 
 ### Theme 1: `extra_pms.txt` margin distribution is bimodal
 
-Not a smooth distribution: 808 PMs fall into clear buckets.
+Not a smooth distribution: 808 PMs fall into clear buckets (re-run
+post throughput tagging).
 
 | Bucket | Count (extra_pms) | Count (unique_pms) |
 |---|---|---|
 | OK (margin in normal range) | 55 | 106 |
-| DEEP-LOSS (margin < -50%) | 139 | 0 |
+| THROUGHPUT (modifier-only) | 134 | 0 |
+| DEEP-LOSS (real loss, margin < -50%) | 5 | 0 |
 | HIGH-PROFIT (margin > 100%) | 86 | 128 |
 | HIGH-WAGE (breakeven > 0.30) | 121 | 48 |
 | LOW-WAGE | 19 | 0 |
 | NO-COSTS (no input/output to compute) | 45 | 45 |
 
-**Almost all of `extra_pms.txt`'s "DEEP-LOSS" PMs are -100% margin** —
-these are inputs-only or throughput-only PMs whose value is in the
-modifier block, not in goods produced. The auditor cannot see modifier
-contribution, so flags them as broken when they're correct-by-design.
-Examples: `pm_national_labs`, `pm_ai_assisted_research`,
-`pm_internet_communications`. These are research / communications PMs
-that consume inputs to produce a modifier (e.g. `country_innovation_mult`
-or building throughput).
+The 134 modifier-only PMs in `extra_pms.txt` (research, comms,
+throughput multipliers) are now auto-classified as `THROUGHPUT`. They
+consume inputs to produce a `country_modifiers` / `building_modifiers`
+block payload (e.g. `country_weekly_innovation_add`) and are
+correct-by-design — the audit just couldn't see modifier value before
+the tagging existed. Examples: `pm_national_labs`,
+`pm_ai_assisted_research`, `pm_internet_communications`.
 
-**Open question (T1):** which DEEP-LOSS PMs in the table are actually
-broken (cost vs throughput out of whack) vs intended throughput-only
-PMs? A second-pass audit would need to parse the modifier block too,
-not just goods costs.
+**T1 (resolved):** the 134 throughput false-positives are now
+filtered out of the outlier table. The 5 remaining `DEEP-LOSS` rows in
+`extra_pms.txt` are real losses worth eyeballing — see Theme 5.
 
 ### Theme 2: A handful of HIGH-PROFIT outliers are extreme
 
@@ -104,30 +109,39 @@ question (T4):** are these clustering in service/research buildings
 (intended) or scattered into industrial PMs (concerning)? Need to
 group by parent building.
 
-### Theme 5: Throughput-only / modifier-only PMs at -100% margin
+### Theme 5: Five real DEEP-LOSS PMs to investigate
 
-The 139 DEEP-LOSS rows are dominated by PMs at exactly -100% margin
-with negative-or-zero wage breakeven values like `-2.5`, `-5.6`,
-`-40.0`. These mean: the PM has inputs but no goods output (or
-trivially small output). They exist purely to apply a modifier (often
-a research speed boost, communications system buff, or building
-throughput multiplier).
+After throughput auto-classification filters out the 134 modifier-only
+false positives, only 5 PMs in `extra_pms.txt` remain `DEEP-LOSS`. All
+sit in the `pm_large_scale_earth_movers_*_mine` family at -50.6% to
+-55.6% margin:
 
-Examples:
-- `pm_national_labs`, `pm_academic_computing`, `pm_ai_assisted_research`
-  — research-system PMs.
-- `pm_internet_communications`, `pm_teletype_communications` — comms.
-- `pm_continuous_bleaching`, `pm_programmable_paper`, etc. — late-era
-  throughput upgrades.
+| pm_id | margin% | wage_be |
+|---|---|---|
+| `pm_large_scale_earth_movers_iron_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_lead_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_sulfur_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_gold_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_coal_mine` | -55.6 | 0.180 |
 
-These are not bugs — they're how the mod represents "researcher
-salaries" or "throughput infrastructure" — but the auditor flags them
-all the same.
+These are upgrade PMs — they substitute heavier inputs (electricity /
+fuel) for labor in the existing mining buildings. A negative margin
+on the upgrade tier is plausible if the building's total output and
+employment scaling compensate, but it's worth a sanity-check pass:
+either the input mix is too costly or the output volume scaling on
+the parent buildings isn't keeping up. The same diesel/condensing
+upgrade PMs (`pm_diesel_pump_*`, `pm_condensing_engine_pump_*`) are
+flagged HIGH-PROFIT in the same family, which suggests the
+electricity-fed earth-mover variant was scaled separately and never
+re-balanced.
 
-**Open question (T5):** is there a tagging convention to mark a PM as
-"deliberately negative goods balance, evaluate on modifier contribution"?
-If not, future audits will keep flagging these. A `# AUDIT: throughput`
-comment in the source would let the audit script skip them.
+**T5 (resolved):** the auditor now supports two ways of marking a PM
+as throughput-only:
+1. **Auto-detection** (default): zero `Total output cost` + at least
+   one non-`goods_input/output_*` line inside a modifier block.
+2. **Explicit override**: place a `# AUDIT: throughput-pm` comment
+   anywhere in the PM body. Useful for edge-case PMs that produce a
+   trivial output but exist primarily for their modifier.
 
 ---
 
@@ -156,25 +170,25 @@ Selected extreme outliers; full list available by re-running
 | `pm_electrified_rotary_drilling_rigs` | 1.150 |
 | `pm_diesel_pump_building_tech_metals_mine` | 0.800 |
 
-### DEEP-LOSS — first 5 entries (representative pattern)
+### DEEP-LOSS — all real losses after throughput filtering
 
-These are throughput/research PMs at -100%, expected to deliver value
-through modifier blocks the auditor doesn't see:
+The remaining DEEP-LOSS entries are now genuine — throughput PMs are
+auto-tagged and excluded:
 
-| pm_id | wage_be |
-|---|---|
-| `pm_large_scale_earth_movers_iron_mine` | 0.160 |
-| `pm_national_labs` | -2.500 |
-| `pm_academic_computing` | -5.330 |
-| `pm_ai_assisted_research` | -11.000 |
-| `pm_internet_communications` | -40.000 |
+| pm_id | margin% | wage_be |
+|---|---|---|
+| `pm_large_scale_earth_movers_iron_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_lead_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_sulfur_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_gold_mine` | -50.6 | 0.160 |
+| `pm_large_scale_earth_movers_coal_mine` | -55.6 | 0.180 |
 
 ---
 
 ## Open questions for back-and-forth
 
-1. **T1**: Which DEEP-LOSS PMs are intentionally throughput-only vs
-   actually broken? Is there a way to tag them?
+1. ~~**T1**~~ (resolved): throughput PMs are now auto-classified;
+   the 5 remaining DEEP-LOSS rows are real and listed in Theme 5.
 2. **T2**: Are the 200–800% margin HIGH-PROFIT outliers (excluding
    `pm_solar_receiver`'s metric artifact) properly compensated by
    construction cost on their parent buildings?
@@ -183,9 +197,9 @@ through modifier blocks the auditor doesn't see:
 4. **T4**: Are the 121 HIGH-WAGE PMs clustering into intended labor-heavy
    buildings (universities, hospitals, research) or leaking into
    industrial PMs?
-5. **T5**: Add a tagging convention (`# AUDIT: throughput-pm`) for
-   modifier-only PMs so the audit script can flag them as
-   "intentional negative balance".
+5. ~~**T5**~~ (resolved): tagging convention implemented. Auto-detect
+   covers the typical case; `# AUDIT: throughput-pm` is the manual
+   override.
 6. **Era progression sanity**: pick a PM family (e.g. iron-mining PMs
    across eras 4–9) and look at era-over-era profit improvement.
    Does it match the era-over-era tech progression curve from Task 12?

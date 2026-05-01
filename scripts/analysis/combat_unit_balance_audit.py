@@ -17,43 +17,64 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 COMBAT_FILE = REPO / "common" / "combat_unit_types" / "extra_combat_units.txt"
+MOD_TECH_DIR = REPO / "common" / "technology" / "technologies"
+# Vanilla tech directory — era_5 entries only matter here, but pulling the whole
+# tree means the audit auto-tracks any vanilla tech a mod-side unit happens to
+# unlock from.
+VANILLA_TECH_DIR = Path(
+    "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3"
+    "/game/common/technology/technologies"
+)
 
-# Tech-to-era mapping (from in-file comments + tech file headers — manually
-# curated since unlocking technologies are recorded inline as comments).
-TECH_ERA = {
-    # era 5 (vanilla baseline)
-    "mobile_armor": "era_5",
-    # era 6
-    "combined_arms": "era_6",
-    "motorized_artillery": "era_6",
-    "bombing_aircraft": "era_6",
-    "advanced_machine_guns": "era_6",
-    "armored_personnel_carriers": "era_6",
-    # era 7
-    "guided_missiles": "era_7",
-    "inertial_navigation_systems": "era_7",
-    "advanced_military_aircraft": "era_7",
-    "advanced_submarine_technology": "era_7",
-    # era 8
-    "advanced_materials_armor": "era_8",
-    "augmented_reality_warfare": "era_8",
-    "stealth_aircraft": "era_8",
-    # era 9
-    "network_centric_warfare": "era_9",
-    "rapid_deployment_forces": "era_9",
-    # era 10
-    "jadc2": "era_10",
-    "swarm_technology": "era_10",
-    "space_militarization": "era_10",
-    "hypersonic_weapons": "era_10",
-    "directed_energy_weapons": "era_10",
-    "augmented_reality_warfare": "era_10",
-    # era 11
-    "molecular_assemblers": "era_11",
-    "compact_fusion_reactors": "era_11",
-    "antimatter_production": "era_11",
-    "bioenhanced_soldiers": "era_11",
-}
+
+def build_tech_era_map() -> dict[str, str]:
+    """Walk mod + vanilla tech files and read each tech's `era = era_X` field.
+
+    Avoids the maintenance burden of a hand-curated dict (which previously
+    drifted out of date — `augmented_reality_warfare`/`swarm_technology`/
+    `space_militarization` had moved eras, and four mod-side techs weren't
+    listed at all).
+    """
+    pat = re.compile(
+        r"^([a-z_][a-z0-9_]*)\s*=\s*\{",
+        re.MULTILINE,
+    )
+    era_pat = re.compile(r"\bera\s*=\s*(era_\d+)")
+
+    out: dict[str, str] = {}
+    for tech_dir in (VANILLA_TECH_DIR, MOD_TECH_DIR):
+        if not tech_dir.exists():
+            continue
+        for txt in sorted(tech_dir.glob("*.txt")):
+            try:
+                text = txt.read_text(encoding="utf-8-sig")
+            except OSError:
+                continue
+            # Walk each top-level `<tech_id> = { ... era = era_X ... }` block.
+            i = 0
+            while i < len(text):
+                m = pat.search(text, i)
+                if not m:
+                    break
+                tech_id = m.group(1)
+                body_start = m.end()
+                depth = 1
+                j = body_start
+                while j < len(text) and depth > 0:
+                    c = text[j]
+                    if c == "{":
+                        depth += 1
+                    elif c == "}":
+                        depth -= 1
+                    j += 1
+                era_m = era_pat.search(text, body_start, j)
+                if era_m:
+                    out[tech_id] = era_m.group(1)
+                i = j
+    return out
+
+
+TECH_ERA = build_tech_era_map()
 
 
 def iter_units(path: Path):
@@ -157,7 +178,12 @@ def main() -> int:
     by_era = {}
     for r in rows:
         by_era.setdefault(r["era"], []).append(r)
-    for era in sorted(by_era.keys()):
+
+    def era_key(e: str) -> tuple[int, str]:
+        m = re.match(r"era_(\d+)", e)
+        return (int(m.group(1)) if m else 9999, e)
+
+    for era in sorted(by_era.keys(), key=era_key):
         erows = by_era[era]
         print(f"## {era} — {len(erows)} units")
         for r in erows:
@@ -174,7 +200,7 @@ def main() -> int:
     for r in rows:
         by_group.setdefault(r["group"], []).append(r)
     for grp in sorted(by_group.keys()):
-        grows = sorted(by_group[grp], key=lambda r: r["era"])
+        grows = sorted(by_group[grp], key=lambda r: era_key(r["era"]))
         print(f"### {grp}")
         for r in grows:
             ptc = f"{r['ptc']:.2f}" if r['ptc'] is not None else "—"
@@ -185,7 +211,7 @@ def main() -> int:
     print("\n## Outlier table\n")
     print("| unit | era | group | ofs+def | upkeep_total | cost/1k | power_per_cost1k |")
     print("|---|---|---|---|---|---|---|")
-    for r in sorted(rows, key=lambda r: (r["era"], r["group"] or "", -r["power"])):
+    for r in sorted(rows, key=lambda r: (era_key(r["era"]), r["group"] or "", -r["power"])):
         ptc = f"{r['ptc']:.2f}" if r['ptc'] is not None else "—"
         cost = f"{r['cost_per_1k']:.0f}" if r['cost_per_1k'] is not None else "—"
         upk = f"{r['upkeep_total']:.0f}" if r['upkeep_total'] is not None else "—"

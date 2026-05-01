@@ -21,10 +21,19 @@ resolve balance by itself. Cross-reference against:
   bureaucracy modifier means very different things to the player than
   100 on `country_authority_add`).
 
-A `WEAK*` flag means **zero modifier-block effects**, which usually
-indicates the tech's value is in unlocks (a building, PM, or law),
-not in raw modifiers — so WEAK\* is *not* automatically a balance
-problem. It just means the audit can't see the value.
+A `WEAK*` flag now means **zero modifier-block effects AND zero
+unlocks** — the audit's "I can't see anything in this tech" verdict.
+Techs with empty modifier blocks but a non-empty unlock set get a
+new `UNLOCK-ONLY` flag instead, with a per-tech breakdown showing
+what they actually gate. This was T3's central question: is each
+WEAK\* tech utility-tier, stack-tier, or genuinely empty? The
+auditor now answers it directly.
+
+The unlock annotation comes from the shared `tech_unlocks_lib`
+(also feeding the mod state server's `/tech-unlocks` endpoint) and
+the annotator registry — PM unlocks pick up their balance flag
+(`HIGH-PROFIT` / `THROUGHPUT` / etc.) from `pm_balance_lib` so the
+"4 PMs (3 OK, 1 HIGH-PROFIT)" rollup works out of the box.
 
 ---
 
@@ -32,29 +41,47 @@ problem. It just means the audit can't see the value.
 
 ### Theme 1: Modifier inflation across eras
 
-The within-era median sum-abs roughly doubles each era:
+The within-era median sum-abs is non-monotonic in mid-mod, but the
+ceiling (range max) climbs steadily, and **mod modifier density sits
+1–2 orders of magnitude above vanilla's**:
 
-| Era | Median sum-abs | Range |
-|---|---|---|
-| era_6 | 2.50 | 0 – 101.25 |
-| era_7 | 10.50 | 0 – 110.10 |
-| era_8 | 15.00 | 0 – 101.15 |
-| era_9 | 19.27 | 0 – 155.10 |
+| Era | Median sum-abs | Range max | Source |
+|---|---|---|---|
+| era_1 | 0.05 | 62.00 | vanilla |
+| era_2 | 0.10 | 31.20 | vanilla |
+| era_3 | 0.05 | 31.05 | vanilla |
+| era_4 | 0.00 | 31.00 | vanilla |
+| era_5 | 0.05 | 26.30 | vanilla |
+| era_6 | 3.10 | 101.25 | mod |
+| era_7 | 1.60 | 110.10 | mod |
+| era_8 | 15.00 | 101.15 | mod |
+| era_9 | 19.27 | 155.10 | mod |
 
-**Open question (T1):** is this intended power inflation (later techs
-should be more valuable) or modifier creep (each new tech feels obliged
-to come with bigger numbers)? Vanilla also inflates — comparing
-mid-vanilla to late-vanilla median would tell us if mod's curve matches
-or exceeds vanilla's.
+(Pull fresh figures with `.venv/bin/python scripts/analysis/tech_balance_audit.py --include-vanilla`.)
+
+**T1 (resolved):** vanilla does *not* inflate — its median per era
+hovers around 0.0–0.1 across all 5 eras and its peak caps near 30
+(except `urbanization` at 62). The mod's era_6 starts ~30× vanilla's
+era_5 median and the gap grows from there. The doubling-per-era story
+is mod-specific, not vanilla mimicry. Whether that's intended power
+inflation or modifier creep is still an open call, but the comparison
+makes clear the mod has *introduced* the inflation rather than
+inheriting it.
+
+The era_6 → era_7 drop (3.10 → 1.60 median) is partly an artifact of
+decolonization moving from era_7 to era_6 (per the decolonization
+review's #1 followup); the era_7 cohort lost its biggest-modifier
+tech without picking up a replacement.
 
 ### Theme 2: A small number of techs dwarf the rest within each era
 
-The top STRONG outlier in each era carries 5×–10× the era's median
+The top STRONG outlier in each era carries 5×–35× the era's median
 modifier value:
 
 - **era_6**: `intergovernmental_organizations` (101.25) and
-  `rural_electrification` (100.85) are 40× the era median (2.50).
-- **era_7**: `tactical_nuclear_weapons` (110.10) is 10× the median.
+  `rural_electrification` (100.85) are 33× the era median (3.10).
+  `decolonization` (53.60) joins this cohort after its move from era_7.
+- **era_7**: `tactical_nuclear_weapons` (110.10) is 69× the median (1.60).
 - **era_8**: `precision_guided_munitions` (101.15) is 7× the median.
 - **era_9**: `network_centric_warfare` (155.10) and
   `unmanned_aerial_vehicles` (151.40) are 8× the median.
@@ -65,35 +92,70 @@ that the metric over-weights. **Open question (T2):** are the topline
 ones actually overpowered in play, or are they correctly weighty
 "keystone" techs that just look big to the auditor?
 
-### Theme 3: Many era_6/_7 techs have empty modifier blocks
+### Theme 3: Empty modifier blocks resolve as utility-tier (not stack-tier)
 
 Eight era_6 techs and three era_7 techs have **no modifier block**.
-They presumably exist purely to gate buildings / PMs / units / laws:
+With the unlock annotation now wired in, every one resolves cleanly
+into the `UNLOCK-ONLY` flag plus a concrete payload:
 
-- **era_6 unlock-only techs:** `isoprene`, `bombing_aircraft`,
-  `modern_materials`, `modern_tools`, `motorized_artillery`,
-  `semiautomatic_rifle`, `aluminum_mass_production`,
-  `modern_management_techniques`.
-- **era_7 unlock-only techs:** `advanced_military_aircraft`,
-  `pollution_control`, `advanced_submarine_technology`.
+| Tech | Era | Unlocks |
+|---|---|---|
+| `isoprene` | era_6 | 1 building (synthetic_rubber) |
+| `bombing_aircraft` | era_6 | 1 combat unit · 1 law |
+| `modern_materials` | era_6 | 1 building · 9 PMs (4 HIGH-PROFIT, 3 HIGH-WAGE, 1 OK, 1 LOW-WAGE) |
+| `modern_tools` | era_6 | 1 building · 8 PMs (6 OK, 1 HIGH-PROFIT, 1 HIGH-WAGE) |
+| `motorized_artillery` | era_6 | 1 combat unit |
+| `semiautomatic_rifle` | era_6 | 2 PMs (1 HIGH-WAGE, 1 HIGH-PROFIT) |
+| `aluminum_mass_production` | era_6 | 1 building · 1 PM (1 HIGH-WAGE) |
+| `modern_management_techniques` | era_6 | 6 PMs (4 THROUGHPUT, 1 HIGH-PROFIT, 1 HIGH-WAGE) |
+| `advanced_military_aircraft` | era_7 | 1 mob option · 1 PM (1 HIGH-PROFIT) |
+| `pollution_control` | era_7 | 1 building · 1 decree · 1 law · 7 PMs (5 THROUGHPUT, 2 NO-COSTS) |
+| `advanced_submarine_technology` | era_7 | 1 PM (1 HIGH-WAGE) · 1 ship type |
 
-This is a legitimate pattern, but it means **roughly 20% of the early
-mod tech tree is "research this and then the value shows up elsewhere"**.
-That's fine if the unlocks are well-balanced; problematic if unlocks
-are unbalanced (and we wouldn't see it from the modifier audit).
+**T3 (resolved):** every one of the 11 originally-WEAK\* techs has a
+real unlock payload. Most are utility-tier (one or two PMs / one
+building), with a few multi-system entries — `modern_materials` (1
+building + 9 PMs), `modern_tools` (1 building + 8 PMs), and
+`pollution_control` (10 entities across 4 types) being the heaviest.
+There are zero genuinely empty techs in the early mod tree.
 
-**Open question (T3):** are the unlock-only techs mostly utility-tier
-(unlock one or two PMs each) or stack-tier (unlock multi-system content
-like the wonder buildings or strategic reserve)? The list spans both —
-`bombing_aircraft` clearly unlocks a unit, but `modern_management_techniques`
-and `modern_materials` might unlock several PMs/decrees each.
+> **Audit gotcha caught while resolving T3:** the inverted-index
+> walker initially missed Clausewitz merge-directive prefixes
+> (`INJECT:`, `REPLACE:`, `REPLACE_OR_CREATE:`) — the regex's
+> identifier class didn't allow `:`, so any entity declared as
+> e.g. `REPLACE_OR_CREATE:building_synthetics_plant_rubber` fell
+> out of the walk and its `unlocking_technologies` block was
+> silently skipped. Fix: `tech_unlocks_lib.iter_top_level_blocks`
+> now strips the prefix and yields the underlying entity id.
+> Regression test: `test_tech_unlocks_lib.test_clausewitz_merge_directive_prefixes`.
+> Across the mod, ~250 directive-prefixed entities had been
+> hidden from the index; the fix grew the unlock total from
+> ~395 to 646 entries. The doc's Theme-3 table reflects the
+> post-fix counts.
+
+The fact that the 11-tech list includes 0 stack-tier outliers means
+the early mod tree's WEAK\* footprint is **less concerning than the
+original audit suggested** — the WEAK\* category was conflating
+three distinct shapes (utility-tier with unlocks, multi-system
+keystone with unlocks, and genuinely empty) that the new flag
+separates.
+
+**Vanilla comparison:** vanilla era_1–5 has *18–20 UNLOCK-ONLY techs
+per era* (out of 24–41), suggesting vanilla relies more heavily on
+unlocks and less on modifier blocks than the mod's late-era tech
+design does. The mod's era_6+ inverts that pattern — keeping its
+era_6 cohort of 7 UNLOCK-ONLY techs as a deliberate continuation of
+the vanilla style, then leaning into modifier-heavy techs from era_7
+on. Worth a sanity-check: are the era_8+ unlock-only PMs (e.g.
+`integrated_circuits` 6 PMs, `advanced_assembly_lines` 7 PMs) carrying
+their weight without modifier block backing?
 
 ### Theme 4: Society category gets the heaviest modifier blocks
 
 Across all four eras, the highest-`modifier_count` techs are mostly
 society-category:
 
-- `decolonization` (era_7): 10 modifiers, sum 53.60
+- `decolonization` (era_6): 10 modifiers, sum 53.60
 - `television_broadcasting` (era_7): 9 modifiers, sum 54.35
 - `pop_culture` (era_8): 7 modifiers, sum 55.20
 
@@ -133,6 +195,7 @@ fresh data.)
 | `rural_electrification` | era_6 | society | 4 | 100.85 | STRONG |
 | `public_works_programs` | era_6 | society | 5 | 66.10 | STRONG |
 | `nuclear_weapons` | era_6 | military | 6 | 61.90 | STRONG |
+| `decolonization` | era_6 | society | 10 | 53.60 | STRONG |
 | `combined_arms` | era_6 | military | 2 | 51.00 | STRONG |
 | `fluorescent_lamps` | era_6 | production | 2 | 30.20 | STRONG |
 | `isoprene` | era_6 | production | 0 | 0.00 | WEAK\* |
@@ -146,9 +209,7 @@ fresh data.)
 | `tactical_nuclear_weapons` | era_7 | military | 4 | 110.10 | STRONG |
 | `mainframe_computers` | era_7 | production | 6 | 57.05 | STRONG |
 | `television_broadcasting` | era_7 | society | 9 | 54.35 | STRONG |
-| `decolonization` | era_7 | society | 10 | 53.60 | STRONG |
 | `advanced_military_aircraft` | era_7 | military | 0 | 0.00 | WEAK\* |
-| `pollution_control` | era_7 | society | 0 | 0.00 | WEAK\* |
 | `advanced_submarine_technology` | era_7 | military | 0 | 0.00 | WEAK\* |
 | `precision_guided_munitions` | era_8 | military | 5 | 101.15 | STRONG |
 | `computer_networks` | era_8 | production | 6 | 57.50 | STRONG |
@@ -177,9 +238,10 @@ fresh data.)
    `tactical_nuclear_weapons`, `intergovernmental_organizations` etc.
    actually too strong in play, or are they the keystone techs they
    appear to be?
-3. **T3 (unlock-only techs):** which of the WEAK\* techs are concerning?
-   Walk through the 11 WEAK\* techs and confirm their unlocks are
-   appropriately weighty.
+3. ~~**T3 (unlock-only techs)**~~ (resolved): each ex-WEAK\* tech is now
+   classified as `UNLOCK-ONLY` with a concrete unlock breakdown — see
+   Theme 3 for the per-tech table. **Zero** techs are genuinely
+   empty after the directive-prefix bug fix.
 4. **T4 (society category density):** intentional that society techs
    carry many small modifiers vs military techs concentrating into
    fewer big ones?
@@ -188,9 +250,12 @@ fresh data.)
    too-large modifiers?
 6. **Cross-era specific concerns:** `decolonization` at 10 modifiers
    stacked is unusual; worth specifically reviewing.
-7. **Vanilla baseline:** would adding vanilla era_5 techs to the same
-   audit give us a reference point for "is era_6 modifier density
-   higher or lower than vanilla's late-game"?
+7. ~~**Vanilla baseline**~~ (resolved): the auditor now accepts
+   `--include-vanilla` and pulls vanilla era_1–5 techs as a baseline.
+   Vanilla medians stay near zero across all five eras (max 0.10) and
+   the heaviest vanilla tech (`urbanization`, era_1) hits 62 — half of
+   what mod era_6's heaviest hits. Mod has introduced the modifier
+   inflation, not inherited it from vanilla.
 
 ---
 
