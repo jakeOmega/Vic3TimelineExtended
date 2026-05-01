@@ -272,6 +272,8 @@ state_pop_support_movement_<name>_mult = {
 - **Building/institution scope chains are also problematic:** `on_building_built`/`on_building_expanded` ROOT is a building object. These hooks have been removed — yearly pulse hooks are sufficient.
 - **Solution:** Move state-scoped modifier updates that use complex script values to `on_yearly_pulse_state`, which guarantees a clean state scope chain. This is how `migration_crowding` and `tourism` are handled.
 - **`has_variable` also fails on law and treaty scopes.** `on_law_activated` ROOT = Law, and the engine traces parent scope through the law for any nested script value's `has_variable` calls. Treaty article `on_entry_into_force` has the same issue. Remove ALL state modifier updates from law/treaty hooks — yearly pulse handles them within 1 year.
+- **JE scope can't read country properties (`gdp`, `prestige`, etc.) inside `multiplier =`.** `je:my_je ?= { add_modifier = { name = X multiplier = some_script_value } }` will return `'none'` from `jomini_scriptvalue.cpp` if the script value reads a country property, because the engine re-evaluates the multiplier in JE scope each tick and JE scope only auto-resolves `var:` reads, not country properties. Country *vars* work (`var:my_var` resolves against the JE owner). **Fix:** cache the script value to a country var before scoping into the JE, and reference it as `root.var:X` in the multiplier. Refresh the cache from the JE's `on_monthly_pulse` so the value tracks. Mod example: `un_buttons.txt` for peacekeeping/development contributor cost; cache var refresh in `je_united_nations.txt` `on_monthly_pulse`.
+- **Script values that read `global_var:X` need a `has_global_variable = X` gate.** A monthly on-action pulse that fires before any yearly pulse will hit `'none'` when the global cache hasn't been populated yet. Wrap the body in `if = { limit = { has_global_variable = X } ... }`. Mod example: `cultural_pull_total` and `cultural_pull_from_sol` in `cultural_hegemony_script_values.txt`.
 
 ## Modifier Values Are NOT Recalculated Within a Single Effect Block
 
@@ -486,6 +488,25 @@ my_script_value = {
 ## History File Country References
 
 - Use `c:TAG ?= { }` (null-safe) instead of `c:TAG = { }` for countries that may not exist at game start or in save games. Especially important for countries that can be annexed (like Peru).
+
+## Starting Laws: `activate_law` at History Time Bypasses Tech Gates
+
+`activate_law` in `common/history/extra_history.txt` (or any country history file) ignores the law's `unlocking_technologies` requirement. So you can give 1836 GBR `law_national_bank` even though the law gates on `central_banking` and even though that tech wouldn't normally be researchable until era 2.
+
+Note: `effect_starting_technology_tier_1_tech` (vanilla, applied to recognized GP/major-power countries via their vanilla history files) already auto-researches `central_banking` as part of its era_1 starting bundle, alongside `dialectics`, `central_archives`, `egalitarianism`, `corporate_charters`. So for tier_1-bundle countries, the tech is satisfied legitimately and you don't need to re-add it.
+
+## Mod-Only Ministry Laws: Calibrate to Bureaucratic Apparatus, Not Office-Holder Existence
+
+The mod's `law_ministry_of_*` laws (foreign_affairs, war, commerce, religion, etc.) spawn institutions whose investment levels grant meaningful country-wide bonuses. When deciding starting assignments, the test is **"did this state run a substantial Western-style ministerial bureaucracy?"** — not "did someone hold that portfolio?".
+
+By 1836:
+- **Yes** for the 5 Great Powers (GBR, FRA, RUS, AUS, PRU) — clear ministerial apparatuses (Foreign Office, Quai d'Orsay, Russian MFA, Staatskanzlei, Prussian post-Scharnhorst Kriegsministerium).
+- **No** for most other recognized states: Greece (1832), Belgium (1830), Sardinia, Two Sicilies, small German states, Netherlands, Portugal — most had a single foreign minister with a handful of clerks, which doesn't match the gameplay meaning of "Ministry."
+- **No** for USA at 1836 game start despite its constitutionally formal Cabinet — State Dept had ~30 staff globally, War Dept was tiny. Player can enact as the country grows.
+
+Don't apply ministry laws via broad filters like `is_country_type = recognized` — the result is over-inclusive and breaks the "you've built a real bureaucracy" gameplay signal. Hand-curate the list.
+
+`is_country_type = recognized` filter does, however, cleanly exclude Japan/Qing China at 1836 (both `unrecognized` in vanilla) — useful when targeting "Western Concert + outliers" institutional baselines that are actually broad enough to apply en masse.
 
 ## Guard Scope References in Triggers
 

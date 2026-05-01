@@ -45,6 +45,105 @@ Systems using this pattern:
 - **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
 
+## Construction as a Market Good (FMC architecture)
+
+> Cross-reference: `docs/vanilla_economy_reference.md` § 9 establishes the vanilla two-FCFS-queue model (government queue from treasury, private queue from IP, allocation set by `country_private_construction_allocation_mult`). This mod adds a market layer underneath without replacing the queues.
+
+**Why:** Decoupling construction *capacity* (the vanilla `country_construction` country-resource that the FCFS queues spend) from construction *output* (what the construction sector actually produces) lets per-state economics influence national construction throughput. A goods-side stockout in one region propagates through the price loop instead of disappearing into a black-box country resource.
+
+**Architecture (3 layers):**
+
+1. **Construction-sector building, REPLACE'd.** `building_construction_sector` (vanilla) is REPLACE'd in `common/buildings/fmc_construction.txt` and its tier PMs are REPLACE'd in `common/production_methods/extra_pms.txt` (`pm_wooden_buildings`, `pm_iron_frame_buildings`, `pm_steel_frame_buildings`, `pm_arc_welded_buildings`, plus newer high-tier variants). Each tier now outputs `goods_output_construction_add = N` (1, 2, 3.5, 5, 6, 10, 16 across tiers) — i.e. the construction sector produces the **`construction`** market good rather than direct country construction points. State-level `state_construction_mult` is preserved so per-state efficiency still matters.
+2. **The `construction` good itself.** Defined in `common/goods/timeline_extended_extra_goods.txt`. `cost = 1000`, `category = industrial`, `traded_quantity = 0.1`, `consumption_tax_cost = 400` (Authority cost if the player consumption-taxes it). High base cost makes it a load-bearing market input.
+3. **Auto-placed consumer building: `fmc_building_construction_site`.** Defined in `common/buildings/fmc_construction.txt`. Flags: `buildable = no`, `expandable = no`, `downsizeable = no`, `min_raise_to_hire = -1.0`, `levels_per_mesh = -1`, `ownership_type = self`. Placed automatically by `fmc_sector_placement_effects.txt`. Its single PM (`pm_base` in `fmc_construction.txt`) consumes 1 `goods_input_construction` per workforce and produces 1 `country_construction_add` — i.e. it converts the construction good back into the vanilla queue currency. Employment is tiny (10 laborers per level, level_scaled).
+
+**The chain end-to-end:**
+
+```
+Construction Sector (vanilla, REPLACE'd) → produces construction good
+   ↓
+Market: construction good supply meets construction good demand at a price
+   ↓
+fmc_building_construction_site (auto-placed) consumes construction good
+   ↓ produces
+country_construction_add (vanilla queue currency)
+   ↓
+Vanilla two-FCFS queues (government from treasury / private from IP) spend it
+   ↓
+New buildings get built / expanded
+```
+
+**Construction-cost-scaling layer.** The `construction_cost_scaling` static modifier (above) applies `goods_input_construction_mult = 1` (multiplied by a per-country GDPpc-driven multiplier). This scales how much *construction good* every building's maintenance PM consumes. So a richer country burns more construction good per same building → competes more for the same supply → stockouts and higher prices → fewer net `country_construction_add` produced → vanilla queues stall on availability rather than treasury.
+
+**Buildings consume the construction good as maintenance.** Most production buildings have `goods_input_construction_add = 0.5 - 1` in their `workforce_scaled` block (see `extra_pms.txt`, lines around 1303, 2033, 2260, etc.). Construction is therefore not just an upfront build cost — it's an ongoing maintenance load tied to current economic activity.
+
+**Implications for mod authors:**
+
+- **The two FCFS queues still apply unchanged** — government queue from treasury, private queue from IP, with allocation set by `country_private_construction_allocation_mult`. The mod hasn't replaced the queue model; it's added an upstream market that determines whether the queue's currency is actually being produced.
+- **A goods-side stockout stalls both queues** regardless of treasury/IP balance. This is the design intent: construction is gated by economic capacity, not just by money.
+- **The `fmc_building_construction_site` building is auto-placed and the PM `pm_base` is `is_default = yes`** — there's no UI surface for the player to see this conversion. Tooltips on the construction-good price and the country `country_construction_add` total are the visible signals.
+- **When mod-adding new buildings**, give them realistic `goods_input_construction_add` in their maintenance PMs. Skipping this makes the building free to maintain in capacity terms, undermining the system.
+
+**FMC scripts (`common/scripted_effects/fmc_*.txt`):**
+
+| File | Purpose |
+|---|---|
+| `fmc_setup_effects.txt` | Initial placement at game start. |
+| `fmc_sector_placement_effects.txt` | Per-state placement of `fmc_building_construction_site`. |
+| `fmc_build_effects.txt` | Adjusts auto-built fmc levels in response to construction-good demand. |
+| `fmc_update_effects.txt` | Periodic update of fmc state. |
+| `fmc_ai_effects.txt` | AI-side decisions around the system. |
+| `fmc_custom_on_actions.txt` | Wires the above to on_actions. |
+
+**FMC script values (`common/script_values/`):**
+
+| File | Key values |
+|---|---|
+| `fmc_current_values.txt` | `fmc_construction_price` and derived ratios. |
+| `fmc_target_values.txt` | Target levels and stabiliser thresholds. |
+| `fmc_sector_placement_values.txt` | `fmc_construction_per_site` etc. |
+| `fmc_ai_values.txt` | AI weights tied to queue depth and banking stress. |
+
+## Bulk Transportation (Merchant Marine relocalization)
+
+> Cross-reference: `docs/vanilla_economy_reference.md` § 17.1.
+
+**Why:** Vanilla 1.13's Merchant Marine is produced by Ports only and represents civilian shipping logistics. The mod treats it as a more general "bulk transportation capacity" — overseas shipping isn't conceptually separate from rail-haul logistics, so the same good models both. The engine ID stays `merchant_marine`; the localization changes; and producers are broadened.
+
+**Localization override:** `localization/english/replace/timeline_extended_override_l_english.yml:23` — `merchant_marine:0 "Bulk Transportation"`. (And matching description / icon overrides if present.) The engine sees `merchant_marine`; the player sees "Bulk Transportation".
+
+**Producers (43 PMs total: 21 in `extra_pms.txt`, 22 in `unique_pms.txt`).** The mod's design rule is: *transport infrastructure produces, everything else consumes*. Concretely:
+
+| Producer category | PMs (representative) | Building family |
+|---|---|---|
+| **Railway** | `pm_early_trains`, `pm_steam_trains`, `pm_diesel_trains`, `pm_electric_trains`, `pm_autonomous_trains`, `pm_centralized_traffic_control`, `pm_automated_loading_and_unloading` | Railway (REPLACE'd) |
+| **Motorways / highways** | `pm_civil_highway`, `pm_industrial_highway`, `pm_electric_civil_highway`, `pm_electric_industrial_highway`, `pm_autonomous_highway` | Motorways |
+| **Ports** | `pm_container_ports`, `pm_containerized_cargo`, `pm_global_ports` | Port (vanilla preserved + mod tiers) |
+| **Airports & spaceports** | `pm_airport`, `pm_spaceport` | Airport / Spaceport (mod additions) |
+| **Trading houses & flagged company HQs** | `pm_eic_trading_house`, `pm_hbc_york_factory`, `pm_rac_sitka_trading_post`, `pm_mitsui_trading_house`, `pm_sassoon_bombay_docks`, `pm_ralli_odessa_grain_elevator`, `pm_sudamericana_valparaiso_pier`, `pm_b_grimm_bangkok_warehouse`, `pm_john_holt_lagos_trading_house`, `pm_ynchausti_manila_trading_house`, `pm_volkswagen_autostadt`, `pm_suez_company_ismailia_hq`, `pm_panama_company_culebra_cut` | Vanilla / mod company buildings |
+| **Logistics & shipyards (modern)** | `pm_amazon_fulfillment_center`, `pm_alibaba_cainiao_park`, `pm_shopify_fulfillment_hub`, `pm_ap_moller_copenhagen_wharf`, `pm_mitsubishi_nagasaki_shipyard`, `pm_generic_dry_dock`, `pm_generic_logistics_hub`, `pm_generic_rail_nexus`, `pm_generic_shipping_terminal` | Vanilla / mod company buildings |
+
+**Consumers (91 PMs in `extra_pms.txt`).** Demand spans most of the catalog — anywhere goods need to move between buildings or out of the country. By family:
+
+| Consumer category | Representative PMs | Why |
+|---|---|---|
+| **High-tier construction sectors** | `pm_iron_frame_buildings`, `pm_steel_frame_buildings`, `pm_arc_welded_buildings` (REPLACE'd) | Construction needs bulk transport for raw materials. |
+| **Extraction with rail/transport tier** | `pm_rail_transport_building_logging_camp`, `pm_log_carts`, `pm_rail_transport_mine`, `pm_rail_transport_building_oil_rig`, `pm_steam_rail_transport`, `pm_tanker_cars` | Rail/road tiers in extraction PMs need transport to ship the resource out. |
+| **Food preservation & cold chain** | `pm_flash_freezing_building_fishing_wharf`, `pm_flash_freezing_building_whaling_station`, `pm_refrigerated_rail_cars_building_fishing_wharf`, `pm_refrigerated_rail_cars_building_livestock_ranch`, `pm_refrigerated_rail_cars_building_whaling_station` | Cold chain depends on transport. |
+| **Mine extraction techniques** | `pm_dragline_excavators_*`, `pm_geophysical_survey_techniques_*`, `pm_deep_well` | Bulk material movement. |
+| **Advanced industry & automation** | `pm_advanced_assembly_lines_*`, `pm_ai_managed_*`, `pm_3d_printed_buildings`, `pm_advanced_construction`, `pm_advanced_process_control`, `pm_continuous_processing`, `pm_distributed_control_systems`, `pm_customized_clothing`, `pm_drone_delivery_systems`, `pm_e-commerce`, `pm_department_stores`, `pm_cleanroom_fabs`, `pm_computer_aided_design`, `pm_automated_assembly_lines`, `pm_autonomous_loading_and_unloading` (where applicable) | Automation tiers assume just-in-time logistics. |
+| **Vanilla consumer (preserved)** | Trade Centers (per `vanilla_economy_reference.md` § 14.1), overseas state market access | Vanilla baseline. |
+
+**Topology summary.** Production is concentrated in a small number of *infrastructure* and *trade-flavored company* buildings. Consumption is distributed across most of the late-game economy. This keeps Bulk Transportation as a load-bearing mid-late-game good — early agrarian economies barely touch it, but as a country industrializes and adopts rail/road/automation tiers, bulk transport becomes one of the goods most likely to bottleneck and price-spike.
+
+**Prestige good:** `prestige_good_generic_merchant_marine` is unchanged; companies that emit it (the shipping flavor) still work.
+
+**Implications for mod authors:**
+
+- When adding a new building / PM that *should* logically demand bulk transport (any high-throughput industry, any extraction with goods leaving the state), add `goods_input_merchant_marine_add` at a small fractional value (~0.5–1.0) to the maintenance PM. Otherwise the building bypasses the bulk-transport demand the system depends on.
+- When adding a transport-flavored building (rail variants, river/canal expansions), give it `goods_output_merchant_marine_add` so it slots into the producer side. Keep the values consistent with existing rail-transport PMs.
+- **Don't grep for "Industrial Transport"** — earlier drafts of this doc and the user's notes used that name, but the actual loc is "Bulk Transportation". The engine name is still `merchant_marine`.
+
 ## Migration Crowding
 
 - **Purpose:** Reduces migration pull to heavily populated states. Prevents unrealistic population concentrations.
@@ -774,6 +873,21 @@ Each JE has **5 monthly events + 1 fail-state event** (except Post-Scarcity whic
 - Script Values: `common/script_values/extra_script_values.txt` (search `sol_expectations`)
 - Vanilla Injections: `sol_expectations_vanilla_injections.txt` in `technologies/`, `laws/`, `interest_group_traits/`
 - Loc: `localization/english/te_modifiers_l_english.yml`
+
+### Interaction with vanilla loyalist/radical generation
+
+> Cross-reference: `docs/vanilla_economy_reference.md` § 5.6.
+
+Vanilla generates loyalists when a pop's SoL **rises** and radicals when it **falls** — the channel is the *delta*, not the *level*. The SoL Expectations System above hooks the *expected SoL* side of that channel (delaying when the delta registers) but does **not** replace the delta-driven loyalist/radical flow itself. That continues to run autonomously inside the engine for every pop in every state.
+
+What this means for mod authors:
+
+- When the banking cycle drops country-wide SoL through a panic phase, vanilla automatically converts that into radicals over the following months. Mod systems don't need to call `add_radicals` to model "the bust radicalized people" — the engine is already doing it.
+- Conversely, when global-warming pollution pushes SoL down in a polluted state, vanilla autoaments the radical fraction without any explicit hook. Mod-side `add_radicals` calls in events should reflect *additional* sources beyond the SoL channel (e.g. movement supporters losing a key vote, a discriminated minority hit by a specific event).
+- The autonomous channel is *generational-decay slow* — loyalists and radicals turn over with the country's death rate, not on a feedback timescale. Sharp short-term shocks register quickly; the country's long-run political alignment shifts slowly.
+- High legitimacy (a separate mechanic) generates loyalists too. Mods that flip legitimacy via events get loyalist generation as a side effect.
+
+The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to economic state (e.g. on an event where SoL crashed), it can double-count vanilla's autonomous response. Prefer to model unique additional triggers (a riot, a discriminatory incident, a political win) and let vanilla handle the SoL-delta side.
 
 ---
 

@@ -67,6 +67,22 @@ Div/0 near events/iberia_events/ip4_coup_events.txt:562
 
 The Spanish-coup (`ip4`) golpista-radicalisation block computes `add_radicals = { value = { add = scope:golpista_general.num_units_share divide = owner.army_size } }` and `owner.army_size` is 0 in some evaluation contexts (e.g. owner has no standing army at coup-resolution time). Vanilla bug. **6 occurrences** in a single 1.13 mod session.
 
+### `common/on_actions/headlines_on_actions.txt:953` — `has_interest_marker_in_region` PostValidate fails
+
+```
+PostValidate of trigger 'has_interest_marker_in_region' returned false at common/on_actions/headlines_on_actions.txt:953
+```
+
+Vanilla headlines on-action reaches into a scope where `has_interest_marker_in_region` cannot resolve. **17 occurrences** in a single session. Same family as the strategic-region scope bugs above.
+
+### `common/on_actions/headlines_tech_on_actions.txt:718` — `has_technology_researched` PostValidate fails
+
+```
+PostValidate of trigger 'has_technology_researched' returned false at common/on_actions/headlines_tech_on_actions.txt:718
+```
+
+Vanilla tech-headlines on-action evaluates `has_technology_researched` in a non-country scope (likely a target-pop / character context) where the trigger can't resolve. Vanilla bug.
+
 ### `common/ideologies/01_character_ideologies.txt:1781` — `ig_approval` in wrong scope
 
 ```
