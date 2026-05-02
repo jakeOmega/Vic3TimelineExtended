@@ -18990,7 +18990,6 @@ pm_earthwork_fortifications = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_fortification_level_add = 1
-			state_blockade_resistance_add = 2
 			state_devastation_decay_mult = 0.1
 		}
 	}
@@ -19024,7 +19023,6 @@ pm_concrete_bunkers = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_fortification_level_add = 2
-			state_blockade_resistance_add = 4
 			state_devastation_decay_mult = 0.2
 		}
 	}
@@ -19060,7 +19058,6 @@ pm_hardened_positions = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_fortification_level_add = 3
-			state_blockade_resistance_add = 6
 			state_devastation_decay_mult = 0.3
 		}
 	}
@@ -19100,6 +19097,109 @@ pm_logistics_hub = {
 	country_modifiers = {
 		workforce_scaled = {
 			unit_supply_consumption_mult = -0.02
+		}
+	}
+}
+
+# ============================================================
+# Naval Fortification — mod-added late-game tiers
+# ============================================================
+# Vanilla naval fortification stops at pm_naval_fortification_advanced
+# (concrete_fortifications, Era 5). These two PMs extend the system to
+# Era 7 and Era 9 following vanilla's ~2-era spacing. INJECTed into
+# vanilla's pmg_base_building_naval_fortification via extra_pm_groups.txt.
+
+# Era 7 — guided coastal anti-ship missile batteries
+pm_naval_fortification_missile_battery = {
+	texture = "gfx/interface/icons/production_method_icons/fortification_advanced.dds"
+
+	unlocking_technologies = {
+		guided_missiles
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_fortification_naval_invasion_add = 1000
+			state_fortification_naval_battle_mult = 0.30
+			state_fortification_bombardment_resistance_add = 4000
+			state_blockade_resistance_add = 400
+		}
+		unscaled = {
+			state_control_strait_bool = yes
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_small_arms_add = 10                      # Price:   60, Total cost:   600.0 (11.54%)
+			goods_input_ammunition_add = 10                      # Price:   50, Total cost:   500.0 (9.62%)
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (14.42%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (11.54%)
+			goods_input_explosives_add = 15                      # Price:   50, Total cost:   750.0 (14.42%)
+			goods_input_radios_add = 25                          # Price:   80, Total cost:  2000.0 (38.46%)
+			# Output goods
+			# Total input cost: 5200.0
+			# Total output cost: 0
+			# Profit: -5200.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_soldiers_add = 700
+			building_employment_officers_add = 200
+			building_employment_engineers_add = 100
+		}
+	}
+}
+
+# Era 9 — integrated radar / sensor / missile-defense coastal grid
+pm_naval_fortification_integrated_defense = {
+	texture = "gfx/interface/icons/production_method_icons/fortification_advanced.dds"
+
+	unlocking_technologies = {
+		missile_defense_systems
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_fortification_naval_invasion_add = 2000
+			state_fortification_naval_battle_mult = 0.50
+			state_fortification_bombardment_resistance_add = 8000
+			state_blockade_resistance_add = 800
+		}
+		unscaled = {
+			state_control_strait_bool = yes
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_small_arms_add = 10                      # Price:   60, Total cost:   600.0 (5.38%)
+			goods_input_ammunition_add = 10                      # Price:   50, Total cost:   500.0 (4.48%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (8.97%)
+			goods_input_engines_add = 20                         # Price:   60, Total cost:  1200.0 (10.76%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (8.97%)
+			goods_input_aeroplanes_add = 10                      # Price:  160, Total cost:  1600.0 (14.35%)
+			goods_input_radios_add = 35                          # Price:   80, Total cost:  2800.0 (25.11%)
+			goods_input_telephones_add = 35                      # Price:   70, Total cost:  2450.0 (21.97%)
+			# Output goods
+			# Total input cost: 11150.0
+			# Total output cost: 0
+			# Profit: -11150.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+		level_scaled = {
+			building_employment_soldiers_add = 600
+			building_employment_officers_add = 200
+			building_employment_engineers_add = 100
+			building_employment_machinists_add = 100
 		}
 	}
 }

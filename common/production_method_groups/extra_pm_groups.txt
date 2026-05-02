@@ -1560,3 +1560,14 @@ pmg_military_base_purpose = {
 		pm_logistics_hub
 	}
 }
+
+# Extend vanilla's naval fortification PMG with mod-added Era 7 and Era 9 tiers.
+# Vanilla caps at concrete_fortifications; these add guided_missiles- and
+# missile_defense_systems-gated upgrades to keep coastal defense relevant
+# in the mod's late-game eras.
+INJECT:pmg_base_building_naval_fortification = {
+	production_methods = {
+		pm_naval_fortification_missile_battery
+		pm_naval_fortification_integrated_defense
+	}
+}
