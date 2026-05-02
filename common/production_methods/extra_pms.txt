@@ -183,6 +183,11 @@ pm_dragline_excavators_sulfur_mine = {
 }
 
 pm_dragline_excavators_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 50
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
 
 	unlocking_technologies = {
@@ -456,6 +461,11 @@ pm_large_scale_earth_movers_sulfur_mine = {
 }
 
 pm_large_scale_earth_movers_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 100
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/heavy_machines.dds"
 
 	unlocking_technologies = {
@@ -750,6 +760,11 @@ pm_geophysical_survey_techniques_sulfur_mine = {
 }
 
 pm_geophysical_survey_techniques_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 213
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_green_p1.dds"
 
 	unlocking_technologies = {
@@ -1050,6 +1065,11 @@ pm_ore_sorting_and_separation_technology_sulfur_mine = {
 }
 
 pm_ore_sorting_and_separation_technology_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 300
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_green_p2.dds"
 
 	unlocking_technologies = {
@@ -1351,6 +1371,11 @@ pm_laser_excavation_technology_sulfur_mine = {
 }
 
 pm_laser_excavation_technology_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 525
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_green_p3.dds"
 
 	unlocking_technologies = {
@@ -1692,6 +1717,11 @@ pm_high_pressure_hydraulic_pump_building_sulfur_mine = {
 }
 
 pm_high_pressure_hydraulic_pump_building_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 1800
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/highpressurehydraulics.dds"
 
 	unlocking_technologies = {
@@ -1940,6 +1970,11 @@ pm_continuous_miners_building_sulfur_mine = {
 }
 
 pm_continuous_miners_building_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 3000
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -2208,6 +2243,11 @@ pm_smart_miners_building_sulfur_mine = {
 }
 
 pm_smart_miners_building_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 8250
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -2473,6 +2513,11 @@ pm_ammonium_nitrate_building_sulfur_mine = {
 }
 
 pm_ammonium_nitrate_building_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 375
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/ammoniumnitrate.dds"
 
 	unlocking_technologies = {
@@ -2683,6 +2728,11 @@ pm_metamaterial_explosives_building_sulfur_mine = {
 }
 
 pm_metamaterial_explosives_building_gold_mine = {
+	country_modifiers = {
+		workforce_scaled = {
+			country_minting_add = 1875
+		}
+	}
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p0.dds"
 
 	unlocking_technologies = {
