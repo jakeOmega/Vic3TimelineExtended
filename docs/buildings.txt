@@ -1206,6 +1206,8 @@ Naval Fortification:
 		Basic Fortification
 		Reinforced Fortification
 		Advanced Fortification
+		Coastal Missile Battery
+		Integrated Coastal Defense
 
 Naval Administration:
 	Unlocking Technology: Admiralty
