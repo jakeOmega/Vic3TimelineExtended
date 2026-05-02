@@ -271,7 +271,7 @@ Vanilla companies should be updated to reference mod-exclusive buildings in thei
 - All buildings need entries in `common/buildings/company_buildings.txt`
 - Each company needs a `REPLACE:` or `INJECT:` override in a mod company file
 - Each company's `prosperity_modifier` needs `state_building_X_max_level_add = 1`
-- All buildings need localization (building name + desc + PM names + PMG names)
+- All buildings need localization in three files: `te_buildings_l_english.yml` (building + `_desc`), `te_production_methods_l_english.yml` (PM + PMG), and `te_modifiers_l_english.yml` (the `state_building_X_max_level_add` modifier — both the name and `_desc` keys, using the `[GetBuildingType('building_X').GetName] Max Level` pattern). Without modifier loc, the company's prosperity tooltip shows the raw modifier key. See `docs/scripting_best_practices.md` § "Adding a Unique Company Building" for the audit command.
 - Vanilla company overrides go in `common/company_types/extra_companies_vanilla_updates.txt`
 - `INJECT:` adds fields to existing definitions without replacing them — use this for ALL vanilla company updates
 - Each unique company building needs a `state_building_X_max_level_add` modifier_type_definition in `common/modifier_type_definitions/extra_modifier_types.txt`

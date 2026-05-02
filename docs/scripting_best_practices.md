@@ -557,13 +557,32 @@ Every company building needs:
 2. **PM + PMG** in `common/production_methods/unique_pms.txt` and `unique_pm_groups.txt`
 3. **Modifier type definition** for `state_building_<name>_max_level_add` in `common/modifier_type_definitions/extra_modifier_types.txt`
 4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`
-5. **Localization** — building name, building desc, PM name, PMG name, max level modifier name
+5. **Localization** — five keys per building, all required:
+   - `building_<name>` (building name) and `building_<name>_desc` in `te_buildings_l_english.yml`
+   - `pm_<name>` and `pmg_<name>` in `te_production_methods_l_english.yml`
+   - **`state_building_<name>_max_level_add` AND `state_building_<name>_max_level_add_desc`** in `te_modifiers_l_english.yml` — pattern: `"[GetBuildingType('building_<name>').GetName] Max Level"` for the name, `"Increases the maximum number of levels that [GetBuildingType('building_<name>').GetName] can expand to in this state"` for the desc. Without both, the prosperity tooltip shows the raw modifier key.
 
 Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies without overwriting their entire definition.
 
 If an `INJECT` block adds `prosperity_modifier = { state_building_<name>_max_level_add = 1 }`, that exact modifier key must also exist in `common/modifier_type_definitions/extra_modifier_types.txt` with `color = good`, `percent = no`, and `decimals = 0`. Defining the prosperity modifier in the company file alone is not enough.
 
-Before finishing company-building work, compare every `state_building_*_max_level_add` key in `common/company_types/extra_companies_vanilla_updates.txt` against `common/modifier_type_definitions/extra_modifier_types.txt` and add any missing definitions in the same change.
+Before finishing company-building work, run this audit (Python one-liner against the repo root) to confirm every registered modifier has both name and `_desc` loc keys:
+
+```bash
+.venv/bin/python -c "
+import re, glob
+mods = set(re.findall(r'^(state_building_[a-z0-9_]+_max_level_add)\s*=\s*\{',
+    open('common/modifier_type_definitions/extra_modifier_types.txt').read(), re.M))
+loc = set()
+for f in glob.glob('localization/english/te_*l_english.yml'):
+    loc.update(re.findall(r'^\s*([a-z][a-z0-9_]+):0', open(f).read(), re.M))
+miss_name = sorted(m for m in mods if m not in loc)
+miss_desc = sorted(m for m in mods if (m+'_desc') not in loc)
+print('missing name loc:', miss_name)
+print('missing desc loc:', miss_desc)"
+```
+
+Both lists should be empty. Generalises to any `<scope>_<name>_<verb>` modifier with a corresponding `_desc` loc entry — re-run before merging if you've registered any new modifier types.
 
 ## Portrait Modifier Files
 
