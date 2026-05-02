@@ -566,23 +566,34 @@ Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies wi
 
 If an `INJECT` block adds `prosperity_modifier = { state_building_<name>_max_level_add = 1 }`, that exact modifier key must also exist in `common/modifier_type_definitions/extra_modifier_types.txt` with `color = good`, `percent = no`, and `decimals = 0`. Defining the prosperity modifier in the company file alone is not enough.
 
-Before finishing company-building work, run this audit (Python one-liner against the repo root) to confirm every registered modifier has both name and `_desc` loc keys:
+Before finishing company-building work, run this audit (Python one-liner against the repo root) to confirm every mod-defined modifier has both name and `_desc` loc keys, taking vanilla loc into account so you don't double-loc a key vanilla already provides:
 
 ```bash
-.venv/bin/python -c "
+.venv/bin/python <<'PY'
 import re, glob
-mods = set(re.findall(r'^(state_building_[a-z0-9_]+_max_level_add)\s*=\s*\{',
-    open('common/modifier_type_definitions/extra_modifier_types.txt').read(), re.M))
-loc = set()
-for f in glob.glob('localization/english/te_*l_english.yml'):
-    loc.update(re.findall(r'^\s*([a-z][a-z0-9_]+):0', open(f).read(), re.M))
-miss_name = sorted(m for m in mods if m not in loc)
-miss_desc = sorted(m for m in mods if (m+'_desc') not in loc)
-print('missing name loc:', miss_name)
-print('missing desc loc:', miss_desc)"
+VANILLA = '/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/localization/english'
+def loc(paths):
+    keys = set()
+    for f in paths:
+        try: t = open(f, encoding='utf-8-sig').read()
+        except: continue
+        keys.update(re.findall(r'^\s*([a-z][a-z0-9_]+):\d+\s', t, re.M))
+    return keys
+v = loc(glob.glob(f'{VANILLA}/**/*.yml', recursive=True))
+m = loc(glob.glob('localization/english/**/*.yml', recursive=True))
+mods = set()
+for f in glob.glob('common/modifier_type_definitions/*.txt'):
+    for k in re.findall(r'^(?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?([a-z][a-z0-9_]+)\s*=\s*\{',
+                        open(f).read(), re.M):
+        if re.match(r'(country|state|building|character|interest_group|unit|ship|pop)_[a-z0-9_]+_(add|mult|cost_mult|max_add|capacity_add)$', k):
+            mods.add(k)
+miss = [k for k in sorted(mods) if (k not in v and k not in m) or
+                                    (k+'_desc' not in v and k+'_desc' not in m)]
+print('truly missing loc:', miss or 'none')
+PY
 ```
 
-Both lists should be empty. Generalises to any `<scope>_<name>_<verb>` modifier with a corresponding `_desc` loc entry — re-run before merging if you've registered any new modifier types.
+Output should be `truly missing loc: none`. Two pitfalls the audit accounts for: (1) match `:\d+` not `:0` — vanilla often uses `:1` or higher version suffixes, and a `:0`-only check spuriously flags vanilla-loc'd keys. (2) Check both vanilla and mod loc — if the mod re-defines (or `INJECT:`s) a vanilla modifier type, vanilla already supplies the loc and the mod must NOT re-add it under the same key. Re-run before merging any new modifier-type registrations.
 
 ## Portrait Modifier Files
 
