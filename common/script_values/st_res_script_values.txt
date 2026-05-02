@@ -347,6 +347,374 @@ st_res_oil_sale_profit = {
 	}
 }
 
+# --- SMALL ARMS ---
+st_res_small_arms_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_small_arms_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_small_arms_weekly_decay = {
+	value = var:st_res_small_arms_stored
+	multiply = st_res_small_arms_decay_rate
+}
+
+st_res_small_arms_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_small_arms_rate
+	}
+	add = st_res_small_arms_weekly_decay
+}
+
+st_res_small_arms_actual_rate_base_applied = {
+	value = st_res_small_arms_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_small_arms_weekly_delta = {
+	value = 0
+	add = st_res_small_arms_actual_rate_base_applied
+	subtract = st_res_small_arms_weekly_decay
+}
+
+st_res_small_arms_capacity = {
+	value = 0
+	add = modifier:country_st_res_small_arms_capacity_add
+}
+
+st_res_small_arms_good_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_small_arms_stored
+			st_res_small_arms_actual_rate_base_applied > 0
+		}
+		add = st_res_small_arms_actual_rate_base_applied
+	}
+	else_if = {
+		limit = { has_variable = st_res_small_arms_stored }
+		subtract = st_res_small_arms_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_small_arms_max_withdrawable = {
+	value = 0
+	add = var:st_res_small_arms_stored
+	subtract = st_res_small_arms_weekly_decay
+	multiply = -1
+}
+
+st_res_small_arms_max_storable = {
+	value = 0
+	add = st_res_small_arms_capacity
+	subtract = var:st_res_small_arms_stored
+	subtract = st_res_small_arms_weekly_decay
+}
+
+st_res_small_arms_sale_profit = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_small_arms_stored
+			st_res_small_arms_actual_rate_base_applied < 0
+		}
+		subtract = st_res_small_arms_actual_rate_base_applied
+		g:small_arms = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:small_arms.market_goods_pricier
+		}
+	}
+}
+
+# --- ARTILLERY ---
+st_res_artillery_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_artillery_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_artillery_weekly_decay = {
+	value = var:st_res_artillery_stored
+	multiply = st_res_artillery_decay_rate
+}
+
+st_res_artillery_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_artillery_rate
+	}
+	add = st_res_artillery_weekly_decay
+}
+
+st_res_artillery_actual_rate_base_applied = {
+	value = st_res_artillery_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_artillery_weekly_delta = {
+	value = 0
+	add = st_res_artillery_actual_rate_base_applied
+	subtract = st_res_artillery_weekly_decay
+}
+
+st_res_artillery_capacity = {
+	value = 0
+	add = modifier:country_st_res_artillery_capacity_add
+}
+
+st_res_artillery_good_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_artillery_stored
+			st_res_artillery_actual_rate_base_applied > 0
+		}
+		add = st_res_artillery_actual_rate_base_applied
+	}
+	else_if = {
+		limit = { has_variable = st_res_artillery_stored }
+		subtract = st_res_artillery_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_artillery_max_withdrawable = {
+	value = 0
+	add = var:st_res_artillery_stored
+	subtract = st_res_artillery_weekly_decay
+	multiply = -1
+}
+
+st_res_artillery_max_storable = {
+	value = 0
+	add = st_res_artillery_capacity
+	subtract = var:st_res_artillery_stored
+	subtract = st_res_artillery_weekly_decay
+}
+
+st_res_artillery_sale_profit = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_artillery_stored
+			st_res_artillery_actual_rate_base_applied < 0
+		}
+		subtract = st_res_artillery_actual_rate_base_applied
+		g:artillery = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:artillery.market_goods_pricier
+		}
+	}
+}
+
+# --- AEROPLANES ---
+st_res_aeroplanes_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_aeroplanes_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_aeroplanes_weekly_decay = {
+	value = var:st_res_aeroplanes_stored
+	multiply = st_res_aeroplanes_decay_rate
+}
+
+st_res_aeroplanes_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_aeroplanes_rate
+	}
+	add = st_res_aeroplanes_weekly_decay
+}
+
+st_res_aeroplanes_actual_rate_base_applied = {
+	value = st_res_aeroplanes_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_aeroplanes_weekly_delta = {
+	value = 0
+	add = st_res_aeroplanes_actual_rate_base_applied
+	subtract = st_res_aeroplanes_weekly_decay
+}
+
+st_res_aeroplanes_capacity = {
+	value = 0
+	add = modifier:country_st_res_aeroplanes_capacity_add
+}
+
+st_res_aeroplanes_good_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_aeroplanes_stored
+			st_res_aeroplanes_actual_rate_base_applied > 0
+		}
+		add = st_res_aeroplanes_actual_rate_base_applied
+	}
+	else_if = {
+		limit = { has_variable = st_res_aeroplanes_stored }
+		subtract = st_res_aeroplanes_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_aeroplanes_max_withdrawable = {
+	value = 0
+	add = var:st_res_aeroplanes_stored
+	subtract = st_res_aeroplanes_weekly_decay
+	multiply = -1
+}
+
+st_res_aeroplanes_max_storable = {
+	value = 0
+	add = st_res_aeroplanes_capacity
+	subtract = var:st_res_aeroplanes_stored
+	subtract = st_res_aeroplanes_weekly_decay
+}
+
+st_res_aeroplanes_sale_profit = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_aeroplanes_stored
+			st_res_aeroplanes_actual_rate_base_applied < 0
+		}
+		subtract = st_res_aeroplanes_actual_rate_base_applied
+		g:aeroplanes = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:aeroplanes.market_goods_pricier
+		}
+	}
+}
+
+# --- TANKS ---
+st_res_tanks_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_tanks_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_tanks_weekly_decay = {
+	value = var:st_res_tanks_stored
+	multiply = st_res_tanks_decay_rate
+}
+
+st_res_tanks_actual_rate = {
+	value = 0
+	if = {
+		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		add = var:st_res_tanks_rate
+	}
+	add = st_res_tanks_weekly_decay
+}
+
+st_res_tanks_actual_rate_base_applied = {
+	value = st_res_tanks_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_tanks_weekly_delta = {
+	value = 0
+	add = st_res_tanks_actual_rate_base_applied
+	subtract = st_res_tanks_weekly_decay
+}
+
+st_res_tanks_capacity = {
+	value = 0
+	add = modifier:country_st_res_tanks_capacity_add
+}
+
+st_res_tanks_good_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_tanks_stored
+			st_res_tanks_actual_rate_base_applied > 0
+		}
+		add = st_res_tanks_actual_rate_base_applied
+	}
+	else_if = {
+		limit = { has_variable = st_res_tanks_stored }
+		subtract = st_res_tanks_actual_rate_base_applied
+	}
+	# Compensate for throughput modifiers, so total rate equals desired rate
+	divide = st_res_throughput_factor
+}
+
+st_res_tanks_max_withdrawable = {
+	value = 0
+	add = var:st_res_tanks_stored
+	subtract = st_res_tanks_weekly_decay
+	multiply = -1
+}
+
+st_res_tanks_max_storable = {
+	value = 0
+	add = st_res_tanks_capacity
+	subtract = var:st_res_tanks_stored
+	subtract = st_res_tanks_weekly_decay
+}
+
+st_res_tanks_sale_profit = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_tanks_stored
+			st_res_tanks_actual_rate_base_applied < 0
+		}
+		subtract = st_res_tanks_actual_rate_base_applied
+		g:tanks = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:tanks.market_goods_pricier
+		}
+	}
+}
+
 # --- Capacity utilization (for AI hints / loc) ---
 st_res_grain_fill_pct = {
 	value = var:st_res_grain_stored
@@ -371,4 +739,51 @@ st_res_oil_fill_pct = {
 		min = 1
 	}
 	multiply = 100
+}
+st_res_small_arms_fill_pct = {
+	value = var:st_res_small_arms_stored
+	divide = {
+		value = st_res_small_arms_capacity
+		min = 1
+	}
+	multiply = 100
+}
+st_res_artillery_fill_pct = {
+	value = var:st_res_artillery_stored
+	divide = {
+		value = st_res_artillery_capacity
+		min = 1
+	}
+	multiply = 100
+}
+st_res_aeroplanes_fill_pct = {
+	value = var:st_res_aeroplanes_stored
+	divide = {
+		value = st_res_aeroplanes_capacity
+		min = 1
+	}
+	multiply = 100
+}
+st_res_tanks_fill_pct = {
+	value = var:st_res_tanks_stored
+	divide = {
+		value = st_res_tanks_capacity
+		min = 1
+	}
+	multiply = 100
+}
+
+# --- Aggregate weekly sales income across all goods ---
+# Sum of every per-good `_sale_profit` (each is 0 unless that good is being sold,
+# i.e. rate < 0 with stored > 0). Result is gross weekly £ income at current
+# market prices (base_price * market_goods_pricier multiplier, by good).
+st_res_total_sale_profit = {
+	value = 0
+	add = st_res_grain_sale_profit
+	add = st_res_ammunition_sale_profit
+	add = st_res_oil_sale_profit
+	add = st_res_small_arms_sale_profit
+	add = st_res_artillery_sale_profit
+	add = st_res_aeroplanes_sale_profit
+	add = st_res_tanks_sale_profit
 }

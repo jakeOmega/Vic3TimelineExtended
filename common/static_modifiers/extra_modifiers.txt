@@ -19,11 +19,15 @@
 	country_covert_operation_slot_add = 1
 	country_intelligence_capacity_add = 5
 
-	# Strategic Reserve: base monthly decay rates for stockpiled goods.
-	# Tech (vacuum_canning, bolt_action_rifles, fractional_distillation) reduces these.
+	# Strategic Reserve: base annual decay rates for stockpiled goods.
+	# Tech reductions are applied via INJECT:<tech_name> entries in technology files.
 	country_st_res_grain_decay_add = 0.25
 	country_st_res_ammunition_decay_add = 0.02
 	country_st_res_oil_decay_add = 0.005
+	country_st_res_small_arms_decay_add = 0.02
+	country_st_res_artillery_decay_add = 0.015
+	country_st_res_aeroplanes_decay_add = 0.08
+	country_st_res_tanks_decay_add = 0.04
 }
 
 INJECT:country_literacy_rate = {
@@ -6046,6 +6050,46 @@ st_res_oil_store_flow = {
 st_res_oil_withdraw_flow = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_oil_mult = 1
+}
+
+st_res_small_arms_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_small_arms_mult = 1
+}
+
+st_res_small_arms_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_small_arms_mult = 1
+}
+
+st_res_artillery_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_artillery_mult = 1
+}
+
+st_res_artillery_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_artillery_mult = 1
+}
+
+st_res_aeroplanes_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_aeroplanes_mult = 1
+}
+
+st_res_aeroplanes_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_aeroplanes_mult = 1
+}
+
+st_res_tanks_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_tanks_mult = 1
+}
+
+st_res_tanks_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_tanks_mult = 1
 }
 
 st_res_sell_profit_modifier = {

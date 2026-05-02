@@ -20,6 +20,30 @@ country_st_res_oil_capacity_add = {
 	color = good
 }
 
+country_st_res_small_arms_capacity_add = {
+	decimals = 0
+	percent = no
+	color = good
+}
+
+country_st_res_artillery_capacity_add = {
+	decimals = 0
+	percent = no
+	color = good
+}
+
+country_st_res_aeroplanes_capacity_add = {
+	decimals = 0
+	percent = no
+	color = good
+}
+
+country_st_res_tanks_capacity_add = {
+	decimals = 0
+	percent = no
+	color = good
+}
+
 # Decay rate modifiers (country-scope, fraction of stockpile lost per month).
 # Base values are set in INJECT:base_values in extra_modifiers.txt; tech
 # reductions are applied via INJECT:<tech_name> entries in technology files.
@@ -37,6 +61,30 @@ country_st_res_ammunition_decay_add = {
 }
 
 country_st_res_oil_decay_add = {
+	decimals = 3
+	percent = yes
+	color = bad
+}
+
+country_st_res_small_arms_decay_add = {
+	decimals = 3
+	percent = yes
+	color = bad
+}
+
+country_st_res_artillery_decay_add = {
+	decimals = 3
+	percent = yes
+	color = bad
+}
+
+country_st_res_aeroplanes_decay_add = {
+	decimals = 3
+	percent = yes
+	color = bad
+}
+
+country_st_res_tanks_decay_add = {
 	decimals = 3
 	percent = yes
 	color = bad

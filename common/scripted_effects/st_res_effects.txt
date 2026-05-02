@@ -40,6 +40,38 @@ st_res_init_effect = {
 		set_variable = { name = st_res_oil_rate value = 0 }
 	}
 	if = {
+		limit = { NOT = { has_variable = st_res_small_arms_stored } }
+		set_variable = { name = st_res_small_arms_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_small_arms_rate } }
+		set_variable = { name = st_res_small_arms_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_artillery_stored } }
+		set_variable = { name = st_res_artillery_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_artillery_rate } }
+		set_variable = { name = st_res_artillery_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_aeroplanes_stored } }
+		set_variable = { name = st_res_aeroplanes_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_aeroplanes_rate } }
+		set_variable = { name = st_res_aeroplanes_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_tanks_stored } }
+		set_variable = { name = st_res_tanks_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_tanks_rate } }
+		set_variable = { name = st_res_tanks_rate value = 0 }
+	}
+	if = {
 		limit = { NOT = { has_variable = st_res_adjust_step_tier } }
 		set_variable = { name = st_res_adjust_step_tier value = 1 }
 	}
@@ -81,6 +113,14 @@ st_res_reset_vars_effect = {
 	set_variable = { name = st_res_ammunition_rate value = 0 }
 	set_variable = { name = st_res_oil_stored value = 0 }
 	set_variable = { name = st_res_oil_rate value = 0 }
+	set_variable = { name = st_res_small_arms_stored value = 0 }
+	set_variable = { name = st_res_small_arms_rate value = 0 }
+	set_variable = { name = st_res_artillery_stored value = 0 }
+	set_variable = { name = st_res_artillery_rate value = 0 }
+	set_variable = { name = st_res_aeroplanes_stored value = 0 }
+	set_variable = { name = st_res_aeroplanes_rate value = 0 }
+	set_variable = { name = st_res_tanks_stored value = 0 }
+	set_variable = { name = st_res_tanks_rate value = 0 }
 	set_variable = { name = st_res_adjust_step_tier value = 1 }
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
@@ -188,6 +228,22 @@ st_res_rebuild_oil_flow_modifiers_effect = {
 	st_res_rebuild_good_flow_modifiers_effect = { GOOD = oil }
 }
 
+st_res_rebuild_small_arms_flow_modifiers_effect = {
+	st_res_rebuild_good_flow_modifiers_effect = { GOOD = small_arms }
+}
+
+st_res_rebuild_artillery_flow_modifiers_effect = {
+	st_res_rebuild_good_flow_modifiers_effect = { GOOD = artillery }
+}
+
+st_res_rebuild_aeroplanes_flow_modifiers_effect = {
+	st_res_rebuild_good_flow_modifiers_effect = { GOOD = aeroplanes }
+}
+
+st_res_rebuild_tanks_flow_modifiers_effect = {
+	st_res_rebuild_good_flow_modifiers_effect = { GOOD = tanks }
+}
+
 # --------------------------------------------------------------------------
 # st_res_rebuild_hub_flow_modifiers_effect — Bridge country -> building scope.
 # Expects country vars and the hub cache to already be current. Applies the
@@ -198,6 +254,10 @@ st_res_rebuild_hub_flow_modifiers_effect = {
 	st_res_startup_good_setup_effect = { GOOD = grain }
 	st_res_startup_good_setup_effect = { GOOD = ammunition }
 	st_res_startup_good_setup_effect = { GOOD = oil }
+	st_res_startup_good_setup_effect = { GOOD = small_arms }
+	st_res_startup_good_setup_effect = { GOOD = artillery }
+	st_res_startup_good_setup_effect = { GOOD = aeroplanes }
+	st_res_startup_good_setup_effect = { GOOD = tanks }
 
 	if = {
 		limit = {
@@ -211,6 +271,10 @@ st_res_rebuild_hub_flow_modifiers_effect = {
 			st_res_rebuild_grain_flow_modifiers_effect = yes
 			st_res_rebuild_ammunition_flow_modifiers_effect = yes
 			st_res_rebuild_oil_flow_modifiers_effect = yes
+			st_res_rebuild_small_arms_flow_modifiers_effect = yes
+			st_res_rebuild_artillery_flow_modifiers_effect = yes
+			st_res_rebuild_aeroplanes_flow_modifiers_effect = yes
+			st_res_rebuild_tanks_flow_modifiers_effect = yes
 		}
 	}
 }
@@ -229,6 +293,10 @@ st_res_refresh_hub_flow_effect = {
 	set_variable = { name = st_res_grain_actual_rate_cached value = st_res_grain_actual_rate }
 	set_variable = { name = st_res_ammunition_actual_rate_cached value = st_res_ammunition_actual_rate }
 	set_variable = { name = st_res_oil_actual_rate_cached value = st_res_oil_actual_rate }
+	set_variable = { name = st_res_small_arms_actual_rate_cached value = st_res_small_arms_actual_rate }
+	set_variable = { name = st_res_artillery_actual_rate_cached value = st_res_artillery_actual_rate }
+	set_variable = { name = st_res_aeroplanes_actual_rate_cached value = st_res_aeroplanes_actual_rate }
+	set_variable = { name = st_res_tanks_actual_rate_cached value = st_res_tanks_actual_rate }
 	st_res_rebuild_hub_flow_modifiers_effect = yes
 	st_res_apply_sell_profit_effect = yes
 }
@@ -243,6 +311,10 @@ st_res_clamp_stockpiles_effect = {
 	clamp_variable = { name = st_res_grain_stored min = 0 max = st_res_grain_capacity }
 	clamp_variable = { name = st_res_ammunition_stored min = 0 max = st_res_ammunition_capacity }
 	clamp_variable = { name = st_res_oil_stored min = 0 max = st_res_oil_capacity }
+	clamp_variable = { name = st_res_small_arms_stored min = 0 max = st_res_small_arms_capacity }
+	clamp_variable = { name = st_res_artillery_stored min = 0 max = st_res_artillery_capacity }
+	clamp_variable = { name = st_res_aeroplanes_stored min = 0 max = st_res_aeroplanes_capacity }
+	clamp_variable = { name = st_res_tanks_stored min = 0 max = st_res_tanks_capacity }
 
 	clamp_variable = { name = st_res_grain_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
 	clamp_variable = { name = st_res_grain_rate min = st_res_grain_max_withdrawable max = st_res_grain_max_storable }
@@ -250,6 +322,14 @@ st_res_clamp_stockpiles_effect = {
 	clamp_variable = { name = st_res_ammunition_rate min = st_res_ammunition_max_withdrawable max = st_res_ammunition_max_storable }
 	clamp_variable = { name = st_res_oil_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
 	clamp_variable = { name = st_res_oil_rate min = st_res_oil_max_withdrawable max = st_res_oil_max_storable }
+	clamp_variable = { name = st_res_small_arms_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
+	clamp_variable = { name = st_res_small_arms_rate min = st_res_small_arms_max_withdrawable max = st_res_small_arms_max_storable }
+	clamp_variable = { name = st_res_artillery_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
+	clamp_variable = { name = st_res_artillery_rate min = st_res_artillery_max_withdrawable max = st_res_artillery_max_storable }
+	clamp_variable = { name = st_res_aeroplanes_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
+	clamp_variable = { name = st_res_aeroplanes_rate min = st_res_aeroplanes_max_withdrawable max = st_res_aeroplanes_max_storable }
+	clamp_variable = { name = st_res_tanks_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
+	clamp_variable = { name = st_res_tanks_rate min = st_res_tanks_max_withdrawable max = st_res_tanks_max_storable }
 }
 
 # --------------------------------------------------------------------------
@@ -277,6 +357,18 @@ st_res_weekly_update_effect = {
 		change_variable = { name = st_res_oil_stored add = st_res_oil_weekly_delta }
 		clamp_variable = { name = st_res_oil_stored min = 0 max = st_res_oil_capacity }
 
+		change_variable = { name = st_res_small_arms_stored add = st_res_small_arms_weekly_delta }
+		clamp_variable = { name = st_res_small_arms_stored min = 0 max = st_res_small_arms_capacity }
+
+		change_variable = { name = st_res_artillery_stored add = st_res_artillery_weekly_delta }
+		clamp_variable = { name = st_res_artillery_stored min = 0 max = st_res_artillery_capacity }
+
+		change_variable = { name = st_res_aeroplanes_stored add = st_res_aeroplanes_weekly_delta }
+		clamp_variable = { name = st_res_aeroplanes_stored min = 0 max = st_res_aeroplanes_capacity }
+
+		change_variable = { name = st_res_tanks_stored add = st_res_tanks_weekly_delta }
+		clamp_variable = { name = st_res_tanks_stored min = 0 max = st_res_tanks_capacity }
+
 		st_res_refresh_hub_flow_effect = yes
 		st_res_clamp_stockpiles_effect = yes
 		st_res_apply_sell_profit_effect = yes
@@ -297,11 +389,19 @@ st_res_je_immediate_effect = {
 	set_variable = { name = st_res_grain_fill_for_bar value = st_res_grain_fill_pct }
 	set_variable = { name = st_res_ammunition_fill_for_bar value = st_res_ammunition_fill_pct }
 	set_variable = { name = st_res_oil_fill_for_bar value = st_res_oil_fill_pct }
+	set_variable = { name = st_res_small_arms_fill_for_bar value = st_res_small_arms_fill_pct }
+	set_variable = { name = st_res_artillery_fill_for_bar value = st_res_artillery_fill_pct }
+	set_variable = { name = st_res_aeroplanes_fill_for_bar value = st_res_aeroplanes_fill_pct }
+	set_variable = { name = st_res_tanks_fill_for_bar value = st_res_tanks_fill_pct }
 
 	scope:journal_entry = {
 		set_bar_progress = { name = st_res_grain_fill_bar value = ROOT.var:st_res_grain_fill_for_bar }
 		set_bar_progress = { name = st_res_ammunition_fill_bar value = ROOT.var:st_res_ammunition_fill_for_bar }
 		set_bar_progress = { name = st_res_oil_fill_bar value = ROOT.var:st_res_oil_fill_for_bar }
+		set_bar_progress = { name = st_res_small_arms_fill_bar value = ROOT.var:st_res_small_arms_fill_for_bar }
+		set_bar_progress = { name = st_res_artillery_fill_bar value = ROOT.var:st_res_artillery_fill_for_bar }
+		set_bar_progress = { name = st_res_aeroplanes_fill_bar value = ROOT.var:st_res_aeroplanes_fill_for_bar }
+		set_bar_progress = { name = st_res_tanks_fill_bar value = ROOT.var:st_res_tanks_fill_for_bar }
 	}
 }
 
@@ -313,11 +413,19 @@ st_res_je_weekly_pulse_effect = {
 	set_variable = { name = st_res_grain_fill_for_bar value = st_res_grain_fill_pct }
 	set_variable = { name = st_res_ammunition_fill_for_bar value = st_res_ammunition_fill_pct }
 	set_variable = { name = st_res_oil_fill_for_bar value = st_res_oil_fill_pct }
+	set_variable = { name = st_res_small_arms_fill_for_bar value = st_res_small_arms_fill_pct }
+	set_variable = { name = st_res_artillery_fill_for_bar value = st_res_artillery_fill_pct }
+	set_variable = { name = st_res_aeroplanes_fill_for_bar value = st_res_aeroplanes_fill_pct }
+	set_variable = { name = st_res_tanks_fill_for_bar value = st_res_tanks_fill_pct }
 
 	scope:journal_entry = {
 		set_bar_progress = { name = st_res_grain_fill_bar value = ROOT.var:st_res_grain_fill_for_bar }
 		set_bar_progress = { name = st_res_ammunition_fill_bar value = ROOT.var:st_res_ammunition_fill_for_bar }
 		set_bar_progress = { name = st_res_oil_fill_bar value = ROOT.var:st_res_oil_fill_for_bar }
+		set_bar_progress = { name = st_res_small_arms_fill_bar value = ROOT.var:st_res_small_arms_fill_for_bar }
+		set_bar_progress = { name = st_res_artillery_fill_bar value = ROOT.var:st_res_artillery_fill_for_bar }
+		set_bar_progress = { name = st_res_aeroplanes_fill_bar value = ROOT.var:st_res_aeroplanes_fill_for_bar }
+		set_bar_progress = { name = st_res_tanks_fill_bar value = ROOT.var:st_res_tanks_fill_for_bar }
 	}
 }
 
@@ -347,6 +455,10 @@ st_res_reset_rates_effect = {
 	set_variable = { name = st_res_grain_rate value = 0 }
 	set_variable = { name = st_res_ammunition_rate value = 0 }
 	set_variable = { name = st_res_oil_rate value = 0 }
+	set_variable = { name = st_res_small_arms_rate value = 0 }
+	set_variable = { name = st_res_artillery_rate value = 0 }
+	set_variable = { name = st_res_aeroplanes_rate value = 0 }
+	set_variable = { name = st_res_tanks_rate value = 0 }
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
 }
@@ -393,11 +505,71 @@ st_res_decrease_oil_rate_effect = {
 	st_res_clamp_stockpiles_effect = yes
 }
 
+st_res_increase_small_arms_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_small_arms_rate add = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_decrease_small_arms_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_small_arms_rate subtract = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_increase_artillery_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_artillery_rate add = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_decrease_artillery_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_artillery_rate subtract = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_increase_aeroplanes_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_aeroplanes_rate add = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_decrease_aeroplanes_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_aeroplanes_rate subtract = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_increase_tanks_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_tanks_rate add = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_decrease_tanks_rate_effect = {
+	st_res_init_effect = yes
+	change_variable = { name = st_res_tanks_rate subtract = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
 st_res_apply_sell_profit_effect = {
 	remove_modifier = st_res_sell_profit_modifier
 	set_variable = { name = st_res_sell_profit value = 0 }
 	change_variable = { name = st_res_sell_profit add = st_res_grain_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_ammunition_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_oil_sale_profit }
+	change_variable = { name = st_res_sell_profit add = st_res_small_arms_sale_profit }
+	change_variable = { name = st_res_sell_profit add = st_res_artillery_sale_profit }
+	change_variable = { name = st_res_sell_profit add = st_res_aeroplanes_sale_profit }
+	change_variable = { name = st_res_sell_profit add = st_res_tanks_sale_profit }
 	add_modifier = { name = st_res_sell_profit_modifier multiplier = var:st_res_sell_profit }
 }

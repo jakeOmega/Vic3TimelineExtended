@@ -48,6 +48,10 @@ je_strategic_reserve = {
 	scripted_progress_bar = st_res_grain_fill_bar
 	scripted_progress_bar = st_res_ammunition_fill_bar
 	scripted_progress_bar = st_res_oil_fill_bar
+	scripted_progress_bar = st_res_small_arms_fill_bar
+	scripted_progress_bar = st_res_artillery_fill_bar
+	scripted_progress_bar = st_res_aeroplanes_fill_bar
+	scripted_progress_bar = st_res_tanks_fill_bar
 
 	scripted_button = st_res_cycle_step_size_button
 	scripted_button = st_res_reset_rates_button
@@ -57,6 +61,14 @@ je_strategic_reserve = {
 	scripted_button = st_res_increase_ammunition_rate_button
 	scripted_button = st_res_decrease_oil_rate_button
 	scripted_button = st_res_increase_oil_rate_button
+	scripted_button = st_res_decrease_small_arms_rate_button
+	scripted_button = st_res_increase_small_arms_rate_button
+	scripted_button = st_res_decrease_artillery_rate_button
+	scripted_button = st_res_increase_artillery_rate_button
+	scripted_button = st_res_decrease_aeroplanes_rate_button
+	scripted_button = st_res_increase_aeroplanes_rate_button
+	scripted_button = st_res_decrease_tanks_rate_button
+	scripted_button = st_res_increase_tanks_rate_button
 
 	status_desc = {
 		first_valid = {
@@ -80,6 +92,10 @@ je_strategic_reserve = {
 			}
 		}
 		triggered_desc = {
+			desc = je_strategic_reserve_profit_line
+			trigger = { always = yes }
+		}
+		triggered_desc = {
 			desc = je_strategic_reserve_rate_line
 			trigger = { always = yes }
 		}
@@ -98,6 +114,22 @@ je_strategic_reserve = {
 		triggered_desc = {
 			desc = je_strategic_reserve_oil_line
 			trigger = { has_technology_researched = fractional_distillation }
+		}
+		triggered_desc = {
+			desc = je_strategic_reserve_small_arms_line
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_strategic_reserve_artillery_line
+			trigger = { always = yes }
+		}
+		triggered_desc = {
+			desc = je_strategic_reserve_aeroplanes_line
+			trigger = { has_technology_researched = military_aviation }
+		}
+		triggered_desc = {
+			desc = je_strategic_reserve_tanks_line
+			trigger = { has_technology_researched = mobile_armor }
 		}
 	}
 

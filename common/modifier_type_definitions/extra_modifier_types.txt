@@ -290,6 +290,18 @@ goods_output_grain_mult = {
 	}
 }
 
+# Vanilla registers goods_output_aeroplanes_mult but not goods_input_aeroplanes_mult,
+# so the Strategic Reserve hub flow modifier silently no-ops without this entry.
+# See docs/scripting_best_practices.md § dynamic modifier per-entity registration.
+goods_input_aeroplanes_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
 goods_output_fish_mult = {
 	color = good
 	percent = yes

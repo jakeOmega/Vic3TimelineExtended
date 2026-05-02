@@ -171,3 +171,179 @@ st_res_decrease_oil_rate_button = {
 		st_res_decrease_oil_rate_effect = yes
 	}
 }
+
+# ---------------- SMALL ARMS RATE BUTTONS ----------------
+st_res_increase_small_arms_rate_button = {
+	name = "st_res_increase_small_arms_rate_button"
+	desc = "st_res_increase_small_arms_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_small_arms_rate < st_res_small_arms_max_storable
+			var:st_res_small_arms_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_small_arms_rate_effect = yes
+	}
+}
+
+st_res_decrease_small_arms_rate_button = {
+	name = "st_res_decrease_small_arms_rate_button"
+	desc = "st_res_decrease_small_arms_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_small_arms_rate > st_res_small_arms_max_withdrawable
+			var:st_res_small_arms_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_small_arms_rate_effect = yes
+	}
+}
+
+# ---------------- ARTILLERY RATE BUTTONS ----------------
+st_res_increase_artillery_rate_button = {
+	name = "st_res_increase_artillery_rate_button"
+	desc = "st_res_increase_artillery_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_artillery_rate < st_res_artillery_max_storable
+			var:st_res_artillery_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_artillery_rate_effect = yes
+	}
+}
+
+st_res_decrease_artillery_rate_button = {
+	name = "st_res_decrease_artillery_rate_button"
+	desc = "st_res_decrease_artillery_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_artillery_rate > st_res_artillery_max_withdrawable
+			var:st_res_artillery_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_artillery_rate_effect = yes
+	}
+}
+
+# ---------------- AEROPLANES RATE BUTTONS ----------------
+st_res_increase_aeroplanes_rate_button = {
+	name = "st_res_increase_aeroplanes_rate_button"
+	desc = "st_res_increase_aeroplanes_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = military_aviation
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_aeroplanes_rate < st_res_aeroplanes_max_storable
+			var:st_res_aeroplanes_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_aeroplanes_rate_effect = yes
+	}
+}
+
+st_res_decrease_aeroplanes_rate_button = {
+	name = "st_res_decrease_aeroplanes_rate_button"
+	desc = "st_res_decrease_aeroplanes_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = military_aviation
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_aeroplanes_rate > st_res_aeroplanes_max_withdrawable
+			var:st_res_aeroplanes_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_aeroplanes_rate_effect = yes
+	}
+}
+
+# ---------------- TANKS RATE BUTTONS ----------------
+st_res_increase_tanks_rate_button = {
+	name = "st_res_increase_tanks_rate_button"
+	desc = "st_res_increase_tanks_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = mobile_armor
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_tanks_rate < st_res_tanks_max_storable
+			var:st_res_tanks_rate < st_res_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_increase_tanks_rate_effect = yes
+	}
+}
+
+st_res_decrease_tanks_rate_button = {
+	name = "st_res_decrease_tanks_rate_button"
+	desc = "st_res_decrease_tanks_rate_button_desc"
+	visible = {
+		has_journal_entry = je_strategic_reserve
+		has_technology_researched = mobile_armor
+	}
+	ai_chance = {
+		value = 0
+	}
+	possible = {
+		custom_tooltip = {
+			text = "st_res_rate_adjustment_disabled"
+			var:st_res_tanks_rate > st_res_tanks_max_withdrawable
+			var:st_res_tanks_rate > st_res_neg_weekly_base_rate_cap
+		}
+	}
+	effect = {
+		st_res_decrease_tanks_rate_effect = yes
+	}
+}

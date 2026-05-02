@@ -13,10 +13,14 @@ pm_st_res_hub_reserve = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
-			country_st_res_grain_capacity_add = 500
-			country_st_res_ammunition_capacity_add = 500
-			country_st_res_oil_capacity_add = 500
-			country_st_res_weekly_rate_cap_add = 10
+			country_st_res_grain_capacity_add = 5000
+			country_st_res_ammunition_capacity_add = 5000
+			country_st_res_oil_capacity_add = 5000
+			country_st_res_small_arms_capacity_add = 5000
+			country_st_res_artillery_capacity_add = 5000
+			country_st_res_aeroplanes_capacity_add = 5000
+			country_st_res_tanks_capacity_add = 5000
+			country_st_res_weekly_rate_cap_add = 1000
 		}
 	}
 	building_modifiers = {
@@ -27,6 +31,14 @@ pm_st_res_hub_reserve = {
 			goods_output_ammunition_add = 1
 			goods_input_oil_add = 1
 			goods_output_oil_add = 1
+			goods_input_small_arms_add = 1
+			goods_output_small_arms_add = 1
+			goods_input_artillery_add = 1
+			goods_output_artillery_add = 1
+			goods_input_aeroplanes_add = 1
+			goods_output_aeroplanes_add = 1
+			goods_input_tanks_add = 1
+			goods_output_tanks_add = 1
 		}
 		level_scaled = {
 			building_employment_bureaucrats_add = 1000
@@ -44,11 +56,15 @@ pm_st_res_silo_capacity = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
-			country_st_res_grain_capacity_add = 200
-			country_st_res_ammunition_capacity_add = 200
-			country_st_res_oil_capacity_add = 200
+			country_st_res_grain_capacity_add = 1000
+			country_st_res_ammunition_capacity_add = 1000
+			country_st_res_oil_capacity_add = 1000
+			country_st_res_small_arms_capacity_add = 1000
+			country_st_res_artillery_capacity_add = 1000
+			country_st_res_aeroplanes_capacity_add = 1000
+			country_st_res_tanks_capacity_add = 1000
 			building_employment_bureaucrats_add = 1000
-			country_st_res_weekly_rate_cap_add = 10
+			country_st_res_weekly_rate_cap_add = 100
 		}
 	}
 	building_modifiers = {

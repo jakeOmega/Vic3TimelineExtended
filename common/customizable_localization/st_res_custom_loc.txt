@@ -72,3 +72,99 @@ st_res_oil_mode_text = {
 		localization_key = st_res_mode_idle
 	}
 }
+
+st_res_small_arms_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_small_arms_rate > 0
+			var:st_res_small_arms_stored < st_res_small_arms_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_small_arms_rate < 0
+			var:st_res_small_arms_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}
+
+st_res_artillery_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_artillery_rate > 0
+			var:st_res_artillery_stored < st_res_artillery_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_artillery_rate < 0
+			var:st_res_artillery_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}
+
+st_res_aeroplanes_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_aeroplanes_rate > 0
+			var:st_res_aeroplanes_stored < st_res_aeroplanes_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_aeroplanes_rate < 0
+			var:st_res_aeroplanes_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}
+
+st_res_tanks_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			var:st_res_tanks_rate > 0
+			var:st_res_tanks_stored < st_res_tanks_capacity
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			var:st_res_tanks_rate < 0
+			var:st_res_tanks_stored > 0
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}

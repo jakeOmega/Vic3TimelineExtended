@@ -30,3 +30,47 @@ st_res_oil_fill_bar = {
 	min_value = 0
 	max_value = 100
 }
+
+st_res_small_arms_fill_bar = {
+	name = "st_res_small_arms_fill_bar_name"
+	desc = "st_res_small_arms_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}
+
+st_res_artillery_fill_bar = {
+	name = "st_res_artillery_fill_bar_name"
+	desc = "st_res_artillery_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}
+
+st_res_aeroplanes_fill_bar = {
+	name = "st_res_aeroplanes_fill_bar_name"
+	desc = "st_res_aeroplanes_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}
+
+st_res_tanks_fill_bar = {
+	name = "st_res_tanks_fill_bar_name"
+	desc = "st_res_tanks_fill_bar_desc"
+
+	default_green = yes
+
+	start_value = 0
+	min_value = 0
+	max_value = 100
+}
