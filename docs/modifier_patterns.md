@@ -58,43 +58,43 @@ Dynamic-modifier templates parameterized over canonical vocabularies (goods, bui
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1005; missing entries: 1005
+- Vocab size: 1009; missing entries: 1009
 
 ### `building_{building}_employees_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1005; missing entries: 1005
+- Vocab size: 1009; missing entries: 1009
 
 ### `building_{building}_max_level_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1005; missing entries: 1005
+- Vocab size: 1009; missing entries: 1009
 
 ### `building_{building}_mortality_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1005; missing entries: 1005
+- Vocab size: 1009; missing entries: 1009
 
 ### `building_{building}_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **502**
-- Vocab size: 1005; missing entries: 503
+- Vocab size: 1009; missing entries: 507
 
 ### `building_{building}_throughput_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1005; missing entries: 1005
+- Vocab size: 1009; missing entries: 1009
 
 ### `building_{building}_unincorporated_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1005; missing entries: 1005
+- Vocab size: 1009; missing entries: 1009
 
 ### `country_institution_impact_{institution}_mult`
 
@@ -198,7 +198,7 @@ _State-scoped cap on a specific building's level._
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **302**
-- Vocab size: 1005; missing entries: 703
+- Vocab size: 1009; missing entries: 707
 
 ### `state_pop_qualifications_{poptype}_mult`
 

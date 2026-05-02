@@ -1949,7 +1949,7 @@ Construction Site:
 Strategic Reserve Hub:
 	Unlocking Technology: Logistics
 	Hub Reserve:
-		Grain Reserve Control
+		Reserve Control
 
 Strategic Reserve Silo:
 	Unlocking Technology: Logistics
@@ -2395,6 +2395,14 @@ Silk Exchange:
 Vintner's Hall:
 	Vintner's Hall Operations:
 		Wine and Fruit Processing
+
+Furniture Showroom:
+	Furniture Showroom Operations:
+		Furniture Showroom
+
+Lumber Yard:
+	Lumber Yard Operations:
+		Lumber Yard
 
 Aker Oslo Shipyard:
 	Aker Oslo Shipyard:
