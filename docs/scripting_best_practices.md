@@ -356,17 +356,19 @@ Inlining the check is silently buggy in two directions: it's easy to forget `law
 ## JE Localization Scope: ROOT = JournalEntry, NOT Country
 
 - In journal entry `status_desc`, `reason`, and custom tooltip loc strings, `ROOT` is the **JournalEntry scope**, not the country.
-- **Invalid:** `[ROOT.GetName]` — returns the JE name, not country name.
+- **This also applies to events fired from a JE-scoped scripted effect** (e.g. via `trigger_event = { id = X }` inside a JE monthly/yearly pulse). The triggered event inherits the caller's ROOT — the JE — not the country, even when the event is `type = country_event`.
+- **Invalid:** `[ROOT.GetName]` — engine logs `Could not find data system function 'GetName' in 'ROOT.GetName'` and the loc string fails to render (everything up to the broken token disappears).
 - **Valid:** `[ROOT.GetCountry.GetName]`, `[ROOT.GetCountry.GetAdjective]`.
 - For script values: vanilla uses `[GetPlayer.MakeScope.ScriptValue('...')]`, though `[ROOT.ScriptValue('...')]` appears to work in some contexts.
 
-## `GetAdjective` Requires `.GetCountry` Accessor
+## `GetName` / `GetAdjective` Require `.GetCountry` Accessor
 
-`GetAdjective` and `GetAdjectiveNoFormatting` are methods on the **Country data type**, NOT on ROOT directly. Even in country_events where ROOT = country, you must use `.GetCountry` to access country-type methods.
+`GetName`, `GetAdjective`, `GetAdjectiveNoFormatting`, etc. are methods on the **Country data type**, NOT on ROOT directly. Even in country_events where you might expect ROOT = country, you must use `.GetCountry` to access country-type methods. Vanilla uses `[ROOT.GetCountry.GetName]` (80+ event uses) and never `[ROOT.GetName]` (0 event uses) — treat the `.GetCountry` hop as mandatory.
 
-- **Invalid (0 vanilla uses):** `[ROOT.GetAdjective]`, `[ROOT.GetAdjectiveNoFormatting]`
-- **Valid (267 + 216 vanilla uses):** `[ROOT.GetCountry.GetAdjective]`, `[ROOT.GetCountry.GetAdjectiveNoFormatting]`
-- **Also valid with scoped countries:** `[SCOPE.sCountry('my_scope').GetAdjective]`, `[scope:cultural_hegemon.GetAdjective]`
+- **Invalid (0 vanilla uses):** `[ROOT.GetName]`, `[ROOT.GetAdjective]`, `[ROOT.GetAdjectiveNoFormatting]`
+- **Valid (80+/267/216 vanilla uses):** `[ROOT.GetCountry.GetName]`, `[ROOT.GetCountry.GetAdjective]`, `[ROOT.GetCountry.GetAdjectiveNoFormatting]`
+- **Also valid with scoped countries:** `[SCOPE.sCountry('my_scope').GetName]`, `[scope:cultural_hegemon.GetAdjective]`
+- **Symptom of getting it wrong:** description renders only the substring AFTER the failed token. (E.g. `"The rest of [ROOT.GetName]'s market is bleeding."` showed up in-game as `"'s market is bleeding."` — debug.log captured the broken-token error in `pdx_data_factory.cpp` and `pdx_data_localize.cpp`.)
 
 ## Saved Scopes vs Variables in Localization
 
