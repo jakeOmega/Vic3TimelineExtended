@@ -872,17 +872,29 @@ INJECT:company_basic_paper = {
 	}
 }
 
-# Generic Home Goods - adds appliances extension
+# Generic Home Goods - unique building + adds appliances extension
 INJECT:company_basic_home_goods = {
+	building_types = {
+		building_generic_furniture_showroom
+	}
 	extension_building_types = {
 		building_electrics_industry_appliances
 	}
+	prosperity_modifier = {
+		state_building_generic_furniture_showroom_max_level_add = 1
+	}
 }
 
-# Generic Forestry - adds synthetic wood extension
+# Generic Forestry - unique building + adds synthetic wood extension
 INJECT:company_basic_forestry = {
+	building_types = {
+		building_generic_lumber_yard
+	}
 	extension_building_types = {
 		building_synthetics_plant_wood
+	}
+	prosperity_modifier = {
+		state_building_generic_lumber_yard_max_level_add = 1
 	}
 }
 
@@ -1170,15 +1182,8 @@ INJECT:company_basic_colonial_plantations_2 = {
 	}
 }
 
-# Generic Electrics - Extensions
-INJECT:company_basic_electrics = {
-	extension_building_types = {
-		building_electronic_components_and_semiconductor_industry
-		building_software_industry
-		building_network_infrastructure
-		building_renewable_energy_plant
-	}
-}
+# (Generic Electrics is fully defined via REPLACE: in extra_companies_generic.txt — its
+# extensions and unique buildings live there to avoid the REPLACE/INJECT merge ambiguity.)
 
 # Generic Gold Mining - Extensions
 INJECT:company_basic_gold_mining = {
@@ -1803,15 +1808,9 @@ INJECT:company_basic_colonial_plantations_2 = {
 	}
 }
 
-# Generic Electrics - Unique: Electronics Laboratory
-INJECT:company_basic_electrics = {
-	building_types = {
-		building_generic_electronics_lab
-	}
-	prosperity_modifier = {
-		state_building_generic_electronics_lab_max_level_add = 1
-	}
-}
+# (Generic Electrics unique buildings — building_generic_hq_skyscraper and
+# building_generic_electronics_lab — are wired in the REPLACE: block in
+# extra_companies_generic.txt.)
 
 # Generic Gold Mining - Unique: Assay Office
 INJECT:company_basic_gold_mining = {

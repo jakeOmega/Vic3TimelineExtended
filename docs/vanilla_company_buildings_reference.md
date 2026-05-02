@@ -118,8 +118,12 @@ Vanilla generic companies (from `99_basic_companies.txt`) should receive **weake
 | `company_basic_weapons` | `building_generic_arsenal` | Arms depot/proving ground | `unit_offense_mult = 0.05` |
 | `company_basic_textiles` | `building_generic_textile_depot` | (shared with fabrics) | (same building) |
 | `company_basic_fishing` | `building_generic_fish_market` | Wholesale fish market | `state_standard_of_living_add = 1` |
+| `company_basic_home_goods` | `building_generic_furniture_showroom` | Furniture/homewares emporium fronting a fab workshop | `building_furniture_manufactory_throughput_add = 0.1` |
+| `company_basic_forestry` | `building_generic_lumber_yard` | Industrial sawmill + timber yard | `building_logging_camp_throughput_add = 0.1` |
 
-**Not receiving buildings** (too niche or already covered): `company_basic_colonial_plantations_1/2`, `company_basic_silk_and_dye`, `company_basic_wine_and_fruit`, `company_basic_gold_mining`, `company_basic_metal_mining`, `company_basic_mineral_mining`, `company_basic_paper`, `company_basic_home_goods`, `company_basic_forestry`, `company_basic_electrics` (already replaced by mod).
+**Special case — `company_basic_electrics`:** REPLACE'd in `extra_companies_generic.txt` to a "Telecommunications" generic covering `building_electrics_industry` + `building_electrics_industry_radio` + `building_electrics_industry_appliances`, plus TWO unique mod buildings (`building_generic_hq_skyscraper` for the corporate-services play, `building_generic_electronics_lab` for the radios/telephones manufacturing play). Prestige good: `prestige_good_generic_consumer_appliances`. The full definition lives in the REPLACE: block; do NOT scatter additions into `extra_companies_vanilla_updates.txt` — the REPLACE/INJECT merge order is fragile.
+
+All other vanilla generic companies now have at least one unique mod building — Phase 6 added the colonial / mining / silk / wine / paper buildings; Phase 8 added home_goods and forestry.
 
 ### Generic Building Design Principles
 - **~10000 employment** (level_scaled), split across laborers/machinists/clerks
@@ -202,6 +206,11 @@ Vanilla companies should be updated to reference mod-exclusive buildings in thei
 - Mitsui (Japan), FIAT (Italy)
 - 2 buildings (Rolls-Royce, BP, Bayer, Thyssen, DuPont, Boeing, Renault, Michelin, Pirelli, Sumitomo, Jardine Matheson skipped — not vanilla companies)
 - Applied all Part C updates (mod-exclusive buildings/goods to all vanilla companies) — completed in earlier session
+
+### Phase 8: Generic Home Goods + Forestry ← DONE
+- `building_generic_furniture_showroom` (`company_basic_home_goods`) — wood + glass → furniture + services; `building_furniture_manufactory_throughput_add = 0.1`.
+- `building_generic_lumber_yard` (`company_basic_forestry`) — hardwood + tools → wood + paper; `building_logging_camp_throughput_add = 0.1`.
+- These were the last two `company_basic_*` companies that lacked a unique-building unlock; Phase 8 closes that gap.
 
 ---
 

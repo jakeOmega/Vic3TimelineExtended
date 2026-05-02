@@ -4134,6 +4134,86 @@ building_generic_vintner_hall = {
 	}
 }
 
+# --- Generic Furniture Showroom (Home Goods) ---
+building_generic_furniture_showroom = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_furniture_showroom
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_home_goods
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_furniture_showroom
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_furniture_showroom
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Generic Lumber Yard (Forestry) ---
+building_generic_lumber_yard = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_generic_lumber_yard
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			OR = {
+				has_company = company_type:company_basic_forestry
+			}
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_generic_lumber_yard
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_generic_lumber_yard
+					}
+				}
+			}
+		}
+	}
+}
+
 #============================================================
 # Phase 7: Remaining Vanilla Flavored Company Buildings
 #============================================================

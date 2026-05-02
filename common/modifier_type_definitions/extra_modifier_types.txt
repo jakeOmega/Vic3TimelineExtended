@@ -2401,6 +2401,16 @@ state_building_generic_vintner_hall_max_level_add = {
 	percent = no
 	decimals = 0
 }
+state_building_generic_furniture_showroom_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+state_building_generic_lumber_yard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
 
 # Phase 7: Remaining Flavored Company Buildings
 state_building_aker_oslo_shipyard_max_level_add = {

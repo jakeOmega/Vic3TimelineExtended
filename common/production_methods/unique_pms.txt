@@ -4465,6 +4465,74 @@ pm_generic_vintner_hall = {
 	}
 }
 
+# --- Generic Furniture Showroom ---
+# Theme: A flagship homewares emporium fronting a fabrication workshop, turning timber and glass into furniture and retail services.
+pm_generic_furniture_showroom = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_furniture_manufactory_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 30                            # Price:   20, Total cost:   600.0 (60.00%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (40.00%)
+			# Output goods
+			goods_output_furniture_add = 40                      # Price:   30, Total cost:  1200.0 (61.54%)
+			goods_output_services_add = 25                       # Price:   30, Total cost:   750.0 (38.46%)
+			# Total input cost: 1000.0
+			# Total output cost: 1950.0
+			# Profit: 950.0
+			# Profit margin: 95.00%
+			# Zero profit price multiplier: 0.51
+			# Employment: 10000
+			# Wage breakeven: 0.10
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_shopkeepers_add = 3000
+			building_employment_machinists_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
+# --- Generic Lumber Yard ---
+# Theme: An industrial sawmill and lumber yard that processes harvested timber into framing wood and pulpwood for paper.
+pm_generic_lumber_yard = {
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_logging_camp_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_hardwood_add = 10                        # Price:   40, Total cost:   400.0 (50.00%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (50.00%)
+			# Output goods
+			goods_output_wood_add = 50                           # Price:   20, Total cost:  1000.0 (62.50%)
+			goods_output_paper_add = 20                          # Price:   30, Total cost:   600.0 (37.50%)
+			# Total input cost: 800.0
+			# Total output cost: 1600.0
+			# Profit: 800.0
+			# Profit margin: 100.00%
+			# Zero profit price multiplier: 0.50
+			# Employment: 10000
+			# Wage breakeven: 0.08
+		}
+		level_scaled = {
+			building_employment_laborers_add = 4000
+			building_employment_farmers_add = 3000
+			building_employment_machinists_add = 2000
+			building_employment_clerks_add = 1000
+		}
+	}
+}
+
 #==================================================
 # Phase 7: Remaining Vanilla Flavored Company PMs
 #==================================================

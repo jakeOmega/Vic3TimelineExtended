@@ -173,59 +173,67 @@ company_basic_autarky = {
 REPLACE:company_basic_electrics = {
 	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
-	
+
+	flavored_company = no
 	uses_dynamic_naming = yes
-	
+
 	dynamic_company_type_names = {
 		"dynamic_company_type_company"
 		"dynamic_company_type_consortium"
 		"dynamic_company_type_corporation"
 		"dynamic_company_type_conglomerate"
 	}
-	
+
 	building_types = {
 		building_electrics_industry
-        building_electrics_industry_radio
+		building_electrics_industry_radio
 		building_electrics_industry_appliances
 		building_generic_hq_skyscraper
+		building_generic_electronics_lab
 	}
 
+	extension_building_types = {
+		building_network_infrastructure
+		building_electronic_components_and_semiconductor_industry
+		building_software_industry
+		building_renewable_energy_plant
+	}
+
+	possible_prestige_goods = {
+		prestige_good_generic_consumer_appliances
+	}
 
 	potential = {
 		always = yes
 	}
+
 	possible = {
 		any_scope_state = {
 			any_scope_building = {
-                OR = {
-                    is_building_type = building_electrics_industry
-                    is_building_type = building_electrics_industry_radio
+				OR = {
+					is_building_type = building_electrics_industry
+					is_building_type = building_electrics_industry_radio
 					is_building_type = building_electrics_industry_appliances
-                }
+				}
 				level >= 5
 			}
 		}
 	}
-	
+
 	prosperity_modifier = {
 		state_education_access_add = 0.05
 		state_building_generic_hq_skyscraper_max_level_add = 1
+		state_building_generic_electronics_lab_max_level_add = 1
 	}
-    flavored_company = no
-    extension_building_types = {
-		building_network_infrastructure
-	}
-	possible_prestige_goods = {
-		prestige_good_generic_consumer_appliances
-	}
-    ai_will_do = {
+
+	ai_will_do = {
 		any_scope_state = {
 			any_scope_building = {
-                OR = {
-				    is_building_type = building_electrics_industry
-                    is_building_type = building_electrics_industry_radio
+				OR = {
+					is_building_type = building_electrics_industry
+					is_building_type = building_electrics_industry_radio
 					is_building_type = building_electrics_industry_appliances
-                }
+				}
 				level >= 3
 			}
 		}
