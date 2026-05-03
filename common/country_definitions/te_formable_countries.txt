@@ -1,4 +1,4 @@
-﻿# Tag definitions for the seven new formable countries added by this mod.
+﻿# Tag definitions for the formable countries added by this mod.
 # BHT (India / Bharat) and IDN (Indonesia) reuse vanilla tag definitions —
 # only their formation rules are overridden in common/country_formation/.
 
@@ -181,4 +181,147 @@ UNA = {
 		metis
 	}
 	capital = STATE_DISTRICT_OF_COLUMBIA
+}
+
+ZHO = {
+	color = { 200 30 30 }
+
+	country_type = recognized
+
+	tier = empire
+
+	cultures = {
+		han
+		manchu
+		yue
+		min
+		mongol
+		tibetan
+		uighur
+	}
+	capital = STATE_BEIJING
+}
+
+UNE = {
+	color = { 60 130 200 }
+
+	country_type = recognized
+
+	tier = hegemony
+
+	cultures = {
+		# Europe
+		french
+		north_german
+		south_german
+		north_italian
+		south_italian
+		spanish
+		portuguese
+		british
+		scottish
+		irish
+		dutch
+		flemish
+		wallonian
+		danish
+		swedish
+		norwegian
+		finnish
+		polish
+		czech
+		slovak
+		hungarian
+		romanian
+		greek
+		bulgarian
+		serb
+		croat
+		slovene
+		albanian
+		russian
+		ukrainian
+		byelorussian
+		lithuanian
+		latvian
+		estonian
+		icelandic
+		# North America
+		yankee
+		dixie
+		anglo_canadian
+		franco_canadian
+		mexican
+		central_american
+		# South America
+		brazilian
+		platinean
+		colombian
+		peruvian
+		chilean
+		venezuelan
+		quechua
+		# Middle East / North Africa
+		maghrebi
+		misri
+		berber
+		mashriqi
+		bedouin
+		turkish
+		persian
+		kurdish
+		azerbaijani
+		# Sub-Saharan Africa
+		yoruba
+		ibo
+		hausa
+		fulbe
+		mande
+		akan
+		swahili
+		amhara
+		oromo
+		zulu
+		xhosa
+		shona
+		bakongo
+		mongo
+		# Central / South Asia
+		panjabi
+		bengali
+		hindustani
+		marathi
+		gujarati
+		tamil
+		telegu
+		sinhala
+		pashtun
+		nepali
+		assamese
+		# East Asia
+		han
+		manchu
+		yue
+		min
+		mongol
+		tibetan
+		uighur
+		korean
+		japanese
+		# Southeast Asia
+		vietnamese
+		thai
+		burmese
+		khmer
+		malay
+		javan
+		filipino
+		visayan
+		# Oceania
+		australian
+		maori
+		polynesian
+		melanesian
+	}
+	capital = STATE_WEST_SWITZERLAND
 }

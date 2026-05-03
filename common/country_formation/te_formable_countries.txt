@@ -1,12 +1,17 @@
-﻿# Formation rules for the seven new formable countries.
+﻿# Formation rules for the formable countries added by this mod.
 #
-# AFU/BHT/IDN/EUN/UNA are major formations (candidates compete via
+# AFU/BHT/IDN/EUN/UNA/UNE/ZHO are major formations (candidates compete via
 # leadership/unification plays); INM/EAF are minor formations (whoever
 # directly controls enough of the required states/region).
 #
 # All require the era_6 `decolonization` mod tech (era_6.txt:785).
+# UNE additionally gates on era-11 `quantum_communications` and era-12
+# `space_colonization` — the world-state idiom only becomes plausible once
+# instant global comms exist and humanity is moving off-planet.
 # BHT and IDN re-declare the vanilla tags so this file's entries override
 # vanilla `00_formable_countries.txt` (last-wins by file load order).
+# ZHO is a NEW tag (Greater China); vanilla CHI is left intact for its
+# early-game minor-formation role (Qing remnants / Taiping etc.).
 
 # === Major formations ===
 
@@ -132,6 +137,55 @@ UNA = {
 	}
 
 	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+ZHO = {
+	use_culture_states = yes
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_china
+	leadership_play = dp_leadership_china
+
+	required_states_fraction = 0.65
+
+	ai_will_do = { has_technology_researched = decolonization }
+
+	possible = {
+		has_technology_researched = decolonization
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+UNE = {
+	geographic_region = geographic_region_united_earth
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_united_earth
+	leadership_play = dp_leadership_united_earth
+
+	required_states_fraction = 0.75
+
+	ai_will_do = {
+		has_technology_researched = quantum_communications
+		has_technology_researched = space_colonization
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = quantum_communications
+		has_technology_researched = space_colonization
+	}
+
+	max_num_formation_candidates = 5
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
 	}

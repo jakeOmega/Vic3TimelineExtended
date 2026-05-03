@@ -6,6 +6,7 @@
 # BHT uses vanilla geographic_region_india.
 # IDN uses an explicit state list — no region needed.
 # EAF uses an explicit state list in country_formation — no region needed.
+# UNE uses geographic_region_united_earth (every land strategic region).
 
 geographic_region_united_north_america = {
 	short_key = "united_north_america"
@@ -68,5 +69,57 @@ geographic_region_intermarium = {
 		STATE_SLOVENIA
 		STATE_CROATIA
 		STATE_SLAVONIA
+	}
+}
+
+geographic_region_united_earth = {
+	short_key = "united_earth"
+
+	strategic_regions = {
+		# Europe
+		sr:region_western_europe
+		sr:region_southern_europe
+		sr:region_central_europe
+		sr:region_northern_europe
+		sr:region_balkans
+		sr:region_russia
+		sr:region_eastern_europe
+
+		# Americas
+		sr:region_canada
+		sr:region_atlantic_coast
+		sr:region_pacific_coast
+		sr:region_great_plains
+		sr:region_central_america
+		sr:region_brazil
+		sr:region_la_plata
+		sr:region_andes
+		sr:region_gran_colombia
+
+		# Africa
+		sr:region_nile_basin
+		sr:region_north_africa
+		sr:region_west_africa
+		sr:region_equatorial_africa
+		sr:region_southern_africa
+		sr:region_east_africa
+
+		# Asia
+		sr:region_near_east
+		sr:region_arabia
+		sr:region_greater_persia
+		sr:region_himalayas
+		sr:region_central_asia
+		sr:region_north_india
+		sr:region_south_india
+		sr:region_south_china
+		sr:region_north_china
+		sr:region_northeast_asia
+		sr:region_siberia
+		sr:region_indonesia
+		sr:region_indochina
+
+		# Oceania
+		sr:region_oceania
 	}
 }

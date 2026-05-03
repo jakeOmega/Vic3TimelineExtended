@@ -1,4 +1,5 @@
-﻿# Government-flavored dynamic names for the seven new formable countries.
+﻿# Government-flavored dynamic names for the formable countries added by
+# this mod.
 #
 # All entries use is_main_tag_only = yes (only the formed tag uses these,
 # not subject states with the same tag).
@@ -458,6 +459,265 @@ UNA = {
 	dynamic_country_name = { # Technocracy
 		name = dyn_c_continental_technate
 		adjective = dyn_c_continental_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === Greater China (ZHO) ===
+#
+# Republic default → Republic of China (ROC, 中華民國, Zhōnghuá Mínguó).
+# Communist → People's Republic of China (PRC, 中华人民共和国).
+# Fascist → Greater Chinese Empire (Wang Jingwei / militarist register).
+# Theocracy → Celestial Empire (天朝, Tiānzhāo — historical exonym).
+# Technocracy → Technocratic Republic of China (Sinocybernetic).
+# Generic monarchy → Empire of China (中華帝國; Yuan Shikai 1916).
+# Manchu-led monarchy (priority 5) → Empire of the Great Qing (大清帝國,
+#   Qing restoration).
+# Mongol-led monarchy (priority 5) → Empire of the Great Yuan (大元,
+#   Yuan restoration).
+
+ZHO = {
+	dynamic_country_name = { # Default / republic — Republic of China
+		name = dyn_c_republic_of_china
+		adjective = ZHO_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist — People's Republic of China
+		name = dyn_c_peoples_republic_of_china
+		adjective = ZHO_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist — Greater Chinese Empire
+		name = dyn_c_greater_chinese_empire
+		adjective = dyn_c_greater_chinese_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Manchu-led monarchy — Empire of the Great Qing (Qing restoration)
+		name = dyn_c_great_qing_empire
+		adjective = dyn_c_qing_imperial_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					has_culture = cu:manchu
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Mongol-led monarchy — Empire of the Great Yuan (Yuan restoration)
+		name = dyn_c_great_yuan_empire
+		adjective = dyn_c_yuan_imperial_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					has_culture = cu:mongol
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy — Empire of China
+		name = dyn_c_empire_of_china
+		adjective = dyn_c_chinese_imperial_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy — Celestial Empire
+		name = dyn_c_celestial_empire
+		adjective = dyn_c_celestial_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy — Technocratic Republic of China
+		name = dyn_c_technocratic_republic_of_china
+		adjective = dyn_c_sinocybernetic_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}
+
+# === United Earth ===
+#
+# UNE is the global hegemony — every government variant gets a name. The
+# 2nd-axis flavors (priority 5) cover succession by major-power founder:
+#   - was_formed_from = USA → Pax Americana (republic)
+#   - was_formed_from = SOV / RUS communist → Cosmic Soviet Union
+#   - was_formed_from = CHI communist → Celestial People's Federation
+#   - was_formed_from = GBR + monarchy → Imperial Federation of Earth
+#     (real Victorian-era Imperial Federation League proposal)
+#   - was_formed_from = FRA + republic → République Mondiale
+#     (French republican tradition scaled up)
+#   - was_formed_from = BHT + republic → Vasudhaiva Kutumbakam
+#     (Sanskrit: "the world is one family" — Indian foreign-policy phrase)
+#   - was_formed_from = GER + republic → Weltbund
+#     (Kantian Völkerbund / federalist; deliberately republic-only to
+#     avoid the Weltreich / Nazi-era register)
+# These fire only when both the gov trigger AND the formed-from trigger
+# match; otherwise the priority-0 generic name applies.
+
+UNE = {
+	dynamic_country_name = { # Default / republic
+		name = dyn_c_united_earth
+		adjective = UNE_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # American-led republic — Pax Americana
+		name = dyn_c_pax_americana
+		adjective = dyn_c_pax_americana_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+			was_formed_from = USA
+		}
+	}
+	dynamic_country_name = { # Communist
+		name = dyn_c_terran_socialist_federation
+		adjective = dyn_c_terran_socialist_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Soviet-led communist — Cosmic Soviet Union
+		name = dyn_c_cosmic_soviet_union
+		adjective = dyn_c_cosmic_soviet_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+			OR = {
+				was_formed_from = SOV
+				was_formed_from = RUS
+			}
+		}
+	}
+	dynamic_country_name = { # Chinese-led communist — Celestial People's Federation
+		name = dyn_c_celestial_peoples_federation
+		adjective = dyn_c_celestial_peoples_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+			was_formed_from = CHI
+		}
+	}
+	dynamic_country_name = { # French-led republic — République Mondiale
+		name = dyn_c_republique_mondiale
+		adjective = dyn_c_republique_mondiale_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+			was_formed_from = FRA
+		}
+	}
+	dynamic_country_name = { # Indian-led republic — Vasudhaiva Kutumbakam
+		name = dyn_c_vasudhaiva_kutumbakam
+		adjective = dyn_c_vasudhaiva_kutumbakam_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+			was_formed_from = BHT
+		}
+	}
+	dynamic_country_name = { # German-led republic — Weltbund (Kantian federation)
+		name = dyn_c_weltbund
+		adjective = dyn_c_weltbund_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+			was_formed_from = GER
+		}
+	}
+	dynamic_country_name = { # British-led monarchy — Imperial Federation of Earth
+		name = dyn_c_imperial_federation_of_earth
+		adjective = dyn_c_imperial_federation_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			was_formed_from = GBR
+		}
+	}
+	dynamic_country_name = { # Fascist
+		name = dyn_c_terran_imperium
+		adjective = dyn_c_terran_imperial_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Monarchy
+		name = dyn_c_empire_of_earth
+		adjective = dyn_c_terran_imperial_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy
+		name = dyn_c_holy_terran_dominion
+		adjective = dyn_c_holy_terran_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_terran_technate
+		adjective = dyn_c_terran_technate_adj
 		is_main_tag_only = yes
 		priority = 0
 		trigger = {
