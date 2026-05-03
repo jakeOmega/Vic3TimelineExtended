@@ -240,6 +240,20 @@ accepted_culture_state_count = {
 	}
 }
 
+# Override of vanilla leverage_threshold_to_invite (defined as 200 in
+# game/common/script_values/00_diplomacy_values.txt). All three consumers —
+# 28_invite_to_power_bloc, 26_join_power_bloc, and treaty article 09_join_power_bloc
+# — read this from inside `power_bloc = { leverage_advantage = { ... } }`, so the
+# scope when this value is computed is the power_bloc. Hop to power_bloc_leader
+# (country scope) to read the modifier sum contributed by techs / laws.
+# Contributors: intergovernmental_organizations (-100), globalization (-50).
+leverage_threshold_to_invite = {
+	value = 200
+	power_bloc_leader = {
+		add = modifier:country_leverage_threshold_change_add
+	}
+}
+
 power_bloc_population = {
 	value = 0
 	every_power_bloc_member = {

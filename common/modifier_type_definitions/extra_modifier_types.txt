@@ -1461,6 +1461,10 @@ country_leverage_threshold_change_add = {
 	color = bad
 	percent = no
 	script_only = yes
+	# Read by the leverage_threshold_to_invite override in
+	# common/script_values/extra_script_values.txt as
+	# `add = modifier:country_leverage_threshold_change_add`. Contributors:
+	# intergovernmental_organizations (-100), globalization (-50).
 }
 
 country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = {
