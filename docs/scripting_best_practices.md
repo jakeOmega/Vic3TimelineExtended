@@ -95,6 +95,19 @@ When in doubt, ask: "if this modifier moved the same amount on every character i
 - `add_prestige` is not a valid static modifier field — use `country_prestige_add`.
 - `add_authority` and `add_influence` are NOT valid effects — these are rate-based resources that can only be affected through modifiers (`country_authority_add`, `country_influence_add`).
 
+## One-Shot vs Duration-Multiplied Calibration
+
+A `country_*_mult` or weekly modifier from `add_modifier { days = N ... }` compounds over `N` days (~`N/7` weeks of effect). A bare `add_treasury` is paid **once**. When an event option offers cash *instead of* a multi-year modifier, size the one-shot to be competitive with the modifier's effective lifetime value:
+
+- **Reward — "cash now instead of a 5-year benefit"**: prefer vanilla's `money_amount_multiplier_very_large` (~0.25% GDP) **× 2–8** depending on how valuable the alternative modifier is. Bare `very_large` is filler-tier; for "you gave up a major bonus for cash," go higher (4–8×). Mod scale anchors (actual computed values, vanilla `event_values.txt` comments are stale):
+  - `money_amount_multiplier_large` ≈ 0.05% GDP
+  - `money_amount_multiplier_more_large` ≈ 0.1% GDP
+  - `money_amount_multiplier_very_large` ≈ 0.25% GDP
+- **Cost — "fund a 5-year program with a one-shot payment"**: scale the income/GDP fraction by **~5×** what a single year of the program would cost; the one-shot is buying the modifier's full duration. So a "spend 3% of yearly income for a 5-year decaying benefit modifier" is undersized — bump to ~15% to reflect 5 years of program funding.
+- **Anti-pattern**: flat `add_treasury = 50000`. Late-game GDPs reach $20M+, where 50k is rounding error. Switch to GDP-scaled (`money_amount_multiplier_*` or a literal `gdp × N` multiplier).
+
+When adding a new option that pairs `add_treasury` with `add_modifier`, sanity-check both magnitudes against the alternative option in the same event — the cash-vs-modifier tradeoff only feels like a real choice if the magnitudes are commensurate.
+
 ## Authority Cost Compensation (Inverse `country_authority_mult`)
 
 `country_authority_add` in a static modifier is multiplied by the country's `country_authority_mult` before being applied. So if a country has a +50% authority mult, a flat `country_authority_add = -250` becomes -375 effective. For *cost* modifiers (where the player intent is "spend exactly 250 authority"), this is wrong: high-mult countries pay more for the same option.
@@ -337,6 +350,25 @@ Inlining the check is silently buggy in two directions: it's easy to forget `law
 - Per-type caps blocked by enemy operations
 - Effects misdirected (debuffs on attackers, self-buffs on victims)
 - Cost scaling includes ops you didn't launch
+
+## Diplomatic Play Scope: Sparse Engine Surface, Asymmetric Hops
+
+The `diplomatic_play` scope has a **much smaller surface than `war` or `diplomatic_pact`**. Things to know before designing systems against it:
+
+- **Only one hop on the play scope: `initiator` → country.** There is no `target` event-target. To reach the defender from a play, iterate `every_scope_play_involved` and filter with `target_is = scope:save`. Don't assume symmetric hops by analogy with `war` / `battle` scopes.
+- **Iterators on the play scope:** `every_scope_play_involved` (all committed countries on either side), `every_scope_initiator_ally`, `every_scope_target_ally`. The latter two **exclude the lead country** — use `every_scope_play_involved` if you need everyone.
+- **Escalation has only two scriptable hooks:** trigger `escalation` (comparator on play scope) and effect `add_escalation = <int>` (play scope). **No vanilla modifier exists for escalation rate or decay** — daily escalation is hard-coded in defines (`DIPLOMATIC_PLAY_ESCALATION_DAILY = 1`, war at 100, action pause 5d up to 20d max). To make plays heat or cool faster, you have to drive `add_escalation` from script (e.g. weekly pulse + `every_diplomatic_play`). See `common/scripted_effects/dp_escalation_effects.txt` for the country-driven dispatch pattern.
+- **Country-driven dispatch beats play-driven** for cross-country modifier reads: each country runs an apply effect that iterates `every_diplomatic_play` filtered by their own role (`initiator_is = scope:mover`, `target_is = scope:mover`, or `any_scope_play_involved = { this = scope:mover }`). This sidesteps the missing `target` hop entirely.
+
+### Modifier Stacking Gotcha #2 — Per-Participant Reads on Shared Resources
+
+The same family as the per-building `_mult` pitfall, but along a different axis: **when a script-driven effect iterates participants and reads each participant's modifier value into a SHARED resource (single play, single battle, single deal), per-country contributions stack additively.** Big plays with many backers (Britain + 30 Indian princely states, large WW coalitions) explode.
+
+**Concrete case from this mod:** the original design had a `country_participant_diplomatic_play_escalation_weekly_add` modifier read once per committed country and added to the same play's escalation. With a 30-country play and `+0.5` per country, that's `+15/week` — far past intended tuning.
+
+**Rule:** Reserve "participant"-flavored modifier types for narrow, single-country uses (one-off event modifiers, unique character traits, head-of-state quirks). Never attach them to laws, techs, principles, or anything many countries can hold simultaneously. For broadly-attached "this country pushes plays harder" modifiers, use role-pinned variants (`aggressor_*`, `defender_*`) — at most one country fills each role per play, so additive stacking is bounded.
+
+**See also** the script-only modifier-type comment in `common/modifier_type_definitions/extra_modifier_types.txt` near the `country_aggressor_diplomatic_play_escalation_weekly_*` block.
 
 ## `interest_group =` Parameter in Effects Requires `ig:` Prefix
 
@@ -1865,6 +1897,8 @@ Two forms work for hyperlinking concepts in tooltip / modifier descriptions:
 
 Vanilla concept names like `concept_interest_group`, `concept_authority`, `concept_country` are always available — no need to redefine. Only define new concepts in `common/game_concepts/` when introducing genuinely new gameplay terminology.
 
+**A new concept needs three things:** (1) a registration entry in `common/game_concepts/extra_concepts.txt` (e.g. `concept_un_veto = {}`), (2) a `concept_X:0 "Display Name"` localization key, and (3) a `concept_X_desc:0 "Tooltip body"` key. Skip step 1 and `organize_loc.py` will flag the loc keys as **UNUSED** and bucket them into `te_unused_l_english.yml` — even if other loc descriptions reference them via `[concept_X]`. The reason: `find_used_keys_explicitly` (in `organize_loc.py`) only scans non-localization files for token usage, and its transitive-closure regex catches `$X$` / `@X!` / `[X.GetY]` style references but **not** plain `[concept_X]` brackets inside loc values. The `extra_concepts.txt` registration is the only way to mark the concept as used.
+
 ## Defined-But-Unused Modifiers
 
 A static modifier definition in `common/static_modifiers/` is dead code unless it appears in at least one `add_modifier`, `add_static_modifier`, or `name = X` reference somewhere. The mod's `colonial_empire_solidified_modifier` was defined but never applied (the JE's monthly pulse only added `_under_pressure` and `_crumbling`) — easy to miss.
@@ -1883,3 +1917,192 @@ To give a mod ship its own slot mods:
 4. Update the ship's `modifications = { ... }` block to point at the new IDs.
 
 **Repo example:** `common/ship_modifications/extra_ship_modifications.txt` — 108 mods across 9 modern ships, with construction goods scaled 2×–4× over vanilla parent values.
+
+## Scripted Button Gating: `visible` Hides, `possible` Greys Out
+
+`scripted_button` has two gating fields with very different UX behavior:
+
+- **`visible = { ... }`** — when any clause is false, the button **disappears entirely**. The player has no way to discover the button exists or learn what they need to do to unlock it.
+- **`possible = { custom_tooltip = { text = X ... } ... }`** — when wrapped in a `custom_tooltip`, a failing clause keeps the button **visible but greyed out**. Hovering shows the tooltip text explaining why it's disabled.
+
+**Default to `possible` for player-facing prerequisites.** Reserve `visible` for "this button is contextually meaningless right now" — e.g. a "decrease funding" button when funding is already 0, or a "disable program X" button when X isn't active. Use `possible` for "you need to unlock something" — laws, techs, institutions, modifiers.
+
+Pattern:
+
+```
+visible = {
+    has_journal_entry = je_X
+    NOT = { je:je_X = { has_modifier = some_program_active } }   # contextual
+}
+possible = {
+    custom_tooltip = {
+        text = REQUIRES_LAW_TT
+        has_law = law_type:law_ministry_of_culture
+    }
+    custom_tooltip = {
+        text = REQUIRES_TECH_TT
+        has_technology_researched = mass_media
+    }
+}
+```
+
+Each `custom_tooltip { text = ... <triggers> }` block fails as a unit — if the inner triggers are false, the tooltip text shows. Stacking multiple `custom_tooltip` blocks in `possible` produces stacked failure-reason lines, which is the right UX for "explain every missing prereq."
+
+**Repo example:** `common/scripted_buttons/cultural_hegemony_buttons.txt` — the 5 enable buttons (increase funding, world expo, cultural institutes, global media, protectionism) keep their `has_law` and `has_technology_researched` gates in `possible` with `CH_REQUIRES_MINISTRY_TT` / `CH_REQUIRES_MASS_MEDIA_TT` tooltips. They stay visible-but-greyed when the player lacks the law or tech, so the JE always shows the player what's available rather than a blank panel.
+
+## Triggered Option Names: `name = { trigger=... text=... }`
+
+Event option labels can be conditional on context. Repeat the `name` field with each variant gated by a `trigger`; first match wins. No `else` / fallback syntax — use `trigger = { always = yes }` as the catch-all.
+
+```
+option = {
+    name = {
+        trigger = { scope:un_vote_target ?= this }
+        text = un_vote.1.a_target
+    }
+    name = {
+        trigger = { always = yes }
+        text = un_vote.1.a
+    }
+    default_option = yes
+    ...
+}
+```
+
+The `?=` operator is exists-aware: `scope:foo ?= this` returns false if `scope:foo` doesn't exist, true if it exists and equals `this`. This lets the same option block work across event topics that don't all set the same saved scope.
+
+**Vanilla example:** `iberia_events/carlist_war_events.txt` carlist_war.1 — uses the pattern with `c:SPA ?= this` and `c:SPC ?= this`. Hard to find by grep because almost no other vanilla event uses it; remember the file path.
+
+**Repo example:** `events/un_vote_events.txt` un_vote.1 options A and B — target-perspective labels keyed off `scope:un_vote_target ?= this`.
+
+## Orphan Tech Gates: When a JE's `possible` Moves, Its Buttons & Diplo Actions Don't Follow
+
+When a journal entry's activation gate (`possible`) is rewritten to use a different signal, every gate downstream — `scripted_button` `visible` clauses, `diplomatic_action` `potential` clauses, AI logic guards inside the JE's own `on_monthly_pulse` — keeps the *old* gate. The engine never warns about this; the JE simply activates and exposes a panel where every interactive control is silently filtered out.
+
+**Repo example:** `je_covert_warfare`'s `possible` was originally `has_technology_researched = television`. It was rewritten in two steps to `covert_operation_max_slots >= <rank-baseline + 1>`. The two funding `scripted_button`s, all 9 `covert_*_action` diplomatic actions, and the AI funding-management `if = { limit = { is_player = no has_technology_researched = television } }` block kept the orphan gate. Result: a country that researches `mainframe_computers` (era 7, the first slot-granting tech, with a prereq chain that does not pass through `television`) gets the JE active with all funding buttons hidden, all diplomatic actions invisible, and the AI funding logic skipped.
+
+**Audit recipe** — when changing a JE's `possible`, grep the whole system for the old gate:
+
+```bash
+grep -rn 'has_technology_researched = <old_tech>' \
+    common/scripted_buttons/<system>*.txt \
+    common/diplomatic_actions/<system>*.txt \
+    common/journal_entries/je_<system>.txt \
+    common/scripted_effects/<system>*.txt \
+    events/<system>_events.txt
+```
+
+Either drop the now-redundant gate (preferred — the JE's `possible` becomes the single source of truth) or update each downstream clause to the new gate. Comments referring to the old gate ("Base (television): cap is 1") are also stale and should be fixed.
+
+## A Good's Effective Era Lives in Its Production Chain
+
+Goods can be defined without an `unlock_goods` block (in `common/goods/` or via tech `unlock_goods = { X }`). It's tempting to read "no `unlock_goods`" as "always available" — but the good is still effectively era-gated by the *PMs that produce it*. If the earliest PM with `goods_output_X_add` is locked behind an era-7 tech, then `X` is *de facto* an era-7 good even though the goods file is silent.
+
+**Repo example:** `electronic_components` (defined in `common/goods/timeline_extended_extra_goods.txt` with no tech gate) is *de facto* era-7 because its only producing PMs (`pm_transistors`, `pm_integrated_circuits`, the company-flavor PMs in `unique_pms.txt`) are gated by era-7+ techs. An era-6 ship modification asking for it is a mismatch even though the goods file shows no formal restriction.
+
+**Audit recipe** — to find a good's effective era:
+
+```bash
+# 1. Find every PM that outputs the good
+awk '/^pm_|^REPLACE:pm_|^INJECT:pm_/{cur=$0} /goods_output_X_add/{print cur}' common/production_methods/*.txt | sort -u
+
+# 2. For each candidate PM, look up its unlocking_technologies block
+# 3. The earliest tech's era is the good's effective era
+```
+
+This matters when auditing era-appropriateness of goods *consumption* — ship modifications, building inputs, military unit costs.
+
+## `show_as_tooltip = { ... }` — Render Effect Tooltip Without Executing
+
+Engine pattern: wrap effects in `show_as_tooltip = { ... }` and the engine renders the auto-generated tooltip (modifier name + every field, relation changes, etc.) but does **not** execute the effects. Use it wherever the player needs to see "if you do X, here's what you'll get" before committing — vote previews, button hovers that forecast a downstream resolution, decision-stage forecasts of effects that fire later.
+
+Repo example: `events/un_vote_events.txt` `un_vote.1` option A wraps a per-topic `if = { limit = { has_global_variable = un_vote_topic_X } add_modifier = { name = ... } }` switch in `show_as_tooltip` so voters see the treaty modifier they would receive if the resolution passes — the actual `add_modifier` runs later in `un_vote.3` option A, not at vote-cast time.
+
+Don't pair `show_as_tooltip = { add_modifier = X }` with a separate scripted-effect call that *also* adds X — the engine tooltip will list the modifier twice. Either preview-only (the real apply is elsewhere) or apply-only (no wrapper needed). When you need both visibility and execution at the same site, just write `add_modifier` directly at the option level — the engine auto-tooltips it.
+
+## Multi-Stage Event Flows: `add_modifier` Visibility Across Audience Splits
+
+Systems built as event chains (propose → ballot → result-for-proposer → notify-other-members) split the audience across stages — each stage's events fire for a different country set. A modifier added inside stage N is invisible to anyone whose audience is stage M. When a player reports "this modifier is applied invisibly," the diagnosis usually comes from one of:
+
+1. **Wrong-stage application.** The `add_modifier` lives in a stage the player never reaches. Example: the proposer never sees `un_vote.3` (it explicitly excludes `THIS = ROOT`), so any modifier applied only there will never reach the proposer; the proposer's modifier needs to live in the proposing event (`un_events.X` option A) or `un_vote.2`.
+2. **Buried under scripted-effect indirection.** `add_modifier` inside a scripted effect inside an `if = { limit }` inside an option block is *technically* auto-tooltipped, but rendered deeply enough that players miss it. Hoist the `add_modifier` directly into the option block when the visibility matters. Keep the scripted effect for *residual* logic (infamy, leverage, contributor pledges) where individual line visibility is less critical.
+3. **`hidden_effect = { ... }` blocks.** Anything wrapped here is suppressed from the option tooltip entirely. Reserve for genuine bookkeeping (variable cleanup, every_country fan-out) — never for the modifier the player most cares about.
+
+When designing a multi-stage flow, name the audiences explicitly ("proposer", "yes-voter", "no-voter who accepts", "no-voter who refuses") and trace which stage's options each audience sees. A modifier needs to live where the audience that should perceive it actually has an option to click.
+
+## Tooltip Auto-Rendering: What the Engine Renders, What It Doesn't
+
+The engine auto-generates tooltip text for some effect-block contents and stays silent on others. Knowing which is which determines whether you can rely on engine-native rendering or need to author / auto-generate the tooltip text yourself.
+
+**Auto-rendered (visible without `custom_tooltip`):**
+- `add_modifier = { ... }` — name + every field with formatted values + duration/decay.
+- `remove_modifier = X` — modifier name with effect inversion.
+- Most relation/event-target effects with built-in tooltip strings (e.g. `change_relations`, `add_treasury`, `change_infamy`).
+
+**Silent (no auto-tooltip):**
+- `change_variable`, `set_variable`, `change_global_variable`, `set_global_variable` — variable changes don't surface to the player at all. Critical for systems that track state in vars (e.g. `un_authority`, banking-cycle counters): the player won't see the delta unless you author it.
+- `trigger_event` — the chained event isn't previewed.
+- Scope iterators (`every_country`, `every_scope_state`, etc.) — the inner block's effects don't bubble up.
+- Anything inside `hidden_effect = { ... }` (intentional).
+
+**Antipattern**: wrapping the entire effect block in `custom_tooltip = { text = "X_DESC" ... add_modifier = ... change_variable = ... }`. The text replaces the auto-render entirely — so the modifier values that *would* have rendered automatically are now hand-typed in `X_DESC`, and they drift from the modifier definitions over time. The mod's `un_buttons.txt` had this for years before the autogen rewrite.
+
+**The two clean fixes:**
+
+1. **Engine-native + visible variable lines**: leave `add_modifier`/`remove_modifier` outside any `custom_tooltip` so the engine renders them with current values; wrap the variable-change line(s) in a small `custom_tooltip = { text = X }` so the player still sees them. Wrap implementation details (`set_global_variable`, `trigger_event`, `every_country` fan-out) in `hidden_effect`. Best when there's exactly one or two variable changes worth surfacing.
+
+2. **Loc-splice autogen pattern**: hand-write a narrative `*_DESC` key with `$..._EFFECTS$` substitution mid-string; have a Python generator emit the `*_EFFECTS` keys from button-source + modifier-definition introspection. The engine resolves `$X$` at display time, so numbers stay synced without relying on engine auto-render. Best when the existing tooltip layout consolidates many effects (modifier values + multiple variable changes + qualifiers) and you want to preserve that layout.
+
+**Repo examples:**
+- `gen_un_button_descs.py` — the loc-splice pattern. Walks each in-scope UN button's effect block to collect `add_modifier`/`remove_modifier` calls and `change_variable un_authority` deltas, looks up modifier values in `extra_modifiers.txt`, emits `UN_*_EFFECTS` loc keys. The hand-written `UN_*_DESC` keys reference `$..._EFFECTS$` to splice the auto-generated mechanical text into the narrative preamble.
+- `gen_pb_principle_unlock_descs.py` — sibling generator for `country_*_pb_principles_bool_desc` keys. Same parse-source-and-emit-loc shape.
+
+## `organize_loc.py` Will Reroute Auto-Gen Loc Files Without a Categorize Rule
+
+A new generator that writes its own `te_<topic>_l_english.yml` file will *appear to work* — the file is there after the generator runs — but the next `organize_loc.py` invocation (post-load, every full `/reload`) sweeps the keys back into `te_miscellaneous_l_english.yml` based on `categorize_key`'s prefix rules, leaving the dedicated file empty.
+
+**The fix is two lines in `organize_loc.py`:**
+
+```python
+# Add to the CATEGORIES list (controls output filename via `te_{cat.lower()}_l_english.yml`)
+"UN_BUTTON_EFFECTS",
+
+# Add to categorize_key (matches before the broad fallback rules)
+if key.startswith("UN_") and key.endswith("_EFFECTS"):
+    return "UN_BUTTON_EFFECTS"
+```
+
+**Existing examples** in the same file:
+- `POWER_BLOC_UNLOCKS` rule routes `*_pb_principles_bool` and `*_pb_principles_bool_desc` to `te_power_bloc_unlocks_l_english.yml` (owned by `gen_pb_principle_unlock_descs.py`).
+- `UN_BUTTON_EFFECTS` rule routes `UN_*_EFFECTS` to `te_un_button_effects_l_english.yml` (owned by `gen_un_button_descs.py`).
+
+Always pair a new generator that owns its own loc file with a `categorize_key` rule. Trying to debug "my generator wrote keys but they're showing up in te_miscellaneous" is faster if you know to look here first.
+
+## Vanilla Script-Value Overrides Are the Bridge Between `script_only` Modifiers and Engine Hardcoded Values
+
+When a vanilla `common/script_values/*.txt` script value is referenced from engine hardcoded paths (diplomatic action `possible` blocks, treaty article gates, ai_chance evaluators, etc.), redefining that script value in `common/script_values/extra_script_values.txt` is the supported way to modify the underlying gameplay number — the mod's later-loaded definition replaces vanilla's at game load (script values do not get the `Duplicated key X will not be created` treatment that entity types do).
+
+**Useful pattern**: combine a `script_only = yes` modifier with a vanilla script-value override that reads it.
+
+```
+# common/modifier_type_definitions/extra_modifier_types.txt
+country_leverage_threshold_change_add = {
+    color = bad
+    percent = no
+    script_only = yes
+}
+
+# common/script_values/extra_script_values.txt — overrides vanilla's literal `= 200`
+leverage_threshold_to_invite = {
+    value = 200
+    power_bloc_leader = { add = modifier:country_leverage_threshold_change_add }
+}
+```
+
+Tech / law / decree / institution `modifier = { country_leverage_threshold_change_add = -100 }` blocks contribute additively, the override sums them via `modifier:X`, the engine reads the result wherever it consumed the original literal. Tooltips on the contributors auto-render the modifier line.
+
+**Failure mode**: the modifier definition + tech contributions are easy to write and look correct, but if the script-value override is missing (or accidentally deleted in a refactor), the contributions are summed into a value that no one reads. No log signal — the modifier appears in tooltips, the techs appear to apply it, but the gameplay number stays at the vanilla literal.
+
+**Repo example: `country_leverage_threshold_change_add`**. This pattern was working until commit `5e83824` (April 7, 2026) deleted the `leverage_threshold_to_invite` script-value override from `extra_script_values.txt` as part of an unrelated covert-ops refactor. The modifier definition + tech contributions stayed in place, so the symptoms looked like "leverage threshold reduction broken" but no error was logged. Restored 2026-05-03 with the simpler `add = modifier:X` form (the deleted version had hardcoded per-tech `subtract` blocks).
+
+**Audit recipe** when a `script_only = yes` modifier looks broken: search `common/script_values/` (mod *and* vanilla) for the consumer. If the consumer is a vanilla script value, confirm the mod has an override redefining it. If the consumer is gone, restore it. If neither has a consumer, the modifier is genuinely unread and the tech contributions are dead code.

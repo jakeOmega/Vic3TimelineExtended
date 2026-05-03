@@ -135,18 +135,18 @@
 			}
 		}
 
-		# 5. Security Council
+		# 5. Security Council (uses permanent-member status for veto-eligibility display)
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_security_council_member
-				trigger = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } }
+				trigger = { is_un_permanent_member = yes }
 			}
 			triggered_desc = {
 				desc = je_un_security_council_nonmember
 				trigger = {
 					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					any_country = {
-						je:je_united_nations ?= { has_modifier = un_security_council_modifier }
+						is_un_permanent_member = yes
 						count >= 1
 					}
 				}
@@ -211,18 +211,31 @@
 	on_monthly_pulse = {
 		effect = {
 			# ---- Security Council cleanup (all countries with JE) ----
+			# Strip SC seat when leaving the UN. Sub-GP rank no longer immediately
+			# strips the seat — permanent members keep it for 10 years sub-GP
+			# (eligibility check below). Non-permanent SC seats are no longer
+			# created in the new model, but legacy saves may still have them.
 			if = {
 				limit = {
 					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-					OR = {
-						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-						NOT = { country_rank >= rank_value:great_power }
-					}
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				}
+				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+				je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+			}
+			# Strip non-permanent SC seats from sub-GP holders (legacy save migration).
+			if = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
+					NOT = { is_un_permanent_member = yes }
+					NOT = { country_rank >= rank_value:great_power }
 				}
 				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 			}
 
 			# ---- Treaty obligation auto-enrollment ----
+			# GPs auto-enrolled by treaty get a permanent seat only during the
+			# founding window (matches the un_join_button rules).
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
@@ -232,14 +245,11 @@
 				if = {
 					limit = {
 						country_rank >= rank_value:great_power
-						NOT = {
-							any_country = {
-								je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-								count >= 5
-							}
-						}
+						has_global_variable = un_founding_window_active
+						un_permanent_seat_count < 5
 					}
 					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+					je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
 				}
 			}
 
@@ -389,19 +399,41 @@
 					je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
 				}
 
-				# ---- Security Council seat award ----
+				# ---- Permanent Member eligibility re-check ----
+				# Permanent seats are granted via un_join_button during the founding
+				# window. Here we track sub-GP duration: a permanent member that
+				# falls below GP rank for 10+ years (120 months) loses the seat.
+				# (Captures real instability — e.g., a former GP whose collapse is
+				# permanent eventually loses its veto. See Q2 in the design doc.)
 				if = {
 					limit = {
-						country_rank >= rank_value:great_power
-						NOT = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } }
-						NOT = {
-							any_country = {
-								je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-								count >= 5
-							}
-						}
+						is_un_permanent_member = yes
+						NOT = { country_rank >= rank_value:great_power }
 					}
-					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+					if = {
+						limit = { NOT = { has_variable = un_permanent_subgp_months } }
+						set_variable = { name = un_permanent_subgp_months value = 0 }
+					}
+					change_variable = { name = un_permanent_subgp_months add = 1 }
+				}
+				# Reset counter when permanent member regains GP rank
+				if = {
+					limit = {
+						is_un_permanent_member = yes
+						country_rank >= rank_value:great_power
+						has_variable = un_permanent_subgp_months
+					}
+					remove_variable = un_permanent_subgp_months
+				}
+				# Strip permanent status after sustained sub-GP rank
+				if = {
+					limit = { un_permanent_member_eligibility_lost = yes }
+					je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+					je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+					if = {
+						limit = { has_variable = un_permanent_subgp_months }
+						remove_variable = un_permanent_subgp_months
+					}
 				}
 			}
 

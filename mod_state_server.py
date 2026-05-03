@@ -19,6 +19,7 @@ import os
 import re
 import signal
 import socket
+import subprocess
 import sys
 import time
 import traceback
@@ -37,6 +38,9 @@ from path_constants import (
     doc_path,
     mod_path,
     vanilla_docs_path,
+    vanilla_snapshot_docs_path,
+    vanilla_source_repo_path,
+    mod_loaded_docs_path,
     game_logs_path,
 )
 
@@ -373,7 +377,51 @@ def _ensure_single_instance(replace: bool = False) -> bool:
 # ---------------------------------------------------------------------------
 # Engine docs parser
 # ---------------------------------------------------------------------------
-ENGINE_DOCS_DIR = vanilla_docs_path
+# Two possible sources for the script_docs output:
+# - vanilla_snapshot_docs_path: authoritative vanilla-only snapshot, written by
+#   running `script_docs` in the in-game console without the mod loaded.
+# - mod_loaded_docs_path: the runtime path; whatever the user last wrote there
+#   (could be vanilla- OR mod-loaded depending on context).
+# We prefer the vanilla snapshot when available so we can confidently tag every
+# parsed entry's origin. If the snapshot is missing we fall back to runtime and
+# tag entries `unknown` (we re-tag mod-source-derived entries below in any case).
+ENGINE_DOCS_DIR = vanilla_docs_path  # legacy default; superseded by _engine_docs_source()
+
+
+def _engine_docs_source() -> tuple[str, str]:
+    """Return (chosen_directory, source_label) — 'vanilla_snapshot' if the
+    repo-mirror snapshot exists, else 'mod_loaded' (fallback)."""
+    if os.path.isdir(vanilla_snapshot_docs_path) and any(
+        os.path.isfile(os.path.join(vanilla_snapshot_docs_path, f))
+        for f in ("modifiers.log", "effects.log", "triggers.log")
+    ):
+        return vanilla_snapshot_docs_path, "vanilla_snapshot"
+    return mod_loaded_docs_path, "mod_loaded"
+
+
+def _load_vanilla_repo_head_info() -> dict:
+    """Return {sha, sha_short, date_iso, date_unix} for the HEAD commit of the
+    vanilla source mirror, or {} if not a git repo / not available."""
+    repo = vanilla_source_repo_path
+    if not os.path.isdir(os.path.join(repo, ".git")):
+        return {}
+    try:
+        result = subprocess.run(
+            ["git", "-C", repo, "log", "-1", "--format=%H %ct %ai"],
+            capture_output=True, text=True, timeout=5, check=True,
+        )
+        parts = result.stdout.strip().split(maxsplit=2)
+        if len(parts) >= 3:
+            sha, ct, ai = parts
+            return {
+                "sha": sha,
+                "sha_short": sha[:8],
+                "date_unix": int(ct),
+                "date_iso": ai,
+            }
+    except (subprocess.SubprocessError, OSError, ValueError) as e:
+        logger.warning(f"Failed to read vanilla repo HEAD: {e}")
+    return {}
 
 def _parse_effects_triggers_log(filepath: str) -> list[dict]:
     """Parse effects.log / triggers.log format:
@@ -683,6 +731,8 @@ def _pattern_token(pattern: str) -> str:
 
 
 engine_docs_sources: dict = {}  # {key: filesystem path of source .log}
+engine_docs_source_label: str = ""  # "vanilla_snapshot" or "mod_loaded" — which path was read
+_vanilla_snapshot_contamination: list = []  # mod-only script_only modifier names found in the "vanilla" snapshot
 pattern_catalog: list[dict] = []  # Loaded from common/_meta/modifier_patterns.yml
 pattern_index: dict = {}          # {pattern_str: {placeholder_value: engine_doc_entry}}
 discovered_patterns: list[dict] = []  # Auto-detected patterns not in catalog
@@ -1200,6 +1250,290 @@ def _scan_mod_mtime() -> float | None:
     return latest or None
 
 
+# ---------------------------------------------------------------------------
+# Duplicate-image detection
+# ---------------------------------------------------------------------------
+# Entity types where vanilla holds the convention "one image per entity" — any
+# image reuse inside the mod (or between mod and vanilla) is a likely placeholder
+# that was never replaced. Each entry: (entity_type, field_name).
+#
+# Permissive types (events, journal entries, production methods, ideologies,
+# combat units) are deliberately omitted — vanilla shares images across many
+# entities of those types by design. They simply aren't scanned.
+_IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
+    ("Buildings",       "icon"),
+    ("Goods",           "texture"),
+    ("Decrees",         "texture"),
+    ("Technologies",    "texture"),
+    ("Interest Groups", "texture"),
+    ("Laws",            "icon"),
+]
+
+# YAML file → canonical entity-type-name mapping. The YAML is keyed by lowercase
+# slug for ergonomic editing; the in-memory map uses the canonical names.
+_ALLOWLIST_TYPE_SLUGS: dict[str, str] = {
+    "buildings":       "Buildings",
+    "goods":           "Goods",
+    "decrees":         "Decrees",
+    "technologies":    "Technologies",
+    "interest_groups": "Interest Groups",
+    "laws":            "Laws",
+}
+
+_IMAGE_ALLOWLIST_PATH = os.path.join(
+    mod_path, "common", "_meta", "duplicate_image_allowlist.yml"
+)
+
+
+def _load_image_allowlist(path: str | None = None) -> dict:
+    """Load the duplicate-image allowlist YAML.
+
+    Each entry may use either form:
+      - image: gfx/foo.dds        # singular, for path-only dupes
+        entities: [a, b]
+        reason: ...
+      - images: [gfx/x, gfx/y]    # plural, for content-identical dupes
+        entities: [a, b]
+        reason: ...
+
+    Returns: {canonical_entity_type: {(frozenset(images), frozenset(entity_ids)): reason}}.
+    Returns {} if the file doesn't exist or is empty (allowlist is optional).
+    """
+    target = path or _IMAGE_ALLOWLIST_PATH
+    if not os.path.isfile(target):
+        return {}
+    try:
+        import yaml
+        with open(target, "r", encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or {}
+    except Exception as e:
+        print(f"WARNING: failed to load image allowlist {target}: {e}")
+        return {}
+
+    out: dict = {}
+    if not isinstance(raw, dict):
+        return out
+    for slug, entries in raw.items():
+        canonical = _ALLOWLIST_TYPE_SLUGS.get(str(slug).lower())
+        if not canonical or not isinstance(entries, list):
+            continue
+        bucket = out.setdefault(canonical, {})
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            # Accept either `image:` (singular string) or `images:` (list).
+            images_field = entry.get("images")
+            if images_field is None:
+                single = entry.get("image")
+                images_field = [single] if single else []
+            if not isinstance(images_field, list) or not images_field:
+                continue
+            entities = entry.get("entities") or []
+            reason = entry.get("reason", "")
+            if not isinstance(entities, list) or len(entities) < 2:
+                continue
+            images_key = frozenset(str(p) for p in images_field if p)
+            entities_key = frozenset(str(e) for e in entities)
+            if not images_key or not entities_key:
+                continue
+            bucket[(images_key, entities_key)] = str(reason)
+    return out
+
+
+def _resolve_image_path(rel_path: str) -> str | None:
+    """Resolve a Paradox-relative image path (`gfx/...`) to an absolute file path.
+
+    Mod overlay first (so a mod-shipped icon wins over a vanilla one of the
+    same name), vanilla fallback. Returns None if neither location has the file.
+    """
+    if not rel_path:
+        return None
+    candidates = (
+        os.path.join(mod_path, rel_path),
+        os.path.join(base_game_path, "game", rel_path),
+    )
+    for c in candidates:
+        if os.path.isfile(c):
+            return c
+    return None
+
+
+def _image_content_hash(rel_path: str) -> str:
+    """Return a stable identity for an image path's actual on-disk content.
+
+    Returns 'md5:<hex>' when the file exists. If neither mod nor vanilla has
+    the file (missing-asset case, caught elsewhere by the debug.log digest),
+    returns 'path:<rel_path>' so two missing distinct paths still cluster
+    independently — i.e. the detector falls back to path identity for missing
+    files rather than crashing.
+    """
+    abs_path = _resolve_image_path(rel_path)
+    if abs_path is None:
+        return f"path:{rel_path}"
+    try:
+        import hashlib
+        h = hashlib.md5()
+        with open(abs_path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                h.update(chunk)
+        return f"md5:{h.hexdigest()}"
+    except OSError:
+        return f"path:{rel_path}"
+
+
+def _collect_image_uses(entity_type: str, field: str, *,
+                        include_vanilla: bool) -> tuple[dict[str, list[str]], set[str]]:
+    """Return (image_path → [entity_id, …], set_of_mod_only_ids) for one type."""
+    if not ms or entity_type not in ms.mod_parsers:
+        return {}, set()
+    full = ms.mod_parsers[entity_type].data or {}
+    base = (ms.base_parsers[entity_type].data
+            if entity_type in ms.base_parsers else {}) or {}
+    mod_only_ids = set(full.keys()) - set(base.keys())
+    uses: dict[str, list[str]] = {}
+    for entity_id, raw in full.items():
+        data = get_entity_data(raw)
+        if not isinstance(data, dict):
+            continue
+        image = get_field(data, field)
+        if not isinstance(image, str) or not image:
+            continue
+        # Strip surrounding quotes preserved by the parser so the path matches
+        # naturally against unquoted entries in the YAML allowlist.
+        if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
+            image = image[1:-1]
+        if image:
+            uses.setdefault(image, []).append(entity_id)
+    return uses, mod_only_ids
+
+
+def _find_duplicate_images(*, include_vanilla: bool = False,
+                           types: list[str] | None = None,
+                           allowlist: dict | None = None,
+                           include_allowlisted: bool = False,
+                           hasher=None) -> dict:
+    """Build the duplicate-image report.
+
+    Groups entities by content-hash (md5 of the resolved file), so two entities
+    that point at different filenames but byte-identical .dds files still get
+    flagged as a duplicate cluster — the case path-only matching misses.
+
+    Parameters:
+      include_vanilla     — include clusters with no mod-side entities.
+      types               — restrict scan to these canonical entity-type names.
+      allowlist           — pre-built allowlist dict (else loaded from the YAML).
+      include_allowlisted — emit the `allowlisted` array in the response.
+      hasher              — callable(rel_path) → hash string. Defaults to
+                            `_image_content_hash`. Tests inject a fake hasher
+                            so they don't need real .dds files on disk.
+
+    Cluster shape:
+      {"entity_type": str,
+       "images":      [sorted paths, len 1 if pure path-dupe else >1],
+       "entities":    [sorted entity ids],
+       "kind":        "path" | "content",
+       "reason":      <only present for allowlisted clusters>}
+    """
+    if allowlist is None:
+        allowlist = _load_image_allowlist()
+    if hasher is None:
+        hasher = _image_content_hash
+
+    scanned_types: list[str] = []
+    flagged: list[dict] = []
+    allowlisted: list[dict] = []
+
+    for entity_type, field in _IMAGE_FIELDS_BY_TYPE:
+        if types is not None and entity_type not in types:
+            continue
+        scanned_types.append(entity_type)
+        path_to_entities, mod_only_ids = _collect_image_uses(
+            entity_type, field, include_vanilla=include_vanilla
+        )
+        # Hash each unique path once.
+        path_to_hash = {p: hasher(p) for p in path_to_entities}
+
+        # Group entities by content hash.
+        hash_to_paths: dict[str, set[str]] = {}
+        hash_to_entities: dict[str, list[str]] = {}
+        for path, ents in path_to_entities.items():
+            h = path_to_hash[path]
+            hash_to_paths.setdefault(h, set()).add(path)
+            hash_to_entities.setdefault(h, []).extend(ents)
+
+        type_allowlist = allowlist.get(entity_type, {})
+        for h, ents in hash_to_entities.items():
+            if len(ents) < 2:
+                continue
+            if not include_vanilla and not (set(ents) & mod_only_ids):
+                continue
+            paths = hash_to_paths[h]
+            kind = "content" if len(paths) > 1 else "path"
+            cluster = {
+                "entity_type": entity_type,
+                "images": sorted(paths),
+                "entities": sorted(set(ents)),
+                "kind": kind,
+            }
+            allow_key = (frozenset(paths), frozenset(ents))
+            if allow_key in type_allowlist:
+                cluster["reason"] = type_allowlist[allow_key]
+                allowlisted.append(cluster)
+            else:
+                flagged.append(cluster)
+
+    flagged.sort(key=lambda c: (c["entity_type"], c["images"]))
+    allowlisted.sort(key=lambda c: (c["entity_type"], c["images"]))
+
+    report: dict = {
+        "summary": {
+            "flagged": len(flagged),
+            "allowlisted": len(allowlisted),
+            "scanned_entity_types": scanned_types,
+        },
+        "flagged": flagged,
+    }
+    if include_allowlisted:
+        report["allowlisted"] = allowlisted
+    return report
+
+
+def _render_duplicate_images_text(report: dict, *, include_allowlisted: bool = False) -> str:
+    """Render the duplicate-image report as plain text for ?format=text."""
+    summary = report.get("summary", {})
+    out = [
+        f"Duplicate images: {summary.get('flagged', 0)} flagged, "
+        f"{summary.get('allowlisted', 0)} allowlisted",
+        f"Scanned types: {', '.join(summary.get('scanned_entity_types', []))}",
+        "",
+    ]
+
+    def _format_cluster(c: dict) -> list[str]:
+        kind_tag = "CONTENT" if c.get("kind") == "content" else "PATH"
+        lines = [f"  [{c['entity_type']}] [{kind_tag}]"]
+        for p in c["images"]:
+            lines.append(f"    image: {p}")
+        for eid in c["entities"]:
+            lines.append(f"      - {eid}")
+        return lines
+
+    flagged = report.get("flagged", [])
+    if flagged:
+        out.append(f"FLAGGED ({len(flagged)}):")
+        for c in flagged:
+            out.extend(_format_cluster(c))
+    else:
+        out.append("FLAGGED: none")
+    if include_allowlisted and report.get("allowlisted"):
+        out.append("")
+        out.append(f"ALLOWLISTED ({len(report['allowlisted'])}):")
+        for c in report["allowlisted"]:
+            reason = c.get("reason") or "(no reason given)"
+            out.extend(_format_cluster(c))
+            out.append(f"      reason: {reason}")
+    return "\n".join(out) + "\n"
+
+
 def _render_engine_coverage_md(report: dict) -> str:
     """Render the JSON validation report as Markdown for docs/."""
     out = []
@@ -1306,11 +1640,202 @@ def _build_pattern_data():
     return pattern_catalog, pattern_index, discovered_patterns, vocabs
 
 
+def _infer_modifier_mask(name: str) -> str:
+    """Infer the modifier mask from the name prefix. Mirrors vanilla naming
+    conventions; defaults to 'country' since most mod-declared modifiers are
+    country-scoped."""
+    for prefix, mask in (
+        ("state_building_", "state-building"),
+        ("building_group_", "building-group"),
+        ("building_", "building"),
+        ("character_", "character"),
+        ("country_", "country"),
+        ("interest_group_", "interest-group"),
+        ("political_movement_", "political-movement"),
+        ("power_bloc_", "power-bloc"),
+        ("ship_", "ship"),
+        ("state_", "state"),
+        ("unit_", "unit"),
+        ("battle_condition_", "battle-condition"),
+        ("goods_input_", "goods-input"),
+        ("goods_output_", "goods-output"),
+        ("party_", "party"),
+        ("religion_", "religion"),
+    ):
+        if name.startswith(prefix):
+            return mask
+    return "country"
+
+
+def _find_modifier_definition_file(name: str) -> str | None:
+    """Best-effort scan of common/modifier_type_definitions/ to find which file
+    defines a given modifier-type key. Returns repo-relative path or None."""
+    dir_path = mod_paths.get("Modifier Types")
+    if not dir_path or not os.path.isdir(dir_path):
+        return None
+    needle = re.compile(rf"^{re.escape(name)}\s*=\s*\{{", re.MULTILINE)
+    for fname in sorted(os.listdir(dir_path)):
+        if not fname.endswith(".txt"):
+            continue
+        full = os.path.join(dir_path, fname)
+        try:
+            with open(full, "r", encoding="utf-8-sig", errors="replace") as f:
+                if needle.search(f.read()):
+                    return os.path.relpath(full, mod_path)
+        except OSError:
+            continue
+    return None
+
+
+def _union_mod_modifier_types(engine_docs: dict) -> None:
+    """Walk the mod-only `Modifier Types` declarations and union them into
+    engine_docs['modifiers'] with origin='mod'. Mod entries shadow vanilla
+    entries on duplicate names (intentional mod redeclaration for cosmetics).
+
+    Vanilla also has modifier_type_definitions, so we diff mod_parsers against
+    base_parsers to isolate mod-only declarations — otherwise we'd flag every
+    vanilla-defined modifier as `origin: mod`."""
+    global _vanilla_snapshot_contamination
+    _vanilla_snapshot_contamination = []
+    if not ms:
+        return
+    mod_data = ms.mod_parsers.get("Modifier Types")
+    base_data = ms.base_parsers.get("Modifier Types")
+    if mod_data is None:
+        return
+    base_keys = set(base_data.data.keys()) if base_data is not None else set()
+    mod_types = {
+        k: v for k, v in mod_data.data.items() if k not in base_keys
+    }
+    if not mod_types:
+        return
+
+    # Index existing entries by name for O(1) lookup
+    by_name = {e.get("name"): i for i, e in enumerate(engine_docs.get("modifiers", []))}
+
+    def _unwrap(v):
+        """Pull the value out of a ('=', X) tuple; pass-through otherwise."""
+        if isinstance(v, tuple) and len(v) >= 2:
+            return v[1]
+        return v
+
+    new_count = 0
+    redeclare_count = 0
+    for name, raw in mod_types.items():
+        data = _flatten_entity_data(raw)
+        is_script_only = str(_unwrap(data.get("script_only", ""))).lower() == "yes"
+        is_boolean = str(_unwrap(data.get("boolean", ""))).lower() == "yes"
+        defined_in = _find_modifier_definition_file(name)
+
+        if name in by_name:
+            # The modifier IS in the vanilla snapshot — engine recognizes it
+            # natively. The mod's declaration is cosmetic (color, percent,
+            # decimals, optionally script_only). Annotate the existing entry
+            # rather than replacing it so origin stays "vanilla".
+            existing = engine_docs["modifiers"][by_name[name]]
+            existing["mod_redeclares"] = True
+            existing["mod_redeclared_in"] = defined_in
+            if is_script_only:
+                existing["mod_script_only"] = True
+                # Contamination signal: a script_only modifier in the "vanilla"
+                # snapshot means the snapshot was actually mod-loaded. Track for
+                # surfacing in /status.
+                _vanilla_snapshot_contamination.append(name)
+            redeclare_count += 1
+        else:
+            # Mod-only declaration — name not in the vanilla snapshot.
+            display_name = ms.localize(name) if ms else None
+            if display_name == name:
+                display_name = None
+            engine_docs["modifiers"].append({
+                "name": name,
+                "mask": _infer_modifier_mask(name),
+                "display_name": display_name or "",
+                "description": "",
+                "origin": "mod",
+                "is_script_only": is_script_only,
+                "is_boolean": is_boolean,
+                "defined_in": defined_in,
+            })
+            new_count += 1
+
+    logger.info(
+        f"Mod modifier-type union: {new_count} mod-only declarations added; "
+        f"{redeclare_count} cosmetic redeclarations of vanilla modifiers annotated"
+    )
+
+
+def _union_mod_custom_localization(engine_docs: dict) -> None:
+    """Walk common/customizable_localization/ and union entries into
+    engine_docs['custom-localization'] with origin='mod'. Skip if the directory
+    is empty or absent (mod doesn't define any). MVP: parses by entity-key
+    only — display names / scopes come from the engine snapshot when present."""
+    cust_dir = os.path.join(mod_path, "common", "customizable_localization")
+    if not os.path.isdir(cust_dir):
+        return
+
+    by_name = {
+        e.get("name"): i
+        for i, e in enumerate(engine_docs.get("custom-localization", []))
+    }
+
+    new_count = 0
+    redeclare_count = 0
+    for fname in sorted(os.listdir(cust_dir)):
+        if not fname.endswith(".txt"):
+            continue
+        full = os.path.join(cust_dir, fname)
+        try:
+            local = ParadoxFileParser()
+            local.parse_file(full, apply_directives=False)
+        except Exception as e:
+            logger.warning(f"Failed to parse customizable_localization/{fname}: {e}")
+            continue
+        rel = os.path.relpath(full, mod_path)
+        for name in local.data.keys():
+            if name in by_name:
+                existing = engine_docs["custom-localization"][by_name[name]]
+                existing["mod_redeclares"] = True
+                existing["mod_redeclared_in"] = rel
+                redeclare_count += 1
+            else:
+                engine_docs["custom-localization"].append({
+                    "name": name,
+                    "scopes": [],
+                    "random_valid": "",
+                    "loc_entries": [],
+                    "origin": "mod",
+                    "defined_in": rel,
+                })
+                new_count += 1
+
+    if new_count or redeclare_count:
+        logger.info(
+            f"Mod customizable_localization union: {new_count} mod-only added; "
+            f"{redeclare_count} cosmetic redeclarations annotated"
+        )
+
+
 def _load_engine_docs():
-    """Parse all engine documentation files into structured data."""
-    global engine_docs, engine_docs_sources
+    """Parse all engine documentation files into structured data.
+
+    Source preference: vanilla_snapshot_docs_path (vanilla-only, authoritative)
+    > mod_loaded_docs_path (runtime, may include mod declarations).
+    Every entry is tagged with `origin`:
+      - "vanilla" when read from the vanilla snapshot
+      - "unknown" when read from the fallback runtime path (we can't tell)
+      - "mod"     after the mod-source-derived union below
+    """
+    global engine_docs, engine_docs_sources, engine_docs_source_label
     engine_docs = {}
     engine_docs_sources = {}
+
+    chosen_dir, source_label = _engine_docs_source()
+    engine_docs_source_label = source_label
+    default_origin = "vanilla" if source_label == "vanilla_snapshot" else "unknown"
+    logger.info(
+        f"Engine docs source: {source_label} ({chosen_dir}); default entry origin: {default_origin}"
+    )
 
     doc_files = {
         "effects": ("effects.log", _parse_effects_triggers_log),
@@ -1322,18 +1847,35 @@ def _load_engine_docs():
     }
 
     for key, (filename, parser_fn) in doc_files.items():
-        filepath = os.path.join(ENGINE_DOCS_DIR, filename)
+        filepath = os.path.join(chosen_dir, filename)
         if os.path.isfile(filepath):
             try:
-                engine_docs[key] = parser_fn(filepath)
+                entries = parser_fn(filepath)
+                # Tag every entry with its origin. Triggers / effects / event_targets
+                # / on_actions aren't moddable; modifiers / custom_localization get
+                # mod-source unioning below, which may upgrade origin to "mod".
+                for e in entries:
+                    e.setdefault("origin", default_origin)
+                engine_docs[key] = entries
                 engine_docs_sources[key] = filepath
-                logger.info(f"Parsed engine doc {filename}: {len(engine_docs[key])} entries")
+                logger.info(f"Parsed engine doc {filename}: {len(entries)} entries")
             except Exception as e:
                 logger.error(f"Failed to parse engine doc {filename}: {e}")
                 engine_docs[key] = []
         else:
             logger.warning(f"Engine doc not found: {filepath}")
             engine_docs[key] = []
+
+    # Union in mod-declared modifier types. The mod state already parsed these
+    # entities; we shape them like engine-doc modifier entries and tag origin=mod.
+    # Names that already exist in the vanilla snapshot get their entry shadowed
+    # (mod intentionally redeclares for cosmetic reasons — e.g. setting color +
+    # percent on country_leverage_threshold_change_add).
+    try:
+        _union_mod_modifier_types(engine_docs)
+        _union_mod_custom_localization(engine_docs)
+    except Exception as e:
+        logger.error(f"Failed to union mod-declared engine docs: {e}\n{traceback.format_exc()}")
 
     # Build the pattern catalog + auto-discovery indexes (§3) before rendering
     # the modifier reference, so the renderer can group dynamic patterns.
@@ -2244,6 +2786,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "modifier-patterns": lambda: self._modifier_patterns(rest, params),
             # Mod-vs-engine validation
             "validate": lambda: self._validate(rest, params),
+            # Duplicate-image detector for unique-per-entity image fields
+            "duplicate-images": lambda: self._duplicate_images(params),
             # Generator-ownership map for auto-generated mod files
             "auto-generated": lambda: self._auto_generated(),
             # Game logs (debug.log, error.log, game.log, …)
@@ -2291,6 +2835,83 @@ class ModStateHandler(BaseHTTPRequestHandler):
         age_days = None
         if oldest:
             age_days = int((time.time() - oldest) // 86400)
+
+        # Vanilla-source-mirror cross-check: if our docs snapshot is older than
+        # the mirror's HEAD commit, the snapshot is stale (vanilla updated since
+        # the user last ran `script_docs` in vanilla).
+        repo_head = _load_vanilla_repo_head_info()
+
+        def _summarize(p: str) -> dict:
+            """Return {path, exists, oldest_mtime, files} for a docs dir."""
+            out = {"path": p, "exists": os.path.isdir(p)}
+            if not out["exists"]:
+                return out
+            mtimes = []
+            files = []
+            for fn in sorted(os.listdir(p)):
+                if not fn.endswith(".log"):
+                    continue
+                m = _safe_mtime(os.path.join(p, fn))
+                if m is not None:
+                    mtimes.append(m)
+                    files.append(fn)
+            if mtimes:
+                oldest_m = min(mtimes)
+                out["oldest_mtime"] = datetime.fromtimestamp(
+                    oldest_m, tz=timezone.utc
+                ).isoformat(timespec="seconds")
+                out["age_days"] = int((time.time() - oldest_m) // 86400)
+                out["files"] = files
+            return out
+
+        vanilla_block = {
+            "source_label": engine_docs_source_label or "unknown",
+            "active_path": (
+                vanilla_snapshot_docs_path
+                if engine_docs_source_label == "vanilla_snapshot"
+                else mod_loaded_docs_path
+            ),
+            "vanilla_snapshot": _summarize(vanilla_snapshot_docs_path),
+            "mod_loaded_snapshot": _summarize(mod_loaded_docs_path),
+            "refresh_workflow": {
+                "vanilla": (
+                    "Disable the mod in the launcher, launch the game, type "
+                    "`script_docs` in the in-game console (~ key), then copy "
+                    f"the .log files from {mod_loaded_docs_path}/ to "
+                    f"{vanilla_snapshot_docs_path}/."
+                ),
+                "mod_loaded": (
+                    "Enable the mod in the launcher, launch the game, type "
+                    f"`script_docs` in the in-game console — files land at "
+                    f"{mod_loaded_docs_path}/ directly."
+                ),
+            },
+        }
+        if repo_head:
+            vanilla_block["repo_head"] = repo_head["sha_short"]
+            vanilla_block["repo_head_date"] = repo_head["date_iso"]
+            if oldest is not None:
+                vanilla_block["is_stale"] = oldest < repo_head["date_unix"]
+                if vanilla_block["is_stale"]:
+                    vanilla_block["stale_reason"] = (
+                        "Vanilla snapshot is older than ~/src/vic3 HEAD — "
+                        "re-run `script_docs` in vanilla to refresh."
+                    )
+
+        # Contamination check: the snapshot is supposed to be vanilla-only, but
+        # if it contains modifiers the mod declares as `script_only = yes`, the
+        # snapshot was actually generated with the mod loaded. Re-running
+        # `script_docs` in vanilla would clean it.
+        if _vanilla_snapshot_contamination:
+            vanilla_block["is_contaminated"] = True
+            vanilla_block["contamination_count"] = len(_vanilla_snapshot_contamination)
+            vanilla_block["contamination_examples"] = sorted(_vanilla_snapshot_contamination)[:5]
+            vanilla_block["contamination_reason"] = (
+                "Vanilla snapshot contains mod-declared script_only modifiers "
+                "— it was likely generated with the mod loaded. Re-run "
+                "`script_docs` in pure-vanilla to refresh."
+            )
+
         return {
             "status": "running",
             "pid": os.getpid(),
@@ -2300,6 +2921,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "localization_keys": len(ms.localization),
             "engine_docs_timestamps": engine_mtimes,
             "engine_docs_age_days": age_days,
+            "vanilla_snapshot": vanilla_block,
             "pattern_catalog_size": len(pattern_catalog),
             "discovered_patterns": len(discovered_patterns),
         }
@@ -2733,6 +3355,41 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         if summary_only:
             return {k: v for k, v in report.items() if k not in ("unknown_modifiers", "suspicious_modifiers")}
+        return report
+
+    def _duplicate_images(self, params):
+        """GET /duplicate-images — flag images reused across entities of types
+        where vanilla treats one image per entity (Buildings, Goods, Decrees,
+        Technologies, Interest Groups, Laws).
+
+        Query params:
+          ?include_vanilla=true     — include clusters with no mod-side entities.
+          ?include_allowlisted=true — emit the `allowlisted` array.
+          ?type=Buildings           — restrict scan (repeatable, comma-separated).
+          ?format=text              — human-readable rendering wrapped in {"text": ...}.
+
+        Allowlist file: common/_meta/duplicate_image_allowlist.yml.
+        """
+        include_vanilla = (params.get("include_vanilla") or ["false"])[0].lower() == "true"
+        include_allowlisted = (params.get("include_allowlisted") or ["false"])[0].lower() == "true"
+        types_raw = params.get("type") or []
+        types: list[str] | None = None
+        if types_raw:
+            types = []
+            for t in types_raw:
+                types.extend(s.strip() for s in t.split(",") if s.strip())
+            types = types or None
+
+        report = _find_duplicate_images(
+            include_vanilla=include_vanilla,
+            types=types,
+            include_allowlisted=include_allowlisted,
+        )
+
+        fmt = (params.get("format") or [""])[0]
+        if fmt == "text":
+            return {"text": _render_duplicate_images_text(report,
+                                                          include_allowlisted=include_allowlisted)}
         return report
 
     def _modifier_pattern_expand(self, pattern, params):
@@ -4034,12 +4691,42 @@ class ModStateHandler(BaseHTTPRequestHandler):
         GET /engine-docs/<type>?q=<search>    - search entries
         GET /engine-docs/<type>?scope=<scope> - filter by scope
         GET /engine-docs/<type>?mask=<mask>   - filter by mask (modifiers only)
+        GET /engine-docs/<type>?origin=mod|vanilla|unknown - filter by origin tag
         GET /engine-docs/<type>?group=true    - group similar entries
+        GET /engine-docs/origin/<name>        - look up which source defines <name>
+                                                across all doc types (modifiers,
+                                                triggers, effects, …). Useful for
+                                                "is this engine-native or mod?"
         """
         if not parts:
             return {
                 "available_types": list(engine_docs.keys()),
                 "counts": {k: len(v) for k, v in engine_docs.items()},
+                "source_label": engine_docs_source_label,
+            }
+
+        # /engine-docs/origin/<name> — convenience disambiguation lookup
+        if parts[0] == "origin":
+            if len(parts) < 2:
+                raise KeyError("Usage: /engine-docs/origin/<name>")
+            target = parts[1]
+            hits = []
+            for dtype, entries in engine_docs.items():
+                for e in entries:
+                    if e.get("name") == target:
+                        hits.append({
+                            "type": dtype,
+                            "origin": e.get("origin", "unknown"),
+                            **{k: e[k] for k in (
+                                "defined_in", "is_script_only", "is_boolean",
+                                "mask", "display_name",
+                                "mod_redeclares", "mod_redeclared_in", "mod_script_only",
+                            ) if k in e},
+                        })
+            return {
+                "name": target,
+                "found": len(hits) > 0,
+                "matches": hits,
             }
 
         doc_type = parts[0]
@@ -4050,6 +4737,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         query = params.get("q", [""])[0].lower()
         scope_filter = params.get("scope", [""])[0].lower()
         mask_filter = params.get("mask", [""])[0].lower()
+        origin_filter = params.get("origin", [""])[0].lower()
         do_group = params.get("group", ["false"])[0].lower() in ("true", "1", "yes")
         limit = int(params.get("limit", ["500"])[0])
 
@@ -4073,6 +4761,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
             filtered = [
                 e for e in filtered
                 if mask_filter in e.get("mask", "").lower()
+            ]
+        if origin_filter:
+            filtered = [
+                e for e in filtered
+                if e.get("origin", "unknown").lower() == origin_filter
             ]
 
         # Grouping
@@ -4302,12 +4995,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
 # server startup. The /reload?engine_only=true path bypasses _load_mod_state
 # entirely, so these don't run there.
 POST_LOAD_GENERATORS = [
-    ("pop_needs_curves", "pop_needs_curves"),
-    ("apply_ideologies", "apply_ideologies"),
-    ("ig_feminism",      "ig_feminism"),
-    ("pm_costs",         "pm_costs"),
-    ("resources",        "resources"),
-    ("organize_loc",     "organize_loc"),
+    ("pop_needs_curves",              "pop_needs_curves"),
+    ("apply_ideologies",              "apply_ideologies"),
+    ("ig_feminism",                   "ig_feminism"),
+    ("pm_costs",                      "pm_costs"),
+    ("resources",                     "resources"),
+    ("gen_pb_principle_unlock_descs", "gen_pb_principle_unlock_descs"),
+    ("gen_un_button_descs",           "gen_un_button_descs"),
+    ("organize_loc",                  "organize_loc"),
 ]
 
 

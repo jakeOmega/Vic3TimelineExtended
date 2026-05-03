@@ -4,6 +4,7 @@ un_vote_notification_cleanup = {
 	remove_variable = un_display_oppose
 	if = { limit = { has_variable = un_notif_vote_passed } remove_variable = un_notif_vote_passed }
 	if = { limit = { has_variable = un_vote_choice } remove_variable = un_vote_choice }
+	if = { limit = { has_variable = un_vote_was_vetoed } remove_variable = un_vote_was_vetoed }
 	if = { limit = { has_variable = un_topic_condemn } remove_variable = un_topic_condemn }
 	if = { limit = { has_variable = un_topic_human_rights } remove_variable = un_topic_human_rights }
 	if = { limit = { has_variable = un_topic_npt } remove_variable = un_topic_npt }
@@ -19,43 +20,19 @@ un_vote_notification_cleanup = {
 	if = { limit = { has_variable = un_topic_sanctions } remove_variable = un_topic_sanctions }
 	if = { limit = { has_variable = un_topic_law_of_sea } remove_variable = un_topic_law_of_sea }
 	if = { limit = { has_variable = un_topic_icc } remove_variable = un_topic_icc }
+	if = { limit = { has_variable = un_topic_expulsion } remove_variable = un_topic_expulsion }
 }
 
-# Apply all effects of complying with a passed UN resolution.
-# Called from un_vote.3 for both yes-voters (auto-apply) and no-voters who accept.
-# Expects: ROOT = country, scope:un_vote_proposer = proposer country (if exists)
-# Expects local vars: un_topic_X set for the active vote topic
-un_vote_apply_resolution_compliance = {
-	# Infamy reduction for supporting humanitarian/aid/peacekeeping votes
-	if = {
-		limit = {
-			OR = {
-				has_variable = un_topic_aid_request
-				has_variable = un_topic_peacekeeping_request
-				has_variable = un_topic_human_rights
-				has_variable = un_topic_refugee
-				has_variable = un_topic_pandemic
-			}
-			infamy > 0
-		}
-		change_infamy = -1
-	}
-
-	# Power bloc leverage: voting with the proposer's bloc on major resolutions
-	if = {
-		limit = {
-			exists = scope:un_vote_proposer
-			scope:un_vote_proposer = { is_power_bloc_leader = yes }
-			is_in_same_power_bloc = scope:un_vote_proposer
-		}
-		scope:un_vote_proposer = {
-			power_bloc ?= {
-				add_leverage = { target = root value = 5 }
-			}
-		}
-	}
-
-	# ---- Permanent treaty/declaration modifiers ----
+# Apply the persistent treaty/declaration modifier for a passed UN resolution.
+# Split out from un_vote_apply_resolution_compliance so each per-topic
+# add_modifier renders directly in the calling option's tooltip — when
+# nested inside the larger compliance effect (which also handles infamy,
+# leverage, and contributor pledges), the engine's tooltip rendering
+# buried the modifier name and fields, so players couldn't see what they
+# were ratifying.
+# Called from un_vote.3 options A and B alongside un_vote_apply_resolution_compliance.
+# Expects: ROOT = country, local vars: un_topic_X set for the active vote topic.
+un_vote_apply_treaty_modifier = {
 	if = {
 		limit = {
 			has_variable = un_topic_human_rights
@@ -134,18 +111,62 @@ un_vote_apply_resolution_compliance = {
 		}
 		add_modifier = { name = un_law_of_sea_modifier }
 	}
+	# ICC membership: skipped when the resolution was vetoed (graduated form
+	# is symbolic censure only — no court jurisdiction is established).
 	if = {
 		limit = {
 			has_variable = un_topic_icc
+			NOT = { has_variable = un_vote_was_vetoed }
 			NOT = { has_modifier = un_icc_member_modifier }
 		}
 		add_modifier = { name = un_icc_member_modifier }
 	}
+}
+
+# Apply the residual (non-modifier) effects of complying with a passed UN
+# resolution: infamy reduction, power-bloc leverage, peacekeeping/aid contributor
+# pledges, and leader leverage on aid/peacekeeping. Per-topic treaty modifiers
+# live in un_vote_apply_treaty_modifier (split out so they render visibly in
+# option tooltips); call both effects together from un_vote.3 options A and B.
+# Expects: ROOT = country, scope:un_vote_proposer = proposer country (if exists),
+# local vars: un_topic_X set for the active vote topic.
+un_vote_apply_resolution_compliance = {
+	# Infamy reduction for supporting humanitarian/aid/peacekeeping votes
+	if = {
+		limit = {
+			OR = {
+				has_variable = un_topic_aid_request
+				has_variable = un_topic_peacekeeping_request
+				has_variable = un_topic_human_rights
+				has_variable = un_topic_refugee
+				has_variable = un_topic_pandemic
+			}
+			infamy > 0
+		}
+		change_infamy = -1
+	}
+
+	# Power bloc leverage: voting with the proposer's bloc on major resolutions
+	if = {
+		limit = {
+			exists = scope:un_vote_proposer
+			scope:un_vote_proposer = { is_power_bloc_leader = yes }
+			is_in_same_power_bloc = scope:un_vote_proposer
+		}
+		scope:un_vote_proposer = {
+			power_bloc ?= {
+				add_leverage = { target = root value = 5 }
+			}
+		}
+	}
 
 	# ---- Peacekeeping/aid pledges ----
+	# Peacekeeping contributions are skipped when the resolution was vetoed —
+	# the graduated form is observer-mission-only and doesn't levy contributors.
 	if = {
 		limit = {
 			has_variable = un_topic_peacekeeping_request
+			NOT = { has_variable = un_vote_was_vetoed }
 			country_rank >= rank_value:major_power
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }

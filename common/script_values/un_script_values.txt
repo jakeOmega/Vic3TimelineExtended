@@ -68,7 +68,7 @@ un_member_pop_share = {
 	}
 }
 
-# ---- Security Council ----
+# ---- Security Council / Permanent Members ----
 
 un_security_council_count = {
 	value = 0
@@ -76,6 +76,34 @@ un_security_council_count = {
 		limit = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } }
 		add = 1
 	}
+}
+
+# Number of permanent-seat holders right now (cap is 5)
+un_permanent_seat_count = {
+	value = 0
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_permanent_member_modifier } }
+		add = 1
+	}
+}
+
+# 2/3 supermajority threshold of currently-eligible voting members.
+# Used for expulsion votes: vote passes when un_vote_support * 3 >= count * 2.
+un_vote_eligible_member_count = {
+	value = 0
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		add = 1
+	}
+}
+
+# Expulsion-vote pass check: positive when un_vote_support * 3 >= count * 2,
+# i.e., 2/3 supermajority achieved. Trigger with: un_vote_expulsion_passed >= 0.
+un_vote_expulsion_passed = {
+	value = global_var:un_vote_support
+	multiply = 3
+	subtract = un_vote_eligible_member_count
+	subtract = un_vote_eligible_member_count
 }
 
 # ---- Authority Drift Factors ----

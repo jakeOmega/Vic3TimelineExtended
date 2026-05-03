@@ -107,11 +107,32 @@ un_vote.1 = {
 				desc = un_vote.1.t_icc
 				trigger = { has_global_variable = un_vote_topic_icc }
 			}
+			triggered_desc = {
+				desc = un_vote.1.t_expulsion
+				trigger = { has_global_variable = un_vote_topic_expulsion }
+			}
 			desc = un_vote.1.t
 		}
 	}
 	desc = {
 		first_valid = {
+			# Target-perspective variants for the two topics that name a target.
+			# Must come before the generic `_condemn` / `_sanctions` blocks so
+			# they win first_valid when ROOT is the country being condemned/sanctioned.
+			triggered_desc = {
+				desc = un_vote.1.d_condemn_target
+				trigger = {
+					has_global_variable = un_vote_topic_condemn
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_sanctions_target
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					scope:un_vote_target ?= this
+				}
+			}
 			triggered_desc = {
 				desc = un_vote.1.d_condemn
 				trigger = { has_global_variable = un_vote_topic_condemn }
@@ -172,6 +193,18 @@ un_vote.1 = {
 				desc = un_vote.1.d_icc
 				trigger = { has_global_variable = un_vote_topic_icc }
 			}
+			# Target-perspective: voting member is the country being expelled
+			triggered_desc = {
+				desc = un_vote.1.d_expulsion_target
+				trigger = {
+					has_global_variable = un_vote_topic_expulsion
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_expulsion
+				trigger = { has_global_variable = un_vote_topic_expulsion }
+			}
 			desc = un_vote.1.d
 		}
 	}
@@ -206,8 +239,81 @@ un_vote.1 = {
 
 	# Option A: Vote in favor
 	option = {
-		name = un_vote.1.a
+		# Target-perspective override: voting "in favor" of a condemnation /
+		# sanctions resolution against ROOT means accepting the verdict.
+		name = {
+			trigger = { scope:un_vote_target ?= this }
+			text = un_vote.1.a_target
+		}
+		name = {
+			trigger = { always = yes }
+			text = un_vote.1.a
+		}
 		default_option = yes
+
+		# Treaty-topic preview: if this resolution passes and we comply
+		# (the default Option A path in un_vote.3), the engine-generated
+		# modifier tooltip surfaces what we're agreeing to before we
+		# commit. show_as_tooltip renders the add_modifier without
+		# executing — the actual application happens later in
+		# un_vote.3 option A via un_vote_apply_treaty_modifier.
+		show_as_tooltip = {
+			if = {
+				limit = { has_global_variable = un_vote_topic_human_rights }
+				je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_npt }
+				je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_climate }
+				je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_reform }
+				add_modifier = {
+					name = un_reform_champion_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_heritage }
+				je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_decolonization }
+				add_modifier = {
+					name = un_decolonization_champion_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_pandemic }
+				je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_refugee }
+				je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_space }
+				je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+			}
+			if = {
+				limit = { has_global_variable = un_vote_topic_law_of_sea }
+				add_modifier = { name = un_law_of_sea_modifier }
+			}
+			if = {
+				limit = {
+					has_global_variable = un_vote_topic_icc
+					NOT = { has_global_variable = un_vote_veto_cast }
+				}
+				add_modifier = { name = un_icc_member_modifier }
+			}
+		}
 
 		custom_tooltip = {
 			text = UN_VOTE_IN_FAVOR_TT
@@ -216,43 +322,95 @@ un_vote.1 = {
 			set_variable = { name = un_vote_choice value = 1 }
 		}
 
-		# Relations boost with proposer + diplomatic catalyst
+		# Target-perspective acceptance: voting in favor of a resolution
+		# targeting yourself is "performative contrition." Pre-applies the
+		# un_self_corrected_modifier (which un_vote.2 reads to skip the standard
+		# un_condemned / un_sanctions_target modifier on resolution pass), sets
+		# a global flag that nudges other AI voters toward yes ("permission"),
+		# and produces an asymmetric IG reaction set instead of the standard
+		# topic-conditional one.
 		if = {
-			limit = { exists = scope:un_vote_proposer }
-			change_relations = { country = scope:un_vote_proposer value = 15 }
-			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
-		}
+			limit = { scope:un_vote_target ?= this }
+			custom_tooltip = UN_VOTE_ACCEPT_TARGET_TT
+			hidden_effect = {
+				# Skips un_condemned / un_sanctions_target in un_vote.2
+				set_variable = un_target_self_corrected
+				# Other AI voters' Option A reads this to lean yes (target gave permission)
+				set_global_variable = un_target_accepted
+			}
 
-		# IG reactions to voting yes
-		# Intelligentsia generally approves of international cooperation
-		if = {
-			limit = {
-				ig:ig_intelligentsia ?= { is_marginal = no }
+			add_modifier = {
+				name = un_self_corrected_modifier
+				days = long_modifier_time
+				is_decaying = yes
 			}
-			ig:ig_intelligentsia = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+
+			# Small reconciliation gesture toward proposer (less than the standard
+			# +15 that other voters give — the proposer just tried to condemn us)
+			if = {
+				limit = { exists = scope:un_vote_proposer }
+				change_relations = { country = scope:un_vote_proposer value = 10 }
+				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
+			}
+
+			# Domestic IG reactions to public capitulation
+			# Armed forces strongly disapprove (longer than the standard short_modifier_time)
+			if = {
+				limit = { ig:ig_armed_forces ?= { is_marginal = no } }
+				ig:ig_armed_forces = { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes } }
+			}
+			# Petty bourgeoisie nationalist sentiment disapproves
+			if = {
+				limit = { ig:ig_petty_bourgeoisie ?= { is_marginal = no } }
+				ig:ig_petty_bourgeoisie = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			}
+			# Intelligentsia approves of international norm-following
+			if = {
+				limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+				ig:ig_intelligentsia = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+			}
 		}
-		# Armed forces disapprove of cooperative/disarmament votes
-		if = {
-			limit = {
-				OR = {
-					has_global_variable = un_vote_topic_npt
-					has_global_variable = un_vote_topic_peacekeeping_request
-					has_global_variable = un_vote_topic_icc
-				}
-				ig:ig_armed_forces ?= { is_marginal = no }
+		else = {
+			# Standard non-target voter path
+
+			# Relations boost with proposer + diplomatic catalyst
+			if = {
+				limit = { exists = scope:un_vote_proposer }
+				change_relations = { country = scope:un_vote_proposer value = 15 }
+				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
 			}
-			ig:ig_armed_forces = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
-		}
-		# Industrialists disapprove of binding climate/pandemic regulation
-		if = {
-			limit = {
-				OR = {
-					has_global_variable = un_vote_topic_climate
-					has_global_variable = un_vote_topic_pandemic
+
+			# IG reactions to voting yes
+			# Intelligentsia generally approves of international cooperation
+			if = {
+				limit = {
+					ig:ig_intelligentsia ?= { is_marginal = no }
 				}
-				ig:ig_industrialists ?= { is_marginal = no }
+				ig:ig_intelligentsia = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
 			}
-			ig:ig_industrialists = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			# Armed forces disapprove of cooperative/disarmament votes
+			if = {
+				limit = {
+					OR = {
+						has_global_variable = un_vote_topic_npt
+						has_global_variable = un_vote_topic_peacekeeping_request
+						has_global_variable = un_vote_topic_icc
+					}
+					ig:ig_armed_forces ?= { is_marginal = no }
+				}
+				ig:ig_armed_forces = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			}
+			# Industrialists disapprove of binding climate/pandemic regulation
+			if = {
+				limit = {
+					OR = {
+						has_global_variable = un_vote_topic_climate
+						has_global_variable = un_vote_topic_pandemic
+					}
+					ig:ig_industrialists ?= { is_marginal = no }
+				}
+				ig:ig_industrialists = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			}
 		}
 
 		ai_chance = {
@@ -301,6 +459,18 @@ un_vote.1 = {
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
 				factor = 1.5
+			}
+			# Target accepted the resolution: lowers political cost for other
+			# voters to support it ("permission" effect). Gated on NOT-target so
+			# the target's own ai_chance doesn't double-dip its own gesture.
+			# Note: vote events fire concurrently; only AI evaluated AFTER the
+			# target's tick will see the flag — partial coverage by design.
+			modifier = {
+				trigger = {
+					has_global_variable = un_target_accepted
+					NOT = { scope:un_vote_target ?= this }
+				}
+				add = 15
 			}
 
 			# ================================================================
@@ -850,7 +1020,16 @@ un_vote.1 = {
 
 	# Option B: Vote against
 	option = {
-		name = un_vote.1.b
+		# Target-perspective override: voting "against" a condemnation /
+		# sanctions resolution targeting ROOT means rejecting the charges.
+		name = {
+			trigger = { scope:un_vote_target ?= this }
+			text = un_vote.1.b_target
+		}
+		name = {
+			trigger = { always = yes }
+			text = un_vote.1.b
+		}
 
 		custom_tooltip = {
 			text = UN_VOTE_AGAINST_TT
@@ -866,10 +1045,12 @@ un_vote.1 = {
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
 
-		# Relations boost with vote target (solidarity against condemnation/sanctions)
+		# Relations boost with vote target (solidarity against condemnation/sanctions).
+		# Skip when voter == target — self-loop relations / catalyst is a no-op.
 		if = {
 			limit = {
 				exists = scope:un_vote_target
+				NOT = { scope:un_vote_target ?= this }
 				OR = {
 					has_global_variable = un_vote_topic_condemn
 					has_global_variable = un_vote_topic_sanctions
@@ -1208,6 +1389,205 @@ un_vote.1 = {
 			}
 		}
 	}
+
+	# Option C: VETO (permanent members only, on binding topics only)
+	# Hard-blocks the full binding form of the resolution. The GA simple-majority
+	# tally is preserved — if it still passes, the graduated/weak form applies
+	# (see un_vote.2). Costs: UN authority drain, isolation modifier, and infamy
+	# on punitive topics (ICC, condemn, peacekeeping).
+	option = {
+		name = {
+			trigger = { scope:un_vote_target ?= this }
+			text = un_vote.1.veto
+		}
+		name = {
+			trigger = { always = yes }
+			text = un_vote.1.veto
+		}
+		trigger = {
+			is_un_permanent_member = yes
+			un_vote_topic_is_binding = yes
+		}
+
+		custom_tooltip = {
+			text = UN_VOTE_VETO_TT
+			# Veto kills the binding form regardless of GA tally
+			set_global_variable = un_vote_veto_cast
+			set_global_variable = { name = un_vote_vetoer_country value = ROOT }
+			# Vetoer's no still counts toward the GA tally (graduated form needs majority)
+			change_global_variable = { name = un_vote_oppose add = 1 }
+			change_global_variable = { name = un_vote_net add = -1 }
+			set_variable = { name = un_vote_choice value = 2 }
+
+			# Authority drain: vetoing weakens our standing in the UN
+			change_variable = { name = un_authority add = -5 }
+			add_modifier = {
+				name = un_veto_authority_drain_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Diplomatic isolation
+			add_modifier = {
+				name = un_veto_isolation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+
+		# Infamy hit on punitive resolutions (vetoing humanitarian intervention,
+		# accountability, or peacekeeping requests is read poorly internationally).
+		# Recommendatory and protective topics don't trigger this.
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = un_vote_topic_icc
+					has_global_variable = un_vote_topic_condemn
+					has_global_variable = un_vote_topic_peacekeeping_request
+				}
+			}
+			change_infamy = 3
+		}
+
+		# Relations damage with proposer
+		if = {
+			limit = { exists = scope:un_vote_proposer }
+			change_relations = { country = scope:un_vote_proposer value = -25 }
+			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
+		}
+
+		# Relations boost with the protected target (sanctions/condemn)
+		if = {
+			limit = {
+				exists = scope:un_vote_target
+				NOT = { scope:un_vote_target ?= this }
+				OR = {
+					has_global_variable = un_vote_topic_condemn
+					has_global_variable = un_vote_topic_sanctions
+				}
+			}
+			change_relations = { country = scope:un_vote_target value = 20 }
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
+		}
+
+		# IG reactions: armed forces approve assertive sovereignty, intelligentsia disapproves
+		if = {
+			limit = { ig:ig_armed_forces ?= { is_marginal = no } }
+			ig:ig_armed_forces = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+		}
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+			ig:ig_intelligentsia = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+		}
+
+		ai_chance = {
+			base = 0
+
+			# Only consider vetoing when the resolution would otherwise pass.
+			# (un_veto_would_change_outcome checks net >= 2, meaning even our "no"
+			# alone wouldn't sink it — so a veto is needed to actually block.)
+			modifier = {
+				trigger = { un_veto_would_change_outcome = yes }
+				add = 30
+			}
+
+			# Strongly veto rivals' proposals
+			modifier = {
+				trigger = {
+					exists = scope:un_vote_proposer
+					has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry }
+				}
+				add = 35
+			}
+
+			# Protect allied / same-bloc targets from sanctions or condemnation
+			modifier = {
+				trigger = {
+					OR = {
+						has_global_variable = un_vote_topic_sanctions
+						has_global_variable = un_vote_topic_condemn
+					}
+					exists = scope:un_vote_target
+					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
+				}
+				add = 40
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						has_global_variable = un_vote_topic_sanctions
+						has_global_variable = un_vote_topic_condemn
+					}
+					exists = scope:un_vote_target
+					is_in_same_power_bloc = scope:un_vote_target
+				}
+				add = 25
+			}
+
+			# ICC referrals targeting US or our allies are existential — strongly veto
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					OR = {
+						scope:un_vote_target ?= this
+						AND = {
+							exists = scope:un_vote_target
+							has_treaty_alliance_with = { TARGET = scope:un_vote_target }
+						}
+					}
+				}
+				add = 50
+			}
+
+			# Reform that would weaken SC privileges (i.e., proposer is non-permanent)
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_reform
+					exists = scope:un_vote_proposer
+					NOT = { scope:un_vote_proposer = { is_un_permanent_member = yes } }
+				}
+				add = 30
+			}
+
+			# Peacekeeping deployment requested by an aligned target — let it go
+			# (we want our friends helped); but veto when requested by a rival's bloc
+			modifier = {
+				trigger = {
+					has_global_variable = un_vote_topic_peacekeeping_request
+					exists = scope:un_vote_proposer
+					NOT = { is_in_same_power_bloc = scope:un_vote_proposer }
+					NOT = { has_treaty_alliance_with = { TARGET = scope:un_vote_proposer } }
+				}
+				add = 10
+			}
+
+			# Costs / restraints — discourage vetoing when:
+			# Our UN authority is already weak (cost is steep)
+			modifier = {
+				trigger = {
+					has_variable = un_authority
+					var:un_authority < 30
+				}
+				add = -25
+			}
+			# We've recently vetoed (cool down)
+			modifier = {
+				trigger = { has_modifier = un_veto_isolation_modifier }
+				add = -20
+			}
+			# Our infamy is already high and this topic would add more
+			modifier = {
+				trigger = {
+					infamy >= 25
+					OR = {
+						has_global_variable = un_vote_topic_icc
+						has_global_variable = un_vote_topic_condemn
+						has_global_variable = un_vote_topic_peacekeeping_request
+					}
+				}
+				add = -15
+			}
+		}
+	}
 }
 
 # ---- Phase 2: Vote results - fires for the proposer after 90 days ----
@@ -1225,7 +1605,16 @@ un_vote.2 = {
 
 	desc = {
 		first_valid = {
-			# Condemn - Passed
+			# Condemn - Passed (vetoed: non-binding rebuke)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_condemn
+					global_var:un_vote_net >= 1
+					has_global_variable = un_vote_veto_cast
+				}
+				desc = un_vote.2.d_condemn_passed_vetoed
+			}
+			# Condemn - Passed (full binding condemnation)
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_condemn global_var:un_vote_net >= 1 }
 				desc = un_vote.2.d_condemn_passed
@@ -1264,6 +1653,15 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_climate }
 				desc = un_vote.2.d_climate_failed
+			}
+			# Reform - Passed (vetoed: flat block)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_reform
+					global_var:un_vote_net >= 1
+					has_global_variable = un_vote_veto_cast
+				}
+				desc = un_vote.2.d_reform_passed_vetoed
 			}
 			# Reform - Passed
 			triggered_desc = {
@@ -1325,6 +1723,15 @@ un_vote.2 = {
 				trigger = { has_global_variable = un_vote_topic_space }
 				desc = un_vote.2.d_space_failed
 			}
+			# Peacekeeping Request - Passed (vetoed: observer mission only)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_peacekeeping_request
+					global_var:un_vote_net >= 1
+					has_global_variable = un_vote_veto_cast
+				}
+				desc = un_vote.2.d_peacekeeping_request_passed_vetoed
+			}
 			# Peacekeeping Request - Passed
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_peacekeeping_request global_var:un_vote_net >= 1 }
@@ -1344,6 +1751,15 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_aid_request }
 				desc = un_vote.2.d_aid_request_failed
+			}
+			# Sanctions - Passed (vetoed: voluntary partial sanctions)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_sanctions
+					global_var:un_vote_net >= 1
+					has_global_variable = un_vote_veto_cast
+				}
+				desc = un_vote.2.d_sanctions_passed_vetoed
 			}
 			# Sanctions - Passed
 			triggered_desc = {
@@ -1365,6 +1781,15 @@ un_vote.2 = {
 				trigger = { has_global_variable = un_vote_topic_law_of_sea }
 				desc = un_vote.2.d_law_of_sea_failed
 			}
+			# International Criminal Court - Passed (vetoed: symbolic censure only)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_icc
+					global_var:un_vote_net >= 1
+					has_global_variable = un_vote_veto_cast
+				}
+				desc = un_vote.2.d_icc_passed_vetoed
+			}
 			# International Criminal Court - Passed
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_icc global_var:un_vote_net >= 1 }
@@ -1374,6 +1799,19 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { has_global_variable = un_vote_topic_icc }
 				desc = un_vote.2.d_icc_failed
+			}
+			# Expulsion - Passed (2/3 supermajority threshold)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_expulsion
+					un_vote_expulsion_passed >= 0
+				}
+				desc = un_vote.2.d_expulsion_passed
+			}
+			# Expulsion - Failed
+			triggered_desc = {
+				trigger = { has_global_variable = un_vote_topic_expulsion }
+				desc = un_vote.2.d_expulsion_failed
 			}
 			# Generic fallback
 			triggered_desc = {
@@ -1425,23 +1863,73 @@ un_vote.2 = {
 		name = un_vote.2.a
 		default_option = yes
 
+		# ---- EXPULSION VOTE (2/3 supermajority threshold; non-vetoable) ----
+		# Handled separately because the pass condition is supermajority, not
+		# simple majority. The standard pass/fail branches below are gated to
+		# skip when the topic is expulsion.
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_expulsion
+				un_vote_expulsion_passed >= 0
+			}
+			custom_tooltip = un_vote_expulsion_passed_tt
+			change_variable = { name = un_authority add = 5 }
+			if = {
+				limit = { exists = scope:un_vote_target }
+				scope:un_vote_target = {
+					je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+					je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+					add_modifier = {
+						name = un_withdrawal_penalty_modifier
+						days = long_modifier_time
+						is_decaying = yes
+					}
+				}
+				change_relations = { country = scope:un_vote_target value = -25 }
+			}
+		}
+		else_if = {
+			limit = { has_global_variable = un_vote_topic_expulsion }
+			custom_tooltip = un_vote_expulsion_failed_tt
+			change_variable = { name = un_authority add = -3 }
+			if = {
+				limit = { exists = scope:un_vote_target }
+				change_relations = { country = scope:un_vote_target value = -15 }
+			}
+		}
+
 		# ---- RESOLUTION PASSED ----
 		if = {
-			limit = { global_var:un_vote_net >= 1 }
+			limit = {
+				global_var:un_vote_net >= 1
+				NOT = { has_global_variable = un_vote_topic_expulsion }
+			}
 
 			# ---- Condemn: target gets condemnation, proposer gets prestige ----
+			# If the target voted to accept the resolution, they already bear
+			# un_self_corrected_modifier (set in un_vote.1 option A target branch);
+			# skip un_condemned_modifier so the player isn't double-penalized.
+			# If a permanent member vetoed, downgrade to a non-binding rebuke
+			# (graduated outcome: GA majority still spoke but the resolution lacks
+			# SC weight).
 			if = {
-				limit = { has_global_variable = un_vote_topic_condemn }
+				limit = {
+					has_global_variable = un_vote_topic_condemn
+					NOT = { has_global_variable = un_vote_veto_cast }
+				}
 				custom_tooltip = un_vote_condemn_passed_tt
 				change_variable = { name = un_authority add = 5 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -30 }
 					scope:un_vote_target = {
-						add_modifier = {
-							name = un_condemned_modifier
-							days = long_modifier_time
-							is_decaying = yes
+						if = {
+							limit = { NOT = { has_variable = un_target_self_corrected } }
+							add_modifier = {
+								name = un_condemned_modifier
+								days = long_modifier_time
+								is_decaying = yes
+							}
 						}
 					}
 				}
@@ -1449,6 +1937,26 @@ un_vote.2 = {
 					name = un_condemnation_leader_modifier
 					days = normal_modifier_time
 					is_decaying = yes
+				}
+			}
+			else_if = {
+				limit = { has_global_variable = un_vote_topic_condemn }
+				# Graduated condemn: SC veto downgrades to non-binding rebuke
+				custom_tooltip = un_vote_condemn_passed_vetoed_tt
+				change_variable = { name = un_authority add = 2 }
+				if = {
+					limit = { exists = scope:un_vote_target }
+					change_relations = { country = scope:un_vote_target value = -10 }
+					scope:un_vote_target = {
+						if = {
+							limit = { NOT = { has_variable = un_target_self_corrected } }
+							add_modifier = {
+								name = un_non_binding_rebuke_modifier
+								days = normal_modifier_time
+								is_decaying = yes
+							}
+						}
+					}
 				}
 			}
 
@@ -1486,10 +1994,22 @@ un_vote.2 = {
 			}
 
 			# ---- Reform: Modernize UN institutions ----
+			# Vetoed reform is the one binding topic with NO graduated fallback —
+			# charter changes really do need P5 unanimity (no Uniting-for-Peace
+			# style override is available here). The vote.3 notification still
+			# fires so members know it was attempted, but no effect applies.
 			if = {
-				limit = { has_global_variable = un_vote_topic_reform }
+				limit = {
+					has_global_variable = un_vote_topic_reform
+					NOT = { has_global_variable = un_vote_veto_cast }
+				}
 				custom_tooltip = un_vote_reform_passed_tt
 				change_variable = { name = un_authority add = 10 }
+			}
+			else_if = {
+				limit = { has_global_variable = un_vote_topic_reform }
+				custom_tooltip = un_vote_reform_passed_vetoed_tt
+				# No effect — flat block
 			}
 
 			# ---- Heritage: UNESCO established ----
@@ -1544,8 +2064,13 @@ un_vote.2 = {
 			}
 
 			# ---- Peacekeeping Request: Deploy peacekeepers to requesting country ----
+			# Vetoed: deploy a non-coercive observer mission instead — the
+			# proposer gets a small benefit but no contributors are levied.
 			if = {
-				limit = { has_global_variable = un_vote_topic_peacekeeping_request }
+				limit = {
+					has_global_variable = un_vote_topic_peacekeeping_request
+					NOT = { has_global_variable = un_vote_veto_cast }
+				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
 				change_variable = { name = un_authority add = 5 }
 				# Apply scaled peacekeeping benefit to the requesting country
@@ -1577,6 +2102,32 @@ un_vote.2 = {
 							days = long_modifier_time
 							is_decaying = yes
 						}
+					}
+				}
+			}
+			else_if = {
+				limit = { has_global_variable = un_vote_topic_peacekeeping_request }
+				custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
+				change_variable = { name = un_authority add = 2 }
+				# Observer mission to the proposer only — no enforcement, no levies
+				if = {
+					limit = { exists = global_var:un_vote_proposer_country }
+					global_var:un_vote_proposer_country = {
+						add_modifier = {
+							name = un_observer_mission_modifier
+							days = normal_modifier_time
+							is_decaying = yes
+						}
+					}
+				}
+				# Drop pledged contributors (the binding deployment was vetoed)
+				hidden_effect = {
+					every_country = {
+						limit = {
+							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
+						}
+						je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
 					}
 				}
 			}
@@ -1615,8 +2166,16 @@ un_vote.2 = {
 			}
 
 			# ---- Sanctions: Apply sanctions to the target country ----
+			# If the target voted to accept the resolution, they already bear
+			# un_self_corrected_modifier; skip un_sanctions_target_modifier so
+			# the player isn't double-penalized.
+			# Vetoed: voluntary partial sanctions — apply un_sanctions_partial_modifier
+			# to the target instead of the full sanctions package.
 			if = {
-				limit = { has_global_variable = un_vote_topic_sanctions }
+				limit = {
+					has_global_variable = un_vote_topic_sanctions
+					NOT = { has_global_variable = un_vote_veto_cast }
+				}
 				custom_tooltip = un_vote_sanctions_passed_tt
 				change_variable = { name = un_authority add = 5 }
 				# Proposer becomes sanctions enforcer
@@ -1625,9 +2184,27 @@ un_vote.2 = {
 				if = {
 					limit = { exists = scope:un_vote_target }
 					scope:un_vote_target = {
-						add_modifier = { name = un_sanctions_target_modifier }
+						if = {
+							limit = { NOT = { has_variable = un_target_self_corrected } }
+							add_modifier = { name = un_sanctions_target_modifier }
+						}
 					}
 					change_relations = { country = scope:un_vote_target value = -30 }
+				}
+			}
+			else_if = {
+				limit = { has_global_variable = un_vote_topic_sanctions }
+				custom_tooltip = un_vote_sanctions_passed_vetoed_tt
+				change_variable = { name = un_authority add = 2 }
+				if = {
+					limit = { exists = scope:un_vote_target }
+					scope:un_vote_target = {
+						if = {
+							limit = { NOT = { has_variable = un_target_self_corrected } }
+							add_modifier = { name = un_sanctions_partial_modifier }
+						}
+					}
+					change_relations = { country = scope:un_vote_target value = -10 }
 				}
 			}
 
@@ -1640,18 +2217,38 @@ un_vote.2 = {
 			}
 
 			# ---- International Criminal Court: Global criminal justice ----
+			# Vetoed: no agency established, just a symbolic censure (proposer
+			# gets un_court_contested_modifier as a small accountability gesture).
 			if = {
-				limit = { has_global_variable = un_vote_topic_icc }
+				limit = {
+					has_global_variable = un_vote_topic_icc
+					NOT = { has_global_variable = un_vote_veto_cast }
+				}
 				custom_tooltip = un_vote_icc_passed_tt
 				change_variable = { name = un_authority add = 5 }
 				set_global_variable = un_agency_icc
 			}
+			else_if = {
+				limit = { has_global_variable = un_vote_topic_icc }
+				custom_tooltip = un_vote_icc_passed_vetoed_tt
+				change_variable = { name = un_authority add = 2 }
+				add_modifier = {
+					name = un_court_contested_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
 
-			# Influence reward for leading a successful resolution
-			add_modifier = {
-				name = un_vote_success_reward
-				days = normal_modifier_time
-				is_decaying = yes
+			# Influence reward for leading a successful resolution.
+			# Skipped for vetoed binding resolutions — only the graduated form
+			# went through, so the proposer didn't fully succeed.
+			if = {
+				limit = { NOT = { has_global_variable = un_vote_veto_cast } }
+				add_modifier = {
+					name = un_vote_success_reward
+					days = normal_modifier_time
+					is_decaying = yes
+				}
 			}
 
 			# Infamy reduction: successfully leading a humanitarian resolution rehabilitates image
@@ -1690,7 +2287,10 @@ un_vote.2 = {
 
 		# ---- RESOLUTION FAILED ----
 		if = {
-			limit = { NOT = { global_var:un_vote_net >= 1 } }
+			limit = {
+				NOT = { global_var:un_vote_net >= 1 }
+				NOT = { has_global_variable = un_vote_topic_expulsion }
+			}
 			custom_tooltip = un_vote_failed_tt
 			change_variable = { name = un_authority add = -3 }
 			add_modifier = {
@@ -1779,6 +2379,7 @@ un_vote.2 = {
 			if = { limit = { has_global_variable = un_vote_topic_sanctions } set_global_variable = { name = un_vote_cooldown_sanctions days = normal_modifier_time } }
 			if = { limit = { has_global_variable = un_vote_topic_law_of_sea } set_global_variable = { name = un_vote_cooldown_law_of_sea days = normal_modifier_time } }
 			if = { limit = { has_global_variable = un_vote_topic_icc } set_global_variable = { name = un_vote_cooldown_icc days = normal_modifier_time } }
+			if = { limit = { has_global_variable = un_vote_topic_expulsion } set_global_variable = { name = un_vote_cooldown_expulsion days = long_modifier_time } }
 		}
 
 		# ---- Cleanup: clear all vote state ----
@@ -1799,8 +2400,19 @@ un_vote.2 = {
 			if = { limit = { has_global_variable = un_vote_topic_sanctions } remove_global_variable = un_vote_topic_sanctions }
 			if = { limit = { has_global_variable = un_vote_topic_law_of_sea } remove_global_variable = un_vote_topic_law_of_sea }
 			if = { limit = { has_global_variable = un_vote_topic_icc } remove_global_variable = un_vote_topic_icc }
+			if = { limit = { has_global_variable = un_vote_topic_expulsion } remove_global_variable = un_vote_topic_expulsion }
 			if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
 			if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
+			if = { limit = { has_global_variable = un_target_accepted } remove_global_variable = un_target_accepted }
+			if = { limit = { has_global_variable = un_vote_veto_cast } remove_global_variable = un_vote_veto_cast }
+			if = { limit = { has_global_variable = un_vote_vetoer_country } remove_global_variable = un_vote_vetoer_country }
+			# Clear the target's self-correction flag (consumed by the pass branches above)
+			if = {
+				limit = { exists = scope:un_vote_target }
+				scope:un_vote_target = {
+					if = { limit = { has_variable = un_target_self_corrected } remove_variable = un_target_self_corrected }
+				}
+			}
 			if = { limit = { has_global_variable = un_vote_net } remove_global_variable = un_vote_net }
 			if = { limit = { has_global_variable = un_vote_support } remove_global_variable = un_vote_support }
 			if = { limit = { has_global_variable = un_vote_oppose } remove_global_variable = un_vote_oppose }
@@ -1856,8 +2468,19 @@ un_vote.3 = {
 			name = un_display_oppose
 			value = global_var:un_vote_oppose
 		}
+		# Expulsion uses 2/3 supermajority; other topics use simple majority
 		if = {
-			limit = { global_var:un_vote_net >= 1 }
+			limit = {
+				has_global_variable = un_vote_topic_expulsion
+				un_vote_expulsion_passed >= 0
+			}
+			set_variable = un_notif_vote_passed
+		}
+		else_if = {
+			limit = {
+				NOT = { has_global_variable = un_vote_topic_expulsion }
+				global_var:un_vote_net >= 1
+			}
 			set_variable = un_notif_vote_passed
 		}
 		# Resolve proposer/target scopes from global vars
@@ -1869,6 +2492,9 @@ un_vote.3 = {
 			limit = { exists = global_var:un_vote_target_country }
 			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
 		}
+
+		# Save veto status locally so we don't depend on globals surviving
+		if = { limit = { has_global_variable = un_vote_veto_cast } set_variable = un_vote_was_vetoed }
 
 		# Save vote topics locally so we don't depend on globals surviving
 		if = { limit = { has_global_variable = un_vote_topic_condemn } set_variable = un_topic_condemn }
@@ -1886,6 +2512,7 @@ un_vote.3 = {
 		if = { limit = { has_global_variable = un_vote_topic_sanctions } set_variable = un_topic_sanctions }
 		if = { limit = { has_global_variable = un_vote_topic_law_of_sea } set_variable = un_topic_law_of_sea }
 		if = { limit = { has_global_variable = un_vote_topic_icc } set_variable = un_topic_icc }
+		if = { limit = { has_global_variable = un_vote_topic_expulsion } set_variable = un_topic_expulsion }
 	}
 
 	# Option A: Vote passed AND you voted yes - effects apply automatically
@@ -1902,9 +2529,15 @@ un_vote.3 = {
 			}
 		}
 
-		# Apply resolution effects if the vote passed and we supported it
+		# Apply the persistent treaty/declaration modifier directly in the
+		# option block so the engine renders each add_modifier in the option
+		# tooltip — players can see exactly what they're ratifying before
+		# clicking acknowledge. (Previously these were buried inside
+		# un_vote_apply_resolution_compliance, where the tooltip nesting
+		# made the modifier name and fields easy to miss.)
 		if = {
 			limit = { has_variable = un_notif_vote_passed }
+			un_vote_apply_treaty_modifier = yes
 			un_vote_apply_resolution_compliance = yes
 		}
 
@@ -1925,6 +2558,7 @@ un_vote.3 = {
 		}
 
 		# Same effects as yes voters - you accept the majority decision
+		un_vote_apply_treaty_modifier = yes
 		un_vote_apply_resolution_compliance = yes
 
 		# Clean up notification variables

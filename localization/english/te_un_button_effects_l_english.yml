@@ -1,0 +1,18 @@
+﻿l_english:
+
+#
+# UN_BUTTON_EFFECTS
+#
+ UN_ARMS_CONTROL_EFFECTS:0 "Applies [Concept('un_arms_control_participant_modifier','$un_arms_control_participant_modifier$')] (+10% $country_infamy_decay_mult$, −5% $unit_kill_rate_add$, −15% $unit_devastation_mult$, −5% $country_military_goods_cost_mult$, −25 $country_bureaucracy_add$). #G +3 UN Authority#!."
+ UN_CHAMPION_ORDER_EFFECTS:0 "Applies [Concept('un_champion_order_cost','$un_champion_order_cost$')] (−50 $country_authority_add$, −10% $country_influence_mult$)."
+ UN_DEFUND_DEVELOPMENT_EFFECTS:0 "Removes [Concept('un_development_contributor_modifier','$un_development_contributor_modifier$')] (+5% $country_institution_impact_institution_ministry_of_commerce_mult$, −25 $country_bureaucracy_add$). #R −2 UN Authority#!."
+ UN_END_PEACEKEEPING_EFFECTS:0 "Removes [Concept('un_peacekeeping_contributor_modifier','$un_peacekeeping_contributor_modifier$')] (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, −25 $country_bureaucracy_add$). #R −2 UN Authority#!."
+ UN_FUND_DEVELOPMENT_EFFECTS:0 "Applies [Concept('un_development_contributor_modifier','$un_development_contributor_modifier$')] (+5% $country_institution_impact_institution_ministry_of_commerce_mult$, −25 $country_bureaucracy_add$). #G +2 UN Authority#!."
+ UN_HUMAN_RIGHTS_EFFECTS:0 "Applies [Concept('un_human_rights_champion_modifier','$un_human_rights_champion_modifier$')] (+5% $country_institution_impact_institution_ministry_of_refugee_affairs_mult$, +5% $country_prestige_mult$, +5% $country_institution_size_change_speed_mult$, −25 $country_bureaucracy_add$). #G +3 UN Authority#!."
+ UN_LIFT_SANCTIONS_EFFECTS:0 "Removes [Concept('un_sanctions_enforcer_modifier','$un_sanctions_enforcer_modifier$')] (+5% $country_leverage_generation_mult$). Removes [Concept('un_sanctions_target_modifier','$un_sanctions_target_modifier$')] (−10% $country_influence_mult$, −5% $country_prestige_mult$, −15% $state_trade_advantage_mult$). #R −3 UN Authority#!."
+ UN_PEACEKEEPING_EFFECTS:0 "Applies [Concept('un_peacekeeping_contributor_modifier','$un_peacekeeping_contributor_modifier$')] (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, −25 $country_bureaucracy_add$). #G +3 UN Authority#!."
+ UN_STOP_CHAMPIONING_EFFECTS:0 "Removes [Concept('un_champion_order_cost','$un_champion_order_cost$')] (−50 $country_authority_add$, −10% $country_influence_mult$)."
+ UN_STOP_UNDERMINING_EFFECTS:0 "Removes [Concept('un_undermine_order_cost','$un_undermine_order_cost$')] (−25 $country_authority_add$, −5% $country_influence_mult$)."
+ UN_UNDERMINE_ORDER_EFFECTS:0 "Applies [Concept('un_undermine_order_cost','$un_undermine_order_cost$')] (−25 $country_authority_add$, −5% $country_influence_mult$)."
+ UN_WITHDRAW_ARMS_CONTROL_EFFECTS:0 "Removes [Concept('un_arms_control_participant_modifier','$un_arms_control_participant_modifier$')] (+10% $country_infamy_decay_mult$, −5% $unit_kill_rate_add$, −15% $unit_devastation_mult$, −5% $country_military_goods_cost_mult$, −25 $country_bureaucracy_add$). #R −3 UN Authority#!."
+ UN_WITHDRAW_HUMAN_RIGHTS_EFFECTS:0 "Removes [Concept('un_human_rights_champion_modifier','$un_human_rights_champion_modifier$')] (+5% $country_institution_impact_institution_ministry_of_refugee_affairs_mult$, +5% $country_prestige_mult$, +5% $country_institution_size_change_speed_mult$, −25 $country_bureaucracy_add$). #R −3 UN Authority#!."

@@ -1,0 +1,53 @@
+# ============================================================================
+# UN PERMANENT MEMBER TRIGGERS
+# Permanent-member status, veto eligibility, and binding-topic checks
+# ============================================================================
+
+# Whether THIS country currently holds a permanent UN seat.
+# Permanent members are granted via un_join_button during the founding window
+# and via expulsion-vote-promotion in the long term. They lose the seat by
+# leaving the UN, by sustained sub-GP rank (10+ years), or by 2/3 expulsion.
+is_un_permanent_member = {
+	je:je_united_nations ?= { has_modifier = un_permanent_member_modifier }
+}
+
+# Whether THIS country can cast a veto right now.
+# Requires: permanent member, in the UN, and not under a recent-veto cooldown.
+can_cast_un_veto = {
+	is_un_permanent_member = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+}
+
+# Whether the currently-active UN vote topic is *binding* (vetoable).
+# The 5 binding types are sanctions, peacekeeping_request, icc, condemn, reform.
+# All other topics are recommendatory and cannot be vetoed.
+un_vote_topic_is_binding = {
+	OR = {
+		has_global_variable = un_vote_topic_sanctions
+		has_global_variable = un_vote_topic_peacekeeping_request
+		has_global_variable = un_vote_topic_icc
+		has_global_variable = un_vote_topic_condemn
+		has_global_variable = un_vote_topic_reform
+	}
+}
+
+# Whether THIS country has been below great-power rank long enough to lose its
+# permanent seat. Tracked by var:un_permanent_subgp_months (incremented on the
+# monthly pulse while sub-GP, reset to 0 on regaining GP). 120 months = 10 yrs.
+un_permanent_member_eligibility_lost = {
+	is_un_permanent_member = yes
+	NOT = { country_rank >= rank_value:great_power }
+	has_variable = un_permanent_subgp_months
+	var:un_permanent_subgp_months >= 120
+}
+
+# Whether the AI should consider casting a veto on the active vote.
+# Used by the un_vote.1 veto option's ai_chance: only veto when the resolution
+# would otherwise pass (un_vote_net would still be >= 1 if THIS voted no).
+# At evaluation time, our own vote hasn't been cast yet, so the condition is
+# (un_vote_net - 1) >= 1, i.e. un_vote_net >= 2 -- enough margin that our
+# "no" alone wouldn't sink it.
+un_veto_would_change_outcome = {
+	exists = global_var:un_vote_net
+	global_var:un_vote_net >= 2
+}
