@@ -287,6 +287,8 @@ law_total_war = {
 		country_war_exhaustion_casualties_mult = -0.75
 		country_institution_impact_institution_ministry_of_war_mult = 0.1
 		state_pop_support_movement_anti_war_mult = 0.2
+		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.25
+		country_defender_diplomatic_play_escalation_weekly_mult = 0.25
 	}
 }
 
@@ -319,6 +321,8 @@ law_war_crimes_forbidden = {
 		country_institution_ministry_of_war_max_investment_add = -1
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.1
 		country_diplomatic_reputation_add = 2
+		country_aggressor_diplomatic_play_escalation_weekly_mult = -0.10
+		country_defender_diplomatic_play_escalation_weekly_mult = -0.10
 	}
 }
 
@@ -340,6 +344,8 @@ law_humanitarian_regulations = {
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.25
 		country_diplomatic_reputation_add = 4
 		state_pop_support_movement_anti_war_mult = -0.1
+		country_aggressor_diplomatic_play_escalation_weekly_mult = -0.20
+		country_defender_diplomatic_play_escalation_weekly_mult = -0.20
 	}
 
 }
@@ -362,6 +368,8 @@ law_limited_war = {
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.5
 		country_diplomatic_reputation_add = 6
 		state_pop_support_movement_anti_war_mult = -0.2
+		country_aggressor_diplomatic_play_escalation_weekly_mult = -0.30
+		country_defender_diplomatic_play_escalation_weekly_mult = -0.30
 	}
 }
 

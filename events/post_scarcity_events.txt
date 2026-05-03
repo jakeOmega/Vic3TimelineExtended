@@ -43,7 +43,7 @@ post_scarcity_events.1 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.05
+			multiply = -0.25
 		}
 	}
 
@@ -60,7 +60,7 @@ post_scarcity_events.1 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.03
+			multiply = -0.15
 		}
 	}
 
@@ -116,7 +116,7 @@ post_scarcity_events.2 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.03
+			multiply = -0.15
 		}
 	}
 
@@ -267,7 +267,7 @@ post_scarcity_events.4 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.03
+			multiply = -0.15
 		}
 	}
 

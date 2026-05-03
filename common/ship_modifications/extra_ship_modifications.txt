@@ -70,7 +70,7 @@ ship_mod_asw_destroyer_guns_light = {
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 16
-		goods_input_electronic_components_add = 4
+		goods_input_radios_add = 4
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -86,7 +86,7 @@ ship_mod_asw_destroyer_guns_medium = {
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 24
-		goods_input_electronic_components_add = 8
+		goods_input_radios_add = 8
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -103,7 +103,7 @@ ship_mod_asw_destroyer_guns_high = {
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 30
-		goods_input_electronic_components_add = 14
+		goods_input_radios_add = 14
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }

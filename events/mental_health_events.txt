@@ -42,7 +42,7 @@ mental_health_events.1 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.03
+			multiply = -0.15
 		}
 	}
 
@@ -118,7 +118,7 @@ mental_health_events.2 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.03
+			multiply = -0.15
 		}
 	}
 
@@ -291,7 +291,7 @@ mental_health_events.4 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.05
+			multiply = -0.25
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -315,7 +315,7 @@ mental_health_events.4 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.01
+			multiply = -0.03
 		}
 	}
 

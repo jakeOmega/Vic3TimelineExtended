@@ -2,14 +2,15 @@
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {
 		state_war_support_monthly_add = 10
+		country_aggressor_diplomatic_play_escalation_weekly_add = 0.1
 	}
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		war_propaganda
 	}
 	cost = 100
 
 	ai_weight = {
-		value = 0				
+		value = 0
 	}
 }
 

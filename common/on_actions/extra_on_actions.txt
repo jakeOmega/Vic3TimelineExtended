@@ -127,6 +127,7 @@ on_monthly_pulse_country = {
 		world_war_events_on_action
 		overbuild_protection_on_action
 		te_pm_retooling_weekly_schedule
+		st_dp_escalation_weekly_schedule
 	}
 }
 
@@ -140,6 +141,19 @@ te_pm_retooling_weekly_schedule = {
 		trigger_event = { id = minor_events_timelineextended.100 days = 7 }
 		trigger_event = { id = minor_events_timelineextended.100 days = 14 }
 		trigger_event = { id = minor_events_timelineextended.100 days = 21 }
+	}
+}
+
+# DIPLOMATIC PLAY ESCALATION - weekly tick distributed across the month at
+# days 0/7/14/21. Day 0 runs inline; days 7/14/21 fire dp_escalation_events.1
+# in country scope. The apply effect short-circuits via three is_diplomatic_play_*
+# guards, so countries not in any play do ~zero work.
+st_dp_escalation_weekly_schedule = {
+	effect = {
+		st_dp_country_apply_weekly_escalation = yes
+		trigger_event = { id = dp_escalation_events.1 days = 7 }
+		trigger_event = { id = dp_escalation_events.1 days = 14 }
+		trigger_event = { id = dp_escalation_events.1 days = 21 }
 	}
 }
 

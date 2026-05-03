@@ -297,8 +297,17 @@
 			value = 10
 		}
 	}
+	# Demote coal power plant subsidy from vanilla's must_have to nice_to_have.
+	# Vanilla pins building_power_plant = must_have for the whole game; with the
+	# mod's late-game fusion/nuclear/renewable options that locks the AI into
+	# permanent coal subsidies. nice_to_have is the lowest priority the engine
+	# accepts (no do_not_subsidize value exists). Railway and port keep their
+	# vanilla must_have via INJECT merge semantics.
+	subsidies = {
+		building_power_plant = nice_to_have
+	}
 	goods_stances = {
-		construction = { 
+		construction = {
 			stance = wants_high_supply 
 			trigger = {
 				always = yes

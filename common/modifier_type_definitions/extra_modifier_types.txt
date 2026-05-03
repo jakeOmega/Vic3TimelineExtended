@@ -901,6 +901,127 @@ country_legislative_override_capacity_add = {
 	script_only = yes
 }
 
+# --- Subjugation strength (read by script_value te_subjugation_strength) ---
+# Universal tuning knob plus 6 per-identity bonuses. Identity-conditional
+# bonuses are paid out only when the actor's bloc has the matching identity
+# AND the target satisfies that identity's axis match (same religion, same
+# governance principle, same primary culture, GDP ratio, army_size ratio).
+# Sovereign Empire is universal (no axis match). identity_diplomatic gets
+# nothing here on purpose — its strength sits elsewhere (alignment, infamy
+# reduction, pact leverage).
+country_subjugation_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_sovereign_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_religious_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_ideological_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_cultural_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_trade_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_military_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+# --- Diplomatic-play weekly escalation (read by st_dp_country_apply_weekly_escalation) ---
+# CADENCE: applied once per week (4× per month via on_monthly_pulse_country dispatch).
+# STACKING: aggressor_*/defender_* are safe for mass attachment (laws, techs, principles)
+# because at most one country fills each role per play. participant_* is APPLIED PER
+# COMMITTED COUNTRY in the play and stacks additively — a play with N participants
+# gets N× the participant contribution. Reserve participant_* for narrow single-country
+# uses (one-off event modifiers, unique character traits); never attach to laws/techs/
+# principles or any modifier source many countries hold simultaneously, or escalation
+# explodes for plays with many backers (e.g. Britain + Indian princely states).
+country_aggressor_diplomatic_play_escalation_weekly_add = {
+	color = bad
+	percent = no
+	decimals = 1
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_aggressor_diplomatic_play_escalation_weekly_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_defender_diplomatic_play_escalation_weekly_add = {
+	color = bad
+	percent = no
+	decimals = 1
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_defender_diplomatic_play_escalation_weekly_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_participant_diplomatic_play_escalation_weekly_add = {
+	color = bad
+	percent = no
+	decimals = 1
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_participant_diplomatic_play_escalation_weekly_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
 country_banking_random_momentum_mult = {
 	color = neutral
 	percent = yes
@@ -3546,6 +3667,110 @@ ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult = {
 	game_data = { ai_value = 0 }
 }
 ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_fleet_carrier_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_fleet_carrier_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_amphibious_assault_ship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_stealth_battlecruiser_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_networked_air_defense_cruiser_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_networked_air_defense_cruiser_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_antimatter_battleship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_orbital_support_amphibious_mothership_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+ship_battle_against_ship_type_orbital_support_amphibious_mothership_hull_damage_mult = {
 	decimals = 0
 	color = good
 	percent = yes

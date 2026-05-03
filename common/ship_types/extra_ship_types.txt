@@ -6,16 +6,24 @@
 # modification slots (ship_mod_<parent>_*) so we don't duplicate every armor /
 # guns / propulsion / range tier.
 #
-# Era / tech mapping:
-#   era 6  sonar                        → asw_destroyer
-#   era 7  advanced_submarine_technology → nuclear_submarine
-#   era 7  guided_missiles              → guided_missile_ship
-#   era 7  nuclear_energy               → nuclear_supercarrier
-#   era 8  precision_guided_munitions   → arsenal_ship
-#   era 9  rapid_deployment_forces      → expeditionary_sea_base
-#   era 10 hypersonic_weapons           → hypersonic_missile_platform
-#   era 11 directed_energy_weapons      → pulsed_laser_escort
-#   era 11 swarm_technology             → swarm_coordination_vessel
+# Era / tech mapping (covers all 4 roles every era 6-12 with 2-3 era overlap):
+#   era 6  bombing_aircraft             → fleet_carrier                     (capital)
+#   era 6  combined_arms                → amphibious_assault_ship           (troop)
+#   era 6  sonar                        → asw_destroyer                     (escort)
+#   era 7  advanced_submarine_technology → nuclear_submarine                (raider)
+#   era 7  guided_missiles              → guided_missile_ship               (escort)
+#   era 7  nuclear_energy               → nuclear_supercarrier              (capital)
+#   era 8  precision_guided_munitions   → arsenal_ship                      (capital)
+#   era 9  network_centric_warfare      → stealth_battlecruiser             (capital)
+#   era 9  network_centric_warfare      → networked_air_defense_cruiser     (escort)
+#   era 9  rapid_deployment_forces      → stealth_attack_submarine          (raider)
+#   era 9  rapid_deployment_forces      → expeditionary_sea_base            (troop)
+#   era 10 hypersonic_weapons           → hypersonic_missile_platform       (capital)
+#   era 11 directed_energy_weapons      → pulsed_laser_escort               (escort)
+#   era 11 swarm_technology             → swarm_coordination_vessel         (capital/support)
+#   era 11 swarm_technology             → autonomous_swarm_submarine        (raider, terminal)
+#   era 12 antimatter_production        → antimatter_battleship             (capital, terminal)
+#   era 12 orbital_weapon_platforms     → orbital_support_amphibious_mothership (troop, terminal)
 # =============================================================================
 
 
@@ -25,6 +33,13 @@ ship_type_asw_destroyer = {
 	ship_group = ship_group_torpedo_craft
 	modification_construction_cost = 110
 	can_be_flagship = yes
+
+	is_obsolete = {
+		has_technology_researched = network_centric_warfare
+	}
+	is_very_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
 
 	modifier = {
 		ship_construction_progress_max_add = 25
@@ -110,6 +125,13 @@ ship_type_nuclear_submarine = {
 	ship_group = ship_group_torpedo_craft
 	modification_construction_cost = 140
 
+	is_obsolete = {
+		has_technology_researched = rapid_deployment_forces
+	}
+	is_very_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
+
 	modifier = {
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 4500
@@ -193,6 +215,13 @@ ship_type_guided_missile_ship = {
 	ship_group = ship_group_torpedo_craft
 	modification_construction_cost = 130
 	can_be_flagship = yes
+
+	is_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
+	is_very_obsolete = {
+		has_technology_researched = swarm_technology
+	}
 
 	modifier = {
 		ship_construction_progress_max_add = 25
@@ -278,6 +307,13 @@ ship_type_nuclear_supercarrier = {
 	modification_construction_cost = 240
 	can_be_flagship = yes
 	combat_power_multiplier = 4.0
+
+	is_obsolete = {
+		has_technology_researched = network_centric_warfare
+	}
+	is_very_obsolete = {
+		has_technology_researched = hypersonic_weapons
+	}
 
 	modifier = {
 		ship_construction_progress_max_add = 25
@@ -369,6 +405,13 @@ ship_type_arsenal_ship = {
 	can_be_flagship = yes
 	combat_power_multiplier = 5.0
 
+	is_obsolete = {
+		has_technology_researched = hypersonic_weapons
+	}
+	is_very_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
+
 	modifier = {
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 11000
@@ -456,6 +499,10 @@ ship_type_expeditionary_sea_base = {
 	modification_construction_cost = 220
 	combat_power_multiplier = 1.0
 
+	is_obsolete = {
+		has_technology_researched = orbital_weapon_platforms
+	}
+
 	modifier = {
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 6500
@@ -540,6 +587,10 @@ ship_type_hypersonic_missile_platform = {
 	modification_construction_cost = 360
 	can_be_flagship = yes
 	combat_power_multiplier = 8.0
+
+	is_obsolete = {
+		has_technology_researched = antimatter_production
+	}
 
 	modifier = {
 		ship_construction_progress_max_add = 25
@@ -789,5 +840,800 @@ ship_type_swarm_coordination_vessel = {
 			utility_mod_camouflage
 			utility_mod_fire_suppression
 		}
+	}
+}
+
+
+### FLEET CARRIER — era 6, bombing_aircraft
+### Capital. Heavy fleet carrier between vanilla aircraft_carrier and nuclear_supercarrier.
+ship_type_fleet_carrier = {
+	ship_group = ship_group_cruisers
+	modification_construction_cost = 180
+	can_be_flagship = yes
+	combat_power_multiplier = 2.5
+
+	is_obsolete = {
+		has_technology_researched = nuclear_energy
+	}
+	is_very_obsolete = {
+		has_technology_researched = precision_guided_munitions
+	}
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 5500
+		ship_crew_max_add = 1100
+		ship_movement_speed_add = 5
+		ship_supply_capacity_add = 150
+		ship_hull_damage_add = 180
+		ship_crew_damage_add = 45
+		ship_armor_add = 130
+		ship_critical_hit_chance_add = 0.3
+		ship_critical_hit_multiplier_add = 2.5
+		ship_vulnerability_add = 100
+		ship_screening_add = 25
+		ship_readiness_gain_add = 11
+		ship_accuracy_add = 50
+		ship_visibility_add = 100
+		ship_detection_add = 450
+		ship_blockade_strength_add = 600
+
+		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.5
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 2800
+		goods_input_iron_add = 1100
+		goods_input_engines_add = 1100
+		goods_input_aeroplanes_add = 250
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_aeroplanes_add = 0.5
+		goods_input_radios_add = 0.5
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { bombing_aircraft }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_cruisers.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_aircraft_carrier.dds"
+
+	ai_weight = 3
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_aircraft_carrier_armor_light
+			ship_mod_aircraft_carrier_armor_medium
+			ship_mod_aircraft_carrier_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_aircraft_carrier_guns_light
+			ship_mod_aircraft_carrier_guns_medium
+			ship_mod_aircraft_carrier_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_aircraft_carrier_propulsion_light
+			ship_mod_aircraft_carrier_propulsion_medium
+			ship_mod_aircraft_carrier_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_aircraft_carrier_range_light
+			ship_mod_aircraft_carrier_range_medium
+			ship_mod_aircraft_carrier_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_fire_suppression
+			utility_mod_extended_sick_bay
+			utility_mod_torpedo_nets
+			utility_mod_camouflage
+			utility_mod_searchlights
+		}
+	}
+}
+
+
+### AMPHIBIOUS ASSAULT SHIP — era 6, combined_arms
+### Troop. Modern LHA: replaces vanilla troop ship in the mod-era timeline.
+ship_type_amphibious_assault_ship = {
+	ship_group = ship_group_cruisers
+	modification_construction_cost = 130
+	combat_power_multiplier = 1.0
+
+	is_obsolete = {
+		has_technology_researched = rapid_deployment_forces
+	}
+	is_very_obsolete = {
+		has_technology_researched = network_centric_warfare
+	}
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 4500
+		ship_crew_max_add = 600
+		ship_movement_speed_add = 5
+		ship_supply_capacity_add = 250
+		ship_hull_damage_add = 60
+		ship_crew_damage_add = 20
+		ship_armor_add = 100
+		ship_critical_hit_chance_add = 0.2
+		ship_critical_hit_multiplier_add = 2.0
+		ship_vulnerability_add = 200
+		ship_screening_add = 0
+		ship_readiness_gain_add = 10
+		ship_accuracy_add = 15
+		ship_visibility_add = 150
+		ship_detection_add = 100
+		ship_blockade_strength_add = 300
+		ship_carrying_capacity_add = 1.2
+		ship_marine_capacity_add = 0.5
+
+		ship_naval_invasion_efficiency_mult = 0.20
+		ship_supply_efficiency_add = 0.15
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 1900
+		goods_input_iron_add = 700
+		goods_input_engines_add = 700
+		goods_input_radios_add = 150
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { combined_arms }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_supply_ships.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_troop_ship.dds"
+
+	ai_weight = 2
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_troop_ship_armor_light
+			ship_mod_troop_ship_armor_medium
+			ship_mod_troop_ship_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_troop_ship_guns_light
+			ship_mod_troop_ship_guns_medium
+			ship_mod_troop_ship_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_troop_ship_propulsion_light
+			ship_mod_troop_ship_propulsion_medium
+			ship_mod_troop_ship_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_troop_ship_range_light
+			ship_mod_troop_ship_range_medium
+			ship_mod_troop_ship_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_landing_skiffs
+			utility_mod_extended_sick_bay
+			utility_mod_fire_suppression
+			utility_mod_camouflage
+		}
+	}
+}
+
+
+### STEALTH BATTLECRUISER — era 9, network_centric_warfare
+### Capital. Stealth-coated networked battlecruiser between arsenal_ship and hypersonic_missile_platform.
+ship_type_stealth_battlecruiser = {
+	ship_group = ship_group_capital_ships
+	modification_construction_cost = 320
+	can_be_flagship = yes
+	combat_power_multiplier = 6.0
+
+	is_obsolete = {
+		has_technology_researched = hypersonic_weapons
+	}
+	is_very_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 13000
+		ship_crew_max_add = 900
+		ship_movement_speed_add = 6
+		ship_supply_capacity_add = 320
+		ship_hull_damage_add = 950
+		ship_crew_damage_add = 350
+		ship_armor_add = 800
+		ship_critical_hit_chance_add = 0.4
+		ship_critical_hit_multiplier_add = 3.0
+		ship_vulnerability_add = 100
+		ship_screening_add = 30
+		ship_readiness_gain_add = 13
+		ship_accuracy_add = 175
+		ship_visibility_add = 60
+		ship_detection_add = 350
+		ship_blockade_strength_add = 4000
+
+		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.4
+		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.3
+		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.4
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 6500
+		goods_input_iron_add = 2800
+		goods_input_engines_add = 2200
+		goods_input_electronic_components_add = 1400
+		goods_input_ammunition_add = 700
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { network_centric_warfare }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_capital_ships.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_super_dreadnought.dds"
+
+	ai_weight = 3
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_arsenal_ship_armor_light
+			ship_mod_arsenal_ship_armor_medium
+			ship_mod_arsenal_ship_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_arsenal_ship_guns_light
+			ship_mod_arsenal_ship_guns_medium
+			ship_mod_arsenal_ship_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_arsenal_ship_propulsion_light
+			ship_mod_arsenal_ship_propulsion_medium
+			ship_mod_arsenal_ship_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_arsenal_ship_range_light
+			ship_mod_arsenal_ship_range_medium
+			ship_mod_arsenal_ship_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_fire_control_system
+			utility_mod_range_finder
+			utility_mod_advanced_explosives
+			utility_mod_camouflage
+		}
+		ship_mod_slot_utility_2 = {
+			utility_mod_dew_point_defense
+			utility_mod_drone_complement
+			utility_mod_torpedo_nets
+			utility_mod_fire_suppression
+		}
+	}
+}
+
+
+### NETWORKED AIR DEFENSE CRUISER — era 9, network_centric_warfare
+### Escort. AEGIS-style anti-missile cruiser. Bridges era 8-10 escort gap.
+ship_type_networked_air_defense_cruiser = {
+	ship_group = ship_group_cruisers
+	modification_construction_cost = 200
+	can_be_flagship = yes
+
+	is_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
+	is_very_obsolete = {
+		has_technology_researched = swarm_technology
+	}
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 6500
+		ship_crew_max_add = 350
+		ship_movement_speed_add = 6
+		ship_supply_capacity_add = 100
+		ship_hull_damage_add = 350
+		ship_crew_damage_add = 110
+		ship_armor_add = 250
+		ship_critical_hit_chance_add = 0.4
+		ship_critical_hit_multiplier_add = 2.5
+		ship_vulnerability_add = 60
+		ship_screening_add = 500
+		ship_readiness_gain_add = 13
+		ship_accuracy_add = 200
+		ship_visibility_add = 30
+		ship_detection_add = 250
+		ship_blockade_strength_add = 700
+		ship_carrying_capacity_add = 0.15
+		ship_marine_capacity_add = 0.075
+
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.6
+		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.4
+		ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = 0.2
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 3000
+		goods_input_iron_add = 1100
+		goods_input_engines_add = 1100
+		goods_input_electronic_components_add = 1000
+		goods_input_ammunition_add = 300
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { network_centric_warfare }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_cruisers.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_light_cruiser.dds"
+
+	ai_weight = 3
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_light_cruiser_armor_light
+			ship_mod_light_cruiser_armor_medium
+			ship_mod_light_cruiser_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_light_cruiser_guns_light
+			ship_mod_light_cruiser_guns_medium
+			ship_mod_light_cruiser_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_light_cruiser_propulsion_light
+			ship_mod_light_cruiser_propulsion_medium
+			ship_mod_light_cruiser_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_light_cruiser_range_light
+			ship_mod_light_cruiser_range_medium
+			ship_mod_light_cruiser_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_fire_control_system
+			utility_mod_range_finder
+			utility_mod_advanced_explosives
+			utility_mod_searchlights
+		}
+	}
+}
+
+
+### STEALTH ATTACK SUBMARINE — era 9, rapid_deployment_forces
+### Raider. AIP/stealth boat. Successor to nuclear_submarine.
+ship_type_stealth_attack_submarine = {
+	ship_group = ship_group_torpedo_craft
+	modification_construction_cost = 180
+
+	is_obsolete = {
+		has_technology_researched = directed_energy_weapons
+	}
+	is_very_obsolete = {
+		has_technology_researched = swarm_technology
+	}
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 6000
+		ship_crew_max_add = 220
+		ship_movement_speed_add = 7
+		ship_supply_capacity_add = 140
+		ship_hull_damage_add = 320
+		ship_crew_damage_add = 110
+		ship_armor_add = 50
+		ship_critical_hit_chance_add = 0.55
+		ship_critical_hit_multiplier_add = 4.0
+		ship_vulnerability_add = 5
+		ship_screening_add = 5
+		ship_readiness_gain_add = 13
+		ship_accuracy_add = 90
+		ship_visibility_add = 1
+		ship_detection_add = 120
+		ship_blockade_strength_add = 200
+
+		ship_battle_against_ship_type_modern_ironclad_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_pre_dreadnought_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 4.0
+		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 5.0
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 2800
+		goods_input_engines_add = 1100
+		goods_input_electronic_components_add = 600
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { rapid_deployment_forces }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_torpedo_craft.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_submarine.dds"
+
+	ai_weight = 3
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_nuclear_submarine_armor_light
+			ship_mod_nuclear_submarine_armor_medium
+			ship_mod_nuclear_submarine_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_nuclear_submarine_guns_light
+			ship_mod_nuclear_submarine_guns_medium
+			ship_mod_nuclear_submarine_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_nuclear_submarine_propulsion_light
+			ship_mod_nuclear_submarine_propulsion_medium
+			ship_mod_nuclear_submarine_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_nuclear_submarine_range_light
+			ship_mod_nuclear_submarine_range_medium
+			ship_mod_nuclear_submarine_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_nuclear_propulsion
+			utility_mod_sonar_suite
+			utility_mod_camouflage
+			utility_mod_drone_complement
+		}
+	}
+}
+
+
+### AUTONOMOUS SWARM SUBMARINE — era 11, swarm_technology
+### Raider, terminal. Unmanned drone wolfpack — very low crew, very high crit.
+ship_type_autonomous_swarm_submarine = {
+	ship_group = ship_group_torpedo_craft
+	modification_construction_cost = 220
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 7500
+		ship_crew_max_add = 50
+		ship_movement_speed_add = 7
+		ship_supply_capacity_add = 150
+		ship_hull_damage_add = 600
+		ship_crew_damage_add = 180
+		ship_armor_add = 80
+		ship_critical_hit_chance_add = 0.6
+		ship_critical_hit_multiplier_add = 4.5
+		ship_vulnerability_add = 5
+		ship_screening_add = 10
+		ship_readiness_gain_add = 14
+		ship_accuracy_add = 150
+		ship_visibility_add = 1
+		ship_detection_add = 200
+		ship_blockade_strength_add = 350
+
+		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 6.0
+		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 6.0
+		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 6.0
+		ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = 5.0
+		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.4
+		ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult = -0.3
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 3200
+		goods_input_engines_add = 1300
+		goods_input_electronic_components_add = 1400
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 0.2
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { swarm_technology }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_torpedo_craft.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_submarine.dds"
+
+	ai_weight = 4
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_nuclear_submarine_armor_light
+			ship_mod_nuclear_submarine_armor_medium
+			ship_mod_nuclear_submarine_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_nuclear_submarine_guns_light
+			ship_mod_nuclear_submarine_guns_medium
+			ship_mod_nuclear_submarine_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_nuclear_submarine_propulsion_light
+			ship_mod_nuclear_submarine_propulsion_medium
+			ship_mod_nuclear_submarine_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_nuclear_submarine_range_light
+			ship_mod_nuclear_submarine_range_medium
+			ship_mod_nuclear_submarine_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_drone_complement
+			utility_mod_camouflage
+			utility_mod_sonar_suite
+			utility_mod_advanced_explosives
+		}
+	}
+}
+
+
+### ANTIMATTER BATTLESHIP — era 12, antimatter_production
+### Capital, terminal. Mass-driver / antimatter-armed late-game flagship.
+ship_type_antimatter_battleship = {
+	ship_group = ship_group_capital_ships
+	modification_construction_cost = 480
+	can_be_flagship = yes
+	combat_power_multiplier = 12.0
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 28000
+		ship_crew_max_add = 1400
+		ship_movement_speed_add = 6
+		ship_supply_capacity_add = 600
+		ship_hull_damage_add = 2800
+		ship_crew_damage_add = 1100
+		ship_armor_add = 2000
+		ship_critical_hit_chance_add = 0.5
+		ship_critical_hit_multiplier_add = 4.0
+		ship_vulnerability_add = 200
+		ship_screening_add = 30
+		ship_readiness_gain_add = 14
+		ship_accuracy_add = 350
+		ship_visibility_add = 200
+		ship_detection_add = 500
+		ship_blockade_strength_add = 10000
+
+		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.5
+		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.6
+		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.7
+		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.1
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 11000
+		goods_input_iron_add = 5000
+		goods_input_engines_add = 3500
+		goods_input_electronic_components_add = 2500
+		goods_input_ammunition_add = 1800
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { antimatter_production }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_capital_ships.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_super_dreadnought.dds"
+
+	ai_weight = 5
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_hypersonic_missile_platform_armor_light
+			ship_mod_hypersonic_missile_platform_armor_medium
+			ship_mod_hypersonic_missile_platform_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_hypersonic_missile_platform_guns_light
+			ship_mod_hypersonic_missile_platform_guns_medium
+			ship_mod_hypersonic_missile_platform_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_hypersonic_missile_platform_propulsion_light
+			ship_mod_hypersonic_missile_platform_propulsion_medium
+			ship_mod_hypersonic_missile_platform_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_hypersonic_missile_platform_range_light
+			ship_mod_hypersonic_missile_platform_range_medium
+			ship_mod_hypersonic_missile_platform_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_ballistic_missile_bay
+			utility_mod_fire_control_system
+			utility_mod_range_finder
+			utility_mod_advanced_explosives
+		}
+		ship_mod_slot_utility_2 = {
+			utility_mod_dew_point_defense
+			utility_mod_drone_complement
+			utility_mod_fire_suppression
+			utility_mod_camouflage
+		}
+	}
+}
+
+
+### ORBITAL SUPPORT AMPHIBIOUS MOTHERSHIP — era 12, orbital_weapon_platforms
+### Troop, terminal. Sea-based mothership with orbital drop-pod marine deployment flavor.
+ship_type_orbital_support_amphibious_mothership = {
+	ship_group = ship_group_cruisers
+	modification_construction_cost = 360
+	combat_power_multiplier = 1.0
+
+	modifier = {
+		ship_construction_progress_max_add = 25
+		ship_hit_points_max_add = 11000
+		ship_crew_max_add = 1200
+		ship_movement_speed_add = 5
+		ship_supply_capacity_add = 1200
+		ship_hull_damage_add = 150
+		ship_crew_damage_add = 50
+		ship_armor_add = 300
+		ship_critical_hit_chance_add = 0.3
+		ship_critical_hit_multiplier_add = 2.5
+		ship_vulnerability_add = 250
+		ship_screening_add = 20
+		ship_readiness_gain_add = 12
+		ship_accuracy_add = 50
+		ship_visibility_add = 200
+		ship_detection_add = 250
+		ship_blockade_strength_add = 1500
+		ship_carrying_capacity_add = 4.0
+		ship_marine_capacity_add = 2.0
+
+		ship_naval_invasion_efficiency_mult = 0.50
+		ship_supply_efficiency_add = 0.40
+		ship_max_distance_to_port_mult = 0.40
+	}
+
+	construction_goods = {
+		goods_input_steel_add = 5500
+		goods_input_iron_add = 2200
+		goods_input_engines_add = 1800
+		goods_input_electronic_components_add = 1000
+	}
+
+	materiel_goods = {
+		goods_input_groceries_add = 1
+		goods_input_oil_add = 1
+		goods_input_steel_add = 0.1
+	}
+
+	unlocking_technologies = { orbital_weapon_platforms }
+
+	icon = "gfx/interface/icons/ships/ship_category/ship_group_supply_ships.dds"
+	profile_texture = "gfx/interface/icons/ships/ship_types/silhouette_troop_ship.dds"
+
+	ai_weight = 3
+
+	modifications = {
+		ship_mod_slot_armor = {
+			ship_mod_expeditionary_sea_base_armor_light
+			ship_mod_expeditionary_sea_base_armor_medium
+			ship_mod_expeditionary_sea_base_armor_high
+		}
+		ship_mod_slot_guns = {
+			ship_mod_expeditionary_sea_base_guns_light
+			ship_mod_expeditionary_sea_base_guns_medium
+			ship_mod_expeditionary_sea_base_guns_high
+		}
+		ship_mod_slot_propulsion = {
+			ship_mod_expeditionary_sea_base_propulsion_light
+			ship_mod_expeditionary_sea_base_propulsion_medium
+			ship_mod_expeditionary_sea_base_propulsion_high
+		}
+		ship_mod_slot_range = {
+			ship_mod_expeditionary_sea_base_range_light
+			ship_mod_expeditionary_sea_base_range_medium
+			ship_mod_expeditionary_sea_base_range_high
+		}
+		ship_mod_slot_utility_1 = {
+			utility_mod_landing_skiffs
+			utility_mod_drone_complement
+			utility_mod_extended_sick_bay
+			utility_mod_camouflage
+		}
+		ship_mod_slot_utility_2 = {
+			utility_mod_dew_point_defense
+			utility_mod_fire_suppression
+			utility_mod_torpedo_nets
+			utility_mod_advanced_explosives
+		}
+	}
+}
+
+
+# =============================================================================
+# INJECT: vanilla ship phase-out
+# =============================================================================
+# Add is_obsolete / is_very_obsolete to vanilla terminal ships so they retire
+# cleanly into the mod-era timeline. Each vanilla ship currently has no
+# obsolete trigger because it was the terminal vanilla type — INJECT: merges
+# these new fields onto the existing definition.
+# =============================================================================
+
+INJECT:ship_type_super_dreadnought = {
+	is_obsolete = {
+		has_technology_researched = bombing_aircraft
+	}
+	is_very_obsolete = {
+		has_technology_researched = nuclear_energy
+	}
+}
+
+INJECT:ship_type_aircraft_carrier = {
+	is_obsolete = {
+		has_technology_researched = nuclear_energy
+	}
+	is_very_obsolete = {
+		has_technology_researched = precision_guided_munitions
+	}
+}
+
+INJECT:ship_type_light_cruiser = {
+	is_obsolete = {
+		has_technology_researched = sonar
+	}
+	is_very_obsolete = {
+		has_technology_researched = guided_missiles
+	}
+}
+
+INJECT:ship_type_destroyer = {
+	is_obsolete = {
+		has_technology_researched = sonar
+	}
+	is_very_obsolete = {
+		has_technology_researched = guided_missiles
+	}
+}
+
+INJECT:ship_type_submarine = {
+	is_obsolete = {
+		has_technology_researched = advanced_submarine_technology
+	}
+	is_very_obsolete = {
+		has_technology_researched = rapid_deployment_forces
+	}
+}
+
+INJECT:ship_type_troop_ship = {
+	is_obsolete = {
+		has_technology_researched = combined_arms
+	}
+	is_very_obsolete = {
+		has_technology_researched = rapid_deployment_forces
 	}
 }

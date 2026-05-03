@@ -15530,6 +15530,202 @@ REPLACE:pm_company_headquarter_worker_cooperative = {
 	}
 }
 
+pm_company_headquarter_government_run_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_laws = {
+		law_command_economy
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_bureaucrats_add = 20
+			building_employment_aristocrats_add = 30
+			building_employment_clerks_add = 45
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_bureaucrats_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_government_run_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	unlocking_laws = {
+		law_command_economy
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_bureaucrats_add = 20
+			building_employment_shopkeepers_add = 30
+			building_employment_clerks_add = 45
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_bureaucrats_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_government_run_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	unlocking_laws = {
+		law_command_economy
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_bureaucrats_add = 65
+			building_employment_clerks_add = 30
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_bureaucrats_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_government_run_academics = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	unlocking_laws = {
+		law_command_economy
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_bureaucrats_add = 20
+			building_employment_clerks_add = 45
+			building_employment_academics_add = 35
+		}
+		unscaled = {
+			building_bureaucrats_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_worker_cooperative_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_laws = {
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_shopkeepers_add = 20
+			building_employment_aristocrats_add = 30
+			building_employment_clerks_add = 45
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_shopkeepers_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_worker_cooperative_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	unlocking_laws = {
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_shopkeepers_add = 65
+			building_employment_clerks_add = 30
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_shopkeepers_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_worker_cooperative_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	unlocking_laws = {
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_shopkeepers_add = 20
+			building_employment_bureaucrats_add = 30
+			building_employment_clerks_add = 45
+			building_employment_academics_add = 5
+		}
+		unscaled = {
+			building_shopkeepers_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
+pm_company_headquarter_worker_cooperative_academics = {
+	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	unlocking_laws = {
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_shopkeepers_add = 20
+			building_employment_clerks_add = 45
+			building_employment_academics_add = 35
+		}
+		unscaled = {
+			building_shopkeepers_shares_add = 10
+			building_clerks_shares_add = 2
+		}
+	}
+}
+
 pm_principle_education_4 = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	is_hidden_when_unavailable = yes

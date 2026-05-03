@@ -975,6 +975,14 @@ INJECT:pmg_ownership_building_company_headquarter = {
 		pm_digital_trading
 		pm_automated_trading
 		pm_hobbyist_ownership
+		pm_company_headquarter_government_run_aristocrats
+		pm_company_headquarter_government_run_shopkeepers
+		pm_company_headquarter_government_run_bureaucrats
+		pm_company_headquarter_government_run_academics
+		pm_company_headquarter_worker_cooperative_aristocrats
+		pm_company_headquarter_worker_cooperative_shopkeepers
+		pm_company_headquarter_worker_cooperative_bureaucrats
+		pm_company_headquarter_worker_cooperative_academics
 	}
 }
 

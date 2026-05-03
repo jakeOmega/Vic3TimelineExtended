@@ -227,7 +227,9 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
   - **≥60:** Non-members receive pariah status (`un_nonmember_pariah_modifier`: relations, prestige, influence penalties). NPT blocks `nuclear_program_aid` treaty article (with IAEA).
   - **≥70:** Great powers refusing humanitarian aid face severe domestic penalties (radicals, IG disapproval, extra authority loss)
   - **≥80:** Non-nuclear member powers face NPT disarmament pressure (`un_npt_disarmament_modifier`: `nuclear_disarmament = yes`) (requires IAEA)
-- **Security Council:** Great power members auto-awarded seats (cap: 5). Removed if dropped below GP or left UN.
+- **Security Council & Permanent Members:** 5 permanent seats. Granted to the founder + the next 4 Great Powers that join during a 5-year founding window (`un_founding_window_active` global variable, set on `un_found_button`). After the window closes, no new permanent members are auto-created — the only path to a new seat is via the expulsion-vote mechanism (a 2/3 supermajority can strip a permanent member, opening a slot, but the slot is not auto-refilled). Permanent membership is held until: (a) the country leaves the UN, (b) the country has been below Great Power rank for 10+ continuous years (`un_permanent_subgp_months` country variable counts months sub-GP and resets on regaining GP), or (c) a 2/3 supermajority expulsion vote passes against them.
+- **Veto Power (binding resolutions only):** Permanent members can cast a veto on the 5 *binding* topics — sanctions, peacekeeping_request, icc, condemn, reform — via a third option in `un_vote.1`. The veto kills the full binding form and sets `un_vote_veto_cast` global. The GA simple majority can still pass a graduated/weak form (vetoed sanctions → voluntary partial; vetoed peacekeeping → observer mission only; vetoed ICC → symbolic censure; vetoed condemn → non-binding rebuke; vetoed reform → flat block, no graduated fallback). Vetoing costs the country 5 UN authority, applies `un_veto_isolation_modifier` (short-term diplomatic isolation) and `un_veto_authority_drain_modifier` (long-term influence hit), and adds 3 infamy when used to block punitive resolutions (ICC, condemn, peacekeeping_request).
+- **Expulsion Vote (`un_propose_expulsion_button`):** Any UN member can call a 2/3 supermajority vote to strip a permanent member that has recently vetoed (`un_veto_isolation_modifier` is the visibility trigger). The vote uses `un_vote_topic_expulsion`; the special pass condition is `un_vote_expulsion_passed >= 0` (i.e., `un_vote_support * 3 >= un_vote_eligible_member_count * 2`). On pass, target loses both `un_permanent_member_modifier` and `un_security_council_modifier`. Non-vetoable.
 - **Treaty obligation:** `join_united_nations` treaty article auto-enrolls target via JE monthly pulse when `un_membership_obligation` modifier is active.
 
 ### Variables
@@ -252,7 +254,10 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 - **Policy (members):** `un_lift_sanctions_button`, `un_peacekeeping_button`, `un_end_peacekeeping_button`, `un_fund_development_button`, `un_defund_development_button`, `un_human_rights_button`, `un_arms_control_button`
 - **GP influence:** `un_champion_order_button`, `un_stop_championing_button`, `un_undermine_order_button`, `un_stop_undermining_button`
 
-### Vote Topics (13)
+### Vote Topics (16, of which 5 are *binding* / vetoable)
+The 5 binding topics — sanctions, peacekeeping_request, icc, condemn, reform — can be vetoed by [concept_un_permanent_member]s via the third option in `un_vote.1`. Vetoed binding resolutions that still have GA simple-majority pass in graduated/weak form (except reform, which is flat-blocked). All other 10 topics are recommendatory (non-vetoable). The 16th topic, `expulsion`, is recommendatory but uses a 2/3 supermajority threshold instead of simple majority.
+
+
 | Topic Variable | Triggered By | Description |
 |---|---|---|
 | `un_vote_topic_condemn` | Event 2 / Propose Condemn button | Condemn military aggressor |

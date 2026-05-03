@@ -553,7 +553,7 @@ movement_events_te.13 = {
 		# Quietly fund the networks - humanitarian act, risky
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.05
+			multiply = -0.25
 		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals pop_type = academics }

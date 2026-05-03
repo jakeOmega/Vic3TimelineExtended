@@ -19,8 +19,7 @@ utility_mod_sonar_suite = {
 	}
 
 	construction_goods = {
-		goods_input_radios_add = 8
-		goods_input_electronic_components_add = 3
+		goods_input_radios_add = 11
 	}
 
 	ai_weight = {

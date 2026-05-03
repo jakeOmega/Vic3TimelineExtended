@@ -3168,7 +3168,10 @@ decolonization_events.50 = {
 			}
 		}
 		add_modifier = { name = colonial_stability_negative_event days = 240 }
-		add_treasury = 50000
+		add_treasury = {
+			value = money_amount_multiplier_very_large
+			multiply = 2
+		}
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }

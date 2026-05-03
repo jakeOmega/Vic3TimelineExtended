@@ -176,7 +176,7 @@
  concept_decline_of_religion:0 "Decline of Religion"
  concept_decline_of_religion_desc:0 "A secularization trend reflecting the declining social influence of religious institutions. Tied to the Ministry of Religion institution. May be partially countered by [concept_religious_revival] events. The secularization campaign decision can accelerate the process."
  country_war_support_monthly_add_religion:0 "Furvor Monthly Add"
- country_war_support_monthly_add_religion_desc:0 "War support added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]."
+ country_war_support_monthly_add_religion_desc:0 "War support added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Displayed in event tooltips as 'From Events'."
  custom_religion:0 "[GetPlayer.GetCustom('custom_religion_custom_loc')]"
  custom_religion_animist:0 "$custom_religion$"
  custom_religion_buddhist:0 "$custom_religion$"

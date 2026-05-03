@@ -220,6 +220,7 @@ principle_vassalization_5 = {
 
 		country_allow_enacting_decrees_in_subject_bool = yes
 		country_leader_has_law_enactment_success_mult = 0.1
+		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
 	
 	ai_weight = {
@@ -431,6 +432,7 @@ principle_defensive_cooperation_5 = {
 		country_military_tech_spread_mult = 0.4
 		state_building_conscription_center_max_level_add = 50
 		country_infamy_decay_mult = 0.25
+		country_defender_diplomatic_play_escalation_weekly_mult = -0.20
 	}
 
 	power_bloc_modifier = {
@@ -507,6 +509,7 @@ principle_aggressive_coordination_5 = {
 		country_infamy_generation_mult = 0.15
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.5
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
 
 	institution = institution_ministry_of_war

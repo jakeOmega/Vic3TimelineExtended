@@ -2277,3 +2277,77 @@ arable_land_mult_pct = {
 	value = modifier:state_arable_land_mult
 	multiply = 100
 }
+
+# Country scope. Subjugation strength: read by force_become_subject's possible
+# clause. Score >= 1.0 lets the actor subjugate scope:target_country (which
+# must be a fellow bloc member; the action's potential clause guarantees that).
+#
+# Tuning intent (vanilla baseline was 5x prestige — too generous given how
+# easily prestige is amassed):
+#   - Base: prestige / target.prestige / 20  →  1.0 at 20x prestige (no bonuses)
+#   - Sovereign Empire: +0.5 universal       →  10x prestige anywhere
+#   - Per-identity matched: +0.4 in domain   →  ~12x prestige (axis-aligned)
+#   - identity_diplomatic: no bonus on purpose
+te_subjugation_strength = {
+	value = 0
+	add = {
+		value = prestige
+		divide = { value = scope:target_country.prestige min = 1 }
+		divide = 20
+	}
+	add = modifier:country_subjugation_strength_add
+
+	# Sovereign Empire — universal (no axis match needed)
+	if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_sovereign_empire } }
+		add = modifier:country_subjugation_sovereign_strength_add
+	}
+
+	# Religious — same state religion
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_religious }
+			religion = scope:target_country.religion
+		}
+		add = modifier:country_subjugation_religious_strength_add
+	}
+
+	# Ideological Union — same governance principle (chiefdom/monarchy/republic/etc.)
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_ideological_union }
+			te_same_governance_principle = { TARGET = scope:target_country }
+		}
+		add = modifier:country_subjugation_ideological_strength_add
+	}
+
+	# Cultural — actor and target share at least one primary culture
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_cultural }
+			any_primary_culture = {
+				save_temporary_scope_as = te_subj_pc
+				scope:target_country = { country_has_primary_culture = scope:te_subj_pc }
+			}
+		}
+		add = modifier:country_subjugation_cultural_strength_add
+	}
+
+	# Trade League — actor's GDP at least 5x target's
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_trade_league }
+			te_target_economically_subordinate = { TARGET = scope:target_country }
+		}
+		add = modifier:country_subjugation_trade_strength_add
+	}
+
+	# Military Treaty Organization — actor's army at least 5x target's
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_military_treaty_organization }
+			te_target_militarily_weaker = { TARGET = scope:target_country }
+		}
+		add = modifier:country_subjugation_military_strength_add
+	}
+}

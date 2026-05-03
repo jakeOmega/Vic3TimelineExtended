@@ -382,7 +382,7 @@ surveillance_events.5 = {
 		}
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.03
+			multiply = -0.15
 		}
 	}
 

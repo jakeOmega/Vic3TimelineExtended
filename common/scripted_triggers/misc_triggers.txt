@@ -216,3 +216,41 @@ is_extraction_industry_allowed = {
 		NOT = { has_law_or_variant = law_type:law_industry_banned }
 	}
 }
+
+# True if the actor (root) and $TARGET$ share the same governance principle law.
+# Used by te_subjugation_strength for the Ideological Union axis match. Lists every
+# vanilla governance-principle law as of 1.13; if extra_laws.txt later adds new
+# governance principles, extend this OR.
+te_same_governance_principle = {
+	OR = {
+		AND = { has_law = law_type:law_chiefdom              $TARGET$ = { has_law = law_type:law_chiefdom              } }
+		AND = { has_law = law_type:law_monarchy              $TARGET$ = { has_law = law_type:law_monarchy              } }
+		AND = { has_law = law_type:law_colonial_administration $TARGET$ = { has_law = law_type:law_colonial_administration } }
+		AND = { has_law = law_type:law_presidential_republic $TARGET$ = { has_law = law_type:law_presidential_republic } }
+		AND = { has_law = law_type:law_parliamentary_republic $TARGET$ = { has_law = law_type:law_parliamentary_republic } }
+		AND = { has_law = law_type:law_theocracy             $TARGET$ = { has_law = law_type:law_theocracy             } }
+		AND = { has_law = law_type:law_council_republic      $TARGET$ = { has_law = law_type:law_council_republic      } }
+		AND = { has_law = law_type:law_corporate_state       $TARGET$ = { has_law = law_type:law_corporate_state       } }
+		AND = { has_law = law_type:law_social_monarchy       $TARGET$ = { has_law = law_type:law_social_monarchy       } }
+	}
+}
+
+# True if the actor's army is at least 5x the target's. Used by te_subjugation_strength
+# for the Military Treaty Organization axis match.
+te_target_militarily_weaker = {
+	army_size >= {
+		value = $TARGET$.army_size
+		multiply = 5
+	}
+}
+
+# True if the actor's GDP is at least 5x the target's. Used by te_subjugation_strength
+# for the Trade League axis match — every TL bloc member shares the customs union by
+# default, so a customs-union check would be a no-op; gate on raw economic dominance
+# instead.
+te_target_economically_subordinate = {
+	gdp >= {
+		value = $TARGET$.gdp
+		multiply = 5
+	}
+}

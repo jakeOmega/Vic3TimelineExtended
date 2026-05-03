@@ -142,9 +142,17 @@ INJECT:company_gwr = {
 	}
 }
 
-# General Electric (USA) - electrics/power → appliances, semiconductors, renewables, software
+# Ferranti Ltd. (GBR) - electrics → radio building (split out from electrics_industry)
+INJECT:company_ferranti_ltd = {
+	building_types = {
+		building_electrics_industry_radio
+	}
+}
+
+# General Electric (USA) - electrics/power → radio, appliances, semiconductors, renewables, software
 INJECT:company_general_electric = {
 	building_types = {
+		building_electrics_industry_radio
 		building_electrics_industry_appliances
 	}
 	extension_building_types = {
@@ -441,9 +449,10 @@ INJECT:company_gotaverken = {
 	}
 }
 
-# Philips (Netherlands) - electrics → appliances, semiconductors, software
+# Philips (Netherlands) - electrics → radio, appliances, semiconductors, software
 INJECT:company_philips = {
 	building_types = {
+		building_electrics_industry_radio
 		building_electrics_industry_appliances
 	}
 	extension_building_types = {
@@ -471,6 +480,20 @@ INJECT:company_john_cockerill = {
 INJECT:company_nederlandse_petroleum = {
 	extension_building_types = {
 		building_synthetics_plant_oil
+	}
+}
+
+# Van Vlissingen en Dudok van Heel (Netherlands) - shipyard/motor → aerospace extension
+INJECT:company_van_vlissingen_en_dudok_van_heel = {
+	extension_building_types = {
+		building_aerospace_industry
+	}
+}
+
+# Maschinenfabrik Oerlikon (Switzerland) - motor/arms/artillery → aerospace extension
+INJECT:company_maschinenfabrik_oerlikon = {
+	extension_building_types = {
+		building_aerospace_industry
 	}
 }
 

@@ -548,8 +548,8 @@ cultural_hegemony.6 = {
 			is_decaying = yes
 		}
 		add_treasury = {
-			value = gdp
-			multiply = 0.005
+			value = money_amount_multiplier_very_large
+			multiply = 4
 		}
 
 		ai_chance = {
@@ -1037,8 +1037,8 @@ cultural_hegemony.10 = {
 			is_decaying = yes
 		} }
 		add_treasury = {
-			value = gdp
-			multiply = 0.0025
+			value = money_amount_multiplier_very_large
+			multiply = 6
 		}
 
 		ai_chance = {
