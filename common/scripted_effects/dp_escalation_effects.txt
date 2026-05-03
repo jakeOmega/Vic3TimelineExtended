@@ -1,0 +1,44 @@
+# ============================================================================
+# Diplomatic-play weekly escalation apply effect
+# ============================================================================
+# Country-driven: each country contributes its own deltas to plays in the
+# appropriate role. Avoids needing a `target` event-target hop on the play
+# scope (engine only exposes `initiator`).
+#
+# Called from dp_escalation_events.1 (events/dp_escalation_events.txt) and
+# inline at week 0 from st_dp_escalation_weekly_schedule (extra_on_actions.txt).
+# Three guards short-circuit countries not in any play, so the heavy
+# every_diplomatic_play iteration only runs when relevant.
+# ============================================================================
+
+st_dp_country_apply_weekly_escalation = {
+	# AGGRESSOR — plays I initiated
+	if = {
+		limit = { is_diplomatic_play_initiator = yes }
+		save_temporary_scope_as = mover
+		every_diplomatic_play = {
+			limit = { initiator_is = scope:mover }
+			add_escalation = scope:mover.country_aggressor_dp_escalation_weekly_total
+		}
+	}
+	# DEFENDER — plays I am the target of
+	if = {
+		limit = { is_diplomatic_play_target = yes }
+		save_temporary_scope_as = mover
+		every_diplomatic_play = {
+			limit = { target_is = scope:mover }
+			add_escalation = scope:mover.country_defender_dp_escalation_weekly_total
+		}
+	}
+	# PARTICIPANT — every play I am a committed member of
+	if = {
+		limit = { is_diplomatic_play_committed_participant = yes }
+		save_temporary_scope_as = mover
+		every_diplomatic_play = {
+			limit = {
+				any_scope_play_involved = { this = scope:mover }
+			}
+			add_escalation = scope:mover.country_participant_dp_escalation_weekly_total
+		}
+	}
+}

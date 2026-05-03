@@ -1,0 +1,41 @@
+# ============================================================================
+# Diplomatic-play weekly escalation totals
+# ============================================================================
+# One per role; combines the script-only `_add` and `_mult` modifier values
+# into a single per-week escalation contribution. Floored at 0 (up-only per
+# design — these modifiers heat plays, never cool them).
+#
+# Read by `st_dp_country_apply_weekly_escalation` (common/scripted_effects/
+# dp_escalation_effects.txt), which calls add_escalation = <these values>
+# on each play the country is in, in the appropriate role.
+# ============================================================================
+
+country_aggressor_dp_escalation_weekly_total = {
+	value = 0
+	add = modifier:country_aggressor_diplomatic_play_escalation_weekly_add
+	multiply = {
+		value = 1
+		add = modifier:country_aggressor_diplomatic_play_escalation_weekly_mult
+	}
+	min = 0
+}
+
+country_defender_dp_escalation_weekly_total = {
+	value = 0
+	add = modifier:country_defender_diplomatic_play_escalation_weekly_add
+	multiply = {
+		value = 1
+		add = modifier:country_defender_diplomatic_play_escalation_weekly_mult
+	}
+	min = 0
+}
+
+country_participant_dp_escalation_weekly_total = {
+	value = 0
+	add = modifier:country_participant_diplomatic_play_escalation_weekly_add
+	multiply = {
+		value = 1
+		add = modifier:country_participant_diplomatic_play_escalation_weekly_mult
+	}
+	min = 0
+}
