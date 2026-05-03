@@ -182,6 +182,8 @@
  CH_PROGRAM_FUNDING_NOT_MAX:0 "Funding is not already at maximum ([ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_cultural_program_max_funding_add')|0])."
  CH_PROGRAM_FUNDING_NOT_MIN:0 "Funding is above zero."
  CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA:0 "Cannot enact Cultural Protectionism while a Global Media Campaign is active."
+ CH_REQUIRES_MASS_MEDIA_TT:0 "Requires [GetTechnology('mass_media').GetName]."
+ CH_REQUIRES_MINISTRY_TT:0 "Requires [GetLawType('law_ministry_of_culture').GetName]."
  CH_WORLD_EXPOSITION_DESC:0 "Stage a major international exposition to turn money into a temporary burst of prestige, migration appeal, and cultural visibility."
  CONTAGION_SCARE_CYCLE_CMD_DESC:0 "[concept_banking_cycle] Value: #R -1#! (state controls absorb most spillovers)"
  CONTAGION_SCARE_CYCLE_COOP_DESC:0 "[concept_banking_cycle] Value: #R -2#! (federation spillovers are limited)"

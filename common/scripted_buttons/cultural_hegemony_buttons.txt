@@ -2,10 +2,11 @@
 	name = "CH_INCREASE_PROGRAM_FUNDING"
 	desc = "CH_INCREASE_PROGRAM_FUNDING_DESC"
 
+	# Stays visible while the JE is up; gating moved to `possible` so the
+	# button greys out with a tooltip when the player lacks the Ministry of
+	# Culture or has no funding cap yet, instead of disappearing silently.
 	visible = {
-		has_law = law_type:law_ministry_of_culture
 		has_journal_entry = je_cultural_hegemony
-		modifier:country_cultural_program_max_funding_add >= 1
 	}
 
 	ai_chance = {
@@ -21,6 +22,10 @@
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = CH_REQUIRES_MINISTRY_TT
+			has_law = law_type:law_ministry_of_culture
+		}
 		custom_tooltip = {
 			text = CH_PROGRAM_FUNDING_NOT_MAX
 			OR = {
@@ -56,8 +61,9 @@ ch_decrease_program_funding_button = {
 	name = "CH_DECREASE_PROGRAM_FUNDING"
 	desc = "CH_DECREASE_PROGRAM_FUNDING_DESC"
 
+	# Hidden when funding is at 0 — without the Ministry the JE pulse zeroes
+	# funding next tick anyway, so no need to grey-out for a missing law.
 	visible = {
-		has_law = law_type:law_ministry_of_culture
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_program_funding_level
 		var:ch_program_funding_level > 0
@@ -104,8 +110,6 @@ ch_world_exposition_button = {
 	desc = "CH_WORLD_EXPOSITION_DESC"
 
 	visible = {
-		has_law = law_type:law_ministry_of_culture
-		has_technology_researched = mass_media
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
 	}
@@ -123,10 +127,14 @@ ch_world_exposition_button = {
 	}
 
 	possible = {
-		has_law = law_type:law_ministry_of_culture
-		has_technology_researched = mass_media
-		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
+		custom_tooltip = {
+			text = CH_REQUIRES_MINISTRY_TT
+			has_law = law_type:law_ministry_of_culture
+		}
+		custom_tooltip = {
+			text = CH_REQUIRES_MASS_MEDIA_TT
+			has_technology_researched = mass_media
+		}
 	}
 
 	effect = {
@@ -140,7 +148,6 @@ ch_cultural_institutes_button = {
 	desc = "CH_CULTURAL_INSTITUTES_DESC"
 
 	visible = {
-		has_law = law_type:law_ministry_of_culture
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
 	}
@@ -158,9 +165,10 @@ ch_cultural_institutes_button = {
 	}
 
 	possible = {
-		has_law = law_type:law_ministry_of_culture
-		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+		custom_tooltip = {
+			text = CH_REQUIRES_MINISTRY_TT
+			has_law = law_type:law_ministry_of_culture
+		}
 	}
 
 	effect = {
@@ -200,8 +208,6 @@ ch_global_media_campaign_button = {
 	desc = "CH_GLOBAL_MEDIA_CAMPAIGN_DESC"
 
 	visible = {
-		has_law = law_type:law_ministry_of_culture
-		has_technology_researched = mass_media
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
@@ -224,11 +230,14 @@ ch_global_media_campaign_button = {
 	}
 
 	possible = {
-		has_law = law_type:law_ministry_of_culture
-		has_technology_researched = mass_media
-		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+		custom_tooltip = {
+			text = CH_REQUIRES_MINISTRY_TT
+			has_law = law_type:law_ministry_of_culture
+		}
+		custom_tooltip = {
+			text = CH_REQUIRES_MASS_MEDIA_TT
+			has_technology_researched = mass_media
+		}
 	}
 
 	effect = {
@@ -272,7 +281,6 @@ ch_cultural_protectionism_button = {
 	desc = "CH_CULTURAL_PROTECTIONISM_DESC"
 
 	visible = {
-		has_law = law_type:law_ministry_of_culture
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
 	}
@@ -294,10 +302,10 @@ ch_cultural_protectionism_button = {
 	}
 
 	possible = {
-		has_law = law_type:law_ministry_of_culture
-		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
-
+		custom_tooltip = {
+			text = CH_REQUIRES_MINISTRY_TT
+			has_law = law_type:law_ministry_of_culture
+		}
 		custom_tooltip = {
 			text = CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA
 			NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
