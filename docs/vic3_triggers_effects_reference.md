@@ -1,4 +1,4 @@
-<!-- Auto-generated from triggers.log @ 2026-04-28T14:06:30+00:00; effects.log @ 2026-04-28T14:06:30+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log @ 2026-05-03T23:13:35+00:00; effects.log @ 2026-05-03T23:13:35+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 

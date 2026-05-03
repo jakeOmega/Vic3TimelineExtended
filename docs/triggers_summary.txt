@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log @ 2026-04-28T14:06:30+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log @ 2026-05-03T23:13:35+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 none|active_lens|Checks if the specified lens is open
 none|active_lens_option|Checks if the specified lens option is activated
@@ -25,161 +25,161 @@ country|any_cobelligerent_in_war|Iterate through all co-belligerents of scope co
 battle,building,front,hq,military_formation|any_combat_unit|Iterate through all combat units of input scope   Supported scopes: building, military formation, front, battle   any_combat_unit
 country|any_company|Iterate through all companies in a country   any_company
 none|any_country|Iterate through all countries globally   any_country
-none|any_country_in_afghanistan|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_country_in_africa|ship_mod_coastal_defence_doctrine
-none|any_country_in_alpide_belt|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_amazon|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_americas|intelligence_capacity_from_gdp
-none|any_country_in_anatolia_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_country_in_andean_federation|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_country_in_andes|gfx_infantry_mobilization_count
-none|any_country_in_angola|ship_mod_coastal_defence_doctrine
-none|any_country_in_arabia|army_projection_comparison
-none|any_country_in_arabic_old|state_urbanization_rate
-none|any_country_in_aragon|gfx_infantry_mobilization_count
-none|any_country_in_arctic_russia_old|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_asia|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_atlantic_coast|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_australia|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_country_in_balkans|covert_operations_available_slots
-none|any_country_in_balkans_old|ship_mod_merchant_navy_doctrine
-none|any_country_in_baltic_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_baltic_states_old|gfx_artillery_mobilization_count
-none|any_country_in_belarus_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_country_in_bengal_old|ship_mod_coastal_defence_doctrine
-none|any_country_in_bolivia|state_urbanization_rate
-none|any_country_in_bombay_old|army_projection_comparison
-none|any_country_in_brazil|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_burma|gfx_artillery_mobilization_count
-none|any_country_in_canada|ship_mod_jeune_ecole_doctrine
+none|any_country_in_afghanistan|gfx_infantry_mobilization_count
+none|any_country_in_africa|gfx_infantry_mobilization_count
+none|any_country_in_alpide_belt|ship_mod_jeune_ecole_doctrine
+none|any_country_in_amazon|gfx_artillery_mobilization_count
+none|any_country_in_americas|ship_mod_coastal_defence_doctrine
+none|any_country_in_anatolia_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_andean_federation|gfx_artillery_mobilization_count
+none|any_country_in_andes|state_urbanization_rate
+none|any_country_in_angola|ship_mod_merchant_navy_doctrine
+none|any_country_in_arabia|ship_mod_coastal_defence_doctrine
+none|any_country_in_arabic_old|money_amount_multiplier_medium
+none|any_country_in_aragon|gfx_artillery_mobilization_count
+none|any_country_in_arctic_russia_old|ship_mod_jeune_ecole_doctrine
+none|any_country_in_asia|ship_mod_merchant_navy_doctrine
+none|any_country_in_atlantic_coast|gfx_infantry_mobilization_count
+none|any_country_in_australia|ship_mod_merchant_navy_doctrine
+none|any_country_in_balkans|money_amount_multiplier_very_small
+none|any_country_in_balkans_old|state_urbanization_rate
+none|any_country_in_baltic_old|ship_mod_coastal_defence_doctrine
+none|any_country_in_baltic_states_old|state_urbanization_rate
+none|any_country_in_belarus_old|money_amount_multiplier_very_small
+none|any_country_in_bengal_old|money_amount_multiplier_very_small
+none|any_country_in_bolivia|gfx_artillery_mobilization_count
+none|any_country_in_bombay_old|gfx_infantry_mobilization_count
+none|any_country_in_brazil|ship_mod_jeune_ecole_doctrine
+none|any_country_in_burma|state_urbanization_rate
+none|any_country_in_canada|money_amount_multiplier_medium
 none|any_country_in_canada_old|army_projection_comparison
-none|any_country_in_caribbean_old|army_projection_comparison
-none|any_country_in_castile|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
+none|any_country_in_caribbean_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_castile|ship_mod_merchant_navy_doctrine
 none|any_country_in_caucasus_old|army_projection_comparison
-none|any_country_in_central_america|state_urbanization_rate
+none|any_country_in_central_america|ship_mod_coastal_defence_doctrine
 none|any_country_in_central_america_old|ship_mod_coastal_defence_doctrine
-none|any_country_in_central_asia|ship_mod_coastal_defence_doctrine
-none|any_country_in_central_asia_old|army_projection_comparison
-none|any_country_in_central_europe|gfx_infantry_mobilization_count
-none|any_country_in_central_india_old|ship_mod_coastal_defence_doctrine
-none|any_country_in_china|gfx_infantry_mobilization_count
-none|any_country_in_chorasmia|gfx_artillery_mobilization_count
-none|any_country_in_colonial_la_plata|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_colonial_new_grenada|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_colonial_new_spain|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
+none|any_country_in_central_asia|money_amount_multiplier_medium
+none|any_country_in_central_asia_old|ship_mod_jeune_ecole_doctrine
+none|any_country_in_central_europe|money_amount_multiplier_medium
+none|any_country_in_central_india_old|ship_mod_jeune_ecole_doctrine
+none|any_country_in_china|money_amount_multiplier_very_small
+none|any_country_in_chorasmia|ship_mod_merchant_navy_doctrine
+none|any_country_in_colonial_la_plata|state_urbanization_rate
+none|any_country_in_colonial_new_grenada|money_amount_multiplier_very_small
+none|any_country_in_colonial_new_spain|state_urbanization_rate
 none|any_country_in_colonial_peru|army_projection_comparison
-none|any_country_in_congo_old|gfx_infantry_mobilization_count
-none|any_country_in_danubia_old|gfx_infantry_mobilization_count
-none|any_country_in_dixie_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_country_in_dnieper_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_east_africa|gfx_infantry_mobilization_count
-none|any_country_in_east_asia|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_country_in_east_sibera_old|army_projection_comparison
-none|any_country_in_eastern_europe|intelligence_capacity_modifier_mult
-none|any_country_in_england_old|covert_operations_available_slots
-none|any_country_in_equatorial_africa|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_country_in_ethiopia_old|covert_operations_available_slots
-none|any_country_in_europe|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_country_in_finland_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_country_in_france|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_france_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_country_in_french_natural_borders|global_fine_art_production
-none|any_country_in_german_confederation|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_country_in_gran_colombia|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_country_in_great_game_region|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_great_plains|army_projection_comparison
+none|any_country_in_congo_old|army_projection_comparison
+none|any_country_in_danubia_old|state_urbanization_rate
+none|any_country_in_dixie_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_dnieper_old|army_projection_comparison
+none|any_country_in_east_africa|army_projection_comparison
+none|any_country_in_east_asia|ship_mod_coastal_defence_doctrine
+none|any_country_in_east_sibera_old|ship_mod_coastal_defence_doctrine
+none|any_country_in_eastern_europe|ship_mod_merchant_navy_doctrine
+none|any_country_in_england_old|ship_mod_coastal_defence_doctrine
+none|any_country_in_equatorial_africa|money_amount_multiplier_very_small
+none|any_country_in_ethiopia_old|money_amount_multiplier_very_small
+none|any_country_in_europe|ship_mod_jeune_ecole_doctrine
+none|any_country_in_finland_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_france|gfx_infantry_mobilization_count
+none|any_country_in_france_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_french_natural_borders|annex_subject_base_liberty_desire_change
+none|any_country_in_german_confederation|gfx_artillery_mobilization_count
+none|any_country_in_gran_colombia|gfx_artillery_mobilization_count
+none|any_country_in_great_game_region|ship_mod_coastal_defence_doctrine
+none|any_country_in_great_plains|state_urbanization_rate
 none|any_country_in_great_plains_old|gfx_infantry_mobilization_count
-none|any_country_in_great_rift_valley|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_country_in_greater_afghanistan|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_country_in_greater_bulgaria|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_country_in_greater_canada|state_urbanization_rate
-none|any_country_in_greater_croatia|gfx_infantry_mobilization_count
-none|any_country_in_greater_germany|ship_mod_coastal_defence_doctrine
-none|any_country_in_greater_khorasan|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_country_in_greater_persia|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_greater_romania|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_country_in_han_homelands|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_country_in_himalayas|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_himalayas_old|gfx_artillery_mobilization_count
-none|any_country_in_historic_byzantium|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_country_in_home_islands|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_country_in_honshu|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_country_in_hungary|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_country_in_iberia_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_country_in_iceland|gfx_infantry_mobilization_count
-none|any_country_in_india|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_indian_frontier|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_indochina|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_country_in_indonesia|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_italy_old|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_japan|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_japan_old|ship_mod_merchant_navy_doctrine
-none|any_country_in_korea|gfx_infantry_mobilization_count
-none|any_country_in_krakatoa_tsunami_zone|covert_ops_funding_ic_display
-none|any_country_in_la_plata|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_latin_america|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_country_in_lesser_germany|intelligence_capacity_from_gdp
-none|any_country_in_madras_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_manchuria_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_country_in_megali_greece|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_mexico_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_country_in_middle_east|ship_mod_coastal_defence_doctrine
-none|any_country_in_mozambique|ship_mod_merchant_navy_doctrine
-none|any_country_in_near_east|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_country_in_new_england_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_new_world|gfx_infantry_mobilization_count
-none|any_country_in_niger_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_nile_basin|ship_mod_jeune_ecole_doctrine
-none|any_country_in_north_africa|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_north_africa_egypt|army_projection_comparison
-none|any_country_in_north_africa_old|state_urbanization_rate
-none|any_country_in_north_america|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_north_andes|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_north_china|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_country_in_north_germany_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_north_india|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_country_in_north_sea_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_northeast_asia|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_country_in_northern_europe|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_country_in_northern_mexico|intelligence_capacity_modifier_mult
-none|any_country_in_occitania_old|ship_mod_coastal_defence_doctrine
-none|any_country_in_oceania|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_old_world|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_country_in_pacific_coast|intelligence_capacity_from_gdp
-none|any_country_in_pacific_coast_old|gfx_artillery_mobilization_count
-none|any_country_in_persia_old|intelligence_capacity_from_gdp
-none|any_country_in_peru|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
+none|any_country_in_great_rift_valley|money_amount_multiplier_very_small
+none|any_country_in_greater_afghanistan|ship_mod_jeune_ecole_doctrine
+none|any_country_in_greater_bulgaria|ship_mod_merchant_navy_doctrine
+none|any_country_in_greater_canada|gfx_infantry_mobilization_count
+none|any_country_in_greater_croatia|gfx_artillery_mobilization_count
+none|any_country_in_greater_germany|state_urbanization_rate
+none|any_country_in_greater_khorasan|ship_mod_coastal_defence_doctrine
+none|any_country_in_greater_persia|army_projection_comparison
+none|any_country_in_greater_romania|state_urbanization_rate
+none|any_country_in_han_homelands|ship_mod_merchant_navy_doctrine
+none|any_country_in_himalayas|money_amount_multiplier_very_small
+none|any_country_in_himalayas_old|ship_mod_coastal_defence_doctrine
+none|any_country_in_historic_byzantium|army_projection_comparison
+none|any_country_in_home_islands|money_amount_multiplier_medium
+none|any_country_in_honshu|gfx_artillery_mobilization_count
+none|any_country_in_hungary|ship_mod_jeune_ecole_doctrine
+none|any_country_in_iberia_old|money_amount_multiplier_medium
+none|any_country_in_iceland|army_projection_comparison
+none|any_country_in_india|gfx_artillery_mobilization_count
+none|any_country_in_indian_frontier|money_amount_multiplier_medium
+none|any_country_in_indochina|ship_mod_coastal_defence_doctrine
+none|any_country_in_indonesia|state_urbanization_rate
+none|any_country_in_italy_old|money_amount_multiplier_medium
+none|any_country_in_japan|army_projection_comparison
+none|any_country_in_japan_old|gfx_infantry_mobilization_count
+none|any_country_in_korea|gfx_artillery_mobilization_count
+none|any_country_in_krakatoa_tsunami_zone|free_opium_producing_arable_land
+none|any_country_in_la_plata|money_amount_multiplier_medium
+none|any_country_in_latin_america|money_amount_multiplier_medium
+none|any_country_in_lesser_germany|gfx_artillery_mobilization_count
+none|any_country_in_madras_old|army_projection_comparison
+none|any_country_in_manchuria_old|money_amount_multiplier_medium
+none|any_country_in_megali_greece|ship_mod_jeune_ecole_doctrine
+none|any_country_in_mexico_old|army_projection_comparison
+none|any_country_in_middle_east|ship_mod_merchant_navy_doctrine
+none|any_country_in_mozambique|money_amount_multiplier_medium
+none|any_country_in_near_east|ship_mod_jeune_ecole_doctrine
+none|any_country_in_new_england_old|state_urbanization_rate
+none|any_country_in_new_world|army_projection_comparison
+none|any_country_in_niger_old|state_urbanization_rate
+none|any_country_in_nile_basin|state_urbanization_rate
+none|any_country_in_north_africa|money_amount_multiplier_medium
+none|any_country_in_north_africa_egypt|gfx_artillery_mobilization_count
+none|any_country_in_north_africa_old|gfx_artillery_mobilization_count
+none|any_country_in_north_america|money_amount_multiplier_very_small
+none|any_country_in_north_andes|ship_mod_coastal_defence_doctrine
+none|any_country_in_north_china|gfx_infantry_mobilization_count
+none|any_country_in_north_germany_old|money_amount_multiplier_very_small
+none|any_country_in_north_india|state_urbanization_rate
+none|any_country_in_north_sea_old|state_urbanization_rate
+none|any_country_in_northeast_asia|money_amount_multiplier_medium
+none|any_country_in_northern_europe|state_urbanization_rate
+none|any_country_in_northern_mexico|gfx_infantry_mobilization_count
+none|any_country_in_occitania_old|army_projection_comparison
+none|any_country_in_oceania|army_projection_comparison
+none|any_country_in_old_world|gfx_artillery_mobilization_count
+none|any_country_in_pacific_coast|army_projection_comparison
+none|any_country_in_pacific_coast_old|money_amount_multiplier_very_small
+none|any_country_in_persia_old|money_amount_multiplier_very_small
+none|any_country_in_peru|ship_mod_coastal_defence_doctrine
 none|any_country_in_philippines|state_urbanization_rate
-none|any_country_in_poland_old|gfx_artillery_mobilization_count
-none|any_country_in_punjab_old|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_country_in_rhine_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_ring_of_fire|gfx_infantry_mobilization_count
-none|any_country_in_russia|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_russia_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_country_in_scandinavia|army_projection_comparison
-none|any_country_in_senegal_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_siberia|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_south_africa|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_south_america|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_south_china|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_country_in_south_east_asia|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_country_in_south_germany_old|ship_mod_merchant_navy_doctrine
-none|any_country_in_south_india|ship_mod_coastal_defence_doctrine
-none|any_country_in_southern_africa|intelligence_capacity_modifier_mult
-none|any_country_in_southern_africa_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_southern_europe|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_country_in_subsaharan_africa|intelligence_capacity_from_gdp
-none|any_country_in_the_midwest_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_country_in_transoxiana|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
+none|any_country_in_poland_old|money_amount_multiplier_medium
+none|any_country_in_punjab_old|state_urbanization_rate
+none|any_country_in_rhine_old|money_amount_multiplier_medium
+none|any_country_in_ring_of_fire|ship_mod_coastal_defence_doctrine
+none|any_country_in_russia|gfx_infantry_mobilization_count
+none|any_country_in_russia_old|gfx_artillery_mobilization_count
+none|any_country_in_scandinavia|money_amount_multiplier_medium
+none|any_country_in_senegal_old|gfx_artillery_mobilization_count
+none|any_country_in_siberia|state_urbanization_rate
+none|any_country_in_south_africa|ship_mod_merchant_navy_doctrine
+none|any_country_in_south_america|gfx_infantry_mobilization_count
+none|any_country_in_south_china|gfx_artillery_mobilization_count
+none|any_country_in_south_east_asia|ship_mod_merchant_navy_doctrine
+none|any_country_in_south_germany_old|money_amount_multiplier_medium
+none|any_country_in_south_india|gfx_artillery_mobilization_count
+none|any_country_in_southern_africa|money_amount_multiplier_medium
+none|any_country_in_southern_africa_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_southern_europe|state_urbanization_rate
+none|any_country_in_subsaharan_africa|state_urbanization_rate
+none|any_country_in_the_midwest_old|ship_mod_merchant_navy_doctrine
+none|any_country_in_transoxiana|money_amount_multiplier_medium
 none|any_country_in_turkestan|army_projection_comparison
-none|any_country_in_urals_old|state_urbanization_rate
-none|any_country_in_west_africa|gfx_artillery_mobilization_count
-none|any_country_in_west_siberia_old|intelligence_capacity_from_gdp
-none|any_country_in_western_europe|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_country_in_wet_process_region|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_country_in_yugoslavia|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_country_in_zambezi_basin|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_country_in_zanj_old|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
+none|any_country_in_urals_old|gfx_artillery_mobilization_count
+none|any_country_in_west_africa|army_projection_comparison
+none|any_country_in_west_siberia_old|gfx_artillery_mobilization_count
+none|any_country_in_western_europe|ship_mod_coastal_defence_doctrine
+none|any_country_in_wet_process_region|army_projection_comparison
+none|any_country_in_yugoslavia|ship_mod_coastal_defence_doctrine
+none|any_country_in_zambezi_basin|ship_mod_coastal_defence_doctrine
+none|any_country_in_zanj_old|state_urbanization_rate
 country|any_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country   any_country_strategic_region
 none|any_decentralized_country|Iterate through all countries that are decentralized   any_decentralized_country
 country|any_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country   any_diplomatic_catalyst
@@ -215,161 +215,161 @@ power_bloc|any_power_bloc_member|Iterate through all members of the scoped power
 interest_group|any_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law   any_preferred_law
 country,country_definition|any_primary_culture|Primary cultures of the scoped country or country definition   any_primary_culture
 province|any_province|Iterate through all Provinces in the scoped State   any_province
-none|any_province_in_afghanistan|intelligence_capacity_modifier_mult
-none|any_province_in_africa|covert_available_slots_display
-none|any_province_in_alpide_belt|state_urbanization_rate
-none|any_province_in_amazon|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_province_in_americas|colonial_state_count
-none|any_province_in_anatolia_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_andean_federation|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_province_in_andes|max_canton_system_level
-none|any_province_in_angola|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_province_in_arabia|gfx_supportship_deploy_count
+none|any_province_in_afghanistan|army_projection_comparison
+none|any_province_in_africa|����E
+none|any_province_in_alpide_belt|ship_mod_merchant_navy_doctrine
+none|any_province_in_amazon|���E
+none|any_province_in_americas|provinces_with_forested_terrain
+none|any_province_in_anatolia_old|army_projection_comparison
+none|any_province_in_andean_federation|army_projection_comparison
+none|any_province_in_andes|provinces_with_elevated_terrain
+none|any_province_in_angola|���E
+none|any_province_in_arabia|max_canton_system_level
 none|any_province_in_arabic_old|gfx_artillery_mobilization_count
-none|any_province_in_aragon|gfx_capitalship_deploy_count
-none|any_province_in_arctic_russia_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_asia|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_province_in_atlantic_coast|gfx_infantry_mobilization_count
-none|any_province_in_australia|covert_available_slots_display
-none|any_province_in_balkans|intelligence_capacity_from_literacy
-none|any_province_in_balkans_old|covert_operations_available_slots
-none|any_province_in_baltic_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_baltic_states_old|gfx_infantry_mobilization_count
-none|any_province_in_belarus_old|gfx_artillery_mobilization_count
-none|any_province_in_bengal_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_bolivia|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_province_in_bombay_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_province_in_brazil|covert_available_slots_display
-none|any_province_in_burma|gfx_lightship_deploy_count
-none|any_province_in_canada|gfx_infantry_deploy_count
-none|any_province_in_canada_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_caribbean_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_castile|colonial_state_count
-none|any_province_in_caucasus_old|intelligence_capacity_modifier_mult
-none|any_province_in_central_america|covert_operations_available_slots
-none|any_province_in_central_america_old|intelligence_capacity_from_gdp
-none|any_province_in_central_asia|intelligence_capacity_modifier_mult
-none|any_province_in_central_asia_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_central_europe|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_province_in_central_india_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_province_in_china|covert_operation_max_slots
-none|any_province_in_chorasmia|dlc010
+none|any_province_in_aragon|gfx_infantry_deploy_count
+none|any_province_in_arctic_russia_old|army_projection_comparison
+none|any_province_in_asia|����E
+none|any_province_in_atlantic_coast|money_amount_multiplier_medium
+none|any_province_in_australia|money_amount_multiplier_small
+none|any_province_in_balkans|���E
+none|any_province_in_balkans_old|ship_mod_jeune_ecole_doctrine
+none|any_province_in_baltic_old|gfx_infantry_mobilization_count
+none|any_province_in_baltic_states_old|ship_mod_coastal_defence_doctrine
+none|any_province_in_belarus_old|ship_mod_merchant_navy_doctrine
+none|any_province_in_bengal_old|money_amount_multiplier_medium
+none|any_province_in_bolivia|���E
+none|any_province_in_bombay_old|state_urbanization_rate
+none|any_province_in_brazil|concentration_of_defensive_mobilized_battalions
+none|any_province_in_burma|max_canton_system_level
+none|any_province_in_canada|����E
+none|any_province_in_canada_old|ship_mod_coastal_defence_doctrine
+none|any_province_in_caribbean_old|gfx_infantry_mobilization_count
+none|any_province_in_castile|gfx_artillery_deploy_count
+none|any_province_in_caucasus_old|gfx_infantry_mobilization_count
+none|any_province_in_central_america|ship_mod_jeune_ecole_doctrine
+none|any_province_in_central_america_old|money_amount_multiplier_very_small
+none|any_province_in_central_asia|gfx_infantry_mobilization_count
+none|any_province_in_central_asia_old|money_amount_multiplier_medium
+none|any_province_in_central_europe|ship_mod_jeune_ecole_doctrine
+none|any_province_in_central_india_old|army_projection_comparison
+none|any_province_in_china|����E
+none|any_province_in_chorasmia|����E
 none|any_province_in_colonial_la_plata|ship_mod_jeune_ecole_doctrine
-none|any_province_in_colonial_new_grenada|intelligence_capacity_modifier_mult
-none|any_province_in_colonial_new_spain|gfx_infantry_mobilization_count
-none|any_province_in_colonial_peru|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_congo_old|gfx_supportship_deploy_count
-none|any_province_in_danubia_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_province_in_dixie_old|max_sakoku_trade_center_level
-none|any_province_in_dnieper_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_east_africa|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_east_asia|colonial_state_count
-none|any_province_in_east_sibera_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_province_in_eastern_europe|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_england_old|gfx_infantry_mobilization_count
-none|any_province_in_equatorial_africa|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_ethiopia_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_europe|gfx_supportship_deploy_count
-none|any_province_in_finland_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_province_in_france|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_province_in_france_old|covert_operations_available_slots
-none|any_province_in_french_natural_borders|gfx_infantry_mobilization_count
-none|any_province_in_german_confederation|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_province_in_gran_colombia|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_great_game_region|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_great_plains|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_great_plains_old|army_projection_comparison
-none|any_province_in_great_rift_valley|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_greater_afghanistan|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_province_in_greater_bulgaria|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_province_in_greater_canada|ship_mod_merchant_navy_doctrine
+none|any_province_in_colonial_new_grenada|gfx_artillery_mobilization_count
+none|any_province_in_colonial_new_spain|army_projection_comparison
+none|any_province_in_colonial_peru|money_amount_multiplier_very_small
+none|any_province_in_congo_old|���E
+none|any_province_in_danubia_old|money_amount_multiplier_medium
+none|any_province_in_dixie_old|����E
+none|any_province_in_dnieper_old|money_amount_multiplier_medium
+none|any_province_in_east_africa|ship_mod_merchant_navy_doctrine
+none|any_province_in_east_asia|provinces_with_elevated_terrain
+none|any_province_in_east_sibera_old|ship_mod_merchant_navy_doctrine
+none|any_province_in_eastern_europe|ship_mod_jeune_ecole_doctrine
+none|any_province_in_england_old|money_amount_multiplier_medium
+none|any_province_in_equatorial_africa|ship_mod_jeune_ecole_doctrine
+none|any_province_in_ethiopia_old|money_amount_multiplier_medium
+none|any_province_in_europe|����E
+none|any_province_in_finland_old|gfx_artillery_mobilization_count
+none|any_province_in_france|���E
+none|any_province_in_france_old|army_projection_comparison
+none|any_province_in_french_natural_borders|army_projection_comparison
+none|any_province_in_german_confederation|money_amount_multiplier_very_small
+none|any_province_in_gran_colombia|money_amount_multiplier_very_small
+none|any_province_in_great_game_region|ship_mod_merchant_navy_doctrine
+none|any_province_in_great_plains|money_amount_multiplier_medium
+none|any_province_in_great_plains_old|money_amount_multiplier_very_small
+none|any_province_in_great_rift_valley|money_amount_multiplier_medium
+none|any_province_in_greater_afghanistan|army_projection_comparison
+none|any_province_in_greater_bulgaria|army_projection_comparison
+none|any_province_in_greater_canada|army_projection_comparison
 none|any_province_in_greater_croatia|ship_mod_coastal_defence_doctrine
-none|any_province_in_greater_germany|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_province_in_greater_khorasan|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_greater_persia|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_province_in_greater_romania|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_province_in_han_homelands|intelligence_capacity_from_gdp
-none|any_province_in_himalayas|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_province_in_himalayas_old|gfx_infantry_mobilization_count
-none|any_province_in_historic_byzantium|ship_mod_jeune_ecole_doctrine
+none|any_province_in_greater_germany|gfx_infantry_mobilization_count
+none|any_province_in_greater_khorasan|gfx_infantry_mobilization_count
+none|any_province_in_greater_persia|money_amount_multiplier_medium
+none|any_province_in_greater_romania|gfx_infantry_mobilization_count
+none|any_province_in_han_homelands|gfx_infantry_mobilization_count
+none|any_province_in_himalayas|gfx_artillery_deploy_count
+none|any_province_in_himalayas_old|gfx_artillery_mobilization_count
+none|any_province_in_historic_byzantium|ship_mod_coastal_defence_doctrine
 none|any_province_in_home_islands|ship_mod_jeune_ecole_doctrine
-none|any_province_in_honshu|gfx_artillery_deploy_count
-none|any_province_in_hungary|gfx_artillery_deploy_count
-none|any_province_in_iberia_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_iceland|gfx_lightship_deploy_count
-none|any_province_in_india|intelligence_capacity_from_literacy
-none|any_province_in_indian_frontier|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_indochina|gfx_supportship_deploy_count
-none|any_province_in_indonesia|covert_available_slots_display
-none|any_province_in_italy_old|gfx_capitalship_deploy_count
-none|any_province_in_japan|covert_operation_max_slots
+none|any_province_in_honshu|max_sakoku_trade_center_level
+none|any_province_in_hungary|����E
+none|any_province_in_iberia_old|ship_mod_coastal_defence_doctrine
+none|any_province_in_iceland|max_canton_system_level
+none|any_province_in_india|����E
+none|any_province_in_indian_frontier|army_projection_comparison
+none|any_province_in_indochina|ottoman_power_projection
+none|any_province_in_indonesia|provinces_with_forested_terrain
+none|any_province_in_italy_old|gfx_artillery_deploy_count
+none|any_province_in_japan|���E
 none|any_province_in_japan_old|gfx_lightship_deploy_count
-none|any_province_in_korea|max_sakoku_trade_center_level
-none|any_province_in_krakatoa_tsunami_zone|ship_mod_merchant_navy_doctrine
-none|any_province_in_la_plata|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_province_in_latin_america|gfx_artillery_mobilization_count
-none|any_province_in_lesser_germany|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_province_in_madras_old|gfx_infantry_mobilization_count
-none|any_province_in_manchuria_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_province_in_megali_greece|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_province_in_mexico_old|covert_operations_available_slots
-none|any_province_in_middle_east|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_province_in_mozambique|army_projection_comparison
-none|any_province_in_near_east|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_province_in_new_england_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_new_world|gfx_capitalship_deploy_count
-none|any_province_in_niger_old|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_province_in_nile_basin|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_north_africa|army_projection_comparison
-none|any_province_in_north_africa_egypt|state_urbanization_rate
-none|any_province_in_north_africa_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_province_in_north_america|ship_mod_merchant_navy_doctrine
-none|any_province_in_north_andes|army_projection_comparison
-none|any_province_in_north_china|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_north_germany_old|state_urbanization_rate
-none|any_province_in_north_india|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_province_in_north_sea_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_province_in_northeast_asia|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_northern_europe|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_province_in_northern_mexico|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_province_in_occitania_old|gfx_infantry_mobilization_count
-none|any_province_in_oceania|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_province_in_old_world|covert_available_slots_display
-none|any_province_in_pacific_coast|ship_mod_merchant_navy_doctrine
-none|any_province_in_pacific_coast_old|ship_mod_coastal_defence_doctrine
-none|any_province_in_persia_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_peru|gfx_capitalship_deploy_count
-none|any_province_in_philippines|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_province_in_poland_old|gfx_infantry_mobilization_count
-none|any_province_in_punjab_old|intelligence_capacity_from_gdp
-none|any_province_in_rhine_old|max_sakoku_trade_center_level
-none|any_province_in_ring_of_fire|ship_mod_coastal_defence_doctrine
-none|any_province_in_russia|covert_available_slots_display
-none|any_province_in_russia_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_province_in_scandinavia|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_province_in_senegal_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_province_in_siberia|gfx_lightship_deploy_count
-none|any_province_in_south_africa|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_province_in_south_america|ship_mod_merchant_navy_doctrine
-none|any_province_in_south_china|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_province_in_south_east_asia|intelligence_capacity_from_gdp
-none|any_province_in_south_germany_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
+none|any_province_in_korea|gfx_lightship_deploy_count
+none|any_province_in_krakatoa_tsunami_zone|gfx_artillery_mobilization_count
+none|any_province_in_la_plata|war_exhaustion_from_country_turmoil
+none|any_province_in_latin_america|ship_mod_jeune_ecole_doctrine
+none|any_province_in_lesser_germany|ship_mod_jeune_ecole_doctrine
+none|any_province_in_madras_old|money_amount_multiplier_very_small
+none|any_province_in_manchuria_old|gfx_artillery_mobilization_count
+none|any_province_in_megali_greece|gfx_artillery_mobilization_count
+none|any_province_in_mexico_old|money_amount_multiplier_very_small
+none|any_province_in_middle_east|gfx_artillery_mobilization_count
+none|any_province_in_mozambique|ship_mod_coastal_defence_doctrine
+none|any_province_in_near_east|����E
+none|any_province_in_new_england_old|ship_mod_merchant_navy_doctrine
+none|any_province_in_new_world|provinces_with_forested_terrain
+none|any_province_in_niger_old|ottoman_power_projection
+none|any_province_in_nile_basin|army_projection_comparison
+none|any_province_in_north_africa|gfx_infantry_mobilization_count
+none|any_province_in_north_africa_egypt|army_projection_comparison
+none|any_province_in_north_africa_old|ship_mod_coastal_defence_doctrine
+none|any_province_in_north_america|ship_mod_jeune_ecole_doctrine
+none|any_province_in_north_andes|gfx_infantry_mobilization_count
+none|any_province_in_north_china|state_urbanization_rate
+none|any_province_in_north_germany_old|gfx_infantry_mobilization_count
+none|any_province_in_north_india|gfx_infantry_mobilization_count
+none|any_province_in_north_sea_old|gfx_infantry_mobilization_count
+none|any_province_in_northeast_asia|money_amount_multiplier_very_small
+none|any_province_in_northern_europe|gfx_infantry_mobilization_count
+none|any_province_in_northern_mexico|state_urbanization_rate
+none|any_province_in_occitania_old|ship_mod_jeune_ecole_doctrine
+none|any_province_in_oceania|privy_purse_multiplier_base
+none|any_province_in_old_world|����E
+none|any_province_in_pacific_coast|ship_mod_jeune_ecole_doctrine
+none|any_province_in_pacific_coast_old|money_amount_multiplier_medium
+none|any_province_in_persia_old|gfx_infantry_mobilization_count
+none|any_province_in_peru|ottoman_power_projection
+none|any_province_in_philippines|gfx_artillery_mobilization_count
+none|any_province_in_poland_old|ship_mod_coastal_defence_doctrine
+none|any_province_in_punjab_old|money_amount_multiplier_very_small
+none|any_province_in_rhine_old|gfx_supportship_deploy_count
+none|any_province_in_ring_of_fire|gfx_artillery_mobilization_count
+none|any_province_in_russia|����E
+none|any_province_in_russia_old|army_projection_comparison
+none|any_province_in_scandinavia|money_amount_multiplier_very_small
+none|any_province_in_senegal_old|state_urbanization_rate
+none|any_province_in_siberia|����E
+none|any_province_in_south_africa|state_urbanization_rate
+none|any_province_in_south_america|money_amount_multiplier_medium
+none|any_province_in_south_china|gfx_infantry_mobilization_count
+none|any_province_in_south_east_asia|money_amount_multiplier_very_small
+none|any_province_in_south_germany_old|ship_mod_coastal_defence_doctrine
 none|any_province_in_south_india|ship_mod_merchant_navy_doctrine
-none|any_province_in_southern_africa|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_province_in_southern_africa_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_southern_europe|covert_operations_available_slots
-none|any_province_in_subsaharan_africa|gfx_artillery_mobilization_count
-none|any_province_in_the_midwest_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_province_in_transoxiana|ship_mod_merchant_navy_doctrine
-none|any_province_in_turkestan|dlc010
-none|any_province_in_urals_old|covert_operation_max_slots
+none|any_province_in_southern_africa|army_projection_comparison
+none|any_province_in_southern_africa_old|ship_mod_coastal_defence_doctrine
+none|any_province_in_southern_europe|gfx_infantry_mobilization_count
+none|any_province_in_subsaharan_africa|ship_mod_merchant_navy_doctrine
+none|any_province_in_the_midwest_old|army_projection_comparison
+none|any_province_in_transoxiana|gfx_artillery_mobilization_count
+none|any_province_in_turkestan|����E
+none|any_province_in_urals_old|war_exhaustion_from_country_turmoil
 none|any_province_in_west_africa|state_urbanization_rate
-none|any_province_in_west_siberia_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_province_in_western_europe|gfx_infantry_mobilization_count
-none|any_province_in_wet_process_region|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_province_in_yugoslavia|covert_operations_available_slots
-none|any_province_in_zambezi_basin|army_projection_comparison
-none|any_province_in_zanj_old|max_canton_system_level
+none|any_province_in_west_siberia_old|money_amount_multiplier_very_small
+none|any_province_in_western_europe|ship_mod_jeune_ecole_doctrine
+none|any_province_in_wet_process_region|state_urbanization_rate
+none|any_province_in_yugoslavia|ship_mod_merchant_navy_doctrine
+none|any_province_in_zambezi_basin|ship_mod_jeune_ecole_doctrine
+none|any_province_in_zanj_old|���E
 country|any_rival_country|Any country that is being rivaled by the country in a scope   any_rival_country
 country|any_rivaling_country|Any country that is rivaling the country in a scope   any_rivaling_country
 country,front,interest_group,military_formation|any_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation   any_scope_admiral
@@ -406,474 +406,474 @@ country|any_scope_violate_sovereignty_wars|Iterate through all relevant wars if 
 country|any_scope_war|Iterate through all wars related to the scope   any_scope_war
 state|any_sea_node_adjacent_state|Iterate through all states that share a sea node with a state   any_sea_node_adjacent_state
 none|any_state|Iterate through all states globally   any_state
-none|any_state_in_afghanistan|dlc010
-none|any_state_in_africa|max_sakoku_trade_center_level
-none|any_state_in_alpide_belt|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_amazon|gfx_infantry_deploy_count
-none|any_state_in_americas|max_sakoku_trade_center_level
+none|any_state_in_afghanistan|����E
+none|any_state_in_africa|gfx_lightship_deploy_count
+none|any_state_in_alpide_belt|concentration_of_defensive_mobilized_battalions
+none|any_state_in_amazon|max_sakoku_trade_center_level
+none|any_state_in_americas|provinces_with_elevated_terrain
 none|any_state_in_anatolia_old|gfx_infantry_deploy_count
-none|any_state_in_andean_federation|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_state_in_andes|max_sakoku_trade_center_level
-none|any_state_in_angola|covert_operation_max_slots
-none|any_state_in_arabia|intelligence_capacity_from_literacy
-none|any_state_in_arabic_old|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_aragon|max_canton_system_level
-none|any_state_in_arctic_russia_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_in_asia|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_atlantic_coast|gfx_supportship_deploy_count
-none|any_state_in_australia|covert_operation_max_slots
-none|any_state_in_balkans|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_balkans_old|intelligence_capacity_from_literacy
-none|any_state_in_baltic_old|gfx_lightship_deploy_count
-none|any_state_in_baltic_states_old|covert_operations_available_slots
-none|any_state_in_belarus_old|covert_available_slots_display
-none|any_state_in_bengal_old|intelligence_capacity_from_literacy
-none|any_state_in_bolivia|covert_operation_max_slots
-none|any_state_in_bombay_old|gfx_capitalship_deploy_count
-none|any_state_in_brazil|colonial_state_count
-none|any_state_in_burma|gfx_lightship_deploy_count
-none|any_state_in_canada|gfx_infantry_deploy_count
-none|any_state_in_canada_old|gfx_artillery_deploy_count
-none|any_state_in_caribbean_old|gfx_supportship_deploy_count
-none|any_state_in_castile|intelligence_capacity_from_literacy
-none|any_state_in_caucasus_old|colonial_state_count
-none|any_state_in_central_america|gfx_capitalship_deploy_count
-none|any_state_in_central_america_old|ship_mod_jeune_ecole_doctrine
-none|any_state_in_central_asia|colonial_state_count
-none|any_state_in_central_asia_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_in_central_europe|max_sakoku_trade_center_level
-none|any_state_in_central_india_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_state_in_china|gfx_supportship_deploy_count
-none|any_state_in_chorasmia|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_colonial_la_plata|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_in_colonial_new_grenada|intelligence_capacity_from_gdp
-none|any_state_in_colonial_new_spain|ship_mod_coastal_defence_doctrine
-none|any_state_in_colonial_peru|gfx_lightship_deploy_count
-none|any_state_in_congo_old|gfx_capitalship_deploy_count
-none|any_state_in_danubia_old|gfx_infantry_deploy_count
+none|any_state_in_andean_federation|ship_mod_coastal_defence_doctrine
+none|any_state_in_andes|����E
+none|any_state_in_angola|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\dlc\dlc015_songs_of_the_homeland\music\dlc_mp2_music.txt
+none|any_state_in_arabia|���E
+none|any_state_in_arabic_old|gfx_capitalship_deploy_count
+none|any_state_in_aragon|gfx_capitalship_deploy_count
+none|any_state_in_arctic_russia_old|money_amount_multiplier_medium
+none|any_state_in_asia|����E
+none|any_state_in_atlantic_coast|privy_purse_multiplier_base
+none|any_state_in_australia|����E
+none|any_state_in_balkans|���E
+none|any_state_in_balkans_old|����E
+none|any_state_in_baltic_old|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\dlc\dlc015_songs_of_the_homeland\music\dlc_mp2_music.txt
+none|any_state_in_baltic_states_old|money_amount_multiplier_very_small
+none|any_state_in_belarus_old|ottoman_power_projection
+none|any_state_in_bengal_old|����E
+none|any_state_in_bolivia|concentration_of_defensive_mobilized_battalions
+none|any_state_in_bombay_old|building_groups_extra
+none|any_state_in_brazil|building_groups_extra
+none|any_state_in_burma|���E
+none|any_state_in_canada|���E
+none|any_state_in_canada_old|concentration_of_defensive_mobilized_battalions
+none|any_state_in_caribbean_old|gfx_lightship_deploy_count
+none|any_state_in_castile|����E
+none|any_state_in_caucasus_old|���E
+none|any_state_in_central_america|ottoman_power_projection
+none|any_state_in_central_america_old|money_amount_multiplier_medium
+none|any_state_in_central_asia|gfx_infantry_deploy_count
+none|any_state_in_central_asia_old|money_amount_multiplier_very_small
+none|any_state_in_central_europe|����E
+none|any_state_in_central_india_old|ship_mod_jeune_ecole_doctrine
+none|any_state_in_china|provinces_with_forested_terrain
+none|any_state_in_chorasmia|money_amount_multiplier_small
+none|any_state_in_colonial_la_plata|money_amount_multiplier_medium
+none|any_state_in_colonial_new_grenada|money_amount_multiplier_very_small
+none|any_state_in_colonial_new_spain|gfx_infantry_mobilization_count
+none|any_state_in_colonial_peru|privy_purse_multiplier_base
+none|any_state_in_congo_old|����E
+none|any_state_in_danubia_old|gfx_supportship_deploy_count
 none|any_state_in_dixie_old|max_sakoku_trade_center_level
-none|any_state_in_dnieper_old|gfx_capitalship_deploy_count
-none|any_state_in_east_africa|covert_operation_max_slots
-none|any_state_in_east_asia|covert_available_slots_display
-none|any_state_in_east_sibera_old|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_eastern_europe|max_canton_system_level
-none|any_state_in_england_old|gfx_lightship_deploy_count
-none|any_state_in_equatorial_africa|ship_mod_jeune_ecole_doctrine
-none|any_state_in_ethiopia_old|gfx_lightship_deploy_count
-none|any_state_in_europe|colonial_state_count
-none|any_state_in_finland_old|covert_available_slots_display
-none|any_state_in_france|gfx_infantry_deploy_count
-none|any_state_in_france_old|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_french_natural_borders|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_in_german_confederation|gfx_infantry_mobilization_count
-none|any_state_in_gran_colombia|dlc010
-none|any_state_in_great_game_region|army_projection_comparison
-none|any_state_in_great_plains|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_great_plains_old|state_urbanization_rate
-none|any_state_in_great_rift_valley|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_in_greater_afghanistan|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_in_greater_bulgaria|intelligence_capacity_from_gdp
-none|any_state_in_greater_canada|covert_available_slots_display
-none|any_state_in_greater_croatia|gfx_lightship_deploy_count
-none|any_state_in_greater_germany|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_greater_khorasan|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_state_in_greater_persia|max_canton_system_level
-none|any_state_in_greater_romania|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_han_homelands|gfx_supportship_deploy_count
-none|any_state_in_himalayas|covert_operation_max_slots
-none|any_state_in_himalayas_old|gfx_artillery_deploy_count
-none|any_state_in_historic_byzantium|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_in_home_islands|max_sakoku_trade_center_level
-none|any_state_in_honshu|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_hungary|gfx_capitalship_deploy_count
-none|any_state_in_iberia_old|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_iceland|dlc010
-none|any_state_in_india|gfx_supportship_deploy_count
-none|any_state_in_indian_frontier|covert_operation_max_slots
-none|any_state_in_indochina|max_sakoku_trade_center_level
-none|any_state_in_indonesia|gfx_capitalship_deploy_count
-none|any_state_in_italy_old|max_canton_system_level
-none|any_state_in_japan|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_japan_old|covert_operation_max_slots
-none|any_state_in_korea|colonial_state_count
-none|any_state_in_krakatoa_tsunami_zone|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_in_la_plata|gfx_supportship_deploy_count
-none|any_state_in_latin_america|max_canton_system_level
-none|any_state_in_lesser_germany|gfx_capitalship_deploy_count
-none|any_state_in_madras_old|max_sakoku_trade_center_level
-none|any_state_in_manchuria_old|colonial_state_count
-none|any_state_in_megali_greece|gfx_lightship_deploy_count
-none|any_state_in_mexico_old|colonial_state_count
-none|any_state_in_middle_east|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_mozambique|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_near_east|gfx_artillery_deploy_count
-none|any_state_in_new_england_old|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_new_world|max_sakoku_trade_center_level
-none|any_state_in_niger_old|dlc010
-none|any_state_in_nile_basin|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_north_africa|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_north_africa_egypt|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_state_in_north_africa_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_in_north_america|gfx_supportship_deploy_count
-none|any_state_in_north_andes|covert_operation_max_slots
-none|any_state_in_north_china|max_sakoku_trade_center_level
-none|any_state_in_north_germany_old|ship_mod_jeune_ecole_doctrine
-none|any_state_in_north_india|dlc010
-none|any_state_in_north_sea_old|gfx_artillery_deploy_count
-none|any_state_in_northeast_asia|covert_operation_max_slots
+none|any_state_in_dnieper_old|privy_purse_multiplier_base
+none|any_state_in_east_africa|privy_purse_multiplier_base
+none|any_state_in_east_asia|provinces_with_forested_terrain
+none|any_state_in_east_sibera_old|����E
+none|any_state_in_eastern_europe|����E
+none|any_state_in_england_old|concentration_of_defensive_mobilized_battalions
+none|any_state_in_equatorial_africa|army_projection_comparison
+none|any_state_in_ethiopia_old|war_exhaustion_from_country_turmoil
+none|any_state_in_europe|����E
+none|any_state_in_finland_old|���E
+none|any_state_in_france|max_sakoku_trade_center_level
+none|any_state_in_france_old|����E
+none|any_state_in_french_natural_borders|money_amount_multiplier_very_small
+none|any_state_in_german_confederation|gfx_artillery_mobilization_count
+none|any_state_in_gran_colombia|provinces_with_elevated_terrain
+none|any_state_in_great_game_region|gfx_artillery_mobilization_count
+none|any_state_in_great_plains|����E
+none|any_state_in_great_plains_old|gfx_artillery_mobilization_count
+none|any_state_in_great_rift_valley|ship_mod_jeune_ecole_doctrine
+none|any_state_in_greater_afghanistan|ship_mod_merchant_navy_doctrine
+none|any_state_in_greater_bulgaria|ship_mod_jeune_ecole_doctrine
+none|any_state_in_greater_canada|����E
+none|any_state_in_greater_croatia|country_slave_culture_population
+none|any_state_in_greater_germany|����E
+none|any_state_in_greater_khorasan|gfx_artillery_mobilization_count
+none|any_state_in_greater_persia|gfx_capitalship_deploy_count
+none|any_state_in_greater_romania|���E
+none|any_state_in_han_homelands|gfx_lightship_deploy_count
+none|any_state_in_himalayas|����E
+none|any_state_in_himalayas_old|����E
+none|any_state_in_historic_byzantium|ship_mod_merchant_navy_doctrine
+none|any_state_in_home_islands|gfx_capitalship_deploy_count
+none|any_state_in_honshu|����E
+none|any_state_in_hungary|building_groups_extra
+none|any_state_in_iberia_old|country_slave_culture_population
+none|any_state_in_iceland|privy_purse_multiplier_base
+none|any_state_in_india|building_groups_extra
+none|any_state_in_indian_frontier|gfx_infantry_deploy_count
+none|any_state_in_indochina|money_amount_multiplier_small
+none|any_state_in_indonesia|building_groups_extra
+none|any_state_in_italy_old|gfx_infantry_deploy_count
+none|any_state_in_japan|���E
+none|any_state_in_japan_old|gfx_artillery_deploy_count
+none|any_state_in_korea|����E
+none|any_state_in_krakatoa_tsunami_zone|state_urbanization_rate
+none|any_state_in_la_plata|war_exhaustion_from_country_turmoil
+none|any_state_in_latin_america|gfx_supportship_deploy_count
+none|any_state_in_lesser_germany|gfx_infantry_deploy_count
+none|any_state_in_madras_old|country_slave_culture_population
+none|any_state_in_manchuria_old|���E
+none|any_state_in_megali_greece|building_levels_extra
+none|any_state_in_mexico_old|���E
+none|any_state_in_middle_east|money_amount_multiplier_small
+none|any_state_in_mozambique|���E
+none|any_state_in_near_east|���E
+none|any_state_in_new_england_old|building_levels_extra
+none|any_state_in_new_world|ottoman_power_projection
+none|any_state_in_niger_old|����E
+none|any_state_in_nile_basin|gfx_artillery_deploy_count
+none|any_state_in_north_africa|gfx_supportship_deploy_count
+none|any_state_in_north_africa_egypt|ship_mod_coastal_defence_doctrine
+none|any_state_in_north_africa_old|ship_mod_merchant_navy_doctrine
+none|any_state_in_north_america|ottoman_power_projection
+none|any_state_in_north_andes|����E
+none|any_state_in_north_china|war_exhaustion_from_country_turmoil
+none|any_state_in_north_germany_old|state_urbanization_rate
+none|any_state_in_north_india|gfx_infantry_deploy_count
+none|any_state_in_north_sea_old|building_levels_extra
+none|any_state_in_northeast_asia|provinces_with_forested_terrain
 none|any_state_in_northern_europe|gfx_capitalship_deploy_count
-none|any_state_in_northern_mexico|covert_operation_max_slots
-none|any_state_in_occitania_old|gfx_capitalship_deploy_count
-none|any_state_in_oceania|gfx_lightship_deploy_count
-none|any_state_in_old_world|gfx_supportship_deploy_count
-none|any_state_in_pacific_coast|gfx_artillery_deploy_count
-none|any_state_in_pacific_coast_old|state_urbanization_rate
-none|any_state_in_persia_old|gfx_lightship_deploy_count
-none|any_state_in_peru|max_canton_system_level
-none|any_state_in_philippines|intelligence_capacity_from_literacy
-none|any_state_in_poland_old|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_punjab_old|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_rhine_old|colonial_state_count
-none|any_state_in_ring_of_fire|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common\tutorial_lessons\00_tutorial_lessons_budget_balance.txt
-none|any_state_in_russia|gfx_capitalship_deploy_count
-none|any_state_in_russia_old|covert_operation_max_slots
-none|any_state_in_scandinavia|colonial_state_count
-none|any_state_in_senegal_old|gfx_artillery_deploy_count
-none|any_state_in_siberia|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_south_africa|gfx_supportship_deploy_count
-none|any_state_in_south_america|intelligence_capacity_from_literacy
-none|any_state_in_south_china|max_canton_system_level
-none|any_state_in_south_east_asia|gfx_capitalship_deploy_count
-none|any_state_in_south_germany_old|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_state_in_south_india|max_sakoku_trade_center_level
-none|any_state_in_southern_africa|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/the_great_wave.dds
-none|any_state_in_southern_africa_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_in_southern_europe|C:/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/gfx/interface/illustrations/music_player/victoria_3_preorder.dds
-none|any_state_in_subsaharan_africa|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_in_the_midwest_old|intelligence_capacity_from_literacy
-none|any_state_in_transoxiana|gfx_infantry_deploy_count
-none|any_state_in_turkestan|gfx_artillery_deploy_count
-none|any_state_in_urals_old|intelligence_capacity_from_literacy
-none|any_state_in_west_africa|gfx_infantry_deploy_count
-none|any_state_in_west_siberia_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_in_western_europe|gfx_infantry_deploy_count
-none|any_state_in_wet_process_region|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_in_yugoslavia|max_sakoku_trade_center_level
-none|any_state_in_zambezi_basin|gfx_lightship_deploy_count
-none|any_state_in_zanj_old|covert_available_slots_display
+none|any_state_in_northern_mexico|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\dlc\dlc015_songs_of_the_homeland\music\dlc_mp2_music.txt
+none|any_state_in_occitania_old|max_canton_system_level
+none|any_state_in_oceania|building_levels_extra
+none|any_state_in_old_world|war_exhaustion_from_country_turmoil
+none|any_state_in_pacific_coast|���E
+none|any_state_in_pacific_coast_old|money_amount_multiplier_very_small
+none|any_state_in_persia_old|���E
+none|any_state_in_peru|����E
+none|any_state_in_philippines|���E
+none|any_state_in_poland_old|���E
+none|any_state_in_punjab_old|provinces_with_forested_terrain
+none|any_state_in_rhine_old|����E
+none|any_state_in_ring_of_fire|provinces_with_forested_terrain
+none|any_state_in_russia|gfx_infantry_deploy_count
+none|any_state_in_russia_old|����E
+none|any_state_in_scandinavia|gfx_artillery_deploy_count
+none|any_state_in_senegal_old|building_groups_extra
+none|any_state_in_siberia|���E
+none|any_state_in_south_africa|gfx_infantry_deploy_count
+none|any_state_in_south_america|provinces_with_forested_terrain
+none|any_state_in_south_china|provinces_with_elevated_terrain
+none|any_state_in_south_east_asia|provinces_with_elevated_terrain
+none|any_state_in_south_germany_old|money_amount_multiplier_medium
+none|any_state_in_south_india|gfx_lightship_deploy_count
+none|any_state_in_southern_africa|max_sakoku_trade_center_level
+none|any_state_in_southern_africa_old|ship_mod_merchant_navy_doctrine
+none|any_state_in_southern_europe|country_slave_culture_population
+none|any_state_in_subsaharan_africa|state_urbanization_rate
+none|any_state_in_the_midwest_old|privy_purse_multiplier_base
+none|any_state_in_transoxiana|privy_purse_multiplier_base
+none|any_state_in_turkestan|C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\dlc\dlc015_songs_of_the_homeland\music\dlc_mp2_music.txt
+none|any_state_in_urals_old|provinces_with_elevated_terrain
+none|any_state_in_west_africa|max_canton_system_level
+none|any_state_in_west_siberia_old|ship_mod_jeune_ecole_doctrine
+none|any_state_in_western_europe|����E
+none|any_state_in_wet_process_region|money_amount_multiplier_very_small
+none|any_state_in_yugoslavia|����E
+none|any_state_in_zambezi_basin|����E
+none|any_state_in_zanj_old|max_sakoku_trade_center_level
 none|any_state_region|Iterate through all state regions   any_state_region
-none|any_state_region_in_afghanistan|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_state_region_in_africa|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_region_in_alpide_belt|intelligence_capacity_modifier_mult
-none|any_state_region_in_amazon|gfx_infantry_mobilization_count
-none|any_state_region_in_americas|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_anatolia_old|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_region_in_andean_federation|gfx_infantry_mobilization_count
-none|any_state_region_in_andes|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_angola|covert_operations_available_slots
-none|any_state_region_in_arabia|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_state_region_in_arabic_old|gfx_artillery_mobilization_count
+none|any_state_region_in_afghanistan|army_projection_comparison
+none|any_state_region_in_africa|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_alpide_belt|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_amazon|money_amount_multiplier_very_small
+none|any_state_region_in_americas|gfx_infantry_mobilization_count
+none|any_state_region_in_anatolia_old|money_amount_multiplier_medium
+none|any_state_region_in_andean_federation|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_andes|army_projection_comparison
+none|any_state_region_in_angola|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_arabia|state_urbanization_rate
+none|any_state_region_in_arabic_old|ship_mod_merchant_navy_doctrine
 none|any_state_region_in_aragon|ship_mod_jeune_ecole_doctrine
-none|any_state_region_in_arctic_russia_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_state_region_in_asia|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_region_in_atlantic_coast|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_australia|ship_mod_merchant_navy_doctrine
-none|any_state_region_in_balkans|intelligence_capacity_modifier_mult
-none|any_state_region_in_balkans_old|intelligence_capacity_modifier_mult
-none|any_state_region_in_baltic_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_baltic_states_old|ship_mod_jeune_ecole_doctrine
-none|any_state_region_in_belarus_old|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_state_region_in_bengal_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_bolivia|gfx_artillery_mobilization_count
-none|any_state_region_in_bombay_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_brazil|gfx_artillery_mobilization_count
-none|any_state_region_in_burma|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_state_region_in_canada|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_state_region_in_canada_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_state_region_in_caribbean_old|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_state_region_in_castile|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_region_in_caucasus_old|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_central_america|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_central_america_old|ship_mod_merchant_navy_doctrine
-none|any_state_region_in_central_asia|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_region_in_central_asia_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_region_in_central_europe|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_region_in_central_india_old|intelligence_capacity_modifier_mult
-none|any_state_region_in_china|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_chorasmia|state_urbanization_rate
+none|any_state_region_in_arctic_russia_old|gfx_infantry_mobilization_count
+none|any_state_region_in_asia|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_atlantic_coast|state_urbanization_rate
+none|any_state_region_in_australia|money_amount_multiplier_medium
+none|any_state_region_in_balkans|state_urbanization_rate
+none|any_state_region_in_balkans_old|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_baltic_old|gfx_infantry_mobilization_count
+none|any_state_region_in_baltic_states_old|army_projection_comparison
+none|any_state_region_in_belarus_old|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_bengal_old|money_amount_multiplier_medium
+none|any_state_region_in_bolivia|money_amount_multiplier_medium
+none|any_state_region_in_bombay_old|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_brazil|army_projection_comparison
+none|any_state_region_in_burma|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_canada|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_canada_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_caribbean_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_castile|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_caucasus_old|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_central_america|money_amount_multiplier_medium
+none|any_state_region_in_central_america_old|money_amount_multiplier_medium
+none|any_state_region_in_central_asia|gfx_artillery_mobilization_count
+none|any_state_region_in_central_asia_old|army_projection_comparison
+none|any_state_region_in_central_europe|money_amount_multiplier_very_small
+none|any_state_region_in_central_india_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_china|army_projection_comparison
+none|any_state_region_in_chorasmia|money_amount_multiplier_very_small
 none|any_state_region_in_colonial_la_plata|army_projection_comparison
-none|any_state_region_in_colonial_new_grenada|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_colonial_new_spain|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_colonial_peru|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_congo_old|ship_mod_jeune_ecole_doctrine
-none|any_state_region_in_danubia_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_region_in_dixie_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_dnieper_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_east_africa|gfx_artillery_mobilization_count
-none|any_state_region_in_east_asia|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_state_region_in_east_sibera_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_eastern_europe|covert_operations_available_slots
-none|any_state_region_in_england_old|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_equatorial_africa|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_ethiopia_old|gfx_infantry_mobilization_count
-none|any_state_region_in_europe|ship_mod_jeune_ecole_doctrine
-none|any_state_region_in_finland_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_state_region_in_france|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_state_region_in_france_old|gfx_artillery_mobilization_count
-none|any_state_region_in_french_natural_borders|covert_operations_available_slots
-none|any_state_region_in_german_confederation|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_state_region_in_gran_colombia|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_state_region_in_great_game_region|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_great_plains|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_state_region_in_great_plains_old|intelligence_capacity_from_gdp
-none|any_state_region_in_great_rift_valley|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_greater_afghanistan|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_region_in_greater_bulgaria|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_state_region_in_greater_canada|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_region_in_greater_croatia|covert_operations_available_slots
-none|any_state_region_in_greater_germany|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_state_region_in_greater_khorasan|ship_mod_merchant_navy_doctrine
-none|any_state_region_in_greater_persia|gfx_infantry_mobilization_count
-none|any_state_region_in_greater_romania|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_han_homelands|gfx_artillery_mobilization_count
-none|any_state_region_in_himalayas|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_state_region_in_himalayas_old|ship_mod_merchant_navy_doctrine
-none|any_state_region_in_historic_byzantium|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_home_islands|intelligence_capacity_from_gdp
-none|any_state_region_in_honshu|covert_operations_available_slots
-none|any_state_region_in_hungary|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_iberia_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_state_region_in_iceland|gfx_artillery_mobilization_count
-none|any_state_region_in_india|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_indian_frontier|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_indochina|ship_mod_merchant_navy_doctrine
-none|any_state_region_in_indonesia|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_italy_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_japan|ship_mod_jeune_ecole_doctrine
-none|any_state_region_in_japan_old|covert_operations_available_slots
-none|any_state_region_in_korea|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_krakatoa_tsunami_zone|gfx_artillery_mobilization_count
-none|any_state_region_in_la_plata|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_latin_america|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_region_in_lesser_germany|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_madras_old|gfx_infantry_mobilization_count
-none|any_state_region_in_manchuria_old|intelligence_capacity_modifier_mult
-none|any_state_region_in_megali_greece|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_state_region_in_mexico_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_state_region_in_middle_east|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_mozambique|intelligence_capacity_modifier_mult
-none|any_state_region_in_near_east|gfx_artillery_mobilization_count
-none|any_state_region_in_new_england_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_region_in_new_world|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_region_in_niger_old|intelligence_capacity_from_gdp
-none|any_state_region_in_nile_basin|state_urbanization_rate
-none|any_state_region_in_north_africa|army_projection_comparison
-none|any_state_region_in_north_africa_egypt|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_north_africa_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_north_america|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_region_in_north_andes|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_north_china|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_region_in_north_germany_old|gfx_artillery_mobilization_count
-none|any_state_region_in_north_india|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_north_sea_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_region_in_northeast_asia|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_northern_europe|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_northern_mexico|state_urbanization_rate
-none|any_state_region_in_occitania_old|intelligence_capacity_from_gdp
-none|any_state_region_in_oceania|covert_operations_available_slots
-none|any_state_region_in_old_world|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_state_region_in_pacific_coast|gfx_artillery_mobilization_count
-none|any_state_region_in_pacific_coast_old|gfx_infantry_mobilization_count
-none|any_state_region_in_persia_old|intelligence_capacity_modifier_mult
-none|any_state_region_in_peru|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_state_region_in_philippines|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_poland_old|intelligence_capacity_from_gdp
-none|any_state_region_in_punjab_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_rhine_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_ring_of_fire|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_russia|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_region_in_russia_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_scandinavia|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_senegal_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_state_region_in_siberia|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_region_in_south_africa|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_state_region_in_south_america|covert_operations_available_slots
-none|any_state_region_in_south_china|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_south_east_asia|intelligence_capacity_modifier_mult
-none|any_state_region_in_south_germany_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_state_region_in_south_india|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_state_region_in_southern_africa|intelligence_capacity_from_gdp
-none|any_state_region_in_southern_africa_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_state_region_in_southern_europe|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_state_region_in_subsaharan_africa|ship_mod_jeune_ecole_doctrine
-none|any_state_region_in_the_midwest_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_state_region_in_transoxiana|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_state_region_in_turkestan|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_state_region_in_urals_old|ship_mod_coastal_defence_doctrine
-none|any_state_region_in_west_africa|gfx_infantry_mobilization_count
-none|any_state_region_in_west_siberia_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_state_region_in_western_europe|gfx_artillery_mobilization_count
-none|any_state_region_in_wet_process_region|covert_operations_available_slots
-none|any_state_region_in_yugoslavia|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_state_region_in_zambezi_basin|state_urbanization_rate
-none|any_state_region_in_zanj_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
+none|any_state_region_in_colonial_new_grenada|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_colonial_new_spain|gfx_infantry_mobilization_count
+none|any_state_region_in_colonial_peru|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_congo_old|money_amount_multiplier_medium
+none|any_state_region_in_danubia_old|army_projection_comparison
+none|any_state_region_in_dixie_old|state_urbanization_rate
+none|any_state_region_in_dnieper_old|money_amount_multiplier_medium
+none|any_state_region_in_east_africa|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_east_asia|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_east_sibera_old|money_amount_multiplier_very_small
+none|any_state_region_in_eastern_europe|money_amount_multiplier_very_small
+none|any_state_region_in_england_old|money_amount_multiplier_medium
+none|any_state_region_in_equatorial_africa|gfx_infantry_mobilization_count
+none|any_state_region_in_ethiopia_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_europe|gfx_infantry_mobilization_count
+none|any_state_region_in_finland_old|money_amount_multiplier_very_small
+none|any_state_region_in_france|army_projection_comparison
+none|any_state_region_in_france_old|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_french_natural_borders|money_amount_multiplier_very_small
+none|any_state_region_in_german_confederation|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_gran_colombia|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_great_game_region|money_amount_multiplier_medium
+none|any_state_region_in_great_plains|army_projection_comparison
+none|any_state_region_in_great_plains_old|state_urbanization_rate
+none|any_state_region_in_great_rift_valley|gfx_artillery_mobilization_count
+none|any_state_region_in_greater_afghanistan|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_greater_bulgaria|gfx_artillery_mobilization_count
+none|any_state_region_in_greater_canada|army_projection_comparison
+none|any_state_region_in_greater_croatia|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_greater_germany|money_amount_multiplier_very_small
+none|any_state_region_in_greater_khorasan|gfx_artillery_mobilization_count
+none|any_state_region_in_greater_persia|money_amount_multiplier_very_small
+none|any_state_region_in_greater_romania|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_han_homelands|state_urbanization_rate
+none|any_state_region_in_himalayas|gfx_artillery_mobilization_count
+none|any_state_region_in_himalayas_old|army_projection_comparison
+none|any_state_region_in_historic_byzantium|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_home_islands|money_amount_multiplier_very_small
+none|any_state_region_in_honshu|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_hungary|money_amount_multiplier_medium
+none|any_state_region_in_iberia_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_iceland|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_india|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_indian_frontier|gfx_infantry_mobilization_count
+none|any_state_region_in_indochina|gfx_infantry_mobilization_count
+none|any_state_region_in_indonesia|army_projection_comparison
+none|any_state_region_in_italy_old|gfx_artillery_mobilization_count
+none|any_state_region_in_japan|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_japan_old|state_urbanization_rate
+none|any_state_region_in_korea|state_urbanization_rate
+none|any_state_region_in_krakatoa_tsunami_zone|state_urbanization_rate
+none|any_state_region_in_la_plata|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_latin_america|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_lesser_germany|state_urbanization_rate
+none|any_state_region_in_madras_old|state_urbanization_rate
+none|any_state_region_in_manchuria_old|army_projection_comparison
+none|any_state_region_in_megali_greece|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_mexico_old|money_amount_multiplier_very_small
+none|any_state_region_in_middle_east|money_amount_multiplier_medium
+none|any_state_region_in_mozambique|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_near_east|state_urbanization_rate
+none|any_state_region_in_new_england_old|money_amount_multiplier_medium
+none|any_state_region_in_new_world|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_niger_old|money_amount_multiplier_medium
+none|any_state_region_in_nile_basin|army_projection_comparison
+none|any_state_region_in_north_africa|gfx_artillery_mobilization_count
+none|any_state_region_in_north_africa_egypt|gfx_infantry_mobilization_count
+none|any_state_region_in_north_africa_old|money_amount_multiplier_very_small
+none|any_state_region_in_north_america|money_amount_multiplier_medium
+none|any_state_region_in_north_andes|gfx_infantry_mobilization_count
+none|any_state_region_in_north_china|state_urbanization_rate
+none|any_state_region_in_north_germany_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_north_india|gfx_infantry_mobilization_count
+none|any_state_region_in_north_sea_old|army_projection_comparison
+none|any_state_region_in_northeast_asia|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_northern_europe|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_northern_mexico|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_occitania_old|money_amount_multiplier_medium
+none|any_state_region_in_oceania|gfx_infantry_mobilization_count
+none|any_state_region_in_old_world|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_pacific_coast|state_urbanization_rate
+none|any_state_region_in_pacific_coast_old|state_urbanization_rate
+none|any_state_region_in_persia_old|money_amount_multiplier_medium
+none|any_state_region_in_peru|money_amount_multiplier_very_small
+none|any_state_region_in_philippines|gfx_artillery_mobilization_count
+none|any_state_region_in_poland_old|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_punjab_old|money_amount_multiplier_very_small
+none|any_state_region_in_rhine_old|army_projection_comparison
+none|any_state_region_in_ring_of_fire|army_projection_comparison
+none|any_state_region_in_russia|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_russia_old|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_scandinavia|gfx_artillery_mobilization_count
+none|any_state_region_in_senegal_old|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_siberia|gfx_infantry_mobilization_count
+none|any_state_region_in_south_africa|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_south_america|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_south_china|army_projection_comparison
+none|any_state_region_in_south_east_asia|gfx_infantry_mobilization_count
+none|any_state_region_in_south_germany_old|gfx_infantry_mobilization_count
+none|any_state_region_in_south_india|money_amount_multiplier_medium
+none|any_state_region_in_southern_africa|state_urbanization_rate
+none|any_state_region_in_southern_africa_old|army_projection_comparison
+none|any_state_region_in_southern_europe|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_subsaharan_africa|gfx_infantry_mobilization_count
+none|any_state_region_in_the_midwest_old|army_projection_comparison
+none|any_state_region_in_transoxiana|money_amount_multiplier_very_small
+none|any_state_region_in_turkestan|ship_mod_coastal_defence_doctrine
+none|any_state_region_in_urals_old|money_amount_multiplier_medium
+none|any_state_region_in_west_africa|state_urbanization_rate
+none|any_state_region_in_west_siberia_old|ship_mod_jeune_ecole_doctrine
+none|any_state_region_in_western_europe|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_wet_process_region|money_amount_multiplier_very_small
+none|any_state_region_in_yugoslavia|money_amount_multiplier_medium
+none|any_state_region_in_zambezi_basin|ship_mod_merchant_navy_doctrine
+none|any_state_region_in_zanj_old|army_projection_comparison
 country|any_strategic_objective|Iterate through all Strategic Objective states from the scoped Country   any_strategic_objective
 none|any_strategic_region|Iterate through all strategic regions globally   any_strategic_region
-none|any_strategic_region_in_afghanistan|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_afghanistan|state_urbanization_rate
 none|any_strategic_region_in_africa|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_alpide_belt|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_amazon|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_americas|state_urbanization_rate
-none|any_strategic_region_in_anatolia_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_andean_federation|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_andes|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_strategic_region_in_angola|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_arabia|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_arabic_old|ship_mod_jeune_ecole_doctrine
-none|any_strategic_region_in_aragon|intelligence_capacity_modifier_mult
-none|any_strategic_region_in_arctic_russia_old|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_asia|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_atlantic_coast|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_australia|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_balkans|intelligence_capacity_from_gdp
-none|any_strategic_region_in_balkans_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_strategic_region_in_baltic_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_baltic_states_old|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_belarus_old|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_bengal_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_bolivia|intelligence_capacity_from_gdp
-none|any_strategic_region_in_bombay_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_strategic_region_in_brazil|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_burma|covert_operations_available_slots
-none|any_strategic_region_in_canada|intelligence_capacity_modifier_mult
-none|any_strategic_region_in_canada_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_caribbean_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_strategic_region_in_castile|covert_operations_available_slots
-none|any_strategic_region_in_caucasus_old|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_central_america|intelligence_capacity_from_gdp
-none|any_strategic_region_in_central_america_old|espionage_target_tech_advantage
-none|any_strategic_region_in_central_asia|covert_operations_available_slots
-none|any_strategic_region_in_central_asia_old|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_strategic_region_in_central_europe|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_central_india_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_china|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_strategic_region_in_chorasmia|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_colonial_la_plata|gfx_artillery_mobilization_count
-none|any_strategic_region_in_colonial_new_grenada|colonial_low_acceptance_count
-none|any_strategic_region_in_colonial_new_spain|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_colonial_peru|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_congo_old|state_urbanization_rate
-none|any_strategic_region_in_danubia_old|ship_mod_jeune_ecole_doctrine
-none|any_strategic_region_in_dixie_old|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_strategic_region_in_dnieper_old|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_east_africa|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_east_asia|army_projection_comparison
-none|any_strategic_region_in_east_sibera_old|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_eastern_europe|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_strategic_region_in_england_old|ship_mod_jeune_ecole_doctrine
-none|any_strategic_region_in_equatorial_africa|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_strategic_region_in_ethiopia_old|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_europe|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_strategic_region_in_finland_old|army_projection_comparison
-none|any_strategic_region_in_france|intelligence_capacity_from_gdp
-none|any_strategic_region_in_france_old|intelligence_capacity_modifier_mult
-none|any_strategic_region_in_french_natural_borders|province_terrain_infrastructure_force_limit
-none|any_strategic_region_in_german_confederation|espionage_target_tech_advantage
+none|any_strategic_region_in_alpide_belt|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_amazon|army_projection_comparison
+none|any_strategic_region_in_americas|gfx_infantry_mobilization_count
+none|any_strategic_region_in_anatolia_old|army_projection_comparison
+none|any_strategic_region_in_andean_federation|money_amount_multiplier_medium
+none|any_strategic_region_in_andes|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_angola|money_amount_multiplier_very_small
+none|any_strategic_region_in_arabia|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_arabic_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_aragon|money_amount_multiplier_very_small
+none|any_strategic_region_in_arctic_russia_old|state_urbanization_rate
+none|any_strategic_region_in_asia|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_atlantic_coast|gfx_infantry_mobilization_count
+none|any_strategic_region_in_australia|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_balkans|state_urbanization_rate
+none|any_strategic_region_in_balkans_old|money_amount_multiplier_medium
+none|any_strategic_region_in_baltic_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_baltic_states_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_belarus_old|money_amount_multiplier_medium
+none|any_strategic_region_in_bengal_old|army_projection_comparison
+none|any_strategic_region_in_bolivia|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_bombay_old|money_amount_multiplier_medium
+none|any_strategic_region_in_brazil|gfx_infantry_mobilization_count
+none|any_strategic_region_in_burma|money_amount_multiplier_medium
+none|any_strategic_region_in_canada|gfx_infantry_mobilization_count
+none|any_strategic_region_in_canada_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_caribbean_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_castile|state_urbanization_rate
+none|any_strategic_region_in_caucasus_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_central_america|gfx_infantry_mobilization_count
+none|any_strategic_region_in_central_america_old|free_tea_producing_arable_land
+none|any_strategic_region_in_central_asia|gfx_infantry_mobilization_count
+none|any_strategic_region_in_central_asia_old|money_amount_multiplier_medium
+none|any_strategic_region_in_central_europe|money_amount_multiplier_medium
+none|any_strategic_region_in_central_india_old|money_amount_multiplier_medium
+none|any_strategic_region_in_china|state_urbanization_rate
+none|any_strategic_region_in_chorasmia|army_projection_comparison
+none|any_strategic_region_in_colonial_la_plata|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_colonial_new_grenada|free_cotton_producing_arable_land
+none|any_strategic_region_in_colonial_new_spain|money_amount_multiplier_medium
+none|any_strategic_region_in_colonial_peru|money_amount_multiplier_very_small
+none|any_strategic_region_in_congo_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_danubia_old|gfx_infantry_mobilization_count
+none|any_strategic_region_in_dixie_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_dnieper_old|gfx_infantry_mobilization_count
+none|any_strategic_region_in_east_africa|money_amount_multiplier_very_small
+none|any_strategic_region_in_east_asia|state_urbanization_rate
+none|any_strategic_region_in_east_sibera_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_eastern_europe|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_england_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_equatorial_africa|money_amount_multiplier_very_small
+none|any_strategic_region_in_ethiopia_old|money_amount_multiplier_medium
+none|any_strategic_region_in_europe|gfx_infantry_mobilization_count
+none|any_strategic_region_in_finland_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_france|money_amount_multiplier_very_small
+none|any_strategic_region_in_france_old|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_french_natural_borders|free_tea_producing_arable_land
+none|any_strategic_region_in_german_confederation|annex_subject_base_liberty_desire_change
 none|any_strategic_region_in_gran_colombia|gfx_artillery_mobilization_count
-none|any_strategic_region_in_great_game_region|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_strategic_region_in_great_plains|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_great_plains_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_great_rift_valley|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_greater_afghanistan|covert_ops_funding_ic_display
-none|any_strategic_region_in_greater_bulgaria|army_projection_comparison
-none|any_strategic_region_in_greater_canada|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_strategic_region_in_greater_croatia|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_greater_germany|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_strategic_region_in_greater_khorasan|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_greater_persia|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_greater_romania|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_han_homelands|intelligence_capacity_modifier_mult
-none|any_strategic_region_in_himalayas|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_himalayas_old|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_great_game_region|army_projection_comparison
+none|any_strategic_region_in_great_plains|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_great_plains_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_great_rift_valley|money_amount_multiplier_very_small
+none|any_strategic_region_in_greater_afghanistan|annex_subject_base_liberty_desire_change
+none|any_strategic_region_in_greater_bulgaria|state_urbanization_rate
+none|any_strategic_region_in_greater_canada|state_urbanization_rate
+none|any_strategic_region_in_greater_croatia|gfx_artillery_mobilization_count
+none|any_strategic_region_in_greater_germany|money_amount_multiplier_medium
+none|any_strategic_region_in_greater_khorasan|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_greater_persia|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_greater_romania|money_amount_multiplier_very_small
+none|any_strategic_region_in_han_homelands|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_himalayas|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_himalayas_old|money_amount_multiplier_medium
 none|any_strategic_region_in_historic_byzantium|state_urbanization_rate
-none|any_strategic_region_in_home_islands|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_honshu|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_strategic_region_in_hungary|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_iberia_old|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_iceland|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_india|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_strategic_region_in_indian_frontier|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_indochina|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_indonesia|covert_operations_available_slots
-none|any_strategic_region_in_italy_old|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_strategic_region_in_japan|gfx_artillery_mobilization_count
-none|any_strategic_region_in_japan_old|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_korea|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_strategic_region_in_krakatoa_tsunami_zone|espionage_target_tech_advantage
-none|any_strategic_region_in_la_plata|army_projection_comparison
-none|any_strategic_region_in_latin_america|army_projection_comparison
-none|any_strategic_region_in_lesser_germany|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_madras_old|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_manchuria_old|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_megali_greece|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_strategic_region_in_mexico_old|gfx_infantry_mobilization_count
-none|any_strategic_region_in_middle_east|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_mozambique|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_strategic_region_in_near_east|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_strategic_region_in_new_england_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
+none|any_strategic_region_in_home_islands|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_honshu|money_amount_multiplier_medium
+none|any_strategic_region_in_hungary|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_iberia_old|state_urbanization_rate
+none|any_strategic_region_in_iceland|money_amount_multiplier_medium
+none|any_strategic_region_in_india|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_indian_frontier|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_indochina|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_indonesia|money_amount_multiplier_medium
+none|any_strategic_region_in_italy_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_japan|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_japan_old|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_korea|money_amount_multiplier_medium
+none|any_strategic_region_in_krakatoa_tsunami_zone|free_tea_producing_arable_land
+none|any_strategic_region_in_la_plata|state_urbanization_rate
+none|any_strategic_region_in_latin_america|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_lesser_germany|money_amount_multiplier_very_small
+none|any_strategic_region_in_madras_old|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_manchuria_old|money_amount_multiplier_medium
+none|any_strategic_region_in_megali_greece|gfx_artillery_mobilization_count
+none|any_strategic_region_in_mexico_old|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_middle_east|state_urbanization_rate
+none|any_strategic_region_in_mozambique|gfx_infantry_mobilization_count
+none|any_strategic_region_in_near_east|army_projection_comparison
+none|any_strategic_region_in_new_england_old|gfx_artillery_mobilization_count
 none|any_strategic_region_in_new_world|state_urbanization_rate
-none|any_strategic_region_in_niger_old|TBI = {   	color = { 220 210 97 }   	country_type = decentralized      	tier = principality      	cultures = { teda }   	capital = STATE_CHAD   }
-none|any_strategic_region_in_nile_basin|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_north_africa|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_strategic_region_in_north_africa_egypt|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_north_africa_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_strategic_region_in_north_america|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_strategic_region_in_north_andes|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_north_china|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_strategic_region_in_north_germany_old|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_north_india|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_north_sea_old|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_northeast_asia|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_strategic_region_in_northern_europe|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_strategic_region_in_northern_mexico|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_occitania_old|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_oceania|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_old_world|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_pacific_coast|KBD = {   	color = { 117 36 54 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_pacific_coast_old|covert_operations_available_slots
-none|any_strategic_region_in_persia_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_peru|BLE = {   	color = { 218 104 44 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_WINDWARD_C...
-none|any_strategic_region_in_philippines|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_strategic_region_in_poland_old|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_punjab_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_rhine_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_ring_of_fire|AYI = {   	color = { 131 210 34 }   	country_type = decentralized      	tier = principality      	cultures = { akan }   	capital = STATE_IVORY_COAS...
-none|any_strategic_region_in_russia|intelligence_capacity_from_gdp
-none|any_strategic_region_in_russia_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_scandinavia|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_senegal_old|ADG = {   	color = { 215 132 165 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_TIMBUKT...
-none|any_strategic_region_in_siberia|ship_mod_coastal_defence_doctrine
-none|any_strategic_region_in_south_africa|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_south_america|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_strategic_region_in_south_china|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_south_east_asia|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_south_germany_old|EWE = {   	color = { 210 34 131 }   	country_type = decentralized      	tier = principality      	cultures = { ewe }   	capital = STATE_TOGO   }
-none|any_strategic_region_in_south_india|gfx_infantry_mobilization_count
-none|any_strategic_region_in_southern_africa|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_southern_africa_old|covert_ops_funding_ci_mult
-none|any_strategic_region_in_southern_europe|ship_mod_jeune_ecole_doctrine
-none|any_strategic_region_in_subsaharan_africa|AHG = {   	color = { 138 168 70 }   	country_type = decentralized      	tier = principality      	cultures = { tuareg }   	capital = STATE_EAST_SAH...
-none|any_strategic_region_in_the_midwest_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
-none|any_strategic_region_in_transoxiana|intelligence_capacity_from_gdp
-none|any_strategic_region_in_turkestan|BSS = { # Bassa   	color = { 203 48 37 }      	country_type = decentralized      	tier = principality      	cultures = { bassa }   	capital = STATE...
-none|any_strategic_region_in_urals_old|intelligence_capacity_from_gdp
-none|any_strategic_region_in_west_africa|MDK = {   	color = { 191 83 53 }   	country_type = decentralized      	tier = principality      	cultures = { mande }   	capital = STATE_GUINEA   }
-none|any_strategic_region_in_west_siberia_old|IBO = {   	color = { 119 24 85 }   	country_type = decentralized      	tier = principality      	cultures = { ibo }   	capital = STATE_NIGER_DELTA   }
-none|any_strategic_region_in_western_europe|ship_mod_merchant_navy_doctrine
-none|any_strategic_region_in_wet_process_region|KRU = {   	color = { 94 168 142 }   	country_type = decentralized      	tier = principality      	cultures = { kru }   	capital = STATE_WINDWARD_CO...
-none|any_strategic_region_in_yugoslavia|DLA = {   	color = { 22 121 17 }   	country_type = decentralized      	tier = principality      	cultures = { equatorial_bantu }   	capital = STATE...
-none|any_strategic_region_in_zambezi_basin|TUA = {   	color = { 66 98 114 }   	country_type = decentralized      	tier = principality      	cultures = { berber }   	capital = STATE_SAHARA   }
-none|any_strategic_region_in_zanj_old|OUA = {   	color = { 113 95 122 }   	country_type = decentralized      	tier = principality      	cultures = { bidan }   	capital = STATE_INNER_MAU...
+none|any_strategic_region_in_niger_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_nile_basin|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_north_africa|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_north_africa_egypt|money_amount_multiplier_medium
+none|any_strategic_region_in_north_africa_old|army_projection_comparison
+none|any_strategic_region_in_north_america|state_urbanization_rate
+none|any_strategic_region_in_north_andes|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_north_china|gfx_artillery_mobilization_count
+none|any_strategic_region_in_north_germany_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_north_india|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_north_sea_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_northeast_asia|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_northern_europe|money_amount_multiplier_medium
+none|any_strategic_region_in_northern_mexico|gfx_infantry_mobilization_count
+none|any_strategic_region_in_occitania_old|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_oceania|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_old_world|money_amount_multiplier_medium
+none|any_strategic_region_in_pacific_coast|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_pacific_coast_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_persia_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_peru|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_philippines|army_projection_comparison
+none|any_strategic_region_in_poland_old|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_punjab_old|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_rhine_old|army_projection_comparison
+none|any_strategic_region_in_ring_of_fire|gfx_infantry_mobilization_count
+none|any_strategic_region_in_russia|money_amount_multiplier_medium
+none|any_strategic_region_in_russia_old|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_scandinavia|gfx_artillery_mobilization_count
+none|any_strategic_region_in_senegal_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_siberia|money_amount_multiplier_medium
+none|any_strategic_region_in_south_africa|gfx_infantry_mobilization_count
+none|any_strategic_region_in_south_america|money_amount_multiplier_medium
+none|any_strategic_region_in_south_china|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_south_east_asia|state_urbanization_rate
+none|any_strategic_region_in_south_germany_old|money_amount_multiplier_very_small
+none|any_strategic_region_in_south_india|money_amount_multiplier_medium
+none|any_strategic_region_in_southern_africa|money_amount_multiplier_very_small
+none|any_strategic_region_in_southern_africa_old|free_cotton_producing_arable_land
+none|any_strategic_region_in_southern_europe|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_subsaharan_africa|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_the_midwest_old|money_amount_multiplier_medium
+none|any_strategic_region_in_transoxiana|ship_mod_coastal_defence_doctrine
+none|any_strategic_region_in_turkestan|ship_mod_merchant_navy_doctrine
+none|any_strategic_region_in_urals_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_west_africa|money_amount_multiplier_medium
+none|any_strategic_region_in_west_siberia_old|gfx_artillery_mobilization_count
+none|any_strategic_region_in_western_europe|money_amount_multiplier_very_small
+none|any_strategic_region_in_wet_process_region|money_amount_multiplier_medium
+none|any_strategic_region_in_yugoslavia|money_amount_multiplier_very_small
+none|any_strategic_region_in_zambezi_basin|ship_mod_jeune_ecole_doctrine
+none|any_strategic_region_in_zanj_old|ship_mod_jeune_ecole_doctrine
 country|any_subject_of_subject|Any country below direct subjects in hierarchy   any_subject_of_subject
 country|any_subject_or_below|Any country below current in hierarchy   any_subject_or_below
 political_movement|any_supporting_character|Iterate through all characters that support the scoped political movement   any_supporting_character

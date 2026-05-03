@@ -1922,6 +1922,14 @@ Company Headquarter:
 		Digital Trading
 		Automated Trading
 		Hobbyist Management
+		$pm_government_run$
+		$pm_government_run$
+		$pm_government_run$
+		$pm_government_run$
+		$pm_worker_cooperative$
+		$pm_worker_cooperative$
+		$pm_worker_cooperative$
+		$pm_worker_cooperative$
 
 Regional Company Headquarter:
 	$pmg_ownership$:
@@ -1943,6 +1951,14 @@ Regional Company Headquarter:
 		Digital Trading
 		Automated Trading
 		Hobbyist Management
+		$pm_government_run$
+		$pm_government_run$
+		$pm_government_run$
+		$pm_government_run$
+		$pm_worker_cooperative$
+		$pm_worker_cooperative$
+		$pm_worker_cooperative$
+		$pm_worker_cooperative$
 
 Construction Site:
 	Construction Site:

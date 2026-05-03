@@ -1,4 +1,4 @@
-# Auto-generated from event_targets.log @ 2026-04-28T14:06:30+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from event_targets.log @ 2026-05-03T23:13:35+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
 country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
@@ -324,6 +324,7 @@ country|tension|value|Scope to tension between two countries (example: tension:r
 battle_side,state|theater|theater|Scope from a BattleSide or State to its theater
 |this||The current scope
 country|top_overlord|country|Scope to the top overlord of the country in scope
+country|total_crew_needed|value|Get the total crew needed by all ships of a country
 country|total_export_value|value|Scope to the total value of scope country's exports to the world market (example:
 country|total_import_value|value|Scope to the total value of scope country's imports from the world market (example:
 country|total_marine_capacity|value|Get the total marine capacity across all fleets of a country
