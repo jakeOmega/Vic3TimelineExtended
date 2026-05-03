@@ -8,9 +8,8 @@
 # ---- FUNDING LEVEL: Increase (0 → 1 → 2 → 3) ----
 iw_increase_funding_button = {
 	name = "iw_increase_funding_button"
-	visible = {
-		has_technology_researched = television
-	}
+	# Visibility piggybacks on the JE's own activation gate (covert_operation_max_slots
+	# above rank baseline). No separate tech gate — see je_covert_warfare possible.
 	possible = {
 		custom_tooltip = {
 			text = iw_funding_not_max_tt
@@ -53,9 +52,8 @@ iw_increase_funding_button = {
 # ---- FUNDING LEVEL: Decrease (3 → 2 → 1 → 0) ----
 iw_decrease_funding_button = {
 	name = "iw_decrease_funding_button"
-	visible = {
-		has_technology_researched = television
-	}
+	# Visibility piggybacks on the JE's own activation gate (covert_operation_max_slots
+	# above rank baseline). No separate tech gate — see je_covert_warfare possible.
 	possible = {
 		custom_tooltip = {
 			text = iw_funding_not_min_tt

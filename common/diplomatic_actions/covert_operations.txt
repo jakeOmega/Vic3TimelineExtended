@@ -42,7 +42,6 @@ covert_election_interference_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -206,7 +205,6 @@ covert_financial_subversion_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -350,7 +348,6 @@ covert_infrastructure_sabotage_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -475,7 +472,6 @@ covert_comms_disruption_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -605,7 +601,6 @@ covert_industrial_espionage_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -741,7 +736,6 @@ covert_military_espionage_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -866,7 +860,6 @@ covert_influence_campaign_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 		is_power_bloc_leader = yes
 	}
 
@@ -1021,7 +1014,6 @@ covert_ideological_subversion_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {
@@ -1181,7 +1173,6 @@ covert_destabilization_action = {
 
 	potential = {
 		has_game_rule = covert_warfare_enabled
-		has_technology_researched = television
 	}
 
 	possible = {

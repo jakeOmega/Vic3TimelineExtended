@@ -344,7 +344,6 @@ je_covert_warfare = {
 			if = {
 				limit = {
 					is_player = no
-					has_technology_researched = television
 				}
 				# In default or severe financial trouble: cut funding
 				# But if we have active ops, drop to 1 instead of 0 to avoid
