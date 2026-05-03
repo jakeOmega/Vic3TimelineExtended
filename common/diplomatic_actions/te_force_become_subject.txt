@@ -1,0 +1,129 @@
+﻿# ======================================================================
+#  Subjugate (force_become_subject) — per-identity rebalance
+# ======================================================================
+#
+# Vanilla gates this action behind identity_sovereign_empire (via
+# power_bloc_leader_can_make_subjects_bool) and a flat 5x prestige check.
+# This rebalance opens it to all identities but raises the baseline cost
+# to 20x prestige and feeds identity-specific bonuses (read from
+# country_subjugation_*_strength_add modifiers seeded on each identity's
+# leader_modifier) through the te_subjugation_strength script_value.
+#
+# accept_effect, potential, and ai blocks are copied byte-identical from
+# vanilla 31_power_bloc_force_become_subject.txt — re-diff on every Vic3
+# patch. Vanilla version copied: 1.10 (Steam, 2026-05).
+#
+# See common/script_values/extra_script_values.txt :: te_subjugation_strength
+# for the full scoring formula.
+
+REPLACE:force_become_subject = {
+	groups = {
+		power_bloc_leader
+	}
+	show_in_lens = no
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+
+	selectable = {
+		is_power_bloc_leader = yes
+		# Vanilla power_bloc_leader_can_make_subjects_bool gate intentionally dropped —
+		# all bloc identities can now select this action; identity-conditional
+		# strength gating happens in `possible` via te_subjugation_strength.
+	}
+
+	potential = {
+		power_bloc ?= {
+			scope:target_country.power_bloc ?= this
+		}
+	}
+
+	possible = {
+		scope:target_country = {
+			is_subject = no
+			country_rank < rank_value:unrecognized_major_power
+			is_diplomatic_play_committed_participant = no
+		}
+
+		power_bloc = {
+			current_cohesion_percentage >= 0.5
+		}
+		scope:target_country = {
+			tenure_in_current_power_bloc_years >= 5
+		}
+
+		# Replaces vanilla's flat `prestige >= target.prestige * 5` with a
+		# scored gate. See te_subjugation_strength for the full formula.
+		custom_tooltip = {
+			text = te_subjugation_strength_sufficient_tt
+			te_subjugation_strength >= 1.0
+		}
+	}
+
+	accept_effect = {
+		if = {
+			limit = { is_country_type = unrecognized }
+			create_diplomatic_pact = {
+				country = scope:target_country
+				type = tributary
+			}
+		}
+		else_if = {
+			limit = {
+				scope:target_country = {
+					is_country_type = colonial
+				}
+			}
+			create_diplomatic_pact = {
+				country = scope:target_country
+				type = dominion
+			}
+		}
+		else = {
+			create_diplomatic_pact = {
+				country = scope:target_country
+				type = protectorate
+			}
+		}
+		create_unidirectional_truce = { country = scope:target_country months = 60 }
+		hidden_effect = { scope:target_country = { add_liberty_desire = 30 } } # Starts at a higher LD level
+
+		power_bloc = {
+			add_cohesion_percent = {
+				value = scaled_cohesion_cost_subjugation
+			}
+		}
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.025 # AI shouldn't use this very often
+		}
+
+		will_propose = {
+			power_bloc ?= { current_cohesion_percentage >= 0.6 }
+			OR = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = domineering
+				}
+				power_bloc ?= { current_cohesion_percentage >= 0.8 }
+			}
+			OR = {
+				AND = {
+					has_attitude = {
+						who = scope:target_country
+						attitude = domineering
+					}
+					power_bloc ?= { current_cohesion_percentage >= 0.8 }
+				}
+				scope:target_country = {
+					is_country_type = unrecognized
+				}
+			}
+		}
+
+		propose_score = {
+			value = 10
+		}
+	}
+}

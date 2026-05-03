@@ -1,0 +1,59 @@
+﻿# ======================================================================
+#  Subjugation strength bonuses per power bloc identity
+# ======================================================================
+#
+# INJECTs a leader_modifier contribution into each of the six vanilla
+# identities. The country_subjugation_*_strength_add modifiers are read
+# (conditionally on axis match) by the te_subjugation_strength script_value,
+# which gates the rebalanced force_become_subject diplomatic action.
+#
+# identity_diplomatic (mod-defined) is intentionally not wired in — it's
+# strong via alignment, infamy reduction, and pact leverage already.
+#
+# Vanilla still leaves power_bloc_leader_can_make_subjects_bool = yes set
+# on identity_sovereign_empire's power_bloc_modifier; that's harmless dead
+# code now that te_force_become_subject.txt no longer reads it.
+
+# Sovereign Empire — universal bonus, applies vs any target (no axis match).
+# Brings 20:1 baseline down to 10:1 prestige threshold.
+INJECT:identity_sovereign_empire = {
+	leader_modifier = {
+		country_subjugation_sovereign_strength_add = 0.5
+	}
+}
+
+# Religious — paid out only when target shares state religion.
+INJECT:identity_religious = {
+	leader_modifier = {
+		country_subjugation_religious_strength_add = 0.4
+	}
+}
+
+# Ideological Union — paid out only when target shares governance principle.
+INJECT:identity_ideological_union = {
+	leader_modifier = {
+		country_subjugation_ideological_strength_add = 0.4
+	}
+}
+
+# Cultural — paid out only when target shares a primary culture with the leader.
+INJECT:identity_cultural = {
+	leader_modifier = {
+		country_subjugation_cultural_strength_add = 0.4
+	}
+}
+
+# Trade League — paid out only when leader's GDP is at least 5x the target's.
+# (A customs-union check would be a no-op since every TL bloc member shares it.)
+INJECT:identity_trade_league = {
+	leader_modifier = {
+		country_subjugation_trade_strength_add = 0.4
+	}
+}
+
+# Military Treaty Organization — paid out only when leader's army is at least 5x the target's.
+INJECT:identity_military_treaty_organization = {
+	leader_modifier = {
+		country_subjugation_military_strength_add = 0.4
+	}
+}
