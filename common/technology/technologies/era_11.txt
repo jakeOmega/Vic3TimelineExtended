@@ -184,13 +184,15 @@ space_militarization = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		reusable_rocketry
 	}
 
 	modifier = {
 		country_space_race_max_funding_add = 1
+		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
+		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 	}
 	
 	ai_weight = {

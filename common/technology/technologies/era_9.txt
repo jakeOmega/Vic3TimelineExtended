@@ -241,6 +241,7 @@ unmanned_aerial_vehicles = {
 		ship_detection_mult = 0.20
 		ship_screening_add = 50
 		character_battle_condition_aggressive_maneuver_mult = 0.25
+		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
 	
 	ai_weight = {
@@ -288,6 +289,8 @@ network_centric_warfare = {
 		country_ncw_pb_principles_bool = yes
 		character_command_limit_add = 1
 		character_advancement_speed_mult = 0.15
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
+		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 	}
 	
 	unlocking_technologies = {	
@@ -383,6 +386,7 @@ rapid_deployment_forces = {
 		ship_supply_efficiency_mult = 0.10
 		country_rapid_deploy_pb_principles_bool = yes
 		character_battle_condition_rapid_advance_mult = 1.0
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 	}
 	
 	ai_weight = {

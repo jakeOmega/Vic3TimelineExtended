@@ -105,14 +105,16 @@ hypersonic_weapons = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		precision_guided_munitions
 		supersonic_aircraft
 	}
 
 	modifier = {
 		country_nuclear_weapon_attack_success_add = 0.5
+		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
+		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 	}
 	
 	ai_weight = {
@@ -211,6 +213,7 @@ electronic_warfare = {
 		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.15
 		ship_visibility_mult = -0.10
 		character_naval_mission_area_add = 1
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
 	
 	ai_weight = {

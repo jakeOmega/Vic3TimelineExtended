@@ -206,6 +206,7 @@ orbital_weapon_platforms = {
 		country_nuclear_weapon_attack_success_add = 0.5
 		country_nuclear_weapon_defense_chance_add = 0.5
 		state_building_barrack_max_level_add = 200
+		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 	}
 	
 	ai_weight = {

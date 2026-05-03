@@ -232,8 +232,9 @@ guided_missiles = {
 		state_building_military_base_max_level_add = 1
 		ship_hull_damage_mult = 0.05
 		ship_battle_against_ship_type_dreadnought_accuracy_mult = 0.20
+		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -336,10 +337,11 @@ ICBMs = {
 		country_nuclear_weapon_attack_success_add = 0.5
 		country_icbm_pb_principles_bool = yes
 		country_icbm_pb_principles_bool = yes
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
-	
-	unlocking_technologies = {	
-		guided_missiles 
+
+	unlocking_technologies = {
+		guided_missiles
 		nuclear_weapons
 	}
 	
@@ -365,6 +367,7 @@ tactical_nuclear_weapons = {
 		state_building_barrack_max_level_add = 50
 		country_tactical_nukes_pb_principles_bool = yes
 		country_tactical_nukes_pb_principles_bool = yes
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
 	
 	ai_weight = {

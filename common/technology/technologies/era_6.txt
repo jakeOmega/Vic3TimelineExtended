@@ -101,11 +101,15 @@ bombing_aircraft = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		military_aviation
 	}
-	
+
+	modifier = {
+		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
+	}
+
 	ai_weight = {
 		value = 1
 	}
@@ -129,6 +133,7 @@ nuclear_weapons = {
 		country_nuclear_weapon_attack_success_add = 1
 		country_nuclear_weapons_pb_principles_bool = yes
 		country_nuclear_weapons_pb_principles_bool = yes
+		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
 	
 	ai_weight = {
@@ -460,6 +465,7 @@ mass_media = {
 		country_homelands_can_change_bool = yes
 		country_cultural_program_max_funding_add = 1
 		country_mass_media_pb_principles_bool = yes
+		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
 	
 	ai_weight = {
