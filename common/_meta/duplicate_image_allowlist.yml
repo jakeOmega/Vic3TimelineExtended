@@ -1,0 +1,858 @@
+# Duplicate-image allowlist for /duplicate-images.
+# See docs/python_tools.md.
+#
+# Each entry covers a cluster of entities that all share visually-identical
+# art. Two cluster shapes:
+#
+#   image:  gfx/foo.dds          # singular: all entities use the SAME path
+#   entities: [a, b]
+#
+#   images:                       # plural: entities use DIFFERENT paths
+#     - gfx/x.dds                 # whose .dds files have IDENTICAL bytes
+#     - gfx/y.dds                 # (i.e. duplicate art under different names)
+#   entities: [a, b]
+#
+# Adding a new entity to a cluster (or a new file with the same content) re-flags
+# it until this file is updated, which forces a fresh review. Replace the
+# placeholder reason with a real one once you've confirmed the share is
+# intentional. To re-flag a cluster as a real bug to fix with new art, simply
+# delete the entry.
+
+buildings:
+- image: gfx/interface/icons/building_icons/advanced_materials.dds
+  entities:
+  - building_advanced_material_fabricator
+  - building_nanofabrication_center
+  - building_nanofabrication_center_construction_site
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/building_arts_academy.dds
+  entities:
+  - building_art_academy
+  - building_wonder_azadi_tower
+  - building_wonder_basilica_of_our_lady_of_peace
+  - building_wonder_gardens_by_the_bay
+  - building_wonder_lotus_temple
+  - building_wonder_statue_of_unity
+  - building_wonder_sydney_opera_house
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/building_barracks.dds
+  entities:
+  - building_barrack
+  - building_military_base
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/building_government_administration.dds
+  entities:
+  - building_government_administration
+  - building_power_bloc_hq
+  - building_resettlement_camp
+  - building_resettlement_colony
+  - building_strategic_reserve_hub
+  - building_strategic_reserve_silo
+  - building_un_headquarters
+  - building_wonder_continental_union_hq
+  - building_wonder_kenyatta_icc
+  - building_wonder_palais_des_nations
+  - building_wonder_peace_palace
+  - building_wonder_pentagon
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/building_railway.dds
+  entities:
+  - building_railway
+  - building_wonder_aswan_high_dam
+  - building_wonder_channel_tunnel
+  - building_wonder_golden_bridge
+  - building_wonder_golden_gate_bridge
+  - building_wonder_hoover_dam
+  - building_wonder_itaipu_dam
+  - building_wonder_three_gorges_dam
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/building_university.dds
+  entities:
+  - building_university
+  - building_wonder_fast_telescope
+  - building_wonder_large_hadron_collider
+  - building_wonder_ligo
+  - building_wonder_moscow_state_university
+  - building_wonder_svalbard_seed_vault
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/coal_mine.dds
+  entities:
+  - building_coal_mine
+  - building_graphite_mine
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/construction_camp.dds
+  entities:
+  - building_construction_sector
+  - fmc_building_construction_site
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/gold_mine.dds
+  entities:
+  - building_gold_mine
+  - building_lithium_mine
+  - building_nickel_cobalt_mine
+  - building_platinum_group_metals_mine
+  - building_rare_earth_metals_mine
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/iron_mine.dds
+  entities:
+  - building_bauxite_mine
+  - building_chromium_mine
+  - building_iron_mine
+  - building_manganese_mine
+  - building_specialty_alloy_metal_mine
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/lead_mine.dds
+  entities:
+  - building_copper_mine
+  - building_lead_mine
+  - building_precious_minor_base_metal_mine
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/network.dds
+  entities:
+  - building_consciousness_network
+  - building_consciousness_network_construction_site
+  - building_mind_upload_nexus
+  - building_mind_upload_nexus_construction_site
+  - building_network_infrastructure
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/nuclear_plant.dds
+  entities:
+  - building_nuclear_plant
+  - building_wonder_iter
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/power_plant.dds
+  entities:
+  - building_antimatter_engine
+  - building_antimatter_facility
+  - building_power_plant
+  - building_solar_receiver
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/skyscraper.dds
+  entities:
+  - building_generic_arsenal
+  - building_generic_assay_office
+  - building_generic_chem_works
+  - building_generic_cold_storage
+  - building_generic_colonial_depot
+  - building_generic_corporate_university
+  - building_generic_data_fortress
+  - building_generic_dry_dock
+  - building_generic_electronics_lab
+  - building_generic_exhibition_centre
+  - building_generic_export_warehouse
+  - building_generic_financial_center
+  - building_generic_fish_market
+  - building_generic_foundry_complex
+  - building_generic_furniture_showroom
+  - building_generic_granary_complex
+  - building_generic_hq_skyscraper
+  - building_generic_industrial_city
+  - building_generic_industrial_zone
+  - building_generic_logistics_hub
+  - building_generic_lumber_yard
+  - building_generic_machine_shop
+  - building_generic_materials_lab
+  - building_generic_media_hq
+  - building_generic_mega_factory
+  - building_generic_mineral_refinery
+  - building_generic_monument_to_industry
+  - building_generic_motor_works
+  - building_generic_ordnance_depot
+  - building_generic_ore_processing
+  - building_generic_paper_mill_complex
+  - building_generic_pipeline_terminus
+  - building_generic_power_hub
+  - building_generic_proving_grounds
+  - building_generic_rail_nexus
+  - building_generic_rd_complex
+  - building_generic_resource_depository
+  - building_generic_robotics_institute
+  - building_generic_shipping_terminal
+  - building_generic_silk_exchange
+  - building_generic_spaceport
+  - building_generic_tank_farm
+  - building_generic_textile_depot
+  - building_generic_vintner_hall
+  - building_skyscraper
+  - building_wonder_abraj_al_bait
+  - building_wonder_lotte_world_tower
+  - building_wonder_petronas_towers
+  - building_wonder_shanghai_tower
+  - building_wonder_taipei_101
+  - building_wonder_world_trade_center
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/space.dds
+  entities:
+  - building_aerospace_industry
+  - building_wonder_international_space_station
+  - building_wonder_kennedy_space_center
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/space_base.dds
+  entities:
+  - building_antimatter_warhead_plant
+  - building_orbital_battlestation
+  - building_orbital_battlestation_construction_site
+  - building_space_mine
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/space_elevator.dds
+  entities:
+  - building_solar_collector
+  - building_space_elevator
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/space_elevator_construction_site.dds
+  entities:
+  - building_antimatter_facility_construction_site
+  - building_solar_collector_construction_site
+  - building_space_elevator_construction_site
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/sulfur_mine.dds
+  entities:
+  - building_industrial_mineral_salt_mine
+  - building_phosphate_mine
+  - building_potash_mine
+  - building_sulfur_mine
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/synthetics_plants.dds
+  entities:
+  - building_synthetics_plant
+  - building_synthetics_plant_silk
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/building_icons/urban_center.dds
+  entities:
+  - building_state_youth_centers
+  - building_urban_center
+  - building_wonder_berlin_tv_tower
+  - building_wonder_burj_khalifa
+  - building_wonder_cn_tower
+  - building_wonder_empire_state_building
+  - building_wonder_tokyo_tower
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/company_icons/basic_construction.dds
+  entities:
+  - building_megastructure_consortium_hq
+  - building_tycho_manufacturing_hq
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/company_icons/basic_electrics.dds
+  entities:
+  - building_hanka_precision_hq
+  - building_neurovault_hq
+  - building_rekal_hq
+  - building_tessier_ashpool_hq
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/company_icons/basic_motors.dds
+  entities:
+  - building_axiom_space_hq
+  - building_yoyodyne_propulsion_hq
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+decrees:
+- image: gfx/interface/icons/decree/decree_greener_grass_campaign.dds
+  entities:
+  - decree_greener_grass_campaign
+  - decree_greenest_grass_campaign
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/decree/decree_road_maintenance.dds
+  entities:
+  - decree_antiterrorism_campaign
+  - decree_bureaucracy_reform
+  - decree_cultural_emigration_initiative
+  - decree_cultural_integration
+  - decree_encourage_emigration
+  - decree_natalism_initiative
+  - decree_political_patronage
+  - decree_pollution_control
+  - decree_promote_tourism
+  - decree_road_maintenance
+  - decree_subsidize_immigration
+  - decree_tax_breakes
+  - decree_trade_reform
+  - decree_war_propaganda
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+technologies:
+- image: gfx/interface/icons/invention_icons/aniline.dds
+  entities:
+  - aniline
+  - bergius_process
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/artillery.dds
+  entities:
+  - artillery
+  - motorized_artillery
+  - rocketry
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/battleship_tech.dds
+  entities:
+  - battleship_tech
+  - naval_fire_control_systems
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/bolt_action_rifles.dds
+  entities:
+  - bolt_action_rifles
+  - semiautomatic_rifle
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/central_planning.dds
+  entities:
+  - central_planning
+  - modern_management_techniques
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/chemical_bleaching.dds
+  entities:
+  - chemical_bleaching
+  - modern_chemical_processes
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/combustion_engine.dds
+  entities:
+  - combustion_engine
+  - modern_automotive_technology
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/electrical_capacitors.dds
+  entities:
+  - electrical_capacitors
+  - fluorescent_lamps
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/electrical_generation.dds
+  entities:
+  - electrical_generation
+  - personal_appliances
+  - rural_electrification
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/film.dds
+  entities:
+  - animation
+  - film
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/intensive_agriculture.dds
+  entities:
+  - advanced_agricultural_statistics
+  - intensive_agriculture
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/macroeconomics.dds
+  entities:
+  - keynesian_economics
+  - macroeconomics
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/mass_communication.dds
+  entities:
+  - ICBMs
+  - LGBTQ_rights_movement
+  - abyssal_plain_mining
+  - additive_manufacturing
+  - advanced_assembly_lines
+  - advanced_body_armor
+  - advanced_materials_armor
+  - advanced_nanofabrication
+  - advanced_structural_engineering
+  - advanced_submarine_technology
+  - advanced_workflow_optimization
+  - anti_sub_warfare
+  - anti_war_movement
+  - antibiotic_mass_production
+  - antimatter_production
+  - artificial_intelligence
+  - asteroid_mining
+  - augmented_reality_warfare
+  - automated_surveillance
+  - autonomous_vehicles
+  - barcodes_and_scanners
+  - bioenhanced_soldiers
+  - biohacking_and_human_augmentation
+  - biological_immortality
+  - biotechnology
+  - brain_computer_interfaces
+  - cellular_networks
+  - civil_rights_movement
+  - clean_energy_technologies
+  - cloud_computing
+  - compact_fusion_reactors
+  - computer_aided_design
+  - computer_networks
+  - computing_machines
+  - containerization
+  - contraceptive_pill
+  - cyber_warfare
+  - cybersecurity
+  - decline_of_organized_religion
+  - digital_education
+  - digital_entertainment
+  - digital_telecommunications
+  - directed_energy_defenses
+  - directed_energy_weapons
+  - e-commerce
+  - early_nanotechnology
+  - electronic_warfare
+  - environmental_movement
+  - fiber_optics
+  - fusion_batteries
+  - fusion_power
+  - gene_splicing
+  - generative_ai
+  - genetic_engineering
+  - globalization
+  - green_revolution
+  - guided_missiles
+  - hydraulic_fracturing
+  - hypersonic_weapons
+  - inertial_navigation_systems
+  - infrared_night_vision
+  - integrated_circuits
+  - jadc2
+  - jet_engine_technology
+  - knowledge_economy
+  - lab-grown_food
+  - laser_technology
+  - machine_learning
+  - mainframe_computers
+  - mass_communication
+  - mass_media
+  - mental_health_awareness
+  - microprocessor
+  - military_grade_cybersecurity
+  - mind_backups
+  - missile_defense_systems
+  - modern_material_science
+  - modern_pharmaceuticals
+  - modern_urban_planning
+  - molecular_assemblers
+  - network_centric_warfare
+  - neural_lace
+  - nuclear_energy
+  - orbital_manufacturing
+  - orbital_weapon_platforms
+  - personal_computers
+  - personalized_medicine
+  - photocopiers
+  - plastic_mass_production
+  - pollution_control
+  - pop_culture
+  - post-scarcity_economy
+  - precision_guided_munitions
+  - predictive_logistics
+  - programmable_matter
+  - quantum_communications
+  - quantum_computing
+  - quantum_materials
+  - rapid_deployment_forces
+  - recon_satellites
+  - reusable_rocketry
+  - robotics
+  - satellite_communications
+  - second_wave_feminism
+  - sexual_revolution
+  - smart_grids
+  - social_justice_movements
+  - social_media
+  - space_based_solar_power
+  - space_colonization
+  - space_elevator
+  - space_exploration
+  - space_militarization
+  - stealth_technology
+  - supersonic_aircraft
+  - supply_chain_management
+  - swarm_technology
+  - synthetic_biology
+  - tactical_nuclear_weapons
+  - telemedicine
+  - telepathic_communities
+  - television
+  - television_broadcasting
+  - terrorism_and_anti_terrorism
+  - transistors
+  - universal_basic_income
+  - unmanned_aerial_vehicles
+  - video_games
+  - virtual_reality
+  - wireless_internet
+  - world_wide_web
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/mass_propaganda.dds
+  entities:
+  - marketing_research
+  - mass_propaganda
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/mass_surveillance.dds
+  entities:
+  - cryptography
+  - mass_surveillance
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/mechanical_tools.dds
+  entities:
+  - mechanical_tools
+  - modern_tools
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/military_aviation.dds
+  entities:
+  - advanced_military_aircraft
+  - bombing_aircraft
+  - commercial_aviation
+  - military_aviation
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/military_drill.dds
+  entities:
+  - combined_arms
+  - military_drill
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/modern_financial_instruments.dds
+  entities:
+  - consumer_credit
+  - modern_financial_instruments
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/multilateral_alliances.dds
+  entities:
+  - intergovernmental_organizations
+  - multilateral_alliances
+  - nuclear_weapons
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/pharmaceuticals.dds
+  entities:
+  - modern_vaccines
+  - pharmaceuticals
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/plastics.dds
+  entities:
+  - modern_materials
+  - plastics
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/radio.dds
+  entities:
+  - radar
+  - radio
+  - sonar
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/rubber.dds
+  entities:
+  - isoprene
+  - rubber_mastication
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/sea_lane_strategies.dds
+  entities:
+  - naval_convoy_defense
+  - sea_lane_strategies
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/steel_frame_buildings.dds
+  entities:
+  - modern_skyscrapers
+  - steel_frame_buildings
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/steelworking.dds
+  entities:
+  - aluminum_mass_production
+  - stainless_steel_mass_production
+  - steelworking
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/invention_icons/urban_planning.dds
+  entities:
+  - art_deco_architecture
+  - public_works_programs
+  - urban_planning
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+laws:
+- images:
+  - gfx/interface/icons/law_icons/active_persecution.dds
+  - gfx/interface/icons/law_icons/minority_rights_violent_hostility.dds
+  entities:
+  - law_active_persecution
+  - law_minority_rights_violent_hostility
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/algorithmic_governance.dds
+  - gfx/interface/icons/law_icons/decentralized_cryptocurrency.dds
+  entities:
+  - law_algorithmic_governance
+  - law_decentralized_cryptocurrency
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/basic_protections.dds
+  - gfx/interface/icons/law_icons/comprehensive_rights.dds
+  - gfx/interface/icons/law_icons/full_equality_and_protection.dds
+  - gfx/interface/icons/law_icons/minority_rights_affirmative_action.dds
+  - gfx/interface/icons/law_icons/minority_rights_discrimination.dds
+  - gfx/interface/icons/law_icons/minority_rights_indifference.dds
+  - gfx/interface/icons/law_icons/minority_rights_protection.dds
+  - gfx/interface/icons/law_icons/protected_class.dds
+  entities:
+  - law_basic_protections
+  - law_comprehensive_rights
+  - law_full_equality_and_protection
+  - law_minority_rights_affirmative_action
+  - law_minority_rights_discrimination
+  - law_minority_rights_indifference
+  - law_minority_rights_protection
+  - law_protected_class
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/central_bank_independence.dds
+  - gfx/interface/icons/law_icons/directed_credit_development_banks.dds
+  - gfx/interface/icons/law_icons/free_mutual_banking.dds
+  - gfx/interface/icons/law_icons/prudential_narrow_banking.dds
+  - gfx/interface/icons/law_icons/universal_banking_light_prudence.dds
+  entities:
+  - law_central_bank_independence
+  - law_directed_credit_development_banks
+  - law_free_mutual_banking
+  - law_prudential_narrow_banking
+  - law_state_owned_banking
+  - law_universal_banking_light_prudence
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/civic_monolingualism.dds
+  - gfx/interface/icons/law_icons/linguistic_purity.dds
+  - gfx/interface/icons/law_icons/multilingual_federalism.dds
+  - gfx/interface/icons/law_icons/state_led_language_reform.dds
+  - gfx/interface/icons/law_icons/ubiquitous_translation.dds
+  entities:
+  - law_civic_monolingualism
+  - law_linguistic_purity
+  - law_multilingual_federalism
+  - law_state_led_language_reform
+  - law_ubiquitous_translation
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/law_icons/colonial_resettlement.dds
+  entities:
+  - law_auxiliary_fleet
+  - law_colonial_resettlement
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/command_cooperative_economy.dds
+  - gfx/interface/icons/law_icons/dirigisme.dds
+  - gfx/interface/icons/law_icons/regulated_utilities.dds
+  entities:
+  - law_command_cooperative_economy
+  - law_dirigisme
+  - law_regulated_utilities
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/corporate_genetic_licensing.dds
+  - gfx/interface/icons/law_icons/open_source_genetics.dds
+  - gfx/interface/icons/law_icons/state_eugenics_program.dds
+  - gfx/interface/icons/law_icons/traditional_heredity.dds
+  entities:
+  - law_corporate_genetic_licensing
+  - law_open_source_genetics
+  - law_state_eugenics_program
+  - law_traditional_heredity
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/creative_commons.dds
+  - gfx/interface/icons/law_icons/open_source_innovation.dds
+  - gfx/interface/icons/law_icons/strict_ip_protection.dds
+  - gfx/interface/icons/law_icons/traditional_ip_protection.dds
+  entities:
+  - law_creative_commons
+  - law_open_source_innovation
+  - law_state_intellectual_property
+  - law_strict_ip_protection
+  - law_traditional_ip_protection
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/devolution.dds
+  - gfx/interface/icons/law_icons/federal_system.dds
+  - gfx/interface/icons/law_icons/unitary_state.dds
+  entities:
+  - law_devolution
+  - law_federal_system
+  - law_unitary_state
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/digital_currency.dds
+  - gfx/interface/icons/law_icons/fiat_currency.dds
+  - gfx/interface/icons/law_icons/gold_standard.dds
+  entities:
+  - law_digital_currency
+  - law_fiat_currency
+  - law_gold_standard
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/direct_democracy.dds
+  - gfx/interface/icons/law_icons/donation_limits.dds
+  - gfx/interface/icons/law_icons/publicly_funded_elections.dds
+  - gfx/interface/icons/law_icons/unregulated_donations.dds
+  entities:
+  - law_direct_democracy
+  - law_donation_limits
+  - law_publicly_funded_elections
+  - law_unregulated_donations
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/equal_inheritance.dds
+  - gfx/interface/icons/law_icons/partible.dds
+  - gfx/interface/icons/law_icons/primogeniture.dds
+  entities:
+  - law_equal_inheritance
+  - law_partible
+  - law_primogeniture
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/freedom_of_contract.dds
+  - gfx/interface/icons/law_icons/trust_busting.dds
+  entities:
+  - law_freedom_of_contract
+  - law_trust_busting
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/freedom_of_information.dds
+  - gfx/interface/icons/law_icons/neocolonialism.dds
+  - gfx/interface/icons/law_icons/open_government.dds
+  entities:
+  - law_freedom_of_information
+  - law_neocolonialism
+  - law_open_government
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/human_purity.dds
+  - gfx/interface/icons/law_icons/mandatory_augmentation.dds
+  - gfx/interface/icons/law_icons/medical_augmentation_only.dds
+  - gfx/interface/icons/law_icons/regulated_augmentation_market.dds
+  - gfx/interface/icons/law_icons/unrestricted_augmentation.dds
+  entities:
+  - law_human_purity
+  - law_mandatory_augmentation
+  - law_medical_augmentation_only
+  - law_regulated_augmentation_market
+  - law_unrestricted_augmentation
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/humanitarian_regulations.dds
+  - gfx/interface/icons/law_icons/limited_war.dds
+  - gfx/interface/icons/law_icons/war_crimes_forbidden.dds
+  entities:
+  - law_humanitarian_regulations
+  - law_limited_war
+  - law_war_crimes_forbidden
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/informal_government_secrecy.dds
+  - gfx/interface/icons/law_icons/intrusive_surveillance.dds
+  entities:
+  - law_informal_government_secrecy
+  - law_intrusive_surveillance
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/legal_limbo.dds
+  - gfx/interface/icons/law_icons/minority_rights_cultural_assimilation.dds
+  entities:
+  - law_legal_limbo
+  - law_minority_rights_cultural_assimilation
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/ministry_of_commerce.dds
+  - gfx/interface/icons/law_icons/ministry_of_consumer_protection.dds
+  - gfx/interface/icons/law_icons/ministry_of_culture.dds
+  - gfx/interface/icons/law_icons/ministry_of_foreign_affairs.dds
+  - gfx/interface/icons/law_icons/ministry_of_intelligence_and_security.dds
+  - gfx/interface/icons/law_icons/ministry_of_international_aid.dds
+  - gfx/interface/icons/law_icons/ministry_of_propaganda.dds
+  - gfx/interface/icons/law_icons/ministry_of_refugee_affairs.dds
+  - gfx/interface/icons/law_icons/ministry_of_religion.dds
+  - gfx/interface/icons/law_icons/ministry_of_science.dds
+  - gfx/interface/icons/law_icons/ministry_of_the_environment.dds
+  - gfx/interface/icons/law_icons/ministry_of_thought_control.dds
+  - gfx/interface/icons/law_icons/ministry_of_urban_planning.dds
+  - gfx/interface/icons/law_icons/ministry_of_war.dds
+  - gfx/interface/icons/law_icons/national_bank.dds
+  - gfx/interface/icons/law_icons/pro_capital_ministry_of_labor.dds
+  - gfx/interface/icons/law_icons/pro_labor_ministry_of_labor.dds
+  entities:
+  - law_ministry_of_commerce
+  - law_ministry_of_consumer_protection
+  - law_ministry_of_culture
+  - law_ministry_of_foreign_affairs
+  - law_ministry_of_intelligence_and_security
+  - law_ministry_of_international_aid
+  - law_ministry_of_propaganda
+  - law_ministry_of_refugee_affairs
+  - law_ministry_of_religion
+  - law_ministry_of_science
+  - law_ministry_of_the_environment
+  - law_ministry_of_thought_control
+  - law_ministry_of_urban_planning
+  - law_ministry_of_war
+  - law_national_bank
+  - law_pro_capital_ministry_of_labor
+  - law_pro_labor_ministry_of_labor
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/moderate_data_privacy.dds
+  - gfx/interface/icons/law_icons/strong_privacy_rights.dds
+  entities:
+  - law_moderate_data_privacy
+  - law_strong_privacy_rights
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/law_icons/national_guard.dds
+  entities:
+  - law_littoral_defense
+  - law_national_guard
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/net_neutrality.dds
+  - gfx/interface/icons/law_icons/state_controlled_internet.dds
+  - gfx/interface/icons/law_icons/unregulated_internet.dds
+  entities:
+  - law_net_neutrality
+  - law_state_controlled_internet
+  - law_unregulated_internet
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/no_ministry_of_commerce.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_consumer_protection.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_culture.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_foreign_affairs.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_intelligence_and_security.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_international_aid.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_labor.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_propaganda.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_refugee_affairs.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_religion.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_science.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_the_environment.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_thought_control.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_urban_planning.dds
+  - gfx/interface/icons/law_icons/no_ministry_of_war.dds
+  - gfx/interface/icons/law_icons/no_national_bank.dds
+  entities:
+  - law_no_ministry_of_commerce
+  - law_no_ministry_of_consumer_protection
+  - law_no_ministry_of_culture
+  - law_no_ministry_of_foreign_affairs
+  - law_no_ministry_of_intelligence_and_security
+  - law_no_ministry_of_international_aid
+  - law_no_ministry_of_labor
+  - law_no_ministry_of_propaganda
+  - law_no_ministry_of_refugee_affairs
+  - law_no_ministry_of_religion
+  - law_no_ministry_of_science
+  - law_no_ministry_of_the_environment
+  - law_no_ministry_of_thought_control
+  - law_no_ministry_of_urban_planning
+  - law_no_ministry_of_war
+  - law_no_national_bank
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/population_control_measures.dds
+  - gfx/interface/icons/law_icons/pro_natalist_subsidies.dds
+  - gfx/interface/icons/law_icons/state_sponsored_family_planning.dds
+  - gfx/interface/icons/law_icons/traditional_family_structure.dds
+  entities:
+  - law_population_control_measures
+  - law_pro_natalist_subsidies
+  - law_state_sponsored_family_planning
+  - law_traditional_family_structure
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/post-scarcity.dds
+  - gfx/interface/icons/law_icons/universal_basic_income.dds
+  entities:
+  - law_post-scarcity
+  - law_universal_basic_income
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- images:
+  - gfx/interface/icons/law_icons/rehabilitation_focused_criminal_justice.dds
+  - gfx/interface/icons/law_icons/restorative_justice.dds
+  entities:
+  - law_rehabilitation_focused_criminal_justice
+  - law_restorative_justice
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+- image: gfx/interface/icons/law_icons/secret_police.dds
+  entities:
+  - law_private_military_contractors
+  - law_secret_police
+  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
