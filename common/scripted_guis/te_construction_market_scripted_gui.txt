@@ -1,6 +1,5 @@
 ﻿# Construction-market subsystem.
-# Originally based on the third-party "Free Market Construction" mod;
-# substantially rewritten and renamed for this codebase. See README.md.
+# Based on the third-party "Free Market Construction" mod. See README.md.
 #
 # Bound from gui/construction_panel.gui to the +/- buttons in the construction
 # queue panel. Each handler nudges the country's public-construction buy target

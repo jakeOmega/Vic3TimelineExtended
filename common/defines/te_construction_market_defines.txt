@@ -1,4 +1,5 @@
-﻿# Construction-market subsystem. See README.md for credit/lineage.
+﻿# Construction-market subsystem.
+# Based on the third-party "Free Market Construction" mod. See README.md.
 
 # Tells the engine which building to use as the per-state construction site
 # (the building the engine spawns and tracks for state-scoped construction
