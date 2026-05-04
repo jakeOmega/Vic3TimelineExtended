@@ -14,6 +14,7 @@ Suppress an intentional hardcoded value with a same-line comment:
 
     multiplier = 2000  # REVIEWED 2026-05-04: tech-gated; intentionally large
 """
+import re
 from dataclasses import dataclass
 
 
@@ -56,3 +57,36 @@ DIRECT_EFFECTS: dict[str, ResourceMeta] = {
         fix_hint="use add_treasury = sv_treasury_event_<tier>",
     ),
 }
+
+
+# ---------------------------------------------------------------------------
+# Source-text helpers (line-based; the AST loses comments + line numbers).
+# ---------------------------------------------------------------------------
+
+# Matches event header lines like:
+#   foo_events.123 = {
+#   REPLACE:foo_events.123 = {
+#   INJECT:foo_events.123 = {
+#   REPLACE_OR_CREATE:foo_events.123 = {
+# Captures the bare event id (without the directive prefix).
+_EVENT_HEADER_RE = re.compile(
+    r"^(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([A-Za-z_]\w*\.\w+)\s*=\s*\{"
+)
+
+
+def find_event_id_at_line(text: str, line_no: int) -> str | None:
+    """Walk upward from `line_no` (1-indexed) to the most recent event header.
+
+    Returns the event id, or None if no header is above the line. Bare-bones
+    implementation: doesn't track brace depth, so a value inside a deeply-
+    nested `event { }` block in a non-event file would resolve to the most
+    recent event-shaped header. For events/*.txt that's correct.
+    """
+    lines = text.splitlines()
+    if not (1 <= line_no <= len(lines)):
+        return None
+    for i in range(line_no - 1, -1, -1):
+        m = _EVENT_HEADER_RE.match(lines[i].lstrip())
+        if m:
+            return m.group(1)
+    return None

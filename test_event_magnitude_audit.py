@@ -10,6 +10,7 @@ from event_magnitude_audit import (
     FAST_SCALING_MODIFIERS,
     DIRECT_EFFECTS,
     ResourceMeta,
+    find_event_id_at_line,
 )
 
 
@@ -26,6 +27,54 @@ class RegistryTests(unittest.TestCase):
         self.assertIn("add_treasury", DIRECT_EFFECTS)
         meta = DIRECT_EFFECTS["add_treasury"]
         self.assertIn("treasury", meta.resource)
+
+
+class EventIdResolutionTests(unittest.TestCase):
+    def test_simple(self):
+        text = (
+            "namespace = test_events\n"
+            "\n"
+            "test_events.1 = {\n"
+            "  type = country_event\n"
+            "  immediate = {\n"
+            "    add_treasury = -100\n"
+            "  }\n"
+            "}\n"
+        )
+        # add_treasury sits on line 6
+        self.assertEqual(find_event_id_at_line(text, line_no=6), "test_events.1")
+
+    def test_multiple_events_in_file(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = { add_treasury = -100 }\n"
+            "}\n"
+            "test_events.2 = {\n"
+            "  immediate = { add_treasury = -200 }\n"
+            "}\n"
+        )
+        # second add_treasury sits on line 5
+        self.assertEqual(find_event_id_at_line(text, line_no=5), "test_events.2")
+
+    def test_inject_replace_prefixes(self):
+        text = (
+            "REPLACE:foo.5 = {\n"
+            "  immediate = { add_treasury = -1 }\n"
+            "}\n"
+            "INJECT:bar.7 = {\n"
+            "  immediate = { add_treasury = -2 }\n"
+            "}\n"
+        )
+        self.assertEqual(find_event_id_at_line(text, line_no=2), "foo.5")
+        self.assertEqual(find_event_id_at_line(text, line_no=5), "bar.7")
+
+    def test_no_event_returns_none(self):
+        text = "namespace = test_events\n# just a comment\n"
+        self.assertIsNone(find_event_id_at_line(text, line_no=2))
+
+    def test_out_of_range_returns_none(self):
+        text = "test_events.1 = {\n}\n"
+        self.assertIsNone(find_event_id_at_line(text, line_no=99))
 
 
 if __name__ == "__main__":
