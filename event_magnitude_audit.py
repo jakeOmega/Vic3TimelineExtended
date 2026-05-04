@@ -74,6 +74,28 @@ _EVENT_HEADER_RE = re.compile(
 )
 
 
+@dataclass
+class AuditFlag:
+    file: str
+    line: int
+    event_id: str | None
+    kind: str             # "direct_effect" | "modifier_inline" | "modifier_named"
+    effect: str           # the matched key (e.g. "add_treasury")
+    value: str            # the literal string matched
+    resource: str         # display name from ResourceMeta
+    fix_hint: str         # display hint from ResourceMeta
+    exemption: dict | None = None  # {date, rationale} when REVIEWED
+
+
+def _is_literal_number(token: str) -> bool:
+    """True for `100`, `-20`, `0.5`, `-3.14` etc.; False for identifiers."""
+    try:
+        float(token)
+        return True
+    except ValueError:
+        return False
+
+
 _REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
@@ -107,3 +129,31 @@ def find_event_id_at_line(text: str, line_no: int) -> str | None:
         if m:
             return m.group(1)
     return None
+
+
+def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
+    """Find `<direct_effect> = <literal>` lines for effects in DIRECT_EFFECTS."""
+    lines = text.splitlines()
+    flags: list[AuditFlag] = []
+    for i, line in enumerate(lines, start=1):
+        for effect, meta in DIRECT_EFFECTS.items():
+            # Word-boundary so `add_treasury` doesn't match `something_add_treasury`.
+            # Search anywhere on the line so single-line `immediate = { add_treasury = N }` works.
+            m = re.search(rf"(?<!\w){re.escape(effect)}\s*=\s*(\S+)", line)
+            if not m:
+                continue
+            value = m.group(1).rstrip("}").rstrip(",").rstrip()
+            if not _is_literal_number(value):
+                continue
+            flags.append(AuditFlag(
+                file=file_path,
+                line=i,
+                event_id=find_event_id_at_line(text, i),
+                kind="direct_effect",
+                effect=effect,
+                value=value,
+                resource=meta.resource,
+                fix_hint=meta.fix_hint,
+                exemption=parse_reviewed_comment(line),
+            ))
+    return flags

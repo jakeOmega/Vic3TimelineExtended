@@ -12,6 +12,8 @@ from event_magnitude_audit import (
     ResourceMeta,
     find_event_id_at_line,
     parse_reviewed_comment,
+    scan_direct_effects,
+    AuditFlag,
 )
 
 
@@ -101,6 +103,61 @@ class SuppressionCommentTests(unittest.TestCase):
     def test_unrelated_comment(self):
         line = "    multiplier = 2000  # just a regular comment"
         self.assertIsNone(parse_reviewed_comment(line))
+
+
+class DirectEffectScannerTests(unittest.TestCase):
+    def test_flags_literal(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_treasury = -10000\n"
+            "  }\n"
+            "}\n"
+        )
+        flags = scan_direct_effects(text, file_path="events/foo.txt")
+        self.assertEqual(len(flags), 1)
+        f = flags[0]
+        self.assertEqual(f.event_id, "test_events.1")
+        self.assertEqual(f.effect, "add_treasury")
+        self.assertEqual(f.value, "-10000")
+        self.assertEqual(f.resource, "treasury (instant)")
+        self.assertIsNone(f.exemption)
+        self.assertEqual(f.line, 3)
+        self.assertEqual(f.kind, "direct_effect")
+
+    def test_skips_script_value(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = { add_treasury = sv_treasury_event_small }\n"
+            "}\n"
+        )
+        self.assertEqual(scan_direct_effects(text, file_path="x.txt"), [])
+
+    def test_reviewed_becomes_exemption(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_treasury = -10000  # REVIEWED 2026-05-04: vanilla precedent\n"
+            "  }\n"
+            "}\n"
+        )
+        flags = scan_direct_effects(text, file_path="x.txt")
+        self.assertEqual(len(flags), 1)
+        self.assertIsNotNone(flags[0].exemption)
+        self.assertEqual(flags[0].exemption["rationale"], "vanilla precedent")
+
+    def test_skips_zero(self):
+        # Zero is a literal but not actionable; treat as a no-op.
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = { add_treasury = 0 }\n"
+            "}\n"
+        )
+        flags = scan_direct_effects(text, file_path="x.txt")
+        # We still flag zero since it's a literal — it's the user's choice
+        # whether to # REVIEWED it. Confirm at least the regex matches.
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].value, "0")
 
 
 if __name__ == "__main__":
