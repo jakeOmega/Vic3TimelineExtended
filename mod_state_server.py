@@ -2765,6 +2765,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             # New structured endpoints
             "events": lambda: self._events(rest, params),
             "event-balance": lambda: self._event_balance(rest, params),
+            # Event magnitude audit (hardcoded fast-scaling values)
+            "event-magnitude-audit": lambda: self._event_magnitude_audit(params),
             "institutions": lambda: self._institutions(rest),
             "production-methods": lambda: self._production_methods(rest, params),
             "journal-entries": lambda: self._journal_entries(rest),
@@ -4325,6 +4327,48 @@ class ModStateHandler(BaseHTTPRequestHandler):
             return {"text": _render_event_balance_issues_text(len(ids), flagged, mode=mode)}
         return result
 
+    def _event_magnitude_audit(self, params):
+        """GET /event-magnitude-audit — flag hardcoded fast-scaling resource deltas in events.
+
+        Filters:
+          ?resource=prestige           — substring match on resource label
+          ?event_id=foo.5              — exact match on event id
+          ?show_reviewed=true          — include reviewed exemptions in flags list
+          ?format=text                 — return the markdown report instead of JSON
+        """
+        import event_magnitude_audit as ema
+        from path_constants import mod_path as _mod_path
+
+        result = ema.audit(ms, mod_path=_mod_path)
+        flags = result.flags
+
+        show_reviewed = (params.get("show_reviewed") or ["false"])[0].lower() in ("true", "1", "yes")
+        if not show_reviewed:
+            flags = [f for f in flags if not f.exemption]
+        resource_filter = (params.get("resource") or [None])[0]
+        if resource_filter:
+            flags = [f for f in flags if resource_filter in f.resource]
+        event_filter = (params.get("event_id") or [None])[0]
+        if event_filter:
+            flags = [f for f in flags if f.event_id == event_filter]
+
+        fmt = (params.get("format") or ["json"])[0]
+        if fmt == "text":
+            return {"text": ema.render_report(ema.AuditResult(flags=flags, coverage=result.coverage))}
+
+        return {
+            "flags": [
+                {
+                    "file": f.file, "line": f.line, "event_id": f.event_id,
+                    "kind": f.kind, "effect": f.effect, "value": f.value,
+                    "resource": f.resource, "fix_hint": f.fix_hint,
+                    "exemption": f.exemption,
+                }
+                for f in flags
+            ],
+            "coverage": result.coverage,
+        }
+
     # ---- structured: institutions -----------------------------------------
     def _institutions(self, parts):
         """GET /institutions[/<institution_id>]  - institution data with modifiers per level."""
@@ -5002,7 +5046,9 @@ POST_LOAD_GENERATORS = [
     ("resources",                     "resources"),
     ("gen_pb_principle_unlock_descs", "gen_pb_principle_unlock_descs"),
     ("gen_un_button_descs",           "gen_un_button_descs"),
+    ("gen_law_consistency",           "gen_law_consistency"),
     ("organize_loc",                  "organize_loc"),
+    ("event_magnitude_audit",         "event_magnitude_audit"),
 ]
 
 

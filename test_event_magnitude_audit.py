@@ -280,8 +280,10 @@ class NamedModifierScannerTests(unittest.TestCase):
             [],
         )
 
-    def test_skips_named_modifier_without_multiplier(self):
-        # `add_modifier { name = X }` defaults multiplier=1; no literal to scale.
+    def test_no_multiplier_flags_when_static_modifier_has_hardcoded_fast_field(self):
+        # `add_modifier { name = X }` with X carrying hardcoded
+        # country_prestige_add IS a problem: it applies a flat -N prestige
+        # that goes invisible at scale. Flag with the no-mult kind.
         text = (
             "test_events.1 = {\n"
             "  immediate = {\n"
@@ -289,10 +291,16 @@ class NamedModifierScannerTests(unittest.TestCase):
             "  }\n"
             "}\n"
         )
-        self.assertEqual(
-            scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup),
-            [],
-        )
+        flags = scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup)
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].kind, "modifier_named_no_mult")
+        self.assertEqual(flags[0].effect, "country_prestige_add")
+        # Value reports `field=raw_value (in name)` so the audit reader sees
+        # both the underlying magnitude and the static modifier carrying it.
+        self.assertIn("country_prestige_add=", flags[0].value)
+        self.assertIn("prestige_loss_X", flags[0].value)
+        # The fix hint mentions the static modifier name and the alternative.
+        self.assertIn("prestige_loss_X", flags[0].fix_hint)
 
     def test_multi_field_modifier_emits_one_flag_per_fast_field(self):
         text = (
@@ -312,12 +320,12 @@ class NamedModifierScannerTests(unittest.TestCase):
 class _StubModState:
     """Minimal ModState fake for audit()."""
 
-    def __init__(self, static_modifiers: dict, mod_path: str):
+    def __init__(self, static_modifiers: dict):
         self._sm = static_modifiers
-        self.mod_path = mod_path
 
     def get_data(self, key):
-        if key == "StaticModifiers":
+        # ModState's entity-type label is "Modifiers" for static modifiers.
+        if key == "Modifiers":
             return self._sm
         return {}
 
@@ -340,9 +348,8 @@ class AuditEntrypointTests(unittest.TestCase):
                 static_modifiers={
                     "prestige_loss_X": _eq({"country_prestige_add": _eq("1")}),
                 },
-                mod_path=tmp,
             )
-            result = audit(ms)
+            result = audit(ms, mod_path=tmp)
             self.assertIsInstance(result, AuditResult)
             unrev = [f for f in result.flags if not f.exemption]
             exemp = [f for f in result.flags if f.exemption]
@@ -353,8 +360,8 @@ class AuditEntrypointTests(unittest.TestCase):
 
     def test_no_events_dir_returns_empty(self):
         with tempfile.TemporaryDirectory() as tmp:
-            ms = _StubModState(static_modifiers={}, mod_path=tmp)
-            result = audit(ms)
+            ms = _StubModState(static_modifiers={})
+            result = audit(ms, mod_path=tmp)
             self.assertEqual(result.flags, [])
             self.assertEqual(result.coverage["files_audited"], 0)
 

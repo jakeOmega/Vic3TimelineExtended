@@ -95,6 +95,28 @@ When in doubt, ask: "if this modifier moved the same amount on every character i
 - `add_prestige` is not a valid static modifier field — use `country_prestige_add`.
 - `add_authority` and `add_influence` are NOT valid effects — these are rate-based resources that can only be affected through modifiers (`country_authority_add`, `country_influence_add`).
 
+### Audit + library for fast-scaling event effects
+
+`event_magnitude_audit.py` (endpoint: `GET /event-magnitude-audit`, report: `docs/event_magnitude_report.md`, regenerated on every full `POST /reload`) flags hardcoded fast-scaling deltas in `events/*.txt` and recommends a scaled fix path. Resources currently audited:
+
+| Modifier / effect | Scaled-fix path |
+|---|---|
+| `country_prestige_add` (in static modifiers used by `add_modifier { name = X multiplier = N }`) | Replace with `add_modifier { name = prestige_loss_<tier> }` (mult-based generic, no multiplier needed) OR `multiplier = sv_prestige_event_<tier>` if X has multiple fields that should scale together |
+| `country_bureaucracy_add` | Replace with `add_modifier { name = bureaucracy_loss_<tier> }` |
+| `add_treasury` (direct effect) | Replace literal value with `add_treasury = sv_treasury_event_<tier>` |
+
+Available tiers (in `common/script_values/extra_script_values.txt` and `common/static_modifiers/extra_modifiers.txt`): `tiny` (0.5%), `small` (2%), `medium` (5%), `large` (15%), `huge` (30%, prestige only). Adding a new fast-scaling resource is one line in `event_magnitude_audit.FAST_SCALING_MODIFIERS`.
+
+The audit also catches the trickier "static modifier carries the hardcoded value itself" case: `add_modifier { name = X }` (no multiplier) where X has a hardcoded `country_prestige_add = -20` field. Fix path: either change X to use `country_prestige_mult`, or replace the reference with a mult-based generic.
+
+**Suppressing a flag.** When a hardcoded value is intentional (tech-gated to a specific era, vanilla precedent, etc.), add an inline comment on the value line:
+
+```
+multiplier = 2000  # REVIEWED 2026-05-04: tech-gated to nuclear era; intentionally large
+```
+
+Both the date and a rationale are required (drive-by `# REVIEWED` is rejected). The audit captures both and reports them in the `## Reviewed Exemptions` section of `docs/event_magnitude_report.md`. Unreviewed flags are the actionable inbox.
+
 ## One-Shot vs Duration-Multiplied Calibration
 
 A `country_*_mult` or weekly modifier from `add_modifier { days = N ... }` compounds over `N` days (~`N/7` weeks of effect). A bare `add_treasury` is paid **once**. When an event option offers cash *instead of* a multi-year modifier, size the one-shot to be competitive with the modifier's effective lifetime value:
@@ -149,6 +171,22 @@ Known invalid names:
 **Validation methods:**
 - Use the mod state server `/modifier-search?q=<name>` endpoint.
 - Search base game: `Get-ChildItem "C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common" -Recurse -Filter "*.txt" | Select-String "modifier_name"`.
+
+## Modifier Value Scale: The Suffix Doesn't Tell You
+
+A modifier's `_add` / `_mult` suffix tells you the *operation* (additive vs multiplicative), not the *unit* the engine reads. Whether a value should be a 0–1 fraction, a raw percentage point integer, or a small integer on a custom scale is set per-modifier by the engine — and it's not always intuitive.
+
+Real bug from this codebase: `country_law_enactment_success_add = 5` was meant as "5 percentage points" but the engine reads this modifier as a 0–1 fraction, so it rendered as **+500%**. Vanilla call sites use `0.05`, `0.10`, `0.20` (i.e. 0–1 fraction). The fix was `5 → 0.05`. Same shape would bite on `country_amenability_add` (vanilla uses small integers like `3`) — there's no rule from the suffix.
+
+**Always grep one vanilla call site before naming a value for an unfamiliar modifier:**
+```
+grep -rn "country_law_enactment_success_add" \
+  /mnt/c/Program\ Files\ \(x86\)/Steam/steamapps/common/Victoria\ 3/game/common/ \
+  | grep -v "_l_"
+```
+Pick a representative vanilla number, then size your value relative to it. The `display_name` from `engine-docs/modifiers?q=NAME` plus `description` (e.g. "A flat percentage point increase…") often hints at the scale, but vanilla call sites are the ground truth.
+
+`/validate/engine-coverage` does NOT catch this — values pass validation as long as the modifier name is registered. The bug surfaces only at runtime in the player's tooltip, so it can sit undetected for a long time.
 
 ## Dynamic Modifier Type Definitions
 
@@ -473,6 +511,20 @@ Both can store scope references, but they differ in persistence and loc access:
 - In `random = { chance = X modifier = { ... } }` blocks (effects, not MTTH), every `modifier` block must contain a `trigger` sub-block.
 - **Invalid:** `modifier = { add = my_script_value }` → "Malformed token" error.
 - **Valid:** `modifier = { trigger = { always = yes } add = my_script_value }`.
+
+## Reading a Script Value as a Trigger: Bare Name, Not `value:NAME`
+
+Inside a trigger block (`possible`, `trigger`, `if/limit`, `custom_tooltip`), reference a script value **by its bare name**:
+
+```
+possible = {
+    te_subjugation_strength >= 1.0   # ✓ correct
+}
+```
+
+`value:te_subjugation_strength >= 1.0` produces `Unknown trigger type: value:te_subjugation_strength` and silently disables the trigger (the action still appears but the gate is dead).
+
+The `value:NAME` prefix is for `add` / `multiply` / `divide` lines **inside another script value**, where the engine needs to disambiguate between named SVs and other tokens. In trigger context, the parser already expects a comparison and resolves the bare name correctly — the prefix is a mistake there. Mod precedent: `peaceful_annex_gdp_requirement` (in `extra_script_values.txt`) is read as `gdp < peaceful_annex_gdp_requirement` from a JE `possible` clause.
 
 ## Silent-Zero Footgun: `_add × (1 + _mult)` Without an `_add` Source
 
@@ -1728,6 +1780,29 @@ Invoke-RestMethod "http://localhost:8950/unlocalized?mod_only=false"
 3. Run `python organize_loc.py` to sort and categorize all keys
 4. Verify with another `/unlocalized` call
 
+## Treaty Article Cross-Article Exclusion: `any_scope_treaty` Misses the Draft
+
+When a treaty article must reject **another article in the same draft** (e.g. nuclear program aid and a nuclear program freeze in one treaty are nonsense), the trigger must reach the **in-construction draft**, not just in-force treaties.
+
+```
+# any_scope_treaty iterates IN-FORCE treaties only — misses the current draft
+any_scope_treaty = { any_scope_article = { has_type = nuclear_program_aid ... } }
+
+# scope:treaty.any_scope_article_option iterates the in-construction draft
+scope:treaty ?= {
+    any_scope_article_option = {
+        has_type = nuclear_program_aid
+        target_country = scope:other_country
+    }
+}
+```
+
+Use BOTH if the rejection should apply against existing pacts AND the same draft. Vanilla example: `06_transfer_state.txt` filters its own draft via `scope:treaty ?= { NOT = { any_scope_article_option = { ... } } }`. The mod's nuclear aid / disarmament / pause articles previously used only `any_scope_treaty`, which is why a single draft could bundle aid + freeze and pass each article's `possible` clause individually (fixed 2026-05-03).
+
+`scope:treaty` is a power_bloc/treaty scope and may not exist in every evaluation context — guard with `?=` (optional). `any_scope_article_option` (note the `_option` suffix) is the right iterator for draft articles, since it includes the article's parameter inputs (`source_country`, `target_country`) needed for filtering.
+
+**Symmetric checks required.** A cross-article exclusion has to be wired in BOTH articles — if only A rejects B, the player can still create a draft by adding B first then A. Both `possible` clauses must check the other type.
+
 ## Top-Level Database Collisions: Use `INJECT:` Instead of Re-Declaring
 
 The Clausewitz database is keyed by the **top-level identifier** of each entry. If a mod file declares the same top-level key vanilla already defines, the engine emits `Duplicated key X will not be created` in `debug.log` and **drops the mod copy entirely**. This applies to anything stored in `gamedatabase` — portrait modifiers, technology entries, buildings, ideologies, modifier type definitions, etc.
@@ -2135,3 +2210,22 @@ Tech / law / decree / institution `modifier = { country_leverage_threshold_chang
 **Repo example: `country_leverage_threshold_change_add`**. This pattern was working until commit `5e83824` (April 7, 2026) deleted the `leverage_threshold_to_invite` script-value override from `extra_script_values.txt` as part of an unrelated covert-ops refactor. The modifier definition + tech contributions stayed in place, so the symptoms looked like "leverage threshold reduction broken" but no error was logged. Restored 2026-05-03 with the simpler `add = modifier:X` form (the deleted version had hardcoded per-tech `subtract` blocks).
 
 **Audit recipe** when a `script_only = yes` modifier looks broken: search `common/script_values/` (mod *and* vanilla) for the consumer. If the consumer is a vanilla script value, confirm the mod has an override redefining it. If the consumer is gone, restore it. If neither has a consumer, the modifier is genuinely unread and the tech contributions are dead code.
+
+## New `.txt` Files Under `common/` Need a UTF-8 BOM
+
+Vic3 expects every brace-script file under `common/` (and `events/`) to start with a UTF-8 BOM (`EF BB BF`). The engine logs `File 'X' should be in utf8-bom encoding (will try to use it anyways)` for files without one. The warning is non-fatal — the engine parses the file regardless — but it adds noise to `debug.log` and (anecdotally) makes some tooling treat the file as ASCII when it shouldn't.
+
+The `Write` tool writes plain UTF-8 by default, so any new file created via Write/Edit lacks a BOM until you add one. Existing files modified by Edit keep their BOM (the BOM bytes survive surgical edits). The fix:
+
+```bash
+for f in common/path/to/new_file.txt; do
+    tmp="${f}.tmp"
+    printf '\xef\xbb\xbf' > "$tmp"
+    cat "$f" >> "$tmp"
+    mv "$tmp" "$f"
+done
+```
+
+Verify with `head -c 3 file.txt | xxd -p` — should print `efbbbf`. After adding, `POST /reload` to refresh the server's view; the `should be in utf8-bom encoding` line should no longer appear in `/logs/debug` for that path.
+
+Locale YAMLs use a different convention — the `*_l_english.yml` files use `\xef\xbb\xbf` BOM as well but `organize_loc.py` re-emits them, so don't hand-bom yaml files.

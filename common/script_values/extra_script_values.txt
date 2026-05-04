@@ -1529,18 +1529,17 @@ banking_event_expense_huge = {
 }
 
 # Base points provided by the currently active law (used for JE setup / display).
+# Values must mirror each law's country_banking_intervention_max_add modifier in
+# common/laws/extra_laws.txt (lawgroup_financial_regulation).
 banking_law_base_points_value = {
 	value = 0
-	if = { limit = { has_law = law_type:law_unregulated_banking }              add = 1 }    # default
-	if = { limit = { has_law = law_type:law_free_mutual_banking }              add = 3 }
-	if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 4 }
-	if = { limit = { has_law = law_type:law_prudential_narrow_banking }        add = 7 }
-	if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 7 }
-	if = {
-		limit = { has_law = law_type:law_central_bank_independence }
-		add = 7
-		institution:institution_national_bank = { add = investment }
-	}
+	if = { limit = { has_law = law_type:law_unregulated_banking }               add = 1 }
+	if = { limit = { has_law = law_type:law_free_mutual_banking }               add = 3 }
+	if = { limit = { has_law = law_type:law_universal_banking_light_prudence }  add = 4 }
+	if = { limit = { has_law = law_type:law_prudential_narrow_banking }         add = 7 }
+	if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 5 }
+	if = { limit = { has_law = law_type:law_state_owned_banking }               add = 7 }
+	if = { limit = { has_law = law_type:law_central_bank_independence }         add = 7 }
 }
 
 # Random momentum nudge values, scaled by the banking_random_momentum_mult modifier.
@@ -2351,3 +2350,28 @@ te_subjugation_strength = {
 		add = modifier:country_subjugation_military_strength_add
 	}
 }
+
+# === Tiered scaler script values for events ============================
+# Used by add_modifier { multiplier = sv_<resource>_event_<tier> } so the
+# resulting modifier scales with the country's current resource value
+# instead of being a hardcoded delta that goes invisible at late-game scale.
+#
+# See docs/event_magnitude_report.md for the audit that flags missing usage,
+# and docs/scripting_best_practices.md § "Fast-scaling resources require
+# scaled effects" for the rationale.
+#
+# Tiers: tiny=0.5%, small=2%, medium=5%, large=15%, huge=30%
+
+sv_prestige_event_tiny   = { value = prestige  multiply = 0.005 }
+sv_prestige_event_small  = { value = prestige  multiply = 0.02  }
+sv_prestige_event_medium = { value = prestige  multiply = 0.05  }
+sv_prestige_event_large  = { value = prestige  multiply = 0.15  }
+sv_prestige_event_huge   = { value = prestige  multiply = 0.30  }
+
+# Treasury (instant): use gold_reserves as the base. Vanilla precedent for
+# this script-value source — it tracks the country's literal money stock.
+sv_treasury_event_tiny   = { value = gold_reserves  multiply = 0.005 }
+sv_treasury_event_small  = { value = gold_reserves  multiply = 0.02  }
+sv_treasury_event_medium = { value = gold_reserves  multiply = 0.05  }
+sv_treasury_event_large  = { value = gold_reserves  multiply = 0.15  }
+sv_treasury_event_huge   = { value = gold_reserves  multiply = 0.30  }

@@ -177,38 +177,63 @@ def scan_named_modifiers(
     for block_match in _ADD_MODIFIER_BLOCK_RE.finditer(text):
         body = block_match.group("body")
         name_m = _NAME_RE.search(body)
-        mult_m = _MULTIPLIER_RE.search(body)
-        if not name_m or not mult_m:
+        if not name_m:
             continue
         name = name_m.group("name").rstrip(",")
-        value = mult_m.group("value").rstrip("}").rstrip(",").rstrip()
-        if not _is_literal_number(value):
-            continue
         modifier_body = lookup(name)
         if not modifier_body:
             continue
 
-        # The line of the multiplier (the actionable target for # REVIEWED).
-        # mult_m.start() is relative to the body text; convert back to the
-        # absolute file offset.
-        mult_offset = block_match.start("body") + mult_m.start()
-        mult_line = _offset_to_line(line_starts, mult_offset)
-        line_text = lines[mult_line - 1] if 0 < mult_line <= len(lines) else ""
+        # Find any fast-scaling fields the static modifier carries, with their
+        # raw values (so we can report the actual magnitude in the unscaled case).
+        fast_fields = [
+            (field, value, FAST_SCALING_MODIFIERS[field])
+            for field, value in modifier_body.items()
+            if field in FAST_SCALING_MODIFIERS
+        ]
+        if not fast_fields:
+            continue
+
+        mult_m = _MULTIPLIER_RE.search(body)
+        if mult_m:
+            mult_value = mult_m.group("value").rstrip("}").rstrip(",").rstrip()
+            if not _is_literal_number(mult_value):
+                # multiplier = sv_<...> — already scaled, skip
+                continue
+            # Anchor # REVIEWED on the multiplier line
+            anchor_offset = block_match.start("body") + mult_m.start()
+            display_value = mult_value
+            kind = "modifier_named"
+            extra_hint = ""
+        else:
+            # No multiplier: defaults to 1, the static modifier's own field
+            # value applies absolutely. This is the failure mode where the
+            # magnitude lives inside the static modifier definition itself.
+            anchor_offset = block_match.start("body") + name_m.start()
+            display_value = "(no multiplier; static modifier carries hardcoded value)"
+            kind = "modifier_named_no_mult"
+            extra_hint = (
+                f" — `{name}` carries a hardcoded fast-scaling field; "
+                "either replace the reference with a mult-based generic "
+                "(prestige_loss_<tier> / bureaucracy_loss_<tier>), or "
+                "convert the static modifier itself to use _mult."
+            )
+
+        anchor_line = _offset_to_line(line_starts, anchor_offset)
+        line_text = lines[anchor_line - 1] if 0 < anchor_line <= len(lines) else ""
         exemption = parse_reviewed_comment(line_text)
 
-        for field in modifier_body.keys():
-            meta = FAST_SCALING_MODIFIERS.get(field)
-            if not meta:
-                continue
+        for field, field_value, meta in fast_fields:
+            shown = display_value if mult_m else f"{field}={field_value} (in {name})"
             flags.append(AuditFlag(
                 file=file_path,
-                line=mult_line,
-                event_id=find_event_id_at_line(text, mult_line),
-                kind="modifier_named",
+                line=anchor_line,
+                event_id=find_event_id_at_line(text, anchor_line),
+                kind=kind,
                 effect=field,
-                value=value,
+                value=shown,
                 resource=meta.resource,
-                fix_hint=meta.fix_hint,
+                fix_hint=meta.fix_hint + extra_hint,
                 exemption=exemption,
             ))
     return flags
@@ -290,12 +315,15 @@ class AuditResult:
 
 
 def _make_static_modifier_lookup(ms) -> Callable[[str], dict | None]:
-    """Build a name→{field: value} lookup from ModState's parsed StaticModifiers.
+    """Build a name→{field: value} lookup from ModState's parsed Modifiers.
 
     The parser stores each modifier as ('=', {field: ('=', value), ...}). We
     unwrap one level for the modifier body and one level for each field value.
+
+    `Modifiers` is ModState's entity-type label for static modifiers (the
+    ones in common/static_modifiers/). See /status entity_types.
     """
-    raw = ms.get_data("StaticModifiers") or {}
+    raw = ms.get_data("Modifiers") or {}
 
     def lookup(name: str) -> dict | None:
         entry = raw.get(name)
@@ -312,10 +340,18 @@ def _make_static_modifier_lookup(ms) -> Callable[[str], dict | None]:
     return lookup
 
 
-def audit(ms) -> AuditResult:
-    """Walk every events/*.txt file, return all magnitude flags."""
+def audit(ms, mod_path: str | None = None) -> AuditResult:
+    """Walk every events/*.txt file, return all magnitude flags.
+
+    `mod_path` defaults to whatever `path_constants.mod_path` resolves to so
+    tests can pass a tempdir explicitly without touching the global config.
+    """
+    if mod_path is None:
+        # Lazy import so tests that don't need real paths don't import path_constants.
+        from path_constants import mod_path as _default
+        mod_path = _default
     lookup = _make_static_modifier_lookup(ms)
-    events_dir = os.path.join(ms.mod_path, "events")
+    events_dir = os.path.join(mod_path, "events")
     if not os.path.isdir(events_dir):
         return AuditResult(flags=[], coverage={"files_audited": 0})
 
@@ -364,9 +400,15 @@ def render_report(result: AuditResult) -> str:
             out.append(f"### {resource} ({len(by_resource[resource])})")
             out.append("")
             for f in by_resource[resource]:
+                # The no-mult case stores `field=value (in name)` in `value` already,
+                # so don't repeat the field name in front of it.
+                if f.kind == "modifier_named_no_mult":
+                    detail = f"`{f.value}`"
+                else:
+                    detail = f"`{f.effect} = {f.value}`"
                 out.append(
                     f"- `{f.file}:{f.line}` — event `{f.event_id or '?'}` — "
-                    f"`{f.effect} = {f.value}` — fix: {f.fix_hint}"
+                    f"{detail} — fix: {f.fix_hint}"
                 )
             out.append("")
 
@@ -393,3 +435,32 @@ def render_report(result: AuditResult) -> str:
     out.append(f"- exempted: {len(exemp)}")
 
     return "\n".join(out) + "\n"
+
+
+# ---------------------------------------------------------------------------
+# Post-load hook (matches POST_LOAD_GENERATORS protocol in mod_state_server).
+# ---------------------------------------------------------------------------
+
+
+def regenerate(mod_state) -> dict:
+    """Run the audit and write docs/event_magnitude_report.md.
+
+    Returns a small summary dict so the caller can log counts.
+    Failures should propagate; the server's _run_post_load_generators wraps
+    each call in try/except.
+    """
+    from path_constants import mod_path
+    result = audit(mod_state, mod_path=mod_path)
+    report = render_report(result)
+    out_path = os.path.join(mod_path, "docs", "event_magnitude_report.md")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(report)
+    unrev = sum(1 for f_ in result.flags if not f_.exemption)
+    exemp = sum(1 for f_ in result.flags if f_.exemption)
+    return {
+        "files_audited": result.coverage.get("files_audited", 0),
+        "total_flags": len(result.flags),
+        "unreviewed": unrev,
+        "exempted": exemp,
+    }

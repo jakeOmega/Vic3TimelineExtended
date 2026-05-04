@@ -161,14 +161,14 @@ forced_law_through_event = {
 forced_law_through_event_enactment_small = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_amenability_add = 10
-	country_law_enactment_success_add = 5
+	country_law_enactment_success_add = 0.05
 	country_law_enactment_stall_mult = -0.25
 }
 
 forced_law_through_event_enactment_medium = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_amenability_add = 25
-	country_law_enactment_success_add = 15
+	country_law_enactment_success_add = 0.15
 	country_law_enactment_stall_mult = -0.50
 	country_law_enactment_max_setbacks_add = 1
 	country_law_enactment_time_mult = -0.20
@@ -177,7 +177,7 @@ forced_law_through_event_enactment_medium = {
 forced_law_through_event_enactment_large = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_amenability_add = 50
-	country_law_enactment_success_add = 25
+	country_law_enactment_success_add = 0.25
 	country_law_enactment_stall_mult = -0.75
 	country_law_enactment_max_setbacks_add = 2
 	country_law_enactment_time_mult = -0.35
@@ -6147,4 +6147,82 @@ st_res_tanks_withdraw_flow = {
 st_res_sell_profit_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_tax_income_add = 1
+}
+
+# === Tiered scaled prestige/bureaucracy modifiers (mult-based) ============
+# Pair with add_modifier = { name = prestige_loss_<tier> } in events. No
+# multiplier needed — the _mult is naturally proportional to current value
+# so the effect stays meaningful at any game scale (early or late game).
+#
+# Tiers: tiny=0.5%, small=2%, medium=5%, large=15%, huge=30%
+# See docs/scripting_best_practices.md § "Fast-scaling resources require
+# scaled effects" for context, and docs/event_magnitude_report.md for the
+# audit that flags hardcoded magnitudes that should use these instead.
+
+prestige_loss_tiny = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.005
+}
+prestige_loss_small = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.02
+}
+prestige_loss_medium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.05
+}
+prestige_loss_large = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.15
+}
+prestige_loss_huge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.30
+}
+
+prestige_gain_tiny = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.005
+}
+prestige_gain_small = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.02
+}
+prestige_gain_medium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.05
+}
+prestige_gain_large = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.15
+}
+prestige_gain_huge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.30
+}
+
+bureaucracy_loss_tiny = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_bureaucracy_mult = -0.005
+}
+bureaucracy_loss_small = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_bureaucracy_mult = -0.02
+}
+bureaucracy_loss_medium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_bureaucracy_mult = -0.05
+}
+
+bureaucracy_gain_tiny = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_bureaucracy_mult = 0.005
+}
+bureaucracy_gain_small = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_bureaucracy_mult = 0.02
+}
+bureaucracy_gain_medium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_bureaucracy_mult = 0.05
 }

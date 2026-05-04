@@ -15,6 +15,22 @@ Last cleanup pass: 2026-04-25 (H1 covert warfare scope pattern; M1 SR var cleanu
 
 ## MEDIUM
 
+### M_NEW. Trading-principle influence inflation
+**Files:** vanilla `common/power_bloc_principles/principle_trade_centers` (and successors)
+
+**Problem (2026-05-04):** Late-game trading powers in a power-bloc with the trading principle accumulate effectively unbounded influence per Trade Center, breaking influence as a finite diplomatic-budget resource. A late-game trading hegemon can sign every available treaty article without budget pressure, which collapses the diplomatic strategy layer. Reproducible: build a trading-principle bloc as a high-rank country, take many Trade Centers, observe weekly influence gain.
+
+**Possible fixes:** cap the per-TC bonus, scale it down with country rank, or move the principle's influence bonus to a one-time threshold rather than per-Trade-Center. Needs balance research first.
+
+### M_NEW2. Deferred event-tooling categories (#2-#4)
+**Tooling:** `event_magnitude_audit.py` covers category #1 of a four-part event-quality plan (work landed 2026-05-04, see `docs/event_magnitude_report.md`). Three categories still TODO:
+
+- **#2 Pulse-event narrative drift.** Flavor events fired from `on_yearly_pulse` / `on_monthly_pulse` narrate game actions the player didn't take (e.g. a `events/un_events.txt` veto-flavor event that fires regardless of whether the player used a veto). Tooling needed: scan event localization for action-implying tokens, cross-reference event triggers for matching game-state checks, flag drift.
+- **#3 Event-chain invisibility.** Backfires/sequels don't surface their precursor to the player (e.g. `international_relations_events.106` "The Narrative Turns" is a backfire of `international_relations_events.4` Option A but reads as orphan to the player). Tooling needed: build event-chain graph; for events with predecessors, check whether the description references the prior choice and otherwise prepend a contextual reminder.
+- **#4 Orphan event-bug detection.** Events meant to fire mechanically but never wired anywhere. Tooling needed: list events that appear in no `trigger_event` call and no `random_events` pool, then cross-reference against titles/descriptions to identify which are mechanically required vs intentionally pulse-only.
+
+Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` suppression pattern established for category #1.
+
 ### M3. Missing unique icon for space-race phase 6
 **File:** [common/production_methods/extra_pms.txt#L15745](../common/production_methods/extra_pms.txt#L15745)
 
