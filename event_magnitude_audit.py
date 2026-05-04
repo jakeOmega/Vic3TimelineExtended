@@ -1,0 +1,58 @@
+"""Detects hardcoded delta values in events for fast-scaling resources.
+
+Background: a `multiplier = -20` on a prestige modifier is invisible at
+late-game scale (-20 / 163,028 = 0.012%). The audit flags such literals
+in events/*.txt and recommends a scaled fix path (mult-based static
+modifier, or sv_<resource>_event_<tier> script value).
+
+Adding a new fast-scaling resource: one entry in FAST_SCALING_MODIFIERS
+or DIRECT_EFFECTS. Verify the modifier exists via /modifier-search and
+that a scaling fix path (`<X>_mult` modifier or a script-value source
+like `value = prestige`) is available before adding.
+
+Suppress an intentional hardcoded value with a same-line comment:
+
+    multiplier = 2000  # REVIEWED 2026-05-04: tech-gated; intentionally large
+"""
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class ResourceMeta:
+    resource: str   # display name shown in the report (e.g. "prestige")
+    fix_hint: str   # short suggestion for the report's fix column
+
+
+# Modifier-type keys checked inside static modifiers referenced via
+# add_modifier { name = X multiplier = N } (named form), AND inline
+# modifier-type keys inside add_modifier { country_prestige_add = N } blocks.
+FAST_SCALING_MODIFIERS: dict[str, ResourceMeta] = {
+    "country_prestige_add": ResourceMeta(
+        resource="prestige",
+        fix_hint=(
+            "use prestige_loss_<tier> / prestige_gain_<tier> static modifier "
+            "(mult-based, no multiplier needed), OR "
+            "multiplier = sv_prestige_event_<tier>"
+        ),
+    ),
+    "country_bureaucracy_add": ResourceMeta(
+        resource="bureaucracy",
+        fix_hint=(
+            "use bureaucracy_loss_<tier> / bureaucracy_gain_<tier> static "
+            "modifier (mult-based, no multiplier needed)"
+        ),
+    ),
+    # Deferred to v2 (need verified script-value source or mult counterpart):
+    #   country_construction_add  — no mult; bare-name `construction` token unverified
+    #   country_expenses_add      — no mult; no script-value source verified
+    #   country_minting_add       — has mult but conversion ratio is non-trivial
+}
+
+# Direct effects (not modifier types). Keys are effect names that take a
+# numeric value as their right-hand side.
+DIRECT_EFFECTS: dict[str, ResourceMeta] = {
+    "add_treasury": ResourceMeta(
+        resource="treasury (instant)",
+        fix_hint="use add_treasury = sv_treasury_event_<tier>",
+    ),
+}
