@@ -1,215 +1,215 @@
 ﻿je_banking_cycle = {
-    icon    = "gfx/interface/icons/event_icons/event_trade.dds"
-    group = je_group_internal_affairs
+	icon    = "gfx/interface/icons/event_icons/event_trade.dds"
+	group = je_group_internal_affairs
 
-    is_shown_when_inactive = {
-        has_game_rule = banking_system_enabled
-        has_technology_researched = stock_exchange
-        any_scope_state = {
-            any_scope_building = { is_building_type = building_urban_center level >= 10 }
-        }
-    }
+	is_shown_when_inactive = {
+		has_game_rule = banking_system_enabled
+		has_technology_researched = stock_exchange
+		any_scope_state = {
+			any_scope_building = { is_building_type = building_urban_center level >= 10 }
+		}
+	}
 
-    scripted_progress_bar = banking_cycle_value_bar
-    scripted_progress_bar = banking_cycle_momentum_bar
-    scripted_progress_bar = banking_bubble_pressure_bar
+	scripted_progress_bar = banking_cycle_value_bar
+	scripted_progress_bar = banking_cycle_momentum_bar
+	scripted_progress_bar = banking_bubble_pressure_bar
 
-    # Buttons
-    scripted_button = cb_policy_rate_hike
-    scripted_button = cb_disable_policy_rate_hike
-    scripted_button = cb_open_market_ops
-    scripted_button = cb_disable_open_market_ops
-    scripted_button = cb_countercyclical_buffer
-    scripted_button = cb_disable_countercyclical_buffer
-    scripted_button = cb_expand_deposit_guarantee
-    scripted_button = cb_disable_expand_deposit_guarantee
-    scripted_button = cb_directed_credit_infrastructure
-    scripted_button = cb_disable_directed_credit_infrastructure
-    scripted_button = cb_emergency_liquidity_program
-    scripted_button = cb_disable_emergency_liquidity_program
-    scripted_button = cb_moral_suasion
-    scripted_button = cb_disable_moral_suasion
-    scripted_button = cb_raise_margin_requirements
-    scripted_button = cb_disable_raise_margin_requirements
-    scripted_button = cb_fx_devaluation
-    scripted_button = cb_disable_fx_devaluation
-    scripted_button = cb_fx_support
-    scripted_button = cb_disable_fx_support
-    scripted_button = cb_capital_controls_outflow
-    scripted_button = cb_disable_capital_controls_outflow
-    scripted_button = cb_fx_swap_lines
-    scripted_button = cb_disable_fx_swap_lines
-    scripted_button = cb_export_credit_facility
-    scripted_button = cb_disable_export_credit_facility
-    scripted_button = cb_asset_relief_program
-    scripted_button = cb_disable_asset_relief_program
+	# Buttons
+	scripted_button = cb_policy_rate_hike
+	scripted_button = cb_disable_policy_rate_hike
+	scripted_button = cb_open_market_ops
+	scripted_button = cb_disable_open_market_ops
+	scripted_button = cb_countercyclical_buffer
+	scripted_button = cb_disable_countercyclical_buffer
+	scripted_button = cb_expand_deposit_guarantee
+	scripted_button = cb_disable_expand_deposit_guarantee
+	scripted_button = cb_directed_credit_infrastructure
+	scripted_button = cb_disable_directed_credit_infrastructure
+	scripted_button = cb_emergency_liquidity_program
+	scripted_button = cb_disable_emergency_liquidity_program
+	scripted_button = cb_moral_suasion
+	scripted_button = cb_disable_moral_suasion
+	scripted_button = cb_raise_margin_requirements
+	scripted_button = cb_disable_raise_margin_requirements
+	scripted_button = cb_fx_devaluation
+	scripted_button = cb_disable_fx_devaluation
+	scripted_button = cb_fx_support
+	scripted_button = cb_disable_fx_support
+	scripted_button = cb_capital_controls_outflow
+	scripted_button = cb_disable_capital_controls_outflow
+	scripted_button = cb_fx_swap_lines
+	scripted_button = cb_disable_fx_swap_lines
+	scripted_button = cb_export_credit_facility
+	scripted_button = cb_disable_export_credit_facility
+	scripted_button = cb_asset_relief_program
+	scripted_button = cb_disable_asset_relief_program
 
-    # Command Economy planning tools (visible only under law_command_economy)
-    scripted_button = ce_plan_revision
-    scripted_button = ce_disable_plan_revision
-    scripted_button = ce_emergency_allocation
-    scripted_button = ce_disable_emergency_allocation
-    scripted_button = ce_target_reduction
-    scripted_button = ce_disable_target_reduction
-    scripted_button = ce_strategic_stockpile
-    scripted_button = ce_disable_strategic_stockpile
-    scripted_button = ce_distribution_upgrade
-    scripted_button = ce_disable_distribution_upgrade
-    scripted_button = ce_admin_campaign
-    scripted_button = ce_disable_admin_campaign
-    scripted_button = ce_coordination_protocol
-    scripted_button = ce_disable_coordination_protocol
-    scripted_button = ce_consolidation_order
-    scripted_button = ce_disable_consolidation_order
-    scripted_button = ce_invest_pool_inject
-    scripted_button = ce_invest_pool_withdraw
+	# Command Economy planning tools (visible only under law_command_economy)
+	scripted_button = ce_plan_revision
+	scripted_button = ce_disable_plan_revision
+	scripted_button = ce_emergency_allocation
+	scripted_button = ce_disable_emergency_allocation
+	scripted_button = ce_target_reduction
+	scripted_button = ce_disable_target_reduction
+	scripted_button = ce_strategic_stockpile
+	scripted_button = ce_disable_strategic_stockpile
+	scripted_button = ce_distribution_upgrade
+	scripted_button = ce_disable_distribution_upgrade
+	scripted_button = ce_admin_campaign
+	scripted_button = ce_disable_admin_campaign
+	scripted_button = ce_coordination_protocol
+	scripted_button = ce_disable_coordination_protocol
+	scripted_button = ce_consolidation_order
+	scripted_button = ce_disable_consolidation_order
+	scripted_button = ce_invest_pool_inject
+	scripted_button = ce_invest_pool_withdraw
 
-    # Cooperative Ownership council tools (visible only under law_cooperative_ownership)
-    scripted_button = cw_dividend_restraint
-    scripted_button = cw_disable_dividend_restraint
-    scripted_button = cw_mutual_aid_fund
-    scripted_button = cw_disable_mutual_aid_fund
-    scripted_button = cw_capital_plan
-    scripted_button = cw_disable_capital_plan
-    scripted_button = cw_solidarity_campaign
-    scripted_button = cw_disable_solidarity_campaign
-    scripted_button = cw_credit_expansion
-    scripted_button = cw_disable_credit_expansion
-    scripted_button = cw_consumption_ceiling
-    scripted_button = cw_disable_consumption_ceiling
-    scripted_button = cw_council_directive
-    scripted_button = cw_disable_council_directive
-    scripted_button = cw_worker_buyout
-    scripted_button = cw_disable_worker_buyout
+	# Cooperative Ownership council tools (visible only under law_cooperative_ownership)
+	scripted_button = cw_dividend_restraint
+	scripted_button = cw_disable_dividend_restraint
+	scripted_button = cw_mutual_aid_fund
+	scripted_button = cw_disable_mutual_aid_fund
+	scripted_button = cw_capital_plan
+	scripted_button = cw_disable_capital_plan
+	scripted_button = cw_solidarity_campaign
+	scripted_button = cw_disable_solidarity_campaign
+	scripted_button = cw_credit_expansion
+	scripted_button = cw_disable_credit_expansion
+	scripted_button = cw_consumption_ceiling
+	scripted_button = cw_disable_consumption_ceiling
+	scripted_button = cw_council_directive
+	scripted_button = cw_disable_council_directive
+	scripted_button = cw_worker_buyout
+	scripted_button = cw_disable_worker_buyout
 
 
-    possible = { always = yes }
+	possible = { always = yes }
 
-    should_be_pinned_by_default_uninvolved_or_context = yes
-    can_revolution_inherit      = yes
-    should_update_on_player_command = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
+	can_revolution_inherit      = yes
+	should_update_on_player_command = yes
 
-    immediate = {
-        # Cycle state vars
-        set_variable = { name = finance_cycle_value         value = 50 } # 0..100
-        set_variable = { name = finance_cycle_momentum      value = 0 }
-        set_variable = {
-            name = bubble_pressure
-            value = 0
-        }
+	immediate = {
+		# Cycle state vars
+		set_variable = { name = finance_cycle_value         value = 50 } # 0..100
+		set_variable = { name = finance_cycle_momentum      value = 0 }
+		set_variable = {
+			name = bubble_pressure
+			value = 0
+		}
 
-        scope:journal_entry = {
-            set_bar_progress = { name = banking_cycle_value_bar value = 50 }
-            set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
-            set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
-        }
-    }
+		scope:journal_entry = {
+			set_bar_progress = { name = banking_cycle_value_bar value = 50 }
+			set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
+			set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
+		}
+	}
 
-    # Progress bar: shows remaining points as % of initial allowance at activation.
-    progressbar      = no
-    progress_desc = {
-        first_valid = {
-            triggered_desc = {
-                desc = banking_cycle_progress_desc_command
-                trigger = { has_law = law_type:law_command_economy }
-            }
-            triggered_desc = {
-                desc = banking_cycle_progress_desc_coop
-                trigger = { has_law = law_type:law_cooperative_ownership }
-            }
-            triggered_desc = {
-                 desc = banking_cycle_progress_desc
-                 trigger = { always = yes }
-            }
-        }
-    }
+	# Progress bar: shows remaining points as % of initial allowance at activation.
+	progressbar      = no
+	progress_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = banking_cycle_progress_desc_command
+				trigger = { has_law = law_type:law_command_economy }
+			}
+			triggered_desc = {
+				desc = banking_cycle_progress_desc_coop
+				trigger = { has_law = law_type:law_cooperative_ownership }
+			}
+			triggered_desc = {
+				desc = banking_cycle_progress_desc
+				trigger = { always = yes }
+			}
+		}
+	}
 
-    status_desc = {
-        first_valid = {
-            triggered_desc = { desc = banking_cycle_status_panic_cmd       trigger = { var:finance_cycle_value < 10  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_panic_coop      trigger = { var:finance_cycle_value < 10  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_panic           trigger = { var:finance_cycle_value < 10 } }
-            triggered_desc = { desc = banking_cycle_status_downturn_cmd    trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_downturn_coop   trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_downturn        trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25 } }
-            triggered_desc = { desc = banking_cycle_status_stagnation_cmd  trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_stagnation_coop trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_stagnation      trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40 } }
-            triggered_desc = { desc = banking_cycle_status_stable_cmd      trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_stable_coop     trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_stable          trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60 } }
-            triggered_desc = { desc = banking_cycle_status_expansion_cmd   trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_expansion_coop  trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_expansion       trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75 } }
-            triggered_desc = { desc = banking_cycle_status_boom_cmd        trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_boom_coop       trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_boom            trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88 } }
-            triggered_desc = { desc = banking_cycle_status_frenzy_cmd      trigger = { var:finance_cycle_value >= 88  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_frenzy_coop     trigger = { var:finance_cycle_value >= 88  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_frenzy          trigger = { var:finance_cycle_value >= 88 } }
-        }
+	status_desc = {
+		first_valid = {
+			triggered_desc = { desc = banking_cycle_status_panic_cmd       trigger = { var:finance_cycle_value < 10  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_panic_coop      trigger = { var:finance_cycle_value < 10  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_panic           trigger = { var:finance_cycle_value < 10 } }
+			triggered_desc = { desc = banking_cycle_status_downturn_cmd    trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_downturn_coop   trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_downturn        trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25 } }
+			triggered_desc = { desc = banking_cycle_status_stagnation_cmd  trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_stagnation_coop trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_stagnation      trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40 } }
+			triggered_desc = { desc = banking_cycle_status_stable_cmd      trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_stable_coop     trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_stable          trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60 } }
+			triggered_desc = { desc = banking_cycle_status_expansion_cmd   trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_expansion_coop  trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_expansion       trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75 } }
+			triggered_desc = { desc = banking_cycle_status_boom_cmd        trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_boom_coop       trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_boom            trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88 } }
+			triggered_desc = { desc = banking_cycle_status_frenzy_cmd      trigger = { var:finance_cycle_value >= 88  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_frenzy_coop     trigger = { var:finance_cycle_value >= 88  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_frenzy          trigger = { var:finance_cycle_value >= 88 } }
+		}
 
-        first_valid = {
-            triggered_desc = { desc = banking_cycle_status_fast_downturn_cmd  trigger = { var:finance_cycle_momentum < -3  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_fast_downturn_coop trigger = { var:finance_cycle_momentum < -3  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_fast_downturn      trigger = { var:finance_cycle_momentum < -3 } }
-            triggered_desc = { desc = banking_cycle_status_slow_downturn_cmd  trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_slow_downturn_coop trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_slow_downturn      trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1 } }
-            triggered_desc = { desc = banking_cycle_status_neutral_cmd        trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_neutral_coop       trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_neutral            trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1 } }
-            triggered_desc = { desc = banking_cycle_status_slow_expansion_cmd  trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_slow_expansion_coop trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_slow_expansion      trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3 } }
-            triggered_desc = { desc = banking_cycle_status_fast_expansion_cmd  trigger = { var:finance_cycle_momentum >= 3  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_fast_expansion_coop trigger = { var:finance_cycle_momentum >= 3  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_fast_expansion      trigger = { var:finance_cycle_momentum >= 3 } }
-        }
+		first_valid = {
+			triggered_desc = { desc = banking_cycle_status_fast_downturn_cmd  trigger = { var:finance_cycle_momentum < -3  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_fast_downturn_coop trigger = { var:finance_cycle_momentum < -3  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_fast_downturn      trigger = { var:finance_cycle_momentum < -3 } }
+			triggered_desc = { desc = banking_cycle_status_slow_downturn_cmd  trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_slow_downturn_coop trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_slow_downturn      trigger = { var:finance_cycle_momentum >= -3  var:finance_cycle_momentum < -1 } }
+			triggered_desc = { desc = banking_cycle_status_neutral_cmd        trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_neutral_coop       trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_neutral            trigger = { var:finance_cycle_momentum >= -1  var:finance_cycle_momentum < 1 } }
+			triggered_desc = { desc = banking_cycle_status_slow_expansion_cmd  trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_slow_expansion_coop trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_slow_expansion      trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3 } }
+			triggered_desc = { desc = banking_cycle_status_fast_expansion_cmd  trigger = { var:finance_cycle_momentum >= 3  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_fast_expansion_coop trigger = { var:finance_cycle_momentum >= 3  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_fast_expansion      trigger = { var:finance_cycle_momentum >= 3 } }
+		}
 
-        first_valid = {
-            triggered_desc = { desc = banking_cycle_status_no_bubble_cmd          trigger = { var:bubble_pressure < 15  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_no_bubble_coop         trigger = { var:bubble_pressure < 15  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_no_bubble              trigger = { var:bubble_pressure < 15 } }
-            triggered_desc = { desc = banking_cycle_status_bubble_stable_cmd      trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_bubble_stable_coop     trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_bubble_stable          trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35 } }
-            triggered_desc = { desc = banking_cycle_status_bubble_expansion_cmd   trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_bubble_expansion_coop  trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_bubble_expansion       trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65 } }
-            triggered_desc = { desc = banking_cycle_status_bubble_frenzy_cmd      trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_bubble_frenzy_coop     trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_bubble_frenzy          trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85 } }
-            triggered_desc = { desc = banking_cycle_status_bubble_extreme_cmd     trigger = { var:bubble_pressure >= 85  has_law = law_type:law_command_economy } }
-            triggered_desc = { desc = banking_cycle_status_bubble_extreme_coop    trigger = { var:bubble_pressure >= 85  has_law = law_type:law_cooperative_ownership } }
-            triggered_desc = { desc = banking_cycle_status_bubble_extreme         trigger = { var:bubble_pressure >= 85 } }
-        }
+		first_valid = {
+			triggered_desc = { desc = banking_cycle_status_no_bubble_cmd          trigger = { var:bubble_pressure < 15  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_no_bubble_coop         trigger = { var:bubble_pressure < 15  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_no_bubble              trigger = { var:bubble_pressure < 15 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_stable_cmd      trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_stable_coop     trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_stable          trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 35 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_expansion_cmd   trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_expansion_coop  trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_expansion       trigger = { var:bubble_pressure >= 35  var:bubble_pressure < 65 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_cmd      trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_coop     trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_frenzy          trigger = { var:bubble_pressure >= 65  var:bubble_pressure < 85 } }
+			triggered_desc = { desc = banking_cycle_status_bubble_extreme_cmd     trigger = { var:bubble_pressure >= 85  has_law = law_type:law_command_economy } }
+			triggered_desc = { desc = banking_cycle_status_bubble_extreme_coop    trigger = { var:bubble_pressure >= 85  has_law = law_type:law_cooperative_ownership } }
+			triggered_desc = { desc = banking_cycle_status_bubble_extreme         trigger = { var:bubble_pressure >= 85 } }
+		}
 
-        first_valid = {
-            triggered_desc = { desc = BANKING_CURR_MODIFIERS trigger = { always = yes } }
-        }
-    }
+		first_valid = {
+			triggered_desc = { desc = BANKING_CURR_MODIFIERS trigger = { always = yes } }
+		}
+	}
 
-    on_monthly_pulse = {
-        effect = {
-            banking_cycle_update_fiscal_policy = yes
-            banking_cycle_advance_variables = yes
-            banking_cycle_check_and_execute_crash = yes
+	on_monthly_pulse = {
+		effect = {
+			banking_cycle_update_fiscal_policy = yes
+			banking_cycle_advance_variables = yes
+			banking_cycle_check_and_execute_crash = yes
 
-            set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
+			set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
 
-            banking_cycle_random_event_effect = yes
-            banking_cycle_apply_phase_modifiers = yes
-            banking_cycle_update_progress_bars = yes
-            banking_cycle_cleanup_capital_controls = yes
-            banking_cycle_update_ce_pool_balance = yes
-            banking_crash_check_overdrawn_interventions = yes
-        }
-    }
+			banking_cycle_random_event_effect = yes
+			banking_cycle_apply_phase_modifiers = yes
+			banking_cycle_update_progress_bars = yes
+			banking_cycle_cleanup_capital_controls = yes
+			banking_cycle_update_ce_pool_balance = yes
+			banking_crash_check_overdrawn_interventions = yes
+		}
+	}
 
-    on_weekly_pulse = {
-        effect = {
-            banking_cycle_weekly_effects = yes
-        }
-    }
+	on_weekly_pulse = {
+		effect = {
+			banking_cycle_weekly_effects = yes
+		}
+	}
 }
