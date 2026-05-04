@@ -103,7 +103,8 @@ When in doubt, ask: "if this modifier moved the same amount on every character i
 |---|---|
 | `country_prestige_add` (in static modifiers used by `add_modifier { name = X multiplier = N }`) | Replace with `add_modifier { name = prestige_loss_<tier> }` (mult-based generic, no multiplier needed) OR `multiplier = sv_prestige_event_<tier>` if X has multiple fields that should scale together |
 | `country_bureaucracy_add` | Replace with `add_modifier { name = bureaucracy_loss_<tier> }` |
-| `add_treasury` (direct effect) | Replace literal value with `add_treasury = sv_treasury_event_<tier>` |
+| `add_treasury` (direct effect) | Replace literal value with `add_treasury = sv_treasury_event_<tier>` (% of `gold_reserves`) |
+| `country_expenses_add`, `country_tax_income_add`, `country_minting_add` (weekly money flows) | Keep the static modifier as `country_<X>_add = 1`, apply via `add_modifier { multiplier = sv_money_flow_event_<tier> }` (% of GDP / week). Same pattern as the existing `banking_event_expense_<tier>` script values, kept for banking-specific events. |
 
 Available tiers (in `common/script_values/extra_script_values.txt` and `common/static_modifiers/extra_modifiers.txt`): `tiny` (0.5%), `small` (2%), `medium` (5%), `large` (15%), `huge` (30%, prestige only). Adding a new fast-scaling resource is one line in `event_magnitude_audit.FAST_SCALING_MODIFIERS`.
 

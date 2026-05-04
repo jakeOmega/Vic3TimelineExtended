@@ -45,10 +45,34 @@ FAST_SCALING_MODIFIERS: dict[str, ResourceMeta] = {
             "modifier (mult-based, no multiplier needed)"
         ),
     ),
+    # Money flows (weekly): scale with GDP, same shape as the existing
+    # banking_event_expense_<tier> script values. The generic
+    # sv_money_flow_event_<tier> script values are recommended fix paths.
+    "country_expenses_add": ResourceMeta(
+        resource="treasury (weekly flow)",
+        fix_hint=(
+            "use multiplier = sv_money_flow_event_<tier> (or "
+            "banking_event_expense_<tier> for banking-specific events) — "
+            "the static modifier itself should keep country_expenses_add = 1"
+        ),
+    ),
+    "country_tax_income_add": ResourceMeta(
+        resource="treasury (weekly flow)",
+        fix_hint=(
+            "use multiplier = sv_money_flow_event_<tier> — the static "
+            "modifier itself should keep country_tax_income_add = 1"
+        ),
+    ),
+    "country_minting_add": ResourceMeta(
+        resource="treasury (weekly flow)",
+        fix_hint=(
+            "use multiplier = sv_money_flow_event_<tier> — the static "
+            "modifier itself should keep country_minting_add = 1"
+        ),
+    ),
     # Deferred to v2 (need verified script-value source or mult counterpart):
-    #   country_construction_add  — no mult; bare-name `construction` token unverified
-    #   country_expenses_add      — no mult; no script-value source verified
-    #   country_minting_add       — has mult but conversion ratio is non-trivial
+    #   country_construction_add — no mult; bare-name `construction` token unverified
+    #   country_government_dividends_add — does not exist as a modifier type
 }
 
 # Direct effects (not modifier types). Keys are effect names that take a

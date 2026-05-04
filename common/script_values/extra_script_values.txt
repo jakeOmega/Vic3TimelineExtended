@@ -2375,3 +2375,15 @@ sv_treasury_event_small  = { value = gold_reserves  multiply = 0.02  }
 sv_treasury_event_medium = { value = gold_reserves  multiply = 0.05  }
 sv_treasury_event_large  = { value = gold_reserves  multiply = 0.15  }
 sv_treasury_event_huge   = { value = gold_reserves  multiply = 0.30  }
+
+# Money-flow (weekly): pair with a static modifier carrying
+# country_expenses_add = 1, country_tax_income_add = 1, or
+# country_minting_add = 1, applied as
+#   add_modifier = { name = X multiplier = sv_money_flow_event_<tier> }
+# Same shape as banking_event_expense_<tier> (which stays for banking
+# events; sv_money_flow_event_<tier> is the generic name to prefer for
+# new content). Tiers are weekly fractions of GDP.
+sv_money_flow_event_small  = { value = gdp  multiply = 0.0001 }   # 0.01% GDP / week
+sv_money_flow_event_medium = { value = gdp  multiply = 0.0002 }   # 0.02% GDP / week
+sv_money_flow_event_large  = { value = gdp  multiply = 0.0004 }   # 0.04% GDP / week
+sv_money_flow_event_huge   = { value = gdp  multiply = 0.0006 }   # 0.06% GDP / week

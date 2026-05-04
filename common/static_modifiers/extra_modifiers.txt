@@ -2161,7 +2161,8 @@ war_profiteering_investigation_modifier = {
 
 war_profit_tax_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_tax_income_add = 50000
+	# Base 1 — apply with multiplier = sv_money_flow_event_<tier> for GDP-scaled tax income.
+	country_tax_income_add = 1
 }
 
 # ============================================================================

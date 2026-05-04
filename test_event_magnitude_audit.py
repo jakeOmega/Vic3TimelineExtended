@@ -36,6 +36,11 @@ class RegistryTests(unittest.TestCase):
     def test_registry_has_bureaucracy(self):
         self.assertIn("country_bureaucracy_add", FAST_SCALING_MODIFIERS)
 
+    def test_registry_has_money_flows(self):
+        for key in ("country_expenses_add", "country_tax_income_add", "country_minting_add"):
+            self.assertIn(key, FAST_SCALING_MODIFIERS)
+            self.assertIn("treasury (weekly flow)", FAST_SCALING_MODIFIERS[key].resource)
+
     def test_registry_has_add_treasury_direct(self):
         self.assertIn("add_treasury", DIRECT_EFFECTS)
         meta = DIRECT_EFFECTS["add_treasury"]

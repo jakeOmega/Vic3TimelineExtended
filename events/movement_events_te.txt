@@ -1384,6 +1384,7 @@ movement_events_te.8 = {
 		# Tax their excess profits - pragmatic compromise
 		add_modifier = {
 			name = war_profit_tax_modifier
+			multiplier = sv_money_flow_event_medium  # 0.02% GDP / week (~£12k/wk early, scales with economy)
 			days = normal_modifier_time
 			is_decaying = yes
 		}
