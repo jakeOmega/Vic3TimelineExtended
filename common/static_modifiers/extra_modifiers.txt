@@ -868,6 +868,108 @@ banking_asset_relief_program = {
 	country_bureaucracy_mult = -0.05
 }
 
+# ============================================================
+# CRASH RESPONSE INTERVENTIONS
+# Applied by minor_events_timelineextended.6 (banking crash event).
+# Two modifiers are added per option chosen:
+#   1. banking_crash_response_cost (decaying, multiplier = banking_event_expense_X) — the GDP-scaled treasury hit
+#   2. banking_crash_intervention_<flavor> (long_modifier_time, ~3y) — IP burden + lingering trade-off
+# The IP-burden modifiers are auto-removed by banking_crash_check_overdrawn_interventions
+# in je_banking's monthly pulse when total IP goes negative.
+# ============================================================
+
+banking_crash_response_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# ----- Per-law base options (one visible per crash, gated by financial-regulation law) -----
+
+banking_crash_intervention_suspend_convertibility = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -1
+	state_export_advantage_mult = -0.10                  # convertibility freeze hampers exporters
+	country_loan_interest_rate_mult = 0.02
+}
+
+banking_crash_intervention_mutual_clearing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_banking_intervention_max_add = -2
+	country_loan_interest_rate_mult = 0.01
+	interest_group_ig_industrialists_approval_add = -2
+}
+
+banking_crash_intervention_correspondent_liquidity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_banking_intervention_max_add = -2
+	country_loan_interest_rate_mult = -0.02
+	country_bubble_pressure_monthly_add = 0.2
+}
+
+banking_crash_intervention_deposit_guarantee = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_banking_intervention_max_add = -3
+	country_bubble_pressure_monthly_add = -0.5
+	state_tax_collection_mult = -0.03
+}
+
+banking_crash_intervention_dev_bank_lending = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_banking_intervention_max_add = -2
+	building_group_bg_infrastructure_construction_efficiency_add = 0.05
+	state_tax_collection_mult = -0.02
+}
+
+banking_crash_intervention_open_market = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_banking_intervention_max_add = -3
+	country_loan_interest_rate_mult = -0.05
+	country_bubble_pressure_monthly_add = 0.4
+	country_prestige_mult = 0.02
+}
+
+banking_crash_intervention_nationalize = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_banking_intervention_max_add = -4
+	country_loan_interest_rate_mult = -0.06
+	interest_group_ig_industrialists_approval_add = -8
+	interest_group_ig_trade_unions_approval_add = 3
+	state_tax_collection_mult = -0.05
+}
+
+# ----- Tech-unlocked family options (0-3 visible per crash) -----
+
+banking_crash_intervention_discount_window = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_banking_intervention_max_add = -2
+	country_loan_interest_rate_mult = -0.04
+	country_bubble_pressure_monthly_add = 0.3
+}
+
+banking_crash_intervention_swap_lines = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_banking_intervention_max_add = -2
+	state_import_advantage_mult = 0.05
+	country_influence_add = -100
+	country_banking_crash_chance_mult = -0.05
+}
+
+banking_crash_intervention_keynesian_stimulus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_banking_intervention_max_add = -3
+	building_group_bg_manufacturing_throughput_add = 0.05
+	state_tax_collection_mult = -0.03
+	country_bubble_pressure_monthly_add = 0.4
+}
+
+banking_crash_intervention_capital_controls = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -2
+	state_trade_capacity_mult = -0.10
+	country_authority_add = 100
+	country_influence_add = -100
+}
+
 # ----- Global Warming severity stage (applied to every country via JE monthly pulse, scaled by multiplier) -----
 # Note: The actual multiplier values are defined in the relevant journal entry (e.g. based on temperature anomaly or severity stage).
 global_warming = {

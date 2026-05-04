@@ -1310,6 +1310,70 @@ apply_banking_crash_origin_effects = {
 	}
 }
 
+# Auto-disable crash interventions when total intervention points have gone negative
+# (e.g. because the player stacked emergency response modifiers from a crash event on top
+# of ongoing JE intervention buttons, or because their financial-regulation law was downgraded).
+#
+# Removes ONE crash-tagged modifier per monthly pulse, walking a fixed priority cascade:
+# tech-family interventions first (these are layered on top of the per-law base, so removing
+# them preserves the player's "core" emergency response), then per-law base options from
+# cheapest IP cost to most expensive (so the strongest emergency tool is shed last).
+#
+# Only one removal per pulse: the engine doesn't refresh modifier:X reads inside the same
+# effect block (CLAUDE.md "modifier-after-effect read ordering"), so a tight loop would
+# fire on stale data. Spacing removals by month also gives the player visible feedback.
+banking_crash_check_overdrawn_interventions = {
+	if = {
+		limit = { modifier:country_banking_intervention_max_add < 0 }
+		# --- Family interventions (shed first) ---
+		if = {
+			limit = { has_modifier = banking_crash_intervention_capital_controls }
+			remove_modifier = banking_crash_intervention_capital_controls
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_swap_lines }
+			remove_modifier = banking_crash_intervention_swap_lines
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_discount_window }
+			remove_modifier = banking_crash_intervention_discount_window
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_keynesian_stimulus }
+			remove_modifier = banking_crash_intervention_keynesian_stimulus
+		}
+		# --- Per-law base options (one of these may be active; cheapest IP cost first) ---
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_suspend_convertibility }
+			remove_modifier = banking_crash_intervention_suspend_convertibility
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_mutual_clearing }
+			remove_modifier = banking_crash_intervention_mutual_clearing
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_correspondent_liquidity }
+			remove_modifier = banking_crash_intervention_correspondent_liquidity
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_dev_bank_lending }
+			remove_modifier = banking_crash_intervention_dev_bank_lending
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_open_market }
+			remove_modifier = banking_crash_intervention_open_market
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_deposit_guarantee }
+			remove_modifier = banking_crash_intervention_deposit_guarantee
+		}
+		else_if = {
+			limit = { has_modifier = banking_crash_intervention_nationalize }
+			remove_modifier = banking_crash_intervention_nationalize
+		}
+	}
+}
+
 # Run contagion crash check in event .7 immediate block.
 # Probability based on TARGET's own bubble pressure, elevated by origin crash severity.
 # Countries with low bubble pressure are mostly immune; high bubble = very vulnerable.
