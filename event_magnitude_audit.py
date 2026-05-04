@@ -14,8 +14,9 @@ Suppress an intentional hardcoded value with a same-line comment:
 
     multiplier = 2000  # REVIEWED 2026-05-04: tech-gated; intentionally large
 """
+import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Callable
 
 
@@ -275,3 +276,61 @@ def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
                 exemption=parse_reviewed_comment(line),
             ))
     return flags
+
+
+# ---------------------------------------------------------------------------
+# Top-level audit() entrypoint.
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class AuditResult:
+    flags: list[AuditFlag] = field(default_factory=list)
+    coverage: dict = field(default_factory=dict)
+
+
+def _make_static_modifier_lookup(ms) -> Callable[[str], dict | None]:
+    """Build a name→{field: value} lookup from ModState's parsed StaticModifiers.
+
+    The parser stores each modifier as ('=', {field: ('=', value), ...}). We
+    unwrap one level for the modifier body and one level for each field value.
+    """
+    raw = ms.get_data("StaticModifiers") or {}
+
+    def lookup(name: str) -> dict | None:
+        entry = raw.get(name)
+        if entry is None:
+            return None
+        body = entry[1] if isinstance(entry, tuple) and len(entry) == 2 else entry
+        if not isinstance(body, dict):
+            return None
+        return {
+            k: (v[1] if isinstance(v, tuple) and len(v) == 2 else v)
+            for k, v in body.items()
+        }
+
+    return lookup
+
+
+def audit(ms) -> AuditResult:
+    """Walk every events/*.txt file, return all magnitude flags."""
+    lookup = _make_static_modifier_lookup(ms)
+    events_dir = os.path.join(ms.mod_path, "events")
+    if not os.path.isdir(events_dir):
+        return AuditResult(flags=[], coverage={"files_audited": 0})
+
+    flags: list[AuditFlag] = []
+    files_audited = 0
+    for fname in sorted(os.listdir(events_dir)):
+        if not fname.endswith(".txt"):
+            continue
+        fpath = os.path.join(events_dir, fname)
+        with open(fpath, encoding="utf-8-sig") as f:
+            text = f.read()
+        rel = os.path.join("events", fname)
+        flags.extend(scan_direct_effects(text, file_path=rel))
+        flags.extend(scan_inline_modifier_types(text, file_path=rel))
+        flags.extend(scan_named_modifiers(text, file_path=rel, lookup=lookup))
+        files_audited += 1
+
+    return AuditResult(flags=flags, coverage={"files_audited": files_audited})

@@ -16,7 +16,14 @@ from event_magnitude_audit import (
     scan_inline_modifier_types,
     scan_named_modifiers,
     AuditFlag,
+    audit,
+    AuditResult,
 )
+
+
+def _eq(value):
+    """Wrap a scalar/dict in the parser's ('=', value) tuple form."""
+    return ("=", value)
 
 
 class RegistryTests(unittest.TestCase):
@@ -299,6 +306,56 @@ class NamedModifierScannerTests(unittest.TestCase):
         # — only one flag emitted, for the fast field.
         self.assertEqual(len(flags), 1)
         self.assertEqual(flags[0].effect, "country_prestige_add")
+
+
+class _StubModState:
+    """Minimal ModState fake for audit()."""
+
+    def __init__(self, static_modifiers: dict, mod_path: str):
+        self._sm = static_modifiers
+        self.mod_path = mod_path
+
+    def get_data(self, key):
+        if key == "StaticModifiers":
+            return self._sm
+        return {}
+
+
+class AuditEntrypointTests(unittest.TestCase):
+    def test_end_to_end_on_tempdir(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "events"))
+            with open(os.path.join(tmp, "events", "test_events.txt"), "w") as f:
+                f.write(
+                    "test_events.1 = {\n"
+                    "  immediate = {\n"
+                    "    add_modifier = { name = prestige_loss_X multiplier = -20 }\n"
+                    "    add_treasury = -10000\n"
+                    "    add_treasury = -50000  # REVIEWED 2026-05-04: era-tagged\n"
+                    "  }\n"
+                    "}\n"
+                )
+            ms = _StubModState(
+                static_modifiers={
+                    "prestige_loss_X": _eq({"country_prestige_add": _eq("1")}),
+                },
+                mod_path=tmp,
+            )
+            result = audit(ms)
+            self.assertIsInstance(result, AuditResult)
+            unrev = [f for f in result.flags if not f.exemption]
+            exemp = [f for f in result.flags if f.exemption]
+            # 1 named-modifier flag (prestige) + 1 unreviewed direct effect
+            self.assertEqual(len(unrev), 2)
+            self.assertEqual(len(exemp), 1)
+            self.assertEqual(result.coverage["files_audited"], 1)
+
+    def test_no_events_dir_returns_empty(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ms = _StubModState(static_modifiers={}, mod_path=tmp)
+            result = audit(ms)
+            self.assertEqual(result.flags, [])
+            self.assertEqual(result.coverage["files_audited"], 0)
 
 
 if __name__ == "__main__":
