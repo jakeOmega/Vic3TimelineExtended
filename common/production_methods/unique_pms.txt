@@ -10436,3 +10436,80 @@ pm_rekal_hq = {
 		}
 	}
 }
+
+# === Shared late-era graduates for company shipyards ===================
+# The 13 company-flavored shipyard PMs in this file (pm_aker_oslo_shipyard,
+# pm_john_brown_clydebank_yard, pm_wadia_bombay_dockyard, etc.) all output
+# 20 steamers and have no per-company progression. Rather than duplicate
+# 13 motor_ships variants and another 13 magnetic_drive_ships variants,
+# every company group gets these two shared graduate PMs INJECTed in
+# (see unique_pm_groups.txt) — preserves the company's flavored steamers PM
+# as a forever-selectable option, while giving players a uniform
+# tier-2 / tier-3 alternative once the supply tech unlocks.
+
+pm_modern_company_shipbuilding = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
+
+	unlocking_technologies = {
+		advanced_submarine_technology
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			building_shipyard_throughput_add = 0.1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (45.45%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (36.36%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (18.18%)
+			# Output goods
+			goods_output_motor_ships_add = 20                    # Price:   90, Total cost:  1800.0 (75.00%)
+			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (25.00%)
+			# Total input cost: 1650.0
+			# Total output cost: 2400.0
+			# Profit: 750.0
+			# Profit margin: 45.45%
+			# Zero profit price multiplier: 0.69
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_advanced_company_shipbuilding = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p3.dds"
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			building_shipyard_throughput_add = 0.15
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (28.85%)
+			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (23.08%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (17.31%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (30.77%)
+			# Output goods
+			goods_output_magnetic_drive_ships_add = 20           # Price:  130, Total cost:  2600.0 (81.25%)
+			goods_output_tools_add = 15                          # Price:   40, Total cost:   600.0 (18.75%)
+			# Total input cost: 2600.0
+			# Total output cost: 3200.0
+			# Profit: 600.0
+			# Profit margin: 23.08%
+			# Zero profit price multiplier: 0.81
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}

@@ -13127,7 +13127,7 @@ pm_diesel_electric_ferries = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
 
 	unlocking_technologies = {
-		compression_ignition
+		advanced_submarine_technology
 	}
 
 	building_modifiers = {
@@ -13170,6 +13170,235 @@ pm_modern_cruise_ships = {
 			# Zero profit price multiplier: 0.71
 			# Employment: 0
 			# Wage breakeven: 0.00
+		}
+	}
+}
+
+# === Tier 2 (motor_ships) consumer upgrades ===========================
+# Sibling-PMs to vanilla pm_steam_trawlers / pm_steam_whaling_ships,
+# extending the clippers→steamers pattern through the mod's motor_ships
+# tier. Gated on advanced_submarine_technology (era 7) to come online the
+# moment motor_ships supply unlocks.
+
+pm_motor_trawlers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+
+	unlocking_technologies = {
+		advanced_submarine_technology
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_motor_ships_add = 5                      # Price:   90, Total cost:   450.0 (36.00%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (32.00%)
+			goods_input_radios_add = 5                           # Price:   80, Total cost:   400.0 (32.00%)
+			# Output goods
+			goods_output_fish_add = 300                          # Price:   20, Total cost:  6000.0 (100.00%)
+			# Total input cost: 1250.0
+			# Total output cost: 6000.0
+			# Profit: 4750.0
+			# Profit margin: 380.00%
+			# Zero profit price multiplier: 0.21
+			# Employment: 3500
+			# Wage breakeven: 1.36
+		}
+		level_scaled = {
+			building_employment_laborers_add = 2500
+			building_employment_machinists_add = 750
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+pm_motor_whaling_ships = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+
+	unlocking_technologies = {
+		advanced_submarine_technology
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_motor_ships_add = 5                      # Price:   90, Total cost:   450.0 (42.86%)
+			goods_input_oil_add = 15                             # Price:   40, Total cost:   600.0 (57.14%)
+			# Output goods
+			goods_output_meat_add = 30                           # Price:   30, Total cost:   900.0 (27.27%)
+			goods_output_oil_add = 60                            # Price:   40, Total cost:  2400.0 (72.73%)
+			# Total input cost: 1050.0
+			# Total output cost: 3300.0
+			# Profit: 2250.0
+			# Profit margin: 214.29%
+			# Zero profit price multiplier: 0.32
+			# Employment: 2500
+			# Wage breakeven: 0.90
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1500
+			building_employment_machinists_add = 750
+			building_employment_engineers_add = 250
+		}
+	}
+}
+
+# === Tier 3 (magnetic_drive_ships) consumer upgrades ==================
+# Sibling-PMs to the tier-2 motor_ships consumers above (and to the existing
+# pm_global_ports / pm_modern_cruise_ships for ports and water transport).
+# Gated on modern_material_science (era 11) — same tech that unlocks
+# magnetic_drive_ships supply via pm_advanced_metamaterials_shipbuilding.
+
+pm_magnetic_drive_ports = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p3.dds"
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 25
+			state_infrastructure_add = 50
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (43.33%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (13.33%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (26.67%)
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost:   500.0 (16.67%)
+			# Output goods
+			goods_output_merchant_marine_add = 140               # Price:   50, Total cost:  7000.0 (100.00%)
+			# Total input cost: 3000.0
+			# Total output cost: 7000.0
+			# Profit: 4000.0
+			# Profit margin: 133.33%
+			# Zero profit price multiplier: 0.43
+			# Employment: 850
+			# Wage breakeven: 4.71
+		}
+		level_scaled = {
+			building_employment_laborers_add = 200
+			building_employment_machinists_add = 250
+			building_employment_engineers_add = 100
+			building_employment_clerks_add = 200
+			building_employment_bureaucrats_add = 100
+		}
+	}
+}
+
+pm_magnetic_drive_cruise_ships = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (54.17%)
+			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (8.33%)
+			goods_input_consumer_appliances_add = 5              # Price:   80, Total cost:   400.0 (16.67%)
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost:   500.0 (20.83%)
+			# Output goods
+			goods_output_transportation_add = 105                # Price:   30, Total cost:  3150.0 (100.00%)
+			# Total input cost: 2400.0
+			# Total output cost: 3150.0
+			# Profit: 750.0
+			# Profit margin: 31.25%
+			# Zero profit price multiplier: 0.76
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_magnetic_drive_trawlers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_magnetic_drive_ships_add = 5             # Price:  130, Total cost:   650.0 (44.83%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (27.59%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.59%)
+			# Output goods
+			goods_output_fish_add = 450                          # Price:   20, Total cost:  9000.0 (100.00%)
+			# Total input cost: 1450.0
+			# Total output cost: 9000.0
+			# Profit: 7550.0
+			# Profit margin: 520.69%
+			# Zero profit price multiplier: 0.16
+			# Employment: 3500
+			# Wage breakeven: 2.16
+		}
+		level_scaled = {
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 500
+		}
+	}
+}
+
+pm_magnetic_drive_whaling_ships = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 25
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_magnetic_drive_ships_add = 5             # Price:  130, Total cost:   650.0 (39.39%)
+			goods_input_oil_add = 15                             # Price:   40, Total cost:   600.0 (36.36%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (24.24%)
+			# Output goods
+			goods_output_meat_add = 45                           # Price:   30, Total cost:  1350.0 (27.27%)
+			goods_output_oil_add = 90                            # Price:   40, Total cost:  3600.0 (72.73%)
+			# Total input cost: 1650.0
+			# Total output cost: 4950.0
+			# Profit: 3300.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2500
+			# Wage breakeven: 1.32
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 500
 		}
 	}
 }

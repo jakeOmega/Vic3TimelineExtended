@@ -1657,6 +1657,10 @@ Fishing Wharves:
 		Steam Trawlers
 			Monthly Pollution: 10
 		Purse Seine Nets
+		Motor Trawlers
+			Monthly Pollution: 15
+		Magnetic Drive Trawlers
+			Monthly Pollution: 20
 	Refrigeration:
 		Unrefrigerated
 		Refrigerated Storage
@@ -1671,6 +1675,10 @@ Whaling Stations:
 		Whaling Fleet
 		Steam-Powered Whalers
 			Monthly Pollution: 10
+		Motor Whaling Ships
+			Monthly Pollution: 20
+		Magnetic Drive Whaling Ships
+			Monthly Pollution: 25
 	Refrigeration:
 		Unrefrigerated
 		Refrigerated Storage
@@ -1731,12 +1739,15 @@ Port:
 			Monthly Pollution: 20
 		Global Ports
 			Monthly Pollution: 20
+		Magnetic Drive Ports
+			Monthly Pollution: 25
 	Water Personal Transport:
 		No Water Personal Transport
 		Sailing Ships
 		Steam Paddleboats
 		Diesel-Electric Ferries
 		Modern Cruise Ships
+		Magnetic Drive Cruise Ships
 	Emissions Control:
 		No Emissions Control
 		Basic Emissions Control
@@ -2425,6 +2436,8 @@ Lumber Yard:
 Aker Oslo Shipyard:
 	Aker Oslo Shipyard:
 		Aker Oslo Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Allatini Thessaloniki Flour Mill:
 	Allatini Thessaloniki Flour Mill:
@@ -2593,6 +2606,8 @@ España Industrial Sants Mills:
 Estaleiro Mauá Niterói Dockyard:
 	Estaleiro Mauá Niterói Dockyard:
 		Estaleiro Mauá Niterói Dockyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Estannífera Llallagua Tin Concentrator:
 	Estañífera Llallagua Tin Concentrator:
@@ -2605,10 +2620,14 @@ FAMAE Santiago Arsenal:
 FCM La Seyne Shipyard:
 	FCM La Seyne Shipyard:
 		FCM La Seyne Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Foochow Mawei Dockyard:
 	Foochow Mawei Dockyard:
 		Foochow Mawei Dockyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Franco-Belge Raismes Works:
 	Franco-Belge Raismes Works:
@@ -2637,6 +2656,8 @@ Getzner Bludenz Textile Works:
 Götaverken Gothenburg Shipyard:
 	Götaverken Gothenburg Shipyard:
 		Götaverken Gothenburg Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Gran Azucarera Aranjuez Refinery:
 	Gran Azucarera Aranjuez Refinery:
@@ -2677,6 +2698,8 @@ ILVA Bagnoli Steelworks:
 Imperial Arsenal Golden Horn:
 	Imperial Arsenal Golden Horn:
 		Imperial Arsenal Golden Horn
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Ethiopian Railway Dire Dawa Depot:
 	Ethiopian Railway Dire Dawa Depot:
@@ -2717,6 +2740,8 @@ Jingdezhen Imperial Kiln:
 John Brown Clydebank Shipyard:
 	John Brown Clydebank Yard:
 		John Brown Clydebank Yard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Cockerill Seraing Works:
 	Cockerill Seraing Works:
@@ -2973,10 +2998,14 @@ Morozov Orekhovo-Zuevo Mills:
 Schichau-Werke Elbing:
 	Schichau Elbing Shipyard:
 		Schichau Elbing Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 SECN Ferrol Shipyard:
 	SECN Ferrol Shipyard:
 		SECN Ferrol Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Sherkat-e Shemali Cotton Gin:
 	Sherkat-e Shemali Cotton Gin:
@@ -2997,6 +3026,8 @@ Mokta el Hadid Beni Saf Mine:
 STF Fiume Torpedo Works:
 	STF Fiume Torpedo Works:
 		STF Fiume Torpedo Works
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Steel Brothers Syriam Depot:
 	Steel Brothers Syriam Depot:
@@ -3005,6 +3036,8 @@ Steel Brothers Syriam Depot:
 STT Hasköy Shipyard:
 	STT Hasköy Shipyard:
 		STT Hasköy Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Sudamericana Valparaíso Pier:
 	Sudamericana Valparaíso Pier:
@@ -3053,6 +3086,8 @@ State Vodka Monopoly Warehouse:
 Wadia Bombay Dockyard:
 	Wadia Bombay Dockyard:
 		Wadia Bombay Dockyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 West Ural Oil Depot:
 	West Ural Oil Depot:
@@ -3061,6 +3096,8 @@ West Ural Oil Depot:
 Cramp Philadelphia Shipyard:
 	Cramp Philadelphia Shipyard:
 		Cramp Philadelphia Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
 
 Sandford Newcastle-Natal Ironworks:
 	Sandford Newcastle Natal Ironworks:

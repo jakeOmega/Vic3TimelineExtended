@@ -1807,3 +1807,52 @@ pmg_rekal_hq = {
 	ai_selection = most_productive
 	production_methods = { pm_rekal_hq }
 }
+
+# === Company shipyard shared graduates ================================
+# Each of the 13 company shipyards in unique_pms.txt outputs 20 steamers
+# from a single-PM group. These INJECTs add two shared graduate PMs
+# (pm_modern_company_shipbuilding at era 7, pm_advanced_company_shipbuilding
+# at era 11) to every such group, giving players a uniform tier-2/tier-3
+# alternative once the supply tech unlocks. The flavored steamers PM stays
+# selectable forever (the early-identity option). pm_mitsubishi_nagasaki_shipyard
+# is intentionally excluded — it outputs merchant_marine, not steamers.
+
+INJECT:pmg_aker_oslo_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_estaleiro_maua_niteroi_dockyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_fcm_la_seyne_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_foochow_mawei_dockyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_gotaverken_gothenburg_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_imperial_arsenal_golden_horn = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_john_brown_clydebank_yard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_schichau_elbing_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_secn_ferrol_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_stf_fiume_torpedo_works = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_stt_haskoy_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_wadia_bombay_dockyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
+INJECT:pmg_cramp_philadelphia_shipyard = {
+	production_methods = { pm_modern_company_shipbuilding pm_advanced_company_shipbuilding }
+}
