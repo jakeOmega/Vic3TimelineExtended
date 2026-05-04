@@ -991,6 +991,16 @@ nuclear_disarmament = {
 				}
 			}
 		}
+		# Same-treaty conflict: disallow if the in-construction draft already
+		# contains nuclear_program_aid targeting the same country.
+		NOT = {
+			scope:treaty ?= {
+				any_scope_article_option = {
+					has_type = nuclear_program_aid
+					target_country = scope:other_country
+				}
+			}
+		}
 	}
 
 	can_ratify = {
@@ -1223,6 +1233,21 @@ nuclear_program_aid = {
 						has_type = nuclear_disarmament
 						target_country = root
 					}
+				}
+			}
+		}
+		# Same-treaty conflict: disallow if the in-construction draft already
+		# contains a nuclear_disarmament or nuclear_program_pause article
+		# targeting the same country. (any_scope_treaty above only catches
+		# IN-FORCE treaties; this catches the same draft.)
+		NOT = {
+			scope:treaty ?= {
+				any_scope_article_option = {
+					OR = {
+						has_type = nuclear_disarmament
+						has_type = nuclear_program_pause
+					}
+					target_country = scope:other_country
 				}
 			}
 		}
@@ -1889,6 +1914,19 @@ nuclear_program_pause = {
 						has_type = nuclear_program_aid
 						target_country = root
 					}
+				}
+			}
+		}
+		# Same-treaty conflict: disallow if the in-construction draft already
+		# contains nuclear_program_aid targeting the same country. (any_scope_treaty
+		# above only iterates IN-FORCE treaties, so this is the only check that
+		# catches a draft that bundles aid + pause together — vanilla pattern from
+		# 06_transfer_state.txt.)
+		NOT = {
+			scope:treaty ?= {
+				any_scope_article_option = {
+					has_type = nuclear_program_aid
+					target_country = scope:other_country
 				}
 			}
 		}
