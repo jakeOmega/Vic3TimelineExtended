@@ -273,6 +273,7 @@
  lobby_environmental_name:0 "[COUNTRY.GetAdjectiveNoFormatting]-[TARGET_COUNTRY.GetAdjectiveNoFormatting] Green $CUSTOM_NAME$"
  lobby_fossil_fuel_icon:0 "@lobby_anti_country!"
  lobby_fossil_fuel_name:0 "Anti-[TARGET_COUNTRY.GetAdjectiveNoFormatting] Energy $CUSTOM_NAME$"
+ minor_events_timelineextended.6.b:0 "Emergency fiscal response"
  minority_protection_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will protect minorities in [SCOPE.sArticleOption('article_option').GetInputState.GetName]"
  minority_protection_effects_desc:0 "• Halves assimilation and conversion rates in the target state.\n• Slight migration pull to the protected state.\n• Source country loses legitimacy and authority.\n• Target country gains prestige."
  mobilization_option_bonus_pay:0 "Bonus Pay"

@@ -281,7 +281,7 @@ minor_events_timelineextended.6 = {
 	duration = 3
 	is_popup = yes
 
-	# Option A: Weather the storm - accept the pain
+	# Option A: Weather the storm - accept the pain (always available)
 	option = {
 		name = minor_events_timelineextended.6.a
 		default_option = yes
@@ -295,30 +295,336 @@ minor_events_timelineextended.6 = {
 			strata = middle
 		}
 		ai_chance = {
-			base = 50
+			base = 30
 		}
 	}
 
-	# Option B: Emergency fiscal response - spend to cushion the blow
+	# ==========================================================
+	# Per-law base options (one visible per crash, gated by financial-regulation law)
+	# Each: pays GDP-scaled treasury hit, softens cycle/momentum damage, applies a
+	# long-lived intervention modifier with -N IP burden.
+	# ==========================================================
+
+	# law_unregulated_banking → Suspend convertibility (small cost, mild softening)
 	option = {
-		name = minor_events_timelineextended.6.b
+		name = minor_events_timelineextended.6.suspend_convertibility
+		trigger = { has_law = law_type:law_unregulated_banking }
 		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 3 }
+		change_variable = { name = finance_cycle_momentum add = 1 }
 		add_modifier = {
-			name = banking_event_deposit_guarantee_emergency
-			multiplier = banking_event_expense_huge
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_small
 			days = short_modifier_time
 			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_suspend_convertibility
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 50
+			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.5 } }
+		}
+	}
+
+	# law_free_mutual_banking → Mutual clearing-house bailout
+	option = {
+		name = minor_events_timelineextended.6.mutual_clearing
+		trigger = { has_law = law_type:law_free_mutual_banking }
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 4 }
+		change_variable = { name = finance_cycle_momentum add = 1 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_mutual_clearing
+			days = long_modifier_time
 		}
 		add_radicals = {
 			value = small_radicals
 			strata = upper
 		}
+		ai_chance = {
+			base = 50
+			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.4 } }
+		}
+	}
+
+	# law_universal_banking_light_prudence → Correspondent liquidity injection
+	option = {
+		name = minor_events_timelineextended.6.correspondent_liquidity
+		trigger = { has_law = law_type:law_universal_banking_light_prudence }
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 6 }
+		change_variable = { name = finance_cycle_momentum add = 1 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_correspondent_liquidity
+			days = long_modifier_time
+		}
 		add_radicals = {
 			value = small_radicals
-			strata = lower
+			strata = upper
 		}
 		ai_chance = {
 			base = 50
+			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.4 } }
+		}
+	}
+
+	# law_prudential_narrow_banking → Activate deposit guarantee
+	option = {
+		name = minor_events_timelineextended.6.deposit_guarantee
+		trigger = { has_law = law_type:law_prudential_narrow_banking }
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 10 }
+		change_variable = { name = finance_cycle_momentum add = 2 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_large
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_deposit_guarantee
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 60
+			modifier = { factor = 0.4  trigger = { gold_reserves <= 0.3 } }
+		}
+	}
+
+	# law_directed_credit_development_banks → Development-bank emergency lending
+	option = {
+		name = minor_events_timelineextended.6.dev_bank_lending
+		trigger = { has_law = law_type:law_directed_credit_development_banks }
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 6 }
+		change_variable = { name = finance_cycle_momentum add = 1 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_dev_bank_lending
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 55
+			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.4 } }
+		}
+	}
+
+	# law_state_owned_banking → Nationalize failing institutions (huge cost, strongest softening)
+	option = {
+		name = minor_events_timelineextended.6.nationalize
+		trigger = { has_law = law_type:law_state_owned_banking }
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 12 }
+		change_variable = { name = finance_cycle_momentum add = 3 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_huge
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_nationalize
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 60
+			modifier = { factor = 0.3  trigger = { gold_reserves <= 0.2 } }
+		}
+	}
+
+	# law_central_bank_independence → Open-market operations & discount window
+	option = {
+		name = minor_events_timelineextended.6.open_market
+		trigger = { has_law = law_type:law_central_bank_independence }
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 10 }
+		change_variable = { name = finance_cycle_momentum add = 2 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_large
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_open_market
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 60
+			modifier = { factor = 0.4  trigger = { gold_reserves <= 0.3 } }
+		}
+	}
+
+	# ==========================================================
+	# Tech-unlocked family options (0-3 visible per crash, layered on top of per-law option)
+	# ==========================================================
+
+	# Emergency discount window — central_banking tech, any law except unregulated
+	option = {
+		name = minor_events_timelineextended.6.discount_window
+		trigger = {
+			has_technology_researched = central_banking
+			NOT = { has_law = law_type:law_unregulated_banking }
+		}
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 5 }
+		change_variable = { name = finance_cycle_momentum add = 1 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_discount_window
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 45
+			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.4 } }
+		}
+	}
+
+	# International swap-line coordination — investment_banks tech, modern banking laws only
+	option = {
+		name = minor_events_timelineextended.6.swap_lines
+		trigger = {
+			has_technology_researched = investment_banks
+			OR = {
+				has_law = law_type:law_prudential_narrow_banking
+				has_law = law_type:law_state_owned_banking
+				has_law = law_type:law_central_bank_independence
+			}
+		}
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 4 }
+		change_variable = { name = finance_cycle_momentum add = 1 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_medium
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_swap_lines
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 40
+			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.4 } }
+		}
+	}
+
+	# Keynesian fiscal stimulus — keynesian_economics tech, state-involved or interventionist laws
+	option = {
+		name = minor_events_timelineextended.6.keynesian_stimulus
+		trigger = {
+			has_technology_researched = keynesian_economics
+			OR = {
+				has_law = law_type:law_interventionism
+				has_law = law_type:law_command_economy
+				has_law = law_type:law_directed_credit_development_banks
+				has_law = law_type:law_state_owned_banking
+				has_law = law_type:law_central_bank_independence
+			}
+		}
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 10 }
+		change_variable = { name = finance_cycle_momentum add = 2 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_huge
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_keynesian_stimulus
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 55
+			modifier = { factor = 0.3  trigger = { gold_reserves <= 0.2 } }
+		}
+	}
+
+	# Emergency capital controls — corporate_management tech, requires a real banking system
+	option = {
+		name = minor_events_timelineextended.6.capital_controls
+		trigger = {
+			has_technology_researched = corporate_management
+			NOT = { has_law = law_type:law_unregulated_banking }
+			NOT = { has_law = law_type:law_free_mutual_banking }
+		}
+		apply_banking_crash_origin_effects = yes
+		change_variable = { name = finance_cycle_value    add = 5 }
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_small
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crash_intervention_capital_controls
+			days = long_modifier_time
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 35
+			modifier = { factor = 1.5  trigger = { var:crash_severity >= 60 } }
 		}
 	}
 
