@@ -1,0 +1,33 @@
+# Construction-market subsystem. See README.md for credit/lineage.
+
+namespace = te_construction_market_building_events
+
+# Fires from on_start_expanding_building. Adds a construction-site building
+# in the state where construction is starting if the state doesn't already
+# have one, and prunes the capital-fallback site when the state's own site
+# is now active.
+te_construction_market_building_events.1 = {
+	type = building_event
+	hidden = yes
+
+	immediate = {
+		state = {
+			te_construction_market_state_on_start = yes
+		}
+	}
+}
+
+# Fires from on_building_built and on_building_expanded. Removes the
+# construction-site building once construction in the state has fully
+# wrapped up (and re-creates the capital fallback if the country has no
+# active sites left).
+te_construction_market_building_events.2 = {
+	type = building_event
+	hidden = yes
+
+	immediate = {
+		state = {
+			te_construction_market_state_on_end = yes
+		}
+	}
+}

@@ -538,10 +538,10 @@ IMAGES = {
         "prompt": "A military command room with officers around a tactical map.",
         "style": "oil painting, dramatic shadows, military interior",
         "events": [
-            "te_construction_market_events.1", "te_construction_market_events.2",
-            "te_construction_market_events.3", "te_construction_market_events.4",
-            "te_construction_market_events.5", "te_construction_market_events.6",
-            "te_construction_market_events.7",
+            "te_construction_market_pulse_events.1", "te_construction_market_pulse_events.2",
+            "te_construction_market_pulse_events.3", "te_construction_market_recalc_events.1",
+            "te_construction_market_recalc_events.2", "te_construction_market_building_events.1",
+            "te_construction_market_building_events.2",
         ],
     },
 

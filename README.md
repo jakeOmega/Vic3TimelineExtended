@@ -13,3 +13,7 @@ Controls the global warming journal entry and greenhouse gas tracking system. Wh
 
 ### World War (Default: Disabled)
 Controls the world war journal entry for great powers. When enabled, ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases. When disabled, the journal entry does not appear and world war events will not fire. World war buttons use direct technology checks (Combined Arms, Mass Media) rather than boolean modifier types.
+
+## Credits
+
+The construction-market subsystem (files prefixed `te_construction_market_*` in `common/` and `events/`, plus the integration in `gui/construction_panel.gui`) was originally based on the third-party **Free Market Construction** mod and has since been substantially rewritten — the price stabilizer, AI buy-target heuristic with bankruptcy-avoidance brake, public/private split via per-building modifier multiplier, geopolitical recalc hooks, and the broader market-driven allocation framing all evolved well past the original. Credit and thanks to that mod's author for the foundation. Identifiers, file layout, and event-namespace shape have been redone to fit this codebase's conventions.

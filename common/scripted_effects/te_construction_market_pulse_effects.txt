@@ -1,4 +1,8 @@
-﻿te_construction_market_on_weekly_pulse = {
+﻿# Construction-market subsystem.
+# Originally based on the third-party "Free Market Construction" mod;
+# substantially rewritten and renamed for this codebase. See README.md.
+
+te_construction_market_on_weekly_pulse = {
 	if = {
 		limit = {
 			NOT = {

@@ -2,26 +2,26 @@
 GLOBAL = {
 	every_country = {
 		trigger_event = {
-			id = te_construction_market_events.5
+			id = te_construction_market_recalc_events.2
 		}
 	}
 	random_country = {
 		trigger_event = {
-			id = te_construction_market_events.2
+			id = te_construction_market_pulse_events.2
 			days = 1
 		}
 		trigger_event = {
-			id = te_construction_market_events.2
+			id = te_construction_market_pulse_events.2
 			days = 2
 		}
 	}
 	random_country = {
 		trigger_event = {
-			id = te_construction_market_events.2
+			id = te_construction_market_pulse_events.2
 			days = 1
 		}
 		trigger_event = {
-			id = te_construction_market_events.2
+			id = te_construction_market_pulse_events.2
 			days = 2
 		}
 	}

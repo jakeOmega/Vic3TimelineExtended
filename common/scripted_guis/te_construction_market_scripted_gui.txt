@@ -1,4 +1,14 @@
-﻿te_construction_market_increase_target_1 = {
+﻿# Construction-market subsystem.
+# Originally based on the third-party "Free Market Construction" mod;
+# substantially rewritten and renamed for this codebase. See README.md.
+#
+# Bound from gui/construction_panel.gui to the +/- buttons in the construction
+# queue panel. Each handler nudges the country's public-construction buy target
+# (te_construction_market_public_target) by a fixed amount: 1 (default click),
+# 10 (shift), 100 (ctrl), 1000 (alt), 10000 (right-click). On the decrease
+# side, right-click resets to 0 instead of stepping by 10000.
+
+te_construction_market_increase_target_1 = {
 
 	scope = country
 

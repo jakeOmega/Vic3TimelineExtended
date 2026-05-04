@@ -1,6 +1,21 @@
-﻿te_construction_market_capacity_modifier = {
+﻿# Construction-market subsystem.
+# Originally based on the third-party "Free Market Construction" mod;
+# substantially rewritten and renamed for this codebase. See README.md.
+
+# Per-site throughput multiplier. Re-applied each weekly pulse with
+# `multiplier = te_construction_market_per_site` so each construction site
+# absorbs its share of the country's total construction-use target.
+te_construction_market_capacity_modifier = {
 	#icon = ""
 	building_throughput_add = 1
+}
+
+# Country-scope private/public allocation modifier. Re-applied each weekly
+# pulse with `multiplier = te_construction_market_private_share_target`
+# (a 0..100 percentage) which is then * 0.01 to land in [0, 1].
+te_construction_market_private_share_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_private_construction_allocation_mult = 0.01
 }
 
 te_construction_market_private_share_modifier = {
