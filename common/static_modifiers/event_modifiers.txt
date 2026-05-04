@@ -728,7 +728,7 @@ re_media_state_control = {
 # ======= Space Elevator
 we_se_milestone_celebrate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_prestige_add = 50
+    country_prestige_mult = 0.05
 }
 we_se_milestone_focus = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -736,17 +736,17 @@ we_se_milestone_focus = {
 }
 we_se_structural_halt = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-    country_prestige_add = -25
+    country_prestige_mult = -0.05
     country_max_weekly_construction_progress_add = 10
 }
 we_se_structural_reinforce = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
     country_max_weekly_construction_progress_add = -5
 }
 we_se_gateway_open = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_prestige_add = 50
+    country_prestige_mult = 0.05
     country_mass_migration_attraction_mult = 0.25
 }
 we_se_gateway_restricted = {
@@ -756,7 +756,7 @@ we_se_gateway_restricted = {
 }
 we_se_trade_auction = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
     state_trade_capacity_mult = 0.15
 }
 we_se_trade_national = {
@@ -782,19 +782,19 @@ we_se_astronaut_industry = {
 }
 we_se_sovereignty = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_prestige_add = 75
+    country_prestige_mult = 0.05
     country_authority_add = 50
 }
 we_se_shared_access = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_influence_add = 100
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
 }
 
 # ======= Solar Collector Array
 we_sc_first_light_pride = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_prestige_add = 50
+    country_prestige_mult = 0.05
 }
 we_sc_first_light_focus = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -802,12 +802,12 @@ we_sc_first_light_focus = {
 }
 we_sc_beam_compensate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-    country_prestige_add = -25
+    country_prestige_mult = -0.05
     country_legitimacy_base_add = 10
 }
 we_sc_beam_minimize = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-    country_prestige_add = -25
+    country_prestige_mult = -0.05
     country_tech_research_speed_mult = 0.03
 }
 we_sc_surplus_invest = {
@@ -818,7 +818,7 @@ we_sc_surplus_invest = {
 we_sc_surplus_export = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
     state_trade_capacity_mult = 0.1
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
 }
 we_sc_postscarcity_subsidize = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -836,11 +836,11 @@ we_sc_storm_shutdown = {
 }
 we_sc_storm_rideout = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
 }
 we_sc_monopoly_assert = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_prestige_add = 75
+    country_prestige_mult = 0.05
 }
 we_sc_monopoly_share = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -851,7 +851,7 @@ we_sc_monopoly_share = {
 # ======= Orbital Battlestation
 we_ob_highground_accelerate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_prestige_add = 50
+    country_prestige_mult = 0.05
     unit_offense_mult = 0.05
 }
 we_ob_highground_assure = {
@@ -870,23 +870,23 @@ we_ob_surveillance_share = {
 }
 we_ob_deterrence_strength = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_prestige_add = 75
+    country_prestige_mult = 0.05
     unit_defense_mult = 0.1
 }
 we_ob_deterrence_negotiate = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_influence_add = 100
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
 }
 we_ob_weapons_test_relief = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-    country_prestige_add = -50
+    country_prestige_mult = -0.05
     country_legitimacy_base_add = 15
 }
 we_ob_weapons_test_classify = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_authority_add = 100
-    country_prestige_add = -25
+    country_prestige_mult = -0.05
 }
 we_ob_arms_race_maintain = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
@@ -897,21 +897,21 @@ we_ob_arms_race_maintain = {
 we_ob_arms_race_treaty = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_influence_add = 100
-    country_prestige_add = 50
+    country_prestige_mult = 0.05
 }
 we_ob_strike_project = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
     unit_offense_mult = 0.1
-    country_prestige_add = 50
+    country_prestige_mult = 0.05
 }
 we_ob_strike_defensive = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
     unit_defense_mult = 0.1
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
 }
 we_ob_shield = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-    country_prestige_add = 150
+    country_prestige_mult = 0.15
 }
 
 # ======= Antimatter Containment Facility
@@ -947,23 +947,23 @@ we_am_annihilation_propulsion = {
 }
 we_am_diplomacy_arsenal = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-    country_prestige_add = 75
+    country_prestige_mult = 0.05
     country_authority_add = 75
 }
 we_am_diplomacy_olive = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_influence_add = 100
-    country_prestige_add = 25
+    country_prestige_mult = 0.05
 }
 we_am_incident_transparent = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
     country_legitimacy_base_add = 15
-    country_prestige_add = -25
+    country_prestige_mult = -0.05
 }
 we_am_incident_suppress = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
     country_authority_add = 100
-    country_prestige_add = -50
+    country_prestige_mult = -0.05
 }
 we_am_propulsion_military = {
     icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
