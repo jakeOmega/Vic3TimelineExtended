@@ -245,7 +245,7 @@ antimatter_production = {
 		military_formation_army_movement_speed_mult = 1
 		ship_hull_damage_mult = 0.20
 		ship_critical_hit_chance_add = 0.10
-		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.30
+		ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = 0.30
 	}
 	
 	ai_weight = {

@@ -102,30 +102,6 @@ utility_mod_dew_point_defense = {
 }
 
 
-### Nuclear Propulsion — extreme speed + supply endurance
-utility_mod_nuclear_propulsion = {
-	type = ship_mod_slot_utility_1
-	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
-
-	unlocking_technologies = { nuclear_energy }
-
-	modifier = {
-		ship_movement_speed_mult = 0.25
-		ship_supply_capacity_mult = 0.3
-	}
-
-	construction_goods = {
-		goods_input_steel_add = 14
-		goods_input_engines_add = 10
-	}
-
-	ai_weight = {
-		value = 3
-		multiply = ship_mod_market_multiplier
-	}
-}
-
-
 ### Aegis Air Defense — networked air-defense / missile-shootdown
 utility_mod_aegis_air_defense = {
 	type = ship_mod_slot_utility_1

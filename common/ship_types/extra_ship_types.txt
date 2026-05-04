@@ -151,10 +151,7 @@ ship_type_nuclear_submarine = {
 		ship_detection_add = 80
 		ship_blockade_strength_add = 100
 
-		ship_battle_against_ship_type_modern_ironclad_hull_damage_mult = 4.0
-		ship_battle_against_ship_type_pre_dreadnought_hull_damage_mult = 4.0
-		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 4.0
-		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 4.0
+		ship_battle_against_ship_type_fleet_carrier_hull_damage_mult = 4.0
 		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 4.0
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 4.0
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 4.0
@@ -201,7 +198,6 @@ ship_type_nuclear_submarine = {
 			ship_mod_nuclear_submarine_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_nuclear_propulsion
 			utility_mod_sonar_suite
 			utility_mod_camouflage
 		}
@@ -244,6 +240,8 @@ ship_type_guided_missile_ship = {
 		ship_carrying_capacity_add = 0.15
 		ship_marine_capacity_add = 0.075
 
+		ship_battle_against_ship_type_fleet_carrier_hull_damage_mult = 0.3
+		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.3
 		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.4
 	}
 
@@ -333,6 +331,9 @@ ship_type_nuclear_supercarrier = {
 		ship_visibility_add = 100
 		ship_detection_add = 600
 		ship_blockade_strength_add = 1000
+
+		ship_battle_against_ship_type_fleet_carrier_hull_damage_mult = 0.3
+		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.3
 	}
 
 	construction_goods = {
@@ -380,7 +381,6 @@ ship_type_nuclear_supercarrier = {
 			ship_mod_nuclear_supercarrier_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_nuclear_propulsion
 			utility_mod_drone_complement
 			utility_mod_dew_point_defense
 			utility_mod_fire_suppression
@@ -431,6 +431,8 @@ ship_type_arsenal_ship = {
 		ship_detection_add = 250
 		ship_blockade_strength_add = 3000
 
+		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.4
+		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.3
 		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.3
 	}
 
@@ -612,10 +614,8 @@ ship_type_hypersonic_missile_platform = {
 		ship_blockade_strength_add = 6000
 
 		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.1
-		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.6
-		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.6
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.6
-		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.6
+		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.6
 	}
 
 	construction_goods = {
@@ -701,6 +701,9 @@ ship_type_pulsed_laser_escort = {
 		ship_visibility_add = 60
 		ship_detection_add = 300
 		ship_blockade_strength_add = 1500
+
+		ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = 0.5
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 0.5
 	}
 
 	construction_goods = {
@@ -782,9 +785,8 @@ ship_type_swarm_coordination_vessel = {
 		ship_detection_add = 500
 		ship_blockade_strength_add = 2500
 
-		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.4
-		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.4
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.4
+		ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = 0.4
 	}
 
 	construction_goods = {
@@ -1247,10 +1249,6 @@ ship_type_stealth_attack_submarine = {
 		ship_detection_add = 120
 		ship_blockade_strength_add = 200
 
-		ship_battle_against_ship_type_modern_ironclad_hull_damage_mult = 5.0
-		ship_battle_against_ship_type_pre_dreadnought_hull_damage_mult = 5.0
-		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 5.0
-		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 5.0
 		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 5.0
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 5.0
 		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 4.0
@@ -1298,7 +1296,6 @@ ship_type_stealth_attack_submarine = {
 			ship_mod_nuclear_submarine_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_nuclear_propulsion
 			utility_mod_sonar_suite
 			utility_mod_camouflage
 			utility_mod_drone_complement
@@ -1332,9 +1329,6 @@ ship_type_autonomous_swarm_submarine = {
 		ship_detection_add = 200
 		ship_blockade_strength_add = 350
 
-		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 6.0
-		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 6.0
-		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 5.0
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 6.0
 		ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = 5.0
 		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.4
@@ -1418,12 +1412,8 @@ ship_type_antimatter_battleship = {
 		ship_detection_add = 500
 		ship_blockade_strength_add = 10000
 
-		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.5
-		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.5
-		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.5
-		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.5
-		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.6
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.7
+		ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = 0.6
 		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.1
 	}
 
@@ -1588,6 +1578,14 @@ INJECT:ship_type_super_dreadnought = {
 	is_obsolete = {
 		has_technology_researched = bombing_aircraft
 	}
+	is_very_obsolete = {
+		has_technology_researched = nuclear_energy
+	}
+}
+
+# vanilla dreadnought has is_obsolete = battleship_tech but no is_very_obsolete; mirror super_dreadnought's
+# very-obsolete trigger so anti-dreadnought modifiers prune cleanly under the mod's extended timeline.
+INJECT:ship_type_dreadnought = {
 	is_very_obsolete = {
 		has_technology_researched = nuclear_energy
 	}

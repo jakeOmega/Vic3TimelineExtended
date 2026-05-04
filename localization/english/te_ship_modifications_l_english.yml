@@ -231,8 +231,6 @@
  utility_mod_drone_complement_desc: "An onboard drone hangar and control suite that improves the ship's accuracy and screening capability while extending detection range."
  utility_mod_helicopter_pad: "Helicopter Pad"
  utility_mod_helicopter_pad_desc: "A flight deck and hangar for naval helicopters and tilt-rotor aircraft, expanding the ship's troop transport and amphibious assault capabilities."
- utility_mod_nuclear_propulsion: "Nuclear Propulsion"
- utility_mod_nuclear_propulsion_desc: "A compact nuclear reactor replaces conventional power, granting extreme cruising speed and effectively unlimited operational endurance."
  utility_mod_sonar_suite: "Sonar Suite"
  utility_mod_sonar_suite_desc: "Active and passive sonar arrays paired with depth-charge mounts. Devastating against submarines, with greatly improved general detection."
  utility_mod_underway_replenishment: "Underway Replenishment"

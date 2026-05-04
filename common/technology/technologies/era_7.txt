@@ -231,7 +231,7 @@ guided_missiles = {
 	modifier = {
 		state_building_military_base_max_level_add = 1
 		ship_hull_damage_mult = 0.05
-		ship_battle_against_ship_type_dreadnought_accuracy_mult = 0.20
+		ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult = 0.20
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
 

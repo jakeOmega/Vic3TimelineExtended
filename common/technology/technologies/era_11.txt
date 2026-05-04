@@ -217,7 +217,7 @@ swarm_technology = {
 		country_general_rank_impact_mult = 1.5
 		country_admiral_rank_impact_mult = 1.5
 		ship_hull_damage_mult = 0.10
-		ship_battle_against_ship_type_dreadnought_hull_damage_mult = 0.20
+		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.20
 		character_command_limit_mult = 0.10
 	}
 	
