@@ -1,0 +1,274 @@
+﻿te_construction_market_increase_target_1 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			add = 1
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_increase_target_10 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			add = 10
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_increase_target_100 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			add = 100
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_increase_target_1000 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			add = 1000
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_increase_target_10000 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = yes
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			add = 10000
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_decrease_target_1 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+	is_valid = {
+		var:te_construction_market_public_target >= 1
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			subtract = 1
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_decrease_target_10 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+	is_valid = {
+		var:te_construction_market_public_target >= 10
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			subtract = 10
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_decrease_target_100 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+	is_valid = {
+		var:te_construction_market_public_target >= 100
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			subtract = 100
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_decrease_target_1000 = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+	is_valid = {
+		var:te_construction_market_public_target >= 1000
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		change_variable = {
+			name = te_construction_market_public_target
+			subtract = 1000
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+te_construction_market_decrease_target_reset = {
+
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+	is_valid = {
+		var:te_construction_market_public_target >= 1
+	}
+
+	effect = {
+		#custom_tooltip = ""
+		te_construction_market_init_target = yes
+		set_variable = {
+			name = te_construction_market_public_target
+			value = 0
+		}
+		te_construction_market_country_update_private_share = yes
+		te_construction_market_apply_per_site_modifier = yes
+	}
+}

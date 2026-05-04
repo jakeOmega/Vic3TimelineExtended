@@ -1,8 +1,8 @@
 ﻿############ GOVERNMENT BUILDINGS
 
 
-fmc_building_construction_site = {
-	building_group = fmc_bg_construction_site
+te_construction_market_site = {
+	building_group = te_construction_market_bg
 	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
 	levels_per_mesh = -1
 	buildable = no
@@ -14,7 +14,7 @@ fmc_building_construction_site = {
 	#economic_contribution = 0.0
 	#auto_place_buildings = yes
 	production_method_groups = {
-		pmg_base_fmc_building_construction_site
+		pmg_base_te_construction_market_site
 	}
 	#possible = {
 	#	this = {
@@ -47,7 +47,7 @@ REPLACE:building_construction_sector = {
 		pmg_construction_principle
 		pmg_maintenance
 	}
-	
+
 	# Construction sector should generally be preferred over other equal-priority spending items.
 	# Conditional bumps reflect: a long queue = need more capacity; war / banking stress
 	# = don't pile on more construction debt right now.
@@ -74,6 +74,6 @@ REPLACE:building_construction_sector = {
 			add = -500
 		}
 	}
-	
+
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
 }

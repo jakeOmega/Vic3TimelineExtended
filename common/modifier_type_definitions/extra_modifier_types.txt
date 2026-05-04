@@ -108,7 +108,7 @@ goods_output_construction_add = {
 	percent = no
 }
 
-building_group_fmc_bg_construction_site_employee_mult = {
+building_group_te_construction_market_bg_employee_mult = {
 	color = bad
 	percent = yes
 }

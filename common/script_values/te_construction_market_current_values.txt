@@ -1,0 +1,68 @@
+﻿TE_CONSTRUCTION_MARKET_SERVICES_PRICE = 1000
+
+te_construction_market_investment_pool_spending = {
+	value = investment_pool_gross_income
+	subtract = investment_pool_net_income
+}
+
+te_construction_market_price = {
+	value = this.market.mg:construction.market_goods_pricier
+	add = 1
+	multiply = TE_CONSTRUCTION_MARKET_SERVICES_PRICE
+	multiply = {
+		value = 1
+		add = construction_cost_scaling_mult
+		min = 1
+	}
+}
+
+te_construction_market_private_bought = {
+	value = te_construction_market_investment_pool_spending
+	divide = te_construction_market_price
+}
+
+te_construction_market_total_use = {
+	value = this.market.mg:construction.market_goods_consumption
+}
+
+te_construction_market_total_spending = {
+	value = te_construction_market_total_use
+	multiply = te_construction_market_price
+}
+
+te_construction_market_public_spending = {
+	value = te_construction_market_total_spending
+	subtract = te_construction_market_investment_pool_spending
+}
+
+te_construction_market_private_use = {
+	value = te_construction_market_investment_pool_spending
+	divide = te_construction_market_price
+}
+
+te_construction_market_public_use = {
+	value = te_construction_market_public_spending
+	divide = te_construction_market_price
+}
+
+te_construction_market_points_left_queue_government = {
+	value = construction_queue_government_duration
+	multiply = te_construction_market_total_use
+	if = {
+		limit = {
+			construction_queue_government_duration > 52000
+		}
+		value = 0
+	}
+}
+
+te_construction_market_points_left_queue_private = {
+	value = construction_queue_private_duration
+	multiply = te_construction_market_total_use
+	if = {
+		limit = {
+			construction_queue_private_duration > 52000
+		}
+		value = 0
+	}
+}

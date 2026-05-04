@@ -181,8 +181,6 @@
  extend_influence_effects_desc:0 "• Generates [concept_leverage] for the target country, deepening ties to the source's [concept_power_bloc]."
  forced_disarmament_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will reduce military capacity"
  forced_disarmament_effects_desc:0 "• Reduces military wages by 25% in the source country.\n• Halves conscription rates.\n• Source country loses prestige."
- free_market_construction_modifier:0 "Free Market Construction"
- free_market_construction_modifier_desc:0 "Applies the effects of a free-market construction policy."
  free_port_concession_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will open [SCOPE.sArticleOption('article_option').GetInputState.GetName] as a free port"
  free_port_concession_effects_desc:0 "• Massively increases trade capacity and migration pull in the target state.\n• Reduces cultural assimilation in the cosmopolitan port.\n• Source country loses authority.\n• Target country gains prestige."
  gdp_tooltip:0 "$GDP_TOOLTIP$"

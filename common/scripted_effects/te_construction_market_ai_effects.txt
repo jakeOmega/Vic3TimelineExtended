@@ -1,0 +1,6 @@
+﻿te_construction_market_ai_update_buy = {
+	set_variable = {
+		name = te_construction_market_public_target
+		value = te_construction_market_ai_purchase_target
+	}
+}

@@ -1,0 +1,150 @@
+﻿
+namespace = te_construction_market_events
+
+#create a daily pulse event
+te_construction_market_events.1 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		OR = {
+			NOT = {
+				has_global_variable = te_construction_market_last_pulse_date
+			}
+			te_construction_market_days_since_last_pulse >= 1
+		}
+	}
+
+	immediate = {
+
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = te_construction_market_pulse_count
+				}
+			}
+			set_global_variable = {
+				name = te_construction_market_pulse_count
+				value = 0
+			}
+		}
+		change_global_variable = {
+			name = te_construction_market_pulse_count
+			add = 1
+		}
+
+		set_global_variable = {
+			name = te_construction_market_last_pulse_date
+			value = game_date
+		}
+		random_country = {
+			trigger_event = {
+				id = te_construction_market_events.2
+				days = 1
+			}
+			trigger_event = {
+				id = te_construction_market_events.2
+				days = 2
+			}
+		}
+		random_country = {
+			trigger_event = {
+				id = te_construction_market_events.2
+				days = 1
+			}
+			trigger_event = {
+				id = te_construction_market_events.2
+				days = 2
+			}
+		}
+		if = {
+			limit = {
+				te_construction_market_pulse_count_modulo_7 = 0
+			}
+			every_country = {
+				trigger_event = {
+					id = te_construction_market_events.3
+				}
+			}
+		}
+	}
+}
+
+#helper event to trigger the main event
+te_construction_market_events.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = {
+			id = te_construction_market_events.1
+		}
+	}
+}
+
+#event fired on daily pulse
+te_construction_market_events.3 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_construction_market_on_weekly_pulse = yes
+	}
+}
+
+#event fired on border changes
+te_construction_market_events.4 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		#every_country = {
+		te_construction_market_on_border_changes = yes
+		#}
+	}
+}
+
+#event fired on construction setup
+te_construction_market_events.5 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		# every_country = {
+		te_construction_market_country_setup = yes
+		# }
+	}
+}
+
+#On construction started
+te_construction_market_events.6 = {
+	type = building_event
+	hidden = yes
+
+	immediate = {
+		state = {
+			te_construction_market_state_on_start = yes
+		}
+	}
+}
+
+#On construction finished
+te_construction_market_events.7 = {
+	type = building_event
+	hidden = yes
+	immediate = {
+		state = {
+			te_construction_market_state_on_end = yes
+		}
+	}
+}
+
+#for testing
+# te_construction_market_events.8 = {
+#     type = country_event
+#     hidden = no
+
+#     option = {
+
+#     }
+# }

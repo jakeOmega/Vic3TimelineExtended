@@ -1,0 +1,61 @@
+﻿te_construction_market_init_target = {
+	if = {
+		limit = {
+			not = {
+				has_variable = te_construction_market_public_target
+			}
+		}
+		set_variable = {
+			name = te_construction_market_public_target
+			value = 0
+		}
+	}
+}
+
+
+# country_replace_sectors = {
+# 	every_scope_state = {
+# 		limit = {
+# 			has_building = te_construction_market_site
+# 			OR = {
+# 				is_capital = no
+# 				state_has_building_type_levels = {
+# 					target = bt:te_construction_market_site
+# 					value > 1
+# 				}
+# 			}
+# 		}
+# 		te_construction_market_replace_building = {
+# 			OLD_TYPE = te_construction_market_site
+# 			NEW_TYPE = building_construction_sector
+# 		}
+# 	}
+# }
+
+te_construction_market_country_setup = {
+	te_construction_market_init_target = yes
+	# country_replace_sectors = yes
+	if = {
+		limit = {
+			NOT = {
+				any_scope_building = {
+					type = bt:te_construction_market_site
+				}
+			}
+		}
+		capital = {
+			create_building = {
+				building = te_construction_market_site
+				level = 1
+			}
+		}
+	}
+	# capital = {
+	# 	create_building = {
+	# 		building = te_construction_market_site
+	# 		level = 1
+	# 	}
+	# }
+	#te_construction_market_country_update_private_share = yes
+}
+

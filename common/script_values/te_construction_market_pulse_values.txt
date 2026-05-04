@@ -1,0 +1,20 @@
+﻿te_construction_market_days_since_last_pulse = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = te_construction_market_last_pulse_date
+			}
+		}
+		value = 1
+	}
+	else = {
+		value = game_date
+		subtract = global_var:te_construction_market_last_pulse_date
+		min = 0
+	}
+}
+
+te_construction_market_pulse_count_modulo_7 = {
+	value = global_var:te_construction_market_pulse_count
+	modulo = 7
+}

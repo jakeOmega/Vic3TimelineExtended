@@ -1,0 +1,3 @@
+﻿NCountry = {
+	CONSTRUCTION_CAMP_BUILDING = "te_construction_market_site"
+}
