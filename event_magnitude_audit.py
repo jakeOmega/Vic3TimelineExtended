@@ -74,6 +74,23 @@ _EVENT_HEADER_RE = re.compile(
 )
 
 
+_REVIEWED_RE = re.compile(
+    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
+)
+
+
+def parse_reviewed_comment(line: str) -> dict | None:
+    """Look for `# REVIEWED YYYY-MM-DD: rationale` on the given line.
+
+    Returns {date, rationale} or None. Both date and rationale are required
+    so that suppressions stay accountable — drive-by `# REVIEWED` doesn't work.
+    """
+    m = _REVIEWED_RE.search(line)
+    if not m:
+        return None
+    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+
+
 def find_event_id_at_line(text: str, line_no: int) -> str | None:
     """Walk upward from `line_no` (1-indexed) to the most recent event header.
 

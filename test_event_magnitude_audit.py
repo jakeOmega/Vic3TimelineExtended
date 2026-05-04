@@ -11,6 +11,7 @@ from event_magnitude_audit import (
     DIRECT_EFFECTS,
     ResourceMeta,
     find_event_id_at_line,
+    parse_reviewed_comment,
 )
 
 
@@ -75,6 +76,31 @@ class EventIdResolutionTests(unittest.TestCase):
     def test_out_of_range_returns_none(self):
         text = "test_events.1 = {\n}\n"
         self.assertIsNone(find_event_id_at_line(text, line_no=99))
+
+
+class SuppressionCommentTests(unittest.TestCase):
+    def test_full_form(self):
+        line = "    multiplier = 2000  # REVIEWED 2026-05-04: tech-gated; intentionally large"
+        result = parse_reviewed_comment(line)
+        self.assertIsNotNone(result)
+        self.assertEqual(result["date"], "2026-05-04")
+        self.assertEqual(result["rationale"], "tech-gated; intentionally large")
+
+    def test_missing_date_rejected(self):
+        line = "    multiplier = 2000  # REVIEWED: no date here"
+        self.assertIsNone(parse_reviewed_comment(line))
+
+    def test_missing_rationale_rejected(self):
+        line = "    multiplier = 2000  # REVIEWED 2026-05-04"
+        self.assertIsNone(parse_reviewed_comment(line))
+
+    def test_no_comment_at_all(self):
+        line = "    multiplier = 2000"
+        self.assertIsNone(parse_reviewed_comment(line))
+
+    def test_unrelated_comment(self):
+        line = "    multiplier = 2000  # just a regular comment"
+        self.assertIsNone(parse_reviewed_comment(line))
 
 
 if __name__ == "__main__":
