@@ -131,6 +131,42 @@ def find_event_id_at_line(text: str, line_no: int) -> str | None:
     return None
 
 
+def scan_inline_modifier_types(text: str, file_path: str) -> list[AuditFlag]:
+    """Find `<fast-scaling-modifier-type> = <literal>` in event files.
+
+    Catches the `add_modifier { country_prestige_add = N }` form (inline
+    modifier-type fields, no static-modifier name lookup needed). Same
+    word-boundary trick as scan_direct_effects so prefix/suffix collisions
+    don't false-match.
+
+    Note: this scanner doesn't validate that the match is *inside* an
+    `add_modifier { }` block — but in events/*.txt the same modifier-type
+    keys don't appear in any other context, so the simpler search is safe.
+    """
+    lines = text.splitlines()
+    flags: list[AuditFlag] = []
+    for i, line in enumerate(lines, start=1):
+        for key, meta in FAST_SCALING_MODIFIERS.items():
+            m = re.search(rf"(?<!\w){re.escape(key)}\s*=\s*(\S+)", line)
+            if not m:
+                continue
+            value = m.group(1).rstrip("}").rstrip(",").rstrip()
+            if not _is_literal_number(value):
+                continue
+            flags.append(AuditFlag(
+                file=file_path,
+                line=i,
+                event_id=find_event_id_at_line(text, i),
+                kind="modifier_inline",
+                effect=key,
+                value=value,
+                resource=meta.resource,
+                fix_hint=meta.fix_hint,
+                exemption=parse_reviewed_comment(line),
+            ))
+    return flags
+
+
 def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
     """Find `<direct_effect> = <literal>` lines for effects in DIRECT_EFFECTS."""
     lines = text.splitlines()

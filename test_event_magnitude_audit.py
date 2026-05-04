@@ -13,6 +13,7 @@ from event_magnitude_audit import (
     find_event_id_at_line,
     parse_reviewed_comment,
     scan_direct_effects,
+    scan_inline_modifier_types,
     AuditFlag,
 )
 
@@ -158,6 +159,40 @@ class DirectEffectScannerTests(unittest.TestCase):
         # whether to # REVIEWED it. Confirm at least the regex matches.
         self.assertEqual(len(flags), 1)
         self.assertEqual(flags[0].value, "0")
+
+
+class InlineModifierScannerTests(unittest.TestCase):
+    def test_flags_inline_prestige(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = {\n"
+            "      country_prestige_add = 100\n"
+            "    }\n"
+            "  }\n"
+            "}\n"
+        )
+        flags = scan_inline_modifier_types(text, file_path="x.txt")
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].effect, "country_prestige_add")
+        self.assertEqual(flags[0].value, "100")
+        self.assertEqual(flags[0].kind, "modifier_inline")
+
+    def test_skips_mult_modifier(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = { add_modifier = { country_prestige_mult = 0.05 } }\n"
+            "}\n"
+        )
+        self.assertEqual(scan_inline_modifier_types(text, file_path="x.txt"), [])
+
+    def test_skips_unrelated_modifier(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = { add_modifier = { country_authority_add = 100 } }\n"
+            "}\n"
+        )
+        self.assertEqual(scan_inline_modifier_types(text, file_path="x.txt"), [])
 
 
 if __name__ == "__main__":
