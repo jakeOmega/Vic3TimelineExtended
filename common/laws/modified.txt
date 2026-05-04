@@ -31,6 +31,13 @@ INJECT:law_elected_bureaucrats = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		country_voting_power_base_add = 10
 	}
+	unlocking_laws = {
+		law_landed_voting
+		law_wealth_voting
+		law_census_voting
+		law_universal_suffrage
+		law_anarchy
+	}
 }
 
 REPLACE:law_subjecthood = {
