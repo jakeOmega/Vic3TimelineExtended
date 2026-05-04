@@ -1,0 +1,29 @@
+# Construction-market subsystem.
+# Based on the third-party "Free Market Construction" mod. See README.md.
+
+namespace = te_construction_market_recalc_events
+
+# Border / geopolitical recalc — fires on country-shape changes (market
+# merge/create, country released, country formed, capitulation, diplo-play
+# back-down, revolution/secession, war end). Re-runs the per-country state
+# update so construction-site placements track the new border layout.
+te_construction_market_recalc_events.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_construction_market_on_border_changes = yes
+	}
+}
+
+# One-shot per-country setup — runs from on_country_formed and once at game
+# start (history file). Initializes the public buy-target variable and creates
+# the construction-site building in the capital if the country has none.
+te_construction_market_recalc_events.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_construction_market_country_setup = yes
+	}
+}

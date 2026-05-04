@@ -1,9 +1,0 @@
-﻿fmc_add_construction_modifier = {
-	#icon = ""
-	building_throughput_add = 1
-}
-
-fmc_private_public_share_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_private_construction_allocation_mult = 0.01
-}

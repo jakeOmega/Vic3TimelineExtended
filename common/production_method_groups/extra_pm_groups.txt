@@ -626,12 +626,12 @@ INJECT:pmg_passenger_trains = {
     }
 }
 
-REPLACE_OR_CREATE:pmg_base_fmc_building_construction_site = {
+REPLACE_OR_CREATE:pmg_base_te_construction_market_site = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 
 	production_methods = {
-		pm_base
+		pm_te_construction_market_base
 	}
 
 }

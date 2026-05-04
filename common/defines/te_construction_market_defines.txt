@@ -1,0 +1,9 @@
+﻿# Construction-market subsystem.
+# Based on the third-party "Free Market Construction" mod. See README.md.
+
+# Tells the engine which building to use as the per-state construction site
+# (the building the engine spawns and tracks for state-scoped construction
+# capacity).
+NCountry = {
+	CONSTRUCTION_CAMP_BUILDING = "te_construction_market_site"
+}

@@ -1,4 +1,4 @@
-﻿fmc_buildings_under_construction = {
+﻿te_construction_market_buildings_under_construction = {
 	value = 0
 	every_scope_building = {
 		limit = {
@@ -8,34 +8,34 @@
 	}
 }
 
-fmc_num_of_construction_sites = {
+te_construction_market_num_sites = {
 	value = 0
 	every_scope_building = {
 		limit = {
-			type = bt:fmc_building_construction_site
+			type = bt:te_construction_market_site
 			occupancy > 0
 		}
 		add = 1
 	}
 }
 
-fmc_construction_per_site = {
-	value = fmc_total_construction_use_target
+te_construction_market_per_site = {
+	value = te_construction_market_total_use_target
 	if = {
 		limit = {
-			fmc_num_of_construction_sites > 0
+			te_construction_market_num_sites > 0
 		}
-		divide = fmc_num_of_construction_sites
+		divide = te_construction_market_num_sites
 	}
 	#subtract = 1
 }
 
-# fmc_employment_adjusted_construction_per_sector = {
-# 	value = owner.fmc_construction_per_site
-# 	divide = this.fmc_employee_slots_filled
+# te_construction_market_employment_adjusted_per_site = {
+# 	value = owner.te_construction_market_per_site
+# 	divide = this.te_construction_market_employee_slots_filled
 # }
 
-# fmc_employee_slots_filled = {
+# te_construction_market_employee_slots_filled = {
 # 	value = 0
 # 	if = {
 # 		limit = {

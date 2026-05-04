@@ -1,4 +1,4 @@
-﻿fmc_ai_construction_purchase_target = {
+﻿te_construction_market_ai_purchase_target = {
 	if = {
 		limit = {
 			is_construction_paused = no
@@ -6,7 +6,7 @@
 		}
 		value = net_fixed_income
 		min = 0
-		divide = var:fmc_price_stabiliser
+		divide = var:te_construction_market_price_stabilizer
 		multiply = {
 			add = scaled_gold_reserves
 			subtract = scaled_debt
@@ -59,7 +59,7 @@
 				add = {
 					value = income
 					divide = {
-						value = fmc_construction_price
+						value = te_construction_market_price
 						min = 50
 						max = 150
 					}

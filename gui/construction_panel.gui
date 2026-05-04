@@ -941,7 +941,7 @@ types construction_panel
 				visible = "[InformationPanel.IsTabSelected('default')]"
 				direction = vertical
 
-				### MOD: FMC (Forced Mass Construction) mass-buy buttons ###
+				### MOD: construction-market mass-buy buttons (te_construction_market) ###
 				flowcontainer = {
 					margin_bottom = 10
 					margin_left = 20
@@ -966,16 +966,16 @@ types construction_panel
 						button_icon_minus_action = {
 							size = { 35 35 }
 							parentanchor = vcenter
-							datacontext = "[GetScriptedGui('remove_construction_scriptedgui')]"
+							datacontext = "[GetScriptedGui('te_construction_market_decrease_target_1')]"
 							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							click_modifiers = {
 								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-								onshift = "[GetScriptedGui('remove_construction_shift_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-								onctrl = "[GetScriptedGui('remove_construction_ctrl_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-								onalt = "[GetScriptedGui('remove_construction_alt_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onshift = "[GetScriptedGui('te_construction_market_decrease_target_10').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onctrl = "[GetScriptedGui('te_construction_market_decrease_target_100').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onalt = "[GetScriptedGui('te_construction_market_decrease_target_1000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 							}
-							onrightclick = "[GetScriptedGui('remove_construction_rightclick_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							onrightclick = "[GetScriptedGui('te_construction_market_decrease_target_reset').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						}
 
 						### LEVEL
@@ -987,7 +987,7 @@ types construction_panel
 							}
 
 							textbox = {
-								text = "[GetPlayer.MakeScope.Var('fmc_public_construction_buy_target').GetValue]"
+								text = "[GetPlayer.MakeScope.Var('te_construction_market_public_target').GetValue]"
 								align = hcenter|nobaseline
 								using = fontsize_large
 								size = { 88 35 }
@@ -1000,16 +1000,16 @@ types construction_panel
 							name = "add_construction"
 							size = { 35 35 }
 							parentanchor = vcenter
-							datacontext = "[GetScriptedGui('add_construction_scriptedgui')]"
+							datacontext = "[GetScriptedGui('te_construction_market_increase_target_1')]"
 							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							click_modifiers = {
 								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-								onshift = "[GetScriptedGui('add_construction_shift_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-								onctrl = "[GetScriptedGui('add_construction_ctrl_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-								onalt = "[GetScriptedGui('add_construction_alt_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onshift = "[GetScriptedGui('te_construction_market_increase_target_10').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onctrl = "[GetScriptedGui('te_construction_market_increase_target_100').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+								onalt = "[GetScriptedGui('te_construction_market_increase_target_1000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 							}
-							onrightclick = "[GetScriptedGui('add_construction_rightclick_scriptedgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							onrightclick = "[GetScriptedGui('te_construction_market_increase_target_10000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						}
 					}
 				}

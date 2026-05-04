@@ -1,0 +1,34 @@
+﻿# Construction-market subsystem.
+# Based on the third-party "Free Market Construction" mod. See README.md.
+
+te_construction_market_on_weekly_pulse = {
+	if = {
+		limit = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			#this = market.owner
+		}
+		te_construction_market_update_price_stabilizer = yes
+		te_construction_market_country_update_data = yes
+		if = {
+			limit = {
+				is_ai = yes
+			}
+			te_construction_market_ai_update_buy = yes
+		}
+	}
+}
+
+
+te_construction_market_on_border_changes = {
+	if = {
+		limit = {
+			NOT = {
+				is_country_type = decentralized
+			}
+			#this = market.owner
+		}
+		te_construction_market_country_update_sites = yes
+	}
+}

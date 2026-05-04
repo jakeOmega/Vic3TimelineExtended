@@ -123,7 +123,7 @@ reveal_assassination_chance_foreign = {
 max_investment_pool_before_on_action = 1000000
 
 needed_private_levels = {
-	value = fmc_total_construction_use_target
+	value = te_construction_market_total_use_target
 	divide = modifier:country_max_weekly_construction_progress_add
 	multiply = 2
 	subtract = construction_queue_num_queued_private_levels
@@ -134,7 +134,7 @@ needed_private_levels = {
 expand_levels = 1
 
 starting_investment_pool = {
-	value = fmc_private_construction_spending_target
+	value = te_construction_market_private_spending_target
 	multiply = 2
 }
 
