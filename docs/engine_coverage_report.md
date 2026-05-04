@@ -2,7 +2,7 @@
 
 # Engine Coverage Report
 
-> ⚠️ Engine docs are 0 days older than the most recent mod edit; some unknowns may be entries added after the last in-game regeneration.
+> ⚠️ Engine docs are 1 days older than the most recent mod edit; some unknowns may be entries added after the last in-game regeneration.
 
 ## Engine doc snapshot timestamps
 
@@ -13,7 +13,7 @@
 - `on-actions`: 2026-05-03T23:13:35+00:00
 - `triggers`: 2026-05-03T23:13:35+00:00
 
-Most recent mod file mtime: 2026-05-04T21:32:53+00:00
+Most recent mod file mtime: 2026-05-04T23:23:23+00:00
 
 ## Summary
 

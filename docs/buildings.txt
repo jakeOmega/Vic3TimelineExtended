@@ -1971,10 +1971,6 @@ Regional Company Headquarter:
 		$pm_worker_cooperative$
 		$pm_worker_cooperative$
 
-Construction Site:
-	Construction Site:
-		Base
-
 Strategic Reserve Hub:
 	Unlocking Technology: Logistics
 	Hub Reserve:
@@ -4508,6 +4504,10 @@ Military Base:
 		Garrison Duty
 		Territorial Defense
 		Logistics Hub
+
+Construction Site:
+	Construction Site:
+		pm_te_construction_market_base
 
 United Nations Headquarters:
 	International Diplomacy:
