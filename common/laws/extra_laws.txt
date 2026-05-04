@@ -3436,7 +3436,6 @@ law_algorithmic_governance = {
 		country_legitimacy_govt_total_votes_add = -20
 		country_legitimacy_govt_leader_clout_add = 10
 		country_legitimacy_ideological_incoherence_mult = -0.3
-		country_voting_power_from_literacy_add = 10
 		state_radicals_and_loyalists_from_sol_change_mult = 1.0
 
 		state_decree_cost_mult = -0.25
