@@ -16,6 +16,7 @@ Suppress an intentional hardcoded value with a same-line comment:
 """
 import re
 from dataclasses import dataclass
+from typing import Callable
 
 
 @dataclass(frozen=True)
@@ -129,6 +130,87 @@ def find_event_id_at_line(text: str, line_no: int) -> str | None:
         if m:
             return m.group(1)
     return None
+
+
+_ADD_MODIFIER_BLOCK_RE = re.compile(
+    r"add_modifier\s*=\s*\{(?P<body>[^{}]*?)\}",
+    re.DOTALL,
+)
+_NAME_RE = re.compile(r"(?<!\w)name\s*=\s*(?P<name>\S+)")
+_MULTIPLIER_RE = re.compile(r"(?<!\w)multiplier\s*=\s*(?P<value>\S+)")
+
+
+def _build_line_index(text: str) -> list[int]:
+    """Return list of byte offsets where each line starts (1-indexed)."""
+    starts = [0]
+    for i, ch in enumerate(text):
+        if ch == "\n":
+            starts.append(i + 1)
+    return starts
+
+
+def _offset_to_line(starts: list[int], offset: int) -> int:
+    line = 0
+    for i, start in enumerate(starts):
+        if start > offset:
+            break
+        line = i + 1
+    return line
+
+
+def scan_named_modifiers(
+    text: str,
+    file_path: str,
+    lookup: Callable[[str], dict | None],
+) -> list[AuditFlag]:
+    """Find `add_modifier = { name = X multiplier = N }` blocks where the
+    static modifier X carries a fast-scaling field and N is a literal.
+
+    Emits one AuditFlag per fast-scaling field in X (a single static modifier
+    can carry multiple fast-scaling fields, all scaled by the same multiplier).
+    """
+    flags: list[AuditFlag] = []
+    lines = text.splitlines()
+    line_starts = _build_line_index(text)
+
+    for block_match in _ADD_MODIFIER_BLOCK_RE.finditer(text):
+        body = block_match.group("body")
+        name_m = _NAME_RE.search(body)
+        mult_m = _MULTIPLIER_RE.search(body)
+        if not name_m or not mult_m:
+            continue
+        name = name_m.group("name").rstrip(",")
+        value = mult_m.group("value").rstrip("}").rstrip(",").rstrip()
+        if not _is_literal_number(value):
+            continue
+        modifier_body = lookup(name)
+        if not modifier_body:
+            continue
+
+        # The line of the multiplier (the actionable target for # REVIEWED).
+        # mult_m.start() is relative to the body text; convert back to the
+        # absolute file offset.
+        mult_offset = block_match.start("body") + mult_m.start()
+        mult_line = _offset_to_line(line_starts, mult_offset)
+        line_text = lines[mult_line - 1] if 0 < mult_line <= len(lines) else ""
+        exemption = parse_reviewed_comment(line_text)
+
+        for field in modifier_body.keys():
+            meta = FAST_SCALING_MODIFIERS.get(field)
+            if not meta:
+                continue
+            flags.append(AuditFlag(
+                file=file_path,
+                line=mult_line,
+                event_id=find_event_id_at_line(text, mult_line),
+                kind="modifier_named",
+                effect=field,
+                value=value,
+                resource=meta.resource,
+                fix_hint=meta.fix_hint,
+                exemption=exemption,
+            ))
+    return flags
 
 
 def scan_inline_modifier_types(text: str, file_path: str) -> list[AuditFlag]:

@@ -14,6 +14,7 @@ from event_magnitude_audit import (
     parse_reviewed_comment,
     scan_direct_effects,
     scan_inline_modifier_types,
+    scan_named_modifiers,
     AuditFlag,
 )
 
@@ -193,6 +194,111 @@ class InlineModifierScannerTests(unittest.TestCase):
             "}\n"
         )
         self.assertEqual(scan_inline_modifier_types(text, file_path="x.txt"), [])
+
+
+def _fake_static_modifier_lookup(name):
+    return {
+        "prestige_loss_X": {"country_prestige_add": "1"},
+        "boring_modifier": {"country_authority_add": "10"},
+        "mult_modifier": {"country_prestige_mult": "-0.05"},
+        "multi_field_modifier": {
+            "country_prestige_add": "1",
+            "country_authority_add": "10",
+        },
+    }.get(name)
+
+
+class NamedModifierScannerTests(unittest.TestCase):
+    def test_flags_prestige_via_named_modifier(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = {\n"
+            "      name = prestige_loss_X\n"
+            "      multiplier = -20\n"
+            "    }\n"
+            "  }\n"
+            "}\n"
+        )
+        flags = scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup)
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].effect, "country_prestige_add")
+        self.assertEqual(flags[0].value, "-20")
+        # Line should point at the `multiplier` line (the actionable value).
+        self.assertEqual(flags[0].line, 5)
+        self.assertEqual(flags[0].kind, "modifier_named")
+        self.assertEqual(flags[0].event_id, "test_events.1")
+
+    def test_skips_mult_modifier(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = { name = mult_modifier multiplier = -0.1 }\n"
+            "  }\n"
+            "}\n"
+        )
+        self.assertEqual(
+            scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup),
+            [],
+        )
+
+    def test_skips_when_multiplier_is_script_value(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = {\n"
+            "      name = prestige_loss_X\n"
+            "      multiplier = sv_prestige_event_small\n"
+            "    }\n"
+            "  }\n"
+            "}\n"
+        )
+        self.assertEqual(
+            scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup),
+            [],
+        )
+
+    def test_skips_unknown_static_modifier(self):
+        # Without a lookup hit we can't know whether the modifier is fast-scaling.
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = { name = unknown_modifier multiplier = -20 }\n"
+            "  }\n"
+            "}\n"
+        )
+        self.assertEqual(
+            scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup),
+            [],
+        )
+
+    def test_skips_named_modifier_without_multiplier(self):
+        # `add_modifier { name = X }` defaults multiplier=1; no literal to scale.
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = { name = prestige_loss_X }\n"
+            "  }\n"
+            "}\n"
+        )
+        self.assertEqual(
+            scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup),
+            [],
+        )
+
+    def test_multi_field_modifier_emits_one_flag_per_fast_field(self):
+        text = (
+            "test_events.1 = {\n"
+            "  immediate = {\n"
+            "    add_modifier = { name = multi_field_modifier multiplier = -20 }\n"
+            "  }\n"
+            "}\n"
+        )
+        flags = scan_named_modifiers(text, file_path="x.txt", lookup=_fake_static_modifier_lookup)
+        # multi_field_modifier has prestige_add (fast) + authority_add (not fast)
+        # — only one flag emitted, for the fast field.
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].effect, "country_prestige_add")
 
 
 if __name__ == "__main__":
