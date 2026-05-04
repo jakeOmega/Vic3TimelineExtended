@@ -1466,9 +1466,10 @@ proxy_conflict_destabilized_modifier = {
 }
 
 # Event 4a bilateral: Rival's propaganda campaign backfires from our counter-campaign
+# Mult-based so the prestige hit stays meaningful at late-game scale (200k+ prestige).
 counter_propaganda_backlash_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_add = -20
+	country_prestige_mult = -0.02
 }
 
 # Event 5a bilateral: Rival suffers from our trade embargo
@@ -1774,15 +1775,16 @@ gp_supports_colonialism_modifier = {
 }
 
 # Event flag modifiers - used as flags for the progress bar monthly_progress
-# to detect recent event effects (positive or negative)
+# to detect recent event effects (positive or negative).
+# Mult-based so the prestige delta scales with current value.
 colonial_stability_positive_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_add = 5
+	country_prestige_mult = 0.005
 }
 
 colonial_stability_negative_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_add = -5
+	country_prestige_mult = -0.005
 }
 
 # Great power colonial policy stance modifiers (applied when GP chooses a stance)

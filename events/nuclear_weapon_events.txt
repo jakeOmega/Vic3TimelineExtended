@@ -814,7 +814,7 @@ nuclear_weapon_events.17 = {
 	option = {
 		name = nuclear_weapon_events.17.a
 		default_option = yes
-		add_modifier = { name = nuclear_event_prestige multiplier = 100 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_medium days = normal_modifier_time is_decaying = yes }
 		add_radicals = {
 			value = very_small_radicals
 		}
@@ -837,7 +837,7 @@ nuclear_weapon_events.17 = {
 	# "History will judge us."
 	option = {
 		name = nuclear_weapon_events.17.b
-		add_modifier = { name = nuclear_event_prestige multiplier = 50 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
@@ -853,7 +853,7 @@ nuclear_weapon_events.17 = {
 		name = nuclear_weapon_events.17.c
 		trigger = { ruler_is_aggressive = yes }
 		highlighted_option = yes
-		add_modifier = { name = nuclear_event_prestige multiplier = 200 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_large days = normal_modifier_time is_decaying = yes }
 		change_infamy = 10
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_armed_forces }
@@ -906,7 +906,7 @@ nuclear_weapon_events.18 = {
 		name = nuclear_weapon_events.18.a
 		trigger = { has_modifier = nuclear_power }
 		default_option = yes
-		add_modifier = { name = nuclear_event_prestige multiplier = 10 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_tiny days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 5
 			modifier = {
@@ -976,7 +976,7 @@ nuclear_weapon_events.18 = {
 				value = -10
 			}
 		}
-		add_modifier = { name = nuclear_event_prestige multiplier = 5 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_tiny days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
@@ -1093,7 +1093,7 @@ nuclear_weapon_events.19 = {
 			change_variable = { name = nuclear_weapon_program_progress subtract = 25 }
 			change_variable = { name = nuclear_weapon_program_progress max = 0 }
 		}
-		add_modifier = { name = nuclear_event_prestige multiplier = 15 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
 			add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes }
@@ -1164,7 +1164,7 @@ nuclear_weapon_events.20 = {
 			change_variable = { name = nuclear_weapon_program_progress max = 0 }
 		}
 		add_modifier = { name = nuclear_civilian_applications days = normal_modifier_time is_decaying = yes }
-		add_modifier = { name = nuclear_event_prestige multiplier = 10 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_gain_tiny days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { ruler_is_cautious = yes } add = 3 }
@@ -1260,7 +1260,7 @@ nuclear_weapon_events.21 = {
 	option = {
 		name = nuclear_weapon_events.21.a
 		default_option = yes
-		add_modifier = { name = nuclear_event_prestige multiplier = -20 days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = prestige_loss_small days = normal_modifier_time is_decaying = yes }
 		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 5
