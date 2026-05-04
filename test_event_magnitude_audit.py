@@ -18,6 +18,7 @@ from event_magnitude_audit import (
     AuditFlag,
     audit,
     AuditResult,
+    render_report,
 )
 
 
@@ -356,6 +357,39 @@ class AuditEntrypointTests(unittest.TestCase):
             result = audit(ms)
             self.assertEqual(result.flags, [])
             self.assertEqual(result.coverage["files_audited"], 0)
+
+
+class ReportRenderTests(unittest.TestCase):
+    def test_basic_render(self):
+        flags = [
+            AuditFlag(
+                file="events/foo.txt", line=10, event_id="foo.1",
+                kind="direct_effect", effect="add_treasury", value="-10000",
+                resource="treasury (instant)",
+                fix_hint="use add_treasury = sv_treasury_event_<tier>",
+            ),
+            AuditFlag(
+                file="events/bar.txt", line=42, event_id="bar.7",
+                kind="modifier_named", effect="country_prestige_add", value="-20",
+                resource="prestige", fix_hint="use prestige_loss_<tier>",
+                exemption={"date": "2026-05-04", "rationale": "tech-gated"},
+            ),
+        ]
+        result = AuditResult(flags=flags, coverage={"files_audited": 2})
+        md = render_report(result)
+        self.assertIn("## Unreviewed Flags", md)
+        self.assertIn("foo.1", md)
+        self.assertIn("treasury (instant)", md)
+        self.assertIn("## Reviewed Exemptions", md)
+        self.assertIn("bar.7", md)
+        self.assertIn("tech-gated", md)
+        self.assertIn("## Coverage", md)
+        self.assertIn("files_audited", md)
+
+    def test_empty_render(self):
+        result = AuditResult(flags=[], coverage={"files_audited": 0})
+        md = render_report(result)
+        self.assertIn("_None._", md)
 
 
 if __name__ == "__main__":
