@@ -83,7 +83,7 @@ buildings:
 - image: gfx/interface/icons/building_icons/construction_camp.dds
   entities:
   - building_construction_sector
-  - fmc_building_construction_site
+  - te_construction_market_site
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/gold_mine.dds
   entities:

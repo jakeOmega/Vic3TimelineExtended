@@ -532,16 +532,16 @@ IMAGES = {
     },
 
     # =========================================================================
-    # FMC UPDATE EVENTS (no localization — military/formation updates)
+    # TE CONSTRUCTION MARKET UPDATE EVENTS (no localization — military/formation updates)
     # =========================================================================
     "military_formation_update": {
         "prompt": "A military command room with officers around a tactical map.",
         "style": "oil painting, dramatic shadows, military interior",
         "events": [
-            "fmc_update_events.1", "fmc_update_events.2",
-            "fmc_update_events.3", "fmc_update_events.4",
-            "fmc_update_events.5", "fmc_update_events.6",
-            "fmc_update_events.7",
+            "te_construction_market_pulse_events.1", "te_construction_market_pulse_events.2",
+            "te_construction_market_pulse_events.3", "te_construction_market_recalc_events.1",
+            "te_construction_market_recalc_events.2", "te_construction_market_building_events.1",
+            "te_construction_market_building_events.2",
         ],
     },
 

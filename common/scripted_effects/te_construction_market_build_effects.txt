@@ -1,7 +1,7 @@
 ﻿
-fmc_replace_building = {
-	every_scope_building = { 
-		limit = { is_building_type = $OLD_TYPE$ } 
+te_construction_market_replace_building = {
+	every_scope_building = {
+		limit = { is_building_type = $OLD_TYPE$ }
 		owner = {
 			set_variable = {
 				name = building_level
@@ -9,7 +9,7 @@ fmc_replace_building = {
 			}
 		}
 		state = {
-			add_specified_building_level = {
+			te_construction_market_add_specified_level = {
 				ADD_LEVEL = var:building_level
 				SPEC_TYPE = $NEW_TYPE$
 			}
@@ -18,7 +18,7 @@ fmc_replace_building = {
 	}
 }
 
-set_specified_building_level = {
+te_construction_market_set_specified_level = {
 
 	if = {
 		limit = {
@@ -32,13 +32,13 @@ set_specified_building_level = {
 		}
 	}
 
-	build_specified_building_level = {
+	te_construction_market_build_specified_level = {
 		SPEC_TYPE = $SPEC_TYPE$
 		SPEC_LEVEL = $SPEC_LEVEL$
 	}
 }
 
-add_specified_building_level = {
+te_construction_market_add_specified_level = {
 	owner = {
 		set_variable = {
 			name = add_level
@@ -49,7 +49,7 @@ add_specified_building_level = {
 				prev = {
 					has_building = $SPEC_TYPE$
 				}
-				
+
 			}
 			change_variable = {
 				name = add_level
@@ -61,14 +61,14 @@ add_specified_building_level = {
 			add = $ADD_LEVEL$
 		}
 	}
-	build_specified_building_level = {
+	te_construction_market_build_specified_level = {
 		SPEC_TYPE = $SPEC_TYPE$
 		SPEC_LEVEL = owner.var:add_level
 	}
-	
+
 }
 
-remove_specified_building_level_amount = {
+te_construction_market_remove_specified_level_amount = {
 	if = {
 		limit = {
 			has_building = $SPEC_TYPE$
@@ -83,7 +83,7 @@ remove_specified_building_level_amount = {
 				subtract = prev.$REMOVE_LEVEL$
 			}
 		}
-		set_specified_building_level = {
+		te_construction_market_set_specified_level = {
 			SPEC_TYPE = $SPEC_TYPE$
 			SPEC_LEVEL = owner.var:add_level
 		}
@@ -92,7 +92,7 @@ remove_specified_building_level_amount = {
 }
 
 
-build_specified_building_level = {
+te_construction_market_build_specified_level = {
 
 	switch = {
 		trigger = $SPEC_LEVEL$

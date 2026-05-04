@@ -1,0 +1,118 @@
+﻿te_construction_market_country_update_sites = {
+	every_state = {
+		if = {
+			limit = {
+				any_scope_building = {
+					is_under_construction = yes
+				}
+			}
+			te_construction_market_set_specified_level = {
+				SPEC_LEVEL = 1
+				SPEC_TYPE = te_construction_market_site
+			}
+		}
+		te_construction_market_state_on_end = yes
+	}
+	if = {
+		limit = {
+			NOT = {
+				any_scope_building = {
+					type = bt:te_construction_market_site
+				}
+			}
+		}
+		capital = {
+			create_building = {
+				building = te_construction_market_site
+				level = 1
+			}
+		}
+	}
+}
+
+
+te_construction_market_country_update_data = {
+	te_construction_market_country_update_private_share = yes
+	te_construction_market_apply_per_site_modifier = yes
+}
+
+
+te_construction_market_country_update_private_share = {
+	remove_modifier = te_construction_market_private_share_modifier
+	add_modifier = {
+		name = te_construction_market_private_share_modifier
+		multiplier = te_construction_market_private_share_target
+	}
+}
+
+
+te_construction_market_apply_per_site_modifier = {
+	set_local_variable = {
+		name = te_construction_market_per_site_local
+		value = te_construction_market_per_site
+	}
+	change_local_variable = {
+		name = te_construction_market_per_site_local
+		subtract = 1
+	}
+
+	every_scope_building = {
+		limit = {
+			type = bt:te_construction_market_site
+		}
+		remove_modifier = te_construction_market_capacity_modifier
+		# save_scope_as = te_construction_market_current_building
+		if = {
+			limit = {
+				occupancy > 1
+			}
+			te_construction_market_reset_site = yes
+
+		}
+		add_modifier = {
+			name = te_construction_market_capacity_modifier
+			multiplier = local_var:te_construction_market_per_site_local
+		}
+	}
+}
+
+
+te_construction_market_reset_site = {
+	state = {
+		remove_building = te_construction_market_site
+		create_building = {
+			building = te_construction_market_site
+			level = 1
+		}
+	}
+}
+
+te_construction_market_update_price_stabilizer = {
+	# if = {
+	# 	limit = {
+	# 		NOT = {
+	# 			has_variable = te_construction_market_price_stabilizer
+	# 		}
+	# 	}
+	set_variable = {
+		name = te_construction_market_price_stabilizer
+		value = te_construction_market_price_stabilizer_next_value
+	}
+	# }
+	# else = {
+
+	# 	if = {
+	# 		limit = { var:te_construction_market_price_stabilizer < te_construction_market_price }
+	# 		change_variable = {
+	# 			name = te_construction_market_price_stabilizer
+	# 			add = 10
+	# 		}
+	# 	}
+	# 	else = {
+	# 		change_variable = {
+	# 			name = te_construction_market_price_stabilizer
+	# 			subtract = 10
+	# 		}
+	# 	}
+	# }
+}

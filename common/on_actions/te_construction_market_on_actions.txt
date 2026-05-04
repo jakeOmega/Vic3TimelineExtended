@@ -1,0 +1,331 @@
+# Construction-market subsystem.
+# Based on the third-party "Free Market Construction" mod. See README.md.
+
+# Construction-market on-action wiring.
+# - The yearly pulse keeps the daily-pulse heartbeat alive (one country a year
+#   re-arms it; the heartbeat itself runs out of pulse_events).
+# - Border / geopolitical hooks fan out a recalc to every affected country so
+#   sector placement can re-converge on the new map.
+# - Building lifecycle hooks add/remove the construction-site building when
+#   work in a state starts or finishes.
+
+# ============================================================================
+# PULSE
+# ============================================================================
+
+on_yearly_pulse_country = {
+	events = {
+		te_construction_market_pulse_events.1
+		te_construction_market_recalc_events.1
+	}
+}
+
+
+# ============================================================================
+# MARKET LIFECYCLE
+# ============================================================================
+
+# Root = From Market
+# scope:market = Market merging into
+# scope:trade_center = Trade Center state of root
+on_merge_markets = {
+	on_actions = {
+		te_construction_market_on_merge_markets
+	}
+}
+
+te_construction_market_on_merge_markets = {
+	effect = {
+		if = {
+			limit = {
+				exists = owner
+			}
+			owner = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:market.owner
+			}
+			scope:market.owner = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
+			}
+		}
+	}
+}
+
+# Root = The newly created market
+on_create_market = {
+	on_actions = {
+		te_construction_market_on_create_market
+	}
+}
+
+te_construction_market_on_create_market = {
+	effect = {
+		owner = {
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+
+# ============================================================================
+# COUNTRY CREATION / RELEASE
+# ============================================================================
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_independent = {
+	on_actions = {
+		te_construction_market_on_released_independent
+	}
+}
+
+te_construction_market_on_released_independent = {
+	effect = {
+		trigger_event = {
+			id = te_construction_market_recalc_events.1
+		}
+		scope:target = {
+			set_variable = { name = former_overlord value = root }
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_own_subject = {
+	on_actions = {
+		te_construction_market_on_released_own_subject
+	}
+}
+
+te_construction_market_on_released_own_subject = {
+	effect = {
+		trigger_event = {
+			id = te_construction_market_recalc_events.1
+		}
+		scope:target = {
+			set_variable = { name = former_overlord value = root }
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		te_construction_market_on_released_overlord_subject
+	}
+}
+
+te_construction_market_on_released_overlord_subject = {
+	effect = {
+		trigger_event = {
+			id = te_construction_market_recalc_events.1
+		}
+		scope:target = {
+			set_variable = { name = former_overlord value = root }
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+# Root = Country
+on_country_formed = {
+	on_actions = {
+		te_construction_market_on_country_formed
+	}
+	events = {
+		te_construction_market_recalc_events.1
+	}
+}
+te_construction_market_on_country_formed = {
+	effect = {
+		set_variable = {
+			name = recently_formed_country
+			days = 7300 # ~20 years
+		}
+	}
+}
+
+
+# ============================================================================
+# WAR / DIPLOMATIC PLAY OUTCOMES
+# ============================================================================
+
+# Root = Country
+on_capitulation = {
+	events = {
+		te_construction_market_recalc_events.1
+	}
+}
+
+on_enemy_capitulated_notification = {
+	events = {
+		te_construction_market_recalc_events.1
+	}
+}
+
+on_ally_capitulated_notification = {
+	events = {
+		te_construction_market_recalc_events.1
+	}
+}
+
+on_diplo_play_back_down = {
+	on_actions = {
+		te_construction_market_on_diplo_play_back_down
+	}
+}
+
+te_construction_market_on_diplo_play_back_down = {
+	effect = {
+		scope:notification_target = {
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+		scope:actor = {
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country
+on_revolution_start = {
+	on_actions = {
+		te_construction_market_on_revolution_start
+	}
+}
+
+te_construction_market_on_revolution_start = {
+	effect = {
+		if = {
+			limit = { exists = scope:target }
+			scope:target = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
+			}
+		}
+		trigger_event = {
+			id = te_construction_market_recalc_events.1
+		}
+	}
+}
+
+
+# Root = Country
+# scope:target = Uprising country
+on_secession_start = {
+	on_actions = {
+		te_construction_market_on_secession_start
+	}
+}
+
+te_construction_market_on_secession_start = {
+	effect = {
+		scope:target = {
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+		trigger_event = {
+			id = te_construction_market_recalc_events.1
+		}
+	}
+}
+
+# Root = Country
+on_wargoal_enforced = {
+	on_actions = {
+		te_construction_market_on_wargoal_enforced
+	}
+}
+
+te_construction_market_on_wargoal_enforced = {
+	effect = {
+		trigger_event = {
+			id = te_construction_market_recalc_events.1
+		}
+		scope:target = {
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+# Root = Diplomatic Play
+# scope:actor = Initiator country
+# scope:target = Target country
+on_war_end = {
+	on_actions = {
+		te_construction_market_on_war_end
+	}
+}
+
+te_construction_market_on_war_end = {
+	effect = {
+		scope:actor = {
+			trigger_event = {
+				id = te_construction_market_recalc_events.1
+			}
+		}
+	}
+}
+
+
+# ============================================================================
+# BUILDING LIFECYCLE
+# ============================================================================
+# This system also co-hooks on_start_expanding_building with PM-retooling
+# cleanup (te_on_building_retooling_cleanup, defined here because it shares
+# the same hook surface).
+
+te_on_building_retooling_cleanup = {
+	effect = {
+		te_remove_pm_retooling_from_zero_level_building = yes
+	}
+}
+
+on_start_expanding_building = {
+	on_actions = {
+		te_on_building_retooling_cleanup
+	}
+	events = {
+		te_construction_market_building_events.1
+	}
+}
+
+on_building_expanded = {
+	events = {
+		te_construction_market_building_events.2
+	}
+}
+
+on_building_built = {
+	events = {
+		te_construction_market_building_events.2
+	}
+}

@@ -893,7 +893,7 @@
  pmg_base_building_space_elevator_construction_site:0 "Space Elevator Construction Site"
  pmg_base_building_space_mine:0 "Base Building Space Mine"
  pmg_base_building_space_program:0 "Space Program"
- pmg_base_fmc_building_construction_site:0 "Construction Site"
+ pmg_base_te_construction_market_site:0 "Construction Site"
  pmg_basf_ludwigshafen_plant:0 "BASF Ludwigshafen Plant"
  pmg_basileiades_piraeus_works:0 "Basileiades Piraeus Works"
  pmg_bengal_coal_raniganj_mine:0 "Bengal Coal Raniganj Mine"

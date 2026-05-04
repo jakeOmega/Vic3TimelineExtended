@@ -1,3 +1,0 @@
-﻿NCountry = {
-	CONSTRUCTION_CAMP_BUILDING = "fmc_building_construction_site"
-}

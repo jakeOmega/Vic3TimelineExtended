@@ -1,11 +1,11 @@
 ﻿
-fmc_bg_construction_site = {
+te_construction_market_bg = {
 	#category = development
-    is_shown_in_outliner = no
+	is_shown_in_outliner = no
 	always_possible = yes
 	#stateregion_max_level = yes
-    min_hiring_rate = 1.0
-    max_hiring_rate = 1.0
+	min_hiring_rate = 1.0
+	max_hiring_rate = 1.0
 	#lens = government
 	is_government_funded = yes
 	economy_of_scale = no
@@ -14,9 +14,9 @@ fmc_bg_construction_site = {
 	infrastructure_usage_per_level = 0
 	fired_pops_become_radical = no
 	should_auto_expand = {
-        always = no
-    }
+		always = no
+	}
 	#urbanization = 5
-	
+
 	#economy_of_scale_ai_factor = 5.0
 }

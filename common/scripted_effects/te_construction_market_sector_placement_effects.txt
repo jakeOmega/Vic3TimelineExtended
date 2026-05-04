@@ -1,14 +1,14 @@
-﻿fmc_state_on_construction_start = {
+﻿te_construction_market_state_on_start = {
 	if = {
 		limit = {
 			NOT = {
 				any_scope_building = {
-					type = bt:fmc_building_construction_site
+					type = bt:te_construction_market_site
 				}
 			}
 		}
 		create_building = {
-			building = fmc_building_construction_site
+			building = te_construction_market_site
 			level = 1
 		}
 	}
@@ -19,7 +19,7 @@
 				capital = {
 					AND = {
 						any_scope_building = {
-							type = bt:fmc_building_construction_site
+							type = bt:te_construction_market_site
 						}
 						NOT = {
 							any_scope_building = {
@@ -30,18 +30,18 @@
 				}
 			}
 			capital = {
-				remove_building = fmc_building_construction_site
+				remove_building = te_construction_market_site
 			}
 		}
 	}
 
 
 	# owner = {
-	# 	fmc_update_construction_effect = yes
+	# 	te_construction_market_apply_per_site_modifier = yes
 	# }
 }
 
-fmc_state_on_construction_end = {
+te_construction_market_state_on_end = {
 	if = {
 		limit = {
 			NOT = {
@@ -50,30 +50,30 @@ fmc_state_on_construction_end = {
 				}
 			}
 			any_scope_building = {
-				type = bt:fmc_building_construction_site
+				type = bt:te_construction_market_site
 			}
 			NOT = {
-				is_capital = yes				
+				is_capital = yes
 			}
 		}
-		remove_building = fmc_building_construction_site
+		remove_building = te_construction_market_site
 	}
 	owner = {
 		if = {
 			limit = {
 				NOT = {
 					any_scope_building = {
-						type = bt:fmc_building_construction_site
+						type = bt:te_construction_market_site
 					}
 				}
 			}
 			capital = {
 				create_building = {
-					building = fmc_building_construction_site
+					building = te_construction_market_site
 					level = 1
 				}
 			}
-	
+
 		}
 	}
 }

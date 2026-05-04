@@ -32,7 +32,7 @@ PM_FILES: list[str] = [
     "unique_pms.txt",
     "strategic_reserve_pms.txt",
     "resettlement_pms.txt",
-    "fmc_construction.txt",
+    "te_construction_market_pms.txt",
 ]
 
 # Flag values returned by classify_pm. Documented for /annotators consumers.
