@@ -1,41 +1,75 @@
 # ============================================================================
 # Diplomatic-play weekly escalation totals
 # ============================================================================
-# One per role; combines the script-only `_add` and `_mult` modifier values
-# into a single per-week escalation contribution. Floored at 0 (up-only per
-# design — these modifiers heat plays, never cool them).
+# One per role; computes the per-week EXTRA escalation this country contributes
+# to plays in that role, on top of vanilla's hard-coded daily rate.
+#
+# Formula: (7·DAILY + _add) × (1 + _mult) − 7·DAILY, floored at 0, integer.
+# DAILY = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY (vanilla = 1).
+# _mult therefore scales BOTH the vanilla weekly base AND the mod's _add
+# contribution, so an aggressive law (+0.25 mult) speeds plays even for a
+# pre-Era-6 country with no _add source. min=0 preserves the up-only intent
+# (peace laws never cool a play below vanilla rate).
+#
+# `floor = yes` because `add_escalation` (the consuming effect) takes a
+# literal integer and we use these values as a `while` loop count in
+# st_dp_country_apply_weekly_escalation; non-integer counts would silently
+# misbehave. `max = 10` is a runaway-stacking safety cap — even with every
+# tech _add and an extreme _mult, no single weekly tick can add more than 10
+# escalation in one day (so worst-case spike-day delta is ~+11 with vanilla).
 #
 # Read by `st_dp_country_apply_weekly_escalation` (common/scripted_effects/
-# dp_escalation_effects.txt), which calls add_escalation = <these values>
-# on each play the country is in, in the appropriate role.
+# dp_escalation_effects.txt), which loops `add_escalation = 1` this many
+# times on each play the country is in, in the appropriate role.
 # ============================================================================
 
 country_aggressor_dp_escalation_weekly_total = {
-	value = 0
+	value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY
+	multiply = 7
 	add = modifier:country_aggressor_diplomatic_play_escalation_weekly_add
 	multiply = {
 		value = 1
 		add = modifier:country_aggressor_diplomatic_play_escalation_weekly_mult
 	}
+	subtract = {
+		value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY
+		multiply = 7
+	}
 	min = 0
+	max = 10
+	floor = yes
 }
 
 country_defender_dp_escalation_weekly_total = {
-	value = 0
+	value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY
+	multiply = 7
 	add = modifier:country_defender_diplomatic_play_escalation_weekly_add
 	multiply = {
 		value = 1
 		add = modifier:country_defender_diplomatic_play_escalation_weekly_mult
 	}
+	subtract = {
+		value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY
+		multiply = 7
+	}
 	min = 0
+	max = 10
+	floor = yes
 }
 
 country_participant_dp_escalation_weekly_total = {
-	value = 0
+	value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY
+	multiply = 7
 	add = modifier:country_participant_diplomatic_play_escalation_weekly_add
 	multiply = {
 		value = 1
 		add = modifier:country_participant_diplomatic_play_escalation_weekly_mult
 	}
+	subtract = {
+		value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY
+		multiply = 7
+	}
 	min = 0
+	max = 10
+	floor = yes
 }

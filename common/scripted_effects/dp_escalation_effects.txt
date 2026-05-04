@@ -9,6 +9,16 @@
 # inline at week 0 from st_dp_escalation_weekly_schedule (extra_on_actions.txt).
 # Three guards short-circuit countries not in any play, so the heavy
 # every_diplomatic_play iteration only runs when relevant.
+#
+# Why a while-loop instead of `add_escalation = <script_value>`: vanilla's
+# only `add_escalation` usage is a literal integer (italian_unification.txt:
+# 613) and the engine doc lists the signature as `add_escalation = integer`,
+# so feeding a script value risks a silent no-op. Looping `add_escalation = 1`
+# N times — where N is the floored script-value total — uses only the literal
+# form vanilla itself uses. `count = scope:X.<sv>` is the script-value-as-loop
+# count pattern (cf. extra_effects.txt's `count = needed_private_levels` /
+# `count = expand_levels`); engine cap is 1000 iterations, well above the
+# 1–10/week range these modifiers produce.
 # ============================================================================
 
 st_dp_country_apply_weekly_escalation = {
@@ -18,7 +28,10 @@ st_dp_country_apply_weekly_escalation = {
 		save_temporary_scope_as = mover
 		every_diplomatic_play = {
 			limit = { initiator_is = scope:mover }
-			add_escalation = scope:mover.country_aggressor_dp_escalation_weekly_total
+			while = {
+				count = scope:mover.country_aggressor_dp_escalation_weekly_total
+				add_escalation = 1
+			}
 		}
 	}
 	# DEFENDER — plays I am the target of
@@ -27,7 +40,10 @@ st_dp_country_apply_weekly_escalation = {
 		save_temporary_scope_as = mover
 		every_diplomatic_play = {
 			limit = { target_is = scope:mover }
-			add_escalation = scope:mover.country_defender_dp_escalation_weekly_total
+			while = {
+				count = scope:mover.country_defender_dp_escalation_weekly_total
+				add_escalation = 1
+			}
 		}
 	}
 	# PARTICIPANT — every play I am a committed member of
@@ -38,7 +54,10 @@ st_dp_country_apply_weekly_escalation = {
 			limit = {
 				any_scope_play_involved = { this = scope:mover }
 			}
-			add_escalation = scope:mover.country_participant_dp_escalation_weekly_total
+			while = {
+				count = scope:mover.country_participant_dp_escalation_weekly_total
+				add_escalation = 1
+			}
 		}
 	}
 }

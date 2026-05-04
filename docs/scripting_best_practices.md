@@ -358,6 +358,7 @@ The `diplomatic_play` scope has a **much smaller surface than `war` or `diplomat
 - **Only one hop on the play scope: `initiator` → country.** There is no `target` event-target. To reach the defender from a play, iterate `every_scope_play_involved` and filter with `target_is = scope:save`. Don't assume symmetric hops by analogy with `war` / `battle` scopes.
 - **Iterators on the play scope:** `every_scope_play_involved` (all committed countries on either side), `every_scope_initiator_ally`, `every_scope_target_ally`. The latter two **exclude the lead country** — use `every_scope_play_involved` if you need everyone.
 - **Escalation has only two scriptable hooks:** trigger `escalation` (comparator on play scope) and effect `add_escalation = <int>` (play scope). **No vanilla modifier exists for escalation rate or decay** — daily escalation is hard-coded in defines (`DIPLOMATIC_PLAY_ESCALATION_DAILY = 1`, war at 100, action pause 5d up to 20d max). To make plays heat or cool faster, you have to drive `add_escalation` from script (e.g. weekly pulse + `every_diplomatic_play`). See `common/scripted_effects/dp_escalation_effects.txt` for the country-driven dispatch pattern.
+- **`add_escalation` does not reliably accept script-value arguments** — engine doc lists the signature as `add_escalation = integer` and the only vanilla usage (`italian_unification.txt:613`) is a literal integer. `add_escalation = scope:X.<script_value>` empirically silently no-ops in this mod even when the script value evaluates to a positive integer. The robust pattern is a `while` loop calling literal `add_escalation = 1`: pre-floor the script value (`floor = yes` on the script value itself) so it's a clean integer, then `while = { count = scope:mover.<script_value>  add_escalation = 1 }`. `count =` accepts script-value references (cf. `extra_effects.txt`'s `count = needed_private_levels`), so the script-value evaluation runs there instead. Engine cap is 1000 iterations — more than enough for any realistic per-week magnitude.
 - **Country-driven dispatch beats play-driven** for cross-country modifier reads: each country runs an apply effect that iterates `every_diplomatic_play` filtered by their own role (`initiator_is = scope:mover`, `target_is = scope:mover`, or `any_scope_play_involved = { this = scope:mover }`). This sidesteps the missing `target` hop entirely.
 
 ### Modifier Stacking Gotcha #2 — Per-Participant Reads on Shared Resources
@@ -472,6 +473,34 @@ Both can store scope references, but they differ in persistence and loc access:
 - In `random = { chance = X modifier = { ... } }` blocks (effects, not MTTH), every `modifier` block must contain a `trigger` sub-block.
 - **Invalid:** `modifier = { add = my_script_value }` → "Malformed token" error.
 - **Valid:** `modifier = { trigger = { always = yes } add = my_script_value }`.
+
+## Silent-Zero Footgun: `_add × (1 + _mult)` Without an `_add` Source
+
+When designing a paired `_add` / `_mult` modifier family meant to combine into a single per-tick contribution, the obvious script-value formula is:
+
+```
+value = 0
+add = modifier:..._add
+multiply = { value = 1  add = modifier:..._mult }
+min = 0
+```
+
+This evaluates to `_add × (1 + _mult)` — and **silently produces 0 if `_add = 0`, regardless of `_mult`**. Pre-tech countries with only law/principle `_mult` modifiers see the modifier in their tooltip and get nothing. The original `dp_escalation_script_values.txt` (commit `e5ba7a2`) shipped this bug; the fix expressed `_mult` as scaling **a vanilla baseline**, then subtracting the baseline back out so only the EXTRA contribution flows into the system:
+
+```
+value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY   # vanilla baseline (per-day)
+multiply = 7                                                  # per-week
+add = modifier:..._add
+multiply = { value = 1  add = modifier:..._mult }             # mult scales baseline + add
+subtract = { value = define:NDiplomacy|DIPLOMATIC_PLAY_ESCALATION_DAILY  multiply = 7 }
+min = 0
+max = 10
+floor = yes
+```
+
+**Rule of thumb:** if you write `_add × (1 + _mult)`, ask whether `_add` can plausibly be 0 in real play. If yes, anchor the multiplication to a non-zero baseline (vanilla rate, fixed constant) and subtract it out at the end. **Reading `define:NNamespace|DEFINE_NAME`** is the canonical way to pull vanilla rates into a script value (cf. vanilla `company_values.txt`'s `value = define:NEconomy|COMPANY_PROSPERITY_WEEKLY_INCREASE_BASE`).
+
+**Cap the result.** Add `max = N` (and `floor = yes` if feeding into an `<int>`-typed effect) so a runaway modifier stack can't apply hundreds per tick.
 
 ## Named Script Values in Weight/Random Modifier `add =`
 
