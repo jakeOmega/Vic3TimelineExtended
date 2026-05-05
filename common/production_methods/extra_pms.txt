@@ -15382,13 +15382,6 @@ INJECT:pm_principle_freedom_of_movement_3 = {
 	}
 }
 
-INJECT:pm_trade_center_principle_external_trade_2 = {
-	unlocking_principles = {
-		principle_external_trade_4
-		principle_external_trade_5
-	}
-}
-
 REPLACE:pm_financial_district_privately_owned = {
 	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
 	replacement_if_valid = pm_financial_district_principle_divine_economics_2
@@ -19625,6 +19618,38 @@ pm_naval_fortification_integrated_defense = {
 			building_employment_officers_add = 200
 			building_employment_engineers_add = 100
 			building_employment_machinists_add = 100
+		}
+	}
+}
+
+# REPLACE: vanilla pm_trade_center_principle_external_trade_2.
+# Vanilla granted country_influence_add = 0.5 workforce-scaled per Trade Center, which compounded
+# unbounded across many populous late-game Trade Centers and broke influence as a finite diplomatic
+# budget. The flat principle-level country_influence_add now lives on the principles themselves in
+# common/power_bloc_principles/modified.txt + extra_power_bloc_principles.txt. Building/state
+# modifiers below match vanilla; unlocking_principles spans all 4 mod tiers (vanilla 2/3 + mod 4/5)
+# so the prior INJECT that wired tiers 4/5 in is rolled into this REPLACE.
+REPLACE:pm_trade_center_principle_external_trade_2 = {
+	texture = "gfx/interface/icons/production_method_icons/trade_center.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_principles = {
+		principle_external_trade_2
+		principle_external_trade_3
+		principle_external_trade_4
+		principle_external_trade_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 200
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_weekly_trades_add = 1
+			state_trade_capacity_add = 10
 		}
 	}
 }

@@ -15,13 +15,6 @@ Last cleanup pass: 2026-04-25 (H1 covert warfare scope pattern; M1 SR var cleanu
 
 ## MEDIUM
 
-### M_NEW. Trading-principle influence inflation
-**Files:** vanilla `common/power_bloc_principles/principle_trade_centers` (and successors)
-
-**Problem (2026-05-04):** Late-game trading powers in a power-bloc with the trading principle accumulate effectively unbounded influence per Trade Center, breaking influence as a finite diplomatic-budget resource. A late-game trading hegemon can sign every available treaty article without budget pressure, which collapses the diplomatic strategy layer. Reproducible: build a trading-principle bloc as a high-rank country, take many Trade Centers, observe weekly influence gain.
-
-**Possible fixes:** cap the per-TC bonus, scale it down with country rank, or move the principle's influence bonus to a one-time threshold rather than per-Trade-Center. Needs balance research first.
-
 ### M_NEW2. Deferred event-tooling categories (#2-#4)
 **Tooling:** `event_magnitude_audit.py` covers category #1 of a four-part event-quality plan (work landed 2026-05-04, see `docs/event_magnitude_report.md`). Three categories still TODO:
 

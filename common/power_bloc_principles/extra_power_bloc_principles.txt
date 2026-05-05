@@ -543,6 +543,8 @@ principle_external_trade_4 = {
 		country_no_advantage_loss_from_lack_of_interest_bool = yes
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+		country_influence_add = 100
+		goods_input_merchant_marine_mult = -0.25
 	}
 
 	institution = institution_ministry_of_commerce
@@ -570,6 +572,8 @@ principle_external_trade_5 = {
 		country_max_companies_add = 1
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+		country_influence_add = 150
+		goods_input_merchant_marine_mult = -0.30
 	}
 
 	institution = institution_ministry_of_commerce

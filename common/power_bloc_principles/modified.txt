@@ -24,8 +24,29 @@ REPLACE:principle_food_standardization_3 = {
 		building_food_industry_throughput_add = 0.2
 		state_standard_of_living_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+# External Trade tiers 2/3 — INJECT a flat principle-level country_influence_add and a
+# merchant_marine input discount, replacing the role of the vanilla per-Trade-Center
+# country_influence_add (stripped in common/production_methods/extra_pms.txt's REPLACE: of
+# pm_trade_center_principle_external_trade_2). The vanilla per-TC bonus scaled unbounded with TC
+# count and broke late-game influence as a finite diplomatic budget; flat values bound it.
+# Mod-added tiers 4/5 carry the same fields directly in extra_power_bloc_principles.txt so
+# upgrading past tier 3 doesn't drop the bonus.
+INJECT:principle_external_trade_2 = {
+	member_modifier = {
+		country_influence_add = 50
+		goods_input_merchant_marine_mult = -0.10
+	}
+}
+
+INJECT:principle_external_trade_3 = {
+	member_modifier = {
+		country_influence_add = 100
+		goods_input_merchant_marine_mult = -0.25
 	}
 }
