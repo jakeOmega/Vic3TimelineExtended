@@ -151,6 +151,8 @@ Common categories to triage:
 
 Vanilla-file errors (e.g. `headlines_on_actions.txt`, `command_values.txt`) are not the mod's problem — record them in `docs/vanilla_known_bugs.md` and skip.
 
+**Third-party-mod errors slip past `mod_only=true`.** The mod-only filter accepts any entry whose message references a `common/.../*.txt` path, regardless of which mod loaded that file — so log spam from workshop mods loaded alongside this one (Statistics, etc.) looks like our own errors. The `?include_external=` filter on `/logs/<family>` (default `false` for error/debug) drops entries whose only file references are in `EXTERNAL_MOD_SOURCE_FILES` in `game_log_reader.py`. **When a new third-party mod starts emitting noise, extend that set** — and include all paired files, not just the apparent root cause: `jomini_script_system` errors emit one entry referencing both the script-effect file and the on-action call-site, so dropping the entry requires both basenames in the set. Set `?include_external=true` to see what's being filtered.
+
 ### System-scope cheat sheet
 Where a given modifier or trigger can be used:
 - **`mobilization_options/*`** `unit_modifier`: armies only. Don't use `military_formation_fleet_*` or `ship_*` modifiers here.
