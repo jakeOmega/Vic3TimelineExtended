@@ -20,9 +20,27 @@ from __future__ import annotations
 
 import fnmatch
 import os
+import pathlib
 import re
 from collections import defaultdict, OrderedDict
 from datetime import datetime, timezone
+
+
+# Source files belonging to other mods that flood the runtime logs. An entry
+# whose only mod-file references are in this set is treated as third-party and
+# dropped from error/debug log views by default. Override per-request with
+# `?include_external=true` on /logs/<family>.
+#
+# Match is by basename (the last path segment). Add new entries when a third-
+# party mod produces recognizable spam. Engine entries usually pair the script
+# location (e.g. `statistics_effects.txt`) with the call-site (`sta_on_actions
+# .txt`); both have to be in the set so the entry's full file list is a subset
+# of the excluded names — otherwise the entry survives the filter.
+EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
+    # Statistics mod — `change_local_variable [Division/modulo by zero]` spam.
+    "statistics_effects.txt",
+    "sta_on_actions.txt",
+})
 
 
 # ---------------------------------------------------------------------------
@@ -220,9 +238,13 @@ def parse_log(path: str) -> list[LogEntry]:
                         entries.append(current)
                     current = LogEntry(m.group("time"), m.group("source"), m.group("message"))
                 elif current is not None:
-                    # Continuation of the previous entry
+                    # Continuation of the previous entry. Re-extract `files`
+                    # so paths that only appear on continuation lines (e.g.
+                    # `Script location: common/scripted_effects/foo.txt:NNN`
+                    # in jomini_script_system errors) are visible to filters.
                     if line.strip():
                         current.message = current.message + "\n" + line
+                        current.files = sorted(set(_MOD_PATH_RE.findall(current.message)))
                 else:
                     # Header / non-prefixed lines (e.g. game.log perf headers)
                     # are kept as their own entries with no time/source.
@@ -250,6 +272,24 @@ def _classify(source: str, message: str) -> str:
 # ---------------------------------------------------------------------------
 def filter_mod_only(entries: list[LogEntry]) -> list[LogEntry]:
     return [e for e in entries if e.files]
+
+
+def filter_external_mods(entries: list[LogEntry]) -> list[LogEntry]:
+    """Drop entries whose only file references are known third-party-mod sources.
+
+    An entry that *only* references files in EXTERNAL_MOD_SOURCE_FILES is dropped.
+    An entry that mixes a third-party file with one of our own (rare cross-references)
+    is kept. Empty-`files` entries are unaffected — `filter_mod_only` already governs
+    those.
+    """
+    excluded = EXTERNAL_MOD_SOURCE_FILES
+    out = []
+    for e in entries:
+        names = {pathlib.Path(p).name for p in e.files}
+        if names and names.issubset(excluded):
+            continue
+        out.append(e)
+    return out
 
 
 def filter_entries(
@@ -419,7 +459,7 @@ def render_error_log_digest(logs_dir: str, mod_path: str) -> str:
         return "# Error Log Digest\n\nNo current `error.log` found.\n"
 
     current_entries = parse_log(current.path)
-    current_mod = filter_mod_only(current_entries)
+    current_mod = filter_external_mods(filter_mod_only(current_entries))
     summary = summarize(current_mod)
 
     out: list[str] = []
@@ -454,7 +494,7 @@ def render_error_log_digest(logs_dir: str, mod_path: str) -> str:
         out.append("")
     if prev is not None:
         prev_entries = parse_log(prev.path)
-        prev_mod = filter_mod_only(prev_entries)
+        prev_mod = filter_external_mods(filter_mod_only(prev_entries))
         diff = diff_against_backup(current_mod, prev_mod)
         out.append(f"## Diff vs `{prev.label}`")
         out.append("")

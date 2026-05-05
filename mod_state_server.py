@@ -3062,7 +3062,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         GET /logs/<family>?dedupe=&dedupe_key=&limit=&offset=&raw=&mod_only=
         """
         from game_log_reader import (
-            list_logs, parse_log, filter_mod_only, filter_entries,
+            list_logs, parse_log, filter_mod_only, filter_external_mods, filter_entries,
             dedupe, summarize, diff_against_backup, cluster_sessions,
         )
 
@@ -3105,11 +3105,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if against_match is None:
                 return {"error": f"No {family}.{against}.log to diff against"}
             mod_only = (params.get("mod_only") or ["true"])[0].lower() == "true"
+            default_external = "false" if family in ("error", "debug") else "true"
+            include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
             current_entries = parse_log(match.path)
             against_entries = parse_log(against_match.path)
             if mod_only:
                 current_entries = filter_mod_only(current_entries)
                 against_entries = filter_mod_only(against_entries)
+            if not include_external:
+                current_entries = filter_external_mods(current_entries)
+                against_entries = filter_external_mods(against_entries)
             return {
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
@@ -3123,6 +3128,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         mod_only = (params.get("mod_only") or [default_mod_only])[0].lower() == "true"
         if mod_only:
             entries = filter_mod_only(entries)
+        # include_external default: drop known third-party-mod spam (Statistics, ...)
+        # from error/debug, keep it for everything else.
+        default_external = "false" if family in ("error", "debug") else "true"
+        include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
+        if not include_external:
+            entries = filter_external_mods(entries)
         entries = filter_entries(
             entries,
             q=(params.get("q") or [None])[0],
@@ -5049,6 +5060,7 @@ POST_LOAD_GENERATORS = [
     ("gen_law_consistency",           "gen_law_consistency"),
     ("organize_loc",                  "organize_loc"),
     ("event_magnitude_audit",         "event_magnitude_audit"),
+    ("kill_character_audit",          "kill_character_audit"),
     ("gen_event_inventory",           "gen_event_inventory"),
 ]
 

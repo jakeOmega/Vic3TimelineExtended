@@ -22,6 +22,7 @@ Reference for all Python utility scripts and the background data server.
 | `gen_law_consistency` | `common/scripted_effects/extra_law_consistency_generated.txt` |
 | `organize_loc` | `localization/english/te_*_l_english.yml` (~26 category files) |
 | `event_magnitude_audit` | `docs/event_magnitude_report.md` |
+| `kill_character_audit` | `docs/kill_character_audit.md` |
 | `gen_event_inventory` | `docs/event_image_inventory.md` |
 
 **Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).
