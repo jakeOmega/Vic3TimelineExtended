@@ -2023,6 +2023,20 @@ To give a mod ship its own slot mods:
 
 **Repo example:** `common/ship_modifications/extra_ship_modifications.txt` — 108 mods across 9 modern ships, with construction goods scaled 2×–4× over vanilla parent values.
 
+## `ship_visibility_add` Doesn't Clamp ≥ 0 — Per-Modification Negatives Are a Mod-Only Pattern
+
+Vic3 reads `ship_visibility` straight into the detection-vs-visibility ratio used by fleet spotting (`common/script_values/command_values.txt`) and AI mission scoring (`common/defines/00_ai.txt`). The engine does **not** clamp it to ≥ 0. A negative final visibility silently inverts the ratio, so a "stealthy" sub becomes more visible than a capital and the AI's spot/raid scoring goes upside-down. `/validate/engine-coverage` does NOT catch this — every modifier name is registered, the bug is in the *value*.
+
+Vanilla never gives a `ship_visibility_add` a negative value. All vanilla stealth comes through `ship_visibility_mult` on missions (`piracy = -0.5`, `raid_supply = -0.25`), traits (`convoy_raider_*` = -0.1, mutually exclusive via `replace = { ... }`), and tech. Vanilla's lowest base is `5` (submarine / frigate / torpedo boat).
+
+The mod's per-modification stealth tiers (e.g. `ship_mod_*_armor_high`, `ship_mod_*_propulsion_high`) use **negative `ship_visibility_add`**, which is a mod-only deviation. That's fine on its own, but the invariant to maintain is:
+
+> `base_ship_visibility_add + sum(worst-case modification adds) > 0`
+
+Otherwise the multiplicative stack on top makes the negative value *more* extreme in detection math, not less. The bug we fixed: three subs at base `1` with two `-2` mod tiers each → `1 - 2 - 2 = -3`. Fix was raising base + shrinking mod magnitudes so the worst case bottoms at `+1`.
+
+**Audit when adding a stealth modification:** for every ship that can equip the mod, check `base + (sum of largest negative adds across its slots) ≥ 1`. Don't size the floor at `0` exactly — vanilla mult stacks (~ -0.8 worst case for submarines on piracy) will still pull down from there.
+
 ## Scripted Button Gating: `visible` Hides, `possible` Greys Out
 
 `scripted_button` has two gating fields with very different UX behavior:

@@ -5049,6 +5049,7 @@ POST_LOAD_GENERATORS = [
     ("gen_law_consistency",           "gen_law_consistency"),
     ("organize_loc",                  "organize_loc"),
     ("event_magnitude_audit",         "event_magnitude_audit"),
+    ("gen_event_inventory",           "gen_event_inventory"),
 ]
 
 

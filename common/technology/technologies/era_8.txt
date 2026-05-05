@@ -444,7 +444,7 @@ barcodes_and_scanners = {
 }
 
 precision_guided_munitions = {
-	# Arsenal Ships unit
+	# Marine Assault Ship (Cold-War-2 LHA), PGM-guided ship utilities, carrier obsolete chain
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military

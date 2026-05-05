@@ -8,7 +8,7 @@ Reference for all Python utility scripts and the background data server.
 
 ## Auto-run on server reload
 
-`mod_state_server.py` runs six idempotent transformers after every full ModState load (server startup and `POST /reload`). Each must expose `regenerate(mod_state=None)` and finish in well under a second; failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. The `?engine_only=true` reload path bypasses `_load_mod_state` and so skips these.
+`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical roster is `POST_LOAD_GENERATORS` in `mod_state_server.py`; each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. The `?engine_only=true` reload path bypasses `_load_mod_state` and so skips these.
 
 | Module | Output |
 |---|---|
@@ -17,13 +17,28 @@ Reference for all Python utility scripts and the background data server.
 | `ig_feminism` | `common/interest_groups/00_*.txt` |
 | `pm_costs` | cost-comment headers in `common/production_methods/extra_pms.txt` & `unique_pms.txt`; `docs/commented_vanilla_pms.txt`; `docs/commented_vanilla_military_units.txt` |
 | `resources` | `map_data/state_regions/*.txt` |
-| `organize_loc` | `localization/english/te_*_l_english.yml` (24 category files) |
+| `gen_pb_principle_unlock_descs` | `*_pb_principles_bool_desc` keys in `localization/english/te_power_bloc_unlocks_l_english.yml` |
+| `gen_un_button_descs` | `localization/english/te_un_button_effects_l_english.yml` |
+| `gen_law_consistency` | `common/scripted_effects/extra_law_consistency_generated.txt` |
+| `organize_loc` | `localization/english/te_*_l_english.yml` (~26 category files) |
+| `event_magnitude_audit` | `docs/event_magnitude_report.md` |
+| `gen_event_inventory` | `docs/event_image_inventory.md` |
 
 **Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).
 
 **Watcher safety:** The deploy watcher (`scripts/watch_deploy_on_edit.sh`) only rsyncs to the Paradox mod folder; it does **not** call `/reload`. So a generator writing into `common/` or `map_data/` triggers exactly one extra rsync after the reload completes, never an infinite loop. **Do not wire `/reload` into the watcher.**
 
-The five scripts retain their standalone CLI entrypoints (with `--dry-run` flags where applicable); auto-run uses a quiet code path that suppresses the verbose progress output.
+Every module retains its standalone CLI entrypoint (with `--dry-run` flags where applicable); auto-run uses a quiet code path that suppresses the verbose progress output.
+
+### Adding a new post-load generator
+
+Three rules — break any of them and the integration fails silently or deadlocks at startup:
+
+1. **Module lives at the repo root.** `POST_LOAD_GENERATORS` calls `importlib.import_module(<bare_name>)`, which only resolves modules on `sys.path`. Generators in `scripts/generators/` don't qualify. If you have one there and want it auto-run, move it (`git mv`) to the repo root.
+2. **Expose `def regenerate(mod_state=None)`.** The post-load chain passes the live `ModState` instance. Read entity data via `mod_state.get_data("Events")` / `mod_state.localize(...)` / `mod_state.mod_parsers[...]` — never via HTTP loopback to `localhost:8950`. The server isn't accepting requests yet during startup, so a `urlopen('http://localhost:8950/...')` call inside post-load will block until timeout. (`gen_event_inventory.py` originally hit the HTTP endpoint and could not have been auto-run as-shipped — refactoring it to take `mod_state` was the unblocker.)
+3. **Standalone fallback uses `mod_state_script` for the path dicts.** When `mod_state is None`, instantiate `ModState(base_game_paths, mod_paths)` — those dicts are defined in `mod_state_script.py` and `mod_state_server.py`, **not** in `path_constants.py` (which only has `mod_path` / `base_game_path` scalars). Importing from `mod_state_script` keeps the standalone path cycle-free; importing from `mod_state_server` would re-enter the server module.
+
+After adding the module + appending to `POST_LOAD_GENERATORS`, validate without disrupting a running server: run `.venv/bin/python <your_module>.py` (the standalone path) and confirm the output file is rewritten. The integration test (`[post-load] <name> ok` line) only fires on a fresh server start — pick that up on the next natural restart rather than killing the running PID for a check.
 
 ## Core Infrastructure
 
@@ -258,6 +273,20 @@ Invoke-RestMethod http://localhost:8950/status
 | `/on-actions` | GET | All on-action IDs (mod-only) |
 | `/on-actions/<id>` | GET | On-action raw data |
 | `/reload` | POST | Re-parse all files from disk (also regenerates docs) |
+
+#### `/raw/<EntityType>[/<id>]` Response Shape
+
+The path takes a **display type name** (URL-encoded with `%20`, e.g. `/raw/Ship%20Types/ship_type_nuclear_submarine`, `/raw/Ship%20Modifications/ship_mod_*`) — not the Python class name. `/entity-types` lists the valid values; `/raw/<unknown>` returns `{"error": "Not found: '<X>'"}`.
+
+The body wraps **every parsed node** as `[<operator>, <value>]` (operator is usually `=`, occasionally `>` / `<` / `?=` etc. for trigger comparisons). So a single-entity fetch is a list, not a dict, and every field one level down is also a wrapped list. To read a leaf field like `modifier.ship_visibility_add` from `/raw/Ship%20Types/<id>`:
+
+```python
+import requests
+d = requests.get("http://localhost:8950/raw/Ship%20Types/ship_type_nuclear_submarine").json()
+val = d[1]['modifier'][1]['ship_visibility_add'][1]   # → '3'
+```
+
+Note `d[1]` (skip the leading operator), then dict access, then `[1]` again at each level. Values come back as **strings**, not numbers — cast with `float()` / `int()` if doing math. For surveys across many entities, prefer the structured endpoints (`/laws`, `/production-methods`, etc.) or import `mod_state` directly — `/raw/` is best when you need every field including triggers and AI-weight blocks that the structured endpoints flatten.
 
 #### Analytical Endpoints
 

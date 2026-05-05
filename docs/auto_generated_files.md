@@ -10,7 +10,7 @@ git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localizatio
 
 ## Mod scripting & data
 
-The five scripts in this section also auto-run inside `mod_state_server.py` after every full `/reload` (see `_run_post_load_generators`). Manual invocation remains useful for `--dry-run` or when iterating on the script itself; set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable the auto-run.
+The scripts in this section auto-run inside `mod_state_server.py` after every full `/reload` (see `POST_LOAD_GENERATORS` and `_run_post_load_generators`). Manual invocation remains useful for `--dry-run` or when iterating on the script itself; set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable the auto-run.
 
 | File / glob | Owner script | Input | Notes |
 |---|---|---|---|
@@ -38,6 +38,8 @@ The five scripts in this section also auto-run inside `mod_state_server.py` afte
 | `docs/triggers_summary.txt`, `docs/effects_summary.txt`, `docs/modifiers_summary.txt`, `docs/event_targets_summary.txt`, `docs/on_actions_summary.txt`, `docs/custom_localization_summary.txt`, `docs/triggers_parsed.txt`, `docs/country_triggers.txt`, `docs/modifier_patterns.md` | `engine_docs_render.py` | manual run / server start |
 | `docs/engine_coverage_report.md` | `mod_state_server.py /validate/engine-coverage` | server start + reload |
 | `docs/error_log_digest.md` | `game_log_reader.py` | manual run |
+| `docs/event_magnitude_report.md` | `event_magnitude_audit.py` | server start + `POST /reload` (post-load chain) |
+| `docs/event_image_inventory.md` | `gen_event_inventory.py` | server start + `POST /reload` (post-load chain). Inventory of all mod events used to drive custom event-image generation. |
 
 ## "One-shot generator" outputs (committed; may be hand-edited afterwards)
 
@@ -51,7 +53,6 @@ These are written by scripts that the team runs occasionally to *bootstrap* cont
 | `common/company_types/extra_companies_vanilla_updates.txt` | `scripts/generators/gen_vanilla_company_injects.py` AND `scripts/generators/gen_vanilla_company_buildings.py` (both write here) | Coordinate runs to avoid one overwriting the other. |
 | `localization/english/te_buildings_l_english.yml` | `scripts/generators/gen_vanilla_company_buildings.py` | Appended to by the company generator before being re-categorized by organize_loc.py — see note in the post-load table above. |
 | `localization/english/extra_law_events_l_english.yml`, `ministry_law_events_l_english.yml` | `scripts/generators/gen_loc_files.py` | Bootstrap dumps of event localization. After bootstrap these are hand-edited freely; do not re-run without merging hand changes first. |
-| `docs/event_image_inventory.md` | `scripts/generators/gen_event_inventory.py` | Inventory of all mod events used to drive custom event-image generation. Manual run; not auto-rebuilt by mod_state_server. |
 | `gfx/interface/icons/character_trait_icons/aptitude_*` (DDS) | `scripts/image_pipeline/gen_aptitude_icons.py` | |
 | `gfx/interface/icons/production_method_icons/*` (DDS) | `scripts/image_pipeline/gen_pm_icons.py` | |
 | `gfx/interface/icons/law_icons/*` (DDS) | `scripts/image_pipeline/gen_law_icons.py` | |

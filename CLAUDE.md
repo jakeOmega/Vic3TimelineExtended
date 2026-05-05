@@ -55,7 +55,7 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder. Se
   - `python scripts/generators/gen_event.py batch spec.json [--dry-run]`
   - `python scripts/generators/gen_event.py scaffold --namespace ... --title ... --desc ... --options ...`
 
-The nine scripts that regenerate mod content from configs + vanilla data — `pop_needs_curves.py`, `apply_ideologies.py`, `ig_feminism.py`, `pm_costs.py`, `resources.py`, `gen_pb_principle_unlock_descs.py`, `gen_un_button_descs.py`, `gen_law_consistency.py`, `organize_loc.py` — also auto-run inside `mod_state_server.py` after every full `/reload` (the server logs `[post-load] <name> ok (Xs)`). The standalone CLIs above remain available for manual / dry-run use. Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable the auto-run while iterating on one of those scripts. The auto-run does **not** fire on `/reload?engine_only=true`.
+The scripts that regenerate mod content from configs + vanilla data — `pop_needs_curves.py`, `apply_ideologies.py`, `ig_feminism.py`, `pm_costs.py`, `resources.py`, `gen_pb_principle_unlock_descs.py`, `gen_un_button_descs.py`, `gen_law_consistency.py`, `organize_loc.py`, `event_magnitude_audit.py`, `gen_event_inventory.py` — also auto-run inside `mod_state_server.py` after every full `/reload` (the server logs `[post-load] <name> ok (Xs)`). The current canonical list lives in `POST_LOAD_GENERATORS` in `mod_state_server.py`. Standalone CLIs remain available for manual / dry-run use. Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable the auto-run while iterating on one of those scripts. The auto-run does **not** fire on `/reload?engine_only=true`.
 
 ### Dependencies
 `.venv/bin/pip install -r requirements.txt`. Core (`requests`, `pyyaml`, `regex`, `numpy`) is required for `mod_state_server.py` plus its post-load generators. The image-generation pipeline (`torch`/`diffusers`/etc.) stays commented out by default. Always run server-touching commands through `.venv/bin/python` so the post-load generators can resolve their deps; `python3` (system) is acceptable for one-off CLI scripts but not for the server.
@@ -195,7 +195,7 @@ Keep additions short — one paragraph or a bullet, not a treatise. The bar is: 
 - Brace-based Paradox files use **tab** indentation. After large edits run `python scripts/format_paradox_tabs.py <files>` (or `--check` in CI-style flows).
 - After editing mod files, `POST /reload` to refresh the server's view (the auto-deploy watcher will already have synced files into the Paradox mod folder).
 - Localization keys: prefer adding to existing `*_l_english.yml` files and run `python organize_loc.py` to sort and detect unused keys.
-- Don't hand-edit auto-generated files. **Always edit the generator's input and re-run the generator.** The eight idempotent transformers below also auto-run on every mod state server reload (see `_run_post_load_generators` in `mod_state_server.py`); manual invocation is still useful for `--dry-run`. Authoritative ownership map (also in `docs/auto_generated_files.md`):
+- Don't hand-edit auto-generated files. **Always edit the generator's input and re-run the generator.** The idempotent transformers below also auto-run on every mod state server reload (see `POST_LOAD_GENERATORS` and `_run_post_load_generators` in `mod_state_server.py`); manual invocation is still useful for `--dry-run`. Authoritative ownership map (also in `docs/auto_generated_files.md`):
   - `common/ideologies/modified.txt` — owned by `apply_ideologies.py`; input is `ideology_modifications.py` plus vanilla ideology files. Re-run after vanilla updates to pick up new vanilla content (e.g. patches that add new laws or change attitudes).
   - `common/interest_groups/00_*.txt` (8 files) — owned by `ig_feminism.py`.
   - `common/buy_packages/00_buy_packages.txt` — owned by `pop_needs_curves.py`.
@@ -209,6 +209,8 @@ Keep additions short — one paragraph or a bullet, not a treatise. The bar is: 
   - `docs/vic3_*_reference.md`, `docs/triggers_summary.txt`, `docs/effects_summary.txt`, etc. — owned by `engine_docs_render.py`.
   - `docs/engine_coverage_report.md` — owned by `mod_state_server.py /validate/engine-coverage`.
   - `docs/error_log_digest.md` — owned by `game_log_reader.py`.
+  - `docs/event_magnitude_report.md` — owned by `event_magnitude_audit.py`; auto-rebuilt by the post-load chain.
+  - `docs/event_image_inventory.md` — owned by `gen_event_inventory.py`; auto-rebuilt by the post-load chain. Inventory of every mod event's title/description/flavor/image, used by the custom event-image pipeline.
   - Files produced by `gen_*.py` scripts may or may not be auto-managed. If a file's first 5 lines contain `# AUTO-GENERATED` or `do not edit manually`, treat it as owned. Otherwise, it's a one-shot generator output that's been committed; check the script to decide.
   - Quick check: `git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localization/`.
 - Use `python3` on this system (no `python` alias). The README/CLAUDE.md `python <script>.py` invocations all work as `python3 <script>.py`.

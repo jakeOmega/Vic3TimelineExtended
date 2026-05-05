@@ -218,7 +218,7 @@ ship_mod_nuclear_submarine_armor_high = {
 	modifier = {
 		ship_armor_add = 35
 		ship_hit_points_max_add = 1250
-		ship_visibility_add = -2
+		ship_visibility_add = -1
 	}
 	construction_goods = { goods_input_steel_add = 40 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
@@ -301,7 +301,7 @@ ship_mod_nuclear_submarine_propulsion_high = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
 	modifier = {
 		ship_movement_speed_add = 8
-		ship_visibility_add = -2
+		ship_visibility_add = -1
 	}
 	construction_goods = {
 		goods_input_engines_add = 62
