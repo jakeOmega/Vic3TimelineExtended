@@ -48,7 +48,7 @@ dp_leadership_african_union = {
 	on_war_end = {}
 }
 
-dp_unify_india = {
+REPLACE:dp_unify_india = {
 	war_goal = unification
 
 	requires_interest_marker = no
@@ -93,7 +93,7 @@ dp_leadership_india = {
 	on_war_end = {}
 }
 
-dp_unify_indonesia = {
+REPLACE:dp_unify_indonesia = {
 	war_goal = unification
 
 	requires_interest_marker = no
@@ -276,7 +276,7 @@ dp_leadership_united_earth = {
 	on_war_end = {}
 }
 
-dp_unify_china = {
+REPLACE:dp_unify_china = {
 	war_goal = unification
 
 	requires_interest_marker = no

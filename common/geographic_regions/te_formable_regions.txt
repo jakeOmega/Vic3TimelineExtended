@@ -1,24 +1,32 @@
 ﻿# Geographic regions used by the new formable countries in
 # common/country_formation/te_formable_countries.txt.
 #
-# AFU uses vanilla geographic_region_africa (whole continent).
-# EUN uses vanilla geographic_region_europe.
-# BHT uses vanilla geographic_region_india.
-# IDN uses an explicit state list — no region needed.
-# EAF uses an explicit state list in country_formation — no region needed.
-# UNE uses geographic_region_united_earth (every land strategic region).
-
-geographic_region_united_north_america = {
-	short_key = "united_north_america"
-
-	strategic_regions = {
-		sr:region_canada
-		sr:region_atlantic_coast
-		sr:region_pacific_coast
-		sr:region_great_plains
-		sr:region_central_america
-	}
-}
+# Vic3 quirk: a formable's `geographic_region = X` field only enumerates
+# states from X's `state_regions = { ... }` block. `strategic_regions = { ... }`
+# is silently ignored in that code path (it works fine for
+# `is_in_geographic_region = X` triggers — different code path). So vanilla
+# `geographic_region_europe` / `geographic_region_africa` (strategic_regions
+# form) cannot drive a formable's required-states list, even though they're
+# semantically what we want. We define explicit-state-list mirrors instead:
+#
+# - geographic_region_united_europe       (mirrors vanilla geographic_region_europe)
+# - geographic_region_united_africa       (mirrors vanilla geographic_region_africa)
+# - geographic_region_united_north_america
+# - geographic_region_united_earth        (every land strategic region)
+#
+# Those four are auto-generated into te_formable_regions_generated.txt by
+# scripts/generators/gen_formable_regions.py — re-run after any vanilla
+# strategic-region rebalance.
+#
+# Per-formable region pointers:
+#   AFU -> geographic_region_united_africa (mod, generated)
+#   EUN -> geographic_region_united_europe (mod, generated)
+#   UNA -> geographic_region_united_north_america (mod, generated)
+#   UNE -> geographic_region_united_earth (mod, generated)
+#   INM -> geographic_region_intermarium (hand-maintained, below)
+#   BHT -> vanilla geographic_region_india (state_regions form, works as-is)
+#   BHA -> use_culture_states (no region needed)
+#   IDN/NUS/EAF -> explicit state lists in country_formation (no region needed)
 
 geographic_region_intermarium = {
 	short_key = "intermarium"
@@ -69,57 +77,5 @@ geographic_region_intermarium = {
 		STATE_SLOVENIA
 		STATE_CROATIA
 		STATE_SLAVONIA
-	}
-}
-
-geographic_region_united_earth = {
-	short_key = "united_earth"
-
-	strategic_regions = {
-		# Europe
-		sr:region_western_europe
-		sr:region_southern_europe
-		sr:region_central_europe
-		sr:region_northern_europe
-		sr:region_balkans
-		sr:region_russia
-		sr:region_eastern_europe
-
-		# Americas
-		sr:region_canada
-		sr:region_atlantic_coast
-		sr:region_pacific_coast
-		sr:region_great_plains
-		sr:region_central_america
-		sr:region_brazil
-		sr:region_la_plata
-		sr:region_andes
-		sr:region_gran_colombia
-
-		# Africa
-		sr:region_nile_basin
-		sr:region_north_africa
-		sr:region_west_africa
-		sr:region_equatorial_africa
-		sr:region_southern_africa
-		sr:region_east_africa
-
-		# Asia
-		sr:region_near_east
-		sr:region_arabia
-		sr:region_greater_persia
-		sr:region_himalayas
-		sr:region_central_asia
-		sr:region_north_india
-		sr:region_south_india
-		sr:region_south_china
-		sr:region_north_china
-		sr:region_northeast_asia
-		sr:region_siberia
-		sr:region_indonesia
-		sr:region_indochina
-
-		# Oceania
-		sr:region_oceania
 	}
 }

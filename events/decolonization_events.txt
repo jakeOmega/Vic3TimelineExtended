@@ -785,7 +785,7 @@ decolonization_events.7 = {
 		}
 		has_technology_researched = decolonization
 		country_rank <= rank_value:minor_power
-		has_variable = recently_formed_country
+		has_variable = recently_decolonized
 	}
 
 	immediate = {
@@ -1908,7 +1908,7 @@ decolonization_events.16 = {
 
 	trigger = {
 		has_technology_researched = decolonization
-		has_variable = recently_formed_country
+		has_variable = recently_decolonized
 		is_subject = no
 		NOT = { has_modifier = partition_territorial_claims_modifier }
 		NOT = { has_modifier = partition_accepted_borders_modifier }
@@ -1922,7 +1922,7 @@ decolonization_events.16 = {
 					OR = {
 						# Another newly formed country with shared heritage
 						AND = {
-							has_variable = recently_formed_country
+							has_variable = recently_decolonized
 							any_primary_culture = {
 								shares_heritage_trait_group_with_any_primary_culture = root
 							}
@@ -1953,7 +1953,7 @@ decolonization_events.16 = {
 						NOT = { is_country_type = decentralized }
 						OR = {
 							AND = {
-								has_variable = recently_formed_country
+								has_variable = recently_decolonized
 								any_primary_culture = {
 									shares_heritage_trait_group_with_any_primary_culture = root
 								}
@@ -1994,7 +1994,7 @@ decolonization_events.16 = {
 			modifier = {
 				trigger = {
 					exists = scope:partition_neighbor
-					scope:partition_neighbor = { has_variable = recently_formed_country }
+					scope:partition_neighbor = { has_variable = recently_decolonized }
 				}
 				add = 3
 			}
@@ -2022,7 +2022,7 @@ decolonization_events.16 = {
 		trigger = {
 			exists = scope:partition_neighbor
 			scope:partition_neighbor = {
-				has_variable = recently_formed_country
+				has_variable = recently_decolonized
 				any_primary_culture = {
 					shares_heritage_trait_group_with_any_primary_culture = root
 				}
@@ -2092,7 +2092,7 @@ decolonization_events.17 = {
 
 	trigger = {
 		has_technology_researched = decolonization
-		has_variable = recently_formed_country
+		has_variable = recently_decolonized
 		is_subject = no
 		NOT = { has_modifier = border_dispute_active_modifier }
 		NOT = { has_modifier = border_dispute_resolved_modifier }
@@ -2101,7 +2101,7 @@ decolonization_events.17 = {
 			any_neighbouring_state = {
 				owner = {
 					NOT = { this = root }
-					has_variable = recently_formed_country
+					has_variable = recently_decolonized
 					is_subject = no
 					NOT = { is_country_type = decentralized }
 				}
@@ -2115,7 +2115,7 @@ decolonization_events.17 = {
 				any_neighbouring_state = {
 					owner = {
 						NOT = { this = root }
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 						is_subject = no
 					}
 				}
@@ -2125,7 +2125,7 @@ decolonization_events.17 = {
 				limit = {
 					owner = {
 						NOT = { this = root }
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 						is_subject = no
 					}
 				}
@@ -2242,7 +2242,7 @@ decolonization_events.18 = {
 
 	trigger = {
 		has_technology_researched = decolonization
-		has_variable = recently_formed_country
+		has_variable = recently_decolonized
 		is_subject = no
 		NOR = {
 			has_modifier = military_strongman_modifier
@@ -2675,7 +2675,7 @@ decolonization_events.21 = {
 
 	trigger = {
 		has_technology_researched = decolonization
-		has_variable = recently_formed_country
+		has_variable = recently_decolonized
 		is_subject = no
 		NOR = {
 			has_modifier = non_aligned_movement_modifier

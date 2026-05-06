@@ -12,13 +12,10 @@
 # When no entry's trigger matches, the engine falls back to the tag's
 # localization key (e.g. AFU:0 "African Union").
 #
-# BHT and IDN entries here APPEND to vanilla's. Vanilla BHT has one
-# priority-1 "Dominion of India" entry gated on subject status — independent
-# BHT falls through to vanilla's tag name; our priority-0 entries fire only
-# when independent and a flavor trigger matches. Vanilla IDN has two
-# priority-0 monarchy entries (Majapahit, Srivijaya) gated on Javan/Malay/
-# Sumatran ruler culture — our entries are mutually exclusive with those by
-# trigger conditions (no monarchy entry from us; the vanilla flavor stays).
+# BHA / NUS are the mod's major-formation India / Indonesia tags (vanilla
+# BHT / IDN remain as pre-decolonization minor formations and keep their
+# vanilla dynamic-name flavor untouched). Each gets a republic default plus
+# the same government-flavored variants the other formables use.
 
 # === African Union ===
 
@@ -250,9 +247,20 @@ EAF = {
 	}
 }
 
-# === India / Bharat (BHT) — APPENDS to vanilla, which keeps "Dominion of India" at priority 1 ===
+# === India / Bharat (BHA) ===
 
-BHT = {
+BHA = {
+	dynamic_country_name = { # Default / republic
+		name = dyn_c_republic_of_india
+		adjective = BHA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
 	dynamic_country_name = { # Communist
 		name = dyn_c_peoples_republic_of_bharat
 		adjective = dyn_c_bharati_adj
@@ -305,12 +313,23 @@ BHT = {
 	}
 }
 
-# === Indonesia (IDN) — APPENDS to vanilla, which keeps Majapahit/Srivijaya monarchy entries ===
+# === Indonesia / Nusantara (NUS) ===
 
-IDN = {
+NUS = {
+	dynamic_country_name = { # Default / republic
+		name = dyn_c_republic_of_indonesia
+		adjective = NUS_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
 	dynamic_country_name = { # Communist
 		name = dyn_c_peoples_republic_of_indonesia
-		adjective = IDN_ADJ
+		adjective = NUS_ADJ
 		is_main_tag_only = yes
 		priority = 0
 		trigger = {
@@ -326,6 +345,33 @@ IDN = {
 			coa_def_fascist_flag_trigger = yes
 		}
 	}
+	dynamic_country_name = { # Monarchy — Majapahit revival (Javan/Malay/Sumatran ruler)
+		name = dyn_c_majapahit_revival
+		adjective = dyn_c_majapahit_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					OR = {
+						has_culture = cu:javan
+						has_culture = cu:malay
+						has_culture = cu:sumatran
+					}
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy — Nusantara Empire
+		name = dyn_c_nusantara_empire
+		adjective = dyn_c_nusantara_empire_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
 	dynamic_country_name = { # Theocracy — Negara Islam Indonesia (Sunni)
 		name = dyn_c_negara_islam_indonesia
 		adjective = dyn_c_negara_islam_adj
@@ -334,13 +380,13 @@ IDN = {
 		trigger = {
 			coa_def_theocracy_flag_trigger = yes
 			scope:actor ?= {
-				state_religion = rel:sunni
+				country_has_state_religion = rel:sunni
 			}
 		}
 	}
 	dynamic_country_name = { # Technocracy
 		name = dyn_c_indonesian_technical_union
-		adjective = IDN_ADJ
+		adjective = NUS_ADJ
 		is_main_tag_only = yes
 		priority = 0
 		trigger = {
@@ -607,7 +653,7 @@ UNE = {
 			coa_def_republic_flag_trigger = yes
 			NOT = { coa_def_communist_flag_trigger = yes }
 			NOT = { coa_def_technocracy_flag_trigger = yes }
-			was_formed_from = USA
+			scope:actor ?= { was_formed_from = USA }
 		}
 	}
 	dynamic_country_name = { # Communist
@@ -626,8 +672,7 @@ UNE = {
 		priority = 5
 		trigger = {
 			coa_def_communist_flag_trigger = yes
-			OR = {
-				was_formed_from = SOV
+			scope:actor ?= {
 				was_formed_from = RUS
 			}
 		}
@@ -639,7 +684,7 @@ UNE = {
 		priority = 5
 		trigger = {
 			coa_def_communist_flag_trigger = yes
-			was_formed_from = CHI
+			scope:actor ?= { was_formed_from = CHI }
 		}
 	}
 	dynamic_country_name = { # French-led republic — République Mondiale
@@ -651,7 +696,7 @@ UNE = {
 			coa_def_republic_flag_trigger = yes
 			NOT = { coa_def_communist_flag_trigger = yes }
 			NOT = { coa_def_technocracy_flag_trigger = yes }
-			was_formed_from = FRA
+			scope:actor ?= { was_formed_from = FRA }
 		}
 	}
 	dynamic_country_name = { # Indian-led republic — Vasudhaiva Kutumbakam
@@ -663,7 +708,12 @@ UNE = {
 			coa_def_republic_flag_trigger = yes
 			NOT = { coa_def_communist_flag_trigger = yes }
 			NOT = { coa_def_technocracy_flag_trigger = yes }
-			was_formed_from = BHT
+			scope:actor ?= {
+				OR = {
+					was_formed_from = BHT
+					was_formed_from = BHA
+				}
+			}
 		}
 	}
 	dynamic_country_name = { # German-led republic — Weltbund (Kantian federation)
@@ -675,7 +725,7 @@ UNE = {
 			coa_def_republic_flag_trigger = yes
 			NOT = { coa_def_communist_flag_trigger = yes }
 			NOT = { coa_def_technocracy_flag_trigger = yes }
-			was_formed_from = GER
+			scope:actor ?= { was_formed_from = GER }
 		}
 	}
 	dynamic_country_name = { # British-led monarchy — Imperial Federation of Earth
@@ -685,7 +735,7 @@ UNE = {
 		priority = 5
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
-			was_formed_from = GBR
+			scope:actor ?= { was_formed_from = GBR }
 		}
 	}
 	dynamic_country_name = { # Fascist

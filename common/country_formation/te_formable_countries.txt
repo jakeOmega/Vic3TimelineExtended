@@ -1,6 +1,6 @@
 ﻿# Formation rules for the formable countries added by this mod.
 #
-# AFU/BHT/IDN/EUN/UNA/UNE/ZHO are major formations (candidates compete via
+# AFU/BHA/NUS/EUN/UNA/UNE/ZHO are major formations (candidates compete via
 # leadership/unification plays); INM/EAF are minor formations (whoever
 # directly controls enough of the required states/region).
 #
@@ -8,20 +8,23 @@
 # UNE additionally gates on era-11 `quantum_communications` and era-12
 # `space_colonization` — the world-state idiom only becomes plausible once
 # instant global comms exist and humanity is moving off-planet.
-# BHT and IDN re-declare the vanilla tags so this file's entries override
-# vanilla `00_formable_countries.txt` (last-wins by file load order).
-# ZHO is a NEW tag (Greater China); vanilla CHI is left intact for its
-# early-game minor-formation role (Qing remnants / Taiping etc.).
+#
+# India and Indonesia each have TWO formations:
+#   - Vanilla BHT / IDN (minor, state-list, pan-nationalism gate) — vanilla
+#     entries are gated behind NOT={has_technology_researched=decolonization}
+#     via small REPLACE: directives below, so they remain available pre-
+#     decolonization but step aside in the post-decolonization era.
+#   - Mod BHA (Bharat) / NUS (Nusantara) (major, use_culture_states,
+#     leadership/unification plays) — the late-game flavor.
+# BHA/NUS coexistence: their unification plays guard NOT={exists=c:BHT/IDN},
+# so if a player formed vanilla BHT/IDN early-game it blocks the major
+# formation. ZHO is a NEW tag (Greater China); vanilla CHI is left intact
+# for its early-game minor-formation role (Qing remnants / Taiping etc.).
 
 # === Major formations ===
 
 AFU = {
-	geographic_region = geographic_region_africa
-
-	is_major_formation = yes
-
-	unification_play = dp_unify_african_union
-	leadership_play = dp_leadership_african_union
+	geographic_region = geographic_region_united_africa
 
 	required_states_fraction = 0.5
 
@@ -31,14 +34,9 @@ AFU = {
 		has_technology_researched = decolonization
 		has_technology_researched = pan-nationalism
 	}
-
-	max_num_formation_candidates = 3
-	can_be_formation_candidate = {
-		country_rank >= rank_value:minor_power
-	}
 }
 
-BHT = {
+BHA = {
 	use_culture_states = yes
 
 	is_major_formation = yes
@@ -60,7 +58,7 @@ BHT = {
 	}
 }
 
-IDN = {
+NUS = {
 	states = {
 		STATE_ACEH
 		STATE_CENTRAL_JAVA
@@ -98,12 +96,7 @@ IDN = {
 }
 
 EUN = {
-	geographic_region = geographic_region_europe
-
-	is_major_formation = yes
-
-	unification_play = dp_unify_european_union
-	leadership_play = dp_leadership_european_union
+	geographic_region = geographic_region_united_europe
 
 	required_states_fraction = 0.5
 
@@ -113,20 +106,10 @@ EUN = {
 		has_technology_researched = decolonization
 		has_technology_researched = pan-nationalism
 	}
-
-	max_num_formation_candidates = 3
-	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
-	}
 }
 
 UNA = {
 	geographic_region = geographic_region_united_north_america
-
-	is_major_formation = yes
-
-	unification_play = dp_unify_united_north_america
-	leadership_play = dp_leadership_united_north_america
 
 	required_states_fraction = 0.65
 
@@ -134,11 +117,6 @@ UNA = {
 
 	possible = {
 		has_technology_researched = decolonization
-	}
-
-	max_num_formation_candidates = 3
-	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
 	}
 }
 
@@ -167,11 +145,6 @@ ZHO = {
 UNE = {
 	geographic_region = geographic_region_united_earth
 
-	is_major_formation = yes
-
-	unification_play = dp_unify_united_earth
-	leadership_play = dp_leadership_united_earth
-
 	required_states_fraction = 0.75
 
 	ai_will_do = {
@@ -183,11 +156,6 @@ UNE = {
 		has_technology_researched = decolonization
 		has_technology_researched = quantum_communications
 		has_technology_researched = space_colonization
-	}
-
-	max_num_formation_candidates = 5
-	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
 	}
 }
 
@@ -230,5 +198,28 @@ EAF = {
 
 	possible = {
 		has_technology_researched = decolonization
+	}
+}
+
+# === Vanilla minor-formation hide gate ===
+#
+# Hide vanilla BHT / IDN entirely once decolonization is researched so the
+# formable list cleanly transitions from minor (pre-decolonization) to
+# major BHA / NUS (post-decolonization) without leaving an obsolete greyed-
+# out entry behind. `potential = { ... }` is the engine's "show in UI"
+# trigger (vs `possible`, which only enables/disables); when potential is
+# false the formation is hidden from the country_formation panel entirely.
+# Vanilla BHT / IDN don't declare `potential`, so INJECT is a clean field-
+# add (no collision with vanilla's existing `possible` block).
+
+INJECT:BHT = {
+	potential = {
+		NOT = { has_technology_researched = decolonization }
+	}
+}
+
+INJECT:IDN = {
+	potential = {
+		NOT = { has_technology_researched = decolonization }
 	}
 }

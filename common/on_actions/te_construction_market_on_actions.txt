@@ -96,6 +96,11 @@ te_construction_market_on_released_independent = {
 		}
 		scope:target = {
 			set_variable = { name = former_overlord value = root }
+			# Post-colonial era marker (~20 years). Read by decolonization_events
+			# (Strongman's Promise, Partition Question, etc.). Set here rather than
+			# on_country_formed so formable-country formation (EU, Pan-Africa Union)
+			# doesn't masquerade as decolonization.
+			set_variable = { name = recently_decolonized days = 7300 }
 			trigger_event = {
 				id = te_construction_market_recalc_events.1
 			}
@@ -148,20 +153,13 @@ te_construction_market_on_released_overlord_subject = {
 }
 
 # Root = Country
+# Construction-market recalc only — DO NOT set a "post-colonial" variable here.
+# This hook fires for any country formation, including formables (EU, Italy,
+# Pan-Africa Union), which are not decolonization events. The post-colonial
+# marker (recently_decolonized) is set in te_construction_market_on_released_independent.
 on_country_formed = {
-	on_actions = {
-		te_construction_market_on_country_formed
-	}
 	events = {
 		te_construction_market_recalc_events.1
-	}
-}
-te_construction_market_on_country_formed = {
-	effect = {
-		set_variable = {
-			name = recently_formed_country
-			days = 7300 # ~20 years
-		}
 	}
 }
 

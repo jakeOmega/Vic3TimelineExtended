@@ -1,0 +1,21 @@
+﻿# Flag aliases for the mod's major-formation India / Indonesia tags.
+# BHA reuses vanilla BHT artwork; NUS reuses vanilla IDN artwork. These
+# matter because if no flag_definition exists for a tag the engine falls
+# back to looking up the tag string as a COA_KEY (which doesn't exist for
+# BHA / NUS and would produce a blank/error flag).
+
+BHA = {
+	flag_definition = {
+		coa = BHT
+		subject_canton = BHT
+		priority = 1
+	}
+}
+
+NUS = {
+	flag_definition = {
+		coa = IDN
+		subject_canton = IDN
+		priority = 1
+	}
+}

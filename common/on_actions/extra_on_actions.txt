@@ -201,6 +201,7 @@ religious_mission_conversion_on_action = {
 		if = {
 			limit = {
 				has_variable = religious_mission_country
+				exists = var:religious_mission_country
 			}
 			var:religious_mission_country = {
 				save_scope_as = mission_country
@@ -1401,7 +1402,7 @@ decolonization_events_on_action = {
 						NOT = { any_subject_or_below = { always = yes } }
 						any_country = {
 							NOT = { this = root }
-							has_variable = recently_formed_country
+							has_variable = recently_decolonized
 							is_subject = no
 						}
 					}
@@ -1413,7 +1414,7 @@ decolonization_events_on_action = {
 						country_rank >= rank_value:major_power
 						any_country = {
 							NOT = { this = root }
-							has_variable = recently_formed_country
+							has_variable = recently_decolonized
 							is_subject = no
 						}
 					}
@@ -1423,7 +1424,7 @@ decolonization_events_on_action = {
 				10 = {
 					trigger = {
 						country_rank <= rank_value:minor_power
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 					}
 					trigger_event = { id = decolonization_events.7 }
 				}
@@ -1523,7 +1524,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Partition Question (new nations near neighbors)
 				10 = {
 					trigger = {
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 						is_subject = no
 						any_scope_state = {
 							any_neighbouring_state = {
@@ -1532,7 +1533,7 @@ decolonization_events_on_action = {
 									is_country_alive = yes
 									NOT = { is_country_type = decentralized }
 									OR = {
-										has_variable = recently_formed_country
+										has_variable = recently_decolonized
 										any_scope_state = {
 											is_overseas_colonial_state = yes
 										}
@@ -1546,13 +1547,13 @@ decolonization_events_on_action = {
 				# Post-Independence: Border Disputes (new nations vs new nations)
 				10 = {
 					trigger = {
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 						is_subject = no
 						any_scope_state = {
 							any_neighbouring_state = {
 								owner = {
 									NOT = { this = root }
-									has_variable = recently_formed_country
+									has_variable = recently_decolonized
 									is_subject = no
 								}
 							}
@@ -1563,7 +1564,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Strongman's Promise (political instability)
 				10 = {
 					trigger = {
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 						is_subject = no
 						OR = {
 							any_political_movement = {
@@ -1582,7 +1583,7 @@ decolonization_events_on_action = {
 						country_rank >= rank_value:great_power
 						any_country = {
 							NOT = { this = root }
-							has_variable = recently_formed_country
+							has_variable = recently_decolonized
 							is_subject = no
 							has_modifier = independence_nationalization_modifier
 						}
@@ -1592,7 +1593,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Non-Aligned Movement (Cold War alignment)
 				10 = {
 					trigger = {
-						has_variable = recently_formed_country
+						has_variable = recently_decolonized
 						is_subject = no
 						any_country = {
 							NOT = { this = root }
@@ -1676,6 +1677,7 @@ movement_events_te_on_action = {
 				trigger = {
 					any_political_movement = { is_political_movement_type = movement_anti_war }
 					country_rank >= rank_value:minor_power
+					is_at_war = yes
 				}
 				trigger_event = { id = movement_events_te.7 }
 			}
@@ -2285,7 +2287,7 @@ overbuild_protection_on_action = {
 					remove_building = building_solar_receiver
 					if = {
 						limit = { var:lvl_tmp > 0 }
-						extended_timeline_te_construction_market_add_specified_level = {
+						te_construction_market_add_specified_level = {
 							ADD_LEVEL = var:lvl_tmp
 							SPEC_TYPE = building_solar_receiver
 						}
@@ -2325,7 +2327,7 @@ overbuild_protection_on_action = {
 					remove_building = building_antimatter_engine
 					if = {
 						limit = { var:lvl_tmp > 0 }
-						extended_timeline_te_construction_market_add_specified_level = {
+						te_construction_market_add_specified_level = {
 							ADD_LEVEL = var:lvl_tmp
 							SPEC_TYPE = building_antimatter_engine
 						}
@@ -2345,7 +2347,7 @@ overbuild_protection_on_action = {
 					remove_building = building_antimatter_warhead_plant
 					if = {
 						limit = { var:lvl_tmp > 0 }
-						extended_timeline_te_construction_market_add_specified_level = {
+						te_construction_market_add_specified_level = {
 							ADD_LEVEL = var:lvl_tmp
 							SPEC_TYPE = building_antimatter_warhead_plant
 						}

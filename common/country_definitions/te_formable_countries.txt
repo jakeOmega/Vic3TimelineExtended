@@ -1,6 +1,13 @@
 ﻿# Tag definitions for the formable countries added by this mod.
-# BHT (India / Bharat) and IDN (Indonesia) reuse vanilla tag definitions —
-# only their formation rules are overridden in common/country_formation/.
+#
+# BHA (Bharat — major-formation India) and NUS (Nusantara — major-formation
+# Indonesia) are mod-only successor tags to vanilla BHT/IDN. Their cultures
+# mirror vanilla BHT/IDN so use_culture_states = yes in country_formation
+# resolves the same homeland set.
+#
+# Vanilla BHT/IDN remain available pre-decolonization (gated in
+# common/country_formation/te_formable_countries.txt). They reuse vanilla
+# tag definitions — no entries needed here.
 
 AFU = {
 	color = { 0 130 70 }
@@ -200,6 +207,61 @@ ZHO = {
 		uighur
 	}
 	capital = STATE_BEIJING
+}
+
+BHA = {
+	color = { 104 68 124 }
+
+	country_type = recognized
+
+	tier = empire
+
+	cultures = {
+		assamese
+		avadhi
+		baluchi
+		bengali
+		bihari
+		gujarati
+		kannada
+		malayalam
+		marathi
+		oriya
+		panjabi
+		pathan
+		rajput
+		sindi
+		tamil
+		telegu
+		hindustani
+		bundeli
+		pahari
+		gondi
+		bageli
+		chhattisgarhi
+		deccani
+	}
+	capital = STATE_DELHI
+}
+
+NUS = {
+	color = { 0 128 128 }
+
+	country_type = recognized
+
+	tier = empire
+
+	cultures = {
+		balinese
+		batak
+		bornean
+		dayak
+		javan
+		malay
+		moluccan
+		sumatran
+	}
+	capital = STATE_WEST_JAVA
 }
 
 UNE = {
