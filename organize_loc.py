@@ -273,8 +273,8 @@ def categorize_key(key, technology_keys):
         or key.startswith("dp_unify_")
         or key.startswith("dp_leadership_")
         or key in {
-            "AFU", "INM", "EAF", "EUN", "UNA", "UNE", "ZHO",
-            "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ", "UNE_ADJ", "ZHO_ADJ",
+            "AFU", "INM", "EAF", "EUN", "UNA", "UNE", "ZHO", "BHA", "NUS",
+            "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ", "UNE_ADJ", "ZHO_ADJ", "BHA_ADJ", "NUS_ADJ",
         }
     ):
         return "FORMABLE_COUNTRIES"

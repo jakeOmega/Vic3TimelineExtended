@@ -981,16 +981,6 @@ nuclear_disarmament = {
 		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
 		# Do not demand disarmament from a country that is receiving (or promised) nuclear aid
 		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
-		NOT = {
-			scope:source_country = {
-				any_scope_treaty = {
-					any_scope_article = {
-						has_type = nuclear_program_aid
-						target_country = root
-					}
-				}
-			}
-		}
 		# Same-treaty conflict: disallow if the in-construction draft already
 		# contains nuclear_program_aid targeting the same country.
 		NOT = {
@@ -1007,6 +997,21 @@ nuclear_disarmament = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = nuclear_disarmament }
+		}
+		# Disallow if the source already has a nuclear_program_aid treaty
+		# targeting this same country — can't simultaneously aid and demand disarmament.
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						any_scope_article = {
+							has_type = nuclear_program_aid
+							target_country = scope:other_country
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -1907,13 +1912,13 @@ nuclear_program_pause = {
 		NOT = { scope:other_country = { modifier:nuclear_program_pause = yes } }
 		# Also disallow freezing if the target is receiving (or promised) nuclear aid
 		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
+		# Disallow if WE (root = proposing country) already have an in-force treaty
+		# article giving nuclear aid TO scope:other_country.
 		NOT = {
-			scope:source_country = {
-				any_scope_treaty = {
-					any_scope_article = {
-						has_type = nuclear_program_aid
-						target_country = root
-					}
+			any_scope_treaty = {
+				any_scope_article = {
+					has_type = nuclear_program_aid
+					target_country = scope:other_country
 				}
 			}
 		}

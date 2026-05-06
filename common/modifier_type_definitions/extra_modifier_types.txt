@@ -563,6 +563,15 @@ goods_output_merchant_marine_mult = {
 	}
 }
 
+goods_input_merchant_marine_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
 building_space_program_throughput_add = {
 	color = good
 	percent = yes

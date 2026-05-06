@@ -487,14 +487,15 @@ un_propose_expulsion_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_PROPOSE_EXPULSION_TT"
-			# Pick the most-rivalry-flavored expellable target (rival first, then any)
+			# Pick a deterministic expellable target (highest country_rank first).
+			# Prior `scaled_debug_value` was a placeholder — undefined script value.
 			ordered_country = {
 				limit = {
 					NOT = { this = ROOT }
 					is_un_permanent_member = yes
 					has_modifier = un_veto_isolation_modifier
 				}
-				order_by = scaled_debug_value
+				order_by = country_rank
 				max = 1
 				save_scope_as = un_vote_target
 				set_global_variable = { name = un_vote_target_country value = THIS }

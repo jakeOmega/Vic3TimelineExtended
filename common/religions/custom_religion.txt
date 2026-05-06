@@ -1,1 +1,45 @@
-﻿
+﻿# Custom religion families used by the timeline-extended scripted-buttons "select
+# a custom religion" flow (`timeline_extended_scripted_buttons.txt:5740+`) and
+# the `country_has_any_custom_religion` trigger in `misc_triggers.txt`. Each
+# entry mirrors the closest vanilla heritage so pops/triggers behave coherently.
+custom_religion_christian = {
+	icon = "gfx/interface/icons/religion_icons/catholic.dds"
+	heritage = heritage_christian
+	color = { 0.7 0.5 0.3 }
+}
+
+custom_religion_muslim = {
+	icon = "gfx/interface/icons/religion_icons/sunni.dds"
+	heritage = heritage_islamic
+	color = { 0.2 0.55 0.35 }
+}
+
+custom_religion_jewish = {
+	icon = "gfx/interface/icons/religion_icons/jewish.dds"
+	heritage = heritage_jewish
+	color = { 0.4 0.4 0.7 }
+}
+
+custom_religion_eastern = {
+	icon = "gfx/interface/icons/religion_icons/confucianism.dds"
+	heritage = heritage_taoic
+	color = { 0.6 0.3 0.5 }
+}
+
+custom_religion_animist = {
+	icon = "gfx/interface/icons/religion_icons/animist.dds"
+	heritage = heritage_indigenous
+	color = { 0.45 0.5 0.25 }
+}
+
+custom_religion_buddhist = {
+	icon = "gfx/interface/icons/religion_icons/mahayana.dds"
+	heritage = heritage_dharmic
+	color = { 0.85 0.55 0.15 }
+}
+
+custom_religion_custom = {
+	icon = "gfx/interface/icons/religion_icons/atheist.dds"
+	heritage = heritage_materialist
+	color = { 0.5 0.5 0.5 }
+}

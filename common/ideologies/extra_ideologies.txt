@@ -188,9 +188,7 @@ ideology_multicultural = {
 					OR = {
 						AND = {
 							is_interest_group_type = ig_intelligentsia
-							ig:ig_intelligentsia = {
-								NOT = { has_ideology = ideology:ideology_multicultural_ig }
-							}
+							NOT = { has_ideology = ideology:ideology_multicultural_ig }
 						}
 						is_interest_group_type = ig_trade_unions
 					}

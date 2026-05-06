@@ -83,6 +83,13 @@ tactical_nuke_aftermath = {
 	building_training_rate_mult = -1
 }
 
+nuclear_crash_program_strain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_authority_mult = -0.10
+	goods_output_construction_mult = -0.05
+	country_weekly_innovation_mult = -0.05
+}
+
 REPLACE:battle_army_experience = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	unit_army_experience_gain_add = 25.0
@@ -2243,6 +2250,12 @@ veteran_advisory_modifier = {
 	country_military_tech_research_speed_mult = 0.05
 }
 
+discredit_pacifists_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_war_exhaustion_casualties_mult = -0.05
+	state_turmoil_effects_mult = 0.05
+}
+
 peace_rally_suppressed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.05
@@ -2253,6 +2266,13 @@ peace_rally_diplomatic_leverage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_influence_add = 50
 	country_leverage_generation_mult = 0.05
+}
+
+# Applied to a political movement scope to weaken anti-war movements after suppression.
+anti_war_movement_suppressed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_pop_attraction_mult = -0.15
+	political_movement_radicalism_add = -0.10
 }
 
 war_profiteering_investigation_modifier = {
@@ -2307,6 +2327,12 @@ biohacker_legalized_modifier = {
 biohacker_research_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.05
+}
+
+biohacker_crackdown_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = -0.05
+	country_authority_add = 50
 }
 
 digital_property_ruling_modifier = {

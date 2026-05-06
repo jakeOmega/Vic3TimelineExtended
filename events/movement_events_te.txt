@@ -339,7 +339,7 @@ movement_events_te.4 = {
 	trigger = {
 		has_active_civil_rights_movement = yes
 		OR = {
-			NOT = { 
+			NOT = {
 				has_progressive_minority_law = yes
 			}
 			has_law = law_type:law_active_persecution
@@ -1145,6 +1145,11 @@ movement_events_te.6 = {
 			}
 		}
 		# Discredit these traitors - military unity, popular trust damaged
+		add_modifier = {
+			name = discredit_pacifists_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = small_radicals pop_type = officers }
 		add_radicals = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -1217,6 +1222,7 @@ movement_events_te.7 = {
 			is_political_movement_type = movement_anti_war
 		}
 		country_rank >= rank_value:minor_power
+		is_at_war = yes
 	}
 
 	cancellation_trigger = {
@@ -1228,6 +1234,10 @@ movement_events_te.7 = {
 	}
 
 	immediate = {
+		random_political_movement = {
+			limit = { is_political_movement_type = movement_anti_war }
+			save_scope_as = anti_war_movement
+		}
 	}
 
 	option = {
@@ -1245,9 +1255,9 @@ movement_events_te.7 = {
 				add = 2
 			}
 		}
-		# Allow the rally - democratic norms upheld
-		add_loyalists = { value = small_radicals strata = lower }
+		# Allow the rally - the rally goes ahead, the war does not end
 		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = very_small_radicals strata = lower }
 		add_radicals = { value = small_radicals pop_type = officers }
 	}
 
@@ -1262,11 +1272,18 @@ movement_events_te.7 = {
 				add = 2
 			}
 		}
-		# Suppress the rally - order maintained at social cost
+		# Suppress the rally - order maintained at social cost; movement loses steam
 		add_modifier = {
 			name = peace_rally_suppressed_modifier
 			days = short_modifier_time
 			is_decaying = yes
+		}
+		scope:anti_war_movement = {
+			add_modifier = {
+				name = anti_war_movement_suppressed
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -1282,13 +1299,15 @@ movement_events_te.7 = {
 				add = 2
 			}
 		}
-		# Use the momentum for diplomatic leverage - clever statecraft
+		# Use the momentum for diplomatic leverage - clever statecraft, military feels sidelined
 		add_modifier = {
 			name = peace_rally_diplomatic_leverage_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = very_small_radicals strata = lower }
+		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = small_radicals pop_type = academics }
+		add_radicals = { value = small_radicals pop_type = officers }
 	}
 }
 
@@ -1639,6 +1658,11 @@ movement_events_te.11 = {
 			}
 		}
 		# Shut them down - order and safety, innovation lost
+		add_modifier = {
+			name = biohacker_crackdown_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = { value = small_radicals pop_type = clergymen }
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_radicals = { value = small_radicals pop_type = engineers }

@@ -1,37 +1,37 @@
 ﻿namespace = nuclear_weapon_events
 
 nuclear_weapon_events.1 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_city_destruction.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_city_destruction.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.1.t
- 	desc = nuclear_weapon_events.1.d
- 	flavor = nuclear_weapon_events.1.f
+	title = nuclear_weapon_events.1.t
+	desc = nuclear_weapon_events.1.d
+	flavor = nuclear_weapon_events.1.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
+	trigger = {
+		# triggered by nuclear strike
+	}
+
+	immediate = {
 		post_notification = industrial_nuke_succeeds_defender
- 	}
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.1.a
- 		default_option = yes
+	option = {
+		name = nuclear_weapon_events.1.a
+		default_option = yes
 		ai_chance = {
 			base = 1
 		}
- 	}
-	
+	}
+
 	option = {
 		name = nuclear_weapon_events.1.b
 		trigger = {
@@ -137,226 +137,226 @@ nuclear_weapon_events.1 = {
 }
 
 nuclear_weapon_events.2 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/tactical_nuclear_strike.dds" }
+	event_image = { texture = "gfx/event_pictures/tactical_nuclear_strike.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.2.t
- 	desc = nuclear_weapon_events.2.d
- 	flavor = nuclear_weapon_events.2.f
+	title = nuclear_weapon_events.2.t
+	desc = nuclear_weapon_events.2.d
+	flavor = nuclear_weapon_events.2.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = industrial_nuke_succeeds_attacker
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.2.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = industrial_nuke_succeeds_attacker
+	}
+
+	option = {
+		name = nuclear_weapon_events.2.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.3 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.3.t
- 	desc = nuclear_weapon_events.3.d
- 	flavor = nuclear_weapon_events.3.f
+	title = nuclear_weapon_events.3.t
+	desc = nuclear_weapon_events.3.d
+	flavor = nuclear_weapon_events.3.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = industrial_nuke_fails_defender
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.3.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = industrial_nuke_fails_defender
+	}
+
+	option = {
+		name = nuclear_weapon_events.3.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.4 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.4.t
- 	desc = nuclear_weapon_events.4.d
- 	flavor = nuclear_weapon_events.4.f
+	title = nuclear_weapon_events.4.t
+	desc = nuclear_weapon_events.4.d
+	flavor = nuclear_weapon_events.4.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = industrial_nuke_fails_attacker
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.4.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = industrial_nuke_fails_attacker
+	}
+
+	option = {
+		name = nuclear_weapon_events.4.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.5 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.5.t
- 	desc = nuclear_weapon_events.5.d
- 	flavor = nuclear_weapon_events.5.f
+	title = nuclear_weapon_events.5.t
+	desc = nuclear_weapon_events.5.d
+	flavor = nuclear_weapon_events.5.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = tactical_nuke_succeeds_defender
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.5.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = tactical_nuke_succeeds_defender
+	}
+
+	option = {
+		name = nuclear_weapon_events.5.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.6 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.6.t
- 	desc = nuclear_weapon_events.6.d
- 	flavor = nuclear_weapon_events.6.f
+	title = nuclear_weapon_events.6.t
+	desc = nuclear_weapon_events.6.d
+	flavor = nuclear_weapon_events.6.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = tactical_nuke_succeeds_attacker
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.6.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = tactical_nuke_succeeds_attacker
+	}
+
+	option = {
+		name = nuclear_weapon_events.6.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.7 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.7.t
- 	desc = nuclear_weapon_events.7.d
- 	flavor = nuclear_weapon_events.7.f
+	title = nuclear_weapon_events.7.t
+	desc = nuclear_weapon_events.7.d
+	flavor = nuclear_weapon_events.7.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = tactical_nuke_fails_defender
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.7.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = tactical_nuke_fails_defender
+	}
+
+	option = {
+		name = nuclear_weapon_events.7.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.8 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.8.t
- 	desc = nuclear_weapon_events.8.d
- 	flavor = nuclear_weapon_events.8.f
+	title = nuclear_weapon_events.8.t
+	desc = nuclear_weapon_events.8.d
+	flavor = nuclear_weapon_events.8.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = tactical_nuke_fails_attacker
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
-  option = {
- 		name = nuclear_weapon_events.8.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = tactical_nuke_fails_attacker
+	}
+
+	option = {
+		name = nuclear_weapon_events.8.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.9 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = {
+	title = {
 		first_valid = {
 			triggered_desc = {
 				trigger = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } }
@@ -393,15 +393,15 @@ nuclear_weapon_events.9 = {
 		}
 	}
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear program
- 	}
-	
- 	immediate = {
- 		
- 	}
+	trigger = {
+		# triggered by nuclear program
+	}
+
+	immediate = {
+
+	}
 
 	# World-first: shock and existential dread
 	option = {
@@ -414,11 +414,11 @@ nuclear_weapon_events.9 = {
 	}
 
 	# Subsequent nuclear powers: concern, but not shock
- 	option = {
- 		name = nuclear_weapon_events.9.a
+	option = {
+		name = nuclear_weapon_events.9.a
 		trigger = { NOT = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } } }
- 		default_option = yes
- 	}
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.10 = {
@@ -427,11 +427,11 @@ nuclear_weapon_events.10 = {
 
 	event_image = { texture = "gfx/event_pictures/anti_nuclear_movement.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = {
+	title = {
 		first_valid = {
 			triggered_desc = {
 				trigger = { has_variable = is_world_first_nuclear_power }
@@ -470,13 +470,13 @@ nuclear_weapon_events.10 = {
 
 	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear program
- 	}
-	
- 	immediate = {
- 		
- 	}
+	trigger = {
+		# triggered by nuclear program
+	}
+
+	immediate = {
+
+	}
 
 	# World-first: a historic achievement
 	option = {
@@ -492,48 +492,48 @@ nuclear_weapon_events.10 = {
 	}
 
 	# Subsequent: joining the nuclear club
- 	option = {
- 		name = nuclear_weapon_events.10.a
+	option = {
+		name = nuclear_weapon_events.10.a
 		trigger = { NOT = { has_variable = is_world_first_nuclear_power } }
- 		default_option = yes
+		default_option = yes
 		add_modifier = {
 			name = nuclear_power
 		}
- 	}
+	}
 }
 
 nuclear_weapon_events.11 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.11.t
- 	desc = nuclear_weapon_events.11.d
- 	flavor = nuclear_weapon_events.11.f
+	title = nuclear_weapon_events.11.t
+	desc = nuclear_weapon_events.11.d
+	flavor = nuclear_weapon_events.11.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
+	trigger = {
+		# triggered by nuclear strike
+	}
+
+	immediate = {
 		post_notification = industrial_nuke_succeeds_defender
- 	}
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.11.a
- 		default_option = yes
+	option = {
+		name = nuclear_weapon_events.11.a
+		default_option = yes
 		ai_chance = {
 			base = 1
 		}
- 	}
-	
+	}
+
 	option = {
 		name = nuclear_weapon_events.11.b
 		trigger = {
@@ -638,145 +638,145 @@ nuclear_weapon_events.11 = {
 }
 
 nuclear_weapon_events.12 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.12.t
- 	desc = nuclear_weapon_events.12.d
- 	flavor = nuclear_weapon_events.12.f
+	title = nuclear_weapon_events.12.t
+	desc = nuclear_weapon_events.12.d
+	flavor = nuclear_weapon_events.12.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = industrial_nuke_succeeds_attacker
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.12.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = industrial_nuke_succeeds_attacker
+	}
+
+	option = {
+		name = nuclear_weapon_events.12.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.13 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_defense_shield.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_defense_shield.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.13.t
- 	desc = nuclear_weapon_events.13.d
- 	flavor = nuclear_weapon_events.13.f
+	title = nuclear_weapon_events.13.t
+	desc = nuclear_weapon_events.13.d
+	flavor = nuclear_weapon_events.13.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = industrial_nuke_fails_defender
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.13.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = industrial_nuke_fails_defender
+	}
+
+	option = {
+		name = nuclear_weapon_events.13.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.14 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
- 	title = nuclear_weapon_events.14.t
- 	desc = nuclear_weapon_events.14.d
- 	flavor = nuclear_weapon_events.14.f
+	title = nuclear_weapon_events.14.t
+	desc = nuclear_weapon_events.14.d
+	flavor = nuclear_weapon_events.14.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
-	
- 	immediate = {
- 		post_notification = industrial_nuke_fails_attacker
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.14.a
- 		default_option = yes
- 	}
+	immediate = {
+		post_notification = industrial_nuke_fails_attacker
+	}
+
+	option = {
+		name = nuclear_weapon_events.14.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.15 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_fallout_contamination.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.15.t
- 	desc = nuclear_weapon_events.15.d
- 	flavor = nuclear_weapon_events.15.f
+	title = nuclear_weapon_events.15.t
+	desc = nuclear_weapon_events.15.d
+	flavor = nuclear_weapon_events.15.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.15.a
- 		default_option = yes
- 	}
+	option = {
+		name = nuclear_weapon_events.15.a
+		default_option = yes
+	}
 }
 
 nuclear_weapon_events.16 = {
-    type = country_event
-    placement = root
+	type = country_event
+	placement = root
 
-    event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
 
- 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
- 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
- 	title = nuclear_weapon_events.16.t
- 	desc = nuclear_weapon_events.16.d
- 	flavor = nuclear_weapon_events.16.f
+	title = nuclear_weapon_events.16.t
+	desc = nuclear_weapon_events.16.d
+	flavor = nuclear_weapon_events.16.f
 
-    duration = 3
+	duration = 3
 
- 	trigger = {
- 		# triggered by nuclear strike
- 	}
+	trigger = {
+		# triggered by nuclear strike
+	}
 
- 	option = {
- 		name = nuclear_weapon_events.16.a
- 		default_option = yes
- 	}
+	option = {
+		name = nuclear_weapon_events.16.a
+		default_option = yes
+	}
 }
 
 # ============================================================================
@@ -901,40 +901,35 @@ nuclear_weapon_events.18 = {
 	immediate = {
 	}
 
-	# Nuclear power: "Monitor the situation."
+	# Option A — Nuclear powers: "Issue a strategic deterrent ultimatum."
 	option = {
-		name = nuclear_weapon_events.18.a
+		name = nuclear_weapon_events.18.opt_a
 		trigger = { has_modifier = nuclear_power }
-		default_option = yes
-		add_modifier = { name = prestige_gain_tiny days = normal_modifier_time is_decaying = yes }
-		ai_chance = {
-			base = 5
-			modifier = {
-				trigger = {
-					has_variable = nuclear_weapon_stockpile
-					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
-				}
-				add = 6
-			}
-			modifier = {
-				trigger = { ruler_is_cautious = yes }
-				add = 4
-			}
-		}
-	}
-
-	# Has a nuclear program but no nukes yet: "We cannot fall behind."
-	option = {
-		name = nuclear_weapon_events.18.b
-		trigger = {
-			NOT = { has_modifier = nuclear_power }
-			has_variable = nuclear_weapon_program_progress
-			has_variable = nuclear_weapons_program_funding
-		}
 		highlighted_option = yes
 		custom_tooltip = {
-			text = NW_PROGRESS_ADD_5_TT
-			change_variable = { name = nuclear_weapon_program_progress add = 5 }
+			text = NW_PROLIF_ULTIMATUM_TT
+			if = {
+				limit = { exists = scope:proliferating_country }
+				scope:proliferating_country = {
+					change_variable = { name = nuclear_weapon_program_progress add = -5 }
+				}
+			}
+		}
+		if = {
+			limit = { exists = scope:proliferating_country }
+			change_relations = {
+				country = scope:proliferating_country
+				value = -20
+			}
+		}
+		change_infamy = 5
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig:ig_intelligentsia
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig:ig_armed_forces
 		}
 		ai_chance = {
 			base = 4
@@ -943,32 +938,99 @@ nuclear_weapon_events.18 = {
 				add = 12
 			}
 			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
+				trigger = { ruler_is_aggressive = yes }
 				add = 6
 			}
 			modifier = {
-				trigger = { scope:proliferating_country = { country_rank >= rank_value:great_power } }
-				add = 4
+				trigger = { ruler_is_cautious = yes }
+				add = -6
 			}
+		}
+	}
+
+	# Option B — Has nuclear program: "Crash development priority."
+	option = {
+		name = nuclear_weapon_events.18.opt_b
+		trigger = {
+			NOT = { has_modifier = nuclear_power }
+			has_variable = nuclear_weapon_program_progress
+			has_variable = nuclear_weapons_program_funding
+		}
+		highlighted_option = yes
+		custom_tooltip = {
+			text = NW_PROLIF_CRASH_TT
+			change_variable = { name = nuclear_weapon_program_progress add = 12 }
+		}
+		add_radicals = {
+			value = medium_radicals
+			interest_group = ig:ig_intelligentsia
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig:ig_devout
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig:ig_armed_forces
+		}
+		add_modifier = { name = nuclear_crash_program_strain days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 5
 			modifier = {
-				trigger = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
-				add = 8
+				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				add = 10
 			}
 			modifier = {
 				trigger = { ruler_is_aggressive = yes }
 				add = 4
 			}
 			modifier = {
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile
+				}
+				add = 6
+			}
+			modifier = {
 				trigger = { ruler_is_cautious = yes }
-				add = -2
+				add = -4
 			}
 		}
 	}
 
-	# Anyone: "Push for non-proliferation."
+	# Option C — Has nuclear program: "Stay the course."
 	option = {
-		name = nuclear_weapon_events.18.c
+		name = nuclear_weapon_events.18.opt_c
+		trigger = {
+			NOT = { has_modifier = nuclear_power }
+			has_variable = nuclear_weapon_program_progress
+			has_variable = nuclear_weapons_program_funding
+		}
 		default_option = yes
+		custom_tooltip = {
+			text = NW_PROGRESS_ADD_5_TT
+			change_variable = { name = nuclear_weapon_program_progress add = 5 }
+		}
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ruler_is_cautious = yes } add = 6 }
+			modifier = { trigger = { ruler_is_aggressive = yes } add = -2 }
+		}
+	}
+
+	# Option D — Anyone: "Lobby for international non-proliferation."
+	option = {
+		name = nuclear_weapon_events.18.opt_d
+		default_option = yes
+		custom_tooltip = {
+			text = NW_PROLIF_LOBBY_TT
+			if = {
+				limit = { exists = scope:proliferating_country }
+				scope:proliferating_country = {
+					change_variable = { name = nuclear_weapon_program_progress add = -1 }
+				}
+			}
+		}
 		if = {
 			limit = { exists = scope:proliferating_country }
 			change_relations = {
@@ -978,17 +1040,88 @@ nuclear_weapon_events.18 = {
 		}
 		add_modifier = { name = prestige_gain_tiny days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
-			base = 3
-			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+			base = 5
+			modifier = { trigger = { ruler_is_cautious = yes } add = 6 }
+			modifier = {
+				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				add = -10
+			}
 			modifier = {
 				trigger = {
 					has_variable = nuclear_weapon_stockpile
 					var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
 				}
+				add = -4
+			}
+		}
+	}
+
+	# Option E — Anyone: "Acknowledge the new strategic reality."
+	option = {
+		name = nuclear_weapon_events.18.opt_e
+		add_modifier = { name = prestige_loss_tiny days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					ruler_is_cautious = yes
+					NOT = { has_variable = nuclear_weapon_program_progress }
+				}
+				add = 3
+			}
+		}
+	}
+
+	# Option F — Anyone: "Sponsor covert sabotage of their program."
+	option = {
+		name = nuclear_weapon_events.18.opt_f
+		highlighted_option = yes
+		random_list = {
+			55 = {
+				custom_tooltip = {
+					text = NW_PROLIF_SABOTAGE_SUCCESS_TT
+					if = {
+						limit = { exists = scope:proliferating_country }
+						scope:proliferating_country = {
+							change_variable = { name = nuclear_weapon_program_progress add = -10 }
+						}
+					}
+				}
+				add_loyalists = {
+					value = small_radicals
+					interest_group = ig:ig_armed_forces
+				}
+			}
+			45 = {
+				custom_tooltip = {
+					text = NW_PROLIF_SABOTAGE_DISCOVERY_TT
+					if = {
+						limit = { exists = scope:proliferating_country }
+						change_relations = {
+							country = scope:proliferating_country
+							value = -25
+						}
+					}
+				}
+				change_infamy = 5
+				add_radicals = {
+					value = small_radicals
+					interest_group = ig:ig_intelligentsia
+				}
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				add = 12
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
 				add = 6
 			}
 			modifier = {
-				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				trigger = { ruler_is_cautious = yes }
 				add = -8
 			}
 		}

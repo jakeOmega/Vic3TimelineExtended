@@ -48,6 +48,8 @@ Files marked `[auto-gen]` are regenerated automatically and should not be hand-e
 | File | Contents | Read When... |
 |------|----------|--------------|
 | `vanilla_economy_reference.md` | Concept primer on vanilla Vic3 economy (pops, ownership / IP, markets / MAPI, companies, power blocs, naval economy) | Need shared context on the base-game economy before touching mod content that hooks it |
+| `vanilla_war_reference.md` | Concept primer on vanilla Vic3 war systems (formations, units, commanders, mobilization, supply, war support, capitulation) | Need shared context on the base-game war layer before touching anti-war / wartime / mobilization-related mod content |
+| `vanilla_diplomacy_reference.md` | Concept primer on vanilla Vic3 diplomacy (rank, prestige, relations, attitudes, interests, infamy, actions, treaties, subjects, power blocs) | Need shared context on the base-game diplomatic layer before touching mod content that hooks ranks / infamy / plays / subjects / power blocs |
 | `vanilla_patch_runbook.md` | Step-by-step process for absorbing a new vanilla patch into the mod | Updating the mod after a vanilla version bump |
 | `vanilla_known_bugs.md` | Vanilla bugs the mod *cannot* fix; debug.log noise to ignore | Triaging log entries; deciding whether an issue is mod-side |
 | `vanilla_company_buildings_reference.md` | System architecture + all implemented vanilla company buildings | Implementing company buildings for vanilla companies |

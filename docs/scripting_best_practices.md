@@ -164,8 +164,14 @@ Known invalid names:
 - `country_trade_route_cost_mult` — does NOT exist. Use `building_group_bg_trade_throughput_add`, `state_trade_advantage_mult`, or `state_trade_capacity_add/mult`.
 - `country_trade_route_quantity_mult` — does NOT exist (removed or never existed). Use `state_trade_capacity_add`, `state_trade_quantity_mult`, or `state_trade_advantage_mult` for state-level trade bonuses.
 - `state_radicals_from_sol_change_mult` — does NOT exist. Use `state_radicals_from_political_movements_mult`. An invalid modifier in a PM file causes **cascading parse failures** for the entire file.
+- `country_construction_mult` — does NOT exist (despite `country_construction_add` existing). Construction *throughput* lives on the goods-output axis: use **`goods_output_construction_mult`** to scale construction proportionally. The `_add`/`_mult` asymmetry is real — country-level construction sectors can be added as a flat count, but multiplying them must go through the construction-good output. Same shape applies to other modifier families where the country-level resource is also a good (services, etc.) — check both axes when an obvious `country_<X>_mult` doesn't validate.
 - `is_owned_by_company` — does NOT exist as a trigger. Use `exists = owning_company` (building scope).
 - `company` — does NOT exist as a trigger to match a specific company. Use `owning_company = <company_scope>`.
+- `country_war_support_mult` — does NOT exist. The country-wide war-support pool isn't a directly-modifiable axis. Use `country_war_exhaustion_casualties_mult` (vanilla, scales casualty-driven exhaustion — negative values reduce wartime drain) or `state_war_support_monthly_add` (mod-added, direct per-state gain). See `docs/vanilla_war_reference.md` § 13 for the full war-support exhaustion table and the lobby-clout lever.
+- `political_movement_support_mult` — does NOT exist. The real name is `political_movement_pop_attraction_mult`. Used to shrink/grow movement reach into pops.
+- `political_movement_radicalism_mult` — does NOT exist. Activism is additive, not multiplicative; use `political_movement_radicalism_add` (negative values cool a movement's activism, positive values heat it). Vanilla precedent: ww_war_propaganda_modifier uses −0.30; civil_rights_martyrdom_modifier uses +0.25.
+
+**Failure mode that produced these:** *extrapolating-by-analogy from a real modifier name without verifying.* Because `country_X_mult` is a recurring shape (`country_prestige_mult`, `country_authority_mult`, etc.), inventing `country_war_support_mult` feels safe — but the engine doesn't expose every concept on every axis. Default to grepping `<vanilla_snapshot_docs_path>/modifiers.log` (typically `~/src/vic3/docs/modifiers.log`) — or use `/modifier-search?q=` — before citing any modifier name in code OR in docs. The doc-citation case bites the same way as the code-citation case: future Claude instances will read the doc and trust the name.
 
 **Use specific building modifiers** when possible: `building_railway_throughput_add` targets only railways, while `building_group_bg_public_infrastructure_throughput_add` applies to ALL public infrastructure. Be intentional about scope.
 
@@ -316,6 +322,10 @@ state_pop_support_movement_<name>_mult = {
 - **`is_on_front`** — a **military_formation/character scope** trigger, NOT a state scope trigger. For state, use `devastation > 0` or `is_target_of_wargoal`.
 - **`is_primary_culture_of`** — requires **culture scope**, NOT pop scope. From pop scope, wrap in `culture = { is_primary_culture_of = ROOT }`.
 - **`country_type = recognized` in `create_dynamic_country`** — causes errors. Remove `country_type` and use `set_country_type = recognized` inside `on_created = { }` instead.
+- **`was_formed_from` in `dynamic_country_name.trigger` requires `scope:actor ?= { ... }` wrapper.** The trigger context for COA/dynamic-name validation isn't directly the country — it's a COA scope where `scope:actor` is the candidate country. Bare `was_formed_from = TAG` at the trigger root produces `PostValidate of trigger 'was_formed_from' returned false` in debug.log and the dynamic name silently never matches. Vanilla pattern: `trigger = { scope:actor ?= { OR = { was_formed_from = X was_formed_from = Y } } }`. Mod example: `te_formable_countries.txt` UNE block.
+- **`every_scope_building` + `type = bt:building_X` may error.** "Event target link 'type' returned an invalid object" floods the error log when `every_scope_building` iterates buildings and the `limit = { type = bt:X }` is evaluated. Use the trigger `is_building_type = building_X` instead — that's the building-scope trigger vanilla uses (e.g., `je_values.txt`'s `every_scope_building` over barracks). The `type = bt:X` form does work in some scope chains but is fragile; prefer the trigger.
+- **Treaty article `possible` does NOT bind `scope:source_country`** even though `scope:other_country` IS bound there. Vanilla puts source-side checks (duplicate-prevention against the source country's existing treaties) in `can_ratify`, not `possible`. The error `Undefined event target 'source_country'` traces to a scope:source_country read inside a treaty article's `possible` block — move it to `can_ratify`.
+- **`is_diplomatic_play_committed_participant = yes`** is the country-scope trigger for "I'm currently in a diplomatic play." There is no `involvement = involved_in_play` sub-trigger inside `any_diplomatic_play = { ... }` — that's invalid syntax that produces `Unknown trigger type: involvement`.
 
 ## Scope Chain Issues with `add_modifier` + Script Values
 
@@ -631,6 +641,7 @@ Don't apply ministry laws via broad filters like `is_country_type = recognized` 
 - **On_action scopes like `on_revolution_start`** may not always set `scope:target` — guard with `if = { limit = { exists = scope:target } }`.
 - **`any_scope_state` in harvest conditions** — inner blocks can match DIFFERENT states than outer guards. Add `has_variable = X` to EACH inner block.
 - **Always guard `var:X` with `has_variable = X`** when the variable may not be set on all entities in scope. This is especially critical in `any_country` iterators where a variable is set only on one country (e.g., JE owner). Without the guard, every non-matching country generates "Failed to fetch variable" + "Invalid left side during comparison 'var'" errors that spam every tick.
+- **For `var:X` holding an object reference (country, character, state), `has_variable` is NOT sufficient — also add `exists = var:X`.** `has_variable` only confirms the variable was set; the referenced object can be destroyed (country annexed, character died) while the variable still points at the now-invalid index. The engine logs `Event target link 'var' returned an invalid object` + `save_scope_as effect [ Scoped object is not valid. Type: Country (NNN) ]` (with NNN = the dead object's index). Pattern: `limit = { has_variable = my_country  exists = var:my_country }`.
 - **Pattern:**
   ```
   evaluation_chance = {
@@ -916,7 +927,7 @@ Not all properties usable in script appear in the triggers/effects reference doc
 - **`triggers.log` / `effects.log`** (→ `docs/vic3_triggers_effects_reference.md`): Named triggers, effects, and iterators. These are standalone commands (`is_building_type`, `country_has_building_type_levels`, `every_scope_building`, etc.).
 - **`event_targets.log`**: Scope-to-scope accessors and value properties. These are properties on scoped objects — e.g. `level` (building scope → value), `level_after_queued_constructions` (building scope → value), `training_rate` (building scope → value), `controller` (state scope → country), `participants` (market scope → value).
 
-**Where to find `event_targets.log`:** `C:\Users\jakef\OneDrive\Documents\Paradox Interactive\Victoria 3\docs\event_targets.log` (engine-generated, 1798 lines, organized as `### property_name` with Input/Output scope annotations).
+**Where to find `event_targets.log`:** under `<vanilla_docs_path>/event_targets.log` (engine-generated, 1798 lines, organized as `### property_name` with Input/Output scope annotations). On a stock Windows install that resolves to `C:\Users\<windows-user>\OneDrive\Documents\Paradox Interactive\Victoria 3\docs\event_targets.log`.
 
 **When to search `event_targets.log`:**
 - You need a building property like `level`, `level_after_queued_constructions`, `training_rate`
@@ -941,6 +952,7 @@ every_scope_building = {
 - **Do NOT use both together.** When `highlighted_option = yes` is present, `custom_tooltip` is redundant — the engine already displays the trigger conditions.
 - **Prefer `highlighted_option = yes`** for options gated by triggers (tech requirements, law prerequisites, ministry levels). It stays in sync with the actual triggers automatically.
 - **Use `custom_tooltip` only** when: (a) you need to explain an effect rather than a trigger condition, or (b) the option has no `trigger` block but needs explanatory text for other reasons.
+- **`highlighted_option` only accepts `yes` / `no` — never a block.** Writing `highlighted_option = { trigger = { ... } }` to get conditional highlighting is invalid; the engine has no per-option conditional-highlight feature. The block form parses past brace matching but causes a downstream `Unexpected token` error several lines later (typically at the next directive after the block). When that happens, parsing of the rest of the *file* runs off the rails: every subsequent `option = { ... }` block is read as a top-level event named `option` (`Duplicated event ID 'option'`, `Namespace 'option' used in event 'option'`), and any later events in the file fail to load entirely (`Event not found! EventID: foo.21`). One bad highlighted_option block can silently kill 2–3 trailing events. If you need conditional emphasis, gate the *option's existence* with `trigger = { ... }` or split into two options with mutually exclusive triggers.
 
 ## Mandatory Reference Doc Consultation
 
@@ -968,7 +980,11 @@ on_entry_into_force = {
 }
 ```
 
-**Outside** `on_entry_into_force` (in `visible`, `possible`, `ai` blocks), `scope:source_country` and `scope:target_country` ARE directly available.
+**Outside** `on_entry_into_force` (in `visible`, `ai` blocks), `scope:source_country` and `scope:target_country` may be available — but **not always**, and notably NOT in `possible`. See `Treaty Article Possible/Visible Scope Caveats` above for the matrix:
+- `possible`: `scope:source_country` is **undefined** (logs `Undefined event target 'source_country'`). Use `root` for the proposing country, `scope:other_country` for the receiving country, mirroring vanilla `06_transfer_state.txt`.
+- `visible`: `scope:source_country` is sometimes set, sometimes not (depends on call site) — wrap reads in `trigger_if = { limit = { exists = scope:source_country } ... }`.
+- `can_ratify`: both `scope:source_country` and `scope:target_country` ARE bound (vanilla pattern).
+- `on_entry_into_force` / `on_break` / `on_withdrawal`: use `scope:article_options.source_country` / `.target_country` per the snippet above.
 
 ### `state_population` Is a Trigger, Not a Script Value
 
@@ -1840,6 +1856,34 @@ The same rule applies any time the wrapper key collides with vanilla: e.g. you c
 
 **Tooling caveat:** any Python audit / walker tool that scans `common/` files needs to handle these prefixes. A naïve identifier regex (`[A-Za-z_]…`) won't match `REPLACE_OR_CREATE:foo` and the entity silently drops out of the walk. See `docs/python_tools.md` § "Gotchas when writing tooling that walks `common/`" for the canonical fix and a regression test.
 
+### `INJECT:` for adding *missing* fields is the safest wedge
+
+The cleanest case for `INJECT:` is **adding a field vanilla doesn't already declare** on that entity. No collision semantics to reason about — engine just sees the new field. Example: vanilla's `BHT` and `IDN` country_formation entries don't declare `potential = { ... }`, so `INJECT:BHT = { potential = { NOT = { has_technology_researched = decolonization } } }` cleanly adds visibility gating without any of the duplicate-key risk that re-declaring a field vanilla owns would carry.
+
+When the field you want to extend already exists in vanilla (e.g. you want to *tighten* vanilla's `possible` block by ANDing extra conditions), `INJECT:` is risky — engine semantics on duplicate sibling keys vary by entity type, and you may get last-wins (silently drops vanilla's conditions) rather than concatenation. Reach for `REPLACE:` and re-state vanilla's body in those cases. Look for a *different* field on the same entity that's empty in vanilla and serves the same gate role (`potential` vs `possible`, `is_shown` vs `selectable`, etc.) — that often turns a brittle REPLACE: into a clean INJECT.
+
+## Country-formation `potential` vs `possible`
+
+Country formation entries support both triggers, with distinct UI semantics:
+- `potential = { ... }` — controls whether the formation **appears in the country_formation panel at all**. False → entry is hidden.
+- `possible = { ... }` — controls whether the formation can **currently be enacted**. False → entry is shown but greyed-out / unselectable.
+
+Vanilla `ITA` uses both (`potential` excludes c:AUS / c:KUK / c:HRE — those nations don't see Italy as a formable; `possible` checks primary culture for the ones that do). Vanilla `BHT` / `IDN` only declare `possible` (so they always appear, just sometimes greyed out).
+
+Use `potential` when an entry should be entirely irrelevant in some game states (e.g. mod adds a successor major-formation tag that supersedes the vanilla minor formation post-tech, and you don't want a stale greyed entry left in the UI). Use `possible` when the entry is conceptually relevant but momentarily blocked (e.g. need a specific culture, treaty, or law).
+
+The same `potential` vs `possible` / `selectable` / `shown` split appears across many Paradox entity types (decisions, decrees, scripted_buttons, journal_entries) — when an entry is "showing greyed out when it shouldn't even exist for this country", look for the entity's UI-visibility trigger before reaching for tighter enable-checks.
+
+## `on_country_formed` Fires for Formables Too — Don't Use It as an "Independence" Signal
+
+`on_country_formed` (Root = the new country) fires for **any** country formation: vanilla decolonization, formable countries (European Union, Italy, Pan-Africa Union, Greater India), and unification-play resolutions. It is NOT a "newly independent post-colonial country" hook.
+
+For decolonization-only signals, use `on_country_released_as_independent` (Root = Releasing Country, scope:target = Released Country). This fires on voluntary subject release, war-for-independence wins, and engine decolonization — but NOT on formable-country formation. Vanilla itself uses this hook to set `newly_released_country` (90 days, for the Trialist Manifesto JE).
+
+**Bug this rule was learned from:** A `recently_formed_country` variable was set on `on_country_formed` and then read by ~12 decolonization events (Strongman's Promise, Partition Question, Border Disputes, etc.). Forming the European Union mid-game from an already-independent UK set the variable on EUN, and the post-colonial events fired on a stable European democracy. Fix: relocate the setter to `on_country_released_as_independent` scoped to `scope:target`, and rename to `recently_decolonized` to match its real semantics.
+
+**General lesson:** when picking an on-action hook, think about every code path that triggers the underlying engine event, not just the path that motivated the rule. `on_country_formed` is wide; `on_country_released_as_independent` is narrow. Wide hooks misnamed for narrow purposes are a hidden bug factory.
+
 ## Global Variable Initialization Timing: Use `on_game_started`
 
 A journal entry's `possible` clause runs on game start (and whenever the engine re-evaluates JE eligibility). If `possible` reads a `global_var:foo` that hasn't been set yet, the engine logs `Value of wrong type in '<file>:<line>'. Got value of type 'none'` and the JE silently fails to appear.
@@ -1988,6 +2032,8 @@ if = {
 inside its `ai_value` **always fires when construction is being evaluated** — because the building can only be evaluated for construction when it doesn't already exist in the state. The clause becomes always-true noise rather than a real conditional.
 
 For per-state-limit-1 buildings, drop the `NOT has_building` clause; use law / JE / tech context to differentiate priority instead. For multi-level buildings (where additional levels can stack), `NOT has_building` IS meaningful (it distinguishes "build the first one" from "expand existing").
+
+**Building `ai_value` evaluates in *state* scope, not country.** ROOT = the state under evaluation; `owner` traverses to the state's country (the AI considering construction). Triggers that require a country target (e.g. `has_diplomatic_relevance = X`) need `root.owner`, not `ROOT`. Symptom of getting this wrong: `Wrong target scope for <trigger>, must be country`. Vanilla buildings rarely need this since they use scalar `ai_value`, but mod ai_value blocks frequently do — match vanilla scripted-trigger patterns (`scope:target_state.owner` style) when adapting.
 
 ## Concept Link Localization Syntax
 
@@ -2244,3 +2290,21 @@ done
 Verify with `head -c 3 file.txt | xxd -p` — should print `efbbbf`. After adding, `POST /reload` to refresh the server's view; the `should be in utf8-bom encoding` line should no longer appear in `/logs/debug` for that path.
 
 Locale YAMLs use a different convention — the `*_l_english.yml` files use `\xef\xbb\xbf` BOM as well but `organize_loc.py` re-emits them, so don't hand-bom yaml files.
+
+## Formables: `geographic_region = X` Reads `state_regions = {...}` Only
+
+A formable's `geographic_region = X` field expands `X.state_regions = {...}` to compute the required-states list. It **silently ignores** `X.strategic_regions = {...}` in this code path — the same field works fine for `is_in_geographic_region = X` triggers, which is a different code path that DOES expand strategic regions. So a geographic_region defined like this:
+
+```
+geographic_region_europe = {
+    strategic_regions = { sr:region_western_europe sr:region_southern_europe ... }  # for triggers
+}
+```
+
+works for `is_in_geographic_region = geographic_region_europe` but produces an empty/unusable required-states list when used as `EUN = { geographic_region = geographic_region_europe }`. Vanilla never makes that mistake — every formable that uses `geographic_region = X` in `00_major_formables.txt` (`GER`, `SCA`, `YUG`, the Andean federation) points at a region defined with `state_regions = {...}` (e.g. `geographic_region_scandinavia` is a flat `state_regions = { STATE_JUTLAND ... }` list).
+
+**Symptom**: the formable's UI either lists no required states or seems to enumerate the wrong scope; specific states the user expects to see are absent. No log signal — the engine doesn't error on the mismatched shape; it just doesn't expand the strategic regions block.
+
+**Fix**: define a mod-side region with `state_regions = {...}`. The mod uses `scripts/generators/gen_formable_regions.py` to expand vanilla `strategic_regions = {...}` to explicit state lists for the EUN/AFU/UNA/UNE formables, writing `common/geographic_regions/te_formable_regions_generated.txt`. Run the generator after vanilla strategic-region rebalances (it fails loudly if a configured region disappears).
+
+A geographic_region can carry both blocks — vanilla `geographic_region_subsaharan_africa` uses both `strategic_regions = {...}` (for triggers) and `state_regions = {...}` (extending the trigger's reach by a few extra states) — but each block only feeds its own code path.

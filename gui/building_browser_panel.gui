@@ -3491,8 +3491,12 @@ types building_browser_panel_types {
 							maximumsize = { 208 -1 }
 							autoresizescrollarea = yes
 							scrollbarpolicy_horizontal = as_needed
+							scrollbarpolicy_vertical = as_needed
 							scrollbar_horizontal = {
 								using = horizontal_scrollbar
+							}
+							scrollbar_vertical = {
+								using = vertical_scrollbar
 							}
 							scrollwidget = {
 							flowcontainer = {

@@ -158,7 +158,8 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 
 ### Option Tradeoff Principles
 - **Every multi-option event must present a meaningful choice.** No option should be strictly better or strictly worse than all alternatives.
-- **A modifier can be all-upside or all-downside** — but if so, other options must be comparably attractive/unattractive.
+- **A modifier can be all-upside or all-downside** — but if so, other options must be comparably attractive/unattractive. The audit isn't "force every option to have a tradeoff"; it's "no option is strictly dominated."
+- **Outcome direction must match the setup.** The pop direction (loyalists vs radicals) and modifier direction (beneficial vs costly) of an option should match the in-fiction reception of that choice given the event's premise. An option that nets loyalists in the strata most aggrieved by the event's premise is a *coherence* bug even if it's competitive on balance — e.g., during an unpopular war, "let the peace rally proceed" giving lower-strata loyalists implies the underlying anger was satisfied by being heard, when nothing about the war actually changed. Re-anchor the trigger (gate on `is_at_war = yes`?) or flip the offending pop direction.
 - **"Do nothing" / passive options** must have at least one tangible benefit (e.g., upper-strata loyalists, authority preserved).
 - **Ambitious / expensive options** must have at least one tangible cost (e.g., bureaucracy drain, IG disapproval, radicals).
 - **Single-option events** (forced crises) are acceptable.

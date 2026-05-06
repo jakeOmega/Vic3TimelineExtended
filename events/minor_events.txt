@@ -310,8 +310,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.suspend_convertibility
 		trigger = { has_law = law_type:law_unregulated_banking }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 3 }
-		change_variable = { name = finance_cycle_momentum add = 1 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_SUSPEND_CONVERTIBILITY_DESC
+			change_variable = { name = finance_cycle_value    add = 3 }
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_small
@@ -337,8 +340,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.mutual_clearing
 		trigger = { has_law = law_type:law_free_mutual_banking }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 4 }
-		change_variable = { name = finance_cycle_momentum add = 1 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_MUTUAL_CLEARING_DESC
+			change_variable = { name = finance_cycle_value    add = 4 }
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_medium
@@ -364,8 +370,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.correspondent_liquidity
 		trigger = { has_law = law_type:law_universal_banking_light_prudence }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 6 }
-		change_variable = { name = finance_cycle_momentum add = 1 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_CORRESPONDENT_LIQUIDITY_DESC
+			change_variable = { name = finance_cycle_value    add = 6 }
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_medium
@@ -391,8 +400,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.deposit_guarantee
 		trigger = { has_law = law_type:law_prudential_narrow_banking }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 10 }
-		change_variable = { name = finance_cycle_momentum add = 2 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_DEPOSIT_GUARANTEE_DESC
+			change_variable = { name = finance_cycle_value    add = 10 }
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_large
@@ -418,8 +430,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.dev_bank_lending
 		trigger = { has_law = law_type:law_directed_credit_development_banks }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 6 }
-		change_variable = { name = finance_cycle_momentum add = 1 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_DEV_BANK_LENDING_DESC
+			change_variable = { name = finance_cycle_value    add = 6 }
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_medium
@@ -445,8 +460,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.nationalize
 		trigger = { has_law = law_type:law_state_owned_banking }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 12 }
-		change_variable = { name = finance_cycle_momentum add = 3 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_NATIONALIZE_DESC
+			change_variable = { name = finance_cycle_value    add = 12 }
+			change_variable = { name = finance_cycle_momentum add = 3 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_huge
@@ -472,8 +490,11 @@ minor_events_timelineextended.6 = {
 		name = minor_events_timelineextended.6.open_market
 		trigger = { has_law = law_type:law_central_bank_independence }
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 10 }
-		change_variable = { name = finance_cycle_momentum add = 2 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_OPEN_MARKET_DESC
+			change_variable = { name = finance_cycle_value    add = 10 }
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_large
@@ -506,8 +527,11 @@ minor_events_timelineextended.6 = {
 			NOT = { has_law = law_type:law_unregulated_banking }
 		}
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 5 }
-		change_variable = { name = finance_cycle_momentum add = 1 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_DISCOUNT_WINDOW_DESC
+			change_variable = { name = finance_cycle_value    add = 5 }
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_medium
@@ -540,8 +564,11 @@ minor_events_timelineextended.6 = {
 			}
 		}
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 4 }
-		change_variable = { name = finance_cycle_momentum add = 1 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_SWAP_LINES_DESC
+			change_variable = { name = finance_cycle_value    add = 4 }
+			change_variable = { name = finance_cycle_momentum add = 1 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_medium
@@ -576,8 +603,11 @@ minor_events_timelineextended.6 = {
 			}
 		}
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 10 }
-		change_variable = { name = finance_cycle_momentum add = 2 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_KEYNESIAN_STIMULUS_DESC
+			change_variable = { name = finance_cycle_value    add = 10 }
+			change_variable = { name = finance_cycle_momentum add = 2 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_huge
@@ -607,7 +637,10 @@ minor_events_timelineextended.6 = {
 			NOT = { has_law = law_type:law_free_mutual_banking }
 		}
 		apply_banking_crash_origin_effects = yes
-		change_variable = { name = finance_cycle_value    add = 5 }
+		custom_tooltip = {
+			text = CRASH_SOFTEN_CAPITAL_CONTROLS_DESC
+			change_variable = { name = finance_cycle_value    add = 5 }
+		}
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_small

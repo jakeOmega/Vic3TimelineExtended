@@ -3306,8 +3306,12 @@ types building_panels
 			}
 			autoresizescrollarea = yes
 			scrollbarpolicy_horizontal = as_needed
+			scrollbarpolicy_vertical = as_needed
 			scrollbar_horizontal = {
 				using = horizontal_scrollbar
+			}
+			scrollbar_vertical = {
+				using = vertical_scrollbar
 			}
 			scrollwidget = {
 			flowcontainer = {

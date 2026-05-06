@@ -3,8 +3,6 @@
 #
 # SHIP_TYPES
 #
- ship_group_torpedo_craft: "Strike Craft"
- ship_group_torpedo_craft_desc: "Strike craft are small, agile vessels that rely on torpedoes, anti-ship missiles, or stealthy subsurface attack to threaten capital ships and disrupt enemy operations."
  ship_type_amphibious_assault_ship: "Amphibious Assault Ship"
  ship_type_amphibious_assault_ship_desc: "A modern landing helicopter assault platform that can deploy a battalion of marines onto a hostile coast in a single wave. Replaces wartime troop transports."
  ship_type_antimatter_battleship: "Antimatter Battleship"
