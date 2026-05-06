@@ -3060,11 +3060,28 @@ class ModStateHandler(BaseHTTPRequestHandler):
         GET /logs/<family>/diff[?against=N]
         GET /logs/<family>?q=&file=&source=&category=&since=
         GET /logs/<family>?dedupe=&dedupe_key=&limit=&offset=&raw=&mod_only=
+        GET /logs/<family>?vanilla_bugs=show|hide|only
+            — tag (default) / drop / keep-only entries that match a vanilla bug
+            registered in docs/vanilla_known_bugs.md. Tagged entries get a
+            `vanilla_bug_ref: {title, section}` field on output.
         """
         from game_log_reader import (
             list_logs, parse_log, filter_mod_only, filter_external_mods, filter_entries,
             dedupe, summarize, diff_against_backup, cluster_sessions,
+            load_vanilla_bug_registry, tag_vanilla_bugs,
         )
+
+        vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla_known_bugs.md")
+        _, by_basename = load_vanilla_bug_registry(vanilla_bugs_doc)
+
+        def _apply_vanilla_bug_tagging(entries, mode):
+            """Tag entries against the registry, then apply mode (show|hide|only)."""
+            tag_vanilla_bugs(entries, by_basename)
+            if mode == "hide":
+                return [e for e in entries if e.vanilla_bug_ref is None]
+            if mode == "only":
+                return [e for e in entries if e.vanilla_bug_ref is not None]
+            return entries
 
         if not parts:
             include_mp = (params.get("mp_sessions") or ["false"])[0].lower() == "true"
@@ -3107,6 +3124,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             mod_only = (params.get("mod_only") or ["true"])[0].lower() == "true"
             default_external = "false" if family in ("error", "debug") else "true"
             include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
+            vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
             current_entries = parse_log(match.path)
             against_entries = parse_log(against_match.path)
             if mod_only:
@@ -3115,6 +3133,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if not include_external:
                 current_entries = filter_external_mods(current_entries)
                 against_entries = filter_external_mods(against_entries)
+            current_entries = _apply_vanilla_bug_tagging(current_entries, vanilla_bugs_mode)
+            against_entries = _apply_vanilla_bug_tagging(against_entries, vanilla_bugs_mode)
             return {
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
@@ -3134,6 +3154,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
         include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
         if not include_external:
             entries = filter_external_mods(entries)
+        # Tag entries that match docs/vanilla_known_bugs.md and optionally drop them.
+        # Modes: show (default — tag, keep visible), hide, only.
+        vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
+        entries = _apply_vanilla_bug_tagging(entries, vanilla_bugs_mode)
         entries = filter_entries(
             entries,
             q=(params.get("q") or [None])[0],

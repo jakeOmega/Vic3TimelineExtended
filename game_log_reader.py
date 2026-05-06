@@ -40,6 +40,16 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
     # Statistics mod — `change_local_variable [Division/modulo by zero]` spam.
     "statistics_effects.txt",
     "sta_on_actions.txt",
+    # Headlines mod — `has_interest_marker_in_region` PostValidate failures,
+    # `Invalid strategic region 'region_*'` lookups, and `has_technology_researched`
+    # PostValidate failures (workshop id 3142463417).
+    "headlines_on_actions.txt",
+    "headlines_tech_on_actions.txt",
+    # GDP Growth Rate Improved mod — Div/0 in `change_local_variable` (workshop
+    # id 3255320685). Engine entries pair the script-effect file with the event
+    # call-site (`events/gdp_events.txt`); both must be in this set.
+    "GDPGR_scripted_effects.txt",
+    "gdp_events.txt",
 })
 
 
@@ -91,7 +101,7 @@ _LINE_RE = re.compile(r"^\[(?P<time>\d\d:\d\d:\d\d)\]\[(?P<source>[^\]]+)\]:\s*(
 # Public types
 # ---------------------------------------------------------------------------
 class LogEntry:
-    __slots__ = ("time", "source", "source_file", "message", "category", "files")
+    __slots__ = ("time", "source", "source_file", "message", "category", "files", "vanilla_bug_ref")
 
     def __init__(self, time: str, source: str, message: str):
         self.time = time
@@ -105,6 +115,9 @@ class LogEntry:
         self.category = _classify(source, message)
         # All paths referenced inside the message body
         self.files = sorted(set(_MOD_PATH_RE.findall(message)))
+        # Set later by tag_vanilla_bugs() if the entry matches a known vanilla bug
+        # registered in docs/vanilla_known_bugs.md.
+        self.vanilla_bug_ref: dict | None = None
 
     def to_dict(self, include_message: bool = True) -> dict:
         d = {
@@ -114,6 +127,8 @@ class LogEntry:
             "category": self.category,
             "files": self.files,
         }
+        if self.vanilla_bug_ref is not None:
+            d["vanilla_bug_ref"] = self.vanilla_bug_ref
         if include_message:
             d["message"] = self.message
         return d
@@ -290,6 +305,165 @@ def filter_external_mods(entries: list[LogEntry]) -> list[LogEntry]:
             continue
         out.append(e)
     return out
+
+
+# ---------------------------------------------------------------------------
+# Vanilla-bug registry: parsed from docs/vanilla_known_bugs.md
+# ---------------------------------------------------------------------------
+# Heading lines look like:
+#   ### `common/path/to/file.txt:5101` — short title
+#   ### `common/path/to/file.txt:131, 142, 153, 517` — short title
+#   ### `common/path/to/file.txt:25` and `common/other_file.txt:397-414` — title
+# We extract every `path:lines` pair from the heading and the first line of the
+# fenced code block (if any) as a message-substring signature. Matching is by
+# file basename + signature substring (case-insensitive); line numbers are
+# ignored because they shift between vanilla version bumps.
+_HEADING_RE = re.compile(r"^###\s+(.*)$")
+_PATH_REF_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:txt|gui|yml|yaml))(?::[0-9,\s\-]+)?`")
+_TITLE_AFTER_DASH_RE = re.compile(r"\s[—-]\s+(.+)$")
+
+
+class VanillaBugRef:
+    __slots__ = ("title", "file_basenames", "signatures", "anchor")
+
+    def __init__(self, title: str, file_basenames: list[str], signatures: list[str], anchor: str):
+        self.title = title
+        self.file_basenames = file_basenames
+        # Empty list = match purely on basename (no signature filter).
+        # A non-empty list matches if ANY signature substring appears in the message.
+        self.signatures = signatures
+        self.anchor = anchor
+
+    def to_dict(self) -> dict:
+        return {
+            "title": self.title,
+            "section": self.anchor,
+        }
+
+
+_vanilla_bug_cache: dict = {}  # {doc_path: (mtime, list[VanillaBugRef], by_basename_index)}
+
+
+def load_vanilla_bug_registry(doc_path: str) -> tuple[list[VanillaBugRef], dict[str, list[VanillaBugRef]]]:
+    """Parse `docs/vanilla_known_bugs.md` and return (refs, basename_index).
+
+    Memoized on the doc's mtime so repeated requests don't re-parse.
+    Returns ([], {}) if the doc is missing or unreadable.
+    """
+    try:
+        mtime = os.path.getmtime(doc_path)
+    except OSError:
+        return [], {}
+    cached = _vanilla_bug_cache.get(doc_path)
+    if cached and cached[0] == mtime:
+        return cached[1], cached[2]
+    try:
+        with open(doc_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+    except OSError:
+        return [], {}
+    refs: list[VanillaBugRef] = []
+    i = 0
+    while i < len(lines):
+        line = lines[i].rstrip("\n")
+        m = _HEADING_RE.match(line)
+        if not m:
+            i += 1
+            continue
+        heading = m.group(1)
+        paths = _PATH_REF_RE.findall(heading)
+        title_match = _TITLE_AFTER_DASH_RE.search(heading)
+        title = title_match.group(1).strip() if title_match else heading.strip()
+        # Anchor: GitHub-style — lowercase, replace non-alnum runs with `-`
+        anchor_text = re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
+        anchor = f"docs/vanilla_known_bugs.md#{anchor_text}"
+        # Walk the entry body up to the next `### ` or `## ` heading. Capture:
+        #   - additional path references (so a heading can list one path and the
+        #     body can enumerate sibling files affected by the same root cause)
+        #   - the first fenced code block, ALL non-empty lines, as signatures
+        #     (many bugs surface as 2-3 distinct error messages — tagging
+        #     should hit any of them)
+        signatures: list[str] = []
+        body_paths: list[str] = []
+        captured_block = False
+        j = i + 1
+        while j < len(lines):
+            nxt = lines[j].rstrip("\n")
+            # Stop at the next entry (`### `) or section break (`## `).
+            # Note: "### " does NOT startswith "## " — must check both.
+            if nxt.startswith("### ") or nxt.startswith("## "):
+                break
+            if not captured_block and nxt.startswith("```"):
+                k = j + 1
+                while k < len(lines):
+                    inner = lines[k].rstrip("\n")
+                    if inner.startswith("```"):
+                        break
+                    if inner.strip():
+                        signatures.append(inner.strip())
+                    k += 1
+                captured_block = True
+                j = k + 1
+                continue
+            body_paths.extend(_PATH_REF_RE.findall(nxt))
+            j += 1
+        all_paths = paths + body_paths
+        if not all_paths:
+            # Heading and body had no parsable path references — skip.
+            i += 1
+            continue
+        basenames = sorted({pathlib.Path(p).name for p in all_paths})
+        refs.append(VanillaBugRef(title=title, file_basenames=basenames, signatures=signatures, anchor=anchor))
+        i += 1
+    by_basename: dict[str, list[VanillaBugRef]] = defaultdict(list)
+    for r in refs:
+        for bn in r.file_basenames:
+            by_basename[bn].append(r)
+    _vanilla_bug_cache[doc_path] = (mtime, refs, dict(by_basename))
+    return refs, dict(by_basename)
+
+
+_LINE_NUM_RE = re.compile(r":\d+")
+
+
+def _normalize_for_signature_match(s: str) -> str:
+    """Lowercase + collapse `:NNN` line references so version-shifted line numbers
+    don't break the substring match."""
+    return _LINE_NUM_RE.sub(":N", s.lower())
+
+
+def tag_vanilla_bugs(entries: list[LogEntry], by_basename: dict[str, list[VanillaBugRef]]) -> None:
+    """Mutate entries: set `vanilla_bug_ref` on each that matches a registered vanilla bug.
+
+    Match: file basename appears in the entry's `files`, AND (the ref has no
+    signatures OR ANY signature appears as a case-insensitive substring of the
+    message). Both signature and message are normalized so explicit `:NNN` line
+    refs don't have to match exactly (vanilla bumps shift them).
+    """
+    if not by_basename:
+        return
+    # Pre-normalize signatures once
+    sig_cache: dict[int, list[str]] = {}
+    for refs in by_basename.values():
+        for ref in refs:
+            if id(ref) not in sig_cache:
+                sig_cache[id(ref)] = [_normalize_for_signature_match(s) for s in ref.signatures]
+    for e in entries:
+        if not e.files:
+            continue
+        norm_msg = _normalize_for_signature_match(e.message)
+        matched: VanillaBugRef | None = None
+        for f in e.files:
+            base = pathlib.Path(f).name
+            for ref in by_basename.get(base, ()):
+                sigs = sig_cache.get(id(ref), [])
+                if not sigs or any(s in norm_msg for s in sigs):
+                    matched = ref
+                    break
+            if matched:
+                break
+        if matched:
+            e.vanilla_bug_ref = matched.to_dict()
 
 
 def filter_entries(
