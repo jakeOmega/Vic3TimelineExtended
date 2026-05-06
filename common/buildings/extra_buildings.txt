@@ -2171,7 +2171,7 @@ building_military_base = {
 				owner = {
 					OR = {
 						is_at_war = yes
-						any_diplomatic_play = { involvement = involved_in_play }
+						is_diplomatic_play_committed_participant = yes
 					}
 				}
 			}
@@ -2182,7 +2182,7 @@ building_military_base = {
 				any_neighbouring_state = {
 					owner = {
 						is_country_type = unrecognized
-						NOT = { has_diplomatic_relevance = ROOT }
+						NOT = { has_diplomatic_relevance = root.owner }
 					}
 				}
 			}

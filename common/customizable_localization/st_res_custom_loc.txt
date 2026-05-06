@@ -1,5 +1,10 @@
 ﻿# Mode text is derived from country vars at display time. The live Strategic
 # Reserve system no longer maintains persistent sr_*_mode variables.
+#
+# Each storing/withdrawing trigger is gated on `has_variable` because the
+# customizable_localization fires for every country (including those that
+# never opened the JE), and unguarded `var:` reads on unset variables raise
+# script-system errors.
 
 st_res_grain_mode_text = {
 	type = country
@@ -7,6 +12,8 @@ st_res_grain_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_grain_rate
+			has_variable = st_res_grain_stored
 			var:st_res_grain_rate > 0
 			var:st_res_grain_stored < st_res_grain_capacity
 		}
@@ -14,6 +21,8 @@ st_res_grain_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_grain_rate
+			has_variable = st_res_grain_stored
 			var:st_res_grain_rate < 0
 			var:st_res_grain_stored > 0
 		}
@@ -31,6 +40,8 @@ st_res_ammunition_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_ammunition_rate
+			has_variable = st_res_ammunition_stored
 			var:st_res_ammunition_rate > 0
 			var:st_res_ammunition_stored < st_res_ammunition_capacity
 		}
@@ -38,6 +49,8 @@ st_res_ammunition_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_ammunition_rate
+			has_variable = st_res_ammunition_stored
 			var:st_res_ammunition_rate < 0
 			var:st_res_ammunition_stored > 0
 		}
@@ -55,6 +68,8 @@ st_res_oil_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_oil_rate
+			has_variable = st_res_oil_stored
 			var:st_res_oil_rate > 0
 			var:st_res_oil_stored < st_res_oil_capacity
 		}
@@ -62,6 +77,8 @@ st_res_oil_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_oil_rate
+			has_variable = st_res_oil_stored
 			var:st_res_oil_rate < 0
 			var:st_res_oil_stored > 0
 		}
@@ -79,6 +96,8 @@ st_res_small_arms_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_small_arms_rate
+			has_variable = st_res_small_arms_stored
 			var:st_res_small_arms_rate > 0
 			var:st_res_small_arms_stored < st_res_small_arms_capacity
 		}
@@ -86,6 +105,8 @@ st_res_small_arms_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_small_arms_rate
+			has_variable = st_res_small_arms_stored
 			var:st_res_small_arms_rate < 0
 			var:st_res_small_arms_stored > 0
 		}
@@ -103,6 +124,8 @@ st_res_artillery_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_artillery_rate
+			has_variable = st_res_artillery_stored
 			var:st_res_artillery_rate > 0
 			var:st_res_artillery_stored < st_res_artillery_capacity
 		}
@@ -110,6 +133,8 @@ st_res_artillery_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_artillery_rate
+			has_variable = st_res_artillery_stored
 			var:st_res_artillery_rate < 0
 			var:st_res_artillery_stored > 0
 		}
@@ -127,6 +152,8 @@ st_res_aeroplanes_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_aeroplanes_rate
+			has_variable = st_res_aeroplanes_stored
 			var:st_res_aeroplanes_rate > 0
 			var:st_res_aeroplanes_stored < st_res_aeroplanes_capacity
 		}
@@ -134,6 +161,8 @@ st_res_aeroplanes_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_aeroplanes_rate
+			has_variable = st_res_aeroplanes_stored
 			var:st_res_aeroplanes_rate < 0
 			var:st_res_aeroplanes_stored > 0
 		}
@@ -151,6 +180,8 @@ st_res_tanks_mode_text = {
 
 	text = {
 		trigger = {
+			has_variable = st_res_tanks_rate
+			has_variable = st_res_tanks_stored
 			var:st_res_tanks_rate > 0
 			var:st_res_tanks_stored < st_res_tanks_capacity
 		}
@@ -158,6 +189,8 @@ st_res_tanks_mode_text = {
 	}
 	text = {
 		trigger = {
+			has_variable = st_res_tanks_rate
+			has_variable = st_res_tanks_stored
 			var:st_res_tanks_rate < 0
 			var:st_res_tanks_stored > 0
 		}

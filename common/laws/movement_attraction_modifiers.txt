@@ -1,4 +1,4 @@
-# Movement attraction modifiers added to vanilla laws.
+﻿# Movement attraction modifiers added to vanilla laws.
 #
 # These INJECTs only target VANILLA laws — contributions to mod-defined laws
 # live inline in their definitions in extra_laws.txt for load-order safety.

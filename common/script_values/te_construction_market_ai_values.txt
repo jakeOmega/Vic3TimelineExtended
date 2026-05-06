@@ -38,6 +38,7 @@
 			# target ~0.3 scaled — modest extra caution
 			if = {
 				limit = {
+					has_variable = bubble_pressure
 					var:bubble_pressure >= 50
 					scaled_gold_reserves < 0.3
 				}

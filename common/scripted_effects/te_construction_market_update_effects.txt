@@ -17,7 +17,7 @@
 		limit = {
 			NOT = {
 				any_scope_building = {
-					type = bt:te_construction_market_site
+					is_building_type = te_construction_market_site
 				}
 			}
 		}
@@ -58,7 +58,7 @@ te_construction_market_apply_per_site_modifier = {
 
 	every_scope_building = {
 		limit = {
-			type = bt:te_construction_market_site
+			is_building_type = te_construction_market_site
 		}
 		remove_modifier = te_construction_market_capacity_modifier
 		# save_scope_as = te_construction_market_current_building

@@ -1,4 +1,4 @@
-# Path-dependent legacy applied to a newly decolonized country.
+﻿# Path-dependent legacy applied to a newly decolonized country.
 # Scope: the new country (called from create_dynamic_country.on_created).
 # Reads the decolonizing parent's policy-time variables to decide which
 # legacy modifier and starting diplomatic relations to apply.

@@ -3,7 +3,7 @@
 		limit = {
 			NOT = {
 				any_scope_building = {
-					type = bt:te_construction_market_site
+					is_building_type = te_construction_market_site
 				}
 			}
 		}
@@ -19,7 +19,7 @@
 				capital = {
 					AND = {
 						any_scope_building = {
-							type = bt:te_construction_market_site
+							is_building_type = te_construction_market_site
 						}
 						NOT = {
 							any_scope_building = {
@@ -50,7 +50,7 @@ te_construction_market_state_on_end = {
 				}
 			}
 			any_scope_building = {
-				type = bt:te_construction_market_site
+				is_building_type = te_construction_market_site
 			}
 			NOT = {
 				is_capital = yes
@@ -63,7 +63,7 @@ te_construction_market_state_on_end = {
 			limit = {
 				NOT = {
 					any_scope_building = {
-						type = bt:te_construction_market_site
+						is_building_type = te_construction_market_site
 					}
 				}
 			}

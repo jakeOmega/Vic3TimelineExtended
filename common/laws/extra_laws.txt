@@ -512,7 +512,7 @@ law_state_intellectual_property = {
 
 	unlocking_laws = {
 		law_command_economy
-		law_corporatism
+		law_corporate_state
 	}
 
 	modifier = {
@@ -532,7 +532,7 @@ law_state_intellectual_property = {
 			add = 400
 		}
 		if = {
-			limit = { has_law = law_type:law_corporatism }
+			limit = { has_law = law_type:law_corporate_state }
 			add = 200
 		}
 	}

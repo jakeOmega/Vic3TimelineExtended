@@ -238,6 +238,9 @@ is_in_or_adjacent_colonial_macroregion_australia_oceania = {
 is_overseas_from_capital = {
 	custom_tooltip = {
 		text = IS_OVERSEAS_FROM_CAPITAL_TT
+		# Guard: decentralized / capital-less countries have no capital.region to read,
+		# which would otherwise spam "Event target link 'region' returned an invalid object".
+		owner = { exists = capital }
 		OR = {
 			AND = {
 				owner = { capital = { is_in_colonial_macroregion_north_america = yes } }

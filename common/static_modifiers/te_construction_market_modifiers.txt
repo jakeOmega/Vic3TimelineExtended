@@ -16,8 +16,3 @@ te_construction_market_private_share_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_private_construction_allocation_mult = 0.01
 }
-
-te_construction_market_private_share_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_private_construction_allocation_mult = 0.01
-}

@@ -1,4 +1,4 @@
-# Contributions to country_legislative_override_capacity_add — read by the
+﻿# Contributions to country_legislative_override_capacity_add — read by the
 # Forced a Law Through event (minor_events_timelineextended.2) to gate which
 # tier of bypass options the player can use, and to scale the authority cost.
 #

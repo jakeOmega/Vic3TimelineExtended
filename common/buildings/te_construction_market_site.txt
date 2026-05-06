@@ -73,7 +73,12 @@ REPLACE:building_construction_sector = {
 		}
 		# Active banking-cycle stress: don't add construction during a financial crunch
 		if = {
-			limit = { owner = { var:bubble_pressure >= 60 } }
+			limit = {
+				owner = {
+					has_variable = bubble_pressure
+					var:bubble_pressure >= 60
+				}
+			}
 			add = -500
 		}
 	}

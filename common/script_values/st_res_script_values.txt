@@ -44,25 +44,42 @@ st_res_throughput_factor = {
 }
 
 # Shared button step size. Tier 0 = 1, 1 = 10, 2 = 100, 3 = 1000, 4 = 10000.
+# Tier var defaults to 1 (10-unit step) before the JE first runs init.
 st_res_adjust_step_value = {
-	value = 1
+	value = 10
 	if = {
-		limit = { var:st_res_adjust_step_tier = 0 }
+		limit = {
+			has_variable = st_res_adjust_step_tier
+			var:st_res_adjust_step_tier = 0
+		}
 		value = 1
 	}
 	else_if = {
-		limit = { var:st_res_adjust_step_tier = 1 }
+		limit = {
+			has_variable = st_res_adjust_step_tier
+			var:st_res_adjust_step_tier = 1
+		}
 		value = 10
 	}
 	else_if = {
-		limit = { var:st_res_adjust_step_tier = 2 }
+		limit = {
+			has_variable = st_res_adjust_step_tier
+			var:st_res_adjust_step_tier = 2
+		}
 		value = 100
 	}
 	else_if = {
-		limit = { var:st_res_adjust_step_tier = 3 }
+		limit = {
+			has_variable = st_res_adjust_step_tier
+			var:st_res_adjust_step_tier = 3
+		}
 		value = 1000
 	}
-	else = {
+	else_if = {
+		limit = {
+			has_variable = st_res_adjust_step_tier
+			var:st_res_adjust_step_tier = 4
+		}
 		value = 10000
 	}
 }
@@ -77,8 +94,12 @@ st_res_grain_decay_rate = {
 }
 
 st_res_grain_weekly_decay = {
-	value = var:st_res_grain_stored
-	multiply = st_res_grain_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_stored }
+		value = var:st_res_grain_stored
+		multiply = st_res_grain_decay_rate
+	}
 }
 
 # Actual gross flow the hub must apply to achieve the configured target net change
@@ -86,7 +107,11 @@ st_res_grain_weekly_decay = {
 st_res_grain_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_grain_rate
+		}
 		add = var:st_res_grain_rate
 	}
 	add = st_res_grain_weekly_decay
@@ -171,8 +196,12 @@ st_res_ammunition_decay_rate = {
 }
 
 st_res_ammunition_weekly_decay = {
-	value = var:st_res_ammunition_stored
-	multiply = st_res_ammunition_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_stored }
+		value = var:st_res_ammunition_stored
+		multiply = st_res_ammunition_decay_rate
+	}
 }
 
 # Actual gross flow the hub must apply to achieve the configured target net change
@@ -180,7 +209,11 @@ st_res_ammunition_weekly_decay = {
 st_res_ammunition_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_ammunition_rate
+		}
 		add = var:st_res_ammunition_rate
 	}
 	add = st_res_ammunition_weekly_decay
@@ -265,14 +298,22 @@ st_res_oil_decay_rate = {
 }
 
 st_res_oil_weekly_decay = {
-	value = var:st_res_oil_stored
-	multiply = st_res_oil_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_stored }
+		value = var:st_res_oil_stored
+		multiply = st_res_oil_decay_rate
+	}
 }
 
 st_res_oil_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_oil_rate
+		}
 		add = var:st_res_oil_rate
 	}
 	add = st_res_oil_weekly_decay
@@ -357,14 +398,22 @@ st_res_small_arms_decay_rate = {
 }
 
 st_res_small_arms_weekly_decay = {
-	value = var:st_res_small_arms_stored
-	multiply = st_res_small_arms_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_stored }
+		value = var:st_res_small_arms_stored
+		multiply = st_res_small_arms_decay_rate
+	}
 }
 
 st_res_small_arms_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_small_arms_rate
+		}
 		add = var:st_res_small_arms_rate
 	}
 	add = st_res_small_arms_weekly_decay
@@ -449,14 +498,22 @@ st_res_artillery_decay_rate = {
 }
 
 st_res_artillery_weekly_decay = {
-	value = var:st_res_artillery_stored
-	multiply = st_res_artillery_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_stored }
+		value = var:st_res_artillery_stored
+		multiply = st_res_artillery_decay_rate
+	}
 }
 
 st_res_artillery_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_artillery_rate
+		}
 		add = var:st_res_artillery_rate
 	}
 	add = st_res_artillery_weekly_decay
@@ -541,14 +598,22 @@ st_res_aeroplanes_decay_rate = {
 }
 
 st_res_aeroplanes_weekly_decay = {
-	value = var:st_res_aeroplanes_stored
-	multiply = st_res_aeroplanes_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_stored }
+		value = var:st_res_aeroplanes_stored
+		multiply = st_res_aeroplanes_decay_rate
+	}
 }
 
 st_res_aeroplanes_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_aeroplanes_rate
+		}
 		add = var:st_res_aeroplanes_rate
 	}
 	add = st_res_aeroplanes_weekly_decay
@@ -633,14 +698,22 @@ st_res_tanks_decay_rate = {
 }
 
 st_res_tanks_weekly_decay = {
-	value = var:st_res_tanks_stored
-	multiply = st_res_tanks_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_stored }
+		value = var:st_res_tanks_stored
+		multiply = st_res_tanks_decay_rate
+	}
 }
 
 st_res_tanks_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_tanks_rate
+		}
 		add = var:st_res_tanks_rate
 	}
 	add = st_res_tanks_weekly_decay

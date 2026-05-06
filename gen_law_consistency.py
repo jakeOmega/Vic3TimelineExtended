@@ -523,7 +523,8 @@ def write_output(content, dry_run=False):
         print(f"[dry-run] Would write {len(content)} bytes to {OUTPUT_PATH}")
         return
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    # utf-8-sig prepends the UTF-8 BOM the Clausewitz parser requires.
+    with open(OUTPUT_PATH, "w", encoding="utf-8-sig") as f:
         f.write(content)
     print(f"[gen_law_consistency] wrote {OUTPUT_PATH} ({len(content)} bytes)")
 

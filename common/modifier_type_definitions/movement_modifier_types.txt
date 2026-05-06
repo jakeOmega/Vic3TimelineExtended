@@ -1,4 +1,4 @@
-# Mod-added movement attraction modifier registrations.
+﻿# Mod-added movement attraction modifier registrations.
 #
 # Vanilla auto-registers state_pop_support_movement_<X>_(add|mult) for every
 # vanilla movement, but mod-added movements (defined in
