@@ -16,15 +16,15 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO))
+from path_constants import base_game_path  # noqa: E402
+
 COMBAT_FILE = REPO / "common" / "combat_unit_types" / "extra_combat_units.txt"
 MOD_TECH_DIR = REPO / "common" / "technology" / "technologies"
 # Vanilla tech directory — era_5 entries only matter here, but pulling the whole
 # tree means the audit auto-tracks any vanilla tech a mod-side unit happens to
 # unlock from.
-VANILLA_TECH_DIR = Path(
-    "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3"
-    "/game/common/technology/technologies"
-)
+VANILLA_TECH_DIR = Path(base_game_path) / "game" / "common" / "technology" / "technologies"
 
 
 def build_tech_era_map() -> dict[str, str]:

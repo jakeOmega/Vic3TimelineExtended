@@ -1,4 +1,4 @@
-path_constants.py
+paths.local.json
 *.pyc
 *__pycache__
 .github/

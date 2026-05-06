@@ -13,7 +13,15 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DEST="${VIC3_MOD_DEPLOY_TARGET:-/mnt/c/Users/jakef/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended}"
+
+# Resolve the deploy target. Order: env var override → path_constants.py
+# (which itself reads paths.local.json → env vars → autodetect). path_constants
+# only uses stdlib so system python3 works even without .venv.
+if [[ -n "${VIC3_MOD_DEPLOY_TARGET:-}" ]]; then
+  DEST="$VIC3_MOD_DEPLOY_TARGET"
+else
+  DEST="$(python3 -c "import sys; sys.path.insert(0, '$REPO_ROOT'); from path_constants import mod_deploy_target; print(mod_deploy_target)" 2>/dev/null || true)"
+fi
 
 APPLY=0
 if [[ "${1:-}" == "--apply" ]]; then APPLY=1; fi
@@ -53,9 +61,14 @@ INCLUDES=(
   --exclude=.DS_Store
 )
 
+if [[ -z "$DEST" ]]; then
+  echo "No deploy target configured."
+  echo "Run python3 scripts/setup.py to configure paths, or set VIC3_MOD_DEPLOY_TARGET."
+  exit 1
+fi
 if [[ ! -d "$DEST" ]]; then
   echo "Deploy target does not exist: $DEST"
-  echo "Create it first, or set VIC3_MOD_DEPLOY_TARGET."
+  echo "Create it first, or re-run python3 scripts/setup.py."
   exit 1
 fi
 

@@ -29,10 +29,10 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = Path(__file__).resolve().parents[2]
-VANILLA_TRAITS = Path(
-    r"C:\Program Files (x86)\Steam\steamapps\common\Victoria 3"
-    r"\game\gfx\interface\icons\character_trait_icons"
-)
+sys.path.insert(0, str(REPO_ROOT))
+from path_constants import base_game_path  # noqa: E402
+
+VANILLA_TRAITS = Path(base_game_path) / "game" / "gfx" / "interface" / "icons" / "character_trait_icons"
 OUTPUT_DIR = REPO_ROOT / "gfx" / "interface" / "icons" / "character_trait_icons"
 
 # Icons to compare for border extraction

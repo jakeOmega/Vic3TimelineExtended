@@ -4,7 +4,7 @@ End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria
 
 ## 0. Prerequisites
 
-- Local clone of vanilla at `/home/jakef/src/vic3` (full git history; the prior version is in git history).
+- Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history).
 - Mod state server runnable: `python3 mod_state_server.py` (use `python3`, not `python`, on this system).
 - The mod loads cleanly on the prior vanilla (i.e. before starting the migration, the mod is in a known-good state).
 
@@ -20,10 +20,10 @@ Captures key gameplay values (combat units, ship types, late-era tech modifiers,
 
 ## 2. Identify the diff baselines
 
-In `/home/jakef/src/vic3`:
+In `~/src/vic3`:
 
 ```bash
-git -C /home/jakef/src/vic3 log --oneline | head -20
+git -C ~/src/vic3 log --oneline | head -20
 ```
 
 Find the commit that bumped to the new version (e.g. "v1.13"). Its parent is the prior version baseline. Save these as `OLD_REF` and `NEW_REF`.
@@ -64,13 +64,16 @@ When `debug.log` shows `Unexpected token: <name>` or `inject/replace to a non-ex
 The auto-generators read vanilla and emit mod files. Re-running them after a vanilla patch picks up vanilla's content changes for free. Run in this order:
 
 ```bash
-python3 apply_ideologies.py        # common/ideologies/modified.txt
-python3 ig_feminism.py             # common/interest_groups/00_*.txt (8 files)
-python3 pop_needs_curves.py        # common/buy_packages/00_buy_packages.txt
-python3 resources.py               # map_data/state_regions/*.txt
+python3 apply_ideologies.py                          # common/ideologies/modified.txt
+python3 ig_feminism.py                               # common/interest_groups/00_*.txt (8 files)
+python3 pop_needs_curves.py                          # common/buy_packages/00_buy_packages.txt
+python3 resources.py                                 # map_data/state_regions/*.txt
+python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
 ```
 
 If the vanilla map changed (states removed/renamed/split), edit `deposits_config.json` to point old keys at successors **before** running `resources.py`. See `docs/auto_generated_files.md` for the full ownership table.
+
+`gen_formable_regions.py` reads vanilla `common/strategic_regions/*.txt` and re-expands the four EU/Africa/N.America/Earth formable regions to explicit state lists — re-run if vanilla rebalances strategic regions or renames states. The script also fails loudly if a configured strategic region disappears, which is the signal to update its inline config.
 
 ## 5. GUI override re-merge
 

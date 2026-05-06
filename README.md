@@ -1,6 +1,22 @@
 # Vic3TimelineExtended
 Mod for Victoria 3 extending timeline
 
+## Setting up on a new machine
+
+```bash
+git clone <repo-url> Vic3TimelineExtended
+cd Vic3TimelineExtended
+python3 scripts/setup.py
+```
+
+The setup script creates a `.venv`, installs the Python tooling deps, then auto-detects (or prompts for) the Steam install of Victoria 3, your Paradox documents folder, and the deploy target. It writes a gitignored `paths.local.json` with the results and runs a dry-run deploy to verify everything resolves. Re-run any time paths move.
+
+WSL is the supported primary platform — the autodetector reads Steam's `libraryfolders.vdf` and the Windows username via `cmd.exe`. On native Linux or Windows the script falls through to prompts.
+
+For vanilla-vs-mod disambiguation, the tooling expects a vanilla `script_docs` snapshot at the path you give for `vanilla_snapshot_docs_path` (default `~/src/vic3/docs/`). Setup warns if it's missing and prints the manual refresh workflow (launch vanilla unmodded → `script_docs` in the in-game console → copy logs).
+
+Per-path env-var overrides also work, useful for one-off invocations: `VIC3_BASE_GAME`, `VIC3_MOD_DEPLOY_TARGET`, `VIC3_VANILLA_DOCS_SNAPSHOT`, `VIC3_VANILLA_REPO`, `VIC3_VANILLA_DOCS_RUNTIME`, `VIC3_GAME_LOGS`. See `path_constants.py` for the resolution order.
+
 ## Game Rules
 
 The following mod systems can be toggled via game rules at game setup:

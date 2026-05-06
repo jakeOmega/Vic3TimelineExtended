@@ -1528,8 +1528,8 @@ When a vanilla patch updates a GUI file the mod overrides, hand-merging is rarel
 
 ```bash
 # Stage vanilla's pre-patch and post-patch versions
-git -C /home/jakef/src/vic3 show <OLD_REF>:game/gui/<file> > /tmp/<file>.old
-git -C /home/jakef/src/vic3 show <NEW_REF>:game/gui/<file> > /tmp/<file>.new
+git -C ~/src/vic3 show <OLD_REF>:game/gui/<file> > /tmp/<file>.old
+git -C ~/src/vic3 show <NEW_REF>:game/gui/<file> > /tmp/<file>.new
 
 # Take the mod's current (pre-patch-based) override as the work copy
 cp gui/<file> /tmp/<file>.work
@@ -1556,8 +1556,8 @@ For the 1.13 migration this resolved 14 of 17 GUI overrides cleanly; the giants 
 mkdir -p /tmp/gui_merge
 for f in gui/*.gui; do
     name=$(basename "$f")
-    git -C /home/jakef/src/vic3 show "<OLD_REF>:game/gui/$name" > "/tmp/gui_merge/$name.old" 2>/dev/null || continue
-    git -C /home/jakef/src/vic3 show "<NEW_REF>:game/gui/$name" > "/tmp/gui_merge/$name.new" 2>/dev/null || continue
+    git -C ~/src/vic3 show "<OLD_REF>:game/gui/$name" > "/tmp/gui_merge/$name.old" 2>/dev/null || continue
+    git -C ~/src/vic3 show "<NEW_REF>:game/gui/$name" > "/tmp/gui_merge/$name.new" 2>/dev/null || continue
     cp "$f" "/tmp/gui_merge/$name.work"
     git merge-file -p "/tmp/gui_merge/$name.work" "/tmp/gui_merge/$name.old" "/tmp/gui_merge/$name.new" \
         > "/tmp/gui_merge/$name.merged" 2>/dev/null

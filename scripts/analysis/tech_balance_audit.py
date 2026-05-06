@@ -34,14 +34,12 @@ sys.path.insert(0, str(REPO))
 import annotators                # noqa: E402
 import pm_balance_lib            # noqa: E402, F401  (registers `balance` annotator)
 import tech_unlocks_lib          # noqa: E402
+from path_constants import base_game_path  # noqa: E402
 
 TECH_DIR = REPO / "common" / "technology" / "technologies"
 ERAS = ["era_6.txt", "era_7.txt", "era_8.txt", "era_9.txt"]
 
-VANILLA_COMMON_DIR = Path(
-    "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3"
-    "/game/common"
-)
+VANILLA_COMMON_DIR = Path(base_game_path) / "game" / "common"
 VANILLA_TECH_DIR = VANILLA_COMMON_DIR / "technology" / "technologies"
 VANILLA_FILES = ["10_production.txt", "20_military.txt", "30_society.txt"]
 

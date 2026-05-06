@@ -1,0 +1,10 @@
+{
+    "_comment": "Tracked schema example. The real per-machine config lives at paths.local.json (gitignored), normally written by `python3 scripts/setup.py`. Hand-edit only if you know what you're doing — env vars (VIC3_*) override these values, and the loader falls back to autodetection on WSL when both are missing. See path_constants.py.",
+
+    "base_game_path": "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3",
+    "mod_deploy_target": "/mnt/c/Users/<windows-user>/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended",
+    "vanilla_snapshot_docs_path": "/home/<linux-user>/src/vic3/docs",
+    "vanilla_source_repo_path": "/home/<linux-user>/src/vic3",
+    "vanilla_docs_path": "/mnt/c/Users/<windows-user>/OneDrive/Documents/Paradox Interactive/Victoria 3/docs",
+    "game_logs_path": "/mnt/c/Users/<windows-user>/OneDrive/Documents/Paradox Interactive/Victoria 3/logs"
+}
