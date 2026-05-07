@@ -1032,7 +1032,7 @@ types production_methods
 
 							block "onclick" {
 								onclick = "[Execute(Country.PauseShipConstruction)]"
-								enabled = "[And(IsValid(Country.PauseShipConstruction), Country.HasShipConstructionQueued)]"
+								enabled = "[IsValid(Country.PauseShipConstruction)]"
 							}
 
 							blockoverride "icon" {

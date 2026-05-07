@@ -6162,6 +6162,59 @@ right_click_menu = {
 			}
 		}
 
+		### STATION IN STATE (direct, no naval transport needed)
+		right_click_menu_item = {
+			blockoverride "properties" {
+				visible = "[And( IsPotential( State.GetStationSelectedFormationsCommand ), Not( State.RequiresNavalTransportForSelectedFormations ) )]"
+				enabled = "[IsValid( State.GetStationSelectedFormationsCommand )]"
+				onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded( State.GetStationSelectedFormationsCommand )]"
+				onclick = "[RightClickMenuManager.Close]"
+				tooltip = "STATION_MILITARY_FORMATION_LABEL"
+			}
+
+			blockoverride "sound" {
+				clicksound = "event:/SFX/UI/Military/formation_actions_station_at_hq"
+			}
+
+			blockoverride "margin" {
+				margin_left = 55
+			}
+
+			blockoverride "texture" {
+				texture = "gfx/interface/icons/formation_order_icons/station_armies.dds"
+			}
+
+			blockoverride "text" {
+				text = "STATION_MILITARY_FORMATION_LABEL"
+			}
+		}
+
+		### STATION IN STATE (requires naval transport)
+		right_click_menu_item = {
+			blockoverride "properties" {
+				visible = "[And( IsPotential( State.GetStationSelectedFormationsCommand ), State.RequiresNavalTransportForSelectedFormations )]"
+				onclick = "[State.ShowTransportPlannerForSelectedFormation]"
+				onclick = "[RightClickMenuManager.Close]"
+				tooltip = "HQ_MOVEMENT_MARKER_TRANSPORT_DESC"
+			}
+
+			blockoverride "sound" {
+				clicksound = "event:/SFX/UI/Military/formation_actions_station_at_hq"
+			}
+
+			blockoverride "margin" {
+				margin_left = 55
+			}
+
+			blockoverride "texture" {
+				texture = "gfx/interface/icons/formation_order_icons/station_armies.dds"
+			}
+
+			blockoverride "text" {
+				text = "STATION_MILITARY_FORMATION_LABEL"
+			}
+		}
+
         right_click_menu_item = {
             blockoverride "properties" {
                 tooltip = "[State.GetPlanInvasionDesc]"
