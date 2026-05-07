@@ -1,0 +1,109 @@
+# sol_expectations_modifier_types.txt
+#
+# Standard-of-living expectations system: adaptive shift (with floor/ceiling),
+# per-strata offsets, target offset, and adaptation-rate multipliers. Consumed
+# by the SoL-expectations script values; see in-block comments for floor/ceiling
+# and per-strata semantics.
+
+#==================================================
+# SoL Expectations Modifier Types
+#==================================================
+country_sol_expectation_adaptation_rate_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Persistent monthly bias added to the expectations shift each month.
+# Positive = expectations rise faster (people expect more), negative = expectations drop.
+# Laws, techs, buildings, or timed modifiers can apply this.
+country_sol_expectations_shift_add = {
+	color = neutral
+	decimals = 2
+	script_only = yes
+}
+
+# Offsets the convergence target for SoL expectations.
+# Positive = people permanently expect more than current average SoL, negative = less.
+# At equilibrium: average_expected_sol ≈ average_sol + target_add.
+# Use this for techs, laws, and other permanent unlocks that raise/lower expectations.
+country_sol_expectations_target_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}
+
+# Floor on the adaptive shift. Positive values raise the floor (expectations can't drop as far).
+# Default floor: 0. E.g. welfare_state adds +5 → floor becomes 5.
+# Prevents expectations from collapsing indefinitely — people are unhappy starving regardless of duration.
+country_sol_expectations_shift_min_add = {
+	color = good
+	decimals = 1
+	script_only = yes
+}
+
+# Ceiling on the adaptive shift. Negative values lower the ceiling (expectations can't rise as far).
+# Default ceiling: 50. E.g. command_economy adds -5 → ceiling becomes 45.
+country_sol_expectations_shift_max_add = {
+	color = bad
+	decimals = 1
+	script_only = yes
+}
+
+# Per-strata expected SoL offsets. These are direct (non-adaptive) adjustments
+# applied on top of the base convergence. Positive = that class expects more
+# than the country average, negative = expects less.
+# Use to model class-relative comparison: aristocratic societies have high upper
+# offsets (elites compare to other elites); egalitarian techs reduce offsets
+# (everyone compares to the whole population).
+country_sol_expectations_upper_offset_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}
+
+country_sol_expectations_middle_offset_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}
+
+country_sol_expectations_lower_offset_add = {
+	color = neutral
+	decimals = 1
+	script_only = yes
+}
+
+# Percentage multiplier applied to the base clamped shift before
+# per-strata offsets. Affects all three strata equally.
+country_sol_expectations_offset_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Percentage multiplier applied to each strata's total shift value.
+# 0.1 = +10% shift. Use for proportional scaling effects (e.g. media,
+# propaganda) rather than flat offsets.
+country_sol_expectations_upper_offset_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_sol_expectations_middle_offset_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_sol_expectations_lower_offset_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

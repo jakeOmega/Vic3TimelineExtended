@@ -1,0 +1,119 @@
+# megastructure_progress_modifier_types.txt
+#
+# Annual + total construction-progress trackers for the mod's late-game
+# megastructures (space elevator, solar collector, orbital battlestation,
+# mind upload nexus, antimatter facility, nanofabrication center,
+# consciousness network) plus their country-level max_level_add caps and
+# the solar receiver counter. Consumed by their respective progress bars
+# and gating triggers.
+
+building_annual_space_elevator_progress = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 50000000
+	}
+}
+
+building_total_space_elevator_progress = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+building_annual_solar_collector_progress = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 50000000
+	}
+}
+
+building_total_solar_collector_progress = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+country_solar_receiver_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+building_annual_orbital_battlestation_progress = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 50000000
+	}
+}
+
+building_total_orbital_battlestation_progress = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+building_annual_mind_upload_nexus_progress = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 50000000
+	}
+}
+
+building_total_mind_upload_nexus_progress = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+#==================================================
+# Antimatter Facility Modifier Types
+#==================================================
+building_annual_antimatter_facility_progress = {
+	color = good
+	percent = yes
+}
+
+building_total_antimatter_facility_progress = {
+	color = good
+	percent = yes
+}
+
+country_antimatter_facility_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+#==================================================
+# Nanofabrication Center Modifier Types
+#==================================================
+building_annual_nanofabrication_center_progress = {
+	color = good
+	percent = yes
+}
+
+building_total_nanofabrication_center_progress = {
+	color = good
+	percent = yes
+}
+
+#==================================================
+# Consciousness Network Modifier Types
+#==================================================
+building_annual_consciousness_network_progress = {
+	color = good
+	percent = yes
+}
+
+building_total_consciousness_network_progress = {
+	color = good
+	percent = yes
+}

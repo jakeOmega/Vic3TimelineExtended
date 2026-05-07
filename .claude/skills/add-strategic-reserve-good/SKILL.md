@@ -37,7 +37,7 @@ for good in <NEW_GOOD_1> <NEW_GOOD_2>; do
 done
 ```
 
-`0` = vanilla doesn't register that axis. **Any 0 means you must add a registration entry to `common/modifier_type_definitions/extra_modifier_types.txt`.** The mod already pre-registers `goods_input_grain_mult`, `goods_output_grain_mult`, and `goods_input_aeroplanes_mult` for exactly this reason — follow that pattern (search the file for the existing `goods_input_grain_mult = { color = bad percent = yes ... }` block to see the format).
+`0` = vanilla doesn't register that axis. **Any 0 means you must add a registration entry to `common/modifier_type_definitions/mod_entity_modifier_types.txt`.** The mod already pre-registers `goods_input_grain_mult`, `goods_output_grain_mult`, and `goods_input_aeroplanes_mult` for exactly this reason — follow that pattern (search the file for the existing `goods_input_grain_mult = { color = bad percent = yes ... }` block to see the format).
 
 Reference: `docs/scripting_best_practices.md` § goods modifier registration.
 
@@ -48,7 +48,7 @@ All paths relative to `/home/jakef/src/Vic3TimelineExtended/`. The pattern is id
 | # | File | What to add per new good |
 |---|---|---|
 | 1 | `common/modifier_type_definitions/st_res_modifier_types.txt` | 2 modifier defs: `country_st_res_<GOOD>_capacity_add` (color=good, decimals=0) + `country_st_res_<GOOD>_decay_add` (color=bad, decimals=3, percent=yes) |
-| 2 | `common/modifier_type_definitions/extra_modifier_types.txt` | **Only if the pre-flight audit flagged a missing mult axis.** Add the missing `goods_input_<GOOD>_mult` and/or `goods_output_<GOOD>_mult` entry, modeled on the existing `goods_input_grain_mult` block. |
+| 2 | `common/modifier_type_definitions/mod_entity_modifier_types.txt` | **Only if the pre-flight audit flagged a missing mult axis.** Add the missing `goods_input_<GOOD>_mult` and/or `goods_output_<GOOD>_mult` entry, modeled on the existing `goods_input_grain_mult` block. |
 | 3 | `common/static_modifiers/extra_modifiers.txt` | (a) one base decay value in the `INJECT:base_values` block near the top, (b) two hub-flow static modifiers (`st_res_<GOOD>_store_flow` with `goods_input_<GOOD>_mult = 1`, `st_res_<GOOD>_withdraw_flow` with `goods_output_<GOOD>_mult = 1`) added next to the existing `st_res_oil_*_flow` entries near the bottom of the file |
 | 4 | `common/production_methods/strategic_reserve_pms.txt` | (a) one capacity line in `pm_st_res_hub_reserve` `country_modifiers > level_scaled` (`country_st_res_<GOOD>_capacity_add = 5000`), (b) two goods-I/O lines in `pm_st_res_hub_reserve` `building_modifiers > workforce_scaled` (`goods_input_<GOOD>_add = 1`, `goods_output_<GOOD>_add = 1`), (c) one capacity line in `pm_st_res_silo_capacity` `country_modifiers > level_scaled` (`country_st_res_<GOOD>_capacity_add = 1000`) |
 | 5 | `common/script_values/st_res_script_values.txt` | One full per-good section (10 script values: decay_rate, weekly_decay, actual_rate, actual_rate_base_applied, weekly_delta, capacity, good_mult, max_withdrawable, max_storable, sale_profit) appended after the existing `--- TANKS ---` section, plus one `st_res_<GOOD>_fill_pct` value at the end with the other fill_pct entries. See template. |
@@ -105,9 +105,9 @@ The pre-existing **Reset Reserve Rates** button reaches the new goods even on an
 
 ## Gotchas
 
-- **Engine modifier-type definitions live in two places.** `st_res_modifier_types.txt` defines the SR-specific country modifiers. `extra_modifier_types.txt` is for goods-mult axes vanilla skipped. Don't conflate them.
+- **Engine modifier-type definitions live in two places.** `st_res_modifier_types.txt` defines the SR-specific country modifiers. `mod_entity_modifier_types.txt` is for goods-mult axes vanilla skipped. Don't conflate them.
 - **Don't rename existing goods.** Removing or renaming `grain`/`ammunition`/`oil`/etc. would orphan saved variables (`st_res_<old>_stored`, `_rate`) and require a save-migration effect. The existing system is additive-only by design.
-- **Adding a NEW non-vanilla good** (e.g. a mod-only good called `helium`) is in scope, but ALSO requires registering `goods_input_<good>_add` / `goods_output_<good>_add` in `extra_modifier_types.txt` because the good itself isn't in vanilla. Confirm the good exists before treating this as an SR-only task.
+- **Adding a NEW non-vanilla good** (e.g. a mod-only good called `helium`) is in scope, but ALSO requires registering `goods_input_<good>_add` / `goods_output_<good>_add` in `mod_entity_modifier_types.txt` because the good itself isn't in vanilla. Confirm the good exists before treating this as an SR-only task.
 - **The `disable_input_flow` / `disable_output_flow` static modifiers** that exist for grain/ammunition in `extra_modifiers.txt` are dead code (no effect references them). Don't add new ones for the new goods — store_flow + withdraw_flow are sufficient. The else-branch of `st_res_rebuild_good_flow_modifiers_effect` applies these two with `multiplier = -1` to neutralize the hub PM's base 1-unit goods I/O when the good is idle (rate=0), which is the only thing that matters.
 
 ## Reference

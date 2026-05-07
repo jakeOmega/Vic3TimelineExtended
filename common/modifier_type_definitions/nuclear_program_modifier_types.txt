@@ -1,0 +1,55 @@
+# nuclear_program_modifier_types.txt
+#
+# Nuclear program / proliferation / disarmament toggles and progress knobs
+# consumed by the nuclear weapons system (events, scripted_effects, je hooks).
+# Most are script_only booleans surfacing program state; progress_mult and
+# weapon attack/defense are read by the launch resolution effects.
+
+receiving_nuclear_program_aid = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+nuclear_disarmament = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = -100
+	}
+	script_only = yes
+}
+
+nuclear_program_pause = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = -50
+	}
+	script_only = yes
+}
+
+country_nuclear_program_progress_mult = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+country_nuclear_weapon_attack_success_add = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+country_nuclear_weapon_defense_chance_add = {
+	color = good
+	percent = yes
+	script_only = yes
+}

@@ -1,0 +1,63 @@
+# banking_cycle_modifier_types.txt
+#
+# Banking cycle / financial momentum modifiers consumed by je_banking_cycle and
+# its on_monthly_pulse_country effects: random momentum, crash chance, finance
+# momentum/value, bubble pressure, weekly investment pool contributions, and
+# the legislative-style banking_intervention reservation counter.
+
+country_banking_intervention_max_add = {
+	color = good
+	percent = no
+	decimals = 0
+	game_data = { ai_value = 100 }
+	script_only = yes
+}
+
+country_banking_random_momentum_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_banking_crash_chance_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_finance_momentum_monthly_add = {
+	color = neutral
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+country_bubble_pressure_monthly_add  = {
+	color = neutral
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+country_finance_value_monthly_add    = {
+	color = neutral
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+country_weekly_investment_pool_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+}
+
+country_weekly_investment_pool_mult = {
+	color = good
+	percent = yes
+	decimals = 2
+	script_only = yes
+}

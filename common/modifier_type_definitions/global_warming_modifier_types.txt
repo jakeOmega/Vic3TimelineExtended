@@ -1,0 +1,91 @@
+# global_warming_modifier_types.txt
+#
+# Global warming and environmental policy modifiers: greenhouse-gas emissions
+# multiplier, state pollution generation, subsidy-required toggles for
+# emissions-heavy buildings, ministry-of-the-environment institution knobs,
+# and coal-mining tax/throughput levers used by climate events.
+
+state_pollution_generation_mult = {
+	color = bad
+	percent = yes
+	script_only = yes
+}
+
+country_institution_ministry_of_the_environment_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_size_change_speed_institution_ministry_of_the_environment_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_the_environment_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_the_environment_mult = {
+	color = good
+	percent = yes
+}
+
+# ----- Global Warming -----
+country_greenhouse_gas_emissions_mult = {
+	color = bad
+	percent = yes
+	script_only = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_building_airport_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_building_highway_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+# Missing modifier type definitions for climate/colonial systems
+country_enactment_success_chance_law_ministry_of_the_environment_add = {
+	color = good
+	percent = yes
+}
+
+country_building_renewable_energy_plant_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_coal_mining_tax_mult = {
+	decimals = 1
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_coal_mining_throughput_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}

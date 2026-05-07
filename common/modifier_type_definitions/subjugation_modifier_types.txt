@@ -1,0 +1,70 @@
+# subjugation_modifier_types.txt
+#
+# Country-level strength modifiers consumed by the subjugation diplomatic action
+# (script_value te_subjugation_strength). One universal knob plus six identity-
+# conditional bonuses keyed to the actor power bloc's identity. See
+# common/script_values/extra_script_values.txt for the consumer formulae.
+
+# --- Subjugation strength (read by script_value te_subjugation_strength) ---
+# Universal tuning knob plus 6 per-identity bonuses. Identity-conditional
+# bonuses are paid out only when the actor's bloc has the matching identity
+# AND the target satisfies that identity's axis match (same religion, same
+# governance principle, same primary culture, GDP ratio, army_size ratio).
+# Sovereign Empire is universal (no axis match). identity_diplomatic gets
+# nothing here on purpose — its strength sits elsewhere (alignment, infamy
+# reduction, pact leverage).
+country_subjugation_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_sovereign_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_religious_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_ideological_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_cultural_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_trade_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+country_subjugation_military_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}

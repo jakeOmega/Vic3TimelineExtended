@@ -1,0 +1,12 @@
+# un_membership_modifier_types.txt
+#
+# UN membership flag read by the UN journal entry and its scripted_buttons.
+
+un_membership_obligation = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 50
+	}
+	script_only = yes
+}

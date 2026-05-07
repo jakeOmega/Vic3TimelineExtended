@@ -212,13 +212,23 @@ If you reference a dynamic modifier (e.g. `building_robotics_industry_throughput
 | `state_building_{name}_max_level_add` | `state_building_space_mine_max_level_add` | state | Level cap for company/gated buildings |
 | `building_group_{bg}_{poptype}_mortality_mult` | `building_group_bg_agriculture_laborers_mortality_mult` | building group | Pop mortality in specific building groups |
 | `ship_battle_against_ship_type_{ship}_{accuracy\|hull_damage}_{add\|mult}` | `ship_battle_against_ship_type_nuclear_submarine_accuracy_mult` | country (applied to ships) | Combat-axis bonus when attacking a specific ship type. **Partial vanilla coverage:** vanilla only registers the axis combos it uses — e.g. `submarine`/`torpedo_boat`/`destroyer` get `_accuracy_*` but NOT `_hull_damage_mult`; `dreadnought`/`super_dreadnought`/`modern_ironclad`/`pre_dreadnought` get `_hull_damage_mult` but NOT `_accuracy_mult`. Always cross-check against `/mnt/c/Program Files (x86)/Steam/.../game/common/modifier_type_definitions/00_modifier_types.txt`; register any missing combo in the mod even when targeting a vanilla ship type. |
-| `country_ship_type_{ship}_construction_efficiency_add` | `country_ship_type_destroyer_construction_efficiency_add` | country (applied to ship construction) | Reduces shipyard build time for a specific ship type. **Partial vanilla coverage:** vanilla registers it only for `troop_ship`/`protected_cruiser`/`armored_cruiser`/`light_cruiser`. `destroyer` and most modern types are NOT pre-registered; mod must register them in `extra_modifier_types.txt` even though they target vanilla ship types. |
+| `country_ship_type_{ship}_construction_efficiency_add` | `country_ship_type_destroyer_construction_efficiency_add` | country (applied to ship construction) | Reduces shipyard build time for a specific ship type. **Partial vanilla coverage:** vanilla registers it only for `troop_ship`/`protected_cruiser`/`armored_cruiser`/`light_cruiser`. `destroyer` and most modern types are NOT pre-registered; mod must register them in `mod_entity_modifier_types.txt` even though they target vanilla ship types. |
 | `goods_input_{good}_add` / `goods_output_{good}_add` | `goods_input_motor_ships_add` | building (in PM) | Flat input/output amount for a modded good. **Mod-defined goods need BOTH `_input_*_add` and `_output_*_add` registered explicitly** — vanilla auto-generates these only for vanilla goods. The `_mult` variants follow the same rule, and **vanilla coverage is partial even for vanilla goods**: e.g. `goods_output_aeroplanes_mult` is registered but `goods_input_aeroplanes_mult` is NOT (vanilla never consumes aeroplanes via a mult source); `grain` lacks both mult axes. Always cross-check `/mnt/c/Program Files (x86)/Steam/.../game/common/modifier_type_definitions/01_building_modifier_types.txt` before applying a mult-axis flow modifier to a vanilla good. Symptom of missing registration: `Unknown modifier type` in debug.log and the modifier silently no-ops. |
+
+### Where New Registrations Go
+
+`common/modifier_type_definitions/` is split by purpose:
+
+- **`mod_entity_modifier_types.txt`** — per-entity registrations of vanilla dynamic-modifier patterns for mod-introduced goods/buildings/ships/units/institutions/laws (and a few vanilla gap-fills). Internally divided by `# === Goods ===` / `Buildings` / `State buildings` / `Combat units` / `Ships` / `Institutions` / `Law-gated` / etc. headers — keep new entries under the matching divider.
+- **One file per mod-invented system** — `subjugation_`, `diplomatic_play_escalation_`, `power_bloc_extra_`, `space_race_`, `nuclear_program_`, `homelands_`, `un_membership_`, `global_warming_`, `megastructure_progress_`, `banking_cycle_`, `sol_expectations_`, `covert_warfare_`, `cultural_hegemony_`, `movement_`, `st_res_`, `tech_gate_`. Bespoke knobs for a single mechanic (escalation rates, capacity counters, capability flags, progress trackers) live in the file named after that mechanic, with a top-of-file scope comment naming the consumers (script values, on-actions, scripted effects). Tiny systems get their own files — `un_membership_modifier_types.txt` is one entry.
+
+When in doubt: if the modifier name parameterizes over a mod entity (`<good>`, `<building>`, `<ship>`, `<institution>`) it goes in `mod_entity_modifier_types.txt`; if it's a fixed name backing one specific mod system, give it its own sibling file (or extend an existing one).
 
 ### Registration Format
 
 ```
-# In common/modifier_type_definitions/extra_modifier_types.txt
+# In common/modifier_type_definitions/mod_entity_modifier_types.txt
+# (or in the matching system file if this modifier is a bespoke mechanic knob)
 
 # Building throughput (percentage)
 building_my_custom_building_throughput_add = {
@@ -273,13 +283,13 @@ When adding a new building or good, always check:
 A `script_only = yes` modifier has no native engine effect — it's just a value the engine sums across all sources, surfaces in tooltips wherever it's contributed, and can be read in triggers as `"modifier:X" >= N`. This makes it the right tool when you want a system whose behavior depends on **a combination of laws / techs / decrees / buildings**, AND want the player to discover those dependencies from the ordinary law/tech/etc. tooltip — not from reading event source.
 
 **The pattern:**
-1. Define the modifier type: `country_X_capacity_add = { color = neutral percent = no decimals = 0 game_data = { ai_value = 50 } script_only = yes }` in `common/modifier_type_definitions/extra_modifier_types.txt`. Localize the name + `_desc` in `localization/english/te_modifiers_l_english.yml`.
+1. Define the modifier type: `country_X_capacity_add = { color = neutral percent = no decimals = 0 game_data = { ai_value = 50 } script_only = yes }` in the matching system file under `common/modifier_type_definitions/` (or `mod_entity_modifier_types.txt` if no system file fits yet). Localize the name + `_desc` in `localization/english/te_modifiers_l_english.yml`.
 2. Add positive/negative contributions to the `modifier = { ... }` block of every law/tech/decree where it's thematically warranted, via `INJECT:` for vanilla entries.
 3. Read it from triggers: `"modifier:country_X_capacity_add" >= 4`. The value is the sum of all contributions; works fine with negative values.
 4. Optionally name banded thresholds with scripted triggers, e.g. `banking_points_low = { "modifier:country_banking_intervention_max_add" <= 2 }`.
 
 **Repo examples:**
-- `country_banking_intervention_max_add` (`common/modifier_type_definitions/extra_modifier_types.txt:876`) — banded by `banking_points_none / low / med / high` in `common/scripted_triggers/market_triggers.txt:29-32`. Contributions live on banking-related laws.
+- `country_banking_intervention_max_add` (`common/modifier_type_definitions/banking_cycle_modifier_types.txt:8`) — banded by `banking_points_none / low / med / high` in `common/scripted_triggers/market_triggers.txt:29-32`. Contributions live on banking-related laws.
 - `country_legislative_override_capacity_add` — gates the Forced a Law Through event (small / medium / large tiers at thresholds 0 / 2 / 4), with contributions across Distribution of Power, Bureaucracy, Free Speech, and Internal Security laws (`common/laws/legislative_override_capacity.txt`). Surplus above the highest threshold also feeds a script-value cost discount.
 
 **When to prefer this over direct `has_law` triggers:** any time the gate is best expressed as a *combination* of multiple laws, or when you want the player to see which laws move the needle. Direct `has_law` checks are invisible to the player and require enumerating every law variant by hand.
@@ -295,7 +305,7 @@ Both fail without a parse error and without a debug.log warning, so the system d
 
 **Validation now covers this.** `/validate/engine-coverage` checks both modifier-use sites and `modifier:NAME = yes` trigger references for booleans (suffix `_bool` / `_boolean`). Any boolean referenced but not declared in the engine modifiers catalog or in a `Modifier Types` entry surfaces in `unknown_modifiers`. Unit + integration tests in `test_engine_coverage_validator.py` freeze the country_sr_* case as a regression test.
 
-**Practical rule.** Declare every mod-side boolean modifier in `common/modifier_type_definitions/` (`extra_modifier_types.txt` or topical files like `tech_gate_modifier_types.txt`). When in doubt: `curl 'http://localhost:8950/raw/Modifier%20Types/<name>'` will return the definition or a `Not found` error.
+**Practical rule.** Declare every mod-side boolean modifier in `common/modifier_type_definitions/` (`mod_entity_modifier_types.txt` or topical files like `tech_gate_modifier_types.txt`, `power_bloc_extra_modifier_types.txt`). When in doubt: `curl 'http://localhost:8950/raw/Modifier%20Types/<name>'` will return the definition or a `Not found` error.
 
 ### Mod-Added Political Movements Need Modifier Type Registration
 
@@ -418,7 +428,7 @@ The same family as the per-building `_mult` pitfall, but along a different axis:
 
 **Rule:** Reserve "participant"-flavored modifier types for narrow, single-country uses (one-off event modifiers, unique character traits, head-of-state quirks). Never attach them to laws, techs, principles, or anything many countries can hold simultaneously. For broadly-attached "this country pushes plays harder" modifiers, use role-pinned variants (`aggressor_*`, `defender_*`) — at most one country fills each role per play, so additive stacking is bounded.
 
-**See also** the script-only modifier-type comment in `common/modifier_type_definitions/extra_modifier_types.txt` near the `country_aggressor_diplomatic_play_escalation_weekly_*` block.
+**See also** the script-only modifier-type comment in `common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt` near the `country_aggressor_diplomatic_play_escalation_weekly_*` block.
 
 ## `interest_group =` Parameter in Effects Requires `ig:` Prefix
 
@@ -680,7 +690,7 @@ PM modifier blocks have strict scope rules:
 Every company building needs:
 1. **Building definition** in `common/buildings/company_buildings.txt` (with `potential` gating on `has_company`)
 2. **PM + PMG** in `common/production_methods/unique_pms.txt` and `unique_pm_groups.txt`
-3. **Modifier type definition** for `state_building_<name>_max_level_add` in `common/modifier_type_definitions/extra_modifier_types.txt`
+3. **Modifier type definition** for `state_building_<name>_max_level_add` in `common/modifier_type_definitions/mod_entity_modifier_types.txt`
 4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`
 5. **Localization** — five keys per building, all required:
    - `building_<name>` (building name) and `building_<name>_desc` in `te_buildings_l_english.yml`
@@ -689,7 +699,7 @@ Every company building needs:
 
 Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies without overwriting their entire definition.
 
-If an `INJECT` block adds `prosperity_modifier = { state_building_<name>_max_level_add = 1 }`, that exact modifier key must also exist in `common/modifier_type_definitions/extra_modifier_types.txt` with `color = good`, `percent = no`, and `decimals = 0`. Defining the prosperity modifier in the company file alone is not enough.
+If an `INJECT` block adds `prosperity_modifier = { state_building_<name>_max_level_add = 1 }`, that exact modifier key must also exist in `common/modifier_type_definitions/mod_entity_modifier_types.txt` with `color = good`, `percent = no`, and `decimals = 0`. Defining the prosperity modifier in the company file alone is not enough.
 
 Before finishing company-building work, run this audit (Python one-liner against the repo root) to confirm every mod-defined modifier has both name and `_desc` loc keys, taking vanilla loc into account so you don't double-loc a key vanilla already provides:
 
@@ -2250,7 +2260,7 @@ When a vanilla `common/script_values/*.txt` script value is referenced from engi
 **Useful pattern**: combine a `script_only = yes` modifier with a vanilla script-value override that reads it.
 
 ```
-# common/modifier_type_definitions/extra_modifier_types.txt
+# common/modifier_type_definitions/mod_entity_modifier_types.txt
 country_leverage_threshold_change_add = {
     color = bad
     percent = no
@@ -2290,6 +2300,20 @@ done
 Verify with `head -c 3 file.txt | xxd -p` — should print `efbbbf`. After adding, `POST /reload` to refresh the server's view; the `should be in utf8-bom encoding` line should no longer appear in `/logs/debug` for that path.
 
 Locale YAMLs use a different convention — the `*_l_english.yml` files use `\xef\xbb\xbf` BOM as well but `organize_loc.py` re-emits them, so don't hand-bom yaml files.
+
+**Migration scripts that split or concatenate `.txt` files must strip embedded BOMs.** When you parse a BOM-prefixed source and write its content into a new file with a fresh header, the BOM travels with the first body byte and lands hundreds of lines into the destination — non-standard, and inside the file the engine treats it as a stray character. Fix in Python:
+
+```python
+data = src_path.read_bytes()
+bom = b'\xef\xbb\xbf'
+had_leading = data.startswith(bom)
+cleaned = data.replace(bom, b'')
+if had_leading:
+    cleaned = bom + cleaned    # keep one BOM at byte 0 only
+dst_path.write_bytes(cleaned)
+```
+
+Verify post-write with `python3 -c "data=open(p,'rb').read(); ...; positions=[]; ..."` (find every BOM and check the only position is 0). The engine *will* load files with mid-content BOMs and `POST /reload` won't error, so this gotcha hides — explicitly scan for it.
 
 ## Formables: `geographic_region = X` Reads `state_regions = {...}` Only
 

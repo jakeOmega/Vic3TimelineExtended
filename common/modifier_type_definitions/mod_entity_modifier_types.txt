@@ -1,0 +1,3433 @@
+# mod_entity_modifier_types.txt
+#
+# Per-entity registrations of vanilla dynamic-modifier patterns for the mod's
+# introduced goods, buildings, ships, units, institutions, laws, and other
+# entities. The Clausewitz engine requires each parameterized modifier name
+# (e.g. goods_output_<good>_mult, building_<b>_throughput_add,
+# ship_battle_against_ship_type_<s>_<axis>_<add|mult>, country_institution_<i>_*)
+# to be explicitly registered before it works — undeclared names silently
+# no-op. A handful of entries here are vanilla-ship gap-fills (axes vanilla
+# itself didn't auto-register).
+#
+# For mod-invented mechanic modifiers, see the sibling files:
+#   subjugation_modifier_types.txt
+#   diplomatic_play_escalation_modifier_types.txt
+#   power_bloc_extra_modifier_types.txt
+#   space_race_modifier_types.txt
+#   nuclear_program_modifier_types.txt
+#   homelands_modifier_types.txt
+#   un_membership_modifier_types.txt
+#   global_warming_modifier_types.txt
+#   megastructure_progress_modifier_types.txt
+#   banking_cycle_modifier_types.txt
+#   sol_expectations_modifier_types.txt
+#   (plus existing covert_warfare_, cultural_hegemony_, movement_, st_res_,
+#    tech_gate_modifier_types.txt)
+#
+# See CLAUDE.md "Validation rules that bite if ignored" for why per-entity
+# registration is mandatory.
+
+
+# === Goods (input/output add+mult for mod and vanilla goods) ===
+
+goods_output_consumer_appliances_add = {
+	color = good
+	percent = no
+}
+goods_output_electronic_components_add = {
+	color = good
+	percent = no
+}
+
+goods_output_tech_metals_add = {
+	color = good
+	percent = no
+}
+
+goods_output_digital_access_add = {
+	color = good
+	percent = no
+}
+
+goods_output_digital_assets_add = {
+	color = good
+	percent = no
+}
+
+goods_output_advanced_materials_add = {
+	color = good
+	percent = no
+}
+
+goods_output_tourism_add = {
+	color = good
+	percent = no
+}
+
+goods_input_electronic_components_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_tea_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_tech_metals_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_gold_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_digital_access_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_digital_assets_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_launch_capacity_add = {
+	color = bad
+	percent = no
+}
+
+goods_output_launch_capacity_add = {
+	color = good
+	percent = no
+}
+
+goods_input_robotics_add = {
+	color = bad
+	percent = no
+}
+
+goods_output_robotics_add = {
+	color = good
+	percent = no
+}
+
+goods_input_advanced_materials_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_consumer_appliances_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_services_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_construction_add = {
+	color = bad
+	percent = no
+}
+
+goods_output_construction_add = {
+	color = good
+	percent = no
+}
+
+goods_input_luxury_clothes_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_fine_art_add = {
+	color = bad
+	percent = no
+}
+
+goods_input_coffee_add = {
+	color = bad
+	percent = no
+}
+
+goods_output_luxury_furniture_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_furniture_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_services_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_consumer_appliances_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_construction_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_digital_access_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_fine_art_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_clothes_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_luxury_clothes_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_glass_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_steel_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_groceries_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_porcelain_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_fertilizer_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_explosives_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_telephones_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_input_grain_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_grain_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+# Vanilla registers goods_output_aeroplanes_mult but not goods_input_aeroplanes_mult,
+# so the Strategic Reserve hub flow modifier silently no-ops without this entry.
+# See docs/scripting_best_practices.md § dynamic modifier per-entity registration.
+goods_input_aeroplanes_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_fish_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_meat_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_wood_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_coal_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_iron_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_lead_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_gold_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_sulfur_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_rubber_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_coffee_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_dye_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_opium_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_tea_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_tobacco_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_paper_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_transportation_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_advanced_materials_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_tourism_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_input_coal_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+goods_input_electricity_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+goods_input_construction_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+goods_input_wood_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+goods_output_launch_capacity_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_electronic_components_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_tech_metals_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_robotics_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_digital_assets_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_trade_advantage_digital_assets_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_output_merchant_marine_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_input_merchant_marine_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+goods_trade_advantage_fine_art_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+# Modded goods motor_ships and magnetic_drive_ships need explicit goods_input/output_*_add registrations.
+goods_input_motor_ships_add = {
+	decimals = 1
+	color = bad
+	game_data = { ai_value = 0 }
+}
+
+goods_output_motor_ships_add = {
+	decimals = 1
+	color = good
+	game_data = { ai_value = 0 }
+}
+
+goods_input_magnetic_drive_ships_add = {
+	decimals = 1
+	color = bad
+	game_data = { ai_value = 0 }
+}
+
+goods_output_magnetic_drive_ships_add = {
+	decimals = 1
+	color = good
+	game_data = { ai_value = 0 }
+}
+
+
+# === Buildings (throughput, max-level for mod buildings) ===
+
+building_space_program_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_electrics_industry_radio_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_oil_rig_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_hydro_plant_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_renewable_energy_plant_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_airport_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_logging_camp_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_robotics_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_advanced_material_fabricator_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_electronic_components_and_semiconductor_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_electrics_industry_appliances_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_synthetics_plant_rubber_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_synthetics_plant_oil_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_network_infrastructure_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_aerospace_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_software_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_tourism_industry_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_space_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_solar_collector_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_fusion_plant_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_nuclear_plant_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_highway_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_deportee_mortality_mult = {
+	color = bad
+	percent = yes
+}
+
+building_farmers_shares_add={
+	decimals=0
+	color=neutral
+	game_data={
+		ai_value=0
+	}
+}
+
+
+# === Building employment (per-pop-type employment scaling) ===
+
+building_employment_clerks_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -2500
+	}
+}
+
+building_employment_engineers_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -2500
+	}
+}
+
+building_employment_farmers_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -2500
+	}
+}
+
+building_employment_machinists_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -2500
+	}
+}
+
+building_employment_shopkeepers_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -2500
+	}
+}
+
+building_employment_deportee_add = {
+	color = neutral
+	percent = no
+}
+
+building_employment_peasants_mult = {
+	color = bad
+	percent = yes
+}
+
+building_employment_capitalists_mult = {
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+
+# === Building groups (group-scoped throughput, employee, etc.) ===
+
+building_group_bg_trade_employee_mult = {
+	color = bad
+	percent = yes
+}
+
+building_group_bg_urban_facilities_employee_mult = {
+	color = bad
+	percent = yes
+}
+
+building_group_bg_military_standard_of_living_add = {
+	color = good
+	percent = no
+}
+
+building_group_bg_bureaucracy_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_group_bg_construction_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_group_bg_biotechnology_throughput_add = {
+	color = good
+	percent = yes
+}
+
+building_group_bg_heavy_industry_infrastructure_usage_mult = {
+	color = bad
+	percent = yes
+}
+
+building_group_bg_power_infrastructure_usage_mult = {
+	color = bad
+	percent = yes
+}
+
+building_group_bg_arts_standard_of_living_add = {
+	color = good
+	percent = no
+}
+
+building_group_bg_power_throughput_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_power_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_group_bg_high_tech_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+
+# === State buildings (max-level for mod company / megastructure / utility buildings) ===
+
+state_building_hydro_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_airport_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_highway_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_national_park_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_state_youth_centers_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_un_headquarters_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_space_elevator_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_solar_collector_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_orbital_battlestation_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_mind_upload_nexus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_antimatter_facility_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_nanofabrication_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_consciousness_network_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_volkswagen_autostadt_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_toyota_kaikan_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_samsung_digital_city_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_hp_labs_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_sony_pictures_studios_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_ikea_almhult_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_intel_ronler_acres_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_microsoft_redmond_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_apple_park_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_tsmc_fab_18_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_huawei_ox_horn_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_amazon_fulfillment_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_nvidia_endeavor_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_googleplex_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_netflix_animation_studios_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_spacex_starbase_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_bytedance_data_fortress_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_openai_research_lab_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_catl_gigafactory_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_boston_dynamics_ai_institute_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_asml_veldhoven_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_lockheed_skunk_works_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_bae_samlesbury_aerodrome_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_roscosmos_vostochny_cosmodrome_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_airbus_lagardere_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_dassault_merignac_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_hyundai_ulsan_factory_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_sap_headquarters_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_tencent_seafront_towers_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_alibaba_cainiao_park_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_nintendo_development_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_gazprom_lakhta_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_saudi_aramco_abqaiq_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_petrobras_cenpes_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_rosatom_mayak_association_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_oracle_cloud_data_center_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_softbank_vision_fund_hq_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_roche_tower_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_pfizer_rd_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_vale_carajas_mine_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_disney_world_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_universal_studios_hollywood_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_verizon_building_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_reliance_jamnagar_refinery_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_fanuc_forest_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_eni_palazzo_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_ferrari_maranello_factory_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_blackberry_rim_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_shopify_fulfillment_hub_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_bhp_mount_whaleback_mine_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_cochlear_global_hq_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_infosys_mysore_campus_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_jsw_vijayanagar_works_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_industrial_zone_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_media_hq_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_resource_depository_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_hq_skyscraper_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_power_hub_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_robotics_institute_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_proving_grounds_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_data_fortress_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_materials_lab_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_rd_complex_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_generic_logistics_hub_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_strategic_reserve_hub_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_resettlement_camp_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_resettlement_colony_max_level_add = {
+	color = good
+	percent = no
+}
+
+# Phase 1 vanilla company building max levels
+state_building_krupp_essen_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_standard_oil_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_carnegie_homestead_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ford_rouge_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_eic_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 2: National Champions
+state_building_schneider_le_creusot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_putilov_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mitsubishi_nagasaki_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_tata_jamshedpur_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_siemens_erlangen_campus_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 3: Specialized Industries
+state_building_de_beers_sorting_office_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_nobel_baku_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ge_schenectady_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 5: Remaining Flavored
+state_building_mitsui_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_fiat_lingotto_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 4: Generic Company Buildings
+state_building_generic_granary_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_textile_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_cold_storage_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_paper_mill_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_foundry_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_machine_shop_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_chem_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_tank_farm_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_ordnance_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_motor_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_dry_dock_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_fish_market_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 6: Remaining Generic Building Modifiers
+state_building_generic_colonial_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_export_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_electronics_lab_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_assay_office_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_ore_processing_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_mineral_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_silk_exchange_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_vintner_hall_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_furniture_showroom_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_generic_lumber_yard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Phase 7: Remaining Flavored Company Buildings
+state_building_aker_oslo_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_allatini_thessaloniki_flour_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_altos_hornos_baracaldo_furnaces_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_anglo_persian_abadan_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_anglo_sicilian_licata_wharf_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ansaldo_sestri_ponente_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ap_moller_copenhagen_wharf_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_argentinian_wine_mendoza_bodega_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_armstrong_elswick_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_assam_company_nazira_tea_estate_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_b_grimm_bangkok_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bacardi_santiago_distillery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_basf_ludwigshafen_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_basileiades_piraeus_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bengal_coal_raniganj_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bolckow_eston_ironworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bombay_burmah_rangoon_timber_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bombay_dyeing_spring_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bunge_born_buenos_aires_grain_silo_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_calcutta_electric_victoria_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_caribbean_petroleum_maracaibo_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ccci_leopoldville_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_cfr_bucharest_railway_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_cgv_haut_brion_estate_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_chr_hansen_copenhagen_laboratory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_coats_ferguslie_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_colt_hartford_armory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sansinena_avellaneda_frigorifico_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_cordoba_railway_alta_gracia_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_cramp_philadelphia_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_csfa_sicilian_sulfur_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_afghan_nassaji_kabul_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sassoon_bombay_docks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_dmc_mulhouse_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_douro_wine_lodge_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_duro_la_felguera_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_eea_dock_sud_power_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_egyptian_rail_cairo_central_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_el_aguila_tampico_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_electricidad_caracas_power_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_elso_budapesti_steam_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ericsson_telefonplan_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_erste_brunner_maschinenwerk_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_espana_industrial_sants_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_estaleiro_maua_niteroi_dockyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_estanifera_llallagua_tin_concentrator_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_famae_santiago_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_fcm_la_seyne_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_foochow_mawei_dockyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_franco_belge_raismes_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_fundicao_ipanema_sorocaba_foundry_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_fundidora_monterrey_blast_furnace_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_galician_boryslaw_oil_field_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_getzner_bludenz_textile_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_gotaverken_gothenburg_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_gran_azucarera_aranjuez_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_great_indian_railway_jamalpur_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_guinness_st_james_gate_brewery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_gwr_swindon_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_hanseong_jeongi_gwanghwamun_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_hanyang_arsenal_iron_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_hbc_york_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_hispano_suiza_barcelona_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ilva_bagnoli_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_imperial_arsenal_golden_horn_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ethiopian_railway_dire_dawa_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_imperial_tobacco_wills_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ingolstadt_power_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_iranian_state_railway_veresk_station_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_izhevsk_arms_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_klein_galician_paper_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_jiangnan_nanjing_brocade_hall_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_jingdezhen_imperial_kiln_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_john_brown_clydebank_yard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_cockerill_seraing_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_john_holt_lagos_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_hughes_yuzovka_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_kablin_zarate_paper_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_kaiping_tangshan_colliery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_kinkozan_kiyomizu_kiln_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_kirgizian_copper_smelter_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_klanicko_belgrade_slaughterhouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_meissen_porcelain_manufactory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_kouppas_piraeus_foundry_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_la_rosada_buenos_aires_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_lanfang_pontianak_kongsi_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_lee_wilson_plantation_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_lilpop_warsaw_metalworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_lkab_kiruna_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_madura_mills_madurai_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_worth_rue_de_la_paix_atelier_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_manfred_weiss_csepel_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mantero_como_silk_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mantetsu_dalian_railway_hub_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_maple_tottenham_court_showroom_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_gavrilovic_petrinja_meatworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_massey_harris_toronto_implement_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mav_budapest_locomotive_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_anzin_colliery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_misr_mahalla_textile_complex_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_moscow_irrigation_cotton_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mozambique_company_beira_concession_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_nam_dinh_textile_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_nioc_masjed_soleyman_field_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_nederlandse_petroleum_pangkalan_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_portalis_lyon_silk_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_nokia_cable_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_norsk_hydro_rjukan_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_alpine_donawitz_steelworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_oevg_steyr_arms_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ocp_khouribga_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ong_lung_sheng_tea_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_opium_ghazipur_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_orient_express_sirkeci_terminal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_oriental_dev_kunsan_granary_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_tobacco_regie_cibali_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_panama_company_culebra_cut_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_paradox_kvarnholmen_studio_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_pedro_domecq_jerez_bodega_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_pernambuco_recife_cotton_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_perskhlopok_cotton_combines_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_persshelk_silk_reeling_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_peruvian_amazon_iquitos_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_philips_eindhoven_natlab_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_prussian_railway_directorate_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ralli_odessa_grain_elevator_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rheinmetall_unterluss_proving_ground_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ricordi_galleria_vittorio_emanuele_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rodriguez_arguelles_havana_tobacco_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_romanian_star_ploiesti_refinery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rossi_sao_leopoldo_arms_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rac_sitka_trading_post_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_saint_etienne_arms_manufactory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_san_miguel_manila_brewery_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sao_paulo_railway_paranapiacaba_workshop_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_morozov_orekhovo_zuevo_mills_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_schichau_elbing_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_secn_ferrol_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sherkat_shemali_cotton_gin_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sherkate_eslamiya_isfahan_mill_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_skoda_pilsen_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_mokta_el_hadid_beni_saf_mine_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_stf_fiume_torpedo_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_steel_brothers_syriam_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_stt_haskoy_shipyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sudamericana_valparaiso_pier_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_suez_company_ismailia_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sunhwaguk_seoul_tobacco_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_tashkent_railroad_workshops_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_trubia_cannon_foundry_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_turkish_petroleum_kirkuk_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_uniao_fabril_barreiro_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_united_fruit_great_white_fleet_terminal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_united_tobacco_moscow_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ursus_warsaw_tractor_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_vodka_monopoly_warehouse_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_wadia_bombay_dockyard_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_west_ural_oil_depot_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_sandford_newcastle_natal_ironworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_witkowitzer_ostrava_ironworks_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ynchausti_manila_trading_house_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_zastava_kragujevac_arsenal_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_thonet_bystrice_bentwood_factory_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_moser_karlsbad_glass_works_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_megastructure_consortium_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_axiom_space_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_neurovault_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_tycho_manufacturing_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_tessier_ashpool_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_hanka_precision_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_yoyodyne_propulsion_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rekal_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Military Base
+state_building_military_base_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+
+# === Combat units (offense/defense for mod unit types) ===
+
+unit_combat_unit_type_jet_powered_fighters_offense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_stealth_aircraft_offense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_orbital_tactical_vehicles_offense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_orbital_weapons_platforms_offense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_jet_powered_fighters_defense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_stealth_aircraft_defense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_orbital_tactical_vehicles_defense_mult = {
+	color = good
+	percent = yes
+}
+
+unit_combat_unit_type_orbital_weapons_platforms_defense_mult = {
+	color = good
+	percent = yes
+}
+
+
+# === Ships (battle-against ship-type axes for mod ships + vanilla gap-fills) ===
+
+# Ship-vs-ship counter modifiers for mod-defined ship types.
+# Vanilla auto-registers these for vanilla ship types; mod-added ship types must
+# register their own _accuracy_mult and _hull_damage_mult patterns here so the
+# engine recognizes them when used in ship_type modifier blocks, utility mods,
+# tech blocks, etc. Mirrors vanilla's syntax in 00_modifier_types.txt.
+ship_battle_against_ship_type_asw_destroyer_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_asw_destroyer_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_guided_missile_ship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_arsenal_ship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_expeditionary_sea_base_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_expeditionary_sea_base_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_pulsed_laser_escort_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_fleet_carrier_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_fleet_carrier_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_amphibious_assault_ship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_stealth_battlecruiser_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_networked_air_defense_cruiser_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_networked_air_defense_cruiser_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_antimatter_battleship_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_orbital_support_amphibious_mothership_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+ship_battle_against_ship_type_orbital_support_amphibious_mothership_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla auto-registers some ship_battle_against patterns but not all combos.
+# The two below are vanilla ship types that vanilla skipped registering for the
+# specific combat axis the mod uses, so we register them here.
+
+# Vanilla registers submarine_accuracy_{add,mult} but not _hull_damage_mult.
+# Used by ASW destroyer (mod ship) for damage-vs-subs role.
+ship_battle_against_ship_type_submarine_hull_damage_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla registers dreadnought_hull_damage_mult but not _accuracy_mult.
+# Used by guided_missiles tech to model precision-guided naval strikes vs capital ships.
+ship_battle_against_ship_type_dreadnought_accuracy_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla skips destroyer in country_ship_type_*_construction_efficiency_add registrations.
+# Used by era_6/era_7 destroyer-focused techs.
+country_ship_type_destroyer_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = { ai_value = 0 }
+}
+
+
+# === Institutions (max_investment / cost / impact / size_change for mod ministries) ===
+
+country_institution_ministry_of_war_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_migration_controls_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_commerce_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_foreign_affairs_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_national_bank_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_culture_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_labor_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_intelligence_and_security_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_refugee_affairs_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_propaganda_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_science_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_thought_control_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_consumer_protection_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_urban_planning_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_religion_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_ministry_of_international_aid_max_investment_add = {
+	color = good
+	percent = no
+	decimals=0
+}
+
+country_institution_cost_institution_ministry_of_culture_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_commerce_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_war_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_consumer_protection_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_national_bank_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_religion_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_propaganda_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_foreign_affairs_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_urban_planning_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_migration_controls_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_cost_institution_home_affairs_mult = {
+	color = bad
+	percent = yes
+}
+
+country_institution_impact_institution_schools_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_police_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_intelligence_and_security_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_foreign_affairs_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_war_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_refugee_affairs_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_commerce_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_ministry_of_science_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_impact_institution_national_bank_mult = {
+	color = good
+	percent = yes
+}
+
+country_institution_cost_institution_ministry_of_intelligence_and_security_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+
+# === Law-gated modifiers (enactment chance / lawgroup-impose for mod laws) ===
+
+country_enactment_success_chance_law_ministry_of_propaganda_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_ministry_of_religion_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_national_bank_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_ministry_of_consumer_protection_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_ministry_of_commerce_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_ministry_of_war_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_ministry_of_science_add = {
+	color = good
+	percent = yes
+}
+
+country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_enactment_success_chance_law_compulsory_primary_school_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_free_trade_add = {
+	color = good
+	percent = yes
+}
+
+country_enactment_success_chance_law_ministry_of_culture_add = {
+	color = good
+	percent = yes
+}
+
+
+# === Harvest conditions ===
+
+state_harvest_condition_financial_panic_duration_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_financial_panic_impact_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_pollinator_surge_impact_mult = {
+	color = good
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_moderate_rainfall_impact_mult = {
+	color = good
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_frost_impact_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_frost_duration_mult = {
+	color = bad
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+}
+
+
+# === Miscellaneous capacity / counter / feature-flag modifiers ===
+
+building_group_te_construction_market_bg_employee_mult = {
+	color = bad
+	percent = yes
+}
+
+country_monthly_loyalists_add = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+country_legislative_override_capacity_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	game_data = { ai_value = 50 }
+	script_only = yes
+}
+
+state_infrastructure_from_aeroplanes_consumption_add = {
+	decimals=2
+	color=good
+	game_data={
+		ai_value=100
+	}
+}
+
+state_infrastructure_from_transportation_consumption_add = {
+	decimals=2
+	color=good
+	game_data={
+		ai_value=1000
+	}
+}
+
+country_leverage_threshold_change_add = {
+	color = bad
+	percent = no
+	script_only = yes
+	# Read by the leverage_threshold_to_invite override in
+	# common/script_values/extra_script_values.txt as
+	# `add = modifier:country_leverage_threshold_change_add`. Contributors:
+	# intergovernmental_organizations (-100), globalization (-50).
+}
+
+country_can_use_biotech_companies_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+country_add_multicultural_ideology_to_intelligentsia_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+country_add_anticolonial_ideology_to_igs_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+country_unrecognized_become_recognized_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+state_mass_migration_encouragement_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+state_arable_land_mult = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+REPLACE:state_working_adult_ratio_add={
+	decimals=1
+	color=good
+	percent=yes
+	game_data={
+		ai_value=0
+	}
+}
+
+REPLACE:state_birth_rate_mult = {
+	decimals=1
+	color=good
+	percent=yes
+	game_data={
+		ai_value=0
+	}
+}
+
+state_war_support_monthly_add = {
+	color = good
+	percent = no
+	script_only = yes
+}
+
+country_war_support_monthly_add_religion = {
+	color = good
+	percent = no
+}
+
+country_foreign_investment_acceptance_add = {
+	color = good
+	percent = no
+	script_only = yes
+}
+
+country_economic_dependence_leverage_gain_mult = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+state_yearly_cultural_acceptance_add = {
+	color = good
+	percent = no
+	script_only = yes
+}
+
+state_min_cultural_acceptance_delta_add = {
+	color = good
+	percent = no
+	script_only = yes
+}
+
+state_violence_against_minorities_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+country_combined_arms_bonus_enabled_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 5000
+	}
+}
+
+state_migration_crowding_density_mult = {
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 50
+	}
+}
+
+state_resettlement_transfer_add = {
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_fortification_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}

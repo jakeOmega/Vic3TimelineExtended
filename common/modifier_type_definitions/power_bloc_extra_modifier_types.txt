@@ -1,0 +1,140 @@
+# power_bloc_extra_modifier_types.txt
+#
+# Mod-invented power-bloc capability flags (script_only booleans) gating bespoke
+# bloc actions: humanitarian/healthcare/security/science/education aid, crisis
+# resolution, decree_cultural_emigration_initiative, force_cultural_acceptance/
+# adoption, peaceful_annexation, greenest_grass_campaign, extend_influence,
+# diplomatic_alignment, and the principle_groups_max counter. Read by the
+# corresponding scripted_buttons / decrees / scripted_effects.
+
+power_bloc_leader_can_force_cultural_acceptance_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_leader_can_force_cultural_adoption_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_leader_can_peacefully_annex_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_enact_greenest_grass_campaign_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_use_extend_influence_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_give_humanitarian_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_use_crisis_resolution_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_enact_decree_cultural_emigration_initiative_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_use_diplomatic_alignment_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_give_education_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_give_healthcare_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_give_security_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_give_science_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_give_science_aid_2_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_principle_groups_max_add = {
+	color = good
+	percent = no
+	script_only = yes
+}

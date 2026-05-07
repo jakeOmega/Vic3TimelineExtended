@@ -71,7 +71,7 @@ Useful `/logs/<family>` query params: `q=` (substring), `file=` (glob on referen
 | `gui_parse_error` / `gui_widget_error` | GUI script error | `docs/gui_modding_guide.md` |
 | `gamedatabase_other`, `localization`, `ai`, `other` | Fallback buckets | Case-by-case |
 
-For **"modifier silently no-ops"** reports that don't show in logs at all: the engine ignores invalid modifier names without logging. Validate via `/modifier-search?q=` and check `common/modifier_type_definitions/extra_modifier_types.txt` for missing per-entity registration of dynamic patterns (`building_*`, `goods_*`, `state_building_*`, `ship_battle_against_ship_type_*`).
+For **"modifier silently no-ops"** reports that don't show in logs at all: the engine ignores invalid modifier names without logging. Validate via `/modifier-search?q=` and check `common/modifier_type_definitions/mod_entity_modifier_types.txt` for missing per-entity registration of dynamic patterns (`building_*`, `goods_*`, `state_building_*`, `ship_battle_against_ship_type_*`).
 
 ## Where lessons live
 

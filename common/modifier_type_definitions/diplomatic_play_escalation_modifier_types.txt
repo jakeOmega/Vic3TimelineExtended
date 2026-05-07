@@ -1,0 +1,64 @@
+# diplomatic_play_escalation_modifier_types.txt
+#
+# Weekly diplomatic-play escalation contributions consumed by
+# st_dp_country_apply_weekly_escalation (4× per month via on_monthly_pulse_country).
+# aggressor_/defender_/participant_ variants — see the in-block comment for stacking
+# semantics; participant_ stacks per committed country and must NOT be attached to
+# laws/techs/principles.
+
+# --- Diplomatic-play weekly escalation (read by st_dp_country_apply_weekly_escalation) ---
+# CADENCE: applied once per week (4× per month via on_monthly_pulse_country dispatch).
+# STACKING: aggressor_*/defender_* are safe for mass attachment (laws, techs, principles)
+# because at most one country fills each role per play. participant_* is APPLIED PER
+# COMMITTED COUNTRY in the play and stacks additively — a play with N participants
+# gets N× the participant contribution. Reserve participant_* for narrow single-country
+# uses (one-off event modifiers, unique character traits); never attach to laws/techs/
+# principles or any modifier source many countries hold simultaneously, or escalation
+# explodes for plays with many backers (e.g. Britain + Indian princely states).
+country_aggressor_diplomatic_play_escalation_weekly_add = {
+	color = bad
+	percent = no
+	decimals = 1
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_aggressor_diplomatic_play_escalation_weekly_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_defender_diplomatic_play_escalation_weekly_add = {
+	color = bad
+	percent = no
+	decimals = 1
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_defender_diplomatic_play_escalation_weekly_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_participant_diplomatic_play_escalation_weekly_add = {
+	color = bad
+	percent = no
+	decimals = 1
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
+
+country_participant_diplomatic_play_escalation_weekly_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 5 }
+	script_only = yes
+}
