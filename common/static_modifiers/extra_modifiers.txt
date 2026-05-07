@@ -308,7 +308,7 @@ INJECT:state_obstinance = {
 too_much_private_construction = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_max_weekly_construction_progress_add = 1
-	state_construction_mult = -0.0001
+	state_construction_mult = -0.0001 # REVIEWED 2026-05-06: Multiplied by a potentially big number, intentionally tiny
 }
 
 overinvestment_modifier = {
@@ -2527,7 +2527,7 @@ war_crime_tribunal_modifier = {
 war_crime_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_mult = 0.05
-	building_training_rate_add = 0.05
+	building_training_rate_add = 500
 	country_sol_expectations_shift_add = 0.02
 }
 
@@ -3725,7 +3725,7 @@ langreform_revived_avestan = {
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = -0.1
 	state_homeland_removal_threshold_add = 0.1
-	country_acceptance_shared_heritage_trait_add = 0.1
+	country_acceptance_shared_heritage_trait_add = 10
 }
 langreform_revived_arabic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -5486,12 +5486,12 @@ me_border_security_campaign_modifier = {
 
 cultural_hegemony_effect = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_mass_migration_attraction_mult = 0.0025
+	country_mass_migration_attraction_mult = 0.0025  # REVIEWED 2026-05-06: Multiplied by cultural hegemony score - need 4% of global cultural influence to get +1% migration attraction
 	goods_output_tourism_mult = 0.01
 	goods_trade_advantage_fine_art_mult = 0.01
 	country_loyalists_from_legitimacy_mult = 0.01
 	country_leverage_generation_mult = 0.01
-	country_diplomatic_reputation_add = 0.1
+	country_diplomatic_reputation_add = 0.1  # REVIEWED 2026-05-06: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
 	country_infamy_decay_mult = 0.01
 	state_assimilation_mult = 0.05
 }
@@ -5543,7 +5543,7 @@ covert_operation_funding_cost = {
 intelligence_capacity_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_support_separatism_resistance_mult = 0.05
-	country_coup_resistance_add = 0.02
+	country_coup_resistance_add = 0.1
 }
 
 # Counterintelligence bonus from covert funding level (applied with multiplier = funding_level - 1)
@@ -6026,7 +6026,7 @@ nuclear_civilian_applications = {
 # Nuclear program — safety review after incident/close call
 nuclear_safety_review = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_tech_spread_add = 0.15
+	country_tech_spread_add = 15
 }
 
 # Nuclear events — prestige from nuclear achievements/diplomacy (base 1, use multiplier)

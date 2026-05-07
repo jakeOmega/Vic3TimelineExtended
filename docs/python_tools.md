@@ -10,6 +10,8 @@ Reference for all Python utility scripts and the background data server.
 
 `mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical roster is `POST_LOAD_GENERATORS` in `mod_state_server.py`; each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. The `?engine_only=true` reload path bypasses `_load_mod_state` and so skips these.
 
+**Audit warnings**: when a generator's return dict contains `unreviewed > 0` or `hard_fails > 0`, the runner logs `[post-load WARN] <label> surfaced issues: <key>=<n>` at WARNING level and adds an entry to the `/reload` response's `warnings` array — caller sees regressions in the same response, no log-scraping required. Add new actionable counter names to `_POST_LOAD_WARN_KEYS` in `mod_state_server.py` if a new audit invents one.
+
 | Module | Output |
 |---|---|
 | `pop_needs_curves` | `common/buy_packages/00_buy_packages.txt` |
@@ -22,6 +24,7 @@ Reference for all Python utility scripts and the background data server.
 | `gen_law_consistency` | `common/scripted_effects/extra_law_consistency_generated.txt` |
 | `organize_loc` | `localization/english/te_*_l_english.yml` (~26 category files) |
 | `event_magnitude_audit` | `docs/event_magnitude_report.md` |
+| `modifier_visibility_audit` | `docs/modifier_visibility_report.md` |
 | `kill_character_audit` | `docs/kill_character_audit.md` |
 | `gen_event_inventory` | `docs/event_image_inventory.md` |
 
@@ -256,6 +259,7 @@ Invoke-RestMethod http://localhost:8950/status
 | `/event-balance/issues[?prefix=&file=]` | GET | **Strict-mode audit** (default). Flags events with at least one option pure-positive on modifiers AND another pure-negative. |
 | `/event-balance/issues?mode=soft&threshold=N` | GET | **Soft-mode audit**. Flags pairwise polarity-count dominance — one option has ≥ as many positive modifier fields AND ≤ as many negatives as another, with combined gap ≥ `threshold` (default 2). Catches mixed-vs-mixed dominance the strict check misses. |
 | `/event-balance/...?format=text` | GET | Render the result as a plain-text report instead of JSON |
+| `/event-balance/issues?...&include_reviewed=true` | GET | Surface the `reviewed` exemption list in the JSON. Events with a `# REVIEWED YYYY-MM-DD: rationale` comment on the event header line (or in the contiguous comment block directly above it) are moved out of `flagged` into `reviewed_count` / `reviewed`. The text renderer always shows the reviewed count in the header line (e.g. `flagged 0 (4 reviewed)`). Use this when an option-dominance shape is intentional — typically because the "dominated" option's compensation lives in post-completion rewards or other effects the audit can't see. |
 
 **Audit limitations** (verify each flag against source before editing): the audit only sees `add_modifier` / `add_enactment_modifier` field polarity. It does NOT classify `add_treasury`, `add_radicals` / `add_loyalists`, `add_momentum`, `change_variable`, `change_relations`, `change_infamy`, `set_ideology`, `set_variable`-driven choice routing, scripted-effect calls, `activate_law`, or `add_modifier` applied via scope changes to *other* actors. It also counts modifier *fields*, not `days = …` durations or value magnitudes. See `docs/event_creation_guide.md` § Verifying Option Balance for the full list.
 | `/institutions` | GET | All institutions with unlock tech |
@@ -356,6 +360,9 @@ from the auto-generated cost-comment block in PM bodies via
 | `/validate/engine-coverage?summary=true` | GET | Same, but return only the `summary` counts and metadata (no entity lists). |
 | `/validate/engine-coverage?filter=vanilla_breakages` | GET | Now redundant — mod-defined modifier types are folded in by default. Kept for back-compat; behaves as a no-op. |
 | `/validate/engine-coverage?refresh=true` | GET | Force re-run of the validation (default: cached after each `/reload`). |
+| `/validate/modifier-visibility` | GET | Flag modifier values too small to display given the modifier type's `decimals = N` (and `percent = yes/no`) precision — e.g. `country_prestige_mult = 0.005` renders as "+0%" because the type is `decimals=0 percent=yes`. The modifier still applies mechanically, only the tooltip rounds to 0. Returns `{summary, flagged: [{file, line, modifier, value, decimals, percent, min_visible}, ...]}`. Suppress an intentional sub-threshold value with a same-line `# REVIEWED YYYY-MM-DD: rationale` comment. Report mirror: `docs/modifier_visibility_report.md`. |
+| `/validate/modifier-visibility?include_reviewed=true` | GET | Also include the reviewed-exemptions list in the response (default: counts only). |
+| `/validate/modifier-visibility?summary=true` | GET | Counts only — no per-flag details. |
 | `/duplicate-images` | GET | Flag images reused across entities of types where vanilla holds "one image per entity": Buildings (`icon`), Goods (`texture`), Decrees (`texture`), Technologies (`texture`), Interest Groups (`texture`), Laws (`icon`). Permissive types (Events, Journal Entries, Production Methods, Ideologies, Combat Units) are intentionally not scanned — vanilla shares images across many of those by design. Groups by **content hash** (md5 of the resolved `.dds` file, mod overlay first then vanilla), so two entities pointing at different filenames whose files have identical bytes still cluster — catches the case where a placeholder file was duplicated under N names. Each cluster carries `kind: "path"` (single shared filename) or `kind: "content"` (multiple distinct filenames, identical bytes). Defaults to mod-only mode: clusters with no mod-side entities are suppressed. Allowlist at `common/_meta/duplicate_image_allowlist.yml`, keyed by lowercase entity-type slug. Each entry uses either `image: <path>` (single, for path dupes) or `images: [<path>, …]` (multiple, for content dupes) plus the exact `entities:` list that may share — adding a new entity or a new identical-content file re-flags the cluster, forcing a fresh review. Query params: `?include_vanilla=true`, `?include_allowlisted=true`, `?type=Buildings` (repeatable / comma-separated), `?format=text`. Tests: `test_duplicate_images.py` (unit, fake ModState; injects a fake hasher so content-dup tests don't need real .dds files) plus an env-gated `VanillaSanityTest` (set `VIC3_RUN_VANILLA_TESTS=1`) that asserts each strict type stays under 10 vanilla-only flags. |
 | `/auto-generated` | GET | Return the file → generator-script ownership map. Helps tools and devs answer "is this file safe to hand-edit?" Mirrors `docs/auto_generated_files.md` in machine-readable form. |
 

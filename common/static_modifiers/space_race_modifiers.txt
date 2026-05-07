@@ -133,7 +133,7 @@ sr_interstellar_probe = {
 sr_shackleton_crater = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.05
-	country_space_race_progress_add = 0.5
+	country_weekly_innovation_max_add = 75
 }
 sr_equatorial_plain = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -318,7 +318,7 @@ sr_mars_direct_landing = {
 sr_mars_orbital_first = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.04
-	country_space_race_progress_add = 0.5
+	building_space_program_throughput_add = 0.10
 }
 sr_mars_robotic_precursor = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -391,6 +391,7 @@ sr_choice_moon_base_military = {
 sr_choice_mars_direct = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_space_race_risk_mult = 0.30
+	country_space_race_progress_add = 0.5
 }
 sr_choice_mars_orbital = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -400,7 +401,6 @@ sr_choice_mars_orbital = {
 sr_choice_mars_robotic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_space_race_risk_mult = -0.20
-	country_space_race_progress_add = 0.5
 }
 
 # --- Moon Landing Site (Event 5) ---

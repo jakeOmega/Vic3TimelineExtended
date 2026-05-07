@@ -1687,6 +1687,60 @@ def _find_modifier_definition_file(name: str) -> str | None:
     return None
 
 
+def _union_vanilla_modifier_decimals(engine_docs: dict) -> None:
+    """Annotate vanilla modifier entries with `decimals` and `percent` fields.
+
+    The engine snapshot (modifiers.log) carries name/mask/display_name/description
+    only — the `decimals = N` / `percent = yes` declarations live in the source
+    files at <base_game_path>/game/common/modifier_type_definitions/. This pass
+    parses those files and patches the existing engine_docs['modifiers'] entries
+    so downstream tools (the visibility audit in particular) can compute display
+    rounding without re-reading the vanilla files themselves.
+
+    Runs BEFORE _union_mod_modifier_types so mod-side cosmetic redeclarations
+    (which may set a different `decimals`) win.
+    """
+    vanilla_dir = os.path.join(base_game_path, "game", "common", "modifier_type_definitions")
+    if not os.path.isdir(vanilla_dir):
+        logger.warning(f"Vanilla modifier_type_definitions directory not found: {vanilla_dir}")
+        return
+
+    by_name = {e.get("name"): i for i, e in enumerate(engine_docs.get("modifiers", []))}
+    annotated = 0
+
+    for fname in sorted(os.listdir(vanilla_dir)):
+        if not fname.endswith(".txt"):
+            continue
+        full = os.path.join(vanilla_dir, fname)
+        try:
+            local = ParadoxFileParser()
+            local.parse_file(full, apply_directives=False)
+        except Exception as e:
+            logger.warning(f"Failed to parse vanilla {fname}: {e}")
+            continue
+        for name, raw in local.data.items():
+            data = _flatten_entity_data(raw)
+
+            def _unwrap(v):
+                return v[1] if isinstance(v, tuple) and len(v) >= 2 else v
+
+            decimals = _try_int(_unwrap(data.get("decimals")))
+            percent = _try_bool_yes(_unwrap(data.get("percent")))
+            if decimals is None and percent is None:
+                continue
+            idx = by_name.get(name)
+            if idx is None:
+                continue
+            entry = engine_docs["modifiers"][idx]
+            if decimals is not None:
+                entry["decimals"] = decimals
+            if percent is not None:
+                entry["percent"] = percent
+            annotated += 1
+
+    logger.info(f"Vanilla modifier-type decimals/percent: {annotated} entries annotated")
+
+
 def _union_mod_modifier_types(engine_docs: dict) -> None:
     """Walk the mod-only `Modifier Types` declarations and union them into
     engine_docs['modifiers'] with origin='mod'. Mod entries shadow vanilla
@@ -1725,6 +1779,8 @@ def _union_mod_modifier_types(engine_docs: dict) -> None:
         data = _flatten_entity_data(raw)
         is_script_only = str(_unwrap(data.get("script_only", ""))).lower() == "yes"
         is_boolean = str(_unwrap(data.get("boolean", ""))).lower() == "yes"
+        decimals = _try_int(_unwrap(data.get("decimals")))
+        percent = _try_bool_yes(_unwrap(data.get("percent")))
         defined_in = _find_modifier_definition_file(name)
 
         if name in by_name:
@@ -1735,6 +1791,12 @@ def _union_mod_modifier_types(engine_docs: dict) -> None:
             existing = engine_docs["modifiers"][by_name[name]]
             existing["mod_redeclares"] = True
             existing["mod_redeclared_in"] = defined_in
+            # Mod overrides vanilla decimals/percent when explicitly set
+            # (e.g. mod sets `decimals = 2` to make sub-1% prestige visible).
+            if decimals is not None:
+                existing["decimals"] = decimals
+            if percent is not None:
+                existing["percent"] = percent
             if is_script_only:
                 existing["mod_script_only"] = True
                 # Contamination signal: a script_only modifier in the "vanilla"
@@ -1747,7 +1809,7 @@ def _union_mod_modifier_types(engine_docs: dict) -> None:
             display_name = ms.localize(name) if ms else None
             if display_name == name:
                 display_name = None
-            engine_docs["modifiers"].append({
+            entry = {
                 "name": name,
                 "mask": _infer_modifier_mask(name),
                 "display_name": display_name or "",
@@ -1756,7 +1818,12 @@ def _union_mod_modifier_types(engine_docs: dict) -> None:
                 "is_script_only": is_script_only,
                 "is_boolean": is_boolean,
                 "defined_in": defined_in,
-            })
+            }
+            if decimals is not None:
+                entry["decimals"] = decimals
+            if percent is not None:
+                entry["percent"] = percent
+            engine_docs["modifiers"].append(entry)
             new_count += 1
 
     logger.info(
@@ -1872,6 +1939,7 @@ def _load_engine_docs():
     # (mod intentionally redeclares for cosmetic reasons — e.g. setting color +
     # percent on country_leverage_threshold_change_add).
     try:
+        _union_vanilla_modifier_decimals(engine_docs)
         _union_mod_modifier_types(engine_docs)
         _union_mod_custom_localization(engine_docs)
     except Exception as e:
@@ -2245,6 +2313,35 @@ def _try_float(s):
     return None
 
 
+def _try_int(s):
+    if isinstance(s, bool):
+        return None
+    if isinstance(s, int):
+        return s
+    if isinstance(s, float) and s.is_integer():
+        return int(s)
+    if isinstance(s, str):
+        try:
+            return int(s)
+        except ValueError:
+            return None
+    return None
+
+
+def _try_bool_yes(s):
+    """Parse Paradox boolean fields (`yes`/`no`). Returns None when absent/malformed
+    so callers can distinguish "explicitly off" from "not specified"."""
+    if isinstance(s, bool):
+        return s
+    if isinstance(s, str):
+        low = s.strip().lower()
+        if low == "yes":
+            return True
+        if low == "no":
+            return False
+    return None
+
+
 def _modifier_color_lookup(mod_name):
     """Return 'good'/'bad'/'neutral'/None for a modifier_type name (e.g. country_bureaucracy_mult)."""
     mod_types = ms.get_data("Modifier Types")
@@ -2571,11 +2668,54 @@ def _find_soft_dominance_issues(event_balance, threshold=2):
     }
 
 
-def _render_event_balance_issues_text(scanned, flagged, mode="strict"):
-    lines = [
-        f"event-balance issues ({mode}) — scanned {scanned} events, flagged {len(flagged)}",
-        "",
-    ]
+_EVENT_HEADER_RE = re.compile(r"^([a-z][a-z0-9_]*\.[a-z0-9_]+)\s*=\s*\{")
+
+
+def _scan_events_for_reviewed_dominance():
+    """Walk events/*.txt for `# REVIEWED YYYY-MM-DD: rationale` suppressions on
+    top-level event headers. Returns event_id → {date, rationale, file, line}.
+
+    Anchor: a `# REVIEWED ...` comment counts as suppressing an event-balance
+    dominance flag if it appears either inline on the header line or in the
+    contiguous comment block immediately above the header.
+    """
+    from event_magnitude_audit import parse_reviewed_comment
+    out = {}
+    events_dir = os.path.join(mod_path, "events")
+    if not os.path.isdir(events_dir):
+        return out
+    for fname in sorted(os.listdir(events_dir)):
+        if not fname.endswith(".txt"):
+            continue
+        path = os.path.join(events_dir, fname)
+        try:
+            with open(path, encoding="utf-8-sig", errors="replace") as f:
+                lines = f.readlines()
+        except OSError:
+            continue
+        for i, line in enumerate(lines):
+            m = _EVENT_HEADER_RE.match(line)
+            if not m:
+                continue
+            eid = m.group(1)
+            rev = parse_reviewed_comment(line)
+            if not rev:
+                k = i - 1
+                while k >= 0 and lines[k].lstrip().startswith("#"):
+                    rev = parse_reviewed_comment(lines[k])
+                    if rev:
+                        break
+                    k -= 1
+            if rev:
+                out[eid] = {**rev, "file": os.path.relpath(path, mod_path), "line": i + 1}
+    return out
+
+
+def _render_event_balance_issues_text(scanned, flagged, mode="strict", reviewed_count=0):
+    header = f"event-balance issues ({mode}) — scanned {scanned} events, flagged {len(flagged)}"
+    if reviewed_count:
+        header += f" ({reviewed_count} reviewed)"
+    lines = [header, ""]
     for f in flagged:
         lines.append("=" * 78)
         lines.append(f"{f['id']}  —  {f.get('name') or ''}")
@@ -2729,7 +2869,17 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     self._respond_json({"status": "engine-only reload complete"})
                 else:
                     _load_mod_state()
-                    self._respond_json({"status": "reloaded", "startup_seconds": startup_elapsed})
+                    body = {
+                        "status": "reloaded",
+                        "startup_seconds": startup_elapsed,
+                    }
+                    # Surface any actionable findings from the post-load chain
+                    # (e.g. modifier_visibility_audit's unreviewed sub-threshold
+                    # values). Caller sees them in the same response, not buried
+                    # in the server log.
+                    if _post_load_warnings:
+                        body["warnings"] = _post_load_warnings
+                    self._respond_json(body)
             except Exception as exc:
                 logger.error(f"Error during reload: {exc}\n{traceback.format_exc()}")
                 self._respond_json({"error": str(exc)}, 500)
@@ -3287,6 +3437,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     "header_marker": True,
                 },
                 {
+                    "pattern": "docs/modifier_visibility_report.md",
+                    "owner": "modifier_visibility_audit.py",
+                    "input": "mod scripts + engine modifier registry",
+                    "header_marker": True,
+                },
+                {
                     "pattern": "docs/error_log_digest.md",
                     "owner": "game_log_reader.py",
                     "input": "game logs",
@@ -3345,10 +3501,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         if not parts:
             return {
-                "available": ["engine-coverage"],
-                "hint": "GET /validate/engine-coverage[?summary=true]",
+                "available": ["engine-coverage", "modifier-visibility"],
+                "hint": (
+                    "GET /validate/engine-coverage[?summary=true] | "
+                    "GET /validate/modifier-visibility[?include_reviewed=true]"
+                ),
             }
         check = parts[0]
+        if check == "modifier-visibility":
+            return self._validate_modifier_visibility(params)
         if check != "engine-coverage":
             raise KeyError(check)
         global _last_validation_report
@@ -3393,6 +3554,54 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if summary_only:
             return {k: v for k, v in report.items() if k not in ("unknown_modifiers", "suspicious_modifiers")}
         return report
+
+    def _validate_modifier_visibility(self, params):
+        """GET /validate/modifier-visibility — flag modifier values too small
+        to display given the modifier type's `decimals = N` precision.
+
+        Query params:
+          ?include_reviewed=true  — include the reviewed-exemptions list in the
+                                    response (default: omit, return count only).
+          ?summary=true           — return only counts, no per-flag details.
+        """
+        import modifier_visibility_audit as mva
+        result = mva.audit(ms, mod_path=mod_path)
+        unrev = [f for f in result.flags if not f.exemption]
+        exemp = [f for f in result.flags if f.exemption]
+
+        def _to_dict(f):
+            return {
+                "file": f.file,
+                "line": f.line,
+                "modifier": f.modifier,
+                "value": f.value,
+                "value_float": f.value_float,
+                "decimals": f.decimals,
+                "percent": f.percent,
+                "min_visible": f.min_visible,
+                **({"exemption": f.exemption} if f.exemption else {}),
+            }
+
+        summary = {
+            "files_audited": result.coverage.get("files_audited", 0),
+            "modifiers_in_registry_with_decimals": result.coverage.get(
+                "modifiers_in_registry_with_decimals", 0
+            ),
+            "registry_hits": result.coverage.get("registry_hits", 0),
+            "flagged": len(unrev),
+            "reviewed": len(exemp),
+        }
+        summary_only = (params.get("summary") or ["false"])[0].lower() == "true"
+        if summary_only:
+            return {"summary": summary}
+        include_reviewed = (params.get("include_reviewed") or ["false"])[0].lower() == "true"
+        out = {
+            "summary": summary,
+            "flagged": [_to_dict(f) for f in unrev],
+        }
+        if include_reviewed:
+            out["reviewed"] = [_to_dict(f) for f in exemp]
+        return out
 
     def _duplicate_images(self, params):
         """GET /duplicate-images — flag images reused across entities of types
@@ -4307,7 +4516,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         }
 
     def _event_balance_issues(self, params, fmt):
-        """GET /event-balance/issues[?mode=strict|soft&threshold=&prefix=&file=&format=text]
+        """GET /event-balance/issues[?mode=strict|soft&threshold=&prefix=&file=&format=text&include_reviewed=]
         Audit every loaded event (or a filtered subset) and flag dominated options.
 
         mode=strict (default): one option pure-positive and another pure-negative.
@@ -4315,6 +4524,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         positives AND ≤ as many negatives as another, with combined gap ≥
         threshold; default threshold=2). Catches mixed-vs-mixed cases the strict
         check misses.
+
+        Suppression: a `# REVIEWED YYYY-MM-DD: rationale` comment on the event
+        header line (or in the contiguous comment block directly above it) moves
+        the event out of `flagged` into a separate `reviewed` list. Use
+        `?include_reviewed=true` to surface that list in the JSON response.
         """
         events = ms.get_data("Events")
         if not events:
@@ -4339,7 +4553,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
         else:
             ids = [eid for eid in events if eid != "namespace"]
 
+        reviewed_map = _scan_events_for_reviewed_dominance()
+        include_reviewed = (params.get("include_reviewed") or ["false"])[0].lower() in ("true", "1", "yes")
         flagged = []
+        reviewed_exemptions = []
         for eid in ids:
             built = self._build_event_balance(eid, events[eid])
             if len(built.get("options", [])) < 2:
@@ -4349,7 +4566,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
             else:
                 issue = _find_dominance_issues(built)
             if issue:
-                flagged.append(issue)
+                rev = reviewed_map.get(eid)
+                if rev:
+                    issue["reviewed"] = rev
+                    reviewed_exemptions.append(issue)
+                else:
+                    flagged.append(issue)
 
         result = {
             "mode": mode,
@@ -4357,9 +4579,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "scanned": len(ids),
             "flagged_count": len(flagged),
             "flagged": flagged,
+            "reviewed_count": len(reviewed_exemptions),
         }
+        if include_reviewed:
+            result["reviewed"] = reviewed_exemptions
         if fmt == "text":
-            return {"text": _render_event_balance_issues_text(len(ids), flagged, mode=mode)}
+            return {"text": _render_event_balance_issues_text(len(ids), flagged, mode=mode, reviewed_count=len(reviewed_exemptions))}
         return result
 
     def _event_magnitude_audit(self, params):
@@ -5084,12 +5309,27 @@ POST_LOAD_GENERATORS = [
     ("gen_law_consistency",           "gen_law_consistency"),
     ("organize_loc",                  "organize_loc"),
     ("event_magnitude_audit",         "event_magnitude_audit"),
+    ("modifier_visibility_audit",     "modifier_visibility_audit"),
     ("kill_character_audit",          "kill_character_audit"),
     ("gen_event_inventory",           "gen_event_inventory"),
 ]
 
 
+# Return-dict keys whose nonzero values indicate "actionable issue surfaced
+# by this generator." Audits use a small set of conventional names; if a new
+# audit invents one, add it here so the warning fires automatically.
+_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails")
+
+# Most-recent post-load run's actionable findings. Reset on every
+# _run_post_load_generators call. Read by /reload POST handler so callers
+# see "the reload succeeded but you have N new sub-threshold modifiers"
+# without having to scrape the server log.
+_post_load_warnings: list[dict] = []
+
+
 def _run_post_load_generators(mod_state):
+    global _post_load_warnings
+    _post_load_warnings = []
     if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
         logger.info("[post-load] skipped via VIC3_SKIP_POST_LOAD_GENERATORS")
         return
@@ -5097,10 +5337,39 @@ def _run_post_load_generators(mod_state):
         t0 = time.monotonic()
         try:
             mod = importlib.import_module(module_name)
-            mod.regenerate(mod_state)
-            logger.info(f"[post-load] {label} ok ({time.monotonic() - t0:.2f}s)")
+            summary = mod.regenerate(mod_state)
+            elapsed = time.monotonic() - t0
+            warn_counts = {}
+            if isinstance(summary, dict):
+                for key in _POST_LOAD_WARN_KEYS:
+                    val = summary.get(key)
+                    if isinstance(val, int) and val > 0:
+                        warn_counts[key] = val
+            if warn_counts:
+                # Compose the warning line in a way that's easy to grep
+                # ([post-load WARN] is the marker) and that names every
+                # actionable counter, not just the first.
+                detail = ", ".join(f"{k}={v}" for k, v in warn_counts.items())
+                logger.warning(
+                    f"[post-load WARN] {label} surfaced issues: {detail} "
+                    f"(see the audit's report under docs/)"
+                )
+                _post_load_warnings.append({
+                    "label": label,
+                    "module": module_name,
+                    "counts": warn_counts,
+                    "summary": summary,
+                })
+            else:
+                logger.info(f"[post-load] {label} ok ({elapsed:.2f}s)")
         except Exception:
             logger.exception(f"[post-load] {label} FAILED — continuing")
+    if _post_load_warnings:
+        labels = ", ".join(w["label"] for w in _post_load_warnings)
+        logger.warning(
+            f"[post-load WARN] {len(_post_load_warnings)} audit(s) surfaced "
+            f"actionable issues: {labels}"
+        )
 
 
 def _load_mod_state():

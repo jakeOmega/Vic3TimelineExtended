@@ -40,6 +40,7 @@ The scripts in this section auto-run inside `mod_state_server.py` after every fu
 | `docs/engine_coverage_report.md` | `mod_state_server.py /validate/engine-coverage` | server start + reload |
 | `docs/error_log_digest.md` | `game_log_reader.py` | manual run |
 | `docs/event_magnitude_report.md` | `event_magnitude_audit.py` | server start + `POST /reload` (post-load chain) |
+| `docs/modifier_visibility_report.md` | `modifier_visibility_audit.py` | server start + `POST /reload` (post-load chain). Flags modifier values too small to display given the type's `decimals = N` precision. |
 | `docs/event_image_inventory.md` | `gen_event_inventory.py` | server start + `POST /reload` (post-load chain). Inventory of all mod events used to drive custom event-image generation. |
 
 ## "One-shot generator" outputs (committed; may be hand-edited afterwards)

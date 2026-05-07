@@ -786,7 +786,7 @@ amendment_langreform_revived_avestan = {
 		country_prestige_mult = 0.1
 		state_homeland_creation_threshold_add = -0.1
 		state_homeland_removal_threshold_add = 0.1
-		country_acceptance_shared_heritage_trait_add = 0.1
+		country_acceptance_shared_heritage_trait_add = 10
 	}
 	possible = { always = yes }
 	would_sponsor = { always = no }
