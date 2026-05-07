@@ -94,6 +94,8 @@ When in doubt, ask: "if this modifier moved the same amount on every character i
 - **Values that do NOT scale much** (safe as flat values): `authority`, `influence`, `cultural_acceptance`, `legitimacy`, `diplomatic_reputation`, `leverage`, `standard_of_living`, `migration_pull`, multiplier/percentage modifiers.
 - `add_prestige` is not a valid static modifier field — use `country_prestige_add`.
 - `add_authority` and `add_influence` are NOT valid effects — these are rate-based resources that can only be affected through modifiers (`country_authority_add`, `country_influence_add`).
+- `add_infamy` is NOT a valid effect — vanilla uses `change_infamy = N`. Symmetric: `change_relations`, etc. The `add_*` shape is *most* effects but not infamy/relations/the-other-relational-resources. Verify against `vanilla_snapshot_docs/effects.log` before authoring.
+- **Many `country_*` names that exist as triggers or modifiers do NOT exist as script values.** `prestige`, `gdp`, `authority` (etc.) read as bare names inside script values (`value = gdp`). Writing `value = country_gdp` produces "Badly read script value" with no name resolution. Also: `country_prestige` is a script value but `prestige` is the trigger — they aren't aliases. When in doubt, grep `common/script_values/` (vanilla) for `^X = {` to confirm the script-value name exists, or grep `<vanilla_snapshot_docs_path>/triggers.log` for trigger usage.
 
 ### Audit + library for fast-scaling event effects
 
@@ -346,6 +348,7 @@ state_pop_support_movement_<name>_mult = {
 - **`has_variable` also fails on law and treaty scopes.** `on_law_activated` ROOT = Law, and the engine traces parent scope through the law for any nested script value's `has_variable` calls. Treaty article `on_entry_into_force` has the same issue. Remove ALL state modifier updates from law/treaty hooks — yearly pulse handles them within 1 year.
 - **JE scope can't read country properties (`gdp`, `prestige`, etc.) inside `multiplier =`.** `je:my_je ?= { add_modifier = { name = X multiplier = some_script_value } }` will return `'none'` from `jomini_scriptvalue.cpp` if the script value reads a country property, because the engine re-evaluates the multiplier in JE scope each tick and JE scope only auto-resolves `var:` reads, not country properties. Country *vars* work (`var:my_var` resolves against the JE owner). **Fix:** cache the script value to a country var before scoping into the JE, and reference it as `root.var:X` in the multiplier. Refresh the cache from the JE's `on_monthly_pulse` so the value tracks. Mod example: `un_buttons.txt` for peacekeeping/development contributor cost; cache var refresh in `je_united_nations.txt` `on_monthly_pulse`.
 - **Script values that read `global_var:X` need a `has_global_variable = X` gate.** A monthly on-action pulse that fires before any yearly pulse will hit `'none'` when the global cache hasn't been populated yet. Wrap the body in `if = { limit = { has_global_variable = X } ... }`. Mod example: `cultural_pull_total` and `cultural_pull_from_sol` in `cultural_hegemony_script_values.txt`.
+- **Variables backing `add_modifier { multiplier = ... }` must persist beyond the call site.** The engine re-evaluates the `multiplier` expression on subsequent ticks (decay/tooltip), not just at add time. Removing the variable right after `add_modifier` makes every later evaluation read `var:X` as `'none'` and emit `Value of wrong type ... Got value of type 'none'` from `jomini_scriptvalue.cpp` per re-eval. **Fix:** never `remove_variable` a name that's referenced by a still-active modifier's multiplier — leave the variable set; it can be safely overwritten by the next `set_variable` call. Vanilla pattern: `c:FRA.var:PRC_money_transfer` in `01_paris_commune.txt` is set at JE start, used in `add_modifier { multiplier = ... }`, and never removed. Mod example: `population_transfer_effect` originally removed `pop_transfer_count` after the disruption modifier was added; reverted, and the runtime errors disappeared.
 
 ## Modifier Values Are NOT Recalculated Within a Single Effect Block
 
@@ -2358,3 +2361,151 @@ The crash does not produce a `script_parse_error`, `inject_to_missing`, or fatal
 - This applies to 1.13.2 (release/1.13.2 : f5b9199e5). Re-test after vanilla bumps — Paradox may fix the assertion in a later patch and remove this restriction.
 
 The full forensic record of one domestic-lobby crash, including ruled-out hypotheses and a staged re-implementation plan, is preserved in `docs/political_lobbies_design.md` § Re-implementation Notes.
+
+## Engine Vocabulary That Doesn't Exist — Verify Before Designing
+
+Several plausible-sounding names turn up empty when you go to use them. Discovered the hard way during the colonial-empire redesign; recording so the next pass doesn't re-walk the same diff.
+
+**No `complete_journal_entry` effect.** The vanilla way to programmatically end a JE is the `complete` block + variable pattern: a decision sets `set_variable = my_je_done`, and the JE's `complete` block reads `OR = { <existing condition> ; has_variable = my_je_done }`. The `on_complete` block can branch on the variable to fire a path-specific event. Used in `je_colonial_empire` for the Imperial Federation Act capstone (decision sets `imperial_federation_taken` + `imperial_federation_iron_fist|civilizing` variables; JE routes to events 300/301 by variable).
+
+**Vic3 has no EU4/CK3-style flags.** `set_country_flag` / `has_country_flag` / `clr_country_flag` / `set_global_flag` / `has_global_flag` do not exist in Vic3 — they parse-error silently into "Unknown effect" / "Unknown trigger" cascades, and downstream effects in the same block get mis-attributed as unknown. Use `set_variable = NAME` (bare form sets to "yes") and `has_variable = NAME` (or `var:NAME`) instead. Vanilla pattern: `set_variable = brazil_spurned_heir` / `has_variable = brazil_spurned_heir`. Globals: `set_global_variable` / `has_global_variable` / `global_var:NAME`.
+
+**No `available` block on `scripted_buttons`.** Buttons gate on `possible` only. To express "AI without enough authority can't fire this," put the cost check directly inside `possible` (e.g. `authority > 300`). The engine greys out the button uniformly for AI and player when `possible` fails.
+
+**No `country_minimum_expected_sol_add` modifier.** The closest vanilla equivalents are `state_lower_strata_expected_sol_add` and `state_middle_strata_expected_sol_add` (state-scoped). They DO propagate through country modifiers — applying them in a country-level static modifier raises expected SoL across all owned states. Used in `colonial_development_investment_modifier` for the "why aren't you investing here?" domestic-anger cost.
+
+**No `law_multiparty_voting`.** Multiparty politics is a function of Distribution of Power (`law_universal_suffrage` / `law_census_voting` / `law_wealth_voting`) plus Free Speech laws plus governance principles, not a single law. When designing law-gated decisions, use the broad-franchise DP options as the "multiparty" proxy.
+
+**Law IDs vs display names.** `docs/laws.txt` (auto-generated, lists display names) and `common/laws/<file>.txt` (vanilla source, lists law IDs) don't match 1:1. Common ID surprises:
+- "Multiculturalism" → `law_multicultural`
+- "Landed Voting" → `law_landed_voting` (not `_voters`)
+- "Wealth Voting" → `law_wealth_voting` (not `_voters`)
+- "Racialized Citizenship" → `law_racial_segregation`
+- "Cultural Citizenship" → `law_cultural_exclusion`
+- "Sovereign Subjecthood" → `law_subjecthood`
+
+Always grep `common/laws/` for the actual ID before writing `has_law = law_type:law_X` triggers.
+
+## `add_treasury` Accepts Script Values for GDP-Scaled Drains
+
+`add_treasury = colonial_invest_monthly_cost` works (script value, scope is country, evaluates `gdp * -0.005` per pulse — note plain `gdp`, not `country_gdp`; the latter is not a script value and silently produces "Badly read script value" errors). Used in `je_colonial_empire` on_monthly_pulse for the Investment policy's GDP-scaled cost. Pattern works for any "cost is X% of GDP per month" drain — modifiers can't express this directly (no `country_weekly_treasury_add`-style modifier), but a JE pulse + script value can.
+
+## Capstone Decisions That Complete a JE
+
+Pattern for "victory condition" decisions that end a JE permanently:
+
+1. Track sustained-state duration in a JE variable (e.g., `colonial_solidified_months` increments while bar ≥ 90, resets if it drops). Read in the decision's `possible` to require N months of sustained achievement.
+2. The decision's `when_taken` sets a country variable and applies a permanent modifier.
+3. The JE's `complete` trigger reads the variable (`has_variable = X`).
+4. The JE's `on_complete` branches by variable to fire a path-flavored victory event.
+
+The variable persists across saves and the modifier applied in `when_taken` is permanent (`days = -1`). The bar/buttons disappear when the JE completes.
+
+Vanilla precedents: Greek "King Otto" / Italy Risorgimento capstones use the same shape. Repo example: `imperial_federation_act_iron_fist` / `imperial_federation_act_civilizing_mission` decisions in `extra_decisions.txt`, with capstone events `decolonization_events.300` / `.301`.
+
+## Tech Tree Authoring
+
+Three rules that bite when adding or moving techs in `common/technology/technologies/`:
+
+### Same-category prereq rule (hard constraint)
+
+A tech's `unlocking_technologies` must all be in the **same category** as the
+tech itself (`production` / `military` / `society`). Vanilla has zero
+cross-category prereqs across all 5 vanilla eras; the mod is also at zero. The
+engine doesn't enforce this — cross-category prereqs load and play, but they
+break the player-facing tech-tree UI flow (each category renders as its own
+chain) and contradict every other tech in the tree.
+
+`scripts/analysis/tech_balance_audit.py` reports `XCAT-PREREQ` flags for
+violations. **Verify category match BEFORE writing the prereq edit, not
+after** — the audit only catches it post-edit. Common pitfall: a society leaf
+(e.g. `virtual_reality`) "naturally" wants to gate a military tech (e.g.
+`augmented_reality_warfare`) thematically; the same-category rule means you
+need to find a different forward-link or accept the leaf.
+
+### Calibrated modifier budgets — grep before adding
+
+Some modifiers are summed across multiple techs to reach a deliberate
+end-game total. Examples found in this codebase:
+- `state_mortality_mult` totals exactly −0.40 across `modern_vaccines`
+  (era_6) + `antibiotic_mass_production` (era_7) + `mental_health_awareness`
+  (era_10) + `biological_immortality` (era_12) + `mind_backups` (era_12),
+  designed so mortality hits zero with brain uploading.
+- `country_weekly_innovation_max_add` is the research-pool budget across the
+  entire late-era tree; per-tech values are tuned together.
+- `country_institution_<X>_max_investment_add` totals reach a target max
+  (~9 institutions by end-game in combination with laws).
+
+Before adding a modifier to a new tech, **grep the entire tech tree** for
+that modifier name. If multiple techs already use it, the total may be
+calibrated. Either move it (don't add net) or leave it off the new tech.
+A simple grep + audit recipe:
+
+```
+for f in common/technology/technologies/era_*.txt; do
+  awk -v m="<modifier>" '/^[a-z][a-z0-9_]+ = \{/{cur=$1; sub(/ = \{/,"",cur)} \
+    $0~m{print cur": "$0}' "$f"
+done
+```
+
+### Unlocks-first principle for new techs
+
+A new tech's strongest justification is **re-routing existing PMs / laws /
+decrees / buildings through it**, not stacking modifiers. The audit's
+`scaled_sum < 1.0` flag generates false positives for techs whose primary
+value lives in their unlock payload (combat units, mobilization options,
+laws, PMs) — see e.g. `radar`, `rocketry`, `recon_satellites`,
+`LGBTQ_rights_movement`, all of which have only one small modifier but
+gate a real combat unit / mob option / PM / law.
+
+When adding a new tech, **check what existing content could re-gate
+through it before authoring the modifier block**. If nothing existing fits,
+either author the new content alongside the tech, or hold the tech until
+relevant content exists. A tech with 0 modifier value and 0 unlocks is
+dead weight.
+
+Don't strand a source tech: before re-routing a PM/law away from its
+current tech, verify the source tech has other unlocks. Moving the only
+unlock off a tech leaves it pure-modifier with no content presence.
+
+### Polarity hints from `modifier_type_definitions/`
+
+For mod-only modifier names that vanilla declares but doesn't use,
+vanilla's `common/modifier_type_definitions/00_modifier_types.txt` includes
+`color = good` / `color = bad` annotations that drive the engine's tooltip
+coloring. These are reliable polarity tags — `state_homeland_creation_threshold_add`
+(`color = bad`), `state_homeland_removal_threshold_add` (`color = good`),
+`state_homeland_change_speed_mult` (`color = good`). When tagging polarity
+in `docs/tech_modifier_polarity.yml`, check vanilla's color annotation
+first; use it as the default and only override when the mod's design
+intent inverts vanilla's frame.
+
+## System-Scope Cheat Sheet
+
+Where a given modifier or trigger can be used:
+
+- **`mobilization_options/*`** `unit_modifier`: armies only. Don't use `military_formation_fleet_*` or `ship_*` modifiers here.
+- **Tech `modifier = { ... }`** (in `common/technology/technologies/`): country-scope. `character_*` modifiers **work as of 1.13** — the engine cascades them to every character belonging to the country (verified empirically with `character_popularity_add`). Earlier in development this was a silent no-op, which explains workarounds elsewhere in this codebase. New uses should still verify with a quick in-game test the first time, since not every char-scope modifier may have been wired through. `ship_*` modifiers DO work in tech scope and apply as a country-wide buff to all ships (vanilla `paddle_steamer` uses `ship_hull_damage_mult` / `ship_crew_damage_mult` from a tech `modifier` block; `ship_battle_against_ship_type_*` patterns also work). Use `country_*`, `state_*`, `unit_*`, `building_*`, `ship_*`, `character_*` (verify new ones), or pre-defined country booleans (`country_<feature>_pb_principles_bool`) that are read elsewhere.
+- **Power bloc `member_modifier` / `leader_modifier`**: country-scope. `character_*` modifiers cascade to all the country's characters.
+- **Static modifiers (`common/static_modifiers/`)**: any scope's modifiers — but the static modifier must be applied at a matching scope (country / state / character).
+- **`INJECT:` / `REPLACE:` / `REPLACE_OR_CREATE:` directive prefixes** on entity keys (e.g. `INJECT:building_shipyard = { ... }`) are **engine-native** in Vic3 (Clausewitz). The mod uses them throughout. They merge or replace into the matching vanilla entity at load time. Don't try to "expand" them in tooling.
+
+## Audit and Research Workflow
+
+When researching mod content (auditing for bugs, inventorying which PMs produce/consume a good, mapping a system across files), a few patterns are reliable and a few are surprisingly broken.
+
+- **Use awk, not `grep -B/-A`, to find which block contains a line.** Paradox brace-nested files (PMs, buildings, laws, etc.) routinely have blocks larger than 40 lines. Running `grep -B40 'goods_output_X' file | grep '^pm_'` reads *across* PM boundaries and mis-attributes — you pick up the previous PM's header for a match deep inside another PM. Use `awk` with a state variable instead:
+
+  ```bash
+  awk '/^pm_|^REPLACE:pm_/{cur=$0} /goods_output_X/{print cur}' file | sort -u
+  ```
+
+  Track the current block as state, emit it when the marker hits. Reliable regardless of block size. The same pattern works for any header-marker pair: replace the headers with `^building_`, `^law_`, etc. as needed.
+
+- **Verify subagent claims by reading the cited file before acting.** Subagent counts ("91 PMs consume X") are easy to re-verify and usually correct; subagent *attribution* claims ("X is consumed by construction sectors") often aren't, especially when the claim hinged on `grep -B/-A` interpretation or specific line numbers. When a critical finding is on the line of "fix this immediately", do the spot-check first. A few minutes of `Read`/`grep` saves a wrong fix.
+
+- **Engine validation catches naming, not semantics.** `mod_state_server`'s `/validate/engine-coverage` (and `docs/engine_coverage_report.md`) reports unknown/suspicious modifier *names*. It does **not** catch: modifiers whose default value is 0 and need explicit activation; per-building `_mult` modifiers in `workforce_scaled` blocks that go pathological at scale; cost-shape mismatches (treating a flat enable cost as a metered flow). Audits looking for those need to read the code, not just check the coverage report.
+
+- **For Paradox files, `grep -rn "^xxx = "` shows top-level definitions reliably.** The same trick doesn't work inside nested blocks because indented lines lose the anchor. For nested searches, use the awk pattern above.
+
+- **PMs in different groups within a building SUM additively.** When auditing a building's net effect, sum across all active PMs from all groups — they don't cancel or override each other. See `docs/vanilla_economy_reference.md` § 2.
