@@ -64,7 +64,7 @@ Files marked `[auto-gen]` are regenerated automatically and should not be hand-e
 |------|----------|--------------|
 | `decolonization_review.md` | Post-implementation review of decolonization mechanics + path-dependent legacies | Modifying or extending decolonization; understanding the design intent |
 | `strategic_reserve_system.md` | Architecture and file layout of the Strategic Reserve journal-entry system | Adding goods to the SR; touching the SR JE / Hub building |
-| `political_lobbies_design.md` | Design proposals for 15 political lobby types (2 implemented, 13 planned) | Implementing new political lobbies; tracking what's already shipped |
+| `political_lobbies_design.md` | Design proposals for 15 political lobby types — **deferred**: a working domestic-lobby implementation was reverted after a new-game crash that's still undiagnosed | Re-implementing political lobbies; investigating the new-game crash first |
 
 ## Audits & Reviews
 

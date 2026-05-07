@@ -1,7 +1,11 @@
 ﻿# Path-dependent legacy applied to a newly decolonized country.
 # Scope: the new country (called from create_dynamic_country.on_created).
 # Reads the decolonizing parent's policy-time variables to decide which
-# legacy modifier and starting diplomatic relations to apply.
+# legacy modifier, starting laws/IG clout, and diplomatic relations to apply.
+#
+# At the end, also applies a 12-month "liberation contagion" -1.0/mo bar
+# drain to every other country running the colonial-empire JE. Produces
+# the historical wave pattern: India 1947 → Burma, Ceylon, Indonesia.
 apply_decolonization_path = {
 	if = {
 		limit = {
@@ -24,6 +28,10 @@ apply_decolonization_path = {
 			scope:decolonizing_parent = {
 				change_relations = { country = ROOT value = -50 }
 			}
+			# Successor seeded as junta state — parent's brutal exit reproduces itself
+			activate_law = law_type:law_autocracy
+			activate_law = law_type:law_outlawed_dissent
+			activate_law = law_type:law_minority_rights_discrimination
 		}
 		# Commonwealth legacy — parent leaned hardest on investment
 		else_if = {
@@ -42,6 +50,10 @@ apply_decolonization_path = {
 			scope:decolonizing_parent = {
 				change_relations = { country = ROOT value = 30 }
 			}
+			# Successor inherits parent's developmentalist institutions
+			activate_law = law_type:law_parliamentary_republic
+			activate_law = law_type:law_protected_speech
+			activate_law = law_type:law_minority_rights_indifference
 		}
 		# Quiet Assimilation legacy — parent leaned hardest on assimilation
 		else_if = {
@@ -60,6 +72,25 @@ apply_decolonization_path = {
 			scope:decolonizing_parent = {
 				change_relations = { country = ROOT value = 15 }
 			}
+			# Successor seeded with cultural-exclusion citizenship — parent's
+			# civilizing mission left a thin elite that runs the new state
+			activate_law = law_type:law_cultural_exclusion
+			activate_law = law_type:law_minority_rights_indifference
+		}
+	}
+
+	# Liberation contagion: every other country running the colonial-empire JE
+	# feels a 12-month -1.0/mo drain on its stability bar. Independence
+	# elsewhere accelerates the next wave.
+	every_country = {
+		limit = {
+			has_journal_entry = je_colonial_empire
+			NOT = { this = scope:decolonizing_parent }
+			NOT = { this = ROOT }
+		}
+		add_modifier = {
+			name = colonial_stability_negative_event
+			months = 12
 		}
 	}
 }

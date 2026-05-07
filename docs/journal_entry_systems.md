@@ -79,21 +79,43 @@ Persistent journal entry (always active once unlocked).
 **Group:** `je_group_internal_affairs`
 
 ### Purpose
-Tracks a civil rights movement for minority populations. Activates when a country has Civil Rights tech and incorporated states with low-acceptance pops.
+Tracks a civil rights movement for minority populations. Activates when a country has Civil Rights tech and incorporated states with low-acceptance pops. Redesigned away from a passive 20-year timer into a bar-and-buttons system structurally modeled on `je_colonial_empire`.
 
 ### Key Mechanics
-- **No buttons or progress bar** — purely event-driven with status tiers
-- **4 status tiers** based on minority rights law: Hostile → Discriminatory → Indifferent → Protective
-- **Timeout:** 7300 days (~20 years)
-- **Completion:** Requires `law_minority_rights_affirmative_action` OR both `law_multicultural` + `law_minority_rights_protection`
+- **Progress bar:** `civil_rights_support_bar` (0-100), starts at 30. Drift sources include base decay, tech tier (`social_justice_movements`), current minority law, low-acceptance state count (via `cr_low_acceptance_count` SV), radical fraction tier, and active button modifiers.
+- **5 phase modifiers** keyed to bar tiers: `civil_rights_phase_marginal/growing/active/pressuring/imminent_modifier`. Imminent (90+) adds `country_law_enactment_success_add = 0.10` so the legal finish line gets a push from the very pressure the bar represents.
+- **6 button toggle pairs** (12 buttons total) representing player stance. Pro buttons (`grassroots`, `federal_protection`, `gradualist`) and anti buttons (`suppression`, `segregationist`) are mutually exclusive. Cooptation is cross-compatible with anti buttons (the historical "coopt moderates, jail radicals" stance). Each button increments a months-tracker variable consumed by path-dependent resolution.
+- **Cooptation expiry:** after 12 months, `cr_cooptation_expired` marker is added by the JE on_monthly_pulse and the bar bonus stops; remove + re-toggle to reset.
+- **No timeout** — bar carries the urgency. Drifts to 0 → `on_fail`; reaches 100 → `on_complete`.
 
-### Outcomes
-- **Complete:** Loyalists added, `civil_rights_triumph_modifier` (decaying)
-- **Fail** (movement dissolves): Radicals added (lower strata)
-- **Timeout:** Radicals added (lower strata + academics)
+### Threshold tier events (one-shot via `cr_tier_X_seen` flags)
+- **Tier 25:** existing `.13` (Refugee networks) under severe discriminatory law, else new `.301` (First Mass Rally)
+- **Tier 50:** existing `.15` (Martyrdom) under any discriminatory law, else new `.303` (Trade Union Coalition)
+- **Tier 75:** new `.304` (Federal Commission Recommends Action) when `cr_federal_months > 24`, else existing `.16` (Civil Disobedience Campaign)
+- **Tier 90:** new `.305` (March on the Capital) — universal cinematic beat
 
-### Events
-- `movement_events_te.1` through `.4` — monthly pulse (10:10:5:5 weight ratio)
+### Path-dependent resolution
+- **Complete (`movement_events_te.220-.223`):** dispatches on the months-tracker that led for ≥18 months. Federal Mandate / Grassroots Triumph / Negotiated Settlement / Coopted Reform. Falls through to existing single-option `.200` if no track took clear lead.
+- **Fail (`movement_events_te.100/.230/.231`):** existing `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law. New `.230` (token reform demobilized) under cooptation dominance. New `.231` (gradualist stagnation) otherwise.
+
+### Random pool (slimmed)
+- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~20% chance per month). Threshold events carry the narrative arc; this pool provides ambient flavor.
+
+### Supporting files
+- `common/scripted_progress_bars/extra_progress_bars.txt` — `civil_rights_support_bar`
+- `common/scripted_buttons/civil_rights_buttons.txt` — 12 buttons
+- `common/script_values/civil_rights_values.txt` — `cr_low_acceptance_count`
+- `common/static_modifiers/extra_modifiers.txt` — phase + button + victory modifiers (`civil_rights_phase_*`, `cr_*_modifier`, `civil_rights_triumph_*_modifier`)
+
+### Removed in this redesign
+The four sibling "social movement" JEs (`je_lgbtq_rights`, `je_second_wave_feminism`, `je_decline_of_religion`, `je_environmental_crisis`) were deleted. Their events 1-5 still fire monthly via `social_movement_orphans_on_action` in `extra_on_actions.txt` with the same tech/law gates. The `.100` and `.200` capstones plus their JE-shape modifiers (`*_struggle_active`, `*_stagnation`, `*_triumph`, `*_crushed`) are gone.
+
+### When retiring a JE: slice modifiers carefully
+Mod JEs of this family bundle two kinds of modifiers in the same `extra_modifiers.txt` section, and they need different fates:
+- **JE-shape modifiers** — `*_struggle_active_modifier` (`modifiers_while_active`), `*_stagnation_modifier` (`on_timeout`), `*_triumph_modifier` (`on_complete`), `*_crushed_modifier` (`on_fail` capstone). These are referenced only by the JE file and its `.100`/`.200` capstones. **Delete with the JE.**
+- **Event-flavor modifiers** — per-event modifiers like `pride_march_momentum_modifier`, `equal_pay_mandate_modifier`, `pollution_regulations_modifier`. These are referenced from inside the events 1-5 the orphan dispatcher keeps firing. **Keep them.**
+
+`grep -rn '<modifier_name>' common/ events/ --include='*.txt'` before deleting any single modifier block — many sit in interleaved order in the section and the comment header lies about which is JE-only.
 
 ---
 

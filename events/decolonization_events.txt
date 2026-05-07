@@ -75,14 +75,6 @@ decolonization_events.1 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_negative_event days = 90 }
-		# Colonial lobby appeasement: negotiation is a concession
-		add_colonial_lobby_appeasement = {
-			FIRST = root
-			SECOND = scope:restless_subject
-			PRO_AMOUNT = -1
-			ANTI_AMOUNT = 1
-			FACTOR = appeasement_colonial_concession
-		}
 	}
 
 	# Option B: Crack down on the movement
@@ -109,14 +101,6 @@ decolonization_events.1 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event months = 2 }
-		# Colonial lobby appeasement: crackdown pleases colonial lobby
-		add_colonial_lobby_appeasement = {
-			FIRST = root
-			SECOND = scope:restless_subject
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
-			FACTOR = appeasement_colonial_crackdown
-		}
 	}
 
 	# Option C: Grant independence outright
@@ -160,14 +144,6 @@ decolonization_events.1 = {
 			ANTI_AMOUNT = -1
 			FACTOR = appeasement_relations_increased
 		}
-		# Colonial lobby: granting independence is a major concession
-		add_colonial_lobby_appeasement = {
-			FIRST = root
-			SECOND = scope:restless_subject
-			PRO_AMOUNT = -2
-			ANTI_AMOUNT = 2
-			FACTOR = appeasement_colonial_concession
-		}
 		# Prestige boost from moral leadership, but landowners furious
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_modifier = { name = colonial_stability_positive_event days = 150 }
@@ -207,14 +183,6 @@ decolonization_events.1 = {
 			PRO_AMOUNT = -1
 			ANTI_AMOUNT = 1
 			FACTOR = appeasement_relations_decreased
-		}
-		# Colonial lobby: neocolonialism is a mixed signal (less harsh than crack down, not independence)
-		add_colonial_lobby_appeasement = {
-			FIRST = root
-			SECOND = scope:restless_subject
-			PRO_AMOUNT = -1
-			ANTI_AMOUNT = 1
-			FACTOR = appeasement_colonial_concession
 		}
 		# Industrialists love this, intelligentsia see through it
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
@@ -793,9 +761,9 @@ decolonization_events.7 = {
 			limit = {
 				NOT = { this = root }
 				root = {
-				has_variable = former_overlord
-				var:former_overlord = prev
-			}
+					has_variable = former_overlord
+					var:former_overlord = prev
+				}
 			}
 			save_scope_as = former_overlord
 		}
@@ -1545,11 +1513,15 @@ decolonization_events.14 = {
 	}
 
 	# Option A: Condemn colonialism
+	# Retuned for proposal #9: non-overlord GPs (USSR, USA, post-1945 China)
+	# should pick anti-colonial stance with high reliability so AI overlords
+	# face a steady stream of GP condemnation pressure even early.
 	option = {
 		name = decolonization_events.14.a
 		default_option = yes
 		ai_chance = {
-			base = 5
+			base = 8
+			# Big bonus for non-overlords — the geopolitical leverage play
 			modifier = {
 				trigger = {
 					NOT = {
@@ -1558,21 +1530,49 @@ decolonization_events.14 = {
 						}
 					}
 				}
-				add = 10
+				add = 15
 			}
+			# Strong penalty for overlords — they almost never pick this
 			modifier = {
 				trigger = {
 					any_scope_state = {
 						is_overseas_colonial_state = yes
 					}
 				}
-				add = -5
+				add = -10
 			}
+			# Geopolitical-rivalry bonus: condemn the colonial powers we don't like
 			modifier = {
 				trigger = {
-					has_technology_researched = knowledge_economy
+					any_country = {
+						NOT = { this = root }
+						country_rank >= rank_value:great_power
+						any_scope_state = { is_overseas_colonial_state = yes }
+						relations:root <= relations_threshold:disloyal
+					}
 				}
 				add = 5
+			}
+			# Decolonization era — once the tech is researched, the line is drawn
+			modifier = {
+				trigger = { has_technology_researched = decolonization }
+				add = 3
+			}
+			# Knowledge economy era — late-game pressure intensifies
+			modifier = {
+				trigger = { has_technology_researched = knowledge_economy }
+				add = 5
+			}
+			# Left-leaning governance reinforces the anti-colonial line
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_universal_suffrage
+						has_law = law_type:law_council_republic
+						has_law = law_type:law_anarchy
+					}
+				}
+				add = 3
 			}
 		}
 		set_variable = gp_anti_colonial_stance
@@ -3269,5 +3269,245 @@ decolonization_events.52 = {
 		ai_chance = { base = 3 }
 		add_modifier = { name = colonial_stability_negative_event days = 90 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+}
+
+# ============================================================================
+# HOME-FRONT PRESSURE EVENTS 53 / 54
+# Supplementary metropole-domestic pressure. Distinct from 50–52 in flavor:
+# 53 is public mobilization (intelligentsia organizing, not quiet petition);
+# 54 is veterans/soldiers protesting after a long garrison campaign.
+# Both apply colonial_stability_negative_event for visible bar drain.
+# ============================================================================
+
+# Event 53: The Universities Speak — fires after the JE has been active a while
+# and the intelligentsia is in opposition (not in government). Distinct from
+# event 52 (quiet petition) — this is public mobilization on campuses.
+decolonization_events.53 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.53.t
+	desc = decolonization_events.53.d
+	flavor = decolonization_events.53.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		any_scope_state = { is_overseas_colonial_state = yes }
+		# JE active for at least 10 years (120 months)
+		var:colonial_je_total_months > 120
+		# Intelligentsia is in opposition and powerful enough to organize
+		ig:ig_intelligentsia ?= {
+			is_in_government = no
+			is_powerful = yes
+		}
+	}
+
+	# Option A: Engage with student leaders — small bar drain, intelligentsia mollified
+	option = {
+		name = decolonization_events.53.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_protected_speech }
+				add = 4
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 90 }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Disperse the rallies — significant bar drain, hardliner approval
+	option = {
+		name = decolonization_events.53.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_outlawed_dissent }
+				add = 4
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 240 }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 54: The Veterans' Protest — fires after a long garrison campaign.
+# Returning soldiers organize against further deployment; petty bourgeoisie
+# (small-business owners, the war's economic backbone) align with them.
+decolonization_events.54 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/parade_military.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.54.t
+	desc = decolonization_events.54.d
+	flavor = decolonization_events.54.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = decolonization
+		any_scope_state = { is_overseas_colonial_state = yes }
+		# Sustained Garrison policy (3+ years) — the soldiers have something
+		# to be tired about
+		var:colonial_garrison_months > 36
+	}
+
+	# Option A: Pension reforms — treasury cost, civilian approval
+	option = {
+		name = decolonization_events.54.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		add_treasury = {
+			value = money_amount_multiplier_medium
+			multiply = -3
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 120 }
+		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Suppress the protests — bar drains harder, soldier radicals
+	option = {
+		name = decolonization_events.54.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_outlawed_dissent }
+				add = 3
+			}
+		}
+		add_modifier = { name = colonial_stability_negative_event days = 240 }
+		add_radicals = { value = small_radicals pop_type = soldiers }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# ============================================================================
+# CAPSTONE EVENTS 300 / 301 — Imperial Federation Act
+# Fired by je_colonial_empire on_complete when the IF Act decision is taken.
+# These are the satisfying narrative endpoint for a well-played hold strategy.
+# 300 = Iron Fist Federation. 301 = Civilizing Mission Federation.
+# ============================================================================
+
+decolonization_events.300 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/parade_military.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.300.t
+	desc = decolonization_events.300.d
+	flavor = decolonization_events.300.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.300.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Capstone modifier already applied by the decision; reinforce with
+		# the iron-fist flavor modifier as a permanent badge.
+		add_modifier = {
+			name = iron_fist_path_modifier
+			days = -1
+		}
+		# Grant homeland to colonial states with high acceptance — the
+		# Federation absorbs them into the metropole's cultural fabric.
+		every_scope_state = {
+			limit = {
+				NOT = { is_homeland_of_country_cultures = ROOT }
+				state_population >= 100000
+				is_overseas_from_capital = yes
+				NOT = {
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_4
+					}
+				}
+			}
+			state_region = {
+				save_scope_as = integration_state_region
+				ROOT = {
+					every_primary_culture = {
+						save_scope_as = current_culture
+						scope:integration_state_region = {
+							add_homeland = scope:current_culture
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+decolonization_events.301 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.301.t
+	desc = decolonization_events.301.d
+	flavor = decolonization_events.301.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.301.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Civilizing Mission flavor — the Commonwealth path modifier
+		# expresses ongoing cultural soft-power retention.
+		add_modifier = {
+			name = commonwealth_path_modifier
+			days = -1
+		}
+		every_scope_state = {
+			limit = {
+				NOT = { is_homeland_of_country_cultures = ROOT }
+				state_population >= 100000
+				is_overseas_from_capital = yes
+				NOT = {
+					any_scope_pop = {
+						pop_acceptance < acceptance_status_4
+					}
+				}
+			}
+			state_region = {
+				save_scope_as = integration_state_region
+				ROOT = {
+					every_primary_culture = {
+						save_scope_as = current_culture
+						scope:integration_state_region = {
+							add_homeland = scope:current_culture
+						}
+					}
+				}
+			}
+		}
 	}
 }

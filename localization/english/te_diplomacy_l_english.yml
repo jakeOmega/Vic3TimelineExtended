@@ -18,7 +18,6 @@
  annex_subject_peaceful_proposal_notification_name:0 "Proposal for Peaceful Integration"
  banking_event_default_rural_impact:0 "Rural Credit Impact"
  banking_event_default_rural_impact_desc:0 "Temporary negative impact on agricultural throughput due to cooperative shortfall adjustments."
- climate_impact_concern:0 "Climate change impact concerns"
  covert_comms_disruption_action_pact_desc:0 "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness."
  covert_destabilization_action_pact_desc:0 "We are conducting a destabilization campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], fueling political unrest and separatism."
  covert_election_interference_action_pact_desc:0 "We are running a covert election interference campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], undermining their political legitimacy."

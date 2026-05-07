@@ -1,10 +1,6 @@
-﻿je_civil_rights = {
+je_civil_rights = {
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 	group = je_group_internal_affairs
-
-	modifiers_while_active = {
-		civil_rights_struggle_active_modifier
-	}
 
 	is_shown_when_inactive = {
 		has_game_rule = social_movements_enabled
@@ -22,65 +18,94 @@
 		has_active_civil_rights_movement = yes
 	}
 
+	scripted_progress_bar = civil_rights_support_bar
+
+	# Player policy buttons. Pro/anti are mutually exclusive; cooptation is
+	# cross-compatible with anti buttons (the historical "coopt moderates,
+	# jail radicals" stance). Each pair toggles a country modifier; months
+	# active per modifier feed the path-dependent on_complete / on_fail.
+	scripted_button = cr_grassroots_organizing
+	scripted_button = cr_remove_grassroots_organizing
+	scripted_button = cr_federal_protection
+	scripted_button = cr_remove_federal_protection
+	scripted_button = cr_gradualist_accommodation
+	scripted_button = cr_remove_gradualist_accommodation
+	scripted_button = cr_cooptation_token_reform
+	scripted_button = cr_remove_cooptation_token_reform
+	scripted_button = cr_suppression_crackdown
+	scripted_button = cr_remove_suppression_crackdown
+	scripted_button = cr_segregationist_consolidation
+	scripted_button = cr_remove_segregationist_consolidation
+
 	immediate = {
+		# Auto-create the political movement if it isn't already present.
 		if = {
-			limit = {
-				NOT = {
-					has_active_civil_rights_movement = yes
-				}
-			}
+			limit = { NOT = { has_active_civil_rights_movement = yes } }
 			create_political_movement = { type = movement_civil_rights }
 		}
-	}
 
-	on_monthly_pulse = {
-		random_events = {
-			150 = 0
-			10 = movement_events_te.1
-			10 = movement_events_te.2
-			5 = movement_events_te.3
-			5 = movement_events_te.4
-			8 = movement_events_te.13
-			8 = movement_events_te.14
-			5 = movement_events_te.15
-			5 = movement_events_te.16
+		# Tracker variable resets — JE may re-activate after a revolution, so
+		# stale months counts from a prior run would corrupt path resolution.
+		set_variable = { name = cr_grassroots_months value = 0 }
+		set_variable = { name = cr_federal_months value = 0 }
+		set_variable = { name = cr_gradualist_months value = 0 }
+		set_variable = { name = cr_cooptation_months value = 0 }
+		set_variable = { name = cr_suppression_months value = 0 }
+		set_variable = { name = cr_segregationist_months value = 0 }
+		remove_variable = cr_tier_25_seen
+		remove_variable = cr_tier_50_seen
+		remove_variable = cr_tier_75_seen
+		remove_variable = cr_tier_90_seen
+
+		scope:journal_entry = {
+			set_bar_progress = { name = civil_rights_support_bar value = 30 }
 		}
 	}
 
+	progressbar = no
+
+	# Status text keyed off bar tier (replaces the old law-keyed status_desc).
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_civil_rights_status_hostile
+				desc = je_civil_rights_status_imminent
 				trigger = {
-					has_severe_discriminatory_minority_law = yes
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 90 }
 				}
 			}
 			triggered_desc = {
-				desc = je_civil_rights_status_discriminatory
+				desc = je_civil_rights_status_pressuring
 				trigger = {
-					OR = {
-						has_law = law_type:law_minority_rights_discrimination
-						has_law = law_type:law_minority_rights_cultural_assimilation
-					}
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 65 }
 				}
 			}
 			triggered_desc = {
-				desc = je_civil_rights_status_indifferent
+				desc = je_civil_rights_status_active
 				trigger = {
-					has_law = law_type:law_minority_rights_indifference
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 40 }
 				}
 			}
 			triggered_desc = {
-				desc = je_civil_rights_status_protective
+				desc = je_civil_rights_status_growing
 				trigger = {
-					has_law = law_type:law_minority_rights_protection
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 20 }
 				}
+			}
+			triggered_desc = {
+				desc = je_civil_rights_status_marginal
+				trigger = { always = yes }
 			}
 		}
 	}
 
 	complete = {
 		OR = {
+			custom_tooltip = {
+				text = je_civil_rights_complete_bar_tt
+				scope:journal_entry = {
+					"scripted_bar_progress(civil_rights_support_bar)" >= 100
+				}
+			}
 			has_law = law_type:law_minority_rights_affirmative_action
 			AND = {
 				has_law = law_type:law_multicultural
@@ -89,8 +114,36 @@
 		}
 	}
 
+	# Path-dependent victory: dispatch on whichever policy track was dominant
+	# for at least 18 months. Falls through to the existing generic .200 event
+	# when no track took clear lead (e.g. fast law-passage with little policy use).
 	on_complete = {
-		trigger_event = { id = movement_events_te.200 }
+		if = {
+			limit = {
+				var:cr_federal_months >= var:cr_grassroots_months
+				var:cr_federal_months >= var:cr_gradualist_months
+				var:cr_federal_months > 18
+			}
+			trigger_event = { id = movement_events_te.220 } # Federal Mandate
+		}
+		else_if = {
+			limit = {
+				var:cr_grassroots_months >= var:cr_gradualist_months
+				var:cr_grassroots_months > 18
+			}
+			trigger_event = { id = movement_events_te.221 } # Grassroots Triumph
+		}
+		else_if = {
+			limit = { var:cr_gradualist_months > 18 }
+			trigger_event = { id = movement_events_te.222 } # Negotiated Settlement
+		}
+		else_if = {
+			limit = { var:cr_cooptation_months > 18 }
+			trigger_event = { id = movement_events_te.223 } # Coopted Reform (bittersweet)
+		}
+		else = {
+			trigger_event = { id = movement_events_te.200 } # generic fallback
+		}
 	}
 
 	invalid = {
@@ -108,44 +161,180 @@
 	}
 
 	fail = {
-		NOT = {
-			has_active_civil_rights_movement = yes
+		OR = {
+			NOT = { has_active_civil_rights_movement = yes }
+			scope:journal_entry = {
+				"scripted_bar_progress(civil_rights_support_bar)" <= 0
+			}
 		}
 	}
 
+	# Path-dependent failure: distinguish suppression (oppressive aftermath),
+	# cooptation (movement demobilized by token reform), and gradualist drift.
 	on_fail = {
-		# Fire the oppressive regime outcome event if laws are discriminatory/hostile
-		# Otherwise a notification that the movement dissolved
 		if = {
 			limit = {
-				has_discriminatory_minority_law = yes
+				OR = {
+					var:cr_suppression_months > var:cr_segregationist_months
+					var:cr_segregationist_months > 18
+					has_discriminatory_minority_law = yes
+				}
 			}
-			trigger_event = { id = movement_events_te.100 }
+			trigger_event = { id = movement_events_te.100 } # existing oppressive aftermath
+		}
+		else_if = {
+			limit = { var:cr_cooptation_months > 18 }
+			trigger_event = { id = movement_events_te.230 } # demobilized by tokenism
 		}
 		else = {
-			trigger_event = { id = movement_events_te.201 }
+			trigger_event = { id = movement_events_te.231 } # gradualist stagnation
 		}
 	}
 
-	timeout = 7300
+	on_monthly_pulse = {
+		effect = {
+			# --- Tracker increments — one variable per active button modifier ---
+			if = {
+				limit = { has_modifier = cr_grassroots_modifier }
+				change_variable = { name = cr_grassroots_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = cr_federal_protection_modifier }
+				change_variable = { name = cr_federal_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = cr_gradualist_modifier }
+				change_variable = { name = cr_gradualist_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = cr_cooptation_modifier }
+				change_variable = { name = cr_cooptation_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = cr_suppression_modifier }
+				change_variable = { name = cr_suppression_months add = 1 }
+			}
+			if = {
+				limit = { has_modifier = cr_segregationist_modifier }
+				change_variable = { name = cr_segregationist_months add = 1 }
+			}
 
-	on_timeout = {
-		# Timeout is always bad: stagnation and unresolved tensions
-		add_radicals = {
-			value = medium_radicals
-			strata = lower
-		}
-		add_radicals = {
-			value = small_radicals
-			pop_type = academics
-		}
-		add_modifier = {
-			name = civil_rights_stagnation_modifier
-			days = long_modifier_time
-			is_decaying = yes
+			# --- Cooptation expiry: after 12 months the bar push goes to 0 ---
+			# Re-applies cleanly each tick once expired so the marker survives
+			# the periodic phase-modifier swaps below.
+			if = {
+				limit = {
+					has_modifier = cr_cooptation_modifier
+					var:cr_cooptation_months >= 12
+					NOT = { has_modifier = cr_cooptation_expired }
+				}
+				add_modifier = { name = cr_cooptation_expired }
+			}
+
+			# --- Tier-cross threshold events (one-shot via cr_tier_*_seen flags) ---
+			# Tier 25
+			if = {
+				limit = {
+					NOT = { has_variable = cr_tier_25_seen }
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 25 }
+				}
+				set_variable = cr_tier_25_seen
+				if = {
+					limit = { has_severe_discriminatory_minority_law = yes }
+					trigger_event = { id = movement_events_te.13 } # Refugee networks (existing)
+				}
+				else = {
+					trigger_event = { id = movement_events_te.301 } # First Mass Rally (new)
+				}
+			}
+			# Tier 50
+			if = {
+				limit = {
+					NOT = { has_variable = cr_tier_50_seen }
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 50 }
+				}
+				set_variable = cr_tier_50_seen
+				if = {
+					limit = { has_discriminatory_minority_law = yes }
+					trigger_event = { id = movement_events_te.15 } # Martyrdom (existing)
+				}
+				else = {
+					trigger_event = { id = movement_events_te.303 } # Trade Union Coalition (new)
+				}
+			}
+			# Tier 75
+			if = {
+				limit = {
+					NOT = { has_variable = cr_tier_75_seen }
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 75 }
+				}
+				set_variable = cr_tier_75_seen
+				if = {
+					limit = { var:cr_federal_months > 24 }
+					trigger_event = { id = movement_events_te.304 } # Federal Commission (new)
+				}
+				else = {
+					trigger_event = { id = movement_events_te.16 } # Civil Disobedience Campaign (existing)
+				}
+			}
+			# Tier 90
+			if = {
+				limit = {
+					NOT = { has_variable = cr_tier_90_seen }
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" >= 90 }
+				}
+				set_variable = cr_tier_90_seen
+				trigger_event = { id = movement_events_te.305 } # March on the Capital (new)
+			}
+
+			# --- Phase modifier swap (5 bands keyed to bar tier) ---
+			je:je_civil_rights = { remove_modifier = civil_rights_phase_marginal_modifier }
+			je:je_civil_rights = { remove_modifier = civil_rights_phase_growing_modifier }
+			je:je_civil_rights = { remove_modifier = civil_rights_phase_active_modifier }
+			je:je_civil_rights = { remove_modifier = civil_rights_phase_pressuring_modifier }
+			je:je_civil_rights = { remove_modifier = civil_rights_phase_imminent_modifier }
+
+			if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" < 20 }
+				}
+				je:je_civil_rights = { add_modifier = { name = civil_rights_phase_marginal_modifier } }
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" < 40 }
+				}
+				je:je_civil_rights = { add_modifier = { name = civil_rights_phase_growing_modifier } }
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" < 65 }
+				}
+				je:je_civil_rights = { add_modifier = { name = civil_rights_phase_active_modifier } }
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(civil_rights_support_bar)" < 90 }
+				}
+				je:je_civil_rights = { add_modifier = { name = civil_rights_phase_pressuring_modifier } }
+			}
+			else = {
+				je:je_civil_rights = { add_modifier = { name = civil_rights_phase_imminent_modifier } }
+			}
+
+			# --- Slimmed random-events ladder (existing flavor pool) ---
+			random_list = {
+				400 = { } # ~80% nothing
+				15 = { trigger_event = { id = movement_events_te.1 } }
+				15 = { trigger_event = { id = movement_events_te.2 } }
+				10 = { trigger_event = { id = movement_events_te.3 } }
+				10 = { trigger_event = { id = movement_events_te.4 } }
+				10 = { trigger_event = { id = movement_events_te.14 } }
+			}
 		}
 	}
 
 	weight = 100
+	can_revolution_inherit = yes
 	should_be_pinned_by_default_uninvolved_or_context = yes
 }

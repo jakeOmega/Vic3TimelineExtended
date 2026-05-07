@@ -1,42 +1,42 @@
 ﻿adopt_local_culture = {
 	is_shown = {
 		NOT = {
-            any_scope_state = {
-                is_homeland_of_country_cultures = ROOT
-            }
-        }
+			any_scope_state = {
+				is_homeland_of_country_cultures = ROOT
+			}
+		}
 	}
 
 	possible = {
 		is_subject = no
-        has_technology_researched = decolonization
-        capital = {
-            any_scope_culture = {
-                has_homeland = PREV
-            }
-        }
+		has_technology_researched = decolonization
+		capital = {
+			any_scope_culture = {
+				has_homeland = PREV
+			}
+		}
 	}
-	
+
 	when_taken = {
 		every_primary_culture = {
-            ROOT = {
-                remove_primary_culture = PREV
-            }
-        }
-        capital  = {
-            every_scope_culture = {
-                limit = {
-                    has_homeland = PREV
-                }
-                ROOT = {
-                    add_primary_culture = PREV
-                }
-            }
-        }
+			ROOT = {
+				remove_primary_culture = PREV
+			}
+		}
+		capital  = {
+			every_scope_culture = {
+				limit = {
+					has_homeland = PREV
+				}
+				ROOT = {
+					add_primary_culture = PREV
+				}
+			}
+		}
 	}
 
 	ai_chance = {
-		value = 100	
+		value = 100
 	}
 }
 
@@ -76,6 +76,225 @@ secularization_campaign = {
 			value = medium_radicals
 			interest_group = ig:ig_devout
 		}
+	}
+
+	ai_chance = {
+		value = 0
+	}
+}
+
+# ============================================================================
+# Open Map-Mode Survey
+# Player-only meta-decision that opens te_map_modes.1, the picker for custom
+# map-mode overlays (Tourism Appeal / GDP per capita / Emissions). The
+# overlay applies a state_migration_pull_add correction to every state so the
+# Migration Attraction map mode color-codes by the chosen metric.
+#
+# DISABLED — vanilla engine bug.
+# The correction math depends on reading per-state migration_pull as a script
+# value. According to ~/src/vic3/docs/event_targets.log:1498, migration_pull
+# is documented to "Get the migration pull for a state or the mass migration
+# pull for a country" (Input Scopes: country, state). In practice it always
+# returns the country's mass-migration value regardless of scope, so the
+# per-state correction collapses to a constant and the gradient is flat.
+# Re-enable by restoring `is_shown = { is_player = yes NOT = { is_country_type
+# = decentralized } }` and `possible = { is_game_paused = yes }` once the
+# vanilla bug is fixed (or once we find a workable per-state pull source).
+# All the supporting files (event, scripted_effects, scripted_triggers,
+# script_values, static_modifier, loc) are left in place — only the entry
+# point is gated off here.
+# ============================================================================
+# ============================================================================
+# Imperial Federation Act — Iron Fist Path (capstone for Iron-Fist hold strategy)
+# Available only when:
+#   - colonial_solidified_months >= 36 (3 years sustained at ≥90 bar)
+#   - country has explicitly committed to formal empire (Colonial Affairs)
+#   - laws across 4 lawgroups all match the Iron-Fist profile
+#   - country is GP and has ≥4 colonial states
+# Effect: completes je_colonial_empire via flag, triggers victory event 300,
+# applies permanent imperial_federation_modifier.
+# ============================================================================
+imperial_federation_act_iron_fist = {
+	is_shown = {
+		has_journal_entry = je_colonial_empire
+	}
+
+	possible = {
+		# Sustained Solidified band
+		var:colonial_solidified_months >= 36
+		# Power and scale
+		country_rank >= rank_value:great_power
+		colonial_state_count >= 4
+		# Colonial Affairs commitment
+		OR = {
+			has_law = law_type:law_colonial_exploitation
+			has_law = law_type:law_colonial_resettlement
+		}
+		# Iron-Fist Minority Rights
+		OR = {
+			has_law = law_type:law_minority_rights_violent_hostility
+			has_law = law_type:law_minority_rights_ghettoization
+			has_law = law_type:law_minority_rights_discrimination
+			has_law = law_type:law_minority_rights_cultural_assimilation
+		}
+		# Hard-line Citizenship
+		OR = {
+			has_law = law_type:law_national_supremacy
+			has_law = law_type:law_ethnostate
+			has_law = law_type:law_racial_segregation
+		}
+		# Speech suppression
+		OR = {
+			has_law = law_type:law_outlawed_dissent
+			has_law = law_type:law_censorship
+		}
+		# Authoritarian DP
+		OR = {
+			has_law = law_type:law_autocracy
+			has_law = law_type:law_oligarchy
+			has_law = law_type:law_single_party_state
+			has_law = law_type:law_landed_voting
+		}
+		# Costs (gated)
+		authority > 300
+		country_prestige >= 100
+	}
+
+	when_taken = {
+		add_authority = -300
+		add_modifier = {
+			name = imperial_federation_modifier
+			days = -1
+		}
+		set_country_flag = imperial_federation_taken
+		set_country_flag = imperial_federation_iron_fist
+	}
+
+	ai_chance = {
+		value = 100
+	}
+}
+
+# ============================================================================
+# Imperial Federation Act — Civilizing Mission Path
+# Same capstone, different legitimation. Available to the developmentalist
+# benevolent-empire profile. Same Solidified-time gate (36 months).
+# ============================================================================
+imperial_federation_act_civilizing_mission = {
+	is_shown = {
+		has_journal_entry = je_colonial_empire
+	}
+
+	possible = {
+		var:colonial_solidified_months >= 36
+		country_rank >= rank_value:great_power
+		colonial_state_count >= 4
+		OR = {
+			has_law = law_type:law_colonial_exploitation
+			has_law = law_type:law_colonial_resettlement
+		}
+		# Benevolent Minority Rights
+		OR = {
+			has_law = law_type:law_minority_rights_protection
+			has_law = law_type:law_minority_rights_affirmative_action
+		}
+		# Pluralist Citizenship
+		OR = {
+			has_law = law_type:law_multicultural
+			has_law = law_type:law_cultural_exclusion
+		}
+		# Free expression
+		OR = {
+			has_law = law_type:law_protected_speech
+			has_law = law_type:law_right_of_assembly
+		}
+		# Broad-franchise DP
+		OR = {
+			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_wealth_voting
+		}
+		authority > 300
+		country_prestige >= 100
+	}
+
+	when_taken = {
+		add_authority = -300
+		add_modifier = {
+			name = imperial_federation_modifier
+			days = -1
+		}
+		set_country_flag = imperial_federation_taken
+		set_country_flag = imperial_federation_civilizing
+	}
+
+	ai_chance = {
+		value = 100
+	}
+}
+
+# ============================================================================
+# Mandate System Decision — managed-decline option for the broad-franchise empire
+# Converts the colonial JE into informal economic empire (mandate_system_modifier)
+# while allowing the player to keep collecting some of the benefits.
+# Available to liberal-democratic colonial empires that have already taken at
+# least one Round Table Conference.
+# ============================================================================
+mandate_system_decision = {
+	is_shown = {
+		has_journal_entry = je_colonial_empire
+		has_technology_researched = decolonization
+	}
+
+	possible = {
+		scope:journal_entry = {
+			"scripted_bar_progress(colonial_stability_bar)" >= 65
+		}
+		# Round Table Conference taken at least once (timed positive event modifier
+		# is the cleanest signal the button has been used recently)
+		# Hard requirement: neocolonialism law (the mod-added "informal empire"
+		# Colonial Affairs law gated on the decolonization tech)
+		has_law = law_type:law_neocolonialism
+		# Broad-franchise DP — selling this requires legitimacy
+		OR = {
+			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_census_voting
+			has_law = law_type:law_wealth_voting
+		}
+		# Cannot have outlawed dissent — selling negotiated transition needs press
+		NOT = { has_law = law_type:law_outlawed_dissent }
+		authority > 100
+	}
+
+	when_taken = {
+		add_authority = -100
+		add_modifier = {
+			name = mandate_system_modifier
+			days = -1
+		}
+		# Push bar up — the world recognizes the negotiated mode
+		add_modifier = {
+			name = colonial_stability_positive_event
+			months = 12
+		}
+	}
+
+	ai_chance = {
+		value = 50
+	}
+}
+
+te_open_map_mode_survey = {
+	is_shown = {
+		always = no
+	}
+
+	possible = {
+		always = no
+	}
+
+	when_taken = {
+		trigger_event = { id = te_map_modes.1 days = 0 popup = yes }
 	}
 
 	ai_chance = {

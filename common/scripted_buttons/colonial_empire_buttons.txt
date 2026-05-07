@@ -103,6 +103,10 @@ ce_military_garrison = {
 			}
 		}
 		NOT = { has_modifier = colonial_military_garrison_modifier }
+		# Hard authority gate — Garrison is unsustainable for liberal AIs without
+		# the authority-generating regressive law stack. The cruel/Iron-Fist
+		# state has authority to spare; the AI without it can't even click.
+		authority > 300
 	}
 
 	effect = {
@@ -110,6 +114,10 @@ ce_military_garrison = {
 			text = "CE_MILITARY_GARRISON_DESC"
 			add_modifier = { name = colonial_military_garrison_modifier }
 		}
+		# Infamy compounds with repeated cycles — a sustained Iron-Fist run
+		# accumulates infamy that itself draws GP condemners (existing -0.6/mo
+		# bar drain per condemner, escalating at tier 4 and 6).
+		add_infamy = 5
 	}
 }
 

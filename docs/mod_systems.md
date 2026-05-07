@@ -389,7 +389,7 @@ Two-phase construction pattern: buildable construction site → completed buildi
 - **Space Elevator:** `building_space_elevator_construction_site` → `building_space_elevator`. Scripted effect: `space_elevator_construction` in `extra_effects.txt`. On-action: `space_elevator_on_action` (monthly state pulse). Max 20 levels.
 - **Solar Collector:** Three-building system (construction site → orbital hub → ground receivers). Hub enables receiver slots via `country_solar_receiver_max_level_add`. Max 10 levels.
 - **Construction progress:** Monthly based on `(occupancy / 12) * speed_multiplier`. Speed PMs: paused=0, slow=0.25, medium=0.5, fast=1.0.
-- **Custom modifier types:** `building_weekly_*_progress` and `building_total_*_progress` (percent, script_only) in `extra_modifier_types.txt`.
+- **Custom modifier types:** `building_weekly_*_progress` and `building_total_*_progress` (percent, script_only) in `megastructure_progress_modifier_types.txt`.
 
 ## On-Actions Reference
 
@@ -731,28 +731,33 @@ At JE start, heirs older than newborn receive pre-initialized investments:
 - **Scripted effects for gain encapsulation:** Each focus has a dedicated `heir_ed_gain_X` effect that handles intelligence, variable updates, bar progress, and IG reactions. This keeps the JE monthly pulse compact.
 - **`change_variable multiply = -1`** is valid Paradox script for negation (used in rebel child mechanic).
 
-## Social Movement Journal Entries (MVP)
+## Social Movement Journal Entries (history)
 
-Eight journal entries tracking major social/political movements of the modern era. Each has a `modifiers_while_active` modifier, 2 monthly pulse events (3 options each), a fail-state event, and completion/timeout modifiers.
+This section originally documented eight social-movement JEs that all shared a passive-timer-plus-random-events shape. Four have since been deleted (LGBTQ+ Rights, Second-Wave Feminism, Decline of Religion, Environmental Crisis) — their events now fire via `social_movement_orphans_on_action` in `extra_on_actions.txt` with the original tech/law gates. Civil Rights was redesigned around a progress bar + buttons + path-dependent outcomes; see the Civil Rights section in `docs/journal_entry_systems.md`.
 
-### Files
-- **JE Definitions:** `common/journal_entries/je_lgbtq_rights.txt`, `je_second_wave_feminism.txt`, `je_human_augmentation.txt`, `je_environmental_crisis.txt`, `je_digital_rights.txt`, `je_post_scarcity.txt`, `je_mental_health.txt`, `je_decline_of_religion.txt`
-- **Events:** `events/lgbtq_events.txt`, `feminist_events.txt`, `augmentation_events.txt`, `environmental_events.txt`, `surveillance_events.txt`, `post_scarcity_events.txt`, `mental_health_events.txt`, `secular_events.txt`
-- **Modifiers:** `common/static_modifiers/extra_modifiers.txt` (search for the JE section headers)
-- **Design doc:** `docs/future_journal_entry_ideas.md`
+### Currently active JEs of this family
+- `je_civil_rights` — progress bar, 6 button toggle pairs, path-dependent victory/failure (see `docs/journal_entry_systems.md`)
+- `je_human_augmentation` — passive timer (legacy shape; not yet redesigned)
+- `je_digital_rights` — passive timer (legacy shape)
+- `je_post_scarcity` — passive timer (legacy shape)
+- `je_mental_health` — passive timer (legacy shape)
 
-### Summary Table
+### Orphan event pools (ex-JE)
+- LGBTQ+ — `events/lgbtq_events.txt` events 1-5, gated on `LGBTQ_rights_movement` tech and not `law_full_equality_and_protection`
+- Second-wave feminism — `events/feminist_events.txt` events 1-5, gated on `second_wave_feminism` tech and not `law_protected_class`
+- Decline of religion — `events/secular_events.txt` events 1-5, gated on `decline_of_organized_religion` tech
+- Environmental crisis — `events/environmental_events.txt` events 1-5, gated on `environmental_movement` / `pollution_control` and not `law_ministry_of_the_environment`
+
+The `.100` (failure) and `.200` (victory) capstone events for these four have been removed along with their JE-shape modifiers (`*_struggle_active`, `*_stagnation`, `*_triumph`, `*_crushed`, `*_paralysis`, `*_revivalism`, `feminism_emancipated_character_modifier`, `feminism_backlash_character_modifier`, `env_crisis_reform_window`).
+
+### Summary Table (legacy-shape JEs still in the mod)
 
 | JE | Trigger Tech | Law Group | Complete | Fail |
 |---|---|---|---|---|
-| LGBTQ+ Rights | `LGBTQ_rights_movement` | `lawgroup_LGBTQ_rights` | `law_full_equality_and_protection` | `law_active_persecution` + `social_justice_movements` |
-| Second-Wave Feminism | `second_wave_feminism` | `lawgroup_womens_rights` | `law_protected_class` | `law_no_womens_rights` + `contraceptive_pill` |
 | Human Augmentation | `biohacking_and_human_augmentation` / `brain_computer_interfaces` | `lawgroup_human_augmentation` | `law_regulated_augmentation_market` / `law_mandatory_augmentation` | `law_human_purity` |
-| Environmental Crisis | `environmental_movement` / `pollution_control` | ministry of environment institution | `law_ministry_of_the_environment` + investment ≥ 3 | no ministry + `clean_energy_technologies` |
 | Digital Rights | `automated_surveillance` / `cybersecurity` | `lawgroup_privacy_rights` | `law_strong_privacy_rights` | `law_intrusive_surveillance` + ministry of intel |
 | Post-Scarcity | `universal_basic_income` | `lawgroup_welfare` | `law_post-scarcity` | (timeout only) |
 | Mental Health | `mental_health_awareness` | `lawgroup_criminal_justice` | `law_rehabilitation_focused_criminal_justice` + social_security ≥ 4 | `law_punishment_focused` + `decline_of_organized_religion` |
-| Decline of Religion | `decline_of_organized_religion` | `lawgroup_ministry_of_religion` | `law_no_ministry_of_religion` | ministry + investment ≥ 4 |
 
 ### Event Design Patterns
 
@@ -768,14 +773,14 @@ Each JE has **5 monthly events + 1 fail-state event** (except Post-Scarcity whic
 
 | System | JE Definition | Events | Modifiers |
 |---|---|---|---|
-| LGBTQ+ Rights | `common/journal_entries/je_lgbtq_rights.txt` | `events/lgbtq_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
-| Second-Wave Feminism | `common/journal_entries/je_second_wave_feminism.txt` | `events/feminist_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
+| LGBTQ+ Rights | (deleted; events run via `social_movement_orphans_on_action`) | `events/lgbtq_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
+| Second-Wave Feminism | (deleted; events run via `social_movement_orphans_on_action`) | `events/feminist_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Human Augmentation | `common/journal_entries/je_augmentation_debate.txt` | `events/augmentation_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
-| Environmental Crisis | `common/journal_entries/je_environmental_crisis.txt` | `events/environmental_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
+| Environmental Crisis | (deleted; events run via `social_movement_orphans_on_action`) | `events/environmental_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Digital Rights | `common/journal_entries/je_digital_rights.txt` | `events/surveillance_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Post-Scarcity | `common/journal_entries/je_post_scarcity.txt` | `events/post_scarcity_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Mental Health | `common/journal_entries/je_mental_health.txt` | `events/mental_health_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
-| Decline of Religion | `common/journal_entries/je_secular_transition.txt` | `events/secular_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
+| Decline of Religion | (deleted; events run via `social_movement_orphans_on_action`) | `events/secular_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Religious Revivals | — (no JE, event-driven) | `events/religious_revival_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 
 ## Religious Revival Events
@@ -869,7 +874,7 @@ Each JE has **5 monthly events + 1 fail-state event** (except Post-Scarcity whic
 - Scripted Effect: `common/scripted_effects/sol_expectations_effects.txt` (`sol_expectations_monthly_update` + utilities)
 - On_action: `common/on_actions/sol_expectations_on_actions.txt`
 - Static Modifier: `common/static_modifiers/sol_expectations_modifiers.txt`
-- Modifier Types: `common/modifier_type_definitions/extra_modifier_types.txt` (search `country_sol_expectation`)
+- Modifier Types: `common/modifier_type_definitions/sol_expectations_modifier_types.txt`
 - Script Values: `common/script_values/extra_script_values.txt` (search `sol_expectations`)
 - Vanilla Injections: `sol_expectations_vanilla_injections.txt` in `technologies/`, `laws/`, `interest_group_traits/`
 - Loc: `localization/english/te_modifiers_l_english.yml`

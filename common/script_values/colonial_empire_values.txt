@@ -86,3 +86,35 @@ colonial_development_cost = {
 	add = 100
 	min = 100
 }
+
+# Metropole state count: total states minus overseas colonial states.
+# Floored at 1 to avoid divide-by-zero when an empire is wholly colonial.
+metropole_state_count = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			NOT = { is_overseas_colonial_state = yes }
+		}
+		add = 1
+	}
+	min = 1
+}
+
+# Overreach ratio: how much your colonial holdings exceed ~1.5x your metropole.
+# 0 (or below) means no penalty; positive values feed the bar's overreach drain.
+# A larger metropole tolerates a larger empire proportionally — France can hold
+# more before overreach than Belgium, Belgium can hold its small empire freely.
+colonial_overreach_ratio = {
+	value = colonial_state_count
+	divide = metropole_state_count
+	subtract = 1.5
+	min = 0
+}
+
+# Colonial GDP cost per month for the Investment policy.
+# Used by the JE's monthly pulse to debit treasury proportional to GDP.
+# 0.5% of GDP per month while Invest is active.
+colonial_invest_monthly_cost = {
+	value = country_gdp
+	multiply = -0.005
+}

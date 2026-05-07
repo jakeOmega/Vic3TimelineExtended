@@ -1356,18 +1356,23 @@ decolonization_events_on_action = {
 				NOT = { is_country_type = decentralized }
 				has_technology_researched = decolonization
 			}
+			# Event firing weights audited (proposal #10):
+			# Total event weight ~265 vs 900 nothing = ~23% chance per month of
+			# any event, with cooldowns gating individual events to 3yr+. Over
+			# a 30yr JE arc that produces roughly 10–14 distinct events visible
+			# per playthrough — within the design target band.
 			random_list = {
 				900 = { } # ~90% chance of nothing
-				# Colonial Independence Movement
-				15 = {
+				# Colonial Independence Movement — generic uprising flavor;
+				# fires often but cooldown-gated so it's not spammy
+				12 = {
 					trigger = {
 						any_subject_or_below = { liberty_desire >= 50 }
 					}
 					trigger_event = { id = decolonization_events.1 }
 				}
-				# International Pressure to Decolonize — bumped weight 10→15 because
-				# this is a marquee event (the international-system push) that
-				# wasn't firing as often as its narrative weight suggests.
+				# International Pressure to Decolonize — marquee event (UN era);
+				# weight 15 reflects the narrative weight of "world is watching"
 				15 = {
 					trigger = {
 						has_technology_researched = intergovernmental_organizations
@@ -1388,8 +1393,10 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.3 }
 				}
-				# Cultural Reclamation (for former colonies)
-				10 = {
+				# Whose Language Do We Dream In? — cultural-identity flavor.
+				# Bumped 10→12: this is one of the strongest narrative beats
+				# but rarely seen because the trigger is exclusive (former colony only)
+				12 = {
 					trigger = {
 						is_subject = no
 						NOT = { any_scope_state = { is_homeland_of_country_cultures = ROOT } }
@@ -1429,8 +1436,10 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.7 }
 				}
-				# Rise of Anti-Colonial Ideology
-				10 = {
+				# Dark Satanic Mills of Empire — colonial-economy flavor.
+				# Bumped 10→12: thematic anchor for industrial-era colonialism;
+				# trigger is restrictive (anti-colonialist intelligentsia)
+				12 = {
 					trigger = {
 						any_subject_or_below = { always = yes }
 						ig:ig_intelligentsia ?= {
@@ -1439,8 +1448,11 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.8 }
 				}
-				# Overseas Colonial Unrest (directly-owned non-homeland territory)
-				15 = {
+				# Overseas Colonial Unrest — generic; lowered 15→10 because it
+				# fires whenever any pop has acceptance<20, which is most of
+				# the JE's runtime. The cap matters most when reactive events
+				# would otherwise crowd out the marquee narrative beats.
+				10 = {
 					trigger = {
 						any_scope_state = {
 							is_overseas_colonial_state = yes
@@ -1634,6 +1646,30 @@ decolonization_events_on_action = {
 						}
 					}
 					trigger_event = { id = decolonization_events.52 }
+				}
+				# Metropole pressure: The Universities Speak — public mobilization
+				# flavor distinct from event 52's quiet petition. Fires after JE
+				# active >10 years with intelligentsia in opposition.
+				8 = {
+					trigger = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						var:colonial_je_total_months > 120
+						ig:ig_intelligentsia ?= {
+							is_in_government = no
+							is_powerful = yes
+						}
+					}
+					trigger_event = { id = decolonization_events.53 }
+				}
+				# Metropole pressure: The Veterans' Protest — fires after sustained
+				# garrison campaigns. Returning soldiers organize against further
+				# deployment.
+				8 = {
+					trigger = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						var:colonial_garrison_months > 36
+					}
+					trigger_event = { id = decolonization_events.54 }
 				}
 			}
 		}

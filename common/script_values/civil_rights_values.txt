@@ -1,0 +1,20 @@
+# ============================================================================
+# CIVIL RIGHTS MOVEMENT SCRIPT VALUES
+# Used by civil_rights_support_bar monthly_progress and CR scripted buttons.
+# ============================================================================
+
+# Count of incorporated states with at least one pop below acceptance_status_4
+# (the same low-acceptance threshold used by je_civil_rights.is_shown_when_inactive).
+# Drives the bar's "states with grievances feed the movement" upward pressure.
+cr_low_acceptance_count = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_incorporated = yes
+			any_scope_pop = {
+				pop_acceptance < acceptance_status_4
+			}
+		}
+		add = 1
+	}
+}

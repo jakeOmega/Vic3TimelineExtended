@@ -1724,27 +1724,78 @@ foreign_property_protected_modifier = {
 #     resistance grows.
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_bureaucracy_mult = -0.05
+	# Primary cost: GDP-scaled treasury debit applied via je_colonial_empire on_monthly_pulse
+	# (modifiers can't drain treasury directly; the JE handles per-month gold cost).
+	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad
+	state_lower_strata_expected_sol_add = 1
+	state_middle_strata_expected_sol_add = 1
+	# Construction capacity diverted to colonies
+	country_construction_add = -3
 	country_prestige_add = -25
 	# Side benefit: investment IS infrastructure
 	state_migration_pull_mult = 0.05
 	building_group_bg_extraction_throughput_add = 0.02
+	# IG anger: Industrialists / Petite Bourgeoisie wanted capital at home
+	interest_group_ig_industrialists_pol_str_mult = -0.05
+	interest_group_ig_petty_bourgeoisie_pol_str_mult = -0.03
 }
 
 colonial_military_garrison_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	# Primary cost: ongoing Authority drain. Cruel/regressive laws supply the
+	# Authority that makes Garrison sustainable; liberal AIs run dry quickly.
+	country_authority_add = -300
 	country_prestige_from_army_power_projection_mult = -0.10
 	country_bureaucracy_mult = -0.03
 	# Larger prestige hit reflects the international optics of armed garrison rule
 	country_prestige_add = -50
+	# Modest money cost: credit dries up when you're shooting people
+	country_loan_interest_rate_mult = 0.05
+	# IG anger: the universities and unions don't like brutality
+	interest_group_ig_intelligentsia_pol_str_mult = -0.05
+	interest_group_ig_trade_unions_pol_str_mult = -0.03
 }
 
 colonial_cultural_assimilation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_bureaucracy_mult = -0.04
+	# Primary cost: bureaucracy MULT — bites big empires hardest, which is the
+	# whole point. Forced cultural conversion is administratively expensive.
+	country_bureaucracy_mult = -0.15
+	country_authority_add = -100
 	country_acceptance_not_homeland_add = 10
 	# Risk: the policy itself radicalizes opposition
 	state_radicals_from_political_movements_mult = 0.10
+}
+
+# State-side modifier reapplied to every overseas colonial state while the
+# country has colonial_cultural_assimilation_modifier active. Represents the
+# disruption to the local economy when teachers are forced to teach the
+# metropole's curriculum and bureaucrats process language conversion.
+# Reapplication wiring lives in je_colonial_empire on_monthly_pulse.
+colonial_assimilation_disruption_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_goods_output_mult = -0.05
+	state_pop_qualifications_mult = -0.10
+}
+
+# Imperial Federation Act capstone modifier — applied permanently when the
+# IF Act decision is taken. The empire is now structurally settled; the
+# bar/JE is removed and the player keeps the empire as a permanent piece of
+# the world-state.
+imperial_federation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_migration_pull_mult = 0.05
+	country_acceptance_not_homeland_add = 5
+	country_prestige_mult = 0.05
+}
+
+# Mandate System modifier — applied when the Mandate System decision is
+# taken. Represents the British informal-empire mode: economic influence
+# without direct rule. Comes with diplomatic cost.
+mandate_system_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_acceptance_not_homeland_add = -3
+	country_diplomatic_reputation_add = 5
 }
 
 # Phase modifiers (applied automatically by JE pulse based on stability level).
@@ -2102,19 +2153,122 @@ civil_rights_triumph_modifier = {
 	country_acceptance_no_shared_heritage_trait_add = 10
 }
 
-# Active while the civil rights journal entry is ongoing
-civil_rights_struggle_active_modifier = {
+# ----------------------------------------------------------------------------
+# Civil Rights JE phase modifiers — applied to je_civil_rights itself by its
+# on_monthly_pulse based on the civil_rights_support_bar tier (0-20 / 20-40 /
+# 40-65 / 65-90 / 90-100). Replaces the single civil_rights_struggle_active_modifier.
+# Country-scope; cascades to states.
+# ----------------------------------------------------------------------------
+civil_rights_phase_marginal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_radicals_from_political_movements_mult = -0.10
+}
+
+civil_rights_phase_growing_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.05
+}
+
+civil_rights_phase_active_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_turmoil_effects_mult = 0.05
 	state_radicals_from_political_movements_mult = 0.10
 }
 
-# Timeout modifier: unresolved stagnation
-civil_rights_stagnation_modifier = {
+civil_rights_phase_pressuring_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_add = -50
 	state_turmoil_effects_mult = 0.10
-	country_acceptance_not_homeland_add = -5
+	state_radicals_from_political_movements_mult = 0.20
+}
+
+civil_rights_phase_imminent_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.15
+	state_radicals_from_political_movements_mult = 0.20
+	country_law_enactment_success_add = 0.10
+}
+
+# ----------------------------------------------------------------------------
+# Civil Rights button policy modifiers — applied to country by scripted buttons
+# in civil_rights_buttons.txt. Each ticks a months-tracker variable on the JE,
+# read by on_complete / on_fail to dispatch path-dependent flavor.
+# ----------------------------------------------------------------------------
+cr_grassroots_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.05
+	state_radicals_from_political_movements_mult = 0.10
+}
+
+cr_federal_protection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_bureaucracy_mult = -0.05
+	country_acceptance_not_homeland_add = 5
+	country_authority_mult = -0.05
+}
+
+cr_gradualist_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_turmoil_effects_mult = -0.05
+	country_acceptance_not_homeland_add = 2
+}
+
+cr_cooptation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_turmoil_effects_mult = -0.10
+	country_acceptance_not_homeland_add = 3
+	country_legitimacy_ideological_incoherence_mult = 0.05
+}
+
+# Marker added by the JE on_monthly_pulse once cr_cooptation_months > 12 — the
+# civil_rights_support_bar checks for its presence to expire the +0.6 push.
+cr_cooptation_expired = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+}
+
+cr_suppression_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.10
+	country_authority_mult = 0.05
+}
+
+cr_segregationist_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_mult = 0.10
+	state_radicals_from_political_movements_mult = 0.30
+	country_acceptance_not_homeland_add = -10
+}
+
+# ----------------------------------------------------------------------------
+# Civil Rights victory-flavor modifiers — variants of civil_rights_triumph_modifier
+# applied by the path-dependent on_complete events. The base civil_rights_triumph_modifier
+# above stays as the generic fallback (movement_events_te.200).
+# ----------------------------------------------------------------------------
+civil_rights_triumph_federal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.20
+	country_acceptance_not_homeland_add = 20
+	country_authority_mult = -0.05
+}
+
+civil_rights_triumph_grassroots_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.15
+	country_acceptance_not_homeland_add = 15
+	political_movement_pop_attraction_mult = 0.10
+}
+
+civil_rights_triumph_gradualist_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.10
+	country_acceptance_not_homeland_add = 10
+	state_turmoil_effects_mult = -0.05
+}
+
+civil_rights_triumph_coopted_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+	country_acceptance_not_homeland_add = 8
+	country_legitimacy_ideological_incoherence_mult = 0.05
 }
 
 # Event 13: Refugee network modifiers

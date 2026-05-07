@@ -93,8 +93,12 @@
 	complete = {
 		custom_tooltip = {
 			text = je_colonial_empire_complete_tt
-			scope:journal_entry = {
-				"scripted_bar_progress(colonial_stability_bar)" >= 100
+			OR = {
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" >= 100
+				}
+				# IF Act capstone — set by the Imperial Federation Act decision
+				has_country_flag = imperial_federation_taken
 			}
 		}
 	}
@@ -103,8 +107,19 @@
 	# Months tracked in vars colonial_invest_months / colonial_garrison_months /
 	# colonial_assimilate_months by the monthly pulse below. The dispatch
 	# picks the dominant path and triggers a flavor-matched event.
+	#
+	# IF Act capstone routes (300/301) take priority — reaching the Solidified
+	# capstone is the explicit "victory" path; it bypasses the bar-100 routing.
 	on_complete = {
 		if = {
+			limit = { has_country_flag = imperial_federation_iron_fist }
+			trigger_event = { id = decolonization_events.300 }   # Iron Fist Federation capstone
+		}
+		else_if = {
+			limit = { has_country_flag = imperial_federation_civilizing }
+			trigger_event = { id = decolonization_events.301 }   # Civilizing Mission capstone
+		}
+		else_if = {
 			limit = {
 				var:colonial_garrison_months >= var:colonial_invest_months
 				var:colonial_garrison_months >= var:colonial_assimilate_months
@@ -173,6 +188,17 @@
 				set_variable = { name = colonial_assimilate_months value = 0 }
 			}
 			if = {
+				limit = { NOT = { has_variable = colonial_solidified_months } }
+				set_variable = { name = colonial_solidified_months value = 0 }
+			}
+			# JE total duration counter — read by long-duration home-front events
+			# (e.g. "The Universities Speak" at >10 years).
+			if = {
+				limit = { NOT = { has_variable = colonial_je_total_months } }
+				set_variable = { name = colonial_je_total_months value = 0 }
+			}
+			change_variable = { name = colonial_je_total_months add = 1 }
+			if = {
 				limit = { has_modifier = colonial_development_investment_modifier }
 				change_variable = { name = colonial_invest_months add = 1 }
 			}
@@ -183,6 +209,45 @@
 			if = {
 				limit = { has_modifier = colonial_cultural_assimilation_modifier }
 				change_variable = { name = colonial_assimilate_months add = 1 }
+			}
+
+			# --- Solidified-band sustained-time counter ---
+			# Increments while bar is in Solidified band; resets if it drops.
+			# The Imperial Federation Act capstone requires 36 sustained months.
+			if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 90 }
+				}
+				change_variable = { name = colonial_solidified_months add = 1 }
+			}
+			else = {
+				set_variable = { name = colonial_solidified_months value = 0 }
+			}
+
+			# --- GDP-scaled treasury debit while Invest is active ---
+			# Models the real cost of developmental empire: ~0.5% of GDP/mo.
+			# A 1960 UK GDP of ~£700M means roughly -£3.5M/month; substantial
+			# but not bankrupting. Anyone CAN fund it; few AIs do for decades.
+			if = {
+				limit = { has_modifier = colonial_development_investment_modifier }
+				add_treasury = colonial_invest_monthly_cost
+			}
+
+			# --- State-side assimilation disruption reapplication ---
+			# While the country has the assimilation modifier, every overseas
+			# colonial state takes a recurring -5% goods output / -10% pop
+			# qualifications hit. Forced cultural conversion stalls the local
+			# economy. 2-month duration; reapplied each pulse so it sticks
+			# while the policy is on, decays naturally when it ends.
+			if = {
+				limit = { has_modifier = colonial_cultural_assimilation_modifier }
+				every_scope_state = {
+					limit = { is_overseas_colonial_state = yes }
+					add_modifier = {
+						name = colonial_assimilation_disruption_modifier
+						months = 2
+					}
+				}
 			}
 
 			# Phase modifiers based on current bar value (five status bands)

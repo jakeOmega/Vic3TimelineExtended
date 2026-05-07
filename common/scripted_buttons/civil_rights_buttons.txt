@@ -1,0 +1,364 @@
+# ============================================================================
+# CIVIL RIGHTS SCRIPTED BUTTONS
+# Used by je_civil_rights. 6 toggle pairs (12 buttons) representing player
+# stance toward the movement. Pro buttons stack with each other; anti buttons
+# stack with each other; cooptation is compatible with anti buttons (the
+# historical "coopt moderates, jail radicals" stance) but no other pro/anti
+# pair coexists. Each button increments a months-tracker variable read by
+# je_civil_rights' path-dependent on_complete / on_fail.
+# ============================================================================
+
+# ------ Grassroots Organizing (pro) ------
+cr_grassroots_organizing = {
+	name = "CR_GRASSROOTS_ORGANIZING"
+	desc = "CR_GRASSROOTS_ORGANIZING_DESC"
+
+	visible = {
+		NOT = { has_modifier = cr_grassroots_modifier }
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_segregationist_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_minority_rights_indifference
+					has_law = law_type:law_minority_rights_protection
+					has_law = law_type:law_minority_rights_affirmative_action
+				}
+			}
+			add = 30
+		}
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+			add = 15
+		}
+	}
+
+	possible = {
+		NOT = { has_modifier = cr_grassroots_modifier }
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_segregationist_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_GRASSROOTS_ORGANIZING_DESC"
+			add_modifier = { name = cr_grassroots_modifier }
+		}
+	}
+}
+
+cr_remove_grassroots_organizing = {
+	name = "CR_REMOVE_GRASSROOTS_ORGANIZING"
+	desc = "CR_REMOVE_GRASSROOTS_ORGANIZING_DESC"
+
+	visible = { has_modifier = cr_grassroots_modifier }
+
+	ai_chance = { value = 0 }
+
+	possible = { has_modifier = cr_grassroots_modifier }
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_REMOVE_GRASSROOTS_ORGANIZING_DESC"
+			remove_modifier = cr_grassroots_modifier
+		}
+	}
+}
+
+# ------ Federal Protection (pro, capacity-gated) ------
+cr_federal_protection = {
+	name = "CR_FEDERAL_PROTECTION"
+	desc = "CR_FEDERAL_PROTECTION_DESC"
+
+	visible = {
+		NOT = { has_modifier = cr_federal_protection_modifier }
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_segregationist_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_minority_rights_protection
+					has_law = law_type:law_minority_rights_affirmative_action
+				}
+			}
+			add = 25
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CR_FEDERAL_PROTECTION_REQUIRES_TT
+			OR = {
+				has_law = law_type:law_minority_rights_indifference
+				has_law = law_type:law_minority_rights_protection
+				has_law = law_type:law_minority_rights_affirmative_action
+			}
+			country_rank >= rank_value:minor_power
+		}
+		NOT = { has_modifier = cr_federal_protection_modifier }
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_segregationist_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_FEDERAL_PROTECTION_DESC"
+			add_modifier = { name = cr_federal_protection_modifier }
+		}
+	}
+}
+
+cr_remove_federal_protection = {
+	name = "CR_REMOVE_FEDERAL_PROTECTION"
+	desc = "CR_REMOVE_FEDERAL_PROTECTION_DESC"
+
+	visible = { has_modifier = cr_federal_protection_modifier }
+
+	ai_chance = { value = 0 }
+
+	possible = { has_modifier = cr_federal_protection_modifier }
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_REMOVE_FEDERAL_PROTECTION_DESC"
+			remove_modifier = cr_federal_protection_modifier
+		}
+	}
+}
+
+# ------ Gradualist Accommodation (center) ------
+cr_gradualist_accommodation = {
+	name = "CR_GRADUALIST_ACCOMMODATION"
+	desc = "CR_GRADUALIST_ACCOMMODATION_DESC"
+
+	visible = {
+		NOT = { has_modifier = cr_gradualist_modifier }
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_segregationist_modifier }
+	}
+
+	ai_chance = {
+		value = 20
+		if = {
+			limit = { ig:ig_petty_bourgeoisie ?= { is_in_government = yes } }
+			add = 15
+		}
+	}
+
+	possible = {
+		NOT = { has_modifier = cr_gradualist_modifier }
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_segregationist_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_GRADUALIST_ACCOMMODATION_DESC"
+			add_modifier = { name = cr_gradualist_modifier }
+		}
+	}
+}
+
+cr_remove_gradualist_accommodation = {
+	name = "CR_REMOVE_GRADUALIST_ACCOMMODATION"
+	desc = "CR_REMOVE_GRADUALIST_ACCOMMODATION_DESC"
+
+	visible = { has_modifier = cr_gradualist_modifier }
+
+	ai_chance = { value = 0 }
+
+	possible = { has_modifier = cr_gradualist_modifier }
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_REMOVE_GRADUALIST_ACCOMMODATION_DESC"
+			remove_modifier = cr_gradualist_modifier
+		}
+	}
+}
+
+# ------ Cooptation / Token Reform (cynical; cross-compatible) ------
+cr_cooptation_token_reform = {
+	name = "CR_COOPTATION_TOKEN_REFORM"
+	desc = "CR_COOPTATION_TOKEN_REFORM_DESC"
+
+	visible = {
+		NOT = { has_modifier = cr_cooptation_modifier }
+		OR = {
+			has_law = law_type:law_minority_rights_discrimination
+			has_law = law_type:law_minority_rights_indifference
+			has_law = law_type:law_minority_rights_cultural_assimilation
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_law = law_type:law_minority_rights_discrimination }
+			add = 25
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CR_COOPTATION_REQUIRES_TT
+			OR = {
+				has_law = law_type:law_minority_rights_discrimination
+				has_law = law_type:law_minority_rights_indifference
+				has_law = law_type:law_minority_rights_cultural_assimilation
+			}
+		}
+		NOT = { has_modifier = cr_cooptation_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_COOPTATION_TOKEN_REFORM_DESC"
+			add_modifier = { name = cr_cooptation_modifier }
+		}
+	}
+}
+
+cr_remove_cooptation_token_reform = {
+	name = "CR_REMOVE_COOPTATION_TOKEN_REFORM"
+	desc = "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC"
+
+	visible = { has_modifier = cr_cooptation_modifier }
+
+	ai_chance = { value = 0 }
+
+	possible = { has_modifier = cr_cooptation_modifier }
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC"
+			remove_modifier = cr_cooptation_modifier
+			# Also drop the expired-marker if present so re-toggling resets the
+			# 12-month bar bonus window cleanly.
+			remove_modifier = cr_cooptation_expired
+		}
+	}
+}
+
+# ------ Suppression / Crackdown (anti) ------
+cr_suppression_crackdown = {
+	name = "CR_SUPPRESSION_CRACKDOWN"
+	desc = "CR_SUPPRESSION_CRACKDOWN_DESC"
+
+	visible = {
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_grassroots_modifier }
+		NOT = { has_modifier = cr_federal_protection_modifier }
+		NOT = { has_modifier = cr_gradualist_modifier }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_severe_discriminatory_minority_law = yes }
+			add = 30
+		}
+		if = {
+			limit = { ig:ig_landowners ?= { is_in_government = yes } }
+			add = 15
+		}
+	}
+
+	possible = {
+		NOT = { has_modifier = cr_suppression_modifier }
+		NOT = { has_modifier = cr_grassroots_modifier }
+		NOT = { has_modifier = cr_federal_protection_modifier }
+		NOT = { has_modifier = cr_gradualist_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_SUPPRESSION_CRACKDOWN_DESC"
+			add_modifier = { name = cr_suppression_modifier }
+		}
+	}
+}
+
+cr_remove_suppression_crackdown = {
+	name = "CR_REMOVE_SUPPRESSION_CRACKDOWN"
+	desc = "CR_REMOVE_SUPPRESSION_CRACKDOWN_DESC"
+
+	visible = { has_modifier = cr_suppression_modifier }
+
+	ai_chance = { value = 0 }
+
+	possible = { has_modifier = cr_suppression_modifier }
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_REMOVE_SUPPRESSION_CRACKDOWN_DESC"
+			remove_modifier = cr_suppression_modifier
+		}
+	}
+}
+
+# ------ Segregationist Consolidation (anti, extreme) ------
+cr_segregationist_consolidation = {
+	name = "CR_SEGREGATIONIST_CONSOLIDATION"
+	desc = "CR_SEGREGATIONIST_CONSOLIDATION_DESC"
+
+	visible = {
+		NOT = { has_modifier = cr_segregationist_modifier }
+		NOT = { has_modifier = cr_grassroots_modifier }
+		NOT = { has_modifier = cr_federal_protection_modifier }
+		NOT = { has_modifier = cr_gradualist_modifier }
+		has_discriminatory_minority_law = yes
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { has_severe_discriminatory_minority_law = yes }
+			add = 25
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = CR_SEGREGATIONIST_REQUIRES_TT
+			has_discriminatory_minority_law = yes
+		}
+		NOT = { has_modifier = cr_segregationist_modifier }
+		NOT = { has_modifier = cr_grassroots_modifier }
+		NOT = { has_modifier = cr_federal_protection_modifier }
+		NOT = { has_modifier = cr_gradualist_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_SEGREGATIONIST_CONSOLIDATION_DESC"
+			add_modifier = { name = cr_segregationist_modifier }
+		}
+	}
+}
+
+cr_remove_segregationist_consolidation = {
+	name = "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION"
+	desc = "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION_DESC"
+
+	visible = { has_modifier = cr_segregationist_modifier }
+
+	ai_chance = { value = 0 }
+
+	possible = { has_modifier = cr_segregationist_modifier }
+
+	effect = {
+		custom_tooltip = {
+			text = "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION_DESC"
+			remove_modifier = cr_segregationist_modifier
+		}
+	}
+}
