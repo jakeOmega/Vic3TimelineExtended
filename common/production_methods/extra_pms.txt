@@ -19510,7 +19510,7 @@ pm_logistics_hub = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			unit_supply_consumption_mult = -0.02
+			unit_supply_consumption_mult = -0.03
 		}
 	}
 }

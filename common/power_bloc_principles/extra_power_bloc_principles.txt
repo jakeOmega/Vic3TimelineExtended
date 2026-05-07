@@ -788,7 +788,7 @@ principle_military_industry_4 = {
 		building_artillery_foundry_throughput_add = 0.15
 		building_shipyard_throughput_add = 0.15
 		country_military_goods_cost_mult = -0.15
-		unit_supply_consumption_mult = -0.15
+		unit_supply_consumption_mult = -0.20
 		building_mobilization_cost_mult = -0.1
 	}
 	
@@ -812,7 +812,7 @@ principle_military_industry_5 = {
 		building_artillery_foundry_throughput_add = 0.25
 		building_shipyard_throughput_add = 0.25
 		country_military_goods_cost_mult = -0.25
-		unit_supply_consumption_mult = -0.25
+		unit_supply_consumption_mult = -0.35
 		building_mobilization_cost_mult = -0.1
 		country_military_tech_spread_mult = 0.25
 	}
