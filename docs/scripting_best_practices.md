@@ -2253,6 +2253,16 @@ if key.startswith("UN_") and key.endswith("_EFFECTS"):
 
 Always pair a new generator that owns its own loc file with a `categorize_key` rule. Trying to debug "my generator wrote keys but they're showing up in te_miscellaneous" is faster if you know to look here first.
 
+## Engine-Convention Loc Keys Land in `te_unused_l_english.yml` (and That's Fine)
+
+Many engine UI strings are looked up by convention — `<entity>_name`, `<entity>_icon`, `<modifier>_desc`, etc. — without ever appearing in script. `organize_loc.py`'s categorizer can't see those lookups (it grep-scans `common/`, `events/`, `gui/`, etc. for *script* references) so it tags the keys as unused and routes them to `te_unused_l_english.yml`.
+
+The keys still resolve at runtime: **all `te_*_l_english.yml` files in `localization/english/` are loaded by the engine, regardless of filename pattern.** `te_unused` is *only* a sorting destination from the script's perspective; the engine sees no difference between it and `te_concepts_l_english.yml`.
+
+**Don't try to "fix" this** by renaming the file, registering the keys, or adding a fake script reference. The placement is benign. If the categorizer's misclassification is itself confusing — e.g. a code reviewer flags "why are the political_lobby `_name` keys in te_unused?" — leave a comment on the keys or call it out in the relevant design doc rather than relocating them.
+
+Caveat: if `organize_loc.py` ever changes to *delete* unused keys instead of relocating them, this convention breaks. Today (2026-05) it relocates, and there's no plan to change that. If the runbook for `organize_loc.py` gains a deletion mode in the future, engine-convention keys need an explicit script reference (e.g. a comment block with `# referenced-by-engine: lobby_<id>_name` that the categorizer learns to recognize, similar to the existing `POWER_BLOC_UNLOCKS` / `UN_BUTTON_EFFECTS` rules).
+
 ## Vanilla Script-Value Overrides Are the Bridge Between `script_only` Modifiers and Engine Hardcoded Values
 
 When a vanilla `common/script_values/*.txt` script value is referenced from engine hardcoded paths (diplomatic action `possible` blocks, treaty article gates, ai_chance evaluators, etc.), redefining that script value in `common/script_values/extra_script_values.txt` is the supported way to modify the underlying gameplay number — the mod's later-loaded definition replaces vanilla's at game load (script values do not get the `Duplicated key X will not be created` treatment that entity types do).
@@ -2332,3 +2342,19 @@ works for `is_in_geographic_region = geographic_region_europe` but produces an e
 **Fix**: define a mod-side region with `state_regions = {...}`. The mod uses `scripts/generators/gen_formable_regions.py` to expand vanilla `strategic_regions = {...}` to explicit state lists for the EUN/AFU/UNA/UNE formables, writing `common/geographic_regions/te_formable_regions_generated.txt`. Run the generator after vanilla strategic-region rebalances (it fails loudly if a configured region disappears).
 
 A geographic_region can carry both blocks — vanilla `geographic_region_subsaharan_africa` uses both `strategic_regions = {...}` (for triggers) and `state_regions = {...}` (extending the trigger's reach by a few extra states) — but each block only feeds its own code path.
+
+## Domestic Political Lobbies (`category = foreign`) Cannot Be Seeded From History (1.13.2)
+
+Vanilla supports three political-lobby categories per `common/political_lobbies/political_lobbies.md`: `foreign_pro_country`, `foreign_anti_country`, and `foreign` (the domestic category, where `scope:target_country` auto-resolves to `scope:country`). Vanilla ships no domestic-lobby type definitions and no domestic-lobby history seed — every entry in `common/history/lobbies/00_lobbies.txt` is foreign-category targeting another country.
+
+A `category = foreign` lobby type with sane `can_create` / `on_created` / `requirement_to_maintain` / `available_for_interest_group` clauses **parses cleanly and loads with no log errors**. The engine's lobby UI and runtime systems appear to accept it. But seeding one via `create_political_lobby` from `common/history/lobbies/<file>.txt` — even the simplest possible form (one IG, `target = c:<self>`, no formation_reason) — crashes the game on new-game start. Load-from-save is unaffected because history files don't execute on save load.
+
+The crash does not produce a `script_parse_error`, `inject_to_missing`, or fatal-assertion log line. `debug.log` shows only the standard load-sequence entries plus a benign `should be in utf8-bom encoding` notice for the seed file. The engine appears to terminate inside the C++ political-lobby creation path before any script-side diagnostic is flushed.
+
+**Practical rules until this is understood:**
+- Don't add domestic-lobby (`category = foreign`) entries to `common/history/lobbies/`. The lobby type definitions themselves are fine; only the history seed path is broken.
+- If a domestic lobby needs to exist at game start, the only confirmed-safe path is the engine's automatic catalyst-driven formation. That's sparse — formation depends on diplomatic catalysts matching one of the lobby's `formation_reasons`, which can take in-game years for a given country.
+- For any new lobby work involving domestic categories, sequence as: type definitions only first, verify new-game starts cleanly, then add appeasement factors / scripted effects, verify again, then add event hooks, verify again, *then* attempt history seeding (which is where the crash gates).
+- This applies to 1.13.2 (release/1.13.2 : f5b9199e5). Re-test after vanilla bumps — Paradox may fix the assertion in a later patch and remove this restriction.
+
+The full forensic record of one domestic-lobby crash, including ruled-out hypotheses and a staged re-implementation plan, is preserved in `docs/political_lobbies_design.md` § Re-implementation Notes.

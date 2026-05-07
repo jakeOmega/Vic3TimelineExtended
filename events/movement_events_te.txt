@@ -1860,3 +1860,371 @@ movement_events_te.201 = {
 		}
 	}
 }
+
+# ============================================================================
+# Civil Rights — path-dependent VICTORY events (220-223). Dispatched from
+# je_civil_rights.on_complete based on which months-tracker variable led.
+# ============================================================================
+
+# Federal Mandate path: cr_federal_months dominant
+movement_events_te.220 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.220.t
+	desc = movement_events_te.220.d
+	flavor = movement_events_te.220.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.220.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = bureaucrats
+		}
+		add_modifier = {
+			name = civil_rights_triumph_federal_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Grassroots Triumph path: cr_grassroots_months dominant
+movement_events_te.221 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.221.t
+	desc = movement_events_te.221.d
+	flavor = movement_events_te.221.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.221.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = civil_rights_triumph_grassroots_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Negotiated Settlement path: cr_gradualist_months dominant
+movement_events_te.222 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.222.t
+	desc = movement_events_te.222.d
+	flavor = movement_events_te.222.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.222.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		add_modifier = {
+			name = civil_rights_triumph_gradualist_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Coopted Reform path (bittersweet): cr_cooptation_months dominant
+movement_events_te.223 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.223.t
+	desc = movement_events_te.223.d
+	flavor = movement_events_te.223.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.223.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		add_modifier = {
+			name = civil_rights_triumph_coopted_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# ============================================================================
+# Civil Rights — path-dependent FAILURE events (230-231). Dispatched from
+# je_civil_rights.on_fail when the bar reaches 0 or the political movement
+# disbands. .100 still handles the "discriminatory regime" aftermath.
+# ============================================================================
+
+# Token reform demobilized the movement
+movement_events_te.230 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = movement_events_te.230.t
+	desc = movement_events_te.230.d
+	flavor = movement_events_te.230.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.230.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Gradualist stagnation — movement ran out of steam under moderation
+movement_events_te.231 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = movement_events_te.231.t
+	desc = movement_events_te.231.d
+	flavor = movement_events_te.231.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.231.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# ============================================================================
+# Civil Rights — threshold tier events (301-305). One-shot per JE lifetime,
+# fired by je_civil_rights.on_monthly_pulse when the bar first crosses each
+# tier. cr_tier_X_seen flag prevents repeat fires; reset in immediate {}.
+# ============================================================================
+
+# Tier 25 alt: First Mass Rally Draws Notice (when no severe discrim law)
+movement_events_te.301 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.301.t
+	desc = movement_events_te.301.d
+	flavor = movement_events_te.301.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.301.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = pride_march_civil_rights_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Tier 50 alt: Coalition Forms with Trade Unions
+movement_events_te.303 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.303.t
+	desc = movement_events_te.303.d
+	flavor = movement_events_te.303.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.303.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		ig:ig_trade_unions ?= {
+			add_modifier = {
+				name = civil_rights_government_endorsement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = pride_march_civil_rights_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# Tier 75 alt: Federal Commission Recommends Action (gated on cr_federal_months > 24)
+movement_events_te.304 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_documents.dds"
+
+	title = movement_events_te.304.t
+	desc = movement_events_te.304.d
+	flavor = movement_events_te.304.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.304.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = {
+			name = minority_rights_reform_push_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Tier 90: The March on the Capital (cinematic, universal)
+movement_events_te.305 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.305.t
+	desc = movement_events_te.305.d
+	flavor = movement_events_te.305.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.305.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = {
+			name = civil_rights_march_momentum_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = pride_march_civil_rights_movement_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+}

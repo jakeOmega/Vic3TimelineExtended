@@ -1,72 +1,91 @@
 # Political Lobbies — Design Proposals
 
+> **Status (2026-05-06): DEFERRED.** Two lobby pairs (Colonial/Anti-Colonial and Environmental/Fossil-Fuel, both `category = foreign` / domestic) were implemented in this branch and then reverted. Adding a single domestic-lobby history seed (one `lobby_colonial` for GBR with `ig_landowners`) caused the game to **crash on starting a new game** — load-from-save was unaffected. Logs were inconclusive (no script_parse_error, the `01_extended_lobbies.txt` file produced only a benign UTF-8 BOM warning), but the failure was specifically gated on history execution, which only runs on new-game start. Rather than ship a half-broken system, the entire lobby framework — definitions, appeasement factors, customizable_localization, scripted effects, event hooks, and localization keys — was removed in commit-ready state. This document preserves the design proposals and engine-level findings for a future re-attempt. See [Re-implementation Notes](#re-implementation-notes) below.
+
 ## Table of Contents
-1. [Implementation Status](#implementation-status)
+1. [Re-implementation Notes](#re-implementation-notes)
 2. [Vanilla System Analysis](#vanilla-system-analysis)
 3. [Engine Capabilities Reference](#engine-capabilities-reference)
 4. [Design Proposals](#design-proposals)
 5. [Implementation Considerations](#implementation-considerations)
+6. [Open Questions](#open-questions)
 
 ---
 
-## Implementation Status
+## Re-implementation Notes
 
-### Implemented Lobbies
+### What was tried (and removed)
 
-#### Proposal #3: Colonial / Anti-Colonial Lobbies — ✅ IMPLEMENTED
+Two pairs of domestic lobbies (`category = foreign` per the engine's vanilla template doc):
 
-**Files created/modified:**
-- `common/political_lobbies/01_extended_lobbies.txt` — `lobby_colonial` (anti-country) and `lobby_anti_colonial` (pro-country)
-- `common/political_lobby_appeasement/01_extended_appeasement.txt` — `appeasement_colonial_crackdown`, `appeasement_colonial_concession`
-- `common/customizable_localization/01_extended_lobby_naming.txt` — Name flavoring (Society, Committee, Council for colonial; League, Movement, Congress for anti-colonial)
-- `common/scripted_effects/extended_lobby_effects.txt` — `extended_initialize_lobby_custom_name`, `add_colonial_lobby_appeasement`
-- `localization/english/te_lobbies_l_english.yml` — All lobby, appeasement, and tooltip loc keys
-- `events/decolonization_events.txt` — Appeasement hooks in events 1a (negotiate=concession), 1b (crackdown), 1c (independence=major concession), 1d (neocolonialism=concession)
+- **Proposal #3 — Colonial / Anti-Colonial:** `lobby_colonial` + `lobby_anti_colonial`, gated on `any_subject_or_below = { exists = this }`. Decolonization events 1a/1b/1c/1d hooked appeasement on negotiate / crackdown / independence / neocolonialism options.
+- **Proposal #8 — Environmental / Fossil Fuel:** `lobby_environmental` + `lobby_fossil_fuel`, gated on `has_technology_researched = environmental_movement` (era 8). Environmental events 1a/1b/2a/2b/4a/4b/4c/5a/5b hooked appeasement on green vs. industry options.
 
-**Design decisions:**
-- Colonial lobby (anti-country) targets subjects from overlord's perspective. Pleased by autonomy decreases, crackdowns. Displeased by concessions, independence.
-- Anti-colonial lobby (pro-country) is the mirror. Pleased by autonomy increases, reforms. Displeased by crackdowns.
-- `requirement_to_maintain`: if target gains independence, lobby swaps to vanilla `lobby_anti_country` / `lobby_pro_country` respectively.
-- IG weighting: Armed forces, Landowners, Industrialists favor colonial; Intelligentsia, Trade unions favor anti-colonial. `ideology_anti_colonialist` provides strong anti-colonial boost.
+Supporting infrastructure (also removed):
+- `common/political_lobbies/01_extended_lobbies.txt` — lobby type definitions
+- `common/political_lobby_appeasement/01_extended_appeasement.txt` — six custom appeasement factors (`appeasement_colonial_concession/crackdown`, `appeasement_environmental_regulation/deregulation`, `appeasement_fossil_expansion`, `appeasement_green_investment`)
+- `common/customizable_localization/01_extended_lobby_naming.txt` — flavored name pools per lobby type (Society/Committee/Council/League/etc.)
+- `common/scripted_effects/extended_lobby_effects.txt` — `extended_initialize_lobby_custom_name`, `add_colonial_lobby_appeasement`, `add_environmental_lobby_appeasement` helpers
+- Localization keys under `te_concepts_l_english.yml` (display names + descriptions + appeasement factor labels) and `te_unused_l_english.yml` (engine-convention `<lobby>_name` / `<lobby>_icon` keys — `organize_loc.py` flags those as unused because it can't see engine-convention lookups, but the engine still loads them since all `te_*_l_english.yml` files are loaded by filename pattern)
 
-**Areas for improvement:**
-- Add more decolonization events (Event 2: International Pressure, Event 3: Violent Independence) with lobby appeasement hooks
-- Add colonial-specific lobby demand journal entries (e.g. "Tighten colonial administration of [Target]")
-- Add flavor events for colonial lobbies (colonial exhibition, missionary scandal, colonial investment boom)
-- Consider lobby-specific modifiers (colonial lobby clout → cheaper colonial building construction)
-- Test whether `is_subject_of = root` works correctly in `can_create` scope (root = country in this context)
-- The naming system (`flavored_name_lobby_colonial`) needs testing to confirm `$CUSTOM_NAME$` resolution works for custom lobby types
+### The crash blocker
 
-#### Proposal #8: Environmental / Fossil Fuel Lobbies — ✅ IMPLEMENTED
+After the four lobby files were in place and parse-clean, a single domestic history seed was added:
 
-**Files created/modified:**
-- `common/political_lobbies/01_extended_lobbies.txt` — `lobby_fossil_fuel` (anti-country) and `lobby_environmental` (pro-country)
-- `common/political_lobby_appeasement/01_extended_appeasement.txt` — `appeasement_environmental_regulation`, `appeasement_environmental_deregulation`, `appeasement_fossil_expansion`, `appeasement_green_investment`
-- `common/customizable_localization/01_extended_lobby_naming.txt` — Name flavoring (Council, Alliance, League for fossil; Society, Committee, Alliance for environmental)
-- `common/scripted_effects/extended_lobby_effects.txt` — `add_environmental_lobby_appeasement`
-- `localization/english/te_lobbies_l_english.yml` — All lobby, appeasement, and tooltip loc keys
-- `events/environmental_events.txt` — Appeasement hooks in events 1a (regulations=green), 1b (protect industry=fossil), 2a (listen to protest=green), 2b (disperse=fossil), 4a (cleanup=green), 4b (accountability=green), 4c (minimize=fossil), 5a (pledge reforms=green), 5b (reject pressure=fossil)
+```
+# common/history/lobbies/01_extended_lobbies.txt
+LOBBIES = {
+    c:GBR ?= {
+        create_political_lobby = {
+            type = lobby_colonial
+            target = c:GBR
+            add_interest_group = ig:ig_landowners
+        }
+    }
+}
+```
 
-**Design decisions:**
-- Both lobbies target diplomatically relevant major+ powers with `environmental_movement` tech (era 8). This creates political tension between nations with environmental awareness.
-- Fossil fuel lobby (anti-country) opposes the influence of environmentally progressive nations, resisting their green standards. 
-- Environmental lobby (pro-country) admires green-leaning nations and pushes for cooperation on climate policy.
-- Tech gate: `environmental_movement` (era 8) required for both the lobby's country and the target.
-- IG weighting: Industrialists strongly favor fossil; Intelligentsia strongly favor environmental. `ideology_environmentalists` leader ideology provides huge environmental lobby boost.
-- Country with `law_ministry_of_the_environment` gets bonus join weight for both lobbies (fossil as opposition, environmental as support).
+The user reported the game crashing on new-game start (load-from-save was fine, which strongly suggests the crash is in history execution).
 
-**Areas for improvement:**
-- Hook into more environmental events (eco-terrorism events 3a/b/c, environmentalism_events threshold events at 0.5°C, 3.0°C)
-- Add lobby-specific demand journal entries (e.g. "Enact environmental regulation" / "Block green standards")
-- Add flavor events for environmental lobbies (climate conference, green tech partnership, fossil fuel divestment campaign)
-- Consider making environmental lobbies interact with the GW temperature_anomaly_display script value for dynamic appeasement
-- The foreign-targeting model means environmental lobbies are about a SPECIFIC green/fossil country, not domestic policy directly. This is somewhat artificial — if domestic lobby categories are confirmed to work, consider making these domestic lobbies targeting self.
-- Fossil fuel lobby could be weighted by how many fossil-fuel-dependent buildings the country has (oil rigs, coal mines, chemical plants)
-- Add `appeasement_fossil_expansion` triggers when specific buildings are constructed (e.g., oil rig level increases)
+What we ruled out from the logs of the crashed session:
+- No `script_parse_error` referencing the seed file, the lobby type, or the appeasement factors.
+- No `inject_to_missing` / `duplicated_key` / `Unknown trigger` / `Unknown effect` entries against any lobby file.
+- The only `01_extended_lobbies.txt` log entry was a benign `should be in utf8-bom encoding` warning.
+- `debug.log` cleanly progresses through the standard load sequence and stops at main-menu file enumeration; no lobby-related output.
+- `game.log` continues briefly past main-menu but writes only repeated `Event target link 'region' returned an invalid object` from `common/ai_strategies/00_default_strategy.txt:4388` — a vanilla bug, unrelated to lobbies.
+- No `.dmp`, `callstacks.log`, or fatal-assertion entries.
 
-### Remaining Proposals (Not Yet Implemented)
+What we can't rule out from logs alone:
+- Engine asserts that don't flush log buffers before terminating.
+- Crashes inside the C++ political-lobby creation path with no script-side error surfaced.
+- A semantic mismatch in how a `category = foreign` lobby handles `target = c:<self>` at history-creation time. The vanilla template doc (`common/political_lobbies/political_lobbies.md` in the install) says the engine sets `scope:target_country = scope:country` automatically for domestic lobbies, but the `create_political_lobby` effect signature still requires `target = <country scope>`. Vanilla has no domestic-lobby history seed to compare against — all four vanilla seeded lobbies are foreign-category.
 
-Proposals #1, #2, #4-#7, #9-#15 remain as design proposals below. See [Recommended Implementation Priority](#recommended-implementation-priority) for suggested order.
+### How to re-attempt safely
+
+Suggested order of investigation, before re-adding any of the deleted files:
+
+1. **Confirm the lobby type definitions themselves are loadable without crash.** Re-add only `01_extended_lobbies.txt` (no appeasement file, no scripted_effects helpers, no event hooks, no history seed). Launch a new game. If it crashes with just the type definitions present, the failure is in `category = foreign` lobby handling, the `on_created` block, or the `requirement_to_maintain` clauses — not in history at all.
+2. **If the type definitions load cleanly, add appeasement + scripted_effects + customizable_localization** without any history seed and without event hooks calling `change_appeasement` from outside. Launch a new game. Open the political lobby UI — domestic lobbies should be empty (no catalyst has fired yet) but the panel should not crash when opened.
+3. **Wire the event-side appeasement hooks.** Trigger one of the affected events via console (`event decolonization_events.1`). Confirm `change_appeasement` works against a *not-yet-existing* domestic lobby (it should silently no-op since the helper iterates `every_political_lobby` with a type filter).
+4. **Last: try to seed a lobby via history.** This is where the crash hit. Try in this order:
+   - **Vanilla-shape sanity check:** seed a *foreign* `lobby_pro_country` for any country (e.g., GBR → FRA) with our existing infrastructure intact. If even that crashes, the issue is something we changed beyond the type definitions.
+   - **Domestic seed without `target`:** the engine signature requires `target`, but try `target = root` (rather than `c:<self>`) — `root` resolves to the iterating country in history scope and may interact better with the engine's automatic `scope:target_country = scope:country` logic for `category = foreign`.
+   - **Domestic seed with on_created stripped:** temporarily remove the `extended_initialize_lobby_custom_name` call from `on_created` and the `change_appeasement = { factor = appeasement_diplomatic_status_quo }` line. If that fixes it, the crash is in one of those calls during history-time execution.
+5. **If the history path is fundamentally broken for domestic lobbies** (and we can't get a vanilla-equivalent seed working), accept that the only formation path is engine catalyst — which is sparse but not crashing — and ship without seeds. Document loudly that lobbies will not appear until a diplomatic catalyst happens to roll formation.
+
+### Where the engine docs actually live
+
+Vanilla template doc with the full effect / trigger / scope reference for political lobbies: `common/political_lobbies/political_lobbies.md` in the Steam install (path: `/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/common/political_lobbies/political_lobbies.md`). This is the canonical answer for what `category` strings the engine accepts (`foreign_pro_country`, `foreign_anti_country`, `foreign`), which scopes are available in each block (`can_create`, `on_created`, `requirement_to_maintain`, `available_for_interest_group`, `join_weight`), and how `scope:target_country` resolves for domestic lobbies.
+
+Vanilla seed examples (foreign-only): `common/history/lobbies/00_lobbies.txt` in the Steam install. ~30 entries; useful template for the seed-file shape, but no domestic precedent.
+
+### What lessons were already absorbed
+
+- `category = foreign` is the engine's domestic-lobby category, with `scope:target_country` auto-set to `scope:country`. Vanilla doesn't ship any but the engine supports them.
+- Hardcoded clout event targets (`lobby_foreign_pro_clout:<country>`, `lobby_foreign_anti_clout:<country>`, plus the `_in_government` variants) sum lobbies in foreign categories only — domestic lobbies don't contribute to those buckets, so don't expect domestic lobby clout to modify pact / treaty article costs the way vanilla foreign lobbies do.
+- Several vanilla appeasement factors (`appeasement_alliance_formed`, `appeasement_rivalry_declared`, `appeasement_relations_increased`, `appeasement_trade_agreement_formed`, etc.) are fired by the engine's diplomatic catalyst pipeline against lobbies whose `target_country` matches the catalyst's other party. Domestic lobbies (target = self) may never receive these — listed-but-dormant factors don't error, but the lobby's appeasement will be driven entirely by mod-side `change_appeasement` calls.
+- The mod's `organize_loc.py` will flag engine-convention loc keys (`<lobby>_name`, `<lobby>_icon`) as unused because the references aren't visible in script. This is benign — all `te_*_l_english.yml` files are loaded by filename pattern, so the keys still resolve. Don't try to "fix" by registering them somewhere.
+- Custom name flavoring works via `customizable_localization` blocks that key on `lobby_custom_name_var_<N>` variables set in an `on_created` scripted effect. The mod's removed `extended_initialize_lobby_custom_name` is a working pattern (see git history pre-revert) — copy from there when re-implementing.
 
 ---
 
@@ -1055,11 +1074,7 @@ lobby_disarmament = {
 
 ### Technical Questions Requiring Testing
 
-1. **Domestic Lobby Categories**: The dev docs mention domestic lobbies (target_country = country), but vanilla only uses `foreign_pro_country` and `foreign_anti_country`. We need to test:
-   - Does `category = domestic` work? What about `domestic_pro`? `domestic_anti`?
-   - Can we use `foreign_pro_country` with `target = root` (self-targeting)?
-   - How does the UI handle domestic lobbies? Does the "target country" display make sense?
-   - Do the hardcoded `lobby_foreign_pro_clout` / `lobby_foreign_anti_clout` event targets include or exclude domestic lobbies?
+1. **Domestic Lobby Categories** — partially answered. `category = foreign` is the engine's domestic-lobby category per `common/political_lobbies/political_lobbies.md` in the vanilla install; engine sets `scope:target_country = scope:country` automatically. The lobby type definitions parse and load fine. **Open**: domestic-lobby creation via `create_political_lobby` from history may crash on new-game start — see [Re-implementation Notes → The crash blocker](#the-crash-blocker). Also caveats: hardcoded `lobby_foreign_pro_clout` / `lobby_foreign_anti_clout` event targets are foreign-category only and do NOT sum domestic lobbies.
 
 2. **Maximum Lobby Count**: Vanilla doesn't seem to have a per-country lobby limit, but at what point does performance or UI clutter become an issue?
 
@@ -1071,12 +1086,13 @@ lobby_disarmament = {
 
 | Priority | Proposals | Rationale |
 |---|---|---|
-| **✅ Implemented** | #3 Colonial/Anti-Colonial, #8 Environmental/Fossil Fuel | High gameplay value, rich mod system integration |
-| **Phase 1 (Test infrastructure)** | Test domestic lobby category with one simple lobby | Determine if domestic lobbies work before building on them |
-| **Phase 2 (High-impact, low-risk)** | #1 Protectionist/Free Trade, #7 Industrial/Labor | Build on existing mod systems |
-| **Phase 3 (Historical flavor)** | #6 Pan-Nationalist, #14 Abolitionist | Major historical forces with clear IG mappings |
-| **Phase 4 (Domestic politics)** | #2 War Hawks/Peace, #5 Religious/Secular, #11 Monarchist/Republican | Deepen domestic political gameplay |
-| **Phase 5 (Specialized)** | #9 Military-Industrial, #10 Agrarian, #15 Nuclear, #4 Temperance, #12 Diaspora, #13 Technology | Specialized lobbies for specific eras or mechanics |
+| **Phase 0 (Crash investigation)** | Resolve the new-game crash on domestic history seeding — see [Re-implementation Notes → How to re-attempt safely](#how-to-re-attempt-safely). Until that's understood, no further lobby work ships. | Blocker for all downstream work |
+| **Phase 1 (Re-add deferred lobbies)** | #3 Colonial/Anti-Colonial, #8 Environmental/Fossil Fuel — re-add the four removed files, then resolve the crash. The branch immediately before revert (see git history) has working type definitions, appeasement factors, custom name flavoring, and event hooks ready to restore. | Highest-readiness future work; previously authored, then removed pending crash fix |
+| **Phase 2 (Visibility)** | Add `common/history/lobbies/01_extended_lobbies.txt` with 5–10 thematic 1836 seeds — only after the crash is resolved | Engine catalyst-driven formation is sparse; seeds make the system visible at game start |
+| **Phase 3 (High-impact, low-risk)** | #1 Protectionist/Free Trade, #7 Industrial/Labor | Build on existing mod systems |
+| **Phase 4 (Historical flavor)** | #6 Pan-Nationalist, #14 Abolitionist | Major historical forces with clear IG mappings |
+| **Phase 5 (Domestic politics)** | #2 War Hawks/Peace, #5 Religious/Secular, #11 Monarchist/Republican | Deepen domestic political gameplay |
+| **Phase 6 (Specialized)** | #9 Military-Industrial, #10 Agrarian, #15 Nuclear, #4 Temperance, #12 Diaspora, #13 Technology | Specialized lobbies for specific eras or mechanics |
 
 ### Appeasement Design Principles
 
@@ -1117,12 +1133,14 @@ Vanilla's `initialize_lobby_custom_name` effect assigns flavor names via variabl
 
 ## Open Questions
 
-1. **Domestic lobby feasibility**: Critical unknown. All domestic lobby proposals depend on either (a) engine support for domestic categories, or (b) self-targeting with foreign categories working correctly in the UI and gameplay systems.
+1. **Domestic lobby new-game crash** — BLOCKER. Adding any single domestic-lobby (`category = foreign`) history seed via `create_political_lobby` from `common/history/lobbies/` crashed the game on new-game start. Logs were silent. This needs to be diagnosed before *any* of the deferred lobby work ships. See [Re-implementation Notes → The crash blocker](#the-crash-blocker) for what's known and ruled out.
 
-2. **Lobby cap / UI concerns**: With 15+ potential lobby types, a country could theoretically have dozens of active lobbies. Should there be a scripted cap? Should some lobbies be mutually exclusive?
+2. **Domestic lobby caveats** — `category = foreign` is the engine's domestic category (confirmed by vanilla template doc). But hardcoded clout event targets (`lobby_foreign_pro_clout` / `lobby_foreign_anti_clout` and their `_in_government` variants) are foreign-category-only and won't sum domestic lobbies — so domestic lobby clout doesn't drive pact / treaty article costs. Some vanilla appeasement factors driven by foreign-country diplomatic catalysts may also be dormant for domestic lobbies. Surface area for re-attempt to verify.
 
-3. **DLC gating**: Vanilla gates all lobby features behind `has_dlc_feature = lobbies` (DLC = dlc010, Sphere of Influence). The mod should decide whether to gate new lobbies behind this DLC check or make them available to all players. If DLC-gated, players without SoI can't use any of these features.
+3. **Lobby cap / UI concerns**: With 15+ potential lobby types, a country could theoretically have dozens of active lobbies. Should there be a scripted cap? Should some lobbies be mutually exclusive?
 
-4. **AI behavior**: The existing lobby system has AI handling for demands (on_actions check for journal entries). New lobby types need AI logic for responding to demands.
+4. **DLC gating**: Vanilla gates all lobby features behind `has_dlc_feature = lobbies` (DLC = dlc010, Sphere of Influence). The mod should decide whether to gate new lobbies behind this DLC check or make them available to all players. If DLC-gated, players without SoI can't use any of these features.
 
-5. **Balance**: Lobby appeasement directly converts to IG approval. Too many lobbies = too many ways to gain/lose approval. Need to ensure total approval swings from lobbies don't dominate other sources.
+5. **AI behavior**: The existing lobby system has AI handling for demands (on_actions check for journal entries). New lobby types need AI logic for responding to demands.
+
+6. **Balance**: Lobby appeasement directly converts to IG approval. Too many lobbies = too many ways to gain/lose approval. Need to ensure total approval swings from lobbies don't dominate other sources.

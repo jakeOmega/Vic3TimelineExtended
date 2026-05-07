@@ -123,6 +123,7 @@ on_monthly_pulse_country = {
 		international_relations_events_on_action
 		decolonization_events_on_action
 		movement_events_te_on_action
+		social_movement_orphans_on_action
 		society_technology_events_on_action
 		world_war_events_on_action
 		overbuild_protection_on_action
@@ -1733,6 +1734,192 @@ movement_events_te_on_action = {
 					has_technology_researched = mind_backups
 				}
 				trigger_event = { id = movement_events_te.12 }
+			}
+		}
+	}
+}
+
+# ============================================================================
+# SOCIAL MOVEMENT ORPHAN EVENTS - replaces the deleted social-movement JEs
+# (je_lgbtq_rights, je_second_wave_feminism, je_decline_of_religion,
+# je_environmental_crisis). Each event already self-gates on tech + law in its
+# own trigger block; these random_list entries mirror those gates so the roll
+# weight isn't wasted on no-op events. Per-event weight 5; total ~95% nothing.
+# ============================================================================
+social_movement_orphans_on_action = {
+	effect = {
+		random_list = {
+			900 = { } # ~95% chance of nothing once all 20 entries fire
+
+			# === LGBTQ+ RIGHTS (ex je_lgbtq_rights) ===
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					NOT = { has_law = law_type:law_full_equality_and_protection }
+				}
+				trigger_event = { id = lgbtq_events.1 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					NOT = { has_law = law_type:law_full_equality_and_protection }
+					any_interest_group = { is_interest_group_type = ig_devout is_powerful = yes }
+				}
+				trigger_event = { id = lgbtq_events.2 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					NOT = { has_law = law_type:law_full_equality_and_protection }
+					has_law = law_type:law_professional_standing_army
+				}
+				trigger_event = { id = lgbtq_events.3 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					NOT = { has_law = law_type:law_full_equality_and_protection }
+					literacy_rate >= 0.5
+				}
+				trigger_event = { id = lgbtq_events.4 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = LGBTQ_rights_movement
+					NOT = { has_law = law_type:law_full_equality_and_protection }
+					NOT = { has_law = law_type:law_active_persecution }
+				}
+				trigger_event = { id = lgbtq_events.5 }
+			}
+
+			# === SECOND-WAVE FEMINISM (ex je_second_wave_feminism) ===
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					NOT = { has_law = law_type:law_protected_class }
+				}
+				trigger_event = { id = feminist_events.1 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					NOT = { has_law = law_type:law_protected_class }
+				}
+				trigger_event = { id = feminist_events.2 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					has_technology_researched = contraceptive_pill
+					NOT = { has_law = law_type:law_protected_class }
+				}
+				trigger_event = { id = feminist_events.3 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					NOT = { has_law = law_type:law_protected_class }
+					has_law = law_type:law_professional_standing_army
+					NOT = { has_global_variable = women_military_debate_happened }
+				}
+				trigger_event = { id = feminist_events.4 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = second_wave_feminism
+					NOT = { has_law = law_type:law_protected_class }
+					literacy_rate >= 0.5
+				}
+				trigger_event = { id = feminist_events.5 }
+			}
+
+			# === DECLINE OF RELIGION (ex je_decline_of_religion) ===
+			5 = {
+				trigger = {
+					has_technology_researched = decline_of_organized_religion
+				}
+				trigger_event = { id = secular_events.1 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = decline_of_organized_religion
+					any_interest_group = { is_interest_group_type = ig_devout is_powerful = yes }
+				}
+				trigger_event = { id = secular_events.2 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = decline_of_organized_religion
+					NOT = { has_law = law_type:law_no_ministry_of_religion }
+				}
+				trigger_event = { id = secular_events.3 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = decline_of_organized_religion
+					has_law = law_type:law_ministry_of_religion
+					NOT = { has_global_variable = state_religion_debate_happened }
+				}
+				trigger_event = { id = secular_events.4 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = decline_of_organized_religion
+				}
+				trigger_event = { id = secular_events.5 }
+			}
+
+			# === ENVIRONMENTAL CRISIS (ex je_environmental_crisis) ===
+			5 = {
+				trigger = {
+					OR = {
+						has_technology_researched = environmental_movement
+						has_technology_researched = pollution_control
+					}
+					NOT = { has_law = law_type:law_ministry_of_the_environment }
+				}
+				trigger_event = { id = environmental_events.1 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						has_technology_researched = environmental_movement
+						has_technology_researched = pollution_control
+					}
+					NOT = { has_law = law_type:law_ministry_of_the_environment }
+				}
+				trigger_event = { id = environmental_events.2 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						has_technology_researched = environmental_movement
+						has_technology_researched = pollution_control
+					}
+					NOT = { has_law = law_type:law_ministry_of_the_environment }
+				}
+				trigger_event = { id = environmental_events.3 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						has_technology_researched = environmental_movement
+						has_technology_researched = pollution_control
+					}
+					any_scope_state = { is_coastal = yes }
+				}
+				trigger_event = { id = environmental_events.4 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						has_technology_researched = environmental_movement
+						has_technology_researched = pollution_control
+					}
+					NOT = { has_law = law_type:law_ministry_of_the_environment }
+					country_rank >= rank_value:major_power
+				}
+				trigger_event = { id = environmental_events.5 }
 			}
 		}
 	}

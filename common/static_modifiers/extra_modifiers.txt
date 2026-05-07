@@ -4496,27 +4496,6 @@ nation_building_unity_modifier = {
 # LGBTQ+ RIGHTS MOVEMENT MODIFIERS
 # ============================================================================
 
-# JE active modifier
-lgbtq_rights_struggle_active_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_turmoil_effects_mult = 0.05
-	political_movement_pop_attraction_mult = 0.10
-}
-
-# JE completion triumph
-lgbtq_rights_triumph_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.15
-	country_acceptance_not_homeland_add = 10
-}
-
-# JE timeout stagnation
-lgbtq_rights_stagnation_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_add = -50
-	state_turmoil_effects_mult = 0.10
-}
-
 # Event 1: Pride march
 pride_march_momentum_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -4544,13 +4523,6 @@ lgbtq_backlash_ig_modifier = {
 lgbtq_devout_support_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_pol_str_mult = 0.10
-}
-
-# Event 100: Movement crushed
-lgbtq_movement_crushed_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_mult = -0.05
-	state_turmoil_effects_mult = -0.05
 }
 
 # Event 3: Military service debate
@@ -4605,26 +4577,6 @@ lgbtq_reform_civil_rights_movement_modifier = {
 # SECOND-WAVE FEMINISM MODIFIERS
 # ============================================================================
 
-# JE active modifier
-feminism_struggle_active_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_pop_attraction_mult = 0.05
-	country_bureaucracy_mult = -0.02
-}
-
-# JE completion triumph
-feminism_triumph_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.15
-	country_weekly_innovation_mult = 0.05
-}
-
-# JE timeout stagnation
-feminism_stagnation_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_add = -25
-}
-
 # Event 1: Equal pay
 equal_pay_mandate_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -4643,29 +4595,6 @@ glass_ceiling_broken_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.02
 	country_weekly_innovation_mult = 0.02
-}
-
-# Event 100: Movement collapsed
-feminism_movement_crushed_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_mult = -0.05
-	state_turmoil_effects_mult = -0.05
-}
-
-# Targeted: applied to female characters when the feminism JE completes (event 200).
-# Shifts the relative ranking of women in IG influence and leader-selection pools.
-feminism_emancipated_character_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	character_popularity_add = 5
-	character_prominence_add = 3
-}
-
-# Targeted: applied to female characters when the feminism JE fails into the
-# explicit traditionalist-backlash branch (event 100, option a).
-feminism_backlash_character_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	character_popularity_add = -5
-	character_prominence_add = -3
 }
 
 # Event 3: Reproductive rights debate
@@ -4821,25 +4750,6 @@ augmentation_crime_ban_modifier = {
 # ENVIRONMENTAL CRISIS RESPONSE MODIFIERS
 # ============================================================================
 
-# JE active modifier
-environmental_crisis_active_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_law_enactment_time_mult = -0.10
-}
-
-# JE completion triumph
-environmental_legislation_triumph_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.05
-	country_weekly_innovation_mult = 0.05
-}
-
-# JE timeout paralysis
-environmental_paralysis_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_add = -25
-}
-
 # Event 1: Pollution regulations / industry protection
 pollution_regulations_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -4862,12 +4772,6 @@ greenwashing_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = 0.005
 	state_turmoil_effects_mult = 0.03
-}
-
-# Event 100: Environmental neglect
-environmental_neglect_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_mult = -0.05
 }
 
 # Event 3: Eco-terrorism
@@ -5228,26 +5132,6 @@ institutional_oversight_modifier = {
 # DECLINE OF RELIGION / SECULAR TRANSITION MODIFIERS
 # ============================================================================
 
-# JE active modifier
-secular_transition_active_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	interest_group_pol_str_mult = 0.10
-	state_turmoil_effects_mult = 0.05
-}
-
-# JE completion
-secular_transition_complete_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_weekly_innovation_mult = 0.05
-	country_prestige_mult = 0.05
-}
-
-# JE timeout
-secular_stagnation_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_turmoil_effects_mult = 0.05
-}
-
 # Event 1: Religious institution investigation / secular momentum
 religious_institution_investigation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -5269,13 +5153,6 @@ secular_momentum_religious_movement_modifier = {
 moral_panic_dismissed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	interest_group_pol_str_mult = -0.10
-}
-
-# Event 100: Religious revivalism
-religious_revivalism_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	interest_group_pol_str_mult = 0.15
-	country_prestige_mult = -0.02
 }
 
 # Event 3: New Age spirituality
@@ -6170,12 +6047,6 @@ covert_op_heightened_vigilance_modifier = {
 banking_crisis_protectionism_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_trade_center_throughput_add = -0.25
-}
-
-# Environmental crisis: grace period before industrialist failure can trigger
-env_crisis_reform_window = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_law_enactment_time_mult = -0.05
 }
 
 # ============================================================================
