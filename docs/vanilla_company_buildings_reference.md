@@ -274,6 +274,6 @@ Vanilla companies should be updated to reference mod-exclusive buildings in thei
 - All buildings need localization in three files: `te_buildings_l_english.yml` (building + `_desc`), `te_production_methods_l_english.yml` (PM + PMG), and `te_modifiers_l_english.yml` (the `state_building_X_max_level_add` modifier — both the name and `_desc` keys, using the `[GetBuildingType('building_X').GetName] Max Level` pattern). Without modifier loc, the company's prosperity tooltip shows the raw modifier key. See `docs/scripting_best_practices.md` § "Adding a Unique Company Building" for the audit command.
 - Vanilla company overrides go in `common/company_types/extra_companies_vanilla_updates.txt`
 - `INJECT:` adds fields to existing definitions without replacing them — use this for ALL vanilla company updates
-- Each unique company building needs a `state_building_X_max_level_add` modifier_type_definition in `common/modifier_type_definitions/extra_modifier_types.txt`
+- Each unique company building needs a `state_building_X_max_level_add` modifier_type_definition in `common/modifier_type_definitions/mod_entity_modifier_types.txt` (under the `# === State buildings ===` divider)
 - **PM modifier scoping rules:** `state_modifiers` only accepts `state_*`, `building_*_throughput_add`, and `goods_output_*_mult`. `unit_*` and `country_*` modifiers must go in `country_modifiers` instead.
 - **Non-existent modifiers:** `country_trade_route_quantity_mult` does not exist. Use `state_trade_capacity_add`, `state_trade_quantity_mult`, or `state_trade_advantage_mult`.

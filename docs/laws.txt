@@ -176,7 +176,7 @@ Privacy Rights:
 	Intrusive Surveillance System - Unlocking Technology: Social Media
 	Minimal Privacy Protection
 	Moderate Data Privacy - Unlocking Technology: Knowledge Economy
-	Strong Privacy Rights - Unlocking Technology: Cybersecurity
+	Strong Privacy Rights - Unlocking Technology: Universal Digital Identity
 Inheritance Laws:
 	Primogeniture
 	Partible Inheritance
@@ -199,7 +199,7 @@ Monetary Policy:
 	Commodity Money
 	Gold Standard - Unlocking Technology: International Exchange Standards
 	Fiat Money - Unlocking Technology: Keynesian Economics
-	Digital Currency - Unlocking Technology: Cybersecurity
+	Digital Currency - Unlocking Technology: Universal Digital Identity
 	Decentralized Cryptocurrency - Unlocking Technology: Cybersecurity
 Right to Information:
 	State Secrets - Unlocking Technology: Cryptography

@@ -1774,7 +1774,6 @@ colonial_cultural_assimilation_modifier = {
 # Reapplication wiring lives in je_colonial_empire on_monthly_pulse.
 colonial_assimilation_disruption_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_goods_output_mult = -0.05
 	state_pop_qualifications_mult = -0.10
 }
 

@@ -309,6 +309,7 @@ space_race_events.4 = {
 
 # Event 5: Moon Landing Site Choice (fires at start of Moon Landing JE)
 # Event 5: Moon Landing Site Choice - expanded with 4 landing sites
+# REVIEWED 2026-05-06: pure-positive (Equatorial: -25% risk) vs pure-negative (Tranquility: +10% risk) is by design — Tranquility's payoff is the prestige+15% cultural-pull post-completion reward, which the audit can't see at choice time.
 space_race_events.5 = {
 	type = country_event
 	placement = root
@@ -4073,6 +4074,7 @@ space_race_events.76 = {
 ##############################################
 
 # Event 80: Orbital Astronaut Type Choice
+# REVIEWED 2026-05-06: military's pure-positive choice modifier vs civilian/scientist pure-negative is by design — the costlier picks earn richer post-completion rewards (civilian: prestige+cultural; scientist: tech+innovation_max) that the audit can't see at choice time.
 space_race_events.80 = {
 	type = country_event
 	placement = root
@@ -4140,6 +4142,7 @@ space_race_events.80 = {
 }
 
 # Event 81: Probe Mission Target Choice
+# REVIEWED 2026-05-06: Mars's pure-positive choice modifier vs Venus/asteroid pure-negative is by design — all three options grant a post-completion progress_add (Venus 0.30, Mars 0.50, asteroid 0.40) that the audit can't see at choice time, so the long-term differential is small.
 space_race_events.81 = {
 	type = country_event
 	placement = root
@@ -4203,6 +4206,7 @@ space_race_events.81 = {
 }
 
 # Event 82: Moon Base Purpose Choice
+# REVIEWED 2026-05-06: scientific's pure-positive choice modifier vs industrial/military pure-negative is by design — the costlier picks earn themed post-completion rewards (industrial: space-mine+launch capacity; military: mil_tech+influence+mil_goods_cost) that the audit can't see at choice time.
 space_race_events.82 = {
 	type = country_event
 	placement = root

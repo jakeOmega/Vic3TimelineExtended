@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 642
-**Event files:** 38
+**Total events:** 629
+**Event files:** 35
 
 ## augmentation_events.txt
 
@@ -838,6 +838,30 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"Did you read this?\" the Prime Minister waved the broadsheet at the Cabinet.\n\n\"I signed it,\" replied the Education Minister, looking at his hands.\n\nA silence that lasted, perhaps, half a beat too long.\n\n\"Well,\" the Prime Minister said carefully, \"that's awkward.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
+### decolonization_events.53
+- **Title:** The Universities Speak
+- **Description:** The campuses of [ROOT.GetCountry.GetName] are aflame with anti-colonial sentiment. Lecture halls fill not for the syllabus but for the petitions; quad statues are graffitied with the names of executed colonial dissidents; visiting lecturers from former colonies are received like heads of state. The young intelligentsia, denied a seat at the table, has built its own table on the lawn outside the chancellery.
+- **Flavor:** #italic They will not be lectured to about decorum.#!
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
+### decolonization_events.54
+- **Title:** The Veterans' Protest
+- **Description:** Soldiers home from the colonies have begun organizing. They have seen what they have seen — and what they have done — and they are no longer quiet about it. The petty bourgeoisie, the small-business backbone of the war economy, sides with them: their sons, their employees, their friends. The pension halls are full; the parade grounds are not.
+- **Flavor:** #italic \"I served. I came home. I will not serve again.\"#!
+- **Current image:** gfx/event_pictures/parade_military.dds
+
+### decolonization_events.300
+- **Title:** The Imperial Federation Act
+- **Description:** [ROOT.GetCountry.GetName] has formally federated its empire. After three years of unbroken stability, the assembled deputies of the metropole and the colonies have ratified the act binding them together under a single, indissoluble crown. Where there were disparate possessions there is now one structure. The Iron Fist that held them is now the Iron Hand that joins them; the world's accommodation, however reluctant, is final.\n\nThere will still be voices of dissent. They will be answered, as they have been answered, with the means we have always preferred.
+- **Flavor:** #italic The empire stands. The empire is now a fact, not a question.#!
+- **Current image:** gfx/event_pictures/parade_military.dds
+
+### decolonization_events.301
+- **Title:** The Civilizing Mission Compact
+- **Description:** [ROOT.GetCountry.GetName] has formally federated its empire under the Civilizing Mission Compact. After three years of demonstrated stability, the elected legislatures of the metropole and the recognized assemblies of the colonies have together ratified a constitutional framework binding them as permanent partners in a single multinational polity.\n\nThe colonies are no longer subject possessions; they are constituent territories. Their representatives sit in our parliament. Their pops vote in our elections. Their concerns shape our budgets. The empire endures, but it endures by consent, not coercion. This was always the harder road.
+- **Flavor:** #italic A federation of consent. A century of patient work. The harder road taken, and finished.#!
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
 ## dp_escalation_events.txt
 
 ### dp_escalation_events.1
@@ -845,50 +869,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** (no localization)
 - **Flavor:** (none)
 - **Current image:** (unknown)
-
-## environmental_events.txt
-
-### environmental_events.1
-- **Title:** The Pollution Crisis
-- **Description:** A major pollution incident has contaminated waterways and choked the air in several industrial regions. Citizens demand action as respiratory diseases spike and farmland is poisoned.
-- **Flavor:** The children downstream wore surgical masks to school. The factory upstream posted record profits.
-- **Current image:** gfx/event_pictures/industrial_smog_victorian.dds
-
-### environmental_events.2
-- **Title:** Environmental Protest
-- **Description:** A mass environmental protest has erupted, with thousands blocking roads and chaining themselves to factory gates. The protesters demand the establishment of a Ministry of the Environment with real power.
-- **Flavor:** Their banners read: There Is No Planet B.
-- **Current image:** gfx/event_pictures/climate_flooding_city.dds
-
-### environmental_events.3
-- **Title:** Eco-Terrorism
-- **Description:** A radical environmentalist cell has sabotaged industrial infrastructure, destroying pipelines and setting fire to a factory. While the public condemns the violence, many sympathize with the underlying cause. The government must respond carefully.
-- **Flavor:** The pipeline burned for three days before anyone claimed responsibility.
-- **Current image:** gfx/event_pictures/drought_devastation.dds
-
-### environmental_events.4
-- **Title:** Oil Spill Disaster
-- **Description:** A catastrophic oil spill has devastated the coastline near [SCOPE.sState('spill_state').GetName]. Marine life is dying, fishing communities are ruined, and the images of oil-soaked wildlife have galvanized public outrage.
-- **Flavor:** Fishermen hauled up nets thick with oil. The company's lawyers arrived before the cleanup crews.
-- **Current image:** gfx/event_pictures/climate_refugee_exodus.dds
-
-### environmental_events.5
-- **Title:** International Environmental Pressure
-- **Description:** Foreign nations have publicly criticized our environmental record, pointing to our lack of environmental regulation. Pressure mounts to act, but many see this as an infringement on national sovereignty.
-- **Flavor:** The foreign correspondent filed her story from beside a river that had not been safe to drink from in ten years. The dispatch ran on the front page of six capitals.
-- **Current image:** gfx/event_pictures/ecological_collapse_panorama.dds
-
-### environmental_events.100
-- **Title:** Environmental Collapse
-- **Description:** (no localization)
-- **Flavor:** The technology existed. The funding was available. The committee voted it down eleven to three.
-- **Current image:** gfx/event_pictures/green_sustainable_city.dds
-
-### environmental_events.200
-- **Title:** Green Victory
-- **Description:** [ROOT.GetCountry.GetName] has enacted sweeping environmental protections. The air clears, the forests regenerate, and the waters run clean once more — a testament to what collective action can achieve.
-- **Flavor:** #italic The earth does not belong to us; we belong to the earth.#!
-- **Current image:** gfx/event_pictures/environmental_catastrophe_final.dds
 
 ## environmentalism_events.txt
 
@@ -1236,50 +1216,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"They have gone mad,\" the old merchant said, folding his newspaper with trembling hands. \"Utterly, irretrievably mad.\"\n\n\"Mad?\" his son replied. \"Or merely ahead of their time?\"\n\n\"There is no difference, boy. Not when the mobs are at the gates.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
-## feminist_events.txt
-
-### feminist_events.1
-- **Title:** The Equal Pay Strike
-- **Description:** Women across multiple industries have walked off the job, demanding equal pay for equal work. Factories and offices grind to a halt as the strike spreads. The government faces a choice.
-- **Flavor:** Their signs read: Same Work, Same Pay.
-- **Current image:** gfx/event_pictures/feminist_equal_pay_march.dds
-
-### feminist_events.2
-- **Title:** The Glass Ceiling
-- **Description:** A prominent and highly qualified woman has been publicly denied a senior government position solely on the basis of her sex. The incident has become a flashpoint for the broader gender equality debate.
-- **Flavor:** Three letters of recommendation, seventeen years of service, and a note from the appointments secretary: 'The Minister prefers a male candidate.'
-- **Current image:** gfx/event_pictures/feminist_equal_pay_march.dds
-
-### feminist_events.3
-- **Title:** The Reproductive Rights Debate
-- **Description:** The arrival of the contraceptive pill has ignited a fierce debate about reproductive rights and bodily autonomy. Women's groups demand universal access, while religious leaders warn of moral collapse. The government must navigate between progress and tradition.
-- **Flavor:** The pharmacist dispensed the prescription without comment. His predecessor had refused. His predecessor's predecessor had called the police.
-- **Current image:** gfx/event_pictures/reproductive_rights_debate.dds
-
-### feminist_events.4
-- **Title:** Women in the Military
-- **Description:** Pressure is mounting to allow women to serve in combat roles in the armed forces. Military reformers argue that denying capable soldiers based on gender weakens national defense, while traditionalists insist on maintaining established norms.
-- **Flavor:** She carried the same pack, fired the same weapon, and marched the same twenty miles. The debate about whether she belonged there continued in offices she would never visit.
-- **Current image:** gfx/event_pictures/women_in_military.dds
-
-### feminist_events.5
-- **Title:** Feminist Literature Boom
-- **Description:** A wave of feminist writing has captured the national imagination. Bestselling books challenge traditional gender roles and inspire a new generation of women to demand equality. The literary movement is reshaping public discourse.
-- **Flavor:** The book sold three hundred thousand copies in its first month. Several legislators admitted, off the record, that their wives had made them read it.
-- **Current image:** gfx/event_pictures/anti_feminist_backlash.dds
-
-### feminist_events.100
-- **Title:** The Movement Falters
-- **Description:** (no localization)
-- **Flavor:** The bill was shelved. The committee was dissolved. The petitions were filed in a cabinet that no one opened again.
-- **Current image:** gfx/event_pictures/feminist_struggle_continues.dds
-
-### feminist_events.200
-- **Title:** Equality Achieved
-- **Description:** The feminist movement in [ROOT.GetCountry.GetName] has accomplished its goals. Gender equality is now deeply embedded in law and culture, opening doors that were once firmly shut.
-- **Flavor:** #italic The story of women's struggle for equality belongs to no single feminist — it is the story of all who care about human rights.#!
-- **Current image:** gfx/event_pictures/gender_equality_achieved.dds
-
 ## heir_education_events.txt
 
 ### heir_education_events.1
@@ -1397,50 +1333,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** One of our intelligence operatives has been quietly returned through an unofficial exchange with [SCOPE.sCountry('espionage_catcher').GetName]. The absence of public scandal is welcome, but our network in the region has plainly been compromised.
 - **Flavor:** \"No press conference. No trial. No headlines,\" the handler says, guiding the exhausted operative into a waiting car. \"That is the good news.\"\n\n\"And the bad news?\"\n\n\"If they were willing to return the agent quietly, they already learned everything they needed.\"
 - **Current image:** gfx/event_pictures/intelligence_dead_drop.dds
-
-## lgbtq_events.txt
-
-### lgbtq_events.1
-- **Title:** The Pride March
-- **Description:** Thousands of LGBTQ+ citizens and their allies have organized a pride march through the capital. Rainbow flags line the streets as the procession demands equal rights and recognition. The government must decide how to respond.
-- **Flavor:** Traffic was diverted. The police chief assigned extra officers. Nobody threw anything. It was, by all accounts, a parade.
-- **Current image:** gfx/event_pictures/pride_march_colorful.dds
-
-### lgbtq_events.2
-- **Title:** Religious Backlash
-- **Description:** The [SCOPE.gsInterestGroup('devout_ig').GetName] have launched a fierce campaign against LGBTQ+ rights, calling the movement an affront to traditional values. Religious leaders demand the government take their side.
-- **Flavor:** The bishop's letter was read aloud in every parish that Sunday. Two congregations walked out. The rest sat in uncomfortable silence.
-- **Current image:** gfx/event_pictures/lgbtq_religious_backlash.dds
-
-### lgbtq_events.3
-- **Title:** The Military Service Debate
-- **Description:** A heated debate has erupted over whether LGBTQ+ citizens should be permitted to serve openly in the armed forces. Military leaders are divided, with some arguing ability should be the only criterion for service while others warn of disruption to unit cohesion.
-- **Flavor:** The sergeant's service record was spotless — twelve years, no complaints. The discharge papers cited 'incompatibility with service norms.'
-- **Current image:** gfx/event_pictures/hate_crime_vigil.dds
-
-### lgbtq_events.4
-- **Title:** A Public Coming Out
-- **Description:** A beloved public figure has come out, sparking an intense national conversation about LGBTQ+ identity. Their courage has inspired many, but also drawn fury from traditionalists who see it as moral decay.
-- **Flavor:** The interview aired at nine o'clock. By midnight, the switchboard had received four thousand calls — roughly half in support, half in fury.
-- **Current image:** gfx/event_pictures/lgbtq_military_service.dds
-
-### lgbtq_events.5
-- **Title:** Hate Crime
-- **Description:** A violent attack against an LGBTQ+ citizen has shocked the nation. The victim was targeted solely for their identity, and now the public demands action. Some call for hate crime legislation, others see a political opportunity.
-- **Flavor:** The hospital report listed sixteen injuries. The motive column read 'suspected bias.' The suspect was known to the community.
-- **Current image:** gfx/event_pictures/lgbtq_marriage_debate.dds
-
-### lgbtq_events.100
-- **Title:** Movement Crushed
-- **Description:** (no localization)
-- **Flavor:** The meeting hall was empty. The organizer's apartment had been searched last week. Nobody came to the next meeting, or the one after that.
-- **Current image:** gfx/event_pictures/lgbtq_persecution_dark.dds
-
-### lgbtq_events.200
-- **Title:** Pride and Progress
-- **Description:** The LGBTQ rights movement in [ROOT.GetCountry.GetName] has won its battles. Full legal equality is now enshrined in law, and a more tolerant society has emerged from decades of activism.
-- **Flavor:** #italic No one is free when others are oppressed.#!
-- **Current image:** gfx/event_pictures/lgbtq_full_equality.dds
 
 ## mental_health_events.txt
 
@@ -1974,6 +1866,66 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** #italic Not with a bang, but a whimper.#!
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
+### movement_events_te.220
+- **Title:** The Civil Rights Mandate is Signed
+- **Description:** After years of federal commissions, executive orders, and court fights, the mandate is law. Marshals deploy to enforce; recalcitrant states are reminded that the writ runs everywhere.
+- **Flavor:** From the capital, a mandate.
+- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
+
+### movement_events_te.221
+- **Title:** The Movement Carries the Day
+- **Description:** The march on the capital, the boycott, the years of organizing — they could not be ignored any longer. The legislation is theirs in everything but signature.
+- **Flavor:** Won from below.
+- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
+
+### movement_events_te.222
+- **Title:** A Settlement, At Last
+- **Description:** After patient committee work and quiet diplomacy across factions, the question closes with a broad institutional consensus. No one is shouting; no one is happy; the law is on the books.
+- **Flavor:** Settled, with all deliberate speed.
+- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
+
+### movement_events_te.223
+- **Title:** Reform on Paper
+- **Description:** The signing ceremony is photographed; the appointed leaders are gracious. The radical organizers, who built this movement, find themselves without a movement to lead. The new statutes apply, in theory.
+- **Flavor:** A victory the movement won't quite recognize.
+- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
+
+### movement_events_te.230
+- **Title:** The Movement Demobilizes
+- **Description:** Token appointments and symbolic legislation cooled the streets. Donors moved on; chapters shrank; the next generation looks elsewhere. The grievances remain; the organizing does not.
+- **Flavor:** Bought out, quietly.
+- **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
+
+### movement_events_te.231
+- **Title:** The Long Drift
+- **Description:** Years of patient incrementalism without escalation. Each compromise was reasonable; each kept the bar from rising. The movement is still nominally there, but the urgency drained out of it.
+- **Flavor:** Reform deferred is reform denied.
+- **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
+
+### movement_events_te.301
+- **Title:** First Mass Rally Draws Notice
+- **Description:** What started as a community meeting filled a city block. Sympathetic newspapers run the photograph above the fold. The movement has, suddenly, faces and names.
+- **Flavor:** The first rally that the country couldn't ignore.
+- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+
+### movement_events_te.303
+- **Title:** Coalition Forms with Trade Unions
+- **Description:** Local branches of organized labor open their halls to civil rights organizers. Joint statements appear; shop floors are now movement spaces.
+- **Flavor:** Wages and rights, on the same picket line.
+- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+
+### movement_events_te.304
+- **Title:** Federal Commission Recommends Action
+- **Description:** After two years of hearings, the civil rights commission's report lands on the cabinet's desk. Its recommendations are concrete, costed, and politically inconvenient. They are, however, recommendations.
+- **Flavor:** An official document with teeth, if anyone chooses to use them.
+- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+
+### movement_events_te.305
+- **Title:** The March on the Capital
+- **Description:** Hundreds of thousands fill the avenues outside the legislature. The speeches are broadcast; the demands are clear; the cameras do not look away. The country is being asked, in front of the cameras, what it intends to be.
+- **Flavor:** We have come, peacefully, in numbers, to be answered.
+- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+
 ## nuclear_weapon_events.txt
 
 ### nuclear_weapon_events.1
@@ -2433,50 +2385,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** (no localization)
 - **Flavor:** The data center hummed like a cathedral organ. Rows of machines blinked in patient sequence, generating heat enough to warm a small town - which, in fact, they did.\n\n'We're at ninety-six percent capacity,' the facility manager said. 'The defense ministry wants twenty percent more. The weather service wants fifteen. Research wants thirty.'\n\n'That's sixty-five percent we don't have.'\n\n'Correct. And every one of them says their need is the most critical.'\n\nShe smiled thinly. 'Welcome to the future. It runs on the same thing as the past: not enough.'
 - **Current image:** gfx/event_pictures/international_development_project.dds
-
-## secular_events.txt
-
-### secular_events.1
-- **Title:** The Scandal
-- **Description:** A major religious institution has been rocked by a corruption scandal. Embezzlement, hypocrisy, and cover-ups have shaken public faith in organized religion. The media frenzy shows no signs of abating.
-- **Flavor:** The accountant's testimony lasted four hours. The bishop's lasted ten minutes, most of it spent declining to answer.
-- **Current image:** gfx/event_pictures/religious_scandal_media.dds
-
-### secular_events.2
-- **Title:** Moral Panic
-- **Description:** The [SCOPE.gsInterestGroup('devout_ig').GetName] have launched a moral panic, claiming that the decline of religion is destroying the fabric of society. They demand a return to traditional values and increased state support for religious institutions.
-- **Flavor:** The pamphlet was distributed to every household in the district, warning of moral collapse. Attendance at services rose briefly, then fell again.
-- **Current image:** gfx/event_pictures/social_moral_panic.dds
-
-### secular_events.3
-- **Title:** New Age Spirituality
-- **Description:** As organized religion declines, new spiritual movements are filling the void. Meditation centers, neo-pagan groups, and eclectic spiritual communities are proliferating. The established religious institutions view them with alarm, while secularists see them as harmless.
-- **Flavor:** The meditation centre opened where the church had been. The landlord said the rent was better.
-- **Current image:** gfx/event_pictures/new_age_spirituality_center.dds
-
-### secular_events.4
-- **Title:** The State Religion Debate
-- **Description:** A growing movement demands the formal separation of church and state. The [SCOPE.gsInterestGroup('devout_ig').GetName] fiercely defend the current arrangement, but reformers argue that a modern nation cannot have an official religion.
-- **Flavor:** The petition gathered twelve thousand signatures in a week. The archbishop called it 'a campaign against faith itself.' The petitioners called it bookkeeping.
-- **Current image:** gfx/event_pictures/church_state_separation.dds
-
-### secular_events.5
-- **Title:** Interfaith Dialogue
-- **Description:** An interfaith dialogue initiative has brought together religious leaders of all faiths to find common ground. The initiative aims to reduce sectarian tensions and build mutual understanding in a rapidly secularizing society.
-- **Flavor:** The rabbi, the imam, and the pastor agreed on very little. They agreed to keep talking. It was enough to fill a conference hall.
-- **Current image:** gfx/event_pictures/interfaith_dialogue_table.dds
-
-### secular_events.100
-- **Title:** Religious Revivalism
-- **Description:** (no localization)
-- **Flavor:** The pews were full again for the first time in a decade. The minister was not sure whether to be grateful or worried.
-- **Current image:** gfx/event_pictures/social_moral_panic.dds
-
-### secular_events.200
-- **Title:** The Secular State
-- **Description:** The gradual decline of religious influence in [ROOT.GetCountry.GetAdjective] public life has culminated in a firmly secular state. Religious institutions have been relegated to the private sphere, with governance now guided by reason and evidence.
-- **Flavor:** #italic The pulpits empty as the lecture halls fill.#!
-- **Current image:** gfx/event_pictures/church_state_separation.dds
 
 ## social_tensions_events.txt
 
@@ -3429,6 +3337,14 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** (no localization)
 - **Flavor:** (none)
 - **Current image:** (unknown)
+
+## te_map_modes_events.txt
+
+### te_map_modes.1
+- **Title:** Cartographic Survey
+- **Description:** Our cartographers stand ready to redraw the world map by whatever measure interests us most. Pick a metric below, then switch to the #b Migration Attraction#! map mode — its color gradient will read as the metric we have chosen rather than as actual migration appeal.\n\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!
+- **Flavor:** Maps are arguments, not records — and tonight we choose the argument.
+- **Current image:** gfx/event_pictures/orbital_earth_view.dds
 
 ## test_event.txt
 
