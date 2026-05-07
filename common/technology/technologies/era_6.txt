@@ -8,12 +8,12 @@
 	modifier = {
 		country_weekly_innovation_max_add = 25
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		aniline
-        combustion_engine
+		combustion_engine
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -24,11 +24,11 @@ isoprene = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/rubber.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		plastics
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -38,18 +38,18 @@ computing_machines = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 25
 		country_institution_schools_max_investment_add = 1
 		state_education_access_add = -0.1
 		country_intelligence_capacity_add = 2
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		analytical_philosophy
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -60,16 +60,16 @@ personal_appliances = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
 	category = production
-	
+
 	modifier = {
 		state_working_adult_ratio_add = 0.025
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		flash_freezing
 		radio
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -80,17 +80,17 @@ rocketry = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/artillery.dds"
 	category = military
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 25
 		country_rocketry_pb_principles_bool = yes
 		country_rocketry_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		bombing_aircraft
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -120,8 +120,8 @@ nuclear_weapons = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/multilateral_alliances.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		rocketry
 	}
 	modifier = {
@@ -135,7 +135,7 @@ nuclear_weapons = {
 		country_nuclear_weapons_pb_principles_bool = yes
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
-	
+
 	ai_weight = {
 		value = 10
 	}
@@ -146,8 +146,8 @@ commercial_aviation = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/military_aviation.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		zeppelins
 	}
 
@@ -156,7 +156,7 @@ commercial_aviation = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_sol_expectations_upper_offset_add = 0.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -167,7 +167,7 @@ keynesian_economics = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/macroeconomics.dds"
 	category = society
-	
+
 	modifier = {
 		state_trade_capacity_mult = 0.1
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
@@ -184,11 +184,11 @@ keynesian_economics = {
 		country_can_use_fx_devaluation_bool = yes
 		country_can_use_asset_relief_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		macroeconomics
 	}
-	
+
 	ai_weight = {
 		value = 3
 	}
@@ -199,8 +199,8 @@ combined_arms = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/military_drill.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		mobile_armor
 	}
 
@@ -211,27 +211,27 @@ combined_arms = {
 		country_combined_arms_pb_principles_bool = yes
 		country_combined_arms_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
 }
 
 modern_materials = {
-	# Dragline Excavators and High-Pressure Hydraulic Pump PMs for mines, Deep Well PM for oil rigs, 
-	# Polyester and Nylon PM for synthetic clothes, Flexible Packaging for Food Industries, 
+	# Dragline Excavators and High-Pressure Hydraulic Pump PMs for mines, Deep Well PM for oil rigs,
+	# Polyester and Nylon PM for synthetic clothes, Flexible Packaging for Food Industries,
 	# Advanced Dyes for Synthetic Dyes Industries
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/plastics.dds"
 	category = production
-	
+
 	modifier = {
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		arc_welding
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -243,16 +243,16 @@ modern_tools = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mechanical_tools.dds"
 	category = production
-	
+
 	modifier = {
 		country_modern_tools_pb_principles_bool = yes
 		country_modern_tools_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		modern_materials
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -263,7 +263,7 @@ modern_skyscrapers = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steel_frame_buildings.dds"
 	category = production
-	
+
 	modifier = {
 		building_urban_center_throughput_add = 0.1
 		state_urbanization_per_level_add = -5
@@ -271,11 +271,11 @@ modern_skyscrapers = {
 		country_modern_skyscrapers_pb_principles_bool = yes
 		country_modern_skyscrapers_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		modern_materials
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -285,7 +285,7 @@ advanced_agricultural_statistics = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/intensive_agriculture.dds"
 	category = society
-	
+
 	modifier = {
 		building_group_bg_plantations_throughput_add = 0.1
 		building_group_bg_ranching_throughput_add = 0.1
@@ -293,11 +293,11 @@ advanced_agricultural_statistics = {
 		country_advanced_agri_stats_pb_principles_bool = yes
 		country_advanced_agri_stats_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		modern_financial_instruments
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -308,15 +308,15 @@ modern_automotive_technology = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/combustion_engine.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		compression_ignition
 	}
 
 	modifier = {
 		state_building_highway_max_level_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -331,11 +331,11 @@ radar = {
 	modifier = {
 		country_nuclear_weapon_defense_chance_add = 0.25
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		military_aviation
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -346,7 +346,7 @@ television = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
+
 	modifier = {
 		country_institution_ministry_of_religion_max_investment_add = 1
 		country_television_pb_principles_bool = yes
@@ -355,11 +355,11 @@ television = {
 		country_cultural_program_max_funding_add = 1
 		country_television_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		personal_appliances
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -370,7 +370,7 @@ marketing_research = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_propaganda.dds"
 	category = society
-	
+
 	modifier = {
 		country_legitimacy_ideological_incoherence_mult = -0.1
 		country_max_companies_add = 1
@@ -379,11 +379,11 @@ marketing_research = {
 		country_marketing_research_pb_principles_bool = yes
 		country_marketing_research_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		behaviorism
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -394,16 +394,16 @@ motorized_artillery = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/artillery.dds"
 	category = military
-	
+
 	modifier = {
 		country_motorized_artillery_pb_principles_bool = yes
 		country_motorized_artillery_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		mobile_armor
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -414,11 +414,11 @@ semiautomatic_rifle = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/bolt_action_rifles.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		bolt_action_rifles
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -428,8 +428,8 @@ modern_vaccines = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/pharmaceuticals.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		antibiotics
 	}
 
@@ -439,7 +439,7 @@ modern_vaccines = {
 		country_modern_vaccines_pb_principles_bool = yes
 		country_modern_vaccines_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -451,8 +451,8 @@ mass_media = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		film
 	}
 
@@ -467,7 +467,7 @@ mass_media = {
 		country_mass_media_pb_principles_bool = yes
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -477,16 +477,16 @@ animation = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/film.dds"
 	category = society
-	
+
 	modifier = {
 		building_art_academy_throughput_add = 0.25
 		state_max_trade_advantage_from_capacity_add = 0.05
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		mass_media
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -496,18 +496,18 @@ rural_electrification = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/electrical_generation.dds"
 	category = society
-	
+
 	modifier = {
 		state_infrastructure_from_population_max_add = 100
 		country_sol_expectations_target_add = 0.5
 		building_power_plant_throughput_add = 0.25
 		country_voting_power_mult = 0.1
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		paved_roads
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -517,16 +517,16 @@ fluorescent_lamps = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/electrical_capacitors.dds"
 	category = production
-	
+
 	modifier = {
 		building_economy_of_scale_level_cap_add = 30
 		state_bureaucracy_population_base_cost_factor_mult = 0.2
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		radio
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -539,19 +539,19 @@ modern_chemical_processes = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/chemical_bleaching.dds"
 	category = production
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 25
 		state_arable_land_mult = 0.2
 		country_st_res_ammunition_decay_add = -0.005
 		country_st_res_oil_decay_add = -0.001
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		nitrogen_fixation
 		isoprene
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -562,11 +562,11 @@ aluminum_mass_production = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		arc_welding
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -577,15 +577,15 @@ stainless_steel_mass_production = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/steelworking.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		aluminum_mass_production
 	}
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 10
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -598,11 +598,15 @@ modern_management_techniques = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/central_planning.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	modifier = {
+		country_institution_ministry_of_labor_max_investment_add = 1
+	}
+
+	unlocking_technologies = {
 		mass_surveillance
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -617,11 +621,11 @@ naval_convoy_defense = {
 		country_ship_group_supply_ships_construction_efficiency_add = 0.5
 		country_supply_ship_construction_progress_max_mult = 0.25
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		sonar
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -640,11 +644,11 @@ sonar = {
 		country_sonar_pb_principles_bool = yes
 		character_interception_add = 0.5
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		battlefleet_tactics
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -664,7 +668,7 @@ naval_fire_control_systems = {
 	unlocking_technologies = {
 		battlefleet_tactics
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -675,7 +679,7 @@ cryptography = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/mass_surveillance.dds"
 	category = military
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 25
 		unit_army_defense_mult = 0.05
@@ -684,11 +688,11 @@ cryptography = {
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.05
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		radar
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -700,7 +704,7 @@ public_works_programs = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
 	category = society
-	
+
 	modifier = {
 		state_building_hydro_plant_max_level_add = 5
 		country_weekly_innovation_max_add = 10
@@ -710,11 +714,11 @@ public_works_programs = {
 		country_public_works_pb_principles_bool = yes
 		country_public_works_pb_principles_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		keynesian_economics
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -725,17 +729,17 @@ art_deco_architecture = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/urban_planning.dds"
 	category = society
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 15
 		country_institution_ministry_of_culture_max_investment_add = 1
 		country_sol_expectations_upper_offset_add = 0.5
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		marketing_research
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -746,18 +750,18 @@ consumer_credit = {
 	era = era_6
 	texture = "gfx/interface/icons/invention_icons/modern_financial_instruments.dds"
 	category = society
-	
+
 	modifier = {
 		building_group_bg_service_throughput_add = 0.2
 		country_institution_national_bank_max_investment_add = 1
 		country_can_use_deposit_guarantee_bool = yes
 		country_can_use_deposit_guarantee_bool = yes
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		modern_financial_instruments
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -772,7 +776,8 @@ intergovernmental_organizations = {
 	modifier = {
 		country_institution_size_change_speed_mult = 0.25
 		country_leverage_threshold_change_add = -100
-		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
+		country_institution_ministry_of_foreign_affairs_max_investment_add = 2
+		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_igo_pb_principles_bool = yes
 		country_can_join_united_nations_bool = yes
 		country_igo_pb_principles_bool = yes
@@ -797,9 +802,6 @@ decolonization = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 50
-		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
-		country_institution_ministry_of_international_aid_max_investment_add = 1
-		country_institution_ministry_of_labor_max_investment_add = 1
 		state_colony_growth_creation_factor = 0.1
 		country_liberty_desire_of_subjects_add = 0.05
 		country_add_anticolonial_ideology_to_igs_bool = yes

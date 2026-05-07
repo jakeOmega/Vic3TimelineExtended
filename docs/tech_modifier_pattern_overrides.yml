@@ -1,0 +1,27 @@
+# Pattern-anchor overrides for `tech_balance_audit.py`.
+#
+# Each entry replaces the computed vanilla median for a parametric modifier
+# pattern. Use when:
+#   - the vanilla median is misleading (outlier-dragged, e.g. mass-mobilization
+#     numbers inflating an otherwise-civilian-scale modifier);
+#   - vanilla has no data for the pattern (e.g. `_add` variants of patterns
+#     vanilla only uses in `_mult` form);
+#   - you want every instance scored against a specific design intent.
+#
+# Format:  pattern_key: numeric_value
+# Comments: # to end of line.
+
+# state_building_<X>_max_level_add — vanilla median is 17.5, dragged up by
+# mass-mobilization values (`barrack_max_level_add = 100`,
+# `conscription_center_max_level_add = 100`). The civilian-scale uses are
+# 5–10. Use 1 as the unit so each +1 building level = 1× vanilla-tech worth.
+state_building_<X>_max_level_add: 1.0
+
+# ship_battle_against_<X>_*_add — no vanilla data (vanilla uses _mult only).
+# Pick a small numeric scale so per-ship-type accuracy/damage adds register.
+ship_battle_against_<X>_accuracy_add: 0.05
+ship_battle_against_<X>_hull_damage_add: 0.05
+ship_battle_against_<X>_crew_damage_add: 0.05
+
+# character_battle_condition_<X>_add — no vanilla data; vanilla uses _mult only.
+character_battle_condition_<X>_add: 0.5

@@ -3,18 +3,18 @@
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		cloud_computing
 		e-commerce
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -29,31 +29,32 @@ generative_ai = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		machine_learning
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
 }
 
 additive_manufacturing = {
-	# Smart Miners PMs for mines, 3D Printed Porcelain PM for Glassworks, 3D Printed Buildings for 
+	# Smart Miners PMs for mines, 3D Printed Porcelain PM for Glassworks, 3D Printed Buildings for
 	# Construction Sectors
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		robotics
+		supply_chain_management
 	}
-	
+
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -64,17 +65,71 @@ advanced_structural_engineering = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		robotics
 	}
-	
+
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
 		state_urbanization_per_level_add = -5
 		state_migration_crowding_density_mult = 0.2
 	}
-	
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+electric_vehicles = {
+	# Re-routes Electric Cars / Hydrogen Fuel Cell / Electric Highway PMs from clean_energy_technologies
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	unlocking_technologies = {
+		clean_energy_technologies
+	}
+
+	modifier = {
+		state_pollution_generation_mult = -0.05
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+internet_of_things = {
+	# Re-routes Smart Miners PMs from additive_manufacturing
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = production
+
+	unlocking_technologies = {
+		wireless_internet
+		cloud_computing
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+mrna_therapeutics = {
+	# To-be-authored mRNA / gene-therapy pharma PM
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+
+	unlocking_technologies = {
+		modern_pharmaceuticals
+	}
+
+	modifier = {
+		country_institution_health_system_max_investment_add = 1
+	}
+
 	ai_weight = {
 		value = 1
 	}
@@ -85,8 +140,8 @@ reusable_rocketry = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		satellite_communications
 	}
 
@@ -94,7 +149,7 @@ reusable_rocketry = {
 		country_space_race_max_funding_add = 1
 		country_space_race_progress_add = 0.2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -116,7 +171,7 @@ hypersonic_weapons = {
 		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -127,16 +182,17 @@ directed_energy_defenses = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		stealth_technology
+		missile_defense_systems
 	}
 
 	modifier = {
 		country_nuclear_weapon_defense_chance_add = 0.5
 		country_space_race_max_funding_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 3
 	}
@@ -147,8 +203,8 @@ jadc2 = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		network_centric_warfare
 		electronic_warfare
 	}
@@ -163,7 +219,7 @@ jadc2 = {
 		character_advancement_speed_mult = 0.25
 		character_max_offensive_battles_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -185,11 +241,12 @@ cyber_warfare = {
 		country_covert_operation_slot_add = 1
 		character_coup_strength_mult = -0.10
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		network_centric_warfare
+		automated_surveillance
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -200,8 +257,8 @@ electronic_warfare = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		network_centric_warfare
 	}
 
@@ -215,7 +272,7 @@ electronic_warfare = {
 		character_naval_mission_area_add = 1
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -226,22 +283,23 @@ decline_of_organized_religion = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		globalization
 		digital_education
 		social_media
+		LGBTQ_rights_movement
 	}
 
 	modifier = {
 		country_loan_interest_rate_add = -0.02
-		country_institution_ministry_of_religion_max_investment_add = 1
+		country_institution_ministry_of_religion_max_investment_add = 2
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		# Homeland system: weakens tradition-based territorial claims
 		state_homeland_creation_threshold_add = -0.05
 		state_homeland_removal_threshold_add = 0.05
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -251,17 +309,18 @@ telemedicine = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		globalization
 		modern_pharmaceuticals
+		virtual_reality
 	}
 
 	modifier = {
 		country_institution_health_system_max_investment_add = 1
 		country_voting_power_mult = 0.2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -272,12 +331,12 @@ universal_basic_income = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		digital_education
 		LGBTQ_rights_movement
 	}
-	
+
 	modifier = {
 		country_sol_expectations_target_add = 0.5
 		country_institution_social_security_max_investment_add = 1
@@ -285,7 +344,7 @@ universal_basic_income = {
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_voting_power_mult = 0.2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -296,16 +355,17 @@ mental_health_awareness = {
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		modern_pharmaceuticals
 		social_media
+		digital_entertainment
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
-	
+
 	modifier = {
 		state_standard_of_living_add = 1
 		state_mortality_mult = -0.05

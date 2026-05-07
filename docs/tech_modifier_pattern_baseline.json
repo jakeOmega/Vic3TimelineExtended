@@ -1,0 +1,128 @@
+{
+  "building_<X>_throughput_add": {
+    "vanilla_count": 480,
+    "vanilla_distinct_names": 53,
+    "vanilla_max": 1.0,
+    "vanilla_median": 0.1,
+    "vanilla_min": -1.0
+  },
+  "building_group_<X>_employee_mult": {
+    "vanilla_count": 3,
+    "vanilla_distinct_names": 1,
+    "vanilla_max": 0.5,
+    "vanilla_median": 0.5,
+    "vanilla_min": 0.25
+  },
+  "building_group_<X>_tax_mult": {
+    "vanilla_count": 23,
+    "vanilla_distinct_names": 6,
+    "vanilla_max": 0.1,
+    "vanilla_median": 0.1,
+    "vanilla_min": -0.4
+  },
+  "building_group_<X>_throughput_add": {
+    "vanilla_count": 404,
+    "vanilla_distinct_names": 24,
+    "vanilla_max": 0.33,
+    "vanilla_median": 0.1,
+    "vanilla_min": -0.6
+  },
+  "character_battle_condition_<X>_mult": {
+    "vanilla_count": 59,
+    "vanilla_distinct_names": 14,
+    "vanilla_max": 8.0,
+    "vanilla_median": 1.0,
+    "vanilla_min": -0.9
+  },
+  "country_institution_<X>_max_investment_add": {
+    "vanilla_count": 30,
+    "vanilla_distinct_names": 7,
+    "vanilla_max": 4.0,
+    "vanilla_median": 1.0,
+    "vanilla_min": 1.0
+  },
+  "goods_input_<X>_mult": {
+    "vanilla_count": 18,
+    "vanilla_distinct_names": 6,
+    "vanilla_max": 0.5,
+    "vanilla_median": 0.25,
+    "vanilla_min": 0.25
+  },
+  "goods_output_<X>_mult": {
+    "vanilla_count": 41,
+    "vanilla_distinct_names": 9,
+    "vanilla_max": 0.5,
+    "vanilla_median": 0.25,
+    "vanilla_min": -1.0
+  },
+  "interest_group_<X>_approval_add": {
+    "vanilla_count": 203,
+    "vanilla_distinct_names": 10,
+    "vanilla_max": 5.0,
+    "vanilla_median": 2.0,
+    "vanilla_min": -10.0
+  },
+  "interest_group_<X>_pol_str_mult": {
+    "vanilla_count": 165,
+    "vanilla_distinct_names": 8,
+    "vanilla_max": 2.0,
+    "vanilla_median": 0.2,
+    "vanilla_min": -0.8
+  },
+  "interest_group_<X>_pop_attraction_mult": {
+    "vanilla_count": 65,
+    "vanilla_distinct_names": 8,
+    "vanilla_max": 0.25,
+    "vanilla_median": 0.1,
+    "vanilla_min": -0.2
+  },
+  "ship_battle_against_<X>_accuracy_mult": {
+    "vanilla_count": 32,
+    "vanilla_distinct_names": 4,
+    "vanilla_max": -0.1,
+    "vanilla_median": 0.8,
+    "vanilla_min": -0.8
+  },
+  "ship_battle_against_<X>_hull_damage_mult": {
+    "vanilla_count": 16,
+    "vanilla_distinct_names": 4,
+    "vanilla_max": 2.0,
+    "vanilla_median": 2.0,
+    "vanilla_min": 2.0
+  },
+  "state_building_<X>_max_level_add": {
+    "vanilla_count": 16,
+    "vanilla_distinct_names": 4,
+    "vanilla_max": 100.0,
+    "vanilla_median": 17.5,
+    "vanilla_min": 5.0
+  },
+  "unit_<X>_defense_add": {
+    "vanilla_count": 3,
+    "vanilla_distinct_names": 1,
+    "vanilla_max": 10.0,
+    "vanilla_median": 5.0,
+    "vanilla_min": 1.0
+  },
+  "unit_<X>_defense_mult": {
+    "vanilla_count": 25,
+    "vanilla_distinct_names": 1,
+    "vanilla_max": 1.5,
+    "vanilla_median": 0.2,
+    "vanilla_min": -0.1
+  },
+  "unit_<X>_offense_add": {
+    "vanilla_count": 8,
+    "vanilla_distinct_names": 4,
+    "vanilla_max": 30.0,
+    "vanilla_median": 7.5,
+    "vanilla_min": 1.0
+  },
+  "unit_<X>_offense_mult": {
+    "vanilla_count": 41,
+    "vanilla_distinct_names": 6,
+    "vanilla_max": 0.5,
+    "vanilla_median": 0.15,
+    "vanilla_min": -0.25
+  }
+}

@@ -12,13 +12,13 @@
 	modifier = {
 		country_institution_ministry_of_science_max_investment_add = 1
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		early_nanotechnology
 		biotechnology
 		additive_manufacturing
 	}
-	
+
 	ai_weight = {
 		value = 5
 	}
@@ -29,12 +29,12 @@ abyssal_plain_mining = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		additive_manufacturing
 		advanced_structural_engineering
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -45,12 +45,12 @@ quantum_computing = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		machine_learning
 		early_nanotechnology
 	}
-	
+
 	modifier = {
 		building_economy_of_scale_level_cap_add = 50
 		country_weekly_innovation_max_add = 100
@@ -58,7 +58,7 @@ quantum_computing = {
 		country_covert_operation_efficiency_mult = 0.10
 		country_covert_operation_slot_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -75,11 +75,12 @@ smart_grids = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_voting_power_mult = 0.2
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		clean_energy_technologies
+		internet_of_things
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -92,9 +93,10 @@ autonomous_vehicles = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		machine_learning
+		electric_vehicles
 	}
 
 	modifier = {
@@ -105,7 +107,7 @@ autonomous_vehicles = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_voting_power_mult = 0.2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -117,17 +119,17 @@ genetic_engineering = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		biotechnology
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		state_arable_land_mult = 0.25
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -142,16 +144,12 @@ synthetic_biology = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		genetic_engineering
 		modern_material_science
 	}
 
-	modifier = {
-		country_institution_health_system_max_investment_add = 1
-	}
-	
 	ai_weight = {
 		value = 1
 	}
@@ -163,8 +161,8 @@ directed_energy_weapons = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		directed_energy_defenses
 	}
 
@@ -194,7 +192,7 @@ space_militarization = {
 		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -206,8 +204,8 @@ swarm_technology = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		rapid_deployment_forces
 		unmanned_aerial_vehicles
 	}
@@ -220,7 +218,7 @@ swarm_technology = {
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.20
 		character_command_limit_mult = 0.10
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -231,19 +229,19 @@ quantum_communications = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		network_centric_warfare
 		military_grade_cybersecurity
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_intelligence_capacity_add = 4
 		country_covert_operation_efficiency_mult = 0.15
 		character_coup_strength_mult = -0.05
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -254,11 +252,11 @@ bioenhanced_soldiers = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		swarm_technology
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		unit_recovery_rate_add = 0.5
@@ -268,7 +266,7 @@ bioenhanced_soldiers = {
 		state_building_barrack_max_level_add = 100
 		character_battle_condition_exhausted_mult = -0.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -279,11 +277,11 @@ augmented_reality_warfare = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		network_centric_warfare
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -294,8 +292,8 @@ asteroid_mining = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		reusable_rocketry
 		directed_energy_weapons
 	}
@@ -303,7 +301,7 @@ asteroid_mining = {
 	modifier = {
 		country_space_race_max_funding_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 5
 	}
@@ -314,8 +312,8 @@ fusion_power = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		directed_energy_defenses
 	}
 
@@ -329,7 +327,7 @@ fusion_power = {
 		ship_max_distance_to_port_mult = 0.30
 		ship_movement_speed_mult = 0.05
 	}
-	
+
 	ai_weight = {
 		value = 5
 	}
@@ -353,11 +351,11 @@ brain_computer_interfaces = {
 		country_covert_operation_efficiency_mult = 0.10
 		character_coup_strength_mult = -0.15
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		cybersecurity
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -367,15 +365,16 @@ personalized_medicine = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		telemedicine
+		mrna_therapeutics
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
-	
+
 	modifier = {
 		building_economy_of_scale_level_cap_add = 10
 		country_weekly_innovation_max_add = 100
@@ -388,8 +387,8 @@ lab-grown_food = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		globalization
 	}
 
@@ -397,7 +396,29 @@ lab-grown_food = {
 		country_max_companies_add = 1
 		country_st_res_grain_decay_add = -0.05
 	}
-	
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+universal_digital_identity = {
+	# Strong Privacy Rights and Digital Currency laws (re-routed from cybersecurity)
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
+	category = society
+
+	unlocking_technologies = {
+		cybersecurity
+		social_media
+	}
+
+	modifier = {
+		country_intelligence_capacity_add = 5
+		country_loyalists_from_legitimacy_mult = 0.05
+		country_radicals_from_sol_change_mult = -0.05
+	}
+
 	ai_weight = {
 		value = 1
 	}
@@ -409,11 +430,11 @@ biohacking_and_human_augmentation = {
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		brain_computer_interfaces
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		state_building_airport_max_level_add = 1
@@ -421,7 +442,7 @@ biohacking_and_human_augmentation = {
 		country_institution_ministry_of_thought_control_max_investment_add = 3
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}

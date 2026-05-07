@@ -1,0 +1,146 @@
+# Polarity overrides for `tech_balance_audit.py`.
+#
+# Each entry overrides the heuristic-derived polarity for a specific
+# modifier name. Values: positive-good, negative-good, unknown.
+#
+# - positive-good: a positive numeric value buffs the player.
+# - negative-good: a positive numeric value HURTS the player (so to
+#   benefit the player you'd assign a negative value, like
+#   `state_radicals_mult = -0.05`).
+# - unknown: context-dependent; surface as MIXED-candidate but don't
+#   assert a polarity.
+#
+# The audit's `MIXED` flag fires when a tech has at least one
+# positive-good modifier and one negative-good modifier — useful for
+# spotting "intentional downside" techs.
+
+# ----------------------------------------------------------------------
+# Subject / overlord relations — bigger desire to break away = worse
+# ----------------------------------------------------------------------
+
+# Subjects wanting independence is bad for the suzerain. Vanilla declares
+# this modifier in modifier_type_definitions but doesn't use it in any
+# tech, so my heuristic defaulted it to positive-good.
+country_liberty_desire_of_subjects_add: negative-good
+country_liberty_desire_of_subjects_mult: negative-good
+
+# ----------------------------------------------------------------------
+# Standard-of-living expectations — higher = pops harder to satisfy
+# ----------------------------------------------------------------------
+
+# `_target_add` raises pops' expected SoL → more radicals when you can't
+# meet it. Bad for player. Negative offsets reduce expectations → good.
+# So positive-as-data = bad.
+country_sol_expectations_target_add: negative-good
+country_sol_expectations_target_mult: negative-good
+country_sol_expectations_middle_offset_add: negative-good
+country_sol_expectations_middle_offset_mult: negative-good
+country_sol_expectations_upper_offset_add: negative-good
+country_sol_expectations_upper_offset_mult: negative-good
+country_sol_expectations_lower_offset_add: negative-good
+country_sol_expectations_lower_offset_mult: negative-good
+
+# ----------------------------------------------------------------------
+# Diplomatic-play escalation as aggressor — context-dependent
+# ----------------------------------------------------------------------
+
+# Faster escalation when you're the aggressor cuts both ways: it commits
+# you to a war faster (good if you want to commit) but reduces your
+# negotiating room (bad if you wanted leverage without war). Heuristic
+# default classifies as unknown via the substring rule; reaffirm here.
+country_aggressor_diplomatic_play_escalation_weekly_add: unknown
+country_aggressor_diplomatic_play_escalation_weekly_mult: unknown
+
+# ----------------------------------------------------------------------
+# Battle condition amplifiers (character_battle_condition_<X>_<add|mult>)
+# ----------------------------------------------------------------------
+#
+# These scale the magnitude of the named battle condition's effects on
+# the character. Polarity flips depending on whether the condition is
+# good or bad.
+#
+# Good (positive_good):
+#   aggressive_maneuver, camouflaged (defender), careful_maneuver,
+#   charted_terrain, controlled_retreat, dug_in (defender),
+#   good_visibility (defender), guerilla_ambush, logistics_secured
+#   (attacker), pursuit, rapid_advance (attacker), surprise_maneuver
+#
+# Bad (negative_good):
+#   blunder, broken_supply_line, exhausted, lost (attacker only — your
+#   troops are confused), mud, panicked_retreat, poor_visibility,
+#   guerilla_disarray
+#
+# Only the conditions actually used in the mod tree are listed; extend
+# as needed.
+
+# Good conditions — heuristic default of positive-good is correct;
+# included here for explicit confirmation.
+character_battle_condition_aggressive_maneuver_mult: positive-good
+character_battle_condition_aggressive_maneuver_add: positive-good
+character_battle_condition_camouflaged_mult: positive-good
+character_battle_condition_camouflaged_add: positive-good
+character_battle_condition_logistics_secured_mult: positive-good
+character_battle_condition_logistics_secured_add: positive-good
+character_battle_condition_rapid_advance_mult: positive-good
+character_battle_condition_rapid_advance_add: positive-good
+
+# Bad conditions — amplifying them hurts the character → negative-good.
+character_battle_condition_exhausted_mult: negative-good
+character_battle_condition_exhausted_add: negative-good
+character_battle_condition_lost_mult: negative-good
+character_battle_condition_lost_add: negative-good
+character_battle_condition_mud_mult: negative-good
+character_battle_condition_mud_add: negative-good
+character_battle_condition_blunder_mult: negative-good
+character_battle_condition_blunder_add: negative-good
+character_battle_condition_broken_supply_line_mult: negative-good
+character_battle_condition_broken_supply_line_add: negative-good
+character_battle_condition_panicked_retreat_mult: negative-good
+character_battle_condition_panicked_retreat_add: negative-good
+character_battle_condition_poor_visibility_mult: negative-good
+character_battle_condition_poor_visibility_add: negative-good
+character_battle_condition_guerilla_disarray_mult: negative-good
+character_battle_condition_guerilla_disarray_add: negative-good
+
+# ----------------------------------------------------------------------
+# Homeland system — taken directly from vanilla's modifier_type_definitions
+# ----------------------------------------------------------------------
+
+# Vanilla annotates these in `common/modifier_type_definitions/`:
+#   creation_threshold_add: color = bad   (higher = harder to form)
+#   removal_threshold_add:  color = good  (higher = minorities erased sooner)
+#   change_speed_mult:      color = good  (higher = faster change)
+# Player techs that go against this default (decolonization protecting
+# minority homelands) end up with effective bad-effects per the audit's
+# polarity × sign(value) logic — which correctly reads as "this tech
+# inverts vanilla's design intent".
+state_homeland_creation_threshold_add: negative-good
+state_homeland_removal_threshold_add: positive-good
+state_homeland_change_speed_mult: positive-good
+state_homeland_change_speed_add: positive-good
+
+# ----------------------------------------------------------------------
+# Colony / colonialism
+# ----------------------------------------------------------------------
+
+# Colony growth: positive = more colonies = thematically odd if applied
+# alongside decolonization, but mechanically a buff. Mark unknown so the
+# audit surfaces these as candidates for review.
+state_colony_growth_creation_factor: unknown
+state_colony_growth_creation_factor_mult: unknown
+
+# ----------------------------------------------------------------------
+# Wages — pops vs treasury
+# ----------------------------------------------------------------------
+
+# `_dependent_wage_mult` raises wages of dependents. Better for pops,
+# costs more for state. Mark unknown.
+state_dependent_wage_mult: unknown
+
+# ----------------------------------------------------------------------
+# Misc unambiguous bad-when-positive (extending heuristic coverage)
+# ----------------------------------------------------------------------
+
+# Catches mod-only radicals modifiers the heuristic substring already
+# handles via "radicals" — included here for safety / explicit override
+# if a future audit run misses one. (Most won't need to be listed.)

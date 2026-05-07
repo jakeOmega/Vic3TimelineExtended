@@ -2062,7 +2062,7 @@ pm_smart_miners_building_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
-		additive_manufacturing
+		internet_of_things
 	}
 
 	state_modifiers = {
@@ -2108,7 +2108,7 @@ pm_smart_miners_building_iron_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
-		additive_manufacturing
+		internet_of_things
 	}
 
 	state_modifiers = {
@@ -2154,7 +2154,7 @@ pm_smart_miners_building_lead_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
-		additive_manufacturing
+		internet_of_things
 	}
 
 	state_modifiers = {
@@ -2200,7 +2200,7 @@ pm_smart_miners_building_sulfur_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
-		additive_manufacturing
+		internet_of_things
 	}
 
 	state_modifiers = {
@@ -2251,7 +2251,7 @@ pm_smart_miners_building_gold_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
-		additive_manufacturing
+		internet_of_things
 	}
 
 	state_modifiers = {
@@ -2297,7 +2297,7 @@ pm_smart_miners_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
 
 	unlocking_technologies = {
-		additive_manufacturing
+		internet_of_things
 	}
 
 	state_modifiers = {
@@ -4599,10 +4599,6 @@ pm_decentralized_religious_structures = {
 			building_employment_clerks_add = 10
 			building_employment_clergymen_add = 40
 		}
-
-		unscaled = {
-			building_clergymen_shares_add = 0.2
-		}
 	}
 }
 
@@ -5039,7 +5035,7 @@ pm_gas_turbine_engines = {
 pm_hydrogen_fuel_cell_engines = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p1.dds"
 	unlocking_technologies = {
-		clean_energy_technologies
+		electric_vehicles
 	}
 
 	building_modifiers = {
@@ -9346,7 +9342,7 @@ pm_electric_cars = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p2.dds"
 
 	unlocking_technologies = {
-		clean_energy_technologies
+		electric_vehicles
 	}
 
 	state_modifiers = {
@@ -10122,7 +10118,7 @@ pm_electric_civil_highway = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p1.dds"
 
 	unlocking_technologies = {
-		clean_energy_technologies
+		electric_vehicles
 	}
 
 	building_modifiers = {
@@ -10168,7 +10164,7 @@ pm_electric_industrial_highway = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p2.dds"
 
 	unlocking_technologies = {
-		clean_energy_technologies
+		electric_vehicles
 	}
 
 	building_modifiers = {
@@ -14916,7 +14912,7 @@ pm_advanced_construction = {
 	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p2.dds"
 
 	unlocking_technologies = {
-		advanced_structural_engineering
+		prefabricated_construction
 	}
 
 	state_modifiers = {

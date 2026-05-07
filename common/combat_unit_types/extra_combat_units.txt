@@ -8,64 +8,64 @@
 ### Infantry
 
 INJECT:combat_unit_type_irregular_infantry = {
-    upgrades = {
-        combat_unit_type_armored_infantry
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_armored_infantry
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 INJECT:combat_unit_type_line_infantry = {
-    upgrades = {
-        combat_unit_type_armored_infantry
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_armored_infantry
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 INJECT:combat_unit_type_skirmish_infantry = {
-    upgrades = {
-        combat_unit_type_armored_infantry
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_armored_infantry
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 INJECT:combat_unit_type_trench_infantry = {
-    upgrades = {
-        combat_unit_type_armored_infantry
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_armored_infantry
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 INJECT:combat_unit_type_squad_infantry = {
-    upgrades = {
-        combat_unit_type_armored_infantry
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_armored_infantry
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 INJECT:combat_unit_type_mechanized_infantry = {
-    upgrades = {
-        combat_unit_type_armored_infantry
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_armored_infantry
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 combat_unit_type_armored_infantry = {
-    group = combat_unit_group_infantry
-    max_manpower = 1000
+	group = combat_unit_group_infantry
+	max_manpower = 1000
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 4                        # Price:   60, Total cost:   240.0 (20.00%)
 		goods_input_ammunition_add = 4                        # Price:   50, Total cost:   200.0 (16.67%)
 		goods_input_tanks_add = 4                             # Price:  120, Total cost:   480.0 (40.00%)
@@ -73,34 +73,34 @@ combat_unit_type_armored_infantry = {
 		goods_input_radios_add = 2                            # Price:   80, Total cost:   160.0 (13.33%)
 		# Total cost: 1200.0
 	}
-    
-    battle_modifier = {
-        unit_offense_add = 60
-        unit_defense_add = 100
-        unit_morale_loss_add = 2
-        unit_devastation_mult = 0.2
-        unit_provinces_lost_mult = -0.25
-    }
+
+	battle_modifier = {
+		unit_offense_add = 45
+		unit_defense_add = 75
+		unit_morale_loss_add = 2
+		unit_devastation_mult = 0.2
+		unit_provinces_lost_mult = -0.25
+	}
 
 	unlocking_technologies = { combined_arms }  # era 6
 
-    combat_unit_image = {
+	combat_unit_image = {
 		# fallback
-        texture = "gfx/unit_illustrations/combined_arms.dds"
-    }
+		texture = "gfx/unit_illustrations/combined_arms.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_robotic_soldiers
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_robotic_soldiers
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 combat_unit_type_robotic_soldiers = {
-    group = combat_unit_group_infantry
-    max_manpower = 100
+	group = combat_unit_group_infantry
+	max_manpower = 600
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 15                       # Price:   60, Total cost:   900.0 (14.52%)
 		goods_input_ammunition_add = 10                       # Price:   50, Total cost:   500.0 (8.06%)
 		goods_input_tanks_add = 12                            # Price:  120, Total cost:  1440.0 (23.23%)
@@ -108,33 +108,33 @@ combat_unit_type_robotic_soldiers = {
 		goods_input_robotics_add = 30                         # Price:   80, Total cost:  2400.0 (38.71%)
 		# Total cost: 6200.0
 	}
-    
-    battle_modifier = {
-        unit_offense_add = 120
-        unit_defense_add = 350
-        unit_morale_loss_add = 1
-        unit_devastation_mult = 1
-        unit_provinces_lost_mult = -0.25
-    }
+
+	battle_modifier = {
+		unit_offense_add = 240
+		unit_defense_add = 585
+		unit_morale_loss_add = 1
+		unit_devastation_mult = 1
+		unit_provinces_lost_mult = -0.25
+	}
 
 	unlocking_technologies = { jadc2 }  # era 10
 
-    combat_unit_image = {
+	combat_unit_image = {
 		# fallback
-        texture = "gfx/unit_illustrations/robotic.dds"
-    }
+		texture = "gfx/unit_illustrations/robotic.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_swarm_bots
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_swarm_bots
+		combat_unit_type_grey_goo
+	}
 }
 
 combat_unit_type_swarm_bots = {
-    group = combat_unit_group_infantry
-    max_manpower = 25
+	group = combat_unit_group_infantry
+	max_manpower = 400
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 30                       # Price:   60, Total cost:  1800.0 (14.22%)
 		goods_input_ammunition_add = 30                       # Price:   50, Total cost:  1500.0 (11.85%)
 		goods_input_tanks_add = 18                            # Price:  120, Total cost:  2160.0 (17.06%)
@@ -142,31 +142,31 @@ combat_unit_type_swarm_bots = {
 		goods_input_robotics_add = 60                         # Price:   80, Total cost:  4800.0 (37.91%)
 		# Total cost: 12660.0
 	}
-    
-    battle_modifier = {
-        unit_offense_add = 240
-        unit_defense_add = 700
-        unit_devastation_mult = 2
-        unit_provinces_lost_mult = -0.25
-    }
+
+	battle_modifier = {
+		unit_offense_add = 540
+		unit_defense_add = 1675
+		unit_devastation_mult = 2
+		unit_provinces_lost_mult = -0.25
+	}
 
 	unlocking_technologies = { swarm_technology } # era 10
 
-    combat_unit_image = {
+	combat_unit_image = {
 		# fallback
-        texture = "gfx/unit_illustrations/swarm.dds"
-    }
+		texture = "gfx/unit_illustrations/swarm.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_grey_goo
-    }
+	upgrades = {
+		combat_unit_type_grey_goo
+	}
 }
 
 combat_unit_type_grey_goo = {
-    group = combat_unit_group_infantry
-    max_manpower = 10
+	group = combat_unit_group_infantry
+	max_manpower = 250
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 30                       # Price:   60, Total cost:  1800.0 (7.23%)
 		goods_input_ammunition_add = 30                       # Price:   50, Total cost:  1500.0 (6.02%)
 		goods_input_tanks_add = 20                            # Price:  120, Total cost:  2400.0 (9.64%)
@@ -175,76 +175,76 @@ combat_unit_type_grey_goo = {
 		goods_input_advanced_materials_add = 3                # Price: 4000, Total cost: 12000.0 (48.19%)
 		# Total cost: 24900.0
 	}
-    
-    battle_modifier = {
-        unit_offense_add = 480
-        unit_defense_add = 1400
-        unit_devastation_mult = 4
-        unit_provinces_lost_mult = -0.25
-    }
+
+	battle_modifier = {
+		unit_offense_add = 1500
+		unit_defense_add = 4475
+		unit_devastation_mult = 4
+		unit_provinces_lost_mult = -0.25
+	}
 
 	unlocking_technologies = { molecular_assemblers }  # era 11
 
-    combat_unit_image = {
+	combat_unit_image = {
 		# fallback
-        texture = "gfx/unit_illustrations/grey_goo.dds"
-    }
+		texture = "gfx/unit_illustrations/grey_goo.dds"
+	}
 }
 
 ### Artillery
 
 INJECT:combat_unit_type_cannon_artillery = {
-    upgrades = {
-        combat_unit_type_motorized_artillery
-        combat_unit_type_guided_artillery_projectiles
-        combat_unit_type_networked_guided_artillery_projectiles
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_motorized_artillery
+		combat_unit_type_guided_artillery_projectiles
+		combat_unit_type_networked_guided_artillery_projectiles
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 INJECT:combat_unit_type_mobile_artillery = {
-    upgrades = {
-        combat_unit_type_motorized_artillery
-        combat_unit_type_guided_artillery_projectiles
-        combat_unit_type_networked_guided_artillery_projectiles
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_motorized_artillery
+		combat_unit_type_guided_artillery_projectiles
+		combat_unit_type_networked_guided_artillery_projectiles
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 INJECT:combat_unit_type_shrapnel_artillery = {
-    upgrades = {
-        combat_unit_type_motorized_artillery
-        combat_unit_type_guided_artillery_projectiles
-        combat_unit_type_networked_guided_artillery_projectiles
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_motorized_artillery
+		combat_unit_type_guided_artillery_projectiles
+		combat_unit_type_networked_guided_artillery_projectiles
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 INJECT:combat_unit_type_siege_artillery = {
-    upgrades = {
-        combat_unit_type_motorized_artillery
-        combat_unit_type_guided_artillery_projectiles
-        combat_unit_type_networked_guided_artillery_projectiles
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_motorized_artillery
+		combat_unit_type_guided_artillery_projectiles
+		combat_unit_type_networked_guided_artillery_projectiles
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 combat_unit_type_motorized_artillery = {
-    group = combat_unit_group_artillery
-    max_manpower = 1000
+	group = combat_unit_group_artillery
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_tanks_add = 4                             # Price:  120, Total cost:   480.0 (22.86%)
 		goods_input_artillery_add = 10                        # Price:   70, Total cost:   700.0 (33.33%)
 		goods_input_radios_add = 2                            # Price:   80, Total cost:   160.0 (7.62%)
@@ -254,41 +254,41 @@ combat_unit_type_motorized_artillery = {
 		# Total cost: 2100.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 120
-        unit_defense_add = 80
-        unit_morale_loss_add = 5
-        unit_kill_rate_add = 0.3
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 0.4
-    }
+	battle_modifier = {
+		unit_offense_add = 100
+		unit_defense_add = 70
+		unit_morale_loss_add = 5
+		unit_kill_rate_add = 0.3
+		unit_morale_damage_mult = 0.5
+		unit_devastation_mult = 0.4
+	}
 
 	unlocking_technologies = { motorized_artillery }  # era 6
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/mobile_art.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/mobile_art.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_guided_artillery_projectiles
-        combat_unit_type_networked_guided_artillery_projectiles
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_guided_artillery_projectiles
+		combat_unit_type_networked_guided_artillery_projectiles
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 combat_unit_type_guided_artillery_projectiles = {
-    group = combat_unit_group_artillery
-    max_manpower = 1000
+	group = combat_unit_group_artillery
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_tanks_add = 7                             # Price:  120, Total cost:   840.0 (19.63%)
 		goods_input_artillery_add = 16                        # Price:   70, Total cost:  1120.0 (26.17%)
 		goods_input_radios_add = 4                            # Price:   80, Total cost:   320.0 (7.48%)
@@ -299,40 +299,40 @@ combat_unit_type_guided_artillery_projectiles = {
 		# Total cost: 4280.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 180
-        unit_defense_add = 120
-        unit_morale_loss_add = 5
-        unit_kill_rate_add = 0.4
-        unit_morale_damage_mult = 0.6
-        unit_devastation_mult = 0.8
-    }
+	battle_modifier = {
+		unit_offense_add = 195
+		unit_defense_add = 130
+		unit_morale_loss_add = 5
+		unit_kill_rate_add = 0.4
+		unit_morale_damage_mult = 0.6
+		unit_devastation_mult = 0.8
+	}
 
 	unlocking_technologies = { guided_missiles }  # era 7
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/precision_art.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/precision_art.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_networked_guided_artillery_projectiles
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_networked_guided_artillery_projectiles
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 combat_unit_type_networked_guided_artillery_projectiles = {
-    group = combat_unit_group_artillery
-    max_manpower = 500
+	group = combat_unit_group_artillery
+	max_manpower = 800
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_tanks_add = 10                            # Price:  120, Total cost:  1200.0 (11.54%)
 		goods_input_artillery_add = 40                        # Price:   70, Total cost:  2800.0 (26.92%)
 		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (7.69%)
@@ -343,39 +343,39 @@ combat_unit_type_networked_guided_artillery_projectiles = {
 		# Total cost: 10400.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 400
-        unit_defense_add = 260
-        unit_morale_loss_add = 5
-        unit_kill_rate_add = 0.4
-        unit_morale_damage_mult = 0.6
-        unit_devastation_mult = 1.2
-    }
+	battle_modifier = {
+		unit_offense_add = 545
+		unit_defense_add = 365
+		unit_morale_loss_add = 5
+		unit_kill_rate_add = 0.4
+		unit_morale_damage_mult = 0.6
+		unit_devastation_mult = 1.2
+	}
 
 	unlocking_technologies = { network_centric_warfare }  # era 9
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/precision_art2.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/precision_art2.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_orbital_bombardment
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_orbital_bombardment
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 combat_unit_type_orbital_bombardment = {
-    group = combat_unit_group_artillery
-    max_manpower = 10
+	group = combat_unit_group_artillery
+	max_manpower = 100
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_artillery_add = 60                        # Price:   70, Total cost:  4200.0 (21.00%)
 		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (4.00%)
 		goods_input_ammunition_add = 44                       # Price:   50, Total cost:  2200.0 (11.00%)
@@ -384,38 +384,38 @@ combat_unit_type_orbital_bombardment = {
 		# Total cost: 20000.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 800
-        unit_defense_add = 520
-        unit_morale_loss_add = 5
-        unit_kill_rate_add = 0.5
-        unit_morale_damage_mult = 0.8
-        unit_devastation_mult = 3
-    }
+	battle_modifier = {
+		unit_offense_add = 1200
+		unit_defense_add = 800
+		unit_morale_loss_add = 5
+		unit_kill_rate_add = 0.5
+		unit_morale_damage_mult = 0.8
+		unit_devastation_mult = 3
+	}
 
 	unlocking_technologies = { space_militarization }  # era 10
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/orbital1.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/orbital1.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_orbital_precision_antimatter_strikes
-    }
+	upgrades = {
+		combat_unit_type_orbital_precision_antimatter_strikes
+	}
 }
 
 combat_unit_type_orbital_precision_antimatter_strikes = {
-    group = combat_unit_group_artillery
-    max_manpower = 10
+	group = combat_unit_group_artillery
+	max_manpower = 100
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_artillery_add = 60                        # Price:   70, Total cost:  4200.0 (10.50%)
 		goods_input_radios_add = 14                           # Price:   80, Total cost:  1120.0 (2.80%)
 		goods_input_ammunition_add = 52                       # Price:   50, Total cost:  2600.0 (6.50%)
@@ -425,45 +425,45 @@ combat_unit_type_orbital_precision_antimatter_strikes = {
 		# Total cost: 40000.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 1600
-        unit_defense_add = 1040
-        unit_morale_loss_add = 5
-        unit_kill_rate_add = 0.5
-        unit_morale_damage_mult = 0.8
-        unit_devastation_mult = 6
-    }
+	battle_modifier = {
+		unit_offense_add = 1900
+		unit_defense_add = 1300
+		unit_morale_loss_add = 5
+		unit_kill_rate_add = 0.5
+		unit_morale_damage_mult = 0.8
+		unit_devastation_mult = 6
+	}
 
 	unlocking_technologies = { antimatter_production }  # era 11
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/orbital2.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/orbital2.dds"
+	}
 }
 
 ### Cavalry
 
 
 INJECT:combat_unit_type_light_tanks = {
-    upgrades = {
-        combat_unit_type_light_scout_tanks
-        combat_unit_type_stealth_reconnaissance_drone_carrier
-        combat_unit_type_holographic_ambush_combat_vehicle
-    }
+	upgrades = {
+		combat_unit_type_light_scout_tanks
+		combat_unit_type_stealth_reconnaissance_drone_carrier
+		combat_unit_type_holographic_ambush_combat_vehicle
+	}
 }
 
 combat_unit_type_light_scout_tanks = {
-    group = combat_unit_group_cavalry
-    max_manpower = 1000
+	group = combat_unit_group_cavalry
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 22                            # Price:  120, Total cost:  2640.0 (38.37%)
 		goods_input_artillery_add = 6                         # Price:   70, Total cost:   420.0 (6.10%)
 		goods_input_oil_add = 3                               # Price:   40, Total cost:   120.0 (1.74%)
@@ -473,38 +473,38 @@ combat_unit_type_light_scout_tanks = {
 		# Total cost: 6880.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 150
-        unit_defense_add = 150
-        unit_morale_loss_add = 4
-        unit_devastation_mult = 0.2
-        unit_occupation_mult = 1
-    }
+	battle_modifier = {
+		unit_offense_add = 150
+		unit_defense_add = 150
+		unit_morale_loss_add = 4
+		unit_devastation_mult = 0.2
+		unit_occupation_mult = 1
+	}
 
 	unlocking_technologies = { inertial_navigation_systems }  # era 7
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/scout_tank.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/scout_tank.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_stealth_reconnaissance_drone_carrier
-        combat_unit_type_holographic_ambush_combat_vehicle
-    }
+	upgrades = {
+		combat_unit_type_stealth_reconnaissance_drone_carrier
+		combat_unit_type_holographic_ambush_combat_vehicle
+	}
 }
 
 combat_unit_type_stealth_reconnaissance_drone_carrier = {
-    group = combat_unit_group_cavalry
-    max_manpower = 1000
+	group = combat_unit_group_cavalry
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 50                            # Price:  120, Total cost:  6000.0 (33.71%)
 		goods_input_artillery_add = 20                        # Price:   70, Total cost:  1400.0 (7.87%)
 		goods_input_oil_add = 6                               # Price:   40, Total cost:   240.0 (1.35%)
@@ -516,37 +516,37 @@ combat_unit_type_stealth_reconnaissance_drone_carrier = {
 		# Total cost: 17800.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 320
-        unit_defense_add = 320
-        unit_morale_loss_add = 4
-        unit_devastation_mult = 1
-        unit_occupation_mult = 1.2
-    }
+	battle_modifier = {
+		unit_offense_add = 320
+		unit_defense_add = 320
+		unit_morale_loss_add = 4
+		unit_devastation_mult = 1
+		unit_occupation_mult = 1.2
+	}
 
 	unlocking_technologies = { rapid_deployment_forces }  # era 9
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/stealth_drone.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/stealth_drone.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_holographic_ambush_combat_vehicle
-    }
+	upgrades = {
+		combat_unit_type_holographic_ambush_combat_vehicle
+	}
 }
 
 combat_unit_type_holographic_ambush_combat_vehicle = {
-    group = combat_unit_group_cavalry
-    max_manpower = 1000
+	group = combat_unit_group_cavalry
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 95                            # Price:  120, Total cost: 11400.0 (32.95%)
 		goods_input_artillery_add = 40                        # Price:   70, Total cost:  2800.0 (8.09%)
 		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (5.78%)
@@ -558,34 +558,34 @@ combat_unit_type_holographic_ambush_combat_vehicle = {
 		# Total cost: 34600.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 640
-        unit_defense_add = 640
-        unit_morale_loss_add = 4
-        unit_devastation_mult = 2
-        unit_occupation_mult = 2
-    }
+	battle_modifier = {
+		unit_offense_add = 640
+		unit_defense_add = 640
+		unit_morale_loss_add = 4
+		unit_devastation_mult = 2
+		unit_occupation_mult = 2
+	}
 
 	unlocking_technologies = { augmented_reality_warfare }  # era 10
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/hologram_tank.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/hologram_tank.dds"
+	}
 }
 
 ### Tanks
 REPLACE:combat_unit_type_heavy_tank = {
-    group = combat_unit_group_tanks
-    max_manpower = 1000
+	group = combat_unit_group_tanks
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 3                             # Price:  120, Total cost:   360.0 (34.62%)
 		goods_input_artillery_add = 4                         # Price:   70, Total cost:   280.0 (26.92%)
 		goods_input_radios_add = 1                            # Price:   80, Total cost:    80.0 (7.69%)
@@ -594,46 +594,46 @@ REPLACE:combat_unit_type_heavy_tank = {
 		# Total cost: 1040.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 70
-        unit_defense_add = 35
-        unit_morale_loss_add = 4
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.15
-        unit_devastation_mult = 0.2
-    }
+	battle_modifier = {
+		unit_offense_add = 41
+		unit_defense_add = 21
+		unit_morale_loss_add = 4
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.15
+		unit_devastation_mult = 0.2
+	}
 
-    formation_modifier = {
-        military_formation_mobilization_speed_mult = -0.2
-        military_formation_army_movement_speed_mult = -0.2
-    }
+	formation_modifier = {
+		military_formation_mobilization_speed_mult = -0.2
+		military_formation_army_movement_speed_mult = -0.2
+	}
 
 	unlocking_technologies = { mobile_armor }  # era 5
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/artillery_heavy_tank.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/artillery_heavy_tank.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_main_battle_tank
-        combat_unit_type_reactive_armor_tank
-        combat_unit_type_railgun_tank
-        combat_unit_type_DEW_tank
-    }
+	upgrades = {
+		combat_unit_type_main_battle_tank
+		combat_unit_type_reactive_armor_tank
+		combat_unit_type_railgun_tank
+		combat_unit_type_DEW_tank
+	}
 }
 
 combat_unit_type_main_battle_tank = {
-    group = combat_unit_group_tanks
-    max_manpower = 1000
+	group = combat_unit_group_tanks
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 50                            # Price:  120, Total cost:  6000.0 (60.00%)
 		goods_input_artillery_add = 20                        # Price:   70, Total cost:  1400.0 (14.00%)
 		goods_input_radios_add = 6                            # Price:   80, Total cost:   480.0 (4.80%)
@@ -643,40 +643,40 @@ combat_unit_type_main_battle_tank = {
 		# Total cost: 10000.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 200
-        unit_defense_add = 200
-        unit_morale_loss_add = 4
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.15
-        unit_devastation_mult = 0.4
-    }
+	battle_modifier = {
+		unit_offense_add = 200
+		unit_defense_add = 200
+		unit_morale_loss_add = 4
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.15
+		unit_devastation_mult = 0.4
+	}
 
 	unlocking_technologies = { guided_missiles }  # era 7
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/main_battle_tanks.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/main_battle_tanks.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_reactive_armor_tank
-        combat_unit_type_railgun_tank
-        combat_unit_type_DEW_tank
-    }
+	upgrades = {
+		combat_unit_type_reactive_armor_tank
+		combat_unit_type_railgun_tank
+		combat_unit_type_DEW_tank
+	}
 }
 
 combat_unit_type_reactive_armor_tank = {
-    group = combat_unit_group_tanks
-    max_manpower = 1000
+	group = combat_unit_group_tanks
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 80                            # Price:  120, Total cost:  9600.0 (55.81%)
 		goods_input_artillery_add = 26                        # Price:   70, Total cost:  1820.0 (10.58%)
 		goods_input_radios_add = 20                           # Price:   80, Total cost:  1600.0 (9.30%)
@@ -686,39 +686,39 @@ combat_unit_type_reactive_armor_tank = {
 		# Total cost: 17200.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 320
-        unit_defense_add = 320
-        unit_morale_loss_add = 4
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.15
-        unit_devastation_mult = 0.8
-    }
+	battle_modifier = {
+		unit_offense_add = 320
+		unit_defense_add = 320
+		unit_morale_loss_add = 4
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.15
+		unit_devastation_mult = 0.8
+	}
 
 	unlocking_technologies = { advanced_materials_armor }  # era 8
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/modern_MBT.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/modern_MBT.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_railgun_tank
-        combat_unit_type_DEW_tank
-    }
+	upgrades = {
+		combat_unit_type_railgun_tank
+		combat_unit_type_DEW_tank
+	}
 }
 
 combat_unit_type_railgun_tank = {
-    group = combat_unit_group_tanks
-    max_manpower = 1000
+	group = combat_unit_group_tanks
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 214                           # Price:  120, Total cost: 25680.0 (52.88%)
 		goods_input_artillery_add = 64                        # Price:   70, Total cost:  4480.0 (9.23%)
 		goods_input_radios_add = 40                           # Price:   80, Total cost:  3200.0 (6.59%)
@@ -729,38 +729,38 @@ combat_unit_type_railgun_tank = {
 		# Total cost: 48560.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 1000
-        unit_defense_add = 1000
-        unit_morale_loss_add = 4
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.15
-        unit_devastation_mult = 2
-    }
+	battle_modifier = {
+		unit_offense_add = 1000
+		unit_defense_add = 1000
+		unit_morale_loss_add = 4
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.15
+		unit_devastation_mult = 2
+	}
 
 	unlocking_technologies = { hypersonic_weapons }  # era 10
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/railgun_tank.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/railgun_tank.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_DEW_tank
-    }
+	upgrades = {
+		combat_unit_type_DEW_tank
+	}
 }
 
 combat_unit_type_DEW_tank = { #directed energy weapon tank
-    group = combat_unit_group_tanks
-    max_manpower = 1000
+	group = combat_unit_group_tanks
+	max_manpower = 1000
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_tanks_add = 300                           # Price:  120, Total cost: 36000.0 (39.13%)
 		goods_input_artillery_add = 100                       # Price:   70, Total cost:  7000.0 (7.61%)
 		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (6.96%)
@@ -772,35 +772,35 @@ combat_unit_type_DEW_tank = { #directed energy weapon tank
 		# Total cost: 92000.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 2000
-        unit_defense_add = 2000
-        unit_morale_loss_add = 4
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.15
-        unit_devastation_mult = 4
-    }
+	battle_modifier = {
+		unit_offense_add = 1610
+		unit_defense_add = 1610
+		unit_morale_loss_add = 4
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.15
+		unit_devastation_mult = 4
+	}
 
 	unlocking_technologies = { compact_fusion_reactors }  # era 11
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/DEW_tank.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/DEW_tank.dds"
+	}
 }
 
 ### Aircraft
 combat_unit_type_bomber_aircraft = {
-    group = combat_unit_group_aircraft
-    max_manpower = 200
+	group = combat_unit_group_aircraft
+	max_manpower = 200
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (23.81%)
 		goods_input_aeroplanes_add = 30                       # Price:  160, Total cost:  4800.0 (57.14%)
 		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (9.52%)
@@ -808,41 +808,41 @@ combat_unit_type_bomber_aircraft = {
 		# Total cost: 8400.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 300
-        unit_defense_add = 200
-        unit_morale_loss_add = 12
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 0.5
-    }
+	battle_modifier = {
+		unit_offense_add = 500
+		unit_defense_add = 340
+		unit_morale_loss_add = 12
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.5
+		unit_devastation_mult = 0.5
+	}
 
 	unlocking_technologies = { bombing_aircraft }  # era 6
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/bomber.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/bomber.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_jet_powered_fighters
-        combat_unit_type_stealth_aircraft
-        combat_unit_type_orbital_tactical_vehicles
-        combat_unit_type_orbital_weapons_platforms
-    }
+	upgrades = {
+		combat_unit_type_jet_powered_fighters
+		combat_unit_type_stealth_aircraft
+		combat_unit_type_orbital_tactical_vehicles
+		combat_unit_type_orbital_weapons_platforms
+	}
 }
 
 combat_unit_type_jet_powered_fighters = {
-    group = combat_unit_group_aircraft
-    max_manpower = 200
+	group = combat_unit_group_aircraft
+	max_manpower = 200
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (13.51%)
 		goods_input_aeroplanes_add = 60                       # Price:  160, Total cost:  9600.0 (64.86%)
 		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (5.41%)
@@ -851,40 +851,40 @@ combat_unit_type_jet_powered_fighters = {
 		# Total cost: 14800.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 450
-        unit_defense_add = 300
-        unit_morale_loss_add = 12
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 1
-    }
+	battle_modifier = {
+		unit_offense_add = 890
+		unit_defense_add = 590
+		unit_morale_loss_add = 12
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.5
+		unit_devastation_mult = 1
+	}
 
 	unlocking_technologies = { jet_engine_technology }  # era 7
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/jet_bomber.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/jet_bomber.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_stealth_aircraft
-        combat_unit_type_orbital_tactical_vehicles
-        combat_unit_type_orbital_weapons_platforms
-    }
+	upgrades = {
+		combat_unit_type_stealth_aircraft
+		combat_unit_type_orbital_tactical_vehicles
+		combat_unit_type_orbital_weapons_platforms
+	}
 }
 
 combat_unit_type_stealth_aircraft = {
-    group = combat_unit_group_aircraft
-    max_manpower = 200
+	group = combat_unit_group_aircraft
+	max_manpower = 200
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_ammunition_add = 40                       # Price:   50, Total cost:  2000.0 (6.67%)
 		goods_input_aeroplanes_add = 125                      # Price:  160, Total cost: 20000.0 (66.67%)
 		goods_input_oil_add = 20                              # Price:   40, Total cost:   800.0 (2.67%)
@@ -893,39 +893,39 @@ combat_unit_type_stealth_aircraft = {
 		# Total cost: 30000.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 700
-        unit_defense_add = 450
-        unit_morale_loss_add = 12
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 2
-    }
+	battle_modifier = {
+		unit_offense_add = 1800
+		unit_defense_add = 1200
+		unit_morale_loss_add = 12
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.5
+		unit_devastation_mult = 2
+	}
 
 	unlocking_technologies = { stealth_technology }  # era 8
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/stealth_bomber.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/stealth_bomber.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_orbital_tactical_vehicles
-        combat_unit_type_orbital_weapons_platforms
-    }
+	upgrades = {
+		combat_unit_type_orbital_tactical_vehicles
+		combat_unit_type_orbital_weapons_platforms
+	}
 }
 
 combat_unit_type_orbital_tactical_vehicles = {
-    group = combat_unit_group_aircraft
-    max_manpower = 100
+	group = combat_unit_group_aircraft
+	max_manpower = 100
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_ammunition_add = 64                       # Price:   50, Total cost:  3200.0 (4.04%)
 		goods_input_aeroplanes_add = 240                      # Price:  160, Total cost: 38400.0 (48.48%)
 		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (8.08%)
@@ -935,38 +935,38 @@ combat_unit_type_orbital_tactical_vehicles = {
 		# Total cost: 79200.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 1400
-        unit_defense_add = 900
-        unit_morale_loss_add = 12
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 4
-    }
+	battle_modifier = {
+		unit_offense_add = 4750
+		unit_defense_add = 3170
+		unit_morale_loss_add = 12
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.5
+		unit_devastation_mult = 4
+	}
 
 	unlocking_technologies = { space_militarization }  # era 10
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/OTC.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/OTC.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_orbital_weapons_platforms
-    }
+	upgrades = {
+		combat_unit_type_orbital_weapons_platforms
+	}
 }
 
 combat_unit_type_orbital_weapons_platforms = {
-    group = combat_unit_group_aircraft
-    max_manpower = 10
+	group = combat_unit_group_aircraft
+	max_manpower = 100
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    
-    upkeep_modifier = {
+
+	upkeep_modifier = {
 		goods_input_ammunition_add = 64                       # Price:   50, Total cost:  3200.0 (2.30%)
 		goods_input_aeroplanes_add = 240                      # Price:  160, Total cost: 38400.0 (27.59%)
 		goods_input_radios_add = 80                           # Price:   80, Total cost:  6400.0 (4.60%)
@@ -977,20 +977,20 @@ combat_unit_type_orbital_weapons_platforms = {
 		# Total cost: 139200.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 2800
-        unit_defense_add = 1800
-        unit_morale_loss_add = 12
-        unit_kill_rate_add = 0.25
-        unit_morale_damage_mult = 0.5
-        unit_devastation_mult = 8
-    }
+	battle_modifier = {
+		unit_offense_add = 6680
+		unit_defense_add = 4456
+		unit_morale_loss_add = 12
+		unit_kill_rate_add = 0.25
+		unit_morale_damage_mult = 0.5
+		unit_devastation_mult = 8
+	}
 
 	unlocking_technologies = { orbital_weapon_platforms }  # era 11
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/OTC2.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/OTC2.dds"
+	}
 }
 
 
@@ -1005,41 +1005,41 @@ combat_unit_type_orbital_weapons_platforms = {
 
 ### Wire mod tiers into vanilla marine upgrade chains.
 INJECT:combat_unit_type_low_tier_marines = {
-    upgrades = {
-        combat_unit_type_combined_arms_marines
-        combat_unit_type_stealth_marines
-        combat_unit_type_networked_marines
-        combat_unit_type_bioenhanced_marines
-    }
+	upgrades = {
+		combat_unit_type_combined_arms_marines
+		combat_unit_type_stealth_marines
+		combat_unit_type_networked_marines
+		combat_unit_type_bioenhanced_marines
+	}
 }
 
 INJECT:combat_unit_type_mid_tier_marines = {
-    upgrades = {
-        combat_unit_type_combined_arms_marines
-        combat_unit_type_stealth_marines
-        combat_unit_type_networked_marines
-        combat_unit_type_bioenhanced_marines
-    }
+	upgrades = {
+		combat_unit_type_combined_arms_marines
+		combat_unit_type_stealth_marines
+		combat_unit_type_networked_marines
+		combat_unit_type_bioenhanced_marines
+	}
 }
 
 INJECT:combat_unit_type_high_tier_marines = {
-    upgrades = {
-        combat_unit_type_combined_arms_marines
-        combat_unit_type_stealth_marines
-        combat_unit_type_networked_marines
-        combat_unit_type_bioenhanced_marines
-    }
+	upgrades = {
+		combat_unit_type_combined_arms_marines
+		combat_unit_type_stealth_marines
+		combat_unit_type_networked_marines
+		combat_unit_type_bioenhanced_marines
+	}
 }
 
 ### Combined Arms Marines — era 6 (combined_arms)
 combat_unit_type_combined_arms_marines = {
-    group = combat_unit_group_marines
-    max_manpower = 1000
-    supply_capacity = 35
+	group = combat_unit_group_marines
+	max_manpower = 1000
+	supply_capacity = 35
 
-    conscript_peasant_levies = yes
+	conscript_peasant_levies = yes
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 4                        # Price:   60, Total cost:   240.0 (26.09%)
 		goods_input_ammunition_add = 4                        # Price:   50, Total cost:   200.0 (21.74%)
 		goods_input_tanks_add = 2                             # Price:  120, Total cost:   240.0 (26.09%)
@@ -1048,42 +1048,42 @@ combat_unit_type_combined_arms_marines = {
 		# Total cost: 920.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 45
-        unit_defense_add = 75
-        unit_morale_loss_add = 6
-        unit_devastation_mult = 0.15
-        unit_provinces_lost_mult = -0.25
-        # no naval invasion efficiency loss (implicit via combat_unit_group_marines)
-    }
+	battle_modifier = {
+		unit_offense_add = 35
+		unit_defense_add = 55
+		unit_morale_loss_add = 6
+		unit_devastation_mult = 0.15
+		unit_provinces_lost_mult = -0.25
+		# no naval invasion efficiency loss (implicit via combat_unit_group_marines)
+	}
 
-    unlocking_technologies = { combined_arms }  # era 6
+	unlocking_technologies = { combined_arms }  # era 6
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/combined_arms.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/combined_arms.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_stealth_marines
-        combat_unit_type_networked_marines
-        combat_unit_type_bioenhanced_marines
-    }
+	upgrades = {
+		combat_unit_type_stealth_marines
+		combat_unit_type_networked_marines
+		combat_unit_type_bioenhanced_marines
+	}
 }
 
 ### Stealth Marines — era 8 (stealth_technology)
 ### Special-forces tier: low signature, high lethality vs static defenses.
 combat_unit_type_stealth_marines = {
-    group = combat_unit_group_marines
-    max_manpower = 500
-    supply_capacity = 55
+	group = combat_unit_group_marines
+	max_manpower = 800
+	supply_capacity = 55
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 6                        # Price:   60, Total cost:   360.0 (19.89%)
 		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (13.81%)
 		goods_input_radios_add = 8                            # Price:   80, Total cost:   640.0 (35.36%)
@@ -1092,42 +1092,42 @@ combat_unit_type_stealth_marines = {
 		# Total cost: 1810.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 80
-        unit_defense_add = 200
-        unit_morale_loss_add = 4
-        unit_devastation_mult = 0.4
-        unit_provinces_lost_mult = -0.3
-        unit_morale_damage_mult = 0.25
-    }
+	battle_modifier = {
+		unit_offense_add = 55
+		unit_defense_add = 135
+		unit_morale_loss_add = 4
+		unit_devastation_mult = 0.4
+		unit_provinces_lost_mult = -0.3
+		unit_morale_damage_mult = 0.25
+	}
 
-    unlocking_technologies = { stealth_technology }  # era 8
+	unlocking_technologies = { stealth_technology }  # era 8
 
-    combat_unit_image = {
-        # Mod has no dedicated stealth-soldier illustration; reuse vanilla high-tier marines.
-        texture = "gfx/unit_illustrations/marines_eu_high.dds"
-    }
+	combat_unit_image = {
+		# Mod has no dedicated stealth-soldier illustration; reuse vanilla high-tier marines.
+		texture = "gfx/unit_illustrations/marines_eu_high.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_networked_marines
-        combat_unit_type_bioenhanced_marines
-    }
+	upgrades = {
+		combat_unit_type_networked_marines
+		combat_unit_type_bioenhanced_marines
+	}
 }
 
 ### Networked Marines — era 10 (jadc2)
 ### Marine fireteams operating with battlefield drones, real-time C2, and exoskeleton support.
 combat_unit_type_networked_marines = {
-    group = combat_unit_group_marines
-    max_manpower = 500
-    supply_capacity = 70
+	group = combat_unit_group_marines
+	max_manpower = 600
+	supply_capacity = 70
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 10                       # Price:   60, Total cost:   600.0 (12.20%)
 		goods_input_ammunition_add = 8                        # Price:   50, Total cost:   400.0 (8.13%)
 		goods_input_tanks_add = 6                             # Price:  120, Total cost:   720.0 (14.63%)
@@ -1137,42 +1137,42 @@ combat_unit_type_networked_marines = {
 		# Total cost: 4920.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 90
-        unit_defense_add = 260
-        unit_morale_loss_add = 2
-        unit_devastation_mult = 0.7
-        unit_provinces_lost_mult = -0.3
-        unit_morale_damage_mult = 0.3
-        unit_kill_rate_add = 0.15
-    }
+	battle_modifier = {
+		unit_offense_add = 160
+		unit_defense_add = 455
+		unit_morale_loss_add = 2
+		unit_devastation_mult = 0.7
+		unit_provinces_lost_mult = -0.3
+		unit_morale_damage_mult = 0.3
+		unit_kill_rate_add = 0.15
+	}
 
-    unlocking_technologies = { jadc2 }  # era 10
+	unlocking_technologies = { jadc2 }  # era 10
 
-    combat_unit_image = {
-        texture = "gfx/unit_illustrations/robotic.dds"
-    }
+	combat_unit_image = {
+		texture = "gfx/unit_illustrations/robotic.dds"
+	}
 
-    upgrades = {
-        combat_unit_type_bioenhanced_marines
-    }
+	upgrades = {
+		combat_unit_type_bioenhanced_marines
+	}
 }
 
 ### Bioenhanced Marines — era 11 (bioenhanced_soldiers)
 ### Gene-modified, pharmacologically-augmented operators. Small elite detachments
 ### with combat output rivaling much larger conventional formations.
 combat_unit_type_bioenhanced_marines = {
-    group = combat_unit_group_marines
-    max_manpower = 200
-    supply_capacity = 100
+	group = combat_unit_group_marines
+	max_manpower = 500
+	supply_capacity = 100
 
-    can_build = {
-        NOT = {
-            has_law = law_type:law_peasant_levies
-        }
-    }
+	can_build = {
+		NOT = {
+			has_law = law_type:law_peasant_levies
+		}
+	}
 
-    upkeep_modifier = {
+	upkeep_modifier = {
 		goods_input_small_arms_add = 20                       # Price:   60, Total cost:  1200.0 (13.33%)
 		goods_input_ammunition_add = 20                       # Price:   50, Total cost:  1000.0 (11.11%)
 		goods_input_radios_add = 20                           # Price:   80, Total cost:  1600.0 (17.78%)
@@ -1181,23 +1181,23 @@ combat_unit_type_bioenhanced_marines = {
 		# Total cost: 9000.0
 	}
 
-    battle_modifier = {
-        unit_offense_add = 180
-        unit_defense_add = 525
-        unit_morale_loss_add = 2
-        unit_devastation_mult = 1.2
-        unit_provinces_lost_mult = -0.4
-        unit_morale_damage_mult = 0.5
-        unit_kill_rate_add = 0.25
-    }
+	battle_modifier = {
+		unit_offense_add = 300
+		unit_defense_add = 870
+		unit_morale_loss_add = 2
+		unit_devastation_mult = 1.2
+		unit_provinces_lost_mult = -0.4
+		unit_morale_damage_mult = 0.5
+		unit_kill_rate_add = 0.25
+	}
 
-    unlocking_technologies = { bioenhanced_soldiers }  # era 11
+	unlocking_technologies = { bioenhanced_soldiers }  # era 11
 
-    combat_unit_image = {
-        # No mod-specific bioenhanced-soldier illustration; use vanilla high-tier marine silhouette
-        # (clean human-marine image fits the enhanced-humans theme better than a drone swarm).
-        texture = "gfx/unit_illustrations/marines_eu_high.dds"
-    }
+	combat_unit_image = {
+		# No mod-specific bioenhanced-soldier illustration; use vanilla high-tier marine silhouette
+		# (clean human-marine image fits the enhanced-humans theme better than a drone swarm).
+		texture = "gfx/unit_illustrations/marines_eu_high.dds"
+	}
 }
 
 

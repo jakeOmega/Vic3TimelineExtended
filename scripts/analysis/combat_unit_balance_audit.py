@@ -3,8 +3,15 @@
 
 Walks common/combat_unit_types/extra_combat_units.txt, extracts each unit's
 offense, defense, max_manpower, total upkeep cost (from auto-generated
-comments), and unlocking tech. Computes power-to-cost ratios within era to
-surface outliers.
+comments), and unlocking tech. Computes:
+
+- `power` = unit_offense_add + unit_defense_add (raw stat sum, manpower-blind)
+- `eff_pwr` = (off+def)/2 × max_manpower/1000 (effective per-battalion combat
+  contribution; this is vanilla's POWER_PROJECTION formula and roughly tracks
+  battalion-selection-weight × per-tick casualty exchange)
+- `ptc` = power × manpower / (upkeep × 1000), i.e. eff_pwr × 2 / upkeep — a
+  cost-effectiveness metric (combat output per unit upkeep). NOTE: this is NOT
+  per-1000-men efficiency; the manpower term is already in the numerator.
 
 Usage:
     .venv/bin/python scripts/analysis/combat_unit_balance_audit.py
@@ -148,9 +155,15 @@ def main() -> int:
 
         offense = battle.get("unit_offense_add", 0)
         defense = battle.get("unit_defense_add", 0)
-        power = offense + defense  # rough scalar; ignore other axes
+        power = offense + defense  # raw stat sum, manpower-blind
+        # Effective per-battalion combat contribution (vanilla POWER_PROJECTION
+        # formula: (off+def)/2 × manpower/1000). Two units with identical raw
+        # stats but different max_manpower deliver effective power in proportion
+        # to their manpower — this is what battles actually exchange.
+        eff_pwr = (power / 2) * (manpower / 1000) if manpower else None
 
-        # Power-to-cost ratio (per-cost-per-manpower view)
+        # Cost-effectiveness: combat output per unit upkeep.
+        # ptc = power × manpower / (upkeep × 1000) = eff_pwr × 2 / upkeep.
         if upkeep_total and upkeep_total > 0 and manpower:
             cost_per_man = upkeep_total / manpower * 1000  # per 1k men
             ptc = power / cost_per_man if cost_per_man > 0 else None
@@ -166,6 +179,7 @@ def main() -> int:
             "offense": offense,
             "defense": defense,
             "power": power,
+            "eff_pwr": eff_pwr,
             "max_manpower": manpower,
             "upkeep_total": upkeep_total,
             "cost_per_1k": cost_per_man,
@@ -189,9 +203,10 @@ def main() -> int:
         for r in erows:
             ptc = f"{r['ptc']:.2f}" if r['ptc'] is not None else "—"
             cost = f"{r['cost_per_1k']:.0f}" if r['cost_per_1k'] is not None else "—"
+            eff = f"{r['eff_pwr']:.0f}" if r['eff_pwr'] is not None else "—"
             mp = r['max_manpower'] or "?"
             print(f"  {r['id']:<60s} ofs={r['offense']:>5g} def={r['defense']:>5g} "
-                  f"mp={mp:>5} cost/1k={cost:>6} ptc={ptc}")
+                  f"mp={mp:>5} eff_pwr={eff:>5} cost/1k={cost:>6} ptc={ptc}")
         print()
 
     # Per-group power progression
@@ -204,19 +219,22 @@ def main() -> int:
         print(f"### {grp}")
         for r in grows:
             ptc = f"{r['ptc']:.2f}" if r['ptc'] is not None else "—"
-            print(f"  {r['era']:<7} {r['id']:<55s} pwr={r['power']:>5g} ptc={ptc}")
+            eff = f"{r['eff_pwr']:.0f}" if r['eff_pwr'] is not None else "—"
+            print(f"  {r['era']:<7} {r['id']:<55s} pwr={r['power']:>5g} "
+                  f"eff_pwr={eff:>5} ptc={ptc}")
         print()
 
     # Outlier flags
     print("\n## Outlier table\n")
-    print("| unit | era | group | ofs+def | upkeep_total | cost/1k | power_per_cost1k |")
-    print("|---|---|---|---|---|---|---|")
+    print("| unit | era | group | ofs+def | mp | eff_pwr | upkeep | ptc |")
+    print("|---|---|---|---|---|---|---|---|")
     for r in sorted(rows, key=lambda r: (era_key(r["era"]), r["group"] or "", -r["power"])):
         ptc = f"{r['ptc']:.2f}" if r['ptc'] is not None else "—"
-        cost = f"{r['cost_per_1k']:.0f}" if r['cost_per_1k'] is not None else "—"
+        eff = f"{r['eff_pwr']:.0f}" if r['eff_pwr'] is not None else "—"
         upk = f"{r['upkeep_total']:.0f}" if r['upkeep_total'] is not None else "—"
+        mp = r['max_manpower'] or "?"
         print(f"| `{r['id']}` | {r['era']} | {r['group']} | "
-              f"{r['power']:.0f} | {upk} | {cost} | {ptc} |")
+              f"{r['power']:.0f} | {mp} | {eff} | {upk} | {ptc} |")
 
     return 0
 

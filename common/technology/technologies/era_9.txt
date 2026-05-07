@@ -3,16 +3,16 @@
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		computer_aided_design
 		personal_computers
 	}
-	
+
 	modifier = {
 		building_group_bg_mining_throughput_add = 0.1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -23,16 +23,16 @@ cloud_computing = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		wireless_internet
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_intelligence_capacity_add = 3
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -48,12 +48,12 @@ biotechnology = {
 		state_arable_land_mult = 0.2
 		country_institution_ministry_of_science_max_investment_add = 1
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		gene_splicing
 		computer_networks
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -64,16 +64,16 @@ early_nanotechnology = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		computer_networks
 		computer_aided_design
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -81,17 +81,17 @@ early_nanotechnology = {
 
 world_wide_web = {
 	# Internet Communications PM for Government Administration, Web 1.0 PM for Software Industries,
-	# Distributed Control Systems PM for chemical/synthetics industries, 
+	# Distributed Control Systems PM for chemical/synthetics industries,
 	# Unregulated Internet, State-Controlled Internet, and Net Neutrality laws
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		fiber_optics
 		computer_networks
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_labor_max_investment_add = 1
@@ -101,31 +101,31 @@ world_wide_web = {
 		country_intelligence_capacity_add = 2
 		country_www_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
 }
 
 digital_telecommunications = {
-	# Remote Work PM for Urban Centers, Automated Trading PM for Financial Districts/Companies, 
+	# Remote Work PM for Urban Centers, Automated Trading PM for Financial Districts/Companies,
 	# Maglev Trains PM for Railways
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		fiber_optics
 		cellular_networks
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.05
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -138,8 +138,8 @@ clean_energy_technologies = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		personal_computers
 	}
 
@@ -148,7 +148,7 @@ clean_energy_technologies = {
 		country_clean_energy_pb_principles_bool = yes
 		country_clean_energy_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -160,12 +160,12 @@ supply_chain_management = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		computer_networks
 		advanced_assembly_lines
 	}
-	
+
 	modifier = {
 		state_building_highway_max_level_add = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
@@ -173,7 +173,7 @@ supply_chain_management = {
 		country_st_res_oil_decay_add = -0.001
 		country_supply_chain_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -184,8 +184,8 @@ e-commerce = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		world_wide_web
 		supply_chain_management
 	}
@@ -196,8 +196,9 @@ e-commerce = {
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_institution_ministry_of_labor_max_investment_add = 1
+		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -208,8 +209,8 @@ wireless_internet = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		world_wide_web
 		personal_computers
 	}
@@ -219,7 +220,7 @@ wireless_internet = {
 		state_migration_crowding_density_mult = 0.15
 		country_space_race_max_funding_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -229,8 +230,8 @@ unmanned_aerial_vehicles = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		supersonic_aircraft
 	}
 
@@ -243,7 +244,7 @@ unmanned_aerial_vehicles = {
 		character_battle_condition_aggressive_maneuver_mult = 0.25
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -253,8 +254,8 @@ military_grade_cybersecurity = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		cryptography
 	}
 
@@ -292,12 +293,12 @@ network_centric_warfare = {
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		military_grade_cybersecurity
 		satellite_communications
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -308,8 +309,8 @@ missile_defense_systems = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		guided_missiles
 	}
 
@@ -319,7 +320,7 @@ missile_defense_systems = {
 		country_missile_defense_pb_principles_bool = yes
 		country_missile_defense_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -330,11 +331,11 @@ automated_surveillance = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		military_grade_cybersecurity
 	}
-	
+
 	modifier = {
 		country_institution_home_affairs_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
@@ -342,7 +343,7 @@ automated_surveillance = {
 		country_auto_surveillance_pb_principles_bool = yes
 		character_coup_strength_mult = -0.10
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -353,15 +354,15 @@ advanced_body_armor = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
-		semiautomatic_rifle
+
+	unlocking_technologies = {
+		advanced_materials_armor
 	}
 
 	modifier = {
 		country_institution_ministry_of_war_max_investment_add = 1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -373,8 +374,8 @@ rapid_deployment_forces = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		satellite_communications
 	}
 
@@ -388,7 +389,7 @@ rapid_deployment_forces = {
 		character_battle_condition_rapid_advance_mult = 1.0
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -400,11 +401,11 @@ globalization = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		containerization
 	}
-	
+
 	modifier = {
 		country_economic_dependence_leverage_gain_mult = 0.5
 		state_market_access_price_impact = 0.01
@@ -413,10 +414,11 @@ globalization = {
 		country_leverage_threshold_change_add = -50
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
+		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_globalization_pb_principles_bool = yes
 		country_globalization_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 5 # This is a very important technology
 	}
@@ -427,17 +429,14 @@ social_media = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		pop_culture
 	}
-	
+
 	modifier = {
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
-		country_institution_ministry_of_international_aid_max_investment_add = 1
-		country_institution_ministry_of_religion_max_investment_add = 1
 		country_institution_ministry_of_propaganda_max_investment_add = 1
-		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_social_media_pb_principles_bool = yes
 		state_homeland_change_speed_mult = 0.15
 		# Social media → everyone compares to the whole population, not their class
@@ -448,7 +447,7 @@ social_media = {
 		country_intelligence_capacity_add = 2
 		country_social_media_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -459,12 +458,12 @@ virtual_reality = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		social_media
 		knowledge_economy
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -477,12 +476,12 @@ knowledge_economy = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		decolonization
 		pop_culture
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_institution_national_bank_max_investment_add = 1
@@ -490,7 +489,7 @@ knowledge_economy = {
 		country_space_race_max_funding_add = 1
 		country_knowledge_economy_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -508,11 +507,11 @@ digital_entertainment = {
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 	}
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		video_games
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -522,11 +521,11 @@ digital_education = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		knowledge_economy
 	}
-	
+
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		state_bureaucracy_population_base_cost_factor_mult = 1
@@ -535,7 +534,7 @@ digital_education = {
 		country_digital_ed_pb_principles_bool = yes
 		country_digital_ed_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -545,11 +544,11 @@ social_justice_movements = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		social_media
 	}
-	
+
 	modifier = {
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_international_aid_max_investment_add = 1
@@ -562,7 +561,7 @@ social_justice_movements = {
 		# Homeland system: protects minority homelands
 		state_homeland_change_speed_mult = -0.15
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -573,17 +572,17 @@ terrorism_and_anti_terrorism = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		pop_culture
 		anti_war_movement
 	}
-	
+
 	modifier = {
 		country_influence_mult = 0.1
 		state_building_barrack_max_level_add = 50
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -594,16 +593,16 @@ LGBTQ_rights_movement = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		sexual_revolution
 		civil_rights_movement
 	}
-	
+
 	modifier = {
 		state_dependent_wage_mult = 0.1
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -614,12 +613,12 @@ cybersecurity = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		knowledge_economy
 		terrorism_and_anti_terrorism
 	}
-	
+
 	modifier = {
 		building_network_infrastructure_throughput_add = 0.1
 		country_institution_home_affairs_max_investment_add = 1
@@ -627,7 +626,7 @@ cybersecurity = {
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.05
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -638,8 +637,8 @@ advanced_workflow_optimization = {
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		knowledge_economy
 		globalization
 	}
@@ -650,7 +649,7 @@ advanced_workflow_optimization = {
 		country_st_res_oil_decay_add = -0.001
 		country_workflow_opt_pb_principles_bool = yes
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}

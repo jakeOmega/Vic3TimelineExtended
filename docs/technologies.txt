@@ -694,7 +694,7 @@
 	Decolonization - The dismantling of colonial empires has led to the birth of new nations and a redrawing of the world map. A messy but necessary process of change.
 		Unlocking Technologies:
 			Intergovernmental Organizations
-7: 25 technologies
+7: 27 technologies
 	Transistor Technology - The transistor is the tiny switch that makes all of our modern electronics possible. Its invention has led to a revolution in computing and communication, changing the world in countless ways.
 		Unlocking Technologies:
 			Modern Tools
@@ -738,6 +738,12 @@
 	Mainframe Computers - These large, powerful computers are the workhorses of big business and government. They're reliable and can handle massive amounts of data, making them essential for large-scale operations.
 		Unlocking Technologies:
 			Transistor Technology
+	Integrated Circuits - By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.
+		Unlocking Technologies:
+			Transistor Technology
+	Prefabricated Construction - Standardized prefab building components - concrete panels, steel-frame modules, modular bathroom pods - slash construction time for housing, hospitals, and military bases. Postwar reconstruction speed defines the era.
+		Unlocking Technologies:
+			Modern Skyscrapers
 	Photocopiers - The ability to quickly and easily make copies of documents has streamlined office work and improved productivity. It's a simple but essential tool in the modern workplace.
 		Unlocking Technologies:
 			Transistor Technology
@@ -780,7 +786,7 @@
 	Modern Urban Planning - By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.
 		Unlocking Technologies:
 			Art Deco Architecture
-8: 24 technologies
+8: 23 technologies
 	Satellite Communications - Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.
 		Unlocking Technologies:
 			Space Exploration
@@ -792,15 +798,9 @@
 		Unlocking Technologies:
 			Satellite Communications
 			Guided Missiles
-	Integrated Circuits - By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.
-		Unlocking Technologies:
-			Transistor Technology
-			Television
-			Stainless Steel Mass Production
 	Advanced Assembly Lines - Further refining the assembly line with modular components and just-in-time production makes our factories even more efficient. We can now produce a wider variety of goods at lower costs, which is good for the economy, I suppose.
 		Unlocking Technologies:
 			Transistor Technology
-			Modern Skyscrapers
 	Modern Pharmaceuticals - With new drugs and vaccines, we've made huge strides in public health. People are living longer, healthier lives, all thanks to the miracles of modern medicine.
 		Unlocking Technologies:
 			Antibiotic Mass Production
@@ -810,7 +810,7 @@
 	Fiber Optics - By sending data as pulses of light through thin glass strands, we can have faster and more efficient communication networks. It's the backbone of our modern digital world.
 		Unlocking Technologies:
 			Computer-Aided Design
-			Isoprene
+			Plastic Mass Production
 	Computer Networks - By connecting computers together, we can share data and resources. This simple idea laid the groundwork for the modern internet and all that comes with it.
 		Unlocking Technologies:
 			Mainframe Computers
@@ -863,11 +863,9 @@
 			Nuclear Energy
 	Video Games - Video games have become a massive new form of entertainment and art. They've had a huge influence on popular culture, and they're only getting more immersive and complex.
 		Unlocking Technologies:
-			Art Deco Architecture
 			Television Broadcasting
 	Pop Culture - From music and movies to fashion and fads, pop culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
 		Unlocking Technologies:
-			Art Deco Architecture
 			Television Broadcasting
 9: 28 technologies
 	Hydraulic Fracturing - A controversial but effective way to extract natural gas and oil from underground. It's a boon for the energy industry, but not so much for the environment.
@@ -926,7 +924,7 @@
 			Military-Grade Cybersecurity
 	Advanced Body Armor - With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat.
 		Unlocking Technologies:
-			Semi-Automatic Rifle
+			Advanced Materials Armor
 	Rapid Deployment Forces - Highly trained and specialized units that can be sent anywhere in the world at a moment's notice. They give us a flexible and effective way to respond to crises.
 		Unlocking Technologies:
 			Satellite Communications
@@ -969,7 +967,7 @@
 		Unlocking Technologies:
 			Knowledge Economy
 			Globalization
-10: 14 technologies
+10: 17 technologies
 	Machine Learning - We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful.
 		Unlocking Technologies:
 			Cloud Computing
@@ -980,9 +978,20 @@
 	Additive Manufacturing - Also known as 3D printing, this process builds objects layer-by-layer. Now we can create complex and customized items on demand, transforming everything from healthcare to making trinkets for the home.
 		Unlocking Technologies:
 			Industrial Robotics
+			Supply Chain Management
 	Advanced Structural Engineering - By combining high-strength composites, new welding techniques, and tougher concrete, we can build things that are lighter, stronger, and last longer. A boon for all industries, really.
 		Unlocking Technologies:
 			Industrial Robotics
+	Electric Vehicles - Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.
+		Unlocking Technologies:
+			Clean Energy Technologies
+	Internet of Things - Embedded sensors and connected devices weave a digital layer over physical infrastructure, generating continuous telemetry on factories, farms, transport, and homes.
+		Unlocking Technologies:
+			Wireless Internet (Wi-Fi)
+			Cloud Computing
+	mRNA Therapeutics - Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.
+		Unlocking Technologies:
+			Modern Pharmaceuticals
 	Reusable Rocketry - By making our rockets reusable, we can dramatically reduce the cost of space travel. This could open up a new era of exploration and commercial activity in space.
 		Unlocking Technologies:
 			Satellite Communications
@@ -993,6 +1002,7 @@
 	Directed Energy Defenses - By using high-energy lasers, we can now shoot down incoming missiles and drones. It's a futuristic way to defend ourselves, and it looks impressive too.
 		Unlocking Technologies:
 			Stealth Technology
+			Missile Defense Systems
 	Joint All-Domain Command and Control (JADC2) - A military concept that aims to connect all of our forces across every domain. It's designed to improve our situational awareness and decision-making, making us a more effective fighting force.
 		Unlocking Technologies:
 			Network Centric Warfare
@@ -1000,6 +1010,7 @@
 	Cyber Warfare - As our world becomes more digital, so does warfare. We're now developing the tools to attack and defend in cyberspace, a new and invisible battlefield.
 		Unlocking Technologies:
 			Network Centric Warfare
+			Automated Surveillance
 	Electronic Warfare - By disrupting enemy communications and radar, we can gain a significant advantage in battle. Electronic warfare is a new and subtle way to fight.
 		Unlocking Technologies:
 			Network Centric Warfare
@@ -1008,10 +1019,12 @@
 			Globalization
 			Digital Education
 			Social Media
+			LGBTQ+ Rights Movement
 	Telemedicine - By delivering healthcare services remotely, we can improve access to care for people in underserved areas. It's a more efficient way to use our medical resources, and it's becoming more common all the time.
 		Unlocking Technologies:
 			Globalization
 			Modern Pharmaceuticals
+			Virtual Reality
 	Universal Basic Income - The idea of giving everyone a basic income is gaining traction as a way to address economic inequality and automation. It's a bold idea, but one that could reshape our society for the better.
 		Unlocking Technologies:
 			Digital Education
@@ -1020,7 +1033,8 @@
 		Unlocking Technologies:
 			Modern Pharmaceuticals
 			Social Media
-11: 19 technologies
+			Digital Entertainment
+11: 20 technologies
 	Modern Material Science - From graphene to metamaterials, we're creating new substances with unique properties. These advanced materials are set to revolutionize everything from electronics to aerospace.
 		Unlocking Technologies:
 			Early Nanotechnology
@@ -1037,9 +1051,11 @@
 	Smart Grids - By incorporating advanced technology into our electrical grids, we can make them more efficient, reliable, and sustainable. It's a smarter way to manage our power.
 		Unlocking Technologies:
 			Clean Energy Technologies
+			Internet of Things
 	Autonomous Vehicles - Vehicles that can drive themselves are no longer a fantasy. They could revolutionize transportation, make our roads safer, and perhaps even put an end to traffic jams.
 		Unlocking Technologies:
 			Machine Learning
+			Electric Vehicles
 	Genetic Engineering - By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.
 		Unlocking Technologies:
 			Biotechnology
@@ -1080,9 +1096,14 @@
 	Personalized Medicine - By tailoring medical treatments to individual patients, we can make them more effective. It's a new approach to healthcare that takes into account our unique genetic and lifestyle factors.
 		Unlocking Technologies:
 			Telemedicine
+			mRNA Therapeutics
 	Lab-Grown Food - We can now grow food in a lab, from cultured meat to other synthetic products. It could be a more sustainable and ethical way to feed the world, if people are willing to eat it.
 		Unlocking Technologies:
 			Globalization
+	Universal Digital Identity - State-issued digital identity becomes the substrate for voting, banking, healthcare, and movement. Privacy collapses into a binary: state-trusted or state-suspect.
+		Unlocking Technologies:
+			Cybersecurity
+			Social Media
 	Human Augmentation - From gene editing to neuroprosthetics, we're pushing the boundaries of what it means to be human. This raises all sorts of ethical questions about who gets to be augmented and what we're becoming.
 		Unlocking Technologies:
 			Brain-Computer Interfaces
