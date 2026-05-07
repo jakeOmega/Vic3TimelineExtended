@@ -102,6 +102,7 @@ enforce_privatization = {
 			# Only meaningful if the target actually has substantial state-owned economy
 			if = {
 				limit = {
+					exists = scope:other_country
 					scope:other_country = {
 						OR = {
 							has_law = law_type:law_cooperative_ownership
@@ -121,6 +122,7 @@ enforce_privatization = {
 			}
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.03

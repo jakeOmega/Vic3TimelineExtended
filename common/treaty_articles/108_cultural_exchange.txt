@@ -81,18 +81,21 @@ cultural_exchange_program = {
 			value = 0.08
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = cooperative }
 				}
 				add = 0.12
 			}
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = friendly }
 				}
 				add = 0.08
 			}
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = conciliatory }
 				}
 				add = 0.04
@@ -100,6 +103,7 @@ cultural_exchange_program = {
 			# Don't consider for hostile nations
 			if = {
 				limit = {
+					exists = scope:other_country
 					OR = {
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 						has_attitude = { who = scope:other_country attitude = hostile }

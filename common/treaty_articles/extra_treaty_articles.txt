@@ -54,12 +54,14 @@ request_influence = {
             }
             if = {
                 limit = {
+                    exists = scope:other_country
                     has_attitude = { who = scope:other_country attitude = cooperative }
                 }
                 add = 0.05
             }
             if = {
                 limit = {
+                    exists = scope:other_country
                     has_attitude = { who = scope:other_country attitude = conciliatory }
                 }
                 add = 0.025
@@ -903,7 +905,10 @@ suppress_subject_liberty = {
 		evaluation_chance = {
 			value = 0.1
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = domineering } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = domineering }
+				}
 				add = 0.15
 			}
 		}
@@ -1022,20 +1027,30 @@ nuclear_disarmament = {
 			value = 0
 			# Only consider demanding disarmament of hostile/rival countries
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = hostile } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = hostile }
+				}
 				add = 0.1
 			}
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = belligerent } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = belligerent }
+				}
 				add = 0.15
 			}
 			if = {
-				limit = { any_rival_country = { THIS = scope:other_country } }
+				limit = {
+					exists = scope:other_country
+					any_rival_country = { THIS = scope:other_country }
+				}
 				add = 0.25
 			}
 			# Never try to disarm allies or friendly nations
 			if = {
 				limit = {
+					exists = scope:other_country
 					OR = {
 						has_attitude = { who = scope:other_country attitude = genial }
 						has_attitude = { who = scope:other_country attitude = loyal }
@@ -1047,6 +1062,7 @@ nuclear_disarmament = {
 			# Don't try if we're in the same power bloc
 			if = {
 				limit = {
+					exists = scope:other_country
 					scope:other_country = {
 						is_in_same_power_bloc = root
 					}
@@ -1302,11 +1318,17 @@ nuclear_program_aid = {
 		evaluation_chance = {
 			value = 0.1
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = friendly }
+				}
 				add = 0.1
 			}
 			if = {
-				limit = { is_in_same_power_bloc = scope:other_country }
+				limit = {
+					exists = scope:other_country
+					is_in_same_power_bloc = scope:other_country
+				}
 				add = 0.15
 			}
 		}
@@ -1811,11 +1833,17 @@ join_united_nations = {
 		evaluation_chance = {
 			value = 0.1
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = friendly }
+				}
 				add = 0.1
 			}
 			if = {
-				limit = { is_in_same_power_bloc = scope:other_country }
+				limit = {
+					exists = scope:other_country
+					is_in_same_power_bloc = scope:other_country
+				}
 				add = 0.15
 			}
 		}
@@ -1967,25 +1995,38 @@ nuclear_program_pause = {
 			value = 0
 			# Consider for hostile/rival countries
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = hostile } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = hostile }
+				}
 				add = 0.15
 			}
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = belligerent } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = belligerent }
+				}
 				add = 0.2
 			}
 			if = {
-				limit = { any_rival_country = { THIS = scope:other_country } }
+				limit = {
+					exists = scope:other_country
+					any_rival_country = { THIS = scope:other_country }
+				}
 				add = 0.3
 			}
 			# More willing to ask for a pause than full disarmament
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = antagonistic } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = antagonistic }
+				}
 				add = 0.1
 			}
 			# Never try with allies
 			if = {
 				limit = {
+					exists = scope:other_country
 					OR = {
 						has_attitude = { who = scope:other_country attitude = genial }
 						has_attitude = { who = scope:other_country attitude = loyal }
@@ -1997,6 +2038,7 @@ nuclear_program_pause = {
 			# Don't try within same power bloc
 			if = {
 				limit = {
+					exists = scope:other_country
 					scope:other_country = {
 						is_in_same_power_bloc = root
 					}
@@ -2241,6 +2283,7 @@ population_transfer = {
 			# Consider if there's cultural tension
 			if = {
 				limit = {
+					exists = scope:other_country
 					OR = {
 						has_attitude = { who = scope:other_country attitude = hostile }
 						has_attitude = { who = scope:other_country attitude = belligerent }
@@ -2250,7 +2293,10 @@ population_transfer = {
 			}
 			# More likely after wars or with domineering attitude
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = domineering } }
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = domineering }
+				}
 				add = 0.08
 			}
 			# Ethno-nationalists want their people back
@@ -2269,6 +2315,7 @@ population_transfer = {
 			# Don't impose on friends
 			if = {
 				limit = {
+					exists = scope:other_country
 					OR = {
 						has_attitude = { who = scope:other_country attitude = friendly }
 						has_attitude = { who = scope:other_country attitude = cooperative }

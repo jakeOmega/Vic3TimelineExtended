@@ -131,6 +131,7 @@ religious_mission_rights = {
 			# Don't bother if same religion: no need for missionaries
 			if = {
 				limit = {
+					exists = scope:other_country
 					religion = scope:other_country.religion
 				}
 				add = -1.0
@@ -161,6 +162,7 @@ religious_mission_rights = {
 			}
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.1

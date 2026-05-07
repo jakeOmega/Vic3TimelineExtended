@@ -104,12 +104,14 @@ demilitarized_zone = {
 			value = 0.05
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = antagonistic }
 				}
 				add = 0.15
 			}
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.1
@@ -365,12 +367,14 @@ forced_disarmament = {
 			value = 0.05
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = antagonistic }
 				}
 				add = 0.15
 			}
 			if = {
 				limit = {
+					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.1
