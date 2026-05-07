@@ -1,4 +1,4 @@
-# nuclear_program_modifier_types.txt
+﻿# nuclear_program_modifier_types.txt
 #
 # Nuclear program / proliferation / disarmament toggles and progress knobs
 # consumed by the nuclear weapons system (events, scripted_effects, je hooks).

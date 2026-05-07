@@ -1,4 +1,4 @@
-# power_bloc_extra_modifier_types.txt
+﻿# power_bloc_extra_modifier_types.txt
 #
 # Mod-invented power-bloc capability flags (script_only booleans) gating bespoke
 # bloc actions: humanitarian/healthcare/security/science/education aid, crisis

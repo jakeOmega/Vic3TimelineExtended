@@ -1,4 +1,4 @@
-# space_race_modifier_types.txt
+﻿# space_race_modifier_types.txt
 #
 # Space race progress modifiers consumed by je_space_race and its scripted
 # progress bar. Funding ceiling, monthly progress add/mult (ambitious approach),

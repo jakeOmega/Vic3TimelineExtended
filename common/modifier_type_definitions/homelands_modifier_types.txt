@@ -1,4 +1,4 @@
-# homelands_modifier_types.txt
+﻿# homelands_modifier_types.txt
 #
 # Mod homeland-formation system: country-level enable flag plus per-state
 # creation/removal thresholds and change-speed multiplier. Consumed by the

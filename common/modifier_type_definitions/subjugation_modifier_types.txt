@@ -1,4 +1,4 @@
-# subjugation_modifier_types.txt
+﻿# subjugation_modifier_types.txt
 #
 # Country-level strength modifiers consumed by the subjugation diplomatic action
 # (script_value te_subjugation_strength). One universal knob plus six identity-

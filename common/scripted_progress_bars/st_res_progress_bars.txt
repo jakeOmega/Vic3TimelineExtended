@@ -1,4 +1,4 @@
-st_res_grain_fill_bar = {
+﻿st_res_grain_fill_bar = {
 	name = "st_res_grain_fill_bar_name"
 	desc = "st_res_grain_fill_bar_desc"
 

@@ -1,4 +1,4 @@
-# Construction-market subsystem.
+﻿# Construction-market subsystem.
 # Based on the third-party "Free Market Construction" mod. See README.md.
 
 # Construction-market on-action wiring.

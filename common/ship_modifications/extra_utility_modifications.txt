@@ -1,4 +1,4 @@
-# =============================================================================
+﻿# =============================================================================
 # Vic3TimelineExtended — modern ship utility wildcards (Phase D1)
 # =============================================================================
 # Utility modifications that mod-specific ship types can equip via the Ship

@@ -1,4 +1,4 @@
-# sol_expectations_modifier_types.txt
+﻿# sol_expectations_modifier_types.txt
 #
 # Standard-of-living expectations system: adaptive shift (with floor/ceiling),
 # per-strata offsets, target offset, and adaptation-rate multipliers. Consumed

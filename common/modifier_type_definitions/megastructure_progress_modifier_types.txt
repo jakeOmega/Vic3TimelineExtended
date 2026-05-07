@@ -1,4 +1,4 @@
-# megastructure_progress_modifier_types.txt
+﻿# megastructure_progress_modifier_types.txt
 #
 # Annual + total construction-progress trackers for the mod's late-game
 # megastructures (space elevator, solar collector, orbital battlestation,

@@ -1,4 +1,4 @@
-# Construction-market subsystem.
+﻿# Construction-market subsystem.
 # Based on the third-party "Free Market Construction" mod. See README.md.
 
 namespace = te_construction_market_pulse_events

@@ -1,4 +1,4 @@
-# global_warming_modifier_types.txt
+﻿# global_warming_modifier_types.txt
 #
 # Global warming and environmental policy modifiers: greenhouse-gas emissions
 # multiplier, state pollution generation, subsidy-required toggles for

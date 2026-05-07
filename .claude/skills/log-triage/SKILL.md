@@ -48,11 +48,55 @@ Useful `/logs/<family>` query params: `q=` (substring), `file=` (glob on referen
 ## Triage workflow
 
 1. Run the canonical command above.
-2. For each entry, decide **mod vs vanilla**:
+2. **Bulk-fix routine noise first.** Some categories are non-actionable per-entry but trivially fixable in bulk. Doing them up front shortens the actionable list and saves the next session from re-triaging the same noise. See "Bulk-fixable noise" below.
+3. For each remaining entry, decide **mod vs vanilla**:
    - Look at the path in `files`. If it doesn't exist under this repo, it's a vanilla file → record it in `docs/vanilla_known_bugs.md` if it's not already there, then skip.
    - If it does exist, it's a mod issue → fix it.
-3. Group mod entries by category and tackle each batch — cheaper to fix related entries together than ping-pong between unrelated bugs.
-4. After fixes: `POST /reload`, re-launch game, then `/logs/debug/diff?against=1` to confirm the fixed entries are gone.
+4. Group mod entries by category and tackle each batch — cheaper to fix related entries together than ping-pong between unrelated bugs.
+5. After fixes: `POST /reload`, re-launch game, then `/logs/debug/diff?against=1` to confirm the fixed entries are gone.
+
+## Bulk-fixable noise
+
+These produce a lot of triage entries that look like errors but are mechanical to fix in bulk. Fix them at the start of the session, before per-entry triage, so they don't crowd the actionable list.
+
+### Missing UTF-8 BOM (`should be in utf8-bom encoding`)
+
+The Clausewitz engine warns once per Paradox `.txt` that lacks the leading `\xef\xbb\xbf` byte sequence. Files still load (the warning literally says "will try to use it anyways"), but every missing-BOM file is one extra triage line forever.
+
+Fix in one pass:
+
+```bash
+python3 <<'EOF'
+import os
+BOM = b'\xef\xbb\xbf'
+fixed = []
+for r in ['common', 'events']:
+    for dp, _, files in os.walk(r):
+        for f in files:
+            if not f.endswith('.txt'):
+                continue
+            p = os.path.join(dp, f)
+            with open(p, 'rb') as fh:
+                data = fh.read()
+            if not data.startswith(BOM):
+                with open(p, 'wb') as fh:
+                    fh.write(BOM + data)
+                fixed.append(p)
+print(f'Prepended BOM to {len(fixed)} files')
+EOF
+```
+
+**Before doing the bulk write, check whether any of the files are auto-generated.** Per `CLAUDE.md` § "Don't hand-edit auto-generated files," the auto-gen list lives in `POST_LOAD_GENERATORS` in `mod_state_server.py` and the ownership map in `docs/auto_generated_files.md`. If a generator writes its outputs without BOM (e.g. `ig_feminism.py` previously used `encoding="utf-8"`), the next `POST /reload` regenerates them and the warning comes back. Fix the generator's write call to `encoding="utf-8-sig"` *first*, then run the bulk fix. **Restart the server (`pkill -f mod_state_server.py` then re-start)** after editing a generator — `/reload` doesn't pick up Python source changes.
+
+YAML/JSON/Python files use a different convention; only target `.txt` under Paradox-script roots. Don't write BOMs to `descriptor.mod`, `.metadata/`, or other files outside `common/` and `events/` without verifying they need one.
+
+### `dds_dimensions` warnings
+
+DDS textures whose width/height aren't multiples of 4 produce one warning per file. Fixing requires re-exporting the DDS through an image pipeline (BC1/BC3 block-compressed needs multiple-of-4 dimensions). Not bulk-fixable from text editing — leave them in the noise pile unless the user asks to re-export.
+
+### Vanilla `00_code_on_actions.txt:7362: <Phrase> Created`
+
+Intentional vanilla `debug_log = "..."` calls that fire every election/movement cycle. Always skip; they aren't fixable.
 
 ## Category playbook
 
@@ -67,6 +111,7 @@ Useful `/logs/<family>` query params: `q=` (substring), `file=` (glob on referen
 | `missing_file` | Asset (often `gfx/event_pictures/*.dds`) not found | Substitute thematically-similar existing asset, or remove the reference |
 | `missing_texture_for_entity` | Entity references a DDS that doesn't exist | Same |
 | `dds_dimensions` | DDS not a multiple of 4 | Visual-only warning; usually skip unless re-exporting |
+| `other` with `should be in utf8-bom encoding` | Mod `.txt` file lacks the leading `\xef\xbb\xbf` BOM | Bulk-fix at session start — see "Bulk-fixable noise" below |
 | `vfs_mount` | Filesystem/mount issue | Usually environmental, not a mod bug |
 | `gui_parse_error` / `gui_widget_error` | GUI script error | `docs/gui_modding_guide.md` |
 | `gamedatabase_other`, `localization`, `ai`, `other` | Fallback buckets | Case-by-case |
@@ -101,4 +146,5 @@ Workflow- and tooling-level lessons accrue here. Engine/scripting lessons go to 
 - 2026-05-05: **Use `?vanilla_bugs=hide` (or `=only` to inspect what's tagged) on every `/logs/*` call.** `docs/vanilla_known_bugs.md` is now a parsed registry — entries with `### \`path/to/file.txt[:line]\`` headings, an optional fenced code block whose lines become signature substrings, and a body whose backticked path references extend the heading's basenames. Multiple distinct error variants per bug should all go inside the same code block (`tag_vanilla_bugs` matches if ANY signature substring appears in the message, normalized for `:NNN` line refs). Avoid `<X>` placeholders in signatures — they're matched literally and won't hit real messages with quoted values. The `## Expected mod-override noise` section uses the same parser to register the `replace/*.yml` warnings as known by-design noise.
 - 2026-05-05: **For comprehensive vanilla-bug discovery, aggregate across all `error*.log` and `debug*.log` generations, not just current.log.** Bugs that only fire under specific conditions (certain country exists / specific JE active / particular UI panel open) often appear in older generations but not current. Pattern: `for path in sorted(glob.glob(os.path.join(game_logs_path, 'error*.log'))): if 'Manfred' not in path and 'pickle' not in path: all_entries.extend(parse_log(path))`. Then `tag_vanilla_bugs(...)` and group by basename — the high-volume basenames are the registration targets. Took error-log tagging from 22% → 86% in one session.
 - 2026-05-05: **`add_loyalists` and `add_radicals` share the same `*_radicals` script values.** Vanilla `event_values.txt` only defines `small_radicals = 0.02 / medium_radicals = 0.05 / large_radicals = 0.1`. There are NO `*_loyalists` script values — vanilla event code uses the radicals values for both effects (`acceptance_events.txt` calls `add_loyalists = { value = large_radicals }`). Mod usages of `value = small_loyalists` will silently fail (`Failed to find a valid event target link`) — replace with the matching `*_radicals` value, not a literal. Note: this triple-fires per occurrence — `Failed to find a valid event target link 'small_loyalists'` + `Badly read script value small_loyalists` + `add_loyalists effect [ The 'value' field must be set ]` — recognize as one bug, not three.
+- 2026-05-06: **A single `script_parse_error` typically chains downstream `inconsistent_effect_scope` / "Unknown trigger type" / "Unknown effect" entries in the same file.** The parser loses block boundaries after the first failure and mis-attributes valid sibling triggers/effects as unknown. Fix the upstream parse error first, then re-check — the cascade usually disappears on its own. Don't independently chase the downstream entries; they're symptoms, not root causes. Recent example: `country_prestige >= 100` (script value used as trigger) at extra_decisions.txt:160 cascaded into "Unknown effect add_authority" at :164 and "Unknown effect set_country_flag" at :169 — all three were one bug. Same shape with `radical_fraction >= 0.10` (block trigger called as scalar) cascading into "Unknown trigger type: add" at the next line.
 - 2026-05-06: **Crashes that ONLY happen on new-game start (load-from-save is fine) implicate `common/history/`.** New-game start runs every `common/history/*` file; load-from-save bypasses them entirely. When a crash is gated specifically on new-game and not on load, the suspect is whatever changed in `common/history/` — not the broader entity definitions, scripted effects, events, or modifier types (those load on both paths). Bisect by removing recently-touched history files first. **Parse-clean ≠ runtime-safe**: the engine can crash inside the C++ effect-execution path (e.g. `create_political_lobby`) without flushing a script_parse_error or any actionable log line — `debug.log` may stop mid-load with only benign notices like `should be in utf8-bom encoding` against the file. Don't trust silence in logs as innocence; the load-vs-new-game differential is faster than further log analysis. Recent example: a single domestic-lobby (`category = foreign`) seed in `common/history/lobbies/01_extended_lobbies.txt` crashed new games; logs showed only the BOM warning, no script error.

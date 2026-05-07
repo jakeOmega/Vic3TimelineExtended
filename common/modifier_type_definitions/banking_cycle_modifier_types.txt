@@ -1,4 +1,4 @@
-# banking_cycle_modifier_types.txt
+﻿# banking_cycle_modifier_types.txt
 #
 # Banking cycle / financial momentum modifiers consumed by je_banking_cycle and
 # its on_monthly_pulse_country effects: random momentum, crash chance, finance

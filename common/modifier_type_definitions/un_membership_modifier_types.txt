@@ -1,4 +1,4 @@
-# un_membership_modifier_types.txt
+﻿# un_membership_modifier_types.txt
 #
 # UN membership flag read by the UN journal entry and its scripted_buttons.
 

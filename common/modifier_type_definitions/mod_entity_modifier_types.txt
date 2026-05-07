@@ -1,4 +1,4 @@
-# mod_entity_modifier_types.txt
+﻿# mod_entity_modifier_types.txt
 #
 # Per-entity registrations of vanilla dynamic-modifier patterns for the mod's
 # introduced goods, buildings, ships, units, institutions, laws, and other

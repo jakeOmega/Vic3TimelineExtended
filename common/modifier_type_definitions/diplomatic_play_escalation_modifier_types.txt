@@ -1,4 +1,4 @@
-# diplomatic_play_escalation_modifier_types.txt
+﻿# diplomatic_play_escalation_modifier_types.txt
 #
 # Weekly diplomatic-play escalation contributions consumed by
 # st_dp_country_apply_weekly_escalation (4× per month via on_monthly_pulse_country).

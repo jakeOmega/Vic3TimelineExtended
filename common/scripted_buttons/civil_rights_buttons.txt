@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # CIVIL RIGHTS SCRIPTED BUTTONS
 # Used by je_civil_rights. 6 toggle pairs (12 buttons) representing player
 # stance toward the movement. Pro buttons stack with each other; anti buttons
