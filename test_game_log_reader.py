@@ -19,6 +19,9 @@ from game_log_reader import (
     summarize,
     render_error_log_digest,
     SOURCE_CATEGORY_PREFIX,
+    load_vanilla_bug_registry,
+    tag_vanilla_bugs,
+    _vanilla_bug_cache,
 )
 
 
@@ -305,6 +308,215 @@ class RenderErrorLogDigestTests(unittest.TestCase):
         self.assertIn("## Diff vs `error.1.log`", digest)
         # The new "Could not find" line should show up under "New since last launch"
         self.assertIn("Could not find common/z.dds", digest)
+
+
+class VanillaBugRegistryTests(unittest.TestCase):
+    """Cover the source-anchored / mod_low_priority / cross-reference-validation
+    behavior added to load_vanilla_bug_registry + tag_vanilla_bugs.
+    """
+
+    def _write_doc(self, dirpath: str, content: str) -> str:
+        path = os.path.join(dirpath, "vanilla_known_bugs.md")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        # Bust the in-process mtime cache so each test gets a fresh parse.
+        _vanilla_bug_cache.clear()
+        return path
+
+    def _write_open_issues(self, dirpath: str, content: str) -> str:
+        path = os.path.join(dirpath, "open_issues.md")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        return path
+
+    def test_path_anchored_legacy_entry_still_works(self):
+        """Regression: a normal `### `path/to/file.txt`` entry tags entries
+        whose `files` contains the basename. No source/kind/tracked needed."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "")
+            doc = self._write_doc(tmp, """
+## Script errors observed
+
+### `common/treaty_articles/foo.txt:54` — vanilla scope bug
+
+```
+Error: Event target link 'scope' returned an invalid object
+```
+""")
+            refs, by_basename, by_source, warnings = load_vanilla_bug_registry(doc)
+            self.assertEqual(len(refs), 1)
+            self.assertEqual(warnings, [])
+            self.assertIn("foo.txt", by_basename)
+            self.assertEqual(by_source, {})
+            entry = LogEntry(
+                time="00:00:01",
+                source="jomini_script_system.cpp:247",
+                message="Script system error!\n  Error: Event target link 'scope' returned an invalid object\n  Script location: common/treaty_articles/foo.txt:54",
+            )
+            tag_vanilla_bugs([entry], by_basename, by_source)
+            self.assertIsNotNone(entry.vanilla_bug_ref)
+            self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla")
+
+    def test_source_anchored_tags_entry_with_empty_files(self):
+        """A `- source:` ref tags entries whose .files is empty but whose
+        .source matches. This is the new path-less filter mechanism."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "")
+            doc = self._write_doc(tmp, """
+## Engine noise (source-anchored)
+
+### `building_manager.cpp:1792` — vanilla auto-charter duplicate building seeding
+- source: `building_manager.cpp:1792`
+
+```
+Tried to create building of Type building_company_basic_
+```
+""")
+            refs, by_basename, by_source, warnings = load_vanilla_bug_registry(doc)
+            self.assertEqual(warnings, [])
+            self.assertEqual(by_basename, {})
+            self.assertIn("building_manager.cpp:1792", by_source)
+            entry = LogEntry(
+                time="00:00:01",
+                source="building_manager.cpp:1792",
+                message="Tried to create building of Type building_company_basic_fabrics in State 'Foo'",
+            )
+            self.assertEqual(entry.files, [])
+            tag_vanilla_bugs([entry], by_basename, by_source)
+            self.assertIsNotNone(entry.vanilla_bug_ref)
+            self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla_noise")
+
+    def test_source_anchored_signature_narrows_match(self):
+        """Different message at the same source must NOT be tagged. Anchor
+        narrows scope but the signature substring narrows it further."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "")
+            doc = self._write_doc(tmp, """
+## Engine noise (source-anchored)
+
+### `building_manager.cpp:1792` — duplicate building seeding only
+- source: `building_manager.cpp:1792`
+
+```
+Tried to create building of Type building_company_basic_
+```
+""")
+            _, by_basename, by_source, _ = load_vanilla_bug_registry(doc)
+            unrelated = LogEntry(
+                time="00:00:01",
+                source="building_manager.cpp:1792",
+                message="Some completely unrelated future error from this cpp:line",
+            )
+            tag_vanilla_bugs([unrelated], by_basename, by_source)
+            self.assertIsNone(unrelated.vanilla_bug_ref)
+
+    def test_anchor_less_ref_rejected(self):
+        """A ref with no path AND no source is rejected at parse time + warns."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "")
+            doc = self._write_doc(tmp, """
+## Script errors observed
+
+### Some title with no anchor at all
+
+```
+some message substring
+```
+""")
+            refs, _, _, warnings = load_vanilla_bug_registry(doc)
+            self.assertEqual(refs, [])
+            self.assertTrue(any("no file path or source anchor" in w for w in warnings))
+
+    def test_mod_low_priority_requires_tracked_issue(self):
+        """A ref under `## Mod-side ...` without `- tracked:` is rejected via warning."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "## LOW\n\n### L7. existing\n")
+            doc = self._write_doc(tmp, """
+## Mod-side cosmetic, tracked-not-fixed (source-anchored)
+
+### `harvest_condition_graphics.cpp:52` — missing sound states
+- source: `harvest_condition_graphics.cpp:52`
+
+```
+Couldn't find any animation state for harvest condition type
+```
+""")
+            refs, _, _, warnings = load_vanilla_bug_registry(doc)
+            # Ref still loads (it has a source anchor) but a warning fires.
+            self.assertEqual(len(refs), 1)
+            self.assertEqual(refs[0].kind, "mod_low_priority")
+            self.assertTrue(any("tracked" in w.lower() for w in warnings))
+
+    def test_mod_low_priority_unresolved_anchor_warns(self):
+        """A `- tracked:` link whose #anchor doesn't resolve in open_issues.md warns."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "## LOW\n\n### L7. real anchor\n")
+            doc = self._write_doc(tmp, """
+## Mod-side cosmetic, tracked-not-fixed (source-anchored)
+
+### `harvest_condition_graphics.cpp:52` — missing sound states
+- source: `harvest_condition_graphics.cpp:52`
+- tracked: `docs/open_issues.md#l99-does-not-exist`
+
+```
+Couldn't find any animation state for harvest condition type
+```
+""")
+            _, _, _, warnings = load_vanilla_bug_registry(doc)
+            self.assertTrue(any("does not resolve" in w for w in warnings))
+
+    def test_mod_low_priority_resolved_anchor_clean(self):
+        """A `- tracked:` link whose #anchor resolves produces no warning."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "## LOW\n\n### L7. mod harvest condition sound entity states missing\n\nFix it eventually.\n")
+            doc = self._write_doc(tmp, """
+## Mod-side cosmetic, tracked-not-fixed (source-anchored)
+
+### `harvest_condition_graphics.cpp:52` — missing sound states
+- source: `harvest_condition_graphics.cpp:52`
+- tracked: `docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`
+
+```
+Couldn't find any animation state for harvest condition type
+```
+""")
+            refs, _, _, warnings = load_vanilla_bug_registry(doc)
+            self.assertEqual(warnings, [])
+            self.assertEqual(refs[0].tracked_issue, "docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing")
+            self.assertEqual(refs[0].to_dict()["tracked_issue"], "docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing")
+
+    def test_path_anchored_wins_over_source_anchored(self):
+        """When an entry has both a matching basename AND a matching source,
+        the path-anchored ref is selected first (legacy compatibility)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "")
+            doc = self._write_doc(tmp, """
+## Script errors observed
+
+### `common/foo.txt:1` — path-anchored
+
+```
+shared signature substring here
+```
+
+## Engine noise (source-anchored)
+
+### `some.cpp:1` — source-anchored fallback
+- source: `some.cpp:1`
+
+```
+shared signature substring here
+```
+""")
+            _, by_basename, by_source, _ = load_vanilla_bug_registry(doc)
+            entry = LogEntry(
+                time="00:00:01",
+                source="some.cpp:1",
+                message="shared signature substring here at common/foo.txt:1",
+            )
+            tag_vanilla_bugs([entry], by_basename, by_source)
+            self.assertIsNotNone(entry.vanilla_bug_ref)
+            self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla")  # path-anchored, default kind
 
 
 if __name__ == "__main__":

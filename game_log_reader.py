@@ -50,6 +50,10 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
     # call-site (`events/gdp_events.txt`); both must be in this set.
     "GDPGR_scripted_effects.txt",
     "gdp_events.txt",
+    # GDP-per-province (GDPPP) mod — GUI template/type collision warnings
+    # (workshop id 3190466673). Each entry references a single GDPPP `.gui` file.
+    "00_GDPPP_graph_tooltips.gui",
+    "00_GDPPP_politics_panel_types.gui",
 })
 
 
@@ -319,53 +323,161 @@ def filter_external_mods(entries: list[LogEntry]) -> list[LogEntry]:
 # file basename + signature substring (case-insensitive); line numbers are
 # ignored because they shift between vanilla version bumps.
 _HEADING_RE = re.compile(r"^###\s+(.*)$")
+_SECTION_RE = re.compile(r"^##\s+(.*)$")
 _PATH_REF_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:txt|gui|yml|yaml))(?::[0-9,\s\-]+)?`")
 _TITLE_AFTER_DASH_RE = re.compile(r"\s[—-]\s+(.+)$")
+# `- source: \`<token>\`` and `- tracked: \`<token>\`` body fields. Captured per-entry
+# during the body walk. `source` extends the source-anchored index. `tracked` is the
+# cross-reference to docs/open_issues.md (mandatory for mod_low_priority refs).
+_SOURCE_REF_RE = re.compile(r"^\s*-\s*source:\s*`([^`]+)`\s*$")
+_TRACKED_REF_RE = re.compile(r"^\s*-\s*tracked:\s*`([^`]+)`\s*$")
+
+# Map ## section header substring (case-insensitive) -> kind label. Sections not
+# matched default to "vanilla". A ref's kind drives validation policy and the
+# `kind` field surfaced through to_dict().
+_SECTION_KIND_RULES: tuple[tuple[str, str], ...] = (
+    ("engine noise", "vanilla_noise"),
+    ("mod-side", "mod_low_priority"),
+    ("mod side", "mod_low_priority"),
+)
 
 
 class VanillaBugRef:
-    __slots__ = ("title", "file_basenames", "signatures", "anchor")
+    __slots__ = ("title", "file_basenames", "source_anchors", "signatures", "anchor", "kind", "tracked_issue")
 
-    def __init__(self, title: str, file_basenames: list[str], signatures: list[str], anchor: str):
+    def __init__(self, title: str, file_basenames: list[str], source_anchors: list[str],
+                 signatures: list[str], anchor: str, kind: str = "vanilla",
+                 tracked_issue: str | None = None):
         self.title = title
         self.file_basenames = file_basenames
-        # Empty list = match purely on basename (no signature filter).
+        # Exact-match against entry.source. Empty for legacy path-anchored entries.
+        self.source_anchors = source_anchors
+        # Empty list = match purely on anchor (no signature filter).
         # A non-empty list matches if ANY signature substring appears in the message.
         self.signatures = signatures
         self.anchor = anchor
+        # "vanilla" (default), "vanilla_noise" (engine cpp-source noise), or
+        # "mod_low_priority" (mod-side cosmetic, must cross-link to open_issues.md).
+        self.kind = kind
+        self.tracked_issue = tracked_issue
 
     def to_dict(self) -> dict:
-        return {
+        d: dict = {
             "title": self.title,
             "section": self.anchor,
+            "kind": self.kind,
         }
+        if self.tracked_issue:
+            d["tracked_issue"] = self.tracked_issue
+        return d
 
 
-_vanilla_bug_cache: dict = {}  # {doc_path: (mtime, list[VanillaBugRef], by_basename_index)}
+def _section_kind(section_header: str) -> str:
+    h = section_header.lower()
+    for needle, kind in _SECTION_KIND_RULES:
+        if needle in h:
+            return kind
+    return "vanilla"
 
 
-def load_vanilla_bug_registry(doc_path: str) -> tuple[list[VanillaBugRef], dict[str, list[VanillaBugRef]]]:
-    """Parse `docs/vanilla_known_bugs.md` and return (refs, basename_index).
+def _open_issues_anchors(open_issues_path: str) -> set[str]:
+    """Return the set of GitHub-style anchors for `### ` headings in open_issues.md.
+
+    Used to verify `- tracked:` cross-references in the bug registry resolve. Best
+    effort — returns empty set if the file is missing or unreadable.
+    """
+    try:
+        with open(open_issues_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+    except OSError:
+        return set()
+    anchors: set[str] = set()
+    for ln in lines:
+        m = _HEADING_RE.match(ln.rstrip("\n"))
+        if not m:
+            continue
+        heading = m.group(1)
+        slug = re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
+        if slug:
+            anchors.add(slug)
+    return anchors
+
+
+def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> list[str]:
+    """Sanity-check a parsed ref. Returns a list of warning strings; empty = ok.
+
+    Rules:
+      1. Anchor-or-die: must have at least one of file_basenames or source_anchors.
+         Eliminates accidental signature-only rules at parse time.
+      2. mod_low_priority refs must specify a `- tracked:` cross-reference, and its
+         #anchor fragment (if any) must resolve in docs/open_issues.md.
+    """
+    warnings: list[str] = []
+    if not ref.file_basenames and not ref.source_anchors:
+        warnings.append(
+            f"vanilla_known_bugs.md: '{ref.title}' has no file path or source anchor — rejected "
+            "(would match every log entry)"
+        )
+        return warnings
+    if ref.kind == "mod_low_priority":
+        if not ref.tracked_issue:
+            warnings.append(
+                f"vanilla_known_bugs.md: '{ref.title}' is in mod-side section but has no "
+                "`- tracked: \\`docs/open_issues.md#anchor\\`` cross-reference"
+            )
+        elif "#" in ref.tracked_issue and known_open_issue_anchors:
+            frag = ref.tracked_issue.split("#", 1)[1]
+            if frag and frag not in known_open_issue_anchors:
+                warnings.append(
+                    f"vanilla_known_bugs.md: '{ref.title}' tracked-issue anchor "
+                    f"'#{frag}' does not resolve in docs/open_issues.md"
+                )
+    return warnings
+
+
+_vanilla_bug_cache: dict = {}  # {doc_path: (mtime, refs, by_basename, by_source, warnings)}
+
+
+def load_vanilla_bug_registry(doc_path: str) -> tuple[
+    list[VanillaBugRef],
+    dict[str, list[VanillaBugRef]],
+    dict[str, list[VanillaBugRef]],
+    list[str],
+]:
+    """Parse `docs/vanilla_known_bugs.md` and return (refs, by_basename, by_source, warnings).
 
     Memoized on the doc's mtime so repeated requests don't re-parse.
-    Returns ([], {}) if the doc is missing or unreadable.
+    Returns ([], {}, {}, []) if the doc is missing or unreadable.
     """
     try:
         mtime = os.path.getmtime(doc_path)
     except OSError:
-        return [], {}
+        return [], {}, {}, []
     cached = _vanilla_bug_cache.get(doc_path)
     if cached and cached[0] == mtime:
-        return cached[1], cached[2]
+        return cached[1], cached[2], cached[3], cached[4]
     try:
         with open(doc_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
     except OSError:
-        return [], {}
+        return [], {}, {}, []
+
+    # Pre-load open_issues.md anchors for cross-reference validation. Same dir
+    # convention as doc_path.
+    open_issues_path = os.path.join(os.path.dirname(doc_path), "open_issues.md")
+    known_anchors = _open_issues_anchors(open_issues_path)
+
     refs: list[VanillaBugRef] = []
+    warnings: list[str] = []
+    current_section_kind = "vanilla"
     i = 0
     while i < len(lines):
         line = lines[i].rstrip("\n")
+        sm = _SECTION_RE.match(line)
+        if sm:
+            current_section_kind = _section_kind(sm.group(1))
+            i += 1
+            continue
         m = _HEADING_RE.match(line)
         if not m:
             i += 1
@@ -380,11 +492,14 @@ def load_vanilla_bug_registry(doc_path: str) -> tuple[list[VanillaBugRef], dict[
         # Walk the entry body up to the next `### ` or `## ` heading. Capture:
         #   - additional path references (so a heading can list one path and the
         #     body can enumerate sibling files affected by the same root cause)
+        #   - `- source:` and `- tracked:` lines
         #   - the first fenced code block, ALL non-empty lines, as signatures
         #     (many bugs surface as 2-3 distinct error messages — tagging
         #     should hit any of them)
         signatures: list[str] = []
         body_paths: list[str] = []
+        body_sources: list[str] = []
+        tracked_issue: str | None = None
         captured_block = False
         j = i + 1
         while j < len(lines):
@@ -405,22 +520,50 @@ def load_vanilla_bug_registry(doc_path: str) -> tuple[list[VanillaBugRef], dict[
                 captured_block = True
                 j = k + 1
                 continue
+            sr = _SOURCE_REF_RE.match(nxt)
+            if sr:
+                body_sources.append(sr.group(1))
+                j += 1
+                continue
+            tr = _TRACKED_REF_RE.match(nxt)
+            if tr:
+                if tracked_issue is None:
+                    tracked_issue = tr.group(1)
+                # Multiple `- tracked:` lines: keep first, ignore rest (warn? not yet)
+                j += 1
+                continue
             body_paths.extend(_PATH_REF_RE.findall(nxt))
             j += 1
         all_paths = paths + body_paths
-        if not all_paths:
-            # Heading and body had no parsable path references — skip.
-            i += 1
-            continue
         basenames = sorted({pathlib.Path(p).name for p in all_paths})
-        refs.append(VanillaBugRef(title=title, file_basenames=basenames, signatures=signatures, anchor=anchor))
+        ref = VanillaBugRef(
+            title=title,
+            file_basenames=basenames,
+            source_anchors=sorted(set(body_sources)),
+            signatures=signatures,
+            anchor=anchor,
+            kind=current_section_kind,
+            tracked_issue=tracked_issue,
+        )
+        ref_warnings = _validate_ref(ref, known_anchors)
+        if ref_warnings:
+            warnings.extend(ref_warnings)
+            # Reject the ref if anchor-less (empty basenames AND empty sources).
+            if not ref.file_basenames and not ref.source_anchors:
+                i += 1
+                continue
+        refs.append(ref)
         i += 1
     by_basename: dict[str, list[VanillaBugRef]] = defaultdict(list)
+    by_source: dict[str, list[VanillaBugRef]] = defaultdict(list)
     for r in refs:
         for bn in r.file_basenames:
             by_basename[bn].append(r)
-    _vanilla_bug_cache[doc_path] = (mtime, refs, dict(by_basename))
-    return refs, dict(by_basename)
+        for src in r.source_anchors:
+            by_source[src].append(r)
+    by_basename_d, by_source_d = dict(by_basename), dict(by_source)
+    _vanilla_bug_cache[doc_path] = (mtime, refs, by_basename_d, by_source_d, warnings)
+    return refs, by_basename_d, by_source_d, warnings
 
 
 _LINE_NUM_RE = re.compile(r":\d+")
@@ -432,36 +575,55 @@ def _normalize_for_signature_match(s: str) -> str:
     return _LINE_NUM_RE.sub(":N", s.lower())
 
 
-def tag_vanilla_bugs(entries: list[LogEntry], by_basename: dict[str, list[VanillaBugRef]]) -> None:
+def tag_vanilla_bugs(
+    entries: list[LogEntry],
+    by_basename: dict[str, list[VanillaBugRef]],
+    by_source: dict[str, list[VanillaBugRef]] | None = None,
+) -> None:
     """Mutate entries: set `vanilla_bug_ref` on each that matches a registered vanilla bug.
 
-    Match: file basename appears in the entry's `files`, AND (the ref has no
-    signatures OR ANY signature appears as a case-insensitive substring of the
-    message). Both signature and message are normalized so explicit `:NNN` line
-    refs don't have to match exactly (vanilla bumps shift them).
+    Two-stage match:
+      1. Path-anchored (legacy) — file basename appears in entry.files.
+      2. Source-anchored (fallback) — entry.source matches a `- source:` token from
+         the registry. Used for engine-cpp-emit-point noise like
+         `building_manager.cpp:1792` whose entries have no script-file path.
+
+    Within each stage, the ref's signatures filter further: empty list = match
+    purely on anchor; non-empty = ANY signature must appear (case-insensitive,
+    normalized) in the message. Path-anchored wins over source-anchored when
+    both are present, preserving legacy behavior.
     """
-    if not by_basename:
+    if not by_basename and not by_source:
         return
-    # Pre-normalize signatures once
+    by_source = by_source or {}
+    # Pre-normalize signatures once across both indexes.
     sig_cache: dict[int, list[str]] = {}
-    for refs in by_basename.values():
-        for ref in refs:
-            if id(ref) not in sig_cache:
-                sig_cache[id(ref)] = [_normalize_for_signature_match(s) for s in ref.signatures]
+    for index in (by_basename, by_source):
+        for refs in index.values():
+            for ref in refs:
+                if id(ref) not in sig_cache:
+                    sig_cache[id(ref)] = [_normalize_for_signature_match(s) for s in ref.signatures]
     for e in entries:
-        if not e.files:
-            continue
         norm_msg = _normalize_for_signature_match(e.message)
         matched: VanillaBugRef | None = None
-        for f in e.files:
-            base = pathlib.Path(f).name
-            for ref in by_basename.get(base, ()):
+        # Stage 1: path-anchored
+        if e.files:
+            for f in e.files:
+                base = pathlib.Path(f).name
+                for ref in by_basename.get(base, ()):
+                    sigs = sig_cache.get(id(ref), [])
+                    if not sigs or any(s in norm_msg for s in sigs):
+                        matched = ref
+                        break
+                if matched:
+                    break
+        # Stage 2: source-anchored (only if path-anchored didn't match)
+        if matched is None and e.source and by_source:
+            for ref in by_source.get(e.source, ()):
                 sigs = sig_cache.get(id(ref), [])
                 if not sigs or any(s in norm_msg for s in sigs):
                     matched = ref
                     break
-            if matched:
-                break
         if matched:
             e.vanilla_bug_ref = matched.to_dict()
 

@@ -2877,8 +2877,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # (e.g. modifier_visibility_audit's unreviewed sub-threshold
                     # values). Caller sees them in the same response, not buried
                     # in the server log.
-                    if _post_load_warnings:
-                        body["warnings"] = _post_load_warnings
+                    warnings = list(_post_load_warnings)
+                    # Also surface vanilla_known_bugs.md parse-time warnings
+                    # (anchor-or-die rejections, missing tracked-issue cross-refs,
+                    # unresolved open_issues.md anchors). Validation runs as part
+                    # of load_vanilla_bug_registry; the reload here just forces
+                    # a re-read by busting the mtime cache before the next /logs
+                    # request, so we call it explicitly and pull the warnings.
+                    try:
+                        from game_log_reader import load_vanilla_bug_registry as _load_vbr
+                        _vbr_doc = os.path.join(mod_path, "docs", "vanilla_known_bugs.md")
+                        _, _, _, _vbr_warnings = _load_vbr(_vbr_doc)
+                        for w in _vbr_warnings:
+                            warnings.append({"label": "vanilla_bug_registry", "detail": w})
+                    except Exception as _vbr_exc:  # noqa: BLE001
+                        logger.warning(f"vanilla_bug_registry warning collection failed: {_vbr_exc}")
+                    if warnings:
+                        body["warnings"] = warnings
                     self._respond_json(body)
             except Exception as exc:
                 logger.error(f"Error during reload: {exc}\n{traceback.format_exc()}")
@@ -3222,11 +3237,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         )
 
         vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla_known_bugs.md")
-        _, by_basename = load_vanilla_bug_registry(vanilla_bugs_doc)
+        _, by_basename, by_source, _ = load_vanilla_bug_registry(vanilla_bugs_doc)
 
         def _apply_vanilla_bug_tagging(entries, mode):
             """Tag entries against the registry, then apply mode (show|hide|only)."""
-            tag_vanilla_bugs(entries, by_basename)
+            tag_vanilla_bugs(entries, by_basename, by_source)
             if mode == "hide":
                 return [e for e in entries if e.vanilla_bug_ref is None]
             if mode == "only":

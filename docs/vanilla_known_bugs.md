@@ -207,14 +207,62 @@ Error: change_appeasement effect [ Appeasement change failed, check that 'appeas
 
 Vanilla `00_diplomatic_catalysts.txt` (lines 285, 292) passes `FACTOR = appeasement_relations_decreased` to a scripted effect that maps it onto `change_appeasement = { factor = $FACTOR$ }`. The engine reports `appeasement_relations_decreased` is not a valid appeasement *reason*, suggesting the field name should be `reason` rather than `factor` (or the vanilla token was renamed). Vanilla bug — single-occurrence so far, low priority.
 
-### `common/ideologies/01_character_ideologies.txt:1781`, `:3365` — IG-scope triggers called in character scope
+### `common/ideologies/01_character_ideologies.txt:1781`, `:3365`, `:8438`, `:8671` — wrong-scope triggers in character/IG scope
 
 ```
 Error: ig_approval trigger [ Wrong scope for trigger: character, expected interest_group ]
 Error: is_in_government trigger [ Wrong scope for trigger: character, expected interest_group ]
+Error: any_diplomatically_relevant_country trigger [ Wrong scope for trigger: character, expected country ]
+Error: any_diplomatically_relevant_country trigger [ Wrong scope for trigger: interest_group, expected country ]
 ```
 
-Vanilla character-ideology blocks call IG-scope triggers (`ig_approval`, `is_in_government`) in character scope, where they don't resolve. Vanilla bug across multiple ideologies. Surfaces in mod's auto-generated `common/ideologies/modified.txt` because `apply_ideologies.py` faithfully replays the vanilla content (so the error references both the vanilla source and the regenerated copy). Will go away when vanilla fixes it — do not patch around it in `ideology_modifications.py`.
+Vanilla character-ideology blocks call IG-scope or country-scope triggers (`ig_approval`, `is_in_government`, `any_diplomatically_relevant_country`) without the right enclosing scope. Vanilla bug across multiple ideologies (e.g. integralist `lawmaker_ideology` and `non_loyalist_political_strength` at `:8438`/`:8671` forget the `owner ?= { ... }` wrap that vanilla applies correctly at `:4705`/`:4941` for the same trigger). Surfaces in mod's auto-generated `common/ideologies/modified.txt` because `apply_ideologies.py` faithfully replays the vanilla content (so the error references both the vanilla source and the regenerated copy). Will go away when vanilla fixes it — do not patch around it in `ideology_modifications.py`.
+
+### `events/iberia_events/ip4_coup_events.txt:401` — `capital` effect in character scope
+
+```
+capital effect [ Wrong scope for effect: character, expected country ]
+ip4_coup_events.txt:401
+```
+
+Vanilla IP4 coup-resolution event calls `capital = ...` on a character scope where it expects country scope. Single-line bug. Skip.
+
+### `events/movement_events.txt:815`/`:820` — `Undefined event target 'relevant_state'` cascading into wrong-scope effects
+
+```
+movement_events.txt:815
+movement_events.txt:820
+Undefined event target 'relevant_state'
+```
+
+Vanilla political-movement event references `event_target:relevant_state` where it's not bound in the immediate scope; cascade emits "unset scope" + `add_loyalists_in_state` / `add_modifier` "Wrong scope for effect: none". Single root cause, three log lines — recognize as one vanilla bug, not three.
+
+### `events/agitators_events/coup_events.txt:983`/`:984` — `Undefined event target 'legacy_of_democracy_state'` cascading into wrong-scope effects
+
+```
+coup_events.txt:983
+coup_events.txt:984
+Undefined event target 'legacy_of_democracy_state'
+```
+
+Same pattern as `movement_events.txt:815`. Vanilla coup-event references an unbound event target; cascades into `add_radicals_in_state` / `add_modifier` "Wrong scope for effect: none". One vanilla bug, three log lines.
+
+### `events/ig_suppression_events.txt:1016` — `Event target link 'scope' returned an invalid object`
+
+```
+ig_suppression_events.txt:1016
+Event target link 'scope' returned an invalid object
+```
+
+Vanilla IG-suppression event accesses a saved scope that has been invalidated by the time the option fires. Vanilla bug. Skip.
+
+### `common/treaty_articles/31_ship_transfer.txt:54` — `Event target link 'scope' returned an invalid object`
+
+```
+31_ship_transfer.txt:54
+```
+
+Vanilla ship-transfer treaty article references a scope that's invalidated during certain treaty-evaluation paths. High repeat count under treaty-heavy gameplay. Vanilla bug. Skip.
 
 ## Expected mod-override noise
 
@@ -227,6 +275,86 @@ These warnings are emitted by the engine when this mod intentionally overrides v
 ```
 
 Mod overrides hundreds of vanilla loc keys via the `replace/` directory convention. Files include `timeline_extended_override_l_english.yml` (goods, laws, concepts, modifiers, buildings, ships, companies, …), `headlines_overrides_l_english.yml` (notification text), `LARP_interfaces_l_english.yml` (radicals/loyalists/GDP tooltips), and similar. The engine emits a "Key X defined in multiple files" warning for each. Expected — not actionable. The signature substring matches any path under `localization/english/replace/`.
+
+### `00_code_on_actions.txt:7362`/`:7370` — vanilla intentional party-creation/disband debug_log calls
+
+```
+00_code_on_actions.txt:7362
+00_code_on_actions.txt:7370
+```
+
+Vanilla `00_code_on_actions.txt` contains `debug_log = "<Phrase> Created"` (line 7362) and `debug_log = "<Phrase> Disbanded"` (line 7370) calls that fire on every political party creation/disband. They dominate `debug.log` mod-only triage during election cycles (one entry per party event, deduped to ~10–50 distinct phrases per session). Always skip — these are vanilla-intentional and not fixable from the mod. The signature matches both line numbers via the source file basename + line ref.
+
+### `gui/companies_panel.gui:1` — vanilla GUI parse warnings
+
+```
+gui/companies_panel.gui:1
+```
+
+Vanilla `companies_panel.gui` line 1 emits `using '' is outside of all descriptions` and `Could not find template ''` warnings. The line is just a comment header, so this is the engine getting confused by something earlier in load order. Vanilla file, not in mod, not actionable.
+
+### `gui/00_GDPPP_graph_tooltips.gui` and `gui/00_GDPPP_politics_panel_types.gui` — workshop mod (GDP-per-province) GUI overrides
+
+```
+gui/00_GDPPP_
+```
+
+Workshop mod 3190466673 ("GDP Growth Rate Improved" / GDPPP) registers GUI templates that collide with vanilla, emitting `Template 'X' already registered` and `Type 'X' already registered` warnings. Third-party mod, not ours — skip. Both basenames are also in `EXTERNAL_MOD_SOURCE_FILES` so error/debug triage drops them via the lower-level filter; the registry entry exists so they're tagged in gui.log too (where `include_external` defaults to `true`).
+
+## Engine noise (source-anchored)
+
+These entries are filtered via the `- source: \`<cpp_file:line>\`` registry mechanism. The parser indexes them by `entry.source` (the cpp emit point reported by the engine) instead of script-file basename, so messages that have no `entry.files` still get tagged. Each entry's signature substring narrows the filter to the specific message — different errors from the same cpp:line still surface.
+
+### `building_manager.cpp:1792` — vanilla auto-charter duplicate building seeding
+- source: `building_manager.cpp:1792`
+
+```
+Tried to create building of Type building_company_basic_
+```
+
+Vanilla company-charter auto-creation tries to create the same `building_company_basic_<good>` building twice on save-restore (or initial seeding). Engine skips the second create and logs informationally. Not a mod bug.
+
+### `game_telemetry.cpp:451` — vanilla telemetry "Unknown tooltip type"
+- source: `game_telemetry.cpp:451`
+
+```
+Unknown tooltip type
+```
+
+Vanilla analytics/telemetry message, not an error. Not actionable.
+
+### `pdx_font.cpp:88` — informational font-load messages
+- source: `pdx_font.cpp:88`
+
+```
+Loading Font File
+```
+
+Informational engine logging during font loading (~56 entries per session). Not errors. Anchor + signature ensures only literal font-load info is hidden — any genuine `pdx_font.cpp:88` error with a different message would still surface.
+
+## Mod-side cosmetic, tracked-not-fixed (source-anchored)
+
+These are filtered for triage cleanliness because they have zero functional impact, but each registry entry has a `- tracked: \`docs/open_issues.md#anchor\`` cross-reference so the underlying mod gap stays visible in the open-issues queue. To audit "what's swept under the rug": `curl /logs/<family>?vanilla_bugs=only | jq '.entries[] | select(.vanilla_bug_ref.kind == "mod_low_priority")'`. Parse-time validation rejects entries in this section that lack a `tracked` link or whose anchor doesn't resolve in `docs/open_issues.md`.
+
+### `harvest_condition_graphics.cpp:52` — missing sound-entity states for mod market harvest conditions
+- source: `harvest_condition_graphics.cpp:52`
+- tracked: `docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`
+
+```
+Couldn't find any animation state for harvest condition type
+```
+
+Mod adds `bull_market` / `bear_market` / `market_downturn` / `financial_panic` as harvest condition types in `common/harvest_condition_types/extra_harvest_condition_types.txt` for banking-cycle visualization. Vanilla `harvest_condition_sound_entity` has no matching states. Functional impact: silent — engine just doesn't play a sound. Fix recipe in `docs/open_issues.md#L7`.
+
+### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:231 - Could not find template 'vertical_scrollbar'`
+- source: `pdx_gui_factory.cpp:628`
+- tracked: `docs/open_issues.md#l8-mod-tooltip-gui-vertical-scrollbar-template-warning`
+
+```
+gui/tooltip.gui:231 - Could not find template 'vertical_scrollbar'
+```
+
+Mod's scrollable `FancyTooltipWidgetType` uses `scrollbar_vertical = { using = vertical_scrollbar }` — the same exact pattern vanilla uses successfully in `block_windows.gui` and `building_browser_panel.gui`. Likely parse-time false-positive resolved in pass-2; scrollable tooltip rendering works in-game. Tracked at `docs/open_issues.md#L8` until a way to silence it surfaces.
 
 ## How to triage a new error-log entry
 
