@@ -1,0 +1,37 @@
+﻿# Map-mode hijack: apply a state_migration_pull_add overlay to every state
+# on the map, sized so the displayed migration_pull lands on the chosen
+# metric. Player must clear before re-applying, so no prior-overlay accounting.
+#
+# The custom_tooltip + hidden_effect wrap suppresses the per-state expansion
+# of every_state in the decision tooltip (which otherwise listed ~1500 states).
+#
+# The set_variable + multiplier=var: bridge avoids the engine's eager
+# tooltip-preview pass evaluating $CORRECTION_SV$ in country scope (which
+# trips state_region scope errors inside base_tourism_appeal_value etc.).
+# set_variable runs only at actual effect time, in state scope; the modifier's
+# multiplier reads var: directly, scope-safely.
+#
+# Parameters:
+#   $CORRECTION_SV$ — te_map_mode_correction_for_X (state-scope script value)
+te_apply_map_mode_overlay = {
+	custom_tooltip = te_apply_map_mode_overlay_tt
+	hidden_effect = {
+		every_state = {
+			add_modifier = {
+				name = te_map_mode_overlay
+				multiplier = $CORRECTION_SV$
+				days = 5
+			}
+		}
+	}
+}
+
+# Wipe the active map-mode overlay across every state.
+te_clear_map_mode_overlays = {
+	custom_tooltip = te_clear_map_mode_overlays_tt
+	hidden_effect = {
+		every_state = {
+			remove_modifier_if_exists_effect = { MODIFIER = te_map_mode_overlay }
+		}
+	}
+}

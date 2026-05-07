@@ -1,0 +1,9 @@
+﻿# True if a map-mode overlay is currently active. Checked on the country's
+# capital state — every_state applies to all states world-wide on apply, so
+# the capital is always representative. Self-cleans when the modifier
+# auto-decays (no flag variable to go stale).
+te_country_has_map_mode_overlay_active_trigger = {
+	capital = {
+		has_modifier = te_map_mode_overlay
+	}
+}

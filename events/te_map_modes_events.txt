@@ -1,0 +1,70 @@
+﻿namespace = te_map_modes
+
+# ============================================================================
+# Cartographic Survey — custom map-mode picker
+# ----------------------------------------------------------------------------
+# The migration_pull engine value drives the in-game "Migration Attraction"
+# map mode (gfx/map/map_modes/map_modes.txt: mm_migration_pull). We override
+# it on a per-state basis so the migration-attraction map mode color-codes
+# states by an arbitrary metric for as long as the game is paused.
+# Decision te_open_map_mode_survey is hard-gated on is_game_paused, so the
+# player can only trigger this while paused; the modifier days=5 self-cleans
+# within a week of unpause as a belt-and-suspenders safeguard.
+# ============================================================================
+
+te_map_modes.1 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/orbital_earth_view.dds" }
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = te_map_modes.1.t
+	desc = te_map_modes.1.d
+	flavor = te_map_modes.1.f
+
+	duration = 3
+
+	# Tourism appeal — hand-tuned per-state values from base_tourism_appeal_value.
+	option = {
+		name = te_map_modes.1.a
+		trigger = {
+			NOT = { te_country_has_map_mode_overlay_active_trigger = yes }
+		}
+		te_apply_map_mode_overlay = {
+			CORRECTION_SV = te_map_mode_correction_for_tourism
+		}
+	}
+
+	# GDP per capita — state gdp / state_population.
+	option = {
+		name = te_map_modes.1.b
+		trigger = {
+			NOT = { te_country_has_map_mode_overlay_active_trigger = yes }
+		}
+		te_apply_map_mode_overlay = {
+			CORRECTION_SV = te_map_mode_correction_for_gdp_per_capita
+		}
+	}
+
+	# Greenhouse gas emissions — country-level value broadcast to every state
+	# of each country, so this mode colors by country, not by state.
+	option = {
+		name = te_map_modes.1.c
+		trigger = {
+			NOT = { te_country_has_map_mode_overlay_active_trigger = yes }
+		}
+		te_apply_map_mode_overlay = {
+			CORRECTION_SV = te_map_mode_correction_for_emissions
+		}
+	}
+
+	# Clear — only shown when an overlay is active.
+	option = {
+		name = te_map_modes.1.e_clear
+		trigger = {
+			te_country_has_map_mode_overlay_active_trigger = yes
+		}
+		te_clear_map_mode_overlays = yes
+	}
+}

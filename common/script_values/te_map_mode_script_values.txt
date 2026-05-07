@@ -1,0 +1,39 @@
+﻿# Map-mode hijack: per-state correction script values. Each correction
+# evaluates in state scope to (our_metric - migration_pull) / (1 + sum_mult)
+# so that the final displayed migration_pull lands on our_metric exactly.
+# Player must clear before switching modes, so apply-time reads of
+# migration_pull never include any prior overlay of ours.
+
+# 1 + sum of state_migration_pull_mult contributions from BOTH state-scope
+# and country-scope sources. The state-scope read returns only state-local
+# mults (pollution, turmoil, state-region statics); country-scope (read via
+# owner.modifier:X) returns the country contributions that cascade to the
+# state's displayed pull but aren't visible from the state's local read
+# (country rank, power-bloc principles, etc.). Both must be summed for the
+# correction denominator to match what the engine actually multiplies by.
+# Floored at 0.1 to avoid blow-ups when total dips toward -1 (extreme).
+te_map_mode_one_plus_pull_mult = {
+	value = 1
+	add = modifier:state_migration_pull_mult
+	min = 0.1
+}
+
+te_map_mode_correction_for_tourism = {
+	value = migration_pull
+	multiply = 100
+}
+
+te_map_mode_correction_for_gdp_per_capita = {
+	value = gdp_per_capita
+	subtract = migration_pull
+	divide = te_map_mode_one_plus_pull_mult
+}
+
+# Country-level GHG broadcast: every state of a country shares the owner's
+# value, so the map colors by country in this mode (not by state).
+te_map_mode_correction_for_emissions = {
+	value = owner.market_greenhouse_gas_emissions_script_value
+	subtract = migration_pull
+	divide = te_map_mode_one_plus_pull_mult
+}
+

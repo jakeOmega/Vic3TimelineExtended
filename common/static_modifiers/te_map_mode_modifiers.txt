@@ -1,0 +1,7 @@
+﻿# Map-mode hijack overlay. The state_migration_pull_add unit value (1) is
+# multiplied by the per-state correction stored in var:te_map_mode_correction_amount
+# so the final displayed migration_pull lands on the chosen metric.
+te_map_mode_overlay = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_migration_pull_add = 1
+}

@@ -3267,6 +3267,17 @@
  test_event.1.a:0 "Understood"
 
 #
+# TE_MAP_MODES
+#
+ te_map_modes.1.a:0 "Tourism appeal"
+ te_map_modes.1.b:0 "GDP per capita"
+ te_map_modes.1.c:0 "Greenhouse gas emissions"
+ te_map_modes.1.d:0 "Our cartographers stand ready to redraw the world map by whatever measure interests us most. Pick a metric below, then switch to the #b Migration Attraction#! map mode — its color gradient will read as the metric we have chosen rather than as actual migration appeal.\n\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!"
+ te_map_modes.1.e_clear:0 "Clear overlay"
+ te_map_modes.1.f:0 "Maps are arguments, not records — and tonight we choose the argument."
+ te_map_modes.1.t:0 "Cartographic Survey"
+
+#
 # TREATY_ARTICLE_EVENTS
 #
  treaty_article_events.1.a:0 "Quietly thank our partners"
