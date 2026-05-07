@@ -117,7 +117,7 @@ ce_military_garrison = {
 		# Infamy compounds with repeated cycles — a sustained Iron-Fist run
 		# accumulates infamy that itself draws GP condemners (existing -0.6/mo
 		# bar drain per condemner, escalating at tier 4 and 6).
-		add_infamy = 5
+		change_infamy = 5
 	}
 }
 

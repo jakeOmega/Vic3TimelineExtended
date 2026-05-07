@@ -346,6 +346,7 @@
  je_banking_cycle_reason_command_economy:0 "In a Command Economy the cycle should be read as a logistics coordination gauge: momentum and bubble pressure track supply-chain synchronization and administrative strain rather than investor confidence. Use directed credit, plan revisions, and allocation orders to resolve bottlenecks."
  je_banking_cycle_reason_cooperative_ownership:0 "Under Cooperative Ownership the cycle tracks the balance between worker consumption and capital availability. High bubble pressure reflects excessive payouts and low reinvestment; interventions include mutual aid funds and council moral suasion to prioritize long-term viability."
  je_banking_cycle_title_market:0 "Boom & Bust Cycle"
+ je_civil_rights_reason:0 "Discriminated communities are demanding equal treatment under the law."
  je_civil_rights_status_discriminatory:0 "Our current laws perpetuate #N discrimination#! against minority communities. The movement demands systemic reform."
  je_civil_rights_status_hostile:0 "Our laws enforce #R active hostility#! toward minority communities. The movement faces a long and difficult struggle."
  je_civil_rights_status_indifferent:0 "Our government takes no position on minority rights. The movement pushes for #G active protection#!."

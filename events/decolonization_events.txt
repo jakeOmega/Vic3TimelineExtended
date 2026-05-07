@@ -3349,7 +3349,7 @@ decolonization_events.54 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/parade_military.dds" }
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3408,7 +3408,7 @@ decolonization_events.300 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/parade_military.dds" }
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 

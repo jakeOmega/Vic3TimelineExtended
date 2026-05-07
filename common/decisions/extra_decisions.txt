@@ -157,17 +157,16 @@ imperial_federation_act_iron_fist = {
 		}
 		# Costs (gated)
 		authority > 300
-		country_prestige >= 100
+		prestige >= 100
 	}
 
 	when_taken = {
-		add_authority = -300
 		add_modifier = {
 			name = imperial_federation_modifier
 			days = -1
 		}
-		set_country_flag = imperial_federation_taken
-		set_country_flag = imperial_federation_iron_fist
+		set_variable = imperial_federation_taken
+		set_variable = imperial_federation_iron_fist
 	}
 
 	ai_chance = {
@@ -215,17 +214,16 @@ imperial_federation_act_civilizing_mission = {
 			has_law = law_type:law_wealth_voting
 		}
 		authority > 300
-		country_prestige >= 100
+		prestige >= 100
 	}
 
 	when_taken = {
-		add_authority = -300
 		add_modifier = {
 			name = imperial_federation_modifier
 			days = -1
 		}
-		set_country_flag = imperial_federation_taken
-		set_country_flag = imperial_federation_civilizing
+		set_variable = imperial_federation_taken
+		set_variable = imperial_federation_civilizing
 	}
 
 	ai_chance = {
@@ -267,7 +265,6 @@ mandate_system_decision = {
 	}
 
 	when_taken = {
-		add_authority = -100
 		add_modifier = {
 			name = mandate_system_modifier
 			days = -1

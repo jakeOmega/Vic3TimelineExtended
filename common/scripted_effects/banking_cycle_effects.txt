@@ -1970,6 +1970,12 @@ banking_cycle_update_progress_bars = {
 #    is NOT available, so we scope via the je: accessor instead.
 banking_cycle_post_event_refresh = {
 	hidden_effect = {
+		# Clamp before bar update — events may push vars below 0 / above 100
+		# and set_bar_progress with out-of-range values spams "clamping to min".
+		if = { limit = { ROOT.var:finance_cycle_value < 0 }   ROOT = { set_variable = { name = finance_cycle_value value = 0 } } }
+		if = { limit = { ROOT.var:finance_cycle_value > 100 } ROOT = { set_variable = { name = finance_cycle_value value = 100 } } }
+		if = { limit = { ROOT.var:bubble_pressure < 0 }       ROOT = { set_variable = { name = bubble_pressure value = 0 } } }
+		if = { limit = { ROOT.var:bubble_pressure > 100 }     ROOT = { set_variable = { name = bubble_pressure value = 100 } } }
 		banking_cycle_apply_phase_modifiers = yes
 		je:je_banking_cycle = {
 			set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }

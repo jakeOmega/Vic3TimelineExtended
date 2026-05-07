@@ -115,6 +115,6 @@ colonial_overreach_ratio = {
 # Used by the JE's monthly pulse to debit treasury proportional to GDP.
 # 0.5% of GDP per month while Invest is active.
 colonial_invest_monthly_cost = {
-	value = country_gdp
+	value = gdp
 	multiply = -0.005
 }

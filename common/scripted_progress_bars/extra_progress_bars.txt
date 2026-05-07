@@ -544,14 +544,14 @@ civil_rights_support_bar = {
 
 		# Radicalization boost: high turmoil feeds recruits
 		if = {
-			limit = { owner = { radical_fraction >= 0.10 } }
+			limit = { owner = { radical_fraction = { value >= 0.10 } } }
 			add = {
 				desc = "cr_radicals_tier1_tt"
 				value = 0.5
 			}
 		}
 		if = {
-			limit = { owner = { radical_fraction >= 0.20 } }
+			limit = { owner = { radical_fraction = { value >= 0.20 } } }
 			add = {
 				desc = "cr_radicals_tier2_tt"
 				value = 0.5

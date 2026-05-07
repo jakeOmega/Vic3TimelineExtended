@@ -130,10 +130,14 @@ types state_panel_types {
 			autoresizescrollarea = yes
 			layoutpolicy_horizontal = preferred
 			scrollbarpolicy_horizontal = as_needed
+			scrollbarpolicy_vertical = always_off
 			scrollbaralign_horizontal = bottom
 
 			scrollbar_horizontal = {
 				using = horizontal_scrollbar
+			}
+			scrollbar_vertical = {
+				using = vertical_scrollbar
 			}
 
 			scrollwidget = {

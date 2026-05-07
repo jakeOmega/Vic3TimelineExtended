@@ -2093,7 +2093,7 @@ movement_events_te.301 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -2126,7 +2126,7 @@ movement_events_te.303 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -2166,9 +2166,9 @@ movement_events_te.304 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_documents.dds"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = movement_events_te.304.t
 	desc = movement_events_te.304.d
@@ -2196,7 +2196,7 @@ movement_events_te.305 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/movement_civil_rights.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 

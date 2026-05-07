@@ -848,13 +848,13 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** The Veterans' Protest
 - **Description:** Soldiers home from the colonies have begun organizing. They have seen what they have seen — and what they have done — and they are no longer quiet about it. The petty bourgeoisie, the small-business backbone of the war economy, sides with them: their sons, their employees, their friends. The pension halls are full; the parade grounds are not.
 - **Flavor:** #italic \"I served. I came home. I will not serve again.\"#!
-- **Current image:** gfx/event_pictures/parade_military.dds
+- **Current image:** gfx/event_pictures/military_parade.dds
 
 ### decolonization_events.300
 - **Title:** The Imperial Federation Act
 - **Description:** [ROOT.GetCountry.GetName] has formally federated its empire. After three years of unbroken stability, the assembled deputies of the metropole and the colonies have ratified the act binding them together under a single, indissoluble crown. Where there were disparate possessions there is now one structure. The Iron Fist that held them is now the Iron Hand that joins them; the world's accommodation, however reluctant, is final.\n\nThere will still be voices of dissent. They will be answered, as they have been answered, with the means we have always preferred.
 - **Flavor:** #italic The empire stands. The empire is now a fact, not a question.#!
-- **Current image:** gfx/event_pictures/parade_military.dds
+- **Current image:** gfx/event_pictures/military_parade.dds
 
 ### decolonization_events.301
 - **Title:** The Civilizing Mission Compact
@@ -1906,25 +1906,25 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** First Mass Rally Draws Notice
 - **Description:** What started as a community meeting filled a city block. Sympathetic newspapers run the photograph above the fold. The movement has, suddenly, faces and names.
 - **Flavor:** The first rally that the country couldn't ignore.
-- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+- **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.303
 - **Title:** Coalition Forms with Trade Unions
 - **Description:** Local branches of organized labor open their halls to civil rights organizers. Joint statements appear; shop floors are now movement spaces.
 - **Flavor:** Wages and rights, on the same picket line.
-- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+- **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.304
 - **Title:** Federal Commission Recommends Action
 - **Description:** After two years of hearings, the civil rights commission's report lands on the cabinet's desk. Its recommendations are concrete, costed, and politically inconvenient. They are, however, recommendations.
 - **Flavor:** An official document with teeth, if anyone chooses to use them.
-- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+- **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.305
 - **Title:** The March on the Capital
 - **Description:** Hundreds of thousands fill the avenues outside the legislature. The speeches are broadcast; the demands are clear; the cameras do not look away. The country is being asked, in front of the cameras, what it intends to be.
 - **Flavor:** We have come, peacefully, in numbers, to be answered.
-- **Current image:** gfx/event_pictures/movement_civil_rights.dds
+- **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ## nuclear_weapon_events.txt
 

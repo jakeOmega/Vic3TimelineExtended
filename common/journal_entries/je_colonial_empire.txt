@@ -98,7 +98,9 @@
 					"scripted_bar_progress(colonial_stability_bar)" >= 100
 				}
 				# IF Act capstone — set by the Imperial Federation Act decision
-				has_country_flag = imperial_federation_taken
+				root = {
+					has_variable = imperial_federation_taken
+				}
 			}
 		}
 	}
@@ -112,11 +114,11 @@
 	# capstone is the explicit "victory" path; it bypasses the bar-100 routing.
 	on_complete = {
 		if = {
-			limit = { has_country_flag = imperial_federation_iron_fist }
+			limit = { has_variable = imperial_federation_iron_fist }
 			trigger_event = { id = decolonization_events.300 }   # Iron Fist Federation capstone
 		}
 		else_if = {
-			limit = { has_country_flag = imperial_federation_civilizing }
+			limit = { has_variable = imperial_federation_civilizing }
 			trigger_event = { id = decolonization_events.301 }   # Civilizing Mission capstone
 		}
 		else_if = {

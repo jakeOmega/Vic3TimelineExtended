@@ -1196,7 +1196,13 @@ population_transfer_effect = {
 		}
 	}
 
-	# Apply disruption to source_country (losing pops)
+	# Apply disruption to source_country (losing pops).
+	# Note: pop_transfer_count must persist — add_modifier's `multiplier` is
+	# re-evaluated later (decay tick / tooltip), and removing the variable here
+	# makes those re-evaluations read type 'none' and throw a script error per
+	# tick. The variable is reset to 0 by set_variable at the start of every
+	# call, so leaving it set between calls is safe. Vanilla follows the same
+	# pattern (e.g. c:FRA.var:PRC_money_transfer in 01_paris_commune.txt).
 	scope:source_country = {
 		if = {
 			limit = {
@@ -1214,10 +1220,6 @@ population_transfer_effect = {
 					max = 2
 				}
 			}
-		}
-		if = {
-			limit = { has_variable = pop_transfer_count }
-			remove_variable = pop_transfer_count
 		}
 	}
 
@@ -1239,10 +1241,6 @@ population_transfer_effect = {
 					max = 2
 				}
 			}
-		}
-		if = {
-			limit = { has_variable = pop_transfer_count }
-			remove_variable = pop_transfer_count
 		}
 	}
 }
