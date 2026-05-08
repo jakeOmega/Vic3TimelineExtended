@@ -118,6 +118,7 @@
 	# for at least 18 months. Falls through to the existing generic .200 event
 	# when no track took clear lead (e.g. fast law-passage with little policy use).
 	on_complete = {
+		cr_ensure_tracker_vars_effect = yes
 		if = {
 			limit = {
 				var:cr_federal_months >= var:cr_grassroots_months
@@ -172,6 +173,7 @@
 	# Path-dependent failure: distinguish suppression (oppressive aftermath),
 	# cooptation (movement demobilized by token reform), and gradualist drift.
 	on_fail = {
+		cr_ensure_tracker_vars_effect = yes
 		if = {
 			limit = {
 				OR = {
@@ -193,6 +195,8 @@
 
 	on_monthly_pulse = {
 		effect = {
+			cr_ensure_tracker_vars_effect = yes
+
 			# --- Tracker increments — one variable per active button modifier ---
 			if = {
 				limit = { has_modifier = cr_grassroots_modifier }

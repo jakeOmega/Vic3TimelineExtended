@@ -11,3 +11,23 @@ save_civil_rights_movement_scope = {
 		save_scope_as = civil_rights_movement
 	}
 }
+
+# Defensive zero-init for the six cr_*_months trackers consumed by je_civil_rights's
+# on_complete / on_fail / on_monthly_pulse. Required because can_revolution_inherit = yes
+# transfers the JE to a successor country without re-running immediate, so the trackers
+# may not exist when on_fail fires (the fail block's NOT = { has_active_civil_rights_movement }
+# can evaluate true on the first tick post-inheritance, before on_monthly_pulse runs).
+cr_ensure_tracker_vars_effect = {
+	if = { limit = { NOT = { has_variable = cr_grassroots_months } }
+		set_variable = { name = cr_grassroots_months value = 0 } }
+	if = { limit = { NOT = { has_variable = cr_federal_months } }
+		set_variable = { name = cr_federal_months value = 0 } }
+	if = { limit = { NOT = { has_variable = cr_gradualist_months } }
+		set_variable = { name = cr_gradualist_months value = 0 } }
+	if = { limit = { NOT = { has_variable = cr_cooptation_months } }
+		set_variable = { name = cr_cooptation_months value = 0 } }
+	if = { limit = { NOT = { has_variable = cr_suppression_months } }
+		set_variable = { name = cr_suppression_months value = 0 } }
+	if = { limit = { NOT = { has_variable = cr_segregationist_months } }
+		set_variable = { name = cr_segregationist_months value = 0 } }
+}
