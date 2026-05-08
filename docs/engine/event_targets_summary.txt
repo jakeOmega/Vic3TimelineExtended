@@ -1,0 +1,348 @@
+# Auto-generated from event_targets.log @ 2026-05-07T23:45:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+
+country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
+country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
+strategic_region|ai_colonization_value|value|Scope to target country AI desire to colonize a strategic region (example:
+country|ai_gdp_comparison|value|Scope to comparative GDP between two countries (example:
+country|ai_ideological_opinion|value|Scope to AI ideological opinion of scope country on target country (example:
+country|ai_navy_comparison|value|Scope to comparative navy strength between two countries (example:
+state|ai_state_value|value|Scope to target country AI desire to own scope state (example:
+country|ai_subject_value|value|Scope to AI desire of target country to have scope country as a subject (example:
+country|ai_transit_rights_value|value|Scope to AI desire of to have transit rights through target country (example:
+market_goods|ai_treaty_export_value|value|Scope to target country AI desire to export scoped market good (example:
+country|ai_treaty_fairness|value|Scope to AI evaluation of how fair (to both sides) it considers existing treaty articles with the target country to be (example:
+market_goods|ai_treaty_import_value|value|Scope to target country AI desire to import scoped market good through treaties (example:
+state|ai_treaty_port_value|value|Scope to target country AI desire to have a treaty port in scope state (example:
+market_goods|ai_treaty_trade_value|value|Scope to target country AI desire to import and export scoped market good (example:
+country|ai_treaty_value|value|Scope to AI evaluation of how favorable to itself it considers existing treaty articles with the target country to be (example:
+treaty_options,treaty|amended_treaty|treaty|Scope to the treaty the scoped treaty is amending
+|amendment_type|amendment_type|Scope to an amendment type from its name (amendment_type:key) Global Link: yes
+country|army_size|value|Number of battalions of scope country, excluding currently raised conscripts.
+country|army_size_including_conscripts|value|Number of battalions of scope country, including currently raised conscripts.
+country|army_size_including_raised_conscripts|value|Number of battalions of scope country, including currently raised conscripts but excluding unraised conscripts.
+|array_define|value|Reference the value of a numeric value in an array define: array_define:Namespace|Name|Index.
+amendment|attached_law|law|Links from an amendment scope to the law the amendment is attached to
+battle|attacker_side|battle_side|Scope from a battle to the BattleSide corresponding to the attacker
+war|attacker_warleader|country|Scope to the attacker warleader of a war
+front|average_defense|value|Returns the average defense of units on Front on the same side as Country
+country,state|average_expected_sol|value|Get the average expected Standard of Living of the scope
+front|average_offense|value|Returns the average offense of units on Front on the same side as Country
+character,interest_group|average_progressiveness|value|Get the average progressiveness of the scoped character or interest group
+country,state|average_sol|value|Get the average Standard of Living of the scope
+state|b|building|Scope to the building of specified key in the state
+goods|base_price|value|Get the base price of the scoped good
+battle_side|battle|battle|Scope from a battle side to the battle itself
+|bg|building_group|Scope to a building group from its name (bg:bg_logging) Global Link: yes
+treaty_options,treaty|binding_period|value|Get the original binding period in days when the treaty was signed for the scoped treaty
+|bt|building_type|Scope to a building type Global Link: yes
+new_combat_unit|building|building|Scope to the related building
+country|building_levels|value|Get the total number of non-subsistence building levels of the scoped country
+|c|country|Scope to the country with specified tag Global Link: yes
+country|cached_ai_coastal_population|value|Scope to total coastal population recorded in AI spending variables (example:
+country|cached_ai_incorporated_coastal_population|value|Scope to total incorporated coastal population recorded in AI spending variables (example:
+country|cached_ai_incorporated_population|value|Scope to total incorporated population recorded in AI spending variables (example:
+country|cached_ai_overseas_subject_population|value|Scope to total population in direct non-adjacent subjects recorded in AI spending variables (example:
+country|cached_ai_subject_population|value|Scope to total population in direct subjects recorded in AI spending variables (example:
+country|cached_ai_total_population|value|Scope to total population recorded in AI spending variables (example:
+country|cached_ai_unincorporated_coastal_population|value|Scope to total unincorporated coastal population recorded in AI spending variables (example:
+country|cached_ai_unincorporated_population|value|Scope to total unincorporated population recorded in AI spending variables (example:
+country|capital|state|Scope to the capital state of a country
+|catalyst_type|diplomatic_catalyst_type|Scope to a diplomatic catalyst type from its name (catalyst_type:catalyst_relations_level_improved) Global Link: yes
+|cd|country_definition|Scope to the country definition with specified tag Global Link: yes
+political_movement|civil_war|civil_war|Scope to the civil war started by the scoped (revolutionary) political movement.
+country|civil_war_origin_country|country|Scope to the origin country of a civil war country
+country|colonial_growth_per_colony|value|Scope to the country's colonial growth per colony value (example:
+province|combat_width|value|Scope to combat width multiplier of scope province
+character|command_limit_num_units|value|Get the baseline number of units from their military formation a commander would normally get, depending on their command limit
+military_formation|commander|character|Scope from a military formation to its commander character
+character|commander_military_formation|military_formation|Scope to the Military Formation of a Character.
+country|company|company|Scope to the scoped country's company of the named company type (company:company_rheinmetall)
+|company_type|company_type|Scope to a company type from its name (company_type:company_rheinmetall) Global Link: yes
+|compare_complex_value|value|A comparison trigger that needs a parsable string parameter that will return its value in the context it is used eg: scope:root.number_of(armies) W...
+|compare_value|value|A comparison trigger that will return its value in the context it is used eg: root.gold Wild Card: yes
+province,state|controller|country|Scope to the controller of the object
+military_formation,ship|country|country|Scope to the country of a military formation or ship
+country|country_definition|country_definition|Scope to country's definition
+country|credit|value|Scope to the current amount of max credit the country can take
+|cu|culture|Scope to the culture with specified key Global Link: yes
+character,new_combat_unit,political_movement,pop|culture|culture|Scope to pop's or character's culture
+military_formation|current_hq|hq|Returns the current HQ of the scoped military formation (may not be valid if the formation is not currently stationed in an HQ)
+law|currently_active_law_in_group|law|Scope from a law to the currently active law in that group
+country|currently_enacting_law|law|Scope from a country to the law that they're currently enacting
+state|decree_cost|value|Scope to a state's cost for a certain decree
+battle|defender_side|battle_side|Scope from a battle to the BattleSide corresponding to the defender
+war|defender_warleader|country|Scope to the defender warleader of a war
+new_combat_unit|defense|value|Returns the unit's defense rating (including impact from their commander)
+|define|value|Reference the value of a numeric or color define: define:Namespace|Name Global Link: yes
+new_combat_unit|demoralized|value|Returns the unit's number of demoralized manpower
+military_formation|detection|value|Links from a fleet scope to the total detection of the ships in the fleet
+country|diplomatic_pact_expense_ratio|value|Scope to the ratio of diplomatic pact expenses to income for this country, clamped 0-1 (example:
+diplomatic_pact|diplomatic_pact_other_country|country|Scope to the other country of the diplomatic pact in scope
+war|diplomatic_play|diplomatic_play|Scope from a war to its diplomatic play
+treaty|enforced_on_country|country|Scope to the enforced_on_country of an enforced treaty
+treaty|enforcer_country|country|Scope to the enforcer_country of an enforced treaty
+company|executive|character|Scope from a company to its executive character
+diplomatic_pact,treaty_article,treaty_options,treaty_article_options,treaty|first_country|country|Scope to the first_country of any of: 1.
+|flag|flag|Flag literals eg: flag:the_boss Global Link: yes
+country|flagship|ship|Get the flagship of the scoped country
+battle,character,military_formation,invasion,province|front|front|Scope to a front from various scopes 	From a battle to the front where it takes place 	From a character to the front where they are at or travellin...
+front|front_length|value|Returns the number of provinces in Front
+|g|goods|Scope to the goods with specified key Global Link: yes
+country,market,state,strategic_region|gdp|value|Get the scoped country's yearly predicted GDP
+country|get_ruler_for|character|Scopes from country to a character that would be ruler, under the given transfer of power type get_ruler_for:parliamentary_elective
+|global_gdp|value|Get the global yearly predicted GDP
+|global_productivity|value|Scope to global productivity values (example: global_productivity:high_threshold)
+|global_var||Reference a previous set global variable via its name eg: global_var:important_thing Global Link: yes
+journal_entry|goal_value|value|Scope to the journal entry's goal value
+market_goods,state_goods|goods|goods|Scope to the goods traded by a trade route
+country|government_size|value|Get the scoped country's current number of Parties & independent IGs in government
+building,building_type|group|building_group|Scope from an object to its group
+|harvest_condition_type|harvest_condition_type|Scope to a harvest condition type from its name (harvest_condition_type:drought) Global Link: yes
+country|heir|character|Scope to the heir of a country
+character,pop|home_country|country|Scopes to the home country of an exile
+military_formation|home_hq|hq|Returns the home HQ of the scoped military formation
+|i|ideology|Scope to ideology specified by key Global Link: yes
+|identity|power_bloc_identity|Scope to the power bloc identity from its name (identity:key) Global Link: yes
+power_bloc|identity|power_bloc_identity|Scope to the central identity for the scoped power bloc
+|ideology|ideology|Scope to a ideology from its name (ideology:ideology_anarchist) Global Link: yes
+character|ideology|ideology|Scope to the ideology of the scoped character (example: scope:example_character
+country,political_movement|ig|interest_group|Scope to the interest group of specified key belonging to the country
+|ig_trait|interest_group_trait|Scope to the Interest Group trait with specified key Global Link: yes
+|ig_type|interest_group_type|Scope to an interest group type Global Link: yes
+country|imposed_law|law|Scope from a country to the law currently imposed on them (enacting or not)
+country,law|imposer_of_law|country|Scope from a country to the country currrently imposing a law on them
+country|income|value|Get the current weekly income of the scoped country
+country|income_transfer_expenses|value|Scope to the amount of money scope country is transfering to other countries via treaties & pacts (example:income_transfer_expenses >= 100)
+country|income_transfer_relative_expenses|value|Scope to the fraction of their income country is transfering to other countries via treaties & pacts (example:income_transfer_relative_expenses >= ...
+country|infamy|value|Scope to infamy of scope country (example:
+|infamy_threshold|value|Scope to infamy level threshold for comparison purposes (infamy_threshold:infamous)
+diplomatic_play|initiator|country|Scope to the initiator of the object
+treaty_article,treaty_article_options|input_building_type|building_type|Scope to the building type input in a treaty article
+treaty_article,treaty_article_options|input_company|company|Scope to the company input in a treaty article
+treaty_article,treaty_article_options|input_country|country|Scope to the country input in a treaty article
+treaty_article,treaty_article_options|input_goods|goods|Scope to the goods input in a treaty article
+treaty_article,treaty_article_options|input_law|law_type|Scope to the law input in a treaty article
+treaty_article,treaty_article_options|input_market_goods|market_goods|Scope to the market goods input in a treaty article (example: input_market_goods:root)
+treaty_article,treaty_article_options|input_quantity|value|Scope to the quantity input in a treaty article
+treaty_article,treaty_article_options|input_ship|ship|Scope to the ship input in a treaty article
+treaty_article,treaty_article_options|input_state|state|Scope to the state input in a treaty article
+treaty_article,treaty_article_options|input_strategic_region|strategic_region|Scope to the strategic region input in a treaty article
+country|institution|institution|Scope to a country's institution from its name (institution:institution_health_system)
+character|interest_group|interest_group|Scope to the interest group of the character!
+character|interest_group_type|interest_group_type|Scope to the type of the scoped character's interest group
+front|invasion|invasion|Returns the invasion of the scoped front if any
+invasion|invasion_attacker|country|If used in an invasion scope, scope to the country executing the invasion.
+invasion|invasion_defender|country|If used in an invasion scope, scope to the country the attacked state is controlled by.
+institution|investment|value|Scope to current investment level in an institution (example:
+institution|investment_max|value|Scope to the country's current maximum investment level in an institution (example:
+country|investment_pool_income|value|Get the current weekly investment pool income of the scoped country
+|is_setup|value|Scope to true/false if gamestate is being initialized! Global Link: yes
+country|je|journal_entry|Scope to the journal entry of specified key belonging to the country
+|je_tutorial|journal_entry|Scope to the active tutorial lesson's journal entry (do not use this outside tutorial)
+province,state|land_controller_hq|hq|Returns the province or state controller land HQ
+province,state|land_hq|hq|Returns the province or state owner local land HQ
+market_goods|largest_exporting_market|market|Scope to the largest exporting market for the scope market good to the local market
+market_goods|largest_importing_market|market|Scope to the largest importing market for the scope market good from the local market
+law|law_type|law_type|Scope from an object to its law type
+|law_type|law_type|Scope to a law type from its name (law_type:law_protected_speech) Global Link: yes
+interest_group|leader|character|Scope to the leader of the interest group
+country|legitimacy|value|Scope to the current amount of legitimacy in country
+building|level|value|Scope to the level of a building
+building|level_after_queued_constructions|value|Scope to the level of a building after all queued constructions finish
+country|lobby_foreign_anti_clout|value|Scope to the total clout of all anti-country foreign policy lobbies targeting a specific country (lobby_foreign_anti_clout:root >= 0.2)
+country|lobby_foreign_pro_clout|value|Scope to the total clout of all pro-country foreign policy lobbies targeting a specific country (lobby_foreign_pro_clout:root >= 0.2)
+country|lobby_in_government_foreign_anti_clout|value|Scope to the total clout of all anti-country foreign policy lobbies in government targeting a specific country (lobby_in_government_foreign_anti_cl...
+country|lobby_in_government_foreign_pro_clout|value|Scope to the total clout of all pro-country foreign policy lobbies in government targeting a specific country (lobby_in_government_foreign_pro_clou...
+interest_group|lobby_join_weight|value|Scope to the join weight of an interest group to a particular lobby (lobby_join_weight:root >= 5)
+|lobby_type|political_lobby_type|Scope to a political lobby type from its name (lobby_type:lobby_pro_country) Global Link: yes
+country|lobby_war_opposition|value|Scope to the total clout of all lobbies that oppose the scoped war (lobby_war_opposition:root >= 0.2)
+country|lobby_war_support|value|Scope to the total clout of all lobbies that support the scoped war (lobby_war_support:root >= 0.2)
+|local_var||Reference a previous set local variable via its name eg: local_var:person_of_interest Global Link: yes
+new_combat_unit|manpower|value|Returns the unit's manpower
+country,building,market,market_goods,province,state,state_goods,state_region|market|market|Scope to the market of the object
+country|market_capital|state|Scope to the market capital of a country
+market_goods|market_export_cap|value|Get the maximum amount of goods the market can export based on it's production of the scoped MarketGoods
+market_goods|market_import_cap|value|Get the maximum amount of goods the market can import based on it's consumption of the scoped MarketGoods
+state|mass_migration_culture|culture|Scope to the mass migration target culture of a state
+market|mg|market_goods|Scope from a market to the MarketGoods with the specified key
+country,state|migration_pull|value|Get the migration pull for a state or the mass migration pull for a country.
+country|military_expenses|value|Get the current military expenses (slaves, wages and goods) of the scoped country
+country|military_expenses_share|value|Get the current share of military expenses (slaves, wages and goods) relative to the total expenses of the scoped country
+new_combat_unit|mobilization|value|Returns the unit's mobilization value between 0 and 1
+|mobilization_option|mobilization_option|Scope to a mobilization option from its name (mobilization_option:key) Global Link: yes
+country,battle_side,building,character,interest_group,market,power_bloc,state|modifier|value,boolean|Scope to the value of the modifier type of specified key belonging to the current object
+party|momentum|value|Get the scoped party's raw momentum
+new_combat_unit|morale|value|Returns the unit's morale
+political_movement|most_desired_law|law_type|Scope to the law type that political movement most desires to be enacted (if any).
+|movement_type|political_movement_type|Scope to a political movement type from its name (movement_type:movement_religious_majority) Global Link: yes
+country|mutual_trade_value_with_country|value|Scope to the total base value of goods traded in trade routes between the two markets (example: mutual_trade_value_with_country:root >= 1000)
+|named_script_value|value,color|A script value that will calculate and returns its value in the context it is used Wild Card: yes
+culture|national_awakening_state_region|state_region|Links from a culture scope to the state region with an active national awakening for that culture
+country|naval_combat_power|value|Scope to the country's navy combat power (example:
+province|naval_controller_hq|hq|Returns the province or state controller navy HQ
+country|naval_hostility_average_damage_dealt|value|Scope to average damage dealt by this country in naval hostilities it initiated over the lookback period.
+country|naval_hostility_damage|value|Scope to damage points inflicted by this country against another in active naval hostilities (example: naval_hostility_damage:root >= 50)
+province|naval_hq|hq|Returns the province or state owner local navy HQ
+country|naval_vulnerability|value|Scope to a country's naval vulnerability score based on trade reliance and coastal GDP share, capped at a define maximum
+country|navy_size|value|Number of flotillas of scope country.
+state|nf|decree|Scope to a Decree of specified key applied to the state
+|no|boolean|Boolean literal for false values Global Link: yes
+country|num_active_interests|value|Scope to the number of active interests a country has
+country|num_active_natural_interests|value|Scope to the number of active natural interests a country has
+country|num_active_plays|value|Get the current number of active Diplomatic Plays the scoped country started
+province|num_active_ships|value|Get the number of active ships for military formations in the province that are allied to the specified country
+country,character,military_formation|num_active_ships|value|Get the number of active ships for a country, commander or military formation
+province|num_active_ships_in_battle|value|Get the number of active ships in battle for military formations in the province that are allied to the specified country
+country,character,military_formation|num_active_ships_in_battle|value|Get the number of active ships in battle for a country, commander or military formation
+province|num_active_ships_not_in_battle|value|Get the number of active ships not in battle for military formations in the province that are allied to the specified country
+country,character,military_formation|num_active_ships_not_in_battle|value|Get the number of active ships not in battle for a country, commander or military formation
+country|num_admirals|value|Scope to the country's number of admirals
+country|num_alliances|value|Get the total number of alliances of the scoped country (example: num_alliances:root >= 2)
+country|num_alliances_and_defensive_pacts_with_allies|value|Scope to the number of alliances target country has with allies of scope country (example: num_alliances_and_defensive_pacts_with_allies:root >= 2)
+country|num_alliances_and_defensive_pacts_with_rivals|value|Scope to the number of alliances & defensive pacts target country has with rivals of scope country (example: num_alliances_and_defensive_pacts_with...
+character|num_battalions|value|Returns the number of active battalions under a commander
+country|num_characters|value|Scope to the country's number of characters
+country|num_colony_projects|value|Get the scoped country's current number of incomplete / in progress colony projects
+military_formation|num_commanderless_units|value|Number of units in a MilitaryFormation which currently don't have a commander due to commanders Command Limit.
+country|num_commanders|value|Scope to the country's number of commanders
+front|num_defending_battalions|value|Returns the total number of units in battle on Front on the same side as Country
+country|num_defensive_pacts|value|Scope to the number of defensive pacts target country has in total (example:
+hq|num_garrison_units|value|Returns the number of units garrisoned in a HQ
+country|num_generals|value|Scope to the country's number of generals
+country|num_income_transfer_pacts|value|Scope to the number of income-transfering (to others) pacts target country has in total (example:
+country|num_income_transfer_treaty_articles|value|Scope to the number of income-transfering (to others) treaty articles target country has in total (example:
+country|num_income_transfers|value|Scope to the number of income-transfering (to others) pacts and treaty articles target country has in total (example:
+country|num_incorporated_states|value|Get the scoped country's current number of incorporated states
+country|num_interests|value|Scope to the number of interests a country has (including inactive)
+power_bloc|num_mandates|value|Scope to the number of available mandates of the scoped power bloc (power_bloc.num_mandates > 0)
+character|num_mobilized_battalions|value|Returns the number of fully mobilized units under a General
+country|num_natural_interests|value|Scope to the number of natural interests a country has (including inactive)
+province|num_non_destroyed_ships|value|Get the number of non-destroyed ships for military formations in the province that are allied to the specified country
+country,character,military_formation|num_non_destroyed_ships|value|Get the number of non-destroyed ships for a country, commander or military formation
+province|num_non_destroyed_ships_in_battle|value|Get the number of non-destroyed ships in battle for military formations in the province that are allied to the specified country
+country,character,military_formation|num_non_destroyed_ships_in_battle|value|Get the number of non-destroyed ships in battle for a country, commander or military formation
+province|num_non_destroyed_ships_not_in_battle|value|Get the number of non-destroyed ships not in battle for military formations in the province that are allied to the specified country
+country,character,military_formation|num_non_destroyed_ships_not_in_battle|value|Get the number of non-destroyed ships not in battle for a country, commander or military formation
+country|num_obligations_earned|value|Scope from a country to the number of obligations others owe them (=which they have earned)
+country|num_pending_events|value|Scope to the number of pending events in scope country
+country|num_pending_events|value|Scope to the number of pending events of given category in scope country num_pending_events:enactment > 0
+country|num_politicians|value|Scope to the country's number of politicians
+country|num_positive_relations|value|Get the current number of countries with positive Relation with the scoped country
+front,state,state_region|num_provinces|value|Get the scoped entity's current number of provinces scopes: state, stateregion, front
+country|num_queued_constructions|value|Scope to the number of queued constructions target country has in total (example:
+country|num_queued_government_constructions|value|Scope to the number of queued government constructions target country has in total (example:
+country|num_queued_private_constructions|value|Scope to the number of queued private constructions target country has in total (example:
+country|num_rivals|value|Scope to the number of rivals target country has in total (example:
+country|num_ruling_igs|value|Get the scoped country's current number of IGs in government
+country|num_shared_rivals|value|Scope to the number of shared rivals scope country has with target country (example: num_shared_rivals:root >= 2)
+province|num_ships|value|Get the number of ships for military formations in the province that are allied to the specified country
+country,character,military_formation|num_ships|value|Get the number of ships for a country, commander or military formation
+province|num_ships_in_battle|value|Get the number of ships in battle for military formations in the province that are allied to the specified country
+country,character,military_formation|num_ships_in_battle|value|Get the number of ships in battle for a country, commander or military formation
+province|num_ships_not_in_battle|value|Get the number of ships not in battle for military formations in the province that are allied to the specified country
+country,character,military_formation|num_ships_not_in_battle|value|Get the number of ships not in battle for a country, commander or military formation
+country,military_formation|num_ships_of_group|value|Number of ships of the provided ship group in the scoped country or military formation "num_ships_of_group(ship_group:ship_group_capital_ships)"
+country|num_states|value|Get the scoped country's current number of states
+front|num_total_battalions|value|Returns the total number of units on Front on the same side as Country   --------------------  Event Targets Saved from Code:  context amendment ar...
+country|num_unincorporated_states|value|Get the scoped country's current number of unincorporated states
+province|num_units|value|Get the number of active units for military formations in the province that are allied to the specified country
+character,military_formation|num_units|value|Get the number of active units for a commander or military formation
+province|num_units_in_battle|value|Get the number of active units in battle for military formations in the province that are allied to the specified country
+character,military_formation|num_units_in_battle|value|Get the number of active units in battle for a commander or military formation
+province|num_units_not_in_battle|value|Get the number of active units not in battle for military formations in the province that are allied to the specified country
+character,military_formation|num_units_not_in_battle|value|Get the number of active units not in battle for a commander or military formation
+character|num_units_share|value|Share of units a commander has considering his command limit.
+state|num_world_market_hub_trade_center_levels|value|Get the total number of trade center levels associated with scope world market hub state
+new_combat_unit|offense|value|Returns the unit's offense rating (including impact from their commander)
+character|opposing_commander|character|Scope from a character in battle to the character on the other side of the battle
+battle_side|opposite_battle_side|battle_side|Scope from a battle side to its opposite
+country|overlord|country|Scope to the direct overlord of the country in scope
+country,building,character,new_combat_unit,company,decree,institution,interest_marker,interest_group,journal_entry,law,market,market_goods,military_formation,political_movement,pop,province,ship,state|owner|country|Scope to the owner country of object
+country|owning_company|company|Scope to the company owning the scoped country
+|p|province|Scope to province specified by hex key Global Link: yes
+amendment|parent_law_type|law_type|Links from an amendment scope to the law type that is considered the amendment's parent
+market|participants|value|Get the total number of participating countries in the scoped market
+interest_group|party|party|Scope to the party that an IG is supporting
+country|pirated_trade_value_by|value|Scope to the average weekly base value of goods pilfered from this country by a target country (example: pirated_trade_value_by:root >= 50)
+|play_type|diplomatic_play_type|Scope to a diplomatic play type from its name (play_type:dp_default_treaty_article) Global Link: yes
+|player|country|Scope to the player (do not use this outside tutorial)
+diplomatic_relations|player_owed_obligation_days_left|value|Scope to number of days left on an obligation in diplomatic relations scope (example:
+character,civil_war|political_movement|political_movement|If used in a character scope, scope to the political movement that character supports.
+|pop_type|pop_type|Scope to a pop type from its name (pop_type:laborers) Global Link: yes
+pop|pop_weight_modifier_scale|value|Get the Pop's weight modifier scale multiplier
+character|popularity|value|Get the scoped character's popularity, normally ranging between -100 and +100
+state|population_below_expected_sol|value|Scope to the current percentage of the state's population that are below their expected standard of living (0-1)
+country|power_bloc|power_bloc|Scope to the power bloc for the scoped country
+power_bloc|power_bloc_leader|country|Scope to the leader country of the scoped power bloc
+new_combat_unit,military_formation,ship|power_projection|value|Get the power projection value of the scoped formation, unit, or ship
+power_bloc|power_struggle_contender|country|Scope to the contender country if there is a power struggle
+|prev||The previous scope Global Link: yes
+country|principal|value|Get the current debt principal of the country
+|principle|power_bloc_principle|Scope to the power bloc principle from its name (principle:key) Global Link: yes
+|principle_group|power_bloc_principle_group|Scope to the power bloc principle group from its name (principle_group:key) Global Link: yes
+company|prosperity|value|Scope to the amount of prosperity for scope company (example:
+battle_side|province|province|Scope from a battle side to the province in which the battle is being fought
+country|py|party|Scope to the active party of specified key belonging to the country
+|rank_value|value|Scope to rank value of a particular country rank (rank_value:great_power)
+building,diplomatic_play,hq,interest_marker,province,state,state_region|region|strategic_region|Scope to the strategic region of the object!
+state_region|region_state|state|Unknown, add something in code registration
+|rel|religion|Scope to the religion with specified key Global Link: yes
+country|relations|value|Scope to relations between two countries (example: relations:root >= 2)
+country|relations_change_rate|value|Scope to daily change in relations progress between two countries (example: relations_change_rate:root > 0)
+|relations_threshold|value|Scope to relations threshold level for comparison purposes (relations_threshold:warm)
+country,character,country_definition,political_movement,pop|religion|religion|Scope to country or country definition's primary religion or pop religion
+treaty_options,treaty|remaining_binding_period|value|Get the current remaining binding period in days for the scoped treaty
+building_type|required_construction|value|Get the required amount of construction for scope building type
+|root||The head of the current top scope eg: reciever of an event, taker of a decision Global Link: yes
+country|ruler|character|Scope to the ruler of a country
+|s|state_region|Scope to state region specified by key Global Link: yes
+|scope||Reference a previously saved scope via its name eg: scope:target Global Link: yes
+diplomatic_relations|scope_relations|value|Scope to relations value in diplomatic relations scope (example:
+diplomatic_relations|scope_tension|value|Scope to tension value in diplomatic relations scope (example:
+military_formation|screening|value|Links from a fleet scope to the total screening of the ships in the fleet
+diplomatic_pact,treaty_article,treaty_options,treaty_article_options,treaty|second_country|country|Scope to the second_country of any of: 1.
+state|sg|state_goods|Scope from a state to the StateGoods with the specified key
+ship|ship_fleet|military_formation|Links from a ship scope to the ship fleet
+ship|ship_group|ship_group|Scope from a ship to its group
+|ship_group|ship_group|Scope to a ship group from its name (ship_group:ship_group_capital_ships) Global Link: yes
+|ship_type|ship_type|Scope to a ship type from its name (ship_type:ship_type_frigate) Global Link: yes
+treaty_article|shipping_lane|shipping_lanes|Scope to the shipping lane for the military formation, or treaty article (goods transfer)
+building_type|slaves_role|pop_type|Scope from building type to it's slaves role pop type
+treaty_article,treaty_article_options|source_country|country|Scope to the source_country of any of: 1.
+amendment|sponsor|interest_group|Links from an amendment scope to the interest group that sponsored the amendment
+|sr|strategic_region|Scope to the strategic region of specified key Global Link: yes
+building,market,pop,province|state|state|Scope to the state of the object
+state|state_region|state_region|Scope to the state region of a state
+country|strait_trade_importance_by|value|Scope to the trade importance of goods this country is trading through straits controlled by a target country.
+|strait_type|strait_type|Scope to a strait type from its name (strait_type:key) Global Link: yes
+diplomatic_play,diplomatic_catalyst,political_lobby,journal_entry|target||Scope to the target of the object
+treaty_article,treaty_article_options|target_country|country|Scope to the target_country of any of: 1.
+country|technology_being_researched|technology|Scope to the current technology a country is researching
+country|techs_researched|value|Scope to the current amount of techs researched of a country
+country|tension|value|Scope to tension between two countries (example: tension:root >= 2)
+|tension_threshold|value|Scope to tension level threshold for comparison purposes (tension_threshold:warm)
+battle_side,state|theater|theater|Scope from a BattleSide or State to its theater
+|this||The current scope
+country|top_overlord|country|Scope to the top overlord of the country in scope
+country|total_crew_needed|value|Get the total crew needed by all ships of a country
+country|total_export_value|value|Scope to the total value of scope country's exports to the world market (example:
+country|total_import_value|value|Scope to the total value of scope country's imports from the world market (example:
+country|total_marine_capacity|value|Get the total marine capacity across all fleets of a country
+diplomatic_relations|total_pirated_trade_value|value|Scope to the total average weekly base value of goods pilfered via piracy between two countries in a diplomatic relations scope (example:
+country|total_trade_value|value|Scope to the total value of scope country's trade with the world market (example:
+market|trade_center|state|Scope to the trade center state of the market!
+building|training_rate|value|Scope to the current maximum weekly training rate of a building
+treaty_article|treaty|treaty|Scope to the treaty a treaty article belongs to
+market_goods|treaty_exports|value|Get the current number of treaty (NOT world market) exports of the good to the market of the scoped MarketGoods
+market_goods|treaty_imports|value|Get the current number of treaty (NOT world market) imports of the good to the market of the scoped MarketGoods
+building,company,diplomatic_play,diplomatic_catalyst,political_lobby,institution,interest_group,law,political_movement,ship,strait,harvest_condition_area,amendment|type|building_type,company_type,diplomatic_play_type,institution_type,interest_group_type,law_type,political_movement_type,ship_type,strait_type,harvest_condition_type,amendment_type|Scope from an object to its type
+|unit_type|combat_unit_type|Scope to a combat unit type from its name (unit_type:key) Global Link: yes
+|value|value|A numeric literal value eg: 1, 5.2, -6 Wild Card: yes Global Link: yes
+|var||Reference a previous set variable via its name eg: var:mortal_enemy
+military_formation|visibility|value|Links from a fleet scope to the total visibility of the ships in the fleet
+military_formation|vulnerability|value|Links from a fleet scope to the total vulnerability of the ships in the fleet
+diplomatic_play|war|war|Scope from a diplomatic play to its war
+company|weekly_prosperity_change|value|Scope to the weekly prosperity change for scope company (example:
+pop|workplace|building|Scope to the workplace of a pop
+state|world_market_hub|state|Scope to the world market hub state associated with the scoped state
+|yes|boolean|Boolean literal for true values Global Link: yes

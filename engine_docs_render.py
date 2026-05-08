@@ -450,7 +450,7 @@ def render_modifier_patterns(
     vocabularies: dict | None = None,
     modifiers_mtime: float | None = None,
 ) -> str:
-    """Render docs/modifier_patterns.md.
+    """Render docs/engine/modifier_patterns.md.
 
     pattern_catalog: list of catalog entries from common/_meta/modifier_patterns.yml.
     pattern_index: {pattern_str: {placeholder_value: entry}}.
@@ -748,10 +748,11 @@ def _cli():
         "on-actions": _parse_on_actions_log(sources["on-actions"]),
         "custom-localization": _parse_custom_localization_log(sources["custom-localization"]),
     }
-    written = render_all(engine_docs, doc_path, source_paths=sources)
+    out_dir = os.path.join(doc_path, "engine")
+    written = render_all(engine_docs, out_dir, source_paths=sources)
     for name, size in written.items():
         print(f"  {name}: {size:,} bytes")
-    print(f"Done — wrote {len(written)} files to {doc_path}")
+    print(f"Done — wrote {len(written)} files to {out_dir}")
 
 
 if __name__ == "__main__":

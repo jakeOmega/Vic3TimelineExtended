@@ -467,7 +467,7 @@ def render_report(result: AuditResult) -> str:
 
 
 def regenerate(mod_state) -> dict:
-    """Run the audit and write docs/event_magnitude_report.md.
+    """Run the audit and write docs/engine/event_magnitude_report.md.
 
     Returns a small summary dict so the caller can log counts.
     Failures should propagate; the server's _run_post_load_generators wraps
@@ -476,7 +476,7 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "event_magnitude_report.md")
+    out_path = os.path.join(mod_path, "docs", "engine", "event_magnitude_report.md")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(report)

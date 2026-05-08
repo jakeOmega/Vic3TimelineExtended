@@ -19,11 +19,11 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder (se
   - Start: `.venv/bin/python mod_state_server.py` — auto-starts under VS Code. **Claude has standing approval to start/restart it without asking** — announce in one short sentence and bring it up.
   - Status: `curl http://localhost:8950/status`. Always verify before doing game-data lookups.
   - Reload after mod-file edits: `curl -X POST http://localhost:8950/reload` (full) or `?engine_only=true` (skips ModState rebuild after re-launching the game with no mod-file changes). The reload response includes a `warnings` array if any post-load audit (`modifier_visibility_audit`, `event_magnitude_audit`, `kill_character_audit`) surfaced findings — **always check it** before claiming a change is clean.
-  - Use the **venv Python** for server-touching commands (system `python3` is missing the `regex` package needed by post-load generators). Endpoint inventory: `docs/python_tools.md`.
-- **Parser tests**: `python test_paradox_file_parser.py`
+  - Use the **venv Python** for server-touching commands (system `python3` is missing the `regex` package needed by post-load generators). Endpoint inventory: `docs/guides/python_tools.md`.
+- **Tests**: `python test_<name>.py` per file (unittest-based, no shared runner). 17+ files cover the parser, post-load generators, server endpoints, balance audits, log readers, engine-docs render.
 - **Tab-normalize Paradox files** (after large edits): `python scripts/format_paradox_tabs.py [--check] <files>` — only for brace-based `.txt`; never on YAML/JSON/Python.
 - **Sort/clean localization**: `python organize_loc.py`
-- Other one-shot CLIs (event scaffolding, balance solvers, deposit configs, image pipelines) live under `scripts/generators/`, `scripts/analysis/`, `scripts/image_pipeline/`. Most config-driven generators (`pop_needs_curves`, `apply_ideologies`, `ig_feminism`, `pm_costs`, `resources`, `gen_pb_principle_unlock_descs`, `gen_un_button_descs`, `gen_law_consistency`, `organize_loc`, `event_magnitude_audit`, `gen_event_inventory`) auto-run on `POST /reload` via `POST_LOAD_GENERATORS` in `mod_state_server.py`. Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable while iterating on one of those scripts.
+- Other one-shot CLIs (event scaffolding, balance solvers, deposit configs, image pipelines) live under `scripts/generators/`, `scripts/analysis/`, `scripts/image_pipeline/`. Most config-driven generators and audits (`pop_needs_curves`, `apply_ideologies`, `ig_feminism`, `pm_costs`, `resources`, `gen_pb_principle_unlock_descs`, `gen_un_button_descs`, `gen_law_consistency`, `organize_loc`, `event_magnitude_audit`, `modifier_visibility_audit`, `kill_character_audit`, `gen_event_inventory`) auto-run on `POST /reload` via `POST_LOAD_GENERATORS` in `mod_state_server.py`. Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` to disable while iterating on one of those scripts.
 
 ## Where things live
 
@@ -50,7 +50,7 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 7. **Events** in `events/<system>_events.txt` plus localization YAML.
 8. **Modifier type definitions** in `common/modifier_type_definitions/` registering any dynamic-pattern modifiers.
 
-**Dynamic-modifier scaling pattern**: define a static modifier with unit values, then in an `on_yearly_pulse_*` re-apply it as `add_modifier = { name = X multiplier = <script_value> }`. The engine multiplies every field by the multiplier each tick. State-scoped scaling **must** run from `on_yearly_pulse_state` — law/treaty/building hooks have unreliable scope chains for state-targeted script values. See `docs/mod_systems.md` and `docs/scripting_best_practices.md`.
+**Dynamic-modifier scaling pattern**: define a static modifier with unit values, then in an `on_yearly_pulse_*` re-apply it as `add_modifier = { name = X multiplier = <script_value> }`. The engine multiplies every field by the multiplier each tick. State-scoped scaling **must** run from `on_yearly_pulse_state` — law/treaty/building hooks have unreliable scope chains for state-targeted script values. See `docs/systems/mod_systems.md` and `docs/guides/scripting_best_practices.md`.
 
 ### Game rules
 `common/game_rules/` and `descriptor.mod` expose toggles for the major systems. When disabled, the journal entry doesn't appear but related laws/events still provide their non-system effects. See `README.md`.
@@ -64,28 +64,28 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 
 ### Read the docs before scripting
 `docs/README.md` is the index. The most-likely-relevant docs:
-- `docs/scripting_best_practices.md` — modifier validation, scope rules, `days` vs `months`, dynamic-pattern registration, `any_*` triggers don't take `limit`, modifier stacking gotchas, top-level database collisions, global-variable initialization timing, decimals/visibility, fast-scaling event audits, tech tree authoring, system-scope cheat sheet, audit/research workflow.
-- `docs/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, AI-weight pitfalls, amenability vs enactment-success modifiers, option tradeoff principles.
-- `docs/vanilla_economy_reference.md` — concept primer on vanilla Vic3 economy. Carries a "Last verified against vanilla: X" banner — refresh per `docs/vanilla_patch_runbook.md` § 8b on every vanilla bump.
-- `docs/mod_systems.md`, `docs/journal_entry_systems.md` — every gameplay system's files and mechanics.
-- `docs/python_tools.md` — full server endpoint list and AI-agent workflow.
-- `docs/gui_modding_guide.md`, `docs/treaty_articles_reference.md`, `docs/wonder_buildings_reference.md`, `docs/vanilla_company_buildings_reference.md`.
+- `docs/guides/scripting_best_practices.md` — modifier validation, scope rules, `days` vs `months`, dynamic-pattern registration, `any_*` triggers don't take `limit`, modifier stacking gotchas, top-level database collisions, global-variable initialization timing, decimals/visibility, fast-scaling event audits, tech tree authoring, system-scope cheat sheet, audit/research workflow.
+- `docs/guides/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, AI-weight pitfalls, amenability vs enactment-success modifiers, option tradeoff principles.
+- `docs/vanilla/vanilla_economy_reference.md` — concept primer on vanilla Vic3 economy. Carries a "Last verified against vanilla: X" banner — refresh per `docs/guides/vanilla_patch_runbook.md` § 8b on every vanilla bump.
+- `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md` — every gameplay system's files and mechanics.
+- `docs/guides/python_tools.md` — full server endpoint list and AI-agent workflow.
+- `docs/guides/gui_modding_guide.md`, `docs/vanilla/treaty_articles_reference.md`, `docs/vanilla/wonder_buildings_reference.md`, `docs/vanilla/vanilla_company_buildings_reference.md`.
 
-### Top gotchas (full lists in `docs/scripting_best_practices.md`)
+### Top gotchas (full lists in `docs/guides/scripting_best_practices.md`)
 - **The Clausewitz engine silently ignores invalid modifier names and unregistered dynamic patterns.** Validate via `/modifier-search?q=` or `/engine-docs/origin/<name>`. Booleans, building/goods/state-building patterns, and ship axis combos all need explicit registration in `common/modifier_type_definitions/`.
 - **Top-level entity collisions get silently dropped** (`Duplicated key X will not be created`). Use `INJECT:X = { ... }` to extend rather than redeclare.
 - **`add_modifier`/`remove_modifier` results are not visible inside the same effect block.** To recompute from "base" values, store the prior contribution as a variable and subtract from the `modifier:X` read.
 - **`short_modifier_time`/`normal_modifier_time`/`long_modifier_time`/`very_long_modifier_time` are days, not months** (off by 30×). And `any_*` triggers don't accept `limit = { }`.
-- **Audits surface findings on every `POST /reload`** (`modifier_visibility_audit`, `event_magnitude_audit`, `kill_character_audit`). Suppress an intentional flag with an inline `# REVIEWED YYYY-MM-DD: rationale` comment on the value line. Reports under `docs/*_report.md`.
+- **Audits surface findings on every `POST /reload`** (`modifier_visibility_audit`, `event_magnitude_audit`, `kill_character_audit`). Suppress an intentional flag with an inline `# REVIEWED YYYY-MM-DD: rationale` comment on the value line. Reports under `docs/engine/*_report.md`.
 
 ### Triage workflow for log issues
-**Look at `debug.log` first, not `error.log`** — Vic3's `error.log` only contains a small subset of engine diagnostics. Use the `log-triage` skill (`.claude/skills/log-triage/SKILL.md`) — it covers the canonical curl, mod-vs-vanilla decision, third-party-mod filtering (`include_external`), and bulk-fixable noise. Vanilla-file errors (e.g. `headlines_on_actions.txt`) belong in `docs/vanilla_known_bugs.md`, not in fixes here.
+**Look at `debug.log` first, not `error.log`** — Vic3's `error.log` only contains a small subset of engine diagnostics. Use the `log-triage` skill (`.claude/skills/log-triage/SKILL.md`) — it covers the canonical curl, mod-vs-vanilla decision, third-party-mod filtering (`include_external`), and bulk-fixable noise. Vanilla-file errors (e.g. `headlines_on_actions.txt`) belong in `docs/vanilla/vanilla_known_bugs.md`, not in fixes here.
 
 ### Recording lessons learned
 When you discover something generally applicable — engine quirk, refactor pattern, tool behavior, validation rule that bites — write it into the appropriate doc in the same session. Don't let it die in conversation history. Natural homes:
-- Engine syntax, scope rules, modifier validation, scripting gotchas → `docs/scripting_best_practices.md`
-- Refactor patterns / helper inventory → `docs/script_parameterization_audit.md`
-- Mod-state-server / tooling behavior → `docs/python_tools.md`
+- Engine syntax, scope rules, modifier validation, scripting gotchas → `docs/guides/scripting_best_practices.md`
+- Refactor patterns / helper inventory → `docs/audits/script_parameterization_audit.md`
+- Mod-state-server / tooling behavior → `docs/guides/python_tools.md`
 - Cross-cutting workflow notes → this file (`CLAUDE.md`) — keep terse, link out
 - Per-helper context → the helper's own comment header in `common/scripted_*/`.
 

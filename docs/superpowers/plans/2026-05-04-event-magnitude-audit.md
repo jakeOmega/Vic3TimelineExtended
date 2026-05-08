@@ -20,9 +20,9 @@
 - Modify: `common/script_values/extra_script_values.txt` (append tiered scaler script values)
 - Modify: `common/static_modifiers/extra_modifiers.txt` (append `_mult`-based generic prestige/bureaucracy modifiers)
 - Modify: 8 events in `events/*.txt` (located via first audit run; convert each prestige hit)
-- New (auto-generated): `docs/event_magnitude_report.md`
-- Modify: `docs/open_issues.md` (append trading-principle inflation + deferred categories)
-- Modify: `docs/scripting_best_practices.md` (new subsection)
+- New (auto-generated): `docs/engine/event_magnitude_report.md`
+- Modify: `docs/audits/open_issues.md` (append trading-principle inflation + deferred categories)
+- Modify: `docs/guides/scripting_best_practices.md` (new subsection)
 - Modify: `CLAUDE.md` (one-line pointer)
 
 ---
@@ -1191,23 +1191,23 @@ Expected: JSON response with at least 8 prestige flags (the existing problematic
 - [ ] **Step 4: Confirm report regenerates on reload**
 
 ```bash
-ls -la docs/event_magnitude_report.md
+ls -la docs/engine/event_magnitude_report.md
 # Touch nothing. Just trigger a reload.
 curl -X POST http://localhost:8950/reload
-ls -la docs/event_magnitude_report.md
+ls -la docs/engine/event_magnitude_report.md
 ```
 Expected: mtime advances. File contains "## Unreviewed Flags" and ~8 prestige entries.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add mod_state_server.py docs/event_magnitude_report.md
+git add mod_state_server.py docs/engine/event_magnitude_report.md
 git commit -m "$(cat <<'EOF'
 mod_state_server: wire event_magnitude_audit endpoint + report
 
 Adds /event-magnitude-audit (JSON, with ?resource= ?event_id=
 ?show_reviewed= ?format=text filters) and runs the audit on every full
-/reload to regenerate docs/event_magnitude_report.md.
+/reload to regenerate docs/engine/event_magnitude_report.md.
 
 Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
@@ -1241,7 +1241,7 @@ Append at end of `common/script_values/extra_script_values.txt`:
 # resulting modifier scales with the country's current resource value
 # instead of being a hardcoded delta that goes invisible at late-game scale.
 #
-# See docs/event_magnitude_report.md for the audit that flags missing usage.
+# See docs/engine/event_magnitude_report.md for the audit that flags missing usage.
 # Tiers: tiny=0.5%, small=2%, medium=5%, large=15%, huge=30%
 
 sv_prestige_event_tiny   = { value = country_prestige  multiply = 0.005 }
@@ -1428,11 +1428,11 @@ EOF
 ### Task 14: Update documentation
 
 **Files:**
-- Modify: `docs/open_issues.md`
-- Modify: `docs/scripting_best_practices.md`
+- Modify: `docs/audits/open_issues.md`
+- Modify: `docs/guides/scripting_best_practices.md`
 - Modify: `CLAUDE.md`
 
-- [ ] **Step 1: Append to docs/open_issues.md**
+- [ ] **Step 1: Append to docs/audits/open_issues.md**
 
 Read the current file first to match its style, then append two new entries:
 
@@ -1474,7 +1474,7 @@ event-quality plan. Still TODO:
   ones are mechanically required vs intentionally pulse-only.
 ```
 
-- [ ] **Step 2: Append to docs/scripting_best_practices.md**
+- [ ] **Step 2: Append to docs/guides/scripting_best_practices.md**
 
 Add a new subsection (locate the right place by reading the table of contents). Suggested content:
 
@@ -1517,7 +1517,7 @@ the value line:
     multiplier = 2000  # REVIEWED 2026-05-04: tech-gated to nuclear era
 
 The audit captures the date and rationale. The
-`docs/event_magnitude_report.md` distinguishes unreviewed flags
+`docs/engine/event_magnitude_report.md` distinguishes unreviewed flags
 (actionable) from reviewed exemptions.
 ```
 
@@ -1526,13 +1526,13 @@ The audit captures the date and rationale. The
 Locate the "Validation rules that bite if ignored" section and append:
 
 ```markdown
-- **Fast-scaling resources require scaled effects.** Events that hardcode prestige/treasury/bureaucracy/construction deltas go invisible at late-game scale (e.g. -20 prestige is 0.012% of 163k). The `event_magnitude_audit` (`/event-magnitude-audit` endpoint, `docs/event_magnitude_report.md`) flags these. See `docs/scripting_best_practices.md` § "Fast-scaling resources require scaled effects".
+- **Fast-scaling resources require scaled effects.** Events that hardcode prestige/treasury/bureaucracy/construction deltas go invisible at late-game scale (e.g. -20 prestige is 0.012% of 163k). The `event_magnitude_audit` (`/event-magnitude-audit` endpoint, `docs/engine/event_magnitude_report.md`) flags these. See `docs/guides/scripting_best_practices.md` § "Fast-scaling resources require scaled effects".
 ```
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add docs/open_issues.md docs/scripting_best_practices.md CLAUDE.md
+git add docs/audits/open_issues.md docs/guides/scripting_best_practices.md CLAUDE.md
 git commit -m "$(cat <<'EOF'
 docs: event magnitude audit, deferred tooling categories, trading-principle issue
 

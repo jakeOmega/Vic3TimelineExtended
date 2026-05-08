@@ -90,7 +90,7 @@ mod_deploy_target = _resolve("mod_deploy_target", "VIC3_MOD_DEPLOY_TARGET")
 # disambiguation. The runtime path is whatever the user last wrote there by typing
 # `script_docs` in the in-game console — it could be vanilla-loaded OR mod-loaded
 # depending on context. The repo-mirror path is a vanilla-only snapshot; treat it
-# as the authoritative baseline. See docs/python_tools.md.
+# as the authoritative baseline. See docs/guides/python_tools.md.
 vanilla_snapshot_docs_path = _resolve("vanilla_snapshot_docs_path", "VIC3_VANILLA_DOCS_SNAPSHOT")
 vanilla_source_repo_path = _resolve("vanilla_source_repo_path", "VIC3_VANILLA_REPO")
 vanilla_docs_path = _resolve("vanilla_docs_path", "VIC3_VANILLA_DOCS_RUNTIME")

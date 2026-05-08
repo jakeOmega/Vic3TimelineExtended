@@ -6,7 +6,7 @@ and laws so that — after a vanilla patch update or major rebalance — the
 intended progression curve can be diffed against this snapshot.
 
 Usage:
-    python3 scripts/snapshot_balance.py            # writes docs/balance_snapshot.json
+    python3 scripts/snapshot_balance.py            # writes docs/data/balance_snapshot.json
     python3 scripts/snapshot_balance.py --print    # also prints a summary to stdout
 
 The output is a JSON dict keyed by category, each containing a list of
@@ -28,9 +28,9 @@ import re
 import sys
 from pathlib import Path
 
-# Canonical mod root — script lives under scripts/, snapshot lives under docs/.
+# Canonical mod root — script lives under scripts/, snapshot lives under docs/data/.
 MOD_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_OUT = MOD_ROOT / "docs" / "balance_snapshot.json"
+DEFAULT_OUT = MOD_ROOT / "docs" / "data" / "balance_snapshot.json"
 
 # Modifier name patterns that are balance-relevant. Anything matching is captured.
 RELEVANT_PATTERNS = [

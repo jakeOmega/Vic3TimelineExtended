@@ -77,7 +77,7 @@ def generate_docs(mod_state):
 
 
 def _generate_laws(mod_state):
-    laws_path = os.path.join(doc_path, "laws.txt")
+    laws_path = os.path.join(doc_path, "engine", "laws.txt")
     laws_output = ""
     laws = mod_state.get_data("Laws")
     laws_dict = {}
@@ -116,7 +116,7 @@ def _generate_laws(mod_state):
 
 
 def _generate_technologies(mod_state):
-    tech_path = os.path.join(doc_path, "technologies.txt")
+    tech_path = os.path.join(doc_path, "engine", "technologies.txt")
     tech_output = ""
     tech = mod_state.get_data("Technologies")
     tech_dict = defaultdict(list)
@@ -146,7 +146,7 @@ def _generate_technologies(mod_state):
 
 
 def _generate_buildings(mod_state):
-    building_path = os.path.join(doc_path, "buildings.txt")
+    building_path = os.path.join(doc_path, "engine", "buildings.txt")
     building_output = ""
     buildings_data = mod_state.get_data("Buildings")
     pmg_groups = mod_state.get_data("PM Groups")
@@ -192,7 +192,7 @@ def _generate_buildings(mod_state):
 
 
 def _generate_goods(mod_state):
-    goods_path = os.path.join(doc_path, "goods.txt")
+    goods_path = os.path.join(doc_path, "engine", "goods.txt")
     goods_output = ""
     goods = mod_state.get_data("Goods")
     for good_id, _ in goods.items():
@@ -203,7 +203,7 @@ def _generate_goods(mod_state):
 
 
 def _generate_combat_units(mod_state):
-    combat_units_path = os.path.join(doc_path, "combat_units.txt")
+    combat_units_path = os.path.join(doc_path, "engine", "combat_units.txt")
     combat_units_output = ""
     combat_unit_groups = mod_state.get_data("Combat Unit Groups")
     combat_unit_types = mod_state.get_data("Combat Unit Types")

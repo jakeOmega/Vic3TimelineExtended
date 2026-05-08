@@ -1,4 +1,4 @@
-"""Generate `docs/event_image_inventory.md` — every mod event's title,
+"""Generate `docs/engine/event_image_inventory.md` — every mod event's title,
 description, flavor, and current image. Used to drive custom event-image
 generation.
 
@@ -132,7 +132,7 @@ def regenerate(mod_state=None):
             output.append(f"- **Current image:** {img}")
             output.append("")
 
-    out_path = os.path.join(mod_path, "docs", "event_image_inventory.md")
+    out_path = os.path.join(mod_path, "docs", "engine", "event_image_inventory.md")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(output))
 

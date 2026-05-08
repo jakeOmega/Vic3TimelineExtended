@@ -385,7 +385,7 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "modifier_visibility_report.md")
+    out_path = os.path.join(mod_path, "docs", "engine", "modifier_visibility_report.md")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         fh.write(report)

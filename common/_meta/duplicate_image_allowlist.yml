@@ -1,5 +1,5 @@
 # Duplicate-image allowlist for /duplicate-images.
-# See docs/python_tools.md.
+# See docs/guides/python_tools.md.
 #
 # Each entry covers a cluster of entities that all share visually-identical
 # art. Two cluster shapes:

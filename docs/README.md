@@ -4,101 +4,139 @@ This folder contains reference documents for Victoria 3 modding and this mod's c
 
 Files marked `[auto-gen]` are regenerated automatically and should not be hand-edited — see `auto_generated_files.md` for the canonical generator → output map.
 
-## Mod Game Data `[auto-gen]`
+## Layout
+
+```
+docs/
+├── README.md                 (this file)
+├── auto_generated_files.md   (generator → output ownership map)
+├── guides/                   (curated authoring guides — read first)
+├── systems/                  (mod-system writeups)
+├── vanilla/                  (hand-curated vanilla-game references)
+├── engine/                   (auto-generated engine dumps + audit reports)
+├── audits/                   (active audits + living trackers)
+├── data/                     (machine-readable inputs / baselines)
+├── archive/                  (deferred / completed / orphaned reference)
+└── superpowers/plans/        (multi-step implementation plans from /writing-plans)
+```
+
+## Mod Authoring Guides — `guides/`
 
 | File | Contents | Read When... |
 |------|----------|--------------|
-| `buildings.txt` | All buildings with their PM groups and PMs in tree format | Working on buildings, production methods, or PM costs |
-| `combat_units.txt` | All combat unit types with unlocking technologies | Working on military units or combat balance |
-| `goods.txt` | All tradeable goods (one per line) | Checking goods names for PM inputs/outputs or trade |
-| `laws.txt` | All law groups and laws with unlock techs | Working on laws, political systems, or legal prerequisites |
-| `technologies.txt` | All technologies by era with prerequisites and descriptions | Working on tech trees, unlock conditions, or era gating |
+| [`guides/scripting_best_practices.md`](guides/scripting_best_practices.md) | Modifier validation, scope chains, time units, expense scaling, scripted triggers/effects catalog, fast-scaling event-effect rules | Scripting modifiers, effects, debugging, or checking for reusable helpers |
+| [`guides/event_creation_guide.md`](guides/event_creation_guide.md) | Event boilerplate, videos, icons, style guide, IG reactions, AI-weight pitfalls, amenability vs. enactment mechanics | Writing or modifying events |
+| [`guides/gui_modding_guide.md`](guides/gui_modding_guide.md) | Widget types, layout, data binding, scripted GUIs, standalone panels, tooltips, format specifiers, GetVariableSystem | Creating or modifying GUI panels |
+| [`guides/python_tools.md`](guides/python_tools.md) | All Python scripts, mod state server API, every endpoint, AI-agent workflow | Using Python tools or the mod state server |
+| [`guides/vanilla_patch_runbook.md`](guides/vanilla_patch_runbook.md) | Step-by-step process for absorbing a new vanilla patch into the mod | Updating the mod after a vanilla version bump |
+| [`guides/quick_reference_ids.md`](guides/quick_reference_ids.md) | Vanilla law / IG / pop / strata IDs, script values, modifier durations | Looking up game IDs or script-value names quickly |
 
-## Engine Reference (Triggers, Effects, Modifiers) `[auto-gen]`
-
-| File | Contents | Read When... |
-|------|----------|--------------|
-| `vic3_triggers_effects_reference.md` | Full compressed reference: 84 iterator families, 820 triggers, 337 effects | Looking up a trigger/effect name, scope, or syntax |
-| `vic3_modifier_type_definitions_reference.md` | All ~2,300 modifier type keys from vanilla | Validating modifier names, finding correct modifier for a scope |
-| `triggers_summary.txt` | Compact pipe-delimited trigger index (scope \| name \| description) | Quick trigger lookup by scope |
-| `effects_summary.txt` | Compact pipe-delimited effect index (scope \| name \| description) | Quick effect lookup by scope |
-| `modifiers_summary.txt` | Compact pipe-delimited modifier index | Quick modifier lookup |
-| `triggers_parsed.txt` | Fully parsed triggers with syntax examples and comparison operators | Detailed trigger documentation with examples |
-| `country_triggers.txt` | Country-scope triggers only, with descriptions | Working specifically in country scope |
-| `event_targets_summary.txt` | Engine event-target accessors (e.g. `controller`, `level`, `training_rate`) | Looking up a property usable in script values / trigger comparisons |
-| `on_actions_summary.txt` | Vanilla `on_action` hooks | Wiring custom logic to engine pulses or game events |
-| `custom_localization_summary.txt` | Custom localization function documentation | Writing dynamic localization expressions |
-| `modifier_patterns.md` | Auto-discovered modifier patterns (`building_*`, `goods_*`, `state_building_*`, …) with placeholders | Adding a dynamic modifier; verifying placeholder vocabulary |
-
-## Mod Authoring Guides
+## Mod Systems — `systems/`
 
 | File | Contents | Read When... |
 |------|----------|--------------|
-| `event_creation_guide.md` | Event boilerplate, videos, icons, style guide, IG reactions, AI-weight pitfalls, amenability vs. enactment mechanics | Writing or modifying events |
-| `scripting_best_practices.md` | Modifier validation, scope chains, time units, expense scaling, scripted triggers/effects catalog, fast-scaling event-effect rules | Scripting modifiers, effects, debugging, or checking for reusable helpers |
-| `mod_systems.md` | All key mod systems: banking cycle, global warming, construction scaling, migration crowding, nuclear, colonial collapse, wonders, etc. | Understanding or modifying a mod system |
-| `journal_entry_systems.md` | All 10+ custom journal-entry systems in detail | Working on or debugging a journal entry system |
-| `python_tools.md` | All Python scripts, mod state server API, every endpoint, AI-agent workflow | Using Python tools or the mod state server |
-| `gui_modding_guide.md` | Widget types, layout, data binding, scripted GUIs, standalone panels, tooltips, format specifiers, GetVariableSystem | Creating or modifying GUI panels |
-| `modding-reference.md` | Compressed Clausewitz engine reference (data types, scope rules, file formats) | Wider engine context not covered by the trigger/effect references |
-| `quick_reference_ids.md` | Vanilla law / IG / pop / strata IDs, script values, modifier durations | Looking up game IDs or script-value names quickly |
+| [`systems/mod_systems.md`](systems/mod_systems.md) | All key mod systems: banking cycle, global warming, construction scaling, migration crowding, nuclear, colonial collapse, wonders, etc. | Understanding or modifying a mod system |
+| [`systems/journal_entry_systems.md`](systems/journal_entry_systems.md) | All 10+ custom journal-entry systems in detail | Working on or debugging a journal entry system |
+| [`systems/strategic_reserve_system.md`](systems/strategic_reserve_system.md) | Architecture and file layout of the Strategic Reserve journal-entry system | Adding goods to the SR; touching the SR JE / Hub building |
 
-## Vanilla & Patch References
+## Vanilla & Patch References — `vanilla/`
 
 | File | Contents | Read When... |
 |------|----------|--------------|
-| `vanilla_economy_reference.md` | Concept primer on vanilla Vic3 economy (pops, ownership / IP, markets / MAPI, companies, power blocs, naval economy) | Need shared context on the base-game economy before touching mod content that hooks it |
-| `vanilla_war_reference.md` | Concept primer on vanilla Vic3 war systems (formations, units, commanders, mobilization, supply, war support, capitulation) | Need shared context on the base-game war layer before touching anti-war / wartime / mobilization-related mod content |
-| `vanilla_diplomacy_reference.md` | Concept primer on vanilla Vic3 diplomacy (rank, prestige, relations, attitudes, interests, infamy, actions, treaties, subjects, power blocs) | Need shared context on the base-game diplomatic layer before touching mod content that hooks ranks / infamy / plays / subjects / power blocs |
-| `vanilla_patch_runbook.md` | Step-by-step process for absorbing a new vanilla patch into the mod | Updating the mod after a vanilla version bump |
-| `vanilla_known_bugs.md` | Vanilla bugs the mod *cannot* fix; debug.log noise to ignore | Triaging log entries; deciding whether an issue is mod-side |
-| `vanilla_company_buildings_reference.md` | System architecture + all implemented vanilla company buildings | Implementing company buildings for vanilla companies |
-| `treaty_articles_reference.md` | Treaty article engine constraints + all implemented article designs | Implementing new treaty articles |
-| `wonder_buildings_reference.md` | Two-phase construction pattern + all implemented wonder designs | Implementing new wonder / megastructure buildings |
-| `commented_vanilla_pms.txt` | Vanilla production methods with input/output cost annotations | Copying a vanilla PM as a starting template; checking PM cost shape |
-| `commented_vanilla_military_units.txt` | Vanilla `combat_unit_type` definitions, annotated | Copying a vanilla unit as a starting template |
+| [`vanilla/vanilla_economy_reference.md`](vanilla/vanilla_economy_reference.md) | Concept primer on vanilla Vic3 economy (pops, ownership / IP, markets / MAPI, companies, power blocs, naval economy) | Need shared context on the base-game economy before touching mod content that hooks it |
+| [`vanilla/vanilla_war_reference.md`](vanilla/vanilla_war_reference.md) | Concept primer on vanilla Vic3 war systems (formations, units, commanders, mobilization, supply, war support, capitulation) | Need shared context on the base-game war layer before touching anti-war / wartime / mobilization-related mod content |
+| [`vanilla/vanilla_diplomacy_reference.md`](vanilla/vanilla_diplomacy_reference.md) | Concept primer on vanilla Vic3 diplomacy (rank, prestige, relations, attitudes, interests, infamy, actions, treaties, subjects, power blocs) | Need shared context on the base-game diplomatic layer before touching mod content that hooks ranks / infamy / plays / subjects / power blocs |
+| [`vanilla/vanilla_known_bugs.md`](vanilla/vanilla_known_bugs.md) | Vanilla bugs the mod *cannot* fix; debug.log noise to ignore | Triaging log entries; deciding whether an issue is mod-side |
+| [`vanilla/vanilla_company_buildings_reference.md`](vanilla/vanilla_company_buildings_reference.md) | System architecture + all implemented vanilla company buildings | Implementing company buildings for vanilla companies |
+| [`vanilla/treaty_articles_reference.md`](vanilla/treaty_articles_reference.md) | Treaty article engine constraints + all implemented article designs | Implementing new treaty articles |
+| [`vanilla/wonder_buildings_reference.md`](vanilla/wonder_buildings_reference.md) | Two-phase construction pattern + all implemented wonder designs | Implementing new wonder / megastructure buildings |
+| [`vanilla/modding-reference.md`](vanilla/modding-reference.md) | Compressed Clausewitz engine reference (data types, scope rules, file formats) | Wider engine context not covered by the trigger/effect references |
 
-## System Designs (Implemented)
+## Engine Reference & Auto-Generated Dumps — `engine/`
+
+All files in this directory are `[auto-gen]` — regenerated on `POST /reload` (see `auto_generated_files.md`).
+
+### Mod data dumps
+
+| File | Contents |
+|------|----------|
+| [`engine/buildings.txt`](engine/buildings.txt) | All buildings with their PM groups and PMs in tree format |
+| [`engine/combat_units.txt`](engine/combat_units.txt) | All combat unit types with unlocking technologies |
+| [`engine/goods.txt`](engine/goods.txt) | All tradeable goods (one per line) |
+| [`engine/laws.txt`](engine/laws.txt) | All law groups and laws with unlock techs |
+| [`engine/technologies.txt`](engine/technologies.txt) | All technologies by era with prerequisites and descriptions |
+
+### Engine references (triggers, effects, modifiers)
+
+| File | Contents |
+|------|----------|
+| [`engine/vic3_triggers_effects_reference.md`](engine/vic3_triggers_effects_reference.md) | Full compressed reference: 84 iterator families, 820 triggers, 337 effects |
+| [`engine/vic3_modifier_type_definitions_reference.md`](engine/vic3_modifier_type_definitions_reference.md) | All ~2,300 modifier type keys from vanilla |
+| [`engine/triggers_summary.txt`](engine/triggers_summary.txt) | Compact pipe-delimited trigger index (scope \| name \| description) |
+| [`engine/effects_summary.txt`](engine/effects_summary.txt) | Compact pipe-delimited effect index (scope \| name \| description) |
+| [`engine/modifiers_summary.txt`](engine/modifiers_summary.txt) | Compact pipe-delimited modifier index |
+| [`engine/triggers_parsed.txt`](engine/triggers_parsed.txt) | Fully parsed triggers with syntax examples and comparison operators |
+| [`engine/country_triggers.txt`](engine/country_triggers.txt) | Country-scope triggers only, with descriptions |
+| [`engine/event_targets_summary.txt`](engine/event_targets_summary.txt) | Engine event-target accessors |
+| [`engine/on_actions_summary.txt`](engine/on_actions_summary.txt) | Vanilla `on_action` hooks |
+| [`engine/custom_localization_summary.txt`](engine/custom_localization_summary.txt) | Custom localization function documentation |
+| [`engine/modifier_patterns.md`](engine/modifier_patterns.md) | Auto-discovered modifier patterns (`building_*`, `goods_*`, `state_building_*`, …) with placeholders |
+
+### Vanilla annotated dumps (gitignored)
+
+| File | Contents |
+|------|----------|
+| [`engine/commented_vanilla_pms.txt`](engine/commented_vanilla_pms.txt) | Vanilla production methods with input/output cost annotations |
+| [`engine/commented_vanilla_military_units.txt`](engine/commented_vanilla_military_units.txt) | Vanilla `combat_unit_type` definitions, annotated |
+
+### Audit + validation reports
+
+| File | Contents |
+|------|----------|
+| [`engine/engine_coverage_report.md`](engine/engine_coverage_report.md) | Output of `/validate/engine-coverage` — unknown / suspicious modifier flags |
+| [`engine/modifier_visibility_report.md`](engine/modifier_visibility_report.md) | Modifier values too small to display given the type's `decimals = N` |
+| [`engine/kill_character_audit.md`](engine/kill_character_audit.md) | `kill_character` calls audited for void6 / exists guards |
+| [`engine/event_magnitude_report.md`](engine/event_magnitude_report.md) | Hardcoded fast-scaling event effects flagged by the magnitude audit |
+| [`engine/event_image_inventory.md`](engine/event_image_inventory.md) | Every mod event with title, description, flavor, and current image path |
+| [`engine/error_log_digest.md`](engine/error_log_digest.md) | Mod-only summary of `error.log` + diff vs. `error.1.log` (gitignored) |
+
+## Audits & Living Trackers — `audits/`
 
 | File | Contents | Read When... |
 |------|----------|--------------|
-| `decolonization_review.md` | Post-implementation review of decolonization mechanics + path-dependent legacies | Modifying or extending decolonization; understanding the design intent |
-| `strategic_reserve_system.md` | Architecture and file layout of the Strategic Reserve journal-entry system | Adding goods to the SR; touching the SR JE / Hub building |
-| `political_lobbies_design.md` | Design proposals for 15 political lobby types — **deferred**: a working domestic-lobby implementation was reverted after a new-game crash that's still undiagnosed | Re-implementing political lobbies; investigating the new-game crash first |
+| [`audits/open_issues.md`](audits/open_issues.md) | Living tracker of known mod bugs / followups not yet ticketed elsewhere | Looking for the current to-do queue; before starting unrelated work |
+| [`audits/mod_known_noise.md`](audits/mod_known_noise.md) | Mod-side cosmetic log entries filtered from triage but tracked in `open_issues.md` | Triaging logs; auditing what's swept under the rug |
+| [`audits/combat_unit_balance_review.md`](audits/combat_unit_balance_review.md) | Era-by-era combat-unit balance audit | Tuning unit stats or adding new units |
+| [`audits/pm_building_balance_review.md`](audits/pm_building_balance_review.md) | Per-building production-method balance audit | Tuning a PM's input/output ratios or unlocking conditions |
+| [`audits/mod_only_tech_modifier_baseline.md`](audits/mod_only_tech_modifier_baseline.md) | User-supplied baseline targets for mod-only tech modifiers | Re-tuning tech modifier targets or refreshing the audit anchor |
+| [`audits/script_parameterization_audit.md`](audits/script_parameterization_audit.md) | Catalog of helper scripted_effects / scripted_triggers and the parameterization pattern used | Considering whether to introduce a new helper vs. inlining |
+| [`audits/steam_workshop_description.md`](audits/steam_workshop_description.md) | Draft Steam Workshop description maintained per release | Updating the Workshop listing copy |
 
-## Audits & Reviews
-
-| File | Contents | Read When... |
-|------|----------|--------------|
-| `combat_unit_balance_review.md` | Era-by-era combat-unit balance audit | Tuning unit stats or adding new units |
-| `pm_building_balance_review.md` | Per-building production-method balance audit | Tuning a PM's input/output ratios or unlocking conditions |
-| `tech_tree_balance_review.md` | Tech-tree balance review for eras 6–9 | Adding or rebalancing late-era technologies |
-| `script_parameterization_audit.md` | Catalog of helper scripted_effects / scripted_triggers and the parameterization pattern used | Considering whether to introduce a new helper vs. inlining |
-| `open_issues.md` | Living tracker of known mod bugs / followups not yet ticketed elsewhere | Looking for the current to-do queue; before starting unrelated work |
-| `engine_coverage_report.md` `[auto-gen]` | Output of `/validate/engine-coverage` — unknown / suspicious modifier-name flags + did-you-mean suggestions | After editing modifiers or before merging; cross-reference against `error.log` lines |
-| `error_log_digest.md` `[auto-gen, gitignored]` | Mod-only summary of `error.log` + diff vs. `error.1.log` | Triaging a recent crash / parse error |
-| `event_magnitude_report.md` `[auto-gen]` | Hardcoded fast-scaling event effects (prestige / treasury / bureaucracy / construction) flagged by the magnitude audit | After editing or adding multi-option events; before merging |
-| `balance_snapshot.json` `[auto-gen, manual run]` | JSON dump of mod balance state for vanilla-bump comparisons (`scripts/snapshot_balance.py`) | Bumping vanilla; diffing balance against a previous snapshot |
-
-## Image Pipeline
+## Machine-Readable Data — `data/`
 
 | File | Contents | Read When... |
 |------|----------|--------------|
-| `event_image_inventory.md` `[auto-gen]` | Every mod event with title, description, flavor, and current image path | Driving custom event-image generation |
+| [`data/balance_snapshot.json`](data/balance_snapshot.json) | JSON dump of mod balance state for vanilla-bump comparisons (`scripts/snapshot_balance.py`) | Bumping vanilla; diffing balance against a previous snapshot |
+| [`data/tech_modifier_baseline.json`](data/tech_modifier_baseline.json) | Vanilla tech modifier baseline cache (per-modifier min/median/max) | Refresh after vanilla bumps via `tech_balance_audit.py --refresh-baseline` |
+| [`data/tech_modifier_pattern_baseline.json`](data/tech_modifier_pattern_baseline.json) | Vanilla pattern-grouped baseline (e.g. `building_*_throughput_add` median) | Same audit cache, parametric-pattern half |
+| [`data/tech_modifier_pattern_overrides.yml`](data/tech_modifier_pattern_overrides.yml) | Hand overrides for parametric pattern medians | When a pattern's vanilla median needs a designer adjustment |
+| [`data/tech_modifier_polarity.yml`](data/tech_modifier_polarity.yml) | Override registry for tech-modifier polarity classification | When the heuristic mis-labels a modifier's polarity |
 
-## Future Work / Inspiration
+## Archive — `archive/`
 
-| File | Contents | Read When... |
-|------|----------|--------------|
-| `future_journal_entry_ideas.md` | Planned expansion for social-movement JEs (additional events, toggle buttons, cross-JE interactions) | Expanding the 8 social-movement journal entries |
-| `event_inspiration.md` | Historical economic / financial crises as event seeds | Drafting new flavor events; looking for seed material |
-| `dynamic_country_naming_feasibility.md` | Feasibility study for "another country of the same culture exists" dynamic naming | Implementing dynamic country names for splits (Korea, Germany, Vietnam, …) |
+Reference material kept for historical or design-rationale purposes. Not actively maintained; check git history for the surrounding work.
 
-## Auto-generation Registry
+| File | Why it's here |
+|------|---------------|
+| [`archive/political_lobbies_design.md`](archive/political_lobbies_design.md) | DEFERRED — implementation reverted after a new-game crash; design + engine findings preserved for re-attempt |
+| [`archive/dynamic_country_naming_feasibility.md`](archive/dynamic_country_naming_feasibility.md) | Feasibility study; not implemented |
+| [`archive/decolonization_review.md`](archive/decolonization_review.md) | Audit + redesign work shipped — preserved as design rationale |
+| [`archive/future_journal_entry_ideas.md`](archive/future_journal_entry_ideas.md) | MVP shipped; expansion ideas for social-movement JEs |
+| [`archive/event_inspiration.md`](archive/event_inspiration.md) | Historical economic / financial crises as event seeds |
 
-| File | Contents | Read When... |
-|------|----------|--------------|
-| `auto_generated_files.md` | Canonical map of generator scripts → output files (mod data, docs, GFX) | Finding the input source of an auto-rebuilt file; before hand-editing anything |
+## Auto-Generation Registry
+
+[`auto_generated_files.md`](auto_generated_files.md) — canonical map of generator scripts → output files (mod data, docs, GFX). Read before hand-editing anything.
 
 ## Session Plans
 
@@ -108,13 +146,13 @@ Files marked `[auto-gen]` are regenerated automatically and should not be hand-e
 
 ## Engine-Generated Logs (outside the repo)
 
-These files are generated by running `script_docs` in the in-game console **without the mod loaded**, then copied to `~/src/vic3/docs/` (the vanilla snapshot path used by `mod_state_server`'s engine-doc loader). The compressed `.md` references in this folder are produced from these logs — read the raw `.log` files only when cross-referencing.
+These files are generated by running `script_docs` in the in-game console **without the mod loaded**, then copied to `~/src/vic3/docs/` (the vanilla snapshot path used by `mod_state_server`'s engine-doc loader). The compressed `.md` references in `engine/` are produced from these logs — read the raw `.log` files only when cross-referencing.
 
-| File | Contents | Read When... |
-|------|----------|--------------|
-| `event_targets.log` | All scope-to-scope accessors and value properties | Verifying a property not in `event_targets_summary.txt` |
-| `triggers.log` | Engine-canonical trigger documentation (raw source for `vic3_triggers_effects_reference.md`) | Cross-referencing trigger syntax |
-| `effects.log` | Engine-canonical effect documentation | Cross-referencing effect syntax |
-| `modifiers.log` | Engine-canonical modifier documentation (raw source for `vic3_modifier_type_definitions_reference.md`) | Cross-referencing modifier definitions |
-| `on_actions.log` | Engine-canonical on_actions documentation | Looking up vanilla on_action hooks |
-| `custom_localization.log` | Custom localization function documentation | Writing dynamic localization expressions |
+| File | Contents |
+|------|----------|
+| `event_targets.log` | All scope-to-scope accessors and value properties |
+| `triggers.log` | Engine-canonical trigger documentation (raw source for `engine/vic3_triggers_effects_reference.md`) |
+| `effects.log` | Engine-canonical effect documentation |
+| `modifiers.log` | Engine-canonical modifier documentation (raw source for `engine/vic3_modifier_type_definitions_reference.md`) |
+| `on_actions.log` | Engine-canonical on_actions documentation |
+| `custom_localization.log` | Custom localization function documentation |

@@ -378,7 +378,7 @@ def regenerate(mod_state) -> dict:  # noqa: ARG001 — protocol arg unused
         if fname.endswith(".txt") and os.path.isfile(os.path.join(events_dir, fname))
     ) if os.path.isdir(events_dir) else 0
     report = render_report(flags, files_audited)
-    out_path = os.path.join(mod_path, "docs", "kill_character_audit.md")
+    out_path = os.path.join(mod_path, "docs", "engine", "kill_character_audit.md")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(report)
@@ -425,7 +425,7 @@ def _main() -> int:
         return 0
 
     report = render_report(flags, files_audited)
-    out_path = os.path.join(repo_root, "docs", "kill_character_audit.md")
+    out_path = os.path.join(repo_root, "docs", "engine", "kill_character_audit.md")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(report)

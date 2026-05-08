@@ -5,14 +5,14 @@ Walks vanilla era_1–5 tech files and produces, per modifier name:
 - count of vanilla techs that use it
 - min / median / max of values used in vanilla
 - polarity classification (positive-good / negative-good / unknown) via a
-  substring heuristic, overridable via `docs/tech_modifier_polarity.yml`
+  substring heuristic, overridable via `docs/data/tech_modifier_polarity.yml`
 
 Used by `scripts/analysis/tech_balance_audit.py` to normalize each modifier
 value against vanilla's typical, so that a `+0.10 country_innovation_mult`
 and a `+0.10 state_pollution_generation_mult` are weighed by the scale
 their respective modifier types actually operate at.
 
-Cache: `docs/tech_modifier_baseline.json`. Refresh after vanilla bumps with
+Cache: `docs/data/tech_modifier_baseline.json`. Refresh after vanilla bumps with
 `tech_balance_audit.py --refresh-baseline`.
 """
 from __future__ import annotations
@@ -33,10 +33,10 @@ VANILLA_COMMON_DIR = Path(base_game_path) / "game" / "common"
 VANILLA_TECH_DIR = VANILLA_COMMON_DIR / "technology" / "technologies"
 VANILLA_FILES = ["10_production.txt", "20_military.txt", "30_society.txt"]
 
-BASELINE_JSON = REPO / "docs" / "tech_modifier_baseline.json"
-PATTERN_BASELINE_JSON = REPO / "docs" / "tech_modifier_pattern_baseline.json"
-PATTERN_OVERRIDES_YAML = REPO / "docs" / "tech_modifier_pattern_overrides.yml"
-POLARITY_YAML = REPO / "docs" / "tech_modifier_polarity.yml"
+BASELINE_JSON = REPO / "docs" / "data" / "tech_modifier_baseline.json"
+PATTERN_BASELINE_JSON = REPO / "docs" / "data" / "tech_modifier_pattern_baseline.json"
+PATTERN_OVERRIDES_YAML = REPO / "docs" / "data" / "tech_modifier_pattern_overrides.yml"
+POLARITY_YAML = REPO / "docs" / "data" / "tech_modifier_polarity.yml"
 
 
 # ---------------------------------------------------------------------------
@@ -505,7 +505,7 @@ def apply_pattern_overrides(
 def get_or_build_pattern_baseline(refresh: bool = False) -> dict[str, dict]:
     """Cached entry point: load pattern baseline JSON, or rebuild from vanilla
     common/*.txt walk (~17s on a fresh build). Always re-applies user
-    overrides from `docs/tech_modifier_pattern_overrides.yml`."""
+    overrides from `docs/data/tech_modifier_pattern_overrides.yml`."""
     if not refresh:
         cached = load_pattern_baseline()
         if cached:

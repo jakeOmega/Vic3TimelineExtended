@@ -39,7 +39,7 @@ done
 
 `0` = vanilla doesn't register that axis. **Any 0 means you must add a registration entry to `common/modifier_type_definitions/mod_entity_modifier_types.txt`.** The mod already pre-registers `goods_input_grain_mult`, `goods_output_grain_mult`, and `goods_input_aeroplanes_mult` for exactly this reason — follow that pattern (search the file for the existing `goods_input_grain_mult = { color = bad percent = yes ... }` block to see the format).
 
-Reference: `docs/scripting_best_practices.md` § goods modifier registration.
+Reference: `docs/guides/scripting_best_practices.md` § goods modifier registration.
 
 ## File layout
 
@@ -113,5 +113,5 @@ The pre-existing **Reset Reserve Rates** button reaches the new goods even on an
 ## Reference
 
 - `references/per_good_templates.md` — verbatim per-good snippet bodies for files 5–9.
-- `docs/scripting_best_practices.md` § goods modifier registration — the mult-axis registration rule.
-- `docs/mod_systems.md` § Strategic Reserve — high-level system overview.
+- `docs/guides/scripting_best_practices.md` § goods modifier registration — the mult-axis registration rule.
+- `docs/systems/mod_systems.md` § Strategic Reserve — high-level system overview.

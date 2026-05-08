@@ -12,7 +12,7 @@ modifier value". A vanilla median of 0.25 (the overall vanilla anchor)
 means a `+0.25 country_innovation_mult` scores 1.0, while a `+10
 country_diplomatic_play_maneuvers_add` is normalized against vanilla
 adds of similar magnitude rather than naively summed. Mod-only modifiers
-fall through to user-supplied targets in `docs/mod_only_tech_modifier_baseline.md`
+fall through to user-supplied targets in `docs/audits/mod_only_tech_modifier_baseline.md`
 or, absent those, the current-mod median (marked imputed in output).
 
 The old `sum_abs` metric stays in each row for diff-checking against the
@@ -65,7 +65,7 @@ VANILLA_COMMON_DIR = Path(base_game_path) / "game" / "common"
 VANILLA_TECH_DIR = VANILLA_COMMON_DIR / "technology" / "technologies"
 VANILLA_FILES = ["10_production.txt", "20_military.txt", "30_society.txt"]
 
-MOD_ONLY_DOC = REPO / "docs" / "mod_only_tech_modifier_baseline.md"
+MOD_ONLY_DOC = REPO / "docs" / "audits" / "mod_only_tech_modifier_baseline.md"
 
 
 # ---------------------------------------------------------------------------
@@ -170,7 +170,7 @@ def _annotate_modifiers_with_baseline(
         """Return (anchor_value, source_tag, polarity).
 
         Resolution order:
-          1. exact vanilla tech baseline (`docs/tech_modifier_baseline.json`)
+          1. exact vanilla tech baseline (`docs/data/tech_modifier_baseline.json`)
           2. user-supplied target in mod_only_tech_modifier_baseline.md
           3. parametric pattern baseline (vanilla median for the `_<X>_`
              family — e.g. all vanilla `building_*_throughput_add` values)
@@ -261,7 +261,7 @@ def emit_mod_only_baseline_doc(
     existing_targets: dict[str, float],
     path: Path = MOD_ONLY_DOC,
 ) -> int:
-    """Write `docs/mod_only_tech_modifier_baseline.md` listing every modifier
+    """Write `docs/audits/mod_only_tech_modifier_baseline.md` listing every modifier
     used in mod tech blocks but NOT in vanilla, with a `target_typical_value`
     column the user fills in. Preserves any already-filled target values.
     For modifiers matching a known parametric pattern (e.g.
@@ -324,7 +324,7 @@ def emit_mod_only_baseline_doc(
         "   suggested target is the vanilla-wide median across all",
         "   matching instances. The `†` mark signals a pattern-derived",
         "   default. Override pattern medians in",
-        "   `docs/tech_modifier_pattern_overrides.yml`, or set a per-modifier",
+        "   `docs/data/tech_modifier_pattern_overrides.yml`, or set a per-modifier",
         "   target by replacing the `<value>†` cell with a plain number.",
         "2. *Bespoke mod modifiers* — no pattern match. Default suggestion",
         "   is the mod's own median for the modifier (`<value>‡`). Replace",
@@ -337,7 +337,7 @@ def emit_mod_only_baseline_doc(
         "it as the normalization anchor.",
         "",
         "Polarity is heuristically classified; override in",
-        "`docs/tech_modifier_polarity.yml` if wrong.",
+        "`docs/data/tech_modifier_polarity.yml` if wrong.",
         "",
         "## Parametric pattern matches",
         "",
@@ -516,7 +516,7 @@ def main() -> int:
     parser.add_argument(
         "--refresh-baseline",
         action="store_true",
-        help="Rebuild docs/tech_modifier_baseline.json from vanilla files.",
+        help="Rebuild docs/data/tech_modifier_baseline.json from vanilla files.",
     )
     args = parser.parse_args()
 
@@ -601,7 +601,7 @@ def main() -> int:
     print("Headline metric: `scaled_sum` = Σ |value| / vanilla_median(name)")
     print("expressing each tech as a multiple of one vanilla-tech's worth")
     print("of modifier value. Mod-only modifiers fall through to user")
-    print("targets in `docs/mod_only_tech_modifier_baseline.md` (or the")
+    print("targets in `docs/audits/mod_only_tech_modifier_baseline.md` (or the")
     print("current-mod median, marked imputed). The legacy `sum_abs`")
     print("metric stays in each row for diff-checking but no longer drives")
     print("flags.\n")

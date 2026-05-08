@@ -28,12 +28,18 @@ After mod-file edits: `curl -X POST http://localhost:8950/reload`. After only re
 Always start with `debug.log`, never `error.log` — Vic3's `error.log` only carries a small subset of engine diagnostics (mostly script-value type errors); the actionable signal lives in `debug.log`.
 
 ```bash
-curl -s "http://localhost:8950/logs/debug?summary=false&dedupe=true" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(f'{e[\"category\"]} | {(e[\"files\"] or [\"?\"])[0]} | {e[\"message\"][:200]}') for e in d['entries']]"
+curl -s "http://localhost:8950/logs/debug?summary=false&dedupe=true&vanilla_bugs=hide&mod_noise=hide" | python3 -c "import json,sys; d=json.load(sys.stdin); print(f'Total: {len(d[\"entries\"])}'); [print(f'{e[\"category\"]} | {e[\"source\"]} | {(e[\"files\"] or [\"?\"])[0]} | {e[\"message\"][:200]}') for e in d['entries']]"
 ```
 
-Output: one line per deduped entry — `category | first-referenced-file | message-truncated-to-200-chars`.
+Output: a `Total: N` line, then one line per deduped entry — `category | cpp_source:line | first-referenced-file | message-truncated-to-200-chars`.
 
-`mod_only` defaults to true for `debug`/`error` families, so this is already filtered to mod-relevant entries. For a histogram of categories instead of entries, use `?summary=true`.
+Three things this command does that matter:
+
+- **`vanilla_bugs=hide` and `mod_noise=hide`** apply the parsed registries (`docs/vanilla/vanilla_known_bugs.md`, `docs/audits/mod_known_noise.md`), so previously-categorized vanilla bugs and tracked low-priority mod noise drop out of the first view. The per-entry mod-vs-vanilla decision-tree should focus on genuinely-new entries — if you're re-discovering something the registry already covers, you're doing the registry's job by hand. Audit what's currently swept away with `?vanilla_bugs=show&mod_noise=show` (default behavior) or scope to one bucket with `?vanilla_bugs=only` / `?mod_noise=only`.
+- **`mod_only` defaults to true** for `debug`/`error` families, so vanilla-file entries without a registry hit still surface — but workshop/third-party-mod files are filtered out via `EXTERNAL_MOD_SOURCE_FILES` regardless.
+- **The `source` field** (cpp file:line, e.g. `jomini_scriptvalue.cpp:1659`) is what you anchor on when registering engine noise into `vanilla_known_bugs.md` § "Engine noise (source-anchored)" — printing it default avoids a second curl just to look up the source token.
+
+For a histogram of categories instead of entries, use `?summary=true`.
 
 ## Log layout
 
@@ -43,14 +49,14 @@ Output: one line per deduped entry — `category | first-referenced-file | messa
 - `/logs/debug/diff?against=1` — what's new since the previous game session. Run this after a fix to confirm the entries are gone.
 - `/logs/sessions` — clusters file mtimes into runs; useful to scope triage to "this session only".
 
-Useful `/logs/<family>` query params: `q=` (substring), `file=` (glob on referenced file path), `category=` (exact filter), `since=HH:MM:SS`, `dedupe_key=message+file|message|category|exact`, `mod_only=true|false`.
+Useful `/logs/<family>` query params: `q=` (substring), `file=` (glob on referenced file path), `category=` (exact filter), `since=HH:MM:SS`, `dedupe_key=message+file|message|category|exact`, `mod_only=true|false`, `vanilla_bugs=hide|only|show`, `mod_noise=hide|only|show`, `include_external=true|false`.
 
 ## Triage workflow
 
 1. Run the canonical command above.
 2. **Bulk-fix routine noise first.** Some categories are non-actionable per-entry but trivially fixable in bulk. Doing them up front shortens the actionable list and saves the next session from re-triaging the same noise. See "Bulk-fixable noise" below.
 3. For each remaining entry, decide **mod vs vanilla**:
-   - Look at the path in `files`. If it doesn't exist under this repo, it's a vanilla file → record it in `docs/vanilla_known_bugs.md` if it's not already there, then skip.
+   - Look at the path in `files`. If it doesn't exist under this repo, it's a vanilla file → record it in `docs/vanilla/vanilla_known_bugs.md` if it's not already there, then skip.
    - If it does exist, it's a mod issue → fix it.
 4. Group mod entries by category and tackle each batch — cheaper to fix related entries together than ping-pong between unrelated bugs.
 5. After fixes: `POST /reload`, re-launch game, then `/logs/debug/diff?against=1` to confirm the fixed entries are gone.
@@ -104,16 +110,16 @@ Intentional vanilla `debug_log = "..."` calls that fire every election/movement 
 
 | Category | What it usually means | Where to look |
 |---|---|---|
-| `script_parse_error` | Typo, vanilla rename, unregistered modifier, or unknown trigger | `docs/vanilla_patch_runbook.md` § Known vanilla renames; `/modifier-search?q=` to validate names |
+| `script_parse_error` | Typo, vanilla rename, unregistered modifier, or unknown trigger | `docs/guides/vanilla_patch_runbook.md` § Known vanilla renames; `/modifier-search?q=` to validate names |
 | `inject_to_missing` | Vanilla renamed/removed an `INJECT:` target | Same runbook |
-| `duplicated_key` | Top-level entity collision (mod redeclares a vanilla key) | Convert mod's declaration to `INJECT:`. `docs/scripting_best_practices.md` § Top-Level Database Collisions |
-| `inconsistent_trigger_scope` / `inconsistent_effect_scope` | Wrong scope for the trigger or effect | `/engine-docs/triggers`, `/engine-docs/effects`; `docs/scripting_best_practices.md` § scope chain |
+| `duplicated_key` | Top-level entity collision (mod redeclares a vanilla key) | Convert mod's declaration to `INJECT:`. `docs/guides/scripting_best_practices.md` § Top-Level Database Collisions |
+| `inconsistent_trigger_scope` / `inconsistent_effect_scope` | Wrong scope for the trigger or effect | `/engine-docs/triggers`, `/engine-docs/effects`; `docs/guides/scripting_best_practices.md` § scope chain |
 | `missing_file` | Asset (often `gfx/event_pictures/*.dds`) not found | Substitute thematically-similar existing asset, or remove the reference |
 | `missing_texture_for_entity` | Entity references a DDS that doesn't exist | Same |
 | `dds_dimensions` | DDS not a multiple of 4 | Visual-only warning; usually skip unless re-exporting |
 | `other` with `should be in utf8-bom encoding` | Mod `.txt` file lacks the leading `\xef\xbb\xbf` BOM | Bulk-fix at session start — see "Bulk-fixable noise" below |
 | `vfs_mount` | Filesystem/mount issue | Usually environmental, not a mod bug |
-| `gui_parse_error` / `gui_widget_error` | GUI script error | `docs/gui_modding_guide.md` |
+| `gui_parse_error` / `gui_widget_error` | GUI script error | `docs/guides/gui_modding_guide.md` |
 | `gamedatabase_other`, `localization`, `ai`, `other` | Fallback buckets | Case-by-case |
 
 For **"modifier silently no-ops"** reports that don't show in logs at all: the engine ignores invalid modifier names without logging. Validate via `/modifier-search?q=` and check `common/modifier_type_definitions/mod_entity_modifier_types.txt` for missing per-entity registration of dynamic patterns (`building_*`, `goods_*`, `state_building_*`, `ship_battle_against_ship_type_*`).
@@ -122,10 +128,10 @@ For **"modifier silently no-ops"** reports that don't show in logs at all: the e
 
 When you discover something worth recording, route by topic — write it in exactly one place:
 
-- **Engine syntax, scope rule, modifier validation, scripting gotcha** → `docs/scripting_best_practices.md`
+- **Engine syntax, scope rule, modifier validation, scripting gotcha** → `docs/guides/scripting_best_practices.md`
 - **Log-triage workflow, category interpretation, tooling quirk** → this skill's "Lessons learned" section below
-- **One-off vanilla bug** → `docs/vanilla_known_bugs.md`
-- **Refactor pattern / helper inventory** → `docs/script_parameterization_audit.md`
+- **One-off vanilla bug** → `docs/vanilla/vanilla_known_bugs.md`
+- **Refactor pattern / helper inventory** → `docs/audits/script_parameterization_audit.md`
 - **Per-helper context** → that helper's own header comment
 
 This mirrors `CLAUDE.md` § "Recording lessons learned" — don't duplicate across homes.
@@ -138,12 +144,12 @@ The bar is: would the next Claude rediscover this from scratch? If yes, write it
 
 ## Lessons learned
 
-Workflow- and tooling-level lessons accrue here. Engine/scripting lessons go to `docs/scripting_best_practices.md` instead.
+Workflow- and tooling-level lessons accrue here. Engine/scripting lessons go to `docs/guides/scripting_best_practices.md` instead.
 
 - 2026-04-29: `debug.log` is the primary signal; `error.log` only surfaces a small subset (mostly script-value type errors). Always start with the canonical debug.log curl above. Source: `CLAUDE.md` § "Triage workflow for log issues".
 - 2026-04-29: `category=other` entries with `source=jomini_effect_impl.cpp:454` and a message body that's a plain English phrase (e.g. "Election Campaign Started", "Conservative Party Created", "Revolutionary Coalition Disbanded") are **intentional vanilla `debug_log = "..."` calls** in `common/on_actions/00_code_on_actions.txt`, not bugs. They dominate `mod_only=true` triage results during election cycles because the categorizer can't distinguish them from real errors. Recognize and skip; don't dig into vanilla source for them.
 - 2026-05-02: A referenced file path that exists in **neither** this mod (`ls <path>` from repo root) **nor** vanilla (`/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/<path>`) is almost always a **third-party Steam Workshop mod**. Locate it with `find /mnt/c/Program Files\ \(x86\)/Steam/steamapps/workshop/content/529340 -name <basename>` and identify via `<workshop>/<id>/.metadata/metadata.json`'s `name` field. The `mod_only=true` filter can't distinguish workshop mods from this mod, so they leak through. Not our problem — skip without recording in `vanilla_known_bugs.md`. Recent example: `GDPGR_scripted_effects.txt` and `events/gdp_events.txt` Div/0 entries trace to "GDP Growth Rate Improved" v1.2.2 (workshop id 3255320685).
-- 2026-05-05: **Use `?vanilla_bugs=hide` (or `=only` to inspect what's tagged) on every `/logs/*` call.** `docs/vanilla_known_bugs.md` is now a parsed registry — entries with `### \`path/to/file.txt[:line]\`` headings, an optional fenced code block whose lines become signature substrings, and a body whose backticked path references extend the heading's basenames. Multiple distinct error variants per bug should all go inside the same code block (`tag_vanilla_bugs` matches if ANY signature substring appears in the message, normalized for `:NNN` line refs). Avoid `<X>` placeholders in signatures — they're matched literally and won't hit real messages with quoted values. The `## Expected mod-override noise` section uses the same parser to register the `replace/*.yml` warnings as known by-design noise.
+- 2026-05-05: **Use `?vanilla_bugs=hide` (or `=only` to inspect what's tagged) on every `/logs/*` call.** `docs/vanilla/vanilla_known_bugs.md` is now a parsed registry — entries with `### \`path/to/file.txt[:line]\`` headings, an optional fenced code block whose lines become signature substrings, and a body whose backticked path references extend the heading's basenames. Multiple distinct error variants per bug should all go inside the same code block (`tag_vanilla_bugs` matches if ANY signature substring appears in the message, normalized for `:NNN` line refs). Avoid `<X>` placeholders in signatures — they're matched literally and won't hit real messages with quoted values. The `## Expected mod-override noise` section uses the same parser to register the `replace/*.yml` warnings as known by-design noise.
 - 2026-05-05: **For comprehensive vanilla-bug discovery, aggregate across all `error*.log` and `debug*.log` generations, not just current.log.** Bugs that only fire under specific conditions (certain country exists / specific JE active / particular UI panel open) often appear in older generations but not current. Pattern: `for path in sorted(glob.glob(os.path.join(game_logs_path, 'error*.log'))): if 'Manfred' not in path and 'pickle' not in path: all_entries.extend(parse_log(path))`. Then `tag_vanilla_bugs(...)` and group by basename — the high-volume basenames are the registration targets. Took error-log tagging from 22% → 86% in one session.
 - 2026-05-05: **`add_loyalists` and `add_radicals` share the same `*_radicals` script values.** Vanilla `event_values.txt` only defines `small_radicals = 0.02 / medium_radicals = 0.05 / large_radicals = 0.1`. There are NO `*_loyalists` script values — vanilla event code uses the radicals values for both effects (`acceptance_events.txt` calls `add_loyalists = { value = large_radicals }`). Mod usages of `value = small_loyalists` will silently fail (`Failed to find a valid event target link`) — replace with the matching `*_radicals` value, not a literal. Note: this triple-fires per occurrence — `Failed to find a valid event target link 'small_loyalists'` + `Badly read script value small_loyalists` + `add_loyalists effect [ The 'value' field must be set ]` — recognize as one bug, not three.
 - 2026-05-06: **A single `script_parse_error` typically chains downstream `inconsistent_effect_scope` / "Unknown trigger type" / "Unknown effect" entries in the same file.** The parser loses block boundaries after the first failure and mis-attributes valid sibling triggers/effects as unknown. Fix the upstream parse error first, then re-check — the cascade usually disappears on its own. Don't independently chase the downstream entries; they're symptoms, not root causes. Recent example: `country_prestige >= 100` (script value used as trigger) at extra_decisions.txt:160 cascaded into "Unknown effect add_authority" at :164 and "Unknown effect set_country_flag" at :169 — all three were one bug. Same shape with `radical_fraction >= 0.10` (block trigger called as scalar) cascading into "Unknown trigger type: add" at the next line.

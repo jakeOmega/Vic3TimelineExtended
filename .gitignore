@@ -6,9 +6,9 @@ paths.local.json
 /.vscode
 # docs/ is tracked; only runtime-derived dumps from auto-run generators are
 # excluded (regenerated on every server /reload, so they'd churn constantly).
-docs/error_log_digest.md
-docs/commented_vanilla_pms.txt
-docs/commented_vanilla_military_units.txt
+docs/engine/error_log_digest.md
+docs/engine/commented_vanilla_pms.txt
+docs/engine/commented_vanilla_military_units.txt
 *.log
 *.log.*
 *.pid
