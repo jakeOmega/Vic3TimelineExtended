@@ -1058,7 +1058,7 @@ INJECT:combat_unit_type_high_tier_marines = {
 combat_unit_type_combined_arms_marines = {
 	group = combat_unit_group_marines
 	max_manpower = 1000
-	supply_capacity = 55
+	supply_capacity = 80
 
 	conscript_peasant_levies = yes
 
@@ -1098,7 +1098,7 @@ combat_unit_type_combined_arms_marines = {
 combat_unit_type_stealth_marines = {
 	group = combat_unit_group_marines
 	max_manpower = 800
-	supply_capacity = 55
+	supply_capacity = 90
 
 	can_build = {
 		NOT = {
@@ -1142,7 +1142,7 @@ combat_unit_type_stealth_marines = {
 combat_unit_type_networked_marines = {
 	group = combat_unit_group_marines
 	max_manpower = 600
-	supply_capacity = 70
+	supply_capacity = 120
 
 	can_build = {
 		NOT = {
@@ -1187,7 +1187,7 @@ combat_unit_type_networked_marines = {
 combat_unit_type_bioenhanced_marines = {
 	group = combat_unit_group_marines
 	max_manpower = 500
-	supply_capacity = 100
+	supply_capacity = 160
 
 	can_build = {
 		NOT = {
@@ -1222,19 +1222,3 @@ combat_unit_type_bioenhanced_marines = {
 		texture = "gfx/unit_illustrations/marines_eu_high.dds"
 	}
 }
-
-
-### NAVY
-###
-### REMOVED IN 1.13 COMPATIBILITY PASS — TO BE REBUILT IN PHASE B
-###
-### Vanilla 1.13 deletes the entire combat_unit_type naval system. The mod's modern
-### ships (fleet_carrier, nuclear_supercarrier, arsenal_ship, hypersonic_missile_platform,
-### asw_destroyers, guided_missile_ship, pulsed_laser_escort, nuclear_submarine,
-### expeditionary_sea_base, swarm_coordination_vessel) all referenced removed combat unit
-### groups (combat_unit_group_capital_ship/light_ship/support_ship) and removed modifiers
-### (unit_convoy_*, unit_blockade_*, unit_navy_*, military_formation_movement_speed_*).
-###
-### These ships will be ported to vanilla's new ship_types/ framework in Phase B. Until
-### then, late-era navies use only the vanilla 1.13 ship roster.
-###

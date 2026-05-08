@@ -431,7 +431,7 @@ def emit_combat_unit_market_cost_svs(out_path, breakdown):
         lines.append("}")
         lines.append("")
     content = "\n".join(lines).rstrip() + "\n"
-    with open(out_path, "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8-sig") as f:
         f.write(content)
 
 

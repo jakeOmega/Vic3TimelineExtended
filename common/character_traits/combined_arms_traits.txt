@@ -74,7 +74,7 @@ trait_combined_arms_recon = {
 	}
 
 	command_modifier = {
-		unit_morale_loss_mult = -0.05
+		character_max_offensive_battles_add = 1
 	}
 
 	country_modifier = {
@@ -107,6 +107,7 @@ trait_combined_arms_armor = {
 	command_modifier = {
 		unit_offense_mult = 0.05
 		unit_defense_mult = 0.03
+		unit_morale_loss_mult = -0.05
 	}
 
 	country_modifier = {
@@ -137,8 +138,8 @@ trait_combined_arms_air_superiority = {
 	}
 
 	command_modifier = {
-		unit_offense_mult = 0.08
-		unit_morale_damage_mult = 0.03
+		unit_offense_mult = 0.05
+		character_advancement_speed_mult = 1
 	}
 
 	country_modifier = {
@@ -171,6 +172,7 @@ trait_combined_arms_full_spectrum = {
 	command_modifier = {
 		unit_offense_mult = 0.05
 		unit_defense_mult = 0.05
+		character_max_offensive_battles_add = 1
 	}
 
 	country_modifier = {
