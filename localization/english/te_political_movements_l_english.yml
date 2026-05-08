@@ -3,8 +3,10 @@
 #
 # POLITICAL_MOVEMENTS
 #
- movement_anti_war_name:0 "Anti-War Movement"
- movement_civil_rights_name:0 "Civil Rights Movement"
+ movement_anti_war:0 "Anti-War Movement"
+ movement_anti_war_name:0 "$movement_anti_war$"
+ movement_civil_rights:0 "Civil Rights Movement"
+ movement_civil_rights_name:0 "$movement_civil_rights$"
  movement_crushed_assimilation_drive_modifier:0 "Assimilation Drive"
  movement_crushed_assimilation_drive_modifier_desc:0 "With the civil rights movement defeated, the state has accelerated its cultural assimilation program."
  movement_crushed_expulsion_modifier:0 "Minority Expulsion Program"
@@ -15,4 +17,6 @@
  movement_crushed_political_suppression_modifier_desc:0 "Discriminated communities have been stripped of what little political voice they had."
  movement_crushed_segregation_enforced_modifier:0 "Segregation Enforced"
  movement_crushed_segregation_enforced_modifier_desc:0 "With dissent silenced, the regime has tightened racial and cultural segregation under the full force of law."
- movement_transhumanist_name:0 "Transhumanist Movement"
+ movement_environmental:0 "Environmental Movement"
+ movement_transhumanist:0 "Transhumanist Movement"
+ movement_transhumanist_name:0 "$movement_transhumanist$"
