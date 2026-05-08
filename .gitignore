@@ -21,3 +21,4 @@ generate_images.log
 .DS_Store
 .claude/*
 !.claude/skills/
+scratch
