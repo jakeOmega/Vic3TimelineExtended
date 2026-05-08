@@ -264,6 +264,148 @@ Vanilla IG-suppression event accesses a saved scope that has been invalidated by
 
 Vanilla ship-transfer treaty article references a scope that's invalidated during certain treaty-evaluation paths. High repeat count under treaty-heavy gameplay. Vanilla bug. Skip.
 
+### `events/agitators_events/land_ownership_law_events.txt:945`/`:946` — `Undefined event target 'farmer_wealth_concentration_state_scope'` cascading into wrong-scope effects
+
+```
+land_ownership_law_events.txt:945
+land_ownership_law_events.txt:946
+Undefined event target 'farmer_wealth_concentration_state_scope'
+```
+
+Same pattern as `movement_events.txt:815` and `coup_events.txt:983`. Vanilla `land_ownership_law_events.7` option `c` references an unbound `scope:farmer_wealth_concentration_state_scope`; cascades into "unset scope" + `add_radicals_in_state` "Wrong scope for effect: none". One vanilla bug, three log lines.
+
+### `events/slave_revolts.txt:38` — `Could not get leader of interest group` in revolt-synthesized country
+
+```
+slave_revolts.txt:38
+Could not get leader of interest group
+Event target link 'leader' returned an unset scope
+```
+
+Vanilla slave/peasant-revolt event walks `every_interest_group` and reads `leader` on each, but revolt-synthesized countries (e.g. "Indian Peasant Revolt") have IGs with no leader set yet. Six IG names per occurrence (`Armed Forces`, `Anglican Church`, `Industrialists`, `Landowners`, `Petite Bourgeoisie`, …) — recognize as one vanilla bug per revolt, not six. Skip.
+
+### `events/india_events/princely_states.txt:61` — `change_relations` same-country self-loop
+
+```
+princely_states.txt:61
+change_relations effect [ Trying to change relations between the same country
+```
+
+Vanilla princely-states event has `change_relations` between two scope refs that resolve to the same country (commonly seen with Oudh). Vanilla bug; the event is missing a `NOT = { this = scope:other }` guard. Skip.
+
+### `events/royal_wedding.txt:351` — `remove_character_role` on character without that role
+
+```
+royal_wedding.txt:351
+remove_character_role effect [ Attempting to remove role that character does not have
+```
+
+Vanilla royal-wedding event removes a role that the chosen wedding character doesn't carry. Vanilla bug; should be wrapped in `has_role = X` limit. Skip.
+
+### `events/peoples_springtime.txt:693, 1111, 1112, 1124` — multiple revolution/variable errors
+
+```
+peoples_springtime.txt:693
+peoples_springtime.txt:1111
+peoples_springtime.txt:1112
+peoples_springtime.txt:1124
+abandon_revolution effect [ InterestGroup's country doesn't have a valid growing revolution
+add_ruling_interest_group effect [ InterestGroup is insurrectionary
+remove_ruling_interest_group effect [ InterestGroup is insurrectionary
+Failed to fetch variable for 'springtime_timer_var' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+```
+
+Vanilla 1848-Springtime event chain has multiple flaws: `abandon_revolution` is called without checking the country still has a growing revolution; `add_ruling_interest_group` / `remove_ruling_interest_group` are called on insurrectionary IGs (not legal); and `springtime_timer_var` is read before it's been set in some branches. All vanilla bugs across the same 1848-Springtime event tree. Skip.
+
+### `common/on_actions/00_on_actions_monthly.txt:206` — `retire_character` on already-dead character
+
+```
+00_on_actions_monthly.txt:206
+retire_character effect [ Character is already dead
+```
+
+Vanilla character-aging on-action calls `retire_character` without a `is_alive = yes` guard. Vanilla bug. Skip.
+
+### `events/japan_events/ep2_shogunate_events.txt:726`, `events/soi_events/00_lobbies_events_03.txt:503`, `events/psychology_events.txt:136`, `events/brazil/pedro_brazil_events.txt:1042` — `ruler = { ... }` without `has_ruler` guard
+
+```
+ep2_shogunate_events.txt:726
+00_lobbies_events_03.txt:503
+psychology_events.txt:136
+pedro_brazil_events.txt:1042
+Event target link 'ruler' returned an invalid object
+```
+
+Vanilla event triggers read `ruler = { ... }` properties without an outer `has_ruler = yes` guard. Throws when the country has no ruler (vacant throne, revolt-synthesized country, regency edge cases). Same root cause across all four files; recognize as one vanilla pattern, not four. Likely more files share this — match the message `Event target link 'ruler' returned an invalid object` for any new occurrence.
+
+### `common/scripted_effects/00_victoria_ep2_scripted_effects.txt:1177` (called from `common/journal_entries/07_iwakura_mission.txt`) — `var:current_expedition_location_var` unset
+
+```
+00_victoria_ep2_scripted_effects.txt:1177
+07_iwakura_mission.txt
+Event target link 'var' returned an invalid object
+Could not get country from scope!
+```
+
+Vanilla Iwakura-mission scripted effect reads `var:current_expedition_location_var.techs_researched` without checking the variable is set. When the expedition location var is unset (expedition not yet dispatched / cleared), the chain throws "var invalid" + "Could not get country from scope". Same family as the unset-event-target cascade. Vanilla bug. Skip.
+
+### `events/agitators_events/agitators_law_events.txt:921` — `Undefined event target 'supporting_ig'` cascading into wrong-scope effects
+
+```
+agitators_law_events.txt:921
+Undefined event target 'supporting_ig'
+```
+
+Same pattern as `movement_events.txt:815`, `coup_events.txt:983`, and `land_ownership_law_events.txt:945`. Vanilla `agitators_law_events.9` option `b` references an unbound `scope:supporting_ig`; cascades into "unset scope" + `add_modifier` "Wrong scope for effect: none". One vanilla bug, three log lines.
+
+### `events/agitators_events/revolution_events_01.txt:1291` — `Event target link 'home_country' returned an invalid object`
+
+```
+revolution_events_01.txt:1291
+Event target link 'home_country' returned an invalid object
+```
+
+Vanilla revolution event reads `home_country` on a scope where it isn't always set (typically when the referenced character has no recorded home_country). Engine logs the failure and skips the dependent effect. No mod-side fix.
+
+### `common/scripted_effects/00_government_type_change_effects.txt:19, 20` (called from `common/government_types/05_council_republics.txt`) — `get_ruler_for` unset cascading into `set_character_as_ruler` wrong-scope
+
+```
+00_government_type_change_effects.txt:19
+00_government_type_change_effects.txt:20
+05_council_republics.txt
+Event target link 'get_ruler_for' returned an unset scope
+set_character_as_ruler effect [ Wrong scope for effect: none, expected character ]
+```
+
+Vanilla council-republics government-type transition tries to install a ruler via `scope:country.get_ruler_for = ...` when the country has no eligible ruler character; the second error is the classic cascade from the first (the now-`none` scope passed into `set_character_as_ruler`). One vanilla bug, two log lines.
+
+### `events/iberia_events/ip4_anarchism_events.txt:610` — `Event target link 'civil_war_origin_country' returned an invalid object`
+
+```
+ip4_anarchism_events.txt:610
+Event target link 'civil_war_origin_country' returned an invalid object
+```
+
+Vanilla anarchism event reads `civil_war_origin_country` on a scope where the saved scope is unset (typically when fired outside a civil-war revolt-spawned context). Engine logs the failure and skips the dependent effect; can fire hundreds of times per game tick if the calling iterator is broad. Same shape as `revolution_events_01.txt:1291` (`home_country` invalid). No mod-side fix.
+
+### `events/iberia_events/regency_events.txt:114-120` — `Undefined event target 'ig_candidate_1'` cascading into wrong-scope effects/triggers
+
+```
+regency_events.txt:114
+regency_events.txt:115
+regency_events.txt:116
+regency_events.txt:120
+Undefined event target 'ig_candidate_1'
+Event target link 'scope' returned an unset scope
+set_character_as_ruler effect [ Wrong scope for effect: none, expected character ]
+set_variable effect [ This scope doesn't support variables. Scope: empty ]
+is_immortal trigger [ Wrong scope for trigger: none, expected character ]
+```
+
+Iberian regency event references `scope:ig_candidate_1` without ensuring the saved scope was established earlier in the chain. Cascades into multiple wrong-scope effects/triggers downstream — same shape as `movement_events.txt:815` and `agitators_law_events.txt:921`. One root cause, five log lines.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
