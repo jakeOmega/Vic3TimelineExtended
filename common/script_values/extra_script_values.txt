@@ -1326,6 +1326,15 @@ country_gdp_per_capita = {
 	}
 }
 
+# Thin wrapper so `change_variable = { divide = ... }` and similar slots can
+# read total_population. The bare form (`divide = total_population`) only
+# evaluates inside script_value blocks; in change_variable/set_variable slots
+# it resolves to type 'none'. Min 1 also guards divide-by-zero.
+te_safe_total_population = {
+	value = total_population
+	min = 1
+}
+
 global_gdp_per_capita = {
 	value = global_gdp_script_value
 	divide = {
@@ -2356,8 +2365,8 @@ te_subjugation_strength = {
 # resulting modifier scales with the country's current resource value
 # instead of being a hardcoded delta that goes invisible at late-game scale.
 #
-# See docs/event_magnitude_report.md for the audit that flags missing usage,
-# and docs/scripting_best_practices.md § "Fast-scaling resources require
+# See docs/engine/event_magnitude_report.md for the audit that flags missing usage,
+# and docs/guides/scripting_best_practices.md § "Fast-scaling resources require
 # scaled effects" for the rationale.
 #
 # Tiers: tiny=0.5%, small=2%, medium=5%, large=15%, huge=30%

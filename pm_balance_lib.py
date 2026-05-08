@@ -36,6 +36,26 @@ PM_FILES: list[str] = [
 ]
 
 # Flag values returned by classify_pm. Documented for /annotators consumers.
+#
+# Interpretation gotchas (read before acting on these flags):
+#
+# - `wage_breakeven` is £ per worker per week, not a revenue share. It's
+#   `profit / employment` (see pm_costs.py) — the pop wage at which the
+#   building's profit hits zero. HIGHER = more wage headroom (healthy);
+#   LOWER = the PM only pays out when wages stay near zero.
+#
+# - `HIGH-WAGE` is therefore a wage-headroom flag, not a labor-cost
+#   concern. The genuine pop-squeeze signal is `LOW-WAGE` (margin > 0
+#   and breakeven < 0.01).
+#
+# - For substitution PMs (e.g. the `pmg_steam_automation_*_mine` chain,
+#   where each tier replaces the previous and trades input cost for
+#   reduced employment), `DEEP-LOSS` reports the per-PM-block delta the
+#   substitution adds, not the building's net economics. The
+#   wage_breakeven captures the actual sign change — the substitution
+#   is net good for the building when pop wages exceed it. Don't read a
+#   `DEEP-LOSS` flag on a substitution PM as "fix the loss"; read it as
+#   "where does this tier sit on the chain's wage_breakeven curve?"
 FLAGS = ("OK", "HIGH-PROFIT", "DEEP-LOSS", "HIGH-WAGE", "LOW-WAGE",
          "THROUGHPUT", "NO-COSTS")
 

@@ -6310,8 +6310,8 @@ st_res_sell_profit_modifier = {
 # so the effect stays meaningful at any game scale (early or late game).
 #
 # Tiers: tiny=0.5%, small=2%, medium=5%, large=15%, huge=30%
-# See docs/scripting_best_practices.md § "Fast-scaling resources require
-# scaled effects" for context, and docs/event_magnitude_report.md for the
+# See docs/guides/scripting_best_practices.md § "Fast-scaling resources require
+# scaled effects" for context, and docs/engine/event_magnitude_report.md for the
 # audit that flags hardcoded magnitudes that should use these instead.
 
 prestige_loss_tiny = {

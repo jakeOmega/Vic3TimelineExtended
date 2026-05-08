@@ -102,7 +102,6 @@
  pm_base_building_inertial_fusion_power:0 "Inertial Fusion Power"
  pm_base_building_nuclear_power:0 "Nuclear Power"
  pm_base_building_renewable_power:0 "Renewable Power"
- pm_base_building_space_power:0 "Space Power"
  pm_base_building_tokamak_fusion_power:0 "Tokamak Fusion Power"
  pm_basf_ludwigshafen_plant:0 "BASF Ludwigshafen Plant"
  pm_basic_am_fabrication:0 "Basic AM Fabrication"
