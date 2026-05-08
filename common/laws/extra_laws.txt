@@ -2384,8 +2384,11 @@ law_freedom_of_contract = {
 	}
 
 	modifier = {
-		country_company_construction_efficiency_bonus_add = 0.4   # companies do better
-		state_construction_mult = -0.2  						  # monopolies slow new entry
+		country_company_construction_efficiency_bonus_add = 0.4         # companies form fast
+		country_company_throughput_bonus_add = -0.10                    # cartel rents → per-company inefficiency (scales with development)
+		interest_group_ig_trade_unions_pop_attraction_mult = 0.20       # workers angry about exploitative contracts; political weight gated by labor laws
+		building_minimum_wage_mult = -0.05                              # employers can negotiate wage floors down
+		state_bureaucracy_population_base_cost_factor_mult = -0.05      # less labor-regulation paperwork
 	}
 }
 
@@ -2406,7 +2409,7 @@ law_trust_busting = {
 	modifier = {
 		country_forbid_monopoly_bool = yes
 		country_company_construction_efficiency_bonus_add = -0.2    # cartel rents trimmed
-		building_throughput_add = 0.1                               # competitive gains
+		country_company_throughput_bonus_add = 0.1                  # competitive gains
 		country_max_companies_add = 1                               # more firms
 	}
 }
@@ -2421,10 +2424,11 @@ law_regulated_utilities = {
 
 	# Treat networks as regulated natural monopolies or unbundle "pipes" from "services"
 	modifier = {
-		country_forbid_monopoly_bool = yes
-		country_company_construction_efficiency_bonus_add = -0.2    # cartel rents trimmed
-		building_throughput_add = 0.1                               # competitive gains
-		building_company_government_dividends_add = 0.10            # stable utility revenues
+		country_company_construction_efficiency_bonus_add = -0.2            # cartel rents trimmed
+		country_company_throughput_bonus_add = 0.1                          # competitive gains
+		building_company_government_dividends_add = 0.10                    # stable utility revenues
+		building_group_bg_infrastructure_construction_efficiency_add = 0.25 # infrastructure is more efficient with centralized planning
+
 	}
 }
 
