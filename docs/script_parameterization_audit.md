@@ -20,6 +20,11 @@ The repo already uses parameterized helpers in several systems:
 | [common/scripted_triggers/misc_triggers.txt](../common/scripted_triggers/misc_triggers.txt) | `is_industrial_production_allowed`, `is_extraction_industry_allowed`, `is_great_or_major_power`, `no_duplicate_treaty_article` | (none / `$ARTICLE_TYPE$`) | Pure-condition triggers replacing 33+10+20 inline copies. See `scripting_best_practices.md` § "Industry-Ban Triggers for New Buildings". |
 | [common/scripted_triggers/space_race_triggers.txt](../common/scripted_triggers/space_race_triggers.txt) | `sr_milestone_followup_is_shown` | `$PREREQ$`, `$TECH$` | JE `is_shown_when_inactive` composer for prereq-gated milestones. |
 | [common/scripted_effects/extra_effects.txt](../common/scripted_effects/extra_effects.txt) | `remove_modifier_if_exists_effect` | `$MODIFIER$` | Idiomatic conditional removal — useful primitive for cleanup helpers. |
+| [common/scripted_effects/extra_effects.txt](../common/scripted_effects/extra_effects.txt) | `remove_banking_planning_modifiers_effect`, `remove_banking_cooperative_modifiers_effect`, `remove_banking_market_modifiers_effect` | (none — single-hop refactor) | Collapsed 30 per-modifier `je:je_banking_cycle = { remove_modifier = X }` calls into one scope hop per helper. Names preserved; behavior identical (`remove_modifier` is idempotent). |
+| [common/scripted_effects/space_race_effects.txt](../common/scripted_effects/space_race_effects.txt) | `sr_apply_safety_review_to_milestone_base`, `sr_apply_progress_loss_base`, `sr_clear_failed_flag_base`, `sr_boost_active_milestone_base` | `$MILESTONE$`, `$MULT$` | Five 8-iteration helpers (`sr_temporary_safety_review_effect`, `sr_apply_ambitious_failure_progress_loss`, `sr_apply_safe_setback_progress_loss`, `sr_clear_failed_milestone_flags`, `sr_boost_active_milestones`) collapsed via Style B inline orchestrators. ~200 lines saved. |
+| [common/scripted_effects/space_race_effects.txt](../common/scripted_effects/space_race_effects.txt) | `sr_clear_milestone_cost_modifiers_base`, `sr_apply_milestone_cost_modifiers_base` | `$MILESTONE$` | `sr_recalculate_cost` two-loop refactor; `?=` operator preserved on the clear base so inactive JEs silently no-op. ~67 lines saved. |
+| [common/scripted_effects/space_race_effects.txt](../common/scripted_effects/space_race_effects.txt) | `sr_cleanup_milestone_if_inactive_base` | `$MILESTONE$` | `sr_cleanup_inactive_space_race_milestones` standard-8-token refactor; `interstellar_results` stays inline (different 2-var set). ~145 lines saved. |
+| [common/scripted_effects/banking_cycle_effects.txt](../common/scripted_effects/banking_cycle_effects.txt) | `apply_banking_crash_softening_option_effect` | `$TT_KEY$`, `$CYCLE_ADD$`, `$MOMENTUM_ADD$`, `$COST_SCALE$`, `$INTERVENTION$`, `$RADICALS$` | 10 of 12 options of `minor_events_timelineextended.6` collapsed; `option_a` and `capital_controls` stay inline (don't fit the shape). $RADICALS$ interpolates into `add_radicals { value = $RADICALS$_radicals }`. ~143 lines saved. |
 
 ### Conventions that already work well here
 
@@ -59,7 +64,7 @@ The repo already uses parameterized helpers in several systems:
 
 ## Remaining Good Candidates
 
-The big candidates are mostly addressed (see commits leading to and including `Phase 7 refactor: banking law-change cleanup bundles + bloc principle base`). What's left is small or deliberately deferred:
+The big candidates are mostly addressed (see commits leading to and including the `Phase 1..5 refactor` series finishing in `Phase 5 refactor: extract apply_banking_crash_softening_option_effect helper`, and the earlier `Phase 7 refactor: banking law-change cleanup bundles + bloc principle base`). What's left is small or deliberately deferred:
 
 | File | Candidate | Why it fits | Risk |
 |---|---|---|---|
