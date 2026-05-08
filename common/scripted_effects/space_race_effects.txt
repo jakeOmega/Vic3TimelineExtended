@@ -343,289 +343,65 @@ sr_cleanup_inactive_space_race_milestones = {
 	}
 }
 
-# Apply a temporary safety review to the last-failed milestone.
+# Apply a temporary safety review to every milestone whose failure flag is set.
 # Each flag sr_failed_<m> is set in the monthly pulse before firing failure events.
-# Uses if (not else_if) so multiple simultaneous failures are all processed.
+# Uses independent if (not else_if) so multiple simultaneous failures all process.
 sr_temporary_safety_review_effect = {
-	if = {
-		limit = { has_variable = sr_failed_suborbital }
-		remove_variable = sr_failed_suborbital
-		if = { limit = { has_journal_entry = je_space_race_suborbital }
-			je:je_space_race_suborbital = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_orbital }
-		remove_variable = sr_failed_orbital
-		if = { limit = { has_journal_entry = je_space_race_orbital }
-			je:je_space_race_orbital = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_moon_landing }
-		remove_variable = sr_failed_moon_landing
-		if = { limit = { has_journal_entry = je_space_race_moon_landing }
-			je:je_space_race_moon_landing = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_probe }
-		remove_variable = sr_failed_probe
-		if = { limit = { has_journal_entry = je_space_race_probe }
-			je:je_space_race_probe = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_moon_base }
-		remove_variable = sr_failed_moon_base
-		if = { limit = { has_journal_entry = je_space_race_moon_base }
-			je:je_space_race_moon_base = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_mars_landing }
-		remove_variable = sr_failed_mars_landing
-		if = { limit = { has_journal_entry = je_space_race_mars_landing }
-			je:je_space_race_mars_landing = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_interstellar_probe }
-		remove_variable = sr_failed_interstellar_probe
-		if = { limit = { has_journal_entry = je_space_race_interstellar_probe }
-			je:je_space_race_interstellar_probe = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
-	if = {
-		limit = { has_variable = sr_failed_solar_colonization }
-		remove_variable = sr_failed_solar_colonization
-		if = { limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = {
-				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
-				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
-			}
-		}
-	}
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = suborbital         }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = orbital            }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_landing       }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = probe              }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_base          }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = mars_landing       }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = interstellar_probe }
+	sr_apply_safety_review_to_milestone_base = { MILESTONE = solar_colonization }
 }
 
 sr_apply_ambitious_failure_progress_loss = {
-	if = {
-		limit = {
-			has_variable = sr_failed_suborbital
-			has_variable = sr_progress_suborbital
-		}
-		change_variable = { name = sr_progress_suborbital multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_orbital
-			has_variable = sr_progress_orbital
-		}
-		change_variable = { name = sr_progress_orbital multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_moon_landing
-			has_variable = sr_progress_moon_landing
-		}
-		change_variable = { name = sr_progress_moon_landing multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_probe
-			has_variable = sr_progress_probe
-		}
-		change_variable = { name = sr_progress_probe multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_moon_base
-			has_variable = sr_progress_moon_base
-		}
-		change_variable = { name = sr_progress_moon_base multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_mars_landing
-			has_variable = sr_progress_mars_landing
-		}
-		change_variable = { name = sr_progress_mars_landing multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_interstellar_probe
-			has_variable = sr_progress_interstellar_probe
-		}
-		change_variable = { name = sr_progress_interstellar_probe multiply = 0.75 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_solar_colonization
-			has_variable = sr_progress_solar_colonization
-		}
-		change_variable = { name = sr_progress_solar_colonization multiply = 0.75 }
-	}
+	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = probe              MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.75 }
+	sr_apply_progress_loss_base = { MILESTONE = solar_colonization MULT = 0.75 }
 }
 
 sr_apply_safe_setback_progress_loss = {
-	if = {
-		limit = {
-			has_variable = sr_failed_suborbital
-			has_variable = sr_progress_suborbital
-		}
-		change_variable = { name = sr_progress_suborbital multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_orbital
-			has_variable = sr_progress_orbital
-		}
-		change_variable = { name = sr_progress_orbital multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_moon_landing
-			has_variable = sr_progress_moon_landing
-		}
-		change_variable = { name = sr_progress_moon_landing multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_probe
-			has_variable = sr_progress_probe
-		}
-		change_variable = { name = sr_progress_probe multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_moon_base
-			has_variable = sr_progress_moon_base
-		}
-		change_variable = { name = sr_progress_moon_base multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_mars_landing
-			has_variable = sr_progress_mars_landing
-		}
-		change_variable = { name = sr_progress_mars_landing multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_interstellar_probe
-			has_variable = sr_progress_interstellar_probe
-		}
-		change_variable = { name = sr_progress_interstellar_probe multiply = 0.85 }
-	}
-	if = {
-		limit = {
-			has_variable = sr_failed_solar_colonization
-			has_variable = sr_progress_solar_colonization
-		}
-		change_variable = { name = sr_progress_solar_colonization multiply = 0.85 }
-	}
+	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = probe              MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.85 }
+	sr_apply_progress_loss_base = { MILESTONE = solar_colonization MULT = 0.85 }
 }
 
 sr_clear_failed_milestone_flags = {
-	if = { limit = { has_variable = sr_failed_suborbital } remove_variable = sr_failed_suborbital }
-	if = { limit = { has_variable = sr_failed_orbital } remove_variable = sr_failed_orbital }
-	if = { limit = { has_variable = sr_failed_moon_landing } remove_variable = sr_failed_moon_landing }
-	if = { limit = { has_variable = sr_failed_probe } remove_variable = sr_failed_probe }
-	if = { limit = { has_variable = sr_failed_moon_base } remove_variable = sr_failed_moon_base }
-	if = { limit = { has_variable = sr_failed_mars_landing } remove_variable = sr_failed_mars_landing }
-	if = { limit = { has_variable = sr_failed_interstellar_probe } remove_variable = sr_failed_interstellar_probe }
-	if = { limit = { has_variable = sr_failed_solar_colonization } remove_variable = sr_failed_solar_colonization }
+	sr_clear_failed_flag_base = { MILESTONE = suborbital         }
+	sr_clear_failed_flag_base = { MILESTONE = orbital            }
+	sr_clear_failed_flag_base = { MILESTONE = moon_landing       }
+	sr_clear_failed_flag_base = { MILESTONE = probe              }
+	sr_clear_failed_flag_base = { MILESTONE = moon_base          }
+	sr_clear_failed_flag_base = { MILESTONE = mars_landing       }
+	sr_clear_failed_flag_base = { MILESTONE = interstellar_probe }
+	sr_clear_failed_flag_base = { MILESTONE = solar_colonization }
 }
 
 
 # Boost progress for all active milestones
 # Set sr_progress_boost before calling (can be negative for penalties)
 sr_boost_active_milestones = {
-	if = {
-		limit = { has_variable = sr_active_suborbital }
-		change_variable = { name = sr_progress_suborbital add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_suborbital < 0 }
-			set_variable = { name = sr_progress_suborbital value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_orbital }
-		change_variable = { name = sr_progress_orbital add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_orbital < 0 }
-			set_variable = { name = sr_progress_orbital value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_moon_landing }
-		change_variable = { name = sr_progress_moon_landing add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_moon_landing < 0 }
-			set_variable = { name = sr_progress_moon_landing value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_probe }
-		change_variable = { name = sr_progress_probe add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_probe < 0 }
-			set_variable = { name = sr_progress_probe value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_moon_base }
-		change_variable = { name = sr_progress_moon_base add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_moon_base < 0 }
-			set_variable = { name = sr_progress_moon_base value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_mars_landing }
-		change_variable = { name = sr_progress_mars_landing add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_mars_landing < 0 }
-			set_variable = { name = sr_progress_mars_landing value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_interstellar_probe }
-		change_variable = { name = sr_progress_interstellar_probe add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_interstellar_probe < 0 }
-			set_variable = { name = sr_progress_interstellar_probe value = 0 }
-		}
-	}
-	if = {
-		limit = { has_variable = sr_active_solar_colonization }
-		change_variable = { name = sr_progress_solar_colonization add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_solar_colonization < 0 }
-			set_variable = { name = sr_progress_solar_colonization value = 0 }
-		}
-	}
+	sr_boost_active_milestone_base = { MILESTONE = suborbital         }
+	sr_boost_active_milestone_base = { MILESTONE = orbital            }
+	sr_boost_active_milestone_base = { MILESTONE = moon_landing       }
+	sr_boost_active_milestone_base = { MILESTONE = probe              }
+	sr_boost_active_milestone_base = { MILESTONE = moon_base          }
+	sr_boost_active_milestone_base = { MILESTONE = mars_landing       }
+	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe }
+	sr_boost_active_milestone_base = { MILESTONE = solar_colonization }
 	remove_variable = sr_progress_boost
 }
 
@@ -716,6 +492,61 @@ sr_cleanup_milestone_variables_effect = {
 	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
 	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
 	sr_recalculate_cost = yes
+}
+
+# --- Per-milestone iteration bases (Style B inline orchestrator pattern) -----
+# Five top-level helpers (sr_temporary_safety_review_effect,
+# sr_apply_ambitious_failure_progress_loss, sr_apply_safe_setback_progress_loss,
+# sr_clear_failed_milestone_flags, sr_boost_active_milestones) all walk the
+# same 8 milestones (suborbital..solar_colonization). Each delegates to one of
+# these bases and the orchestrator lists the tokens explicitly so the support
+# matrix stays grep-able at the call site.
+
+# Apply a temporary safety review modifier to the JE owning the failed milestone.
+# Country scope. Caller iterates the standard 8 milestone tokens.
+sr_apply_safety_review_to_milestone_base = {
+	if = {
+		limit = { has_variable = sr_failed_$MILESTONE$ }
+		remove_variable = sr_failed_$MILESTONE$
+		if = {
+			limit = { has_journal_entry = je_space_race_$MILESTONE$ }
+			je:je_space_race_$MILESTONE$ = {
+				if = { limit = { has_modifier = sr_temporary_safety_review } remove_modifier = sr_temporary_safety_review }
+				add_modifier = { name = sr_temporary_safety_review days = long_modifier_time is_decaying = yes }
+			}
+		}
+	}
+}
+
+# Multiplicatively reduce a milestone's progress when its failure flag is set.
+# Country scope. $MULT$ is the retention factor (0.75 ambitious, 0.85 safe).
+sr_apply_progress_loss_base = {
+	if = {
+		limit = {
+			has_variable = sr_failed_$MILESTONE$
+			has_variable = sr_progress_$MILESTONE$
+		}
+		change_variable = { name = sr_progress_$MILESTONE$ multiply = $MULT$ }
+	}
+}
+
+# Clear the failure flag for one milestone if present. Country scope.
+sr_clear_failed_flag_base = {
+	if = { limit = { has_variable = sr_failed_$MILESTONE$ } remove_variable = sr_failed_$MILESTONE$ }
+}
+
+# Add var:sr_progress_boost (signed) to one active milestone's progress, clamped
+# at zero. Country scope. Caller sets sr_progress_boost before the orchestrator
+# and removes it afterwards.
+sr_boost_active_milestone_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		change_variable = { name = sr_progress_$MILESTONE$ add = var:sr_progress_boost }
+		if = {
+			limit = { var:sr_progress_$MILESTONE$ < 0 }
+			set_variable = { name = sr_progress_$MILESTONE$ value = 0 }
+		}
+	}
 }
 
 # --- Concrete per-milestone wrappers (kept as named entry points) ------------
