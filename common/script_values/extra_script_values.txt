@@ -1326,15 +1326,6 @@ country_gdp_per_capita = {
 	}
 }
 
-# Thin wrapper so `change_variable = { divide = ... }` and similar slots can
-# read total_population. The bare form (`divide = total_population`) only
-# evaluates inside script_value blocks; in change_variable/set_variable slots
-# it resolves to type 'none'. Min 1 also guards divide-by-zero.
-te_safe_total_population = {
-	value = total_population
-	min = 1
-}
-
 global_gdp_per_capita = {
 	value = global_gdp_script_value
 	divide = {

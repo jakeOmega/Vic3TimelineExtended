@@ -349,7 +349,7 @@ state_pop_support_movement_<name>_mult = {
 - **JE scope can't read country properties (`gdp`, `prestige`, etc.) inside `multiplier =`.** `je:my_je ?= { add_modifier = { name = X multiplier = some_script_value } }` will return `'none'` from `jomini_scriptvalue.cpp` if the script value reads a country property, because the engine re-evaluates the multiplier in JE scope each tick and JE scope only auto-resolves `var:` reads, not country properties. Country *vars* work (`var:my_var` resolves against the JE owner). **Fix:** cache the script value to a country var before scoping into the JE, and reference it as `root.var:X` in the multiplier. Refresh the cache from the JE's `on_monthly_pulse` so the value tracks. Mod example: `un_buttons.txt` for peacekeeping/development contributor cost; cache var refresh in `je_united_nations.txt` `on_monthly_pulse`.
 - **Script values that read `global_var:X` need a `has_global_variable = X` gate.** A monthly on-action pulse that fires before any yearly pulse will hit `'none'` when the global cache hasn't been populated yet. Wrap the body in `if = { limit = { has_global_variable = X } ... }`. Mod example: `cultural_pull_total` and `cultural_pull_from_sol` in `cultural_hegemony_script_values.txt`.
 - **Variables backing `add_modifier { multiplier = ... }` must persist beyond the call site.** The engine re-evaluates the `multiplier` expression on subsequent ticks (decay/tooltip), not just at add time. Removing the variable right after `add_modifier` makes every later evaluation read `var:X` as `'none'` and emit `Value of wrong type ... Got value of type 'none'` from `jomini_scriptvalue.cpp` per re-eval. **Fix:** never `remove_variable` a name that's referenced by a still-active modifier's multiplier — leave the variable set; it can be safely overwritten by the next `set_variable` call. Vanilla pattern: `c:FRA.var:PRC_money_transfer` in `01_paris_commune.txt` is set at JE start, used in `add_modifier { multiplier = ... }`, and never removed. Mod example: `population_transfer_effect` originally removed `pop_transfer_count` after the disruption modifier was added; reverted, and the runtime errors disappeared.
-- **Inline `multiplier = { ... divide = { value = X min = Y } ... }` block-form arithmetic in `add_modifier` is fragile — prefer the flat-scalar paris-commune pattern.** Even with persistent variables, a multiplier block that nests a `divide = { value = country_trigger min = … }` (or any sub-block whose `value =` reads a country trigger like `total_population`) re-evaluates that nested block on every decay tick and intermittently returns `'none'` from `jomini_scriptvalue.cpp:1659`, even when the outer scope is valid. Reported file:line is often the start-of-effect line (e.g. a blank line just before the multiplier block) rather than the actual offending line — don't trust the line number, look at the multiplier block. **Fix:** precompute the final scalar at apply-time into a country variable and read it flat: `set_variable = { name = X value = var:input }` → `change_variable = { name = X divide = total_population }` (scalar form, not block) → `clamp_variable = { name = X min = 0.25 max = 2 }` → `add_modifier = { ... multiplier = scope:source_country.var:X }`. The multiplier becomes a single variable lookup with no nested script-value evaluation per tick. Note: there is no `divide_variable` effect — use `change_variable = { divide = ... }`. Mod example: `population_transfer_effect` in `extra_effects.txt`.
+- **Inline `multiplier = { ... divide = { value = X min = Y } ... }` block-form arithmetic in `add_modifier` is fragile — prefer the flat-scalar paris-commune pattern.** Even with persistent variables, a multiplier block that nests a `divide = { value = country_trigger min = … }` (or any sub-block whose `value =` reads a country trigger like `total_population`) re-evaluates that nested block on every decay tick and intermittently returns `'none'` from `jomini_scriptvalue.cpp:1659`, even when the outer scope is valid. Reported file:line is often the start-of-effect line (e.g. a blank line just before the multiplier block) rather than the actual offending line — don't trust the line number, look at the multiplier block. **Fix:** precompute the final scalar at apply-time into a country variable using `set_variable`'s inline `value = { ... }` script-value block (where country triggers like `total_population` resolve correctly), then read it flat in the multiplier: `set_variable = { name = X value = { value = var:input  divide = { value = total_population min = 1 }  min = 0.25  max = 2 } }` → `add_modifier = { ... multiplier = scope:source_country.var:X }`. The multiplier becomes a single variable lookup with no nested script-value evaluation per tick. **Do NOT** factor the divide out as `change_variable = { divide = total_population }` (or `divide = my_script_value`): empirically the `divide=` operand of `change_variable` only resolves numeric literals and `var:Y` references, not bare country triggers or script-value names — both silently return `'none'` despite the engine docs claiming script values are accepted, and the failure corrupts the variable so the later multiplier read also returns `'none'`. Mod example: `population_transfer_effect` in `extra_effects.txt`.
 
 ## Modifier Values Are NOT Recalculated Within a Single Effect Block
 
@@ -1008,9 +1008,27 @@ on_entry_into_force = {
 - `can_ratify`: both `scope:source_country` and `scope:target_country` ARE bound (vanilla pattern).
 - `on_entry_into_force` / `on_break` / `on_withdrawal`: use `scope:article_options.source_country` / `.target_country` per the snippet above.
 
-### `state_population` Is a Trigger, Not a Script Value
+### `state_population` / `total_population` Are Triggers, Not Script Values
 
-`state_population` is a **trigger** (comparison operator: `state_population >= 100000`). It CANNOT be used as a value in script value / weight blocks (e.g., `add = state_population` causes "Malformed token"). For population-weighted `random_scope_state`, use tiered modifiers:
+`state_population` and `total_population` are **triggers** (comparison operators: `state_population >= 100000`, `total_population > 0`). They CANNOT be used as bare values in `weight = { add = … }` modifier blocks (e.g., `add = state_population` causes "Malformed token") or inside nested script-value sub-blocks like `divide = { value = total_population … }` (silently resolves to type `'none'`).
+
+**Two valid uses:**
+
+1. As a **bareword on the modifier-block top-level field** of a script value: `divide = total_population`, `multiply = total_population`. Vanilla precedent: `common/script_values/building_values.txt:26-40` (`country_urbanization_rate`):
+   ```
+   country_urbanization_rate = {
+       value = country_total_urbanization
+       if = {
+           limit = { total_population > 0 }
+           divide = total_population        # bareword — works
+       }
+       else = { multiply = 0.0001 }
+       multiply = 1000
+   }
+   ```
+2. As a **trigger comparator** inside `limit = { … }` or weight modifier conditions.
+
+For population-weighted `random_scope_state`, use tiered weight modifiers (the trigger form):
 
 ```
 random_scope_state = {
@@ -1025,6 +1043,8 @@ random_scope_state = {
 ```
 
 Alternatively, use `PREV.state_population` when adding to a VARIABLE in a parent scope (as in vanilla `02_south_america_migration.txt`).
+
+**Validation rule**: `/engine-docs/origin/<name>` — if `matches[].type == "triggers"` and not also `"script_values"`, the name is trigger-only and must be used as a bareword in script-value top-level fields, never as `value = <name>` inside a nested sub-block.
 
 ### Pick a Destination Once — Don't Call Destination-Picking Scripted Effects Inside `every_scope_pop`
 
