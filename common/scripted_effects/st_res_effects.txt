@@ -463,103 +463,43 @@ st_res_reset_rates_effect = {
 	st_res_clamp_stockpiles_effect = yes
 }
 
-st_res_increase_grain_rate_effect = {
+# --- Per-good rate adjustment bases ----------------------------------------
+# Each rate button calls the matching st_res_<dir>_<good>_rate_effect wrapper
+# (kept as a named entry point — buttons reference effect names directly).
+# All 14 wrappers share the same 4-line body modulo $GOOD$ and the +/- direction;
+# each wrapper delegates to one of these two bases.
+# Country scope. st_res_init_effect ensures the rate variable exists.
+
+st_res_increase_rate_base = {
 	st_res_init_effect = yes
-	change_variable = { name = st_res_grain_rate add = st_res_adjust_step_value }
+	change_variable = { name = st_res_$GOOD$_rate add = st_res_adjust_step_value }
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
 }
 
-st_res_decrease_grain_rate_effect = {
+st_res_decrease_rate_base = {
 	st_res_init_effect = yes
-	change_variable = { name = st_res_grain_rate subtract = st_res_adjust_step_value }
+	change_variable = { name = st_res_$GOOD$_rate subtract = st_res_adjust_step_value }
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
 }
 
-st_res_increase_ammunition_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_ammunition_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
+# --- Concrete per-good wrappers (kept as named entry points for buttons) ----
 
-st_res_decrease_ammunition_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_ammunition_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_increase_oil_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_oil_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_decrease_oil_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_oil_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_increase_small_arms_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_small_arms_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_decrease_small_arms_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_small_arms_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_increase_artillery_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_artillery_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_decrease_artillery_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_artillery_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_increase_aeroplanes_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_aeroplanes_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_decrease_aeroplanes_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_aeroplanes_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_increase_tanks_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_tanks_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
-
-st_res_decrease_tanks_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_tanks_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
+st_res_increase_grain_rate_effect       = { st_res_increase_rate_base = { GOOD = grain       } }
+st_res_decrease_grain_rate_effect       = { st_res_decrease_rate_base = { GOOD = grain       } }
+st_res_increase_ammunition_rate_effect  = { st_res_increase_rate_base = { GOOD = ammunition  } }
+st_res_decrease_ammunition_rate_effect  = { st_res_decrease_rate_base = { GOOD = ammunition  } }
+st_res_increase_oil_rate_effect         = { st_res_increase_rate_base = { GOOD = oil         } }
+st_res_decrease_oil_rate_effect         = { st_res_decrease_rate_base = { GOOD = oil         } }
+st_res_increase_small_arms_rate_effect  = { st_res_increase_rate_base = { GOOD = small_arms  } }
+st_res_decrease_small_arms_rate_effect  = { st_res_decrease_rate_base = { GOOD = small_arms  } }
+st_res_increase_artillery_rate_effect   = { st_res_increase_rate_base = { GOOD = artillery   } }
+st_res_decrease_artillery_rate_effect   = { st_res_decrease_rate_base = { GOOD = artillery   } }
+st_res_increase_aeroplanes_rate_effect  = { st_res_increase_rate_base = { GOOD = aeroplanes  } }
+st_res_decrease_aeroplanes_rate_effect  = { st_res_decrease_rate_base = { GOOD = aeroplanes  } }
+st_res_increase_tanks_rate_effect       = { st_res_increase_rate_base = { GOOD = tanks       } }
+st_res_decrease_tanks_rate_effect       = { st_res_decrease_rate_base = { GOOD = tanks       } }
 
 st_res_apply_sell_profit_effect = {
 	remove_modifier = st_res_sell_profit_modifier
