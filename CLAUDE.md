@@ -67,6 +67,7 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 - `docs/guides/scripting_best_practices.md` — modifier validation, scope rules, `days` vs `months`, dynamic-pattern registration, `any_*` triggers don't take `limit`, modifier stacking gotchas, top-level database collisions, global-variable initialization timing, decimals/visibility, fast-scaling event audits, tech tree authoring, system-scope cheat sheet, audit/research workflow.
 - `docs/guides/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, AI-weight pitfalls, amenability vs enactment-success modifiers, option tradeoff principles.
 - `docs/vanilla/vanilla_economy_reference.md` — concept primer on vanilla Vic3 economy. Carries a "Last verified against vanilla: X" banner — refresh per `docs/guides/vanilla_patch_runbook.md` § 8b on every vanilla bump.
+- `docs/vanilla/vanilla_politics_reference.md` — concept primer on vanilla Vic3 politics (legitimacy, laws, IGs, parties, ideologies, movements, characters, institutions, decrees). Read before touching law-stance, IG-approval, or movement-driven mod content.
 - `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md` — every gameplay system's files and mechanics.
 - `docs/guides/python_tools.md` — full server endpoint list and AI-agent workflow.
 - `docs/guides/gui_modding_guide.md`, `docs/vanilla/treaty_articles_reference.md`, `docs/vanilla/wonder_buildings_reference.md`, `docs/vanilla/vanilla_company_buildings_reference.md`.

@@ -287,7 +287,7 @@ For mod design, this means: any system that creates obligations is creating long
 
 ## 9. Power blocs
 
-A power bloc is an international organization with a leader and members. The leader pays a continuous 500 {{influence}} cost (only one country pays; if leadership shifts via power struggle, the new leader pays). Power blocs are documented in detail on the wiki and via `/raw/PowerBloc*`; this section is the conceptual map.
+A power bloc is an international organization with a leader and members. The leader pays a continuous 500 {{influence}} cost (only one country pays; if leadership shifts via power struggle, the new leader pays). Power blocs are documented in detail on the wiki and via `/raw/PowerBloc*`; this section is the conceptual map. For how power-bloc mandates feed IG approval and law enactment on the domestic side — and for the lobby → IG-approval channel referenced by leverage — see `vanilla_politics_reference.md` § 5.6 and § 3.5.
 
 ### 9.1 Creating and joining
 

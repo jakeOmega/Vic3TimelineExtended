@@ -472,7 +472,7 @@ Spent on (all of these are **flat-while-active reservations**, not one-shot or m
 - **Corporate charters above the slot limit** — 100 each while the charter is granted.
 - **State monopoly on a building** — 100 while the monopoly is in force.
 
-The *cumulative* nature of Authority spending matters: a country juggling many decrees, a few consumption taxes, an active suppress on an opposing movement, and a couple of monopolies can blow through its Authority budget even though no single decision was expensive. Authority is a portfolio, not a one-time payment.
+The *cumulative* nature of Authority spending matters: a country juggling many decrees, a few consumption taxes, an active suppress on an opposing movement, and a couple of monopolies can blow through its Authority budget even though no single decision was expensive. Authority is a portfolio, not a one-time payment. For the consumer-side mechanics of decrees and movement bolster/suppress in particular, see `vanilla_politics_reference.md` § 11 and § 8.7.
 
 A surplus ("Legislative Efficiency") gives up to **−25% Enactment Time** at full surplus — laws pass faster. A deficit ("Political Dysfunction") imposes up to **−10 Opposition IG Approval** and **+20% Radicals from Political Movements** at full deficit. So Authority management both speeds law passage and dampens unrest; a country in deep deficit is silently feeding its own opposition.
 

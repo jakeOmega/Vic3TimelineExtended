@@ -367,7 +367,7 @@ Power projection = average of (offense + defense) × manpower-ratio, summed acro
 
 ## 13. War support — the political ceiling on a war
 
-This is the section that matters most for anti-war movement and wartime-event design. **War support** is a per-country value in roughly [−100, +100], starting full when war begins and decreasing each week from **exhaustion**.
+This is the section that matters most for anti-war movement and wartime-event design. **War support** is a per-country value in roughly [−100, +100], starting full when war begins and decreasing each week from **exhaustion**. For how lobby clout and IG approval feed back into war support exhaustion — and for the radicals → exhaustion loop that compounds with casualties — see `vanilla_politics_reference.md` § 5.4 and § 5.6.
 
 ### Exhaustion sources
 
