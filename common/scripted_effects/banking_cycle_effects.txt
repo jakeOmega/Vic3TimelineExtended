@@ -1310,6 +1310,53 @@ apply_banking_crash_origin_effects = {
 	}
 }
 
+# Composite helper for the conforming softening options of
+# minor_events_timelineextended.6 (event 6). Posts the origin tier first to set
+# baseline cycle/momentum/bubble (must run before per-option additions because
+# origin uses set_variable, then per-option change_variable adds on top), then
+# applies the per-option softening tooltip, GDP-scaled treasury cost, long-lived
+# intervention modifier, and upper-strata radicals.
+#
+# Country scope. Trigger and ai_chance stay in each option block — they vary
+# unrelatedly per option (law/tech gating + AI weighting heuristics).
+#
+# 10 of 12 options of event 6 use this helper. Two outliers stay inline:
+#   - Option A (.6.a "weather the storm"): no softening, no intervention modifier,
+#     different radicals shape (medium upper + small middle).
+#   - Option .6.capital_controls: no momentum softening (only finance_cycle_value
+#     changes), so a $MOMENTUM_ADD$=0 call would emit an ugly "+0" tooltip line.
+#
+# Parameters:
+#   $TT_KEY$       — custom_tooltip text loc key (CRASH_SOFTEN_<X>_DESC)
+#   $CYCLE_ADD$    — finance_cycle_value softening add (3..12)
+#   $MOMENTUM_ADD$ — finance_cycle_momentum softening add (1..3)
+#   $COST_SCALE$   — banking_event_expense_<small|medium|large|huge>
+#   $INTERVENTION$ — banking_crash_intervention_<X> modifier name
+#   $RADICALS$     — radicals size (very_small|small|medium); resolves to
+#                    <RADICALS>_radicals script value at the call site.
+apply_banking_crash_softening_option_effect = {
+	apply_banking_crash_origin_effects = yes
+	custom_tooltip = {
+		text = $TT_KEY$
+		change_variable = { name = finance_cycle_value    add = $CYCLE_ADD$    }
+		change_variable = { name = finance_cycle_momentum add = $MOMENTUM_ADD$ }
+	}
+	add_modifier = {
+		name = banking_crash_response_cost
+		multiplier = $COST_SCALE$
+		days = short_modifier_time
+		is_decaying = yes
+	}
+	add_modifier = {
+		name = $INTERVENTION$
+		days = long_modifier_time
+	}
+	add_radicals = {
+		value = $RADICALS$_radicals
+		strata = upper
+	}
+}
+
 # Auto-disable crash interventions when total intervention points have gone negative
 # (e.g. because the player stacked emergency response modifiers from a crash event on top
 # of ongoing JE intervention buttons, or because their financial-regulation law was downgraded).

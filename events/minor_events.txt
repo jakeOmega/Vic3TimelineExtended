@@ -309,25 +309,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.suspend_convertibility
 		trigger = { has_law = law_type:law_unregulated_banking }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_SUSPEND_CONVERTIBILITY_DESC
-			change_variable = { name = finance_cycle_value    add = 3 }
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_small
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_suspend_convertibility
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = medium_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_SUSPEND_CONVERTIBILITY_DESC
+			CYCLE_ADD    = 3
+			MOMENTUM_ADD = 1
+			COST_SCALE   = banking_event_expense_small
+			INTERVENTION = banking_crash_intervention_suspend_convertibility
+			RADICALS     = medium
 		}
 		ai_chance = {
 			base = 50
@@ -339,25 +327,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.mutual_clearing
 		trigger = { has_law = law_type:law_free_mutual_banking }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_MUTUAL_CLEARING_DESC
-			change_variable = { name = finance_cycle_value    add = 4 }
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_medium
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_mutual_clearing
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_MUTUAL_CLEARING_DESC
+			CYCLE_ADD    = 4
+			MOMENTUM_ADD = 1
+			COST_SCALE   = banking_event_expense_medium
+			INTERVENTION = banking_crash_intervention_mutual_clearing
+			RADICALS     = small
 		}
 		ai_chance = {
 			base = 50
@@ -369,25 +345,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.correspondent_liquidity
 		trigger = { has_law = law_type:law_universal_banking_light_prudence }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_CORRESPONDENT_LIQUIDITY_DESC
-			change_variable = { name = finance_cycle_value    add = 6 }
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_medium
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_correspondent_liquidity
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_CORRESPONDENT_LIQUIDITY_DESC
+			CYCLE_ADD    = 6
+			MOMENTUM_ADD = 1
+			COST_SCALE   = banking_event_expense_medium
+			INTERVENTION = banking_crash_intervention_correspondent_liquidity
+			RADICALS     = small
 		}
 		ai_chance = {
 			base = 50
@@ -399,25 +363,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.deposit_guarantee
 		trigger = { has_law = law_type:law_prudential_narrow_banking }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_DEPOSIT_GUARANTEE_DESC
-			change_variable = { name = finance_cycle_value    add = 10 }
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_large
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_deposit_guarantee
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_DEPOSIT_GUARANTEE_DESC
+			CYCLE_ADD    = 10
+			MOMENTUM_ADD = 2
+			COST_SCALE   = banking_event_expense_large
+			INTERVENTION = banking_crash_intervention_deposit_guarantee
+			RADICALS     = very_small
 		}
 		ai_chance = {
 			base = 60
@@ -429,25 +381,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.dev_bank_lending
 		trigger = { has_law = law_type:law_directed_credit_development_banks }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_DEV_BANK_LENDING_DESC
-			change_variable = { name = finance_cycle_value    add = 6 }
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_medium
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_dev_bank_lending
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_DEV_BANK_LENDING_DESC
+			CYCLE_ADD    = 6
+			MOMENTUM_ADD = 1
+			COST_SCALE   = banking_event_expense_medium
+			INTERVENTION = banking_crash_intervention_dev_bank_lending
+			RADICALS     = small
 		}
 		ai_chance = {
 			base = 55
@@ -459,25 +399,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.nationalize
 		trigger = { has_law = law_type:law_state_owned_banking }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_NATIONALIZE_DESC
-			change_variable = { name = finance_cycle_value    add = 12 }
-			change_variable = { name = finance_cycle_momentum add = 3 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_huge
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_nationalize
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_NATIONALIZE_DESC
+			CYCLE_ADD    = 12
+			MOMENTUM_ADD = 3
+			COST_SCALE   = banking_event_expense_huge
+			INTERVENTION = banking_crash_intervention_nationalize
+			RADICALS     = small
 		}
 		ai_chance = {
 			base = 60
@@ -489,25 +417,13 @@ minor_events_timelineextended.6 = {
 	option = {
 		name = minor_events_timelineextended.6.open_market
 		trigger = { has_law = law_type:law_central_bank_independence }
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_OPEN_MARKET_DESC
-			change_variable = { name = finance_cycle_value    add = 10 }
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_large
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_open_market
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_OPEN_MARKET_DESC
+			CYCLE_ADD    = 10
+			MOMENTUM_ADD = 2
+			COST_SCALE   = banking_event_expense_large
+			INTERVENTION = banking_crash_intervention_open_market
+			RADICALS     = very_small
 		}
 		ai_chance = {
 			base = 60
@@ -526,25 +442,13 @@ minor_events_timelineextended.6 = {
 			has_technology_researched = central_banking
 			NOT = { has_law = law_type:law_unregulated_banking }
 		}
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_DISCOUNT_WINDOW_DESC
-			change_variable = { name = finance_cycle_value    add = 5 }
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_medium
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_discount_window
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_DISCOUNT_WINDOW_DESC
+			CYCLE_ADD    = 5
+			MOMENTUM_ADD = 1
+			COST_SCALE   = banking_event_expense_medium
+			INTERVENTION = banking_crash_intervention_discount_window
+			RADICALS     = small
 		}
 		ai_chance = {
 			base = 45
@@ -563,25 +467,13 @@ minor_events_timelineextended.6 = {
 				has_law = law_type:law_central_bank_independence
 			}
 		}
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_SWAP_LINES_DESC
-			change_variable = { name = finance_cycle_value    add = 4 }
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_medium
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_swap_lines
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_SWAP_LINES_DESC
+			CYCLE_ADD    = 4
+			MOMENTUM_ADD = 1
+			COST_SCALE   = banking_event_expense_medium
+			INTERVENTION = banking_crash_intervention_swap_lines
+			RADICALS     = small
 		}
 		ai_chance = {
 			base = 40
@@ -602,25 +494,13 @@ minor_events_timelineextended.6 = {
 				has_law = law_type:law_central_bank_independence
 			}
 		}
-		apply_banking_crash_origin_effects = yes
-		custom_tooltip = {
-			text = CRASH_SOFTEN_KEYNESIAN_STIMULUS_DESC
-			change_variable = { name = finance_cycle_value    add = 10 }
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		add_modifier = {
-			name = banking_crash_response_cost
-			multiplier = banking_event_expense_huge
-			days = short_modifier_time
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = banking_crash_intervention_keynesian_stimulus
-			days = long_modifier_time
-		}
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
+		apply_banking_crash_softening_option_effect = {
+			TT_KEY       = CRASH_SOFTEN_KEYNESIAN_STIMULUS_DESC
+			CYCLE_ADD    = 10
+			MOMENTUM_ADD = 2
+			COST_SCALE   = banking_event_expense_huge
+			INTERVENTION = banking_crash_intervention_keynesian_stimulus
+			RADICALS     = very_small
 		}
 		ai_chance = {
 			base = 55
