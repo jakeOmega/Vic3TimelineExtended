@@ -20,6 +20,7 @@ from game_log_reader import (
     render_error_log_digest,
     SOURCE_CATEGORY_PREFIX,
     load_vanilla_bug_registry,
+    load_mod_noise_registry,
     tag_vanilla_bugs,
     _vanilla_bug_cache,
 )
@@ -316,15 +317,30 @@ class VanillaBugRegistryTests(unittest.TestCase):
     """
 
     def _write_doc(self, dirpath: str, content: str) -> str:
-        path = os.path.join(dirpath, "vanilla_known_bugs.md")
+        # Mirrors the live layout: registry lives under docs/vanilla/.
+        sub = os.path.join(dirpath, "vanilla")
+        os.makedirs(sub, exist_ok=True)
+        path = os.path.join(sub, "vanilla_known_bugs.md")
         with open(path, "w", encoding="utf-8") as f:
             f.write(content)
         # Bust the in-process mtime cache so each test gets a fresh parse.
         _vanilla_bug_cache.clear()
         return path
 
+    def _write_mod_noise_doc(self, dirpath: str, content: str) -> str:
+        # Mirrors docs/audits/mod_known_noise.md.
+        sub = os.path.join(dirpath, "audits")
+        os.makedirs(sub, exist_ok=True)
+        path = os.path.join(sub, "mod_known_noise.md")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        _vanilla_bug_cache.clear()
+        return path
+
     def _write_open_issues(self, dirpath: str, content: str) -> str:
-        path = os.path.join(dirpath, "open_issues.md")
+        sub = os.path.join(dirpath, "audits")
+        os.makedirs(sub, exist_ok=True)
+        path = os.path.join(sub, "open_issues.md")
         with open(path, "w", encoding="utf-8") as f:
             f.write(content)
         return path
@@ -456,7 +472,7 @@ Couldn't find any animation state for harvest condition type
 
 ### `harvest_condition_graphics.cpp:52` — missing sound states
 - source: `harvest_condition_graphics.cpp:52`
-- tracked: `docs/open_issues.md#l99-does-not-exist`
+- tracked: `docs/audits/open_issues.md#l99-does-not-exist`
 
 ```
 Couldn't find any animation state for harvest condition type
@@ -474,7 +490,7 @@ Couldn't find any animation state for harvest condition type
 
 ### `harvest_condition_graphics.cpp:52` — missing sound states
 - source: `harvest_condition_graphics.cpp:52`
-- tracked: `docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`
+- tracked: `docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`
 
 ```
 Couldn't find any animation state for harvest condition type
@@ -482,8 +498,78 @@ Couldn't find any animation state for harvest condition type
 """)
             refs, _, _, warnings = load_vanilla_bug_registry(doc)
             self.assertEqual(warnings, [])
-            self.assertEqual(refs[0].tracked_issue, "docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing")
-            self.assertEqual(refs[0].to_dict()["tracked_issue"], "docs/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing")
+            self.assertEqual(refs[0].tracked_issue, "docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing")
+            self.assertEqual(refs[0].to_dict()["tracked_issue"], "docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing")
+
+    def test_mod_noise_registry_loads_with_default_kind(self):
+        """`load_mod_noise_registry` defaults entries to mod_low_priority kind
+        even when their section header doesn't say `## Mod-side`."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "## LOW\n\n### L7. mod harvest condition sound entity states missing\n")
+            doc = self._write_mod_noise_doc(tmp, """# Mod Known Noise
+
+### `harvest_condition_graphics.cpp:52` — missing sound states
+- source: `harvest_condition_graphics.cpp:52`
+- tracked: `docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`
+
+```
+Couldn't find any animation state for harvest condition type
+```
+""")
+            refs, by_basename, by_source, warnings = load_mod_noise_registry(doc)
+            self.assertEqual(warnings, [])
+            self.assertEqual(len(refs), 1)
+            self.assertEqual(refs[0].kind, "mod_low_priority")
+            entry = LogEntry(
+                time="00:00:01",
+                source="harvest_condition_graphics.cpp:52",
+                message="Couldn't find any animation state for harvest condition type 'bull_market'",
+            )
+            tag_vanilla_bugs(entry_list := [entry], by_basename, by_source)
+            self.assertIsNotNone(entry.vanilla_bug_ref)
+            self.assertEqual(entry.vanilla_bug_ref["kind"], "mod_low_priority")
+            self.assertIn("tracked_issue", entry.vanilla_bug_ref)
+
+    def test_two_pass_tagging_does_not_overwrite(self):
+        """Calling tag_vanilla_bugs twice (once per registry) must not let the
+        second pass overwrite a match found by the first pass."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(tmp, "## LOW\n\n### L7. mod harvest condition sound entity states missing\n")
+            # Registry 1: vanilla — matches by source
+            v_doc = self._write_doc(tmp, """
+## Engine noise (source-anchored)
+
+### `shared.cpp:1` — vanilla noise
+- source: `shared.cpp:1`
+
+```
+shared signature
+```
+""")
+            _, vb_basenames, vb_sources, _ = load_vanilla_bug_registry(v_doc)
+            # Registry 2: mod_noise — would also match by source if first pass didn't tag
+            mn_doc = self._write_mod_noise_doc(tmp, """# Mod Known Noise
+
+### `shared.cpp:1` — mod cosmetic
+- source: `shared.cpp:1`
+- tracked: `docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`
+
+```
+shared signature
+```
+""")
+            _, mn_basenames, mn_sources, _ = load_mod_noise_registry(mn_doc)
+            entry = LogEntry(
+                time="00:00:01",
+                source="shared.cpp:1",
+                message="shared signature in body",
+            )
+            # Pass 1: vanilla registry tags it as vanilla_noise
+            tag_vanilla_bugs([entry], vb_basenames, vb_sources)
+            self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla_noise")
+            # Pass 2: mod_noise registry should leave the prior tag alone
+            tag_vanilla_bugs([entry], mn_basenames, mn_sources)
+            self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla_noise")
 
     def test_path_anchored_wins_over_source_anchored(self):
         """When an entry has both a matching basename AND a matching source,

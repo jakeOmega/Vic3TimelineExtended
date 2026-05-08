@@ -120,7 +120,7 @@ class LogEntry:
         # All paths referenced inside the message body
         self.files = sorted(set(_MOD_PATH_RE.findall(message)))
         # Set later by tag_vanilla_bugs() if the entry matches a known vanilla bug
-        # registered in docs/vanilla_known_bugs.md.
+        # registered in docs/vanilla/vanilla_known_bugs.md.
         self.vanilla_bug_ref: dict | None = None
 
     def to_dict(self, include_message: bool = True) -> dict:
@@ -312,7 +312,7 @@ def filter_external_mods(entries: list[LogEntry]) -> list[LogEntry]:
 
 
 # ---------------------------------------------------------------------------
-# Vanilla-bug registry: parsed from docs/vanilla_known_bugs.md
+# Vanilla-bug registry: parsed from docs/vanilla/vanilla_known_bugs.md
 # ---------------------------------------------------------------------------
 # Heading lines look like:
 #   ### `common/path/to/file.txt:5101` — short title
@@ -328,7 +328,7 @@ _PATH_REF_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:txt|gui|yml|yaml))(?::[0-9,\s
 _TITLE_AFTER_DASH_RE = re.compile(r"\s[—-]\s+(.+)$")
 # `- source: \`<token>\`` and `- tracked: \`<token>\`` body fields. Captured per-entry
 # during the body walk. `source` extends the source-anchored index. `tracked` is the
-# cross-reference to docs/open_issues.md (mandatory for mod_low_priority refs).
+# cross-reference to docs/audits/open_issues.md (mandatory for mod_low_priority refs).
 _SOURCE_REF_RE = re.compile(r"^\s*-\s*source:\s*`([^`]+)`\s*$")
 _TRACKED_REF_RE = re.compile(r"^\s*-\s*tracked:\s*`([^`]+)`\s*$")
 
@@ -372,12 +372,19 @@ class VanillaBugRef:
         return d
 
 
-def _section_kind(section_header: str) -> str:
+def _section_kind(section_header: str) -> str | None:
+    """Map a `##` section header to a kind label, or None if no rule matches.
+
+    Returning None lets the parser preserve the current/default kind for sections
+    that don't carry kind semantics (e.g. `## Entries`, `## Format` in
+    docs/audits/mod_known_noise.md). Otherwise an unrecognized header would silently
+    reset every subsequent ref back to the global default.
+    """
     h = section_header.lower()
     for needle, kind in _SECTION_KIND_RULES:
         if needle in h:
             return kind
-    return "vanilla"
+    return None
 
 
 def _open_issues_anchors(open_issues_path: str) -> set[str]:
@@ -410,7 +417,7 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
       1. Anchor-or-die: must have at least one of file_basenames or source_anchors.
          Eliminates accidental signature-only rules at parse time.
       2. mod_low_priority refs must specify a `- tracked:` cross-reference, and its
-         #anchor fragment (if any) must resolve in docs/open_issues.md.
+         #anchor fragment (if any) must resolve in docs/audits/open_issues.md.
     """
     warnings: list[str] = []
     if not ref.file_basenames and not ref.source_anchors:
@@ -423,14 +430,14 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
         if not ref.tracked_issue:
             warnings.append(
                 f"vanilla_known_bugs.md: '{ref.title}' is in mod-side section but has no "
-                "`- tracked: \\`docs/open_issues.md#anchor\\`` cross-reference"
+                "`- tracked: \\`docs/audits/open_issues.md#anchor\\`` cross-reference"
             )
         elif "#" in ref.tracked_issue and known_open_issue_anchors:
             frag = ref.tracked_issue.split("#", 1)[1]
             if frag and frag not in known_open_issue_anchors:
                 warnings.append(
                     f"vanilla_known_bugs.md: '{ref.title}' tracked-issue anchor "
-                    f"'#{frag}' does not resolve in docs/open_issues.md"
+                    f"'#{frag}' does not resolve in docs/audits/open_issues.md"
                 )
     return warnings
 
@@ -438,22 +445,32 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
 _vanilla_bug_cache: dict = {}  # {doc_path: (mtime, refs, by_basename, by_source, warnings)}
 
 
-def load_vanilla_bug_registry(doc_path: str) -> tuple[
+def load_vanilla_bug_registry(
+    doc_path: str,
+    default_kind: str = "vanilla",
+) -> tuple[
     list[VanillaBugRef],
     dict[str, list[VanillaBugRef]],
     dict[str, list[VanillaBugRef]],
     list[str],
 ]:
-    """Parse `docs/vanilla_known_bugs.md` and return (refs, by_basename, by_source, warnings).
+    """Parse a registry markdown file and return (refs, by_basename, by_source, warnings).
 
-    Memoized on the doc's mtime so repeated requests don't re-parse.
+    `default_kind` is the kind assigned to entries that aren't inside a section
+    header that overrides it. `docs/vanilla/vanilla_known_bugs.md` uses default_kind
+    "vanilla" (engine-noise sections override to "vanilla_noise"); `docs/audits/mod_known_noise.md`
+    passes default_kind="mod_low_priority" so entries there are flagged for the
+    cross-reference-required validation.
+
+    Memoized on (doc_path, default_kind, mtime) so repeated requests don't re-parse.
     Returns ([], {}, {}, []) if the doc is missing or unreadable.
     """
     try:
         mtime = os.path.getmtime(doc_path)
     except OSError:
         return [], {}, {}, []
-    cached = _vanilla_bug_cache.get(doc_path)
+    cache_key = (doc_path, default_kind)
+    cached = _vanilla_bug_cache.get(cache_key)
     if cached and cached[0] == mtime:
         return cached[1], cached[2], cached[3], cached[4]
     try:
@@ -462,20 +479,23 @@ def load_vanilla_bug_registry(doc_path: str) -> tuple[
     except OSError:
         return [], {}, {}, []
 
-    # Pre-load open_issues.md anchors for cross-reference validation. Same dir
-    # convention as doc_path.
-    open_issues_path = os.path.join(os.path.dirname(doc_path), "open_issues.md")
+    # Pre-load open_issues.md anchors for cross-reference validation. Lives in
+    # docs/audits/ regardless of which registry (vanilla/ or audits/) is being parsed.
+    docs_root = os.path.dirname(os.path.dirname(doc_path))
+    open_issues_path = os.path.join(docs_root, "audits", "open_issues.md")
     known_anchors = _open_issues_anchors(open_issues_path)
 
     refs: list[VanillaBugRef] = []
     warnings: list[str] = []
-    current_section_kind = "vanilla"
+    current_section_kind = default_kind
     i = 0
     while i < len(lines):
         line = lines[i].rstrip("\n")
         sm = _SECTION_RE.match(line)
         if sm:
-            current_section_kind = _section_kind(sm.group(1))
+            new_kind = _section_kind(sm.group(1))
+            if new_kind is not None:
+                current_section_kind = new_kind
             i += 1
             continue
         m = _HEADING_RE.match(line)
@@ -488,7 +508,11 @@ def load_vanilla_bug_registry(doc_path: str) -> tuple[
         title = title_match.group(1).strip() if title_match else heading.strip()
         # Anchor: GitHub-style — lowercase, replace non-alnum runs with `-`
         anchor_text = re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
-        anchor = f"docs/vanilla_known_bugs.md#{anchor_text}"
+        # Derive the docs/<subdir>/<file> prefix from the registry path so the
+        # anchor reflects the actual source (vanilla/vanilla_known_bugs.md or
+        # audits/mod_known_noise.md).
+        anchor_doc_rel = "docs/" + os.path.basename(os.path.dirname(doc_path)) + "/" + os.path.basename(doc_path)
+        anchor = f"{anchor_doc_rel}#{anchor_text}"
         # Walk the entry body up to the next `### ` or `## ` heading. Capture:
         #   - additional path references (so a heading can list one path and the
         #     body can enumerate sibling files affected by the same root cause)
@@ -562,8 +586,24 @@ def load_vanilla_bug_registry(doc_path: str) -> tuple[
         for src in r.source_anchors:
             by_source[src].append(r)
     by_basename_d, by_source_d = dict(by_basename), dict(by_source)
-    _vanilla_bug_cache[doc_path] = (mtime, refs, by_basename_d, by_source_d, warnings)
+    _vanilla_bug_cache[cache_key] = (mtime, refs, by_basename_d, by_source_d, warnings)
     return refs, by_basename_d, by_source_d, warnings
+
+
+def load_mod_noise_registry(doc_path: str) -> tuple[
+    list[VanillaBugRef],
+    dict[str, list[VanillaBugRef]],
+    dict[str, list[VanillaBugRef]],
+    list[str],
+]:
+    """Parse `docs/audits/mod_known_noise.md` — mod-side cosmetic entries filtered for
+    triage cleanliness but tracked in `docs/audits/open_issues.md` so they remain actionable.
+
+    Thin wrapper around `load_vanilla_bug_registry` with default_kind="mod_low_priority";
+    every entry must have a `- tracked: \\`docs/audits/open_issues.md#anchor\\`` cross-reference
+    that resolves to a real heading.
+    """
+    return load_vanilla_bug_registry(doc_path, default_kind="mod_low_priority")
 
 
 _LINE_NUM_RE = re.compile(r":\d+")
@@ -604,6 +644,11 @@ def tag_vanilla_bugs(
                 if id(ref) not in sig_cache:
                     sig_cache[id(ref)] = [_normalize_for_signature_match(s) for s in ref.signatures]
     for e in entries:
+        # Skip entries already tagged by an earlier registry pass — caller can
+        # invoke this function twice (vanilla registry, then mod-noise registry)
+        # without later passes overwriting earlier matches.
+        if e.vanilla_bug_ref is not None:
+            continue
         norm_msg = _normalize_for_signature_match(e.message)
         matched: VanillaBugRef | None = None
         # Stage 1: path-anchored
@@ -786,7 +831,7 @@ def cluster_sessions(infos: list[LogFileInfo], window_seconds: float = 300.0) ->
 # Markdown digest (called by /reload)
 # ---------------------------------------------------------------------------
 def render_error_log_digest(logs_dir: str, mod_path: str) -> str:
-    """Produce docs/error_log_digest.md from the current error.log + diff vs error.1.log."""
+    """Produce docs/engine/error_log_digest.md from the current error.log + diff vs error.1.log."""
     infos = list_logs(logs_dir)
     by_gen = {(i.family, i.generation): i for i in infos if i.family == "error"}
     current = by_gen.get(("error", 0))

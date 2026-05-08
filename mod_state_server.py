@@ -1605,7 +1605,7 @@ def _reload_engine_only():
     try:
         _last_validation_report = _validate_engine_coverage()
         report_md = _render_engine_coverage_md(_last_validation_report)
-        with open(os.path.join(doc_path, "engine_coverage_report.md"), "w", encoding="utf-8") as f:
+        with open(os.path.join(doc_path, "engine", "engine_coverage_report.md"), "w", encoding="utf-8") as f:
             f.write(report_md)
         summary = _last_validation_report.get("summary", {})
         logger.info(
@@ -1952,20 +1952,21 @@ def _load_engine_docs():
     except Exception as e:
         logger.error(f"Failed to build pattern state: {e}\n{traceback.format_exc()}")
 
-    # Regenerate the engine-doc reference files in docs/
+    # Regenerate the engine-doc reference files in docs/engine/
     try:
         from engine_docs_render import render_all as _render_engine_docs
         catalog, index, discovered, vocabs = _build_pattern_data()
+        engine_docs_out = os.path.join(doc_path, "engine")
         written = _render_engine_docs(
             engine_docs,
-            doc_path,
+            engine_docs_out,
             pattern_catalog=catalog,
             pattern_index=index,
             discovered_patterns=discovered,
             vocabularies=vocabs,
             source_paths=engine_docs_sources,
         )
-        logger.info(f"Regenerated {len(written)} engine reference files in {doc_path}")
+        logger.info(f"Regenerated {len(written)} engine reference files in {engine_docs_out}")
     except Exception as e:
         logger.error(f"Failed to regenerate engine reference docs: {e}\n{traceback.format_exc()}")
 
@@ -1975,7 +1976,7 @@ def _load_engine_docs():
         _last_validation_report = _validate_engine_coverage()
         _annotate_validation_with_error_log(_last_validation_report)
         report_md = _render_engine_coverage_md(_last_validation_report)
-        with open(os.path.join(doc_path, "engine_coverage_report.md"), "w", encoding="utf-8") as f:
+        with open(os.path.join(doc_path, "engine", "engine_coverage_report.md"), "w", encoding="utf-8") as f:
             f.write(report_md)
         summary = _last_validation_report.get("summary", {})
         if summary.get("unknown_modifiers") or summary.get("suspicious_modifiers"):
@@ -1994,9 +1995,9 @@ def _load_engine_docs():
     try:
         from game_log_reader import render_error_log_digest
         digest = render_error_log_digest(game_logs_path, mod_path)
-        with open(os.path.join(doc_path, "error_log_digest.md"), "w", encoding="utf-8") as f:
+        with open(os.path.join(doc_path, "engine", "error_log_digest.md"), "w", encoding="utf-8") as f:
             f.write(digest)
-        logger.info(f"Wrote error log digest to {doc_path}/error_log_digest.md")
+        logger.info(f"Wrote error log digest to {doc_path}/engine/error_log_digest.md")
     except Exception as e:
         logger.error(f"Failed to render error log digest: {e}\n{traceback.format_exc()}")
 
@@ -2885,13 +2886,20 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # a re-read by busting the mtime cache before the next /logs
                     # request, so we call it explicitly and pull the warnings.
                     try:
-                        from game_log_reader import load_vanilla_bug_registry as _load_vbr
-                        _vbr_doc = os.path.join(mod_path, "docs", "vanilla_known_bugs.md")
+                        from game_log_reader import (
+                            load_vanilla_bug_registry as _load_vbr,
+                            load_mod_noise_registry as _load_mnr,
+                        )
+                        _vbr_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
+                        _mnr_doc = os.path.join(mod_path, "docs", "audits", "mod_known_noise.md")
                         _, _, _, _vbr_warnings = _load_vbr(_vbr_doc)
+                        _, _, _, _mnr_warnings = _load_mnr(_mnr_doc)
                         for w in _vbr_warnings:
                             warnings.append({"label": "vanilla_bug_registry", "detail": w})
+                        for w in _mnr_warnings:
+                            warnings.append({"label": "mod_noise_registry", "detail": w})
                     except Exception as _vbr_exc:  # noqa: BLE001
-                        logger.warning(f"vanilla_bug_registry warning collection failed: {_vbr_exc}")
+                        logger.warning(f"known-noise registry warning collection failed: {_vbr_exc}")
                     if warnings:
                         body["warnings"] = warnings
                     self._respond_json(body)
@@ -3227,26 +3235,62 @@ class ModStateHandler(BaseHTTPRequestHandler):
         GET /logs/<family>?dedupe=&dedupe_key=&limit=&offset=&raw=&mod_only=
         GET /logs/<family>?vanilla_bugs=show|hide|only
             — tag (default) / drop / keep-only entries that match a vanilla bug
-            registered in docs/vanilla_known_bugs.md. Tagged entries get a
-            `vanilla_bug_ref: {title, section}` field on output.
+            registered in docs/vanilla/vanilla_known_bugs.md.
+        GET /logs/<family>?mod_noise=show|hide|only
+            — same shape, but for mod-side cosmetic entries registered in
+            docs/audits/mod_known_noise.md (these are NOT vanilla bugs; they're mod
+            issues filtered for triage cleanliness but cross-linked to
+            docs/audits/open_issues.md so they remain actionable).
+            Tagged entries get a `vanilla_bug_ref: {title, section, kind}`
+            field; `kind` is "vanilla", "vanilla_noise", or "mod_low_priority".
+            Use `?vanilla_bugs=hide&mod_noise=hide` for fully clean triage.
         """
         from game_log_reader import (
             list_logs, parse_log, filter_mod_only, filter_external_mods, filter_entries,
             dedupe, summarize, diff_against_backup, cluster_sessions,
-            load_vanilla_bug_registry, tag_vanilla_bugs,
+            load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
         )
 
-        vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla_known_bugs.md")
-        _, by_basename, by_source, _ = load_vanilla_bug_registry(vanilla_bugs_doc)
+        vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
+        mod_noise_doc = os.path.join(mod_path, "docs", "audits", "mod_known_noise.md")
+        _, vb_by_basename, vb_by_source, _ = load_vanilla_bug_registry(vanilla_bugs_doc)
+        _, mn_by_basename, mn_by_source, _ = load_mod_noise_registry(mod_noise_doc)
 
-        def _apply_vanilla_bug_tagging(entries, mode):
-            """Tag entries against the registry, then apply mode (show|hide|only)."""
-            tag_vanilla_bugs(entries, by_basename, by_source)
-            if mode == "hide":
-                return [e for e in entries if e.vanilla_bug_ref is None]
-            if mode == "only":
-                return [e for e in entries if e.vanilla_bug_ref is not None]
-            return entries
+        def _apply_known_noise_tagging(entries, vanilla_mode, mod_noise_mode):
+            """Tag entries against both registries, then apply per-kind modes (show|hide|only).
+
+            Two-pass tagging: vanilla registry first, then mod-noise registry on
+            entries that didn't match vanilla. Once tagged, an entry's
+            vanilla_bug_ref.kind tells us which mode applies for filtering.
+            """
+            tag_vanilla_bugs(entries, vb_by_basename, vb_by_source)
+            tag_vanilla_bugs(entries, mn_by_basename, mn_by_source)
+
+            def _matches_vanilla(e):
+                ref = e.vanilla_bug_ref
+                return ref is not None and ref.get("kind") != "mod_low_priority"
+
+            def _matches_mod(e):
+                ref = e.vanilla_bug_ref
+                return ref is not None and ref.get("kind") == "mod_low_priority"
+
+            filtered = []
+            for e in entries:
+                v_match = _matches_vanilla(e)
+                m_match = _matches_mod(e)
+                if vanilla_mode == "hide" and v_match:
+                    continue
+                if mod_noise_mode == "hide" and m_match:
+                    continue
+                if vanilla_mode == "only" or mod_noise_mode == "only":
+                    keep = (
+                        (vanilla_mode == "only" and v_match)
+                        or (mod_noise_mode == "only" and m_match)
+                    )
+                    if not keep:
+                        continue
+                filtered.append(e)
+            return filtered
 
         if not parts:
             include_mp = (params.get("mp_sessions") or ["false"])[0].lower() == "true"
@@ -3290,6 +3334,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             default_external = "false" if family in ("error", "debug") else "true"
             include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
             vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
+            mod_noise_mode = (params.get("mod_noise") or ["show"])[0].lower()
             current_entries = parse_log(match.path)
             against_entries = parse_log(against_match.path)
             if mod_only:
@@ -3298,8 +3343,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if not include_external:
                 current_entries = filter_external_mods(current_entries)
                 against_entries = filter_external_mods(against_entries)
-            current_entries = _apply_vanilla_bug_tagging(current_entries, vanilla_bugs_mode)
-            against_entries = _apply_vanilla_bug_tagging(against_entries, vanilla_bugs_mode)
+            current_entries = _apply_known_noise_tagging(current_entries, vanilla_bugs_mode, mod_noise_mode)
+            against_entries = _apply_known_noise_tagging(against_entries, vanilla_bugs_mode, mod_noise_mode)
             return {
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
@@ -3319,10 +3364,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
         include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
         if not include_external:
             entries = filter_external_mods(entries)
-        # Tag entries that match docs/vanilla_known_bugs.md and optionally drop them.
-        # Modes: show (default — tag, keep visible), hide, only.
+        # Tag entries that match docs/vanilla/vanilla_known_bugs.md and docs/audits/mod_known_noise.md,
+        # then optionally drop or keep-only by kind. Modes per param: show (default —
+        # tag, keep visible), hide, only.
+        #   ?vanilla_bugs=hide → drops vanilla / vanilla_noise tagged entries
+        #   ?mod_noise=hide    → drops mod_low_priority tagged entries
+        # Use both with `hide` for a fully-clean triage view; use `only` on either
+        # for an audit of "what's currently being filtered".
         vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
-        entries = _apply_vanilla_bug_tagging(entries, vanilla_bugs_mode)
+        mod_noise_mode = (params.get("mod_noise") or ["show"])[0].lower()
+        entries = _apply_known_noise_tagging(entries, vanilla_bugs_mode, mod_noise_mode)
         entries = filter_entries(
             entries,
             q=(params.get("q") or [None])[0],
@@ -3404,61 +3455,61 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     "header_marker": False,
                 },
                 {
-                    "pattern": "docs/laws.txt",
+                    "pattern": "docs/engine/laws.txt",
                     "owner": "mod_state_script.py",
                     "input": "mod state",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/technologies.txt",
+                    "pattern": "docs/engine/technologies.txt",
                     "owner": "mod_state_script.py",
                     "input": "mod state",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/buildings.txt",
+                    "pattern": "docs/engine/buildings.txt",
                     "owner": "mod_state_script.py",
                     "input": "mod state",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/goods.txt",
+                    "pattern": "docs/engine/goods.txt",
                     "owner": "mod_state_script.py",
                     "input": "mod state",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/combat_units.txt",
+                    "pattern": "docs/engine/combat_units.txt",
                     "owner": "mod_state_script.py",
                     "input": "mod state",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/vic3_*_reference.md",
+                    "pattern": "docs/engine/vic3_*_reference.md",
                     "owner": "engine_docs_render.py",
                     "input": "vanilla engine logs",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/*_summary.txt",
+                    "pattern": "docs/engine/*_summary.txt",
                     "owner": "engine_docs_render.py",
                     "input": "vanilla engine logs",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/engine_coverage_report.md",
+                    "pattern": "docs/engine/engine_coverage_report.md",
                     "owner": "mod_state_server.py /validate/engine-coverage",
                     "input": "mod state",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/modifier_visibility_report.md",
+                    "pattern": "docs/engine/modifier_visibility_report.md",
                     "owner": "modifier_visibility_audit.py",
                     "input": "mod scripts + engine modifier registry",
                     "header_marker": True,
                 },
                 {
-                    "pattern": "docs/error_log_digest.md",
+                    "pattern": "docs/engine/error_log_digest.md",
                     "owner": "game_log_reader.py",
                     "input": "game logs",
                     "header_marker": True,
@@ -5367,7 +5418,7 @@ def _run_post_load_generators(mod_state):
                 detail = ", ".join(f"{k}={v}" for k, v in warn_counts.items())
                 logger.warning(
                     f"[post-load WARN] {label} surfaced issues: {detail} "
-                    f"(see the audit's report under docs/)"
+                    f"(see the audit's report under docs/engine/)"
                 )
                 _post_load_warnings.append({
                     "label": label,
@@ -5435,7 +5486,7 @@ def _load_mod_state():
     except Exception as e:
         logger.error(f"Failed to load dev reference docs: {e}\n{traceback.format_exc()}")
 
-    # Regenerate docs/ text files from the freshly parsed data
+    # Regenerate docs/engine/ text files from the freshly parsed data
     try:
         from mod_state_script import generate_docs
         generate_docs(ms)
@@ -5444,7 +5495,7 @@ def _load_mod_state():
 
     # Run idempotent transformers that regenerate mod content from configs
     # + vanilla data (e.g. pop_needs_curves, apply_ideologies). See
-    # POST_LOAD_GENERATORS above and docs/python_tools.md for details.
+    # POST_LOAD_GENERATORS above and docs/guides/python_tools.md for details.
     _run_post_load_generators(ms)
 
 
