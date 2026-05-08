@@ -73,166 +73,16 @@ sr_recalculate_cost = {
 # Keeps live milestone state aligned with the JEs that own it.
 # This is permanent logic for intentionally deactivatable JEs, not a save-migration cleanup.
 sr_cleanup_inactive_space_race_milestones = {
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_suborbital } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_suborbital
-					has_variable = sr_progress_suborbital
-					has_variable = sr_funding_suborbital
-					has_variable = sr_safe_suborbital
-					has_variable = sr_ambitious_suborbital
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_suborbital } remove_variable = sr_active_suborbital }
-			if = { limit = { has_variable = sr_progress_suborbital } remove_variable = sr_progress_suborbital }
-			if = { limit = { has_variable = sr_funding_suborbital } remove_variable = sr_funding_suborbital }
-			if = { limit = { has_variable = sr_safe_suborbital } remove_variable = sr_safe_suborbital }
-			if = { limit = { has_variable = sr_ambitious_suborbital } remove_variable = sr_ambitious_suborbital }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_orbital } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_orbital
-					has_variable = sr_progress_orbital
-					has_variable = sr_funding_orbital
-					has_variable = sr_safe_orbital
-					has_variable = sr_ambitious_orbital
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_orbital } remove_variable = sr_active_orbital }
-			if = { limit = { has_variable = sr_progress_orbital } remove_variable = sr_progress_orbital }
-			if = { limit = { has_variable = sr_funding_orbital } remove_variable = sr_funding_orbital }
-			if = { limit = { has_variable = sr_safe_orbital } remove_variable = sr_safe_orbital }
-			if = { limit = { has_variable = sr_ambitious_orbital } remove_variable = sr_ambitious_orbital }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_moon_landing } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_moon_landing
-					has_variable = sr_progress_moon_landing
-					has_variable = sr_funding_moon_landing
-					has_variable = sr_safe_moon_landing
-					has_variable = sr_ambitious_moon_landing
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_moon_landing } remove_variable = sr_active_moon_landing }
-			if = { limit = { has_variable = sr_progress_moon_landing } remove_variable = sr_progress_moon_landing }
-			if = { limit = { has_variable = sr_funding_moon_landing } remove_variable = sr_funding_moon_landing }
-			if = { limit = { has_variable = sr_safe_moon_landing } remove_variable = sr_safe_moon_landing }
-			if = { limit = { has_variable = sr_ambitious_moon_landing } remove_variable = sr_ambitious_moon_landing }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_probe } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_probe
-					has_variable = sr_progress_probe
-					has_variable = sr_funding_probe
-					has_variable = sr_safe_probe
-					has_variable = sr_ambitious_probe
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_probe } remove_variable = sr_active_probe }
-			if = { limit = { has_variable = sr_progress_probe } remove_variable = sr_progress_probe }
-			if = { limit = { has_variable = sr_funding_probe } remove_variable = sr_funding_probe }
-			if = { limit = { has_variable = sr_safe_probe } remove_variable = sr_safe_probe }
-			if = { limit = { has_variable = sr_ambitious_probe } remove_variable = sr_ambitious_probe }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_moon_base } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_moon_base
-					has_variable = sr_progress_moon_base
-					has_variable = sr_funding_moon_base
-					has_variable = sr_safe_moon_base
-					has_variable = sr_ambitious_moon_base
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_moon_base } remove_variable = sr_active_moon_base }
-			if = { limit = { has_variable = sr_progress_moon_base } remove_variable = sr_progress_moon_base }
-			if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
-			if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
-			if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_mars_landing } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_mars_landing
-					has_variable = sr_progress_mars_landing
-					has_variable = sr_funding_mars_landing
-					has_variable = sr_safe_mars_landing
-					has_variable = sr_ambitious_mars_landing
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_mars_landing } remove_variable = sr_active_mars_landing }
-			if = { limit = { has_variable = sr_progress_mars_landing } remove_variable = sr_progress_mars_landing }
-			if = { limit = { has_variable = sr_funding_mars_landing } remove_variable = sr_funding_mars_landing }
-			if = { limit = { has_variable = sr_safe_mars_landing } remove_variable = sr_safe_mars_landing }
-			if = { limit = { has_variable = sr_ambitious_mars_landing } remove_variable = sr_ambitious_mars_landing }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_interstellar_probe } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_interstellar_probe
-					has_variable = sr_progress_interstellar_probe
-					has_variable = sr_funding_interstellar_probe
-					has_variable = sr_safe_interstellar_probe
-					has_variable = sr_ambitious_interstellar_probe
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_interstellar_probe } remove_variable = sr_active_interstellar_probe }
-			if = { limit = { has_variable = sr_progress_interstellar_probe } remove_variable = sr_progress_interstellar_probe }
-			if = { limit = { has_variable = sr_funding_interstellar_probe } remove_variable = sr_funding_interstellar_probe }
-			if = { limit = { has_variable = sr_safe_interstellar_probe } remove_variable = sr_safe_interstellar_probe }
-			if = { limit = { has_variable = sr_ambitious_interstellar_probe } remove_variable = sr_ambitious_interstellar_probe }
-		}
-	}
-	if = {
-		limit = { NOT = { has_journal_entry = je_space_race_solar_colonization } }
-		if = {
-			limit = {
-				OR = {
-					has_variable = sr_active_solar_colonization
-					has_variable = sr_progress_solar_colonization
-					has_variable = sr_funding_solar_colonization
-					has_variable = sr_safe_solar_colonization
-					has_variable = sr_ambitious_solar_colonization
-				}
-			}
-			set_variable = { name = sr_space_race_cleanup_changed value = yes }
-			if = { limit = { has_variable = sr_active_solar_colonization } remove_variable = sr_active_solar_colonization }
-			if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
-			if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
-			if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
-			if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-		}
-	}
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = suborbital         }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = orbital            }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_landing       }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = probe              }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_base          }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = mars_landing       }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = interstellar_probe }
+	sr_cleanup_milestone_if_inactive_base = { MILESTONE = solar_colonization }
+	# interstellar_results uses a different variable set (only sr_active_interstellar_results
+	# and sr_interstellar_transit_progress) — cannot share the standard 5-var base.
 	if = {
 		limit = { NOT = { has_journal_entry = je_space_race_interstellar_results } }
 		if = {
@@ -497,6 +347,34 @@ sr_apply_milestone_cost_modifiers_base = {
 		je:je_space_race_$MILESTONE$ = {
 			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
 			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
+		}
+	}
+}
+
+# When a milestone JE is no longer active, clear its 5-var family (active /
+# progress / funding / safe / ambitious) and flag a cleanup-changed signal so
+# the orchestrator runs sr_recalculate_cost once at the end. Country scope.
+# interstellar_results does NOT use this base — it has only 2 vars (handled
+# inline in sr_cleanup_inactive_space_race_milestones).
+sr_cleanup_milestone_if_inactive_base = {
+	if = {
+		limit = { NOT = { has_journal_entry = je_space_race_$MILESTONE$ } }
+		if = {
+			limit = {
+				OR = {
+					has_variable = sr_active_$MILESTONE$
+					has_variable = sr_progress_$MILESTONE$
+					has_variable = sr_funding_$MILESTONE$
+					has_variable = sr_safe_$MILESTONE$
+					has_variable = sr_ambitious_$MILESTONE$
+				}
+			}
+			set_variable = { name = sr_space_race_cleanup_changed value = yes }
+			if = { limit = { has_variable = sr_active_$MILESTONE$    } remove_variable = sr_active_$MILESTONE$    }
+			if = { limit = { has_variable = sr_progress_$MILESTONE$  } remove_variable = sr_progress_$MILESTONE$  }
+			if = { limit = { has_variable = sr_funding_$MILESTONE$   } remove_variable = sr_funding_$MILESTONE$   }
+			if = { limit = { has_variable = sr_safe_$MILESTONE$      } remove_variable = sr_safe_$MILESTONE$      }
+			if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
 		}
 	}
 }
