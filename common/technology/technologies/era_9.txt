@@ -488,6 +488,7 @@ knowledge_economy = {
 		country_knowledge_economy_pb_principles_bool = yes
 		country_space_race_max_funding_add = 1
 		country_knowledge_economy_pb_principles_bool = yes
+		state_literacy_growth_add = 0.0001
 	}
 
 	ai_weight = {
@@ -533,6 +534,7 @@ digital_education = {
 		state_education_access_add = -0.1
 		country_digital_ed_pb_principles_bool = yes
 		country_digital_ed_pb_principles_bool = yes
+		state_literacy_growth_add = 0.0002
 	}
 
 	ai_weight = {

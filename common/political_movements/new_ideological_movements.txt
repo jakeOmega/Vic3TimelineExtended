@@ -192,6 +192,9 @@
     
         state_weight = {
             value = 1
+            add = scope:clout
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
         }
     }
 
@@ -205,8 +208,10 @@
         }  
 
         state_weight = {
-            value = 1          
-        }        
+            value = 1
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
+        }
     }    
     
     additional_radicalism_factors = {
@@ -573,6 +578,9 @@ movement_civil_rights = {
     
         state_weight = {
             value = 1
+            add = scope:clout
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
         }
     }
 
@@ -586,8 +594,10 @@ movement_civil_rights = {
         }  
 
         state_weight = {
-            value = 1          
-        }        
+            value = 1
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
+        }
     }
 }
 
@@ -801,6 +811,9 @@ movement_anti_war = {
     
         state_weight = {
             value = 1
+            add = scope:clout
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
         }
     }
 
@@ -814,8 +827,10 @@ movement_anti_war = {
         }  
 
         state_weight = {
-            value = 1          
-        }        
+            value = 1
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
+        }
     }
 
     additional_radicalism_factors = {
@@ -1064,6 +1079,9 @@ movement_transhumanist = {
     
         state_weight = {
             value = 1
+            add = scope:clout
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
         }
     }
 
@@ -1077,8 +1095,10 @@ movement_transhumanist = {
         }  
 
         state_weight = {
-            value = 1          
-        }        
+            value = 1
+            add = { value = this.turmoil divide = 2 }
+            subtract = this.loyalists
+        }
     }
 
     additional_radicalism_factors = {

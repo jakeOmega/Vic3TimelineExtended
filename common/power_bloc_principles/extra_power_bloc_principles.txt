@@ -3000,7 +3000,7 @@ principle_global_security_5 = {
 		country_military_tech_research_speed_mult = 0.04
 		country_authority_add = 100
 		building_training_rate_mult = 0.5
-		military_formation_organization_gain_add = 0.1
+		military_formation_organization_gain_add = 0.2
 	}
 
 	ai_weight = {
