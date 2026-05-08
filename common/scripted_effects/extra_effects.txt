@@ -1029,6 +1029,43 @@ gw_copy_market_policy_modifiers = {
 	}
 }
 
+# Fire a warming-threshold environmentalism event globally to all
+# non-decentralized countries the FIRST time temperature_anomaly_display
+# crosses $THRESHOLD$ upward. Idempotent — the $FLAG$ global variable is set
+# on first fire and gates re-entry. Called from on_monthly_pulse (world scope).
+gw_fire_warming_threshold_event = {
+	if = {
+		limit = {
+			temperature_anomaly_display >= $THRESHOLD$
+			NOT = { has_global_variable = $FLAG$ }
+		}
+		set_global_variable = $FLAG$
+		every_country = {
+			limit = { NOT = { is_country_type = decentralized } }
+			trigger_event = { id = $EVENT_ID$ }
+		}
+	}
+}
+
+# Cooling counterpart: fires once when temperature_anomaly_display crosses
+# back below $THRESHOLD$, gated on $PREREQ$ (the warming-side flag) so cooling
+# only triggers if the matching warming flag fired earlier in the run. Same
+# every_country dispatch shape. Called from on_monthly_pulse (world scope).
+gw_fire_cooling_threshold_event = {
+	if = {
+		limit = {
+			temperature_anomaly_display < $THRESHOLD$
+			has_global_variable = $PREREQ$
+			NOT = { has_global_variable = $FLAG$ }
+		}
+		set_global_variable = $FLAG$
+		every_country = {
+			limit = { NOT = { is_country_type = decentralized } }
+			trigger_event = { id = $EVENT_ID$ }
+		}
+	}
+}
+
 # Remove all language reform modifiers and variables.
 # Called when the country no longer has the state-led language reform law.
 # Amendments are automatically removed when the law changes;

@@ -626,116 +626,23 @@ global_warming_update_on_action = {
 
 global_warming_events_on_action = {
 	effect = {
-		# Fire threshold events exactly once globally when temperature crosses each threshold.
-		# Runs in the global (world) scope of on_monthly_pulse - fires once per month,
-		# so every_country here reaches all countries without per-country duplication.
-		if = {
-			limit = {
-				temperature_anomaly_display >= 0.5
-				NOT = { has_global_variable = gw_mild_event_fired }
-			}
-			set_global_variable = gw_mild_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.1 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display >= 1.0
-				NOT = { has_global_variable = gw_moderate_event_fired }
-			}
-			set_global_variable = gw_moderate_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.2 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display >= 2.0
-				NOT = { has_global_variable = gw_severe_event_fired }
-			}
-			set_global_variable = gw_severe_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.3 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display >= 3.0
-				NOT = { has_global_variable = gw_catastrophic_event_fired }
-			}
-			set_global_variable = gw_catastrophic_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.4 }
-			}
-		}
+		# Fire warming-threshold environmentalism events exactly once globally when
+		# temperature_anomaly_display crosses each threshold upward. Runs in the
+		# global (world) scope of on_monthly_pulse — every_country inside the
+		# helper reaches all countries without per-country duplication.
+		gw_fire_warming_threshold_event = { THRESHOLD = 0.5 FLAG = gw_mild_event_fired         EVENT_ID = environmentalism_events.1 }
+		gw_fire_warming_threshold_event = { THRESHOLD = 1.0 FLAG = gw_moderate_event_fired     EVENT_ID = environmentalism_events.2 }
+		gw_fire_warming_threshold_event = { THRESHOLD = 2.0 FLAG = gw_severe_event_fired       EVENT_ID = environmentalism_events.3 }
+		gw_fire_warming_threshold_event = { THRESHOLD = 3.0 FLAG = gw_catastrophic_event_fired EVENT_ID = environmentalism_events.4 }
 
-		# Cooling / reversal threshold events.
-		# These fire once globally when temperatures move back below major thresholds.
-		if = {
-			limit = {
-				temperature_anomaly_display < 3.0
-				has_global_variable = gw_catastrophic_event_fired
-				NOT = { has_global_variable = gw_cooling_below_3_event_fired }
-			}
-			set_global_variable = gw_cooling_below_3_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.17 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display < 2.0
-				has_global_variable = gw_severe_event_fired
-				NOT = { has_global_variable = gw_cooling_below_2_event_fired }
-			}
-			set_global_variable = gw_cooling_below_2_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.18 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display < 1.0
-				has_global_variable = gw_moderate_event_fired
-				NOT = { has_global_variable = gw_cooling_below_1_event_fired }
-			}
-			set_global_variable = gw_cooling_below_1_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.19 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display < 0.5
-				has_global_variable = gw_mild_event_fired
-				NOT = { has_global_variable = gw_cooling_below_0_5_event_fired }
-			}
-			set_global_variable = gw_cooling_below_0_5_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.20 }
-			}
-		}
-		if = {
-			limit = {
-				temperature_anomaly_display < 0.1
-				has_global_variable = gw_mild_event_fired
-				NOT = { has_global_variable = gw_cooling_near_baseline_event_fired }
-			}
-			set_global_variable = gw_cooling_near_baseline_event_fired
-			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				trigger_event = { id = environmentalism_events.21 }
-			}
-		}
+		# Cooling / reversal threshold events: fire once globally when temperatures
+		# move back below a threshold, gated on the matching warming flag so cooling
+		# only fires if the warming side already fired earlier in the run.
+		gw_fire_cooling_threshold_event = { THRESHOLD = 3.0 PREREQ = gw_catastrophic_event_fired FLAG = gw_cooling_below_3_event_fired       EVENT_ID = environmentalism_events.17 }
+		gw_fire_cooling_threshold_event = { THRESHOLD = 2.0 PREREQ = gw_severe_event_fired       FLAG = gw_cooling_below_2_event_fired       EVENT_ID = environmentalism_events.18 }
+		gw_fire_cooling_threshold_event = { THRESHOLD = 1.0 PREREQ = gw_moderate_event_fired     FLAG = gw_cooling_below_1_event_fired       EVENT_ID = environmentalism_events.19 }
+		gw_fire_cooling_threshold_event = { THRESHOLD = 0.5 PREREQ = gw_mild_event_fired         FLAG = gw_cooling_below_0_5_event_fired     EVENT_ID = environmentalism_events.20 }
+		gw_fire_cooling_threshold_event = { THRESHOLD = 0.1 PREREQ = gw_mild_event_fired         FLAG = gw_cooling_near_baseline_event_fired EVENT_ID = environmentalism_events.21 }
 
 		# Recurring random events for countries experiencing global warming.
 		# Each country has a small monthly chance of getting one event.
