@@ -4738,34 +4738,35 @@ pm_teletype_communications = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = 200
+			country_bureaucracy_add = 180
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_tax_capacity_add = 60
+			state_tax_capacity_add = 55
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (21.43%)
-			goods_input_telephones_add = 20                      # Price:   70, Total cost:  1400.0 (50.00%)
-			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (28.57%)
+			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (28.04%)
+			goods_input_telephones_add = 14                      # Price:   70, Total cost:   980.0 (45.79%)
+			goods_input_electronic_components_add = 7            # Price:   80, Total cost:   560.0 (26.17%)
 			# Output goods
-			# Total input cost: 2800.0
+			# Total input cost: 2140.0
 			# Total output cost: 0
-			# Profit: -2800.0
+			# Profit: -2140.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 500
-			# Wage breakeven: -5.60
+			# Wage breakeven: -4.28
 		}
 
 		level_scaled = {
-			building_employment_clerks_add = 500
+			building_employment_clerks_add = 200
+			building_employment_bureaucrats_add = 300
 		}
 	}
 }
@@ -4774,6 +4775,51 @@ pm_internet_communications = {
 	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p2.dds"
 	unlocking_technologies = {
 		world_wide_web
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_bureaucracy_add = 220
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_tax_capacity_add = 70
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (22.73%)
+			goods_input_telephones_add = 12                      # Price:   70, Total cost:   840.0 (31.82%)
+			goods_input_electronic_components_add = 6            # Price:   80, Total cost:   480.0 (18.18%)
+			goods_input_digital_access_add = 6                   # Price:  120, Total cost:   720.0 (27.27%)
+			# Output goods
+			# Total input cost: 2640.0
+			# Total output cost: 0
+			# Profit: -2640.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 500
+			# Wage breakeven: -5.28
+		}
+
+		level_scaled = {
+			building_employment_clerks_add = 100
+			building_employment_bureaucrats_add = 300
+			building_employment_engineers_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_ai_governance = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	unlocking_technologies = {
+		artificial_intelligence
 	}
 
 	country_modifiers = {
@@ -4791,57 +4837,14 @@ pm_internet_communications = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (15.00%)
-			goods_input_telephones_add = 20                      # Price:   70, Total cost:  1400.0 (35.00%)
-			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (20.00%)
-			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (30.00%)
+			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (9.84%)
+			goods_input_telephones_add = 14                      # Price:   70, Total cost:   980.0 (16.07%)
+			goods_input_electronic_components_add = 7            # Price:   80, Total cost:   560.0 (9.18%)
+			goods_input_digital_access_add = 33                  # Price:  120, Total cost:  3960.0 (64.92%)
 			# Output goods
-			# Total input cost: 4000.0
+			# Total input cost: 6100.0
 			# Total output cost: 0
-			# Profit: -4000.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: 100
-			# Wage breakeven: -40.00
-		}
-
-		level_scaled = {
-			building_employment_clerks_add = 100
-		}
-	}
-
-	required_input_goods = digital_access
-}
-
-pm_ai_governance = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
-	unlocking_technologies = {
-		artificial_intelligence
-	}
-
-	country_modifiers = {
-		workforce_scaled = {
-			country_bureaucracy_add = 300
-		}
-	}
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_tax_capacity_add = 100
-		}
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_paper_add = 20                           # Price:   30, Total cost:   600.0 (7.89%)
-			goods_input_telephones_add = 20                      # Price:   70, Total cost:  1400.0 (18.42%)
-			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (10.53%)
-			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (63.16%)
-			# Output goods
-			# Total input cost: 7600.0
-			# Total output cost: 0
-			# Profit: -7600.0
+			# Profit: -6100.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -15938,6 +15941,8 @@ pm_principle_education_4 = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_authority_add = 0.1
+			# Cultural pull: universities draw foreign talent and project soft power
+			country_cultural_pull_add = 0.02
 		}
 	}
 }
@@ -15945,6 +15950,51 @@ pm_principle_education_4 = {
 pm_education_no_effect = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	replacement_if_valid = pm_principle_education_4
+}
+
+pm_principle_advanced_research_4 = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_principles = {
+		principle_advanced_research_4
+		principle_advanced_research_5
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_add = 1.5
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pop_qualifications_mult = 0.05
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_paper_add = 5                            # Price:   30, Total cost:   150.0 (100.00%)
+			# Output goods
+			# Total input cost: 150.0
+			# Total output cost: 0
+			# Profit: -150.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 250
+			# Wage breakeven: -0.60
+		}
+		level_scaled = {
+			building_employment_academics_add = 250
+		}
+	}
+}
+
+pm_advanced_research_no_effect = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	replacement_if_valid = pm_principle_advanced_research_4
 }
 
 pm_earth_orbit = {

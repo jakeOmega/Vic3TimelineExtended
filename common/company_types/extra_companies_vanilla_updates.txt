@@ -1320,11 +1320,9 @@ INJECT:company_compania_sansinena_de_carnes_congeladas = {
 }
 
 # Construction Power Bloc - steel & tooling
-INJECT:company_construction_power_bloc = {
-	extension_building_types = {
-		building_advanced_material_fabricator
-	}
-}
+# NOTE: building_advanced_material_fabricator merged into the company's
+# REPLACE block in extra_companies_generic.txt (INJECT into a REPLACEd
+# entity silently fails -- caught by mod_structure_audit).
 
 # CSFA (Italy) - sulfur mining & railway
 INJECT:company_csfa = {
