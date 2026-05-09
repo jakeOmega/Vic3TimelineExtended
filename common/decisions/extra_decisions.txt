@@ -245,7 +245,10 @@ mandate_system_decision = {
 	}
 
 	possible = {
-		scope:journal_entry = {
+		# Decisions are country-scoped — scope:journal_entry is only auto-saved
+		# inside JE-internal blocks. Use the je:<key> scope link instead (same
+		# pattern as je_colonial_empire's own monthly pulse).
+		je:je_colonial_empire = {
 			"scripted_bar_progress(colonial_stability_bar)" >= 65
 		}
 		# Round Table Conference taken at least once (timed positive event modifier

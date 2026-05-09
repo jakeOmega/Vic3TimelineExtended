@@ -10,6 +10,18 @@
 			value = 0
 		}
 	}
+	# Seed price_stabilizer so the divide on var:te_construction_market_price_stabilizer
+	# in te_construction_market_private_use_target doesn't return 'none' / Div/0
+	# before the first stabilizer update tick.
+	if = {
+		limit = {
+			NOT = { has_variable = te_construction_market_price_stabilizer }
+		}
+		set_variable = {
+			name = te_construction_market_price_stabilizer
+			value = TE_CONSTRUCTION_MARKET_SERVICES_PRICE
+		}
+	}
 }
 
 

@@ -49,133 +49,17 @@ colonial_stability_bar = {
 		}
 
 		# ========================================================================
-		# COLONIAL AFFAIRS — the metropole's stated relationship to empire
+		# LAW CONTRIBUTIONS — aggregated via country_colonial_stability_drift_add.
+		# Each contributing law (Colonial Affairs, Minority Rights, Citizenship,
+		# Distribution of Power, Free Speech, Internal Security) declares its
+		# colonial-stability impact in its own modifier block. The law tooltip
+		# shows the contribution directly. See:
+		#   common/laws/colonial_empire_law_injections.txt
+		#   common/modifier_type_definitions/colonial_empire_modifier_types.txt
 		# ========================================================================
-		if = {
-			limit = { owner = { has_law = law_type:law_colonial_exploitation } }
-			add = { desc = "colonial_law_exploitation_tt" value = 0.5 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_colonial_resettlement } }
-			add = { desc = "colonial_law_resettlement_tt" value = 0.3 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_neocolonialism } }
-			add = { desc = "colonial_law_neocolonialism_tt" value = -0.3 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_no_colonial_affairs } }
-			add = { desc = "colonial_law_no_affairs_tt" value = -0.6 }
-		}
-
-		# ========================================================================
-		# MINORITY RIGHTS — cruelty creates unrest (drains bar); benevolence
-		# stabilizes. Tools compensate (see button effectiveness section below).
-		# ========================================================================
-		if = {
-			limit = { owner = { has_law = law_type:law_minority_rights_violent_hostility } }
-			add = { desc = "colonial_law_violent_hostility_tt" value = -0.7 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_minority_rights_ghettoization } }
-			add = { desc = "colonial_law_ghettoization_tt" value = -0.5 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_minority_rights_discrimination } }
-			add = { desc = "colonial_law_discrimination_tt" value = -0.3 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_minority_rights_cultural_assimilation } }
-			add = { desc = "colonial_law_minority_assim_tt" value = -0.1 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_minority_rights_protection } }
-			add = { desc = "colonial_law_protection_tt" value = 0.3 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_minority_rights_affirmative_action } }
-			add = { desc = "colonial_law_affirmative_action_tt" value = 0.5 }
-		}
-
-		# ========================================================================
-		# CITIZENSHIP — secondary signal; reinforces minority-rights direction
-		# ========================================================================
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law = law_type:law_ethnostate
-						has_law = law_type:law_national_supremacy
-						has_law = law_type:law_racial_segregation
-					}
-				}
-			}
-			add = { desc = "colonial_law_hardline_citizenship_tt" value = -0.1 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_multicultural } }
-			add = { desc = "colonial_law_multicultural_tt" value = 0.2 }
-		}
-
-		# ========================================================================
-		# DISTRIBUTION OF POWER — small base; main effect is on tool effectiveness
-		# ========================================================================
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law = law_type:law_autocracy
-						has_law = law_type:law_single_party_state
-					}
-				}
-			}
-			add = { desc = "colonial_law_authoritarian_dp_tt" value = 0.2 }
-		}
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law = law_type:law_oligarchy
-						has_law = law_type:law_landed_voting
-					}
-				}
-			}
-			add = { desc = "colonial_law_conservative_dp_tt" value = 0.1 }
-		}
-		if = {
-			limit = {
-				owner = {
-					OR = {
-						has_law = law_type:law_universal_suffrage
-						has_law = law_type:law_anarchy
-					}
-				}
-			}
-			add = { desc = "colonial_law_democratic_dp_tt" value = -0.2 }
-		}
-
-		# ========================================================================
-		# FREE SPEECH
-		# ========================================================================
-		if = {
-			limit = { owner = { has_law = law_type:law_outlawed_dissent } }
-			add = { desc = "colonial_law_outlawed_dissent_tt" value = 0.2 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_protected_speech } }
-			add = { desc = "colonial_law_protected_speech_tt" value = -0.2 }
-		}
-
-		# ========================================================================
-		# INTERNAL SECURITY
-		# ========================================================================
-		if = {
-			limit = { owner = { has_law = law_type:law_secret_police } }
-			add = { desc = "colonial_law_secret_police_tt" value = 0.2 }
-		}
-		if = {
-			limit = { owner = { has_law = law_type:law_guaranteed_liberties } }
-			add = { desc = "colonial_law_guaranteed_liberties_tt" value = -0.2 }
+		add = {
+			desc = "colonial_law_aggregate_tt"
+			value = owner.modifier:country_colonial_stability_drift_add
 		}
 
 		# ========================================================================
@@ -222,15 +106,11 @@ colonial_stability_bar = {
 			add = { desc = "colonial_non_gp_penalty_tt" value = -0.5 }
 		}
 
-		# Era pressure: globalization makes decolonization irresistible
-		if = {
-			limit = { owner = { has_technology_researched = globalization } }
-			add = { desc = "colonial_globalization_pressure_tt" value = -1.5 }
-		}
-		else_if = {
-			limit = { owner = { has_technology_researched = knowledge_economy } }
-			add = { desc = "colonial_knowledge_economy_pressure_tt" value = -0.75 }
-		}
+		# Era pressure: contributions live on the techs themselves so they
+		# show up in each tech's tooltip. globalization tech contributes
+		# -1.5/mo, knowledge_economy contributes -0.75/mo. Both flow through
+		# country_colonial_stability_drift_add and surface in the bar's law-
+		# aggregate breakdown above.
 
 		# GP condemnation pressure (linear + tier escalations)
 		if = {
@@ -268,169 +148,33 @@ colonial_stability_bar = {
 		# block it (you can't culturally absorb people you're attacking).
 		# ========================================================================
 
-		# --- GARRISON ---
+		# --- POLICY EFFECTIVENESS ---
+		# When a policy button is active, the bar reads the corresponding
+		# country_colonial_*_effectiveness_add aggregate. Baselines live in
+		# `base_values` (see common/static_modifiers/extra_modifiers.txt); law
+		# contributions live in each affected law's modifier block. The
+		# aggregate's GetValueWithBreakdownFor tooltip shows the full sum --
+		# base + each law -- in one place.
 		if = {
 			limit = { owner = { has_modifier = colonial_military_garrison_modifier } }
-			add = { desc = "colonial_garrison_baseline_tt" value = 1.0 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_military_garrison_modifier
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
-				}
+			add = {
+				desc = "colonial_garrison_aggregate_tt"
+				value = owner.modifier:country_colonial_garrison_effectiveness_add
 			}
-			add = { desc = "colonial_garrison_cruelty_bonus_tt" value = 0.7 }
 		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_military_garrison_modifier
-					has_law = law_type:law_outlawed_dissent
-				}
-			}
-			add = { desc = "colonial_garrison_dissent_bonus_tt" value = 0.4 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_military_garrison_modifier
-					has_law = law_type:law_secret_police
-				}
-			}
-			add = { desc = "colonial_garrison_secret_police_bonus_tt" value = 0.2 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_military_garrison_modifier
-					OR = {
-						has_law = law_type:law_minority_rights_protection
-						has_law = law_type:law_minority_rights_affirmative_action
-					}
-				}
-			}
-			add = { desc = "colonial_garrison_nice_law_penalty_tt" value = -0.7 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_military_garrison_modifier
-					has_law = law_type:law_protected_speech
-				}
-			}
-			add = { desc = "colonial_garrison_legitimacy_penalty_tt" value = -0.4 }
-		}
-
-		# --- CULTURAL ASSIMILATION ---
 		if = {
 			limit = { owner = { has_modifier = colonial_cultural_assimilation_modifier } }
-			add = { desc = "colonial_assim_baseline_tt" value = 0.7 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_cultural_assimilation_modifier
-					has_law = law_type:law_minority_rights_cultural_assimilation
-				}
+			add = {
+				desc = "colonial_assim_aggregate_tt"
+				value = owner.modifier:country_colonial_assim_effectiveness_add
 			}
-			add = { desc = "colonial_assim_law_match_bonus_tt" value = 0.5 }
 		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_cultural_assimilation_modifier
-					OR = {
-						has_law = law_type:law_national_supremacy
-						has_law = law_type:law_ethnostate
-						has_law = law_type:law_cultural_exclusion
-					}
-				}
-			}
-			add = { desc = "colonial_assim_hardline_citizenship_tt" value = 0.3 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_cultural_assimilation_modifier
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
-				}
-			}
-			add = { desc = "colonial_assim_cruelty_block_tt" value = -0.6 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_cultural_assimilation_modifier
-					OR = {
-						has_law = law_type:law_multicultural
-						has_law = law_type:law_minority_rights_protection
-						has_law = law_type:law_minority_rights_affirmative_action
-					}
-				}
-			}
-			add = { desc = "colonial_assim_pluralist_tt" value = -0.5 }
-		}
-
-		# --- INVESTMENT ---
 		if = {
 			limit = { owner = { has_modifier = colonial_development_investment_modifier } }
-			add = { desc = "colonial_invest_baseline_tt" value = 0.5 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_development_investment_modifier
-					OR = {
-						has_law = law_type:law_universal_suffrage
-						has_law = law_type:law_wealth_voting
-						has_law = law_type:law_census_voting
-					}
-				}
+			add = {
+				desc = "colonial_invest_aggregate_tt"
+				value = owner.modifier:country_colonial_invest_effectiveness_add
 			}
-			add = { desc = "colonial_invest_franchise_bonus_tt" value = 0.3 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_development_investment_modifier
-					OR = {
-						has_law = law_type:law_minority_rights_protection
-						has_law = law_type:law_minority_rights_affirmative_action
-					}
-				}
-			}
-			add = { desc = "colonial_invest_protection_bonus_tt" value = 0.3 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_development_investment_modifier
-					OR = {
-						has_law = law_type:law_minority_rights_violent_hostility
-						has_law = law_type:law_minority_rights_ghettoization
-					}
-				}
-			}
-			add = { desc = "colonial_invest_cruelty_penalty_tt" value = -0.3 }
-		}
-		if = {
-			limit = {
-				owner = {
-					has_modifier = colonial_development_investment_modifier
-					OR = {
-						has_law = law_type:law_autocracy
-						has_law = law_type:law_oligarchy
-					}
-				}
-			}
-			add = { desc = "colonial_invest_autocracy_penalty_tt" value = -0.2 }
 		}
 
 		# Acceptance: per-state penalties / bonuses
@@ -457,15 +201,29 @@ colonial_stability_bar = {
 			add = { desc = "colonial_war_penalty_tt" value = -0.5 }
 		}
 
-		# Timed event modifiers
+		# Revolution: imperial administration has collapsed; colonies run themselves
 		if = {
-			limit = { owner = { has_modifier = colonial_stability_positive_event } }
-			add = { desc = "colonial_positive_events_tt" value = 1 }
+			limit = { owner = { has_revolution = yes } }
+			add = { desc = "colonial_revolution_penalty_tt" value = -1.0 }
 		}
+
+		# Domestic turmoil: radicalization at home saps imperial focus.
+		# country_turmoil is a 0-1 fraction; threshold gate keeps trace turmoil
+		# out of the breakdown. Scaled: turmoil 0.25 -> -0.5/mo, 0.5 -> -1.0/mo.
 		if = {
-			limit = { owner = { has_modifier = colonial_stability_negative_event } }
-			add = { desc = "colonial_negative_events_tt" value = -1 }
+			limit = { owner = { country_turmoil > 0.05 } }
+			add = {
+				desc = "colonial_turmoil_penalty_tt"
+				value = owner.country_turmoil
+				multiply = -2.0
+			}
 		}
+
+		# Timed event modifiers: contributions live on the
+		# colonial_stability_positive_event / _negative_event modifiers
+		# themselves (declared in common/static_modifiers/extra_modifiers.txt).
+		# They flow through country_colonial_stability_drift_add to the bar's
+		# law-aggregate breakdown above.
 	}
 }
 

@@ -1315,16 +1315,10 @@ war_propaganda_support_script_value = {
 	}
 }
 
-country_gdp_per_capita = {
-	value = 0
-	every_scope_state = {
-		add = gdp
-	}
-	divide = {
-		value = total_population
-		min = 1
-	}
-}
+# country_gdp_per_capita is defined later in this file with the simpler
+# country-scope `gdp / total_population` form (the duplicate state-iteration
+# version that lived here previously was silently dropped by the engine's
+# "Duplicated key" rule -- caught by mod_structure_audit).
 
 global_gdp_per_capita = {
 	value = global_gdp_script_value
@@ -1528,9 +1522,9 @@ banking_event_expense_huge = {
 	multiply = 0.0006
 }
 
-# Base points provided by the currently active law (used for JE setup / display).
+# Base points provided by the currently active laws (used for JE setup / display).
 # Values must mirror each law's country_banking_intervention_max_add modifier in
-# common/laws/extra_laws.txt (lawgroup_financial_regulation).
+# common/laws/extra_laws.txt (lawgroup_financial_regulation + lawgroup_national_bank).
 banking_law_base_points_value = {
 	value = 0
 	if = { limit = { has_law = law_type:law_unregulated_banking }               add = 1 }
@@ -1540,6 +1534,7 @@ banking_law_base_points_value = {
 	if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 5 }
 	if = { limit = { has_law = law_type:law_state_owned_banking }               add = 7 }
 	if = { limit = { has_law = law_type:law_central_bank_independence }         add = 7 }
+	if = { limit = { has_law = law_type:law_national_bank }                     add = 1 }
 }
 
 # Random momentum nudge values, scaled by the banking_random_momentum_mult modifier.
@@ -2387,3 +2382,19 @@ sv_money_flow_event_small  = { value = gdp  multiply = 0.0001 }   # 0.01% GDP / 
 sv_money_flow_event_medium = { value = gdp  multiply = 0.0002 }   # 0.02% GDP / week
 sv_money_flow_event_large  = { value = gdp  multiply = 0.0004 }   # 0.04% GDP / week
 sv_money_flow_event_huge   = { value = gdp  multiply = 0.0006 }   # 0.06% GDP / week
+
+# Population-transfer disruption strength: var:pop_transfer_count / total_population,
+# clamped. Must be a top-level named script value — `divide = total_population` as a
+# bareword silently resolves to 'none' inside an inline anonymous script-value block
+# (the value = { … } form on set_variable), but works in a named definition. Vanilla
+# precedent: country_urbanization_rate. Caller: country scope with pop_transfer_count
+# already set on the same scope.
+te_pop_transfer_disruption_strength = {
+	value = var:pop_transfer_count
+	if = {
+		limit = { total_population > 0 }
+		divide = total_population
+	}
+	min = 0.25
+	max = 2
+}

@@ -18,15 +18,31 @@
 	country_covert_operation_slot_add = 1
 	country_intelligence_capacity_add = 5
 
+	# Colonial empire (je_colonial_empire): per-policy effectiveness baselines.
+	# These are always-on; the bar only reads the aggregate when the
+	# corresponding policy modifier is active. Putting baselines here (rather
+	# than in the policy modifier or as a hardcoded bar IF) means the
+	# modifier's GetValueWithBreakdownFor renders the full sum -- baseline +
+	# law contributions -- in tooltips so the player sees the complete picture
+	# in one place.
+	country_colonial_garrison_effectiveness_add = 1.0
+	country_colonial_invest_effectiveness_add = 0.5
+	country_colonial_assim_effectiveness_add = 0.7
+
 	# Strategic Reserve: base annual decay rates for stockpiled goods.
 	# Tech reductions are applied via INJECT:<tech_name> entries in technology files.
 	country_st_res_grain_decay_add = 0.25
 	country_st_res_ammunition_decay_add = 0.02
 	country_st_res_oil_decay_add = 0.005
-	country_st_res_small_arms_decay_add = 0.02
-	country_st_res_artillery_decay_add = 0.015
-	country_st_res_aeroplanes_decay_add = 0.08
-	country_st_res_tanks_decay_add = 0.04
+	# Aeroplanes/tanks start "appropriately slow" because mid-era complexity techs
+	# (jets, stealth, UAVs, composite armor, network-centric warfare) push their
+	# decay temporarily *up* in eras 7-9 before late-era automation/programmable-
+	# matter techs in eras 10-12 bring them back down. Small arms and artillery
+	# decline monotonically with metallurgy, polymer, and case-sealing tech.
+	country_st_res_small_arms_decay_add = 0.015
+	country_st_res_artillery_decay_add = 0.010
+	country_st_res_aeroplanes_decay_add = 0.040
+	country_st_res_tanks_decay_add = 0.025
 }
 
 INJECT:country_literacy_rate = {
@@ -221,6 +237,7 @@ nuclear_power = {
 	country_leverage_generation_mult = 0.25
 	country_leverage_resistance_mult = 0.25
 	country_liberty_desire_add = 0.25
+	country_colonial_stability_drift_add = 0.2
 }
 
 REPLACE:low_pop_state = {
@@ -1939,11 +1956,13 @@ gp_supports_colonialism_modifier = {
 colonial_stability_positive_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.005
+	country_colonial_stability_drift_add = 1.0
 }
 
 colonial_stability_negative_event = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.005
+	country_colonial_stability_drift_add = -1.0
 }
 
 # Great power colonial policy stance modifiers (applied when GP chooses a stance)
@@ -5785,6 +5804,7 @@ covert_ideological_subversion_resist = {
 covert_destabilization_resist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_support_separatism_resistance_mult = -0.15
+	country_colonial_stability_drift_add = -0.35
 }
 
 # ============================================================================
@@ -6380,4 +6400,107 @@ bureaucracy_gain_small = {
 bureaucracy_gain_medium = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_bureaucracy_mult = 0.05
+}
+# ============================================================================
+# IRREDENTIST PRESSURE — modifiers used by irredentism events.
+# See events/irredentism_events.txt and
+# /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+# ============================================================================
+
+# Lasting goodwill from "Fund cultural ties" option (Event 1B). Symmetric:
+# applied to both unifier and target. Slightly improves enactment of
+# cooperation-flavored laws.
+irr_cultural_ties_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_loyalists_from_political_movements_mult = 0.05
+	country_pact_leverage_generation_mult = 0.05
+}
+
+# Target stood firm against demands (Event 2A). National-pride flavor.
+irr_defiance_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_loyalists_from_political_movements_mult = 0.10
+	country_authority_mult = 0.05
+}
+
+# Target chose to negotiate (Event 2B). Less national pride; more pragmatism.
+irr_negotiating_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_radicals_from_political_movements_mult = 0.05
+	country_pact_leverage_generation_mult = 0.05
+}
+
+# Unifier offered voluntary union (Event 3A). A mild, mult-based prestige
+# bump (statesmanship); _mult keeps duration scaling bounded
+# (event_magnitude_audit flagged the prior _add form as fast-scaling).
+irr_offered_union_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+}
+
+# Target is open to union (Event 4A). Soft acceptance signal -- voluntary_union
+# AI propose-side reads this as a strong yes-bias.
+irr_open_to_union_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_loyalists_from_political_movements_mult = 0.05
+}
+
+# Target rejected union (Event 4B). Backlash; no voluntary union for 5y.
+irr_rejected_union_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_radicals_from_political_movements_mult = 0.05
+	country_authority_mult = 0.05
+}
+
+# Bloc leader vetoed an irredentist client's war request (Event 5a B).
+# Cooldown -- AI shouldn't bombard the leader with re-requests.
+irr_war_vetoed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_radicals_from_political_movements_mult = 0.05
+}
+
+# Bloc leader forbade a peaceful union (Event 5b B). Blocks the action
+# from re-proposal for the duration.
+irr_union_forbidden_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_mult = 0.05
+}
+
+# ============================================================================
+# COLONIAL EMPIRE -- subject-side LD pressure modifiers
+# ----------------------------------------------------------------------------
+# Applied to qualifying colonial subjects (Colony / Chartered Company /
+# overseas Protectorate of different heritage group) by je_colonial_empire's
+# on_monthly_pulse, scaled by the metropole's bar band.
+#
+# Scale reference: vanilla country_liberty_desire_add values are fractions of
+# 1.0 over the 0-100 LD scale (0.10 = +10 LD points).
+# ============================================================================
+
+# Strained band (40 <= bar < 65). Mild LD bump; subjects begin to chafe.
+colonial_overlord_strained_subject_ld_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_liberty_desire_add = 0.05
+}
+
+# Crumbling band (20 <= bar < 40). Strong LD pressure; visible decolonization
+# momentum at the diplomatic-panel level.
+colonial_overlord_crumbling_subject_ld_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_liberty_desire_add = 0.15
+}
+
+# Collapsing band (bar < 20). Severe pressure; subjects on the brink of
+# unilaterally declaring independence.
+colonial_overlord_collapsing_subject_ld_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_liberty_desire_add = 0.30
+}
+
+# Failure aftershock: applied on JE-fail (bar hits 0). Non-decaying, very-long
+# duration (~20 years). Half the LD bar permanently; the empire has lost grip
+# but subjects are not auto-released -- player must negotiate or weather it.
+colonial_collapse_subject_unrest_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_liberty_desire_add = 0.50
 }

@@ -1243,15 +1243,10 @@ population_transfer_effect = {
 	# precomputed into a single scalar variable at apply-time and read flat by
 	# `multiplier = scope:X.var:Y` — the vanilla paris-commune
 	# (c:FRA.var:PRC_money_transfer) pattern, since inline `multiplier = { ... }`
-	# on `add_modifier` is re-evaluated every decay tick.
-	#
-	# `total_population` is a trigger, NOT a script value: it works as a bareword
-	# in `divide`/`multiply` modifier-block fields (`divide = total_population`)
-	# and as a trigger comparator (`total_population > 0`), but silently resolves
-	# to type 'none' inside a nested script-value sub-block of the form
-	# `divide = { value = total_population … }`. Vanilla precedent for the
-	# bareword-with-guard pattern: common/script_values/building_values.txt:26-40
-	# (country_urbanization_rate).
+	# on `add_modifier` is re-evaluated every decay tick. The strength itself
+	# comes from the named script value te_pop_transfer_disruption_strength
+	# (inline anonymous script-value blocks can't read total_population as a
+	# bareword — see that script value's header).
 	scope:source_country = {
 		if = {
 			limit = {
@@ -1260,15 +1255,7 @@ population_transfer_effect = {
 			}
 			set_variable = {
 				name = pop_transfer_disruption_strength
-				value = {
-					value = var:pop_transfer_count
-					if = {
-						limit = { total_population > 0 }
-						divide = total_population
-					}
-					min = 0.25
-					max = 2
-				}
+				value = te_pop_transfer_disruption_strength
 			}
 			add_modifier = {
 				name = population_transfer_disruption
@@ -1288,15 +1275,7 @@ population_transfer_effect = {
 			}
 			set_variable = {
 				name = pop_transfer_disruption_strength
-				value = {
-					value = var:pop_transfer_count
-					if = {
-						limit = { total_population > 0 }
-						divide = total_population
-					}
-					min = 0.25
-					max = 2
-				}
+				value = te_pop_transfer_disruption_strength
 			}
 			add_modifier = {
 				name = population_transfer_disruption
@@ -1338,3 +1317,50 @@ nanofabrication_center_construction    = { generic_wonder_construction_base = { 
 #==================================================
 
 consciousness_network_construction     = { generic_wonder_construction_base = { WONDER = consciousness_network     MAX_LEVEL = 10 } }
+
+# ============================================================================
+# IRREDENTISM — third-party annexation notification
+#
+# Fires irredentism.6 on every country (above insignificant rank, not the
+# unifier or annexee) that holds Engaged-or-higher interest in a strategic
+# region containing the annexed country's former territory.
+#
+# Caller MUST save these scopes before invoking:
+#   scope:irr_annexed_country  — the country being absorbed (must still be
+#                                 valid; capture before the `annex` effect
+#                                 runs in voluntary_union, or trust it
+#                                 surviving briefly into a wargoal on_enforced)
+#   scope:irr_unifier          — the absorbing country
+#
+# The variable irr_notify_peaceful is set on each notified country before
+# the event fires; the event reads it to pick warlike or peaceful flavor.
+# Cooldown on the event handles dedupe (the unifier may have multiple
+# strategic regions, but each interested party only sees one notification).
+# ============================================================================
+
+te_irredentism_notify_third_parties_effect = {
+	# Parameter: PEACEFUL = yes | no
+	scope:irr_annexed_country ?= {
+		every_country_strategic_region = {
+			save_temporary_scope_as = irr_target_region
+			every_country = {
+				limit = {
+					NOT = { THIS = scope:irr_unifier }
+					NOT = { THIS = scope:irr_annexed_country }
+					NOT = { is_country_type = decentralized }
+					country_rank >= rank_value:minor_power
+					has_strategic_region_interest_tier = {
+						strategic_region = scope:irr_target_region
+						value >= 2
+					}
+				}
+				set_variable = {
+					name = irr_notify_peaceful_flag
+					value = $PEACEFUL$
+					days = 7
+				}
+				trigger_event = { id = irredentism.6 days = 1 }
+			}
+		}
+	}
+}

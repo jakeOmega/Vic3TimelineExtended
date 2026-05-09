@@ -163,7 +163,7 @@ st_res_refresh_hub_cache_effect = {
 # --------------------------------------------------------------------------
 st_res_startup_good_setup_effect = {
 	# Parameter: GOOD = grain | ammunition | oil
-	set_local_variable = { name = st_res_$GOOD$_rate_local value = st_res_$GOOD$_actual_rate }
+	set_local_variable = { name = st_res_$GOOD$_rate_local value = var:st_res_$GOOD$_actual_rate_cached }
 	set_local_variable = { name = st_res_$GOOD$_good_mult_local value = st_res_$GOOD$_good_mult }
 	set_local_variable = { name = st_res_$GOOD$_can_store_local value = 0 }
 	set_local_variable = { name = st_res_$GOOD$_can_withdraw_local value = 0 }

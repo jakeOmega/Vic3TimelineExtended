@@ -195,14 +195,20 @@ on_diplo_play_back_down = {
 
 te_construction_market_on_diplo_play_back_down = {
 	effect = {
-		scope:notification_target = {
-			trigger_event = {
-				id = te_construction_market_recalc_events.1
+		if = {
+			limit = { exists = scope:notification_target }
+			scope:notification_target = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
 			}
 		}
-		scope:actor = {
-			trigger_event = {
-				id = te_construction_market_recalc_events.1
+		if = {
+			limit = { exists = scope:actor }
+			scope:actor = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
 			}
 		}
 	}
@@ -243,9 +249,12 @@ on_secession_start = {
 
 te_construction_market_on_secession_start = {
 	effect = {
-		scope:target = {
-			trigger_event = {
-				id = te_construction_market_recalc_events.1
+		if = {
+			limit = { exists = scope:target }
+			scope:target = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
 			}
 		}
 		trigger_event = {
@@ -266,9 +275,12 @@ te_construction_market_on_wargoal_enforced = {
 		trigger_event = {
 			id = te_construction_market_recalc_events.1
 		}
-		scope:target = {
-			trigger_event = {
-				id = te_construction_market_recalc_events.1
+		if = {
+			limit = { exists = scope:target }
+			scope:target = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
 			}
 		}
 	}
@@ -285,9 +297,12 @@ on_war_end = {
 
 te_construction_market_on_war_end = {
 	effect = {
-		scope:actor = {
-			trigger_event = {
-				id = te_construction_market_recalc_events.1
+		if = {
+			limit = { exists = scope:actor }
+			scope:actor = {
+				trigger_event = {
+					id = te_construction_market_recalc_events.1
+				}
 			}
 		}
 	}
