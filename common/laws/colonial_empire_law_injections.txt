@@ -1,0 +1,136 @@
+﻿# Colonial Empire — Vanilla Law Injections
+# ============================================================================
+# Adds the four colonial-empire modifier types to vanilla laws:
+#
+#   country_colonial_stability_drift_add        — read by the bar always
+#   country_colonial_garrison_effectiveness_add — read when Garrison is active
+#   country_colonial_invest_effectiveness_add   — read when Invest is active
+#   country_colonial_assim_effectiveness_add    — read when Assimilation is active
+#
+# Magnitudes match the corresponding IF-block values that previously lived
+# in common/scripted_progress_bars/extra_progress_bars.txt. The bar reads
+# aggregated totals via owner.modifier:<name>; the policy-button tooltips
+# preview the effectiveness aggregate via GetValueWithBreakdownFor so the
+# player sees what their laws contribute BEFORE pressing the button.
+#
+# Mirrors the sol_expectations_vanilla_injections.txt INJECT pattern: each
+# block extends an existing vanilla law non-destructively.
+
+# === Colonial Affairs ===
+
+INJECT:law_colonial_exploitation = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.5
+	}
+}
+
+INJECT:law_colonial_resettlement = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.3
+	}
+}
+
+INJECT:law_no_colonial_affairs = {
+	modifier = {
+		country_colonial_stability_drift_add = -0.6
+	}
+}
+
+# === Minority Rights / Citizenship: handled via DIRECT EDITS, not INJECT ===
+# These laws are redeclared by the mod (extra_laws.txt for minority_rights,
+# modified.txt for the citizenship variants). INJECT directives don't merge
+# into mod redeclarations -- the latter wins silently. The colonial-stability
+# contributions for these laws live alongside their other modifiers in
+# common/laws/extra_laws.txt and common/laws/modified.txt.
+
+# law_neocolonialism is a mod-only law (no vanilla def). Direct edit in
+# common/laws/extra_laws.txt.
+
+# === Distribution of Power ===
+# Authoritarian regimes drift positively but undermine the legitimacy
+# investment needs to land. Broad franchises drift negatively but make
+# colonial development read as a public good.
+
+INJECT:law_autocracy = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+		country_colonial_invest_effectiveness_add = -0.2
+	}
+}
+
+INJECT:law_single_party_state = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+	}
+}
+
+INJECT:law_oligarchy = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.1
+		country_colonial_invest_effectiveness_add = -0.2
+	}
+}
+
+INJECT:law_landed_voting = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.1
+	}
+}
+
+INJECT:law_universal_suffrage = {
+	modifier = {
+		country_colonial_stability_drift_add = -0.2
+		country_colonial_invest_effectiveness_add = 0.3
+	}
+}
+
+# wealth_voting and census_voting were not on the drift list but DO carry
+# franchise-bonus weight for investment.
+INJECT:law_wealth_voting = {
+	modifier = {
+		country_colonial_invest_effectiveness_add = 0.3
+	}
+}
+
+INJECT:law_census_voting = {
+	modifier = {
+		country_colonial_invest_effectiveness_add = 0.3
+	}
+}
+
+INJECT:law_anarchy = {
+	modifier = {
+		country_colonial_stability_drift_add = -0.2
+	}
+}
+
+# === Free Speech ===
+
+INJECT:law_outlawed_dissent = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+		country_colonial_garrison_effectiveness_add = 0.4
+	}
+}
+
+INJECT:law_protected_speech = {
+	modifier = {
+		country_colonial_stability_drift_add = -0.2
+		country_colonial_garrison_effectiveness_add = -0.4
+	}
+}
+
+# === Internal Security ===
+
+INJECT:law_secret_police = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+		country_colonial_garrison_effectiveness_add = 0.2
+	}
+}
+
+INJECT:law_guaranteed_liberties = {
+	modifier = {
+		country_colonial_stability_drift_add = -0.2
+	}
+}

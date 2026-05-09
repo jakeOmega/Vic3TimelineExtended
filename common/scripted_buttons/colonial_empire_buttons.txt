@@ -30,9 +30,12 @@ ce_invest_in_development = {
 
 	possible = {
 		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES
-			any_scope_state = {
-				is_overseas_colonial_state = yes
+			text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
+			OR = {
+				any_scope_state = {
+					is_overseas_colonial_state = yes
+				}
+				country_has_qualifying_colonial_subject = yes
 			}
 		}
 		NOT = { has_modifier = colonial_development_investment_modifier }
@@ -97,9 +100,12 @@ ce_military_garrison = {
 
 	possible = {
 		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES
-			any_scope_state = {
-				is_overseas_colonial_state = yes
+			text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
+			OR = {
+				any_scope_state = {
+					is_overseas_colonial_state = yes
+				}
+				country_has_qualifying_colonial_subject = yes
 			}
 		}
 		NOT = { has_modifier = colonial_military_garrison_modifier }
@@ -172,9 +178,12 @@ ce_cultural_assimilation = {
 
 	possible = {
 		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES
-			any_scope_state = {
-				is_overseas_colonial_state = yes
+			text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
+			OR = {
+				any_scope_state = {
+					is_overseas_colonial_state = yes
+				}
+				country_has_qualifying_colonial_subject = yes
 			}
 		}
 		modifier:country_can_use_cultural_assimilation_bool = yes

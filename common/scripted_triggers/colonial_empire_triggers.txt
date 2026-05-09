@@ -304,6 +304,11 @@ is_overseas_from_capital = {
 
 # A state that structurally qualifies as an overseas colony.
 # Does NOT include acceptance/integration checks - those are context-dependent.
+# Two qualifying signals (either suffices, given non-primary population
+# present): low acceptance for an indigenous culture, OR significantly lower
+# average SoL than the metropole. The SoL fallback captures empires that
+# have culturally co-opted but economically underdeveloped peripheries
+# (Portugal under assimilatory citizenship, etc.).
 # Scope: state
 is_overseas_colonial_state = {
 	custom_tooltip = {
@@ -312,14 +317,156 @@ is_overseas_colonial_state = {
 		NOT = { is_homeland_of_country_cultures = owner }
 		# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
 		state_population >= 100000
-		# Has a non-primary culture with low acceptance (proxy for significant indigenous population)
+		OR = {
+			# Indigenous-population signal: non-primary culture with low acceptance.
+			any_scope_culture = {
+				NOT = { is_primary_culture_of = owner }
+				prev = {
+					state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
+				}
+			}
+			# Economic-disparity signal: state SoL falls below 0.8 x metropole
+			# average, AND there is at least some non-primary population
+			# (otherwise a poor metropole state would qualify).
+			AND = {
+				any_scope_culture = {
+					NOT = { is_primary_culture_of = owner }
+				}
+				average_sol < colonial_state_sol_qualifying_floor
+			}
+		}
+		# Outside the capital's macro-region and all neighboring macro-regions
+		is_overseas_from_capital = yes
+	}
+}
+
+# Sibling of is_overseas_from_capital that checks against the OVERLORD's
+# capital instead of the owner's. Used when iterating subjects of a metropole;
+# the subject's own capital is in the colonial region by construction, so the
+# owner-perspective check would never fire.
+# Scope: state (subject's state); requires owner to have an overlord.
+is_overseas_from_overlord_capital = {
+	custom_tooltip = {
+		text = IS_OVERSEAS_FROM_OVERLORD_CAPITAL_TT
+		owner = { exists = overlord }
+		owner = { exists = overlord.capital }
+		OR = {
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_north_america = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_north_america = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_south_america = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_south_america = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_western_europe = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_western_europe = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_eastern_europe = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_eastern_europe = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_siberia_central_asia = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_siberia_central_asia = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_middle_east = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_middle_east = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_north_africa = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_north_africa = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_western_africa = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_western_africa = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_eastern_africa = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_eastern_africa = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_southern_africa = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_southern_africa = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_india = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_india = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_southeast_asia_indonesia = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_southeast_asia_indonesia = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_east_asia = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_east_asia = yes }
+			}
+			AND = {
+				owner = { overlord = { capital = { is_in_colonial_macroregion_australia_oceania = yes } } }
+				NOT = { is_in_or_adjacent_colonial_macroregion_australia_oceania = yes }
+			}
+		}
+	}
+}
+
+# Country-scope (evaluated on a SUBJECT country): does it count as a "colonial
+# subject" of its overlord for je_colonial_empire purposes?
+# Used by country_has_qualifying_colonial_subject (metropole gate) and by
+# every_subject_or_below { limit = ... } blocks scoping into subjects.
+#
+# The Protectorate branch additionally requires:
+#   - at least one of the subject's states is overseas from the overlord's
+#     capital (so European-on-European protectorates do not qualify), AND
+#   - none of the subject's primary cultures shares a heritage trait group
+#     with any of the overlord's primary cultures (i.e. different heritage
+#     group entirely -- e.g. UK -> Egypt qualifies, France -> Tunisia
+#     qualifies, but a hypothetical Germany -> Austria protectorate would
+#     not).
+is_qualifying_colonial_subject = {
+	exists = overlord
+	OR = {
+		is_subject_type =subject_type_colony
+		is_subject_type =subject_type_chartered_company
+		AND = {
+			is_subject_type =subject_type_protectorate
+			any_scope_state = {
+				is_overseas_from_overlord_capital = yes
+			}
+			overlord = { save_temporary_scope_as = ce_overlord_ref }
+			NOT = {
+				any_primary_culture = {
+					shares_heritage_trait_group_with_any_primary_culture = scope:ce_overlord_ref
+				}
+			}
+		}
+	}
+}
+
+# Country-scope (evaluated on a METROPOLE): holds >=1 qualifying colonial
+# subject? Used by je_colonial_empire's possible block.
+country_has_qualifying_colonial_subject = {
+	any_subject_or_below = {
+		is_qualifying_colonial_subject = yes
+	}
+}
+
+# State-scope: the state has the cultural/population profile of an
+# unintegrated colony but skips the overseas-from-capital geography check.
+# Used when iterating from a metropole INTO a subject's states (where the
+# subject is in the colonial region by construction, so the standard
+# overseas-from-owner-capital test would fail).
+is_unintegrated_culturally_distinct_state = {
+	custom_tooltip = {
+		text = IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT
+		NOT = { is_homeland_of_country_cultures = owner }
+		state_population >= 100000
 		any_scope_culture = {
 			NOT = { is_primary_culture_of = owner }
 			prev = {
 				state_average_culture_pop_acceptance = { culture = prev value < 0.6 }
 			}
 		}
-		# Outside the capital's macro-region and all neighboring macro-regions
-		is_overseas_from_capital = yes
 	}
 }

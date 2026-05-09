@@ -118,3 +118,15 @@ colonial_invest_monthly_cost = {
 	value = gdp
 	multiply = -0.005
 }
+
+# Scope: state. SoL threshold below which the state qualifies as colonial-
+# feeling regardless of cultural acceptance: 0.8 x owner's national average.
+# Multiplicative scaling means a poorer metropole has a lower absolute floor
+# (its colonies need less SoL to "feel poor"); a richer metropole has higher
+# absolute tolerance but the same proportional sensitivity. Captures the
+# Portugal-with-assimilatory-citizenship case: high acceptance but the
+# colonies are still markedly poorer than the mainland.
+colonial_state_sol_qualifying_floor = {
+	value = owner.average_sol
+	multiply = 0.8
+}

@@ -1,0 +1,45 @@
+﻿# colonial_empire_modifier_types.txt
+#
+# Modifier type for the colonial-stability bar's drift contribution.
+# Laws (Colonial Affairs, Minority Rights, Citizenship, Distribution of
+# Power, Free Speech, Internal Security) declare their colonial-stability
+# impact via this modifier. The bar's monthly_progress reads the aggregated
+# value as a single line item rather than re-evaluating each `has_law` check.
+#
+# Player benefit: the law tooltip shows the colonial-stability contribution
+# directly (e.g. "Outlawed Dissent: +0.20 Colonial Stability Drift"), making
+# the law's relationship to the colonial system transparent rather than
+# hidden in the bar's monthly_progress script.
+#
+# Conditional contributions (button-active bonuses, GP condemnation, era
+# pressure, IG composition, overreach) remain as bar IF-blocks -- they are
+# not law-attached and don't fit the modifier-aggregation pattern.
+
+country_colonial_stability_drift_add = {
+	color = neutral
+	decimals = 2
+	script_only = yes
+}
+
+# Per-button effectiveness multipliers. Read by the bar only when the
+# corresponding policy button is active; the modifier value still aggregates
+# at all times (its contribution is what the button preview tooltip shows
+# via GetValueWithBreakdownFor, so the player can see what their laws will
+# contribute BEFORE pressing the button).
+country_colonial_garrison_effectiveness_add = {
+	color = neutral
+	decimals = 2
+	script_only = yes
+}
+
+country_colonial_invest_effectiveness_add = {
+	color = neutral
+	decimals = 2
+	script_only = yes
+}
+
+country_colonial_assim_effectiveness_add = {
+	color = neutral
+	decimals = 2
+	script_only = yes
+}

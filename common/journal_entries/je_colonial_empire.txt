@@ -9,9 +9,17 @@
 	}
 
 	possible = {
-		# Has at least one overseas colonial state with unintegrated population
-		any_scope_state = {
-			is_overseas_colonial_state = yes
+		# Direct overseas-state holders OR holders of qualifying colonial
+		# subjects (Colonial Administration Colonies, Chartered Companies, and
+		# overseas Protectorates of a different heritage group from the
+		# metropole). The subject branch catches modern-era colonial relations
+		# where the metropole owns no overseas states directly -- e.g. UK over
+		# India, Netherlands over the DEIC, France over Tunisia/Morocco.
+		OR = {
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+			country_has_qualifying_colonial_subject = yes
 		}
 	}
 
@@ -143,6 +151,13 @@
 		else = {
 			trigger_event = { id = decolonization_events.200 }   # generic Empire Endures
 		}
+
+		# Clean up persistent state from this JE run. Path-tracking variables,
+		# country-scope policy modifiers, civil-rights movement modifiers, and
+		# subject-side LD modifiers all need explicit removal -- they are
+		# attached to entities that survive the JE's end and would otherwise
+		# stick around indefinitely.
+		colonial_empire_je_cleanup_effect = yes
 	}
 
 	fail = {
@@ -170,6 +185,29 @@
 		else = {
 			trigger_event = { id = decolonization_events.201 }   # The Empire Crumbles (bloody)
 		}
+
+		# Subject-holders: instead of forced release, every qualifying
+		# colonial subject takes a strong LD spike + relations hit. Subjects
+		# don't auto-secede but become much harder to hold; the player has to
+		# negotiate releases or weather the LD-driven independence pressure.
+		# Direct-state release (where applicable) already happens via the
+		# event-204/201 flavor branches and the existing form_decolonized
+		# pathway.
+		every_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
+			add_modifier = {
+				name = colonial_collapse_subject_unrest_modifier
+				days = very_long_modifier_time
+				is_decaying = no
+			}
+			change_relations = { country = ROOT value = -50 }
+		}
+
+		# Clean up persistent JE state. The collapse_subject_unrest_modifier
+		# applied just above is intentionally preserved (failure consequence)
+		# -- the cleanup helper removes the bar-band LD modifiers but not the
+		# failure aftershock.
+		colonial_empire_je_cleanup_effect = yes
 	}
 
 	on_monthly_pulse = {
@@ -250,6 +288,18 @@
 						months = 2
 					}
 				}
+				# Subject-state branch: cultural assimilation policy also
+				# disrupts qualifying subjects' colonial states.
+				every_subject_or_below = {
+					limit = { is_qualifying_colonial_subject = yes }
+					every_scope_state = {
+						limit = { is_unintegrated_culturally_distinct_state = yes }
+						add_modifier = {
+							name = colonial_assimilation_disruption_modifier
+							months = 2
+						}
+					}
+				}
 			}
 
 			# Phase modifiers based on current bar value (five status bands)
@@ -286,6 +336,49 @@
 			else = {
 				je:je_colonial_empire = { add_modifier = { name = colonial_empire_solidified_modifier } }
 			}
+
+			# --- Subject-side LD pressure ---
+			# Bar status pushes Liberty Desire onto qualifying colonial
+			# subjects. Strained band -> mild LD bump; Crumbling -> strong;
+			# Collapsing -> severe. Stable / Solidified -> no LD pressure.
+			# Pressure is one-way: subjects' LD does not feed back into the
+			# bar (the bar is driven by GP condemnation, governance, and
+			# overreach terms in the bar's monthly_progress script).
+			every_subject_or_below = {
+				limit = { is_qualifying_colonial_subject = yes }
+				remove_modifier = colonial_overlord_strained_subject_ld_modifier
+				remove_modifier = colonial_overlord_crumbling_subject_ld_modifier
+				remove_modifier = colonial_overlord_collapsing_subject_ld_modifier
+			}
+			if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 20 }
+				}
+				every_subject_or_below = {
+					limit = { is_qualifying_colonial_subject = yes }
+					add_modifier = { name = colonial_overlord_collapsing_subject_ld_modifier }
+				}
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 40 }
+				}
+				every_subject_or_below = {
+					limit = { is_qualifying_colonial_subject = yes }
+					add_modifier = { name = colonial_overlord_crumbling_subject_ld_modifier }
+				}
+			}
+			else_if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" < 65 }
+				}
+				every_subject_or_below = {
+					limit = { is_qualifying_colonial_subject = yes }
+					add_modifier = { name = colonial_overlord_strained_subject_ld_modifier }
+				}
+			}
+			# Stable (>=65) and Solidified (>=90): no LD pressure (modifiers
+			# already removed at the top of this block).
 
 			# Apply radicalism to civil rights movement specifically (not all movements)
 			every_political_movement = {

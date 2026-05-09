@@ -360,3 +360,48 @@ form_decolonized_country = { # scope is capital state of new country, must be a 
 		}
 	}
 }
+
+# Clean up state attached to the metropole, civil-rights movements, and
+# qualifying colonial subjects when je_colonial_empire ends (complete or fail).
+# The bar-band modifiers attached to the JE itself disappear with the JE; the
+# items below survive the JE's lifetime and need explicit removal.
+#
+# Called by both on_complete and on_fail. The on_fail callsite preserves
+# colonial_collapse_subject_unrest_modifier (applied separately, intentionally
+# permanent) -- this helper does not touch that modifier.
+#
+# Scope: country (the metropole).
+colonial_empire_je_cleanup_effect = {
+	# Path-tracking and total-duration variables
+	remove_variable = colonial_invest_months
+	remove_variable = colonial_garrison_months
+	remove_variable = colonial_assimilate_months
+	remove_variable = colonial_solidified_months
+	remove_variable = colonial_je_total_months
+
+	# Country-scope policy modifiers from the three policy buttons. If any
+	# button was active at end-of-JE, its modifier persisted after the JE
+	# vanished; clear them so the country reverts to neutral.
+	remove_modifier = colonial_development_investment_modifier
+	remove_modifier = colonial_military_garrison_modifier
+	remove_modifier = colonial_cultural_assimilation_modifier
+
+	# Civil-rights movement radicalism modifiers reapplied each pulse while
+	# the JE was active. Remove from any civil-rights movement.
+	every_political_movement = {
+		limit = { is_political_movement_type = movement_civil_rights }
+		remove_modifier = colonial_pressure_movement_radicalism
+		remove_modifier = colonial_crumbling_movement_radicalism
+	}
+
+	# Subject-side LD pressure modifiers (bar-band driven). Remove from
+	# every qualifying colonial subject; the failure spike modifier
+	# (colonial_collapse_subject_unrest_modifier) is intentionally NOT in
+	# this list.
+	every_subject_or_below = {
+		limit = { is_qualifying_colonial_subject = yes }
+		remove_modifier = colonial_overlord_strained_subject_ld_modifier
+		remove_modifier = colonial_overlord_crumbling_subject_ld_modifier
+		remove_modifier = colonial_overlord_collapsing_subject_ld_modifier
+	}
+}
