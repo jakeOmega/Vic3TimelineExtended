@@ -11,6 +11,7 @@
 
 	modifier = {
 		country_institution_ministry_of_science_max_investment_add = 1
+		country_st_res_small_arms_decay_add = -0.002
 	}
 
 	unlocking_technologies = {
@@ -57,6 +58,7 @@ quantum_computing = {
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
 		country_covert_operation_slot_add = 1
+		country_st_res_tanks_decay_add = -0.003
 	}
 
 	ai_weight = {
@@ -150,6 +152,10 @@ synthetic_biology = {
 		modern_material_science
 	}
 
+	modifier = {
+		country_st_res_artillery_decay_add = -0.002
+	}
+
 	ai_weight = {
 		value = 1
 	}
@@ -191,6 +197,7 @@ space_militarization = {
 		country_space_race_max_funding_add = 1
 		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
+		country_st_res_aeroplanes_decay_add = -0.005
 	}
 
 	ai_weight = {
@@ -217,6 +224,7 @@ swarm_technology = {
 		ship_hull_damage_mult = 0.10
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.20
 		character_command_limit_mult = 0.10
+		country_st_res_tanks_decay_add = -0.005
 	}
 
 	ai_weight = {

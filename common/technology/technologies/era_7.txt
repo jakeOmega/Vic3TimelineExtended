@@ -52,6 +52,7 @@ advanced_military_aircraft = {
 	}
 
 	modifier = {
+		country_st_res_aeroplanes_decay_add = 0.003
 	}
 
 	ai_weight = {

@@ -1039,6 +1039,13 @@ law_minority_rights_violent_hostility = {
 		# Homeland system: violence drives minority populations below removal threshold
 		state_homeland_removal_threshold_add = 0.10
 		state_homeland_change_speed_mult = 0.25
+
+		# Colonial empire (je_colonial_empire): cruelty laws stabilize garrison
+		# but undermine investment and assimilation. The bar drains heavily.
+		country_colonial_stability_drift_add = -0.7
+		country_colonial_garrison_effectiveness_add = 0.7
+		country_colonial_invest_effectiveness_add = -0.3
+		country_colonial_assim_effectiveness_add = -0.6
 	}
 
 	acceptance_modifier = {
@@ -1131,6 +1138,13 @@ law_minority_rights_ghettoization = {
 		country_acceptance_shared_religious_trait_add = -1
 		country_acceptance_shared_religious_trait_group_add = -3
 		country_acceptance_no_shared_religious_trait_add = -5
+
+		# Colonial empire (je_colonial_empire): cruelty laws stabilize garrison,
+		# undermine investment and assimilation.
+		country_colonial_stability_drift_add = -0.5
+		country_colonial_garrison_effectiveness_add = 0.7
+		country_colonial_invest_effectiveness_add = -0.3
+		country_colonial_assim_effectiveness_add = -0.6
 	}
 
 	acceptance_modifier = {
@@ -1235,6 +1249,10 @@ law_minority_rights_cultural_assimilation = {
 		# Homeland system: forced assimilation erases minority homelands faster
 		state_homeland_removal_threshold_add = 0.05
 		state_homeland_change_speed_mult = 0.25
+
+		# Colonial empire (je_colonial_empire): matching minority law amplifies the assimilation policy
+		country_colonial_stability_drift_add = -0.1
+		country_colonial_assim_effectiveness_add = 0.5
 	}
 
 	acceptance_modifier = {
@@ -1335,6 +1353,9 @@ law_minority_rights_discrimination = {
 		country_acceptance_shared_religious_trait_add = -1
 		country_acceptance_shared_religious_trait_group_add = -3
 		country_acceptance_no_shared_religious_trait_add = -5
+
+		# Colonial empire (je_colonial_empire): discrimination breeds resentment
+		country_colonial_stability_drift_add = -0.3
 	}
 
 	acceptance_modifier = {
@@ -1523,6 +1544,13 @@ law_minority_rights_protection = {
 		# Homeland system: legal protections help minority homelands persist
 		state_homeland_removal_threshold_add = -0.05
 		state_homeland_change_speed_mult = -0.15
+
+		# Colonial empire (je_colonial_empire): pluralist law cripples garrison,
+		# helps investment land, dilutes the assimilation push.
+		country_colonial_stability_drift_add = 0.3
+		country_colonial_garrison_effectiveness_add = -0.7
+		country_colonial_invest_effectiveness_add = 0.3
+		country_colonial_assim_effectiveness_add = -0.5
 	}
 
 	acceptance_modifier = {
@@ -1608,6 +1636,13 @@ law_minority_rights_affirmative_action = {
 		state_homeland_creation_threshold_add = 0.05
 		state_homeland_removal_threshold_add = -0.10
 		state_homeland_change_speed_mult = -0.25
+
+		# Colonial empire (je_colonial_empire): pluralist law cripples garrison,
+		# helps investment land, dilutes the assimilation push.
+		country_colonial_stability_drift_add = 0.5
+		country_colonial_garrison_effectiveness_add = -0.7
+		country_colonial_invest_effectiveness_add = 0.3
+		country_colonial_assim_effectiveness_add = -0.5
 	}
 
 	acceptance_modifier = {
@@ -2630,6 +2665,7 @@ law_national_bank = {
 
 	modifier = {
 		country_institution_national_bank_max_investment_add = 2
+		country_banking_intervention_max_add = 1
 	}
 
 	ai_enact_weight_modifier = {
@@ -3368,6 +3404,11 @@ law_neocolonialism = {
 	institution_modifier = {
 		state_colony_growth_creation_factor = -0.1
 		country_economic_dependence_leverage_gain_mult = 0.1
+	}
+
+	modifier = {
+		# Colonial empire (je_colonial_empire): formal empire abandoned -- bar drains
+		country_colonial_stability_drift_add = -0.3
 	}
 
 	ai_will_do = {

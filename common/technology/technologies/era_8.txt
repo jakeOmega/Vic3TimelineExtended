@@ -33,6 +33,7 @@ advanced_materials_armor = {
 	}
 
 	modifier = {
+		country_st_res_tanks_decay_add = 0.003
 	}
 
 	ai_weight = {
@@ -231,6 +232,7 @@ supersonic_aircraft = {
 		unit_combat_unit_type_jet_powered_fighters_offense_mult = 0.25
 		country_weekly_innovation_max_add = 50
 		state_building_airport_max_level_add = 1
+		country_st_res_aeroplanes_decay_add = 0.005
 	}
 
 	unlocking_technologies = {
@@ -257,6 +259,7 @@ stealth_technology = {
 	modifier = {
 		country_prestige_mult = 0.1
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
+		country_st_res_aeroplanes_decay_add = 0.003
 	}
 
 	ai_weight = {
@@ -437,6 +440,7 @@ precision_guided_munitions = {
 		state_building_military_base_max_level_add = 1
 		ship_hull_damage_mult = 0.10
 		ship_accuracy_mult = 0.05
+		country_st_res_artillery_decay_add = -0.001
 	}
 
 	ai_weight = {

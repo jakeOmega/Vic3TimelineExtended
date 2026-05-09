@@ -3,13 +3,17 @@
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		generative_ai
 		programmable_matter
 		autonomous_vehicles
 	}
-	
+
+	modifier = {
+		country_st_res_tanks_decay_add = -0.006
+	}
+
 	ai_weight = {
 		value = 5
 	}
@@ -21,8 +25,8 @@ advanced_nanofabrication = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		synthetic_biology
 		additive_manufacturing
 	}
@@ -30,8 +34,9 @@ advanced_nanofabrication = {
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
 		country_institution_ministry_of_the_environment_max_investment_add = 1
+		country_st_res_aeroplanes_decay_add = -0.006
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -43,15 +48,16 @@ molecular_assemblers = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		advanced_nanofabrication
 	}
-	
+
 	modifier = {
 		country_max_weekly_construction_progress_add = 200
+		country_st_res_small_arms_decay_add = -0.002
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -63,11 +69,11 @@ quantum_materials = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		quantum_computing
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -79,8 +85,8 @@ orbital_manufacturing = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		smart_grids
 		additive_manufacturing
 	}
@@ -89,29 +95,32 @@ orbital_manufacturing = {
 		state_building_airport_max_level_add = 2
 		country_space_race_max_funding_add = 2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
 }
 
 programmable_matter = {
-	# Programmable Matter PM for Furniture and Textile Factories, Programmable Plastics 
+	# Programmable Matter PM for Furniture and Textile Factories, Programmable Plastics
 	# PM for Glassworks, Bespoke Alloys PM for Steel Mills, Advanced Sel-Replicating Assemblers
 	# PM for Advanced Material Fabricator, Programmable Food Synthesis PM for Food Industries
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = production
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		molecular_assemblers
 		quantum_materials
 	}
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 75
+		country_st_res_aeroplanes_decay_add = -0.007
+		country_st_res_tanks_decay_add = -0.006
+		country_st_res_artillery_decay_add = -0.002
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -125,8 +134,8 @@ compact_fusion_reactors = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		fusion_power
 		directed_energy_weapons
 	}
@@ -141,8 +150,9 @@ compact_fusion_reactors = {
 		ship_max_distance_to_port_mult = 0.50
 		ship_supply_efficiency_mult = 0.20
 		ship_movement_speed_mult = 0.05
+		country_st_res_aeroplanes_decay_add = -0.007
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -154,8 +164,8 @@ fusion_batteries = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		compact_fusion_reactors
 	}
 
@@ -169,7 +179,7 @@ fusion_batteries = {
 		ship_movement_speed_mult = 0.10
 		ship_supply_efficiency_mult = 0.20
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -180,12 +190,12 @@ space_elevator = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		asteroid_mining
 		compact_fusion_reactors
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -196,8 +206,8 @@ orbital_weapon_platforms = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		space_militarization
 		asteroid_mining
 	}
@@ -208,7 +218,7 @@ orbital_weapon_platforms = {
 		state_building_barrack_max_level_add = 200
 		country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -219,11 +229,11 @@ space_based_solar_power = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		quantum_communications
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -234,12 +244,12 @@ antimatter_production = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = military
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		fusion_power
 		quantum_communications
 	}
-	
+
 	modifier = {
 		building_aerospace_industry_throughput_add = 0.25
 		military_formation_army_movement_speed_mult = 1
@@ -247,7 +257,7 @@ antimatter_production = {
 		ship_critical_hit_chance_add = 0.10
 		ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = 0.30
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -257,12 +267,12 @@ biological_immortality = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		biohacking_and_human_augmentation
 		personalized_medicine
 	}
-	
+
 	modifier = {
 		building_economy_of_scale_level_cap_add = 10
 		country_company_throughput_bonus_add = 0.25
@@ -270,7 +280,7 @@ biological_immortality = {
 		character_health_add = 100
 		state_arable_land_mult = 0.25
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -281,8 +291,8 @@ space_colonization = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		biohacking_and_human_augmentation
 		lab-grown_food
 	}
@@ -291,7 +301,7 @@ space_colonization = {
 		country_space_race_max_funding_add = 2
 		country_space_race_progress_add = 0.2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -303,12 +313,12 @@ telepathic_communities = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		neural_lace
 		mental_health_awareness
 	}
-	
+
 	modifier = {
 		country_influence_mult = 1
 		country_max_companies_add = 2
@@ -320,7 +330,7 @@ telepathic_communities = {
 		country_covert_operation_efficiency_mult = 0.20
 		character_coup_strength_mult = -0.20
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -330,12 +340,12 @@ mind_backups = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		biological_immortality
 		neural_lace
 	}
-	
+
 	modifier = {
 		building_economy_of_scale_level_cap_add = 10
 		country_max_weekly_construction_progress_add = 50
@@ -343,7 +353,7 @@ mind_backups = {
 		character_health_add = 10000
 		state_literacy_growth_add = 0.0002
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -355,11 +365,11 @@ post-scarcity_economy = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		universal_basic_income
 	}
-	
+
 	modifier = {
 		country_sol_expectations_target_add = 0.5
 		country_max_weekly_construction_progress_add = 50
@@ -372,7 +382,7 @@ post-scarcity_economy = {
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		country_voting_power_mult = 0.2
 	}
-	
+
 	ai_weight = {
 		value = 1
 	}
@@ -383,8 +393,8 @@ neural_lace = {
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
-	
-	unlocking_technologies = {	
+
+	unlocking_technologies = {
 		biohacking_and_human_augmentation
 	}
 

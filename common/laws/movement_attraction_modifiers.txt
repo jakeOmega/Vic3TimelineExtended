@@ -1,39 +1,9 @@
 ﻿# Movement attraction modifiers added to vanilla laws.
 #
-# These INJECTs only target VANILLA laws — contributions to mod-defined laws
-# live inline in their definitions in extra_laws.txt for load-order safety.
-#
 # Magnitudes calibrated against vanilla labour-association laws (which use
 # 0.05–0.20 range for state_pop_support_movement_*_mult).
-
-# =============================================================================
-# Civil Rights Movement
-# Pulled by moderately discriminatory citizenship laws — the band where
-# domestic activism is plausible. Outright ethnostate / racial exclusion
-# regimes suppress the movement rather than feeding it; multicultural laws
-# satisfy the demand and reduce the pull.
-# =============================================================================
-
-INJECT:law_national_supremacy = {
-	modifier = {
-		state_pop_support_movement_civil_rights_mult = 0.15
-	}
-}
-
-INJECT:law_racial_segregation = {
-	modifier = {
-		state_pop_support_movement_civil_rights_mult = 0.2
-	}
-}
-
-INJECT:law_cultural_exclusion = {
-	modifier = {
-		state_pop_support_movement_civil_rights_mult = 0.1
-	}
-}
-
-INJECT:law_multicultural = {
-	modifier = {
-		state_pop_support_movement_civil_rights_mult = -0.2
-	}
-}
+#
+# Citizenship laws (national_supremacy / racial_segregation / cultural_exclusion
+# / multicultural) are mod-REPLACEd in modified.txt — their civil-rights
+# attraction contributions live inline with their other modifier lines there.
+# This file holds INJECTs that target purely-vanilla laws (no REPLACE conflict).

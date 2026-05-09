@@ -243,6 +243,7 @@ unmanned_aerial_vehicles = {
 		ship_screening_add = 50
 		character_battle_condition_aggressive_maneuver_mult = 0.25
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
+		country_st_res_aeroplanes_decay_add = 0.004
 	}
 
 	ai_weight = {
@@ -292,6 +293,7 @@ network_centric_warfare = {
 		character_advancement_speed_mult = 0.15
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
+		country_st_res_tanks_decay_add = 0.005
 	}
 
 	unlocking_technologies = {
@@ -361,6 +363,7 @@ advanced_body_armor = {
 
 	modifier = {
 		country_institution_ministry_of_war_max_investment_add = 1
+		country_st_res_small_arms_decay_add = -0.001
 	}
 
 	ai_weight = {
@@ -388,6 +391,7 @@ rapid_deployment_forces = {
 		country_rapid_deploy_pb_principles_bool = yes
 		character_battle_condition_rapid_advance_mult = 1.0
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
+		country_st_res_tanks_decay_add = 0.005
 	}
 
 	ai_weight = {
@@ -417,6 +421,10 @@ globalization = {
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_globalization_pb_principles_bool = yes
 		country_globalization_pb_principles_bool = yes
+
+		# Colonial empire (je_colonial_empire): globalization makes empire
+		# unsustainable -- decolonization becomes irresistible.
+		country_colonial_stability_drift_add = -1.5
 	}
 
 	ai_weight = {
@@ -489,6 +497,10 @@ knowledge_economy = {
 		country_space_race_max_funding_add = 1
 		country_knowledge_economy_pb_principles_bool = yes
 		state_literacy_growth_add = 0.0001
+
+		# Colonial empire (je_colonial_empire): information era makes empire
+		# harder to suppress; international scrutiny rises.
+		country_colonial_stability_drift_add = -0.75
 	}
 
 	ai_weight = {

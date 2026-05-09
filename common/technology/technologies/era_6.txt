@@ -398,6 +398,7 @@ motorized_artillery = {
 	modifier = {
 		country_motorized_artillery_pb_principles_bool = yes
 		country_motorized_artillery_pb_principles_bool = yes
+		country_st_res_artillery_decay_add = -0.001
 	}
 
 	unlocking_technologies = {
@@ -417,6 +418,10 @@ semiautomatic_rifle = {
 
 	unlocking_technologies = {
 		bolt_action_rifles
+	}
+
+	modifier = {
+		country_st_res_small_arms_decay_add = -0.001
 	}
 
 	ai_weight = {

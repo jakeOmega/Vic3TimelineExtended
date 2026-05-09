@@ -14,6 +14,8 @@
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
 		state_literacy_growth_add = 0.0001
+		country_st_res_aeroplanes_decay_add = -0.006
+		country_st_res_tanks_decay_add = -0.004
 	}
 
 	ai_weight = {
@@ -55,6 +57,7 @@ additive_manufacturing = {
 
 	modifier = {
 		country_max_weekly_construction_progress_add = 25
+		country_st_res_small_arms_decay_add = -0.002
 	}
 
 	ai_weight = {
@@ -193,6 +196,7 @@ directed_energy_defenses = {
 	modifier = {
 		country_nuclear_weapon_defense_chance_add = 0.5
 		country_space_race_max_funding_add = 1
+		country_st_res_aeroplanes_decay_add = -0.004
 	}
 
 	ai_weight = {
