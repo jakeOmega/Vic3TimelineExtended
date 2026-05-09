@@ -42,6 +42,7 @@ from path_constants import (
     vanilla_source_repo_path,
     mod_loaded_docs_path,
     game_logs_path,
+    vic3_modding_digests_path,
 )
 
 # Annotator registry — importing pm_balance_lib triggers registration of the
@@ -5377,6 +5378,9 @@ POST_LOAD_GENERATORS = [
     ("event_magnitude_audit",         "event_magnitude_audit"),
     ("modifier_visibility_audit",     "modifier_visibility_audit"),
     ("kill_character_audit",          "kill_character_audit"),
+    ("loc_coverage_audit",            "loc_coverage_audit"),
+    ("localization_accessor_audit",   "localization_accessor_audit"),
+    ("mod_structure_audit",           "mod_structure_audit"),
     ("gen_event_inventory",           "gen_event_inventory"),
 ]
 
@@ -5436,6 +5440,71 @@ def _run_post_load_generators(mod_state):
             f"[post-load WARN] {len(_post_load_warnings)} audit(s) surfaced "
             f"actionable issues: {labels}"
         )
+
+
+_MODDING_DIGESTS_REMOTE = "https://github.com/Victoria-3-Modding-Co-op/Modding-Digests.git"
+
+
+def _ensure_modding_digests_fresh() -> None:
+    """Clone (if missing) or fast-forward the Modding-Digests checkout.
+
+    Called once per process from main(); /reload deliberately does not retrigger.
+    All git/network failures are warnings — the server starts regardless. Set
+    VIC3_SKIP_DIGESTS_FETCH=1 to skip entirely.
+    """
+    if os.environ.get("VIC3_SKIP_DIGESTS_FETCH"):
+        logger.info("[digests] skipped via VIC3_SKIP_DIGESTS_FETCH")
+        return
+    if not vic3_modding_digests_path:
+        logger.info(
+            "[digests] vic3_modding_digests_path not configured; skipping fetch. "
+            "Set it via paths.local.json (run scripts/setup.py) or $VIC3_MODDING_DIGESTS_REPO."
+        )
+        return
+    target = Path(vic3_modding_digests_path)
+
+    def _short_sha() -> str:
+        try:
+            r = subprocess.run(
+                ["git", "-C", str(target), "rev-parse", "--short", "HEAD"],
+                capture_output=True, text=True, timeout=10, check=True,
+            )
+            return r.stdout.strip()
+        except (subprocess.SubprocessError, OSError):
+            return "?"
+
+    t0 = time.monotonic()
+    try:
+        if not target.exists():
+            logger.info(f"[digests] cloning {_MODDING_DIGESTS_REMOTE} -> {target}")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            subprocess.run(
+                ["git", "clone", "--depth", "50", _MODDING_DIGESTS_REMOTE, str(target)],
+                timeout=60, check=True, capture_output=True, text=True,
+            )
+            logger.info(f"[digests] cloned at {_short_sha()} ({time.monotonic() - t0:.1f}s)")
+            return
+        if not (target / ".git").exists():
+            logger.warning(
+                f"[digests] {target} exists but is not a git repo; skipping fetch"
+            )
+            return
+        subprocess.run(
+            ["git", "-C", str(target), "fetch", "--quiet", "origin", "main"],
+            timeout=30, check=True, capture_output=True, text=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(target), "merge", "--ff-only", "--quiet", "origin/main"],
+            timeout=30, check=True, capture_output=True, text=True,
+        )
+        logger.info(f"[digests] up to date at {_short_sha()} ({time.monotonic() - t0:.1f}s)")
+    except subprocess.TimeoutExpired as exc:
+        logger.warning(f"[digests] git operation timed out ({exc.cmd}); continuing")
+    except subprocess.CalledProcessError as exc:
+        stderr = (exc.stderr or "").strip().splitlines()[-1:] or ["(no stderr)"]
+        logger.warning(f"[digests] git failed (exit {exc.returncode}): {stderr[0]}; continuing")
+    except OSError as exc:
+        logger.warning(f"[digests] git not invokable: {exc}; continuing")
 
 
 def _load_mod_state():
@@ -5522,6 +5591,7 @@ def main():
     import atexit
     atexit.register(_cleanup_pid_file)
 
+    _ensure_modding_digests_fresh()
     _load_mod_state()
 
     try:

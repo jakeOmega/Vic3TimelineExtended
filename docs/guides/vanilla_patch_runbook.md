@@ -5,6 +5,7 @@ End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria
 ## 0. Prerequisites
 
 - Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history).
+- [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) clone at `vic3_modding_digests_path` (`~/src/Modding-Digests` by default). The mod state server auto-pulls this on cold start; if absent, run `.venv/bin/python mod_state_server.py` once and it'll clone. The digests short-circuit much of § 3.
 - Mod state server runnable: `python3 mod_state_server.py` (use `python3`, not `python`, on this system).
 - The mod loads cleanly on the prior vanilla (i.e. before starting the migration, the mod is in a known-good state).
 
@@ -30,12 +31,21 @@ Find the commit that bumped to the new version (e.g. "v1.13"). Its parent is the
 
 ## 3. Engine-doc diff
 
-Compare `docs/modifiers.log`, `docs/effects.log`, `docs/triggers.log`, `docs/on_actions.log` between `OLD_REF` and `NEW_REF` in vanilla. Categorize:
+**Start here:** open `<vic3_modding_digests_path>/<NEW_VERSION>/changes_breaking.md` and `changes_script_docs.md` (e.g. `~/src/Modding-Digests/1.13.0/`). They contain pre-computed Removed/Added/Renamed lists for scopes, effects, triggers, event targets, iterators, on-actions, plus narrative breaking-change writeups for each major mechanic. The categories below map onto the digest's section headings — let them do the heavy lifting first.
+
+Fall back to manually diffing `OLD_REF`/`NEW_REF` in `~/src/vic3` only when:
+- The new vanilla version doesn't yet have a digest (typical for early hotfixes — check `~/src/Modding-Digests` after `mod_state_server` startup, since it's auto-pulled).
+- You need a class of identifier the digest doesn't enumerate (e.g. script-value renames, modifier-type-definition shape changes).
+- A digest entry needs verification against the actual log file (`<vanilla_snapshot_docs_path>/<modifiers|effects|triggers|on_actions>.log`).
+
+Manual-diff workflow when needed: compare `docs/modifiers.log`, `docs/effects.log`, `docs/triggers.log`, `docs/on_actions.log` between `OLD_REF` and `NEW_REF` in vanilla. Categorize:
 
 - **Removed**: identifiers that existed in OLD but not NEW. These break the mod hardest. Examples from 1.13: `country_convoys_capacity_*`, `unit_navy_*`, `unit_blockade_*`, `state_building_naval_base_max_level_add`, `military_formation_movement_speed_mult`, `is_ruler`/`is_heir` triggers, `country_max_declared_interests_*`.
 - **Renamed**: re-named pairs (e.g. `has_role` → `has_role_of_type`). Identify by name similarity.
 - **Semantics changed**: same name, different meaning. Watch for `relative_*` triggers and similar.
 - **Added**: useful new modifiers/effects/triggers the mod might want to leverage.
+
+The shell helpers in `<vic3_modding_digests_path>/script/` (`diff-modifiers.sh`, `diff-documentation.sh`) are the same ones the upstream uses to generate the digests — handy when running against a vanilla version not yet covered.
 
 You can use the mod-state server validator as a gating signal: after preliminary edits, `curl http://localhost:8950/validate/engine-coverage` returns the modifier names the mod uses that are no longer recognized.
 

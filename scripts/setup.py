@@ -88,6 +88,14 @@ PATH_SPECS = [
         True,
         lambda p: Path(p).exists(),
     ),
+    (
+        "vic3_modding_digests_path",
+        "Modding-Digests local clone (per-vanilla-patch modder change digests; auto-cloned on first server start)",
+        "VIC3_MODDING_DIGESTS_REPO",
+        True,
+        # Path may not exist yet — server clones it on first start.
+        lambda p: True,
+    ),
 ]
 
 

@@ -17,7 +17,10 @@ RuntimeError with a clear pointer to `python3 scripts/setup.py`.
 
 Adding a new path constant: pick an env var name (VIC3_*), add it to
 DEFAULT_KEYS below, extend the autodetect logic in scripts/_path_detect.py
-if useful, and assign the constant via `_resolve(...)` further down.
+if useful, and assign the constant via `_resolve(...)` further down. For
+external resources that not every contributor will have configured (e.g.
+optional reference checkouts), pass `optional=True` so `_resolve` returns
+None on failure instead of raising at import time.
 """
 from __future__ import annotations
 
@@ -59,8 +62,9 @@ def _autodetect() -> dict:
     return _AUTODETECTED
 
 
-def _resolve(key: str, env_var: Optional[str] = None) -> str:
-    """Return the resolved value for `key`, or raise RuntimeError."""
+def _resolve(key: str, env_var: Optional[str] = None, optional: bool = False) -> Optional[str]:
+    """Return the resolved value for `key`. Raises RuntimeError unless `optional=True`,
+    in which case unresolved keys return None."""
     if env_var:
         v = os.environ.get(env_var)
         if v:
@@ -70,6 +74,8 @@ def _resolve(key: str, env_var: Optional[str] = None) -> str:
     auto = _autodetect().get(key)
     if auto:
         return auto
+    if optional:
+        return None
     raise RuntimeError(
         f"Could not resolve path '{key}'. "
         f"Set it in {_LOCAL.name}"
@@ -97,3 +103,10 @@ vanilla_docs_path = _resolve("vanilla_docs_path", "VIC3_VANILLA_DOCS_RUNTIME")
 mod_loaded_docs_path = vanilla_docs_path  # alias; same path, clearer intent
 
 game_logs_path = _resolve("game_logs_path", "VIC3_GAME_LOGS")
+
+# Optional: per-vanilla-patch modder change digests
+# (https://github.com/Victoria-3-Modding-Co-op/Modding-Digests). Auto-pulled
+# on cold start by mod_state_server.py when set. None when unconfigured.
+vic3_modding_digests_path: Optional[str] = _resolve(
+    "vic3_modding_digests_path", "VIC3_MODDING_DIGESTS_REPO", optional=True
+)

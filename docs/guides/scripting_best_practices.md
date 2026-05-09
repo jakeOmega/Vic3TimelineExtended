@@ -338,6 +338,10 @@ state_pop_support_movement_<name>_mult = {
 - **`every_scope_building` + `type = bt:building_X` may error.** "Event target link 'type' returned an invalid object" floods the error log when `every_scope_building` iterates buildings and the `limit = { type = bt:X }` is evaluated. Use the trigger `is_building_type = building_X` instead — that's the building-scope trigger vanilla uses (e.g., `je_values.txt`'s `every_scope_building` over barracks). The `type = bt:X` form does work in some scope chains but is fragile; prefer the trigger.
 - **Treaty article `possible` does NOT bind `scope:source_country`** even though `scope:other_country` IS bound there. Vanilla puts source-side checks (duplicate-prevention against the source country's existing treaties) in `can_ratify`, not `possible`. The error `Undefined event target 'source_country'` traces to a scope:source_country read inside a treaty article's `possible` block — move it to `can_ratify`.
 - **`is_diplomatic_play_committed_participant = yes`** is the country-scope trigger for "I'm currently in a diplomatic play." There is no `involvement = involved_in_play` sub-trigger inside `any_diplomatic_play = { ... }` — that's invalid syntax that produces `Unknown trigger type: involvement`.
+- **`has_diplomatic_pact = { type = alliance }` PostValidate-fails — alliances are treaty articles post-Sphere of Influence, not pacts.** Valid `has_diplomatic_pact` types are the legacy bilateral pacts: `rivalry`, `embargo`, `damage_relations`, `increase_relations`, `support_separatism`, `defensive_pact`, `puppet`, `colony`, etc. (vanilla actions in `common/diplomatic_actions/`). For alliances, use `any_scope_treaty = { binds = scope:other_country  any_scope_article = { has_type = alliance } }` from country scope. Same pattern in vanilla `00_player_objectives_great_game.txt`, `00_hispaniola_buttons.txt`. Symptom: `PostValidate of trigger 'has_diplomatic_pact' returned false` at the trigger line, with no parse error — the engine accepts the syntax and only PostValidates after parse.
+- **`has_journal_entry = je_X` PostValidates that `je_X` exists in the JE database.** Referencing a nonexistent JE key (typo, mod removal, vanilla rename) yields `PostValidate of trigger 'has_journal_entry' returned false` at the trigger line. Vanilla unification JEs are `je_german_unification`, `je_risorgimento`, `je_reunify_china` — there is no `je_unite_germany` or `je_unite_italy`. Validate the key against `common/journal_entries/` before referencing.
+- **Event-target / scope names need `scope:` prefix when used as a scope-switcher in war_goal/diplomatic_action contexts.** Bare `creator_country = { ... }` in a wargoal's `possible` or `on_enforced` parses as an unknown trigger/effect — comments listing the available scopes (e.g. `# scopes: root = holder, creator_country, diplomatic_play, ...`) document the *event targets* in scope, not bareword scope-switchers. Correct: `scope:creator_country = { ... }`. Vanilla wargoal files only ever reference `creator_country` in those scope comments, never as a bare block.
+- **Scripted triggers that read `scope:X` internally must be called with `= yes`, not `= scope:X`.** A scripted trigger defined as `is_irredentist_candidate_for = { scope:target_country = { ... } }` already reads `scope:target_country` from the *calling* scope — calling it as `is_irredentist_candidate_for = scope:target_country` produces `Malformed token: scope:target_country` because the parser doesn't accept event-target tokens as scripted-trigger arguments. Correct: `is_irredentist_candidate_for = yes`. The vanilla AI-strategy callsite shape is the reference (`other.txt` in mod uses the right form).
 
 ## Scope Chain Issues with `add_modifier` + Script Values
 
@@ -531,6 +535,53 @@ Both can store scope references, but they differ in persistence and loc access:
 - **Character in variable:** `set_variable = { name = expedition_leader_storage_var value = ... }` → `[ROOT.Var('expedition_leader_storage_var').GetCharacter.GetFullName]` (expeditions).
 - **Numeric display:** `[Country.MakeScope.Var('bonapartist_progress_from_characters').GetValue\|+=]` (agitators_1_l_english.yml).
 - **Scope in pulse for tooltip:** `save_scope_as = expulsion_destination_state` in `on_monthly_pulse` → `[SCOPE.sState('expulsion_destination_state').GetName]` in `custom_tooltip` within the same effect (03_russia.txt circassian expulsion).
+
+## Localization Accessor Chains: Magic Scopes Are Per-Rendering-Context
+
+`[X.Y.Z]` accessor chains in `localization/english/*.yml` are validated against the *rendering context* of the loc key. The first step (the magic scope) is context-specific; using the wrong one renders an empty string and the engine emits **no debug.log entry** — the bug is only visible by hovering the in-game UI. Vanilla magic scopes per context (verified against vanilla loc samples; see `localization_accessor_audit.py:_MAGIC_SCOPES_BY_CONTEXT`):
+
+- **Events** (`<namespace>.<n>.<suffix>` keys): `[ROOT.…]`, `[SCOPE.sCountry('name').…]`, `[SCOPE.sState('name').…]`, `[SCOPE.sCharacter('name').…]`, `[SCOPE.gsInterestGroup('name').…]`, plus uppercase magic scopes like `[STATE.…]`, `[CHARACTER.…]`, `[CULTURE.…]`, `[POP.…]`, `[BUILDING.…]`, `[MARKET.…]`, `[GOODS.…]`, `[POWER_BLOC.…]`, etc.
+- **Diplomatic actions** (action name and proposal/notification descs): `[COUNTRY.GetName]` (the actor) and `[TARGET_COUNTRY.GetName]` (the recipient). NOT `[SCOPE.GetTargetCountry.GetName]` — that's a draft error that silently drops.
+- **War goals** (`war_goal_<x>(_desc|_sway_desc)?`): `[WAR_GOAL_DRAFT.GetTarget.GetName]`, `[WAR_GOAL_DRAFT.GetHolder.GetName]`, `[WAR_GOAL_DRAFT.GetTargetState.GetName]`.
+- **Treaty articles**: `[FIRST_COUNTRY.…]`, `[SECOND_COUNTRY.…]`.
+- **Journal entries** (`je_<x>*`): `[JournalEntry.GetGoalProgressValue|D]`, etc.
+- **Always valid**: `[GetPlayer.GetName]`, `[Concept('concept_x', '$fallback$')]`, `[GetDefine('NSomething', 'KEY')]`, `[GetCulture('foo')]`, plus `[concept_X]` direct references and `$X$` substitutions (passed at render time).
+
+**Silent-drop symptom**: a tooltip with missing chunks ("Norway will annex without war.") usually means a chain failed and the renderer chopped at the failure point, eating intermediate text. The engine doesn't log it, so static analysis is the only signal.
+
+**Audit**: `localization_accessor_audit.py` (registered in `mod_state_server.py:POST_LOAD_GENERATORS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass — vanilla loc is the authoritative source for what the engine accepts.
+
+## `relations:` Syntax: `scope:X.relations:root`, Not `relations:scope:X`
+
+The bare-prefix form `relations:scope:target_country >= relations_threshold:amicable` does NOT resolve the saved-scope reference inside a colon-chain — the engine returns a default that silently passes high-threshold checks. The correct vanilla form is to put the country scope on the *left* and use a literal scope reference (`root` / `prev` / etc.) on the right of `relations:`:
+
+- **Wrong (silently misfires):** `relations:scope:target_country >= relations_threshold:amicable`
+- **Right:** `scope:target_country.relations:root >= relations_threshold:amicable`
+- **Also right:** `scope:target_country.relations:prev >= relations_threshold:cordial` (when previous scope is the comparison side)
+
+Vanilla source-of-truth: `common/diplomatic_actions/12_rivalry.txt`, `01_expel_diplomats.txt`, `04_trade_states.txt`, `13_embargo.txt`, `03_violate_sovereignty.txt` — all use `scope:target_country.relations:root` form.
+
+**Symptom**: a relations-band check that always passes regardless of actual relations (action selectable at Poor relations even though the trigger says `>= amicable`); a tooltip asserting "relations are friendly" when they're not. Recent example: voluntary_union proposable against rivals with Poor relations because every `relations:scope:X` line read as "high enough."
+
+## Diplomatic Action `accept_score`: ROOT = Decider, `scope:actor` = Proposer
+
+Inside a diplomatic action's `ai = { accept_score = { … } }`, the scope conventions differ from the action's `possible` / `selectable` / `accept_effect`:
+
+- **`possible`, `selectable`, `accept_effect`, `propose_score`, `will_propose`**: ROOT = actor (proposer); `scope:target_country` = recipient.
+- **`accept_score`**: ROOT = recipient (the country deciding whether to accept); `scope:actor` = proposer; `scope:target_country` is bound to the recipient (i.e., same as ROOT — self-reference, NOT the proposer).
+
+So in `accept_score`, querying relations / attitude / rivalry of the *proposer* requires `scope:actor`, not `scope:target_country`. Vanilla source-of-truth: `04_trade_states.txt` (uses `scope:actor.…` accessors throughout its accept_score). Mistakenly using `scope:target_country` in `accept_score` queries the recipient about itself — relations checks become "recipient's relations with self" which return a default that always passes high-threshold tests.
+
+**Every `add` block in AI scoring (`accept_score` / `propose_score` / `aggression`) must carry a `desc =` tag** so the in-game tooltip shows the breakdown. Without `desc`, the term is invisible and the player sees only the final score (e.g., "+40 acceptance" with no explanation). Vanilla example shape (from `04_trade_states.txt`):
+
+```
+add = {
+    desc = "DIPLOMATIC_ACCEPTANCE_GIVING_AWAY_LAND"
+    value = 100
+}
+```
+
+The `desc` value is a loc key whose string explains what this term contributes. Mod content that omits `desc` produces a hidden term — bare numbers with no breakdown is the worst possible UX for diplomatic acceptance.
 
 ## `random_list` Requires Literal Integer Weights
 
@@ -920,6 +971,7 @@ For events that don't know which milestone they're associated with (generic fail
 
 - **Extract large logic blocks into scripted effects.** Event-triggering logic (weighted random_list with many entries) belongs in `common/scripted_effects/`, not inlined in journal entries.
 - Banking cycle events use `banking_cycle_random_event_effect` in `common/scripted_effects/banking_cycle_effects.txt`.
+- **Event IDs must be `<namespace>.<integer>` — letter suffixes silently collapse to the numeric prefix.** Naming sibling events `irredentism.5a` and `irredentism.5b` produces `Duplicated event ID 'irredentism.5a' found` because the engine's event-ID parser stops at the digit boundary; both register as `irredentism.5`. The error message preserves the typed letter, which makes the bug look like a stale-log artifact when both IDs visibly differ in source. Vanilla never uses letter suffixes — pick distinct integers (`.7`/`.8`) and keep the human-readable "Event 5a/5b" labels in comments and `name = <id>.a/.b` option keys, where letter suffixes ARE valid.
 
 ## Game Rule Lifecycle
 
@@ -1905,6 +1957,27 @@ The same rule applies any time the wrapper key collides with vanilla: e.g. you c
 The cleanest case for `INJECT:` is **adding a field vanilla doesn't already declare** on that entity. No collision semantics to reason about — engine just sees the new field. Example: vanilla's `BHT` and `IDN` country_formation entries don't declare `potential = { ... }`, so `INJECT:BHT = { potential = { NOT = { has_technology_researched = decolonization } } }` cleanly adds visibility gating without any of the duplicate-key risk that re-declaring a field vanilla owns would carry.
 
 When the field you want to extend already exists in vanilla (e.g. you want to *tighten* vanilla's `possible` block by ANDing extra conditions), `INJECT:` is risky — engine semantics on duplicate sibling keys vary by entity type, and you may get last-wins (silently drops vanilla's conditions) rather than concatenation. Reach for `REPLACE:` and re-state vanilla's body in those cases. Look for a *different* field on the same entity that's empty in vanilla and serves the same gate role (`potential` vs `possible`, `is_shown` vs `selectable`, etc.) — that often turns a brittle REPLACE: into a clean INJECT.
+
+### `INJECT:` silently fails on mod-only or REPLACEd entities
+
+`INJECT:<name>` only merges when `<name>` is a **vanilla-defined entity that nothing in the mod has REPLACEd**. Two failure modes both produce zero error and zero log line:
+
+1. **Mod-only target** — the entity is defined directly (no prefix) in the mod itself; vanilla doesn't know about it. The mod's own definition wins; the INJECT block is silently dropped. Example: `INJECT:pmg_aker_oslo_shipyard = { production_methods = { pm_modern_company_shipbuilding } }` next to a bare `pmg_aker_oslo_shipyard = { ... }` earlier in the same file → the new PM never makes it into the merged group.
+2. **REPLACEd target** — another mod file declares `REPLACE:<name> = { ... }`. The REPLACE wins; INJECTs from other files are silently dropped. Example: `common/laws/movement_attraction_modifiers.txt` had `INJECT:law_multicultural` adding a `state_pop_support_movement_civil_rights_mult`, while `common/laws/modified.txt` REPLACEd `law_multicultural` outright — the inject's modifier never applied at runtime.
+
+**Fix:** edit the entity's bare or `REPLACE:` definition directly — add the field there alongside its other modifiers, and remove the INJECT.
+
+**Detection:** `mod_structure_audit` (auto-runs on `POST /reload`, surfaces in the warnings array) cross-references every `INJECT:<name>` against the mod's bare definitions and `REPLACE:<name>` directives. Findings live in `docs/engine/mod_structure_report.md`. Brace-balance and within-namespace top-level collisions are caught by the same audit.
+
+### `base_values` as the always-on baseline source
+
+The vanilla `base_values` static modifier (extended via `INJECT:base_values = { ... }` in `common/static_modifiers/extra_modifiers.txt`) is the cleanest place to put a baseline contribution that should appear in the modifier's `GetValueWithBreakdownFor` breakdown alongside variable contributions from laws / techs / events. Even if the bar / read site only consumes the modifier conditionally (e.g. "while button X is active"), keeping the baseline in `base_values` means the player sees `Base values: +1.0 / Law A: +0.7 / Law B: -0.4` as a single connected line item rather than `Baseline (+1.0) / Laws: +0.3` split across two reads. Used by the colonial garrison/invest/assim effectiveness aggregates.
+
+### Modifier breakdown rendering: `GetValueWithBreakdownFor`
+
+The loc-string token `[ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_X_add')]` renders the modifier's value followed by its source-by-source breakdown — "Total: +1.5 (Base values: +1.0, Outlawed Dissent: +0.4, Secret Police: +0.2, Affirmative Action: -0.7)". This works in any tooltip context (progress-bar `desc` strings, scripted-button `desc` keys, JE description fields). Pair with `[ROOT.GetCountry.MakeScope.ScriptValue('name')|=+2]` for derived totals (script values that combine multiple modifiers).
+
+Vanilla precedents: `concept_economy_of_scale_desc_ingame_added` in `concepts_l_english.yml`; `POWER_BLOC_MANDATE_PROGRESS_FROM_GREAT_POWER_MEMBERS_TOOLTIP` in `interfaces_l_english.yml`. Mod precedents: `je_ch_breakdown_*` in `te_journal_entries_l_english.yml`, `je_iw_defense_header`, and the colonial-stability bar / button preview tooltips.
 
 ## Country-formation `potential` vs `possible`
 

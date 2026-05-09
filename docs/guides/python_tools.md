@@ -26,6 +26,8 @@ Reference for all Python utility scripts and the background data server.
 | `event_magnitude_audit` | `docs/engine/event_magnitude_report.md` |
 | `modifier_visibility_audit` | `docs/engine/modifier_visibility_report.md` |
 | `kill_character_audit` | `docs/engine/kill_character_audit.md` |
+| `loc_coverage_audit` | `docs/engine/loc_coverage_report.md` |
+| `mod_structure_audit` | `docs/engine/mod_structure_report.md` — flags brace-balance failures, silent-INJECT failures (INJECTs targeting mod-only or REPLACEd entities), and within-namespace top-level collisions. Subdirs that merge by design (`on_actions/`, `defines/`, `history/`) are excluded from collision detection. |
 | `gen_event_inventory` | `docs/engine/event_image_inventory.md` |
 
 **Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).

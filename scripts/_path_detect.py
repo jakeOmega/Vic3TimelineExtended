@@ -147,6 +147,7 @@ def detect_all() -> dict[str, Optional[str]]:
         ),
         "vanilla_source_repo_path": str(home / "src" / "vic3"),
         "vanilla_snapshot_docs_path": str(home / "src" / "vic3" / "docs"),
+        "vic3_modding_digests_path": str(home / "src" / "Modding-Digests"),
         "vanilla_docs_path": (
             f"{paradox_docs}/docs" if paradox_docs else None
         ),
