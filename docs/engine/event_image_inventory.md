@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 629
-**Event files:** 35
+**Total events:** 636
+**Event files:** 36
 
 ## augmentation_events.txt
 
@@ -1333,6 +1333,50 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** One of our intelligence operatives has been quietly returned through an unofficial exchange with [SCOPE.sCountry('espionage_catcher').GetName]. The absence of public scandal is welcome, but our network in the region has plainly been compromised.
 - **Flavor:** \"No press conference. No trial. No headlines,\" the handler says, guiding the exhausted operative into a waiting car. \"That is the good news.\"\n\n\"And the bad news?\"\n\n\"If they were willing to return the agent quietly, they already learned everything they needed.\"
 - **Current image:** gfx/event_pictures/intelligence_dead_drop.dds
+
+## irredentism_events.txt
+
+### irredentism.1
+- **Title:** The Diaspora Calls
+- **Description:** Communities of [SCOPE.sCountry('irr_unifier').GetAdjective] in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the homeland — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.
+- **Flavor:** What is owed to a people of our own blood living under another flag?
+- **Current image:** europenorthamerica_native_american
+
+### irredentism.2
+- **Title:** Foreign Power Demands Our Land
+- **Description:** A diplomatic note has been delivered. The government of our same-culture neighbor demands one of our states back, citing kinship and historical right. The press is outraged; the Foreign Ministry is meeting in continuous session.
+- **Flavor:** Whose nation is this?
+- **Current image:** europenorthamerica_rich_and_poor
+
+### irredentism.3
+- **Title:** An Opportunity for Union
+- **Description:** Relations with [SCOPE.sCountry('target_country').GetName] are warm enough that voices on both sides have begun to whisper of voluntary union. They share our culture; their lands hold pieces of our heartland. The moment, if it exists, is fragile.
+- **Flavor:** A union of equals, freely entered.
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.4
+- **Title:** A Sister Nation Asks Us to Join
+- **Description:** A formal proposal has arrived. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. There are voices in our parliament for it; there are voices against.
+- **Flavor:** What is a nation, if not a choice?
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.7
+- **Title:** [SCOPE.sCountry('irr_requester').GetName] Asks Us to Bless a War
+- **Description:** Our bloc client [SCOPE.sCountry('irr_requester').GetName] requests our blessing to wage a war of reunification against [SCOPE.sCountry('target_country').GetName]. The decision is ours; refusing risks straining the bloc.
+- **Flavor:** When clients ask for blessing, leaders learn the price of leadership.
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.8
+- **Title:** [SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union
+- **Description:** Our bloc member [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName]. We may bless the merger or forbid it.
+- **Flavor:** Sister-nations finding their way to one flag — but on whose terms?
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.6
+- **Title:** [SCOPE.sCountry('irr_annexed_country').GetName] Absorbed by [SCOPE.sCountry('irr_unifier').GetName]
+- **Description:** (no localization)
+- **Flavor:** Borders move; the map remembers.
+- **Current image:** africa_diplomats_negotiating
 
 ## mental_health_events.txt
 

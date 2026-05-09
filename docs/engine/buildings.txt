@@ -1353,8 +1353,11 @@ University:
 		Increased Exchange
 		No effect
 	Education:
-		Education Principle 4
-		No Effect
+		Cultural Center
+		No Cultural Mandate
+	Research:
+		Research Mandate
+		No Research Mandate
 
 Skyscraper:
 	Skyscraper:
@@ -4507,7 +4510,7 @@ Military Base:
 
 Construction Site:
 	Construction Site:
-		pm_te_construction_market_base
+		Basic Construction Market
 
 United Nations Headquarters:
 	International Diplomacy:

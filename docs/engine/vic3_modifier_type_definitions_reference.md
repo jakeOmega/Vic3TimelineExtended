@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7735 modifier entries.*
+*Auto-generated from 7739 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1847,7 +1847,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (513)
+### country (517)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1939,6 +1939,10 @@ _Cannon Artillery Offense_
 - `country_cellular_pb_principles_bool` — **Enables [GetTechnology('cellular_networks').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_civil_rights_pb_principles_bool` — **Enables [GetTechnology('civil_rights_movement').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_clean_energy_pb_principles_bool` — **Enables [GetTechnology('clean_energy_technologies').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
+- `country_colonial_assim_effectiveness_add` — **Colonial Assimilation Effectiveness**
+- `country_colonial_garrison_effectiveness_add` — **Colonial Garrison Effectiveness**
+- `country_colonial_invest_effectiveness_add` — **Colonial Investment Effectiveness**
+- `country_colonial_stability_drift_add` — **Colonial Stability Drift**
 - `country_combined_arms_bonus_enabled_bool` — **Combined Arms Doctrine**
 - `country_company_construction_efficiency_bonus_add` — **Company Construction Bonus** — An increase or decrease to the weekly Construction progress added by Companies to their associated Buildings
 - `country_company_throughput_bonus_add` — **Company Throughput Bonus** — An increase or decrease to the Throughput added by Companies to their associated Buildings

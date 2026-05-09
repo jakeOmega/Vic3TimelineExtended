@@ -590,7 +590,7 @@ goods_output_merchant_marine_mult = {
 }
 
 goods_input_merchant_marine_mult = {
-	color = good
+	color = bad
 	percent = yes
 
 	game_data = {

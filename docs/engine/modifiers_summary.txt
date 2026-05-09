@@ -4523,6 +4523,10 @@ country|country_coffee_max_import_tariffs_level_add|
 country|country_coffee_min_export_tariffs_level_add|
 country|country_coffee_min_import_tariffs_level_add|
 country|country_colombian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
+country|country_colonial_assim_effectiveness_add|
+country|country_colonial_garrison_effectiveness_add|
+country|country_colonial_invest_effectiveness_add|
+country|country_colonial_stability_drift_add|
 country|country_comanche_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_combined_arms_bonus_enabled_bool|
 country|country_combined_arms_pb_principles_bool|
