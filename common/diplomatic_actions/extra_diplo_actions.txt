@@ -1,13 +1,13 @@
 ﻿
 decolonize_diplo_action = {
-    groups= {
+	groups= {
 		general
 	}
 	requires_approval = no
 
 	state_selection = second_required
-    second_state_list = second_country
-	
+	second_state_list = second_country
+
 	show_confirmation_box = yes
 
 	selectable = {
@@ -15,109 +15,109 @@ decolonize_diplo_action = {
 	}
 
 	possible = {
-        always = yes
-    }
+		always = yes
+	}
 
 	second_state_trigger = {
-        any_scope_culture = {
-            has_homeland = PREV
-            NOT = { is_primary_culture_of = PREV.owner }
-        }
-        NOT = {
-            is_homeland_of_country_cultures = owner
-        }
-    }
-    
+		any_scope_culture = {
+			has_homeland = PREV
+			NOT = { is_primary_culture_of = PREV.owner }
+		}
+		NOT = {
+			is_homeland_of_country_cultures = owner
+		}
+	}
+
 	accept_effect = {
-    }
+	}
 
 	is_hostile = no
 
-    ai = {
+	ai = {
 		evaluation_chance = {
-            value = 0
-        }
+			value = 0
+		}
 
 		will_select_as_second_state = {
-            always = yes
-        }
-	
+			always = yes
+		}
+
 		will_propose = {
-            always = no
-        }
+			always = no
+		}
 
 		propose_score = {
-            value = 0
-        }
+			value = 0
+		}
 	}
 }
 
 annex_subject_peaceful = {
-    groups= {
+	groups= {
 		overlord
 	}
 	requires_approval = no
-	
+
 	show_confirmation_box = yes
 
-    selectable = {
+	selectable = {
 		is_power_bloc_leader = yes
 		power_bloc ?= {
 			modifier:power_bloc_leader_can_peacefully_annex_bool = yes
-		}		
+		}
 	}
 
 	potential = {
-        scope:target_country = {
-            is_direct_subject_of = root
-        }
+		scope:target_country = {
+			is_direct_subject_of = root
+		}
 		is_revolutionary = no
-    }
-	
+	}
+
 	possible = {
-        scope:target_country = {
-            NOT = { has_truce_with = ROOT }
-        }
-        custom_tooltip = {
-            text = DIPLO_ACTION_GDP_REQUIREMENT
-            scope:target_country = {
-                is_direct_subject_of = root
+		scope:target_country = {
+			NOT = { has_truce_with = ROOT }
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_GDP_REQUIREMENT
+			scope:target_country = {
+				is_direct_subject_of = root
 				OR = {
 					gdp < peaceful_annex_gdp_requirement
 					peaceful_annex_gdp_requirement < 0
 				}
-            }
-        }
-        scope:target_country = {
+			}
+		}
+		scope:target_country = {
 			OR = {
 				has_diplomatic_pact = { who = root type = puppet }
 				has_diplomatic_pact = { who = root type = colony }
 			}
-            
-            liberty_desire < 25
-        }
-        custom_tooltip = {
+
+			liberty_desire < 25
+		}
+		custom_tooltip = {
 			text = DIPLO_ACTION_RELATIONS_CORDIAL_OR_GREATER
 			scope:target_country.relations:root >= relations_threshold:cordial
 		}
 		is_diplomatic_play_committed_participant = no
 		scope:target_country = { is_diplomatic_play_committed_participant = no }
-    }
+	}
 
 	accept_effect = {
-        annex = scope:target_country
-    }
+		annex = scope:target_country
+	}
 
 	is_hostile = no
-	
+
 	ai = {
 		accept_score = {
-            value = 1
-        }	
+			value = 1
+		}
 
-        evaluation_chance = {
-            value = 100
-        }
+		evaluation_chance = {
+			value = 100
+		}
 	}
 }
 
@@ -128,70 +128,70 @@ colonial_culture_change = {
 	show_in_lens = no
 
 	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
-	
+
 	selectable = {
-        always = yes
+		always = yes
 	}
-	
+
 	potential = {
-        scope:target_country = {
-            is_direct_subject_of = ROOT
-            OR = {
-                has_government_type = gov_chartered_company
-                has_government_type = gov_colonial_administration
-            }
-        }
+		scope:target_country = {
+			is_direct_subject_of = ROOT
+			OR = {
+				has_government_type = gov_chartered_company
+				has_government_type = gov_colonial_administration
+			}
+		}
 	}
-	
+
 	possible = {
-        OR = {
-            scope:target_country = {
-                any_primary_culture = {
-                    NOT = { is_primary_culture_of = ROOT }
-                }
-            }
-            any_primary_culture = {
-                NOT = { is_primary_culture_of = scope:target_country }
-            }
-        }
+		OR = {
+			scope:target_country = {
+				any_primary_culture = {
+					NOT = { is_primary_culture_of = ROOT }
+				}
+			}
+			any_primary_culture = {
+				NOT = { is_primary_culture_of = scope:target_country }
+			}
+		}
 
 		prestige >= {
 			value = scope:target_country.prestige
 			multiply = 3
 		}
 	}
-	
-	accept_effect = {
-        every_primary_culture = {
-            limit = {
-                NOT = { is_primary_culture_of = scope:target_country }
-            }
-            scope:target_country = {
-                add_primary_culture = PREV
-            }
-        }
-        
-        scope:target_country = {
-            every_primary_culture = {
-                limit = {
-                    NOT = { is_primary_culture_of = ROOT }
-                }
-                scope:target_country = {
-                    remove_primary_culture = PREV
-                }
-            }
-        }
 
-        if = {
-            limit = {
-                NOT = { scope:target_country.religion = ROOT.religion }
-            }
-            scope:target_country = { set_state_religion = ROOT.religion }
-        }
+	accept_effect = {
+		every_primary_culture = {
+			limit = {
+				NOT = { is_primary_culture_of = scope:target_country }
+			}
+			scope:target_country = {
+				add_primary_culture = PREV
+			}
+		}
+
+		scope:target_country = {
+			every_primary_culture = {
+				limit = {
+					NOT = { is_primary_culture_of = ROOT }
+				}
+				scope:target_country = {
+					remove_primary_culture = PREV
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				NOT = { scope:target_country.religion = ROOT.religion }
+			}
+			scope:target_country = { set_state_religion = ROOT.religion }
+		}
 
 		scope:target_country = { add_liberty_desire = 20 }
-    }
-	
+	}
+
 	ai = {
 		evaluation_chance = {
 			value = 0.25
@@ -207,14 +207,14 @@ colonial_culture_change = {
 				add = 0.25
 			}
 		}
-		
+
 		will_propose = {
-            scope:target_country = {
-                is_direct_subject_of = ROOT
-                liberty_desire < 50
-            }
+			scope:target_country = {
+				is_direct_subject_of = ROOT
+				liberty_desire < 50
+			}
 			NOT = { # Don't break Canadian unification
-				scope:target_country = { c:HBC ?= THIS } 
+				scope:target_country = { c:HBC ?= THIS }
 				ROOT = {c:GBR ?= THIS }
 			}
 			OR = {
@@ -223,7 +223,7 @@ colonial_culture_change = {
 			}
 		}
 
-		propose_score = {								
+		propose_score = {
 			value = 10
 			if = {
 				limit = { prestige >= { value = scope:target_country.prestige multiply = 5 } }
@@ -247,18 +247,18 @@ diplomatic_alignment = {
 	groups= {
 		general
 	}
-	
+
 	requires_approval = no
 	show_confirmation_box = no
-	
+
 	selectable = {
 		NOT = { is_country_type = decentralized }
-        is_power_bloc_leader = yes
+		is_power_bloc_leader = yes
 		power_bloc ?= {
 			modifier:power_bloc_can_use_diplomatic_alignment_bool = yes
-		}	
+		}
 	}
-	
+
 	potential = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
@@ -267,60 +267,60 @@ diplomatic_alignment = {
 
 	possible = {
 		always = yes
-	}	
+	}
 
-	pact = {	
+	pact = {
 		cost = 200
 		is_two_sided_pact = no
-		show_in_outliner = yes	
+		show_in_outliner = yes
 
-        monthly_effect = {
+		monthly_effect = {
 			every_diplomatically_relevant_country = {
-                limit = {
-                    NOT = { THIS = scope:target_country }
-                    scope:target_country = {
-                        has_diplomatic_relevance = PREV
-                        NOT = {
-                            scope:target_country.relations:PREV = ROOT.relations:PREV
-                        }
-                    }
-                }
-                save_scope_as = third_part_country
-                scope:target_country = {
-                    if = {
-                        limit = {
-                            relations:PREV > ROOT.relations:PREV
-                        }
-                        change_relations = {
-                            country = PREV
-                            value = -1
-                        }
-                    }
-                    else = {
-                        change_relations = {
-                            country = PREV
-                            value = 1
-                        }
-                    }
-                }
-            }
-		} 
-		
+				limit = {
+					NOT = { THIS = scope:target_country }
+					scope:target_country = {
+						has_diplomatic_relevance = PREV
+						NOT = {
+							scope:target_country.relations:PREV = ROOT.relations:PREV
+						}
+					}
+				}
+				save_scope_as = third_part_country
+				scope:target_country = {
+					if = {
+						limit = {
+							relations:PREV > ROOT.relations:PREV
+						}
+						change_relations = {
+							country = PREV
+							value = -1
+						}
+					}
+					else = {
+						change_relations = {
+							country = PREV
+							value = 1
+						}
+					}
+				}
+			}
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				has_diplomatic_relevance = scope:target_country
 			}
 		}
-		
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
 					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = { has_war_with = scope:target_country }
-				}			
+				}
 			}
-		}		
-		
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
@@ -328,36 +328,36 @@ diplomatic_alignment = {
 					NOT = { is_country_type = decentralized }
 					scope:target_country = {
 						NOT = { is_country_type = decentralized }
-					}				
+					}
 				}
 			}
-		}			
-		
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				NOT = { has_diplomats_expelled = scope:target_country }
 			}
 		}
-		
+
 		requirement_to_maintain = {
-			trigger = {				
+			trigger = {
 				NOT = { scope:target_country = { has_diplomats_expelled = root } }
 			}
-		}		
+		}
 	}
-	
+
 	ai = {
 		max_influence_spending_fraction = 0.25
-	
+
 		evaluation_chance = {
 			value = 0.25
-		}	
-	
+		}
+
 		propose_score = {
 			value = 5
-		}		
-	
-		will_propose = { 
+		}
+
+		will_propose = {
 			OR = {
 				has_attitude = {
 					who = scope:target_country
@@ -366,7 +366,7 @@ diplomatic_alignment = {
 				has_attitude = {
 					who = scope:target_country
 					attitude = conciliatory
-				}	
+				}
 				has_attitude = {
 					who = scope:target_country
 					attitude = genial
@@ -374,20 +374,20 @@ diplomatic_alignment = {
 				has_attitude = {
 					who = scope:target_country
 					attitude = protective
-				}	
+				}
 			}
-		}	
-		
-		will_break = { 
+		}
+
+		will_break = {
 			NOR = {
 				has_attitude = {
 					who = scope:target_country
 					attitude = genial
-				}	
+				}
 				has_attitude = {
 					who = scope:target_country
 					attitude = conciliatory
-				}	
+				}
 				has_attitude = {
 					who = scope:target_country
 					attitude = cooperative
@@ -395,8 +395,8 @@ diplomatic_alignment = {
 				has_attitude = {
 					who = scope:target_country
 					attitude = protective
-				}					
-			}		
+				}
+			}
 		}
 	}
 }
@@ -407,63 +407,63 @@ humanitarian_aid = {
 	}
 	requires_approval = no
 	should_notify_third_parties = no
-	
+
 	selectable = {
 		power_bloc ?= {
-            modifier:power_bloc_can_give_humanitarian_aid_bool = yes
-        }
+			modifier:power_bloc_can_give_humanitarian_aid_bool = yes
+		}
 	}
-	
+
 	potential = {
 		always = yes
 	}
-	
+
 	possible = {}
-	
-	pact = {	
+
+	pact = {
 		cost = 100
-	
+
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
 		relations_progress_per_day = 3 # At 100, +1 relations
 		relations_improvement_max = 30
-		
+
 		income_transfer = 0.5
-        second_country_gets_income_transfer = yes
+		second_country_gets_income_transfer = yes
 		max_paying_country_income_to_transfer = 0.1
 		income_transfer_to_pops = {
-            allow_non_fully_accepted = yes
+			allow_non_fully_accepted = yes
 
-            upper_strata_pops = 0
-            middle_strata_pops = 10
-            lower_strata_pops = 90
-        }
+			upper_strata_pops = 0
+			middle_strata_pops = 10
+			lower_strata_pops = 90
+		}
 		income_transfer_based_on_second_country = yes
-		
+
 		second_modifier = {
 			country_pact_leverage_generation_add = 200
 		}
-		
+
 		requirement_to_maintain = {
 			trigger = {
 				has_diplomatic_relevance = scope:target_country
 			}
 		}
 
-	 	requirement_to_maintain = {
+		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
 					text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
 					scope:target_country.relations:root > relations_threshold:poor
-				}		
+				}
 			}
-			
+
 			show_about_to_break_warning = {
 				scope:target_country.relations:root <= -17 # this is: poor + 3
 				scope:target_country.relations_change_rate:root < 0
-			}					
-		}	
+			}
+		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -472,58 +472,58 @@ humanitarian_aid = {
 					NOT = { is_country_type = decentralized }
 					scope:target_country = {
 						NOT = { is_country_type = decentralized }
-					}				
+					}
 				}
 			}
-		}				
-	
+		}
+
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
 					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
 					NOT = { has_war_with = scope:target_country }
-				}			
+				}
 			}
-		}		
+		}
 
 		requirement_to_maintain = {
 			trigger = {
 				in_default = no
 			}
-		}			
+		}
 	}
-	
+
 	ai = {
 		max_influence_spending_fraction = 0.20
-		
+
 		evaluation_chance = {
 			value = 0.0
-			
+
 			if = {
 				limit = { country_rank >= rank_value:major_power }
 				add = {
 					value = country_rank
 					multiply = 0.05
-				}				
-			}			
-		}		
-		
+				}
+			}
+		}
+
 		accept_score = {
 			value = 0
-		}		
-	
+		}
+
 		junior_accept_score = {
 			value = 0
-		}	
-	
+		}
+
 		propose_score = {
 			value = 10
 		}
-	
-		will_propose = { 
+
+		will_propose = {
 			scaled_debt <= 0
 			is_at_war = no
-			net_fixed_income > 0	
+			net_fixed_income > 0
 			has_attitude = {
 				who = scope:target_country
 				attitude = protective
@@ -537,9 +537,9 @@ humanitarian_aid = {
 				AND = {
 					num_income_transfer_pacts < 3
 					income >= 400000
-				}				
+				}
 			}
-				
+
 			# We want to have at least five times their income, and at least 50k income in general
 			OR = {
 				AND = {
@@ -551,7 +551,7 @@ humanitarian_aid = {
 					income >= 75000
 					net_fixed_income >= 6000
 					scope:target_country.income <= 15000
-				}				
+				}
 				AND = {
 					income >= 100000
 					net_fixed_income >= 8000
@@ -566,7 +566,7 @@ humanitarian_aid = {
 					income >= 150000
 					net_fixed_income >= 12000
 					scope:target_country.income <= 30000
-				}	
+				}
 				AND = {
 					income >= 175000
 					net_fixed_income >= 14000
@@ -581,51 +581,51 @@ humanitarian_aid = {
 					income >= 225000
 					net_fixed_income >= 18000
 					scope:target_country.income <= 45000
-				}	
+				}
 				AND = {
 					income >= 250000
 					net_fixed_income >= 20000
 					scope:target_country.income <= 50000
-				}					
-			}			
+				}
+			}
 		}
-		
-		will_break = { 
-			OR = {		
+
+		will_break = {
+			OR = {
 				scaled_debt > 0.25
 				AND = {
 					scaled_debt > 0
 					OR = {
-						net_fixed_income < 0	
+						net_fixed_income < 0
 						is_at_war = yes
-					}				
-				}				
+					}
+				}
 				NOT = {
 					has_attitude = {
 						who = scope:target_country
 						attitude = protective
-					}				
+					}
 				}
 				num_income_transfer_pacts > 3
 				AND = {
 					num_income_transfer_pacts > 1
 					OR = {
-						net_fixed_income < -10000	
+						net_fixed_income < -10000
 						income < 300000
-					}			
+					}
 				}
 				AND = {
 					num_income_transfer_pacts > 2
 					OR = {
-						net_fixed_income < -5000					
+						net_fixed_income < -5000
 						income < 500000
 					}
-				}					
+				}
 				NOR = {
 					AND = {
 						income >= 40000
 						scope:target_country.income <= 12500
-					}				
+					}
 					AND = {
 						income >= 50000
 						scope:target_country.income <= 15000
@@ -633,7 +633,7 @@ humanitarian_aid = {
 					AND = {
 						income >= 75000
 						scope:target_country.income <= 20000
-					}				
+					}
 					AND = {
 						income >= 100000
 						scope:target_country.income <= 25000
@@ -645,7 +645,7 @@ humanitarian_aid = {
 					AND = {
 						income >= 150000
 						scope:target_country.income <= 35000
-					}	
+					}
 					AND = {
 						income >= 175000
 						scope:target_country.income <= 40000
@@ -661,10 +661,10 @@ humanitarian_aid = {
 					AND = {
 						income >= 250000
 						scope:target_country.income <= 55000
-					}					
-				}						
+					}
+				}
 			}
-		}			
+		}
 	}
 }
 
@@ -675,24 +675,24 @@ force_cultural_acceptance = {
 	show_in_lens = no
 
 	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
-	
+
 	selectable = {
 		is_power_bloc_leader = yes
 		power_bloc ?= {
 			modifier:power_bloc_leader_can_force_cultural_acceptance_bool = yes
-		}		
+		}
 	}
-	
+
 	potential = {
 		power_bloc ?= {
 			scope:target_country.power_bloc ?= this
 		}
 	}
-	
+
 	possible = {
-        any_primary_culture = {
-            NOT = { is_primary_culture_of = scope:target_country }
-        }
+		any_primary_culture = {
+			NOT = { is_primary_culture_of = scope:target_country }
+		}
 
 		power_bloc = {
 			current_cohesion_percentage >= 0.5
@@ -705,22 +705,22 @@ force_cultural_acceptance = {
 			multiply = 3
 		}
 	}
-	
+
 	accept_effect = {
-        every_primary_culture = {
-            limit = {
-                NOT = { is_primary_culture_of = scope:target_country }
-            }
-            scope:target_country = {
-                add_primary_culture = PREV
-            }
-        }
-		
+		every_primary_culture = {
+			limit = {
+				NOT = { is_primary_culture_of = scope:target_country }
+			}
+			scope:target_country = {
+				add_primary_culture = PREV
+			}
+		}
+
 		power_bloc = {
 			add_cohesion_percent = scaled_cohesion_cost
 		}
 	}
-	
+
 	ai = {
 		evaluation_chance = {
 			value = 0.025
@@ -733,7 +733,7 @@ force_cultural_acceptance = {
 				add = 0.05
 			}
 		}
-		
+
 		will_propose = {
 			power_bloc = { current_cohesion_percentage >= 0.75 }
 			OR = {
@@ -752,7 +752,7 @@ force_cultural_acceptance = {
 			}
 		}
 
-		propose_score = {								
+		propose_score = {
 			value = 10
 			if = {
 				limit = {
@@ -775,26 +775,26 @@ force_cultural_adoption = {
 	show_in_lens = no
 
 	texture = "gfx/interface/icons/diplomatic_action_icons/force_state_religion.dds"
-	
+
 	selectable = {
 		is_power_bloc_leader = yes
 		power_bloc ?= {
 			modifier:power_bloc_leader_can_force_cultural_adoption_bool = yes
-		}		
+		}
 	}
-	
+
 	potential = {
 		scope:target_country = {
-            is_direct_subject_of = root
-        }
+			is_direct_subject_of = root
+		}
 	}
-	
+
 	possible = {
-        scope:target_country = {
-            any_primary_culture = {
-                NOT = { is_primary_culture_of = ROOT }
-            }
-        }
+		scope:target_country = {
+			any_primary_culture = {
+				NOT = { is_primary_culture_of = ROOT }
+			}
+		}
 
 		power_bloc = {
 			current_cohesion_percentage >= 0.5
@@ -807,33 +807,33 @@ force_cultural_adoption = {
 			multiply = 3
 		}
 	}
-	
+
 	accept_effect = {
-        every_primary_culture = {
-            limit = {
-                NOT = { is_primary_culture_of = scope:target_country }
-            }
-            scope:target_country = {
-                add_primary_culture = PREV
-            }
-        }
-        
-        scope:target_country = {
-            every_primary_culture = {
-                limit = {
-                    NOT = { is_primary_culture_of = ROOT }
-                }
-                scope:target_country = {
-                    remove_primary_culture = PREV
-                }
-            }
-        }
-		
+		every_primary_culture = {
+			limit = {
+				NOT = { is_primary_culture_of = scope:target_country }
+			}
+			scope:target_country = {
+				add_primary_culture = PREV
+			}
+		}
+
+		scope:target_country = {
+			every_primary_culture = {
+				limit = {
+					NOT = { is_primary_culture_of = ROOT }
+				}
+				scope:target_country = {
+					remove_primary_culture = PREV
+				}
+			}
+		}
+
 		power_bloc = {
 			add_cohesion_percent = scaled_cohesion_cost
 		}
-    }
-	
+	}
+
 	ai = {
 		evaluation_chance = {
 			value = 0.025
@@ -846,14 +846,14 @@ force_cultural_adoption = {
 				add = 0.05
 			}
 		}
-		
+
 		will_propose = {
 			power_bloc = { current_cohesion_percentage >= 0.75 }
 			OR = {
 				has_attitude = {
 					who = scope:target_country
 					attitude = domineering
-				}									
+				}
 			}
 			prestige >= {
 				value = scope:target_country.prestige
@@ -861,7 +861,7 @@ force_cultural_adoption = {
 			}
 		}
 
-		propose_score = {								
+		propose_score = {
 			value = 10
 			if = {
 				limit = {
@@ -872,6 +872,380 @@ force_cultural_adoption = {
 			if = {
 				limit = { power_bloc = { current_cohesion_percentage >= 0.9 } }
 				add = 10
+			}
+		}
+	}
+}
+# ============================================================================
+# VOLUNTARY UNION
+#
+# Peaceful counterpart to the te_reunify_country wargoal: a same-culture
+# country with high relations and a strong claims footprint can propose a
+# voluntary merger to a smaller / weaker same-culture neighbor. Engine
+# annexes on accept (per `accept_effect = { annex = scope:target_country }`,
+# same primitive vanilla annex_subject_peaceful uses).
+#
+# Tilt-aware: any active driver can use the action, but AI propose_score
+# and target accept_score lean heavily on irredentist_war_tilt --
+# warlike-tilt unifiers rarely propose, peaceful-tilt targets are more
+# willing to accept. Anschluss-style outcomes (warlike unifier with
+# extremely amicable target) remain reachable but rare.
+#
+# Bloc gate: voluntary_union_eligible already requires both sides have an
+# active driver and the target is not a subject; irredentist_bloc_check_peace
+# layered on top requires both bloc leaders' approval (Phase 5).
+#
+# See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+# ============================================================================
+voluntary_union = {
+	groups = { general }
+	requires_approval = yes
+	show_confirmation_box = yes
+	is_hostile = no
+	show_in_lens = no   # avoid auto-lookup of gfx/interface/icons/lens_toolbar_icons/voluntary_union.dds
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+
+	selectable = {
+		# Activator gate intentionally absent -- voluntary union is open to
+		# any sovereign nation post-decolonization. AI scoring (tilt-driven
+		# propose_score / accept_score) decides whether anyone actually uses it.
+		has_technology_researched = decolonization
+	}
+
+	potential = {
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	possible = {
+		is_irredentist_candidate_for = yes
+		voluntary_union_eligible = yes
+		irredentist_bloc_check_peace = yes
+		is_diplomatic_play_committed_participant = no
+		scope:target_country = {
+			is_diplomatic_play_committed_participant = no
+			NOT = { has_modifier = irr_rejected_union_modifier }
+		}
+		NOT = { has_truce_with = scope:target_country }
+	}
+
+	accept_effect = {
+		# Notify interested third parties BEFORE the annex -- the scripted
+		# effect needs scope:target_country (still valid here) to walk its
+		# strategic regions. Set up the scope aliases the effect expects.
+		save_scope_as = irr_unifier
+		scope:target_country = {
+			save_scope_as = irr_annexed_country
+		}
+		te_irredentism_notify_third_parties_effect = { PEACEFUL = yes }
+		annex = scope:target_country
+	}
+
+	ai = {
+		# In `accept_score`: ROOT = recipient (the country being asked to dissolve
+		# itself); `scope:actor` = proposer. In `propose_score`: ROOT = proposer;
+		# `scope:target_country` = recipient.
+		#
+		# Vanilla convention (see common/diplomatic_actions/04_trade_states.txt):
+		# every `add` block carries a `desc =` so the in-game tooltip shows the
+		# full breakdown. Without `desc`, the term is invisible -- a +40 final
+		# number with no breakdown is the worst possible UX.
+
+		evaluation_chance = {
+			value = 0.025
+			# More likely to consider when relations are very high.
+			if = {
+				limit = {
+					scope:target_country.relations:root >= relations_threshold:friendly
+				}
+				add = 0.05
+			}
+		}
+
+		accept_score = {
+			value = 0
+
+			# Voluntary annexation = the country ceasing to exist. The default
+			# stance is a strong NO; positive factors must accumulate to flip it.
+			add = {
+				desc = "VOLUNTARY_UNION_ACCEPT_BASELINE"
+				value = -75
+			}
+
+			# === Hard nopes ===
+
+			if = {
+				limit = {
+					has_diplomatic_pact = { who = scope:actor type = rivalry }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_RIVALRY"
+					value = -200
+				}
+			}
+
+			# === Relations bands (only the matched band fires) ===
+
+			if = {
+				limit = { scope:actor.relations:root >= relations_threshold:friendly }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_REL_FRIENDLY"
+					value = 60
+				}
+			}
+			else_if = {
+				limit = { scope:actor.relations:root >= relations_threshold:amicable }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_REL_AMICABLE"
+					value = 30
+				}
+			}
+			else_if = {
+				limit = { scope:actor.relations:root >= relations_threshold:cordial }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_REL_CORDIAL"
+					value = 10
+				}
+			}
+			else_if = {
+				limit = { scope:actor.relations:root <= relations_threshold:hostile }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_REL_HOSTILE"
+					value = -150
+				}
+			}
+			else_if = {
+				limit = { scope:actor.relations:root <= relations_threshold:cold }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_REL_COLD"
+					value = -75
+				}
+			}
+			else_if = {
+				limit = { scope:actor.relations:root <= relations_threshold:poor }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_REL_POOR"
+					value = -40
+				}
+			}
+
+			# === Attitudes (AI-only; mutually exclusive) ===
+
+			if = {
+				limit = { has_attitude = { who = scope:actor attitude = belligerent } }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ATT_BELLIGERENT"
+					value = -100
+				}
+			}
+			else_if = {
+				limit = { has_attitude = { who = scope:actor attitude = antagonistic } }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ATT_ANTAGONISTIC"
+					value = -75
+				}
+			}
+			else_if = {
+				limit = { has_attitude = { who = scope:actor attitude = wary } }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ATT_WARY"
+					value = -25
+				}
+			}
+			else_if = {
+				limit = { has_attitude = { who = scope:actor attitude = cooperative } }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ATT_COOPERATIVE"
+					value = 30
+				}
+			}
+			else_if = {
+				limit = { has_attitude = { who = scope:actor attitude = genial } }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ATT_GENIAL"
+					value = 50
+				}
+			}
+			else_if = {
+				limit = { has_attitude = { who = scope:actor attitude = protective } }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ATT_PROTECTIVE"
+					value = 40
+				}
+			}
+
+			# === Recipient's own ideological tilt ===
+			# (Tilt as a script value reads scope:target_country which equals
+			# ROOT here; the laws/IG checks evaluate correctly on ROOT.)
+
+			if = {
+				limit = {
+					any_interest_group = {
+						is_in_government = yes
+						OR = {
+							leader = { has_ideology = ideology:ideology_pacifist }
+							leader = { has_ideology = ideology:ideology_humanitarian }
+							leader = { has_ideology = ideology:ideology_anarchist }
+						}
+					}
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_PEACEFUL_IGS"
+					value = 20
+				}
+			}
+			if = {
+				limit = {
+					any_interest_group = {
+						is_in_government = yes
+						OR = {
+							leader = { has_ideology = ideology:ideology_jingoist_leader }
+							leader = { has_ideology = ideology:ideology_fascist }
+							leader = { has_ideology = ideology:ideology_ethno_nationalist }
+						}
+					}
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_NATIONALIST_IGS"
+					value = -30
+				}
+			}
+			if = {
+				limit = {
+					ig:ig_armed_forces ?= { is_in_government = yes }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_ARMED_FORCES_OPPOSE"
+					value = -25
+				}
+			}
+
+			# === Bloc-context boosts ===
+
+			if = {
+				limit = {
+					is_in_same_power_bloc = scope:actor
+					scope:actor = { is_power_bloc_leader = yes }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_OUR_BLOC_LEADER"
+					value = 25
+				}
+			}
+			else_if = {
+				limit = {
+					is_in_same_power_bloc = scope:actor
+					power_bloc ?= { has_identity = identity:identity_diplomatic }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_DIPLOMATIC_FRAMEWORK"
+					value = 15
+				}
+			}
+
+			# === Prior signals ===
+
+			# Recipient said "open to it" via Event 4A -- they already nodded yes.
+			if = {
+				limit = { has_modifier = irr_open_to_union_modifier }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_PRIOR_OPENNESS"
+					value = 50
+				}
+			}
+			# Standing cultural-ties bond from Event 1B.
+			if = {
+				limit = { has_modifier = irr_cultural_ties_modifier }
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_CULTURAL_TIES"
+					value = 15
+				}
+			}
+		}
+
+		will_propose = {
+			voluntary_union_eligible = yes
+			irredentist_bloc_check_peace = yes
+			# Don't propose to a country that fundamentally hates us. AI score
+			# would discount it anyway, but spare them the spam.
+			NOT = {
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			}
+			scope:target_country.relations:root >= relations_threshold:cordial
+		}
+
+		propose_score = {
+			value = 0
+
+			# Baseline interest -- the system is designed to be a viable choice
+			# for ideologically peaceful unifiers, not a constant background poll.
+			add = {
+				desc = "VOLUNTARY_UNION_PROPOSE_BASELINE"
+				value = 5
+			}
+
+			# === Pressure score: stronger candidate = more interest ===
+			if = {
+				limit = { irredentist_pressure_score >= 6 }
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_PRESSURE_HIGH"
+					value = 5
+				}
+			}
+			if = {
+				limit = { irredentist_pressure_score >= 10 }
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_PRESSURE_MAX"
+					value = 5
+				}
+			}
+
+			# === Tilt: peaceful tilt prefers this path; warlike tilt discounts ===
+			if = {
+				limit = { irredentist_war_tilt >= 3 }
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_TILT_WARLIKE"
+					value = -8
+				}
+			}
+			else_if = {
+				limit = { irredentist_war_tilt >= 1 }
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_TILT_LEAN_WARLIKE"
+					value = -3
+				}
+			}
+			else_if = {
+				limit = { irredentist_war_tilt <= -2 }
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_TILT_PEACEFUL"
+					value = 8
+				}
+			}
+
+			# Target signaled openness via Event 4A -- the moment is now.
+			if = {
+				limit = {
+					scope:target_country = {
+						has_modifier = irr_open_to_union_modifier
+					}
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_TARGET_OPEN"
+					value = 10
+				}
+			}
+
+			# Relations softer than amicable -- discount even though
+			# voluntary_union_eligible already requires amicable+ to propose.
+			if = {
+				limit = { scope:target_country.relations:root < relations_threshold:friendly }
+				add = {
+					desc = "VOLUNTARY_UNION_PROPOSE_RELATIONS_NOT_FRIENDLY"
+					value = -3
+				}
 			}
 		}
 	}

@@ -1,0 +1,869 @@
+﻿namespace = irredentism
+
+# ============================================================================
+# IRREDENTIST PRESSURE — same-culture-with-claims event suite
+#
+# Dispatched from on_monthly_pulse_country via irredentism_events_on_action
+# in common/on_actions/extra_on_actions.txt. All events fire under any
+# active driver; AI weights tilt-aware via irredentist_war_tilt.
+#
+# Event 1  "The Diaspora Calls"          (unifier, primary)
+# Event 2  "[Other] Demands Our Lands"   (target, follow-up to Event 1 option C)
+# Event 3  "An Opportunity for Union"    (unifier, peaceful proposal)
+# Event 4  "A Sister Nation Asks Us"     (target, follow-up to Event 3 option A)
+#
+# Events 5a/5b (bloc-leader approval) live in Phase 5.
+#
+# See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+# ============================================================================
+
+# ============================================================================
+# Event 1: "The Diaspora Calls"
+# Fires on a unifier with at least one strong candidate (pressure score >= 4).
+# Picks a same-culture target the unifier holds claims on, lets the player
+# choose how to push: stoke nationalism, fund cultural ties, demand a state
+# back, or bide time.
+# ============================================================================
+irredentism.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "europenorthamerica_native_american" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.1.t
+	desc = irredentism.1.d
+	flavor = irredentism.1.f
+
+	duration = 3
+
+	cooldown = { years = 8 }
+
+	trigger = {
+		# System gates
+		has_technology_researched = decolonization
+		irredentist_unifier_can_act = yes
+		NOT = { is_country_type = decentralized }
+		# At least one valid candidate exists.
+		any_country = {
+			NOT = { THIS = ROOT }
+			NOT = { is_country_type = decentralized }
+			ROOT = {
+				any_primary_culture = { is_primary_culture_of = PREV }
+			}
+			any_scope_state = {
+				is_homeland_of_country_cultures = ROOT
+				has_claim_by = ROOT
+			}
+		}
+	}
+
+	immediate = {
+		save_scope_as = irr_unifier
+		# Pick a same-culture, claim-holding candidate.
+		random_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				NOT = { is_country_type = decentralized }
+				ROOT = {
+					any_primary_culture = { is_primary_culture_of = PREV }
+				}
+				any_scope_state = {
+					is_homeland_of_country_cultures = ROOT
+					has_claim_by = ROOT
+				}
+			}
+			save_scope_as = target_country
+		}
+		# Pick the specific state we'd demand back if the player picks option C.
+		scope:target_country = {
+			random_scope_state = {
+				limit = {
+					is_homeland_of_country_cultures = ROOT
+					has_claim_by = ROOT
+				}
+				save_scope_as = irr_demanded_state
+			}
+		}
+		# Also pick an unclaimed home-state for the "stoke" option, if any.
+		scope:target_country = {
+			random_scope_state = {
+				limit = {
+					is_homeland_of_country_cultures = ROOT
+					NOT = { has_claim_by = ROOT }
+				}
+				save_scope_as = irr_unclaimed_home_state
+			}
+		}
+	}
+
+	# --- Option A: Stoke irredentism ---
+	option = {
+		name = irredentism.1.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { irredentist_war_tilt >= 2 }
+				add = 4
+			}
+			modifier = {
+				trigger = { irredentist_war_tilt >= 5 }
+				add = 4
+			}
+			modifier = {
+				trigger = { irredentist_war_tilt < 0 }
+				add = -1
+			}
+		}
+		# If we found an unclaimed home state, claim it.
+		if = {
+			limit = { exists = scope:irr_unclaimed_home_state }
+			scope:irr_unclaimed_home_state = {
+				state_region = { add_claim = ROOT }
+			}
+		}
+		change_infamy = 5
+		change_relations = {
+			country = scope:target_country
+			value = -10
+		}
+		# Armed forces approve, intelligentsia/peaceful IGs disapprove.
+		ig:ig_armed_forces ?= {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	# --- Option B: Fund cultural ties ---
+	option = {
+		name = irredentism.1.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { irredentist_war_tilt <= -2 }
+				add = 4
+			}
+			modifier = {
+				trigger = { irredentist_war_tilt >= 3 }
+				add = -2
+			}
+		}
+		change_relations = {
+			country = scope:target_country
+			value = 15
+		}
+		# Lasting goodwill -- biases voluntary_union AI in their direction.
+		add_modifier = {
+			name = irr_cultural_ties_modifier
+			days = 1825   # 5 years
+			is_decaying = yes
+		}
+		scope:target_country = {
+			add_modifier = {
+				name = irr_cultural_ties_modifier
+				days = 1825
+				is_decaying = yes
+			}
+		}
+	}
+
+	# --- Option C: Demand return of [state] ---
+	option = {
+		name = irredentism.1.c
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { irredentist_war_tilt >= 1 }
+				add = 2
+			}
+			modifier = {
+				trigger = { irredentist_pressure_score >= 8 }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					is_diplomatic_play_committed_participant = yes
+				}
+				add = -100   # Don't pile a play on top of an existing one
+			}
+		}
+		trigger = {
+			# Can only demand a state if we have one to demand AND we're
+			# not already in a play.
+			exists = scope:irr_demanded_state
+			is_diplomatic_play_committed_participant = no
+			scope:target_country = { is_diplomatic_play_committed_participant = no }
+		}
+		change_infamy = 2
+		create_diplomatic_play = {
+			target_country = scope:target_country
+			type = dp_return_state
+			target_state = scope:irr_demanded_state
+		}
+		# Notify the target with Event 2 (narrative + IG reactions).
+		scope:target_country = {
+			trigger_event = { id = irredentism.2 days = 5 }
+		}
+	}
+
+	# --- Option D: Bide our time ---
+	option = {
+		name = irredentism.1.bide
+		ai_chance = {
+			base = 1
+			modifier = {
+				# AI biders mostly when they have no driver beyond a low tilt
+				trigger = {
+					irredentist_war_tilt >= -1
+					irredentist_war_tilt <= 1
+				}
+				add = 1
+			}
+		}
+		# Memory: future event firing slightly biased to escalation.
+		set_variable = {
+			name = irr_bided_against
+			value = scope:target_country
+			days = 3650   # 10 years
+		}
+	}
+}
+
+# ============================================================================
+# Event 2: "[Other] Demands Our Lands"
+# Fires on the target country after Event 1 option C creates a return-state
+# play. Cosmetic + IG reaction options -- the play itself is already in motion.
+# ============================================================================
+irredentism.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "europenorthamerica_rich_and_poor" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.2.t
+	desc = irredentism.2.d
+	flavor = irredentism.2.f
+
+	duration = 3
+
+	immediate = {
+		save_scope_as = irr_target
+	}
+
+	# --- Option A: Stand defiant ---
+	option = {
+		name = irredentism.2.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { irredentist_war_tilt >= 1 }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = irr_defiance_modifier
+			days = 1825
+			is_decaying = yes
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	# --- Option B: Try to negotiate ---
+	option = {
+		name = irredentism.2.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { irredentist_war_tilt <= -1 }
+				add = 2
+			}
+		}
+		create_diplomatic_catalyst = {
+			type = catalyst_event_negative
+			target = ROOT
+		}
+		add_modifier = {
+			name = irr_negotiating_modifier
+			days = 1825
+			is_decaying = yes
+		}
+	}
+}
+
+# ============================================================================
+# Event 3: "An Opportunity for Union"
+# Fires on a unifier when voluntary_union_eligible (high relations + mutual
+# active driver). Player can propose voluntary union (surfaces the action via
+# diplomatic catalyst on the target) or withdraw to bank the goodwill.
+# ============================================================================
+irredentism.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.3.t
+	desc = irredentism.3.d
+	flavor = irredentism.3.f
+
+	duration = 3
+
+	cooldown = { years = 6 }
+
+	trigger = {
+		has_technology_researched = decolonization
+		irredentist_unifier_can_act = yes
+		NOT = { is_country_type = decentralized }
+		any_country = {
+			NOT = { THIS = ROOT }
+			ROOT = {
+				any_primary_culture = { is_primary_culture_of = PREV }
+			}
+			ROOT.relations:THIS >= relations_threshold:amicable
+			any_scope_state = {
+				is_homeland_of_country_cultures = ROOT
+				has_claim_by = ROOT
+			}
+		}
+	}
+
+	immediate = {
+		save_scope_as = irr_unifier
+		random_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				ROOT = {
+					any_primary_culture = { is_primary_culture_of = PREV }
+				}
+				ROOT.relations:THIS >= relations_threshold:amicable
+				any_scope_state = {
+					is_homeland_of_country_cultures = ROOT
+					has_claim_by = ROOT
+				}
+			}
+			save_scope_as = target_country
+		}
+	}
+
+	# --- Option A: Propose voluntary union ---
+	option = {
+		name = irredentism.3.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { irredentist_war_tilt <= -2 }
+				add = 4
+			}
+			modifier = {
+				trigger = { irredentist_war_tilt >= 3 }
+				add = -2
+			}
+		}
+		# Surface the proposal narratively; the diplomatic action itself
+		# becomes available in the lens once Phase 4 ships voluntary_union.
+		create_diplomatic_catalyst = {
+			type = catalyst_event_positive
+			target = scope:target_country
+		}
+		scope:target_country = {
+			trigger_event = { id = irredentism.4 days = 5 }
+		}
+		add_modifier = {
+			name = irr_offered_union_modifier
+			days = 1825
+			is_decaying = yes
+		}
+	}
+
+	# --- Option B: Withdraw -- bank goodwill instead ---
+	option = {
+		name = irredentism.3.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { irredentist_war_tilt >= 2 }
+				add = 1
+			}
+		}
+		change_relations = {
+			country = scope:target_country
+			value = 5
+		}
+	}
+}
+
+# ============================================================================
+# Event 4: "A Sister Nation Asks Us to Join"
+# Fires on the target after Event 3's "Propose union" option. Target chooses
+# whether to accept or reject (the diplomatic action itself flows through
+# voluntary_union; Event 4 is the narrative surface for the choice).
+# ============================================================================
+irredentism.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.4.t
+	desc = irredentism.4.d
+	flavor = irredentism.4.f
+
+	duration = 3
+
+	immediate = {
+		save_scope_as = irr_target
+	}
+
+	# --- Option A: We are open to it ---
+	option = {
+		name = irredentism.4.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { irredentist_war_tilt <= -2 }
+				add = 4
+			}
+			modifier = {
+				# Event 4 fires on the target; we want target's relations with
+				# the unifier (carried forward from Event 3 as scope:irr_unifier).
+				trigger = {
+					exists = scope:irr_unifier
+					scope:irr_unifier.relations:root >= relations_threshold:friendly
+				}
+				add = 2
+			}
+		}
+		# Modifier biases voluntary_union acceptance for 5y.
+		add_modifier = {
+			name = irr_open_to_union_modifier
+			days = 1825
+			is_decaying = yes
+		}
+	}
+
+	# --- Option B: We will remain a free nation ---
+	option = {
+		name = irredentism.4.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { irredentist_war_tilt >= 1 }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = irr_rejected_union_modifier
+			days = 1825
+			is_decaying = yes
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ============================================================================
+# Event 5a: "Our Client Asks Us to Bless a War"
+# Fires on the unifier's bloc leader when a non-leader bloc member is a
+# strong irredentist-pressure candidate but lacks war-path approval.
+# Endorse → sets var on requester unblocking irredentist_bloc_check_war.
+# Veto → cooldown modifier blocking re-attempt for 5y.
+# ============================================================================
+irredentism.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.7.t
+	desc = irredentism.7.d
+	flavor = irredentism.7.f
+
+	duration = 3
+
+	cooldown = { years = 5 }
+
+	# Inherited scopes (irr_requester, target_country) are saved by the
+	# on-action 3 days before fire. Either may have invalidated by now
+	# (annexation, decentralization). Suppress the event in that case --
+	# vanilla event-target accessor errors otherwise cascade through
+	# every option's ai_chance evaluation.
+	trigger = {
+		exists = scope:irr_requester
+		exists = scope:target_country
+		scope:irr_requester = { NOT = { is_country_type = decentralized } }
+		scope:target_country = { NOT = { is_country_type = decentralized } }
+	}
+
+	immediate = {
+		save_scope_as = irr_bloc_leader
+	}
+
+	# --- Endorse the war ---
+	option = {
+		name = irredentism.7.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			# Ideology match between leader and requester is the largest pull.
+			modifier = {
+				trigger = {
+					scope:irr_requester = {
+						any_interest_group = {
+							is_in_government = yes
+							OR = {
+								leader = { has_ideology = ideology:ideology_jingoist_leader }
+								leader = { has_ideology = ideology:ideology_fascist }
+								leader = { has_ideology = ideology:ideology_communist }
+								leader = { has_ideology = ideology:ideology_vanguardist }
+								leader = { has_ideology = ideology:ideology_ethno_nationalist }
+							}
+						}
+					}
+					ROOT = {
+						any_interest_group = {
+							is_in_government = yes
+							OR = {
+								leader = { has_ideology = ideology:ideology_jingoist_leader }
+								leader = { has_ideology = ideology:ideology_fascist }
+								leader = { has_ideology = ideology:ideology_communist }
+								leader = { has_ideology = ideology:ideology_vanguardist }
+								leader = { has_ideology = ideology:ideology_ethno_nationalist }
+							}
+						}
+					}
+				}
+				add = 4
+			}
+			# Bloc strength advantage over target's bloc.
+			modifier = {
+				trigger = {
+					OR = {
+						scope:target_country = { is_in_power_bloc = no }
+						AND = {
+							scope:target_country = { is_in_power_bloc = yes }
+							scope:target_country.power_bloc ?= {
+								any_power_bloc_member = {
+									country_rank < ROOT.country_rank
+								}
+							}
+						}
+					}
+				}
+				add = 3
+			}
+			# Target is unrecognized -- low cost, easy approval.
+			modifier = {
+				trigger = { scope:target_country = { is_country_type = unrecognized } }
+				add = 2
+			}
+			# Leader's own infamy is high -- reluctance to add inherited cost.
+			modifier = {
+				trigger = { infamy >= infamy_threshold:notorious }
+				add = -3
+			}
+			# Target is the leader's own ally / co-bloc member.
+			# Alliances live in treaty articles (Sphere of Influence rework),
+			# not in has_diplomatic_pact -- iterate ROOT's treaties.
+			modifier = {
+				trigger = {
+					OR = {
+						any_scope_treaty = {
+							binds = scope:target_country
+							any_scope_article = {
+								has_type = alliance
+							}
+						}
+						is_in_same_power_bloc = scope:target_country
+					}
+				}
+				add = -5
+			}
+		}
+		# Set approval var on the requester for 5 years. Use null-safe `?=`
+		# in case the requester was annexed between on-action and fire.
+		scope:irr_requester ?= {
+			set_variable = {
+				name = irredentist_war_approval
+				value = scope:target_country
+				days = 1825
+			}
+		}
+		# Trigger a notification event on the requester so they know they can act.
+		scope:irr_requester ?= {
+			trigger_event = { id = irredentism.1 days = 7 }
+		}
+	}
+
+	# --- Veto the war ---
+	option = {
+		name = irredentism.7.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { infamy >= infamy_threshold:infamous }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						any_scope_article = {
+							has_type = alliance
+						}
+					}
+				}
+				add = 5
+			}
+			modifier = {
+				trigger = {
+					scope:target_country = { country_rank >= rank_value:major_power }
+				}
+				add = 2
+			}
+		}
+		# Cool-down on the requester so the AI doesn't spam asks (null-safe).
+		scope:irr_requester ?= {
+			add_modifier = {
+				name = irr_war_vetoed_modifier
+				days = 1825
+				is_decaying = yes
+			}
+		}
+		if = {
+			limit = { exists = scope:irr_requester }
+			change_relations = {
+				country = scope:irr_requester
+				value = -10
+			}
+		}
+	}
+}
+
+# ============================================================================
+# Event 5b: "A Sister Asks to Be Absorbed"
+# Fires on the target's bloc leader when a non-leader bloc member is the
+# target of a voluntary union proposal. Bless → unblocks
+# irredentist_bloc_check_peace; Forbid → modifier blocks for 5y.
+# ============================================================================
+irredentism.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.8.t
+	desc = irredentism.8.d
+	flavor = irredentism.8.f
+
+	duration = 3
+
+	cooldown = { years = 5 }
+
+	# Inherited scopes (irr_proposed_target, irr_unifier) saved by the on-action
+	# 3 days before fire. Either may have invalidated -- suppress event then.
+	trigger = {
+		exists = scope:irr_proposed_target
+		exists = scope:irr_unifier
+		scope:irr_proposed_target = { NOT = { is_country_type = decentralized } }
+		scope:irr_unifier = { NOT = { is_country_type = decentralized } }
+	}
+
+	immediate = {
+		save_scope_as = irr_bloc_leader
+	}
+
+	# --- Bless the union ---
+	option = {
+		name = irredentism.8.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+			# Ideology match makes blessing easier.
+			modifier = {
+				trigger = {
+					ROOT = {
+						any_interest_group = {
+							is_in_government = yes
+							OR = {
+								leader = { has_ideology = ideology:ideology_market_liberal }
+								leader = { has_ideology = ideology:ideology_humanitarian }
+								leader = { has_ideology = ideology:ideology_pacifist }
+							}
+						}
+					}
+				}
+				add = 3
+			}
+			# Amicable+ relations with the unifier.
+			modifier = {
+				trigger = {
+					scope:irr_unifier.relations:root >= relations_threshold:amicable
+				}
+				add = 3
+			}
+			# Target is a peripheral / small contributor to the bloc.
+			modifier = {
+				trigger = {
+					scope:irr_proposed_target = { country_rank <= rank_value:minor_power }
+				}
+				add = 2
+			}
+		}
+		scope:irr_proposed_target = {
+			set_variable = {
+				name = irredentist_peace_approval
+				value = scope:irr_unifier
+				days = 1825
+			}
+		}
+		# When the unifier is also in OUR bloc (we're its leader too),
+		# the same blessing covers them. Without this, two non-leader members
+		# of the same bloc could never pass irredentist_bloc_check_peace
+		# even after their shared leader said yes.
+		if = {
+			limit = {
+				scope:irr_unifier ?= {
+					is_in_same_power_bloc = ROOT
+				}
+			}
+			scope:irr_unifier ?= {
+				set_variable = {
+					name = irredentist_peace_approval
+					value = scope:irr_proposed_target
+					days = 1825
+				}
+			}
+		}
+	}
+
+	# --- Forbid the union ---
+	option = {
+		name = irredentism.8.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					scope:irr_unifier.relations:root <= relations_threshold:cold
+				}
+				add = 4
+			}
+			modifier = {
+				trigger = {
+					scope:irr_proposed_target = { country_rank >= rank_value:major_power }
+				}
+				add = 3
+			}
+		}
+		scope:irr_proposed_target = {
+			add_modifier = {
+				name = irr_union_forbidden_modifier
+				days = 1825
+				is_decaying = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# Event 6: "[Annexed] absorbed by [Unifier]" — third-party notification
+# Fires on countries with Engaged-or-higher interest in the annexed country's
+# strategic regions. Uses var:irr_notify_peaceful_flag (set by the dispatching
+# scripted effect) to choose warlike vs peaceful flavor text.
+# ============================================================================
+irredentism.6 = {
+	type = country_event
+	placement = scope:irr_annexed_country
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.6.t
+	desc = {
+		# Pick desc by the peaceful flag the dispatching effect set on us.
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = irr_notify_peaceful_flag
+					var:irr_notify_peaceful_flag = yes
+				}
+				desc = irredentism.6.d.peaceful
+			}
+			triggered_desc = { desc = irredentism.6.d.warlike }
+		}
+	}
+	flavor = irredentism.6.f
+
+	duration = 3
+
+	# Per-target cooldown handles dedup if multiple regions overlap.
+	cooldown = { years = 1 }
+
+	trigger = {
+		exists = scope:irr_annexed_country
+		exists = scope:irr_unifier
+	}
+
+	immediate = {
+		save_scope_as = irr_observer
+	}
+
+	option = {
+		name = irredentism.6.a
+		default_option = yes
+		# Mirror the engine's own diplomatic-incident relations effect
+		# directionally: observers slightly cool toward the unifier when
+		# the annexation was warlike.
+		if = {
+			limit = {
+				has_variable = irr_notify_peaceful_flag
+				var:irr_notify_peaceful_flag = no
+			}
+			change_relations = {
+				country = scope:irr_unifier
+				value = -5
+			}
+		}
+		remove_variable = irr_notify_peaceful_flag
+	}
+}

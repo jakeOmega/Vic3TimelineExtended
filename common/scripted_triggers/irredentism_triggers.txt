@@ -1,0 +1,205 @@
+﻿# ============================================================================
+# IRREDENTISM SCRIPTED TRIGGERS
+#
+# Generic same-culture-with-claims reunification system. Activates after
+# `decolonization` tech unlocks (era 6) and surfaces as: monthly events on
+# the unifier, an AI strategy biasing aggression toward candidate targets,
+# the te_reunify_country wargoal, and the voluntary_union diplomatic action.
+#
+# These triggers are read by:
+#   - common/script_values/irredentism_values.txt (pressure score, tilt)
+#   - common/ai_strategies/other.txt (ai_strategy_irredentist)
+#   - common/war_goal_types/te_reunify_country.txt
+#   - common/diplomatic_actions/extra_diplo_actions.txt (voluntary_union)
+#   - events/irredentism_events.txt
+#
+# Design notes live in /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md
+# ============================================================================
+
+# Country scope, takes scope:target_country.
+# Returns true when ROOT and scope:target_country are in principle a candidate
+# pair for irredentist pressure: tech unlocked, share at least one primary
+# culture, ROOT holds a claim on at least one home-culture state of target,
+# and neither side is in a subject relationship that would block direct action.
+#
+# Bloc compatibility is intentionally NOT filtered here -- path-specific gates
+# (`irredentist_bloc_check_war` / `_peace`) and the engine-level Defensive
+# Cooperation block decide what the bloc setup *allows*.
+is_irredentist_candidate_for = {
+	has_technology_researched = decolonization
+
+	NOT = { is_country_type = decentralized }
+	scope:target_country = {
+		NOT = { is_country_type = decentralized }
+	}
+
+	# Same primary culture (strict): share at least one primary culture.
+	any_primary_culture = {
+		is_primary_culture_of = scope:target_country
+	}
+
+	# At least one of target's owned states is homeland of ROOT's primary
+	# culture and is claimed by ROOT.
+	scope:target_country = {
+		any_scope_state = {
+			is_homeland_of_country_cultures = ROOT
+			has_claim_by = ROOT
+		}
+	}
+
+	# Avoid degenerate same-country / shared-subject cases.
+	NOT = { THIS = scope:target_country }
+	NOR = {
+		AND = {
+			is_subject = yes
+			scope:target_country = { is_subject_of = ROOT.overlord }
+		}
+		AND = {
+			scope:target_country = { is_subject = yes }
+			is_subject_of = scope:target_country.overlord
+		}
+	}
+}
+
+# Country scope (ROOT only). Binary on/off gate: is the system active for
+# this country? Active iff ANY ideology driver is present (warlike or
+# peaceful flavor). Tilt (in irredentism_values.txt) determines AI bias
+# between paths; this trigger only decides whether the system is on.
+irredentist_unifier_can_act = {
+	OR = {
+		# Law-based drivers
+		has_law = law_type:law_ethnostate
+		has_law = law_type:law_national_supremacy
+		has_law = law_type:law_council_republic
+		has_law = law_type:law_multicultural
+
+		# Leader-ideology drivers across any ruling IG
+		any_interest_group = {
+			is_in_government = yes
+			OR = {
+				leader = { has_ideology = ideology:ideology_jingoist_leader }
+				leader = { has_ideology = ideology:ideology_fascist }
+				leader = { has_ideology = ideology:ideology_ethno_nationalist }
+				leader = { has_ideology = ideology:ideology_communist }
+				leader = { has_ideology = ideology:ideology_vanguardist }
+				leader = { has_ideology = ideology:ideology_market_liberal }
+				leader = { has_ideology = ideology:ideology_humanitarian }
+				leader = { has_ideology = ideology:ideology_republican_leader }
+				leader = { has_ideology = ideology:ideology_pacifist }
+				leader = { has_ideology = ideology:ideology_anarchist }
+				leader = { has_ideology = ideology:ideology_reformer }
+			}
+		}
+
+		# Existing China-style JE drivers
+		has_journal_entry = je_reunify_china
+	}
+}
+
+# Country scope (ROOT). Initiator-side gate for the war path. Either ROOT is
+# its own bloc leader / has no bloc, or the bloc leader has previously set
+# the approval var via Event 5a.
+#
+# The `exists = var:irredentist_war_approval` guard is per
+# scripting_best_practices.md §666 (object-ref vars need exists check beyond
+# has_variable). The var is set on ROOT to point at scope:target_country, so
+# we additionally check it's set against THIS target.
+irredentist_bloc_check_war = {
+	custom_tooltip = {
+		text = te_irredentist_bloc_check_war_tt
+		OR = {
+			is_in_power_bloc = no
+			is_power_bloc_leader = yes
+			AND = {
+				has_variable = irredentist_war_approval
+				exists = var:irredentist_war_approval
+				var:irredentist_war_approval = scope:target_country
+			}
+		}
+	}
+}
+
+# Country scope (ROOT) with scope:target_country. Both-sides gate for the
+# peaceful path. Each side must independently be unaffiliated / lead its
+# bloc / be in the SAME bloc as the other party led by them / have an
+# explicit approval var from its own bloc leader.
+#
+# `custom_tooltip` wraps each side so the in-game failure message is one
+# clear sentence per side instead of the auto-expanded OR ladder.
+irredentist_bloc_check_peace = {
+	# Unifier side
+	custom_tooltip = {
+		text = te_irredentist_bloc_check_peace_unifier_tt
+		OR = {
+			is_in_power_bloc = no
+			is_power_bloc_leader = yes
+			# Diplomatic-Framework blocs are cooperative-only -- the leader
+			# has no political authority over members and cannot veto union.
+			power_bloc ?= {
+				has_identity = identity:identity_diplomatic
+			}
+			# Same bloc, target is the leader (we're absorbing into our own bloc leader).
+			# Unusual since voluntary_union_eligible requires us > target, but kept for symmetry.
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				scope:target_country = { is_power_bloc_leader = yes }
+			}
+			AND = {
+				has_variable = irredentist_peace_approval
+				exists = var:irredentist_peace_approval
+				var:irredentist_peace_approval = scope:target_country
+			}
+		}
+	}
+	# Target side
+	custom_tooltip = {
+		text = te_irredentist_bloc_check_peace_target_tt
+		scope:target_country = {
+			OR = {
+				is_in_power_bloc = no
+				is_power_bloc_leader = yes
+				# Same exemption: Diplomatic-Framework blocs don't gate union.
+				power_bloc ?= {
+					has_identity = identity:identity_diplomatic
+				}
+				# Target is in OUR bloc and we lead it. The common case --
+				# Germany absorbing Oldenburg out of its own North German bloc.
+				AND = {
+					is_in_same_power_bloc = ROOT
+					ROOT = { is_power_bloc_leader = yes }
+				}
+				AND = {
+					has_variable = irredentist_peace_approval
+					exists = var:irredentist_peace_approval
+					var:irredentist_peace_approval = ROOT
+				}
+			}
+		}
+	}
+}
+
+# Country scope, takes scope:target_country. Eligibility for the peaceful
+# voluntary_union diplomatic action. Deliberately a *wide* gate: any
+# sovereign nation can pursue voluntary union; tilt and AI scoring decide
+# whether either side actually wants to. Explicit blockers only:
+#   - target is a subject (peaceful path can't bypass overlord)
+#   - either side already in a play
+#   - relations too cold for a union proposal
+#   - unifier isn't larger than target (avoids "minor power absorbs great power")
+# The activator gate (`irredentist_unifier_can_act`) is intentionally NOT
+# checked here -- see the wargoal te_reunify_country for the warlike path
+# which does still require it.
+voluntary_union_eligible = {
+	scope:target_country = {
+		OR = {
+			is_subject = no
+			is_subject_of = ROOT
+		}
+		is_diplomatic_play_committed_participant = no
+	}
+	is_diplomatic_play_committed_participant = no
+	scope:target_country.relations:root >= relations_threshold:amicable
+	# Unifier should be meaningfully larger / stronger -- avoids "small fry
+	# absorbs great power" absurdities.
+	country_rank > scope:target_country.country_rank
+}

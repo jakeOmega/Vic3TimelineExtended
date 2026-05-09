@@ -21,3 +21,155 @@
 		}
 	}
 }
+
+# ============================================================================
+# IRREDENTIST PRESSURE
+#
+# Generic same-culture-with-claims aggression strategy. Activates after the
+# `decolonization` tech (era 6) for any country with at least one candidate
+# (per `is_irredentist_candidate_for`) and an active ideology driver. Stacks
+# alongside `ai_strategy_unify_china` -- China gets both, others get this.
+#
+# Aggression and weight read `irredentist_pressure_score` and
+# `irredentist_war_tilt` (common/script_values/irredentism_values.txt). The
+# pressure score already factors tilt internally, so the aggression block
+# stays simple.
+#
+# See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+# ============================================================================
+ai_strategy_irredentist = {
+	icon = "gfx/interface/icons/ai_strategy_icons/territorial_expansion.dds"
+
+	type = diplomatic
+
+	undesirable_infamy_level = {
+		value = 50
+	}
+
+	unacceptable_infamy_level = {
+		value = 100
+	}
+
+	wargoal_maneuvers_fraction = {
+		value = 0.10
+	}
+
+	diplomatic_play_boldness = {
+		value = 15
+	}
+
+	recklessness = {
+		value = 0.20
+	}
+
+	aggression = {
+		value = 0
+
+		# Aggression is evaluated per (unifier, target) pair. ROOT is the
+		# unifier; the AI engine binds scope:target_country to the candidate.
+		# `is_irredentist_candidate_for` reads scope:target_country directly,
+		# so call it from ROOT scope -- not from inside `scope:target_country = { ... }`,
+		# which would put THIS on the target and break the trigger's scope
+		# expectations (was the source of cascade scope errors in error.log).
+		if = {
+			limit = {
+				is_irredentist_candidate_for = yes
+				irredentist_unifier_can_act = yes
+			}
+			add = irredentist_pressure_score
+		}
+
+		# Less aggressive on antagonistic-only attitudes, mirroring the
+		# China strategy's tone-down clause.
+		if = {
+			limit = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}
+			}
+			multiply = 0.5
+		}
+
+		# Bloc co-members in the same Military Treaty bloc with Defensive
+		# Cooperation can't war each other anyway -- don't waste cycles
+		# scoring aggression on them.
+		if = {
+			limit = {
+				is_in_same_power_bloc = scope:target_country
+				power_bloc ?= {
+					has_principle = principle:principle_defensive_cooperation_1
+				}
+			}
+			multiply = 0
+		}
+	}
+
+	building_group_weights = {
+		bg_army = 1.25
+	}
+
+	wargoal_weights = {
+		te_reunify_country = 3.0
+		annex_country = 1.0
+		conquer_state = 1.5
+		return_state = 2.0
+	}
+
+	secret_goal_weights = {
+		conquer = 1.25
+	}
+
+	possible = {
+		is_subject = no
+		has_technology_researched = decolonization
+		irredentist_unifier_can_act = yes
+
+		# At least one valid candidate exists. Inlined here -- the
+		# `is_irredentist_candidate_for` trigger reads scope:target_country,
+		# which isn't bound in the `possible` block (the engine only binds
+		# it inside `aggression` per-target), so we reproduce the conditions
+		# directly via `any_country`.
+		any_country = {
+			NOT = { THIS = ROOT }
+			NOT = { is_country_type = decentralized }
+			ROOT = {
+				any_primary_culture = { is_primary_culture_of = PREV }
+			}
+			any_scope_state = {
+				is_homeland_of_country_cultures = ROOT
+				has_claim_by = ROOT
+			}
+		}
+	}
+
+	weight = {
+		value = 10
+
+		# Strong tilt in either direction = stronger pull toward this strategy.
+		if = {
+			limit = { irredentist_war_tilt >= 4 }
+			add = 10
+		}
+		else_if = {
+			limit = { irredentist_war_tilt >= 2 }
+			add = 5
+		}
+
+		# Armed-forces dominance pushes aggression-flavored strategies up.
+		if = {
+			limit = { ig:ig_armed_forces ?= { is_powerful = yes } }
+			multiply = 1.25
+		}
+
+		# Aggressive Coordination bloc principle nudges this up too.
+		if = {
+			limit = {
+				power_bloc ?= {
+					has_principle_group = principle_group:principle_group_aggressive_coordination
+				}
+			}
+			add = 5
+		}
+	}
+}

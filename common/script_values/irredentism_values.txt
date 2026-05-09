@@ -1,0 +1,242 @@
+﻿# ============================================================================
+# IRREDENTISM SCRIPT VALUES
+#
+# Drive AI strategy weighting and event firing rate for the same-culture +
+# claims reunification system. See common/scripted_triggers/irredentism_triggers.txt
+# and /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+#
+# Both values are evaluated in unifier scope and expect scope:target_country
+# (or ROOT.target_country for AI-strategy contexts) to be set.
+# ============================================================================
+
+# Number of states owned by scope:target_country that are in ROOT's primary
+# culture homeland AND that ROOT holds a claim on. Capped at 10 to keep AI
+# weighting from blowing up against very large targets.
+te_irredentist_claimed_home_states = {
+	value = 0
+	scope:target_country = {
+		every_scope_state = {
+			limit = {
+				is_homeland_of_country_cultures = ROOT
+				has_claim_by = ROOT
+			}
+			add = 1
+		}
+	}
+	max = 10
+}
+
+# Total count of target's home-culture states (regardless of claim) -- used
+# to compute "majority claimed" tier.
+te_irredentist_home_states_total = {
+	value = 0
+	scope:target_country = {
+		every_scope_state = {
+			limit = { is_homeland_of_country_cultures = ROOT }
+			add = 1
+		}
+	}
+	max = 30
+}
+
+# Signed war/peace tilt, roughly -10..+10. Positive = warlike; negative =
+# peaceful. Drives AI option weights but never gates an action -- both the
+# wargoal and the voluntary_union action remain selectable under any active
+# driver. Ideology determines preference, not capability.
+irredentist_war_tilt = {
+	value = 0
+
+	# === Warlike pulls ===
+
+	if = {
+		limit = { has_law = law_type:law_ethnostate }
+		add = 5
+	}
+	if = {
+		limit = { has_law = law_type:law_national_supremacy }
+		add = 4
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader = { has_ideology = ideology:ideology_fascist }
+			}
+		}
+		add = 4
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader = { has_ideology = ideology:ideology_jingoist_leader }
+			}
+		}
+		add = 3
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader = { has_ideology = ideology:ideology_ethno_nationalist }
+			}
+		}
+		add = 3
+	}
+	# Revolutionary expansionism: hard-line communist with command economy.
+	if = {
+		limit = {
+			has_law = law_type:law_council_republic
+			has_law = law_type:law_command_economy
+		}
+		add = 2
+	}
+	# Soft communist tilt: communist leader but not the law combo above.
+	# Communist union *can* be peaceful (Soviet sphere), so this is small.
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				OR = {
+					leader = { has_ideology = ideology:ideology_communist }
+					leader = { has_ideology = ideology:ideology_vanguardist }
+				}
+			}
+			NOT = {
+				AND = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_command_economy
+				}
+			}
+		}
+		add = 1
+	}
+	# Already burning bridges: high infamy makes the moral cost of war softer.
+	if = {
+		limit = { infamy >= infamy_threshold:infamous }
+		add = 1
+	}
+
+	# === Peaceful pulls ===
+
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader = { has_ideology = ideology:ideology_pacifist }
+			}
+		}
+		add = -3
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader = { has_ideology = ideology:ideology_anarchist }
+			}
+		}
+		add = -3
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				OR = {
+					leader = { has_ideology = ideology:ideology_humanitarian }
+					leader = { has_ideology = ideology:ideology_market_liberal }
+				}
+			}
+		}
+		add = -2
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader = { has_ideology = ideology:ideology_republican_leader }
+			}
+		}
+		add = -2
+	}
+	if = {
+		limit = { has_law = law_type:law_multicultural }
+		add = -2
+	}
+	if = {
+		limit = { scope:target_country.relations:root >= relations_threshold:cordial }
+		add = -2
+	}
+
+	min = -10
+	max = 10
+}
+
+# How strong is this candidate? Drives AI aggression and event firing rate
+# regardless of war/peace path. Reads claims, homeland ownership, bloc
+# overlap, and the absolute value of war tilt (strong opinions in either
+# direction = stronger pressure).
+irredentist_pressure_score = {
+	value = 0
+
+	# Base: count of claimed home-culture states.
+	add = te_irredentist_claimed_home_states
+
+	# "Majority" tier bonus when 2/3+ of target's home states are claimed.
+	if = {
+		limit = {
+			te_irredentist_home_states_total >= 3
+			te_irredentist_claimed_home_states >= {
+				value = te_irredentist_home_states_total
+				multiply = 0.66
+			}
+		}
+		multiply = 1.5
+	}
+
+	# ROOT already owns part of the shared cultural homeland.
+	# (Loose check, matching the original intent: shared culture exists AND
+	# ROOT owns at least one of its own homeland states.)
+	if = {
+		limit = {
+			any_primary_culture = {
+				is_primary_culture_of = scope:target_country
+			}
+			any_scope_state = {
+				is_homeland_of_country_cultures = ROOT
+			}
+		}
+		add = 2
+	}
+
+	# Tilt amplifies pressure (war is irredentism; peace is too).
+	# Approximate the "absolute value clamped to 0..5" with two
+	# half-clamps: positive tilt up to +5, negative tilt up to -3
+	# (peaceful path is more eligibility-constrained).
+	if = {
+		limit = { irredentist_war_tilt >= 1 }
+		add = {
+			value = irredentist_war_tilt
+			max = 5
+			min = 0
+		}
+	}
+	if = {
+		limit = { irredentist_war_tilt <= -1 }
+		add = {
+			value = irredentist_war_tilt
+			multiply = -1
+			max = 3
+			min = 0
+		}
+	}
+
+	# Same-bloc dampener: cohesion is precious; AI shouldn't tear up its
+	# own bloc casually. Bloc-leader approval flow (Event 5a/5b) handles
+	# the "bloc-leader-endorsed" cases more strongly.
+	if = {
+		limit = { is_in_same_power_bloc = scope:target_country }
+		multiply = 0.5
+	}
+
+	min = 0
+}

@@ -122,6 +122,8 @@ on_monthly_pulse_country = {
 		investment_pool_setup_on_action
 		international_relations_events_on_action
 		decolonization_events_on_action
+		irredentism_events_on_action
+		irredentism_bloc_approval_on_action
 		movement_events_te_on_action
 		social_movement_orphans_on_action
 		society_technology_events_on_action
@@ -2536,6 +2538,184 @@ consciousness_network_on_action = {
 				add_modifier = {
 					name = consciousness_network_progress
 					multiplier = this.var:consciousness_network_progress_var
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# IRREDENTIST PRESSURE EVENTS — monthly chance for eligible same-culture
+# pairs. Fires Event 1 ("Diaspora Calls") for warlike/general candidates,
+# Event 3 ("Opportunity for Union") for peaceful-driver candidates with
+# high relations. Total fire rate ~3.5%/month per active country.
+#
+# See events/irredentism_events.txt and the design plan at
+# /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+# ============================================================================
+irredentism_events_on_action = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { is_country_type = decentralized }
+				has_technology_researched = decolonization
+				irredentist_unifier_can_act = yes
+				# Existence gate: at least one valid candidate
+				any_country = {
+					NOT = { THIS = ROOT }
+					NOT = { is_country_type = decentralized }
+					ROOT = {
+						any_primary_culture = { is_primary_culture_of = PREV }
+					}
+					any_scope_state = {
+						is_homeland_of_country_cultures = ROOT
+						has_claim_by = ROOT
+					}
+				}
+			}
+			random_list = {
+				965 = { } # ~96.5% nothing
+				# "The Diaspora Calls" — central pressure event
+				25 = {
+					trigger_event = { id = irredentism.1 }
+				}
+				# "An Opportunity for Union" — peaceful proposal
+				10 = {
+					trigger = {
+						any_country = {
+							NOT = { THIS = ROOT }
+							ROOT = {
+								any_primary_culture = { is_primary_culture_of = PREV }
+							}
+							ROOT.relations:THIS >= relations_threshold:amicable
+						}
+					}
+					trigger_event = { id = irredentism.3 }
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# IRREDENTIST BLOC APPROVAL — fires Events 5a/5b on bloc leaders when one of
+# their non-leader members would activate the war or peace path but lacks
+# the corresponding approval var. Low fire rate (~1.5%/month combined per
+# eligible non-leader member).
+#
+# 5a: bloc member is a strong irredentist candidate (warlike-tilted) without
+#     war approval. Bloc leader endorses or vetoes.
+# 5b: bloc member has just received an irr_offered_union_modifier (proposed
+#     to via Event 3) without peace approval. Bloc leader blesses or forbids.
+# ============================================================================
+irredentism_bloc_approval_on_action = {
+	effect = {
+		# 5a: warlike client asks bloc leader to bless a war
+		if = {
+			limit = {
+				NOT = { is_country_type = decentralized }
+				has_technology_researched = decolonization
+				is_in_power_bloc = yes
+				is_power_bloc_leader = no
+				irredentist_unifier_can_act = yes
+				NOT = { has_modifier = irr_war_vetoed_modifier }
+				# No standing approval for any target
+				NOT = {
+					AND = {
+						has_variable = irredentist_war_approval
+						exists = var:irredentist_war_approval
+					}
+				}
+				# At least one strong candidate
+				any_country = {
+					NOT = { THIS = ROOT }
+					NOT = { is_country_type = decentralized }
+					ROOT = {
+						any_primary_culture = { is_primary_culture_of = PREV }
+					}
+					any_scope_state = {
+						is_homeland_of_country_cultures = ROOT
+						has_claim_by = ROOT
+					}
+				}
+			}
+			random_list = {
+				985 = { } # 98.5% nothing
+				15 = {
+					save_scope_as = irr_requester
+					random_country = {
+						limit = {
+							NOT = { THIS = ROOT }
+							NOT = { is_country_type = decentralized }
+							ROOT = {
+								any_primary_culture = { is_primary_culture_of = PREV }
+							}
+							any_scope_state = {
+								is_homeland_of_country_cultures = ROOT
+								has_claim_by = ROOT
+							}
+						}
+						save_scope_as = target_country
+					}
+					power_bloc ?= {
+						power_bloc_leader ?= {
+							trigger_event = { id = irredentism.7 days = 3 }
+						}
+					}
+				}
+			}
+		}
+
+		# 5b: peaceful client received a union proposal -- ask bloc leader.
+		# Skip for Diplomatic-Framework blocs: that identity has no leader
+		# authority over members, so irredentist_bloc_check_peace already
+		# passes without an approval var. Firing 5b would be wasted.
+		if = {
+			limit = {
+				NOT = { is_country_type = decentralized }
+				is_in_power_bloc = yes
+				is_power_bloc_leader = no
+				NOT = {
+					power_bloc ?= {
+						has_identity = identity:identity_diplomatic
+					}
+				}
+				has_modifier = irr_open_to_union_modifier
+				NOT = {
+					AND = {
+						has_variable = irredentist_peace_approval
+						exists = var:irredentist_peace_approval
+					}
+				}
+				# Some same-culture amicable+ neighbor exists -- the unifier
+				NOT = { has_modifier = irr_union_forbidden_modifier }
+				any_country = {
+					NOT = { THIS = ROOT }
+					ROOT = {
+						any_primary_culture = { is_primary_culture_of = PREV }
+					}
+					relations:ROOT >= relations_threshold:amicable
+				}
+			}
+			random_list = {
+				985 = { }
+				15 = {
+					save_scope_as = irr_proposed_target
+					random_country = {
+						limit = {
+							NOT = { THIS = ROOT }
+							ROOT = {
+								any_primary_culture = { is_primary_culture_of = PREV }
+							}
+							relations:ROOT >= relations_threshold:amicable
+						}
+						save_scope_as = irr_unifier
+					}
+					power_bloc ?= {
+						power_bloc_leader ?= {
+							trigger_event = { id = irredentism.8 days = 3 }
+						}
+					}
 				}
 			}
 		}
