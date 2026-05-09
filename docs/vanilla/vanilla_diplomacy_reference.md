@@ -408,6 +408,8 @@ The two big functional axes are:
 
 Personal unions and chartered companies are special: PUs require Nationalism tech to change autonomy and end if either side leaves Monarchy; chartered companies require Civilizing Mission tech and have unique throughput / construction bonuses applied to government-owned buildings via the overlord's company.
 
+**Colonial Administration** subjects (six pre-set African regions: Abyssinia, Congo, East Africa, Niger, Senegal, South Africa) are a Colony-typed subject created via the *Establish Colonial Administration* JE; they ship with a fixed law profile and four flavor variants (Colonial Company / Religious Mission / Colonial Settlement / Colonial Extraction). See `vanilla_colonization_reference.md` § 6 for the JE mechanics and the path-dependent law/modifier set.
+
 ### 10.2 Liberty desire
 
 Liberty desire (LD) is per-subject in [0–100], bucketed into three bands: **Low / Moderate / High**. Low LD makes discriminated-pop radicalism softer and produces more loyalists from movements; High LD does the opposite and unlocks the subject's ability to demand independence in a play. Specific band thresholds and per-band modifier values are tuning balance numbers in `common/defines/`.

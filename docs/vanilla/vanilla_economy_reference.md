@@ -331,6 +331,10 @@ When a mass migration triggers, the engine searches for an eligible target state
 
 Each combination of culture and country has a small weekly chance of triggering a mass migration based on cultural turmoil and on how far below SoL 10 / 5 the culture's average SoL sits.
 
+### 8.6 Slaves and migration
+
+**Slaves cannot migrate** under any law, including `No Migration Controls` — the slave profession is migration-locked. The one exception is **`Slave Trade`**, which permits "imports" of slaves into states with available slave jobs even when the country has `Closed Borders`. This makes `Slave Trade` the only law that bypasses the migration-controls gate for any pop type. See `vanilla_pops_reference.md` § 4 for the broader slave profession specials.
+
 ## 9. The construction sector and queue
 
 ### 9.1 Vanilla vs this mod
