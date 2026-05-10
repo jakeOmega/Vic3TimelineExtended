@@ -20,15 +20,7 @@ comment on the loc line:
 
 ## Unreviewed Flags
 
-### `concept_leverage` (2)
-
-- `localization/english/te_concepts_l_english.yml:842` — referenced by `cultural_hegemony_effect_desc`
-- `localization/english/te_unused_l_english.yml:288` — referenced by `extend_influence_effects_desc`
-
-### `concept_standard_of_living` (2)
-
-- `localization/english/te_concepts_l_english.yml:558` — referenced by `concept_ch_sol_desc`
-- `localization/english/te_concepts_l_english.yml:589` — referenced by `concept_foreign_cultural_benchmark_desc`
+_None._
 
 ## Reviewed Exemptions
 
@@ -37,9 +29,9 @@ _None._
 ## Coverage
 
 - loc files scanned: 29
-- concept references checked: 1078
+- concept references checked: 2894
 - registered concepts (vanilla + mod): 713
-- total flags: 4
-- unreviewed: 4
+- total flags: 0
+- unreviewed: 0
 - exempted: 0
 

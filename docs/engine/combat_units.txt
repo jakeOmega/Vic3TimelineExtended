@@ -61,7 +61,7 @@ Marines:
 		Unlocking Technology: Power of the Purse
 	Assault Marines
 		Unlocking Technology: Landing Craft
-	Combined Arms Marines
+	[concept_combined_arms] Marines
 		Unlocking Technology: Combined Arms
 	Stealth Marines
 		Unlocking Technology: Stealth Technology

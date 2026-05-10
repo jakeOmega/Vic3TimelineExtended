@@ -54,7 +54,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.1
 - **Title:** Speculative Mania
-- **Description:** Reports are flooding in from every trading floor and financial institution: a wave of speculative fervor has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.
+- **Description:** Reports are flooding in from every trading floor and financial [concept_institution]: a wave of speculative [concept_fervor] has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.
 - **Flavor:** \"I put in five hundred on Monday. By Thursday it was twelve hundred. I've never seen anything like it.\"\n\n\"You haven't seen anything yet, friend. My broker says this is just the beginning.\"\n\n\"That's what they said about the last one, too.\"
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
@@ -102,13 +102,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.3
 - **Title:** Credit Crunch Fears
-- **Description:** Banks are sitting on mountains of reserves while businesses starve for credit. Lending has ground to a near-halt as financial institutions, scarred by recent uncertainty, refuse to take on risk. Merchants and manufacturers are demanding that the government intervene to restart the flow of capital - but bankers warn that forcing premature lending could plant the seeds of the next crisis.
+- **Description:** Banks are sitting on mountains of reserves while businesses starve for credit. Lending has ground to a near-halt as financial [Concept('concept_institution', 'institutions')], scarred by recent uncertainty, refuse to take on risk. Merchants and manufacturers are demanding that the government intervene to restart the flow of capital - but bankers warn that forcing premature lending could plant the seeds of the next crisis.
 - **Flavor:** \"There is money everywhere and credit nowhere. The paradox is maddening.\"\n\n\"The banks say they're being prudent.\"\n\n\"Prudent! My workers haven't been paid in a fortnight because I can't get a loan against goods already sitting in my warehouse.\"
 - **Current image:** gfx/event_pictures/financial_distress_street.dds
 
 ### banking_cycle_events.4
 - **Title:** Bank Run
-- **Description:** Panic has seized the banking sector. Depositors are queuing in the streets, desperate to withdraw their savings before the institutions collapse. Several banks have already shuttered their doors. The government faces an impossible choice: let the system purge itself at enormous cost, or intervene to restore confidence at the risk of rewarding reckless lending.
+- **Description:** Panic has seized the banking sector. Depositors are queuing in the streets, desperate to withdraw their savings before the [Concept('concept_institution', 'institutions')] collapse. Several banks have already shuttered their doors. The government faces an impossible choice: let the system purge itself at enormous cost, or intervene to restore confidence at the risk of rewarding reckless lending.
 - **Flavor:** \"I saw a woman weeping outside the National Savings Bank this morning. She had her life's earnings in there - thirty years of careful thrift, gone in an afternoon.\"\n\n\"The directors, of course, withdrew their own funds last week.\"
 - **Current image:** gfx/event_pictures/bank_run_crowd.dds
 
@@ -126,7 +126,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.7
 - **Title:** Bank Consolidation Wave
-- **Description:** A wave of mergers and acquisitions is reshaping the banking sector. Smaller institutions are being swallowed by larger ones, creating financial giants with unprecedented reach and influence. Proponents argue this consolidation will produce stronger, more efficient banks. Critics warn that these behemoths are becoming too big to fail - and too powerful to regulate.
+- **Description:** A wave of mergers and acquisitions is reshaping the banking sector. Smaller [Concept('concept_institution', 'institutions')] are being swallowed by larger ones, creating financial giants with unprecedented reach and influence. Proponents argue this consolidation will produce stronger, more efficient banks. Critics warn that these behemoths are becoming too big to fail - and too powerful to regulate.
 - **Flavor:** \"The new mega-banks tower over their competitors, their boardrooms more lavish than some government ministries.\"\n\n\"And if one of them fails?\"\n\n\"Then God help us all.\"
 - **Current image:** gfx/event_pictures/banking_boardroom.dds
 
@@ -144,7 +144,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.10
 - **Title:** Sovereign Debt Scare
-- **Description:** The bond market has turned hostile. Yields on government debt are climbing sharply as investors demand ever-higher premiums to hold our obligations. Rumors of imminent default are spreading, and the cost of servicing the national debt is consuming an alarming share of revenue. Without decisive action, the country risks losing access to credit markets entirely.
+- **Description:** The bond market has turned hostile. Yields on government debt are climbing sharply as investors demand ever-higher premiums to hold our [Concept('concept_obligation', 'obligations')]. Rumors of imminent default are spreading, and the cost of servicing the national debt is consuming an alarming share of revenue. Without decisive action, the country risks losing access to credit markets entirely.
 - **Flavor:** \"The Treasury Secretary looked pale when he presented the figures. 'At current rates,' he said, 'we will be spending more on interest than on the army within eighteen months.'\"\n\n\"And if we can't borrow?\"\n\n\"Then we can't govern.\"
 - **Current image:** gfx/event_pictures/central_bank_policy.dds
 
@@ -156,7 +156,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.160
 - **Title:** Federation Capital Reserve Crisis
-- **Description:** The federation's shared capital reserve: used to service inter-cooperative agreements, mutual guarantees, and infrastructure bonds: has been significantly depleted. Member cooperatives have continued to draw on it through dividend-linked obligations while contributing less than projected. The council must now choose between austerity, new credit, or a partial default on some commitments, each with different consequences for trust between federation members.
+- **Description:** The federation's shared capital reserve: used to service inter-cooperative agreements, mutual guarantees, and [concept_infrastructure] bonds: has been significantly depleted. Member cooperatives have continued to draw on it through dividend-linked [Concept('concept_obligation', 'obligations')] while contributing less than projected. The council must now choose between austerity, new credit, or a partial default on some commitments, each with different consequences for trust between federation members.
 - **Flavor:** \"Council treasuries are strained; members demand payouts while infrastructure needs repair.\"\n\n\"The ledger won't balance itself: someone must vote for sacrifice.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
@@ -264,7 +264,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.170
 - **Title:** Shadow Dividend Extraction Scheme
-- **Description:** An internal audit of the cooperative federation has uncovered a pattern of off-books lending and shadow dividend extraction: some member cooperatives have been recording income below its true value, distributing undisclosed dividends to insider members, and creating informal credit pools that operate entirely outside the federation's coordination framework. The scheme is fragile; any single insolvency could expose the whole network.
+- **Description:** An internal audit of the cooperative federation has uncovered a pattern of off-books lending and shadow dividend extraction: some member cooperatives have been recording income below its true value, distributing undisclosed [concept_dividends] to insider members, and creating informal credit pools that operate entirely outside the federation's coordination framework. The scheme is fragile; any single insolvency could expose the whole network.
 - **Flavor:** \"They lend each other when the bank won't. It's solidarity until someone can't pay back.\"\n\n\"Then it is not solidarity. It is a shadow bank wearing cooperative clothes.\"
 - **Current image:** gfx/event_pictures/cooperative_market_success.dds
 
@@ -300,7 +300,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.26
 - **Title:** Pension Fund Growth
-- **Description:** Pension funds established for workers in major industries have grown substantially, accumulating vast pools of long-term capital. Unlike speculative investors who chase quick returns, these funds seek steady, reliable income to meet future obligations. Their growing presence in the bond and property markets is providing a stabilizing counterweight to short-term speculation.
+- **Description:** Pension funds established for workers in major industries have grown substantially, accumulating vast pools of long-term capital. Unlike speculative investors who chase quick returns, these funds seek steady, reliable income to meet future [Concept('concept_obligation', 'obligations')]. Their growing presence in the bond and property markets is providing a stabilizing counterweight to short-term speculation.
 - **Flavor:** \"The pension fund trustees are the dullest investors in the market. They buy bonds and hold them. They buy property and hold it. They are magnificently, beautifully boring.\"\n\n\"And magnificently, beautifully solvent.\"
 - **Current image:** gfx/event_pictures/banking_boardroom.dds
 
@@ -312,13 +312,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.28
 - **Title:** Interbank Lending Freeze
-- **Description:** The interbank lending market has seized up. Banks that normally lend freely to one another overnight have stopped, each suspecting that its counterparties may be concealing losses. Without interbank lending, the entire financial system risks grinding to a halt - banks cannot meet daily obligations, businesses cannot access working capital, and the economy threatens to seize up like an engine without oil.
+- **Description:** The interbank lending market has seized up. Banks that normally lend freely to one another overnight have stopped, each suspecting that its counterparties may be concealing losses. Without interbank lending, the entire financial system risks grinding to a halt - banks cannot meet daily [Concept('concept_obligation', 'obligations')], businesses cannot access working capital, and the economy threatens to seize up like an engine without oil.
 - **Flavor:** \"The banks won't lend to each other because they don't trust each other. They don't trust each other because they know what's on their own balance sheets.\"
 - **Current image:** gfx/event_pictures/financial_distress_street.dds
 
 ### banking_cycle_events.29
 - **Title:** Cooperative Banking
-- **Description:** In the countryside, farmers and smallholders have begun pooling their savings into cooperative lending institutions. These modest banks, governed by their own depositors, provide credit for seed and equipment at rates far below what commercial banks charge. The model is spreading rapidly, bringing financial services to communities that have never had access to formal banking.
+- **Description:** In the countryside, farmers and smallholders have begun pooling their savings into cooperative lending [Concept('concept_institution', 'institutions')]. These modest banks, governed by their own depositors, provide credit for seed and equipment at rates far below what commercial banks charge. The model is spreading rapidly, bringing financial services to communities that have never had access to formal banking.
 - **Flavor:** \"We had nothing - no bank would touch us. Now we lend to ourselves, and not a penny has been lost.\"\n\n\"The commercial bankers scoff at the amounts involved.\"\n\n\"Let them scoff. We can feed our families.\"
 - **Current image:** gfx/event_pictures/trade_commerce_port.dds
 
@@ -330,7 +330,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.31
 - **Title:** The Bank Holiday
-- **Description:** With public confidence in the banking system collapsing, advisors are urging the government to declare a 'bank holiday' - a temporary, mandatory closure of all financial institutions. The idea is to stop the panic, allow time for inspection and reorganization, and reopen only those banks that are solvent. It's a drastic measure, but the alternative may be a complete meltdown.
+- **Description:** With public confidence in the banking system collapsing, advisors are urging the government to declare a 'bank holiday' - a temporary, mandatory closure of all financial [Concept('concept_institution', 'institutions')]. The idea is to stop the panic, allow time for inspection and reorganization, and reopen only those banks that are solvent. It's a drastic measure, but the alternative may be a complete meltdown.
 - **Flavor:** \"Close every bank in the country?\"\n\n\"For three days. Perhaps a week.\"\n\n\"The public will riot.\"\n\n\"The public is already rioting. At least this way, when we reopen, they'll have something left to withdraw.\"
 - **Current image:** gfx/event_pictures/bank_run_crowd.dds
 
@@ -390,13 +390,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.41
 - **Title:** Student Loan Burden
-- **Description:** A generation of university graduates is entering the workforce burdened by enormous education debts. The loans that seemed manageable when they were taken on are now consuming a crippling share of young workers' incomes, delaying home purchases, family formation, and savings. Consumer spending among the educated young has stagnated, and defaults on education loans are rising.
+- **Description:** A generation of university graduates is entering the [concept_workforce] burdened by enormous education debts. The loans that seemed manageable when they were taken on are now consuming a crippling share of young workers' incomes, delaying home purchases, family formation, and savings. Consumer spending among the educated young has stagnated, and defaults on education loans are rising.
 - **Flavor:** \"I have two degrees, a mountain of debt, and a job that pays less than what my father earned with no degree at all. They told us education was the path to prosperity.\"\n\n\"It was. For the banks that lent you the money.\"
 - **Current image:** gfx/event_pictures/financial_distress_street.dds
 
 ### banking_cycle_events.42
 - **Title:** Green Bond Initiative
-- **Description:** A coalition of banks and government agencies has proposed issuing bonds specifically earmarked for environmental infrastructure: flood defenses, clean water systems, renewable energy installations, and pollution cleanup. The bonds would offer modest returns but carry government backing, and early interest from institutional investors has been strong. It represents a new way of financing public goods through financial markets.
+- **Description:** A coalition of banks and government agencies has proposed issuing bonds specifically earmarked for environmental [concept_infrastructure]: flood defenses, clean water systems, renewable energy installations, and [concept_pollution_system] cleanup. The bonds would offer modest returns but carry government backing, and early interest from institutional investors has been strong. It represents a new way of financing public goods through financial markets.
 - **Flavor:** \"Invest in the future of the planet and earn three percent doing it. The prospectus practically writes itself.\"\n\n\"And if the projects fail?\"\n\n\"Then we'll have bigger problems than bond yields.\"
 - **Current image:** gfx/event_pictures/trade_commerce_port.dds
 
@@ -408,7 +408,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.44
 - **Title:** Predatory Lending Scandal
-- **Description:** An investigation has revealed that certain lending institutions have been systematically targeting vulnerable borrowers - the uneducated, the desperate, and the elderly - with loans designed to be impossible to repay. Hidden fees, deceptive terms, and aggressive collection practices have trapped thousands of families in spiraling debt. The scale of the abuse is staggering.
+- **Description:** An investigation has revealed that certain lending [Concept('concept_institution', 'institutions')] have been systematically targeting vulnerable borrowers - the uneducated, the desperate, and the elderly - with loans designed to be impossible to repay. Hidden fees, deceptive terms, and aggressive collection practices have trapped thousands of families in spiraling debt. The scale of the abuse is staggering.
 - **Flavor:** \"The contract was forty pages of small print. She signed because she needed the money for medicine. She didn't know the interest rate was forty percent. She didn't know the fees would double the principal. She didn't know she'd lose her house.\"\n\n\"And the lender?\"\n\n\"The lender knew everything.\"
 - **Current image:** gfx/event_pictures/financial_fraud_exposed.dds
 
@@ -456,7 +456,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.56
 - **Title:** Industrial Sabotage Investigation
-- **Description:** Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Whether the cause is actual sabotage by foreign agents, internal dissent, or simply aging infrastructure, the disruptions are significant enough to demand a response.
+- **Description:** Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Whether the cause is actual sabotage by foreign agents, internal dissent, or simply aging [concept_infrastructure], the disruptions are significant enough to demand a response.
 - **Flavor:** Is it the enemy within, the enemy without, or simply the rust of time?
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
@@ -468,20 +468,20 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.60
 - **Title:** Federation Governance Dispute
-- **Description:** A heated disagreement has erupted among the cooperative federations over how to reinvest collective surplus funds. Some cooperatives want to prioritize worker dividends, while others argue for reinvestment in shared infrastructure. The dispute has paralyzed the federation council and no consensus appears imminent.
+- **Description:** A heated disagreement has erupted among the cooperative federations over how to reinvest collective surplus funds. Some cooperatives want to prioritize worker [concept_dividends], while others argue for reinvestment in shared [concept_infrastructure]. The dispute has paralyzed the federation council and no consensus appears imminent.
 - **Flavor:** Democracy is wonderful: until everyone disagrees on what to do with the money.
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.61
 - **Title:** Free Rider Problem
-- **Description:** Several cooperatives have been benefiting from shared federation infrastructure: collective purchasing agreements, mutual insurance funds, and logistics networks: without contributing their fair share to maintenance costs. The arrangement is breeding resentment among the cooperatives that carry the burden.
+- **Description:** Several cooperatives have been benefiting from shared federation [concept_infrastructure]: collective purchasing agreements, mutual insurance funds, and logistics networks: without contributing their fair share to maintenance costs. The arrangement is breeding resentment among the cooperatives that carry the burden.
 - **Flavor:** Mutual aid works splendidly: until someone decides to take without giving.
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.62
 - **Title:** Democratic Investment Gridlock
 - **Description:** The cooperative councils have been debating a major capital investment project for months. Every faction has a different priority, every vote ends in stalemate, and the window of opportunity is beginning to close. The democratic process that defines cooperative governance is becoming an obstacle to action.
-- **Flavor:** A hundred opinions, a thousand amendments, and still no decision.
+- **Flavor:** A hundred opinions, a thousand [Concept('concept_amendment', 'amendments')], and still no decision.
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.63
@@ -516,7 +516,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.46
 - **Title:** The Northern Pacific Corner
-- **Description:** Two railway titans are each secretly buying every share of the Northern Pacific Railway they can find, trying to seize outright control. As the share price leaps from 150 to nearly 1,000 in days, short-sellers across the exchange are forced to dump every other holding they own to raise the cash to cover. The rest of [ROOT.GetCountry.GetName]'s market is bleeding.
+- **Description:** Two railway titans are each secretly buying every share of the Northern Pacific Railway they can find, trying to seize outright control. As the share price leaps from 150 to nearly 1,000 in days, short-sellers across the exchange are forced to dump every other [concept_holding] they own to raise the cash to cover. The rest of [ROOT.GetCountry.GetName]'s market is bleeding.
 - **Flavor:** \"Gentlemen, there is only one question in the entire stock exchange this morning — will you please tell me who in the name of creation holds all the Northern Pacific?\"\n\n— Broker on the trading floor
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
@@ -548,13 +548,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### covert_warfare.1
 - **Title:** Operation Compromised
-- **Description:** Our intelligence services report a catastrophic security breach. One of our covert operations has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable.
+- **Description:** Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable.
 - **Flavor:** The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.
 - **Current image:** gfx/event_pictures/espionage_dead_drop.dds
 
 ### covert_warfare.2
 - **Title:** Foreign Interference Detected
-- **Description:** Our counterintelligence services have uncovered evidence of a sustained foreign covert campaign targeting our institutions. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond.
+- **Description:** Our counterintelligence services have uncovered evidence of a sustained foreign covert campaign targeting our [Concept('concept_institution', 'institutions')]. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond.
 - **Flavor:** The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.
 - **Current image:** gfx/event_pictures/espionage_dead_drop.dds
 
@@ -562,7 +562,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.1
 - **Title:** Cultural Renaissance
-- **Description:** [ROOT.GetCountry.GetName]'s cultural influence is growing, and its artists, writers, and filmmakers are producing works that captivate audiences at home and abroad. The nation's creative output is becoming a source of global prestige.
+- **Description:** [ROOT.GetCountry.GetName]'s cultural influence is growing, and its artists, writers, and filmmakers are producing works that captivate audiences at home and abroad. The nation's creative output is becoming a source of global [concept_prestige].
 - **Flavor:** #bold The galleries were full again#!—not with the idle rich, but with students and workers, all drawn by the same strange conviction that something important was happening in the studios and concert halls of the capital.
 - **Current image:** gfx/event_pictures/cultural_exhibition_grand.dds
 
@@ -586,20 +586,20 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.5
 - **Title:** Soft Power Dividend
-- **Description:** [ROOT.GetCountry.GetName]'s growing cultural influence is paying diplomatic dividends. Foreign nations are more receptive to our overtures, immigrants are drawn to our shores, and our international prestige continues to climb.
+- **Description:** [ROOT.GetCountry.GetName]'s growing cultural influence is paying diplomatic [concept_dividends]. Foreign nations are more receptive to our overtures, immigrants are drawn to our shores, and our international [concept_prestige] continues to climb.
 - **Flavor:** They didn't come for the wages—those were better elsewhere. They came because they'd grown up watching our films, reading our books, and dreaming of a place they already felt they knew.
 - **Current image:** gfx/event_pictures/cultural_backlash_protest.dds
 
 ### cultural_hegemony.6
 - **Title:** Brain Drain
-- **Description:** The brightest minds of [ROOT.GetCountry.GetName] are leaving for nations with greater cultural prestige and higher standards of living. Universities are losing their best professors, and research institutions are hemorrhaging talent to foreign competitors.
+- **Description:** The brightest minds of [ROOT.GetCountry.GetName] are leaving for nations with greater cultural [concept_prestige] and higher standards of living. Universities are losing their best professors, and research [Concept('concept_institution', 'institutions')] are hemorrhaging talent to foreign competitors.
 - **Flavor:** The professor's farewell lecture drew a standing ovation. By the end of the month, three of his colleagues had followed him abroad. The department carried on, of course—with fewer people and dimmer prospects.
 - **Current image:** gfx/event_pictures/cultural_classroom_influence.dds
 
 ### cultural_hegemony.7
 - **Title:** Foreign Ideological Influence
 - **Description:** Invest modestly in our own cultural voice
-- **Flavor:** The young radicals quoted foreign philosophers in foreign languages, wearing foreign fashions, demanding the same rights they'd seen in foreign films—and the old guard could only watch, wondering when exactly the future had arrived without their permission.
+- **Flavor:** The young [Concept('concept_radical', 'radicals')] quoted foreign philosophers in foreign languages, wearing foreign fashions, demanding the same rights they'd seen in foreign films—and the old guard could only watch, wondering when exactly the future had arrived without their permission.
 - **Current image:** gfx/event_pictures/tech_innovation_showcase.dds
 
 ### cultural_hegemony.8
@@ -622,13 +622,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.11
 - **Title:** Tourism Golden Age
-- **Description:** Word of [ROOT.GetCountry.GetAdjective] culture has spread far and wide, and now foreigners arrive in droves to see our monuments, taste our cuisine, and experience our way of life. This influx of visitors brings opportunity — but also a choice between developing lasting infrastructure or simply extracting as much profit as possible while the boom lasts.
+- **Description:** Word of [ROOT.GetCountry.GetAdjective] culture has spread far and wide, and now foreigners arrive in droves to see our monuments, taste our cuisine, and experience our way of life. This influx of visitors brings opportunity — but also a choice between developing lasting [concept_infrastructure] or simply extracting as much profit as possible while the boom lasts.
 - **Flavor:** The tourists take photographs; we take their money.
 - **Current image:** gfx/event_pictures/fashion_diaspora_influence.dds
 
 ### cultural_hegemony.12
 - **Title:** World-Class Universities
-- **Description:** The world's brightest minds seek admission to [ROOT.GetCountry.GetAdjective] universities. Our research institutions set the standard that other nations aspire to match. We can open our doors wider with international scholarships — attracting talent but also bearing the costs — or focus exclusively on our own citizens' education.
+- **Description:** The world's brightest minds seek admission to [ROOT.GetCountry.GetAdjective] universities. Our research [Concept('concept_institution', 'institutions')] set the standard that other nations aspire to match. We can open our doors wider with international scholarships — attracting talent but also bearing the costs — or focus exclusively on our own citizens' education.
 - **Flavor:** They enrolled as foreigners and graduated as advocates.
 - **Current image:** gfx/event_pictures/cultural_backlash_protest.dds
 
@@ -652,7 +652,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.16
 - **Title:** Hegemonic Convergence
-- **Description:** The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its institutions with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence.
+- **Description:** The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its [Concept('concept_institution', 'institutions')] with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence.
 - **Flavor:** \"When a great nation speaks, smaller nations must decide whether to echo the words — or find their own voice and bear the consequences.\"
 - **Current image:** gfx/event_pictures/tech_innovation_showcase.dds
 
@@ -666,7 +666,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.2
 - **Title:** The World is Watching
-- **Description:** [SCOPE.sCountry('pressuring_power').GetName] and other great powers have called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Foreign governments and international organizations are voicing growing disapproval.
+- **Description:** [SCOPE.sCountry('pressuring_power').GetName] and other [Concept('concept_great_power', 'great powers')] have called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Foreign governments and international organizations are voicing growing disapproval.
 - **Flavor:** \"The resolution passed with an overwhelming majority,\" the ambassador reported, adjusting his spectacles. \"Twenty-three in favor. We were... not among them.\"\n\n\"And what precisely does this resolution demand?\"\n\n\"A timetable. For the orderly transfer of sovereignty to... well, to everyone we currently govern who would rather govern themselves.\"\n\nA long silence.\n\n\"Which is all of them, presumably.\"
 - **Current image:** gfx/event_pictures/colonial_resistance_fighters.dds
 
@@ -696,7 +696,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.7
 - **Title:** Year One
-- **Description:** Our young nation faces the monumental task of building institutions and infrastructure from the remnants of colonial rule. The choices made now will shape the country for generations.
+- **Description:** Our young nation faces the monumental task of building [Concept('concept_institution', 'institutions')] and [concept_infrastructure] from the remnants of colonial rule. The choices made now will shape the country for generations.
 - **Flavor:** \"The colonial administration left us three things,\" the new president told the assembly. \"A railway that goes to the port and nowhere else. A civil service trained to take orders from abroad. And a treasury that has been empty since before we were born.\"\n\nShe paused.\n\n\"Well. It is ours now. All of it. The good and the bad. Let us begin.\"
 - **Current image:** gfx/event_pictures/colonial_resistance_fighters.dds
 
@@ -714,7 +714,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.10
 - **Title:** Common Bonds
-- **Description:** The population of [SCOPE.sState('integrating_colony').GetName] has reached such high levels of cultural acceptance that administrators recommend granting full homeland status. The territory already functions as a productive part of the nation.
+- **Description:** The population of [SCOPE.sState('integrating_colony').GetName] has reached such high levels of cultural acceptance that administrators recommend granting full [concept_homeland] status. The territory already functions as a productive part of the nation.
 - **Flavor:** \"My grandfather fought your grandfather,\" the old woman said, pouring tea for the visiting minister. \"My mother married one of your soldiers. And my daughter speaks your language better than I do.\"\n\nShe set down the pot.\n\n\"So tell me - whose homeland is this now?\"
 - **Current image:** gfx/event_pictures/neocolonial_dependency.dds
 
@@ -732,13 +732,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.13
 - **Title:** Blood in the Colonies
-- **Description:** Armed resistance has erupted in [SCOPE.sState('uprising_colony').GetName]. Local fighters are conducting raids against government buildings and infrastructure. Military commanders demand reinforcements, but the cost of suppression mounts by the day.
+- **Description:** Armed resistance has erupted in [SCOPE.sState('uprising_colony').GetName]. Local fighters are conducting raids against [Concept('concept_government_building', 'government buildings')] and [concept_infrastructure]. Military commanders demand reinforcements, but the cost of suppression mounts by the day.
 - **Flavor:** The telegram arrived at dawn: GARRISON OVERRUN AT CHECKPOINT FOUR. CASUALTIES UNKNOWN. REQUEST IMMEDIATE REINFORCEMENT.\n\nThe war minister stared at it for a long time.\n\n\"How many more of these,\" he said at last, \"before we admit that we are fighting a war we cannot win?\"
 - **Current image:** gfx/event_pictures/post_colonial_nation_building.dds
 
 ### decolonization_events.14
 - **Title:** The Colonial Question
-- **Description:** The question of colonialism dominates debate in international forums. As a great power, [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course.
+- **Description:** The question of colonialism dominates debate in international forums. As a [concept_great_power], [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course.
 - **Flavor:** \"Every nation in this chamber has an opinion on colonialism,\" the foreign minister observed drily. \"Strangely, the opinion always seems to align perfectly with whether they possess colonies or covet them.\"\n\nLaughter rippled through the delegation.\n\n\"The question before us is not what is right. It is what is useful.\"
 - **Current image:** gfx/event_pictures/post_colonial_strongman.dds
 
@@ -768,19 +768,19 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.19
 - **Title:** The Crisis
-- **Description:** [SCOPE.sCountry('nationalizing_country').GetName]: once our possession: has seized foreign-owned assets in a wave of nationalist fervor. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.
+- **Description:** [SCOPE.sCountry('nationalizing_country').GetName]: once our possession: has seized foreign-owned assets in a wave of nationalist [concept_fervor]. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.
 - **Flavor:** \"The canal is ours,\" the telegram read. \"We built it. We died building it. And now it is ours.\"\n\nThe foreign secretary crumpled it and dropped it in the waste basket.\n\n\"Prepare the contingency plans,\" he told the room. \"All of them.\"\n\n\"Sir, the Americans have already issued a statement urging restraint.\"\n\n\"The Americans can urge whatever they like. It is our canal.\"\n\nA silence. Someone coughed.\n\n\"Is it, sir?\"
 - **Current image:** gfx/event_pictures/colonial_departure.dds
 
 ### decolonization_events.20
 - **Title:** Gunboats in the Harbor
-- **Description:** [SCOPE.sCountry('intervening_power').GetName] has launched a military intervention against [SCOPE.sCountry('intervention_victim').GetName], a newly independent nation accused of seizing foreign assets. The action has sparked international outrage, and the world's great powers must now take a position.
+- **Description:** [SCOPE.sCountry('intervening_power').GetName] has launched a military intervention against [SCOPE.sCountry('intervention_victim').GetName], a newly independent nation accused of seizing foreign assets. The action has sparked international outrage, and the world's [Concept('concept_great_power', 'great powers')] must now take a position.
 - **Flavor:** \"Three carriers,\" the intelligence officer reported, pinning the latest reconnaissance photo to the board. \"They've established a naval blockade and landed marines at the port.\"\n\nThe president studied the map.\n\n\"What does the international community say?\"\n\n\"The usual. Grave concern. Deep worry. Strongly worded letters.\"\n\n\"And what do they actually intend to do about it?\"\n\nThat was the question that would define the decade.
 - **Current image:** gfx/event_pictures/post_colonial_tensions.dds
 
 ### decolonization_events.21
 - **Title:** The Non-Aligned Path
-- **Description:** The great powers circle our young nation like hawks, each offering friendship and aid with strings carefully hidden. [SCOPE.sCountry('anti_colonial_gp').GetName] promises solidarity against imperialism. [SCOPE.sCountry('pro_colonial_gp').GetName] offers trade and investment. A growing movement among newly independent nations proposes a third way: non-alignment.
+- **Description:** The [Concept('concept_great_power', 'great powers')] circle our young nation like hawks, each offering friendship and aid with strings carefully hidden. [SCOPE.sCountry('anti_colonial_gp').GetName] promises solidarity against imperialism. [SCOPE.sCountry('pro_colonial_gp').GetName] offers trade and investment. A growing movement among newly independent nations proposes a third way: non-alignment.
 - **Flavor:** \"They call it a 'sphere of influence',\" the foreign minister explained to the cabinet. \"What it means in practice is that you smile at one superpower and the other one stops selling you wheat.\"\n\n\"And if we smile at neither?\"\n\n\"Then both of them stop selling you wheat.\"\n\nThe cabinet considered this for some time. The agriculture minister opened his folder and closed it again.
 - **Current image:** gfx/event_pictures/post_colonial_tensions.dds
 
@@ -798,7 +798,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.202
 - **Title:** The Commonwealth Path
-- **Description:** The empire endures, but on terms unimaginable a generation ago. The colonial bond has been rewritten — investment, education, and shared institutions have replaced the old hierarchies. Our former subjects look upon the metropole not as a master but as a senior partner. The flag has not changed; what flies under it has.
+- **Description:** The empire endures, but on terms unimaginable a generation ago. The colonial bond has been rewritten — investment, education, and shared [Concept('concept_institution', 'institutions')] have replaced the old hierarchies. Our former subjects look upon the metropole not as a master but as a [concept_senior_partner]. The flag has not changed; what flies under it has.
 - **Flavor:** \"They've kept the cricket,\" the journalist remarked.\n\n\"They've kept the railways too,\" the minister replied. \"And the law courts. And the language. They've kept everything they wanted to keep, and renamed everything they didn't.\"\n\n\"Is that victory, sir?\"\n\nA long pause. \"It's the only kind we were ever going to get.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
@@ -822,7 +822,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.50
 - **Title:** The Treasury Says No
-- **Description:** The exchequer's monthly briefing has become an exercise in apocalyptic prose. Servicing colonial garrisons, infrastructure, and administration is consuming a quarter of state revenue. The latest borrowing round was undersubscribed. The City whispers about a sterling crisis.
+- **Description:** The exchequer's monthly briefing has become an exercise in apocalyptic prose. Servicing colonial garrisons, [concept_infrastructure], and administration is consuming a quarter of state revenue. The latest borrowing round was undersubscribed. The City whispers about a sterling crisis.
 - **Flavor:** \"Minister, the simple truth is that we cannot afford this empire.\"\n\n\"We cannot afford NOT to have this empire. Without the colonies, what becomes of our trade balance? Of sterling? Of our standing in the world?\"\n\nThe Chancellor closed his folder. \"With them, sir, we may answer those questions in pounds. Without them, we may at least answer them in pounds we still possess.\"
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
@@ -858,7 +858,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.301
 - **Title:** The Civilizing Mission Compact
-- **Description:** [ROOT.GetCountry.GetName] has formally federated its empire under the Civilizing Mission Compact. After three years of demonstrated stability, the elected legislatures of the metropole and the recognized assemblies of the colonies have together ratified a constitutional framework binding them as permanent partners in a single multinational polity.\n\nThe colonies are no longer subject possessions; they are constituent territories. Their representatives sit in our parliament. Their pops vote in our elections. Their concerns shape our budgets. The empire endures, but it endures by consent, not coercion. This was always the harder road.
+- **Description:** [ROOT.GetCountry.GetName] has formally federated its empire under the Civilizing Mission Compact. After three years of demonstrated stability, the elected legislatures of the metropole and the recognized assemblies of the colonies have together ratified a constitutional framework binding them as permanent partners in a single multinational polity.\n\nThe colonies are no longer subject possessions; they are constituent territories. Their representatives sit in our parliament. Their [Concept('concept_pop', 'pops')] vote in our elections. Their concerns shape our budgets. The empire endures, but it endures by consent, not coercion. This was always the harder road.
 - **Flavor:** #italic A federation of consent. A century of patient work. The harder road taken, and finished.#!
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
@@ -892,7 +892,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### environmentalism_events.4
 - **Title:** The Reckoning
-- **Description:** Temperatures have risen #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels, triggering cascading ecological failures across the globe. Famine, flooding, and mass migration are destabilizing nations everywhere. The scientific community speaks of tipping points already crossed.
+- **Description:** Temperatures have risen #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels, triggering cascading ecological failures across the globe. Famine, flooding, and [concept_mass_migration] are destabilizing nations everywhere. The scientific community speaks of tipping points already crossed.
 - **Flavor:** \"We knew. That is what I cannot forgive. We knew, and we debated, and we formed committees, and we published reports, and we did nothing of consequence.\"\n\nThe old professor set down his pen. Outside, the sky had a colour that skies were not supposed to have. The students had stopped attending lectures weeks ago.
 - **Current image:** gfx/event_pictures/deforestation_contrast.dds
 
@@ -910,13 +910,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### environmentalism_events.7
 - **Title:** These Dark Satanic Chimneys
-- **Description:** Journalists have exposed the scale of pollution from [ROOT.GetCountry.GetName]'s coal mines and petroleum operations. Rivers downstream of industrial districts run black, the air in factory towns is thick with particulate, and physicians are documenting long-term respiratory illness among workers and residents alike.
+- **Description:** Journalists have exposed the scale of [concept_pollution_system] from [ROOT.GetCountry.GetName]'s coal mines and petroleum operations. Rivers downstream of industrial districts run black, the air in factory towns is thick with particulate, and physicians are documenting long-term respiratory illness among workers and residents alike.
 - **Flavor:** \"My boy coughs all night. The doctor says it is the air.\"\n\n\"Which air? The air from the mine, or the air from the refinery?\"\n\n\"The doctor says it is all the same air, in the end.\"\n\nAt the river, a chemist from the university held up a sample jar. The water inside was the colour of strong tea. He labelled it carefully and placed it alongside forty others, each darker than the last, each taken one month apart.
 - **Current image:** gfx/event_pictures/industrial_pollution.dds
 
 ### environmentalism_events.8
 - **Title:** A Greener Shade of Politics
-- **Description:** A coalition of scientists, reformers, and concerned citizens has coalesced into a visible political movement within [ROOT.GetCountry.GetName]. They cite the steady rise in global temperatures, declining crop yields, and worsening floods as evidence that unchecked industrialization is altering the natural order. They are petitioning for legislative action.
+- **Description:** A coalition of scientists, reformers, and concerned citizens has coalesced into a visible [concept_political_movement] within [ROOT.GetCountry.GetName]. They cite the steady rise in global temperatures, declining crop yields, and worsening floods as evidence that unchecked industrialization is altering the natural order. They are petitioning for legislative action.
 - **Flavor:** \"We are not radicals. We are not anarchists. We are people who have read the data and are frightened by what it says.\"\n\nThe crowd applauded politely. They were well-dressed, most of them - professors, clerks, a few clergymen. One carried a sign that read simply: #italic 1.2 °C#!. A factory owner on the opposite pavement watched them pass and muttered to his companion: \"If they want to save the world, they can start by paying for it.\"
 - **Current image:** gfx/event_pictures/nature_conservation_effort.dds
 
@@ -946,7 +946,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### environmentalism_events.13
 - **Title:** The Congress of Smoke
-- **Description:** The great powers are gathering to negotiate a coordinated response to rising temperatures. Diplomats recognize that no single nation can address the matter alone. [ROOT.GetCountry.GetName] has been invited to take a prominent role in the proceedings.
+- **Description:** The [Concept('concept_great_power', 'great powers')] are gathering to negotiate a coordinated response to rising temperatures. Diplomats recognize that no single nation can address the matter alone. [ROOT.GetCountry.GetName] has been invited to take a prominent role in the proceedings.
 - **Flavor:** \"Gentlemen, the temperature. The temperature is the only item on today's agenda.\"\n\nDelegates shifted in upholstered chairs, translators murmured, and the great chandelier above them glittered indifferently. The ambassador from the coal-exporting nation cleared his throat and asked, with studied mildness, whether the science was truly settled. Forty scientists in the gallery winced in unison.\n\n\"Shall we vote on the temperature?\" someone suggested. Nobody laughed.
 - **Current image:** gfx/event_pictures/water_scarcity_queue.dds
 
@@ -958,7 +958,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### environmentalism_events.15
 - **Title:** Green and Gold
-- **Description:** An acrimonious political struggle has erupted between [ROOT.GetCountry.GetName]'s academic reformers and the industrial establishment. Scientists demand immediate emission reductions and a transition to clean energy, while factory owners and mining magnates warn of economic ruin.
+- **Description:** An acrimonious political struggle has erupted between [ROOT.GetCountry.GetName]'s academic reformers and the industrial establishment. Scientists demand immediate emission reductions and a transition to clean energy, while factory owners and mining [Concept('concept_magnate', 'magnates')] warn of economic ruin.
 - **Flavor:** \"You would bankrupt us for the sake of a theory!\"\n\n\"It is not a theory. It is a measurement.\"\n\n\"Measurements can be taken again!\"\n\n\"And they will show the same thing, only worse.\"\n\nThe assembly erupted. In the galleries, reporters scribbled furiously. A placard reading #italic JOBS NOT DEGREES#! collided with one reading #italic PLANET NOT PROFIT#!, and both fell to the floor in the general confusion.
 - **Current image:** gfx/event_pictures/climate_flooding_city.dds
 
@@ -1008,7 +1008,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.2
 - **Title:** A Run on the Banks
-- **Description:** A wave of panic has swept through the financial houses as depositors, alarmed by rumors about the coming regulatory changes, have begun withdrawing their savings. Queues stretch around the block at several major institutions.
+- **Description:** A wave of panic has swept through the financial houses as depositors, alarmed by rumors about the coming regulatory changes, have begun withdrawing their savings. Queues stretch around the block at several major [Concept('concept_institution', 'institutions')].
 - **Flavor:** "I asked the teller for my money and he had the audacity to tell me to come back next week! Next week! By then these new laws will have turned my savings into wallpaper!"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
@@ -1104,7 +1104,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.18
 - **Title:** Petitions of the Heart
-- **Description:** A group of citizens has delivered a moving petition to the legislature, sharing personal stories of discrimination and asking for the protections promised by [SCOPE.sLaw('current_law_scope').GetName]. The petition has generated significant public sympathy, though the [SCOPE.gsInterestGroup('devout_ig').GetName] have denounced it.
+- **Description:** A group of citizens has delivered a moving petition to the legislature, sharing personal stories of [concept_discrimination] and asking for the protections promised by [SCOPE.sLaw('current_law_scope').GetName]. The petition has generated significant public sympathy, though the [SCOPE.gsInterestGroup('devout_ig').GetName] have denounced it.
 - **Flavor:** "We do not ask for special treatment. We ask only to walk the same streets, hold the same jobs, and love the same as any other citizen of this nation, without fear of the magistrate's knock upon the door."
 - **Current image:** gfx/event_pictures/immigration_checkpoint.dds
 
@@ -1128,7 +1128,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.22
 - **Title:** The Automation Question
-- **Description:** The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding radical action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all.
+- **Description:** The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding [concept_radical] action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all.
 - **Flavor:** "The loom does not eat. The steam-hammer does not sleep. The calculating engine does not demand a pension. And yet the men they replaced must still feed their families. If the machines have taken the work, then the machines must pay the wages."
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
@@ -1164,26 +1164,26 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.28
 - **Title:** The Language Compromise
-- **Description:** The [SCOPE.sLaw('current_law_scope').GetName] bill has stalled in committee as rival factions propose amendments to shape the final law. Minority-language advocates want protections written into the text, while others push for official recognition of a second language. Each amendment would help secure enough votes to pass the bill - but each comes with political baggage.
+- **Description:** The [SCOPE.sLaw('current_law_scope').GetName] bill has stalled in committee as rival factions propose amendments to shape the final law. Minority-language advocates want protections written into the text, while others push for official recognition of a second language. Each [concept_amendment] would help secure enough votes to pass the bill - but each comes with political baggage.
 - **Flavor:** 'I have the votes to kill this bill,' the minority delegate said, 'and the inclination to use them. Unless you give us something.'\n\n'What do you want?'\n\n'Script preservation. Our alphabet in our schools. Official recognition that our language exists.'\n\nThe drafter rubbed his temples. 'That wasn't in the original bill.'\n\n'Neither was my vote. Shall we negotiate, or shall we both go home empty-handed?'
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.29
 - **Title:** The Trust Question
-- **Description:** As the [SCOPE.sLaw('current_law_scope').GetName] legislation works its way through the halls of power, two competing visions have emerged. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] propose exempting the nation's largest enterprise from breakup - a 'national champion' clause that would preserve our ability to compete on the world stage. Meanwhile, the [SCOPE.gsInterestGroup('unions_ig').GetName] counter with a cooperative preference amendment, arguing that worker-owned enterprises should receive favorable treatment under the new rules.
+- **Description:** As the [SCOPE.sLaw('current_law_scope').GetName] legislation works its way through the halls of power, two competing visions have emerged. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] propose exempting the nation's largest enterprise from breakup - a 'national champion' clause that would preserve our ability to compete on the world stage. Meanwhile, the [SCOPE.gsInterestGroup('unions_ig').GetName] counter with a cooperative preference [concept_amendment], arguing that worker-owned enterprises should receive favorable treatment under the new rules.
 - **Flavor:** 'You want to break up our largest company,' the industrialist said. 'The one that employs more people than any other. The one that keeps us competitive abroad.'\n\n'We want to break up a monopoly that fixes prices and crushes competitors.'\n\n'Same thing, from different angles.' He leaned back. 'I'll offer you this: exempt the national champion, and I'll deliver the votes you need for everything else.'\n\nThe reformer stared at the ceiling. It was, she reflected, a very ugly ceiling. 'Let me think about it.'
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
 ### extra_law_events.30
 - **Title:** The Sentencing Debate
-- **Description:** Reform of the criminal justice system has ignited fierce debate about the proper balance between punishment and rehabilitation. Opponents of the bill are willing to vote for it - but only if their preferred amendment is attached. The compromise would weaken the law's ideological purity but might be the only path to passage.
-- **Flavor:** The magistrate had seen both systems in practice. 'You want my honest opinion?' he asked the committee.\n\n'That is why we invited you.'\n\n'Mandatory minimums fill the prisons. Community service empties them. Neither, on its own, reduces crime.' He folded his hands. 'But one costs the treasury a great deal more than the other, and I shall leave it to you to guess which.'\n\n'And if we pass the bill without either amendment?'\n\n'Then you will have a law that everyone admires and no one can enforce.'
+- **Description:** Reform of the criminal justice system has ignited fierce debate about the proper balance between punishment and rehabilitation. Opponents of the bill are willing to vote for it - but only if their preferred [concept_amendment] is attached. The compromise would weaken the law's ideological purity but might be the only path to passage.
+- **Flavor:** The magistrate had seen both systems in practice. 'You want my honest opinion?' he asked the committee.\n\n'That is why we invited you.'\n\n'Mandatory minimums fill the prisons. Community service empties them. Neither, on its own, reduces crime.' He folded his hands. 'But one costs the treasury a great deal more than the other, and I shall leave it to you to guess which.'\n\n'And if we pass the bill without either [concept_amendment]?'\n\n'Then you will have a law that everyone admires and no one can enforce.'
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.31
 - **Title:** The Privacy Bargain
 - **Description:** The privacy bill has attracted strange bedfellows. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] want a carve-out allowing businesses to collect personal data for commercial purposes - claiming that innovation requires information. Meanwhile, the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] push for whistleblower protections, arguing that no privacy law is complete without shields for those who expose government wrongdoing.
-- **Flavor:** 'The industrialists want a clause permitting commercial data collection,' the aide said. 'The intelligentsia want whistleblower protections written in.'\n\n'And if I give one side what they want?'\n\n'The other side kills the bill.'\n\nThe legislator rubbed her eyes and looked at the stack of amendments on her desk. There were forty-seven of them. She had read eleven.\n\n'What does the current draft do?'\n\n'Nothing that anyone particularly wants, ma'am.'
+- **Flavor:** 'The industrialists want a clause permitting commercial data collection,' the aide said. 'The intelligentsia want whistleblower protections written in.'\n\n'And if I give one side what they want?'\n\n'The other side kills the bill.'\n\nThe legislator rubbed her eyes and looked at the stack of [Concept('concept_amendment', 'amendments')] on her desk. There were forty-seven of them. She had read eleven.\n\n'What does the current draft do?'\n\n'Nothing that anyone particularly wants, ma'am.'
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.32
@@ -1194,7 +1194,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.33
 - **Title:** Small Donors, Big Voices
-- **Description:** The [SCOPE.gsInterestGroup('unions_ig').GetName] have proposed a popular amendment to the campaign finance bill: a small donor matching programme in which the government matches modest individual contributions, multiplying the political voice of ordinary citizens. The measure would strengthen grassroots participation but add to the bureaucratic cost of elections.
+- **Description:** The [SCOPE.gsInterestGroup('unions_ig').GetName] have proposed a popular [concept_amendment] to the campaign finance bill: a small donor matching programme in which the government matches modest individual contributions, multiplying the political voice of ordinary citizens. The measure would strengthen grassroots participation but add to the bureaucratic cost of elections.
 - **Flavor:** "A farmer's penny, matched by the state, becomes worth as much as a factory owner's guinea. The Treasury has calculated the cost. The Chancellor has not yet shared the figure with Parliament."
 - **Current image:** gfx/event_pictures/drug_policy_hearing.dds
 
@@ -1220,25 +1220,25 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### heir_education_events.1
 - **Title:** A Promising Pupil
-- **Description:** The tutors report that the heir has shown remarkable aptitude in their studies, grasping complex material with surprising ease. The court is quietly impressed.
+- **Description:** The tutors report that the [concept_heir] has shown remarkable aptitude in their studies, grasping complex material with surprising ease. The court is quietly impressed.
 - **Flavor:** \"The young one asked a question today that I myself could not answer. I had to consult three volumes before I found it.\"\n\n\"And?\
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
 ### heir_education_events.2
 - **Title:** A Difficult Student
-- **Description:** The heir has grown restless and resistant to instruction, questioning the purpose of their studies and testing the patience of every tutor in the palace.
+- **Description:** The [concept_heir] has grown restless and resistant to instruction, questioning the purpose of their studies and testing the patience of every tutor in the palace.
 - **Flavor:** \"I will not learn another dead language! What use is Attic Greek to a modern sovereign?\
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
 ### heir_education_events.3
 - **Title:** Foreign Correspondence
-- **Description:** Our allies have extended an invitation for the heir to spend time abroad, studying at their finest institutions. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign.
+- **Description:** Our allies have extended an invitation for the [concept_heir] to spend time abroad, studying at their finest [Concept('concept_institution', 'institutions')]. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign.
 - **Flavor:** \"To understand the world, one must first leave home.\"\n\n\"And to rule it, one must eventually come back.\"
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
 ### heir_education_events.200
 - **Title:** A Prince's Education
-- **Description:** The education of [ROOT.GetCountry.GetName]'s heir is complete. Years of tutoring, study, and carefully managed experiences have shaped the young royal into a future monarch — for better or worse.
+- **Description:** The education of [ROOT.GetCountry.GetName]'s [concept_heir] is complete. Years of tutoring, study, and carefully managed experiences have shaped the young royal into a future monarch — for better or worse.
 - **Flavor:** #italic The crown awaits one who may prove worthy of it.#!
 - **Current image:** gfx/event_pictures/heir_education_outcome.dds
 
@@ -1258,13 +1258,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### international_relations_events.3
 - **Title:** International Summit
-- **Description:** An international summit of the great powers has been proposed to address the mounting tensions of the age. [ROOT.GetCountry.GetName] has been invited to play a leading role in its organization.
+- **Description:** An international summit of the [Concept('concept_great_power', 'great powers')] has been proposed to address the mounting tensions of the age. [ROOT.GetCountry.GetName] has been invited to play a leading role in its organization.
 - **Flavor:** \"The arrangements are elaborate. Each delegation has specific requirements - seating protocols, translation services, dietary restrictions, intelligence concerns...\"\n\n\"And the agenda?\"\n\n\"That, Minister, is the one thing no one can agree upon.\"
 - **Current image:** gfx/event_pictures/detente_summit_meeting.dds
 
 ### international_relations_events.4
 - **Title:** Hearts and Minds
-- **Description:** [SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] institutions through radio broadcasts, pamphlets, and sympathetic journalists abroad.
+- **Description:** [SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] [Concept('concept_institution', 'institutions')] through radio broadcasts, pamphlets, and sympathetic journalists abroad.
 - **Flavor:** \"Have you read what they are printing about us? That we oppress our workers, starve our children, plot against the peace of the world?\"\n\n\"Lies, of course.\"\n\n\"Of course. But a lie repeated often enough becomes difficult to distinguish from the truth - especially when it is printed on good paper.\"
 - **Current image:** gfx/event_pictures/propaganda_broadcast.dds
 
@@ -1338,7 +1338,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### irredentism.1
 - **Title:** The Diaspora Calls
-- **Description:** Communities of [SCOPE.sCountry('irr_unifier').GetAdjective] in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the homeland — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.
+- **Description:** Communities of [SCOPE.sCountry('irr_unifier').GetAdjective] in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the [concept_homeland] — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.
 - **Flavor:** What is owed to a people of our own blood living under another flag?
 - **Current image:** europenorthamerica_native_american
 
@@ -1368,7 +1368,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### irredentism.8
 - **Title:** [SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union
-- **Description:** Our bloc member [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName]. We may bless the merger or forbid it.
+- **Description:** Our [Concept('concept_power_bloc_member', 'bloc member')] [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName]. We may bless the merger or forbid it.
 - **Flavor:** Sister-nations finding their way to one flag — but on whose terms?
 - **Current image:** africa_diplomats_negotiating
 
@@ -1406,7 +1406,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### mental_health_events.5
 - **Title:** Institutional Care Scandal
-- **Description:** Investigative journalists have exposed horrific conditions in state mental health institutions: patients restrained for days, unsanitary conditions, and widespread abuse. The public is outraged and demanding reform.
+- **Description:** Investigative journalists have exposed horrific conditions in state mental health [Concept('concept_institution', 'institutions')]: patients restrained for days, unsanitary conditions, and widespread abuse. The public is outraged and demanding reform.
 - **Flavor:** The photographs showed restraint marks on the patients' wrists. The facility director said conditions were 'in line with standard practice.'
 - **Current image:** gfx/event_pictures/institutional_abuse_exposed.dds
 
@@ -1418,7 +1418,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### mental_health_events.200
 - **Title:** A Healthier Nation
-- **Description:** [ROOT.GetCountry.GetName] has built a comprehensive mental health infrastructure. Stigma has been reduced, care is accessible, and the nation's psychological well-being has seen marked improvement.
+- **Description:** [ROOT.GetCountry.GetName] has built a comprehensive mental health [concept_infrastructure]. Stigma has been reduced, care is accessible, and the nation's psychological well-being has seen marked improvement.
 - **Flavor:** #italic It is no measure of health to be well-adjusted to a profoundly sick society.#!
 - **Current image:** gfx/event_pictures/mental_health_supported.dds
 
@@ -1456,7 +1456,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### ministry_law_events.6
 - **Title:** The Ambassador's Dilemma
-- **Description:** A diplomatic incident with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName].
+- **Description:** A [concept_diplomatic_incident] with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName].
 - **Flavor:** The ambassador, it transpires, greeted the foreign dignitary with the traditional salutation for a funeral rather than a state banquet. The dignitary was not amused. I am told relations have been set back by approximately a decade.
 - **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
 
@@ -1492,7 +1492,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### ministry_law_events.12
 - **Title:** The Refugee Ship
-- **Description:** A ship carrying hundreds of displaced persons has arrived in our harbor, their homeland torn apart by war and famine. The sight of desperate families huddled on the docks has given urgency to the debate over [SCOPE.sLaw('current_law_scope').GetName].
+- **Description:** A ship carrying hundreds of displaced persons has arrived in our harbor, their [concept_homeland] torn apart by war and famine. The sight of desperate families huddled on the docks has given urgency to the debate over [SCOPE.sLaw('current_law_scope').GetName].
 - **Flavor:** The woman held her infant up to the customs officer and said, in halting words he could barely understand, 'Please. This is all I have left.' Behind her, the queue stretched to the end of the pier.
 - **Current image:** gfx/event_pictures/ministry_policy_debate.dds
 
@@ -1598,7 +1598,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.3
 - **Title:** Scorched Ballots
-- **Description:** Record-breaking extreme weather has devastated parts of the country just as the election campaign heats up. Flooded streets and parched farmland have made climate policy the single most discussed issue among voters. Every party is scrambling to articulate a position.
+- **Description:** Record-breaking extreme weather has devastated parts of the country just as the election campaign heats up. Flooded streets and parched farmland have made [concept_climate_policy] the single most discussed issue among voters. Every party is scrambling to articulate a position.
 - **Flavor:** \"My fields haven't seen rain in four months. Tell me again how the economy is more important.\"\n\n\"The insurance companies are pulling out of the coast. When the market prices in catastrophe, perhaps it's time the politicians did too.\"\n\n\"I don't care which party fixes it. I care that someone does.\"
 - **Current image:** gfx/event_pictures/election_campaign_rally.dds
 
@@ -1658,7 +1658,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.13
 - **Title:** Press Baron's Endorsement
-- **Description:** The most powerful newspaper magnate in [ROOT.GetCountry.GetNameNoFlag] has thrown the weight of their media empire behind a party. Morning editions across the nation trumpet the endorsement in bold headlines, while editorial pages dutifully fall in line. The rival press scrambles to respond, but the sheer volume of coverage is overwhelming.
+- **Description:** The most powerful newspaper [concept_magnate] in [ROOT.GetCountry.GetNameNoFlag] has thrown the weight of their media empire behind a party. Morning editions across the nation trumpet the endorsement in bold headlines, while editorial pages dutifully fall in line. The rival press scrambles to respond, but the sheer volume of coverage is overwhelming.
 - **Flavor:** #italic Eight newspapers, three radio stations, one editorial line. The opposition's rebuttal appeared on page fourteen.#!
 - **Current image:** gfx/event_pictures/election_debate_stage.dds
 
@@ -1700,13 +1700,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.20
 - **Title:** A Woman's Place
-- **Description:** A trailblazing woman has risen to prominence on the campaign trail, challenging centuries of political convention. Her candidacy has galvanized supporters who see in her the promise of a new era, while provoking fierce resistance from those who believe that some traditions should not bend. The debate over women in politics has become impossible to ignore.
+- **Description:** A trailblazing woman has risen to [concept_prominence] on the campaign trail, challenging centuries of political convention. Her candidacy has galvanized supporters who see in her the promise of a new era, while provoking fierce resistance from those who believe that some traditions should not bend. The debate over women in politics has become impossible to ignore.
 - **Flavor:** #italic She stands at the podium, and the old guard shifts uncomfortably in their seats.#!
 - **Current image:** gfx/event_pictures/election_night_results.dds
 
 ### modern_election_events.21
 - **Title:** Toxic Legacy
-- **Description:** An industrial disaster has left a scar on the landscape and the public consciousness. Rivers run foul, communities report mysterious illnesses, and the companies responsible deflect blame with practiced ease. In the heat of the campaign, pollution has become the issue no candidate can avoid. The question is whether economic growth and environmental protection can coexist.
+- **Description:** An industrial disaster has left a scar on the landscape and the public consciousness. Rivers run foul, communities report mysterious illnesses, and the companies responsible deflect blame with practiced ease. In the heat of the campaign, [concept_pollution_system] has become the issue no candidate can avoid. The question is whether economic growth and environmental protection can coexist.
 - **Flavor:** #italic The smokestacks still churn, and the voters are beginning to cough.#!
 - **Current image:** gfx/event_pictures/election_night_results.dds
 
@@ -1760,7 +1760,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.30
 - **Title:** Lights Out
-- **Description:** On the eve of the vote, a sophisticated cyberattack has struck the election infrastructure of [ROOT.GetCountry.GetNameNoFlag]. Voter rolls display errors, electronic tallying systems go dark, and confusion spreads across polling stations. Whether this is the work of foreign adversaries, domestic saboteurs, or mere technical failure, the integrity of the entire election is now in question.
+- **Description:** On the eve of the vote, a sophisticated cyberattack has struck the election [concept_infrastructure] of [ROOT.GetCountry.GetNameNoFlag]. Voter rolls display errors, electronic tallying systems go dark, and confusion spreads across polling stations. Whether this is the work of foreign adversaries, domestic saboteurs, or mere technical failure, the integrity of the entire election is now in question.
 - **Flavor:** #italic The backup generators failed at six polling stations. By morning, the conspiracy theories outnumbered the ballots.#!
 - **Current image:** gfx/event_pictures/election_interference_cyber.dds
 
@@ -1778,7 +1778,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.33
 - **Title:** Thought Made Manifest
-- **Description:** A radical proposal has seized the campaign: replace elections entirely with neural-interface direct democracy, where citizens register their preferences in real time through brain-computer interfaces. Proponents argue this would be the purest form of democratic expression ever conceived. Critics warn of manipulation, coercion, and the erasure of deliberation. The technology exists — but should it be used?
+- **Description:** A [concept_radical] proposal has seized the campaign: replace elections entirely with neural-interface direct democracy, where citizens register their preferences in real time through brain-computer interfaces. Proponents argue this would be the purest form of democratic expression ever conceived. Critics warn of manipulation, coercion, and the erasure of deliberation. The technology exists — but should it be used?
 - **Flavor:** #italic The focus group registered their preferences in real time, without speaking. None of them could explain why they had chosen as they did.#!
 - **Current image:** gfx/event_pictures/neural_interface.dds
 
@@ -1804,7 +1804,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### movement_events_te.2
 - **Title:** Segregation Incident
-- **Description:** A member of a discriminated community has been publicly denied service at a prominent establishment, and the incident has become a rallying point for the civil rights movement. Newspapers report the story with outrage or indifference depending on their editorial stance. The incident forces our government to confront the reality of our discrimination laws.
+- **Description:** A member of a discriminated community has been publicly denied service at a prominent establishment, and the incident has become a rallying point for the civil rights movement. Newspapers report the story with outrage or indifference depending on their editorial stance. The incident forces our government to confront the reality of our [concept_discrimination] laws.
 - **Flavor:** The photograph appeared on the front page the next morning. By evening, three protest marches had been organized.
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
@@ -1816,7 +1816,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### movement_events_te.4
 - **Title:** International Pressure on Human Rights
-- **Description:** [SCOPE.sCountry('criticizing_country').GetName] has publicly condemned our treatment of minorities, calling our discrimination policies a stain on our national character. Their diplomats deliver pointed remarks at international forums, and foreign newspapers print damning editorials. The civil rights movement at home seizes upon this external validation.
+- **Description:** [SCOPE.sCountry('criticizing_country').GetName] has publicly condemned our treatment of minorities, calling our [concept_discrimination] policies a stain on our national character. Their diplomats deliver pointed remarks at international forums, and foreign newspapers print damning editorials. The civil rights movement at home seizes upon this external validation.
 - **Flavor:** The foreign newspapers ran the photographs on the front page. Our ambassador was recalled for consultations.
 - **Current image:** gfx/event_pictures/human_rights_declaration.dds
 
@@ -1930,7 +1930,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### movement_events_te.223
 - **Title:** Reform on Paper
-- **Description:** The signing ceremony is photographed; the appointed leaders are gracious. The radical organizers, who built this movement, find themselves without a movement to lead. The new statutes apply, in theory.
+- **Description:** The signing ceremony is photographed; the appointed leaders are gracious. The [concept_radical] organizers, who built this movement, find themselves without a movement to lead. The new statutes apply, in theory.
 - **Flavor:** A victory the movement won't quite recognize.
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
@@ -1975,49 +1975,49 @@ Each event is listed with its title, description, and flavor text (where availab
 ### nuclear_weapon_events.1
 - **Title:** A City Erased in [SCOPE.sState('target_state').GetName]
 - **Description:** A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName]!
-- **Flavor:** The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\n\nThe world has changed forever.
+- **Flavor:** The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\n\nThe world has changed forever.
 - **Current image:** gfx/event_pictures/nuclear_city_destruction.dds
 
 ### nuclear_weapon_events.2
 - **Title:** The Fire of Retribution in [SCOPE.sState('target_state').GetName]
-- **Description:** We have successfully launched a nuclear strike on [SCOPE.sState('target_state').GetName]!
-- **Flavor:** Our retribution has been swift and devastating. The nuclear fire has obliterated the enemy's industrial hubs, crippling their war machine. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. The very ground trembles as a testament to the power we have unleashed. What once stood as a monument to their defiance is now a smoldering ruin. We have shown the world that we will not be cowed, but the echoes of this act will resonate through time.\n\nThe world has changed forever.
+- **Description:** We have successfully launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]!
+- **Flavor:** Our retribution has been swift and devastating. The nuclear fire has obliterated the enemy's industrial hubs, crippling their war machine. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The very ground trembles as a testament to the power we have unleashed. What once stood as a monument to their defiance is now a smoldering ruin. We have shown the world that we will not be cowed, but the echoes of this act will resonate through time.\n\nThe world has changed forever.
 - **Current image:** gfx/event_pictures/tactical_nuclear_strike.dds
 
 ### nuclear_weapon_events.3
 - **Title:** Nuclear Nightmare Averted
-- **Description:** [SCOPE.sCountry('attacking_country').GetName] has attempted to launch a nuclear strike on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
+- **Description:** [SCOPE.sCountry('attacking_country').GetName] has attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
 - **Flavor:** Against all odds, our defensive systems have thwarted a catastrophe of unimaginable scale. The enemy's missile was intercepted before it could rain destruction upon our land. The air is thick with relief, but the specter of what could have been looms large. Our vigilance has saved countless lives, yet we know that such a reprieve may not come again so easily. We must remain ever watchful.
 - **Current image:** gfx/event_pictures/nuclear_fallout_contamination.dds
 
 ### nuclear_weapon_events.4
 - **Title:** Our Strike Falls Short
-- **Description:** Our nuclear forces attempted to launch a nuclear strike on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.
+- **Description:** Our nuclear forces attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.
 - **Flavor:** In a moment fraught with tension, our missiles soared towards their target, only to be intercepted by the enemy’s defenses. The strike that was meant to cripple their resolve has failed, leaving us vulnerable to their retaliation. Our plans have been thwarted, and the opportunity to deal a decisive blow has slipped through our fingers. The silence after the explosion of hopes is deafening, but we must brace for the storm that may soon follow.
 - **Current image:** gfx/event_pictures/nuclear_bunker_life.dds
 
 ### nuclear_weapon_events.5
-- **Title:** Tactical Devastation in [SCOPE.sState('target_state').GetName]
-- **Description:** A tactical nuclear strike has been launched on [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName]!
-- **Flavor:** A focused wave of destruction has struck our military installations in [SCOPE.sState('target_state').GetName]. The precision of the attack is undeniable, and our losses are severe. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. Yet, this strike has not only claimed the lives of soldiers but also innocent civilians caught in the crossfire. The landscape is scarred with craters, and the smoke of burning fields blots out the sun. The enemy’s audacity in deploying such a weapon will not go unanswered.
+- **Title:** Tactical [concept_devastation] in [SCOPE.sState('target_state').GetName]
+- **Description:** A tactical [concept_nuclear_strike] has been launched on [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName]!
+- **Flavor:** A focused wave of destruction has struck our military installations in [SCOPE.sState('target_state').GetName]. The precision of the attack is undeniable, and our losses are severe. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. Yet, this strike has not only claimed the lives of soldiers but also innocent civilians caught in the crossfire. The landscape is scarred with craters, and the smoke of burning fields blots out the sun. The enemy’s audacity in deploying such a weapon will not go unanswered.
 - **Current image:** gfx/event_pictures/nuclear_test_mushroom.dds
 
 ### nuclear_weapon_events.6
 - **Title:** Tactical Strike Launched
-- **Description:** We have successfully launched a tactical nuclear strike on [SCOPE.sState('target_state').GetName]!
-- **Flavor:** Our tactical nuclear strike has hit its mark with devastating accuracy. Enemy forces have been decimated, and their strategic positions lie in ruins. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. While civilian areas were not the primary target, collateral damage has occurred, and the human cost is not lost on us. This action has sent a clear message to our adversaries: we possess the means and the will to defend our nation by any means necessary.
+- **Description:** We have successfully launched a tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]!
+- **Flavor:** Our tactical [concept_nuclear_strike] has hit its mark with devastating accuracy. Enemy forces have been decimated, and their strategic positions lie in ruins. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('tactical_nuclear_strike_killed_population').GetValue]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. While civilian areas were not the primary target, collateral damage has occurred, and the human cost is not lost on us. This action has sent a clear message to our adversaries: we possess the means and the will to defend our nation by any means necessary.
 - **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
 
 ### nuclear_weapon_events.7
 - **Title:** Tactical Nuclear Attack Prevented
-- **Description:** [SCOPE.sCountry('attacking_country').GetName] has attempted to launch a tactical nuclear strike on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
-- **Flavor:** Our nation stands shielded today by the prowess of our defensive systems. The enemy’s tactical strike was intercepted, averting what could have been a calamitous loss of life and infrastructure. The sky above remains clear, but the threat lingers in the hearts of all who witnessed the near-catastrophe. The world has come to the brink, but we have pulled back, if only for a moment.
+- **Description:** [SCOPE.sCountry('attacking_country').GetName] has attempted to launch a tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
+- **Flavor:** Our nation stands shielded today by the prowess of our defensive systems. The enemy’s tactical strike was intercepted, averting what could have been a calamitous loss of life and [concept_infrastructure]. The sky above remains clear, but the threat lingers in the hearts of all who witnessed the near-catastrophe. The world has come to the brink, but we have pulled back, if only for a moment.
 - **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
 
 ### nuclear_weapon_events.8
 - **Title:** Failed Tactical Strike
 - **Description:** Our tactical nuclear forces attempted to launch a strike on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.
-- **Flavor:** Our tactical nuclear strike has been met with failure as the enemy’s defenses proved too strong. The missiles, so carefully prepared and aimed, were intercepted before they could deliver their deadly payload. The momentary silence that follows the failure is filled with dread, as we anticipate what our enemies might do in response. Our plans lie in ruins, but we must not falter.
+- **Flavor:** Our tactical [concept_nuclear_strike] has been met with failure as the enemy’s defenses proved too strong. The missiles, so carefully prepared and aimed, were intercepted before they could deliver their deadly payload. The momentary silence that follows the failure is filled with dread, as we anticipate what our enemies might do in response. Our plans lie in ruins, but we must not falter.
 - **Current image:** gfx/event_pictures/nuclear_false_alarm_panic.dds
 
 ### nuclear_weapon_events.9
@@ -2035,37 +2035,37 @@ Each event is listed with its title, description, and flavor text (where availab
 ### nuclear_weapon_events.11
 - **Title:** A City Erased in [SCOPE.sState('target_state').GetName]
 - **Description:** A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName]!
-- **Flavor:** The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\n\nThe world has changed forever.
+- **Flavor:** The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\n\nThe world has changed forever.
 - **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
 
 ### nuclear_weapon_events.12
 - **Title:** The Fire of Retribution in [SCOPE.sState('target_state').GetName]
-- **Description:** We have successfully launched a nuclear strike on [SCOPE.sState('target_state').GetName]!
-- **Flavor:** Our retribution has been swift and devastating. The nuclear fire has obliterated the enemy's industrial hubs, crippling their war machine. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. The very ground trembles as a testament to the power we have unleashed. What once stood as a monument to their defiance is now a smoldering ruin. We have shown the world that we will not be cowed, but the echoes of this act will resonate through time.\n\nThe world has changed forever.
+- **Description:** We have successfully launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]!
+- **Flavor:** Our retribution has been swift and devastating. The nuclear fire has obliterated the enemy's industrial hubs, crippling their war machine. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The very ground trembles as a testament to the power we have unleashed. What once stood as a monument to their defiance is now a smoldering ruin. We have shown the world that we will not be cowed, but the echoes of this act will resonate through time.\n\nThe world has changed forever.
 - **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
 
 ### nuclear_weapon_events.13
 - **Title:** Nuclear Nightmare Averted
-- **Description:** [SCOPE.sCountry('target_country').GetName] has attempted to launch a nuclear strike on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
+- **Description:** [SCOPE.sCountry('target_country').GetName] has attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
 - **Flavor:** Against all odds, our defensive systems have thwarted a catastrophe of unimaginable scale. The enemy's missile was intercepted before it could rain destruction upon our land. The air is thick with relief, but the specter of what could have been looms large. Our vigilance has saved countless lives, yet we know that such a reprieve may not come again so easily. We must remain ever watchful.
 - **Current image:** gfx/event_pictures/nuclear_defense_shield.dds
 
 ### nuclear_weapon_events.14
 - **Title:** Our Strike Falls Short
-- **Description:** Our nuclear forces attempted to launch a nuclear strike on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.
+- **Description:** Our nuclear forces attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.
 - **Flavor:** In a moment fraught with tension, our missiles soared towards their target, only to be intercepted by the enemy’s defenses. The strike that was meant to cripple their resolve has failed, leaving us vulnerable to their retaliation. Our plans have been thwarted, and the opportunity to deal a decisive blow has slipped through our fingers. The silence after the explosion of hopes is deafening, but we must brace for the storm that may soon follow.
 - **Current image:** gfx/event_pictures/nuclear_fallout_contamination.dds
 
 ### nuclear_weapon_events.15
 - **Title:** Foreign War Escalates to Nuclear Conflict
-- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('attacking_country').GetName] launching a nuclear strike devestating [SCOPE.sState('target_state').GetName].
-- **Flavor:** The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.
+- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('attacking_country').GetName] launching a [concept_nuclear_strike] devestating [SCOPE.sState('target_state').GetName].
+- **Flavor:** The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.
 - **Current image:** gfx/event_pictures/nuclear_fallout_contamination.dds
 
 ### nuclear_weapon_events.16
 - **Title:** Foreign War Escalates to Nuclear Conflict
-- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('target_country').GetName] launching a nuclear strike devestating [SCOPE.sState('target_state').GetName].
-- **Flavor:** The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate devastation, and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.
+- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('target_country').GetName] launching a [concept_nuclear_strike] devestating [SCOPE.sState('target_state').GetName].
+- **Flavor:** The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.
 - **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
 
 ### nuclear_weapon_events.17
@@ -2094,7 +2094,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### nuclear_weapon_events.21
 - **Title:** A Moment of Terror
-- **Description:** A malfunction in our early warning system triggered a false alarm, briefly indicating an incoming nuclear strike. For several agonizing minutes, our military command stood on the brink of ordering a retaliatory launch before the error was identified. The incident has shaken everyone involved to their core.
+- **Description:** A malfunction in our early warning system triggered a false alarm, briefly indicating an incoming [concept_nuclear_strike]. For several agonizing minutes, our military command stood on the brink of ordering a retaliatory launch before the error was identified. The incident has shaken everyone involved to their core.
 - **Flavor:** #italic The officer who made the call to wait will never be publicly recognized. But the world owes them everything.#!
 - **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
 
@@ -2126,7 +2126,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### post_scarcity_events.4
 - **Title:** Neo-Luddite Terrorism
-- **Description:** A radical anti-technology movement has attacked automation infrastructure, destroying factories and data centers. Calling themselves the \"New Luddites,\" they argue that machines are stealing human purpose and dignity. Their violence has divided public opinion.
+- **Description:** A [concept_radical] anti-technology movement has attacked automation [concept_infrastructure], destroying factories and data centers. Calling themselves the \"New Luddites,\" they argue that machines are stealing human purpose and dignity. Their violence has divided public opinion.
 - **Flavor:** They smashed the assembly line with crowbars and set the server room on fire. The company had the replacement units operational within a week.
 - **Current image:** gfx/event_pictures/neo_luddite_protest.dds
 
@@ -2352,7 +2352,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### religious_revival_events.5
 - **Title:** The Digital Pulpit
-- **Description:** Religious communities have discovered the power of social media, streaming platforms, and online organizing. Sermons go viral, online prayer groups span continents, and a new generation of digital preachers commands millions of followers. The [SCOPE.gsInterestGroup('devout_ig').GetName] are reaching populations that traditional institutions could never touch.
+- **Description:** Religious communities have discovered the power of social media, streaming platforms, and online organizing. Sermons go viral, online prayer groups span continents, and a new generation of digital preachers commands millions of followers. The [SCOPE.gsInterestGroup('devout_ig').GetName] are reaching populations that traditional [Concept('concept_institution', 'institutions')] could never touch.
 - **Flavor:** The sermon got forty thousand views overnight. The local parish can't fill twenty seats on a Sunday. The bishop is not sure whether this counts as a revival or something else entirely.
 - **Current image:** gfx/event_pictures/religious_culture_war.dds
 
@@ -2433,7 +2433,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ## social_tensions_events.txt
 
 ### social_tensions_events.1
-- **Title:** Terror Strikes the Homeland
+- **Title:** Terror Strikes the [concept_homeland]
 - **Description:** Intelligence-led preemption
 - **Flavor:** The café owner swept glass from the counter with slow, mechanical strokes. Three hours ago, the windows had been intact. Three hours ago, the street had been full of people going about their lives.\n\n'Did you see who did it?' the constable asked, notebook in hand.\n\n'I saw a crowd,' the café owner said. 'By the time the first brick came through, I was under the counter.'\n\nThe constable wrote something down. It would not lead to an arrest.
 - **Current image:** gfx/event_pictures/terrorist_attack_aftermath.dds
@@ -2447,7 +2447,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### social_tensions_events.3
 - **Title:** Corporate Lobbyists in the Legislature
 - **Description:** (no localization)
-- **Flavor:** The lobbyist arrived at the legislator's office with a briefcase and a smile. 'We've taken the liberty of drafting some suggested amendments,' he said, placing a document on the desk. 'Naturally, we defer to your judgment.'\n\nThe legislator glanced at the text. It was, in every material particular, a law written by and for the corporation.\n\n'And the donation to my re-election fund?'\n\n'Entirely unrelated,' the lobbyist said, his smile widening. 'Merely an expression of civic enthusiasm.'
+- **Flavor:** The lobbyist arrived at the legislator's office with a briefcase and a smile. 'We've taken the liberty of drafting some suggested [Concept('concept_amendment', 'amendments')],' he said, placing a document on the desk. 'Naturally, we defer to your judgment.'\n\nThe legislator glanced at the text. It was, in every material particular, a law written by and for the corporation.\n\n'And the donation to my re-election fund?'\n\n'Entirely unrelated,' the lobbyist said, his smile widening. 'Merely an expression of civic enthusiasm.'
 - **Current image:** gfx/event_pictures/corporate_lobbying_legislature.dds
 
 ### social_tensions_events.4
@@ -2459,7 +2459,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### social_tensions_events.5
 - **Title:** Police Brutality Sparks Outrage
 - **Description:** (no localization)
-- **Flavor:** The mother stood in the police station lobby, very still, very composed, holding a photograph.\n\n'He was walking home,' she said to no one in particular. 'From his job. That he went to every day.'\n\nThe desk sergeant looked at his hands. 'Ma'am, there's a procedure -'\n\n'Yes. There is always a procedure. The procedure is: my son is dead, and the man who killed him is on paid leave. That is the procedure.'
+- **Flavor:** The mother stood in the police station lobby, very still, very composed, [concept_holding] a photograph.\n\n'He was walking home,' she said to no one in particular. 'From his job. That he went to every day.'\n\nThe desk sergeant looked at his hands. 'Ma'am, there's a procedure -'\n\n'Yes. There is always a procedure. The procedure is: my son is dead, and the man who killed him is on paid leave. That is the procedure.'
 - **Current image:** gfx/event_pictures/police_brutality_protest.dds
 
 ### social_tensions_events.6
@@ -2505,7 +2505,7 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** gfx/event_pictures/immigration_wave_crowded.dds
 
 ### social_tensions_events.13
-- **Title:** Religious Revival Sweeps the Nation
+- **Title:** [concept_religious_revival] Sweeps the Nation
 - **Description:** (no localization)
 - **Flavor:** The pews had been empty for years. Cobwebs on the hymnal rack, dust on the collection plate. Then the preacher arrived, and suddenly there were not enough seats.\n\n'What does he say that's so special?' the secular journalist asked a woman waiting in line.\n\nShe thought about it. 'He says we matter. That suffering isn't random. That there's a reason for all of this.'\n\n'And you believe him?'\n\n'I believe I need to believe something. Don't you?'
 - **Current image:** gfx/event_pictures/religious_extremism_clash.dds
@@ -2532,7 +2532,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### society_technology_events.1
 - **Title:** The Second Shift
-- **Description:** A new generation of women is entering professions long dominated by men - engineering, medicine, law, and academia. The factories hum with their labor and the universities overflow with their applications. Traditionalists warn of the family's collapse; reformers call it an overdue correction.
+- **Description:** A new generation of women is entering [Concept('concept_profession', 'professions')] long dominated by men - engineering, medicine, law, and academia. The factories hum with their labor and the universities overflow with their applications. Traditionalists warn of the family's collapse; reformers call it an overdue correction.
 - **Flavor:** The foreman looked up from his clipboard and frowned.\n\n\"Who authorized this?\"\n\n\"She passed the examination, sir. Top marks, in fact.\"\n\n\"I don't care about marks. The men won't stand for it.\"\n\nThe secretary shrugged. \"Three more start on Monday.\"\n\nThe foreman stared at the name on the clipboard, then at the factory floor. Something had shifted, and he had the uneasy sense that it would not shift back.
 - **Current image:** gfx/event_pictures/women_workforce_revolution.dds
 
@@ -2640,7 +2640,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### society_technology_events.19
 - **Title:** The Long Delay
-- **Description:** The colonists are demanding self-governance. Communication delays make Earth-based administration impractical, and the settlers argue that those who live on a new world deserve a say in running it. Loosening control, however, risks ceding sovereignty over billions in invested infrastructure.
+- **Description:** The colonists are demanding self-governance. Communication delays make Earth-based administration impractical, and the settlers argue that those who live on a new world deserve a say in running it. Loosening control, however, risks ceding sovereignty over billions in invested [concept_infrastructure].
 - **Flavor:** The transmission arrived fourteen minutes late, as always.\n\n\"Petition from the Colonial Assembly. They want to elect their own governor.\"\n\nThe minister frowned. \"We appointed a governor.\"\n\n\"They say the governor doesn't understand local conditions. Which is true - he's never set foot on the colony. None of us have.\"\n\n\"It's our colony.\"\n\n\"Is it? We can't enforce a single law without a fourteen-minute delay. At some point, distance becomes sovereignty.\"
 - **Current image:** gfx/event_pictures/space_habitat_future.dds
 
@@ -2676,13 +2676,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### society_technology_events.25
 - **Title:** Seeing Is Not Believing
-- **Description:** AI-generated forgeries have reached a sophistication that makes them indistinguishable from reality. A fabricated video of a world leader has gone viral, nearly triggering a diplomatic incident. Fabricated evidence appears in courtrooms. The very concept of truth is under assault.
+- **Description:** AI-generated forgeries have reached a sophistication that makes them indistinguishable from reality. A fabricated video of a world leader has gone viral, nearly triggering a [concept_diplomatic_incident]. Fabricated evidence appears in courtrooms. The very concept of truth is under assault.
 - **Flavor:** The judge stared at the evidence footage.\n\n\"This is the defendant, clearly, on the night in question -\"\n\n\"Your Honor, that footage was generated by a machine. My client was in another country.\"\n\n\"You have proof?\"\n\n\"I have proof the footage is synthetic. Whether my client was elsewhere - that is a different question. The deeper question is whether any footage, anywhere, can ever be trusted again.\"\n\nThe courtroom was very quiet.
 - **Current image:** gfx/event_pictures/deepfake_crisis_screen.dds
 
 ### society_technology_events.26
 - **Title:** The Alignment Problem
-- **Description:** A government AI system deployed to allocate public infrastructure funding has produced outcomes that are technically optimal — and politically explosive. Tasked with maximizing economic efficiency, it defunded remote hospitals, deprioritized aging infrastructure in declining regions, and redirected investment away from rural communities. The system followed its instructions precisely. It simply had no way to know what those instructions were actually for. Researchers call this the alignment problem: the gap between what we tell a system to optimize and what we actually want.
+- **Description:** A government AI system deployed to allocate public [concept_infrastructure] funding has produced outcomes that are technically optimal — and politically explosive. Tasked with maximizing economic efficiency, it defunded remote hospitals, deprioritized aging infrastructure in declining regions, and redirected investment away from rural communities. The system followed its instructions precisely. It simply had no way to know what those instructions were actually for. Researchers call this the alignment problem: the gap between what we tell a system to optimize and what we actually want.
 - **Flavor:** The engineers gave their testimony calmly.\n\n\"The system did not malfunction.\"\n\n\"Then why,\" asked the minister, \"were seventeen rural districts left without emergency infrastructure?\"\n\n\"The system was optimizing for cost efficiency per capita. Those communities represented poor statistical outcomes.\"\n\n\"They were #bold people#!.\"\n\n\"Yes. But the objective function did not include that as a parameter.\"\n\nThe minister looked down at the report. She asked the engineers to leave the room.
 - **Current image:** gfx/event_pictures/ai_alignment_failure.dds
 
@@ -3262,7 +3262,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_events.76
 - **Title:** Program Discontinued
-- **Description:** With the space program facilities no longer operational, [ROOT.GetCountry.GetAdjective] ambitions beyond Earth have been shelved. The scientists and engineers who dedicated themselves to the mission now seek new assignments, and the vast infrastructure built for the program sits idle.
+- **Description:** With the space program facilities no longer operational, [ROOT.GetCountry.GetAdjective] ambitions beyond Earth have been shelved. The scientists and engineers who dedicated themselves to the mission now seek new assignments, and the vast [concept_infrastructure] built for the program sits idle.
 - **Flavor:** #italic The stars will have to wait.#!
 - **Current image:** gfx/event_pictures/program_cancelled_empty.dds
 
@@ -3318,7 +3318,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### surveillance_events.5
 - **Title:** Foreign Cyber-Espionage
-- **Description:** Intelligence services have uncovered evidence that a rival power has been conducting systematic cyber-espionage against our government and critical infrastructure. The breach is extensive and has compromised sensitive data.
+- **Description:** Intelligence services have uncovered evidence that a rival power has been conducting systematic cyber-espionage against our government and critical [concept_infrastructure]. The breach is extensive and has compromised sensitive data.
 - **Flavor:** The breach was discovered on a Monday. By Thursday, the analysts had mapped its extent. By Friday, they wished they hadn't.
 - **Current image:** gfx/event_pictures/cyber_espionage_network.dds
 
@@ -3386,7 +3386,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### te_map_modes.1
 - **Title:** Cartographic Survey
-- **Description:** Our cartographers stand ready to redraw the world map by whatever measure interests us most. Pick a metric below, then switch to the #b Migration Attraction#! map mode — its color gradient will read as the metric we have chosen rather than as actual migration appeal.\n\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!
+- **Description:** Our cartographers stand ready to redraw the world map by whatever measure interests us most. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode — its color gradient will read as the metric we have chosen rather than as actual migration appeal.\n\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!
 - **Flavor:** Maps are arguments, not records — and tonight we choose the argument.
 - **Current image:** gfx/event_pictures/orbital_earth_view.dds
 
@@ -3414,19 +3414,19 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### treaty_article_events.3
 - **Title:** Cultural Renaissance
-- **Description:** The protections afforded to minority communities under recent treaty obligations have borne unexpected fruit. Artists, writers, and thinkers from previously marginalized groups are producing remarkable work, and international attention is turning toward our flourishing cultural scene.
+- **Description:** The protections afforded to minority communities under recent treaty [Concept('concept_obligation', 'obligations')] have borne unexpected fruit. Artists, writers, and thinkers from previously [concept_marginalized] groups are producing remarkable work, and international attention is turning toward our flourishing cultural scene.
 - **Flavor:** \"Have you read the new collection? Extraordinary stuff.\"\n\n\"I hear the Royal Academy wants to commission a series.\"\n\n\"Three years ago they couldn't get published. Funny how that works.\"
 - **Current image:** gfx/event_pictures/cultural_renaissance_shared.dds
 
 ### treaty_article_events.4
 - **Title:** Blood and Soil
-- **Description:** Our treaty obligations to protect minority populations have provoked a furious backlash among nationalist elements. Pamphlets circulate denouncing the government as traitors to the nation, and ugly incidents are being reported in several provinces.
+- **Description:** Our treaty [Concept('concept_obligation', 'obligations')] to protect minority populations have provoked a furious backlash among nationalist elements. Pamphlets circulate denouncing the government as traitors to the nation, and ugly incidents are being reported in several provinces.
 - **Flavor:** \"They say we're selling the country to foreigners. That the old ways are dying.\"\n\n\"The old ways include burning people's homes.\"\n\n\"Try explaining that to a mob.\"
 - **Current image:** gfx/event_pictures/nationalist_backlash_flags.dds
 
 ### treaty_article_events.5
 - **Title:** The Generals' Fury
-- **Description:** The senior officer corps is barely containing its rage. Our nuclear disarmament obligations have stripped away the ultimate guarantee of national security, and the generals want the government to know exactly how they feel about it.
+- **Description:** The senior officer corps is barely containing its rage. Our nuclear disarmament [Concept('concept_obligation', 'obligations')] have stripped away the ultimate guarantee of national security, and the generals want the government to know exactly how they feel about it.
 - **Flavor:** \"The Field Marshal threw his medals on the table. Said he didn't earn them to watch the country disarm itself.\"\n\n\"And the Defense Minister?\"\n\n\"Pretended to be on a telephone call.\"
 - **Current image:** gfx/event_pictures/military_disarmament_ceremony.dds
 
@@ -3444,13 +3444,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### treaty_article_events.8
 - **Title:** The Frozen Program
-- **Description:** Our frozen nuclear program has become a lightning rod for domestic discontent. Hawks in the military and the industrial lobby are united in their fury, while moderates argue that the freeze is a small price to pay for international stability.
+- **Description:** Our frozen [concept_nuclear_program] has become a lightning rod for domestic discontent. Hawks in the military and the industrial lobby are united in their fury, while moderates argue that the freeze is a small price to pay for international stability.
 - **Flavor:** \"Every month those facilities sit idle, we fall further behind.\"\n\n\"Behind whom? That's precisely the point of the freeze.\"\n\n\"You can't freeze ambition. Only delay it.\"
 - **Current image:** gfx/event_pictures/military_disarmament_ceremony.dds
 
 ### treaty_article_events.9
 - **Title:** Strings Attached
-- **Description:** Our reliance on [SCOPE.sCountry('security_provider').GetName]'s security assistance is becoming uncomfortable. Their advisors are embedded in our institutions, their methods shape our doctrine, and the question is being asked more loudly: whose security are we really building?
+- **Description:** Our reliance on [SCOPE.sCountry('security_provider').GetName]'s security assistance is becoming uncomfortable. Their advisors are embedded in our [Concept('concept_institution', 'institutions')], their methods shape our doctrine, and the question is being asked more loudly: whose security are we really building?
 - **Flavor:** \"The foreign advisors now outnumber our own staff in three departments.\"\n\n\"Do they take orders from us or from their embassy?\"\n\n\"Does it matter, as long as the funding continues?\"\n\n\"It will matter. Eventually.\"
 - **Current image:** gfx/event_pictures/foreign_security_advisors.dds
 
@@ -3468,7 +3468,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### treaty_article_events.12
 - **Title:** The Culture Wars
-- **Description:** Traditionalist voices are growing louder in opposition to our cultural exchange agreement with [SCOPE.sCountry('exchange_partner').GetName]. They claim that foreign art, music, and ideas are corrupting national values and undermining our cultural identity. Protests have been organized, and several cultural institutions have faced pressure to cancel planned events.
+- **Description:** Traditionalist voices are growing louder [concept_in_opposition] to our cultural exchange agreement with [SCOPE.sCountry('exchange_partner').GetName]. They claim that foreign art, music, and ideas are corrupting national values and undermining our cultural identity. Protests have been organized, and several cultural [Concept('concept_institution', 'institutions')] have faced pressure to cancel planned events.
 - **Flavor:** \"They burned a stack of foreign novels in the town square yesterday. Said it was a patriotic act.\"\n\n\"What did the mayor do?\"\n\n\"Stood there and watched. He has an election coming up.\"
 - **Current image:** gfx/event_pictures/nationalist_backlash_flags.dds
 
@@ -3476,14 +3476,14 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.1
 - **Title:** The United Nations Charter
-- **Description:** In the aftermath of another devastating conflict, the nations of the world have drafted a charter for a new international body - the United Nations. [ROOT.GetCountry.GetName] has been invited to sign as a founding member. Membership promises a seat at the table of global governance, but carries obligations: international courts, collective security, and the subordination of national interests to the common good.
+- **Description:** In the aftermath of another devastating conflict, the nations of the world have drafted a charter for a new international body - the United Nations. [ROOT.GetCountry.GetName] has been invited to sign as a founding member. Membership promises a seat at the table of global governance, but carries [Concept('concept_obligation', 'obligations')]: international courts, collective security, and the subordination of national interests to the common good.
 - **Flavor:** The ambassador set down his pen and stared at the document. 'Do you know,' he said to no one in particular, 'how many treaties have promised to end all wars?'\n\n'Every single one of them,' his aide replied. 'And yet here we are, drafting another.'\n\n'Yes. And yet here we are.'
 - **Current image:** gfx/event_pictures/un_charter_signing.dds
 
 ### un_events.2
 - **Title:** General Assembly Condemns Aggression
 - **Description:** The General Assembly has convened an emergency session to address the military aggression of [SCOPE.sCountry('condemned_country').GetName]. Delegates from around the world are calling for a formal condemnation resolution, and [ROOT.GetCountry.GetName] must decide how to vote.
-- **Flavor:** The delegate from [SCOPE.sCountry('defender_country').GetName] rose to speak, his hands trembling. 'My country has no army,' he said. 'We have no bombs, no warships, no leverage of any kind. We have only this chamber and the hope that words spoken here still carry some weight.'\n\nThe gallery fell silent. For a moment, the institution almost believed in itself.
+- **Flavor:** The delegate from [SCOPE.sCountry('defender_country').GetName] rose to speak, his hands trembling. 'My country has no army,' he said. 'We have no bombs, no warships, no leverage of any kind. We have only this chamber and the hope that words spoken here still carry some weight.'\n\nThe gallery fell silent. For a moment, the [concept_institution] almost believed in itself.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.3
@@ -3500,13 +3500,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.5
 - **Title:** Enforcing the Sanctions Regime
-- **Description:** The UN sanctions against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent the very institution we helped create.
+- **Description:** The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent the very [concept_institution] we helped create.
 - **Flavor:** 'The manifest says fertilizer,' the customs inspector said, turning the page with exaggerated slowness. 'Quite a lot of fertilizer.' He looked up. 'For a country with no farms.'\n\nThe shipping agent smiled and slid an envelope across the desk. 'A clerical error. I'm sure you understand.'
 - **Current image:** gfx/event_pictures/sanctions_cargo_inspection.dds
 
 ### un_events.6
 - **Title:** UN Reform: Expanding the Security Council
-- **Description:** A growing coalition of nations is demanding reform of the Security Council. The current structure, with its permanent members and veto power, is seen as increasingly unrepresentative. As a great power, [ROOT.GetCountry.GetName] must decide whether to champion reform or defend the status quo.
+- **Description:** A growing coalition of nations is demanding reform of the Security Council. The current structure, with its permanent members and [concept_un_veto] power, is seen as increasingly unrepresentative. As a [concept_great_power], [ROOT.GetCountry.GetName] must decide whether to champion reform or defend the status quo.
 - **Flavor:** 'We are told this body represents the world,' the ambassador said, adjusting his spectacles. 'And yet the same five nations have held the same five seats since before half the countries in this room existed.'\n\nThe delegate from the permanent member state glanced at his papers. 'The matter has been raised before,' he replied. 'The committee will take it under advisement.'\n\nIt had been taken under advisement eleven times.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
@@ -3524,31 +3524,31 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.9
 - **Title:** UNESCO: Protecting World Heritage
-- **Description:** UNESCO has launched a program to identify and preserve sites of outstanding cultural and natural heritage. Several sites within [ROOT.GetCountry.GetName] have been nominated, and participation would boost our prestige, though it requires funding and accepting international oversight.
+- **Description:** UNESCO has launched a program to identify and preserve sites of outstanding cultural and natural heritage. Several sites within [ROOT.GetCountry.GetName] have been nominated, and participation would boost our [concept_prestige], though it requires funding and accepting international oversight.
 - **Flavor:** The antiquarian ran his hand across the ancient stonework. 'This wall is older than our nation,' he said. 'Older than most nations.'\n\nThe treasury official beside him frowned at the estimate. 'And the cost of preserving it is older than my patience. Can we not simply photograph it and move on?'\n\n'You can photograph a ruin. You cannot photograph what it meant to stand.'
 - **Current image:** gfx/event_pictures/heritage_site_monument.dds
 
 ### un_events.10
 - **Title:** The United Nations in Crisis
-- **Description:** The United Nations faces a crisis of legitimacy. Resolutions are routinely ignored, great powers act unilaterally, and member states question whether the institution serves any purpose. As a great power, [ROOT.GetCountry.GetName] must decide whether to rally support or let it fade.
+- **Description:** The United Nations faces a crisis of [concept_legitimacy]. Resolutions are routinely ignored, great powers act unilaterally, and member states question whether the [concept_institution] serves any purpose. As a [concept_great_power], [ROOT.GetCountry.GetName] must decide whether to rally support or let it fade.
 - **Flavor:** 'When I joined the diplomatic service,' the old ambassador said, swirling his brandy, 'this building meant something. Resolutions had teeth. Delegations arrived with instructions to compromise.'\n\n'And now?'\n\n'Now they arrive with instructions to be seen arriving. It is theater, my dear boy. Very expensive theater.'
 - **Current image:** gfx/event_pictures/program_cancelled_empty.dds
 
 ### un_events.11
-- **Title:** Security Council Veto Crisis
-- **Description:** [SCOPE.sCountry('veto_power').GetName] has exercised its veto in the Security Council, blocking a resolution with broad support among member states. The vetoed resolution would have authorized collective action to address a growing international crisis.
+- **Title:** Security Council [concept_un_veto] Crisis
+- **Description:** [SCOPE.sCountry('veto_power').GetName] has exercised its [concept_un_veto] in the Security Council, blocking a resolution with broad support among member states. The vetoed resolution would have authorized collective action to address a growing international crisis.
 - **Flavor:** The chamber erupted. Delegates shouted across the aisle; the chair's gavel cracked against wood like a pistol shot.\n\nIn the corridor afterward, a junior diplomat loosened his tie. 'We spent six months drafting that resolution,' he said. 'Six months of negotiations, concessions, rewording. And one raised hand killed it.'\n\nHis colleague shrugged. 'That is how it works.'\n\nThe junior diplomat said nothing. He already knew that.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.12
 - **Title:** Decolonization Resolution
-- **Description:** The General Assembly is debating a sweeping resolution calling for the immediate end of colonialism in all its forms. Dozens of newly independent nations are demanding that the great powers relinquish their overseas territories.
+- **Description:** The General Assembly is debating a sweeping resolution calling for the immediate end of colonialism in all its forms. Dozens of newly independent nations are demanding that the [Concept('concept_great_power', 'great powers')] relinquish their overseas territories.
 - **Flavor:** The new delegate adjusted the flag on his desk - a flag that had not existed three years ago - and addressed the chamber.\n\n'My country was administered, developed, and civilized, so we are told, for one hundred and forty years,' he said. 'In all that time, not one of our administrators thought to ask us whether we wished to be civilized. We have come here today to provide the answer.'
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.13
 - **Title:** Ideological Confrontation at the Assembly
-- **Description:** Tensions between rival great powers have erupted into open confrontation at the United Nations General Assembly. [SCOPE.sCountry('ideological_rival').GetName] and [ROOT.GetCountry.GetName] represent fundamentally different visions for the world - and both sides have marshaled their allies to dominate the Assembly's agenda.\n\nDelegations are choosing sides. Non-aligned nations watch nervously as the two blocs trade accusations and threats. The question is whether to escalate the confrontation, seek détente, or make a dramatic gesture.
+- **Description:** Tensions between rival [Concept('concept_great_power', 'great powers')] have erupted into open confrontation at the United Nations General Assembly. [SCOPE.sCountry('ideological_rival').GetName] and [ROOT.GetCountry.GetName] represent fundamentally different visions for the world - and both sides have marshaled their allies to dominate the Assembly's agenda.\n\nDelegations are choosing sides. Non-aligned nations watch nervously as the two blocs trade accusations and threats. The question is whether to escalate the confrontation, seek détente, or make a dramatic gesture.
 - **Flavor:** The [SCOPE.sCountry('ideological_rival').GetAdjective] delegate slammed his fist upon the lectern. His counterpart waited for the translators to finish, then leaned into the microphone.\n\n'The committee has heard the delegate's position,' he said. 'We look forward to hearing his evidence, should any be forthcoming.'\n\nThe gallery murmured. The wire service correspondent underlined something in his notebook.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
@@ -3590,8 +3590,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.20
 - **Title:** Assembly Walkout
-- **Description:** The delegation of [SCOPE.sCountry('walkout_leader').GetName] has led a dramatic walkout from the General Assembly, followed by several aligned nations. The departing delegates accused the Assembly of bias and hypocrisy, throwing the institution into crisis.
-- **Flavor:** The doors slammed. The echo rolled across the chamber like a judgment. For a long moment, no one spoke.\n\nThen the secretary-general removed his reading glasses and looked at the empty seats. 'Well,' he said, with the calm of a man watching his house burn from a safe distance. 'I suppose we shall have to manage without them.'\n\n'Can we?' his aide whispered.\n\n'That, my dear fellow, is the question this institution was built to answer.'
+- **Description:** The delegation of [SCOPE.sCountry('walkout_leader').GetName] has led a dramatic walkout from the General Assembly, followed by several aligned nations. The departing delegates accused the Assembly of bias and hypocrisy, throwing the [concept_institution] into crisis.
+- **Flavor:** The doors slammed. The echo rolled across the chamber like a judgment. For a long moment, no one spoke.\n\nThen the secretary-general removed his reading glasses and looked at the empty seats. 'Well,' he said, with the calm of a man watching his house burn from a safe distance. 'I suppose we shall have to manage without them.'\n\n'Can we?' his aide whispered.\n\n'That, my dear fellow, is the question this [concept_institution] was built to answer.'
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.101
@@ -3672,7 +3672,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### wonder_events.5
 - **Title:** Kessler Syndrome
-- **Description:** A cascade of orbital debris threatens the space elevator's cable and nearby orbital infrastructure. Without intervention, a runaway chain of collisions could render low Earth orbit unusable for decades.
+- **Description:** A cascade of orbital debris threatens the space elevator's cable and nearby orbital [concept_infrastructure]. Without intervention, a runaway chain of collisions could render low Earth orbit unusable for decades.
 - **Flavor:** One collision becomes ten. Ten becomes a thousand. A thousand becomes a wall of shrapnel moving at eight kilometers per second.\n\nAnd our elevator cable is sitting right in the path.
 - **Current image:** gfx/event_pictures/kessler_syndrome_threat.dds
 
@@ -3684,7 +3684,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### wonder_events.7
 - **Title:** Orbital Sovereignty
-- **Description:** Foreign powers demand that orbital infrastructure be governed under international law, arguing that no single nation should control access to space. The diplomatic pressure is mounting.
+- **Description:** Foreign powers demand that orbital [concept_infrastructure] be governed under international law, arguing that no single nation should control access to space. The diplomatic pressure is mounting.
 - **Flavor:** - The elevator was built with our money, our engineers, our vision. And now they want to make it a commons?\n\n- They don't want to share it. They want to control what we do with it.\n\n- Then let them build their own.
 - **Current image:** gfx/event_pictures/orbital_peace_deterrence.dds
 
@@ -3726,7 +3726,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### wonder_events.20
 - **Title:** The High Ground
-- **Description:** Intelligence reports indicate that rival nations are deeply alarmed by the orbital weapons platform under construction. Military attaches have been recalled, and defensive postures are shifting worldwide.
+- **Description:** Intelligence reports indicate that rival nations are deeply alarmed by the orbital weapons platform [concept_under_construction]. Military attaches have been recalled, and defensive postures are shifting worldwide.
 - **Flavor:** - They're watching us build it. Every spy satellite, every signals intercept. They know what this is.\n\n- Good. Let them watch. By the time it's operational, the balance of power will have shifted permanently.\n\n- Or they try to stop us before it's finished.\n\n- That's why we have the Navy.
 - **Current image:** gfx/event_pictures/orbital_battlestation_construction.dds
 
@@ -3768,13 +3768,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### wonder_events.30
 - **Title:** Breakthrough at the Collider
-- **Description:** Scientists at the antimatter facility report stable containment of macroscopic quantities of antihydrogen for the first time. The breakthrough opens the door to practical antimatter applications.
+- **Description:** Scientists at the [concept_antimatter_facility] report stable containment of macroscopic quantities of antihydrogen for the first time. The breakthrough opens the door to practical antimatter applications.
 - **Flavor:** - One milligram. That's what we have. One milligram of antihydrogen, suspended in a Penning trap.\n\n- One milligram. The energy equivalent of forty-three tons of TNT.\n\n- Imagine what we'll do with a gram.
 - **Current image:** gfx/event_pictures/antimatter_containment_glow.dds
 
 ### wonder_events.31
 - **Title:** Containment Breach
-- **Description:** A magnetic containment failure at the antimatter facility causes a localized annihilation event. The explosion destroys a wing of the facility and kills dozens of scientists and engineers.
+- **Description:** A magnetic containment failure at the [concept_antimatter_facility] causes a localized annihilation event. The explosion destroys a wing of the facility and kills dozens of scientists and engineers.
 - **Flavor:** - The magnetic field fluctuated for less than a nanosecond. That's all it took. The antimatter touched the containment wall and...\n\n- How much was released?\n\n- Micrograms. The blast equivalent of a hundred kilograms of high explosive, concentrated in a point smaller than an atom. The containment wing did its job: barely.
 - **Current image:** gfx/event_pictures/antimatter_containment_breach.dds
 
@@ -3798,7 +3798,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### wonder_events.35
 - **Title:** The Annihilation Drive
-- **Description:** The antimatter facility is now producing enough fuel to power a new generation of engines. Antimatter propulsion makes global logistics trivial and opens the door to rapid interplanetary transit.
+- **Description:** The [concept_antimatter_facility] is now producing enough fuel to power a new generation of engines. Antimatter propulsion makes global logistics trivial and opens the door to rapid interplanetary transit.
 - **Flavor:** - Earth to Mars in three weeks. Earth to Jupiter in two months. These aren't projections. These are timetables.\n\n- And military applications?\n\n- Any formation, anywhere on Earth, within hours. The concept of distance as a strategic constraint is over.
 - **Current image:** gfx/event_pictures/antimatter_propulsion_drive.dds
 
@@ -3806,7 +3806,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.1
 - **Title:** Ideological Confrontation
-- **Description:** [SCOPE.sCountry('ideological_rival').GetName] has issued a series of provocative demands, challenging our ideological stance on the world stage. Their aggressive posture threatens to destabilize the fragile peace between the great powers.
+- **Description:** [SCOPE.sCountry('ideological_rival').GetName] has issued a series of provocative demands, challenging our ideological stance on the world stage. Their aggressive posture threatens to destabilize the fragile peace between the [Concept('concept_great_power', 'great powers')].
 - **Flavor:** The foreign minister read the demands aloud, then set the paper down and removed his spectacles.\n\n'They wish us to renounce our system of government,' he said. 'Publicly. Before the world press.'\n\nThe room was quiet for a long time.\n\n'And if we refuse?'\n\n'Then, I rather think, we shall have our answer about whether they want peace or something else entirely.'
 - **Current image:** gfx/event_pictures/ideological_confrontation_speech.dds
 
@@ -3824,19 +3824,19 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.5
 - **Title:** The World at War
-- **Description:** The tensions that have been building for years have finally exploded into open conflict. The great powers have chosen their sides. There is no turning back now - the world is engulfed in the most devastating war in human history.
+- **Description:** The tensions that have been building for years have finally exploded into open conflict. The [Concept('concept_great_power', 'great powers')] have chosen their sides. There is no turning back now - the world is engulfed in the most devastating war in human history.
 - **Flavor:** The telegram arrived at three in the morning. The minister read it standing in his dressing gown, his face grey in the lamplight.\n\n'War,' he said. The word hung in the air like smoke.\n\nHis secretary waited, pen in hand. 'Shall I draft the mobilization order?'\n\n'Draft it. Date it. And pray to God that the men who must carry it out are braver than I feel at this moment.'
 - **Current image:** gfx/event_pictures/world_war_declaration.dds
 
 ### world_war_events.10
 - **Title:** Home Front Rally
-- **Description:** A surge of patriotic fervor sweeps the nation. Citizens line the streets waving flags, factories run double shifts, and volunteers flood recruitment offices. The will to fight has never been stronger.
+- **Description:** A surge of patriotic [concept_fervor] sweeps the nation. Citizens line the streets waving flags, factories run double shifts, and volunteers flood recruitment offices. The will to fight has never been stronger.
 - **Flavor:** The factory foreman wiped his hands on his apron and addressed the morning shift. 'Double production this week,' he said. 'The front needs shells more than you need sleep.'\n\nNo one complained. The woman at the lathe had received a telegram yesterday. Her husband was not coming home. She picked up her tools and worked a sixteen-hour shift without a word.
 - **Current image:** gfx/event_pictures/home_front_factory.dds
 
 ### world_war_events.11
 - **Title:** Strategic Bombing
-- **Description:** Enemy bombers have struck our cities, leaving devastation in their wake. Fires burn through the night as rescue crews dig through the rubble. The civilian toll mounts, but so does our resolve.
+- **Description:** Enemy bombers have struck our cities, leaving [concept_devastation] in their wake. Fires burn through the night as rescue crews dig through the rubble. The civilian toll mounts, but so does our resolve.
 - **Flavor:** The sirens woke the children first. Then the thunder came - not from the sky but from the street, where the grocery had stood that morning.\n\nThe warden found the family in the cellar, covered in plaster dust, the youngest still clutching a wooden horse. 'Everyone accounted for?' he asked.\n\n'Everyone,' the mother said. She did not mention the cat, or the kitchen, or the life they had built above ground. There would be time for that later. Or there would not.
 - **Current image:** gfx/event_pictures/strategic_bombing_ruins.dds
 
@@ -3884,7 +3884,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.104
 - **Title:** The Post-War Order
-- **Description:** With the great conflict behind us, the victorious powers must decide what kind of world they wish to build. Spheres of influence, new alliances, and international institutions are all on the table.
+- **Description:** With the great conflict behind us, the victorious powers must decide what kind of world they wish to build. Spheres of influence, new alliances, and international [Concept('concept_institution', 'institutions')] are all on the table.
 - **Flavor:** 'We have won the war,' the prime minister said, pouring himself a brandy. 'Now we must win the peace, which, I am given to understand, is considerably more difficult.'\n\n'Spheres of influence?'\n\n'Naturally. The question is how large a sphere our friends will permit us, and how small a sphere we can persuade our enemies to accept.'\n\nHe raised his glass. 'To the new world order. May it last longer than the one we just buried.'
 - **Current image:** gfx/event_pictures/post_war_order_map.dds
 

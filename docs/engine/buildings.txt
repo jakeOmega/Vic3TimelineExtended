@@ -1194,8 +1194,8 @@ Barracks:
 		Training Method Streamlining
 		NCO Incorporation
 		Mobile Warfare Tactics
-	Engineering and Logisitics Principle Group:
-		Engineering and Logisitics Principle 1
+	Engineering and Logisitics [concept_power_bloc_principle_group]:
+		Engineering and Logisitics [concept_power_bloc_principle] 1
 		No Effect
 
 Conscription Center:
@@ -1291,8 +1291,8 @@ Creative Industries:
 	Freedom of Movement:
 		Increased Exchange
 		No effect
-	Artistic Expression Principle Group:
-		Artistic Expression Principle 2
+	Artistic Expression [concept_power_bloc_principle_group]:
+		Artistic Expression [concept_power_bloc_principle] 2
 		No Effect
 	Maintenance:
 		Maintenance
@@ -1818,7 +1818,7 @@ Manor Houses:
 	$pmg_ownership$:
 		$pm_privately_owned$
 		Increased Clergy Oversight
-		Rural Principle Manor House
+		Rural [concept_power_bloc_principle] Manor House
 		Hobbyist Management
 	Additional $pmg_ownership$:
 		Clergy Oversight
@@ -1916,7 +1916,7 @@ Construction Sector:
 		Tower Cranes
 		Computer-Aided Design
 		3D Printed Buildings
-	Construction Principle Group:
+	Construction [concept_power_bloc_principle_group]:
 		Construction Principle 2
 		No Effect
 	Maintenance:
@@ -3049,8 +3049,8 @@ Sudamericana Valparaíso Pier:
 		Sudamericana Valparaíso Pier
 
 Suez Company Ismailia Headquarters:
-	Suez Company Ismailia HQ:
-		Suez Company Ismailia HQ
+	Suez Company Ismailia [concept_hq]:
+		Suez Company Ismailia [concept_hq]
 
 Sunhwaguk Seoul Tobacco Factory:
 	Sunhwaguk Seoul Tobacco Factory:
@@ -4452,13 +4452,13 @@ Mind Upload Nexus:
 	Mind Upload Nexus:
 		Mind Upload Nexus
 
-Antimatter Facility Construction Site:
+[concept_antimatter_facility] Construction Site:
 	Unlocking Technology: Antimatter Production
-	Antimatter Facility Construction:
-		Antimatter Facility Construction (Paused)
-		Antimatter Facility Construction (4 years)
-		Antimatter Facility Construction (2 years)
-		Antimatter Facility Construction (1 year)
+	[concept_antimatter_facility] Construction:
+		[concept_antimatter_facility] Construction (Paused)
+		[concept_antimatter_facility] Construction (4 years)
+		[concept_antimatter_facility] Construction (2 years)
+		[concept_antimatter_facility] Construction (1 year)
 
 Antimatter Containment Facility:
 	Antimatter Containment Facility:
@@ -4522,9 +4522,9 @@ United Nations Headquarters:
 	International Diplomacy:
 		Host Nation
 
-Power Bloc Headquarters:
+[concept_power_bloc] Headquarters:
 	Unlocking Technology: Intergovernmental Organizations
-	Power Bloc Headquarters:
+	[concept_power_bloc] Headquarters:
 		Seat of the Empire
 		Alliance Command
 		Global Trade Center

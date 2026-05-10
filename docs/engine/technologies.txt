@@ -594,7 +594,7 @@
 	Rocketry - The development of rockets has given us powerful new weapons and the ability to explore space. It has been a key technology of the 20th century, with a profound impact on warfare and science.
 		Unlocking Technologies:
 			Bombing Aircraft
-	Bombing Aircraft - These aircraft have changed the face of warfare. Now we can drop bombs on enemy targets and infrastructure from a great distance, which is a very effective way to make a point.
+	Bombing Aircraft - These aircraft have changed the face of warfare. Now we can drop bombs on enemy targets and [concept_infrastructure] from a great distance, which is a very effective way to make a point.
 		Unlocking Technologies:
 			Military Aviation
 	Nuclear Weapons - The atomic bomb has changed the world forever. These incredibly powerful weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics.
@@ -606,7 +606,7 @@
 	Keynesian Economics - An economic theory that advocates for government intervention to manage the economy. It's all about using public spending to stimulate growth and reduce unemployment, a popular idea in times of crisis.
 		Unlocking Technologies:
 			Macroeconomics
-	Combined Arms - By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique combined arms traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.
+	Combined Arms - By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.
 		Unlocking Technologies:
 			Mobile Armor
 	Modern Materials - New materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what we had before. They've changed the way we build and manufacture things.
@@ -664,7 +664,7 @@
 	Stainless Steel Mass Production - We can now produce stainless steel in large quantities. This corrosion-resistant and durable material is useful in a wide range of applications.
 		Unlocking Technologies:
 			Aluminum Mass Production
-	Modern Management Techniques - New ways of organizing and managing our businesses and institutions are leading to greater efficiency and productivity. It's all about working smarter, not harder.
+	Modern Management Techniques - New ways of organizing and managing our businesses and [Concept('concept_institution', 'institutions')] are leading to greater efficiency and productivity. It's all about working smarter, not harder.
 		Unlocking Technologies:
 			Mass Surveillance
 	Naval Convoy Defense - New strategies and technologies are making our naval convoys safer. It's all about protecting the ships that carry our vital goods and personnel across the seas.
@@ -673,22 +673,22 @@
 	Sonar - By using sound to detect objects underwater, sonar has become an essential tool for naval defense. It helps us to find submarines and other underwater threats.
 		Unlocking Technologies:
 			Modern Battlefleet Tactics
-	Naval Fire Control Systems - Advanced systems for targeting and coordinating naval gunfire. They make our ships' weapons more accurate and deadly, which is always a plus in a naval battle.
+	Naval Fire Control Systems - Advanced systems for targeting and coordinating naval gunfire. They make our ships' weapons more accurate and deadly, which is always a plus in a [concept_naval_battle].
 		Unlocking Technologies:
 			Modern Battlefleet Tactics
 	Cryptography - The art of writing and solving codes. It's a crucial tool for keeping our communications secret and for breaking into the enemy's.
 		Unlocking Technologies:
 			Radar
-	Public Works Programs - Government-funded projects to build infrastructure and improve public utilities. They're a way to stimulate the economy and create jobs, especially in tough times.
+	Public Works Programs - Government-funded projects to build [concept_infrastructure] and improve public utilities. They're a way to stimulate the economy and create jobs, especially in tough times.
 		Unlocking Technologies:
 			Keynesian Economics
-	Art Deco Architecture - A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and prestige, making our cities look a bit more glamorous.
+	Art Deco Architecture - A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and [concept_prestige], making our cities look a bit more glamorous.
 		Unlocking Technologies:
 			Marketing Research
 	Consumer Credit - A system that lets people buy things they can't afford. It's great for the economy, as long as everyone remembers to pay their bills.
 		Unlocking Technologies:
 			Modern Financial Instruments
-	Intergovernmental Organizations - Formal institutions where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.
+	Intergovernmental Organizations - Formal [Concept('concept_institution', 'institutions')] where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.
 		Unlocking Technologies:
 			Modern Financial Instruments
 	Decolonization - The dismantling of colonial empires has led to the birth of new nations and a redrawing of the world map. A messy but necessary process of change.
@@ -711,7 +711,7 @@
 	Green Revolution - A series of technological innovations in agriculture that have led to a huge increase in food production. It has helped to feed a growing world, but not without its own set of problems.
 		Unlocking Technologies:
 			Modern Chemical Processes
-	Civil Rights Movement - A movement aimed at ending racial segregation and discrimination. It has fought for equal rights and opportunities for all, shaking the very foundations of society.
+	Civil Rights Movement - A movement aimed at ending racial segregation and [concept_discrimination]. It has fought for equal rights and opportunities for all, shaking the very foundations of society.
 		Unlocking Technologies:
 			Mass Media
 			Intergovernmental Organizations
@@ -721,7 +721,7 @@
 	Space Exploration - Advancements in rocketry and satellite technology have allowed us to explore space. This has been a new era of scientific discovery and a testament to human ingenuity.
 		Unlocking Technologies:
 			Intercontinental Ballistic Missiles
-	Pollution Control - We're finally starting to clean up our act. By managing pollution from our industries and cars, we can improve our air and water quality and protect public health.
+	Pollution Control - We're finally starting to clean up our act. By managing [concept_pollution_system] from our industries and cars, we can improve our air and water quality and protect public health.
 		Unlocking Technologies:
 			Advanced Agricultural Statistics
 			Public Works Programs
@@ -826,7 +826,7 @@
 		Unlocking Technologies:
 			Inertial Navigation Systems
 			Jet Engine Technology
-	Stealth Technology - By using special materials and designs, we can make our military assets nearly invisible to radar and other detection systems. It's a powerful advantage in modern warfare.
+	Stealth Technology - By using special materials and designs, we can make our military assets nearly invisible to radar and other [concept_detection] systems. It's a powerful advantage in modern warfare.
 		Unlocking Technologies:
 			Supersonic Aircraft
 			Advanced Submarine Technology
@@ -864,7 +864,7 @@
 	Video Games - Video games have become a massive new form of entertainment and art. They've had a huge influence on popular culture, and they're only getting more immersive and complex.
 		Unlocking Technologies:
 			Television Broadcasting
-	Pop Culture - From music and movies to fashion and fads, pop culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
+	Pop Culture - From music and movies to fashion and fads, [concept_pop] culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
 		Unlocking Technologies:
 			Television Broadcasting
 9: 28 technologies
@@ -948,7 +948,7 @@
 	Digital Education - With online learning and multimedia resources, education is going digital. This could make learning more accessible and collaborative, if you have a good internet connection.
 		Unlocking Technologies:
 			Knowledge Economy
-	Social Justice Movements - Movements that fight for equality, fairness, and human rights. They tackle issues like racial discrimination and economic inequality, pushing for social change through activism and advocacy.
+	Social Justice Movements - Movements that fight for equality, fairness, and human rights. They tackle issues like racial [concept_discrimination] and economic inequality, pushing for social change through activism and advocacy.
 		Unlocking Technologies:
 			Social Media
 	Terrorism and Antiterrorism - The rise of terrorism has forced us to develop new strategies to protect ourselves. This has redefined our national security priorities and led to a new era of global cooperation and conflict.
@@ -982,10 +982,10 @@
 	Advanced Structural Engineering - By combining high-strength composites, new welding techniques, and tougher concrete, we can build things that are lighter, stronger, and last longer. A boon for all industries, really.
 		Unlocking Technologies:
 			Industrial Robotics
-	Electric Vehicles - Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.
+	Electric Vehicles - Battery-electric powertrains overtake internal combustion for passenger transport. Charging [concept_infrastructure], regenerative braking, and rare-earth supply chains reshape automotive manufacturing.
 		Unlocking Technologies:
 			Clean Energy Technologies
-	Internet of Things - Embedded sensors and connected devices weave a digital layer over physical infrastructure, generating continuous telemetry on factories, farms, transport, and homes.
+	Internet of Things - Embedded sensors and connected devices weave a digital layer over physical [concept_infrastructure], generating continuous telemetry on factories, farms, transport, and homes.
 		Unlocking Technologies:
 			Wireless Internet (Wi-Fi)
 			Cloud Computing
@@ -1044,7 +1044,7 @@
 		Unlocking Technologies:
 			Additive Manufacturing
 			Advanced Structural Engineering
-	Quantum Computing - By harnessing the strange principles of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems.
+	Quantum Computing - By harnessing the strange [Concept('concept_power_bloc_principle', 'principles')] of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems.
 		Unlocking Technologies:
 			Machine Learning
 			Early Nanotechnology
