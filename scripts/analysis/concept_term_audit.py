@@ -92,7 +92,6 @@ TIER1_SINGLE_WORD: set[str] = {
     "concept_fortification_system",
     "concept_gdp",
     "concept_heir",
-    "concept_holding",
     "concept_homeland",
     "concept_hq",
     "concept_humiliation",
@@ -189,6 +188,11 @@ TIER3_EXCLUDED: set[str] = {
     "concept_liberty",
     "concept_equality",
     "concept_tradition",
+    # "holding" appears overwhelmingly as a verb ("holding steady", "holding
+    # a photograph") or as a financial-asset noun ("dump every holding they
+    # own"). The Vic3 Holding mechanic is rare in flow text — tagging produced
+    # 5 false positives, 0 true positives.
+    "concept_holding",
 }
 
 # File-name suffix → file kind (used by Tier 2 gating).
