@@ -49,12 +49,9 @@ cultural_hegemony.1 = {
 				is_decaying = yes
 			}
 		}
-		every_scope_state = {
-			limit = { any_scope_pop = { is_pop_type = academics } }
-			add_loyalists = {
-				pop_type = academics
-				value = medium_radicals
-			}
+		add_loyalists = {
+			pop_type = academics
+			value = medium_radicals
 		}
 
 		ai_chance = {

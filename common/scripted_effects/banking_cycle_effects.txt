@@ -1314,8 +1314,8 @@ apply_banking_crash_origin_effects = {
 # minor_events_timelineextended.6 (event 6). Posts the origin tier first to set
 # baseline cycle/momentum/bubble (must run before per-option additions because
 # origin uses set_variable, then per-option change_variable adds on top), then
-# applies the per-option softening tooltip, GDP-scaled treasury cost, long-lived
-# intervention modifier, and upper-strata radicals.
+# applies the per-option softening tooltip, GDP-scaled treasury cost (6 months,
+# decaying), year-long intervention modifier, and upper-strata radicals.
 #
 # Country scope. Trigger and ai_chance stay in each option block — they vary
 # unrelatedly per option (law/tech gating + AI weighting heuristics).
@@ -1344,12 +1344,12 @@ apply_banking_crash_softening_option_effect = {
 	add_modifier = {
 		name = banking_crash_response_cost
 		multiplier = $COST_SCALE$
-		days = short_modifier_time
+		days = 180
 		is_decaying = yes
 	}
 	add_modifier = {
 		name = $INTERVENTION$
-		days = long_modifier_time
+		days = 365
 	}
 	add_radicals = {
 		value = $RADICALS$_radicals

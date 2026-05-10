@@ -524,12 +524,12 @@ minor_events_timelineextended.6 = {
 		add_modifier = {
 			name = banking_crash_response_cost
 			multiplier = banking_event_expense_small
-			days = short_modifier_time
+			days = 180
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = banking_crash_intervention_capital_controls
-			days = long_modifier_time
+			days = 365
 		}
 		add_radicals = {
 			value = small_radicals

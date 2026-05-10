@@ -61,12 +61,10 @@ ch_decrease_program_funding_button = {
 	name = "CH_DECREASE_PROGRAM_FUNDING"
 	desc = "CH_DECREASE_PROGRAM_FUNDING_DESC"
 
-	# Hidden when funding is at 0 — without the Ministry the JE pulse zeroes
-	# funding next tick anyway, so no need to grey-out for a missing law.
+	# Stays visible while the JE is up so the JE button count is constant;
+	# greys out via `possible` when funding is already at 0.
 	visible = {
 		has_journal_entry = je_cultural_hegemony
-		has_variable = ch_program_funding_level
-		var:ch_program_funding_level > 0
 	}
 
 	ai_chance = {
@@ -109,9 +107,10 @@ ch_world_exposition_button = {
 	name = "CH_WORLD_EXPOSITION"
 	desc = "CH_WORLD_EXPOSITION_DESC"
 
+	# Stays visible while the JE is up so the JE button count is constant;
+	# greys out via `possible` while the decaying exposition modifier is active.
 	visible = {
 		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
 	}
 
 	ai_chance = {
@@ -134,6 +133,10 @@ ch_world_exposition_button = {
 		custom_tooltip = {
 			text = CH_REQUIRES_MASS_MEDIA_TT
 			has_technology_researched = mass_media
+		}
+		custom_tooltip = {
+			text = CH_EXPOSITION_NOT_ACTIVE
+			NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
 		}
 	}
 
@@ -207,10 +210,12 @@ ch_global_media_campaign_button = {
 	name = "CH_GLOBAL_MEDIA_CAMPAIGN"
 	desc = "CH_GLOBAL_MEDIA_CAMPAIGN_DESC"
 
+	# `visible` keeps only the enable↔disable swap with
+	# ch_disable_global_media_campaign_button; the protectionism mutual-exclusion
+	# moves into `possible` so the slot stays populated and just greys out.
 	visible = {
 		has_journal_entry = je_cultural_hegemony
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
 	}
 
 	ai_chance = {
@@ -237,6 +242,10 @@ ch_global_media_campaign_button = {
 		custom_tooltip = {
 			text = CH_REQUIRES_MASS_MEDIA_TT
 			has_technology_researched = mass_media
+		}
+		custom_tooltip = {
+			text = CH_MEDIA_BLOCKED_BY_PROTECTIONISM
+			NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
 		}
 	}
 

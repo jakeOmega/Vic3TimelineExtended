@@ -1693,6 +1693,12 @@ decolonization_events.15 = {
 	duration = 3
 
 	trigger = {
+		# Only fire on true independence — not on overlord-to-overlord transfer
+		# or other transitions where on_become_independent may still pulse.
+		is_subject = no
+		# 20-year cooldown — prevents back-to-back nationalizations if a country
+		# is re-vassalized and freed again.
+		NOT = { has_variable = nationalization_cooldown_var }
 		# Ensure there is meaningful foreign ownership to nationalize
 		any_country = {
 			NOT = { this = root }
@@ -1708,6 +1714,10 @@ decolonization_events.15 = {
 
 	immediate = {
 		save_scope_as = nationalizing_country
+		set_variable = {
+			name = nationalization_cooldown_var
+			years = 20
+		}
 		# Save the biggest foreign owner for description/effects
 		random_country = {
 			limit = {
