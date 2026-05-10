@@ -13,6 +13,7 @@ docs/engine/commented_vanilla_military_units.txt
 *.log.*
 *.pid
 generated_images/
+scripts/image_pipeline/preview_law_icons/
 .venv/
 /tests/
 rules_found.txt
