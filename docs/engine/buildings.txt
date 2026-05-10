@@ -1,4 +1,4 @@
-Food Industries:
+Food Industries (bg_light_industry):
 	Unlocking Technology: Manufacturies
 	$pm_base$:
 		Bakeries
@@ -28,7 +28,7 @@ Food Industries:
 	Maintenance:
 		Maintenance
 
-Textile Mills:
+Textile Mills (bg_light_industry):
 	Unlocking Technology: Manufacturies
 	$pm_base$:
 		Handsewn Clothes
@@ -54,7 +54,7 @@ Textile Mills:
 	Maintenance:
 		Maintenance
 
-Furniture Manufacturies:
+Furniture Manufacturies (bg_light_industry):
 	Unlocking Technology: Manufacturies
 	$pm_base$:
 		Handcrafted Furniture
@@ -86,7 +86,7 @@ Furniture Manufacturies:
 	Maintenance:
 		Maintenance
 
-Glassworks:
+Glassworks (bg_light_industry):
 	Unlocking Technology: Manufacturies
 	$pm_base$:
 		Forest Glass
@@ -123,7 +123,7 @@ Glassworks:
 	Maintenance:
 		Maintenance
 
-Tooling Workshops:
+Tooling Workshops (bg_light_industry):
 	Unlocking Technology: Manufacturies
 	$pm_base$:
 		Crude Tools
@@ -157,7 +157,7 @@ Tooling Workshops:
 	Maintenance:
 		Maintenance
 
-Paper Mills:
+Paper Mills (bg_light_industry):
 	Unlocking Technology: Manufacturies
 	$pm_base$:
 		Pulp Pressing
@@ -188,7 +188,7 @@ Paper Mills:
 	Maintenance:
 		Maintenance
 
-Chemical Plants:
+Chemical Plants (bg_heavy_industry):
 	Unlocking Technology: Intensive Agriculture
 	Chemicals Production:
 		Basic Chemical Production
@@ -225,7 +225,7 @@ Chemical Plants:
 	Maintenance:
 		Maintenance
 
-Explosives Factory:
+Explosives Factory (bg_heavy_industry):
 	Unlocking Technology: Intensive Agriculture
 	$pm_base$:
 		Leblanc Process
@@ -251,7 +251,7 @@ Explosives Factory:
 	Maintenance:
 		Maintenance
 
-Synthetic Dyes Industries:
+Synthetic Dyes Industries (bg_heavy_industry):
 	Unlocking Technology: Aniline
 	Synthetic Dyes:
 		Synthetic Dye
@@ -273,7 +273,7 @@ Synthetic Dyes Industries:
 	Maintenance:
 		Maintenance
 
-Steel Mills:
+Steel Mills (bg_heavy_industry):
 	Unlocking Technology: Steelworking
 	Steelmaking Process:
 		Blister Steel Process
@@ -306,7 +306,7 @@ Steel Mills:
 	Maintenance:
 		Maintenance
 
-Motor Industries:
+Motor Industries (bg_heavy_industry):
 	Unlocking Technology: Atmospheric Engine
 	$pm_base$:
 		Steam Engines
@@ -336,7 +336,7 @@ Motor Industries:
 	Maintenance:
 		Maintenance
 
-Shipyards:
+Shipyards (bg_ship_construction):
 	Unlocking Technology: Navigation
 	$pm_base$:
 		Wooden Ships
@@ -352,7 +352,7 @@ Shipyards:
 	Maintenance:
 		Maintenance
 
-Automotive Industries:
+Automotive Industries (bg_heavy_industry):
 	Unlocking Technology: Combustion Engine
 	Automobile Production:
 		Automobile Production
@@ -388,7 +388,7 @@ Automotive Industries:
 	Maintenance:
 		Maintenance
 
-Wired Telecommunications Industries:
+Wired Telecommunications Industries (bg_heavy_industry):
 	Unlocking Technology: Telephone
 	Telephones:
 		Telephone Production
@@ -409,7 +409,7 @@ Wired Telecommunications Industries:
 	Maintenance:
 		Maintenance
 
-Arms Industries:
+Arms Industries (bg_military_industry):
 	Unlocking Technology: Gunsmithing
 	Firearms Manufacturing:
 		Muskets
@@ -437,7 +437,7 @@ Arms Industries:
 	Maintenance:
 		Maintenance
 
-Artillery Foundry:
+Artillery Foundry (bg_military_industry):
 	Unlocking Technology: Gunsmithing
 	Foundries:
 		Cannons
@@ -461,7 +461,7 @@ Artillery Foundry:
 	Maintenance:
 		Maintenance
 
-Munition Plants:
+Munition Plants (bg_military_industry):
 	Unlocking Technology: Percussion Cap
 	$pm_base$:
 		Percussion Caps
@@ -493,7 +493,7 @@ Munition Plants:
 	Maintenance:
 		Maintenance
 
-Rye Farms:
+Rye Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Simple Farming
@@ -533,7 +533,7 @@ Rye Farms:
 		Precision Agriculture
 			Monthly Pollution: -10
 
-Wheat Farms:
+Wheat Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Simple Farming
@@ -571,7 +571,7 @@ Wheat Farms:
 		Precision Agriculture
 			Monthly Pollution: -10
 
-Rice Farms:
+Rice Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Simple Farming
@@ -604,7 +604,7 @@ Rice Farms:
 		Precision Agriculture
 			Monthly Pollution: -10
 
-Maize Farms:
+Maize Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Simple Farming
@@ -640,7 +640,7 @@ Maize Farms:
 		Precision Agriculture
 			Monthly Pollution: -10
 
-Millet Farms:
+Millet Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Simple Farming
@@ -676,7 +676,7 @@ Millet Farms:
 		Precision Agriculture
 			Monthly Pollution: -10
 
-Livestock Ranches:
+Livestock Ranches (bg_ranching):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Open Air Stockyards
@@ -699,7 +699,7 @@ Livestock Ranches:
 		Refrigerated Storage
 		Refrigerated Rail Cars
 
-Vineyards:
+Vineyards (bg_agriculture):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -716,7 +716,7 @@ Vineyards:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Coal Mines:
+Coal Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
 	Mining Equipment:
 		Picks and Shovels
@@ -770,7 +770,7 @@ Coal Mines:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Iron Mines:
+Iron Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
 	Mining Equipment:
 		Picks and Shovels
@@ -824,7 +824,7 @@ Iron Mines:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Lead Mines:
+Lead Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
 	Mining Equipment:
 		Picks and Shovels
@@ -878,7 +878,7 @@ Lead Mines:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Sulfur Mines:
+Sulfur Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
 	Mining Equipment:
 		Picks and Shovels
@@ -932,7 +932,7 @@ Sulfur Mines:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Gold Mines:
+Gold Mines (bg_mining):
 	Unlocking Technology: Prospecting
 	Mining Equipment:
 		Picks and Shovels
@@ -986,12 +986,12 @@ Gold Mines:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Gold Fields:
+Gold Fields (bg_gold_fields):
 	Unlocking Technology: Prospecting
 	$pm_base$:
 		$pm_default$
 
-Coffee Plantations:
+Coffee Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		Dry Process
@@ -1018,7 +1018,7 @@ Coffee Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Cotton Plantations:
+Cotton Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1038,7 +1038,7 @@ Cotton Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Dye Plantations:
+Dye Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1058,7 +1058,7 @@ Dye Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Opium Plantations:
+Opium Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1074,7 +1074,7 @@ Opium Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Tea Plantations:
+Tea Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1095,7 +1095,7 @@ Tea Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Tobacco Plantations:
+Tobacco Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1121,7 +1121,7 @@ Tobacco Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Sugar Plantations:
+Sugar Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1147,7 +1147,7 @@ Sugar Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Banana Plantations:
+Banana Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1168,7 +1168,7 @@ Banana Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Silk Plantations:
+Silk Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
 	$pm_base$:
 		$pm_default$
@@ -1184,7 +1184,7 @@ Silk Plantations:
 		Extensive Rail Transport
 			Monthly Pollution: 10
 
-Barracks:
+Barracks (bg_army):
 	Unlocking Technology: Standing Army
 	Training:
 		No Organized Training
@@ -1198,7 +1198,7 @@ Barracks:
 		Engineering and Logisitics [concept_power_bloc_principle] 1
 		No Effect
 
-Conscription Center:
+Conscription Center (bg_conscription):
 	$pmg_training$:
 		$pm_no_organization$
 		$pm_general_training$
@@ -1207,7 +1207,7 @@ Conscription Center:
 		$pm_nco_incorporation$
 		$pm_mobile_warfare_tactics$
 
-Naval Fortification:
+Naval Fortification (bg_naval_fortification):
 	Fortification:
 		Basic Fortification
 		Reinforced Fortification
@@ -1215,20 +1215,20 @@ Naval Fortification:
 		Coastal Missile Battery
 		Integrated Coastal Defense
 
-Naval Administration:
+Naval Administration (bg_naval_administration):
 	Unlocking Technology: Admiralty
 	Recruitment:
 		Simple Recruitment
 
-Naval Logistics Center:
+Naval Logistics Center (bg_naval_logistics_center):
 	$building_naval_logistics_center$:
 		$pm_base$
 
-Land Logistics Center:
+Land Logistics Center (bg_land_logistics_center):
 	$building_land_logistics_center$:
 		$pm_base$
 
-Urban Center:
+Urban Center (bg_service):
 	Unlocking Technology: Urbanization
 	Amenities:
 		Market Stalls
@@ -1268,7 +1268,7 @@ Urban Center:
 		Decentralized Religious Structures
 		Secular Society
 
-Creative Industries:
+Creative Industries (bg_arts):
 	Unlocking Technology: Romanticism
 	$pm_base$:
 		Traditional Art
@@ -1297,7 +1297,7 @@ Creative Industries:
 	Maintenance:
 		Maintenance
 
-Power Plants:
+Power Plants (bg_power):
 	Unlocking Technology: Electrical Generation
 	$pm_base$:
 		Early Power Plant
@@ -1324,7 +1324,7 @@ Power Plants:
 	Maintenance:
 		Maintenance
 
-Government Administration:
+Government Administration (bg_bureaucracy):
 	Unlocking Technology: Bureaucracy
 	$pm_base$:
 		Simple Organization
@@ -1341,7 +1341,7 @@ Government Administration:
 		Administrative Clergy
 		Secular Administration
 
-University:
+University (bg_technology):
 	Unlocking Technology: Academia
 	$pm_base$:
 		Scholastic Education
@@ -1365,7 +1365,7 @@ University:
 		Research Mandate
 		No Research Mandate
 
-Skyscraper:
+Skyscraper (bg_skyscraper):
 	Skyscraper:
 		Bureaucratic Nexus
 		Trade Nexus
@@ -1375,139 +1375,139 @@ Skyscraper:
 	Maintenance:
 		Maintenance
 
-The Eiffel Tower:
+The Eiffel Tower (bg_monuments):
 	Unlocking Technology: Steel-Frame Buildings
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Angkor Wat:
+Angkor Wat (bg_monuments):
 	Base:
 		Angkor Wat
 		Prestige
 		No Effect
 
-Big Ben:
+Big Ben (bg_monuments):
 	Base:
 		Big Ben
 		Prestige
 		No Effect
 
-Forbidden City:
+Forbidden City (bg_monuments):
 	Base:
 		Forbidden City
 		Prestige
 		No Effect
 
-Hagia Sophia:
+Hagia Sophia (bg_monuments):
 	Base:
 		Hagia Sophia
 		Prestige
 		No Effect
 
-Mosque of Djenne:
+Mosque of Djenne (bg_monuments):
 	Base:
 		Mosque of Djenne
 		Prestige
 		No Effect
 
-Saint Basil’s Cathedral:
+Saint Basil’s Cathedral (bg_monuments):
 	Base:
 		Saint Basil’s Cathedral
 		Prestige
 		No Effect
 
-Statue of Liberty:
+Statue of Liberty (bg_monuments):
 	Unlocking Technology: Steel-Frame Buildings
 	Base:
 		Statue of Liberty
 		Prestige
 		No Effect
 
-Taj Mahal:
+Taj Mahal (bg_monuments):
 	Base:
 		Taj Mahal
 		Prestige
 		No Effect
 
-Vatican City:
+Vatican City (bg_monuments):
 	Base:
 		Vatican City
 		$pm_monument_prestige_only$
 		Prestige
 		No Effect
 
-White House:
+White House (bg_monuments):
 	Base:
 		White House
 		Prestige
 		No Effect
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-$building_dummy$:
+$building_dummy$ (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-Cristo Redentor:
+Cristo Redentor (bg_monuments):
 	Unlocking Technology: Pneumatic Tools
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Power Bloc Statue:
+Power Bloc Statue (bg_monuments):
 	Power Bloc Statue:
 		$identity_sovereign_empire$
 		$identity_military_treaty_organization$
@@ -1519,106 +1519,106 @@ Power Bloc Statue:
 		Cultural Coalition
 		Diplomatic Framework
 
-Castle Dracula:
+Castle Dracula (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-Victoria Terminus:
+Victoria Terminus (bg_monuments):
 	Unlocking Technology: Steel-Frame Buildings
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Kaiserforum:
+Kaiserforum (bg_monuments):
 	Unlocking Technology: Reinforced Concrete
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Kaiserforum:
+Kaiserforum (bg_monuments):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Kaiserforum:
+Kaiserforum (bg_monuments):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Kaiserforum:
+Kaiserforum (bg_monuments):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Sagrada Família Cathedral:
+Sagrada Família Cathedral (bg_monuments):
 	Unlocking Technology: Reinforced Concrete
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Sagrada Família Cathedral:
+Sagrada Família Cathedral (bg_monuments):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Sagrada Família Cathedral:
+Sagrada Família Cathedral (bg_monuments):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Pena Convent:
+Pena Convent (bg_monuments_hidden):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Pena Palace:
+Pena Palace (bg_monuments):
 	Unlocking Technology: Mechanical Tools
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Grand Theater of Havana:
+Grand Theater of Havana (bg_monuments):
 	Unlocking Technology: Pneumatic Tools
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Atocha Railway Station:
+Atocha Railway Station (bg_monuments):
 	Unlocking Technology: Steel-Frame Buildings
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Manila Cathedral:
+Manila Cathedral (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
 		Dummy PM for graphics-only buildings. Should never be shown in UI.
 
-Manila Cathedral:
+Manila Cathedral (bg_monuments):
 	Unlocking Technology: Reinforced Concrete
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Manila Cathedral Ruins:
+Manila Cathedral Ruins (bg_monuments_hidden):
 	$pm_base$:
 		Default Production
 		Prestige
 		No Effect
 
-Logging Camps:
+Logging Camps (bg_logging):
 	$pm_base$:
 		Simple Forestry
 		Saw Mills
@@ -1642,7 +1642,7 @@ Logging Camps:
 		Rail Log Carts
 			Monthly Pollution: 15
 
-Rubber Plantations:
+Rubber Plantations (bg_rubber):
 	Unlocking Technology: Rubber Mastication
 	$pm_base$:
 		$pm_default$
@@ -1659,7 +1659,7 @@ Rubber Plantations:
 		Rail Transportation
 			Monthly Pollution: 10
 
-Fishing Wharves:
+Fishing Wharves (bg_fishing):
 	$pm_base$:
 		Simple Fishing
 		Fishing Trawlers
@@ -1677,7 +1677,7 @@ Fishing Wharves:
 			Monthly Pollution: 15
 		Flash Freezing
 
-Whaling Stations:
+Whaling Stations (bg_whaling):
 	Unlocking Technology: Navigation
 	$pm_base$:
 		Simple Whaling
@@ -1695,7 +1695,7 @@ Whaling Stations:
 			Monthly Pollution: 15
 		Flash Freezing
 
-Oil Rigs:
+Oil Rigs (bg_oil_extraction):
 	Unlocking Technology: Pumpjacks
 	$pm_base$:
 		Steam-Powered Derricks
@@ -1727,17 +1727,17 @@ Oil Rigs:
 		Ultradeep Well
 			Monthly Pollution: 15
 
-Suez Canal:
+Suez Canal (bg_canals):
 	Unlocking Technology: Colonization
 	Canal:
 		Canal
 
-Panama Canal:
+Panama Canal (bg_canals):
 	Unlocking Technology: Civilizing Mission
 	Canal:
 		Canal
 
-Port:
+Port (bg_private_infrastructure):
 	Unlocking Technology: Navigation
 	$pm_base$:
 		Anchorage
@@ -1766,7 +1766,7 @@ Port:
 	Maintenance:
 		Maintenance
 
-Railway:
+Railway (bg_private_infrastructure):
 	Unlocking Technology: Railways
 	$pm_base$:
 		Experimental Trains
@@ -1798,7 +1798,7 @@ Railway:
 	Maintenance:
 		Maintenance
 
-Trade Center:
+Trade Center (bg_trade):
 	$pm_base$:
 		International Trading
 		Influential Trade Center
@@ -1814,7 +1814,7 @@ Trade Center:
 	Maintenance:
 		Maintenance
 
-Manor Houses:
+Manor Houses (bg_manor_houses):
 	$pmg_ownership$:
 		$pm_privately_owned$
 		Increased Clergy Oversight
@@ -1825,7 +1825,7 @@ Manor Houses:
 		Bureaucrat Oversight
 		AI Management
 
-Financial Districts:
+Financial Districts (bg_financial_districts):
 	$pmg_ownership$:
 		$pm_privately_owned$
 		$pm_publicly_traded$
@@ -1835,7 +1835,7 @@ Financial Districts:
 		Automated Trading
 		Hobbyist Management
 
-Subsistence Farms:
+Subsistence Farms (bg_subsistence_agriculture):
 	$pm_base$:
 		$pm_default$
 	$pmg_home_workshops$:
@@ -1848,7 +1848,7 @@ Subsistence Farms:
 		Homesteading
 		$law_peasant_proprietorship$
 
-Subsistence Orchards:
+Subsistence Orchards (bg_subsistence_agriculture):
 	$pm_base$:
 		$pm_default$
 	$pmg_home_workshops$:
@@ -1861,7 +1861,7 @@ Subsistence Orchards:
 		Homesteading
 		$law_peasant_proprietorship$
 
-Subsistence Pastures:
+Subsistence Pastures (bg_subsistence_ranching):
 	$pm_base$:
 		$pm_default$
 	$pmg_home_workshops$:
@@ -1874,7 +1874,7 @@ Subsistence Pastures:
 		Homesteading
 		$law_peasant_proprietorship$
 
-Subsistence Fishing Villages:
+Subsistence Fishing Villages (bg_subsistence_agriculture):
 	$pm_base$:
 		$pm_default$
 	$pmg_home_workshops$:
@@ -1887,7 +1887,7 @@ Subsistence Fishing Villages:
 		Homesteading
 		$law_peasant_proprietorship$
 
-Subsistence Rice Paddies:
+Subsistence Rice Paddies (bg_subsistence_agriculture):
 	$pm_base$:
 		$pm_default$
 	$pmg_home_workshops$:
@@ -1900,7 +1900,7 @@ Subsistence Rice Paddies:
 		Homesteading
 		$law_peasant_proprietorship$
 
-Construction Sector:
+Construction Sector (bg_construction):
 	Unlocking Technology: Urbanization
 	$pm_base$:
 		Wooden Buildings
@@ -1922,7 +1922,7 @@ Construction Sector:
 	Maintenance:
 		Maintenance
 
-Company Headquarter:
+Company Headquarter (bg_company_headquarter):
 	$pmg_ownership$:
 		$pm_privately_owned$
 		$pm_privately_owned$
@@ -1951,7 +1951,7 @@ Company Headquarter:
 		$pm_worker_cooperative$
 		$pm_worker_cooperative$
 
-Regional Company Headquarter:
+Regional Company Headquarter (bg_company_regional_headquarter):
 	$pmg_ownership$:
 		$pm_privately_owned$
 		$pm_privately_owned$
@@ -1980,1179 +1980,1219 @@ Regional Company Headquarter:
 		$pm_worker_cooperative$
 		$pm_worker_cooperative$
 
-Strategic Reserve Hub:
+Strategic Reserve Hub (bg_public_infrastructure):
+	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, and tanks. Each level provides +5000 capacity per reserve good and up to 10 goods per level each week of reserve flow, which can be fine-tuned separately for each good in the Strategic Reserve [concept_journal_entry].
 	Unlocking Technology: Logistics
 	Hub Reserve:
 		Reserve Control
 
-Strategic Reserve Silo:
+Strategic Reserve Silo (bg_public_infrastructure):
+	A distributed storage depot that adds +200 capacity per level for each reserve good. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile.
 	Unlocking Technology: Logistics
 	Silo Storage:
 		Silo Storage
 
-Volkswagen Autostadt:
+Volkswagen Autostadt (bg_company_buildings):
 	Volkswagen Autostadt:
 		Volkswagen Autostadt
 
-Toyota Kaikan Museum & Plant:
+Toyota Kaikan Museum & Plant (bg_company_buildings):
 	Toyota Kaikan Museum & Plant:
 		Toyota Kaikan Museum & Plant
 
-Samsung Digital City:
+Samsung Digital City (bg_company_buildings):
 	Samsung Digital City:
 		Samsung Digital City
 
-HP Labs:
+HP Labs (bg_company_buildings):
 	HP Labs:
 		HP Labs
 
-Sony Pictures Studios:
+Sony Pictures Studios (bg_company_buildings):
 	Sony Pictures Studios:
 		Sony Pictures Studios
 
-IKEA Älmhult Campus:
+IKEA Älmhult Campus (bg_company_buildings):
 	IKEA Älmhult Campus:
 		IKEA Älmhult Campus
 
-Intel Ronler Acres Campus:
+Intel Ronler Acres Campus (bg_company_buildings):
 	Intel Ronler Acres Campus:
 		Intel Ronler Acres Campus
 
-Microsoft Redmond Campus:
+Microsoft Redmond Campus (bg_company_buildings):
 	Microsoft Redmond Campus:
 		Microsoft Redmond Campus
 
-Apple Park:
+Apple Park (bg_company_buildings):
 	Apple Park:
 		Apple Park
 
-TSMC Fab 18:
+TSMC Fab 18 (bg_company_buildings):
 	TSMC Fab 18:
 		TSMC Fab 18
 
-Huawei Ox Horn Campus:
+Huawei Ox Horn Campus (bg_company_buildings):
 	Huawei Ox Horn Campus:
 		Huawei Ox Horn Campus
 
-Automated Fulfillment Center:
+Automated Fulfillment Center (bg_company_buildings):
 	Automated Fulfillment Center:
 		Automated Fulfillment Center
 
-Nvidia Endeavor Campus:
+Nvidia Endeavor Campus (bg_company_buildings):
 	Nvidia Endeavor Campus:
 		Nvidia Endeavor Campus
 
-The Googleplex:
+The Googleplex (bg_company_buildings):
 	The Googleplex:
 		The Googleplex
 
-Netflix Animation Studios:
+Netflix Animation Studios (bg_company_buildings):
 	Netflix Animation Studios:
 		Netflix Animation Studios
 
-Starbase:
+Starbase (bg_company_buildings):
 	Starbase:
 		Starbase
 
-TikTok Data Fortress:
+TikTok Data Fortress (bg_company_buildings):
 	TikTok Data Fortress:
 		TikTok Data Fortress
 
-OpenAI Research Laboratory:
+OpenAI Research Laboratory (bg_company_buildings):
 	OpenAI Research Laboratory:
 		OpenAI Research Laboratory
 
-CATL Gigafactory:
+CATL Gigafactory (bg_company_buildings):
 	CATL Gigafactory:
 		CATL Gigafactory
 
-Boston Dynamics AI Institute:
+Boston Dynamics AI Institute (bg_company_buildings):
 	Boston Dynamics AI Institute:
 		Boston Dynamics AI Institute
 
-ASML Veldhoven Campus:
+ASML Veldhoven Campus (bg_company_buildings):
 	ASML Veldhoven Campus:
 		ASML Veldhoven Campus
 
-Skunk Works:
+Skunk Works (bg_company_buildings):
 	Skunk Works:
 		Skunk Works
 
-BAE Systems Samlesbury Aerodrome:
+BAE Systems Samlesbury Aerodrome (bg_company_buildings):
 	BAE Systems Samlesbury Aerodrome:
 		BAE Systems Samlesbury Aerodrome
 
-Vostochny Cosmodrome:
+Vostochny Cosmodrome (bg_company_buildings):
 	Vostochny Cosmodrome:
 		Vostochny Cosmodrome
 
-Jean-Luc Lagardère Plant:
+Jean-Luc Lagardère Plant (bg_company_buildings):
 	Jean-Luc Lagardère Plant:
 		Jean-Luc Lagardère Plant
 
-Dassault Merignac Plant:
+Dassault Merignac Plant (bg_company_buildings):
 	Dassault Merignac Plant:
 		Dassault Merignac Plant
 
-Hyundai Ulsan Factory:
+Hyundai Ulsan Factory (bg_company_buildings):
 	Hyundai Ulsan Factory:
 		Hyundai Ulsan Factory
 
-SAP SE Headquarters:
+SAP SE Headquarters (bg_company_buildings):
 	SAP SE Headquarters:
 		SAP SE Headquarters
 
-Tencent Seafront Towers:
+Tencent Seafront Towers (bg_company_buildings):
 	Tencent Seafront Towers:
 		Tencent Seafront Towers
 
-Cainiao Logistics Park:
+Cainiao Logistics Park (bg_company_buildings):
 	Cainiao Logistics Park:
 		Cainiao Logistics Park
 
-Nintendo Development Center:
+Nintendo Development Center (bg_company_buildings):
 	Nintendo Development Center:
 		Nintendo Development Center
 
-The Lakhta Center:
+The Lakhta Center (bg_company_buildings):
 	The Lakhta Center:
 		The Lakhta Center
 
-Abqaiq Plant:
+Abqaiq Plant (bg_company_buildings):
 	Abqaiq Plant:
 		Abqaiq Plant
 
-Cenpes Research Center:
+Cenpes Research Center (bg_company_buildings):
 	Cenpes Research Center:
 		Cenpes Research Center
 
-Mayak Production Association:
+Mayak Production Association (bg_company_buildings):
 	Mayak Production Association:
 		Mayak Production Association
 
-Oracle Cloud Data Center:
+Oracle Cloud Data Center (bg_company_buildings):
 	Oracle Cloud Data Center:
 		Oracle Cloud Data Center
 
-The Vision Fund Headquarters:
+The Vision Fund Headquarters (bg_company_buildings):
 	The Vision Fund Headquarters:
 		The Vision Fund Headquarters
 
-The Roche Tower:
+The Roche Tower (bg_company_buildings):
 	The Roche Tower:
 		The Roche Tower
 
-Pfizer Global R&D Campus:
+Pfizer Global R&D Campus (bg_company_buildings):
 	Pfizer Global R&D Campus:
 		Pfizer Global R&D Campus
 
-Carajás Mine:
+Carajás Mine (bg_company_buildings):
 	Carajás Mine:
 		Carajás Mine
 
-Disney World:
+Disney World (bg_company_buildings):
 	Disney World:
 		Disney World
 
-Universal Studios Hollywood:
+Universal Studios Hollywood (bg_company_buildings):
 	Universal Studios Hollywood:
 		Universal Studios Hollywood
 
-The Verizon Building:
+The Verizon Building (bg_company_buildings):
 	The Verizon Building:
 		The Verizon Building
 
-Jamnagar Refinery:
+Jamnagar Refinery (bg_company_buildings):
 	Jamnagar Refinery:
 		Jamnagar Refinery
 
-The FANUC Forest:
+The FANUC Forest (bg_company_buildings):
 	The FANUC Forest:
 		The FANUC Forest
 
-Palazzo ENI:
+Palazzo ENI (bg_company_buildings):
 	Palazzo ENI:
 		Palazzo ENI
 
-Ferrari Maranello Factory:
+Ferrari Maranello Factory (bg_company_buildings):
 	Ferrari Maranello Factory:
 		Ferrari Maranello Factory
 
-RIM Campus:
+RIM Campus (bg_company_buildings):
 	RIM Campus:
 		RIM Campus
 
-Shopify Fulfillment Network Hub:
+Shopify Fulfillment Network Hub (bg_company_buildings):
 	Shopify Fulfillment Network Hub:
 		Shopify Fulfillment Network Hub
 
-Mount Whaleback Mine:
+Mount Whaleback Mine (bg_company_buildings):
 	Mount Whaleback Mine:
 		Mount Whaleback Mine
 
-Cochlear Global Headquarters:
+Cochlear Global Headquarters (bg_company_buildings):
 	Cochlear Global Headquarters:
 		Cochlear Global Headquarters
 
-Infosys Mysore Campus:
+Infosys Mysore Campus (bg_company_buildings):
 	Infosys Mysore Campus:
 		Infosys Mysore Campus
 
-JSW Vijayanagar Works:
+JSW Vijayanagar Works (bg_company_buildings):
 	JSW Vijayanagar Works:
 		JSW Vijayanagar Works
 
-Central R&D Complex:
+Central R&D Complex (bg_company_buildings):
 	Central R&D Complex:
 		Central R&D Complex
 
-National Logistics Hub:
+National Logistics Hub (bg_company_buildings):
 	National Logistics Hub:
 		National Logistics Hub
 
-Corporate Headquarters Skyscraper:
+Corporate Headquarters Skyscraper (bg_company_buildings):
 	Corporate Headquarters Skyscraper:
 		Corporate Headquarters Skyscraper
 
-Specialized Industrial Zone:
+Specialized Industrial Zone (bg_company_buildings):
 	Specialized Industrial Zone:
 		Specialized Industrial Zone
 
-Mega-Factory Complex:
+Mega-Factory Complex (bg_company_buildings):
 	Mega-Factory Complex:
 		Mega-Factory Complex
 
-National Exhibition Centre:
+National Exhibition Centre (bg_company_buildings):
 	National Exhibition Centre:
 		National Exhibition Centre
 
-Global Shipping Terminal:
+Global Shipping Terminal (bg_company_buildings):
 	Global Shipping Terminal:
 		Global Shipping Terminal
 
-Advanced Materials Laboratory:
+Advanced Materials Laboratory (bg_company_buildings):
 	Advanced Materials Laboratory:
 		Advanced Materials Laboratory
 
-Automation & Robotics Institute:
+Automation & Robotics Institute (bg_company_buildings):
 	Automation & Robotics Institute:
 		Automation & Robotics Institute
 
-Corporate University:
+Corporate University (bg_company_buildings):
 	Corporate University:
 		Corporate University
 
-National Data Fortress:
+National Data Fortress (bg_company_buildings):
 	National Data Fortress:
 		National Data Fortress
 
-Private Industrial City:
+Private Industrial City (bg_company_buildings):
 	Private Industrial City:
 		Private Industrial City
 
-Global Media Headquarters:
+Global Media Headquarters (bg_company_buildings):
 	Global Media Headquarters:
 		Global Media Headquarters
 
-High-Efficiency Power Hub:
+High-Efficiency Power Hub (bg_company_buildings):
 	High-Efficiency Power Hub:
 		High-Efficiency Power Hub
 
-Cross-Continental Pipeline Terminus:
+Cross-Continental Pipeline Terminus (bg_company_buildings):
 	Cross-Continental Pipeline Terminus:
 		Cross-Continental Pipeline Terminus
 
-Intercontinental Rail Nexus:
+Intercontinental Rail Nexus (bg_company_buildings):
 	Intercontinental Rail Nexus:
 		Intercontinental Rail Nexus
 
-Strategic Proving Grounds:
+Strategic Proving Grounds (bg_company_buildings):
 	Strategic Proving Grounds:
 		Strategic Proving Grounds
 
-National Resource Depository:
+National Resource Depository (bg_company_buildings):
 	National Resource Depository:
 		National Resource Depository
 
-International Financial Center:
+International Financial Center (bg_company_buildings):
 	International Financial Center:
 		International Financial Center
 
-Monument to Industry:
+Monument to Industry (bg_company_buildings):
 	Monument to Industry:
 		Monument to Industry
 
-Spaceport:
+Spaceport (bg_company_buildings):
 	Spaceport:
 		Spaceport
 
-Krupp Essen Works:
+Krupp Essen Works (bg_company_buildings):
+	The legendary Krupp steelworks in Essen, producing the finest steel and armaments in the world.
 	Krupp Essen Works:
 		Krupp Essen Works
 
-Standard Oil Refinery:
+Standard Oil Refinery (bg_company_buildings):
+	A sprawling refinery complex that dominates the petroleum industry, refining crude oil into fuel and chemicals.
 	Standard Oil Refinery:
 		Standard Oil Refinery
 
-Carnegie Homestead Mill:
+Carnegie Homestead Mill (bg_company_buildings):
+	The massive Homestead steelworks on the Monongahela River, forging the steel that built America's railways and skyscrapers.
 	Carnegie Homestead Mill:
 		Carnegie Homestead Mill
 
-Ford Rouge Plant:
+Ford Rouge Plant (bg_company_buildings):
+	The River Rouge Complex: the world's largest integrated factory, where raw materials enter one end and finished automobiles emerge from the other.
 	Ford Rouge Plant:
 		Ford Rouge Plant
 
-East India Company Trading House:
+East India Company Trading House (bg_company_buildings):
+	A grand trading house coordinating the vast commercial empire of the East India Company across the subcontinent and beyond.
 	East India Company Trading House:
 		East India Company Trading House
 
-Schneider Le Creusot Works:
+Schneider Le Creusot Works (bg_company_buildings):
+	The great Schneider-Creusot industrial complex, France's premier producer of steel, artillery, and armaments since the Napoleonic era.
 	Schneider Le Creusot Works:
 		Schneider Le Creusot Works
 
-Putilov Works:
+Putilov Works (bg_company_buildings):
+	The Putilov iron and steel works in Saint Petersburg, producing heavy machinery, railway equipment, and artillery for the Russian Empire.
 	Putilov Works:
 		Putilov Works
 
-Mitsubishi Nagasaki Shipyard:
+Mitsubishi Nagasaki Shipyard (bg_company_buildings):
+	Mitsubishi's massive Nagasaki shipyard, constructing warships and merchant vessels that project Japan's industrial might across the Pacific.
 	Mitsubishi Nagasaki Shipyard:
 		Mitsubishi Nagasaki Shipyard
 
-Tata Jamshedpur Works:
+Tata Jamshedpur Works (bg_company_buildings):
+	The Tata Iron and Steel Company works at Jamshedpur, India's first integrated steel plant and symbol of indigenous industrialization.
 	Tata Jamshedpur Works:
 		Tata Jamshedpur Works
 
-Siemens Erlangen Campus:
+Siemens Erlangen Campus (bg_company_buildings):
+	The Siemens research and manufacturing campus, pioneering telegraph systems, electrical generators, and communications technology.
 	Siemens Erlangen Campus:
 		Siemens Erlangen Campus
 
-De Beers Sorting Office:
+De Beers Sorting Office (bg_company_buildings):
+	The De Beers diamond sorting and valuation office, controlling the global flow of rough diamonds from South African mines to world markets.
 	De Beers Sorting Office:
 		De Beers Sorting Office
 
-Nobel Baku Refinery:
+Nobel Baku Refinery (bg_company_buildings):
+	The Nobel Brothers' pioneering petroleum refinery in Baku, processing Caspian crude oil into kerosene, explosives, and industrial chemicals.
 	Nobel Baku Refinery:
 		Nobel Baku Refinery
 
-GE Schenectady Works:
+GE Schenectady Works (bg_company_buildings):
+	General Electric's sprawling Schenectady complex, where Thomas Edison's vision became an empire of electrical innovation and manufacturing.
 	GE Schenectady Works:
 		GE Schenectady Works
 
-Mitsui Trading House:
+Mitsui Trading House (bg_company_buildings):
+	The Mitsui [concept_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.
 	Mitsui Trading House:
 		Mitsui Trading House
 
-FIAT Lingotto Factory:
+FIAT Lingotto Factory (bg_company_buildings):
+	The iconic FIAT Lingotto factory in Turin, with its revolutionary rooftop test track: a cathedral of Italian automobile manufacturing.
 	FIAT Lingotto Factory:
 		FIAT Lingotto Factory
 
-Granary Complex:
+Granary Complex (bg_company_buildings):
+	A large-scale grain storage and distribution hub that ensures reliable food supply across the region.
 	Granary Complex:
 		Granary Complex
 
-Textile Depot:
+Textile Depot (bg_company_buildings):
+	A centralized fabric warehousing and dyeing facility that streamlines textile production and distribution.
 	Textile Depot:
 		Textile Depot
 
-Cold Storage Facility:
+Cold Storage Facility (bg_company_buildings):
+	An industrial cold storage and food preservation center that reduces spoilage and extends the reach of perishable goods.
 	Cold Storage:
 		Cold Storage
 
-Paper Mill Complex:
+Paper Mill Complex (bg_company_buildings):
+	An integrated pulp and paper complex that turns timber into paper stock and the clerical backbone of modern commerce.
 	Paper Mill Complex:
 		Paper Mill Complex
 
-Foundry Complex:
+Foundry Complex (bg_company_buildings):
+	A sprawling steel and iron smelting campus that feeds the insatiable demand for construction materials.
 	Foundry Complex:
 		Foundry Complex
 
-Machine Shop:
+Machine Shop (bg_company_buildings):
+	A precision engineering workshop producing tools, machine parts, and specialized equipment for heavy industry.
 	Machine Shop:
 		Machine Shop
 
-Chemical Works:
+Chemical Works (bg_company_buildings):
+	A chemical processing campus producing fertilizers, explosives, and industrial chemicals from raw materials.
 	Chemical Works:
 		Chemical Works
 
-Tank Farm:
+Tank Farm (bg_company_buildings):
+	An oil storage and refining depot with rows of massive tanks feeding petroleum products to industry and transport.
 	Tank Farm:
 		Tank Farm
 
-Ordnance Depot:
+Ordnance Depot (bg_company_buildings):
+	A munitions storage and testing facility that keeps the nation's military well-supplied with ammunition.
 	Ordnance Depot:
 		Ordnance Depot
 
-Motor Works:
+Motor Works (bg_company_buildings):
+	An engine and vehicle assembly plant producing motors, machinery, and transport equipment.
 	Motor Works:
 		Motor Works
 
-Dry Dock:
+Dry Dock (bg_company_buildings):
+	A large ship repair and construction facility that keeps the merchant and military fleet in fighting condition.
 	Dry Dock:
 		Dry Dock
 
-Arsenal:
+Arsenal (bg_company_buildings):
+	An arms depot and proving ground where weapons are manufactured, tested, and stored for military use.
 	Arsenal:
 		Arsenal
 
-Fish Market:
+Fish Market (bg_company_buildings):
+	A wholesale fish market and distribution center that brings fresh seafood from the docks to the population.
 	Fish Market:
 		Fish Market
 
-Colonial Depot:
+Colonial Depot (bg_company_buildings):
+	A central depot for consolidating and distributing colonial commodities such as tea and opium.
 	Colonial Depot Operations:
 		Colonial Commodity Trade
 
-Export Warehouse:
+Export Warehouse (bg_company_buildings):
+	A bonded warehouse for sorting, grading, and re-exporting colonial cash crops.
 	Export Warehouse Operations:
 		Cash Crop Export
 
-Electronics Laboratory:
+Electronics Laboratory (bg_company_buildings):
+	A research and testing laboratory for electrical components and consumer electronics.
 	Electronics Lab Operations:
 		Electronics Research
 
-Assay Office:
+Assay Office (bg_company_buildings):
+	A facility for testing precious metal purity and facilitating bullion trade.
 	Assay Office Operations:
 		Precious Metal Assaying
 
-Ore Processing Plant:
+Ore Processing Plant (bg_company_buildings):
+	A central facility for crushing, smelting, and refining metallic ores.
 	Ore Processing Operations:
 		Ore Smelting
 
-Mineral Refinery:
+Mineral Refinery (bg_company_buildings):
+	A refinery converting raw minerals into industrial chemicals and fertilizers.
 	Mineral Refinery Operations:
 		Mineral Refining
 
-Silk Exchange:
+Silk Exchange (bg_company_buildings):
+	A trading house for sorting, grading, and auctioning raw silk and dyed textiles.
 	Silk Exchange Operations:
 		Silk and Dye Trade
 
-Vintner's Hall:
+Vintner's Hall (bg_company_buildings):
+	A facility for aging, blending, and bottling wine and processing fruit into preserves.
 	Vintner's Hall Operations:
 		Wine and Fruit Processing
 
-Furniture Showroom:
+Furniture Showroom (bg_company_buildings):
+	A flagship homewares emporium fronting a fabrication workshop, where carpenters, glaziers, and shopkeepers turn timber and glass into the furnishings of the modern home.
 	Furniture Showroom Operations:
 		Furniture Showroom
 
-Lumber Yard:
+Lumber Yard (bg_company_buildings):
+	An industrial sawmill and timber yard where harvested logs are cut, dried, and graded into framing wood and pulpwood for paper.
 	Lumber Yard Operations:
 		Lumber Yard
 
-Aker Oslo Shipyard:
+Aker Oslo Shipyard (bg_company_buildings):
 	Aker Oslo Shipyard:
 		Aker Oslo Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Allatini Thessaloniki Flour Mill:
+Allatini Thessaloniki Flour Mill (bg_company_buildings):
 	Allatini Thessaloniki Flour Mill:
 		Allatini Thessaloniki Flour Mill
 
-Altos Hornos Baracaldo Furnaces:
+Altos Hornos Baracaldo Furnaces (bg_company_buildings):
 	Altos Hornos de Baracaldo Furnaces:
 		Altos Hornos de Baracaldo Furnaces
 
-Anglo-Persian Abadan Refinery:
+Anglo-Persian Abadan Refinery (bg_company_buildings):
 	Anglo-Persian Abadan Refinery:
 		Anglo-Persian Abadan Refinery
 
-Anglo-Sicilian Licata Wharf:
+Anglo-Sicilian Licata Wharf (bg_company_buildings):
 	Anglo-Sicilian Licata Wharf:
 		Anglo-Sicilian Licata Wharf
 
-Ansaldo Sestri Ponente Works:
+Ansaldo Sestri Ponente Works (bg_company_buildings):
 	Ansaldo Sestri Ponente Works:
 		Ansaldo Sestri Ponente Works
 
-A.P. Møller Copenhagen Wharf:
+A.P. Møller Copenhagen Wharf (bg_company_buildings):
 	A.P. Møller Copenhagen Wharf:
 		A.P. Møller Copenhagen Wharf
 
-Argentine Wine Mendoza Bodega:
+Argentine Wine Mendoza Bodega (bg_company_buildings):
 	Argentine Wine Mendoza Bodega:
 		Argentine Wine Mendoza Bodega
 
-Armstrong Elswick Works:
+Armstrong Elswick Works (bg_company_buildings):
 	Armstrong Elswick Works:
 		Armstrong Elswick Works
 
-Assam Company Nazira Tea Estate:
+Assam Company Nazira Tea Estate (bg_company_buildings):
 	Assam Company Nazira Tea Estate:
 		Assam Company Nazira Tea Estate
 
-B. Grimm Bangkok Warehouse:
+B. Grimm Bangkok Warehouse (bg_company_buildings):
 	B. Grimm Bangkok Warehouse:
 		B. Grimm Bangkok Warehouse
 
-Bacardí Santiago Distillery:
+Bacardí Santiago Distillery (bg_company_buildings):
 	Bacardí Santiago Distillery:
 		Bacardí Santiago Distillery
 
-BASF Ludwigshafen Works:
+BASF Ludwigshafen Works (bg_company_buildings):
 	BASF Ludwigshafen Plant:
 		BASF Ludwigshafen Plant
 
-Basileiades Piraeus Works:
+Basileiades Piraeus Works (bg_company_buildings):
 	Basileiades Piraeus Works:
 		Basileiades Piraeus Works
 
-Bengal Coal Raniganj Mine:
+Bengal Coal Raniganj Mine (bg_company_buildings):
 	Bengal Coal Raniganj Mine:
 		Bengal Coal Raniganj Mine
 
-Bolckow Vaughan Eston Ironworks:
+Bolckow Vaughan Eston Ironworks (bg_company_buildings):
 	Bolckow Eston Ironworks:
 		Bolckow Eston Ironworks
 
-Bombay Burmah Rangoon Timber Depot:
+Bombay Burmah Rangoon Timber Depot (bg_company_buildings):
 	Bombay Burmah Rangoon Timber Depot:
 		Bombay Burmah Rangoon Timber Depot
 
-Bombay Dyeing Spring Mills:
+Bombay Dyeing Spring Mills (bg_company_buildings):
 	Bombay Dyeing Spring Mills:
 		Bombay Dyeing Spring Mills
 
-Bunge & Born Buenos Aires Grain Silo:
+Bunge & Born Buenos Aires Grain Silo (bg_company_buildings):
 	Bunge & Born Buenos Aires Grain Silo:
 		Bunge & Born Buenos Aires Grain Silo
 
-Calcutta Electric Victoria House:
+Calcutta Electric Victoria House (bg_company_buildings):
 	Calcutta Electric Victoria House:
 		Calcutta Electric Victoria House
 
-Caribbean Petroleum Maracaibo Depot:
+Caribbean Petroleum Maracaibo Depot (bg_company_buildings):
 	Caribbean Petroleum Maracaibo Depot:
 		Caribbean Petroleum Maracaibo Depot
 
-CCCI Léopoldville Rubber Depot:
+CCCI Léopoldville Rubber Depot (bg_company_buildings):
 	CCCI Léopoldville Depot:
 		CCCI Léopoldville Depot
 
-CFR Bucharest Railway Works:
+CFR Bucharest Railway Works (bg_company_buildings):
 	CFR Bucharest Railway Works:
 		CFR Bucharest Railway Works
 
-CGV Haut-Brion Estate:
+CGV Haut-Brion Estate (bg_company_buildings):
 	CGV Haut-Brion Estate:
 		CGV Haut-Brion Estate
 
-Chr. Hansen Copenhagen Laboratory:
+Chr. Hansen Copenhagen Laboratory (bg_company_buildings):
 	Chr. Hansen Copenhagen Laboratory:
 		Chr. Hansen Copenhagen Laboratory
 
-Colt Hartford Armory:
+Colt Hartford Armory (bg_company_buildings):
 	Colt Hartford Armory:
 		Colt Hartford Armory
 
-Sansinena Avellaneda Frigorífico:
+Sansinena Avellaneda Frigorífico (bg_company_buildings):
 	Sansinena Avellaneda Frigorífico:
 		Sansinena Avellaneda Frigorífico
 
-Córdoba Railway Alta Gracia Works:
+Córdoba Railway Alta Gracia Works (bg_company_buildings):
 	Córdoba Railway Alta Gracia Works:
 		Córdoba Railway Alta Gracia Works
 
-CSFA Sicilian Sulfur Depot:
+CSFA Sicilian Sulfur Depot (bg_company_buildings):
 	CSFA Sicilian Sulfur Depot:
 		CSFA Sicilian Sulfur Depot
 
-Afghan Nassaji Kabul Mills:
+Afghan Nassaji Kabul Mills (bg_company_buildings):
 	Afghan Nassaji Kabul Mills:
 		Afghan Nassaji Kabul Mills
 
-Sassoon Bombay Docks:
+Sassoon Bombay Docks (bg_company_buildings):
 	Sassoon Bombay Docks:
 		Sassoon Bombay Docks
 
-DMC Mulhouse Thread Mills:
+DMC Mulhouse Thread Mills (bg_company_buildings):
 	DMC Mulhouse Mills:
 		DMC Mulhouse Mills
 
-Douro Wine Lodge:
+Douro Wine Lodge (bg_company_buildings):
 	Douro Wine Lodge:
 		Douro Wine Lodge
 
-Duro La Felguera Steelworks:
+Duro La Felguera Steelworks (bg_company_buildings):
 	Duro La Felguera Steelworks:
 		Duro La Felguera Steelworks
 
-EEA Dock Sud Power Station:
+EEA Dock Sud Power Station (bg_company_buildings):
 	EEA Dock Sud Power Station:
 		EEA Dock Sud Power Station
 
-Egyptian Railway Cairo Central Station:
+Egyptian Railway Cairo Central Station (bg_company_buildings):
 	Egyptian Rail Cairo Central:
 		Egyptian Rail Cairo Central
 
-El Águila Tampico Refinery:
+El Águila Tampico Refinery (bg_company_buildings):
 	El Águila Tampico Refinery:
 		El Águila Tampico Refinery
 
-Electricidad de Caracas Power House:
+Electricidad de Caracas Power House (bg_company_buildings):
 	Electricidad de Caracas Power House:
 		Electricidad de Caracas Power House
 
-Első Budapesti Steam Mill:
+Első Budapesti Steam Mill (bg_company_buildings):
 	Első Budapesti Steam Mill:
 		Első Budapesti Steam Mill
 
-Ericsson Telefonplan:
+Ericsson Telefonplan (bg_company_buildings):
 	Ericsson Telefonplan:
 		Ericsson Telefonplan
 
-Erste Brünner Maschinenwerk:
+Erste Brünner Maschinenwerk (bg_company_buildings):
 	Erste Brünner Maschinenwerk:
 		Erste Brünner Maschinenwerk
 
-España Industrial Sants Mills:
+España Industrial Sants Mills (bg_company_buildings):
 	España Industrial Sants Mills:
 		España Industrial Sants Mills
 
-Estaleiro Mauá Niterói Dockyard:
+Estaleiro Mauá Niterói Dockyard (bg_company_buildings):
 	Estaleiro Mauá Niterói Dockyard:
 		Estaleiro Mauá Niterói Dockyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Estannífera Llallagua Tin Concentrator:
+Estannífera Llallagua Tin Concentrator (bg_company_buildings):
 	Estañífera Llallagua Tin Concentrator:
 		Estañífera Llallagua Tin Concentrator
 
-FAMAE Santiago Arsenal:
+FAMAE Santiago Arsenal (bg_company_buildings):
 	FAMAE Santiago Arsenal:
 		FAMAE Santiago Arsenal
 
-FCM La Seyne Shipyard:
+FCM La Seyne Shipyard (bg_company_buildings):
 	FCM La Seyne Shipyard:
 		FCM La Seyne Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Foochow Mawei Dockyard:
+Foochow Mawei Dockyard (bg_company_buildings):
 	Foochow Mawei Dockyard:
 		Foochow Mawei Dockyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Franco-Belge Raismes Works:
+Franco-Belge Raismes Works (bg_company_buildings):
 	Franco-Belge Raismes Works:
 		Franco-Belge Raismes Works
 
-Fundição Ipanema Sorocaba Foundry:
+Fundição Ipanema Sorocaba Foundry (bg_company_buildings):
 	Fundição Ipanema Sorocaba Foundry:
 		Fundição Ipanema Sorocaba Foundry
 
-Fundidora Monterrey Blast Furnace:
+Fundidora Monterrey Blast Furnace (bg_company_buildings):
 	Fundidora Monterrey Blast Furnace:
 		Fundidora Monterrey Blast Furnace
 
-Galician Borysław Oil Field:
+Galician Borysław Oil Field (bg_company_buildings):
 	Galician Borysław Oil Field:
 		Galician Borysław Oil Field
 
-Thonet Bystřice Bentwood Factory:
+Thonet Bystřice Bentwood Factory (bg_company_buildings):
 	Thonet Bystřice Bentwood Factory:
 		Thonet Bystřice Bentwood Factory
 
-Getzner Bludenz Textile Works:
+Getzner Bludenz Textile Works (bg_company_buildings):
 	Getzner Bludenz Textile Works:
 		Getzner Bludenz Textile Works
 
-Götaverken Gothenburg Shipyard:
+Götaverken Gothenburg Shipyard (bg_company_buildings):
 	Götaverken Gothenburg Shipyard:
 		Götaverken Gothenburg Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Gran Azucarera Aranjuez Refinery:
+Gran Azucarera Aranjuez Refinery (bg_company_buildings):
 	Gran Azucarera Aranjuez Refinery:
 		Gran Azucarera Aranjuez Refinery
 
-Great Indian Railway Jamalpur Works:
+Great Indian Railway Jamalpur Works (bg_company_buildings):
 	Great Indian Railway Jamalpur Works:
 		Great Indian Railway Jamalpur Works
 
-Guinness St. James's Gate Brewery:
+Guinness St. James's Gate Brewery (bg_company_buildings):
 	Guinness St. James's Gate Brewery:
 		Guinness St. James's Gate Brewery
 
-GWR Swindon Works:
+GWR Swindon Works (bg_company_buildings):
 	GWR Swindon Works:
 		GWR Swindon Works
 
-Hanseong Electric Gwanghwamun Station:
+Hanseong Electric Gwanghwamun Station (bg_company_buildings):
 	Hanseong Jeongi Gwanghwamun Station:
 		Hanseong Jeongi Gwanghwamun Station
 
-Hanyang Arsenal Iron Works:
+Hanyang Arsenal Iron Works (bg_company_buildings):
 	Hanyang Arsenal Iron Works:
 		Hanyang Arsenal Iron Works
 
-Hudson's Bay York Factory:
+Hudson's Bay York Factory (bg_company_buildings):
 	HBC York Factory:
 		HBC York Factory
 
-Hispano-Suiza Barcelona Factory:
+Hispano-Suiza Barcelona Factory (bg_company_buildings):
 	Hispano-Suiza Barcelona Factory:
 		Hispano-Suiza Barcelona Factory
 
-ILVA Bagnoli Steelworks:
+ILVA Bagnoli Steelworks (bg_company_buildings):
 	ILVA Bagnoli Steelworks:
 		ILVA Bagnoli Steelworks
 
-Imperial Arsenal Golden Horn:
+Imperial Arsenal Golden Horn (bg_company_buildings):
 	Imperial Arsenal Golden Horn:
 		Imperial Arsenal Golden Horn
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Ethiopian Railway Dire Dawa Depot:
+Ethiopian Railway Dire Dawa Depot (bg_company_buildings):
 	Ethiopian Railway Dire Dawa Depot:
 		Ethiopian Railway Dire Dawa Depot
 
-Imperial Tobacco Wills Factory:
+Imperial Tobacco Wills Factory (bg_company_buildings):
 	Imperial Tobacco Wills' Factory:
 		Imperial Tobacco Wills' Factory
 
-Ingolstadt Power Station:
+Ingolstadt Power Station (bg_company_buildings):
 	Ingolstadt Power Station:
 		Ingolstadt Power Station
 
-Iranian State Railway Veresk Station:
+Iranian State Railway Veresk Station (bg_company_buildings):
 	Iranian State Railway Veresk Station:
 		Iranian State Railway Veresk Station
 
-Izhevsk Arms Factory:
+Izhevsk Arms Factory (bg_company_buildings):
 	Izhevsk Arms Factory:
 		Izhevsk Arms Factory
 
-J&P Coats Ferguslie Thread Mills:
+J&P Coats Ferguslie Thread Mills (bg_company_buildings):
 	Coats Ferguslie Mills:
 		Coats Ferguslie Mills
 
-Klein Galician Paper Mill:
+Klein Galician Paper Mill (bg_company_buildings):
 	Klein Galician Paper Mill:
 		Klein Galician Paper Mill
 
-Jiangnan Nanjing Brocade Hall:
+Jiangnan Nanjing Brocade Hall (bg_company_buildings):
 	Jiangnan Nanjing Brocade Hall:
 		Jiangnan Nanjing Brocade Hall
 
-Jingdezhen Imperial Kiln:
+Jingdezhen Imperial Kiln (bg_company_buildings):
 	Jingdezhen Imperial Kiln:
 		Jingdezhen Imperial Kiln
 
-John Brown Clydebank Shipyard:
+John Brown Clydebank Shipyard (bg_company_buildings):
 	John Brown Clydebank Yard:
 		John Brown Clydebank Yard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Cockerill Seraing Works:
+Cockerill Seraing Works (bg_company_buildings):
 	Cockerill Seraing Works:
 		Cockerill Seraing Works
 
-John Holt Lagos Trading House:
+John Holt Lagos Trading House (bg_company_buildings):
 	John Holt Lagos Trading House:
 		John Holt Lagos Trading House
 
-Hughes Yuzovka Steelworks:
+Hughes Yuzovka Steelworks (bg_company_buildings):
 	Hughes Yuzovka Steelworks:
 		Hughes Yuzovka Steelworks
 
-Kablín Zárate Paper Mill:
+Kablín Zárate Paper Mill (bg_company_buildings):
 	Kablín Zárate Paper Mill:
 		Kablín Zárate Paper Mill
 
-Kaiping Tangshan Colliery:
+Kaiping Tangshan Colliery (bg_company_buildings):
 	Kaiping Tangshan Colliery:
 		Kaiping Tangshan Colliery
 
-Kinkozan Kiyomizu Kiln:
+Kinkozan Kiyomizu Kiln (bg_company_buildings):
 	Kinkozan Kiyomizu Kiln:
 		Kinkozan Kiyomizu Kiln
 
-Kirgizian Copper Smelter:
+Kirgizian Copper Smelter (bg_company_buildings):
 	Kirgizian Copper Smelter:
 		Kirgizian Copper Smelter
 
-Klanično Belgrade Slaughterhouse:
+Klanično Belgrade Slaughterhouse (bg_company_buildings):
 	Klaničko Belgrade Slaughterhouse:
 		Klaničko Belgrade Slaughterhouse
 
-Meissen Porcelain Manufactory:
+Meissen Porcelain Manufactory (bg_company_buildings):
 	Meissen Porcelain Manufactory:
 		Meissen Porcelain Manufactory
 
-Kouppas Piraeus Foundry:
+Kouppas Piraeus Foundry (bg_company_buildings):
 	Kouppas Piraeus Foundry:
 		Kouppas Piraeus Foundry
 
-La Rosada Buenos Aires Arsenal:
+La Rosada Buenos Aires Arsenal (bg_company_buildings):
 	La Rosada Buenos Aires Arsenal:
 		La Rosada Buenos Aires Arsenal
 
-Lanfang Pontianak Kongsi House:
+Lanfang Pontianak Kongsi House (bg_company_buildings):
 	Lanfang Pontianak Kongsi House:
 		Lanfang Pontianak Kongsi House
 
-Lee Wilson Plantation Depot:
+Lee Wilson Plantation Depot (bg_company_buildings):
 	Lee Wilson Plantation Depot:
 		Lee Wilson Plantation Depot
 
-Lilpop Warsaw Metalworks:
+Lilpop Warsaw Metalworks (bg_company_buildings):
 	Lilpop Warsaw Metalworks:
 		Lilpop Warsaw Metalworks
 
-LKAB Kiruna Iron Mine:
+LKAB Kiruna Iron Mine (bg_company_buildings):
 	LKAB Kiruna Mine:
 		LKAB Kiruna Mine
 
-Moser Karlsbad Glass Works:
+Moser Karlsbad Glass Works (bg_company_buildings):
 	Moser Karlsbad Glass Works:
 		Moser Karlsbad Glass Works
 
-Madura Mills Madurai Complex:
+Madura Mills Madurai Complex (bg_company_buildings):
 	Madura Mills Madurai Complex:
 		Madura Mills Madurai Complex
 
-Worth Rue de la Paix Atelier:
+Worth Rue de la Paix Atelier (bg_company_buildings):
 	Worth Rue de la Paix Atelier:
 		Worth Rue de la Paix Atelier
 
-Manfred Weiss Csepel Works:
+Manfred Weiss Csepel Works (bg_company_buildings):
 	Manfred Weiss Csepel Works:
 		Manfred Weiss Csepel Works
 
-Mantero Como Silk Mill:
+Mantero Como Silk Mill (bg_company_buildings):
 	Mantero Como Silk Mill:
 		Mantero Como Silk Mill
 
-Mantetsu Dalian Railway Hub:
+Mantetsu Dalian Railway Hub (bg_company_buildings):
 	Mantetsu Dalian Railway Hub:
 		Mantetsu Dalian Railway Hub
 
-Maple & Co Tottenham Court Road:
+Maple & Co Tottenham Court Road (bg_company_buildings):
 	Maple Tottenham Court Showroom:
 		Maple Tottenham Court Showroom
 
-Massey-Harris Toronto Implement Works:
+Massey-Harris Toronto Implement Works (bg_company_buildings):
 	Massey-Harris Toronto Implement Works:
 		Massey-Harris Toronto Implement Works
 
-Gavrilović Petrinja Meatworks:
+Gavrilović Petrinja Meatworks (bg_company_buildings):
 	Gavrilović Petrinja Meatworks:
 		Gavrilović Petrinja Meatworks
 
-MÁV Budapest Locomotive Works:
+MÁV Budapest Locomotive Works (bg_company_buildings):
 	MÁV Budapest Locomotive Works:
 		MÁV Budapest Locomotive Works
 
-Mines d'Anzin Colliery:
+Mines d'Anzin Colliery (bg_company_buildings):
 	Anzin Colliery:
 		Anzin Colliery
 
-Misr Mahalla Textile Complex:
+Misr Mahalla Textile Complex (bg_company_buildings):
 	Misr Mahalla Textile Complex:
 		Misr Mahalla Textile Complex
 
-Moscow Irrigation Cotton Depot:
+Moscow Irrigation Cotton Depot (bg_company_buildings):
 	Moscow Irrigation Cotton Depot:
 		Moscow Irrigation Cotton Depot
 
-Mozambique Company Beira Concession:
+Mozambique Company Beira Concession (bg_company_buildings):
 	Mozambique Company Beira Concession:
 		Mozambique Company Beira Concession
 
-Nam Định Textile Plant:
+Nam Định Textile Plant (bg_company_buildings):
 	Nam Định Textile Plant:
 		Nam Định Textile Plant
 
-NIOC Masjed Soleyman Oil Field:
+NIOC Masjed Soleyman Oil Field (bg_company_buildings):
 	NIOC Masjed Soleyman Field:
 		NIOC Masjed Soleyman Field
 
-NedPetroleum Pangkalan Brandan Depot:
+NedPetroleum Pangkalan Brandan Depot (bg_company_buildings):
 	Nederlandse Petroleum Pangkalan Depot:
 		Nederlandse Petroleum Pangkalan Depot
 
-Portalis Lyon Silk House:
+Portalis Lyon Silk House (bg_company_buildings):
 	Portalis Lyon Silk House:
 		Portalis Lyon Silk House
 
-Nokia Cable Works:
+Nokia Cable Works (bg_company_buildings):
 	Nokia Cable Works:
 		Nokia Cable Works
 
-Norsk Hydro Rjukan Plant:
+Norsk Hydro Rjukan Plant (bg_company_buildings):
 	Norsk Hydro Rjukan Plant:
 		Norsk Hydro Rjukan Plant
 
-Alpine Donawitz Steelworks:
+Alpine Donawitz Steelworks (bg_company_buildings):
 	Alpine Donawitz Steelworks:
 		Alpine Donawitz Steelworks
 
-OEVG Steyr Arms Works:
+OEVG Steyr Arms Works (bg_company_buildings):
 	OEWG Steyr Arms Works:
 		OEWG Steyr Arms Works
 
-OCP Khouribga Phosphate Mine:
+OCP Khouribga Phosphate Mine (bg_company_buildings):
 	OCP Khouribga Mine:
 		OCP Khouribga Mine
 
-Ong Lung Sheng Tea Warehouse:
+Ong Lung Sheng Tea Warehouse (bg_company_buildings):
 	Ong Lung Sheng Tea Warehouse:
 		Ong Lung Sheng Tea Warehouse
 
-Opium Ghazipur Factory:
+Opium Ghazipur Factory (bg_company_buildings):
 	Opium Ghazipur Factory:
 		Opium Ghazipur Factory
 
-Orient Express Sirkeci Terminal:
+Orient Express Sirkeci Terminal (bg_company_buildings):
 	Orient Express Sirkeci Terminal:
 		Orient Express Sirkeci Terminal
 
-Oriental Development Kunsan Granary:
+Oriental Development Kunsan Granary (bg_company_buildings):
 	Oriental Development Kunsan Granary:
 		Oriental Development Kunsan Granary
 
-Tobacco Régie Cibali Factory:
+Tobacco Régie Cibali Factory (bg_company_buildings):
 	Tobacco Régie Cibali Factory:
 		Tobacco Régie Cibali Factory
 
-Panama Company Culebra Cut:
+Panama Company Culebra Cut (bg_company_buildings):
 	Panama Company Culebra Cut:
 		Panama Company Culebra Cut
 
-Paradox Kvarnholmen Studio:
+Paradox Kvarnholmen Studio (bg_company_buildings):
 	Paradox Kvarnholmen Studio:
 		Paradox Kvarnholmen Studio
 
-Pedro Domecq Jerez Bodega:
+Pedro Domecq Jerez Bodega (bg_company_buildings):
 	Pedro Domecq Jerez Bodega:
 		Pedro Domecq Jerez Bodega
 
-Pernambuco Recife Cotton Mill:
+Pernambuco Recife Cotton Mill (bg_company_buildings):
 	Pernambuco Recife Cotton Mill:
 		Pernambuco Recife Cotton Mill
 
-Perskhlopok Cotton Combines:
+Perskhlopok Cotton Combines (bg_company_buildings):
 	Perskhlopok Cotton Combines:
 		Perskhlopok Cotton Combines
 
-Persshelk Silk Reeling House:
+Persshelk Silk Reeling House (bg_company_buildings):
 	Persshëlk Silk Reeling House:
 		Persshëlk Silk Reeling House
 
-Peruvian Amazon Iquitos Rubber Depot:
+Peruvian Amazon Iquitos Rubber Depot (bg_company_buildings):
 	Peruvian Amazon Iquitos Depot:
 		Peruvian Amazon Iquitos Depot
 
-Philips Eindhoven NatLab:
+Philips Eindhoven NatLab (bg_company_buildings):
 	Philips Eindhoven NatLab:
 		Philips Eindhoven NatLab
 
-Prussian Railway Directorate:
+Prussian Railway Directorate (bg_company_buildings):
 	Prussian Railway Directorate:
 		Prussian Railway Directorate
 
-Ralli Odessa Grain Elevator:
+Ralli Odessa Grain Elevator (bg_company_buildings):
 	Ralli Odessa Grain Elevator:
 		Ralli Odessa Grain Elevator
 
-Rheinmetall Unterlüss Proving Ground:
+Rheinmetall Unterlüss Proving Ground (bg_company_buildings):
 	Rheinmetall Unterlüß Proving Ground:
 		Rheinmetall Unterlüß Proving Ground
 
-Ricordi Galleria Publishing House:
+Ricordi Galleria Publishing House (bg_company_buildings):
 	Ricordi Galleria Vittorio Emanuele:
 		Ricordi Galleria Vittorio Emanuele
 
-Rodríguez Argüelles Havana Tobacco House:
+Rodríguez Argüelles Havana Tobacco House (bg_company_buildings):
 	Rodríguez Argüelles Havana Tobacco House:
 		Rodríguez Argüelles Havana Tobacco House
 
-Romanian Star Ploiești Refinery:
+Romanian Star Ploiești Refinery (bg_company_buildings):
 	Romanian Star Ploiești Refinery:
 		Romanian Star Ploiești Refinery
 
-Rossi São Leopoldo Arms Factory:
+Rossi São Leopoldo Arms Factory (bg_company_buildings):
 	Rossi São Leopoldo Arms Factory:
 		Rossi São Leopoldo Arms Factory
 
-Russian-American Company Sitka Trading Post:
+Russian-American Company Sitka Trading Post (bg_company_buildings):
 	RAC Sitka Trading Post:
 		RAC Sitka Trading Post
 
-Saint-Étienne Arms Manufactory:
+Saint-Étienne Arms Manufactory (bg_company_buildings):
 	Saint-Étienne Arms Manufactory:
 		Saint-Étienne Arms Manufactory
 
-San Miguel Manila Brewery:
+San Miguel Manila Brewery (bg_company_buildings):
 	San Miguel Manila Brewery:
 		San Miguel Manila Brewery
 
-São Paulo Railway Paranapiacaba Workshop:
+São Paulo Railway Paranapiacaba Workshop (bg_company_buildings):
 	São Paulo Railway Paranapiacaba Workshop:
 		São Paulo Railway Paranapiacaba Workshop
 
-Morozov Orekhovo-Zuevo Mills:
+Morozov Orekhovo-Zuevo Mills (bg_company_buildings):
 	Morozov Orekhovo-Zuevo Mills:
 		Morozov Orekhovo-Zuevo Mills
 
-Schichau-Werke Elbing:
+Schichau-Werke Elbing (bg_company_buildings):
 	Schichau Elbing Shipyard:
 		Schichau Elbing Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-SECN Ferrol Shipyard:
+SECN Ferrol Shipyard (bg_company_buildings):
 	SECN Ferrol Shipyard:
 		SECN Ferrol Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Sherkat-e Shemali Cotton Gin:
+Sherkat-e Shemali Cotton Gin (bg_company_buildings):
 	Sherkat-e Shemali Cotton Gin:
 		Sherkat-e Shemali Cotton Gin
 
-Sherkat-e Eslāmiyyeh Isfahan Mill:
+Sherkat-e Eslāmiyyeh Isfahan Mill (bg_company_buildings):
 	Sherkat-e Eslamiya Isfahan Mill:
 		Sherkat-e Eslamiya Isfahan Mill
 
-Škoda Pilsen Works:
+Škoda Pilsen Works (bg_company_buildings):
 	Škoda Pilsen Works:
 		Škoda Pilsen Works
 
-Mokta el Hadid Beni Saf Mine:
+Mokta el Hadid Beni Saf Mine (bg_company_buildings):
 	Mokta el Hadid Beni Saf Mine:
 		Mokta el Hadid Beni Saf Mine
 
-STF Fiume Torpedo Works:
+STF Fiume Torpedo Works (bg_company_buildings):
 	STF Fiume Torpedo Works:
 		STF Fiume Torpedo Works
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Steel Brothers Syriam Depot:
+Steel Brothers Syriam Depot (bg_company_buildings):
 	Steel Brothers Syriam Depot:
 		Steel Brothers Syriam Depot
 
-STT Hasköy Shipyard:
+STT Hasköy Shipyard (bg_company_buildings):
 	STT Hasköy Shipyard:
 		STT Hasköy Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Sudamericana Valparaíso Pier:
+Sudamericana Valparaíso Pier (bg_company_buildings):
 	Sudamericana Valparaíso Pier:
 		Sudamericana Valparaíso Pier
 
-Suez Company Ismailia Headquarters:
+Suez Company Ismailia Headquarters (bg_company_buildings):
 	Suez Company Ismailia [concept_hq]:
 		Suez Company Ismailia [concept_hq]
 
-Sunhwaguk Seoul Tobacco Factory:
+Sunhwaguk Seoul Tobacco Factory (bg_company_buildings):
 	Sunhwaguk Seoul Tobacco Factory:
 		Sunhwaguk Seoul Tobacco Factory
 
-Tashkent Railroad Workshops:
+Tashkent Railroad Workshops (bg_company_buildings):
 	Tashkent Railroad Workshops:
 		Tashkent Railroad Workshops
 
-Trubia Cannon Foundry:
+Trubia Cannon Foundry (bg_company_buildings):
 	Trubia Cannon Foundry:
 		Trubia Cannon Foundry
 
-Turkish Petroleum Kirkuk Depot:
+Turkish Petroleum Kirkuk Depot (bg_company_buildings):
 	Turkish Petroleum Kirkuk Depot:
 		Turkish Petroleum Kirkuk Depot
 
-União Fabril Barreiro Plant:
+União Fabril Barreiro Plant (bg_company_buildings):
 	União Fabril Barreiro Plant:
 		União Fabril Barreiro Plant
 
-United Fruit Terminal:
+United Fruit Terminal (bg_company_buildings):
 	United Fruit Great White Fleet Terminal:
 		United Fruit Great White Fleet Terminal
 
-United Tobacco Moscow Plant:
+United Tobacco Moscow Plant (bg_company_buildings):
 	United Tobacco Moscow Plant:
 		United Tobacco Moscow Plant
 
-Ursus Warsaw Tractor Plant:
+Ursus Warsaw Tractor Plant (bg_company_buildings):
 	Ursus Warsaw Tractor Plant:
 		Ursus Warsaw Tractor Plant
 
-State Vodka Monopoly Warehouse:
+State Vodka Monopoly Warehouse (bg_company_buildings):
 	Vodka Monopoly Warehouse:
 		Vodka Monopoly Warehouse
 
-Wadia Bombay Dockyard:
+Wadia Bombay Dockyard (bg_company_buildings):
 	Wadia Bombay Dockyard:
 		Wadia Bombay Dockyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-West Ural Oil Depot:
+West Ural Oil Depot (bg_company_buildings):
 	West Ural Oil Depot:
 		West Ural Oil Depot
 
-Cramp Philadelphia Shipyard:
+Cramp Philadelphia Shipyard (bg_company_buildings):
 	Cramp Philadelphia Shipyard:
 		Cramp Philadelphia Shipyard
 		Modern Shipbuilding
 		Advanced Shipbuilding
 
-Sandford Newcastle-Natal Ironworks:
+Sandford Newcastle-Natal Ironworks (bg_company_buildings):
 	Sandford Newcastle Natal Ironworks:
 		Sandford Newcastle Natal Ironworks
 
-Witkowitzer Ostrava Ironworks:
+Witkowitzer Ostrava Ironworks (bg_company_buildings):
 	Witkowitzer Ostrava Ironworks:
 		Witkowitzer Ostrava Ironworks
 
-Ynchausti Manila Trading House:
+Ynchausti Manila Trading House (bg_company_buildings):
 	Ynchausti Manila Trading House:
 		Ynchausti Manila Trading House
 
-Zastava Kragujevac Arsenal:
+Zastava Kragujevac Arsenal (bg_company_buildings):
 	Zastava Kragujevac Arsenal:
 		Zastava Kragujevac Arsenal
 
-Megastructure Consortium HQ:
+Megastructure Consortium HQ (bg_company_buildings):
 	Megastructure Operations:
 		Megastructure Operations
 
-Axiom Space Station:
+Axiom Space Station (bg_company_buildings):
 	Axiom Station Operations:
 		Axiom Station Operations
 
-Neurovault Research Complex:
+Neurovault Research Complex (bg_company_buildings):
 	Neurovault Research:
 		Neurovault Research
 
-Tycho Orbital Works:
+Tycho Orbital Works (bg_company_buildings):
 	Tycho Orbital Construction:
 		Tycho Orbital Construction
 
-Tessier-Ashpool Orbital:
+Tessier-Ashpool Orbital (bg_company_buildings):
 	Tessier-Ashpool Operations:
 		Tessier-Ashpool Operations
 
-Hanka Precision Laboratory:
+Hanka Precision Laboratory (bg_company_buildings):
 	Hanka Cybernetics Division:
 		Hanka Cybernetics Division
 
-Yoyodyne Propulsion Lab:
+Yoyodyne Propulsion Lab (bg_company_buildings):
 	Yoyodyne Propulsion Research:
 		Yoyodyne Propulsion Research
 
-Rekal Memory Center:
+Rekal Memory Center (bg_company_buildings):
 	Rekal Memory Services:
 		Rekal Memory Services
 
-Synthetic Clothes Industries:
+Synthetic Clothes Industries (bg_heavy_industry):
 	Unlocking Technology: Art Silk
 	Synthetic Silk:
 		Rayon
@@ -3179,7 +3219,7 @@ Synthetic Clothes Industries:
 	Maintenance:
 		Maintenance
 
-Synthetic Fuel Works:
+Synthetic Fuel Works (bg_heavy_industry):
 	Unlocking Technology: Bergius Process
 	Synthetic Oil:
 		Synthetic Oil
@@ -3198,7 +3238,7 @@ Synthetic Fuel Works:
 	Maintenance:
 		Maintenance
 
-Synthetic Rubber Works:
+Synthetic Rubber Works (bg_heavy_industry):
 	Unlocking Technology: Isoprene
 	Synthetic Rubber:
 		Polyisoprene Rubber
@@ -3223,7 +3263,7 @@ Synthetic Rubber Works:
 	Maintenance:
 		Maintenance
 
-Pharmaceutical Industries:
+Pharmaceutical Industries (bg_biotechnology):
 	Unlocking Technology: Modern Pharmaceuticals
 	Pharmaceuticals:
 		Pharmaceuticals
@@ -3240,7 +3280,7 @@ Pharmaceutical Industries:
 	Maintenance:
 		Maintenance
 
-Carbon Conversion Works:
+Carbon Conversion Works (bg_heavy_industry):
 	Unlocking Technology: Genetic Engineering
 	Synthetic Coal:
 		Synthetic Coal
@@ -3257,7 +3297,7 @@ Carbon Conversion Works:
 	Maintenance:
 		Maintenance
 
-Phenolic Resin Panels Plant:
+Phenolic Resin Panels Plant (bg_heavy_industry):
 	Unlocking Technology: Biotechnology
 	Synthetic Wood:
 		Synthetic Wood
@@ -3274,7 +3314,7 @@ Phenolic Resin Panels Plant:
 	Maintenance:
 		Maintenance
 
-Artificial Sweeteners Plant:
+Artificial Sweeteners Plant (bg_heavy_industry):
 	Unlocking Technology: Green Revolution
 	Synthetic Sugar:
 		High-Fructose Syrup
@@ -3297,7 +3337,7 @@ Artificial Sweeteners Plant:
 	Maintenance:
 		Maintenance
 
-Cultured Meat Plant:
+Cultured Meat Plant (bg_biotechnology):
 	Unlocking Technology: Lab-Grown Food
 	Synthetic Meat:
 		Synthetic Meat
@@ -3314,7 +3354,7 @@ Cultured Meat Plant:
 	Maintenance:
 		Maintenance
 
-Cultured Produce Facility:
+Cultured Produce Facility (bg_biotechnology):
 	Unlocking Technology: Lab-Grown Food
 	Synthetic Fruit:
 		Synthetic Fruit
@@ -3331,7 +3371,7 @@ Cultured Produce Facility:
 	Maintenance:
 		Maintenance
 
-Beverage Concentrates Plant:
+Beverage Concentrates Plant (bg_heavy_industry):
 	Unlocking Technology: Biotechnology
 	Synthetic Drinks:
 		Synthetic Drinks
@@ -3348,7 +3388,7 @@ Beverage Concentrates Plant:
 	Maintenance:
 		Maintenance
 
-Integrated Biorefinery:
+Integrated Biorefinery (bg_biotechnology):
 	Unlocking Technology: Genetic Engineering
 	Synthetic Biomass:
 		Synthetic Biomass
@@ -3365,7 +3405,7 @@ Integrated Biorefinery:
 	Maintenance:
 		Maintenance
 
-Wireless Telecommunications Industries:
+Wireless Telecommunications Industries (bg_heavy_industry):
 	Unlocking Technology: Radio
 	Radios:
 		Radio Production
@@ -3385,7 +3425,7 @@ Wireless Telecommunications Industries:
 	Maintenance:
 		Maintenance
 
-Consumer Appliance Industries:
+Consumer Appliance Industries (bg_high_tech):
 	Unlocking Technology: Personal Appliances
 	Consumer Appliances:
 		Consumer Appliances Production
@@ -3412,7 +3452,7 @@ Consumer Appliance Industries:
 	Maintenance:
 		Maintenance
 
-Airport:
+Airport (bg_private_infrastructure):
 	Unlocking Technology: Commercial Aviation
 	Airport:
 		Airport
@@ -3422,7 +3462,7 @@ Airport:
 	Maintenance:
 		Maintenance
 
-Highway:
+Highway (bg_private_infrastructure):
 	Unlocking Technology: Paved Roads
 	Highway:
 		Civil Highway
@@ -3435,7 +3475,7 @@ Highway:
 	Maintenance:
 		Maintenance
 
-Software Industry:
+Software Industry (bg_high_tech):
 	Unlocking Technology: Computer Networks
 	Software Industry:
 		Punchcards
@@ -3452,7 +3492,7 @@ Software Industry:
 	Maintenance:
 		Maintenance
 
-Network Infrastructure:
+Network Infrastructure (bg_private_infrastructure):
 	Unlocking Technology: Computer Networks
 	Base Building Network:
 		Local Network
@@ -3468,7 +3508,7 @@ Network Infrastructure:
 	Maintenance:
 		Maintenance
 
-Hydro Plant:
+Hydro Plant (bg_power):
 	Unlocking Technology: Public Works Programs
 	Hydro Power:
 		Hydro Power
@@ -3480,7 +3520,7 @@ Hydro Plant:
 	Maintenance:
 		Maintenance
 
-Nuclear Plant:
+Nuclear Plant (bg_power):
 	Unlocking Technology: Nuclear Energy
 	Nuclear Power:
 		Nuclear Power
@@ -3492,7 +3532,7 @@ Nuclear Plant:
 	Maintenance:
 		Maintenance
 
-Fusion Plant:
+Fusion Plant (bg_power):
 	Unlocking Technology: Fusion Power
 	Fusion Power:
 		Tokamak Fusion Power
@@ -3506,7 +3546,7 @@ Fusion Plant:
 	Maintenance:
 		Maintenance
 
-Renewable Energy Plant:
+Renewable Energy Plant (bg_power):
 	Unlocking Technology: Clean Energy Technologies
 	Renewable Power:
 		Renewable Power
@@ -3519,7 +3559,7 @@ Renewable Energy Plant:
 	Maintenance:
 		Maintenance
 
-Electronic Components and Semiconductor Industry:
+Electronic Components and Semiconductor Industry (bg_high_tech):
 	Unlocking Technology: Transistor Technology
 	Electronic Components:
 		Transistors
@@ -3540,7 +3580,7 @@ Electronic Components and Semiconductor Industry:
 	Maintenance:
 		Maintenance
 
-Robotics Industry:
+Robotics Industry (bg_high_tech):
 	Unlocking Technology: Industrial Robotics
 	Base Building Robotics:
 		Robots
@@ -3558,7 +3598,7 @@ Robotics Industry:
 	Maintenance:
 		Maintenance
 
-Advanced Material Fabricator:
+Advanced Material Fabricator (bg_high_tech):
 	Unlocking Technology: Modern Material Science
 	Advanced Material Fabricator:
 		Basic AM Fabrication
@@ -3575,7 +3615,7 @@ Advanced Material Fabricator:
 	Maintenance:
 		Maintenance
 
-Aerospace Industry:
+Aerospace Industry (bg_high_tech):
 	Unlocking Technology: Military Aviation
 	Aeroplanes:
 		Aeroplane Production
@@ -3599,7 +3639,7 @@ Aerospace Industry:
 	Maintenance:
 		Maintenance
 
-Space Elevator Construction Site:
+Space Elevator Construction Site (bg_government):
 	Unlocking Technology: Space Elevator
 	Space Elevator Construction Site:
 		Space Elevator Construction (Paused)
@@ -3607,11 +3647,11 @@ Space Elevator Construction Site:
 		Space Elevator Construction (2 years)
 		Space Elevator Construction (1 year)
 
-Space Elevator:
+Space Elevator (bg_private_infrastructure):
 	Space Elevator:
 		Space Elevator
 
-Extraplanetary Base:
+Extraplanetary Base (bg_space):
 	Unlocking Technology: Asteroid Mining
 	Base Building Space Mine:
 		Asteroid Mine
@@ -3620,7 +3660,7 @@ Extraplanetary Base:
 	Maintenance:
 		Maintenance
 
-Deep-Sea Mine:
+Deep-Sea Mine (bg_space):
 	Unlocking Technology: Abyssal Plain Mining
 	Deep-Sea Mine:
 		Deep-Sea Mining
@@ -3629,7 +3669,7 @@ Deep-Sea Mine:
 	Maintenance:
 		Maintenance
 
-Space Program:
+Space Program (bg_monuments):
 	Unlocking Technology: Guided Missiles
 	Space Program:
 		Earth Orbit
@@ -3639,7 +3679,7 @@ Space Program:
 		Deep Space Exploration
 		Interstellar Mission
 
-National Park:
+National Park (bg_parks):
 	National Park:
 		National Park
 			Monthly Pollution: -500
@@ -3648,7 +3688,8 @@ National Park:
 		National Wildlife Refuge
 			Monthly Pollution: -500
 
-Tourism Industry:
+Tourism Industry (bg_arts):
+	A collection of hotels, resorts, and services that cater to visitors, generating [concept_tourism_system] revenue from the state's natural and cultural appeal.
 	Unlocking Technology: Romanticism
 	Tourism:
 		Tourism
@@ -3659,7 +3700,7 @@ Tourism Industry:
 	Maintenance:
 		Maintenance
 
-State Youth Centers:
+State Youth Centers (bg_government):
 	Philosophy:
 		Voluntary Daycare
 		Communal Child-Rearing
@@ -3674,7 +3715,7 @@ State Youth Centers:
 	Maintenance:
 		Maintenance
 
-Manganese Mine:
+Manganese Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Tools
 	Mining Equipment:
 		Picks and Shovels
@@ -3728,7 +3769,7 @@ Manganese Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Chromium Mine:
+Chromium Mine (bg_discoverable_mining):
 	Unlocking Technology: Stainless Steel Mass Production
 	Mining Equipment:
 		Picks and Shovels
@@ -3782,7 +3823,7 @@ Chromium Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Specialty Alloy Metal Mine:
+Specialty Alloy Metal Mine (bg_discoverable_mining):
 	Unlocking Technology: Jet Engine Technology
 	Mining Equipment:
 		Picks and Shovels
@@ -3836,7 +3877,7 @@ Specialty Alloy Metal Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Copper Mine:
+Copper Mine (bg_discoverable_mining):
 	Unlocking Technology: Rural Electrification
 	Mining Equipment:
 		Picks and Shovels
@@ -3890,7 +3931,7 @@ Copper Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Bauxite Mine:
+Bauxite Mine (bg_discoverable_mining):
 	Unlocking Technology: Aluminum Mass Production
 	Mining Equipment:
 		Picks and Shovels
@@ -3944,7 +3985,7 @@ Bauxite Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Precious and Minor Base Metal Mine:
+Precious and Minor Base Metal Mine (bg_discoverable_mining):
 	Unlocking Technology: Advanced Automotive Production Techniques
 	Mining Equipment:
 		Picks and Shovels
@@ -3998,7 +4039,7 @@ Precious and Minor Base Metal Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Nickel and Cobalt Mine:
+Nickel and Cobalt Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Materials
 	Mining Equipment:
 		Condensing Engine Pump
@@ -4047,7 +4088,7 @@ Nickel and Cobalt Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Lithium Mine:
+Lithium Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Chemical Processes
 	Mining Equipment:
 		Condensing Engine Pump
@@ -4096,7 +4137,7 @@ Lithium Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Rare Earth Metals Mine:
+Rare Earth Metals Mine (bg_discoverable_mining):
 	Unlocking Technology: Laser Technology
 	Mining Equipment:
 		Condensing Engine Pump
@@ -4145,7 +4186,7 @@ Rare Earth Metals Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Platinum Group Metals Mine:
+Platinum Group Metals Mine (bg_discoverable_mining):
 	Unlocking Technology: Pollution Control
 	Mining Equipment:
 		Condensing Engine Pump
@@ -4194,7 +4235,7 @@ Platinum Group Metals Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Graphite Mine:
+Graphite Mine (bg_discoverable_mining):
 	Unlocking Technology: Nuclear Energy
 	Mining Equipment:
 		Picks and Shovels
@@ -4248,7 +4289,7 @@ Graphite Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Phosphate Mine:
+Phosphate Mine (bg_discoverable_mining):
 	Unlocking Technology: Green Revolution
 	Mining Equipment:
 		Picks and Shovels
@@ -4302,7 +4343,7 @@ Phosphate Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Potash Mine:
+Potash Mine (bg_discoverable_mining):
 	Unlocking Technology: Advanced Agricultural Statistics
 	Mining Equipment:
 		Picks and Shovels
@@ -4357,7 +4398,7 @@ Potash Mine:
 			Monthly Pollution: -10
 
 0 "Industrial Mineral and Salt Mine
-:
+ (bg_discoverable_mining):
 	Unlocking Technology: Modern Skyscrapers
 	Mining Equipment:
 		Picks and Shovels
@@ -4411,7 +4452,7 @@ Potash Mine:
 		Tailings Treatment
 			Monthly Pollution: -10
 
-Solar Collector Construction Site:
+Solar Collector Construction Site (bg_government):
 	Unlocking Technology: Space-Based Solar Power
 	Solar Collector Construction:
 		Solar Collector Construction (Paused)
@@ -4419,16 +4460,16 @@ Solar Collector Construction Site:
 		Solar Collector Construction (2 years)
 		Solar Collector Construction (1 years)
 
-Orbital Solar Collector:
+Orbital Solar Collector (bg_government):
 	Solar Collector:
 		Solar Collector Maintenance
 
-Solar Power Receiver:
+Solar Power Receiver (bg_megastructure_capped_private):
 	Unlocking Technology: Space-Based Solar Power
 	Solar Power Receiver:
 		Solar Power Receiver
 
-Orbital Battlestation Construction Site:
+Orbital Battlestation Construction Site (bg_government):
 	Unlocking Technology: Orbital Weapon Platforms
 	Orbital Battlestation Construction:
 		Orbital Battlestation Construction (Paused)
@@ -4436,11 +4477,11 @@ Orbital Battlestation Construction Site:
 		Orbital Battlestation Construction (2 years)
 		Orbital Battlestation Construction (1 year)
 
-Orbital Battlestation:
+Orbital Battlestation (bg_government):
 	Orbital Battlestation:
 		Orbital Battlestation
 
-Mind Upload Nexus Construction Site:
+Mind Upload Nexus Construction Site (bg_government):
 	Unlocking Technology: Mind Backups
 	Mind Upload Nexus Construction:
 		Mind Upload Nexus Construction (Paused)
@@ -4448,11 +4489,11 @@ Mind Upload Nexus Construction Site:
 		Mind Upload Nexus Construction (2 years)
 		Mind Upload Nexus Construction (1 year)
 
-Mind Upload Nexus:
+Mind Upload Nexus (bg_private_infrastructure):
 	Mind Upload Nexus:
 		Mind Upload Nexus
 
-[concept_antimatter_facility] Construction Site:
+[concept_antimatter_facility] Construction Site (bg_government):
 	Unlocking Technology: Antimatter Production
 	[concept_antimatter_facility] Construction:
 		[concept_antimatter_facility] Construction (Paused)
@@ -4460,21 +4501,21 @@ Mind Upload Nexus:
 		[concept_antimatter_facility] Construction (2 years)
 		[concept_antimatter_facility] Construction (1 year)
 
-Antimatter Containment Facility:
+Antimatter Containment Facility (bg_government):
 	Antimatter Containment Facility:
 		Antimatter Containment Facility
 
-Antimatter Engine:
+Antimatter Engine (bg_megastructure_capped_private):
 	Unlocking Technology: Antimatter Production
 	Antimatter Engine:
 		Antimatter Engine
 
-Antimatter Warhead Plant:
+Antimatter Warhead Plant (bg_government):
 	Unlocking Technology: Antimatter Production
 	Antimatter Warhead Plant:
 		Antimatter Warhead Plant
 
-Nanofabrication Center Construction Site:
+Nanofabrication Center Construction Site (bg_government):
 	Unlocking Technology: Molecular Assemblers
 	Nanofabrication Center Construction:
 		Nanofabrication Center Construction (Paused)
@@ -4482,11 +4523,11 @@ Nanofabrication Center Construction Site:
 		Nanofabrication Center Construction (2 years)
 		Nanofabrication Center Construction (1 year)
 
-Nanofabrication Center:
+Nanofabrication Center (bg_private_infrastructure):
 	Nanofabrication Center:
 		Nanofabrication Center
 
-Consciousness Network Construction Site:
+Consciousness Network Construction Site (bg_government):
 	Unlocking Technology: Telepathic Communities
 	Consciousness Network Construction:
 		Consciousness Network Construction (Paused)
@@ -4494,14 +4535,15 @@ Consciousness Network Construction Site:
 		Consciousness Network Construction (2 years)
 		Consciousness Network Construction (1 year)
 
-Consciousness Network:
+Consciousness Network (bg_government):
 	Consciousness Network:
 		Consciousness Network
 	Network Mode:
 		Open Network
 		Social Control Network
 
-Military Base:
+Military Base (bg_government):
+	A permanent military installation providing state-level [concept_infrastructure], [concept_blockade] resistance, and [concept_fortification_system] defensive bonuses. Expanding the base and upgrading its [Concept('concept_production_method', 'production methods')] increases [concept_fortification_level], unlocking progressively stronger [Concept('concept_battle_condition', 'battle conditions')] for defenders.
 	Unlocking Technology: Trench Works
 	Military Base:
 		Military Base Operations
@@ -4514,15 +4556,15 @@ Military Base:
 		Territorial Defense
 		Logistics Hub
 
-Construction Site:
+Construction Site (te_construction_market_bg):
 	Construction Site:
 		Basic Construction Market
 
-United Nations Headquarters:
+United Nations Headquarters (bg_bureaucracy):
 	International Diplomacy:
 		Host Nation
 
-[concept_power_bloc] Headquarters:
+[concept_power_bloc] Headquarters (bg_bureaucracy):
 	Unlocking Technology: Intergovernmental Organizations
 	[concept_power_bloc] Headquarters:
 		Seat of the Empire
@@ -4533,191 +4575,191 @@ United Nations Headquarters:
 		World Cultural Center
 		Palace of Nations
 
-Golden Gate Bridge:
+Golden Gate Bridge (bg_monuments):
 	Unlocking Technology: Marketing Research
 	Golden Gate Bridge:
 		Golden Gate Bridge
 
-Empire State Building:
+Empire State Building (bg_monuments):
 	Unlocking Technology: Modern Skyscrapers
 	Empire State Building:
 		Empire State Building
 
-Sydney Opera House:
+Sydney Opera House (bg_monuments):
 	Unlocking Technology: Art Deco Architecture
 	Sydney Opera House:
 		Sydney Opera House
 
-CN Tower:
+CN Tower (bg_monuments):
 	Unlocking Technology: Modern Skyscrapers
 	CN Tower:
 		CN Tower
 
-Hoover Dam:
+Hoover Dam (bg_monuments):
 	Unlocking Technology: Public Works Programs
 	Hoover Dam:
 		Hoover Dam
 
-The Pentagon:
+The Pentagon (bg_monuments):
 	Unlocking Technology: Combined Arms
 	The Pentagon:
 		The Pentagon
 
-Kennedy Space Center:
+Kennedy Space Center (bg_monuments):
 	Unlocking Technology: Space Exploration
 	Kennedy Space Center:
 		Kennedy Space Center
 
-Aswan High Dam:
+Aswan High Dam (bg_monuments):
 	Unlocking Technology: Nuclear Energy
 	Aswan High Dam:
 		Aswan High Dam
 
-Tokyo Tower:
+Tokyo Tower (bg_monuments):
 	Unlocking Technology: Television Broadcasting
 	Tokyo Tower:
 		Tokyo Tower
 
-Moscow State University:
+Moscow State University (bg_monuments):
 	Unlocking Technology: Mainframe Computers
 	Moscow State University:
 		Moscow State University
 
-Berlin TV Tower:
+Berlin TV Tower (bg_monuments):
 	Unlocking Technology: Transistor Technology
 	Berlin TV Tower:
 		Berlin TV Tower
 
-Azadi Tower:
+Azadi Tower (bg_monuments):
 	Unlocking Technology: Decolonization
 	Azadi Tower:
 		Azadi Tower
 
-Kenyatta International Convention Centre:
+Kenyatta International Convention Centre (bg_monuments):
 	Unlocking Technology: Decolonization
 	Kenyatta ICC:
 		Kenyatta ICC
 
-Burj Khalifa:
+Burj Khalifa (bg_monuments):
 	Unlocking Technology: Computer-Aided Design
 	Burj Khalifa:
 		Burj Khalifa
 
-World Trade Center:
+World Trade Center (bg_monuments):
 	Unlocking Technology: Containerization
 	World Trade Center:
 		World Trade Center
 
-Lotus Temple:
+Lotus Temple (bg_monuments):
 	Unlocking Technology: Pop Culture
 	Lotus Temple:
 		Lotus Temple
 
-Itaipu Dam:
+Itaipu Dam (bg_monuments):
 	Unlocking Technology: Industrial Robotics
 	Itaipu Dam:
 		Itaipu Dam
 
-Petronas Towers:
+Petronas Towers (bg_monuments):
 	Unlocking Technology: Cellular Networks
 	Petronas Towers:
 		Petronas Towers
 
-Basilica of Our Lady of Peace:
+Basilica of Our Lady of Peace (bg_monuments):
 	Unlocking Technology: Pop Culture
 	Basilica of Our Lady of Peace:
 		Basilica of Our Lady of Peace
 
-Three Gorges Dam:
+Three Gorges Dam (bg_monuments):
 	Unlocking Technology: Clean Energy Technologies
 	Three Gorges Dam:
 		Three Gorges Dam
 
-Channel Tunnel:
+Channel Tunnel (bg_monuments):
 	Unlocking Technology: Globalization
 	Channel Tunnel:
 		Channel Tunnel
 
-Taipei 101:
+Taipei 101 (bg_monuments):
 	Unlocking Technology: Digital Telecommunications
 	Taipei 101:
 		Taipei 101
 
-Lotte World Tower:
+Lotte World Tower (bg_monuments):
 	Unlocking Technology: World Wide Web
 	Lotte World Tower:
 		Lotte World Tower
 
-Gardens by the Bay:
+Gardens by the Bay (bg_monuments):
 	Unlocking Technology: Clean Energy Technologies
 	Gardens by the Bay:
 		Gardens by the Bay
 
-Abraj Al-Bait Clock Tower:
+Abraj Al-Bait Clock Tower (bg_monuments):
 	Unlocking Technology: Globalization
 	Abraj Al-Bait Clock Tower:
 		Abraj Al-Bait Clock Tower
 
-Shanghai Tower:
+Shanghai Tower (bg_monuments):
 	Unlocking Technology: Advanced Structural Engineering
 	Shanghai Tower:
 		Shanghai Tower
 
-FAST Telescope:
+FAST Telescope (bg_monuments):
 	Unlocking Technology: Machine Learning
 	FAST Telescope:
 		FAST Telescope
 
-Statue of Unity:
+Statue of Unity (bg_monuments):
 	Unlocking Technology: Advanced Structural Engineering
 	Statue of Unity:
 		Statue of Unity
 
-Golden Bridge:
+Golden Bridge (bg_monuments):
 	Unlocking Technology: Advanced Structural Engineering
 	Golden Bridge:
 		Golden Bridge
 
-Large Hadron Collider:
+Large Hadron Collider (bg_monuments):
 	Unlocking Technology: World Wide Web
 	Large Hadron Collider:
 		Large Hadron Collider
 
-International Space Station:
+International Space Station (bg_monuments):
 	Unlocking Technology: Satellite Communications
 	International Space Station:
 		International Space Station
 
-ITER Fusion Reactor:
+ITER Fusion Reactor (bg_monuments):
 	Unlocking Technology: Fusion Power
 	ITER Fusion Reactor:
 		ITER Fusion Reactor
 
-Svalbard Global Seed Vault:
+Svalbard Global Seed Vault (bg_monuments):
 	Unlocking Technology: Biotechnology
 	Svalbard Global Seed Vault:
 		Svalbard Global Seed Vault
 
-LIGO Observatory:
+LIGO Observatory (bg_monuments):
 	Unlocking Technology: Fiber Optics
 	LIGO Observatory:
 		LIGO Observatory
 
-Continental Union Headquarters:
+Continental Union Headquarters (bg_monuments):
 	Unlocking Technology: Globalization
 	Continental Union Headquarters:
 		Continental Union Headquarters
 
-Peace Palace:
+Peace Palace (bg_monuments):
 	Unlocking Technology: Intergovernmental Organizations
 	Peace Palace:
 		Peace Palace
 
-Palais des Nations:
+Palais des Nations (bg_monuments):
 	Palais des Nations:
 		Palais des Nations
 
-Resettlement Camp:
+Resettlement Camp (bg_resettlement):
 	Unlocking Technology: Nationalism
 	Resettlement Method:
 		Homesteading Program
@@ -4726,7 +4768,7 @@ Resettlement Camp:
 		Penal Transportation
 		Incentivized Relocation
 
-Resettlement Colony:
+Resettlement Colony (bg_resettlement):
 	Unlocking Technology: Nationalism
 	Settlement Type:
 		Settler Homesteads

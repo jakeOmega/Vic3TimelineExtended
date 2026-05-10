@@ -516,7 +516,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.46
 - **Title:** The Northern Pacific Corner
-- **Description:** Two railway titans are each secretly buying every share of the Northern Pacific Railway they can find, trying to seize outright control. As the share price leaps from 150 to nearly 1,000 in days, short-sellers across the exchange are forced to dump every other [concept_holding] they own to raise the cash to cover. The rest of [ROOT.GetCountry.GetName]'s market is bleeding.
+- **Description:** Two railway titans are each secretly buying every share of the Northern Pacific Railway they can find, trying to seize outright control. As the share price leaps from 150 to nearly 1,000 in days, short-sellers across the exchange are forced to dump every other holding they own to raise the cash to cover. The rest of [ROOT.GetCountry.GetName]'s market is bleeding.
 - **Flavor:** \"Gentlemen, there is only one question in the entire stock exchange this morning — will you please tell me who in the name of creation holds all the Northern Pacific?\"\n\n— Broker on the trading floor
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
@@ -2459,7 +2459,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### social_tensions_events.5
 - **Title:** Police Brutality Sparks Outrage
 - **Description:** (no localization)
-- **Flavor:** The mother stood in the police station lobby, very still, very composed, [concept_holding] a photograph.\n\n'He was walking home,' she said to no one in particular. 'From his job. That he went to every day.'\n\nThe desk sergeant looked at his hands. 'Ma'am, there's a procedure -'\n\n'Yes. There is always a procedure. The procedure is: my son is dead, and the man who killed him is on paid leave. That is the procedure.'
+- **Flavor:** The mother stood in the police station lobby, very still, very composed, holding a photograph.\n\n'He was walking home,' she said to no one in particular. 'From his job. That he went to every day.'\n\nThe desk sergeant looked at his hands. 'Ma'am, there's a procedure -'\n\n'Yes. There is always a procedure. The procedure is: my son is dead, and the man who killed him is on paid leave. That is the procedure.'
 - **Current image:** gfx/event_pictures/police_brutality_protest.dds
 
 ### social_tensions_events.6

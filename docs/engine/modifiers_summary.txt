@@ -4224,6 +4224,13 @@ country|country_baluchi_cultural_acceptance_add|A bonus or penalty to a specific
 country|country_bambara_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_banking_crash_chance_mult|
 country|country_banking_intervention_max_add|
+country|country_banking_lock_asset_relief_bool|
+country|country_banking_lock_capital_controls_bool|
+country|country_banking_lock_directed_credit_bool|
+country|country_banking_lock_export_credit_bool|
+country|country_banking_lock_fx_devaluation_bool|
+country|country_banking_lock_fx_swap_lines_bool|
+country|country_banking_lock_open_market_ops_bool|
 country|country_banking_random_momentum_mult|
 country|country_bashkir_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_basque_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]

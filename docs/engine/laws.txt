@@ -1,331 +1,602 @@
 Army Model:
-	Peasant Levies
-	Warrior Caste (Variant of Peasant Levies)
+	Peasant Levies [progressiveness=-50]
+		The army's main force comes from conscripted infantry with zero to basic training.
+	Warrior Caste [progressiveness=-50] (Variant of Peasant Levies)
+		Bearing arms is a privilege limited to an elite warrior strata. Commoners are barred from serving in combatant roles.
 	Professional Army - Unlocking Technology: Military Drill
+		The army consists of well-trained, professional regulars.
 	National Militia - Unlocking Technology: Mandatory Service
-	Mass Conscription - Unlocking Technology: Enlistment Offices
-	Private Military Contractors - Unlocking Technology: Guided Missiles
+		The standing army is small, but local militias can be activated to defend their homes.
+	Mass Conscription [progressiveness=50] - Unlocking Technology: Enlistment Offices
+		Large numbers of infantry conscripts can be activated as needed to supplement the professional army.
+	Private Military Contractors [progressiveness=25] - Unlocking Technology: Guided Missiles
+		The state contracts private firms to wage its wars. Operations abroad gain plausible deniability and the home front tolerates protracted conflicts, but contractors are expensive, line-combat performance suffers, and reliance on mercenaries draws international suspicion.
 Bureaucracy:
-	Hereditary Bureaucrats
-	Crownland Diets (Variant of Hereditary Bureaucrats)
+	Hereditary Bureaucrats [progressiveness=-50]
+		Bureaucrats hold their position through traditional inheritance, passing on the responsibilities to their children.
+	Crownland Diets [progressiveness=-50] (Variant of Hereditary Bureaucrats)
+		Local governance is carried out by traditional assemblies elected from the ranks of the regional nobility.
 	Appointed Bureaucrats
-	Elected Bureaucrats
+		Bureaucrats are appointed by rulers to serve the country's best interests in exchange for high wages.
+	Elected Bureaucrats [progressiveness=50]
+		Local governors are elected by their constituents, decentralizing power while making citizens easier to manage.
 Caste Hegemony:
-	Caste System Enforced
-	Caste System Codified
+	Caste System Enforced [progressiveness=-75]
+		Caste hierarchy is legally enforced and prevents upward socioeconomic mobility.
+	Caste System Codified [progressiveness=-25]
+		Caste hierarchy is recognized and used to restrict upward socioeconomic mobility.
 	Caste Not Enforced
-	Affirmative Action
+		Socioeconomic mobility on the basis of caste is not legally restricted but discrimination may still persist.
+	Affirmative Action [progressiveness=50]
+		Active measures to create an equitable socioeconomic situation, prioritizing previously marginalized groups.
 Edo Status System:
-	Rigid Status Order
-	Loosened Status Order
-	Lax Status Order
+	Rigid Status Order [progressiveness=-75]
+		Everything from legal and professional opportunities to the number of residential gates one's status affords them is strictly regulated and enforced by the state. Any breach of the protocol is heavily sanctioned, and townsmen and peasants have no way to formally enter the ranks of the samurai.
+	Loosened Status Order [progressiveness=-50]
+		Legal and sumptuary laws have been relaxed, and commoners are afforded increasing influence and status in society. Wealthy townsmen or peasants may become gokenin—a low-ranking samurai—through purchase.
+	Lax Status Order [progressiveness=-25]
+		Positions and roles previously exclusive to samurai are opened up for commoners, and enforcement of remaining sumptuary and professional limitations is only enforced selectively, usually limited to the most serious offenses alone.
 Children's Rights:
-	Child Labor Allowed
+	Child Labor Allowed [progressiveness=-50]
+		No legal restrictions are placed on where children may work.
 	Restricted Child Labor - Unlocking Technology: Labor Movement
-	Compulsory Primary School - Unlocking Technology: Human Rights
+		No child is permitted on the factory floor.
+	Compulsory Primary School [progressiveness=50] - Unlocking Technology: Human Rights
+		All children must attend several years of primary school during which they're prohibited from working.
 Church and State:
-	State Religion
-	Millet System (Variant of State Religion)
-	People of the Book (Variant of State Religion)
+	State Religion [progressiveness=-50]
+		The church is an official organ of the state. All minority religions are discriminated against.
+	Millet System [progressiveness=-50] (Variant of State Religion)
+		The state upholds Sunni Islam as the official religion. Adherents of other Abrahamic religions are grouped under confessional communities, exempting them from conscription and granting them legal autonomy in return for paying a religious tax.
+	People of the Book [progressiveness=-50] (Variant of State Religion)
+		The state adheres to the principles of Islamic law. Adherents of other Abrahamic religions are recognized as #italic Dhimmi#!, exempting them from conscription and granting them legal autonomy in return for paying a religious tax.
 	Freedom of Conscience - Unlocking Technology: Rationalism
-	Total Separation - Unlocking Technology: Empiricism
-	State Atheism - Unlocking Technology: Empiricism
+		The state has an official state religion but the people may choose what to believe. Only particularly exotic religions are discriminated against.
+	Total Separation [progressiveness=50] - Unlocking Technology: Empiricism
+		No church or faith may interfere in government functions. No religion may be discriminated against.
+	State Atheism [progressiveness=100] - Unlocking Technology: Empiricism
+		Religion is banned from public life, and the state advocates anti-religious policies. All religions face discrimination, and the clergy are allowed little to no role in society.
 Citizenship:
-	Sovereign Subjecthood
-	Ancestral Citizenship - Unlocking Technology: Nationalism
-	Cultural Citizenship
+	Sovereign Subjecthood [progressiveness=-25]
+		The state defines its people foremostly as subjects of a sovereign. Legal identity is tied to local tradition and community loyalty rather than a centralized national status.
+	Ancestral Citizenship [progressiveness=-75] - Unlocking Technology: Nationalism
+		Citizenship is an immutable trait derived from the 'Right of Blood.' Only those of the core ancestral lineage are recognized as legal members of the nation.
+	Cultural Citizenship [progressiveness=-25]
+		Membership in the nation is determined by adherence to its primary spirit. Citizenship is reserved for those who share the language, traditions, and heritage of the dominant culture.
 	Racialized Citizenship
-	Assimilatory Citizenship
-	Universal Citizenship - Unlocking Technology: Human Rights
+		Citizenship is stratified based on perceived racial or ancestral proximity. Preference is given to specific lineages regardless of their cultural or linguistic adoption.
+	Assimilatory Citizenship [progressiveness=25]
+		The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.
+	Universal Citizenship [progressiveness=75] - Unlocking Technology: Human Rights
+		Citizenship is a matter of residency and the 'Right of Soil.' Every resident born within the borders is a full member of the nation, regardless of heritage or creed.
 Colonization:
 	No Colonial Affairs
+		The country does not engage in any formal type of colonization and cannot establish colonies.
 	Frontier Colonization - Unlocking Technology: Colonization
+		The wild frontiers on our borders are ripe for settlement if they can first be pacified and tamed.
 	Colonial Resettlement - Unlocking Technology: Colonization
-	Colonial Exploitation - Unlocking Technology: Colonization
-	Neocolonialism - Unlocking Technology: Decolonization
+		Colonies are established to provide land to settlers from the country's incorporated states.
+	Colonial Exploitation [progressiveness=-25] - Unlocking Technology: Colonization
+		Colonies are established to exploit the area for their natural resources and cheap labor.
+	Neocolonialism [progressiveness=-10] - Unlocking Technology: Decolonization
+		A [concept_decolonization_system]-era form of indirect control and exploitation where powerful nations or corporations exert influence over less developed countries, often through economic, political, or cultural means.
 Distribution of Power:
-	Autocracy
-	Bakufu (Variant of Autocracy)
-	Neo-Absolutism (Variant of Autocracy)
-	Technocracy - Unlocking Technology: Central Archives
-	Oligarchy
-	Organic Regulation (Variant of Oligarchy)
-	Elder Council
-	Landed Voting - Unlocking Technology: Democracy
+	Autocracy [progressiveness=-100]
+		The Head of State's power is absolute and they are held accountable to no earthly power.
+	Bakufu [progressiveness=-100] (Variant of Autocracy)
+		Absolute power is vested in the Shōgun, who officially serves in the name of the Emperor.
+	Neo-Absolutism [progressiveness=-100] (Variant of Autocracy)
+		The Head of State rules as an enlightened autocrat, with their rule facilitated by a modern, centralized state apparatus.
+	Technocracy [progressiveness=-50] - Unlocking Technology: Central Archives
+		The nation is governed by an unelected council of men of reason and ability.
+	Oligarchy [progressiveness=-50]
+		The Head of State shares power and responsibility with a small group of powerful, unelected individuals.
+	Organic Regulation [progressiveness=-50] (Variant of Oligarchy)
+		This country's government is constituted through a set of
+	Elder Council [progressiveness=-25]
+		The most venerated men have a say in the nation's governance.
+	Landed Voting [progressiveness=-25] - Unlocking Technology: Democracy
+		Those who own land or capital property are given a vote.
 	Wealth Voting - Unlocking Technology: Democracy
-	Census Suffrage - Unlocking Technology: Democracy
-	Universal Suffrage - Unlocking Technology: Egalitarianism
-	Anarchy - Unlocking Technology: Anarchism
-	Single-Party State - Unlocking Technology: Political Agitation
+		Wealthy citizens are granted a vote. Men of more wealth are granted more votes.
+	Census Suffrage [progressiveness=50] - Unlocking Technology: Democracy
+		Literate men of particular status is given a vote.
+	Universal Suffrage [progressiveness=100] - Unlocking Technology: Egalitarianism
+		Every adult man is given an equal vote.
+	Anarchy [progressiveness=200] - Unlocking Technology: Anarchism
+		Local communities govern their own affairs and send representatives to serve limited terms on larger cooperative councils. With no formal hierarchies, central authority is difficult to exercise.
+	Single-Party State [progressiveness=50] - Unlocking Technology: Political Agitation
+		The state is governed by a single legal political party, which has a monopoly on all political activity within the nation.
 	Algorithmic Governance - Unlocking Technology: Machine Learning
+		A system of government where decisions are made by algorithms or artificial intelligence, based on data analysis and predictive modeling.
 Economic System:
-	Traditionalism
-	Interventionism - Unlocking Technology: Manufacturies
+	Traditionalism [progressiveness=-50]
+		Pre-industrial subsistence economy with little central control.
+	Interventionism [progressiveness=25] - Unlocking Technology: Manufacturies
+		To ensure the stability of our nation, government must curb the worst excesses of private businesses.
 	Agrarianism - Unlocking Technology: Romanticism
-	Industry Banned - Unlocking Technology: Romanticism
-	Extraction Economy - Unlocking Technology: Colonization
-	Laissez-Faire - Unlocking Technology: International Trade
-	Cooperative Ownership
-	Command Economy - Unlocking Technology: Central Planning
+		A rural economy emphasizing agricultural development and community.
+	Industry Banned [progressiveness=-50] - Unlocking Technology: Romanticism
+		An economic view that rejects heavy industry and automation, preferring the fruits of honest labor over soulless machinery.
+	Extraction Economy [progressiveness=-50] - Unlocking Technology: Colonization
+		A colonial economic system which focuses on maximum extraction of capital for the benefit of the metropole.
+	Laissez-Faire [progressiveness=25] - Unlocking Technology: International Trade
+		A liberal economy founded on the principles of comparative advantage and that fewer government interventions means greater growth
+	Cooperative Ownership [progressiveness=100]
+		An economic system based around the concept of social ownership, where surplus production is distributed more evenly among the workers.
+	Command Economy [progressiveness=50] - Unlocking Technology: Central Planning
+		An inward-focused interventionist economy where the government directly manages most aspects of production.
 Education System:
-	No Schools
+	No Schools [progressiveness=-25]
+		Education is the parents' responsibility. Only the most leisurely citizens learn to read and write.
 	Religious Schools - Unlocking Technology: Rationalism
-	Private Schools - Unlocking Technology: Academia
-	Terakoya (Variant of Private Schools) - Unlocking Technology: Academia
-	Public Schools - Unlocking Technology: Empiricism
+		Letting the church take care of state education ensures a loyal and morally healthy population.
+	Private Schools [progressiveness=25] - Unlocking Technology: Academia
+		Schooling is best left to private interests who can assure freedom of choice in one's education.
+	Terakoya [progressiveness=25] (Variant of Private Schools) - Unlocking Technology: Academia
+		The education of commoners is left to a decentralized system of privately-owned Terakoya, or temple schools.
+	Public Schools [progressiveness=50] - Unlocking Technology: Empiricism
+		Schooling is the responsibility of the state, and should be standardized and equally accessible to all.
 Free Speech:
-	Outlawed Dissent - Unlocking Technology: Political Agitation
+	Outlawed Dissent [progressiveness=-50] - Unlocking Technology: Political Agitation
+		Criticizing the government is considered treasonous and illegal.
 	Censorship - Unlocking Technology: Law Enforcement
-	Right of Assembly
-	Protected Speech - Unlocking Technology: Human Rights
+		There is active censorship of the press and no guaranteed right of assembly.
+	Right of Assembly [progressiveness=50]
+		Citizens enjoy the right to public assembly.
+	Protected Speech [progressiveness=100] - Unlocking Technology: Human Rights
+		The protection of free speech is enshrined in law.
 Governance Principles:
-	Chiefdom
+	Chiefdom [progressiveness=-100]
+		A hierarchical pre-industrial political system based on kinship, with a warlord or elder of a prominent family at the head. It is incapable of efficient centralized control over entire states.
 	Monarchy
+		A form of governance where an aristocratic dynasty represents the country's national identity and yields executive powers to the royal head of the dynasty.
 	Colonial Administration (Variant of Monarchy)
-	Presidential Republic - Unlocking Technology: Democracy
-	Parliamentary Republic - Unlocking Technology: Democracy
-	Theocracy
-	Council Republic - Unlocking Technology: Socialism
-	Corporate State - Unlocking Technology: Corporatism
-	Social Monarchy - Unlocking Technology: Corporatism
+		The state is legally an administrative sub-division of a foreign power, possessing no sovereignty of its own. It is delegated powers with which to administer a given territory on the behalf of the metropole.
+	Presidential Republic [progressiveness=100] - Unlocking Technology: Democracy
+		A political system where power is held by the people and their elected representatives. Republics have an elected or nominated $RULER_TITLE_PRESIDENT$ as Head of State.
+	Parliamentary Republic [progressiveness=100] - Unlocking Technology: Democracy
+		A political system where power is held by the people and their elected representatives. The leader of the legislature acts as the Head of State and is referred to as $RULER_TITLE_CHANCELLOR$.
+	Theocracy [progressiveness=-25]
+		The government is ruled by a clergy and their interpretation of holy scripture. The Head of State is nominally the person of worship, though in practice a worldly representative selected by merit, status, or birth.
+	Council Republic [progressiveness=200] - Unlocking Technology: Socialism
+		A political system where workers elect delegates to local councils. Extends concepts of workplace organization to general governance.
+	Corporate State [progressiveness=50] - Unlocking Technology: Corporatism
+		A political system based around institutionalized collaboration between officially recognized corporate groups. The state serves as a forum for negotiation between different social classes.
+	Social Monarchy [progressiveness=25] - Unlocking Technology: Corporatism
+		A political system in which the state positions itself as the ultimate mediator between the nation's corporate groups. The monarchy is held to be a symbol of the country's national identity.
 	Neocameralism - Unlocking Technology: Marketing Research
-	Direct Democracy - Unlocking Technology: Mass Media
+		A political system where the state is organized as a joint-stock corporation, with shareholders having control over government functions and policies.
+	Direct Democracy [progressiveness=50] - Unlocking Technology: Mass Media
+		A system of government where eligible citizens participate directly in decision-making processes, rather than through elected representatives.
 Health System:
-	No Health System
+	No Health System [progressiveness=-25]
+		The government does not fund any system of healthcare.
 	Charity Hospitals - Unlocking Technology: Medical Degrees
-	Private Health Insurance - Unlocking Technology: Pharmaceuticals
-	Public Health Insurance - Unlocking Technology: Pharmaceuticals
+		Charitable organizations—often religious ones—provide some help to anyone who's sick or dying, to the degree they are able.
+	Private Health Insurance [progressiveness=50] - Unlocking Technology: Pharmaceuticals
+		Population health is managed through a system of privately owned hospitals paid through private health insurance programs, ensuring the well-being of those who can afford it with minimal impact on the government treasury.
+	Public Health Insurance [progressiveness=100] - Unlocking Technology: Pharmaceuticals
+		The government provides a publicly funded health insurance program ensuring equal access to care for all.
 Internal Security:
-	No Home Affairs
-	National Guard - Unlocking Technology: Law Enforcement
+	No Home Affairs [progressiveness=-25]
+		The state relies upon conventional military and police forces to suppress unrest and uprisings.
+	National Guard [progressiveness=25] - Unlocking Technology: Law Enforcement
+		The state maintains an independent volunteer force of citizen-soldiers charged with upholding public order.
 	Secret Police - Unlocking Technology: Central Archives
-	Shinsengumi (Variant of Secret Police) - Unlocking Technology: Law Enforcement
-	Guaranteed Liberties
+		The state possesses a secret police bureau tasked with monitoring dissidents and investigating political crimes.
+	Shinsengumi [progressiveness=-5] (Variant of Secret Police) - Unlocking Technology: Law Enforcement
+		The state commissions an elite organization of swordsmen to protect government officials and police the capital.
+	Guaranteed Liberties [progressiveness=75]
+		The state's home affairs bureau is solely focused on addressing the grievances of the citizens, and is forbidden from investigating or arresting them without due cause.
 Labor Rights:
 	No Workers' Rights
-	Regulatory Bodies - Unlocking Technology: Labor Movement
-	Workers' Protections - Unlocking Technology: Human Rights
+		Workers have no particular labor rights guaranteed by the state.
+	Regulatory Bodies [progressiveness=50] - Unlocking Technology: Labor Movement
+		Government institutions have been created to regulate the excesses of employers.
+	Workers' Protections [progressiveness=100] - Unlocking Technology: Human Rights
+		Workers enjoy extensive protections that are enshrined in law.
 Labor Associations:
-	Guild System
+	Guild System [progressiveness=-50]
+		A system in which eligibility for employment within certain fields is dependent upon membership of a formalized craft or merchant guild.
 	Combination Acts
-	Anti-Strike Laws
-	Right to Associate
+		The formation of labor associations of any kind is prohibited by law.
+	Anti-Strike Laws [progressiveness=25]
+		Whilst the formation of labor associations is permitted, strikes and certain forms of collective bargaining are prohibited.
+	Right to Associate [progressiveness=50]
+		No especial restrictions are placed upon the formation and activity of labor associations.
 	Corporatized Unions - Unlocking Technology: Corporatism
-	Factory Councils - Unlocking Technology: Socialism
+		Labor associations have been brought under the direct or indirect control of the state, serving foremostly as a means to facilitate collaboration between classes.
+	Factory Councils [progressiveness=100] - Unlocking Technology: Socialism
+		Workers have been radicalized by revolutionary conditions, seizing control of their workplaces and supplanting previous management structures.
 Land Reform:
-	Serfdom
-	Manorialism (Variant of Serfdom)
+	Serfdom [progressiveness=-50]
+		Peasants are tied to their land and must perform labor for their feudal masters.
+	Manorialism [progressiveness=-50] (Variant of Serfdom)
+		Agricultural land is owned by hereditary elites. Tenants are granted freedom of movement, but are obliged to perform unpaid labor for their landlords.
 	Tenant Farmers
-	Latifundias (Variant of Tenant Farmers)
-	Expanded Latifundias (Variant of Tenant Farmers)
-	Commercialized Agriculture - Unlocking Technology: Mutual Funds
-	Peasant Proprietorship
-	Homesteading (Variant of Peasant Proprietorship)
-	Collectivized Agriculture - Unlocking Technology: Socialism
+		Agricultural land is owned by hereditary elites. Workers are not tied to the land, and may seek alternative employment if they can find it.
+	Latifundias [progressiveness=-25] (Variant of Tenant Farmers)
+		Agricultural land is dominated by vast estates worked by seasonally employed and poorly paid day-laborers
+	Expanded Latifundias [progressiveness=-25] (Variant of Tenant Farmers)
+		$law_latifundias_desc$
+	Commercialized Agriculture [progressiveness=50] - Unlocking Technology: Mutual Funds
+		Agriculture is a business like any other, subject to market forces and owned by capital.
+	Peasant Proprietorship [progressiveness=50]
+		Agricultural land is largely owned by independent peasant-proprietors, with a scattering of larger commercial estates.
+	Homesteading [progressiveness=50] (Variant of Peasant Proprietorship)
+		Farmers lay claim to plots of land which they work alongside their hired laborers.
+	Collectivized Agriculture [progressiveness=100] - Unlocking Technology: Socialism
+		Agricultural land is organized into plots worked by groups of farmers as a joint enterprise.
 Migration:
-	No Migration Controls
+	No Migration Controls [progressiveness=50]
+		The country makes no attempt to control movement across its borders.
 	Migration Controls
-	Closed Borders
+		Only people of cultures and religions not discriminated against may migrate in or out of the country.
+	Closed Borders [progressiveness=-50]
+		No migration in or out of the country is permitted.
 Navy Model:
-	Merchant Navy
-	Jeune École - Unlocking Technology: Jeune École
+	Merchant Navy [progressiveness=-50]
+		The fleet is focused on the propagation and protection of overseas trade and supply.
+	Jeune École [progressiveness=-50] - Unlocking Technology: Jeune École
+		A naval model prioritizing the use of smaller, heavily armed ships to combat a larger enemy.
 	Capital Fleet - Unlocking Technology: Military Drill
+		Focused on the construction and maintenance of a mighty battlefleet in order to impress and deter rivals.
 	Diplomatic Fleet - Unlocking Technology: Military Drill
-	Littoral Defense - Unlocking Technology: Naval Convoy Defense
-	Auxiliary Fleet - Unlocking Technology: Predictive Logistics
+		Prioritizing long-range cruising in order to build and maintain a global diplomatic presence.
+	Littoral Defense [progressiveness=-25] - Unlocking Technology: Naval Convoy Defense
+		The fleet exists to defend the home coast, not to project power abroad. Dense flotillas of small craft and reinforced coastal [concept_fortification_system] make landings costly for any aggressor, but the navy cannot operate far from port and capital ships are deliberately neglected.
+	Auxiliary Fleet [progressiveness=25] - Unlocking Technology: Predictive Logistics
+		The fleet's purpose is to sustain the army at extreme distance — sealift, [concept_naval_invasion], and forward logistics. Operational reach and amphibious capability are unmatched, but the surface combat fleet is hollowed out in favor of [Concept('concept_supply_ship', 'supply ships')] and transports.
 Policing:
 	No Police
-	Local Police Force - Unlocking Technology: Bureaucracy
-	Dedicated Police Force - Unlocking Technology: Law Enforcement
-	Militarized Police Force - Unlocking Technology: Mass Surveillance
+		Any sort of structured police force does not exist in this country.
+	Local Police Force [progressiveness=-50] - Unlocking Technology: Bureaucracy
+		This country has local police forces operating.
+	Dedicated Police Force [progressiveness=25] - Unlocking Technology: Law Enforcement
+		This country has a dedicated police force with standardized training.
+	Militarized Police Force [progressiveness=-100] - Unlocking Technology: Mass Surveillance
+		By giving your police force military equipment and military training, their effectiveness at carrying out your will increases.
 Rights of Women:
-	Legal Guardianship
-	Women in the Fields (Variant of Legal Guardianship)
-	Propertied Women
+	Legal Guardianship [progressiveness=-100]
+		Women are legally under the guardianship of men and enjoy very few rights.
+	Women in the Fields [progressiveness=-100] (Variant of Legal Guardianship)
+		A rare arrangement of gender roles where women are responsible for most labor and agriculture, leaving more men available for war and raiding.
+	Propertied Women [progressiveness=-50]
+		Whether inherited or otherwise earned, even women have the right and duty to own and cherish their possessions.
 	Women in the Workplace - Unlocking Technology: Feminism
-	Women’s Suffrage - Unlocking Technology: Feminism
-	Protected Class - Unlocking Technology: Sexual Revolution
+		How will we be able to keep the furnaces of progress aflame with only half the potential workforce?
+	Women’s Suffrage [progressiveness=50] - Unlocking Technology: Feminism
+		In the adjustment of the new order of things, we women demand an equal voice; we shall accept nothing less.
+	Protected Class [progressiveness=60] - Unlocking Technology: Sexual Revolution
+		[concept_discrimination] on the basis of gender is prohibited by law, and individuals are protected from unfair treatment or bias based on gender.
 Slavery:
-	Slavery Banned
-	Colonial Slavery
-	Debt Slavery
-	Slave Trade
+	Slavery Banned [progressiveness=100]
+		No human being may be owned by another.
+	Colonial Slavery [progressiveness=50]
+		The institution of slavery is legal in this country's colonies. Any slave that sets foot upon the mainland is made free.
+	Debt Slavery [progressiveness=-50]
+		Those who cannot clear their debts instead forfeits their person as their creditor's property.
+	Slave Trade [progressiveness=-50]
+		Demand for cheap labor is fulfilled through a dehumanizing trade in foreign bodies.
 	Legacy Slavery
+		As a compromise between abolitionists and slaveholders, the institution of slavery may continue as long as it does not expand.
 Taxation:
-	Consumption-Based Taxation
-	Land-Based Taxation
+	Consumption-Based Taxation [progressiveness=-100]
+		A tax system where there are no direct income or per-capita taxes and instead revenue is raised through taxing the consumption of goods.
+	Land-Based Taxation [progressiveness=-50]
+		A traditional form of land-based taxation, collected mainly from the peasantry.
 	Per-Capita Taxation - Unlocking Technology: Currency Standards
-	Proportional Taxation - Unlocking Technology: Egalitarianism
-	Graduated Taxation - Unlocking Technology: Socialism
+		A tax system that disproportionally taxes the poor through a combination of income and per-capita taxes.
+	Proportional Taxation [progressiveness=50] - Unlocking Technology: Egalitarianism
+		A mainly income-based tax system that tries to ensure everyone pays a roughly equal share of their income to the state.
+	Graduated Taxation [progressiveness=100] - Unlocking Technology: Socialism
+		A tax system that aims to put the burden of taxation primarily on the well-to-do through high Dividends taxes.
 Trade Policy:
 	Mercantilism - Unlocking Technology: International Trade
-	Protectionism - Unlocking Technology: Stock Exchange
-	Free Trade - Unlocking Technology: International Trade
-	Isolationism
-	Canton System (Variant of Isolationism)
-	Sakoku (Variant of Isolationism)
+		An export-focused economy with an emphasis on keeping a positive current account and competing with other nations.
+	Protectionism [progressiveness=50] - Unlocking Technology: Stock Exchange
+		Our industries must be protected from the depredations of foreign market actors.
+	Free Trade [progressiveness=50] - Unlocking Technology: International Trade
+		The free exchange of goods must not be impeded, as trade is for the benefit of all.
+	Isolationism [progressiveness=-50]
+		An economy focused on supplying the nation's needs internally, while keeping out of the affairs of others.
+	Canton System [progressiveness=-50] (Variant of Isolationism)
+		A variant of $law_isolationism$ where trade is only permitted in a single coastal state.
+	Sakoku [progressiveness=-50] (Variant of Isolationism)
+		A variant of $law_isolationism$ where contact with other nations is heavily restricted and trade is limited to only a handful of designated ports.
 Welfare:
 	No Social Security
-	Šef Paternalism (Variant of No Social Security)
-	Poor Laws - Unlocking Technology: Democracy
-	Wage Subsidies - Unlocking Technology: Labor Movement
-	Old Age Pension - Unlocking Technology: Human Rights
-	Universal Basic Income - Unlocking Technology: Universal Basic Income
-	Post-Scarcity Economy - Unlocking Technology: Post-Scarcity Economy
+		It is not the state's role to provide for those who cannot provide for themselves.
+	Šef Paternalism [progressiveness=-25] (Variant of No Social Security)
+		A system where tribal chiefs distribute funds to family members in need, as well as to the church and their armed men.
+	Poor Laws [progressiveness=25] - Unlocking Technology: Democracy
+		Getting the tramps and hobos off our streets and into the workhouses is well worth the cost.
+	Wage Subsidies [progressiveness=75] - Unlocking Technology: Labor Movement
+		All who are willing to work have a right to eat. No man should lack the means to provide for his family.
+	Old Age Pension [progressiveness=100] - Unlocking Technology: Human Rights
+		There is a practical limit to the age where our workforce is no longer efficient and their subsequent welfare must fall under the purview of government.
+	Universal Basic Income [progressiveness=110] - Unlocking Technology: Universal Basic Income
+		A [concept_post_scarcity_system] policy providing a guaranteed, unconditional income is provided to all citizens, regardless of employment status, wealth, or other factors. This financial safety net aims to reduce poverty, stimulate economic growth, and support individual freedom and well-being.
+	Post-Scarcity Economy [progressiveness=120] - Unlocking Technology: Post-Scarcity Economy
+		In this economic model, advanced technologies and efficient resource management have achieved [concept_post_scarcity_system], making scarcity a thing of the past. All essential goods and services are readily available to every citizen, nullifying traditional economic challenges tied to supply and demand.
 Privacy Rights:
 	Intrusive Surveillance System - Unlocking Technology: Social Media
-	Minimal Privacy Protection
-	Moderate Data Privacy - Unlocking Technology: Knowledge Economy
-	Strong Privacy Rights - Unlocking Technology: Universal Digital Identity
+		An extensive surveillance system monitors citizens' activities, both online and offline. Personal information is collected, stored, and used by the government to control and manipulate society, with little or no privacy protection.
+	Minimal Privacy Protection [progressiveness=25]
+		Basic privacy rights exist, primarily focused on physical spaces. No comprehensive [concept_digital_rights_system] framework exists for data protection or surveillance restrictions.
+	Moderate Data Privacy [progressiveness=50] - Unlocking Technology: Knowledge Economy
+		Comprehensive data protection laws are in place, including limitations on government surveillance and private data collection. Exceptions exist for national security or public interest purposes, and enforcement may be inconsistent.
+	Strong Privacy Rights [progressiveness=75] - Unlocking Technology: Universal Digital Identity
+		Privacy rights are enshrined in the constitution or equivalent legal framework. Extensive laws protect personal privacy in both physical and digital realms, with strict [concept_digital_rights_system] laws and robust enforcement mechanisms.
 Inheritance Laws:
 	Primogeniture
-	Partible Inheritance
-	Equal Inheritance - Unlocking Technology: Egalitarianism
-	Non-Inheritable Usage Rights
+		The eldest child, typically the firstborn son, inherits the entire estate or title of the deceased parent. This system ensures the preservation of family wealth and power within a single line of descent.
+	Partible Inheritance [progressiveness=10]
+		Estates are divided among multiple heirs, with some flexibility in how assets are distributed.
+	Equal Inheritance [progressiveness=25] - Unlocking Technology: Egalitarianism
+		All children inherit an equal share of the estate or assets, regardless of birth order. This system promotes fairness and equality among siblings, ensuring that wealth is distributed evenly.
+	Non-Inheritable Usage Rights [progressiveness=25]
+		Property is not owned by individuals but by the community or state. Citizens are granted usage rights but cannot pass the property to their descendants. This system aims to prevent the accumulation of wealth and promote social equality.
 Rules of War:
 	Total War - Unlocking Technology: Bombing Aircraft
-	Traditional Rules of War
-	War Crimes Forbidden - Unlocking Technology: Wargaming
-	Humanitarian Regulations - Unlocking Technology: Nuclear Weapons
-	Limited War - Unlocking Technology: Intercontinental Ballistic Missiles
+		No restrictions on warfare, with all available resources and population mobilized. Civilians and civilian [concept_infrastructure] are considered legitimate targets.
+	Traditional Rules of War [progressiveness=10]
+		Warfare is conducted according to customary [concept_rules_of_war_system] and [Concept('concept_power_bloc_principle', 'principles')], such as chivalry and just war theory. Limited protections for civilians and wounded soldiers.
+	War Crimes Forbidden [progressiveness=20] - Unlocking Technology: Wargaming
+		Codification of laws and customs of war, including treatment of POWs and prohibition of certain weapons. Establishes the concept of war crimes and individual responsibility for violations.
+	Humanitarian Regulations [progressiveness=30] - Unlocking Technology: Nuclear Weapons
+		Comprehensive protections for civilians, POWs, and wounded/sick soldiers. Emphasizes humane treatment and respect for human rights during armed conflicts.
+	Limited War [progressiveness=50] - Unlocking Technology: Intercontinental Ballistic Missiles
+		Strict restrictions on means and methods of warfare, with a focus on minimizing civilian casualties and damage to civilian [concept_infrastructure]. Prohibits the use of certain weapons and tactics, and emphasizes the [concept_power_bloc_principle] of proportionality in the use of force.
 Intellectual Property:
-	No IP Protection
-	Creative Commons - Unlocking Technology: Analytical Philosophy
-	Traditional IP Protection - Unlocking Technology: Mutual Funds
-	Strict IP Protection - Unlocking Technology: Corporate Governance
-	Open Source Innovation - Unlocking Technology: Knowledge Economy
-	State Intellectual Property
+	No IP Protection [progressiveness=65]
+		Intellectual property is not recognized or protected, allowing for open creation, distribution, and use of inventions, artistic works, and other forms of intellectual property without legal consequences or restrictions.
+	Creative Commons [progressiveness=75] - Unlocking Technology: Analytical Philosophy
+		Intellectual property protection is based on a Creative Commons philosophy, which encourages sharing and collaboration. Creators can choose from various licenses to determine how their works may be used, adapted, or redistributed by others.
+	Traditional IP Protection [progressiveness=50] - Unlocking Technology: Mutual Funds
+		Intellectual property is protected under a traditional system, with patents, copyrights, and trademarks offering exclusive rights to creators for a limited time. Enforcement and infringement penalties are moderate, balancing protection with innovation.
+	Strict IP Protection [progressiveness=40] - Unlocking Technology: Corporate Governance
+		Intellectual property protection is heavily enforced, with extended durations for patents, copyrights, and trademarks. Infringement penalties are severe, prioritizing creator rights and revenue over collaboration and innovation.
+	Open Source Innovation [progressiveness=80] - Unlocking Technology: Knowledge Economy
+		Intellectual property protection is geared towards fostering innovation and collaboration, with a focus on open-source [Concept('concept_power_bloc_principle', 'principles')]. Creators are encouraged to share their work, while still retaining certain rights and receiving recognition for their contributions.
+	State Intellectual Property [progressiveness=55]
+		Patents, copyrights, and industrial designs are owned by the state and licensed freely to domestic firms; foreign access is gated and expensive. State research bureaus coordinate where private R&D would otherwise duplicate effort, but the apparatus consumes administrative capacity and starves the capitalist [concept_investment_pool] of monopoly rents.
 Monetary Policy:
 	Commodity Money
-	Gold Standard - Unlocking Technology: International Exchange Standards
-	Fiat Money - Unlocking Technology: Keynesian Economics
-	Digital Currency - Unlocking Technology: Universal Digital Identity
-	Decentralized Cryptocurrency - Unlocking Technology: Cybersecurity
+		A commodity, such as gold or silver, is used directly as currency.
+	Gold Standard [progressiveness=10] - Unlocking Technology: International Exchange Standards
+		The currency is backed by a fixed amount of gold, and the government guarantees to exchange paper money for gold at a fixed rate.
+	Fiat Money [progressiveness=20] - Unlocking Technology: Keynesian Economics
+		Money that has no intrinsic value and is not backed by a physical commodity. Its value is derived from the trust and confidence of the people who use it.
+	Digital Currency [progressiveness=35] - Unlocking Technology: Universal Digital Identity
+		A form of currency that exists only in digital form, with transactions conducted electronically.
+	Decentralized Cryptocurrency [progressiveness=25] - Unlocking Technology: Cybersecurity
+		A monetary system built on distributed cryptographic networks rather than central bank authority. Transactions are pseudonymous and resistant to state control, enabling frictionless cross-border trade but undermining tax collection and amplifying financial volatility.
 Right to Information:
 	State Secrets - Unlocking Technology: Cryptography
-	Informal Government Secrecy
-	Freedom of Information - Unlocking Technology: Decolonization
-	Open Government - Unlocking Technology: Knowledge Economy
+		Government information is classified as state secrets, with strict controls on access and dissemination. Unauthorized disclosure of state secrets is a criminal offense.
+	Informal Government Secrecy [progressiveness=5]
+		Limited transparency and accountability, with government information kept confidential and access restricted to certain officials or agencies.
+	Freedom of Information [progressiveness=25] - Unlocking Technology: Decolonization
+		Comprehensive laws guaranteeing the public's right to access government information, subject to certain exceptions for national security or privacy concerns.
+	Open Government [progressiveness=50] - Unlocking Technology: Knowledge Economy
+		Government operates with transparency and accountability, proactively providing public access to information, decision-making processes, and official records.
 Criminal Justice:
 	Punishment-Focused Criminal Justice
-	Restorative Justice - Unlocking Technology: Behaviorism
-	Rehabilitation-Focused Criminal Justice - Unlocking Technology: Mental Health Awareness
+		A criminal justice system that emphasizes punishment and retribution, with a focus on deterrence and incapacitation.
+	Restorative Justice [progressiveness=25] - Unlocking Technology: Behaviorism
+		A criminal justice system that focuses on repairing harm caused by criminal behavior.
+	Rehabilitation-Focused Criminal Justice [progressiveness=50] - Unlocking Technology: Mental Health Awareness
+		A criminal justice system that emphasizes rehabilitation and reintegration of offenders into society.
 LGBTQ+ Rights:
 	Active Persecution
-	Legal Limbo - Unlocking Technology: Romanticism
-	Basic Protections - Unlocking Technology: Human Rights
-	Anti-Discrimination Laws - Unlocking Technology: Sexual Revolution
-	Full Equality and Protection - Unlocking Technology: LGBTQ+ Rights Movement
+		LGBTQ+ individuals face active persecution, with laws criminalizing same-sex relationships and gender nonconformity. Severe penalties and social stigmatization limit the rights and freedoms of [concept_lgbtq_rights_movement] individuals.
+	Legal Limbo [progressiveness=10] - Unlocking Technology: Romanticism
+		LGBTQ+ rights are neither criminalized nor protected, and authorities mostly ignore the issue. This leaves LGBTQ+ individuals vulnerable to [concept_lgbtq_rights_movement] gaps, leaving them [concept_discrimination] and mistreatment, with no legal recourse or support.
+	Basic Protections [progressiveness=15] - Unlocking Technology: Human Rights
+		LGBTQ+ individuals have basic legal protections, such as decriminalization of same-sex relationships. However, [concept_lgbtq_rights_movement] protections may be limited in scope and not fully enforced.
+	Anti-Discrimination Laws [progressiveness=25] - Unlocking Technology: Sexual Revolution
+		LGBTQ+ individuals have legal rights under [concept_lgbtq_rights_movement] legislation, including anti-[concept_discrimination] laws and protections from hate crimes. However, they may lack some aspects of full social equality, such as marriage equality or adoption rights.
+	Full Equality and Protection [progressiveness=35] - Unlocking Technology: LGBTQ+ Rights Movement
+		LGBTQ+ individuals enjoy full legal and social equality under [concept_lgbtq_rights_movement] legislation, including marriage equality and adoption rights with robust protections against [concept_discrimination] and hate crimes.
 Human Augmentation:
-	No Augmentation
-	Unrestricted Augmentation - Unlocking Technology: Brain-Computer Interfaces
-	Human Purity - Unlocking Technology: Brain-Computer Interfaces
-	Medical Augmentation Only - Unlocking Technology: Brain-Computer Interfaces
-	Regulated Augmentation Market - Unlocking Technology: Human Augmentation
-	Mandatory Augmentation - Unlocking Technology: Bioenhanced Soldiers
+	No Augmentation [progressiveness=50]
+		[concept_human_augmentation_system] technologies mostly do not exist or are in their infancy. No augmentations have been allowed to market and society has not yet addressed the ethical, legal, and social implications of human modification.
+	Unrestricted Augmentation [progressiveness=60] - Unlocking Technology: Brain-Computer Interfaces
+		[concept_human_augmentation_system] is unregulated, allowing for open development, distribution, and use of enhancement technologies. This fosters rapid advancements but may result in significant ethical, social, and safety concerns.
+	Human Purity [progressiveness=40] - Unlocking Technology: Brain-Computer Interfaces
+		[concept_human_augmentation_system] is strictly prohibited, based on the belief that human beings should remain in their natural state. Laws enforce the preservation of human purity, and those attempting to modify themselves face severe penalties.
+	Medical Augmentation Only [progressiveness=60] - Unlocking Technology: Brain-Computer Interfaces
+		[concept_human_augmentation_system] is strictly regulated and limited to medical purposes, such as correcting disabilities or treating severe illnesses. Enhancement of human abilities beyond natural limitations is prohibited.
+	Regulated Augmentation Market [progressiveness=70] - Unlocking Technology: Human Augmentation
+		[concept_human_augmentation_system] is legal and regulated by the government, with strict controls on safety, ethical considerations, and distribution. Access to augmentation technologies is limited by factors such as affordability or [concept_pop_qualifications].
+	Mandatory Augmentation [progressiveness=35] - Unlocking Technology: Bioenhanced Soldiers
+		[concept_human_augmentation_system] is not only allowed but mandatory for certain segments of the population or specific roles, such as military personnel or other specialized [Concept('concept_profession', 'professions')]. The government enforces and oversees the augmentation process.
 Minority Rights:
 	Violent Hostility
-	Ghettoization - Unlocking Technology: Urbanization
-	Cultural Assimilation - Unlocking Technology: Urbanization
-	Discrimination
-	Indifference
-	Protection - Unlocking Technology: Human Rights
-	Affirmative Action - Unlocking Technology: Civil Rights Movement
+		Minorities are violently oppressed by the government.
+	Ghettoization [progressiveness=5] - Unlocking Technology: Urbanization
+		The government enforces segregation and isolation of minority groups, confining them to specific areas or neighborhoods.
+	Cultural Assimilation [progressiveness=25] - Unlocking Technology: Urbanization
+		The government promotes the [concept_assimilation] of minority groups into the dominant culture, suppressing their distinct identities and traditions.
+	Discrimination [progressiveness=20]
+		The government discriminates against minority groups, treating them as second-class citizens and limiting their rights and opportunities.
+	Indifference [progressiveness=30]
+		The government is indifferent to the rights and needs of minority groups, neither actively supporting nor oppressing them.
+	Protection [progressiveness=45] - Unlocking Technology: Human Rights
+		The government actively protects the rights and interests of minority groups, ensuring their safety, equality, and opportunities.
+	Affirmative Action [progressiveness=60] - Unlocking Technology: Civil Rights Movement
+		The government implements policies to address historical [concept_discrimination] and promote equal opportunities for minority groups.
 State Power:
-	Traditional Vassalage
+	Traditional Vassalage [progressiveness=-10]
+		The state is a tapestry of personal oaths and traditional [Concept('concept_obligation', 'obligations')].
 	Unitary State
-	Federal System
-	Devolved Administration
+		All administrative power is concentrated in the hands of the central government.
+	Federal System [progressiveness=10]
+		Power is shared between the central government and its constituent political units.
+	Devolved Administration [progressiveness=20]
+		Significant powers are delegated to regional governments, granting them a high degree of autonomy.
 Electoral Finance:
 	No Campaign Finance Laws
+		The state does not regulate political donations, as no formal elections take place.
 	Unregulated Donations
-	Donation Limits - Unlocking Technology: Mass Media
-	Publicly Funded Elections - Unlocking Technology: Keynesian Economics
+		Wealthy individuals and corporations are free to donate unlimited funds to political campaigns, ensuring their voices are heard.
+	Donation Limits [progressiveness=10] - Unlocking Technology: Mass Media
+		Caps are placed on how much any single entity can donate to a political campaign, aiming to reduce the influence of wealth.
+	Publicly Funded Elections [progressiveness=25] - Unlocking Technology: Keynesian Economics
+		The state provides funding for political campaigns to create a level playing field, paid for by the taxpayer.
 Family & Reproductive Policy:
-	Traditional Family Structure
-	Pro-Natalist Subsidies - Unlocking Technology: Mass Propaganda
-	State-Sponsored Family Planning - Unlocking Technology: Second Wave Feminism
+	Traditional Family Structure [progressiveness=50]
+		The nuclear family is the natural bedrock of society. The state's role is not to interfere, but to uphold this [concept_institution] through its example and other laws.
+	Pro-Natalist Subsidies [progressiveness=25] - Unlocking Technology: Mass Propaganda
+		A growing nation needs a growing populace. The state actively encourages larger families through propaganda, tax incentives, and direct subsidies to ensure our continued strength and prosperity.
+	State-Sponsored Family Planning [progressiveness=75] - Unlocking Technology: Second Wave Feminism
+		Empowering citizens with the knowledge and means to choose the size of their own family is a hallmark of a modern, healthy society. The state provides education and access to contraception to manage population growth.
 	Population Control Measures - Unlocking Technology: Mass Surveillance
-	Communal Child-Rearing - Unlocking Technology: Anarchism
+		The state takes direct action to manage the size and growth of its populace. These measures can range from strict limits on the number of children to state-guided eugenics programs, all in the name of the greater national good.
+	Communal Child-Rearing [progressiveness=100] - Unlocking Technology: Anarchism
+		The family is a relic of bourgeois individualism. To ensure absolute equality of opportunity and loyalty to the state above all, children will be raised collectively by the state in public crèches and dormitories.
 Financial Regulation:
 	Unregulated Banking
-	Free & Mutual Banking - Unlocking Technology: Postal Savings
-	Universal Banking (Light Prudence) - Unlocking Technology: Central Banking
-	Prudential / Narrow Banking - Unlocking Technology: Modern Financial Instruments
-	Directed Credit & Development Banks - Unlocking Technology: Central Planning
-	State-Owned Banking
-	Central Bank Independence - Unlocking Technology: Keynesian Economics
+		Banks operate freely with minimal oversight. Credit flows cheaply - until it doesn’t. The state has no formal tools to stabilize the cycle.
+	Free & Mutual Banking [progressiveness=10] - Unlocking Technology: Postal Savings
+		A patchwork of private and cooperative banks clears through mutual arrangements. Some informal coordination is possible, but there is no true central bank.
+	Universal Banking (Light Prudence) [progressiveness=20] - Unlocking Technology: Central Banking
+		Large, diversified banks face limited prudential rules. Authorities can temper exuberance but lack a full central bank toolkit.
+	Prudential / Narrow Banking [progressiveness=35] - Unlocking Technology: Modern Financial Instruments
+		Commercial deposits are walled off from speculation. Banks can lend only against safe assets, capping crashes and volatility at the cost of slower capital formation - capitalists have less room to take risks.
+	Directed Credit & Development Banks [progressiveness=40] - Unlocking Technology: Central Planning
+		Private banks remain in the driver's seat, but state-backed development [Concept('concept_institution', 'institutions')] co-finance priority sectors and absorb risk that private capital won't. The state guides; it does not own.
+	State-Owned Banking [progressiveness=45]
+		Private banks have been dissolved or absorbed; all credit allocation is conducted by state-owned [Concept('concept_institution', 'institutions')] answering to the central plan. The cycle of speculative excess and crash is replaced with the steady drumbeat of administrative capacity, but capitalist investment dries up.
+	Central Bank Independence [progressiveness=50] - Unlocking Technology: Keynesian Economics
+		A technocratic central bank manages liquidity and expectations. Powerful stabilization tools are available at arm’s length from day-to-day politics.
 Internet Governance:
 	No Internet Policy
-	Unregulated Internet - Unlocking Technology: World Wide Web
+		The state has no policy regarding the governance of global digital networks.
+	Unregulated Internet [progressiveness=10] - Unlocking Technology: World Wide Web
+		The internet is a free and open frontier of information and commerce.
 	State-Controlled Internet - Unlocking Technology: World Wide Web
-	Net Neutrality - Unlocking Technology: World Wide Web
+		The state heavily monitors, censors, and controls all internet traffic within its borders.
+	Net Neutrality [progressiveness=25] - Unlocking Technology: World Wide Web
+		All internet data must be treated equally, preventing service providers from creating 'fast lanes' for preferred content.
 Genetic Rights:
 	Traditional Heredity
-	Ban on Genetic Modification - Unlocking Technology: Gene Splicing
-	Corporate Genetic Licensing - Unlocking Technology: Biotechnology
-	Open-Source Genetics - Unlocking Technology: Synthetic Biology
+		An individual's traits are determined by their lineage and divine will. The concept of altering this inheritance is not a matter for state legislation.
+	Ban on Genetic Modification [progressiveness=20] - Unlocking Technology: Gene Splicing
+		Fearing the unknown consequences, the state prohibits all forms of genetic engineering.
+	Corporate Genetic Licensing [progressiveness=10] - Unlocking Technology: Biotechnology
+		Genetic modification is a profitable enterprise, and its use is restricted to licensed corporations.
+	Open-Source Genetics [progressiveness=25] - Unlocking Technology: Synthetic Biology
+		The genetic code is the shared heritage of all life; research and modification are placed in the public domain to accelerate progress.
 	State Eugenics Program - Unlocking Technology: Genetic Engineering
+		The state mandates genetic [concept_screening] and 'enhancements' to guide the evolution of its populace.
 Language Policy:
 	Local Vernacular
-	Civic Monolingualism - Unlocking Technology: Nationalism
-	Multilingual Federalism - Unlocking Technology: Human Rights
+		Administration and schooling follow local custom. The state sets no uniform language standard, producing a patchwork of practices and identities.
+	Civic Monolingualism [progressiveness=20] - Unlocking Technology: Nationalism
+		Compulsory schooling and public life operate in a single civic language. Proficiency becomes a gateway to citizenship, office, and social mobility.
+	Multilingual Federalism [progressiveness=30] - Unlocking Technology: Human Rights
+		Multiple co-official languages are recognized by region, with rights to courts, schooling, and administration in the local tongue and a federal lingua franca for coordination.
 	Linguistic Purity - Unlocking Technology: Mass Propaganda
-	State-Led Language Reform - Unlocking Technology: Mass Media
-	Ubiquitous Translation - Unlocking Technology: Machine Learning
+		The state suppresses minority languages in public life and enforces a single national language as a marker of loyalty and identity.
+	State-Led Language Reform [progressiveness=50] - Unlocking Technology: Mass Media
+		Script changes, orthographic simplification, standard grammar, and terminology planning are mandated and funded to modernize [concept_literacy]-or to revive an ancestral or constructed language.
+	Ubiquitous Translation [progressiveness=50] - Unlocking Technology: Machine Learning
+		Machine and institutional translation remove most language barriers. Services must accommodate any language, shifting policy from [concept_assimilation] to seamless access.
 Antitrust & Market Structure:
 	Guilds and Chartered Monopolies
-	Freedom of Contract - Unlocking Technology: International Trade
-	Antitrust Enforcement - Unlocking Technology: Corporate Governance
-	Regulated Utilities - Unlocking Technology: Central Planning
-	Dirigiste Policy - Unlocking Technology: Mass Propaganda
-	Command/Cooperative Economy
+		Exclusive charters and guild privileges govern market entry. Rents flow to the crown and corporations, trading dynamism for stability and control.
+	Freedom of Contract [progressiveness=10] - Unlocking Technology: International Trade
+		The state largely abstains from competition policy. Firms may consolidate and coordinate absent fraud, prioritizing property rights and low administrative burden.
+	Antitrust Enforcement [progressiveness=20] - Unlocking Technology: Corporate Governance
+		Courts police cartels and abusive conduct, scrutinizing mergers case-by-case. Collusion is deterred while scale economies are preserved where lawful.
+	Regulated Utilities [progressiveness=30] - Unlocking Technology: Central Planning
+		Network industries are treated as natural monopolies or unbundled ‘pipes.’ Access, rates, and interconnection are set by regulators to ensure fair, reliable service.
+	Dirigiste Policy [progressiveness=15] - Unlocking Technology: Mass Propaganda
+		The state cultivates national champions, coordinates cartels under supervision, and steers investment for strategic aims, accepting higher concentration to accelerate development.
+	Command/Cooperative Economy [progressiveness=50]
+		Large firms are socialized or reorganized into public and worker cooperatives. Prices and output are directed, prioritizing equity and stability over market competition.
 Ministry of Foreign Affairs:
 	No Ministry of Foreign Affairs
-	Ministry of Foreign Affairs Established - Unlocking Technology: International Relations
+		We have no Ministry of Foreign Affairs
+	Ministry of Foreign Affairs Established [progressiveness=25] - Unlocking Technology: International Relations
+		The Ministry of Foreign Affairs manages the nation's diplomatic relations, international treaties, and foreign policy.
 Ministry of War:
 	No Ministry of War
-	Ministry of War Established - Unlocking Technology: Wargaming
+		We have no Ministry of War.
+	Ministry of War Established [progressiveness=25] - Unlocking Technology: Wargaming
+		The Ministry of War is responsible for the defense of the nation, overseeing military strategy, operations, and personnel.
 Ministry of Commerce:
 	No Ministry of Commerce
-	Ministry of Commerce Established - Unlocking Technology: International Exchange Standards
+		We have no Ministry of Commerce.
+	Ministry of Commerce Established [progressiveness=25] - Unlocking Technology: International Exchange Standards
+		The Ministry of Commerce regulates trade policies, promotes economic growth, and ensures fair business practices.
 National Bank:
 	No National Bank
-	National Bank Established - Unlocking Technology: Central Banking
+		We have no National Bank.
+	National Bank Established [progressiveness=25] - Unlocking Technology: Central Banking
+		The National Bank oversees the country's monetary policy and the [concept_banking_cycle], ensuring economic stability and [concept_financial_regulation].
 Ministry of Culture:
 	No Ministry of Culture
-	Ministry of Culture Established - Unlocking Technology: Mass Propaganda
+		We have no Ministry of Culture.
+	Ministry of Culture Established [progressiveness=25] - Unlocking Technology: Mass Propaganda
+		he Ministry of Culture promotes the nation's cultural heritage, arts, and creative industries, fostering national identity and cultural diversity.
 Ministry of Labor:
-	No Ministry of Labor
-	Pro-Labor Ministry of Labor Established - Unlocking Technology: Public Works Programs
+	No Ministry of Labor [progressiveness=25]
+		We have no Ministry of Labor.
+	Pro-Labor Ministry of Labor Established [progressiveness=50] - Unlocking Technology: Public Works Programs
+		The Ministry of Labor regulates employment laws, worker rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed.
 	Pro-Capital Ministry of Labor Established - Unlocking Technology: Marketing Research
+		The Ministry of Labor regulates employment laws, employer rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed.
 Ministry of the Environment:
 	No Ministry of the Environment
-	Ministry of the Environment Established - Unlocking Technology: Pollution Control
+		We have no Ministry of the Environment.
+	Ministry of the Environment Established [progressiveness=25] - Unlocking Technology: Pollution Control
+		The Ministry of Environment is tasked with the protection and conservation of the [concept_pollution_system] and the nation's natural resources, implementing policies for clean air, water, and soil.
 Ministry of Intelligence and Security:
 	No Ministry of Intelligence and Security
-	Ministry of Intelligence and Security Established - Unlocking Technology: Mass Surveillance
+		We have no Ministry of Intelligence and Security.
+	Ministry of Intelligence and Security Established [progressiveness=25] - Unlocking Technology: Mass Surveillance
+		The Ministry of Intelligence and Security manages national security, conducting intelligence operations and ensuring internal stability.
 Ministry of Refugee Affairs:
 	No Ministry of Refugee Affairs
-	Ministry of Refugee Affairs Established - Unlocking Technology: Civil Rights Movement
+		We have no Ministry of Refugee Affairs.
+	Ministry of Refugee Affairs Established [progressiveness=25] - Unlocking Technology: Civil Rights Movement
+		The Ministry of Refugee Affairs manages the nation's refugee policies, including the processing of asylum claims and the resettlement of refugees.
 Ministry of Propaganda:
-	No Ministry of Propaganda
+	No Ministry of Propaganda [progressiveness=25]
+		We have no Ministry of Propaganda.
 	Ministry of Propaganda Established - Unlocking Technology: Mass Media
+		The Ministry of Propaganda manages the nation's propaganda efforts, including the dissemination of information and the promotion of government policies.
 Ministry of Science:
 	No Ministry of Science
-	Ministry of Science Established - Unlocking Technology: Nuclear Weapons
+		We have no Ministry of Science.
+	Ministry of Science Established [progressiveness=25] - Unlocking Technology: Nuclear Weapons
+		The Ministry of Science manages the nation's emergency services, including disaster relief, search and rescue, and emergency medical services.
 Ministry of Thought Control:
-	No Ministry of Thought Control
+	No Ministry of Thought Control [progressiveness=25]
+		We have no Ministry of Thought Control.
 	Ministry of Thought Control Established - Unlocking Technology: Automated Surveillance
+		The Ministry of Thought Control manages the nation's censorship and surveillance efforts, including the monitoring of communications and the suppression of dissent.
 Ministry of Consumer Protection:
 	No Ministry of Consumer Protection
-	Ministry of Consumer Protection Established - Unlocking Technology: Consumer Credit
+		We have no Ministry of Consumer Protection.
+	Ministry of Consumer Protection Established [progressiveness=25] - Unlocking Technology: Consumer Credit
+		The Ministry of Consumer Protection manages the nation's consumer protection efforts, including the regulation of product safety and the enforcement of consumer rights.
 Ministry of Urban Planning:
 	No Ministry of Urban Planning
-	Ministry of Urban Planning Established - Unlocking Technology: Urbanization
+		We have no Ministry of Urban Planning.
+	Ministry of Urban Planning Established [progressiveness=25] - Unlocking Technology: Urbanization
+		The Ministry of Urban Planning manages the nation's urban planning efforts, including the development of [concept_infrastructure] and the regulation of land use.
 Ministry of Religion:
-	No Ministry of Religion
+	No Ministry of Religion [progressiveness=10]
+		We have no Ministry of Religion.
 	Ministry of Religion Established - Unlocking Technology: Mass Media
+		The Ministry of Religion manages the nation's religious affairs, including the regulation of religious [Concept('concept_institution', 'institutions')] and the enforcement of religious laws.
 Ministry of International Aid:
 	No Ministry of International Aid
-	Ministry of International Aid Established - Unlocking Technology: Intergovernmental Organizations
+		We have no Ministry of International Aid.
+	Ministry of International Aid Established [progressiveness=10] - Unlocking Technology: Intergovernmental Organizations
+		The Ministry of International Aid manages the nation's international aid efforts, including the provision of humanitarian assistance and the promotion of development.

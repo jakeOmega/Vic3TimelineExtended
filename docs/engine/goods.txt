@@ -1,65 +1,70 @@
-Ammunition
-Small Arms
-Artillery
-Tanks
-Aeroplanes
-Man-o-Wars
-Ironclads
-Grain
-Fish
-Fabric
-Wood
-Groceries
-Clothes
-Furniture
-Paper
-Services
-Personal Transportation
-Electricity
-Bulk Transportation
-Clippers
-Steamers
-Silk
-Dye
-Chemical and Industrial Minerals
-Energy and Carbon Minerals
-Structural Metals
-Conductive and Base Metals
-Hardwood
-Rubber
-Oil
-Engines
-Steel
-Glass and Plastics
-Chemicals
-Tools
-Explosives
-Porcelain
-Meat
-Fruit
-Liquor
-Wine
-Tea
-Coffee
-Sugar
-Tobacco
-Drugs
-Automobiles
-Wired Telecommunication Gear
-Wireless Telecommunication Gear
-Luxury Clothes
-Luxury Furniture
-Gold
-Art and Entertainment
-Consumer Appliances
-Electronic Components
-Industrial Robotics
-Software
-Digital Access
-Launch Capacity
-Advanced Materials
-Construction Services
-Tourism
-Tech-Critical Metals
-Motor Ships
-Magnetic Drive Ships
+Ammunition (category=military, prestige=5)
+Small Arms (category=military, prestige=5)
+Artillery (category=military, prestige=5)
+	Long-range bombardment with heavy munitions intimidates and scatters enemy forces without risking your own troops. Inaccurate, slow-moving, and expensive, yet a crucial ingredient in any modern army.
+Tanks (category=military, prestige=10)
+Aeroplanes (category=military, prestige=10)
+Man-o-Wars (category=military, prestige=5)
+Ironclads (category=military, prestige=10)
+Grain (category=staple, prestige=3)
+Fish (category=staple, prestige=3)
+Fabric (category=staple, prestige=3)
+Wood (category=staple, prestige=3)
+Groceries (category=staple, prestige=4)
+Clothes (category=staple, prestige=4)
+Furniture (category=staple, prestige=4)
+Paper (category=staple, prestige=4)
+Services (category=staple)
+Personal Transportation (category=staple, prestige=4)
+Electricity (category=staple)
+Bulk Transportation (category=staple, prestige=8)
+Clippers (category=industrial, prestige=4)
+Steamers (category=industrial, prestige=6)
+Silk (category=industrial, prestige=6)
+Dye (category=industrial, prestige=6)
+Chemical and Industrial Minerals (category=industrial, prestige=3)
+Energy and Carbon Minerals (category=industrial, prestige=3)
+Structural Metals (category=industrial, prestige=3)
+Conductive and Base Metals (category=industrial, prestige=3)
+Hardwood (category=industrial, prestige=4)
+Rubber (category=industrial, prestige=4)
+Oil (category=industrial, prestige=6)
+Engines (category=industrial, prestige=8)
+Steel (category=industrial, prestige=5)
+Glass and Plastics (category=industrial, prestige=5)
+Chemicals (category=industrial, prestige=3)
+Tools (category=industrial, prestige=5)
+Explosives (category=industrial, prestige=6)
+Porcelain (category=luxury, prestige=8)
+Meat (category=luxury, prestige=4)
+Fruit (category=luxury, prestige=4)
+Liquor (category=luxury, prestige=4)
+Wine (category=luxury, prestige=6)
+Tea (category=luxury, prestige=6)
+Coffee (category=luxury, prestige=6)
+Sugar (category=luxury, prestige=4)
+Tobacco (category=luxury, prestige=4)
+Drugs (category=luxury, prestige=2)
+Automobiles (category=luxury, prestige=10)
+Wired Telecommunication Gear (category=luxury, prestige=10)
+	In theory we have known that the idea of the speaking telegraph could be possible, but we just weren't sure how. Advances in the field of electronics have made this idea finally possible and the telephone is born.
+Wireless Telecommunication Gear (category=luxury, prestige=10)
+Luxury Clothes (category=luxury, prestige=8)
+Luxury Furniture (category=luxury, prestige=8)
+Gold (category=luxury, prestige=5)
+Art and Entertainment (category=luxury, prestige=10)
+Consumer Appliances (category=luxury, prestige=10)
+Electronic Components (category=industrial, prestige=10)
+Industrial Robotics (category=industrial, prestige=10)
+	Industrial robots have transformed our factories. They can perform complex tasks with incredible precision and efficiency, making our production lines safer and more productive.
+Software (category=luxury, prestige=10)
+Digital Access (category=luxury, prestige=10)
+Launch Capacity (category=industrial, prestige=20)
+Advanced Materials (category=industrial, prestige=20)
+Construction Services (category=industrial, prestige=5)
+Tourism (category=luxury, prestige=10)
+Tech-Critical Metals (category=industrial, prestige=20)
+Motor Ships (category=industrial, prestige=8)
+	Diesel- and turbine-powered oceangoing vessels — supertankers, container ships, and modern liners that displaced coal-fired steamers in the post-war era.
+Magnetic Drive Ships (category=industrial, prestige=12)
+	Vessels propelled by magnetohydrodynamic drives — superconducting magnets accelerate seawater through electromagnetic conduits, eliminating propellers and bearings entirely. The exotic apex of civilian shipbuilding.

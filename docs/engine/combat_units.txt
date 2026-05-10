@@ -1,93 +1,231 @@
 Infantry:
 	Irregular Infantry
+		Units that do not follow traditional military organization standards.
+		Stats: max_manpower=1000, supply_capacity=25, offense=10, defense=10, morale_loss=15
 	Line Infantry
+		Organized in two to four ranks of soldiers to maximize their firepower.
 		Unlocking Technology: Line Infantry
+		Stats: max_manpower=1000, supply_capacity=30, offense=20, defense=25, morale_loss=10
 	Skirmish Infantry
+		Light Infantry which is positioned in a loose formation, allowing a high degree of flexibility.
 		Unlocking Technology: General Staff
+		Stats: max_manpower=1000, supply_capacity=40, offense=25, defense=35, morale_loss=10
 	Trench Infantry
+		These units make use of dug trenches to fortify their position.
 		Unlocking Technology: Trench Works
+		Stats: max_manpower=1000, supply_capacity=50, offense=30, defense=40, morale_loss=8
 	Squad Infantry
+		Small groups that can act independently from their army organization.
 		Unlocking Technology: NCO Training
+		Stats: max_manpower=1000, supply_capacity=60, offense=40, defense=50, morale_loss=6
 	Mechanized Infantry
+		Supported by heavily armored vehicles to provide cover.
 		Unlocking Technology: Mobile Armor
+		Stats: max_manpower=1000, supply_capacity=80, offense=50, defense=60, morale_loss=4
 	Armored Infantry
+		Armored infantry fight mounted in armored vehicles, not just travel in them, providing protection and mobility on the battlefield.
+		Cost at base prices: #N @money!1200 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_armored_infantry')|0] #!
 		Unlocking Technology: Combined Arms
+		Stats: max_manpower=1000, supply_capacity=100, offense=45, defense=75, morale_loss=2
 	Robotic Soldiers
+		Robotic soldiers are autonomous combat units that can be deployed in place of human soldiers.
+		Cost at base prices: #N @money!6200 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_robotic_soldiers')|0] #!
 		Unlocking Technology: Joint All-Domain Command and Control (JADC2)
+		Stats: max_manpower=600, supply_capacity=150, offense=240, defense=585, morale_loss=1
 	Swarm Bots
+		Swarm bots are small, autonomous robots that can be deployed in large numbers to overwhelm enemy forces.
+		Cost at base prices: #N @money!12660 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_swarm_bots')|0] #!
 		Unlocking Technology: Swarm Technology
+		Stats: max_manpower=400, supply_capacity=120, offense=540, defense=1675
 	Utility Fog Phalanx
+		Self-organizing clouds of programmable nanomachines that reshape themselves to the battlefield. Utility fog can harden into shields, disperse into reconnaissance dust, or engulf enemies in microscopic disassembly.
+		Cost at base prices: #N @money!24900 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_grey_goo')|0] #!
 		Unlocking Technology: Molecular Assemblers
+		Stats: max_manpower=250, supply_capacity=110, offense=1500, defense=4475
 Artillery:
 	Cannon Artillery
+		Large cannons that fire big projectiles at their enemy.
 		Unlocking Technology: Artillery
+		Stats: max_manpower=1000, supply_capacity=30, offense=25, defense=15, morale_loss=10
 	Mobile Artillery
+		Higher degree of mobility to allow quicker repositioning.
 		Unlocking Technology: Napoleonic Warfare
+		Stats: max_manpower=1000, supply_capacity=40, offense=30, defense=15, morale_loss=8
 	Shrapnel Artillery
+		The shrapnel shells these units fire wreak havoc among enemy infantry.
 		Unlocking Technology: Breech-Loading Artillery
+		Stats: max_manpower=1000, supply_capacity=60, offense=45, defense=25, morale_loss=6
 	Siege Artillery
+		Using superior firepower to ensure destruction of enemy fortifications.
 		Unlocking Technology: Defense in Depth
+		Stats: max_manpower=1000, supply_capacity=80, offense=55, defense=30, morale_loss=6
 	Motorized Artillery
+		Motorized artillery combines the power of traditional artillery with the mobility and speed of motor vehicles.
+		Cost at base prices: #N @money!2100 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_motorized_artillery')|0] #!
 		Unlocking Technology: Motorized Artillery
+		Stats: max_manpower=1000, supply_capacity=100, offense=100, defense=70, morale_loss=5
 	Guided Artillery Projectiles
+		Guided artillery projectiles enable precision artillery strikes previously out of reach.
+		Cost at base prices: #N @money!4280 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_guided_artillery_projectiles')|0] #!
 		Unlocking Technology: Guided Missiles
+		Stats: max_manpower=1000, supply_capacity=130, offense=195, defense=130, morale_loss=5
 	Networked Guided Artillery Projectiles
+		Networked guided artillery projectiles enable precisely placed and timed barrages of artillery fire.
+		Cost at base prices: #N @money!10400 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_networked_guided_artillery_projectiles')|0] #!
 		Unlocking Technology: Network Centric Warfare
+		Stats: max_manpower=800, supply_capacity=150, offense=545, defense=365, morale_loss=5
 	Orbital Bombardment
+		Orbital bombardment is the use of space-based weapons platforms to deliver powerful and precise strikes on enemy targets.
+		Cost at base prices: #N @money!20000 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_bombardment')|0] #!
 		Unlocking Technology: Space Militarization
+		Stats: max_manpower=100, supply_capacity=65, offense=1200, defense=800, morale_loss=5
 	Orbital Precision Antimatter Strikes
+		Orbital precision antimatter strikes are the most powerful and precise weapons in existence, capable of destroying entire armies in a single strike.
+		Cost at base prices: #N @money!40000 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_precision_antimatter_strikes')|0] #!
 		Unlocking Technology: Antimatter Production
+		Stats: max_manpower=100, supply_capacity=85, offense=1900, defense=1300, morale_loss=5
 Cavalry:
 	Hussars
+		Light and mobile cavalry armed with sabres.
 		Unlocking Technology: Standing Army
+		Stats: max_manpower=1000, supply_capacity=25, offense=15, defense=10, morale_loss=10
 	Dragoons
+		Mounted infantry for increased mobility on the battlefield.
 		Unlocking Technology: Line Infantry
+		Stats: max_manpower=1000, supply_capacity=40, offense=20, defense=25, morale_loss=8
 	Cuirassiers
+		Armored cavalry that is fighting on the front row.
 		Unlocking Technology: Line Infantry
+		Stats: max_manpower=1000, supply_capacity=40, offense=25, defense=20, morale_loss=8
 	Lancers
+		Mobile cavalry equipped with long lances that is designed for spearhead attacks to disrupt enemy formations.
 		Unlocking Technology: Napoleonic Warfare
+		Stats: max_manpower=1000, supply_capacity=70, offense=30, defense=20, morale_loss=6
 	Light Tanks
+		A lighter version of the tank which is focussed more on mobility rather than armor and firepower.
 		Unlocking Technology: Mobile Armor
+		Stats: max_manpower=1000, supply_capacity=100, offense=45, defense=45, morale_loss=4
 	Modern Scout Tank
+		Modern scout tanks are fast and maneuverable, providing reconnaissance and support for ground forces.
+		Cost at base prices: #N @money!6880 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_light_scout_tanks')|0] #!
 		Unlocking Technology: Inertial Navigation Systems
+		Stats: max_manpower=1000, supply_capacity=130, offense=150, defense=150, morale_loss=4
 	Stealth Reconnaissance Drone Carrier
+		Stealth reconnaissance drone carriers are capable of deploying large numbers of stealth reconnaissance drones to gather intelligence on enemy positions and movements.
+		Cost at base prices: #N @money!17800 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_reconnaissance_drone_carrier')|0] #!
 		Unlocking Technology: Rapid Deployment Forces
+		Stats: max_manpower=1000, supply_capacity=180, offense=320, defense=320, morale_loss=4
 	Holographic Ambush Combat Vehicle
+		Holographic ambush combat vehicles are capable of projecting holographic decoys to confuse and distract enemy forces.
+		Cost at base prices: #N @money!34600 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_holographic_ambush_combat_vehicle')|0] #!
 		Unlocking Technology: Augmented Reality Warfare
+		Stats: max_manpower=1000, supply_capacity=220, offense=640, defense=640, morale_loss=4
 Marines:
 	Shipboard Marines
+		Early Marines were used in naval battles before landing on shores.
 		Unlocking Technology: Line Infantry
+		Stats: max_manpower=1000, supply_capacity=30, offense=20, defense=25, morale_loss=10
 	Landing Marines
+		At the forefront of amphibious landings.
 		Unlocking Technology: Power of the Purse
+		Stats: max_manpower=1000, supply_capacity=45, offense=25, defense=35, morale_loss=10
 	Assault Marines
+		Highly specialized units to conduct naval invasions.
 		Unlocking Technology: Landing Craft
+		Stats: max_manpower=1000, supply_capacity=60, offense=30, defense=40, morale_loss=8
 	[concept_combined_arms] Marines
+		Marines integrated with mechanized vehicles, attack helicopters, and modern combined-arms doctrine. Capable of seizing a beachhead and pushing inland against entrenched defenders without waiting for follow-on forces.
+		Cost at base prices: #N @money!2420 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_combined_arms_marines')|0] #!
 		Unlocking Technology: Combined Arms
+		Stats: max_manpower=1000, supply_capacity=80, offense=105, defense=100, morale_loss=6
 	Stealth Marines
+		Special-operations marines equipped with stealth gear, encrypted comms, and small-unit tactics. They infiltrate before the main landing, neutralize coastal sensors and command nodes, and devastate static defenses through surgical strikes.
+		Cost at base prices: #N @money!7390 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_marines')|0] #!
 		Unlocking Technology: Stealth Technology
+		Stats: max_manpower=800, supply_capacity=90, offense=290, defense=235, morale_loss=4
 	Networked Marines
+		Marine fireteams fighting alongside companion drones, exoskeletons, and joint all-domain command (JADC2) data feeds. Each operator commands a small swarm of robotic combatants, multiplying their effective firepower while reducing personnel exposure.
+		Cost at base prices: #N @money!25450 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_networked_marines')|0] #!
 		Unlocking Technology: Joint All-Domain Command and Control (JADC2)
+		Stats: max_manpower=600, supply_capacity=120, offense=960, defense=970, morale_loss=2
 	Bioenhanced Marines
+		Marines whose biology has been re-engineered for combat: heightened reflexes, fatigue resistance, accelerated wound healing, and pharmacologically-managed cognition. A small bioenhanced detachment can match the combat output of a much larger conventional force.
+		Cost at base prices: #N @money!56110 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bioenhanced_marines')|0] #!
 		Unlocking Technology: Bioenhanced Soldiers
+		Stats: max_manpower=500, supply_capacity=160, offense=2180, defense=3835, morale_loss=2
 Heavy Tanks:
 	Heavy Tanks
+		Heavily armored and equipped with high explosive shells.
 		Unlocking Technology: Mobile Armor
+		Stats: max_manpower=1000, supply_capacity=100, offense=41, defense=21, morale_loss=4
 	Main Battle Tanks
+		Main battle tanks are heavily armored and armed with powerful cannons, providing the backbone of ground forces.
+		Cost at base prices: #N @money!10000 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_main_battle_tank')|0] #!
 		Unlocking Technology: Guided Missiles
+		Stats: max_manpower=1000, supply_capacity=130, offense=200, defense=200, morale_loss=4
 	Reactive Armor Tank
+		Reactive armor tanks are equipped with reactive armor, which can reduce the effectiveness of enemy anti-tank weapons.
+		Cost at base prices: #N @money!17200 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_reactive_armor_tank')|0] #!
 		Unlocking Technology: Advanced Materials Armor
+		Stats: max_manpower=1000, supply_capacity=150, offense=320, defense=320, morale_loss=4
 	Railgun Tank
+		Railgun tanks are equipped with powerful railguns, which can fire projectiles at extremely high velocities.
+		Cost at base prices: #N @money!48560 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_railgun_tank')|0] #!
 		Unlocking Technology: Hypersonic Weapons
+		Stats: max_manpower=1000, supply_capacity=220, offense=1000, defense=1000, morale_loss=4
 	DEW Tank
+		DEW tanks are equipped with directed-energy weapons, which can fire powerful beams of energy at enemy targets.
+		Cost at base prices: #N @money!92000 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_DEW_tank')|0] #!
 		Unlocking Technology: Muon-Catalyzed Fusion Reactors
+		Stats: max_manpower=1000, supply_capacity=280, offense=1610, defense=1610, morale_loss=4
 Aircraft:
 	Propeller Aircraft
+		Early aircraft capable of delivering bombs or establishing air superiority.
+		Cost at base prices: #N @money!8400 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bomber_aircraft')|0] #!
 		Unlocking Technology: Bombing Aircraft
+		Stats: max_manpower=200, supply_capacity=45, offense=500, defense=340, morale_loss=12
 	Jet-Powered Aircraft
+		Jet-powered aircraft are faster and more maneuverable than propeller-driven aircraft, enabling more effective air combat.
+		Cost at base prices: #N @money!14800 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_jet_powered_fighters')|0] #!
 		Unlocking Technology: Jet Engine Technology
+		Stats: max_manpower=200, supply_capacity=60, offense=890, defense=590, morale_loss=12
 	Stealth Aircraft
+		Stealth aircraft are designed to avoid detection by enemy radar, enabling them to penetrate enemy airspace and strike targets with minimal risk.
+		Cost at base prices: #N @money!30000 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_stealth_aircraft')|0] #!
 		Unlocking Technology: Stealth Technology
+		Stats: max_manpower=200, supply_capacity=70, offense=1800, defense=1200, morale_loss=12
 	Orbital Tactical Vehicles
+		Orbital tactical vehicles are capable of deploying from space to the battlefield, providing a powerful and versatile means of transportation.
+		Cost at base prices: #N @money!79200 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_tactical_vehicles')|0] #!
 		Unlocking Technology: Space Militarization
+		Stats: max_manpower=100, supply_capacity=65, offense=4750, defense=3170, morale_loss=12
 	Orbital Weapons Platforms
+		Orbital weapons platforms are advanced space-based weapons systems, able to deliver powerful strikes on enemy targets from orbit or deploy to the battlefield.
+		Cost at base prices: #N @money!139200 #!
+		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_orbital_weapons_platforms')|0] #!
 		Unlocking Technology: Orbital Weapon Platforms
+		Stats: max_manpower=100, supply_capacity=85, offense=6680, defense=4456, morale_loss=12

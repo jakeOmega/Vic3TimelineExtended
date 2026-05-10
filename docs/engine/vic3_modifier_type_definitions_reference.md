@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7739 modifier entries.*
+*Auto-generated from 7746 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1847,7 +1847,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (517)
+### country (524)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1905,6 +1905,13 @@ _Cannon Artillery Offense_
 - `country_auto_surveillance_pb_principles_bool` — **Enables [GetTechnology('automated_surveillance').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_banking_crash_chance_mult` — **[concept_banking_crash] Likelihood**
 - `country_banking_intervention_max_add` — **Maximum Banking Intervention Points**
+- `country_banking_lock_asset_relief_bool` — **Locks [Concept('concept_asset_relief_program', 'Asset Relief Program')]**
+- `country_banking_lock_capital_controls_bool` — **Locks [Concept('concept_capital_controls', 'Capital Controls')]**
+- `country_banking_lock_directed_credit_bool` — **Locks [Concept('concept_directed_credit', 'Directed Credit')]**
+- `country_banking_lock_export_credit_bool` — **Locks [Concept('concept_export_credit_facility', 'Export Credit Facility')]**
+- `country_banking_lock_fx_devaluation_bool` — **Locks [Concept('concept_currency_devaluation', 'Currency Devaluation')]**
+- `country_banking_lock_fx_swap_lines_bool` — **Locks [Concept('concept_fx_swap_lines', 'FX Swap Lines')]**
+- `country_banking_lock_open_market_ops_bool` — **Locks [Concept('concept_open_market_operations', 'Open Market Operations')]**
 - `country_banking_random_momentum_mult` — **[concept_banking_cycle] Volatility**
 - `country_block_government_reform_bool` — **Blocks Government Reform** — Blocks the Country from reforming it's current Government.
 - `country_bolster_attraction_factor` — **Bolstered impact on Political Movement attraction** — A bonus or penalty to how attracted Pops are to a Political Movement as a result of being Bolstered
@@ -2356,8 +2363,8 @@ _Cannon Artillery Offense_
 - `country_weekly_innovation_add` — **Innovation** — The amount of innovation! Innovation gained or lost each week
 - `country_weekly_innovation_max_add` — **Maximum Innovation Investment** — The maximum amount of innovation! Innovation that can be invested into a Technology each week
 - `country_weekly_innovation_mult` — **Innovation** — The amount of innovation! Innovation gained or lost each week
-- `country_weekly_investment_pool_add` — **Monthly [concept_investment_pool] Change**
-- `country_weekly_investment_pool_mult` — **Monthly [concept_investment_pool]**
+- `country_weekly_investment_pool_add` — **Weekly [concept_investment_pool] Change**
+- `country_weekly_investment_pool_mult` — **Weekly [concept_investment_pool]**
 - `country_workflow_opt_pb_principles_bool` — **Enables [GetTechnology('advanced_workflow_optimization').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_www_pb_principles_bool` — **Enables [GetTechnology('world_wide_web').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_yankee_and_dixie_cultures_obsessed_with_guns` — **Yankee and Dixie Cultures gain an Obsession with Small Arms** — Yankee and Dixie Cultures gain an Obsession with Small Arms
