@@ -1468,6 +1468,232 @@ def draw_umbrella_abundance() -> Image.Image:
     return img
 
 
+# ── Prohibition / "no X" overlay (used by the family of "no_*" laws) ────
+def _apply_prohibition_overlay(img: Image.Image) -> Image.Image:
+    """Draw a circle-slash 'prohibition' mark over the silhouette.
+
+    The circle and slash extend well past the existing silhouette boundary
+    so the metallic styling reads them as new edges (otherwise white-on-
+    white would merge into the base shape and disappear). Mirrors the
+    `draw_no_building` pattern but factored out for reuse across all
+    'no X' / 'banned' law variants.
+    """
+    d = _d(img)
+    r = 215
+    d.arc([C - r, C - r, C + r, C + r], 0, 360, fill=W, width=22)
+    a = math.radians(-45)
+    d.line([
+        (C + r * math.cos(a), C + r * math.sin(a)),
+        (C - r * math.cos(a), C - r * math.sin(a)),
+    ], fill=W, width=22)
+    return img
+
+
+# ── Bespoke shape variants for "no X" / "banned" laws ───────────────────
+def draw_lightbulb_no() -> Image.Image:
+    """Lightbulb with prohibition slash — no IP protection."""
+    return _apply_prohibition_overlay(draw_lightbulb())
+
+
+def draw_wifi_no() -> Image.Image:
+    """WiFi with prohibition slash — no internet policy."""
+    return _apply_prohibition_overlay(draw_wifi())
+
+
+def draw_robot_head_no() -> Image.Image:
+    """Robot head with prohibition slash — no augmentation."""
+    return _apply_prohibition_overlay(draw_robot_head())
+
+
+def draw_dna_no() -> Image.Image:
+    """DNA helix with prohibition slash — ban on genetic modification."""
+    return _apply_prohibition_overlay(draw_dna())
+
+
+def draw_ballot_box_no() -> Image.Image:
+    """Ballot box with prohibition slash — no campaign finance laws."""
+    return _apply_prohibition_overlay(draw_ballot_box())
+
+
+# ── Bespoke shape variants for "alternate / lesser" laws (formerly dark_gold) ──
+def draw_chains_walled() -> Image.Image:
+    """Chains inside a rectangular wall — ghettoization (segregation)."""
+    img = draw_chains()
+    d = _d(img)
+    # Rectangular wall enclosing the chains, extending past the silhouette
+    for off in range(0, 14, 4):
+        d.rectangle([60 - off, 60 - off, 452 + off, 410 + off],
+                    outline=W, width=4)
+    # Cross-bars on the wall (suggesting cells/grid)
+    arr = np.array(img)
+    arr[230:240, 60:452] = arr[58:68, 60:452]  # not quite — use draw lines instead
+    img = Image.fromarray(arr)
+    d = _d(img)
+    d.line([(60, 235), (452, 235)], fill=W, width=8)
+    d.line([(C, 60), (C, 410)], fill=W, width=8)
+    return img
+
+
+def draw_eye_classified() -> Image.Image:
+    """Eye obscured by horizontal redaction bars — state secrets (formal classification)."""
+    img = draw_eye()
+    arr = np.array(img)
+    # Cut three horizontal redaction bars across the eye region
+    for y_top in [180, 230, 280]:
+        arr[y_top:y_top + 18, 80:432] = [0, 0, 0, 0]
+    img = Image.fromarray(arr)
+    d = _d(img)
+    # Re-draw the bars as solid white, slightly offset so they stay visible
+    # against the metallic backdrop (the cuts created the embossed channels;
+    # the white redrawn bars sit inside as raised redaction strips).
+    for y_top in [186, 236, 286]:
+        d.rectangle([100, y_top, 412, y_top + 8], fill=W)
+    return img
+
+
+def draw_lock_unlocked() -> Image.Image:
+    """Padlock with the shackle popped open — minimal privacy protection."""
+    img = _new(); d = _d(img)
+    # Lock body
+    d.rounded_rectangle([C - 110, 220, C + 110, 440], radius=15, fill=W)
+    # Keyhole cutout
+    arr = np.array(img)
+    y, x = np.ogrid[:S, :S]
+    keyhole_circle = ((x - C) ** 2 + (y - 310) ** 2) < 22 ** 2
+    arr[keyhole_circle] = [0, 0, 0, 0]
+    arr[310:370, C - 8:C + 8] = [0, 0, 0, 0]
+    img = Image.fromarray(arr)
+    d = _d(img)
+    # Open shackle: only the LEFT arm rooted to the body, top arc swung off to
+    # the right and detached. Reads as "lock not engaged".
+    d.rectangle([C - 80, 160, C - 50, 240], fill=W)
+    # Open arc swung to the right
+    d.arc([C - 80, 30, C + 100, 200], 230, 0, fill=W, width=22)
+    # Free shackle tip (sits above-right, separate from the body)
+    d.ellipse([C + 90, 50, C + 130, 90], fill=W)
+    return img
+
+
+def draw_scroll_expiring() -> Image.Image:
+    """Scroll with hourglass — non-inheritable / lifetime usage rights."""
+    img = draw_scroll()
+    d = _d(img)
+    # Small hourglass below the scroll, extending past the bottom edge so
+    # the silhouette is visibly different from a plain scroll.
+    hx, hy_top = C, 440
+    d.polygon([(hx - 30, hy_top), (hx + 30, hy_top), (hx, hy_top + 30)], fill=W)
+    d.polygon([(hx - 30, hy_top + 80), (hx + 30, hy_top + 80), (hx, hy_top + 50)], fill=W)
+    # Sides of the hourglass
+    d.line([(hx - 30, hy_top), (hx - 30, hy_top + 80)], fill=W, width=6)
+    d.line([(hx + 30, hy_top), (hx + 30, hy_top + 80)], fill=W, width=6)
+    return img
+
+
+def draw_coin_stack_loose() -> Image.Image:
+    """Stack of mixed-size coins — commodity money (non-uniform goods)."""
+    img = _new(); d = _d(img)
+    # Coins of varying widths to suggest commodity goods rather than uniform currency.
+    coin_h = 45
+    widths_and_tops = [
+        (140, 320),  # widest at bottom
+        (90, 255),
+        (115, 190),
+        (75, 125),
+        (105, 70),
+    ]
+    for half_w, y_top in widths_and_tops:
+        d.rectangle([C - half_w, y_top + 15, C + half_w, y_top + coin_h], fill=W)
+        d.ellipse([C - half_w, y_top, C + half_w, y_top + 35], fill=W)
+    # Bottom face
+    d.ellipse([C - 140, 320 + coin_h - 15, C + 140, 320 + coin_h + 20], fill=W)
+    # Cut separation lines
+    arr = np.array(img)
+    for half_w, y_top in widths_and_tops[1:]:
+        arr[y_top + coin_h - 2:y_top + coin_h + 2, C - half_w + 5:C + half_w - 5] = [0, 0, 0, 0]
+    return Image.fromarray(arr)
+
+
+def draw_people_assimilated() -> Image.Image:
+    """Three identical, uniform people figures — cultural assimilation."""
+    img = _new(); d = _d(img)
+    # Three identical figures, no size variation, regimented spacing.
+    for cx in [C - 130, C, C + 130]:
+        # Head
+        head_r = 38
+        head_y = 150
+        d.ellipse([cx - head_r, head_y - head_r, cx + head_r, head_y + head_r], fill=W)
+        # Body — identical rectangle silhouettes, no trapezoidal flare
+        d.rectangle([cx - 50, head_y + head_r + 5, cx + 50, 440], fill=W)
+    # A horizontal bar/floor line connecting them — visual cue of homogenization
+    d.rectangle([60, 430, 452, 450], fill=W)
+    return img
+
+
+def draw_robot_head_no_legacy() -> Image.Image:
+    """Robot head with prohibition slash — no augmentation (legacy alias).
+
+    Use draw_robot_head_no() instead; kept for completeness.
+    """
+    return draw_robot_head_no()
+
+
+def draw_speech_bubble_local() -> Image.Image:
+    """Speech bubble flanked by smaller dialect bubbles — local vernacular."""
+    img = _new(); d = _d(img)
+    # Main bubble (smaller than default)
+    d.rounded_rectangle([130, 100, 382, 280], radius=40, fill=W)
+    d.polygon([(180, 270), (220, 280), (160, 350)], fill=W)
+    # Two smaller "dialect" bubbles in the lower corners, suggesting regional speech.
+    d.rounded_rectangle([40, 320, 180, 420], radius=25, fill=W)
+    d.polygon([(80, 410), (110, 420), (60, 460)], fill=W)
+    d.rounded_rectangle([332, 320, 472, 420], radius=25, fill=W)
+    d.polygon([(420, 410), (450, 420), (400, 460)], fill=W)
+    # Cutout text lines for each bubble
+    arr = np.array(img)
+    for y_pos in range(150, 260, 30):
+        arr[y_pos:y_pos + 7, 160:355] = [0, 0, 0, 0]
+    for y_pos in [350, 380]:
+        arr[y_pos:y_pos + 5, 60:160] = [0, 0, 0, 0]
+        arr[y_pos:y_pos + 5, 352:452] = [0, 0, 0, 0]
+    return Image.fromarray(arr)
+
+
+def draw_gear_law_chartered() -> Image.Image:
+    """Gear with crown above — guilds / chartered monopolies."""
+    img = draw_gear_law()
+    d = _d(img)
+    # Small crown sitting above the gear (extending past the gear silhouette)
+    d.rectangle([C - 60, 30, C + 60, 70], fill=W)
+    # Crown points
+    d.polygon([
+        (C - 60, 30), (C - 60, 0),
+        (C - 30, 25), (C, -10), (C + 30, 25),
+        (C + 60, 0), (C + 60, 30),
+    ], fill=W)
+    # Crown band
+    d.rectangle([C - 70, 70, C + 70, 90], fill=W)
+    return img
+
+
+def draw_family_communal() -> Image.Image:
+    """One adult and four children clustered — communal child-rearing."""
+    img = _new(); d = _d(img)
+    # Single adult figure on the left
+    acx = C - 130
+    d.ellipse([acx - 35, 80, acx + 35, 150], fill=W)
+    d.polygon([(acx - 50, 160), (acx + 50, 160),
+               (acx + 75, 440), (acx - 75, 440)], fill=W)
+    # Four child figures clustered on the right, varying heights
+    children = [(C - 30, 230), (C + 50, 215), (C + 130, 245), (C + 80, 270)]
+    for ccx, ccy_head in children:
+        d.ellipse([ccx - 24, ccy_head, ccx + 24, ccy_head + 48], fill=W)
+        d.polygon([
+            (ccx - 32, ccy_head + 56), (ccx + 32, ccy_head + 56),
+            (ccx + 42, 440), (ccx - 42, 440),
+        ], fill=W)
+    return img
+
+
 # ── Ministry variants (pro-labor vs pro-capital ministries of labor) ────
 def draw_building_ministry_labor() -> Image.Image:
     """Ministry building with crossed hammer + wrench — pro-labor ministry of labor."""
@@ -1665,6 +1891,22 @@ SHAPES: dict[str, callable] = {
     "people_raised":           draw_people_raised,
     "building_ministry_labor":   draw_building_ministry_labor,
     "building_ministry_capital": draw_building_ministry_capital,
+    # ── prohibition / "no X" overlay variants ───────────────────────────
+    "lightbulb_no":           draw_lightbulb_no,
+    "wifi_no":                draw_wifi_no,
+    "robot_head_no":          draw_robot_head_no,
+    "dna_no":                 draw_dna_no,
+    "ballot_box_no":          draw_ballot_box_no,
+    # ── alternate / lesser-form variants (formerly differentiated only by tint) ──
+    "chains_walled":          draw_chains_walled,
+    "eye_classified":         draw_eye_classified,
+    "lock_unlocked":          draw_lock_unlocked,
+    "scroll_expiring":        draw_scroll_expiring,
+    "coin_stack_loose":       draw_coin_stack_loose,
+    "people_assimilated":     draw_people_assimilated,
+    "speech_bubble_local":    draw_speech_bubble_local,
+    "gear_law_chartered":     draw_gear_law_chartered,
+    "family_communal":        draw_family_communal,
 }
 
 
@@ -1717,7 +1959,7 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
 
     # ── Privacy & Surveillance ──
     "law_intrusive_surveillance":         ("eye",                 "gold",      None),
-    "law_minimal_privacy_protection":     ("lock",                "dark_gold", None),
+    "law_minimal_privacy_protection":     ("lock_unlocked",       "gold",      None),
     "law_moderate_data_privacy":          ("lock",                "gold",      None),
     "law_strong_privacy_rights":          ("lock_strong",         "gold",      None),
 
@@ -1725,7 +1967,7 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_primogeniture":                  ("scroll",              "gold",      None),
     "law_partible":                       ("scroll_split",        "gold",      None),
     "law_equal_inheritance":              ("scroll_equal",        "gold",      None),
-    "law_non_inheritable_usage_rights":   ("scroll",              "dark_gold", None),
+    "law_non_inheritable_usage_rights":   ("scroll_expiring",     "gold",      None),
 
     # ── War & Warfare ──
     "law_total_war":                      ("sword_crossed",       "gold",      None),
@@ -1735,21 +1977,21 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_limited_war":                    ("dove_split",          "gold",      None),
 
     # ── Intellectual Property ──
-    "law_no_ip_protection":               ("lightbulb",           "dark_gold", None),
+    "law_no_ip_protection":               ("lightbulb_no",        "gold",      None),
     "law_creative_commons":               ("lightbulb_open",      "gold",      None),
     "law_traditional_ip_protection":      ("lightbulb",           "gold",      None),
     "law_strict_ip_protection":           ("lightbulb_locked",    "gold",      None),
     "law_open_source_innovation":         ("lightbulb_branched",  "gold",      None),
 
     # ── Currency & Currency Systems ──
-    "law_commodity_money":                ("coin_stack",          "dark_gold", None),
+    "law_commodity_money":                ("coin_stack_loose",    "gold",      None),
     "law_gold_standard":                  ("coin_stack",          "gold",      None),
     "law_fiat_currency":                  ("coin_stack_paper",    "gold",      None),
     "law_digital_currency":               ("coin_stack_digital",  "gold",      None),
     "law_decentralized_cryptocurrency":   ("circuit_board",       "gold",      None),
 
     # ── Government Information & Transparency ──
-    "law_state_secrets":                  ("eye",                 "dark_gold", None),
+    "law_state_secrets":                  ("eye_classified",      "gold",      None),
     "law_informal_government_secrecy":    ("eye",                 "gold",      None),
     "law_freedom_of_information":         ("globe_lines",         "gold",      None),
     "law_open_government":                ("globe_lines_open",    "gold",      None),
@@ -1769,15 +2011,15 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
 
     # ── Minority Rights (sub-laws) ──
     "law_minority_rights_violent_hostility":     ("chains",         "gold",      None),
-    "law_minority_rights_ghettoization":         ("chains",         "dark_gold", None),
-    "law_minority_rights_cultural_assimilation": ("people",         "dark_gold", None),
+    "law_minority_rights_ghettoization":         ("chains_walled",      "gold", None),
+    "law_minority_rights_cultural_assimilation": ("people_assimilated", "gold", None),
     "law_minority_rights_discrimination":        ("people_separated", "gold",   None),
     "law_minority_rights_indifference":          ("people",         "gold",      None),
     "law_minority_rights_protection":            ("people_shielded", "gold",     None),
     "law_minority_rights_affirmative_action":    ("people_raised",  "gold",      None),
 
     # ── Human Augmentation ──
-    "law_no_augmentation":                ("robot_head",             "dark_gold", None),
+    "law_no_augmentation":                ("robot_head_no",          "gold",      None),
     "law_unrestricted_augmentation":      ("robot_head",             "gold",      None),
     "law_human_purity":                   ("robot_head_purity",      "gold",      None),
     "law_medical_augmentation_only":      ("robot_head_medical",     "gold",      None),
@@ -1791,7 +2033,7 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_devolution":                     ("pillar_branched",     "gold",      None),
 
     # ── Campaign Finance ──
-    "law_no_campaign_finance_laws":       ("ballot_box",          "dark_gold", None),
+    "law_no_campaign_finance_laws":       ("ballot_box_no",       "gold",      None),
     "law_unregulated_donations":          ("ballot_box",          "gold",      None),
     "law_donation_limits":                ("ballot_box_capped",   "gold",      None),
     "law_publicly_funded_elections":      ("ballot_box_public",   "gold",      None),
@@ -1801,7 +2043,7 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_pro_natalist_subsidies":         ("family_natal",        "gold",      None),
     "law_state_sponsored_family_planning": ("family_planned",     "gold",      None),
     "law_population_control_measures":    ("family_controlled",   "gold",      None),
-    "law_communal_child_rearing":         ("family",              "dark_gold", None),
+    "law_communal_child_rearing":         ("family_communal",     "gold",      None),
 
     # ── Banking & Financial Regulation ──
     "law_unregulated_banking":               ("bank",                  "dark_gold", None),
@@ -1812,20 +2054,20 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_central_bank_independence":         ("bank_shield",           "gold",      None),
 
     # ── Internet & Digital Policy ──
-    "law_no_internet_policy":             ("wifi",                "dark_gold", None),
+    "law_no_internet_policy":             ("wifi_no",             "gold",      None),
     "law_unregulated_internet":           ("wifi",                "gold",      None),
     "law_state_controlled_internet":      ("wifi_state",          "gold",      None),
     "law_net_neutrality":                 ("wifi_neutral",        "gold",      None),
 
     # ── Genetics & Heredity ──
     "law_traditional_heredity":           ("dna",                 "gold",      None),
-    "law_ban_on_genetic_modification":    ("dna",                 "dark_gold", None),
+    "law_ban_on_genetic_modification":    ("dna_no",              "gold",      None),
     "law_corporate_genetic_licensing":    ("dna_corporate",       "gold",      None),
     "law_open_source_genetics":           ("dna_open",            "gold",      None),
     "law_state_eugenics_program":         ("dna_state",           "gold",      None),
 
     # ── Language Policy ──
-    "law_local_vernacular":               ("speech_bubble",        "dark_gold", None),
+    "law_local_vernacular":               ("speech_bubble_local",  "gold",      None),
     "law_civic_monolingualism":           ("speech_bubble",        "gold",      None),
     "law_multilingual_federalism":        ("speech_bubble_pair",   "gold",      None),
     "law_linguistic_purity":              ("speech_bubble_pure",   "gold",      None),
@@ -1833,7 +2075,7 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_ubiquitous_translation":         ("speech_bubble_globe",  "gold",      None),
 
     # ── Economic Systems & Trade ──
-    "law_guilds_chartered_monopolies":    ("gear_law",             "dark_gold", None),
+    "law_guilds_chartered_monopolies":    ("gear_law_chartered",   "gold",      None),
     "law_freedom_of_contract":            ("handshake",            "gold",      None),
     "law_trust_busting":                  ("handshake_break",      "gold",      None),
     "law_regulated_utilities":            ("gear_law",             "gold",      None),
