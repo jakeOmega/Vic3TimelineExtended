@@ -1241,7 +1241,7 @@
  international_relations_events.3.t:0 "International Summit"
  international_relations_events.4.a:0 "Fight fire with fire."
  international_relations_events.4.b:0 "Words cannot harm us."
- international_relations_events.4.d:0 "[SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] [Concept('concept_institution', 'institutions')] through radio broadcasts, pamphlets, and sympathetic journalists abroad."
+ international_relations_events.4.d:0 "[SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] institutions through radio broadcasts, pamphlets, and sympathetic journalists abroad."
  international_relations_events.4.f:0 "\"Have you read what they are printing about us? That we oppress our workers, starve our children, plot against the peace of the world?\"\n\n\"Lies, of course.\"\n\n\"Of course. But a lie repeated often enough becomes difficult to distinguish from the truth - especially when it is printed on good paper.\""
  international_relations_events.4.t:0 "Hearts and Minds"
  international_relations_events.5.a:0 "Shut them out."

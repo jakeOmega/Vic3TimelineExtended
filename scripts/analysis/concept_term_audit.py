@@ -200,6 +200,16 @@ TIER3_EXCLUDED: set[str] = {
     # radar / sonar contexts that DO want the ship concept must be tagged
     # by hand. 14 false positives, 7 (radar/sonar) correct hand-tags.
     "concept_detection",
+    # "institution" / "institutions" is the worst false-positive vector
+    # in this mod's prose: it appears constantly as generic English
+    # (financial institutions = banks; religious institutions = churches;
+    # the family-as-an-institution; the UN-as-an-institution; civic
+    # institutions in propaganda/colonial-development contexts). The Vic3
+    # `concept_institution` mechanic IS valid when paired with a specific
+    # Vic3 institution name (Ministry of X) — those existing hand-tags
+    # stay. Auto-tagging the bare word produced 17 false positives, so
+    # block future auto-runs and require manual judgment.
+    "concept_institution",
 }
 
 # File-name suffix → file kind (used by Tier 2 gating).
