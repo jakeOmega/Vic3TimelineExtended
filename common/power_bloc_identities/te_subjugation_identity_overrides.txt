@@ -11,8 +11,13 @@
 # strong via alignment, infamy reduction, and pact leverage already.
 #
 # Vanilla still leaves power_bloc_leader_can_make_subjects_bool = yes set
-# on identity_sovereign_empire's power_bloc_modifier; that's harmless dead
-# code now that te_force_become_subject.txt no longer reads it.
+# on identity_sovereign_empire's power_bloc_modifier. The mod's
+# te_force_become_subject.txt no longer uses it as a gate, but DOES read it
+# in the change_infamy block as a 50% Subjugate-infamy discount flag — the
+# bool's loc has been overridden to "Reduced Infamy for Subjugating Power
+# Bloc Member" in localization/english/te_modifiers_l_english.yml. If a
+# vanilla patch ever drops or renames this bool from identity_sovereign_empire,
+# the SE infamy discount silently breaks; re-verify on each Vic3 bump.
 
 # Sovereign Empire — universal bonus, applies vs any target (no axis match).
 # Brings 20:1 baseline down to 10:1 prestige threshold.
@@ -43,8 +48,12 @@ INJECT:identity_cultural = {
 	}
 }
 
-# Trade League — paid out only when leader's GDP is at least 5x the target's.
-# (A customs-union check would be a no-op since every TL bloc member shares it.)
+# Trade League — paid out only when the target's economic_dependence on the leader
+# has reached at least "Reliant" (level 3 of 5: Independent / Important / Entangled /
+# Reliant / Dependent / Controlled). A customs-union check would be a no-op since
+# every TL bloc member shares one; gating on multi-factor dependence (GDP share,
+# pop-goods reliance, trade volume) rewards actual economic integration rather than
+# raw GDP dominance.
 INJECT:identity_trade_league = {
 	leader_modifier = {
 		country_subjugation_trade_strength_add = 0.4

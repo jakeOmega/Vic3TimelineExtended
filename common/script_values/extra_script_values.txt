@@ -2327,7 +2327,7 @@ te_subjugation_strength = {
 		add = modifier:country_subjugation_cultural_strength_add
 	}
 
-	# Trade League — actor's GDP at least 5x target's
+	# Trade League — target is at least "Reliant" (economic_dependence >= 3) on actor
 	if = {
 		limit = {
 			power_bloc ?= { has_identity = identity:identity_trade_league }

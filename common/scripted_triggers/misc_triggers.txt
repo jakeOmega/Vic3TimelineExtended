@@ -244,13 +244,14 @@ te_target_militarily_weaker = {
 	}
 }
 
-# True if the actor's GDP is at least 5x the target's. Used by te_subjugation_strength
-# for the Trade League axis match — every TL bloc member shares the customs union by
-# default, so a customs-union check would be a no-op; gate on raw economic dominance
-# instead.
+# True if the target is at least "Reliant" (level 3 of 5: Independent / Important /
+# Entangled / Reliant / Dependent / Controlled) on the actor in the vanilla
+# economic_dependence metric — see ECONOMIC_DEPENDENCE_LABEL_* / ECONOMIC_DEPENDENCE_*
+# defines for the underlying GDP-share, market, and trade contributions. Used by
+# te_subjugation_strength for the Trade League axis match. Every TL bloc member
+# already shares the customs union, and a flat GDP ratio is too coarse — gating on
+# multi-factor dependence rewards the player for actually integrating a target's
+# economy into the bloc rather than just outgrowing them.
 te_target_economically_subordinate = {
-	gdp >= {
-		value = $TARGET$.gdp
-		multiply = 5
-	}
+	"$TARGET$.economic_dependence(root)" >= 3
 }

@@ -9,9 +9,19 @@
 # country_subjugation_*_strength_add modifiers seeded on each identity's
 # leader_modifier) through the te_subjugation_strength script_value.
 #
-# accept_effect, potential, and ai blocks are copied byte-identical from
+# Now that any bloc can subjugate, the action also charges population-
+# scaled infamy on success (see change_infamy block below). Sovereign
+# Empire keeps a flavor edge via the dormant vanilla bool
+# power_bloc_leader_can_make_subjects_bool — repurposed as a 50% infamy
+# discount flag (the bool is still granted by the vanilla SE identity's
+# power_bloc_modifier; relocalized in te_modifiers_l_english.yml).
+# If a vanilla patch renames or removes that bool, the SE discount
+# silently breaks — re-check on every vanilla bump.
+#
+# accept_effect, potential, and ai blocks were copied byte-identical from
 # vanilla 31_power_bloc_force_become_subject.txt — re-diff on every Vic3
-# patch. Vanilla version copied: 1.10 (Steam, 2026-05).
+# patch. Vanilla version copied: 1.10 (Steam, 2026-05). The change_infamy
+# block is mod-only; everything else above it remains vanilla-shaped.
 #
 # See common/script_values/extra_script_values.txt :: te_subjugation_strength
 # for the full scoring formula.
@@ -90,6 +100,39 @@ REPLACE:force_become_subject = {
 		power_bloc = {
 			add_cohesion_percent = {
 				value = scaled_cohesion_cost_subjugation
+			}
+		}
+
+		# Population-scaled infamy. Mirrors the vanilla annex shape (base 5 + per-
+		# population multiplier; see vanilla 43_subjects_handle_states.txt:317),
+		# globally halved because subjugation leaves the target nominally
+		# sovereign, and capped at INFAMY_THRESHOLD_INFAMOUS (25) so it can never
+		# alone tip the leader into "Infamous" status. Sovereign Empire halves
+		# this further via the repurposed power_bloc_leader_can_make_subjects_bool
+		# flag still granted by the vanilla SE identity.
+		change_infamy = {
+			value = {
+				add = 5
+
+				multiply = {
+					value = scope:target_country.total_population
+					divide = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER
+					add = 1
+					max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+
+				# Subjugate is half as bad as annex globally.
+				multiply = 0.5
+
+				# Sovereign Empire discount via repurposed dormant bool.
+				if = {
+					limit = { has_modifier = power_bloc_leader_can_make_subjects_bool }
+					multiply = 0.5
+				}
+
+				min = 0
+				max = 25
 			}
 		}
 	}
