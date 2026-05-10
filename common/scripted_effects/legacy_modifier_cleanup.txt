@@ -199,9 +199,6 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = sr_space_program_funding } remove_modifier = sr_space_program_funding }
 	if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
 	if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
-	# Legacy shared approach variables
-	remove_variable = sr_approach_safe
-	remove_variable = sr_approach_ambitious
 	# Solar Colonization colony modifiers (moved to JE scope)
 	if = {
 		limit = { has_modifier = sr_solar_system_trade }

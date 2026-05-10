@@ -1101,9 +1101,6 @@ remove_all_langreform_modifiers = {
 	remove_modifier = langreform_advisory_panel
 	remove_modifier = langreform_minority_protection
 	remove_modifier = langreform_national_focus
-	remove_variable = language_reform_type
-	remove_variable = langreform_academy_pending
-	remove_variable = langreform_minority_pending
 }
 
 # =================================================================

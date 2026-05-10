@@ -145,6 +145,10 @@ concept_ministry_system = {}
 # Government & Lawmaking
 concept_legislative_override_capacity = {}
 
+# Strategic Reserve
+concept_st_res_rate_setting = {}
+concept_st_res_active_rate = {}
+
 # Other
 concept_religious_revival = {}
 concept_custom_religion = {}
