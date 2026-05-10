@@ -502,6 +502,15 @@ Starting pre-enumerating 'gfx/frontend/interface/frontend/startscreen.dds'
 
 Companion to the `:388` entry above — same VFS pre-enumeration cycle, same harmless trace, different cpp emit point.
 
+### `pdx_persistent_reader.cpp:268` — save-game scan key-reference parse warnings
+- source: `pdx_persistent_reader.cpp:268`
+
+```
+Failed to read key reference: : , near line:
+```
+
+The persistent reader scans every file under the saves directory at startup and emits this warning for entries whose key/value layout doesn't fit the expected schema (legacy save formats, partially-written autosaves, third-party tools' artifacts). The `entry.files` field is empty for the bare-line variants and references `save games/*.v3` for the named ones. Non-actionable from script — categorized as `script_parse_error` purely on the wording, but no mod (or vanilla) `.txt` is involved. ~1100/session in this user's setup; volume scales with how many save files exist on disk.
+
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
 ## How to triage a new error-log entry

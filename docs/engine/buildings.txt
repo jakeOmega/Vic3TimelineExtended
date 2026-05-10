@@ -591,6 +591,12 @@ Rice Farms:
 		Harvesting Tools
 		Steam-Powered Thresher Machines
 			Monthly Pollution: 10
+		Hydraulic Equipment
+			Monthly Pollution: 20
+		Automated Mechanical Harvesters
+			Monthly Pollution: 20
+		Automated Harvesters and Planters
+			Monthly Pollution: 20
 	Precision Environmental Management:
 		No Environmental Management
 		Improved Crop Rotation
