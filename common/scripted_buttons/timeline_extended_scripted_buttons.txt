@@ -288,9 +288,14 @@ cb_open_market_ops = {
                 modifier:country_banking_intervention_max_add >= 4
             }
         NOT = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
+        custom_tooltip = {
+            text = banking_button_locked_by_law_tt
+            modifier:country_banking_lock_open_market_ops_bool = no
+        }
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_open_market_ops } }
+        add_treasury = banking_omo_activation_cost
     }
 }
 
@@ -348,6 +353,7 @@ cb_countercyclical_buffer = {
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_countercyclical_capital_buffer } }
+        add_radicals = { value = banking_small_radicals_value }
     }
 }
 
@@ -368,6 +374,7 @@ cb_disable_countercyclical_buffer = {
     }
     effect = {
         je:je_banking_cycle = { remove_modifier = banking_countercyclical_capital_buffer }
+        add_radicals = { value = banking_small_radicals_value }
     }
 }
 
@@ -464,9 +471,14 @@ cb_directed_credit_infrastructure = {
                 text = BANKING_POINTS_3
                 modifier:country_banking_intervention_max_add >= 3
             }
+        custom_tooltip = {
+            text = banking_button_locked_by_law_tt
+            modifier:country_banking_lock_directed_credit_bool = no
+        }
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_infrastructure } }
+        add_treasury = banking_directed_credit_activation_cost
     }
 }
 
@@ -487,6 +499,7 @@ cb_disable_directed_credit_infrastructure = {
     }
     effect = {
         je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
+        add_radicals = { value = banking_small_radicals_value }
     }
 }
 
@@ -643,6 +656,7 @@ cb_raise_margin_requirements = {
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_raise_margin_requirements } }
+        add_radicals = { value = banking_small_radicals_value }
     }
 }
 
@@ -663,6 +677,7 @@ cb_disable_raise_margin_requirements = {
     }
     effect = {
         je:je_banking_cycle = { remove_modifier = banking_raise_margin_requirements }
+        add_radicals = { value = banking_small_radicals_value }
     }
 }
 
@@ -705,9 +720,27 @@ cb_fx_devaluation = {
             }
         modifier:country_can_use_fx_devaluation_bool = yes
         NOT = { je:je_banking_cycle = { has_modifier = banking_fx_support } }
+        custom_tooltip = {
+            text = banking_button_locked_by_law_tt
+            modifier:country_banking_lock_fx_devaluation_bool = no
+        }
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_fx_devaluation } }
+        change_infamy = { value = 1 }
+        custom_tooltip = {
+            text = FX_DEVALUATION_GP_RELATIONS_TT
+            every_country = {
+                limit = {
+                    country_rank = rank_value:great_power
+                    NOT = { this = root }
+                }
+                change_relations = {
+                    country = root
+                    value = -3
+                }
+            }
+        }
     }
 }
 
@@ -729,6 +762,7 @@ cb_disable_fx_devaluation = {
     }
     effect = {
         je:je_banking_cycle = { remove_modifier = banking_fx_devaluation }
+        add_radicals = { value = banking_small_radicals_value }
     }
 }
 
@@ -833,14 +867,30 @@ cb_capital_controls_outflow = {
                 text = BANKING_POINTS_2
                 modifier:country_banking_intervention_max_add >= 2
             }
-        OR = {
-            has_law = law_type:law_prudential_narrow_banking
-            has_law = law_type:law_directed_credit_development_banks
-            is_at_war = yes
+        custom_tooltip = {
+            text = banking_button_locked_capital_controls_tt
+            OR = {
+                modifier:country_banking_lock_capital_controls_bool = no
+                is_at_war = yes
+            }
         }
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_capital_controls_out } }
+        change_infamy = { value = 1 }
+        custom_tooltip = {
+            text = CAPITAL_CONTROLS_GP_RELATIONS_TT
+            every_country = {
+                limit = {
+                    country_rank = rank_value:great_power
+                    NOT = { this = root }
+                }
+                change_relations = {
+                    country = root
+                    value = -2
+                }
+            }
+        }
     }
 }
 
@@ -899,9 +949,9 @@ cb_fx_swap_lines = {
                 modifier:country_banking_intervention_max_add >= 4
             }
         modifier:country_can_use_fx_swap_lines_bool = yes
-        OR = {
-            has_law = law_type:law_central_bank_independence
-            has_law = law_type:law_directed_credit_development_banks
+        custom_tooltip = {
+            text = banking_button_locked_by_law_tt
+            modifier:country_banking_lock_fx_swap_lines_bool = no
         }
         NOT = {
             country_rank = rank_value:great_power
@@ -987,6 +1037,10 @@ cb_export_credit_facility = {
                 modifier:country_banking_intervention_max_add >= 2
             }
         modifier:country_can_use_export_credit_bool = yes
+        custom_tooltip = {
+            text = banking_button_locked_by_law_tt
+            modifier:country_banking_lock_export_credit_bool = no
+        }
     }
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_export_credit_facility } }
@@ -1040,18 +1094,17 @@ cb_asset_relief_program = {
                 text = BANKING_POINTS_5
                 modifier:country_banking_intervention_max_add >= 5
             }
-        OR = {
-            modifier:country_can_use_asset_relief_bool = yes
-        }
-        OR = {
-            has_law = law_type:law_central_bank_independence
-            has_law = law_type:law_directed_credit_development_banks
-            has_law = law_type:law_prudential_narrow_banking
+        modifier:country_can_use_asset_relief_bool = yes
+        custom_tooltip = {
+            text = banking_button_locked_by_law_tt
+            modifier:country_banking_lock_asset_relief_bool = no
         }
     }
 
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_asset_relief_program } }
+        add_treasury = banking_asset_relief_activation_cost
+        add_radicals = { value = banking_medium_radicals_value }
     }
 }
 

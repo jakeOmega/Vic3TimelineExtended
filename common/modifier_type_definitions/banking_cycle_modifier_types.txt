@@ -14,7 +14,7 @@ country_banking_intervention_max_add = {
 }
 
 country_banking_random_momentum_mult = {
-	color = neutral
+	color = bad
 	percent = yes
 	decimals = 0
 	script_only = yes
@@ -61,3 +61,15 @@ country_weekly_investment_pool_mult = {
 	decimals = 2
 	script_only = yes
 }
+
+# Per-tool banking-cycle button lock modifiers. When set on a country (typically
+# via a banking law), the corresponding cb_* button is greyed in the UI with a
+# "Tool not available under your current banking law" tooltip. Players see each
+# active lock as a red "Locks: <Tool>" line in the law's modifier block tooltip.
+country_banking_lock_open_market_ops_bool  = { color = bad  boolean = yes }
+country_banking_lock_directed_credit_bool  = { color = bad  boolean = yes }
+country_banking_lock_fx_devaluation_bool   = { color = bad  boolean = yes }
+country_banking_lock_export_credit_bool    = { color = bad  boolean = yes }
+country_banking_lock_capital_controls_bool = { color = bad  boolean = yes }
+country_banking_lock_fx_swap_lines_bool    = { color = bad  boolean = yes }
+country_banking_lock_asset_relief_bool     = { color = bad  boolean = yes }

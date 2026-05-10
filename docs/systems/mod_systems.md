@@ -214,14 +214,16 @@ Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) t
 
 **Current law values:**
 
-| Law | Volatility | Crash Likelihood |
-|---|---|---|
-| Unregulated Banking | +50% | +25% |
-| Free & Mutual Banking | — | -10% |
-| Universal Light Prudence | +10% | — |
-| Prudential Narrow Banking | -25% | -25% |
-| Directed Credit Dev Banks | -25% | -20% |
-| Central Bank Independence | -10% | -30% |
+| Law | Volatility | Crash Likelihood | Capitalist Inv Pool |
+|---|---|---|---|
+| Unregulated Banking | +50% | +25% | — |
+| Free & Mutual Banking | — | -10% | — |
+| Universal Light Prudence | +10% | — | — |
+| Prudential Narrow Banking | -60% | -50% | -10% |
+| Directed Credit Dev Banks | -25% | -20% | — |
+| Central Bank Independence | -10% | -30% | — |
+
+(`state_capitalists_investment_pool_efficiency_mult` is a vanilla per-pop modifier; Prudential is the only banking law that uses it. CBI gets the opposite signal at scale through `institution_national_bank` (+5%/level for capitalists in National Bank states).)
 
 **Script values** (in `extra_script_values.txt`):
 - `banking_random_nudge_down_value` — base -1, scaled by `(1 + country_banking_random_momentum_mult)`. Used in the random nudge step.
@@ -229,6 +231,10 @@ Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) t
 - `banking_crash_chance_multiplier_value` — base 1.0, adds `country_banking_crash_chance_mult`, clamped to min 0. Multiplied into crash weight.
 
 **To add banking volatility/crash modifiers from other sources** (technologies, PMs, etc.), simply add `country_banking_random_momentum_mult = 0.1` or `country_banking_crash_chance_mult = -0.15` to the modifier block.
+
+**Per-tool law gating.** Most `cb_*` buttons are tier-unlocked by `country_banking_intervention_max_add` (a threshold per button — see the `possible` blocks in `timeline_extended_scripted_buttons.txt`). On top of the tier gate, every banking law publishes its tool restrictions via `country_banking_lock_<tool>_bool` modifiers (defined in `banking_cycle_modifier_types.txt`). The lock entries appear as red "Locks: …" lines in the law's modifier-block tooltip, and each `cb_*` button gates on a `custom_tooltip { modifier:country_banking_lock_<tool>_bool = no }` check that surfaces the reason as "Tool not available under your current banking law" when the button is greyed. To add a new law-based restriction: add `country_banking_lock_<tool>_bool = yes` to the law's modifier block — no edits to scripted_buttons needed. Crisis-only tools (`cb_emergency_liquidity_program`) remain available regardless of law as Bagehot-style lender-of-last-resort. `cb_capital_controls_outflow` has a war override (`is_at_war = yes` bypasses the lock).
+
+**Toggle costs.** Each `cb_*` button has friction on toggle to discourage rapid cycling, calibrated to its real-world parallel: monetary tools (OMO, asset relief, directed credit, e-liquidity, fx support, export credit) cost treasury via `banking_*_activation_cost` script values scaled to GDP; political tools (countercyclical buffer, raise margin requirements, policy rate hike, deposit guarantee) generate radicals/loyalists via `banking_small_radicals_value` and `banking_medium_radicals_value` (banking-specific equivalents of vanilla `small_radicals`/`medium_radicals`, defined in `extra_script_values.txt` to allow tuning banking-button friction independently of global event balance); FX manipulation (devaluation, capital controls) costs infamy and -2/-3 relations with great-power trade partners. Moral suasion is the lone exception — speeches have no real-world toggle cost.
 
 ### Contagion GDP Scaling
 Contagion spread depends on relative GDP sizes (script values in `extra_script_values.txt`):

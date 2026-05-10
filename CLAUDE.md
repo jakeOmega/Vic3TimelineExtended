@@ -63,6 +63,8 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 ## Working in this repo
 
 ### Read the docs before scripting
+Before redesigning, rebalancing, or extending an existing gameplay system, read its section in `docs/systems/mod_systems.md` first — these sections document modifier hooks, threshold tables, button-gate patterns, and architectural conventions specific to that system.
+
 `docs/README.md` is the index. The most-likely-relevant docs:
 - `docs/guides/scripting_best_practices.md` — modifier validation, scope rules, `days` vs `months`, dynamic-pattern registration, `any_*` triggers don't take `limit`, modifier stacking gotchas, top-level database collisions, global-variable initialization timing, decimals/visibility, fast-scaling event audits, tech tree authoring, system-scope cheat sheet, audit/research workflow.
 - `docs/guides/event_creation_guide.md` — boilerplate, available videos/icons, IG approval modifiers, AI-weight pitfalls, amenability vs enactment-success modifiers, option tradeoff principles.

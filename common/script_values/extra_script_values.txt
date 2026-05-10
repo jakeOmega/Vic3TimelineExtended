@@ -1681,7 +1681,7 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	value = total_expenses
 	subtract = income
 	divide = gdp
-	multiply = 20 # deficit spending 5% of GDP per year adds 1 points to the financial cycle monthly
+	multiply = 100 # deficit spending 1% of GDP per year adds 1 point to the financial cycle monthly (5x previous; was effectively dormant at typical 1-3% deficit levels)
 }
 
 # linear up to +0.25 at 50 bubble pressure, then quadratic to reach +1.25 at max pressure.
@@ -1782,6 +1782,30 @@ export_credit_activation_cost = {
 	multiply = -0.002 # costs 0.2% of GDP to establish facility
 	round = yes
 }
+
+banking_omo_activation_cost = {
+	value = root.gdp
+	multiply = -0.005 # 0.5% of GDP — balance-sheet operational cost / signaling commitment
+	round = yes
+}
+
+banking_directed_credit_activation_cost = {
+	value = root.gdp
+	multiply = -0.008 # 0.8% of GDP — state co-financing commitment
+	round = yes
+}
+
+banking_asset_relief_activation_cost = {
+	value = root.gdp
+	multiply = -0.025 # 2.5% of GDP — TARP-scale bailout
+	round = yes
+}
+
+# Banking-cycle radicals magnitudes — initially mirror vanilla small_radicals/medium_radicals
+# (0.02 / 0.05 in event_values.txt), defined separately so banking-button friction can be tuned
+# independently of global event balance.
+banking_small_radicals_value = 0.02
+banking_medium_radicals_value = 0.03
 
 # Transfer amount for command economy treasury <-> investment pool buttons (0.2% GDP)
 ce_pool_transfer_amount = {
