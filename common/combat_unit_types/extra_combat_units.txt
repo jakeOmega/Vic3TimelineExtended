@@ -1062,20 +1062,30 @@ combat_unit_type_combined_arms_marines = {
 
 	conscript_peasant_levies = yes
 
+	# Combined-arms-in-miniature: 60% armored_infantry + 10% each of motorized_artillery,
+	# heavy_tank (era 5, last available), light_tanks (era 5, last available), and
+	# bomber_aircraft. Goods then +25% (elite premium); offense/defense +10% (small
+	# elite combat bonus). Marines must be all-marine in fleet detachments, so they
+	# carry organic artillery / armor / air components rather than relying on
+	# attached non-marine units.
 	upkeep_modifier = {
-		goods_input_small_arms_add = 4                        # Price:   60, Total cost:   240.0 (26.09%)
-		goods_input_ammunition_add = 4                        # Price:   50, Total cost:   200.0 (21.74%)
-		goods_input_tanks_add = 2                             # Price:  120, Total cost:   240.0 (26.09%)
-		goods_input_oil_add = 2                               # Price:   40, Total cost:    80.0 (8.70%)
-		goods_input_radios_add = 2                            # Price:   80, Total cost:   160.0 (17.39%)
-		# Total cost: 920.0
+		goods_input_small_arms_add = 3                        # Price:   60, Total cost:   180.0 (7.44%)
+		goods_input_ammunition_add = 10                       # Price:   50, Total cost:   500.0 (20.66%)
+		goods_input_artillery_add = 2                         # Price:   70, Total cost:   140.0 (5.79%)
+		goods_input_tanks_add = 4                             # Price:  120, Total cost:   480.0 (19.83%)
+		goods_input_oil_add = 6                               # Price:   40, Total cost:   240.0 (9.92%)
+		goods_input_radios_add = 3                            # Price:   80, Total cost:   240.0 (9.92%)
+		goods_input_aeroplanes_add = 4                        # Price:  160, Total cost:   640.0 (26.45%)
+		# Total cost: 2420.0
 	}
 
 	battle_modifier = {
-		unit_offense_add = 35
-		unit_defense_add = 55
+		unit_offense_add = 105
+		unit_defense_add = 100
 		unit_morale_loss_add = 6
-		unit_devastation_mult = 0.15
+		unit_devastation_mult = 0.25
+		unit_morale_damage_mult = 0.1
+		unit_kill_rate_add = 0.08
 		unit_provinces_lost_mult = -0.25
 		# no naval invasion efficiency loss (implicit via combat_unit_group_marines)
 	}
@@ -1106,22 +1116,33 @@ combat_unit_type_stealth_marines = {
 		}
 	}
 
+	# Combined-arms-in-miniature: 60% armored_infantry (era 6, last available before
+	# era 8 — no era-7/8 mod infantry tier exists) + 10% each of guided_artillery_projectiles,
+	# main_battle_tank, light_scout_tanks (all era 7), and stealth_aircraft (era 8).
+	# Goods +25% elite premium; offense/defense +10% combat bonus. The era-7-8
+	# supporting arms supply the e_components and aeroplanes that the era-6
+	# infantry baseline lacks, giving stealth_marines a recognizable stealth-tech
+	# logistics shape.
 	upkeep_modifier = {
-		goods_input_small_arms_add = 6                        # Price:   60, Total cost:   360.0 (19.89%)
-		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (13.81%)
-		goods_input_radios_add = 8                            # Price:   80, Total cost:   640.0 (35.36%)
-		goods_input_electronic_components_add = 6             # Price:   80, Total cost:   480.0 (26.52%)
-		goods_input_oil_add = 2                               # Price:   40, Total cost:    80.0 (4.42%)
-		# Total cost: 1810.0
+		goods_input_small_arms_add = 3                        # Price:   60, Total cost:   180.0 (2.44%)
+		goods_input_ammunition_add = 14                       # Price:   50, Total cost:   700.0 (9.47%)
+		goods_input_artillery_add = 5                         # Price:   70, Total cost:   350.0 (4.74%)
+		goods_input_tanks_add = 13                            # Price:  120, Total cost:  1560.0 (21.11%)
+		goods_input_oil_add = 7                               # Price:   40, Total cost:   280.0 (3.79%)
+		goods_input_radios_add = 12                           # Price:   80, Total cost:   960.0 (12.99%)
+		goods_input_electronic_components_add = 10            # Price:   80, Total cost:   800.0 (10.83%)
+		goods_input_aeroplanes_add = 16                       # Price:  160, Total cost:  2560.0 (34.64%)
+		# Total cost: 7390.0
 	}
 
 	battle_modifier = {
-		unit_offense_add = 55
-		unit_defense_add = 135
+		unit_offense_add = 290
+		unit_defense_add = 235
 		unit_morale_loss_add = 4
-		unit_devastation_mult = 0.4
+		unit_devastation_mult = 0.5
 		unit_provinces_lost_mult = -0.3
 		unit_morale_damage_mult = 0.25
+		unit_kill_rate_add = 0.1
 	}
 
 	unlocking_technologies = { stealth_technology }  # era 8
@@ -1150,21 +1171,31 @@ combat_unit_type_networked_marines = {
 		}
 	}
 
+	# Combined-arms-in-miniature: 60% robotic_soldiers + 10% each of orbital_bombardment
+	# (era 10), railgun_tank (era 10), stealth_reconnaissance_drone_carrier (era 9, last
+	# available light tank), and orbital_tactical_vehicles (era 10). Goods +25% elite
+	# premium; offense/defense +10% combat bonus. Marines acquire orbital-insertion
+	# launch_capacity from the orbital arty/aircraft mix, modeling drone-marine
+	# fireteams that drop from orbit with their own organic fire support.
 	upkeep_modifier = {
-		goods_input_small_arms_add = 10                       # Price:   60, Total cost:   600.0 (12.20%)
-		goods_input_ammunition_add = 8                        # Price:   50, Total cost:   400.0 (8.13%)
-		goods_input_tanks_add = 6                             # Price:  120, Total cost:   720.0 (14.63%)
-		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (16.26%)
-		goods_input_electronic_components_add = 15            # Price:   80, Total cost:  1200.0 (24.39%)
-		goods_input_robotics_add = 15                         # Price:   80, Total cost:  1200.0 (24.39%)
-		# Total cost: 4920.0
+		goods_input_small_arms_add = 11                       # Price:   60, Total cost:   660.0 (2.59%)
+		goods_input_ammunition_add = 33                       # Price:   50, Total cost:  1650.0 (6.48%)
+		goods_input_artillery_add = 18                        # Price:   70, Total cost:  1260.0 (4.95%)
+		goods_input_tanks_add = 42                            # Price:  120, Total cost:  5040.0 (19.80%)
+		goods_input_oil_add = 3                               # Price:   40, Total cost:   120.0 (0.47%)
+		goods_input_radios_add = 30                           # Price:   80, Total cost:  2400.0 (9.43%)
+		goods_input_electronic_components_add = 34            # Price:   80, Total cost:  2720.0 (10.69%)
+		goods_input_robotics_add = 38                         # Price:   80, Total cost:  3040.0 (11.94%)
+		goods_input_aeroplanes_add = 31                       # Price:  160, Total cost:  4960.0 (19.49%)
+		goods_input_launch_capacity_add = 18                  # Price:  200, Total cost:  3600.0 (14.15%)
+		# Total cost: 25450.0
 	}
 
 	battle_modifier = {
-		unit_offense_add = 160
-		unit_defense_add = 455
+		unit_offense_add = 960
+		unit_defense_add = 970
 		unit_morale_loss_add = 2
-		unit_devastation_mult = 0.7
+		unit_devastation_mult = 1.6
 		unit_provinces_lost_mult = -0.3
 		unit_morale_damage_mult = 0.3
 		unit_kill_rate_add = 0.15
@@ -1195,20 +1226,32 @@ combat_unit_type_bioenhanced_marines = {
 		}
 	}
 
+	# Combined-arms-in-miniature: 60% grey_goo (era 11 nanobot infantry) + 10% each
+	# of orbital_precision_antimatter_strikes (era 11), DEW_tank (era 11),
+	# holographic_ambush_combat_vehicle (era 10, last available light tank), and
+	# orbital_weapons_platforms (era 11). Goods +25% elite premium; offense/defense
+	# +10% combat bonus. Bioenhanced marine fireteams operate alongside their own
+	# nanoswarm support, energy-weapon armor, and orbital strike platforms.
 	upkeep_modifier = {
-		goods_input_small_arms_add = 20                       # Price:   60, Total cost:  1200.0 (13.33%)
-		goods_input_ammunition_add = 20                       # Price:   50, Total cost:  1000.0 (11.11%)
-		goods_input_radios_add = 20                           # Price:   80, Total cost:  1600.0 (17.78%)
-		goods_input_electronic_components_add = 25            # Price:   80, Total cost:  2000.0 (22.22%)
-		goods_input_robotics_add = 40                         # Price:   80, Total cost:  3200.0 (35.56%)
-		# Total cost: 9000.0
+		goods_input_small_arms_add = 22                       # Price:   60, Total cost:  1320.0 (2.35%)
+		goods_input_ammunition_add = 56                       # Price:   50, Total cost:  2800.0 (4.99%)
+		goods_input_artillery_add = 25                        # Price:   70, Total cost:  1750.0 (3.12%)
+		goods_input_tanks_add = 64                            # Price:  120, Total cost:  7680.0 (13.69%)
+		goods_input_oil_add = 2                               # Price:   40, Total cost:    80.0 (0.14%)
+		goods_input_radios_add = 50                           # Price:   80, Total cost:  4000.0 (7.13%)
+		goods_input_electronic_components_add = 44            # Price:   80, Total cost:  3520.0 (6.27%)
+		goods_input_robotics_add = 65                         # Price:   80, Total cost:  5200.0 (9.27%)
+		goods_input_aeroplanes_add = 31                       # Price:  160, Total cost:  4960.0 (8.84%)
+		goods_input_launch_capacity_add = 44                  # Price:  200, Total cost:  8800.0 (15.68%)
+		goods_input_advanced_materials_add = 4                # Price: 4000, Total cost: 16000.0 (28.52%)
+		# Total cost: 56110.0
 	}
 
 	battle_modifier = {
-		unit_offense_add = 300
-		unit_defense_add = 870
+		unit_offense_add = 2180
+		unit_defense_add = 3835
 		unit_morale_loss_add = 2
-		unit_devastation_mult = 1.2
+		unit_devastation_mult = 4.4
 		unit_provinces_lost_mult = -0.4
 		unit_morale_damage_mult = 0.5
 		unit_kill_rate_add = 0.25

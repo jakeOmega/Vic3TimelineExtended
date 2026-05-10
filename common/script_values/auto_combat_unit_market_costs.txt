@@ -78,27 +78,57 @@ value_combat_unit_market_cost_bioenhanced_marines = {
 	add = {
 		value = this.market.mg:small_arms.market_goods_pricier
 		add = 1
-		multiply = 1200 # base_price(60) × quantity(20)
+		multiply = 1320 # base_price(60) × quantity(22)
 	}
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1000 # base_price(50) × quantity(20)
+		multiply = 2800 # base_price(50) × quantity(56)
+	}
+	add = {
+		value = this.market.mg:artillery.market_goods_pricier
+		add = 1
+		multiply = 1750 # base_price(70) × quantity(25)
+	}
+	add = {
+		value = this.market.mg:tanks.market_goods_pricier
+		add = 1
+		multiply = 7680 # base_price(120) × quantity(64)
+	}
+	add = {
+		value = this.market.mg:oil.market_goods_pricier
+		add = 1
+		multiply = 80 # base_price(40) × quantity(2)
 	}
 	add = {
 		value = this.market.mg:radios.market_goods_pricier
 		add = 1
-		multiply = 1600 # base_price(80) × quantity(20)
+		multiply = 4000 # base_price(80) × quantity(50)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
 		add = 1
-		multiply = 2000 # base_price(80) × quantity(25)
+		multiply = 3520 # base_price(80) × quantity(44)
 	}
 	add = {
 		value = this.market.mg:robotics.market_goods_pricier
 		add = 1
-		multiply = 3200 # base_price(80) × quantity(40)
+		multiply = 5200 # base_price(80) × quantity(65)
+	}
+	add = {
+		value = this.market.mg:aeroplanes.market_goods_pricier
+		add = 1
+		multiply = 4960 # base_price(160) × quantity(31)
+	}
+	add = {
+		value = this.market.mg:launch_capacity.market_goods_pricier
+		add = 1
+		multiply = 8800 # base_price(200) × quantity(44)
+	}
+	add = {
+		value = this.market.mg:advanced_materials.market_goods_pricier
+		add = 1
+		multiply = 16000 # base_price(4000) × quantity(4)
 	}
 }
 
@@ -129,27 +159,37 @@ value_combat_unit_market_cost_combined_arms_marines = {
 	add = {
 		value = this.market.mg:small_arms.market_goods_pricier
 		add = 1
-		multiply = 240 # base_price(60) × quantity(4)
+		multiply = 180 # base_price(60) × quantity(3)
 	}
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 200 # base_price(50) × quantity(4)
+		multiply = 500 # base_price(50) × quantity(10)
+	}
+	add = {
+		value = this.market.mg:artillery.market_goods_pricier
+		add = 1
+		multiply = 140 # base_price(70) × quantity(2)
 	}
 	add = {
 		value = this.market.mg:tanks.market_goods_pricier
 		add = 1
-		multiply = 240 # base_price(120) × quantity(2)
+		multiply = 480 # base_price(120) × quantity(4)
 	}
 	add = {
 		value = this.market.mg:oil.market_goods_pricier
 		add = 1
-		multiply = 80 # base_price(40) × quantity(2)
+		multiply = 240 # base_price(40) × quantity(6)
 	}
 	add = {
 		value = this.market.mg:radios.market_goods_pricier
 		add = 1
-		multiply = 160 # base_price(80) × quantity(2)
+		multiply = 240 # base_price(80) × quantity(3)
+	}
+	add = {
+		value = this.market.mg:aeroplanes.market_goods_pricier
+		add = 1
+		multiply = 640 # base_price(160) × quantity(4)
 	}
 }
 
@@ -436,32 +476,52 @@ value_combat_unit_market_cost_networked_marines = {
 	add = {
 		value = this.market.mg:small_arms.market_goods_pricier
 		add = 1
-		multiply = 600 # base_price(60) × quantity(10)
+		multiply = 660 # base_price(60) × quantity(11)
 	}
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 400 # base_price(50) × quantity(8)
+		multiply = 1650 # base_price(50) × quantity(33)
+	}
+	add = {
+		value = this.market.mg:artillery.market_goods_pricier
+		add = 1
+		multiply = 1260 # base_price(70) × quantity(18)
 	}
 	add = {
 		value = this.market.mg:tanks.market_goods_pricier
 		add = 1
-		multiply = 720 # base_price(120) × quantity(6)
+		multiply = 5040 # base_price(120) × quantity(42)
+	}
+	add = {
+		value = this.market.mg:oil.market_goods_pricier
+		add = 1
+		multiply = 120 # base_price(40) × quantity(3)
 	}
 	add = {
 		value = this.market.mg:radios.market_goods_pricier
 		add = 1
-		multiply = 800 # base_price(80) × quantity(10)
+		multiply = 2400 # base_price(80) × quantity(30)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
 		add = 1
-		multiply = 1200 # base_price(80) × quantity(15)
+		multiply = 2720 # base_price(80) × quantity(34)
 	}
 	add = {
 		value = this.market.mg:robotics.market_goods_pricier
 		add = 1
-		multiply = 1200 # base_price(80) × quantity(15)
+		multiply = 3040 # base_price(80) × quantity(38)
+	}
+	add = {
+		value = this.market.mg:aeroplanes.market_goods_pricier
+		add = 1
+		multiply = 4960 # base_price(160) × quantity(31)
+	}
+	add = {
+		value = this.market.mg:launch_capacity.market_goods_pricier
+		add = 1
+		multiply = 3600 # base_price(200) × quantity(18)
 	}
 }
 
@@ -728,27 +788,42 @@ value_combat_unit_market_cost_stealth_marines = {
 	add = {
 		value = this.market.mg:small_arms.market_goods_pricier
 		add = 1
-		multiply = 360 # base_price(60) × quantity(6)
+		multiply = 180 # base_price(60) × quantity(3)
 	}
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 250 # base_price(50) × quantity(5)
+		multiply = 700 # base_price(50) × quantity(14)
 	}
 	add = {
-		value = this.market.mg:radios.market_goods_pricier
+		value = this.market.mg:artillery.market_goods_pricier
 		add = 1
-		multiply = 640 # base_price(80) × quantity(8)
+		multiply = 350 # base_price(70) × quantity(5)
 	}
 	add = {
-		value = this.market.mg:electronic_components.market_goods_pricier
+		value = this.market.mg:tanks.market_goods_pricier
 		add = 1
-		multiply = 480 # base_price(80) × quantity(6)
+		multiply = 1560 # base_price(120) × quantity(13)
 	}
 	add = {
 		value = this.market.mg:oil.market_goods_pricier
 		add = 1
-		multiply = 80 # base_price(40) × quantity(2)
+		multiply = 280 # base_price(40) × quantity(7)
+	}
+	add = {
+		value = this.market.mg:radios.market_goods_pricier
+		add = 1
+		multiply = 960 # base_price(80) × quantity(12)
+	}
+	add = {
+		value = this.market.mg:electronic_components.market_goods_pricier
+		add = 1
+		multiply = 800 # base_price(80) × quantity(10)
+	}
+	add = {
+		value = this.market.mg:aeroplanes.market_goods_pricier
+		add = 1
+		multiply = 2560 # base_price(160) × quantity(16)
 	}
 }
 
