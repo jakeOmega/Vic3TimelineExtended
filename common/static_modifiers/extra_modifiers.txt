@@ -6228,6 +6228,15 @@ banking_crisis_protectionism_modifier = {
 # Applied directly to the hub building by st_res_refresh_hub_flow_effect.
 # These scale the active reserve PM's base 1-unit goods input/output and shut
 # off the inactive side with a fixed -100% multiplier.
+#
+# NOTE: These MUST stay `_mult`, not `_add`. The engine only registers
+# goods_input_*_add / goods_output_*_add modifier contributions through PM
+# building_modifiers/country_modifiers blocks; modifiers applied at runtime via
+# `add_modifier` only take effect on goods flow when they target the `_mult`
+# axis. A runtime-applied `_add` will appear in the building's modifier list
+# but produce no actual goods flow — Active rate UI shows nonzero while the
+# hub buys/sells nothing. See docs/guides/scripting_best_practices.md
+# § "Goods I/O modifiers: PM-applied vs runtime-applied (the `_add` trap)".
 
 st_res_grain_store_flow = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -6503,4 +6512,16 @@ colonial_overlord_collapsing_subject_ld_modifier = {
 colonial_collapse_subject_unrest_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_liberty_desire_add = 0.50
+}
+
+# ============================================================================
+# MANDATE RESERVE - power bloc cohesion bonus scaled on unused mandates.
+# Unit value (1); the real per-tier number is carried by the multiplier in
+# te_unused_mandate_reserve_on_action via sv_te_unused_mandate_cohesion_tier.
+# Engine has no script-value accessor for num_mandates (only a comparator
+# trigger), so the SV uses an if/else_if ladder rather than continuous scaling.
+# ============================================================================
+sm_te_unused_mandate_reserve = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_cohesion_add = 1
 }

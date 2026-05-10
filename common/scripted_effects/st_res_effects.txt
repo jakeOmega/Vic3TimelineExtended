@@ -90,21 +90,8 @@ st_res_init_effect = {
 }
 
 # --------------------------------------------------------------------------
-# st_res_reset_legacy_vars_effect — Remove old vars kept only for save cleanup.
-# --------------------------------------------------------------------------
-st_res_reset_legacy_vars_effect = {
-	remove_variable = st_res_grain_target
-	remove_variable = st_res_grain_mode
-	remove_variable = st_res_ammunition_target
-	remove_variable = st_res_ammunition_mode
-	remove_variable = st_res_oil_target
-	remove_variable = st_res_oil_mode
-}
-
-# --------------------------------------------------------------------------
 # st_res_reset_vars_effect — Zero all live SR vars. Called from JE invalidation so
 # a rebuilt hub starts from a clean slate rather than inheriting stale data.
-# Legacy mode/target vars are cleared separately for save compatibility.
 # --------------------------------------------------------------------------
 st_res_reset_vars_effect = {
 	set_variable = { name = st_res_grain_stored value = 0 }
@@ -125,7 +112,6 @@ st_res_reset_vars_effect = {
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
 	set_variable = { name = st_res_hub_workforce_cached value = 1 }
-	st_res_reset_legacy_vars_effect = yes
 }
 
 # --------------------------------------------------------------------------
@@ -168,10 +154,14 @@ st_res_startup_good_setup_effect = {
 	set_local_variable = { name = st_res_$GOOD$_can_store_local value = 0 }
 	set_local_variable = { name = st_res_$GOOD$_can_withdraw_local value = 0 }
 
+	# `<=` not `<`: at exactly full capacity the hub still needs to buy decay
+	# replacement to maintain the stockpile. weekly_delta nets to ~0 at full so
+	# the level stays flat. Using `<` would idle the hub at full and silently
+	# leak goods to decay (script reports stable level while market shows nothing).
 	if = {
 		limit = {
 			local_var:st_res_$GOOD$_rate_local > 0
-			var:st_res_$GOOD$_stored < st_res_$GOOD$_capacity
+			var:st_res_$GOOD$_stored <= st_res_$GOOD$_capacity
 			var:st_res_hub_workforce_cached > 0.99
 		}
 		set_local_variable = { name = st_res_$GOOD$_can_store_local value = 1 }

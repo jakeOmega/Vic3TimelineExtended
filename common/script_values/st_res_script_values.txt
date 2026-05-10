@@ -104,6 +104,10 @@ st_res_grain_weekly_decay = {
 
 # Actual gross flow the hub must apply to achieve the configured target net change
 # (includes decay replenishment). Positive = hub buying, negative = hub selling.
+# Decay-add must stay inside the workforce gate: an undermanned hub cannot
+# auto-replenish decay loss. Pulling decay-add outside makes weekly_delta
+# read 0 (= decay - decay) when the hub is actually doing nothing, hiding
+# real stockpile loss from the player.
 st_res_grain_actual_rate = {
 	value = 0
 	if = {
@@ -113,8 +117,8 @@ st_res_grain_actual_rate = {
 			has_variable = st_res_grain_rate
 		}
 		add = var:st_res_grain_rate
+		add = st_res_grain_weekly_decay
 	}
-	add = st_res_grain_weekly_decay
 }
 
 st_res_grain_actual_rate_base_applied = {
@@ -152,12 +156,22 @@ st_res_grain_good_mult = {
 	}
 	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	# Subtract 1 to compensate for the PM's base 1-unit goods input/output:
+	# applied as `goods_input_<good>_mult = good_mult`, the engine computes
+	# final = base × (1 + good_mult) × throughput_factor, so good_mult must be
+	# (R / throughput) - 1 for final to equal R. Without this, the hub overbuys
+	# by `throughput_factor` units/week — most visible at maintenance buying
+	# (rate=0+decay), where it'd otherwise consume `decay + throughput` instead
+	# of just `decay`.
+	subtract = 1
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_grain_max_withdrawable = {
 	value = 0
 	add = var:st_res_grain_stored
-	subtract = st_res_grain_weekly_decay
 	multiply = -1
 }
 
@@ -165,7 +179,6 @@ st_res_grain_max_storable = {
 	value = 0
 	add = st_res_grain_capacity
 	subtract = var:st_res_grain_stored
-	subtract = st_res_grain_weekly_decay
 }
 
 st_res_grain_sale_profit = {
@@ -215,8 +228,8 @@ st_res_ammunition_actual_rate = {
 			has_variable = st_res_ammunition_rate
 		}
 		add = var:st_res_ammunition_rate
+		add = st_res_ammunition_weekly_decay
 	}
-	add = st_res_ammunition_weekly_decay
 }
 
 st_res_ammunition_actual_rate_base_applied = {
@@ -252,14 +265,16 @@ st_res_ammunition_good_mult = {
 		limit = { has_variable = st_res_ammunition_stored }
 		subtract = st_res_ammunition_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_ammunition_max_withdrawable = {
 	value = 0
 	add = var:st_res_ammunition_stored
-	subtract = st_res_ammunition_weekly_decay
 	multiply = -1
 }
 
@@ -267,7 +282,6 @@ st_res_ammunition_max_storable = {
 	value = 0
 	add = st_res_ammunition_capacity
 	subtract = var:st_res_ammunition_stored
-	subtract = st_res_ammunition_weekly_decay
 }
 
 st_res_ammunition_sale_profit = {
@@ -315,8 +329,8 @@ st_res_oil_actual_rate = {
 			has_variable = st_res_oil_rate
 		}
 		add = var:st_res_oil_rate
+		add = st_res_oil_weekly_decay
 	}
-	add = st_res_oil_weekly_decay
 }
 
 st_res_oil_actual_rate_base_applied = {
@@ -352,14 +366,16 @@ st_res_oil_good_mult = {
 		limit = { has_variable = st_res_oil_stored }
 		subtract = st_res_oil_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_oil_max_withdrawable = {
 	value = 0
 	add = var:st_res_oil_stored
-	subtract = st_res_oil_weekly_decay
 	multiply = -1
 }
 
@@ -367,7 +383,6 @@ st_res_oil_max_storable = {
 	value = 0
 	add = st_res_oil_capacity
 	subtract = var:st_res_oil_stored
-	subtract = st_res_oil_weekly_decay
 }
 
 st_res_oil_sale_profit = {
@@ -415,8 +430,8 @@ st_res_small_arms_actual_rate = {
 			has_variable = st_res_small_arms_rate
 		}
 		add = var:st_res_small_arms_rate
+		add = st_res_small_arms_weekly_decay
 	}
-	add = st_res_small_arms_weekly_decay
 }
 
 st_res_small_arms_actual_rate_base_applied = {
@@ -452,14 +467,16 @@ st_res_small_arms_good_mult = {
 		limit = { has_variable = st_res_small_arms_stored }
 		subtract = st_res_small_arms_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_small_arms_max_withdrawable = {
 	value = 0
 	add = var:st_res_small_arms_stored
-	subtract = st_res_small_arms_weekly_decay
 	multiply = -1
 }
 
@@ -467,7 +484,6 @@ st_res_small_arms_max_storable = {
 	value = 0
 	add = st_res_small_arms_capacity
 	subtract = var:st_res_small_arms_stored
-	subtract = st_res_small_arms_weekly_decay
 }
 
 st_res_small_arms_sale_profit = {
@@ -515,8 +531,8 @@ st_res_artillery_actual_rate = {
 			has_variable = st_res_artillery_rate
 		}
 		add = var:st_res_artillery_rate
+		add = st_res_artillery_weekly_decay
 	}
-	add = st_res_artillery_weekly_decay
 }
 
 st_res_artillery_actual_rate_base_applied = {
@@ -552,14 +568,16 @@ st_res_artillery_good_mult = {
 		limit = { has_variable = st_res_artillery_stored }
 		subtract = st_res_artillery_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_artillery_max_withdrawable = {
 	value = 0
 	add = var:st_res_artillery_stored
-	subtract = st_res_artillery_weekly_decay
 	multiply = -1
 }
 
@@ -567,7 +585,6 @@ st_res_artillery_max_storable = {
 	value = 0
 	add = st_res_artillery_capacity
 	subtract = var:st_res_artillery_stored
-	subtract = st_res_artillery_weekly_decay
 }
 
 st_res_artillery_sale_profit = {
@@ -615,8 +632,8 @@ st_res_aeroplanes_actual_rate = {
 			has_variable = st_res_aeroplanes_rate
 		}
 		add = var:st_res_aeroplanes_rate
+		add = st_res_aeroplanes_weekly_decay
 	}
-	add = st_res_aeroplanes_weekly_decay
 }
 
 st_res_aeroplanes_actual_rate_base_applied = {
@@ -652,14 +669,16 @@ st_res_aeroplanes_good_mult = {
 		limit = { has_variable = st_res_aeroplanes_stored }
 		subtract = st_res_aeroplanes_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_aeroplanes_max_withdrawable = {
 	value = 0
 	add = var:st_res_aeroplanes_stored
-	subtract = st_res_aeroplanes_weekly_decay
 	multiply = -1
 }
 
@@ -667,7 +686,6 @@ st_res_aeroplanes_max_storable = {
 	value = 0
 	add = st_res_aeroplanes_capacity
 	subtract = var:st_res_aeroplanes_stored
-	subtract = st_res_aeroplanes_weekly_decay
 }
 
 st_res_aeroplanes_sale_profit = {
@@ -715,8 +733,8 @@ st_res_tanks_actual_rate = {
 			has_variable = st_res_tanks_rate
 		}
 		add = var:st_res_tanks_rate
+		add = st_res_tanks_weekly_decay
 	}
-	add = st_res_tanks_weekly_decay
 }
 
 st_res_tanks_actual_rate_base_applied = {
@@ -752,14 +770,16 @@ st_res_tanks_good_mult = {
 		limit = { has_variable = st_res_tanks_stored }
 		subtract = st_res_tanks_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_tanks_max_withdrawable = {
 	value = 0
 	add = var:st_res_tanks_stored
-	subtract = st_res_tanks_weekly_decay
 	multiply = -1
 }
 
@@ -767,7 +787,6 @@ st_res_tanks_max_storable = {
 	value = 0
 	add = st_res_tanks_capacity
 	subtract = var:st_res_tanks_stored
-	subtract = st_res_tanks_weekly_decay
 }
 
 st_res_tanks_sale_profit = {

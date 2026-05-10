@@ -72,14 +72,16 @@ st_res_<GOOD>_good_mult = {
 		limit = { has_variable = st_res_<GOOD>_stored }
 		subtract = st_res_<GOOD>_actual_rate_base_applied
 	}
-	# Compensate for throughput modifiers, so total rate equals desired rate
 	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
 }
 
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
 st_res_<GOOD>_max_withdrawable = {
 	value = 0
 	add = var:st_res_<GOOD>_stored
-	subtract = st_res_<GOOD>_weekly_decay
 	multiply = -1
 }
 
@@ -87,7 +89,6 @@ st_res_<GOOD>_max_storable = {
 	value = 0
 	add = st_res_<GOOD>_capacity
 	subtract = var:st_res_<GOOD>_stored
-	subtract = st_res_<GOOD>_weekly_decay
 }
 
 st_res_<GOOD>_sale_profit = {

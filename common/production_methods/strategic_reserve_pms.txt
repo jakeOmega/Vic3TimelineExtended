@@ -5,6 +5,14 @@
 # goods input and 1-unit goods output, while st_res_refresh_hub_flow_effect applies
 # dynamic +mult and -100% disable modifiers to choose the active direction and
 # scale that side up to the configured weekly rate.
+#
+# The base 1-unit I/O below is LOAD-BEARING — it's what the runtime `_mult`
+# flow modifiers scale against. Engine constraint: goods_input_*_add and
+# goods_output_*_add only register goods flow when applied via PM modifier
+# blocks like this one, NOT when applied at runtime via add_modifier. So the
+# runtime flow modifiers (st_res_<good>_store_flow / _withdraw_flow) must be
+# `_mult`, and they need a non-zero base here to scale. Don't drop these.
+# See docs/guides/scripting_best_practices.md § "Goods I/O modifiers".
 # PMG definitions live in common/production_method_groups/strategic_reserve_pmgs.txt.
 # ============================================================================
 
