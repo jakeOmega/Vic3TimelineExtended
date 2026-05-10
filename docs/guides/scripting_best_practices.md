@@ -313,6 +313,21 @@ Both fail without a parse error and without a debug.log warning, so the system d
 
 **Practical rule.** Declare every mod-side boolean modifier in `common/modifier_type_definitions/` (`mod_entity_modifier_types.txt` or topical files like `tech_gate_modifier_types.txt`, `power_bloc_extra_modifier_types.txt`). When in doubt: `curl 'http://localhost:8950/raw/Modifier%20Types/<name>'` will return the definition or a `Not found` error.
 
+### Modifier Coloring for "Good When Reduced" + Surfacing Greyed-Button Reasons
+
+Two short tips for making restrictions and signed-effect modifiers legible to the player:
+
+**`color = bad` for modifiers where less is better.** A modifier with `color = bad` flips with sign — positive renders red, negative renders green. So for "volatility", "crash chance", "tax burden", or any modifier where reducing the value is the desired outcome, use `color = bad` (NOT `color = neutral`). `color = neutral` renders plain text in all cases. Vanilla precedent: `country_banking_crash_chance_mult`. `country_banking_random_momentum_mult` was `neutral` for a long time and players couldn't tell at a glance whether `-60%` (Prudential) was a benefit or a cost.
+
+**Boolean lock modifiers + `custom_tooltip` for "why is this button greyed?".** When a `scripted_button`'s `possible` block is gated by a condition the player needs to understand, prefer publishing a registered `country_X_lock_<tool>_bool` (`color = bad  boolean = yes`) and gating with:
+```
+custom_tooltip = {
+    text = my_lock_tooltip_key
+    modifier:country_X_lock_<tool>_bool = no
+}
+```
+The lock entries appear as red "Locks: …" lines in the modifier-block tooltip of whichever entity (law, tech, decree) sets them — making the *source* of the restriction visible — and the button-side `custom_tooltip` explains the greying. Beats inline `NOT = { has_law = … }` or sprawling `OR = { has_law = X, has_law = Y, … }` lists, which silently grey buttons with no player-readable explanation. Vanilla precedent: `country_disallow_law_*_bool` in `can_enact` blocks. Mod precedent: the seven `country_banking_lock_*_bool` modifiers in `banking_cycle_modifier_types.txt` (one per cb_* intervention tool).
+
 ### Mod-Added Political Movements Need Modifier Type Registration
 
 Vanilla auto-registers `state_pop_support_movement_<X>_(add|mult)` and `country_pop_support_movement_<X>_(add|mult)` for every vanilla movement (in `common/modifier_type_definitions/08_movement_modifier_types.txt`). **Mod-added movements** defined in `common/political_movements/` get no such treatment — their support modifiers must be registered explicitly, otherwise references in laws / techs / events produce `Unknown modifier type: state_pop_support_movement_<X>_mult` and silently no-op (per the same rule as `_bool` modifiers).
