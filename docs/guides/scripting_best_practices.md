@@ -1038,6 +1038,14 @@ every_scope_building = {
 - **Use `custom_tooltip` only** when: (a) you need to explain an effect rather than a trigger condition, or (b) the option has no `trigger` block but needs explanatory text for other reasons.
 - **`highlighted_option` only accepts `yes` / `no` — never a block.** Writing `highlighted_option = { trigger = { ... } }` to get conditional highlighting is invalid; the engine has no per-option conditional-highlight feature. The block form parses past brace matching but causes a downstream `Unexpected token` error several lines later (typically at the next directive after the block). When that happens, parsing of the rest of the *file* runs off the rails: every subsequent `option = { ... }` block is read as a top-level event named `option` (`Duplicated event ID 'option'`, `Namespace 'option' used in event 'option'`), and any later events in the file fail to load entirely (`Event not found! EventID: foo.21`). One bad highlighted_option block can silently kill 2–3 trailing events. If you need conditional emphasis, gate the *option's existence* with `trigger = { ... }` or split into two options with mutually exclusive triggers.
 
+## `every_*` Iterators Enumerate in Tooltip Previews — Wrap with `custom_tooltip`
+
+When an effect contains `every_country = { limit = { ... } ... }` (or any `every_*` iterator with a `limit` block), the engine renders the tooltip preview by listing every entity that currently matches the limit. In an event option's preview (which inherits the event's `after` block effects), this becomes a wall of country names — sometimes dozens, all enumerated alongside the trigger chain that selected them.
+
+Wrap the iterator in a `custom_tooltip = { text = TT_KEY  every_X = { ... } }`. The effect itself still runs unchanged; only the tooltip preview collapses to the loc string at `TT_KEY`. Example: `banking_cycle_spread_contagion` enumerates every trade-linked country for the cascade event preview; wrapping in `custom_tooltip = { text = BANKING_CONTAGION_SPREAD_TT  every_country = { ... } }` reduces the option tooltip to one explanatory line.
+
+Note that an event's `after` block runs regardless of which option the player picks, so its effects appear in EVERY option's tooltip preview. Heavy iterators placed in `after` have outsized tooltip cost — gate them with `custom_tooltip` or move per-option-specific iterators into the option body where only that option's preview is affected.
+
 ## Mandatory Reference Doc Consultation
 
 **Before implementing ANY game mechanic**, search the reference docs by SCOPE TYPE to discover all available tools:

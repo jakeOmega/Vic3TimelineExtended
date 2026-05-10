@@ -46,6 +46,14 @@ Three rules — break any of them and the integration fails silently or deadlock
 
 After adding the module + appending to `POST_LOAD_GENERATORS`, validate without disrupting a running server: run `.venv/bin/python <your_module>.py` (the standalone path) and confirm the output file is rewritten. The integration test (`[post-load] <name> ok` line) only fires on a fresh server start — pick that up on the next natural restart rather than killing the running PID for a check.
 
+**Edits to an existing post-load generator don't take effect on `/reload`.** Python caches the module on first import; `POST /reload` re-runs the chain but each entry is the version that was imported at server startup. Symptom: a fix to `pm_costs.py` works when invoked directly (`.venv/bin/python pm_costs.py`) but `/reload` still produces the broken output. Restart the server to pick up the edit.
+
+### Generator idempotency around hand-edited loc
+
+When a post-load generator regenerates a loc value via regex substitution (e.g. `pm_costs.py` rewriting the `Cost at current market prices: …` suffix in every `combat_unit_type_*_desc`), a hand-edit that tags the term with `[concept_X]` or `[Concept('X', '…')]` will silently break the regex's anchor — the generator's "replace existing" path stops matching, falls back to "append fresh," and the file accumulates a duplicate suffix on every reload. No parser warning fires; the only catch is visual inspection of the loc value or a `grep -c` after a few reloads.
+
+Defensive pattern: make the regex match BOTH the legacy untagged form and the tagged form (`(?:market prices|\[Concept\('concept_market_price', 'market prices'\)\])`) and emit the tagged form on write. The same applies to any generator that anchors on display-name substrings of registered concepts.
+
 ## Core Infrastructure
 
 | Script | Purpose | Run |
