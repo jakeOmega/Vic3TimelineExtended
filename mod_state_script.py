@@ -1,6 +1,8 @@
 import os
 from collections import defaultdict
+from pathlib import Path
 
+import tech_unlocks_lib
 from mod_state import ModState
 from path_constants import base_game_path, doc_path, mod_path
 
@@ -63,13 +65,36 @@ mod_paths = {
     "Subject Types": os.path.join(_MOD_COMMON, "subject_types"),
 }
 
+def _format_description(desc, indent="\t\t"):
+    """Render a localized description as one or more indented lines.
+
+    Vic3 loc strings often embed literal `\\n` newlines and bracketed concept
+    references; we collapse runs of whitespace so each output line is grep-able
+    without word-wrapping.
+    """
+    if not desc:
+        return ""
+    text = desc.replace("\\n", "\n").strip()
+    out = []
+    for line in text.split("\n"):
+        line = " ".join(line.split())
+        if line:
+            out.append(f"{indent}{line}")
+    return "\n".join(out) + "\n" if out else ""
+
+
 def generate_docs(mod_state):
     """Generate text reference docs (laws, technologies, buildings, goods, combat units) from parsed mod state.
 
     Called by mod_state_server.py on startup and reload, and by this script standalone.
     """
+    tech_unlock_index = tech_unlocks_lib.build_tech_unlock_index(
+        Path(mod_path),
+        include_vanilla=True,
+        vanilla_common_root=Path(base_game_path) / "game" / "common",
+    )
     _generate_laws(mod_state)
-    _generate_technologies(mod_state)
+    _generate_technologies(mod_state, tech_unlock_index)
     _generate_buildings(mod_state)
     _generate_goods(mod_state)
     _generate_combat_units(mod_state)
@@ -100,22 +125,27 @@ def _generate_laws(mod_state):
     for law_group in laws_dict.keys():
         laws_output += f"{mod_state.localize(law_group)}:\n"
         for law_id in laws_dict[law_group]:
+            law_data = laws[law_id][1]
             laws_output += f"\t{mod_state.localize(law_id)}"
-            variant_of = laws[law_id][1].get("parent", None)
+            progressiveness = law_data.get("progressiveness", ["", ""])[1]
+            if progressiveness and progressiveness != "0":
+                laws_output += f" [progressiveness={progressiveness}]"
+            variant_of = law_data.get("parent", None)
             if variant_of:
                 laws_output += f" (Variant of {mod_state.localize(variant_of[1])})"
-            unlocking_tech_ids = laws[law_id][1].get("unlocking_technologies", None)
+            unlocking_tech_ids = law_data.get("unlocking_technologies", None)
             if unlocking_tech_ids:
                 if unlocking_tech_ids[1]:
                     tech_name = mod_state.localize(unlocking_tech_ids[1][0])
                     laws_output += f" - Unlocking Technology: {tech_name}"
             laws_output += "\n"
+            laws_output += _format_description(mod_state.get_description(law_id), indent="\t\t")
 
     with open(laws_path, "w", encoding="utf-8") as f:
         f.write(laws_output)
 
 
-def _generate_technologies(mod_state):
+def _generate_technologies(mod_state, tech_unlock_index):
     tech_path = os.path.join(doc_path, "engine", "technologies.txt")
     tech_output = ""
     tech = mod_state.get_data("Technologies")
@@ -140,9 +170,43 @@ def _generate_technologies(mod_state):
                     tech_output += "\t\tUnlocking Technologies:\n"
                     for unlocking_tech_ids in tech_requirement_ids:
                         tech_output += f"\t\t\t{mod_state.localize(unlocking_tech_ids)}\n"
+            tech_output += _format_tech_unlocks(mod_state, tech_unlock_index, tech_id)
 
     with open(tech_path, "w", encoding="utf-8") as f:
         f.write(tech_output)
+
+
+# Entity types whose unlocked entries we list by name (gameplay-major).
+# PMs are summarized as a count instead — they're typically dozens per tech
+# and already reachable via the parent building's listing in buildings.txt.
+_TECH_UNLOCKS_NAMED_TYPES = (
+    "Buildings",
+    "Laws",
+    "Combat Unit Types",
+    "Decrees",
+    "Ship Types",
+    "Mobilization Options",
+    "Parties",
+    "Ship Modifications",
+)
+
+
+def _format_tech_unlocks(mod_state, tech_unlock_index, tech_id):
+    rec = tech_unlock_index.get(tech_id)
+    if not rec:
+        return ""
+    lines = []
+    by_type = rec.get("by_type", {})
+    for entity_type in _TECH_UNLOCKS_NAMED_TYPES:
+        entries = by_type.get(entity_type)
+        if not entries:
+            continue
+        names = sorted({mod_state.localize(e["id"]) for e in entries})
+        lines.append(f"\t\tUnlocks {entity_type}: {', '.join(names)}")
+    pm_count = len(by_type.get("PMs", []) or [])
+    if pm_count:
+        lines.append(f"\t\tUnlocks PMs: {pm_count} (listed under their buildings in buildings.txt)")
+    return ("\n".join(lines) + "\n") if lines else ""
 
 
 def _generate_buildings(mod_state):
@@ -153,7 +217,12 @@ def _generate_buildings(mod_state):
     production_methods = mod_state.get_data("PMs")
     for building_id, data in buildings_data.items():
         pm_groups = data[1].get("production_method_groups", ["", []])[1]
-        building_output += f"{mod_state.localize(building_id)}:\n"
+        building_group = data[1].get("building_group", ["", ""])[1]
+        header = mod_state.localize(building_id)
+        if building_group:
+            header += f" ({building_group})"
+        building_output += f"{header}:\n"
+        building_output += _format_description(mod_state.get_description(building_id), indent="\t")
         tech_requirement = data[1].get("unlocking_technologies", None)
         if tech_requirement:
             if tech_requirement[1]:
@@ -195,8 +264,20 @@ def _generate_goods(mod_state):
     goods_path = os.path.join(doc_path, "engine", "goods.txt")
     goods_output = ""
     goods = mod_state.get_data("Goods")
-    for good_id, _ in goods.items():
-        goods_output += f"{mod_state.localize(good_id)}\n"
+    for good_id, (_, good_data) in goods.items():
+        category = good_data.get("category", ["", ""])[1]
+        cost = good_data.get("cost", ["", ""])[1]
+        prestige_factor = good_data.get("prestige_factor", ["", ""])[1]
+        attrs = []
+        if category:
+            attrs.append(f"category={category}")
+        if cost:
+            attrs.append(f"cost={cost}")
+        if prestige_factor and prestige_factor != "0":
+            attrs.append(f"prestige={prestige_factor}")
+        suffix = f" ({', '.join(attrs)})" if attrs else ""
+        goods_output += f"{mod_state.localize(good_id)}{suffix}\n"
+        goods_output += _format_description(mod_state.get_description(good_id), indent="\t")
 
     with open(goods_path, "w", encoding="utf-8") as f:
         f.write(goods_output)
@@ -223,6 +304,7 @@ def _generate_combat_units(mod_state):
         combat_units_output += f"{mod_state.localize(group)}:\n"
         for type in combat_unit_dict[group]:
             combat_units_output += f"\t{mod_state.localize(type)}\n"
+            combat_units_output += _format_description(mod_state.get_description(type), indent="\t\t")
             unit_data = combat_unit_types[type][1]
             if isinstance(unit_data, list):
                 unit_data_flat = {}
@@ -234,9 +316,51 @@ def _generate_combat_units(mod_state):
                 if tech_requirement[1]:
                     tech_name = mod_state.localize(tech_requirement[1][0])
                     combat_units_output += f"\t\tUnlocking Technology: {tech_name}\n"
+            combat_units_output += _format_combat_unit_stats(unit_data)
 
     with open(combat_units_path, "w", encoding="utf-8") as f:
         f.write(combat_units_output)
+
+
+# Combat-stat fields rendered inline. Order chosen for readability: capacity
+# first, then offense/defense pair, then breakthrough/recovery pair.
+_COMBAT_UNIT_STATS = (
+    ("max_manpower", "max_manpower"),
+    ("supply_capacity", "supply_capacity"),
+    ("unit_offense_add", "offense"),
+    ("unit_defense_add", "defense"),
+    ("unit_breakthrough_add", "breakthrough"),
+    ("unit_recovery_rate_add", "recovery_rate"),
+    ("unit_morale_loss_add", "morale_loss"),
+    ("unit_morale_recovery_add", "morale_recovery"),
+)
+
+
+def _format_combat_unit_stats(unit_data):
+    """One-line stats summary for a combat unit type.
+
+    Reads top-level fields (max_manpower, supply_capacity) and the
+    `battle_modifier = { ... }` block, both flat and list forms.
+    """
+    battle = unit_data.get("battle_modifier")
+    bm = {}
+    if battle:
+        bm_raw = battle[1]
+        if isinstance(bm_raw, list):
+            for e in bm_raw:
+                bm.update(e)
+        elif isinstance(bm_raw, dict):
+            bm = bm_raw
+    parts = []
+    for field, label in _COMBAT_UNIT_STATS:
+        if field in unit_data:
+            value = unit_data[field][1]
+        elif field in bm:
+            value = bm[field][1]
+        else:
+            continue
+        parts.append(f"{label}={value}")
+    return f"\t\tStats: {', '.join(parts)}\n" if parts else ""
 
 
 if __name__ == "__main__":
