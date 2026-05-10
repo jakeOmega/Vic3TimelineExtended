@@ -9107,6 +9107,129 @@ pm_automated_harvesters_and_planters = {
 	required_input_goods = electricity
 }
 
+pm_hydraulic_equipment_building_rice_farm = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p0.dds"
+
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (30.77%)
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (69.23%)
+			# Output goods
+			# Total input cost: 520.0
+			# Total output cost: 0
+			# Profit: -520.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -6000
+			# Wage breakeven: 0.09
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -5000
+			building_employment_farmers_add = -1000
+		}
+	}
+}
+
+pm_automated_mechanical_harvesters_building_rice_farm = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_green_p1.dds"
+
+	unlocking_technologies = {
+		microprocessor
+	}
+
+	unlocking_production_methods = {
+		pm_modern_farming_rice_farm
+		pm_designed_crops_rice_farm
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (19.05%)
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (42.86%)
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost:   320.0 (38.10%)
+			# Output goods
+			# Total input cost: 840.0
+			# Total output cost: 0
+			# Profit: -840.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -6500
+			# Wage breakeven: 0.13
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -5000
+			building_employment_farmers_add = -1000
+			building_employment_engineers_add = -500
+		}
+	}
+}
+
+pm_automated_harvesters_and_planters_building_rice_farm = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_green_p2.dds"
+
+	unlocking_technologies = {
+		autonomous_vehicles
+	}
+
+	unlocking_production_methods = {
+		pm_modern_farming_rice_farm
+		pm_designed_crops_rice_farm
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (14.55%)
+			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (32.73%)
+			goods_input_electronic_components_add = 4            # Price:   80, Total cost:   320.0 (29.09%)
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (5.45%)
+			goods_input_digital_assets_add = 2                   # Price:  100, Total cost:   200.0 (18.18%)
+			# Output goods
+			# Total input cost: 1100.0
+			# Total output cost: 0
+			# Profit: -1100.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -6980
+			# Wage breakeven: 0.16
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -5000
+			building_employment_farmers_add = -1000
+			building_employment_engineers_add = -980
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 pm_debarkers_and_chippers = {
 	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	unlocking_technologies = {

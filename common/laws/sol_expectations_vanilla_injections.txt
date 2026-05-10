@@ -64,19 +64,19 @@ INJECT:law_universal_suffrage = {
 
 INJECT:law_poor_laws = {
 	modifier = {
-		country_sol_expectations_shift_min_add = 3
+		country_sol_expectations_shift_min_add = 1
 	}
 }
 
 INJECT:law_wage_subsidies = {
 	modifier = {
-		country_sol_expectations_shift_min_add = 5
+		country_sol_expectations_shift_min_add = 2
 	}
 }
 
 INJECT:law_old_age_pension = {
 	modifier = {
-		country_sol_expectations_shift_min_add = 8
+		country_sol_expectations_shift_min_add = 3
 	}
 }
 

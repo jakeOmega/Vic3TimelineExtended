@@ -2023,7 +2023,7 @@ principle_education_3 = {
 		# School institution gives more tech spread
 		country_tech_spread_mult = 0.10
 		state_literacy_growth_add = 0.0001
-		state_migration_pull_mult = 0.05
+		state_migration_pull_mult = 0.02
 	}
 
 	ai_weight = {
@@ -2070,7 +2070,7 @@ principle_education_4 = {
 		state_literacy_growth_add = 0.00015
 
 		state_pop_qualifications_mult = 0.05
-		state_migration_pull_mult = 0.10
+		state_migration_pull_mult = 0.05
 	}
 
 	ai_weight = {
@@ -2114,7 +2114,7 @@ principle_education_5 = {
 		state_pop_qualifications_mult = 0.10
 
 		country_bureaucracy_mult = 0.02
-		state_migration_pull_mult = 0.15
+		state_migration_pull_mult = 0.1
 		state_assimilation_mult = 0.05
 
 		# Educated populace hardens against rival blocs' cultural hegemony

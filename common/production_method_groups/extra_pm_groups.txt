@@ -1265,6 +1265,14 @@ INJECT:pmg_harvesting_process_building_millet_farm = {
 	}
 }
 
+INJECT:pmg_harvesting_process_building_rice_farm = {
+	production_methods = {
+		pm_hydraulic_equipment_building_rice_farm
+		pm_automated_mechanical_harvesters_building_rice_farm
+		pm_automated_harvesters_and_planters_building_rice_farm
+	}
+}
+
 INJECT:pmg_base_building_construction_sector = {
 	production_methods = {
 		pm_reinforced_concrete_buildings
