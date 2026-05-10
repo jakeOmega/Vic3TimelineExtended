@@ -9,7 +9,19 @@ Last cleanup pass: 2026-05-04 (M4 verified clean and a regression audit added; M
 
 ## HIGH
 
-*(None outstanding.)*
+### H1. Late-era marines have no dedicated unit illustrations (2026-05-10)
+**File:** [common/combat_unit_types/extra_combat_units.txt#L1058-L1224](../../common/combat_unit_types/extra_combat_units.txt)
+
+**Problem:** All four mod-added late-era marine tiers reuse placeholder illustrations. Each is a unique unit with its own tech, era, and battle profile, but visually they read as duplicates of either their corresponding mod infantry tier or vanilla high-tier marines.
+
+| Unit | Era | Tech | Current placeholder | Why it's wrong |
+|---|---|---|---|---|
+| `combat_unit_type_combined_arms_marines` (L1058) | 6 | `combined_arms` | `gfx/unit_illustrations/combined_arms.dds` | Shared with the era-6 regular infantry tier (`# fallback` comment at L88-90); both tiers render identically in the army composition UI. |
+| `combat_unit_type_stealth_marines` (L1098) | 8 | `stealth_technology` | `gfx/unit_illustrations/marines_eu_high.dds` (vanilla) | Source comment at L1130 acknowledges placeholder: "Mod has no dedicated stealth-soldier illustration; reuse vanilla high-tier marines." Stealth/special-forces flavor lost. |
+| `combat_unit_type_networked_marines` (L1142) | 10 | `jadc2` | `gfx/unit_illustrations/robotic.dds` | Shared with the era-10 `robotic_soldiers` infantry tier (`# fallback` comment at L122-126). Drone-marine fireteams render as a generic robot drone. |
+| `combat_unit_type_bioenhanced_marines` (L1187) | 11 | `bioenhanced_soldiers` | `gfx/unit_illustrations/marines_eu_high.dds` (vanilla) | Source comment at L1219-1221 acknowledges placeholder: "No mod-specific bioenhanced-soldier illustration; use vanilla high-tier marine silhouette." Same image as `stealth_marines`, so the two tiers are visually indistinguishable.
+
+**Fix:** Generate four era-appropriate unit illustrations and swap the `texture =` lines in each `combat_unit_image` block. Each should read as a marine (amphibious / coastal-assault silhouette) rather than generic infantry, and the four should be visually distinct from each other and from the existing `combined_arms.dds` / `robotic.dds` infantry illustrations. Pipeline candidate: extend `scripts/image_pipeline/` (or use the same prompt-driven workflow as the prestige / aptitude icon generators), output to `gfx/unit_illustrations/marines_<tier>.dds`. Note that fixing this also resolves the cross-tier visual collision between `stealth_marines` and `bioenhanced_marines` (both currently identical), which is the most player-visible artifact.
 
 ---
 

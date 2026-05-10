@@ -1271,6 +1271,12 @@ This ensures repressive governments pick repressive options, liberal governments
 - **`set_interest_group_type`** — does NOT exist as an effect. Always use `set_interest_group`.
 - **`ig_type:ig_name`** — NOT a valid scope prefix. Use `ig:ig_name` (e.g., `ig:ig_devout`, not `ig_type:ig_devout`).
 
+## Repeated Sibling Keys Get Deduplicated by the Parser
+
+`paradox_file_parser.py` (and likely the engine — not verified) collapses adjacent sibling keys whose values are bytewise-identical. So in a script value, `multiply = X` followed by another `multiply = X` parses as a single multiply, **not two** — the cube `x³` written as three identical `multiply = above_30` lines silently becomes `x²`. Same trap for two identical `multiply = { value = … }` inline blocks.
+
+Workaround: factor the repeated factor into its own named helper at the next exponent up (e.g. `cultural_pull_share_above_30_squared = { value = above_30  multiply = above_30 }`), then chain `value = squared  multiply = above_30  multiply = …` so each sibling key has a distinct value. Verified discovery via `/script-values/<name>` AST inspection — the parsed `multiply` list shows fewer entries than written. Always verify multi-multiply chains via the AST after authoring.
+
 ## Script Values Are NOT Effect Blocks
 
 Script values (`common/script_values/`) evaluate mathematical expressions with triggers/iterators — they are NOT effect blocks. Key restrictions:
