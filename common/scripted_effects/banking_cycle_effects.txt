@@ -1806,129 +1806,132 @@ banking_cycle_check_and_execute_crash = {
 #     Probability depends on trade linkage, severity, AND relative GDP.
 #     Countries where the source is less than ~1% of target GDP are immune.
 banking_cycle_spread_contagion = {
-	every_country = {
-		limit = {
-			NOT = { THIS = scope:banking_crash_origin_country }
-			# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
-			NOT = { has_variable = banking_crisis_wave_crashed }
-			has_journal_entry = je_banking_cycle
-			# Trade-reachable
-			OR = {
-				this.market = scope:banking_crash_origin_country.market
-				is_market_reachable_for_trade = scope:banking_crash_origin_country.market
-			}
-			# At least one trade channel
-			OR = {
-				this.market = scope:banking_crash_origin_country.market
-				is_in_customs_union_with = scope:banking_crash_origin_country
-				is_adjacent_to_country = scope:banking_crash_origin_country
-				economic_dependence = {
-					target = scope:banking_crash_origin_country
-					value > 0.05
+	custom_tooltip = {
+		text = BANKING_CONTAGION_SPREAD_TT
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:banking_crash_origin_country }
+				# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
+				NOT = { has_variable = banking_crisis_wave_crashed }
+				has_journal_entry = je_banking_cycle
+				# Trade-reachable
+				OR = {
+					this.market = scope:banking_crash_origin_country.market
+					is_market_reachable_for_trade = scope:banking_crash_origin_country.market
 				}
-				market = {
-					market_trade_reliance = {
-						target = scope:banking_crash_origin_country.market
-						value > 0.01
-					}
-				}
-				market = {
-					market_production_share = {
+				# At least one trade channel
+				OR = {
+					this.market = scope:banking_crash_origin_country.market
+					is_in_customs_union_with = scope:banking_crash_origin_country
+					is_adjacent_to_country = scope:banking_crash_origin_country
+					economic_dependence = {
 						target = scope:banking_crash_origin_country
-						value > 0.01
+						value > 0.05
+					}
+					market = {
+						market_trade_reliance = {
+							target = scope:banking_crash_origin_country.market
+							value > 0.01
+						}
+					}
+					market = {
+						market_production_share = {
+							target = scope:banking_crash_origin_country
+							value > 0.01
+						}
+					}
+					market = {
+						market_consumption_share = {
+							target = scope:banking_crash_origin_country
+							value > 0.01
+						}
 					}
 				}
-				market = {
-					market_consumption_share = {
-						target = scope:banking_crash_origin_country
-						value > 0.01
-					}
+				# GDP filter: source must have at least 1% of target's GDP
+				# Tiny economies cannot destabilise giants
+				scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
+			}
+
+			random = {
+				chance = 25
+				# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
+				# origin GDP >= affected GDP (same size or bigger)
+				modifier = {
+					trigger = { scope:banking_crash_origin_country.gdp >= gdp }
+					add = 5
 				}
-			}
-			# GDP filter: source must have at least 1% of target's GDP
-			# Tiny economies cannot destabilise giants
-			scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
-		}
+				# origin GDP >= 2x affected
+				modifier = {
+					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
+					add = 10
+				}
+				# origin GDP >= 5x affected
+				modifier = {
+					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
+					add = 15
+				}
+				# origin GDP >= 10x affected
+				modifier = {
+					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
+					add = 20
+				}
+				# Same market = strongest contagion channel
+				modifier = {
+					trigger = { this.market = scope:banking_crash_origin_country.market }
+					add = 10
+				}
+				# Hard crash spreads more easily
+				modifier = {
+					trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+					add = 10
+				}
+				modifier = {
+					trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
+					add = 5
+				}
+				modifier = {
+					trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
+					add = 10
+				}
+				modifier = {
+					trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
+					add = 5
+				}
+				modifier = {
+					trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
+					add = 5
+				}
+				modifier = {
+					trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
+					add = 10
+				}
+				modifier = {
+					trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
+					add = 5
+				}
+				modifier = {
+					trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
+					add = 10
+				}
+				modifier = {
+					trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
+					add = 1.5
+				}
+				modifier = {
+					trigger = { has_law_or_variant = law_type:law_free_trade }
+					add = 1.5
+				}
 
-		random = {
-			chance = 25
-			# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
-			# origin GDP >= affected GDP (same size or bigger)
-			modifier = {
-				trigger = { scope:banking_crash_origin_country.gdp >= gdp }
-				add = 5
-			}
-			# origin GDP >= 2x affected
-			modifier = {
-				trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
-				add = 10
-			}
-			# origin GDP >= 5x affected
-			modifier = {
-				trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
-				add = 15
-			}
-			# origin GDP >= 10x affected
-			modifier = {
-				trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
-				add = 20
-			}
-			# Same market = strongest contagion channel
-			modifier = {
-				trigger = { this.market = scope:banking_crash_origin_country.market }
-				add = 10
-			}
-			# Hard crash spreads more easily
-			modifier = {
-				trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
-				add = 10
-			}
-			modifier = {
-				trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
-				add = 5
-			}
-			modifier = {
-				trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
-				add = 10
-			}
-			modifier = {
-				trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
-				add = 5
-			}
-			modifier = {
-				trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
-				add = 5
-			}
-			modifier = {
-				trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
-				add = 10
-			}
-			modifier = {
-				trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
-				add = 5
-			}
-			modifier = {
-				trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
-				add = 10
-			}
-			modifier = {
-				trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
-				add = 1.5
-			}
-			modifier = {
-				trigger = { has_law_or_variant = law_type:law_free_trade }
-				add = 1.5
-			}
+				scope:banking_crash_origin_country = {
+					save_scope_as = banking_crash_origin_country
+				}
 
-			scope:banking_crash_origin_country = {
-				save_scope_as = banking_crash_origin_country
+				# Mark target immediately so cascading spreads from other countries
+				# in this wave cannot hit the same country twice
+				set_variable = { name = banking_crisis_wave_crashed value = 1 }
+
+				trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
 			}
-
-			# Mark target immediately so cascading spreads from other countries
-			# in this wave cannot hit the same country twice
-			set_variable = { name = banking_crisis_wave_crashed value = 1 }
-
-			trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
 		}
 	}
 }
