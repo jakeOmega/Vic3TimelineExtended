@@ -122,8 +122,8 @@ REPLACE:force_become_subject = {
 					max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
 				}
 
-				# Subjugate is half as bad as annex globally.
-				multiply = 0.5
+				# Subjugate is 20% as bad as annex globally.
+				multiply = 0.2
 
 				# Sovereign Empire discount via repurposed dormant bool.
 				if = {
