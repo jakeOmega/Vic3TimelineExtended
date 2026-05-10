@@ -83,7 +83,6 @@ TIER1_SINGLE_WORD: set[str] = {
     "concept_decree",
     "concept_morale_demoralized",
     "concept_dependents",
-    "concept_detection",
     "concept_disenfranchised",
     "concept_dividends",
     "concept_dominion",
@@ -193,6 +192,14 @@ TIER3_EXCLUDED: set[str] = {
     # own"). The Vic3 Holding mechanic is rare in flow text — tagging produced
     # 5 false positives, 0 true positives.
     "concept_holding",
+    # `concept_detection` is the SHIP COMBAT detection (fleet visibility);
+    # `concept_operation_detection` is the mod's covert-warfare detection.
+    # The bare word "detection" overwhelmingly appears in covert-warfare
+    # contexts in this mod (operation_detection chance, counterintelligence
+    # detection, etc.) where the ship-combat tag would mislead. Sensor /
+    # radar / sonar contexts that DO want the ship concept must be tagged
+    # by hand. 14 false positives, 7 (radar/sonar) correct hand-tags.
+    "concept_detection",
 }
 
 # File-name suffix → file kind (used by Tier 2 gating).
