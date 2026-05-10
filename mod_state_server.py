@@ -133,6 +133,7 @@ base_game_paths = {
     "Discrimination Traits": os.path.join(_BASE_COMMON, "discrimination_traits"),
     "Pop Types": os.path.join(_BASE_COMMON, "pop_types"),
     "Terrains": os.path.join(_BASE_COMMON, "terrain"),
+    "Game Concepts": os.path.join(_BASE_COMMON, "game_concepts"),
 }
 
 mod_paths = {
@@ -185,6 +186,7 @@ mod_paths = {
     "Discrimination Traits": os.path.join(_MOD_COMMON, "discrimination_traits"),
     "Pop Types": os.path.join(_MOD_COMMON, "pop_types"),
     "Terrains": os.path.join(_MOD_COMMON, "terrain"),
+    "Game Concepts": os.path.join(_MOD_COMMON, "game_concepts"),
 }
 
 # ---------------------------------------------------------------------------
@@ -2854,7 +2856,10 @@ class ModStateHandler(BaseHTTPRequestHandler):
             data = self.route(parts, params)
             self._respond_json(data)
         except KeyError as exc:
-            self._respond_json({"error": f"Not found: {exc}"}, 404)
+            self._respond_json(
+                {"error": f"Not found: {exc}", "hint": "GET /help for the endpoint inventory."},
+                404,
+            )
         except Exception as exc:
             logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
             self._respond_json({"error": str(exc)}, 500)
@@ -2916,6 +2921,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         ep = parts[0]
         rest = parts[1:]
         dispatch = {
+            "help": lambda: self._help(),
             "entity-types": lambda: list(ms.mod_parsers.keys()),
             "keys": lambda: self._keys(rest, params),
             "raw": lambda: self._raw(rest),
@@ -2997,6 +3003,69 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return result
 
     # ---- endpoints --------------------------------------------------------
+    def _help(self):
+        return {
+            "see_also": "docs/guides/python_tools.md for full workflow examples.",
+            "post": {
+                "/reload": "Re-parse mod + vanilla; runs post-load generators and audits. ?engine_only=true skips the ModState rebuild.",
+            },
+            "get": [
+                {"path": "/status", "desc": "Server uptime, entity-type list, engine-docs freshness, vanilla-snapshot staleness."},
+                {"path": "/help", "desc": "This endpoint inventory."},
+                {"path": "/entity-types", "desc": "List of every entity type the parser exposes."},
+                {"path": "/keys/<EntityType>", "desc": "All entity IDs of a given type (e.g. /keys/Buildings)."},
+                {"path": "/raw/<EntityType>/<id>", "desc": "Raw parsed AST for one entity."},
+                {"path": "/localize/<key>", "desc": "Resolve a localization key to its English string."},
+                {"path": "/unlocalize?q=<text>", "desc": "Reverse-lookup loc keys whose value matches a substring."},
+                {"path": "/search?q=<text>", "desc": "Full-text search across mod + vanilla parsed entities."},
+                {"path": "/laws/<id?>", "desc": "Laws and law groups; omit id for the index."},
+                {"path": "/technologies/<id?>", "desc": "Tech entries and tree relationships."},
+                {"path": "/buildings/<id?>", "desc": "Building defs incl. PMG list."},
+                {"path": "/goods", "desc": "Goods catalog."},
+                {"path": "/combat-units", "desc": "Combat unit type/group catalog."},
+                {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
+                {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
+                {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
+                {"path": "/decisions/<id?>", "desc": "Decisions catalog."},
+                {"path": "/script-values/<id?>", "desc": "Script value definitions."},
+                {"path": "/decrees/<id?>", "desc": "Decree catalog."},
+                {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
+                {"path": "/events/<id?>", "desc": "Events (mod-only)."},
+                {"path": "/event-balance/<id?>", "desc": "Event option / fast-scaling magnitude analysis."},
+                {"path": "/institutions/<id?>", "desc": "Institutions catalog."},
+                {"path": "/references/<entity>", "desc": "Where in the parsed corpus an entity is referenced."},
+                {"path": "/tech-tree/<id?>", "desc": "Tech-tree adjacency view."},
+                {"path": "/tech-unlocks/<tech>", "desc": "What a tech unlocks (PMs, buildings, laws, etc.)."},
+                {"path": "/unlocked-by/<entity>", "desc": "Inverse of tech-unlocks: what gates an entity."},
+                {"path": "/modifier-search?q=<name>", "desc": "Validate / discover modifier keys against the engine catalog."},
+                {"path": "/modifier-patterns/<sub?>", "desc": "Modifier pattern catalog and discovered families."},
+                {"path": "/engine-docs/<section>/<key?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization)."},
+                {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
+                {"path": "/technology-effects/<tech>", "desc": "Aggregate of all effects applied by a tech."},
+                {"path": "/event-magnitude-audit", "desc": "Hardcoded fast-scaling event-value audit."},
+                {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
+                {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
+                {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
+                {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
+                {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
+                {"path": "/logs/<which?>", "desc": "Game logs (debug / error / game). Use ?include_external=true to keep third-party-mod entries."},
+                {"path": "/annotators", "desc": "List of available ?annotate=<name> post-processors."},
+                {"path": "/filter/<EntityType>", "desc": "Server-side filter over an entity collection."},
+                {"path": "/cultures", "desc": "Culture vocab (thin wrapper over /keys/Cultures)."},
+                {"path": "/religions", "desc": "Religion vocab."},
+                {"path": "/interest-groups", "desc": "IG vocab."},
+                {"path": "/law-groups", "desc": "Law-group vocab."},
+                {"path": "/building-groups", "desc": "Building-group vocab."},
+                {"path": "/pop-types", "desc": "Pop-type vocab."},
+                {"path": "/country-ranks", "desc": "Country-rank vocab."},
+                {"path": "/terrain", "desc": "Terrain vocab."},
+                {"path": "/discrimination-traits", "desc": "Discrimination-trait vocab."},
+            ],
+            "global_query_params": {
+                "annotate": "Comma-separated annotators to enrich entity entries (see /annotators).",
+            },
+        }
+
     def _status(self):
         uptime = time.time() - _server_start_time if _server_start_time else 0
         engine_mtimes = {}
@@ -3233,7 +3302,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
         GET /logs/<family>?summary=true   — category histogram + top repeats.
         GET /logs/<family>/diff[?against=N]
         GET /logs/<family>?q=&file=&source=&category=&since=
-        GET /logs/<family>?dedupe=&dedupe_key=&limit=&offset=&raw=&mod_only=
+        GET /logs/<family>?dedupe=&dedupe_key=&limit=&offset=&raw=
+        GET /logs/<family>?mod_only=true|false|unknown
+            — true (default for error/debug): keep only entries with at least
+              one mod-style script path in `files`.
+            — false (default elsewhere): keep all entries.
+            — unknown: keep entries unless they're tagged as a registered
+              vanilla bug or registered vanilla noise. Includes mod-path
+              entries AND entries with empty `files` whose origin can't be
+              confirmed vanilla — useful for catching engine errors that
+              surface from vanilla cpp source (no mod path attached) but
+              are actually caused by mod content (e.g. unregistered concept
+              refs, malformed loc).
         GET /logs/<family>?vanilla_bugs=show|hide|only
             — tag (default) / drop / keep-only entries that match a vanilla bug
             registered in docs/vanilla/vanilla_known_bugs.md.
@@ -3244,7 +3324,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             docs/audits/open_issues.md so they remain actionable).
             Tagged entries get a `vanilla_bug_ref: {title, section, kind}`
             field; `kind` is "vanilla", "vanilla_noise", or "mod_low_priority".
-            Use `?vanilla_bugs=hide&mod_noise=hide` for fully clean triage.
+            Use `?vanilla_bugs=hide&mod_noise=hide` for a fully-clean triage
+            view, or `?mod_only=unknown` to surface uncategorized engine
+            entries that the canonical filters hide.
         """
         from game_log_reader import (
             list_logs, parse_log, filter_mod_only, filter_external_mods, filter_entries,
@@ -3256,6 +3338,39 @@ class ModStateHandler(BaseHTTPRequestHandler):
         mod_noise_doc = os.path.join(mod_path, "docs", "audits", "mod_known_noise.md")
         _, vb_by_basename, vb_by_source, _ = load_vanilla_bug_registry(vanilla_bugs_doc)
         _, mn_by_basename, mn_by_source, _ = load_mod_noise_registry(mod_noise_doc)
+
+        def _apply_mod_only_mode(entries, mode):
+            """Tristate filter on `mod_only` parameter.
+
+            - 'true'    → keep entries with at least one mod-style script path
+                          in `files` (today's default for error/debug).
+            - 'false'   → keep all entries.
+            - 'unknown' → keep entries unless they're tagged with a
+                          `vanilla_bug_ref` of kind 'vanilla' or
+                          'vanilla_noise'. Includes mod-path entries AND
+                          entries with empty `files` whose origin can't be
+                          confirmed vanilla. Surfaces engine errors that
+                          come from vanilla cpp source (no mod path attached)
+                          but are caused by mod content — e.g. unregistered
+                          concept references, malformed loc, custom-loc
+                          references to undeclared keys.
+
+            Other values (incl. typos) fall through as 'false' / no filter.
+
+            Caller must invoke `_apply_known_noise_tagging` first so that
+            `vanilla_bug_ref` is populated when `mode == 'unknown'`.
+            """
+            if mode == "true":
+                return filter_mod_only(entries)
+            if mode == "unknown":
+                kept = []
+                for e in entries:
+                    ref = e.vanilla_bug_ref
+                    if ref is not None and ref.get("kind") in ("vanilla", "vanilla_noise"):
+                        continue
+                    kept.append(e)
+                return kept
+            return entries
 
         def _apply_known_noise_tagging(entries, vanilla_mode, mod_noise_mode):
             """Tag entries against both registries, then apply per-kind modes (show|hide|only).
@@ -3331,21 +3446,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
             )
             if against_match is None:
                 return {"error": f"No {family}.{against}.log to diff against"}
-            mod_only = (params.get("mod_only") or ["true"])[0].lower() == "true"
+            mod_only_mode = (params.get("mod_only") or ["true"])[0].lower()
             default_external = "false" if family in ("error", "debug") else "true"
             include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
             vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
             mod_noise_mode = (params.get("mod_noise") or ["show"])[0].lower()
             current_entries = parse_log(match.path)
             against_entries = parse_log(against_match.path)
-            if mod_only:
-                current_entries = filter_mod_only(current_entries)
-                against_entries = filter_mod_only(against_entries)
+            # Tag noise first so the mod_only=unknown filter can examine
+            # vanilla_bug_ref. The vanilla_bugs/mod_noise modes also apply
+            # their own drop/only filtering inside this call.
+            current_entries = _apply_known_noise_tagging(current_entries, vanilla_bugs_mode, mod_noise_mode)
+            against_entries = _apply_known_noise_tagging(against_entries, vanilla_bugs_mode, mod_noise_mode)
+            current_entries = _apply_mod_only_mode(current_entries, mod_only_mode)
+            against_entries = _apply_mod_only_mode(against_entries, mod_only_mode)
             if not include_external:
                 current_entries = filter_external_mods(current_entries)
                 against_entries = filter_external_mods(against_entries)
-            current_entries = _apply_known_noise_tagging(current_entries, vanilla_bugs_mode, mod_noise_mode)
-            against_entries = _apply_known_noise_tagging(against_entries, vanilla_bugs_mode, mod_noise_mode)
             return {
                 "current": match.to_dict(),
                 "against": against_match.to_dict(),
@@ -3356,15 +3473,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         entries = parse_log(match.path)
         # mod_only default: true for error/debug, false for the rest
         default_mod_only = "true" if family in ("error", "debug") else "false"
-        mod_only = (params.get("mod_only") or [default_mod_only])[0].lower() == "true"
-        if mod_only:
-            entries = filter_mod_only(entries)
-        # include_external default: drop known third-party-mod spam (Statistics, ...)
-        # from error/debug, keep it for everything else.
-        default_external = "false" if family in ("error", "debug") else "true"
-        include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
-        if not include_external:
-            entries = filter_external_mods(entries)
+        mod_only_mode = (params.get("mod_only") or [default_mod_only])[0].lower()
         # Tag entries that match docs/vanilla/vanilla_known_bugs.md and docs/audits/mod_known_noise.md,
         # then optionally drop or keep-only by kind. Modes per param: show (default —
         # tag, keep visible), hide, only.
@@ -3372,9 +3481,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
         #   ?mod_noise=hide    → drops mod_low_priority tagged entries
         # Use both with `hide` for a fully-clean triage view; use `only` on either
         # for an audit of "what's currently being filtered".
+        # Tagging is applied BEFORE mod_only so the `mod_only=unknown` mode can
+        # examine `vanilla_bug_ref` on each entry.
         vanilla_bugs_mode = (params.get("vanilla_bugs") or ["show"])[0].lower()
         mod_noise_mode = (params.get("mod_noise") or ["show"])[0].lower()
         entries = _apply_known_noise_tagging(entries, vanilla_bugs_mode, mod_noise_mode)
+        entries = _apply_mod_only_mode(entries, mod_only_mode)
+        # include_external default: drop known third-party-mod spam (Statistics, ...)
+        # from error/debug, keep it for everything else.
+        default_external = "false" if family in ("error", "debug") else "true"
+        include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
+        if not include_external:
+            entries = filter_external_mods(entries)
         entries = filter_entries(
             entries,
             q=(params.get("q") or [None])[0],
@@ -5379,6 +5497,7 @@ POST_LOAD_GENERATORS = [
     ("modifier_visibility_audit",     "modifier_visibility_audit"),
     ("kill_character_audit",          "kill_character_audit"),
     ("loc_coverage_audit",            "loc_coverage_audit"),
+    ("concept_reference_audit",       "concept_reference_audit"),
     ("localization_accessor_audit",   "localization_accessor_audit"),
     ("mod_structure_audit",           "mod_structure_audit"),
     ("gen_event_inventory",           "gen_event_inventory"),
