@@ -8,7 +8,7 @@
  movement_civil_rights:0 "Civil Rights Movement"
  movement_civil_rights_name:0 "$movement_civil_rights$"
  movement_crushed_assimilation_drive_modifier:0 "Assimilation Drive"
- movement_crushed_assimilation_drive_modifier_desc:0 "With the civil rights movement defeated, the state has accelerated its cultural assimilation program."
+ movement_crushed_assimilation_drive_modifier_desc:0 "With the civil rights movement defeated, the state has accelerated its cultural [concept_assimilation] program."
  movement_crushed_expulsion_modifier:0 "Minority Expulsion Program"
  movement_crushed_expulsion_modifier_desc:0 "The state is actively driving out unwanted minorities, encouraging or forcing their emigration."
  movement_crushed_order_restored_modifier:0 "Order Restored"

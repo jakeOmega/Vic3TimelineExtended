@@ -333,18 +333,29 @@ def compute_combat_unit_breakdown(file_path, goods_dict):
 
 def _build_market_cost_line(unit_name):
     return (
-        f"\\nCost at current market prices: #N @money!"
+        f"\\nCost at current "
+        f"[Concept('concept_market_price', 'market prices')]: #N @money!"
         f"[GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_{unit_name}')|0]"
         f" #!"
     )
 
 
+# Match the cost-base anchor plus zero or more cost-current entries (the
+# `*` quantifier sweeps duplicates that earlier idempotency regressions
+# may have left behind). The cost-current label may be either the legacy
+# untagged "market prices" or the current `[Concept('concept_market_price',
+# 'market prices')]` tag — both are accepted on read; output is always
+# the tagged form.
 _DESC_SUFFIX_RE = re.compile(
     r"(Cost at base prices: #N @money!)(\d+)"
     r"( #!)"
-    r"(\\nCost at current market prices: #N @money!"
+    r"(?:\\nCost at current "
+    r"(?:market prices|"
+    r"\[Concept\('concept_market_price', 'market prices'\)\]"
+    r"): "
+    r"#N @money!"
     r"\[GetPlayer\.MakeScope\.ScriptValue\("
-    r"'value_combat_unit_market_cost_(\w+)'\)\|0\] #!)?"
+    r"'value_combat_unit_market_cost_\w+'\)\|0\] #!)*"
 )
 
 
@@ -385,8 +396,8 @@ def update_combat_unit_loc(loc_path, breakdown):
 
         market_line = _build_market_cost_line(unit_name)
 
-        def _replace(match):
-            return f"{match.group(1)}{base_total}{match.group(3)}{market_line}"
+        def _replace(match, _ml=market_line, _bt=base_total):
+            return f"{match.group(1)}{_bt}{match.group(3)}{_ml}"
 
         new_body = _DESC_SUFFIX_RE.sub(_replace, body, count=1)
         new_line = f'{new_body}"'

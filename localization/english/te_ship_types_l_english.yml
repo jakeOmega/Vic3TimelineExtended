@@ -4,7 +4,7 @@
 # SHIP_TYPES
 #
  ship_type_amphibious_assault_ship: "Amphibious Assault Ship"
- ship_type_amphibious_assault_ship_desc: "A modern landing helicopter assault platform that can deploy a battalion of marines onto a hostile coast in a single wave. Replaces wartime troop transports."
+ ship_type_amphibious_assault_ship_desc: "A modern landing helicopter assault platform that can deploy a [concept_battalion] of marines onto a hostile coast in a single wave. Replaces wartime troop transports."
  ship_type_antimatter_battleship: "Antimatter Battleship"
  ship_type_antimatter_battleship_desc: "A fusion-driven capital ship armed with antimatter-tipped mass-driver projectiles. The terminal expression of surface naval firepower."
  ship_type_arsenal_ship: "Arsenal Ship"
@@ -18,7 +18,7 @@
  ship_type_expeditionary_sea_base: "Expeditionary Sea Base"
  ship_type_expeditionary_sea_base_desc: "A floating staging platform that supports rapid forward deployment of marines and supplies far from any friendly port."
  ship_type_fleet_carrier: "Fleet Carrier"
- ship_type_fleet_carrier_desc: "A heavy fleet carrier purpose-built around carrier aviation doctrine. Projects air power across a task force at long range while screening capital ships from torpedo strikes."
+ ship_type_fleet_carrier_desc: "A heavy fleet carrier purpose-built around carrier aviation doctrine. Projects air power across a task force at long range while [concept_screening] capital ships from torpedo strikes."
  ship_type_guided_missile_ship: "Guided Missile Ship"
  ship_type_guided_missile_ship_desc: "A destroyer-class warship armed with guided anti-ship missiles. Trades close-in armament for stand-off precision strike capability."
  ship_type_hypersonic_missile_platform: "Hypersonic Missile Platform"

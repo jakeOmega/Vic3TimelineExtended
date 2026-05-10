@@ -250,7 +250,7 @@ def render_effects_text(button_data, modifier_effects):
         delta_str = (
             f"{int(abs(delta))}" if abs(delta) == int(abs(delta)) else f"{abs(delta):g}"
         )
-        parts.append(f"#{color} {sign}{delta_str} UN Authority#!")
+        parts.append(f"#{color} {sign}{delta_str} [concept_un_authority]#!")
 
     if not parts:
         return ""
