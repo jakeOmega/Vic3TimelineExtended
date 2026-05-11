@@ -502,14 +502,121 @@ Starting pre-enumerating 'gfx/frontend/interface/frontend/startscreen.dds'
 
 Companion to the `:388` entry above — same VFS pre-enumeration cycle, same harmless trace, different cpp emit point.
 
-### `pdx_persistent_reader.cpp:268` — save-game scan key-reference parse warnings
+### `pdx_persistent_reader.cpp:268` — save-game scan key-reference and province-reference parse warnings
 - source: `pdx_persistent_reader.cpp:268`
 
 ```
 Failed to read key reference: : , near line:
+Invalid read of province reference, no string & no number
 ```
 
-The persistent reader scans every file under the saves directory at startup and emits this warning for entries whose key/value layout doesn't fit the expected schema (legacy save formats, partially-written autosaves, third-party tools' artifacts). The `entry.files` field is empty for the bare-line variants and references `save games/*.v3` for the named ones. Non-actionable from script — categorized as `script_parse_error` purely on the wording, but no mod (or vanilla) `.txt` is involved. ~1100/session in this user's setup; volume scales with how many save files exist on disk.
+The persistent reader scans every file under the saves directory at startup and emits this warning for entries whose key/value layout doesn't fit the expected schema (legacy save formats, partially-written autosaves, third-party tools' artifacts). The `entry.files` field is empty for the bare-line variants and references `save games/*.v3` for the named ones. The "Invalid read of province reference" variant fires from the same source for unset province-id fields encountered during the same save scan. Non-actionable from script — categorized as `script_parse_error` purely on the wording, but no mod (or vanilla) `.txt` is involved. ~1100/session in this user's setup; volume scales with how many save files exist on disk.
+
+### `journal_entry_manager.cpp:370` — revolt-spawned countries duplicate every parent JE
+- source: `journal_entry_manager.cpp:370`
+
+```
+already has a journal entry of type
+```
+
+When a revolt secession spawns a new secondary-formation country (e.g. "Swedish Liberal Revolt", "Indori Peasant Revolt", "Khairpuri Communist Revolt"), the engine seeds it with journal entries inherited from the parent country, then immediately re-runs JE-seeding on-actions that try to add the same entries again. The manager emits one warning per duplicate. Volume scales with how many JEs the parent country has — mod content (`je_banking_cycle`, `je_covert_warfare`, `je_global_warming`, etc.) appears alongside vanilla JEs (`je_sale_of_alaska`, `je_german_unification`, …) in the duplicate list, because both sets are valid on the parent. **The mod does not mass-add JEs via `on_country_creation` or any other revolt-related on-action** — verified by grepping `common/on_actions/`. Vanilla revolt creation is the source. Cosmetic — the engine de-duplicates and keeps the existing JE.
+
+### `jomini_script_system.cpp:247` — invalid `religion` event-target in cross-religion comparisons
+
+```
+common/script_values/01_power_bloc_values.txt:56
+common/script_values/modified.txt:52
+common/coat_of_arms/template_lists/coa_templates.txt:141
+common/character_interactions/00_character_interactions.txt:297
+```
+
+Vanilla uses the pattern `religion = scope:X.religion` unguarded — `power_bloc_leverage_gain` (`01_power_bloc_values.txt:56`), the coat-of-arms religion-match template (`coa_templates.txt:141`), and the character "Convert" interaction (`00_character_interactions.txt:297`). When the right-hand scope evaluates to a country lacking a state religion (e.g. revolt-synthesized countries during their creation window), the engine emits `Event target link 'religion' returned an invalid object`. The mod's `common/script_values/modified.txt` is an override of `01_power_bloc_values.txt` carrying the same line; same noise re-emerges under the mod filename. Mod's own treaty article `common/treaty_articles/106_religious_mission_rights.txt` was hardened with `exists = scope:target_country` / `exists = scope:source_country` guards (2026-05-10), so it is no longer in this list. Cosmetic — comparisons that fail simply don't fire their accept-score branch.
+
+### `common/war_goal_types/00_annex_country.txt:93, :114, :148, :155` — invalid country/strategic-region scope
+
+```
+common/war_goal_types/00_annex_country.txt:93
+common/war_goal_types/00_annex_country.txt:114
+common/war_goal_types/00_annex_country.txt:148
+common/war_goal_types/00_annex_country.txt:155
+```
+
+Parallel to the existing `03_conquer_state.txt:156-185` entry. `00_annex_country.txt` uses `scope:target_country` and `has_strategic_region_interest_tier` triggers without `exists = scope:target_country` guards; when the play-evaluation runs against an unset target (`Country  (4294967295)`), the cascade fires "Scoped object of type 'country' is not valid". Cosmetic — the trigger short-circuits to false.
+
+### `common/journal_entries/00_east_indies.txt:7`, `:12`, `00_opium_wars.txt:7`, `01_ryukyu_rivalry.txt:16`, `02_acre_dispute.txt:8`, `00_german_unification.txt:12` — `c:XXX` unset-scope cascade
+
+```
+common/journal_entries/00_east_indies.txt
+common/journal_entries/00_german_unification.txt
+common/journal_entries/00_opium_wars.txt
+common/journal_entries/01_ryukyu_rivalry.txt
+common/journal_entries/02_acre_dispute.txt
+```
+
+Parallel to the existing `common/on_actions/00_on_actions_yearly.txt:559` entry — vanilla JE definitions reference country tags via `c:XXX` (e.g. `c:GBR`, `c:NDL`, `c:JAP`, `c:CHI`) at the top-level `possible` or `scope` block without `exists = c:XXX` guards. When the referenced country doesn't exist in the world (e.g. has been annexed or never spawned), the engine emits the paired "Event target link 'c' returned an unset scope" + "Invalid left side during comparison 'c'" cascade on the same line. Cosmetic — JE simply doesn't activate.
+
+### `events/secession_situations.txt:418` — `Could not get leader of interest group 'Industrialists'` in revolt-synthesized country
+
+```
+Could not get leader of interest group 'Industrialists' in country
+events/secession_situations.txt:418
+```
+
+Parallel to the existing `events/slave_revolts.txt:38` entry. Vanilla secession event reads the Industrialists IG leader on a freshly-synthesized revolt country before its IGs have been populated with characters. Casts as a `leader returned an unset scope` cascade on the same line. Cosmetic — null leader is handled gracefully downstream.
+
+### `jomini_mapobject_manager.cpp:3509` — invalid camera index 0
+- source: `jomini_mapobject_manager.cpp:3509`
+
+```
+CMapObjectManager::GetVisibleObjects: invalid camera index 0 requested
+```
+
+Engine graphics noise emitted during early frame setup. No mod or vanilla script involvement.
+
+### `pdx_assert.cpp:637` — "The null hierarchy will never have social classes"
+- source: `pdx_assert.cpp:637`
+
+```
+The null hierarchy will never have social classes associated with it
+```
+
+Engine-internal assertion fired during pop-strata setup when an empty hierarchy is queried. `pdx_assert.cpp:637` is shared with several other distinct assertions (the `building_company_basic_*` duplicate-building entries above, the Mobilize-Army entry below) — the signature substring is what disambiguates this one. Cosmetic.
+
+### `pdx_assert.cpp:637` — "Mobilize Army Commmand given an invalid army"
+- source: `pdx_assert.cpp:637`
+
+```
+Mobilize Army Commmand given an invalid army
+```
+
+Engine assertion (note the typo `Commmand` is in vanilla's source string — match it verbatim) fired when the AI sends a Mobilize Army command targeting an army that has since been disbanded or merged. Cosmetic.
+
+### `pdx_online_telemetry.cpp:25` — engine telemetry dump on graphics-settings init
+- source: `pdx_online_telemetry.cpp:25`
+
+```
+[telemetry]
+```
+
+Informational dump of resolved graphics settings (quality, shadowmap_resolution, texture_quality, anti_aliasing, scale, …). Fires once per launch as the engine pushes settings to its telemetry sink. Not an error — the categorizer tags it `other` because there's no script context to classify against.
+
+### `pdx_json_settings.cpp:425` — settings-write skip notice on shutdown
+- source: `pdx_json_settings.cpp:425`
+
+```
+[SPdxJsonSettingsIO]
+```
+
+Informational `Category:"X" Setting:"Y" won't be written` lines emitted as the engine reconciles in-memory settings against disk on shutdown — entries marked transient are intentionally skipped. Not an error.
+
+### `player.cpp:153` — `DeleteAllPlayers` shutdown trace
+- source: `player.cpp:153`
+
+```
+CJominiPlayers:::DeleteAllPlayers
+```
+
+Engine shutdown trace logging the player cleanup count. Not an error.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
