@@ -49,6 +49,7 @@ power_bloc_leverage_gain = {
 
 	if = {
 		limit = {
+			exists = scope:target.religion
 			scope:target.religion = root.religion
 			root.power_bloc = {
 				has_identity = identity:identity_religious

@@ -253,5 +253,5 @@ te_target_militarily_weaker = {
 # multi-factor dependence rewards the player for actually integrating a target's
 # economy into the bloc rather than just outgrowing them.
 te_target_economically_subordinate = {
-	"$TARGET$.economic_dependence(root)" >= 3
+	"$TARGET$.economic_dependence(root)" > 3
 }

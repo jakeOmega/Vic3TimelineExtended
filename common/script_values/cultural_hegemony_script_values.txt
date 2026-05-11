@@ -78,9 +78,7 @@ ch_program_funding_level_value = {
 
 ch_program_funding_cost_mult = {
 	value = 0
-	owner = {
-		add = gdp
-	}
+	add = gdp
 	multiply = 0.00005
 	min = 0
 }
@@ -185,7 +183,13 @@ country_fine_art_production = {
 			divide = {
 				value = 0
 				every_country = {
-					limit = { market = root.market }
+					# `exists = market` guards decentralized/unrecognized/uncreated countries that
+					# `every_country` iterates over but lack a market scope. Without the guard the
+					# engine logs "Event target link 'market' returned an invalid object" per tick.
+					limit = {
+						exists = market
+						market = root.market
+					}
 					add = gdp
 				}
 				min = 1

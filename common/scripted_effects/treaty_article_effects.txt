@@ -16,7 +16,7 @@ update_intel_sharing_defense = {
 	# Only proceed if country has an intel sharing pact
 	if = {
 		limit = {
-			any_scope_diplomatic_pact = {
+			any_scope_treaty = {
 				any_scope_article = { has_type = intelligence_sharing_pact }
 			}
 		}
@@ -39,7 +39,7 @@ update_intel_sharing_defense = {
 		set_variable = { name = _best_boost value = 0 }
 		save_scope_as = _self
 
-		every_scope_diplomatic_pact = {
+		every_scope_treaty = {
 			limit = { any_scope_article = { has_type = intelligence_sharing_pact } }
 
 			# Determine which country is the partner

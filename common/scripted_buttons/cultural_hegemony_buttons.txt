@@ -46,13 +46,22 @@
 				clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
 			}
 
+			# Pre-compute multipliers in country scope; passing the script values
+			# directly into the JE-scoped add_modifier would evaluate them in JE
+			# scope, where the underlying variables / gdp accessor are unreachable.
+			save_scope_as = _ch_country
+			set_variable = { name = _ch_level_mult value = ch_program_funding_level_value }
+			set_variable = { name = _ch_cost_mult value = ch_program_funding_cost_mult }
+
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
 			if = {
-				limit = { ch_program_funding_level_value >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
+				limit = { var:_ch_level_mult >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
 			}
+			remove_variable = _ch_level_mult
+			remove_variable = _ch_cost_mult
 		}
 	}
 }
@@ -92,13 +101,19 @@ ch_decrease_program_funding_button = {
 			change_variable = { name = ch_program_funding_level subtract = 1 }
 			clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
 
+			save_scope_as = _ch_country
+			set_variable = { name = _ch_level_mult value = ch_program_funding_level_value }
+			set_variable = { name = _ch_cost_mult value = ch_program_funding_cost_mult }
+
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
 			if = {
-				limit = { ch_program_funding_level_value >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
+				limit = { var:_ch_level_mult >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
 			}
+			remove_variable = _ch_level_mult
+			remove_variable = _ch_cost_mult
 		}
 	}
 }

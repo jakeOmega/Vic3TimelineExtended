@@ -875,7 +875,7 @@ IMAGES = {
     "movement_triumph_celebration": {
         "prompt": "A massive public celebration after a movement's victory.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["movement_events_te.100", "movement_events_te.201"],
+        "events": ["movement_events_te.100"],
     },
     "movement_crushed_aftermath": {
         "prompt": "Empty rain-soaked streets after a suppressed movement.",
@@ -2154,15 +2154,6 @@ IMAGES = {
         "prompt": "Diplomats redrawing the map of the world after a great war: new borders, new alliances, new spheres of influence sketched on a giant map. Some nations enlarged, others divided, some erased entirely. The tectonic restructuring of geopolitics.",
         "style": "oil painting, academic art, warm strategic light",
         "events": ["world_war_events.104", "world_war_events.105"],
-    },
-
-    # =========================================================================
-    # TEST EVENT
-    # =========================================================================
-    "test_placeholder": {
-        "prompt": "A generic Victorian-era office scene: desk with papers, inkwell, and a globe. Bookshelves line the walls. Afternoon light through a window.",
-        "style": "oil painting, warm afternoon light, Victorian",
-        "events": ["test_event.1"],
     },
 }
 

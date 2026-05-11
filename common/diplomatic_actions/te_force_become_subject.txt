@@ -127,7 +127,7 @@ REPLACE:force_become_subject = {
 
 				# Sovereign Empire discount via repurposed dormant bool.
 				if = {
-					limit = { has_modifier = power_bloc_leader_can_make_subjects_bool }
+					limit = { modifier:power_bloc_leader_can_make_subjects_bool = yes }
 					multiply = 0.5
 				}
 

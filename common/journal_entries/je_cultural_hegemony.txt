@@ -372,16 +372,25 @@ je_cultural_hegemony = {
 				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_protectionism_program }
 			}
 
+			# Pre-compute multipliers in country scope; passing the script values
+			# directly into the JE-scoped add_modifier would evaluate them in JE
+			# scope, where the underlying variables / gdp accessor are unreachable.
+			save_scope_as = _ch_country
+			set_variable = { name = _ch_level_mult value = ch_program_funding_level_value }
+			set_variable = { name = _ch_cost_mult value = ch_program_funding_cost_mult }
+
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
 			if = {
 				limit = {
 					has_law = law_type:law_ministry_of_culture
-					ch_program_funding_level_value >= 1
+					var:_ch_level_mult >= 1
 				}
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
 			}
+			remove_variable = _ch_level_mult
+			remove_variable = _ch_cost_mult
 
 			# Apply/remove cultural hegemony modifier (hegemon bonus)
 			je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
@@ -401,6 +410,11 @@ je_cultural_hegemony = {
 				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
 				remove_modifier = cultural_hegemony_foreign_benchmark
 			}
+
+			# Milestone events — self-gated by ch_milestone_* variables, fire
+			# at most once per country when cultural_pull_total crosses 10 / 25.
+			trigger_event = { id = cultural_hegemony.8 }
+			trigger_event = { id = cultural_hegemony.9 }
 		}
 	}
 

@@ -38,10 +38,10 @@ cultural_hegemony.1 = {
 
 		# Patronize the arts - boost intelligentsia, attract academics
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_cultural_renaissance
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_cultural_renaissance
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_cultural_renaissance_ig
@@ -68,10 +68,10 @@ cultural_hegemony.1 = {
 
 		# Redirect cultural output toward propaganda - boost prestige, anger intellectuals
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_state_propaganda
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_state_propaganda
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_state_propaganda_ig
@@ -137,15 +137,15 @@ cultural_hegemony.2 = {
 		}
 		every_scope_state = {
 			limit = { state_population > 100000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = aristocrats
 				value = medium_radicals
 			}
-			add_radicals = {
+			add_radicals_in_state = {
 				interest_group = ig:ig_devout
 				value = small_radicals
 			}
-			add_loyalists = {
+			add_loyalists_in_state = {
 				pop_type = academics
 				value = small_radicals
 			}
@@ -180,11 +180,11 @@ cultural_hegemony.2 = {
 		}
 		every_scope_state = {
 			limit = { state_population > 100000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = academics
 				value = small_radicals
 			}
-			add_loyalists = {
+			add_loyalists_in_state = {
 				interest_group = ig:ig_devout
 				value = small_radicals
 			}
@@ -205,7 +205,7 @@ cultural_hegemony.2 = {
 		# Ignore the issue - minor unrest across the board
 		every_scope_state = {
 			limit = { state_population > 100000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				value = very_small_radicals
 			}
 		}
@@ -255,10 +255,10 @@ cultural_hegemony.3 = {
 
 		# Leverage media dominance - cultural pull boost, political movements weakened
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_media_dominance
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_media_dominance
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		add_loyalists = {
 			value = small_radicals
 		}
@@ -273,10 +273,10 @@ cultural_hegemony.3 = {
 
 		# Promote media freedom - migration pull, legitimacy, intelligentsia approval
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_media_freedom
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_media_freedom
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		ig:ig_intelligentsia = {
 			add_modifier = {
 				name = ch_media_freedom_ig
@@ -355,11 +355,11 @@ cultural_hegemony.4 = {
 			}
 		}
 		every_scope_state = {
-			add_loyalists = {
+			add_loyalists_in_state = {
 				interest_group = ig:ig_armed_forces
 				value = small_radicals
 			}
-			add_loyalists = {
+			add_loyalists_in_state = {
 				interest_group = ig:ig_devout
 				value = very_small_radicals
 			}
@@ -379,15 +379,15 @@ cultural_hegemony.4 = {
 
 		# Suppress nationalism - reduce tensions but anger traditionalists
 		every_scope_state = {
-			add_radicals = {
+			add_radicals_in_state = {
 				interest_group = ig:ig_armed_forces
 				value = small_radicals
 			}
-			add_radicals = {
+			add_radicals_in_state = {
 				interest_group = ig:ig_devout
 				value = small_radicals
 			}
-			add_loyalists = {
+			add_loyalists_in_state = {
 				pop_type = academics
 				value = very_small_radicals
 			}
@@ -442,10 +442,10 @@ cultural_hegemony.5 = {
 
 		# Capitalize on soft power - prestige and migration pull
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_soft_power_dividend
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_soft_power_dividend
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 7
@@ -457,10 +457,10 @@ cultural_hegemony.5 = {
 
 		# Reinvest in cultural institutions - boost cultural pull directly
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_cultural_investment
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_cultural_investment
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 5
@@ -511,10 +511,10 @@ cultural_hegemony.6 = {
 
 		# Fund universities and research - retain talent, cost innovation
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_talent_retention
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_talent_retention
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 7
@@ -530,11 +530,11 @@ cultural_hegemony.6 = {
 				any_scope_pop = { is_pop_type = academics }
 				state_population > 100000
 			}
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = academics
 				value = medium_radicals
 			}
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = engineers
 				value = small_radicals
 			}
@@ -637,10 +637,10 @@ cultural_hegemony.7 = {
 
 		# Research bonus from cultural exchange
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_cultural_exchange
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_cultural_exchange
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		# Boost IGs that are in government in the hegemon
 		if = {
@@ -730,7 +730,7 @@ cultural_hegemony.7 = {
 		# Radicals among pops disturbed by foreign ideology
 		every_scope_state = {
 			limit = { state_population > 50000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				value = small_radicals
 			}
 		}
@@ -755,21 +755,21 @@ cultural_hegemony.7 = {
 
 		# Heavy-handed crackdown: no IG or movement effects, but government cost
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_foreign_influence_crackdown
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_foreign_influence_crackdown
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		every_scope_state = {
 			limit = { state_population > 50000 }
-			add_loyalists = {
+			add_loyalists_in_state = {
 				interest_group = ig:ig_armed_forces
 				value = small_radicals
 			}
-			add_loyalists = {
+			add_loyalists_in_state = {
 				interest_group = ig:ig_devout
 				value = very_small_radicals
 			}
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = academics
 				value = medium_radicals
 			}
@@ -796,10 +796,10 @@ cultural_hegemony.7 = {
 
 		# Moderate suppression costs
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_narrative_control
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_narrative_control
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		# Only intelligentsia and trade unions leak through (shorter duration)
 		if = {
 			limit = {
@@ -827,7 +827,7 @@ cultural_hegemony.7 = {
 
 		every_scope_state = {
 			limit = { state_population > 50000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = academics
 				value = small_radicals
 			}
@@ -845,10 +845,10 @@ cultural_hegemony.7 = {
 
 		# Small cultural adaptation bonus (much weaker than option A's research)
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_cultural_adaptation
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_cultural_adaptation
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		# Reduced political movement pressure (you're not suppressing, just redirecting)
 		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
@@ -898,10 +898,10 @@ cultural_hegemony.8 = {
 
 		# Invest in cultural projection
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_soft_power_dividend
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_soft_power_dividend
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 10
@@ -913,11 +913,11 @@ cultural_hegemony.8 = {
 
 		# Focus on internal development instead
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_domestic_consolidation
-			days = normal_modifier_time
-			is_decaying = yes
-			multiplier = 2
-		} }
+				name = ch_domestic_consolidation
+				days = normal_modifier_time
+				is_decaying = yes
+				multiplier = 2
+			} }
 
 		ai_chance = {
 			base = 5
@@ -1010,10 +1010,10 @@ cultural_hegemony.10 = {
 		default_option = yes
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_touring_exhibition
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_touring_exhibition
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 6
@@ -1029,10 +1029,10 @@ cultural_hegemony.10 = {
 		name = cultural_hegemony.10.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_art_commercialization
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_art_commercialization
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		add_treasury = {
 			value = money_amount_multiplier_very_large
 			multiply = 6
@@ -1087,10 +1087,10 @@ cultural_hegemony.11 = {
 		default_option = yes
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_tourism_infrastructure
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_tourism_infrastructure
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 6
@@ -1106,10 +1106,10 @@ cultural_hegemony.11 = {
 		name = cultural_hegemony.11.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_tourism_exploitation
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_tourism_exploitation
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		add_radicals = {
 			pop_type = shopkeepers
 			value = very_small_radicals
@@ -1165,10 +1165,10 @@ cultural_hegemony.12 = {
 		default_option = yes
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_international_university
-			days = long_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_international_university
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 6
@@ -1184,10 +1184,10 @@ cultural_hegemony.12 = {
 		name = cultural_hegemony.12.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_domestic_university_focus
-			days = long_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_domestic_university_focus
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 5
@@ -1240,10 +1240,10 @@ cultural_hegemony.13 = {
 		default_option = yes
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_language_academies
-			days = long_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_language_academies
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 6
@@ -1259,10 +1259,10 @@ cultural_hegemony.13 = {
 		name = cultural_hegemony.13.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_natural_lingua_franca
-			days = long_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_natural_lingua_franca
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 5
@@ -1348,10 +1348,10 @@ cultural_hegemony.14 = {
 		default_option = yes
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_entertainment_embrace
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_entertainment_embrace
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		if = {
 			limit = { exists = scope:cultural_hegemon }
 			change_relations = {
@@ -1361,7 +1361,7 @@ cultural_hegemony.14 = {
 		}
 		every_scope_state = {
 			limit = { state_population > 50000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				interest_group = ig:ig_devout
 				value = small_radicals
 			}
@@ -1382,10 +1382,10 @@ cultural_hegemony.14 = {
 		name = cultural_hegemony.14.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_entertainment_restriction
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_entertainment_restriction
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		if = {
 			limit = { exists = scope:cultural_hegemon }
 			change_relations = {
@@ -1413,11 +1413,11 @@ cultural_hegemony.14 = {
 		}
 		every_scope_state = {
 			limit = { state_population > 50000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				pop_type = shopkeepers
 				value = small_radicals
 			}
-			add_loyalists = {
+			add_loyalists_in_state = {
 				interest_group = ig:ig_devout
 				value = very_small_radicals
 			}
@@ -1437,10 +1437,10 @@ cultural_hegemony.14 = {
 		name = cultural_hegemony.14.c
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_entertainment_adaptation
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_entertainment_adaptation
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 3
@@ -1520,10 +1520,10 @@ cultural_hegemony.15 = {
 		default_option = yes
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_adopted_education
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_adopted_education
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		if = {
 			limit = { exists = scope:cultural_hegemon }
 			change_relations = {
@@ -1538,7 +1538,7 @@ cultural_hegemony.15 = {
 		}
 		every_scope_state = {
 			limit = { state_population > 50000 }
-			add_radicals = {
+			add_radicals_in_state = {
 				interest_group = ig:ig_devout
 				value = very_small_radicals
 			}
@@ -1558,10 +1558,10 @@ cultural_hegemony.15 = {
 		name = cultural_hegemony.15.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_domestic_education_defense
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_domestic_education_defense
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		if = {
 			limit = { exists = scope:cultural_hegemon }
 			change_relations = {
@@ -1591,10 +1591,10 @@ cultural_hegemony.15 = {
 		name = cultural_hegemony.15.c
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_selective_education
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_selective_education
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 4
@@ -1850,10 +1850,10 @@ cultural_hegemony.16 = {
 		set_variable = { name = ch_hegemonic_law_backlash_immunity days = normal_modifier_time }
 		activate_law = scope:ch_pressure_law_type
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_hegemonic_law_adopted
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_hegemonic_law_adopted
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		# General disruption from externally imposed law change
 		add_radicals = {
@@ -1907,10 +1907,10 @@ cultural_hegemony.16 = {
 		name = cultural_hegemony.16.b
 
 		je:je_cultural_hegemony ?= { add_modifier = {
-			name = ch_hegemonic_law_resistance
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ch_hegemonic_law_resistance
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 
 		# Diplomatic cost of defying the international order
 		change_infamy = 5

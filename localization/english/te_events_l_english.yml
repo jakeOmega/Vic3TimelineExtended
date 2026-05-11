@@ -1805,10 +1805,6 @@
  movement_events_te.200.d:0 "After years of struggle, the civil rights movement in [ROOT.GetCountry.GetName] has achieved its goals. Legal protections for minorities are now firmly established, and the nation can look forward to a more just society."
  movement_events_te.200.f:0 "#italic The arc of the moral universe is long, but it bends toward justice.#!"
  movement_events_te.200.t:0 "A New Era of Equality"
- movement_events_te.201.a:0 "The struggle continues."
- movement_events_te.201.d:0 "The civil rights movement in [ROOT.GetCountry.GetName] has lost its momentum. Without a clear enemy to rally against, the coalition of activists has splintered and public interest has waned. The cause is not defeated — merely postponed."
- movement_events_te.201.f:0 "#italic Not with a bang, but a whimper.#!"
- movement_events_te.201.t:0 "Movement Dissolves"
  movement_events_te.220.a:0 "A new constitutional baseline."
  movement_events_te.220.d:0 "After years of federal commissions, executive orders, and court fights, the mandate is law. Marshals deploy to enforce; recalcitrant states are reminded that the writ runs everywhere."
  movement_events_te.220.f:0 "From the capital, a mandate."
@@ -3165,11 +3161,6 @@
 # TEMPERATURE_ANOMALY_1
 #
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
-
-#
-# TEST_EVENT
-#
- test_event.1.a:0 "Understood"
 
 #
 # TE_MAP_MODES

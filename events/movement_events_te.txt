@@ -1833,34 +1833,6 @@ movement_events_te.200 = {
 	}
 }
 
-movement_events_te.201 = {
-	type = country_event
-	placement = root
-
-	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-
-	title = movement_events_te.201.t
-	desc = movement_events_te.201.d
-	flavor = movement_events_te.201.f
-
-	duration = 3
-
-	trigger = { }
-	immediate = { }
-
-	option = {
-		name = movement_events_te.201.a
-		default_option = yes
-		ai_chance = { base = 5 }
-		add_radicals = {
-			value = small_radicals
-			strata = lower
-		}
-	}
-}
-
 # ============================================================================
 # Civil Rights — path-dependent VICTORY events (220-223). Dispatched from
 # je_civil_rights.on_complete based on which months-tracker variable led.
