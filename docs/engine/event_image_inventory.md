@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 636
-**Event files:** 36
+**Total events:** 634
+**Event files:** 35
 
 ## augmentation_events.txt
 
@@ -1904,12 +1904,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** #italic The arc of the moral universe is long, but it bends toward justice.#!
 - **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
 
-### movement_events_te.201
-- **Title:** Movement Dissolves
-- **Description:** The civil rights movement in [ROOT.GetCountry.GetName] has lost its momentum. Without a clear enemy to rally against, the coalition of activists has splintered and public interest has waned. The cause is not defeated — merely postponed.
-- **Flavor:** #italic Not with a bang, but a whimper.#!
-- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
-
 ### movement_events_te.220
 - **Title:** The Civil Rights Mandate is Signed
 - **Description:** After years of federal commissions, executive orders, and court fights, the mandate is law. Marshals deploy to enforce; recalcitrant states are reminded that the writ runs everywhere.
@@ -3389,14 +3383,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** Our cartographers stand ready to redraw the world map by whatever measure interests us most. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode — its color gradient will read as the metric we have chosen rather than as actual migration appeal.\n\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!
 - **Flavor:** Maps are arguments, not records — and tonight we choose the argument.
 - **Current image:** gfx/event_pictures/orbital_earth_view.dds
-
-## test_event.txt
-
-### test_event.1
-- **Title:** (no localization)
-- **Description:** (no localization)
-- **Flavor:** (none)
-- **Current image:** (unknown)
 
 ## treaty_article_events.txt
 
