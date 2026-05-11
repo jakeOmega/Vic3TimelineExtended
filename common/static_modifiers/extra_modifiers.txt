@@ -6517,9 +6517,10 @@ colonial_collapse_subject_unrest_modifier = {
 # ============================================================================
 # MANDATE RESERVE - power bloc cohesion bonus scaled on unused mandates.
 # Unit value (1); the real per-tier number is carried by the multiplier in
-# te_unused_mandate_reserve_on_action via sv_te_unused_mandate_cohesion_tier.
-# Engine has no script-value accessor for num_mandates (only a comparator
-# trigger), so the SV uses an if/else_if ladder rather than continuous scaling.
+# te_unused_mandate_reserve_on_action, which inlines an if/else_if ladder
+# directly in power_bloc scope (num_mandates is a power_bloc-scoped trigger
+# comparator; resolving it via a script value passed as `multiplier` failed
+# because multipliers are evaluated in the caller's country scope).
 # ============================================================================
 sm_te_unused_mandate_reserve = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds

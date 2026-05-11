@@ -2550,10 +2550,25 @@ te_unused_mandate_reserve_on_action = {
 			limit = { is_power_bloc_leader = yes }
 			power_bloc = {
 				remove_modifier = sm_te_unused_mandate_reserve
-				add_modifier = {
-					name = sm_te_unused_mandate_reserve
-					multiplier = sv_te_unused_mandate_cohesion_tier
-					months = 13
+				# num_mandates is a power_bloc-scoped trigger comparator; `multiplier = <script_value>`
+				# resolves in the outer (country) scope where num_mandates is invalid. Inline the
+				# tier ladder here so the comparator runs in power_bloc scope and the multiplier is
+				# a plain integer literal.
+				if = {
+					limit = { num_mandates >= 4 }
+					add_modifier = { name = sm_te_unused_mandate_reserve multiplier = 12 months = 13 }
+				}
+				else_if = {
+					limit = { num_mandates >= 3 }
+					add_modifier = { name = sm_te_unused_mandate_reserve multiplier = 9 months = 13 }
+				}
+				else_if = {
+					limit = { num_mandates >= 2 }
+					add_modifier = { name = sm_te_unused_mandate_reserve multiplier = 6 months = 13 }
+				}
+				else_if = {
+					limit = { num_mandates >= 1 }
+					add_modifier = { name = sm_te_unused_mandate_reserve multiplier = 3 months = 13 }
 				}
 			}
 		}

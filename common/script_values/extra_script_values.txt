@@ -2423,14 +2423,8 @@ te_pop_transfer_disruption_strength = {
 	max = 2
 }
 
-# Mandate Reserve cohesion ladder. num_mandates is a trigger comparator, not a
-# numeric script-value accessor, so continuous scaling isn't possible -- this
-# is the only path. Conservative flavor-tier values; rebalance against vanilla
-# cohesion ranges if a future patch surfaces a numeric accessor.
-sv_te_unused_mandate_cohesion_tier = {
-	if = { limit = { num_mandates >= 4 } value = 12 }
-	else_if = { limit = { num_mandates >= 3 } value = 9 }
-	else_if = { limit = { num_mandates >= 2 } value = 6 }
-	else_if = { limit = { num_mandates >= 1 } value = 3 }
-	else = { value = 0 }
-}
+# sv_te_unused_mandate_cohesion_tier removed 2026-05-10: when used as
+# `multiplier = sv_...` inside `add_modifier` from country scope, the engine
+# resolved num_mandates in the calling country scope (where it's invalid) rather
+# than the enclosing power_bloc block. The tier ladder now lives inline in
+# te_unused_mandate_reserve_on_action so num_mandates evaluates in power_bloc scope.
