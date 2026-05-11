@@ -93,7 +93,7 @@ Error: Event target link 'region_state' returned an unset scope
 
 The Hokkaido JE's `possible` block reaches `s:STATE_HOKKAIDO.region_state:JAP` without checking whether `c:JAP` exists or owns any part of Hokkaido. When JAP isn't on the map (released, replaced by another tag, or absent in scenario start), the trigger fails. Vanilla bug.
 
-### `common/journal_entries/00_communism.txt`, `events/communism.txt`, `events/election_events/*.txt` — `leader = { ... }` without `has_leader` guard
+### `common/journal_entries/00_communism.txt`, `events/communism.txt`, `events/election_events/*.txt`, `common/political_movements/02_cultural_movement.txt` — `leader = { ... }` without `has_leader` guard
 
 Affected vanilla files (all share the same root cause):
 - `common/journal_entries/00_communism.txt:185`
@@ -108,13 +108,14 @@ Affected vanilla files (all share the same root cause):
 - `events/election_events/election_generic_events.txt`
 - `events/election_events/election_other_parties_events.txt`
 - `events/election_events/communist_fascist_election_events.txt`
+- `common/political_movements/02_cultural_movement.txt:1096`
 
 ```
 Error: Could not get leader of interest group
 Error: Event target link 'leader' returned an unset scope
 ```
 
-`je_vanguard`, the related communism-event option, and most election-event branches iterate `any_interest_group = { leader = { ... } }` without first checking `has_leader = yes`. Marginal IGs and IGs in newly-formed or recently-released countries can lack a leader for several months. Vanilla pattern across multiple content systems — affects every country running these JEs/events while an IG is leaderless.
+`je_vanguard`, the related communism-event option, most election-event branches, and the cultural-movement leader-recruitment path iterate `any_interest_group = { leader = { ... } }` without first checking `has_leader = yes`. Marginal IGs and IGs in newly-formed or recently-released countries can lack a leader for several months. Vanilla pattern across multiple content systems — affects every country running these JEs/events/movements while an IG is leaderless.
 
 ### `common/treaty_articles/18_acquire_monopoly_for_company.txt` — `Event target link 'type' returned an invalid object`
 
@@ -301,6 +302,17 @@ remove_character_role effect [ Attempting to remove role that character does not
 ```
 
 Vanilla royal-wedding event removes a role that the chosen wedding character doesn't carry. Vanilla bug; should be wrapped in `has_role = X` limit. Skip.
+
+### `events/royal_wedding.txt:112, 205, 206, 210` — unbound option-branch scope
+
+```
+royal_wedding.txt:112
+royal_wedding.txt:205
+royal_wedding.txt:206
+royal_wedding.txt:210
+```
+
+Vanilla royal-wedding event references `scope:marriage_country_1` in option-branch triggers before the option that binds it has run. Cascades into "Invalid left side during comparison" on the same line. Cosmetic — the AI score branch evaluates to false and the option's relative weight stays at the base. One vanilla bug, four log lines per event firing.
 
 ### `events/peoples_springtime.txt:693, 1111, 1112, 1124` — multiple revolution/variable errors
 
@@ -525,12 +537,11 @@ When a revolt secession spawns a new secondary-formation country (e.g. "Swedish 
 
 ```
 common/script_values/01_power_bloc_values.txt:56
-common/script_values/modified.txt:52
 common/coat_of_arms/template_lists/coa_templates.txt:141
 common/character_interactions/00_character_interactions.txt:297
 ```
 
-Vanilla uses the pattern `religion = scope:X.religion` unguarded — `power_bloc_leverage_gain` (`01_power_bloc_values.txt:56`), the coat-of-arms religion-match template (`coa_templates.txt:141`), and the character "Convert" interaction (`00_character_interactions.txt:297`). When the right-hand scope evaluates to a country lacking a state religion (e.g. revolt-synthesized countries during their creation window), the engine emits `Event target link 'religion' returned an invalid object`. The mod's `common/script_values/modified.txt` is an override of `01_power_bloc_values.txt` carrying the same line; same noise re-emerges under the mod filename. Mod's own treaty article `common/treaty_articles/106_religious_mission_rights.txt` was hardened with `exists = scope:target_country` / `exists = scope:source_country` guards (2026-05-10), so it is no longer in this list. Cosmetic — comparisons that fail simply don't fire their accept-score branch.
+Vanilla uses the pattern `religion = scope:X.religion` unguarded — `power_bloc_leverage_gain` (`01_power_bloc_values.txt:56`), the coat-of-arms religion-match template (`coa_templates.txt:141`), and the character "Convert" interaction (`00_character_interactions.txt:297`). When the right-hand scope evaluates to a country lacking a state religion (e.g. revolt-synthesized countries during their creation window), the engine emits `Event target link 'religion' returned an invalid object`. Mod's own treaty article `common/treaty_articles/106_religious_mission_rights.txt` was hardened with `exists = scope:target_country` / `exists = scope:source_country` guards (2026-05-10), and mod's override `common/script_values/modified.txt:52` was hardened with `exists = scope:target.religion` (2026-05-10), so both are no longer in this list. Cosmetic — comparisons that fail simply don't fire their accept-score branch.
 
 ### `common/war_goal_types/00_annex_country.txt:93, :114, :148, :155` — invalid country/strategic-region scope
 
@@ -617,6 +628,123 @@ CJominiPlayers:::DeleteAllPlayers
 ```
 
 Engine shutdown trace logging the player cleanup count. Not an error.
+
+### `application.cpp:1861` — "Quit: Quit from inside game" shutdown trace
+- source: `application.cpp:1861`
+
+```
+Quit: Quit from inside game
+```
+
+Engine shutdown trace fired when the user exits the game via the in-game menu. Not an error.
+
+### `pdx_transition_task.cpp:328` — game→empty transition timing trace
+- source: `pdx_transition_task.cpp:328`
+
+```
+Transition Game->Empty took:
+```
+
+Engine shutdown trace logging how long the game→empty-state transition took. Not an error.
+
+### `pdx_assert.cpp:637` — "Trying to reposition an invalid formation"
+- source: `pdx_assert.cpp:637`
+
+```
+Trying to reposition an invalid formation
+```
+
+Engine assertion fired when a formation reposition is requested for a formation that has been disbanded. Same source-line as several other engine assertions (silk-and-dye / null-hierarchy / Mobilize-Army entries); the signature substring disambiguates this one. Cosmetic.
+
+### `common/journal_entries/01_paris_commune.txt:234` — `current_value` references unset `global_var:paris_commune_progress_var`
+- source: `jomini_scriptvalue.cpp:1659`
+
+```
+common/journal_entries/01_paris_commune.txt:234
+```
+
+Vanilla JE reads `global_var:paris_commune_progress_var` in its `current_value` before the variable has been initialized by any prior `set_global_variable`. Engine emits "Value of wrong type … Got value of type 'none'". The JE renders with 0 until the variable gets set later in the play. Cosmetic.
+
+### `jomini_script_system.cpp:247` — `<unknown>:0` untyped-trigger country-not-valid noise
+- source: `jomini_script_system.cpp:247`
+
+```
+untyped trigger [ Scoped object of type 'country' is not valid (Country  (4294967295))
+```
+
+Engine fires this when an untyped trigger reads a country target that has resolved to `Country (4294967295)` — i.e. a sentinel "not-found" value. Script location is reported as `<unknown>:0`, meaning the offending check sits in compiled engine code (typically AI evaluation against an in-flight diplomatic play whose target hasn't been resolved yet). Cosmetic.
+
+### `pdx_data_factory.cpp:1662` — vanilla NAVAL_BATTLE desc accessor requires non-const promote
+- source: `pdx_data_factory.cpp:1662`
+
+```
+Invalid promote 'NAVAL_BATTLE'
+```
+
+Vanilla naval-battle UI loc accessors (`NAVAL_BATTLE.GetAttackerNumWantedShipsDesc`, `GetDefenderNumWantedShipsDesc`, `CalcCurrentAttackerPowerProjection`, `CalcCurrentDefenderPowerProjection`) are tagged const but the engine demands a non-const promote for the path it takes through them. Vanilla bug — fires once per UI render of the battle-ships breakdown panel. Cosmetic; the loc still resolves to fallback text.
+
+### `pdx_data_callstack.cpp:16` — vanilla data context not supplied for chained loc accessors
+- source: `pdx_data_callstack.cpp:16`
+
+```
+No context supplied (Use SetDataContext), wanted context of type
+```
+
+Vanilla loc strings (`INCORPORATION_TIME_SAME_TRAIT_GROUP`, `PRODUCTION_METHOD_OPTIONS_BULK`, etc.) read chained data-system functions (`DiscriminationTraitGroup.GetName`, `BuildingProductionMethodsEntry.GetBuildingType`) without first calling `SetDataContext` to bind the upstream object. Engine emits the context-missing error and falls back to the raw loc value. Cosmetic; loc still renders (with the placeholder visible to the player).
+
+### `pdx_data_callstack.cpp:325` — vanilla new-data-types missing context registration
+- source: `pdx_data_callstack.cpp:325`
+
+```
+New data types does not contain a
+```
+
+Companion to `pdx_data_callstack.cpp:16` — same root cause (vanilla loc context not registered for chained accessors), different cpp emit point. Most-frequent payload is `'DiscriminationTraitGroup'`.
+
+### `pdx_data_localize.cpp:136` — vanilla "Data error in loc string" naval-battle UI
+- source: `pdx_data_localize.cpp:136`
+
+```
+Data error in loc string
+```
+
+Downstream cascade from the `pdx_data_factory.cpp:1662` non-const-promote bug — the loc-string evaluator fails to resolve the call, then emits this generic "data error" for the affected key (`BATTLE_SHIPS_BREAKDOWN_HEADER_ATTACKER`, `BATTLE_SHIPS_BREAKDOWN_HEADER_DEFENDER`, with/without `_START_OF_BATTLE`). One vanilla bug, four log lines per render.
+
+### `pdx_data_localize.cpp:151` — vanilla "Data error in loc string" incorporation tooltip
+- source: `pdx_data_localize.cpp:151`
+
+```
+Data error in loc string
+```
+
+Downstream cascade from the `pdx_data_callstack.cpp:16` missing-context bug — vanilla `INCORPORATION_TIME_SAME_TRAIT_GROUP` loc string fails its chained `DiscriminationTraitGroup.GetName` lookup, then emits this generic data-error message. Cosmetic.
+
+### `pdx_data_localize_helper.cpp:286` — vanilla "FetchData failed" cascade
+- source: `pdx_data_localize_helper.cpp:286`
+
+```
+FetchData failed for
+```
+
+Final cascade step of the `pdx_data_callstack.cpp` context-missing chain — once the data lookup fails, the helper logs this summary message per failed loc fetch. Companion to the cpp:16 / :325 entries above. Cosmetic.
+
+### `pdx_gui_data_model.cpp:95` — vanilla GUI reshape with negative offset
+- source: `pdx_gui_data_model.cpp:95`
+
+```
+Trying to reshape data model with negative offset
+```
+
+Vanilla GUI panel reshape logic occasionally hands the data-model layer a negative offset (typically `-1` from an empty list/sentinel index). Engine emits the warning and uses 0. Cosmetic.
+
+### `pdx_gui_localize.cpp:140` — vanilla GUI loc fetch failure
+- source: `pdx_gui_localize.cpp:140`
+
+```
+PdxDataFetchLocalizedData failed for
+```
+
+Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
