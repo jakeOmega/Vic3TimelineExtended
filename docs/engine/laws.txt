@@ -448,7 +448,7 @@ Electoral Finance:
 		The state provides funding for political campaigns to create a level playing field, paid for by the taxpayer.
 Family & Reproductive Policy:
 	Traditional Family Structure [progressiveness=50]
-		The nuclear family is the natural bedrock of society. The state's role is not to interfere, but to uphold this [concept_institution] through its example and other laws.
+		The nuclear family is the natural bedrock of society. The state's role is not to interfere, but to uphold this institution through its example and other laws.
 	Pro-Natalist Subsidies [progressiveness=25] - Unlocking Technology: Mass Propaganda
 		A growing nation needs a growing populace. The state actively encourages larger families through propaganda, tax incentives, and direct subsidies to ensure our continued strength and prosperity.
 	State-Sponsored Family Planning [progressiveness=75] - Unlocking Technology: Second Wave Feminism
@@ -467,9 +467,9 @@ Financial Regulation:
 	Prudential / Narrow Banking [progressiveness=35] - Unlocking Technology: Modern Financial Instruments
 		Commercial deposits are walled off from speculation. Banks can lend only against safe assets, capping crashes and volatility at the cost of slower capital formation - capitalists have less room to take risks.
 	Directed Credit & Development Banks [progressiveness=40] - Unlocking Technology: Central Planning
-		Private banks remain in the driver's seat, but state-backed development [Concept('concept_institution', 'institutions')] co-finance priority sectors and absorb risk that private capital won't. The state guides; it does not own.
+		Private banks remain in the driver's seat, but state-backed development institutions co-finance priority sectors and absorb risk that private capital won't. The state guides; it does not own.
 	State-Owned Banking [progressiveness=45]
-		Private banks have been dissolved or absorbed; all credit allocation is conducted by state-owned [Concept('concept_institution', 'institutions')] answering to the central plan. The cycle of speculative excess and crash is replaced with the steady drumbeat of administrative capacity, but capitalist investment dries up.
+		Private banks have been dissolved or absorbed; all credit allocation is conducted by state-owned institutions answering to the central plan. The cycle of speculative excess and crash is replaced with the steady drumbeat of administrative capacity, but capitalist investment dries up.
 	Central Bank Independence [progressiveness=50] - Unlocking Technology: Keynesian Economics
 		A technocratic central bank manages liquidity and expectations. Powerful stabilization tools are available at arm’s length from day-to-day politics.
 Internet Governance:
@@ -594,7 +594,7 @@ Ministry of Religion:
 	No Ministry of Religion [progressiveness=10]
 		We have no Ministry of Religion.
 	Ministry of Religion Established - Unlocking Technology: Mass Media
-		The Ministry of Religion manages the nation's religious affairs, including the regulation of religious [Concept('concept_institution', 'institutions')] and the enforcement of religious laws.
+		The Ministry of Religion manages the nation's religious affairs, including the regulation of religious institutions and the enforcement of religious laws.
 Ministry of International Aid:
 	No Ministry of International Aid
 		We have no Ministry of International Aid.

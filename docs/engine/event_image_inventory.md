@@ -1264,7 +1264,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### international_relations_events.4
 - **Title:** Hearts and Minds
-- **Description:** [SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] [Concept('concept_institution', 'institutions')] through radio broadcasts, pamphlets, and sympathetic journalists abroad.
+- **Description:** [SCOPE.sCountry('propaganda_rival').GetName] has launched a sustained campaign of disinformation targeting [ROOT.GetCountry.GetAdjectiveNoFormatting] institutions through radio broadcasts, pamphlets, and sympathetic journalists abroad.
 - **Flavor:** \"Have you read what they are printing about us? That we oppress our workers, starve our children, plot against the peace of the world?\"\n\n\"Lies, of course.\"\n\n\"Of course. But a lie repeated often enough becomes difficult to distinguish from the truth - especially when it is printed on good paper.\"
 - **Current image:** gfx/event_pictures/propaganda_broadcast.dds
 
