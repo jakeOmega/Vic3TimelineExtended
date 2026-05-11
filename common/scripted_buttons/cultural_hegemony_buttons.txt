@@ -103,14 +103,16 @@ ch_decrease_program_funding_button = {
 	}
 }
 
+### NOTE: player-facing name is "International Cultural Outreach". Internal
+### key kept as ch_world_exposition* to avoid silently dropping the modifier
+### from any save where it's currently active.
 ch_world_exposition_button = {
 	name = "CH_WORLD_EXPOSITION"
 	desc = "CH_WORLD_EXPOSITION_DESC"
 
-	# Stays visible while the JE is up so the JE button count is constant;
-	# greys out via `possible` while the decaying exposition modifier is active.
 	visible = {
 		has_journal_entry = je_cultural_hegemony
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
 	}
 
 	ai_chance = {
@@ -134,15 +136,39 @@ ch_world_exposition_button = {
 			text = CH_REQUIRES_MASS_MEDIA_TT
 			has_technology_researched = mass_media
 		}
-		custom_tooltip = {
-			text = CH_EXPOSITION_NOT_ACTIVE
-			NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
-		}
 	}
 
 	effect = {
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition days = short_modifier_time is_decaying = yes } }
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult days = short_modifier_time is_decaying = yes } }
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult } }
+	}
+}
+
+ch_disable_world_exposition_button = {
+	name = "CH_DISABLE_WORLD_EXPOSITION"
+	desc = "CH_DISABLE_WORLD_EXPOSITION_DESC"
+
+	visible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
+			add = 100
+		}
+	}
+
+	possible = {
+		has_journal_entry = je_cultural_hegemony
+		je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
+	}
+
+	effect = {
+		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
+		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition_cost }
 	}
 }
 

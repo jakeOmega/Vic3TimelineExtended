@@ -121,6 +121,7 @@ concept_cultural_pull_components = {}
 concept_cultural_pull_share = {}
 concept_cultural_pull_raw_score = {}
 concept_ch_art_production = {}
+concept_ch_art_diminishing_returns = {}
 concept_ch_prestige = {}
 concept_ch_sol = {}
 concept_ch_tech_leadership = {}

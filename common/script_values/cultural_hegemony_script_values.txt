@@ -53,6 +53,13 @@ cultural_hegemony_foreign_benchmark_max = 3
 # Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
 cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
 
+# Art share above this percentage of global production enters diminishing returns
+cultural_pull_art_dr_threshold = 33
+# Steepness of the Möbius diminishing-returns curve applied above the threshold.
+# Equals 50/1139, chosen so f(100) = 50 with f(33) = 33 and f'(33) = 1 (C¹-continuous).
+# Asymptote of the diminished share as x → ∞ is 33 + 1/c ≈ 55.78.
+cultural_pull_art_dr_steepness = 0.04390
+
 # Cultural program funding cap and live level
 ch_program_funding_max_level = {
 	value = 0
@@ -96,8 +103,8 @@ ch_program_funding_cap_display = {
 global_fine_art_production = {
 	value = 0
 	every_market = {
-        mg:fine_art = {
-            add = market_goods_production
+		mg:fine_art = {
+			add = market_goods_production
 		}
 	}
 	min = 1		# avoid divide by zero
@@ -113,9 +120,9 @@ global_prestige_total = {
 }
 
 sol_factor = {
-    value = average_sol
-    min = 0
-    multiply = total_population_share
+	value = average_sol
+	min = 0
+	multiply = total_population_share
 }
 
 # Global average Standard of Living (population-weighted mean)
@@ -139,16 +146,53 @@ global_raw_cultural_pull = {
 # SECTION 3: CULTURAL HEGEMONY — PER-COUNTRY COMPONENTS
 # ============================================================================
 
-# Fine art goods production in this country (sum of state-level production)
-# Uses state_goods_production via sg: accessor to avoid shared-market overcounting
+# Fine art goods production in this country — sum of state-level production,
+# corrected for trade-center inflation.
+#
+# state_goods_production over-counts at trade-center buildings: imported goods
+# arrive there and the engine reports them as local "production" of the state.
+# Sum-over-states therefore equals real_production + this_country's_imports.
+#
+# Correction: subtract an estimate of this country's imports = (market's total
+# fine_art imports) × (this country's GDP / sum of market-participant GDPs).
+# Apportioning by GDP is a heuristic — trade flows don't perfectly track GDP —
+# but it's closer than no correction and self-cancels for dominant producers
+# (whose imports are near zero anyway).
+#
+# Why not market_goods_production × market_production_share? Tried it: the
+# function-call form of market_production_share silently drops the goods
+# parameter and returns the country's share of TOTAL market output across all
+# goods (~60% for Germany when its fine-art share is ~98%). Block-trigger form
+# supports goods= but only returns a boolean.
 country_fine_art_production = {
 	value = 0
-	market = {
-		mg:fine_art = {
-			add = market_goods_production
+	# Raw state-level production (includes trade-center imports).
+	every_scope_state = {
+		sg:fine_art = {
+			add = state_goods_production
 		}
-        multiply = "market_production_share(PREV)"
 	}
+	# Subtract this country's GDP-weighted slice of market fine_art imports.
+	subtract = {
+		value = 0
+		market = {
+			mg:fine_art = {
+				add = market_goods_imports
+			}
+		}
+		multiply = {
+			value = gdp
+			divide = {
+				value = 0
+				every_country = {
+					limit = { market = root.market }
+					add = gdp
+				}
+				min = 1
+			}
+		}
+	}
+	min = 0
 }
 
 # Art share of global production (0-100 scale)
@@ -158,13 +202,35 @@ country_art_share_pct = {
 	multiply = 100
 }
 
-# Art: min(absolute production, share of global * 100)
+# Diminishing-returns-shaped art share (linear ≤ 33%, Möbius above):
+#   x ≤ 33  → x
+#   x > 33  → 33 + (x - 33) / (1 + 0.04390 * (x - 33))
+# C¹-continuous at 33, strictly monotonic, asymptotes to ≈ 55.78.
+country_art_share_pct_diminished = {
+	value = country_art_share_pct
+	if = {
+		limit = { country_art_share_pct > cultural_pull_art_dr_threshold }
+		subtract = cultural_pull_art_dr_threshold
+		divide = {
+			value = 1
+			add = {
+				value = country_art_share_pct
+				subtract = cultural_pull_art_dr_threshold
+				multiply = cultural_pull_art_dr_steepness
+			}
+		}
+		add = cultural_pull_art_dr_threshold
+	}
+}
+
+# Art: min(absolute production, diminished share of global * 100)
 # Uses `max = share` as a ceiling to cap absolute at share
 # Early game: absolute limits (high share but tiny global market)
 # Late game: share limits (massive production but fractional global share)
+# Above 33% global share the share cap follows the diminishing-returns curve.
 cultural_pull_from_art = {
 	value = country_fine_art_production
-	max = country_art_share_pct
+	max = country_art_share_pct_diminished
 	# Apply modifier hook for art contribution
 	multiply = {
 		value = 1
@@ -408,13 +474,27 @@ cultural_pull_raw_display = {
 }
 
 country_fine_art_production_display = {
-    value = country_fine_art_production
-    round = yes
+	value = country_fine_art_production
+	round = yes
 }
 
 global_fine_art_production_display = {
-    value = global_fine_art_production
-    round = yes
+	value = global_fine_art_production
+	round = yes
+}
+
+country_art_share_pct_display = {
+	value = country_art_share_pct
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+country_art_share_pct_diminished_display = {
+	value = country_art_share_pct_diminished
+	multiply = 10
+	round = yes
+	divide = 10
 }
 
 cultural_pull_from_art_display = {
@@ -425,13 +505,13 @@ cultural_pull_from_art_display = {
 }
 
 prestige_display = {
-    value = prestige
-    round = yes
+	value = prestige
+	round = yes
 }
 
 global_prestige_total_display = {
-    value = global_var:ch_cached_prestige
-    round = yes
+	value = global_var:ch_cached_prestige
+	round = yes
 }
 
 cultural_pull_from_prestige_display = {
@@ -442,17 +522,17 @@ cultural_pull_from_prestige_display = {
 }
 
 sol_display = {
-    value = average_sol
-    multiply = 10
-    round = yes
-    divide = 10
+	value = average_sol
+	multiply = 10
+	round = yes
+	divide = 10
 }
 
 global_average_sol_display = {
-    value = global_var:ch_cached_sol_avg
-    multiply = 10
-    round = yes
-    divide = 10
+	value = global_var:ch_cached_sol_avg
+	multiply = 10
+	round = yes
+	divide = 10
 }
 
 cultural_pull_from_sol_display = {

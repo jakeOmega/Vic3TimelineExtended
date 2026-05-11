@@ -19,14 +19,15 @@ je_cultural_hegemony = {
 
 	possible = {
 		any_country = {
-            has_technology_researched = mass_media
-        }
+			has_technology_researched = mass_media
+		}
 		has_technology_researched = romanticism
 	}
 
 	scripted_button = ch_increase_program_funding_button
 	scripted_button = ch_decrease_program_funding_button
 	scripted_button = ch_world_exposition_button
+	scripted_button = ch_disable_world_exposition_button
 	scripted_button = ch_cultural_institutes_button
 	scripted_button = ch_disable_cultural_institutes_button
 	scripted_button = ch_global_media_campaign_button
@@ -104,7 +105,19 @@ je_cultural_hegemony = {
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_art
-			trigger = { has_variable = ch_art var:ch_art > 0 }
+			trigger = {
+				has_variable = ch_art
+				var:ch_art > 0
+				country_art_share_pct <= cultural_pull_art_dr_threshold
+			}
+		}
+		triggered_desc = {
+			desc = je_ch_breakdown_art_dr
+			trigger = {
+				has_variable = ch_art
+				var:ch_art > 0
+				country_art_share_pct > cultural_pull_art_dr_threshold
+			}
 		}
 		triggered_desc = {
 			desc = je_ch_breakdown_sol
@@ -142,15 +155,15 @@ je_cultural_hegemony = {
 				}
 			}
 		}
-        desc = separator
+		desc = separator
 		triggered_desc = {
 			desc = je_ch_breakdown_mult
 			trigger = { modifier:country_cultural_pull_mult > 0 }
 		}
-        desc = separator
-        desc = je_ce_raw_score
-        desc = je_ce_global_raw_score
-        desc = je_ch_leaderboard_delimiter
+		desc = separator
+		desc = je_ce_raw_score
+		desc = je_ce_global_raw_score
+		desc = je_ch_leaderboard_delimiter
 		triggered_desc = {
 			desc = je_ch_ideology_alignment_header
 			trigger = {
@@ -350,7 +363,7 @@ je_cultural_hegemony = {
 	}
 
 	on_monthly_pulse = {
-        effect = {
+		effect = {
 			if = {
 				limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
 				set_variable = { name = ch_program_funding_level value = 0 }
@@ -370,25 +383,25 @@ je_cultural_hegemony = {
 				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult } }
 			}
 
-            # Apply/remove cultural hegemony modifier (hegemon bonus)
-            je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
-            if = {
-                limit = { var:ch_total >= 1 }
-                je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult } }
-            }
+			# Apply/remove cultural hegemony modifier (hegemon bonus)
+			je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
+			if = {
+				limit = { var:ch_total >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult } }
+			}
 
-            # Apply/remove foreign benchmark (SoL expectations from hegemon)
-            # Only applies to countries with this JE active
-            if = {
-                limit = { cultural_hegemony_benchmark_mult >= 0.1 }
-                remove_modifier = cultural_hegemony_foreign_benchmark
-                add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
-            }
-            else_if = {
-                limit = { has_modifier = cultural_hegemony_foreign_benchmark }
-                remove_modifier = cultural_hegemony_foreign_benchmark
-            }
-        }
+			# Apply/remove foreign benchmark (SoL expectations from hegemon)
+			# Only applies to countries with this JE active
+			if = {
+				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
+				remove_modifier = cultural_hegemony_foreign_benchmark
+				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
+			}
+			else_if = {
+				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+				remove_modifier = cultural_hegemony_foreign_benchmark
+			}
+		}
 	}
 
 	weight = 900

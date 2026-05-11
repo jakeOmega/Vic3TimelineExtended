@@ -5944,7 +5944,7 @@ ch_world_exposition = {
 
 # Cultural Hegemony active button: recurring cost of staging a world exposition
 ch_world_exposition_cost = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_money_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
 }
 
