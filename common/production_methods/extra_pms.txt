@@ -16332,7 +16332,7 @@ pm_deep_space_exploration = {
 }
 
 pm_interstellar_mission = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p5.dds" # TODO: needs unique p6 icon
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p6.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors

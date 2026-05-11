@@ -36,13 +36,6 @@ Last cleanup pass: 2026-05-04 (M4 verified clean and a regression audit added; M
 
 Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` suppression pattern established for category #1.
 
-### M3. Missing unique icon for space-race phase 6
-**File:** [common/production_methods/extra_pms.txt#L15745](../common/production_methods/extra_pms.txt#L15745)
-
-**Problem:** `# TODO: needs unique p6 icon` — the phase-6 rocket PM reuses the phase-5 icon. Cosmetic, but phase 6 is the final achievement and deserves its own art.
-
-**Fix:** Generate a new icon via `gen_image.py` or the `gen_pm_icons.py` pipeline and swap the texture path. Non-urgent.
-
 ---
 
 ## LOW
