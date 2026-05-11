@@ -184,6 +184,7 @@ religious_mission_rights = {
 				# Same religion: missionaries are harmless
 				if = {
 					limit = {
+						exists = scope:target_country
 						religion = scope:target_country.religion
 					}
 					add = {
@@ -237,6 +238,7 @@ religious_mission_rights = {
 				# Same religion: no point sending missionaries
 				if = {
 					limit = {
+						exists = scope:source_country
 						religion = scope:source_country.religion
 					}
 					add = {
