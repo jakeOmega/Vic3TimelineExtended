@@ -464,6 +464,7 @@
  civil_rights_triumph_gradualist_modifier_desc:0 "A negotiated settlement closes the question with broad institutional buy-in."
  civil_rights_triumph_grassroots_modifier_desc:0 "Mass mobilization carried the day. The movement remains organized and proud."
  civil_rights_triumph_modifier_desc:0 "Our nation's embrace of civil rights has earned us [concept_prestige] and goodwill."
+ civil_rights_hollow_victory_modifier_desc:0 "The movement reached its peak. The law did not move. International observers and our own [Concept('concept_intelligentsia', 'intelligentsia')] noticed."
  climate_accord_rejection_modifier_desc:0 "By rejecting the international climate accord, our fossil fuel industries operate without the constraints accepted by other nations, boosting coal and oil output at the cost of increased emissions."
  climate_accord_rejection_no_gw_modifier_desc:0 "By rejecting the international climate accord, our fossil fuel industries operate without environmental constraints accepted by other nations, boosting coal and oil output at the cost of increased [concept_pollution_system]."
  climate_adaptation_modifier:0 "Climate Adaptation Program"

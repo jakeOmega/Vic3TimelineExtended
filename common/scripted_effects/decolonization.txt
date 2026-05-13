@@ -378,6 +378,19 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_assimilate_months
 	remove_variable = colonial_solidified_months
 	remove_variable = colonial_je_total_months
+	remove_variable = colonial_at_100_months
+
+	# Pressuring-great-powers roster slots (populated by the monthly pulse for
+	# status_desc display). Surviving these past JE end would orphan the slot
+	# references in the journal-history tooltip.
+	remove_variable = colonial_condemner_idx
+	remove_variable = colonial_condemner_rank_1
+	remove_variable = colonial_condemner_rank_2
+	remove_variable = colonial_condemner_rank_3
+	remove_variable = colonial_condemner_rank_4
+	remove_variable = colonial_condemner_rank_5
+	remove_variable = colonial_condemner_rank_6
+	remove_variable = colonial_condemner_rank_7
 
 	# Country-scope policy modifiers from the three policy buttons. If any
 	# button was active at end-of-JE, its modifier persisted after the JE

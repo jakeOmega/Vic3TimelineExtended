@@ -1741,20 +1741,19 @@ foreign_property_protected_modifier = {
 #     resistance grows.
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	# Primary cost: GDP-scaled treasury debit applied via je_colonial_empire on_monthly_pulse
-	# (modifiers can't drain treasury directly; the JE handles per-month gold cost).
-	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad
+	# Primary cost: GDP-scaled treasury debit applied via je_colonial_empire
+	# on_monthly_pulse (modifiers can't drain treasury directly; the JE handles
+	# the per-month gold cost). Domestic-anger primary cost: pops expect SoL
+	# gains at home, not abroad.
 	state_lower_strata_expected_sol_add = 1
 	state_middle_strata_expected_sol_add = 1
-	# Construction capacity diverted to colonies
-	country_construction_add = -3
-	country_prestige_add = -25
-	# Side benefit: investment IS infrastructure
-	state_migration_pull_mult = 0.05
+	# Side benefit: investment IS infrastructure. Migration attraction is
+	# narrowed to unincorporated states — the point of the policy is to
+	# populate the colonies, not to boost migration into the metropole.
+	state_migration_pull_unincorporated_mult = 0.15
 	building_group_bg_extraction_throughput_add = 0.02
-	# IG anger: Industrialists / Petite Bourgeoisie wanted capital at home
-	interest_group_ig_industrialists_pol_str_mult = -0.05
-	interest_group_ig_petty_bourgeoisie_pol_str_mult = -0.03
+	# IG anger is handled via ig_approval_effect on the activation button —
+	# the policy is one IGs *react to*, not one that mechanically erodes them.
 }
 
 colonial_military_garrison_modifier = {
@@ -1764,13 +1763,15 @@ colonial_military_garrison_modifier = {
 	country_authority_add = -300
 	country_prestige_from_army_power_projection_mult = -0.10
 	country_bureaucracy_mult = -0.03
-	# Larger prestige hit reflects the international optics of armed garrison rule
-	country_prestige_add = -50
 	# Modest money cost: credit dries up when you're shooting people
 	country_loan_interest_rate_mult = 0.05
 	# IG anger: the universities and unions don't like brutality
 	interest_group_ig_intelligentsia_pol_str_mult = -0.05
 	interest_group_ig_trade_unions_pol_str_mult = -0.03
+	# Ongoing infamy drip ("garrison maintenance") is applied per-month via
+	# je_colonial_empire on_monthly_pulse — modifiers can't generate infamy
+	# directly. The prestige number was too small to matter and is dropped;
+	# international standing is now expressed through infamy.
 }
 
 colonial_cultural_assimilation_modifier = {
@@ -1779,7 +1780,11 @@ colonial_cultural_assimilation_modifier = {
 	# whole point. Forced cultural conversion is administratively expensive.
 	country_bureaucracy_mult = -0.15
 	country_authority_add = -100
-	country_acceptance_not_homeland_add = 10
+	# Reward the *process*, not the endpoint: assimilation and conversion
+	# rates accelerate. (Earlier versions granted acceptance directly, which
+	# fast-forwarded past the system the program is supposed to engage with.)
+	state_assimilation_mult = 0.25
+	state_conversion_mult = 0.15
 	# Risk: the policy itself radicalizes opposition
 	state_radicals_from_political_movements_mult = 0.10
 }
@@ -2297,6 +2302,19 @@ civil_rights_triumph_coopted_modifier = {
 	country_prestige_mult = 0.05
 	country_acceptance_not_homeland_add = 8
 	country_legitimacy_ideological_incoherence_mult = 0.05
+}
+
+# Hollow-victory aftermath — movement filled the support bar to capacity but
+# the regime refused to budge on discriminatory laws. International standing
+# craters, the movement radicalizes, and the legitimacy fiction is exposed.
+civil_rights_hollow_victory_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+	country_legitimacy_ideological_incoherence_mult = 0.20
+	state_radicals_from_political_movements_mult = 0.25
+	state_turmoil_effects_mult = 0.10
+	political_movement_pop_attraction_mult = 0.20
+	political_movement_radicalism_add = 0.15
 }
 
 # Event 13: Refugee network modifiers

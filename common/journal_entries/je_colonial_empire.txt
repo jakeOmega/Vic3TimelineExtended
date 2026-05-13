@@ -96,6 +96,41 @@
 				trigger = { always = yes }
 			}
 		}
+		# Named-condemner roster. Slot variables are populated each pulse;
+		# entries surface only the slots currently holding a country, so the
+		# list grows and shrinks as great powers shift stance.
+		triggered_desc = {
+			desc = je_colonial_empire_condemners_header
+			trigger = { has_variable = colonial_condemner_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_1_entry
+			trigger = { has_variable = colonial_condemner_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_2_entry
+			trigger = { has_variable = colonial_condemner_rank_2 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_3_entry
+			trigger = { has_variable = colonial_condemner_rank_3 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_4_entry
+			trigger = { has_variable = colonial_condemner_rank_4 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_5_entry
+			trigger = { has_variable = colonial_condemner_rank_5 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_6_entry
+			trigger = { has_variable = colonial_condemner_rank_6 }
+		}
+		triggered_desc = {
+			desc = je_colonial_empire_condemner_rank_7_entry
+			trigger = { has_variable = colonial_condemner_rank_7 }
+		}
 	}
 
 	complete = {
@@ -298,6 +333,70 @@
 			if = {
 				limit = { has_modifier = colonial_development_investment_modifier }
 				add_treasury = colonial_invest_monthly_cost
+			}
+
+			# --- Garrison maintenance infamy drip ---
+			# Armed occupation generates a steady trickle of international
+			# infamy ("garrison maintenance" in the JE tooltip). This is the
+			# enduring international-standing cost; the previous prestige
+			# number was too small to matter and was dropped. The one-shot
+			# +5 infamy on activation lives on the button itself.
+			if = {
+				limit = { has_modifier = colonial_military_garrison_modifier }
+				change_infamy = 0.05
+			}
+
+			# --- Pressuring great powers leaderboard ---
+			# Populates colonial_condemner_rank_N slot variables so the
+			# status_desc can show *who* is applying decolonization pressure
+			# (not just the count). Order is by country_rank — the larger
+			# the condemner, the more prominent in the list.
+			remove_variable = colonial_condemner_rank_1
+			remove_variable = colonial_condemner_rank_2
+			remove_variable = colonial_condemner_rank_3
+			remove_variable = colonial_condemner_rank_4
+			remove_variable = colonial_condemner_rank_5
+			remove_variable = colonial_condemner_rank_6
+			remove_variable = colonial_condemner_rank_7
+			set_variable = { name = colonial_condemner_idx value = 0 }
+			ordered_country = {
+				limit = {
+					NOT = { THIS = ROOT }
+					country_rank >= rank_value:great_power
+					has_variable = gp_anti_colonial_stance
+				}
+				order_by = country_rank
+				check_range_bounds = no
+				save_temporary_scope_as = current_condemner
+				if = {
+					limit = { ROOT.var:colonial_condemner_idx < 1 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_1 value = scope:current_condemner } }
+				}
+				else_if = {
+					limit = { ROOT.var:colonial_condemner_idx < 2 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_2 value = scope:current_condemner } }
+				}
+				else_if = {
+					limit = { ROOT.var:colonial_condemner_idx < 3 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_3 value = scope:current_condemner } }
+				}
+				else_if = {
+					limit = { ROOT.var:colonial_condemner_idx < 4 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_4 value = scope:current_condemner } }
+				}
+				else_if = {
+					limit = { ROOT.var:colonial_condemner_idx < 5 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_5 value = scope:current_condemner } }
+				}
+				else_if = {
+					limit = { ROOT.var:colonial_condemner_idx < 6 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_6 value = scope:current_condemner } }
+				}
+				else_if = {
+					limit = { ROOT.var:colonial_condemner_idx < 7 }
+					ROOT = { set_variable = { name = colonial_condemner_rank_7 value = scope:current_condemner } }
+				}
+				ROOT = { change_variable = { name = colonial_condemner_idx add = 1 } }
 			}
 
 			# --- State-side assimilation disruption reapplication ---

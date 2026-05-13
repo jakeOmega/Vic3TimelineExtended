@@ -117,9 +117,18 @@
 	# Path-dependent victory: dispatch on whichever policy track was dominant
 	# for at least 18 months. Falls through to the existing generic .200 event
 	# when no track took clear lead (e.g. fast law-passage with little policy use).
+	#
+	# Hollow-victory check FIRST: if the bar filled but the regime kept its
+	# discriminatory laws in place, the movement's "victory" is purely on paper.
+	# Fire a separate event so an actively oppressive government doesn't get
+	# the victory-coded rewards (issue #14).
 	on_complete = {
 		cr_ensure_tracker_vars_effect = yes
 		if = {
+			limit = { has_discriminatory_minority_law = yes }
+			trigger_event = { id = movement_events_te.240 } # Hollow Victory
+		}
+		else_if = {
 			limit = {
 				var:cr_federal_months >= var:cr_grassroots_months
 				var:cr_federal_months >= var:cr_gradualist_months

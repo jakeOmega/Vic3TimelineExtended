@@ -2025,6 +2025,79 @@ movement_events_te.230 = {
 	}
 }
 
+# Hollow victory — bar filled to capacity but the regime kept discriminatory
+# laws fully in place. Issued by je_civil_rights.on_complete when the
+# completion condition is met purely through movement strength while the
+# country still holds a discriminatory minority law. Resolves with anger and
+# radicalization, not the victory rewards (issue #14).
+movement_events_te.240 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = movement_events_te.240.t
+	desc = movement_events_te.240.d
+	flavor = movement_events_te.240.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	# Option A: acknowledge the betrayal. Movement keeps its mobilization,
+	# radicalizes, and the regime takes a serious legitimacy hit.
+	option = {
+		name = movement_events_te.240.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_radicals = {
+			value = large_radicals
+			strata = lower
+		}
+		add_radicals = {
+			value = medium_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = civil_rights_hollow_victory_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		every_political_movement = {
+			limit = { is_political_movement_type = movement_civil_rights }
+			add_modifier = {
+				name = martyrdom_suppression_movement_radicalism
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	# Option B: double down. The regime treats the movement's mobilization as
+	# a threat rather than a constituency. Buys short-term authority at the
+	# cost of even worse turmoil down the line.
+	option = {
+		name = movement_events_te.240.b
+		ai_chance = { base = 1 }
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		add_radicals = {
+			value = large_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = civil_disobedience_crackdown_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
 # Gradualist stagnation — movement ran out of steam under moderation
 movement_events_te.231 = {
 	type = country_event

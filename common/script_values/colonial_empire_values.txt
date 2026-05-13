@@ -119,6 +119,23 @@ colonial_invest_monthly_cost = {
 	multiply = -0.005
 }
 
+# One-shot startup cost for the Development Investment program, scaled to GDP
+# so the gate matches the scale of the empire — ~2% of monthly GDP, applied
+# once on activation. Mirrored by colonial_assimilate_startup_cost so the two
+# program-startup costs read as parallel.
+colonial_invest_startup_cost = {
+	value = gdp
+	multiply = -0.02
+}
+
+# One-shot startup cost for the Cultural Assimilation program. Parallel to
+# colonial_invest_startup_cost — slightly smaller because Assimilation already
+# carries the heavy bureaucracy mult drag.
+colonial_assimilate_startup_cost = {
+	value = gdp
+	multiply = -0.015
+}
+
 # Scope: state. SoL threshold below which the state qualifies as colonial-
 # feeling regardless of cultural acceptance: 0.8 x owner's national average.
 # Multiplicative scaling means a poorer metropole has a lower absolute floor
