@@ -54,7 +54,7 @@
  ideology_custom_religion_traditionalist_economy:0 "Traditionalism"
  ideology_custom_religion_traditionalist_economy_desc:0 "This religion favors traditional economic practices, emphasizing stability, continuity, and adherence to established customs and norms."
  ideology_custom_religion_traditionalist_society:0 "Social Orthodoxy"
- ideology_custom_religion_traditionalist_society_desc:0 "This religion values traditional social norms, customs, and [Concept('concept_institution', 'institutions')], emphasizing stability, continuity, and adherence to established practices."
+ ideology_custom_religion_traditionalist_society_desc:0 "This religion values traditional social norms, customs, and institutions, emphasizing stability, continuity, and adherence to established practices."
  ideology_environmentalists:0 "Environmentalist"
  ideology_environmentalists_desc:0 "Environmentalists believe that the environment should be protected and that human activity is causing harm to the planet."
  ideology_islamic_inheritance:0 "Islamic Inheritance"

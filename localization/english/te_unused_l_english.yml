@@ -572,7 +572,7 @@
  principle_space_exploration_3_desc:0 "The [concept_power_bloc] encourages space exploration and the development of space technology."
  regulatory_burden:0 "Regulatory burden on industry"
  religious_mission_rights_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will allow missionaries in [SCOPE.sArticleOption('article_option').GetInputState.GetName]"
- religious_mission_rights_effects_desc:0 "• Gradually converts population in the target state toward the protector's religion.\n• Attracts migration to the target state.\n• Source country loses [concept_authority] and [concept_legitimacy].\n• Target country gains [concept_prestige]."
+ religious_mission_rights_effects_desc:0 "• Gradually converts population in the target state toward the protector's religion.\n• Attracts migration to the target state.\n• Source country loses [concept_legitimacy].\n• Target country gains [concept_prestige]."
  religious_revivalism_modifier:0 "Religious Revivalism"
  religious_revivalism_modifier_desc:0 "A [concept_religious_revival] has strengthened the devout at the cost of national [concept_prestige]."
  remove_culture_text:"This will change authority cost by @aut! [SCOPE.sCulture('curr_culture').MakeScope.ScriptValue('culture_discrimination_cost_script_value_player')]. All [Concept('concept_pop', 'pops')] of this culture will also become more [concept_radical]. Are you sure you want to remove this culture?"
