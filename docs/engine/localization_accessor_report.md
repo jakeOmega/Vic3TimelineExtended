@@ -13,27 +13,16 @@ Suppress an intentional flag with a same-line comment:
 
 ## Unreviewed Flags
 
-### te_journal_entries_l_english.yml (7)
-
-- `te_journal_entries_l_english.yml:69` — `je_colonial_empire_condemner_rank_1_entry` — `[ROOT.GetVariable('colonial_condemner_rank_1').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
-- `te_journal_entries_l_english.yml:70` — `je_colonial_empire_condemner_rank_2_entry` — `[ROOT.GetVariable('colonial_condemner_rank_2').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
-- `te_journal_entries_l_english.yml:71` — `je_colonial_empire_condemner_rank_3_entry` — `[ROOT.GetVariable('colonial_condemner_rank_3').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
-- `te_journal_entries_l_english.yml:72` — `je_colonial_empire_condemner_rank_4_entry` — `[ROOT.GetVariable('colonial_condemner_rank_4').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
-- `te_journal_entries_l_english.yml:73` — `je_colonial_empire_condemner_rank_5_entry` — `[ROOT.GetVariable('colonial_condemner_rank_5').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
-- `te_journal_entries_l_english.yml:74` — `je_colonial_empire_condemner_rank_6_entry` — `[ROOT.GetVariable('colonial_condemner_rank_6').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
-- `te_journal_entries_l_english.yml:75` — `je_colonial_empire_condemner_rank_7_entry` — `[ROOT.GetVariable('colonial_condemner_rank_7').GetCountry.GetName]` — context `journal_entries` — accessor 'GetVariable' is not valid on type 'country'
+_None._
 
 ## Reviewed Exemptions
 
-- `te_events_l_english.yml:762` — `decolonization_events.400.a` — `[ROOT.GetVariable('decolonization_region_1_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
-- `te_events_l_english.yml:763` — `decolonization_events.400.b` — `[ROOT.GetVariable('decolonization_region_2_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
-- `te_events_l_english.yml:764` — `decolonization_events.400.c` — `[ROOT.GetVariable('decolonization_region_3_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
-- `te_events_l_english.yml:773` — `decolonization_events.401.d` — `[ROOT.GetVariable('decolonization_planned_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
+_None._
 
 ## Coverage
 
 - files_audited: 28
 - chains_scanned: 3326
-- total flags: 11
-- unreviewed: 7
-- exempted: 4
+- total flags: 0
+- unreviewed: 0
+- exempted: 0

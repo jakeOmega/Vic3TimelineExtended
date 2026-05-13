@@ -6264,6 +6264,36 @@ covert_op_heightened_vigilance_modifier = {
 banking_crisis_protectionism_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_trade_center_throughput_add = -0.25
+	# monthly:
+	country_finance_momentum_monthly_add = 0.10
+}
+
+banking_crisis_protectionism_light_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_trade_center_throughput_add = -0.05
+	# monthly:
+	country_finance_momentum_monthly_add = 0.05
+}
+
+banking_crisis_capital_controls_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_trade_center_throughput_add = -0.10
+	country_loan_interest_rate_mult = 0.05
+	# monthly:
+	country_finance_momentum_monthly_add = 0.08
+}
+
+banking_crisis_monetary_stabilization_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_loan_interest_rate_mult = 0.08
+	# monthly:
+	country_finance_momentum_monthly_add = 0.15
+}
+
+banking_crisis_confidence_messaging_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	# monthly:
+	country_finance_momentum_monthly_add = 0.05
 }
 
 # ============================================================================

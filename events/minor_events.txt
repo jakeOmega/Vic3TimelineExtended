@@ -589,25 +589,30 @@ minor_events_timelineextended.7 = {
 	duration = 3
 	is_popup = yes
 
-	# Option A: Protect domestic banks — trade penalty for weaker impact
+	# Option A: Close the gates — full trade restriction + recovery for crash; lighter penalty for scare
 	option = {
 		name = minor_events_timelineextended.7.a
 		default_option = yes
 		apply_banking_contagion_effects = yes
-		# Protectionist measures: contain the crisis but hurt trade
-		add_modifier = {
-			name = banking_crisis_protectionism_modifier
-			days = short_modifier_time
-			is_decaying = yes
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		if = {
 			limit = { var:contagion_crash > 0 }
+			add_modifier = {
+				name = banking_crisis_protectionism_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
 			add_radicals = {
 				value = small_radicals
 				strata = upper
 			}
 		}
 		else = {
+			add_modifier = {
+				name = banking_crisis_protectionism_light_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			}
 			add_radicals = {
 				value = very_small_radicals
 				strata = upper
@@ -618,7 +623,7 @@ minor_events_timelineextended.7 = {
 		}
 	}
 
-	# Option B: Ride it out — maintain open markets, take the full hit
+	# Option B: Ride it out — laissez-faire non-intervention, full political cost
 	option = {
 		name = minor_events_timelineextended.7.b
 		apply_banking_contagion_effects = yes
@@ -649,6 +654,119 @@ minor_events_timelineextended.7 = {
 		}
 		ai_chance = {
 			base = 50
+			modifier = {
+				factor = 2
+				has_law = law_type:law_laissez_faire
+			}
+		}
+	}
+
+	# Option C: Targeted capital controls — partial restriction with recovery bonus
+	# Crash only. Gate: state-directed economic laws.
+	option = {
+		name = minor_events_timelineextended.7.capital_controls
+		trigger = {
+			var:contagion_crash > 0
+			OR = {
+				has_law = law_type:law_interventionism
+				has_law = law_type:law_command_economy
+				has_law = law_type:law_cooperative_ownership
+				has_law = law_type:law_state_owned_banking
+			}
+		}
+		apply_banking_contagion_effects = yes
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		add_modifier = {
+			name = banking_crisis_capital_controls_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 5
+				OR = {
+					has_law = law_type:law_interventionism
+					has_law = law_type:law_command_economy
+					has_law = law_type:law_cooperative_ownership
+				}
+			}
+			modifier = {
+				factor = 0.2
+				has_law = law_type:law_laissez_faire
+			}
+		}
+	}
+
+	# Option D: Central bank monetary intervention — institutional stabilization, GDP-scaled cost
+	# Crash only. Gate: national bank institution invested.
+	option = {
+		name = minor_events_timelineextended.7.monetary_intervention
+		trigger = {
+			var:contagion_crash > 0
+			institution_investment_level = { institution = institution_national_bank value >= 1 }
+		}
+		apply_banking_contagion_effects = yes
+		add_modifier = {
+			name = banking_crash_response_cost
+			multiplier = banking_event_expense_small
+			days = 180
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = banking_crisis_monetary_stabilization_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 5
+				institution_investment_level = { institution = institution_national_bank value >= 3 }
+			}
+			modifier = {
+				factor = 0
+				gold_reserves <= 0.5
+			}
+		}
+	}
+
+	# Option E: Confidence messaging via state communications apparatus
+	# Crash only. Gate: propaganda ministry invested.
+	option = {
+		name = minor_events_timelineextended.7.confidence_messaging
+		trigger = {
+			var:contagion_crash > 0
+			institution_investment_level = { institution = institution_ministry_of_propaganda value >= 1 }
+		}
+		apply_banking_contagion_effects = yes
+		add_modifier = {
+			name = banking_crisis_confidence_messaging_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 15
+			modifier = {
+				factor = 2
+				institution_investment_level = { institution = institution_ministry_of_propaganda value >= 3 }
+			}
 		}
 	}
 
