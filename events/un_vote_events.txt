@@ -380,6 +380,26 @@ un_vote.1 = {
 				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
 			}
 
+			# Relations damage with vote target on hostile resolutions
+			# (mirrors the NO-vote +15-with-target solidarity bonus). Voting yes
+			# on a condemn/sanctions/icc/expulsion vote is a public hostile act
+			# against the target — it shouldn't be a free vote. Skip when voter
+			# == target (the target-perspective branch above handles that case).
+			if = {
+				limit = {
+					exists = scope:un_vote_target
+					NOT = { scope:un_vote_target ?= this }
+					OR = {
+						has_global_variable = un_vote_topic_condemn
+						has_global_variable = un_vote_topic_sanctions
+						has_global_variable = un_vote_topic_icc
+						has_global_variable = un_vote_topic_expulsion
+					}
+				}
+				change_relations = { country = scope:un_vote_target value = -15 }
+				create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_target }
+			}
+
 			# IG reactions to voting yes
 			# Intelligentsia generally approves of international cooperation
 			if = {
@@ -1800,7 +1820,16 @@ un_vote.2 = {
 				trigger = { has_global_variable = un_vote_topic_icc }
 				desc = un_vote.2.d_icc_failed
 			}
-			# Expulsion - Passed (2/3 supermajority threshold)
+			# Expulsion - Passed with promotion (2/3 supermajority; vacated seat filled)
+			triggered_desc = {
+				trigger = {
+					has_global_variable = un_vote_topic_expulsion
+					un_vote_expulsion_passed >= 0
+					exists = scope:un_vote_promoted
+				}
+				desc = un_vote.2.d_expulsion_passed_promoted
+			}
+			# Expulsion - Passed but no eligible challenger (seat left vacant)
 			triggered_desc = {
 				trigger = {
 					has_global_variable = un_vote_topic_expulsion
@@ -1856,6 +1885,30 @@ un_vote.2 = {
 			limit = { exists = global_var:un_vote_target_country }
 			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
 		}
+		# Successful-expulsion promotion: pick the highest-ranking eligible
+		# non-permanent UN member to fill the vacated seat. Saved as scope so
+		# the description below and the option block below can reference it.
+		# Eligibility: UN member, GP rank, not already permanent, not the
+		# country we are about to expel. If no candidate exists, scope is
+		# unset and the seat goes vacant (description falls back accordingly).
+		if = {
+			limit = {
+				has_global_variable = un_vote_topic_expulsion
+				un_vote_expulsion_passed >= 0
+			}
+			ordered_country = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
+					country_rank >= rank_value:great_power
+					NOT = { is_un_permanent_member = yes }
+					NOT = { this = scope:un_vote_target }
+				}
+				order_by = country_rank
+				max = 1
+				save_scope_as = un_vote_promoted
+				set_global_variable = { name = un_vote_promoted_country value = THIS }
+			}
+		}
 	}
 
 	# Single option: acknowledge the results
@@ -1886,6 +1939,17 @@ un_vote.2 = {
 					}
 				}
 				change_relations = { country = scope:un_vote_target value = -25 }
+			}
+			# Promote the highest-ranking eligible non-permanent member into the
+			# vacated seat (scope:un_vote_promoted was selected in the immediate
+			# block). No-op when no eligible challenger exists; the seat then
+			# remains vacant.
+			if = {
+				limit = { exists = scope:un_vote_promoted }
+				scope:un_vote_promoted = {
+					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+					je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+				}
 			}
 		}
 		else_if = {
@@ -2403,6 +2467,7 @@ un_vote.2 = {
 			if = { limit = { has_global_variable = un_vote_topic_expulsion } remove_global_variable = un_vote_topic_expulsion }
 			if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
 			if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
+			if = { limit = { has_global_variable = un_vote_promoted_country } remove_global_variable = un_vote_promoted_country }
 			if = { limit = { has_global_variable = un_target_accepted } remove_global_variable = un_target_accepted }
 			if = { limit = { has_global_variable = un_vote_veto_cast } remove_global_variable = un_vote_veto_cast }
 			if = { limit = { has_global_variable = un_vote_vetoer_country } remove_global_variable = un_vote_vetoer_country }
@@ -2515,13 +2580,17 @@ un_vote.3 = {
 		if = { limit = { has_global_variable = un_vote_topic_expulsion } set_variable = un_topic_expulsion }
 	}
 
-	# Option A: Vote passed AND you voted yes - effects apply automatically
+	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, or you
+	# joined the UN after vote.1 fired and never had a chance to vote. In the
+	# last case the country still gets bound by the passed resolution (default
+	# acceptance) since the apply blocks below already gate on the passed flag.
 	option = {
 		name = un_vote.3.a
 		default_option = yes
 		trigger = {
 			OR = {
 				NOT = { has_variable = un_notif_vote_passed }
+				NOT = { has_variable = un_vote_choice }
 				AND = {
 					has_variable = un_vote_choice
 					var:un_vote_choice = 1

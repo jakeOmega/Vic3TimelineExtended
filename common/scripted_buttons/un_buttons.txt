@@ -56,7 +56,6 @@ un_found_button = {
 				je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 				je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
 			}
-			set_variable = { name = can_build_un_hq value = 1 }
 			# Fire charter event for all other recognized independent countries
 			every_country = {
 				limit = {

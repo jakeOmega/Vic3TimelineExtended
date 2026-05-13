@@ -4,9 +4,12 @@
 # ============================================================================
 
 # Whether THIS country currently holds a permanent UN seat.
-# Permanent members are granted via un_join_button during the founding window
-# and via expulsion-vote-promotion in the long term. They lose the seat by
-# leaving the UN, by sustained sub-GP rank (10+ years), or by 2/3 expulsion.
+# Permanent members are granted via the charter event (un_events.1) and
+# un_join_button during the 5-year founding window, and via promotion when
+# a 2/3 expulsion vote vacates a seat (the highest-ranking eligible GP outside
+# the Council fills it; see un_vote.2's immediate + option blocks). They lose
+# the seat by leaving the UN, by sustained sub-GP rank (10+ years), or by 2/3
+# expulsion.
 is_un_permanent_member = {
 	je:je_united_nations ?= { has_modifier = un_permanent_member_modifier }
 }

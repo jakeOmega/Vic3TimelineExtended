@@ -18,19 +18,8 @@ building_un_headquarters = {
     background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
     potential = {
         owner = {
-            has_variable = can_build_un_hq
-        }
-        OR = {
-            any_scope_building = {
-                is_building_type = building_un_headquarters
-            }
-            NOT = {
-                any_state = {
-                    any_scope_building = {
-                        is_building_type = building_un_headquarters
-                    }
-                }
-            }
+            has_global_variable = un_hq_country
+            this = global_var:un_hq_country
         }
     }
 }

@@ -232,6 +232,20 @@
 				}
 				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 			}
+			# Founding-member SC seat upgrade (legacy save migration).
+			# Charter Option A used to grant un_security_council_modifier without
+			# un_permanent_member_modifier. Upgrade founding-member GPs with an
+			# orphaned SC seat to full permanent member, respecting the 5-seat cap.
+			if = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
+					je:je_united_nations ?= { has_modifier = un_founding_member_modifier }
+					NOT = { is_un_permanent_member = yes }
+					country_rank >= rank_value:great_power
+					un_permanent_seat_count < 5
+				}
+				je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+			}
 
 			# ---- Treaty obligation auto-enrollment ----
 			# GPs auto-enrolled by treaty get a permanent seat only during the
