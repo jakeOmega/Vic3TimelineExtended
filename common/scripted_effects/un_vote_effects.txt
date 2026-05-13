@@ -123,6 +123,92 @@ un_vote_apply_treaty_modifier = {
 	}
 }
 
+# Catch-up effect: apply every globally-ratified UN convention's binding
+# modifier to a country that has just joined the UN. Without this, late
+# joiners (decolonization-spawned nations, treaty auto-enrollment) miss
+# the gameplay effects of conventions ratified before they joined, even
+# though they're now members and bound by them in fiction. Idempotent —
+# each branch skips if the modifier is already present, so safe to call
+# from every UN-join path (founder charter, voluntary join button,
+# treaty-obligation auto-enrollment).
+# Expects: ROOT = the country that just joined the UN.
+un_apply_ratified_conventions = {
+	# Human Rights Declaration (UNHRC established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_unhrc
+			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+	}
+	# Nuclear Non-Proliferation Treaty (IAEA established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_iaea
+			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+	}
+	# Climate Binding Framework (UNEP established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_unep
+			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+	}
+	# Cultural Heritage Program (UNESCO established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_unesco
+			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+	}
+	# Pandemic Cooperation (WHO established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_who
+			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+	}
+	# Refugee Protection Program (UNHCR established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_unhcr
+			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+	}
+	# Space Partnership (UNOOSA established)
+	if = {
+		limit = {
+			has_global_variable = un_agency_unoosa
+			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+	}
+	# Convention on the Law of the Sea (ITLOS established).
+	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
+	if = {
+		limit = {
+			has_global_variable = un_agency_itlos
+			NOT = { has_modifier = un_law_of_sea_modifier }
+		}
+		add_modifier = { name = un_law_of_sea_modifier }
+	}
+	# International Criminal Court (ICC established, non-vetoed pass).
+	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
+	if = {
+		limit = {
+			has_global_variable = un_agency_icc
+			NOT = { has_modifier = un_icc_member_modifier }
+		}
+		add_modifier = { name = un_icc_member_modifier }
+	}
+}
+
 # Apply the residual (non-modifier) effects of complying with a passed UN
 # resolution: infamy reduction, power-bloc leverage, peacekeeping/aid contributor
 # pledges, and leader leverage on aid/peacekeeping. Per-topic treaty modifiers

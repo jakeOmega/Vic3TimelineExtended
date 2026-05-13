@@ -2904,3 +2904,19 @@ Some Vic3 entity types have UI repeal/remove buttons gated by hardcoded engine l
 If the design requires a workflow that bypasses the engine gate (e.g. a player tool to revoke an amendment that no IG opposes), look for the corresponding script **effect**, not a trigger. `remove_amendment = bool` exists on `amendment` scope and skips the cooldown + opposition checks entirely. Wire it through a decision or scripted button with a designer-chosen cost (legitimacy / authority / IG approval hit) to keep balance. Iterators like `every_scope_amendment` (from a law scope) make targeting straightforward.
 
 The general pattern: vanilla UI button → script trigger only narrows; script effect → operates directly on the entity and skips UI gates. Confirm against the engine-doc `effects.log` (`## remove_X` / `## set_X` / `## add_X` entries with `**Supported Scopes**`).
+
+## Per-Country Modifier as "Has This Already Happened Globally" Gate
+
+When the gameplay question is *"has the global community already ratified / established X?"*, a `NOT = { has_modifier = X_modifier }` country-scope check is the wrong gate even if every country that participates in the deciding event receives the modifier. Paths that silently bypass:
+
+- **Late entrants** — countries that joined the system after the deciding event fired (decolonization spawns, late-game civilizations) never received the modifier.
+- **Branched outcomes** — countries that picked a "no" / "abstain" / "with reservations" branch don't get the ratification modifier in the first place.
+- **Decayed modifiers** — gates checking decaying modifiers expire silently after the decay window.
+
+Those countries pass `NOT = { has_modifier = X_modifier }` and re-trigger the global event, cascading the entire cycle (vote, vote-result, notification) for *every* participant. The original Law-of-the-Sea re-firing bug was exactly this shape.
+
+**Fix shape**: set a `set_global_variable = X_ratified` (or reuse an existing global "institution established" flag — Vic3 mods often already have one for UI/JE-description purposes) inside the global "this happened" branch. Gate the trigger on `NOT = { has_global_variable = X_ratified }`. Keep the per-country modifier checks for their gameplay-state purpose; the global flag is the authoritative "this is in force" gate.
+
+**Join-time catch-up**: if the per-country modifier carries gameplay effects beyond gating, factor a catch-up scripted_effect (apply each ratified-state's modifier from its global flag, idempotently) and call it from every system-join callsite — late joiners then receive the in-force conventions' effects, matching in-fiction expectation. Idempotent (skip if modifier already present) makes it safe to call from any path.
+
+Repo example: `events/un_events.txt` `un_events.21` / `un_events.22` triggers now gate on `un_agency_itlos` / `un_agency_icc` (set in the `un_vote.2` "RESOLUTION PASSED" branch). `common/scripted_effects/un_vote_effects.txt` `un_apply_ratified_conventions` is called from `un_join_button`, `je_united_nations` monthly pulse treaty auto-enrollment, and `un_events.1` charter Option A.

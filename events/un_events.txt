@@ -72,6 +72,10 @@ un_events.1 = {
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 		je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
+		# No conventions are ratified at UN founding, so this is a no-op today;
+		# kept for symmetry with the other join paths in case the founding event
+		# is ever fired after conventions exist (alternate timeline starts, etc.).
+		un_apply_ratified_conventions = yes
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
@@ -2717,6 +2721,10 @@ un_events.21 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		var:un_authority >= 30
 		has_technology_researched = international_trade
+		# Global ratification gate. The per-country modifier checks below don't
+		# cover new UN joiners or Option B/C takers (decaying modifiers), who
+		# would otherwise be able to re-trigger the full vote cascade.
+		NOT = { has_global_variable = un_agency_itlos }
 		NOT = { has_modifier = un_law_of_sea_modifier }
 		NOT = { has_modifier = un_law_of_sea_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -2840,6 +2848,12 @@ un_events.22 = {
 		var:un_authority >= 40
 		has_technology_researched = human_rights
 		country_rank >= rank_value:major_power
+		# Global ratification gate. The per-country modifier checks below don't
+		# cover new UN joiners or Option B/C takers (decaying modifiers), who
+		# would otherwise be able to re-trigger the full vote cascade. Note:
+		# un_agency_icc is only set on non-vetoed pass — vetoed/graduated
+		# passes are symbolic censure only and remain re-proposable.
+		NOT = { has_global_variable = un_agency_icc }
 		NOT = { has_modifier = un_icc_member_modifier }
 		NOT = { has_modifier = un_icc_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }

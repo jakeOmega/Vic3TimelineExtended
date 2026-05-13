@@ -265,6 +265,8 @@
 					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
 					je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
 				}
+				# Bind the joiner to any conventions already ratified globally.
+				un_apply_ratified_conventions = yes
 			}
 
 			# ---- Member-only logic ----
