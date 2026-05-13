@@ -3057,6 +3057,8 @@ space_race_events.15 = {
 				custom_tooltip = {
 					text = "SR_MANUAL_OVERRIDE_FAIL_TT"
 				}
+				# Needs extra cost, so this option isn't strictly better than option a above
+				add_radicals = { value = small_radicals }
 			}
 		}
 		sr_clear_failed_milestone_flags = yes
