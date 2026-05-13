@@ -54,7 +54,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.1
 - **Title:** Speculative Mania
-- **Description:** Reports are flooding in from every trading floor and financial [concept_institution]: a wave of speculative [concept_fervor] has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.
+- **Description:** Reports are flooding in from every trading floor and financial institution: a wave of speculative [concept_fervor] has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.
 - **Flavor:** \"I put in five hundred on Monday. By Thursday it was twelve hundred. I've never seen anything like it.\"\n\n\"You haven't seen anything yet, friend. My broker says this is just the beginning.\"\n\n\"That's what they said about the last one, too.\"
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
@@ -102,13 +102,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.3
 - **Title:** Credit Crunch Fears
-- **Description:** Banks are sitting on mountains of reserves while businesses starve for credit. Lending has ground to a near-halt as financial [Concept('concept_institution', 'institutions')], scarred by recent uncertainty, refuse to take on risk. Merchants and manufacturers are demanding that the government intervene to restart the flow of capital - but bankers warn that forcing premature lending could plant the seeds of the next crisis.
+- **Description:** Banks are sitting on mountains of reserves while businesses starve for credit. Lending has ground to a near-halt as financial institutions, scarred by recent uncertainty, refuse to take on risk. Merchants and manufacturers are demanding that the government intervene to restart the flow of capital - but bankers warn that forcing premature lending could plant the seeds of the next crisis.
 - **Flavor:** \"There is money everywhere and credit nowhere. The paradox is maddening.\"\n\n\"The banks say they're being prudent.\"\n\n\"Prudent! My workers haven't been paid in a fortnight because I can't get a loan against goods already sitting in my warehouse.\"
 - **Current image:** gfx/event_pictures/financial_distress_street.dds
 
 ### banking_cycle_events.4
 - **Title:** Bank Run
-- **Description:** Panic has seized the banking sector. Depositors are queuing in the streets, desperate to withdraw their savings before the [Concept('concept_institution', 'institutions')] collapse. Several banks have already shuttered their doors. The government faces an impossible choice: let the system purge itself at enormous cost, or intervene to restore confidence at the risk of rewarding reckless lending.
+- **Description:** Panic has seized the banking sector. Depositors are queuing in the streets, desperate to withdraw their savings before the institutions collapse. Several banks have already shuttered their doors. The government faces an impossible choice: let the system purge itself at enormous cost, or intervene to restore confidence at the risk of rewarding reckless lending.
 - **Flavor:** \"I saw a woman weeping outside the National Savings Bank this morning. She had her life's earnings in there - thirty years of careful thrift, gone in an afternoon.\"\n\n\"The directors, of course, withdrew their own funds last week.\"
 - **Current image:** gfx/event_pictures/bank_run_crowd.dds
 
@@ -126,7 +126,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.7
 - **Title:** Bank Consolidation Wave
-- **Description:** A wave of mergers and acquisitions is reshaping the banking sector. Smaller [Concept('concept_institution', 'institutions')] are being swallowed by larger ones, creating financial giants with unprecedented reach and influence. Proponents argue this consolidation will produce stronger, more efficient banks. Critics warn that these behemoths are becoming too big to fail - and too powerful to regulate.
+- **Description:** A wave of mergers and acquisitions is reshaping the banking sector. Smaller institutions are being swallowed by larger ones, creating financial giants with unprecedented reach and influence. Proponents argue this consolidation will produce stronger, more efficient banks. Critics warn that these behemoths are becoming too big to fail - and too powerful to regulate.
 - **Flavor:** \"The new mega-banks tower over their competitors, their boardrooms more lavish than some government ministries.\"\n\n\"And if one of them fails?\"\n\n\"Then God help us all.\"
 - **Current image:** gfx/event_pictures/banking_boardroom.dds
 
@@ -318,7 +318,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.29
 - **Title:** Cooperative Banking
-- **Description:** In the countryside, farmers and smallholders have begun pooling their savings into cooperative lending [Concept('concept_institution', 'institutions')]. These modest banks, governed by their own depositors, provide credit for seed and equipment at rates far below what commercial banks charge. The model is spreading rapidly, bringing financial services to communities that have never had access to formal banking.
+- **Description:** In the countryside, farmers and smallholders have begun pooling their savings into cooperative lending institutions. These modest banks, governed by their own depositors, provide credit for seed and equipment at rates far below what commercial banks charge. The model is spreading rapidly, bringing financial services to communities that have never had access to formal banking.
 - **Flavor:** \"We had nothing - no bank would touch us. Now we lend to ourselves, and not a penny has been lost.\"\n\n\"The commercial bankers scoff at the amounts involved.\"\n\n\"Let them scoff. We can feed our families.\"
 - **Current image:** gfx/event_pictures/trade_commerce_port.dds
 
@@ -330,7 +330,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.31
 - **Title:** The Bank Holiday
-- **Description:** With public confidence in the banking system collapsing, advisors are urging the government to declare a 'bank holiday' - a temporary, mandatory closure of all financial [Concept('concept_institution', 'institutions')]. The idea is to stop the panic, allow time for inspection and reorganization, and reopen only those banks that are solvent. It's a drastic measure, but the alternative may be a complete meltdown.
+- **Description:** With public confidence in the banking system collapsing, advisors are urging the government to declare a 'bank holiday' - a temporary, mandatory closure of all financial institutions. The idea is to stop the panic, allow time for inspection and reorganization, and reopen only those banks that are solvent. It's a drastic measure, but the alternative may be a complete meltdown.
 - **Flavor:** \"Close every bank in the country?\"\n\n\"For three days. Perhaps a week.\"\n\n\"The public will riot.\"\n\n\"The public is already rioting. At least this way, when we reopen, they'll have something left to withdraw.\"
 - **Current image:** gfx/event_pictures/bank_run_crowd.dds
 
@@ -408,7 +408,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.44
 - **Title:** Predatory Lending Scandal
-- **Description:** An investigation has revealed that certain lending [Concept('concept_institution', 'institutions')] have been systematically targeting vulnerable borrowers - the uneducated, the desperate, and the elderly - with loans designed to be impossible to repay. Hidden fees, deceptive terms, and aggressive collection practices have trapped thousands of families in spiraling debt. The scale of the abuse is staggering.
+- **Description:** An investigation has revealed that certain lending institutions have been systematically targeting vulnerable borrowers - the uneducated, the desperate, and the elderly - with loans designed to be impossible to repay. Hidden fees, deceptive terms, and aggressive collection practices have trapped thousands of families in spiraling debt. The scale of the abuse is staggering.
 - **Flavor:** \"The contract was forty pages of small print. She signed because she needed the money for medicine. She didn't know the interest rate was forty percent. She didn't know the fees would double the principal. She didn't know she'd lose her house.\"\n\n\"And the lender?\"\n\n\"The lender knew everything.\"
 - **Current image:** gfx/event_pictures/financial_fraud_exposed.dds
 
@@ -592,7 +592,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.6
 - **Title:** Brain Drain
-- **Description:** The brightest minds of [ROOT.GetCountry.GetName] are leaving for nations with greater cultural [concept_prestige] and higher standards of living. Universities are losing their best professors, and research [Concept('concept_institution', 'institutions')] are hemorrhaging talent to foreign competitors.
+- **Description:** The brightest minds of [ROOT.GetCountry.GetName] are leaving for nations with greater cultural [concept_prestige] and higher standards of living. Universities are losing their best professors, and research institutions are hemorrhaging talent to foreign competitors.
 - **Flavor:** The professor's farewell lecture drew a standing ovation. By the end of the month, three of his colleagues had followed him abroad. The department carried on, of course—with fewer people and dimmer prospects.
 - **Current image:** gfx/event_pictures/cultural_classroom_influence.dds
 
@@ -628,7 +628,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.12
 - **Title:** World-Class Universities
-- **Description:** The world's brightest minds seek admission to [ROOT.GetCountry.GetAdjective] universities. Our research [Concept('concept_institution', 'institutions')] set the standard that other nations aspire to match. We can open our doors wider with international scholarships — attracting talent but also bearing the costs — or focus exclusively on our own citizens' education.
+- **Description:** The world's brightest minds seek admission to [ROOT.GetCountry.GetAdjective] universities. Our research institutions set the standard that other nations aspire to match. We can open our doors wider with international scholarships — attracting talent but also bearing the costs — or focus exclusively on our own citizens' education.
 - **Flavor:** They enrolled as foreigners and graduated as advocates.
 - **Current image:** gfx/event_pictures/cultural_backlash_protest.dds
 
@@ -652,7 +652,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.16
 - **Title:** Hegemonic Convergence
-- **Description:** The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its [Concept('concept_institution', 'institutions')] with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence.
+- **Description:** The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its institutions with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence.
 - **Flavor:** \"When a great nation speaks, smaller nations must decide whether to echo the words — or find their own voice and bear the consequences.\"
 - **Current image:** gfx/event_pictures/tech_innovation_showcase.dds
 
@@ -798,7 +798,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.202
 - **Title:** The Commonwealth Path
-- **Description:** The empire endures, but on terms unimaginable a generation ago. The colonial bond has been rewritten — investment, education, and shared [Concept('concept_institution', 'institutions')] have replaced the old hierarchies. Our former subjects look upon the metropole not as a master but as a [concept_senior_partner]. The flag has not changed; what flies under it has.
+- **Description:** The empire endures, but on terms unimaginable a generation ago. The colonial bond has been rewritten — investment, education, and shared institutions have replaced the old hierarchies. Our former subjects look upon the metropole not as a master but as a [concept_senior_partner]. The flag has not changed; what flies under it has.
 - **Flavor:** \"They've kept the cricket,\" the journalist remarked.\n\n\"They've kept the railways too,\" the minister replied. \"And the law courts. And the language. They've kept everything they wanted to keep, and renamed everything they didn't.\"\n\n\"Is that victory, sir?\"\n\nA long pause. \"It's the only kind we were ever going to get.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
@@ -1008,7 +1008,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.2
 - **Title:** A Run on the Banks
-- **Description:** A wave of panic has swept through the financial houses as depositors, alarmed by rumors about the coming regulatory changes, have begun withdrawing their savings. Queues stretch around the block at several major [Concept('concept_institution', 'institutions')].
+- **Description:** A wave of panic has swept through the financial houses as depositors, alarmed by rumors about the coming regulatory changes, have begun withdrawing their savings. Queues stretch around the block at several major institutions.
 - **Flavor:** "I asked the teller for my money and he had the audacity to tell me to come back next week! Next week! By then these new laws will have turned my savings into wallpaper!"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
@@ -1232,7 +1232,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### heir_education_events.3
 - **Title:** Foreign Correspondence
-- **Description:** Our allies have extended an invitation for the [concept_heir] to spend time abroad, studying at their finest [Concept('concept_institution', 'institutions')]. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign.
+- **Description:** Our allies have extended an invitation for the [concept_heir] to spend time abroad, studying at their finest institutions. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign.
 - **Flavor:** \"To understand the world, one must first leave home.\"\n\n\"And to rule it, one must eventually come back.\"
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
@@ -1406,7 +1406,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### mental_health_events.5
 - **Title:** Institutional Care Scandal
-- **Description:** Investigative journalists have exposed horrific conditions in state mental health [Concept('concept_institution', 'institutions')]: patients restrained for days, unsanitary conditions, and widespread abuse. The public is outraged and demanding reform.
+- **Description:** Investigative journalists have exposed horrific conditions in state mental health institutions: patients restrained for days, unsanitary conditions, and widespread abuse. The public is outraged and demanding reform.
 - **Flavor:** The photographs showed restraint marks on the patients' wrists. The facility director said conditions were 'in line with standard practice.'
 - **Current image:** gfx/event_pictures/institutional_abuse_exposed.dds
 
@@ -2346,7 +2346,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### religious_revival_events.5
 - **Title:** The Digital Pulpit
-- **Description:** Religious communities have discovered the power of social media, streaming platforms, and online organizing. Sermons go viral, online prayer groups span continents, and a new generation of digital preachers commands millions of followers. The [SCOPE.gsInterestGroup('devout_ig').GetName] are reaching populations that traditional [Concept('concept_institution', 'institutions')] could never touch.
+- **Description:** Religious communities have discovered the power of social media, streaming platforms, and online organizing. Sermons go viral, online prayer groups span continents, and a new generation of digital preachers commands millions of followers. The [SCOPE.gsInterestGroup('devout_ig').GetName] are reaching populations that traditional institutions could never touch.
 - **Flavor:** The sermon got forty thousand views overnight. The local parish can't fill twenty seats on a Sunday. The bishop is not sure whether this counts as a revival or something else entirely.
 - **Current image:** gfx/event_pictures/religious_culture_war.dds
 
@@ -3436,7 +3436,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### treaty_article_events.9
 - **Title:** Strings Attached
-- **Description:** Our reliance on [SCOPE.sCountry('security_provider').GetName]'s security assistance is becoming uncomfortable. Their advisors are embedded in our [Concept('concept_institution', 'institutions')], their methods shape our doctrine, and the question is being asked more loudly: whose security are we really building?
+- **Description:** Our reliance on [SCOPE.sCountry('security_provider').GetName]'s security assistance is becoming uncomfortable. Their advisors are embedded in our institutions, their methods shape our doctrine, and the question is being asked more loudly: whose security are we really building?
 - **Flavor:** \"The foreign advisors now outnumber our own staff in three departments.\"\n\n\"Do they take orders from us or from their embassy?\"\n\n\"Does it matter, as long as the funding continues?\"\n\n\"It will matter. Eventually.\"
 - **Current image:** gfx/event_pictures/foreign_security_advisors.dds
 
@@ -3454,7 +3454,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### treaty_article_events.12
 - **Title:** The Culture Wars
-- **Description:** Traditionalist voices are growing louder [concept_in_opposition] to our cultural exchange agreement with [SCOPE.sCountry('exchange_partner').GetName]. They claim that foreign art, music, and ideas are corrupting national values and undermining our cultural identity. Protests have been organized, and several cultural [Concept('concept_institution', 'institutions')] have faced pressure to cancel planned events.
+- **Description:** Traditionalist voices are growing louder [concept_in_opposition] to our cultural exchange agreement with [SCOPE.sCountry('exchange_partner').GetName]. They claim that foreign art, music, and ideas are corrupting national values and undermining our cultural identity. Protests have been organized, and several cultural institutions have faced pressure to cancel planned events.
 - **Flavor:** \"They burned a stack of foreign novels in the town square yesterday. Said it was a patriotic act.\"\n\n\"What did the mayor do?\"\n\n\"Stood there and watched. He has an election coming up.\"
 - **Current image:** gfx/event_pictures/nationalist_backlash_flags.dds
 
@@ -3469,7 +3469,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### un_events.2
 - **Title:** General Assembly Condemns Aggression
 - **Description:** The General Assembly has convened an emergency session to address the military aggression of [SCOPE.sCountry('condemned_country').GetName]. Delegates from around the world are calling for a formal condemnation resolution, and [ROOT.GetCountry.GetName] must decide how to vote.
-- **Flavor:** The delegate from [SCOPE.sCountry('defender_country').GetName] rose to speak, his hands trembling. 'My country has no army,' he said. 'We have no bombs, no warships, no leverage of any kind. We have only this chamber and the hope that words spoken here still carry some weight.'\n\nThe gallery fell silent. For a moment, the [concept_institution] almost believed in itself.
+- **Flavor:** The delegate from [SCOPE.sCountry('defender_country').GetName] rose to speak, his hands trembling. 'My country has no army,' he said. 'We have no bombs, no warships, no leverage of any kind. We have only this chamber and the hope that words spoken here still carry some weight.'\n\nThe gallery fell silent. For a moment, the institution almost believed in itself.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.3
@@ -3486,7 +3486,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.5
 - **Title:** Enforcing the Sanctions Regime
-- **Description:** The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent the very [concept_institution] we helped create.
+- **Description:** The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent the very institution we helped create.
 - **Flavor:** 'The manifest says fertilizer,' the customs inspector said, turning the page with exaggerated slowness. 'Quite a lot of fertilizer.' He looked up. 'For a country with no farms.'\n\nThe shipping agent smiled and slid an envelope across the desk. 'A clerical error. I'm sure you understand.'
 - **Current image:** gfx/event_pictures/sanctions_cargo_inspection.dds
 
@@ -3516,7 +3516,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.10
 - **Title:** The United Nations in Crisis
-- **Description:** The United Nations faces a crisis of [concept_legitimacy]. Resolutions are routinely ignored, great powers act unilaterally, and member states question whether the [concept_institution] serves any purpose. As a [concept_great_power], [ROOT.GetCountry.GetName] must decide whether to rally support or let it fade.
+- **Description:** The United Nations faces a crisis of [concept_legitimacy]. Resolutions are routinely ignored, great powers act unilaterally, and member states question whether the institution serves any purpose. As a [concept_great_power], [ROOT.GetCountry.GetName] must decide whether to rally support or let it fade.
 - **Flavor:** 'When I joined the diplomatic service,' the old ambassador said, swirling his brandy, 'this building meant something. Resolutions had teeth. Delegations arrived with instructions to compromise.'\n\n'And now?'\n\n'Now they arrive with instructions to be seen arriving. It is theater, my dear boy. Very expensive theater.'
 - **Current image:** gfx/event_pictures/program_cancelled_empty.dds
 
@@ -3576,8 +3576,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.20
 - **Title:** Assembly Walkout
-- **Description:** The delegation of [SCOPE.sCountry('walkout_leader').GetName] has led a dramatic walkout from the General Assembly, followed by several aligned nations. The departing delegates accused the Assembly of bias and hypocrisy, throwing the [concept_institution] into crisis.
-- **Flavor:** The doors slammed. The echo rolled across the chamber like a judgment. For a long moment, no one spoke.\n\nThen the secretary-general removed his reading glasses and looked at the empty seats. 'Well,' he said, with the calm of a man watching his house burn from a safe distance. 'I suppose we shall have to manage without them.'\n\n'Can we?' his aide whispered.\n\n'That, my dear fellow, is the question this [concept_institution] was built to answer.'
+- **Description:** The delegation of [SCOPE.sCountry('walkout_leader').GetName] has led a dramatic walkout from the General Assembly, followed by several aligned nations. The departing delegates accused the Assembly of bias and hypocrisy, throwing the institution into crisis.
+- **Flavor:** The doors slammed. The echo rolled across the chamber like a judgment. For a long moment, no one spoke.\n\nThen the secretary-general removed his reading glasses and looked at the empty seats. 'Well,' he said, with the calm of a man watching his house burn from a safe distance. 'I suppose we shall have to manage without them.'\n\n'Can we?' his aide whispered.\n\n'That, my dear fellow, is the question this institution was built to answer.'
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.101
@@ -3870,7 +3870,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.104
 - **Title:** The Post-War Order
-- **Description:** With the great conflict behind us, the victorious powers must decide what kind of world they wish to build. Spheres of influence, new alliances, and international [Concept('concept_institution', 'institutions')] are all on the table.
+- **Description:** With the great conflict behind us, the victorious powers must decide what kind of world they wish to build. Spheres of influence, new alliances, and international institutions are all on the table.
 - **Flavor:** 'We have won the war,' the prime minister said, pouring himself a brandy. 'Now we must win the peace, which, I am given to understand, is considerably more difficult.'\n\n'Spheres of influence?'\n\n'Naturally. The question is how large a sphere our friends will permit us, and how small a sphere we can persuade our enemies to accept.'\n\nHe raised his glass. 'To the new world order. May it last longer than the one we just buried.'
 - **Current image:** gfx/event_pictures/post_war_order_map.dds
 

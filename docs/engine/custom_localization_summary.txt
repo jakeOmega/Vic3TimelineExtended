@@ -1,4 +1,4 @@
-# Auto-generated from custom_localization.log @ 2026-05-07T23:45:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from custom_localization.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 character|BR_Dede|random_valid=no
 character|BR_DoDa|random_valid=no
@@ -236,19 +236,6 @@ religion|RU_RL_PP|random_valid=no
 religion|RU_RL_RP|random_valid=no
 religion|RU_RL_TP|random_valid=no
 religion|RU_RL_VP|random_valid=no
-state_region|RU_SL_ADJ|random_valid=no
-state_region|RU_SL_CM_ADJ|random_valid=no
-state_region|RU_SL_CM_DP|random_valid=no
-state_region|RU_SL_CM_PP|random_valid=no
-state_region|RU_SL_CM_RP|random_valid=no
-state_region|RU_SL_CM_TP|random_valid=no
-state_region|RU_SL_CM_VP|random_valid=no
-state_region|RU_SL_DP|random_valid=no
-state_region|RU_SL_END|random_valid=no
-state_region|RU_SL_PP|random_valid=no
-state_region|RU_SL_RP|random_valid=no
-state_region|RU_SL_TP|random_valid=no
-state_region|RU_SL_VP|random_valid=no
 interest_group|SOL_commitment_duration|random_valid=no
 country|afghanistan_delineation_northern_proposal|random_valid=no
 country|afghanistan_delineation_offer_compensation|random_valid=no

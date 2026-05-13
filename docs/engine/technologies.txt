@@ -847,7 +847,7 @@
 		Unlocking Technologies:
 			Mobile Armor
 		Unlocks Buildings: The Pentagon
-		Unlocks Combat Unit Types: Armored Infantry, [concept_combined_arms] Marines
+		Unlocks Combat Unit Types: Armored Infantry, Combined Arms Marines
 		Unlocks Ship Types: Amphibious Assault Ship
 	Modern Materials - New materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what we had before. They've changed the way we build and manufacture things.
 		Unlocking Technologies:
@@ -858,7 +858,7 @@
 		Unlocking Technologies:
 			Modern Materials
 		Unlocks Buildings: Manganese Mine
-		Unlocks PMs: 8 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
 	Modern Skyscrapers - Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.
 		Unlocking Technologies:
 			Modern Materials
@@ -931,7 +931,7 @@
 			Aluminum Mass Production
 		Unlocks Buildings: Chromium Mine
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
-	Modern Management Techniques - New ways of organizing and managing our businesses and [Concept('concept_institution', 'institutions')] are leading to greater efficiency and productivity. It's all about working smarter, not harder.
+	Modern Management Techniques - New ways of organizing and managing our businesses and institutions are leading to greater efficiency and productivity. It's all about working smarter, not harder.
 		Unlocking Technologies:
 			Mass Surveillance
 		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
@@ -966,10 +966,10 @@
 		Unlocking Technologies:
 			Modern Financial Instruments
 		Unlocks Laws: Ministry of Consumer Protection Established
-	Intergovernmental Organizations - Formal [Concept('concept_institution', 'institutions')] where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.
+	Intergovernmental Organizations - Formal organizations where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.
 		Unlocking Technologies:
 			Modern Financial Instruments
-		Unlocks Buildings: Peace Palace, [concept_power_bloc] Headquarters
+		Unlocks Buildings: Peace Palace, Power Bloc Headquarters
 		Unlocks Laws: Ministry of International Aid Established
 		Unlocks Decrees: Bureaucratic Reform
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
@@ -1624,7 +1624,7 @@
 		Unlocking Technologies:
 			Fusion Power
 			Quantum Communications
-		Unlocks Buildings: Antimatter Engine, Antimatter Warhead Plant, [concept_antimatter_facility] Construction Site
+		Unlocks Buildings: Antimatter Engine, Antimatter Facility Construction Site, Antimatter Warhead Plant
 		Unlocks Combat Unit Types: Orbital Precision Antimatter Strikes
 		Unlocks Ship Types: Antimatter Battleship
 	Biological Immortality - The idea of living forever is no longer just a dream. Through advancements in medicine and genetic engineering, we might just be able to cheat death itself.

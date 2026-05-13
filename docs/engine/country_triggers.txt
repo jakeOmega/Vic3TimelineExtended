@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log @ 2026-05-07T23:45:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_exhaustion: Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play   additional_war_exhaustion
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays

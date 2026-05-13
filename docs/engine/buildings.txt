@@ -4493,7 +4493,7 @@ Mind Upload Nexus (bg_private_infrastructure):
 	Mind Upload Nexus:
 		Mind Upload Nexus
 
-[concept_antimatter_facility] Construction Site (bg_government):
+Antimatter Facility Construction Site (bg_government):
 	Unlocking Technology: Antimatter Production
 	[concept_antimatter_facility] Construction:
 		[concept_antimatter_facility] Construction (Paused)
@@ -4564,7 +4564,7 @@ United Nations Headquarters (bg_bureaucracy):
 	International Diplomacy:
 		Host Nation
 
-[concept_power_bloc] Headquarters (bg_bureaucracy):
+Power Bloc Headquarters (bg_bureaucracy):
 	Unlocking Technology: Intergovernmental Organizations
 	[concept_power_bloc] Headquarters:
 		Seat of the Empire

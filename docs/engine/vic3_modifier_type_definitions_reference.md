@@ -1,8 +1,8 @@
-<!-- Auto-generated from modifiers.log @ 2026-05-07T23:45:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7746 modifier entries.*
+*Auto-generated from 7745 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1156,13 +1156,13 @@ _A bonus or penalty to a specific culture's [concept_fervor], to be proportioned
 - `country_fervor_target_yankee_add`, `country_fervor_target_yao_add`, `country_fervor_target_yemenite_add`, `country_fervor_target_yoruba_add`, `country_fervor_target_yuanzhumin_add`, `country_fervor_target_yue_add`
 - `country_fervor_target_zapotec_add`, `country_fervor_target_zhuang_add`, `country_fervor_target_zulu_add`
 
-### `country_institution_cost_{institution}_mult` (18 members)
+### `country_institution_cost_{institution}_mult` (17 members)
 
 _An increase or reduction to the bur! Bureaucracy cost of bringing Colonial Affairs to the citizens_
 
-- `country_institution_cost_institution_colonial_affairs_mult`, `country_institution_cost_institution_health_system_mult`, `country_institution_cost_institution_home_affairs_mult`, `country_institution_cost_institution_migration_controls_mult`, `country_institution_cost_institution_ministry_of_commerce_mult`, `country_institution_cost_institution_ministry_of_consumer_protection_mult`
-- `country_institution_cost_institution_ministry_of_culture_mult`, `country_institution_cost_institution_ministry_of_foreign_affairs_mult`, `country_institution_cost_institution_ministry_of_intelligence_and_security_mult`, `country_institution_cost_institution_ministry_of_propaganda_mult`, `country_institution_cost_institution_ministry_of_religion_mult`, `country_institution_cost_institution_ministry_of_the_environment_mult`
-- `country_institution_cost_institution_ministry_of_urban_planning_mult`, `country_institution_cost_institution_ministry_of_war_mult`, `country_institution_cost_institution_national_bank_mult`, `country_institution_cost_institution_police_mult`, `country_institution_cost_institution_schools_mult`, `country_institution_cost_institution_social_security_mult`
+- `country_institution_cost_institution_colonial_affairs_mult`, `country_institution_cost_institution_health_system_mult`, `country_institution_cost_institution_migration_controls_mult`, `country_institution_cost_institution_ministry_of_commerce_mult`, `country_institution_cost_institution_ministry_of_consumer_protection_mult`, `country_institution_cost_institution_ministry_of_culture_mult`
+- `country_institution_cost_institution_ministry_of_foreign_affairs_mult`, `country_institution_cost_institution_ministry_of_intelligence_and_security_mult`, `country_institution_cost_institution_ministry_of_propaganda_mult`, `country_institution_cost_institution_ministry_of_religion_mult`, `country_institution_cost_institution_ministry_of_the_environment_mult`, `country_institution_cost_institution_ministry_of_urban_planning_mult`
+- `country_institution_cost_institution_ministry_of_war_mult`, `country_institution_cost_institution_national_bank_mult`, `country_institution_cost_institution_police_mult`, `country_institution_cost_institution_schools_mult`, `country_institution_cost_institution_social_security_mult`
 
 ### `country_institution_impact_{institution}_mult` (11 members)
 

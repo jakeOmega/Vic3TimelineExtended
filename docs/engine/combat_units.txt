@@ -145,7 +145,7 @@ Marines:
 		Highly specialized units to conduct naval invasions.
 		Unlocking Technology: Landing Craft
 		Stats: max_manpower=1000, supply_capacity=60, offense=30, defense=40, morale_loss=8
-	[concept_combined_arms] Marines
+	Combined Arms Marines
 		Marines integrated with mechanized vehicles, attack helicopters, and modern combined-arms doctrine. Capable of seizing a beachhead and pushing inland against entrenched defenders without waiting for follow-on forces.
 		Cost at base prices: #N @money!2420 #!
 		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_combined_arms_marines')|0] #!

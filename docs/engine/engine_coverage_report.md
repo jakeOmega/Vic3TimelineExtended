@@ -6,14 +6,14 @@
 
 ## Engine doc snapshot timestamps
 
-- `custom-localization`: 2026-05-07T23:45:43+00:00
-- `effects`: 2026-05-07T23:45:43+00:00
-- `event-targets`: 2026-05-07T23:45:43+00:00
-- `modifiers`: 2026-05-07T23:45:43+00:00
-- `on-actions`: 2026-05-07T23:45:43+00:00
-- `triggers`: 2026-05-07T23:45:43+00:00
+- `custom-localization`: 2026-05-09T07:54:17+00:00
+- `effects`: 2026-05-09T07:54:17+00:00
+- `event-targets`: 2026-05-09T07:54:17+00:00
+- `modifiers`: 2026-05-09T07:54:17+00:00
+- `on-actions`: 2026-05-09T07:54:17+00:00
+- `triggers`: 2026-05-09T07:54:17+00:00
 
-Most recent mod file mtime: 2026-05-11T04:28:39+00:00
+Most recent mod file mtime: 2026-05-13T00:18:24+00:00
 
 ## Summary
 
