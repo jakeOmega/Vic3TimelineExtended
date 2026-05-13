@@ -478,8 +478,26 @@ je_covert_warfare = {
 				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
 
-			# ---- Update operation phase durations ----
-			covert_ops_update_all_durations = yes
+			# ---- Decay defender-event cooldown (24-month window) ----
+			# covert_warfare.2 sets iw_defender_event_cooldown when it fires;
+			# without decay, the defender can only ever see the detection event
+			# once per game. iw_defender_event_cooldown_age tracks elapsed
+			# months and clears both vars after 24 months.
+			if = {
+				limit = { has_variable = iw_defender_event_cooldown_age }
+				change_variable = { name = iw_defender_event_cooldown_age add = 1 }
+				if = {
+					limit = { var:iw_defender_event_cooldown_age >= 24 }
+					remove_variable = iw_defender_event_cooldown
+					remove_variable = iw_defender_event_cooldown_age
+				}
+			}
+
+			# ---- Age per-slot operation durations ----
+			# Duration carry-over across slot reassignment is handled by
+			# covert_op_track_targets (idempotent on every cancel/break/start
+			# path), so the monthly pulse only needs to increment.
+			covert_ops_age_all_durations = yes
 
 			# ---- Apply phase-based operation effects (only if funding > 0) ----
 			if = {

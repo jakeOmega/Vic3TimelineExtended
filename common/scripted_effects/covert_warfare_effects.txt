@@ -4,134 +4,21 @@
 
 # Track targets for a specific operation type, assigning up to 3 slots.
 # Sets iw_target_<TYPE>_1/2/3 (capital state), iw_detect_<TYPE>_1/2/3 (detection %),
-# iw_tgt_ic_<TYPE>_1/2/3 (target's IC), and iw_tgt_td_<TYPE>_1/2/3 (target's type defense).
+# iw_tgt_ic_<TYPE>_1/2/3 (target's IC), iw_tgt_td_<TYPE>_1/2/3 (target's type defense),
+# and preserves iw_duration_<TYPE>_1/2/3 by target identity across slot reassignment.
 # After calling, iw_slot_counter holds the count of instances for this type.
+#
+# Idempotent: safe to call any number of times. Cancel/break/funding-change paths
+# rely on this to keep duration vars in sync with the new slot order without waiting
+# for the next monthly pulse — duration follows the TARGET, not the slot index.
+#
 # Parameters: $TYPE$        = short name (e.g. election_interference)
 #             $ACTION$      = diplomatic_action_type key (e.g. covert_election_interference_action)
 #             $DEFENSE_MOD$ = type-specific defense modifier (e.g. country_covert_defense_ideological_add)
 # Scope: country (ROOT = country owning the JE)
 covert_op_track_targets = {
-	# Clear previous slots
-	remove_variable = iw_target_$TYPE$_1
-	remove_variable = iw_target_$TYPE$_2
-	remove_variable = iw_target_$TYPE$_3
-	remove_variable = iw_detect_$TYPE$_1
-	remove_variable = iw_detect_$TYPE$_2
-	remove_variable = iw_detect_$TYPE$_3
-	remove_variable = iw_tgt_ic_$TYPE$_1
-	remove_variable = iw_tgt_ic_$TYPE$_2
-	remove_variable = iw_tgt_ic_$TYPE$_3
-	remove_variable = iw_tgt_td_$TYPE$_1
-	remove_variable = iw_tgt_td_$TYPE$_2
-	remove_variable = iw_tgt_td_$TYPE$_3
-	set_variable = { name = iw_slot_counter value = 0 }
-
-	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
-		every_participant = {
-			limit = { NOT = { this = ROOT } }
-			# Set target IC + type defense for detection calculation (PREV = target country)
-			ROOT = {
-				change_variable = { name = iw_slot_counter add = 1 }
-				set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-				set_variable = { name = target_type_defense value = PREV.modifier:$DEFENSE_MOD$ }
-			}
-			# Store capital state, detection %, and target IC per slot
-			capital = {
-				ROOT = {
-					if = {
-						limit = { var:iw_slot_counter = 1 }
-						set_variable = { name = iw_target_$TYPE$_1 value = PREV }
-						set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
-						set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
-				}
-				else_if = {
-					limit = { var:iw_slot_counter = 2 }
-					set_variable = { name = iw_target_$TYPE$_2 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
-				}
-				else_if = {
-					limit = { var:iw_slot_counter = 3 }
-					set_variable = { name = iw_target_$TYPE$_3 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
-					}
-				}
-			}
-		}
-	}
-}
-
-# Refresh all 9 operation type slots. Call after pact creation/destruction
-# to update JE display immediately.
-# Scope: country
-covert_op_refresh_all_targets = {
-	covert_op_track_targets = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_track_targets = { TYPE = financial_subversion ACTION = covert_financial_subversion_action DEFENSE_MOD = country_covert_defense_economic_add }
-	covert_op_track_targets = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_track_targets = { TYPE = comms_disruption ACTION = covert_comms_disruption_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_track_targets = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action DEFENSE_MOD = country_covert_defense_economic_add }
-	covert_op_track_targets = { TYPE = military_espionage ACTION = covert_military_espionage_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_track_targets = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_track_targets = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_track_targets = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
-}
-
-# Register a newly started operation's target into the next empty slot.
-# Called from accept_effect AFTER covert_op_refresh_all_targets, because the
-# new pact doesn't exist yet when accept_effect fires, so the iterator can't
-# find it. This directly fills the next available slot using scope:target_country.
-# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
-# Scope: country (ROOT = initiator), scope:target_country must be set
-covert_op_register_new_target = {
-	# Compute target defense data
-	set_variable = { name = target_max_ic value = scope:target_country.intelligence_capacity_total }
-	set_variable = { name = target_type_defense value = scope:target_country.modifier:$DEFENSE_MOD$ }
-	# Find next empty slot and fill it
-	scope:target_country = {
-		capital = {
-			ROOT = {
-				if = {
-					limit = { NOT = { has_variable = iw_target_$TYPE$_1 } }
-					set_variable = { name = iw_target_$TYPE$_1 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
-				}
-				else_if = {
-					limit = { NOT = { has_variable = iw_target_$TYPE$_2 } }
-					set_variable = { name = iw_target_$TYPE$_2 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
-				}
-				else_if = {
-					limit = { NOT = { has_variable = iw_target_$TYPE$_3 } }
-					set_variable = { name = iw_target_$TYPE$_3 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
-				}
-			}
-		}
-	}
-}
-
-# ============================================================================
-# PHASE DURATION TRACKING (PER-SLOT)
-# ============================================================================
-# Track how many months each individual operation SLOT has been active.
-# Duration is per-slot (iw_duration_<TYPE>_1/2/3), not per-type.
-# When slots shift (pact cancelled), durations follow the TARGET country,
-# not the slot number — avoids resetting progress on reorder.
-# Parameters: $ACTION$ = pact action type, $TYPE$ = short name
-# Scope: country (must be called BEFORE covert_op_refresh_all_targets)
-covert_op_update_duration = {
-	# Save old slot targets + durations into temp vars
+	# Save current (target, duration) pairs so duration can carry across slot
+	# reassignment by target-identity match.
 	if = {
 		limit = { has_variable = iw_target_$TYPE$_1 }
 		set_variable = { name = iw_old_t_1 value = var:iw_target_$TYPE$_1 }
@@ -160,57 +47,105 @@ covert_op_update_duration = {
 		else = { set_variable = { name = iw_old_d_3 value = 0 } }
 	}
 
-	# Iterate current pacts, assign durations to slots.
-	# For each pact target, search all OLD slots for a match and carry over + increment.
-	# New targets (not in any old slot) start at 1.
-	set_variable = { name = iw_dur_slot value = 0 }
+	# Clear ALL slot vars including durations. Duration vars are repopulated below
+	# via target-identity match (or left unset for genuinely-new targets, in which
+	# case covert_op_register_new_target sets them to 0).
+	remove_variable = iw_target_$TYPE$_1
+	remove_variable = iw_target_$TYPE$_2
+	remove_variable = iw_target_$TYPE$_3
+	remove_variable = iw_detect_$TYPE$_1
+	remove_variable = iw_detect_$TYPE$_2
+	remove_variable = iw_detect_$TYPE$_3
+	remove_variable = iw_tgt_ic_$TYPE$_1
+	remove_variable = iw_tgt_ic_$TYPE$_2
+	remove_variable = iw_tgt_ic_$TYPE$_3
+	remove_variable = iw_tgt_td_$TYPE$_1
+	remove_variable = iw_tgt_td_$TYPE$_2
+	remove_variable = iw_tgt_td_$TYPE$_3
+	remove_variable = iw_duration_$TYPE$_1
+	remove_variable = iw_duration_$TYPE$_2
+	remove_variable = iw_duration_$TYPE$_3
+	set_variable = { name = iw_slot_counter value = 0 }
+
 	every_scope_diplomatic_pact = {
 		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
 		every_participant = {
 			limit = { NOT = { this = ROOT } }
-			ROOT = { change_variable = { name = iw_dur_slot add = 1 } }
+			# Set target IC + type defense for detection calculation (PREV = target country)
+			ROOT = {
+				change_variable = { name = iw_slot_counter add = 1 }
+				set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
+				set_variable = { name = target_type_defense value = PREV.modifier:$DEFENSE_MOD$ }
+			}
+			# Store capital state, detection %, IC, TD per slot; carry duration by
+			# target-identity match across any old slot.
 			capital = {
 				ROOT = {
-					# Search old slots for this target (PREV = capital state)
 					if = {
-						limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
-						# Found in old slot 1 — carry over + increment
-						if = { limit = { var:iw_dur_slot = 1 } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_1 } change_variable = { name = iw_duration_$TYPE$_1 add = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 2 } set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_1 } change_variable = { name = iw_duration_$TYPE$_2 add = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 3 } set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_1 } change_variable = { name = iw_duration_$TYPE$_3 add = 1 } }
+						limit = { var:iw_slot_counter = 1 }
+						set_variable = { name = iw_target_$TYPE$_1 value = PREV }
+						set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
+						set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
+						set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
+						if = {
+							limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_1 }
+						}
+						else_if = {
+							limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_2 }
+						}
+						else_if = {
+							limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_3 }
+						}
+						# else: new target. covert_op_register_new_target sets duration=0
+						# when accept_effect fires; the next monthly age helper increments to 1.
 					}
 					else_if = {
-						limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
-						# Found in old slot 2
-						if = { limit = { var:iw_dur_slot = 1 } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_2 } change_variable = { name = iw_duration_$TYPE$_1 add = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 2 } set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_2 } change_variable = { name = iw_duration_$TYPE$_2 add = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 3 } set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_2 } change_variable = { name = iw_duration_$TYPE$_3 add = 1 } }
+						limit = { var:iw_slot_counter = 2 }
+						set_variable = { name = iw_target_$TYPE$_2 value = PREV }
+						set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
+						set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
+						set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
+						if = {
+							limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_1 }
+						}
+						else_if = {
+							limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_2 }
+						}
+						else_if = {
+							limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_3 }
+						}
 					}
 					else_if = {
-						limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
-						# Found in old slot 3
-						if = { limit = { var:iw_dur_slot = 1 } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_3 } change_variable = { name = iw_duration_$TYPE$_1 add = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 2 } set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_3 } change_variable = { name = iw_duration_$TYPE$_2 add = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 3 } set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_3 } change_variable = { name = iw_duration_$TYPE$_3 add = 1 } }
-					}
-					else = {
-						# New target — start at 1
-						if = { limit = { var:iw_dur_slot = 1 } set_variable = { name = iw_duration_$TYPE$_1 value = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 2 } set_variable = { name = iw_duration_$TYPE$_2 value = 1 } }
-						else_if = { limit = { var:iw_dur_slot = 3 } set_variable = { name = iw_duration_$TYPE$_3 value = 1 } }
+						limit = { var:iw_slot_counter = 3 }
+						set_variable = { name = iw_target_$TYPE$_3 value = PREV }
+						set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
+						set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
+						set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
+						if = {
+							limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_1 }
+						}
+						else_if = {
+							limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_2 }
+						}
+						else_if = {
+							limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
+							set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_3 }
+						}
 					}
 				}
 			}
 		}
 	}
 
-	# Clean up empty slots
-	if = { limit = { var:iw_dur_slot < 3 } remove_variable = iw_duration_$TYPE$_3 }
-	if = { limit = { var:iw_dur_slot < 2 } remove_variable = iw_duration_$TYPE$_2 }
-	if = { limit = { var:iw_dur_slot < 1 } remove_variable = iw_duration_$TYPE$_1 }
-
-	# Clean up temp vars
-	remove_variable = iw_dur_slot
+	# Cleanup temp old-slot vars
 	remove_variable = iw_old_t_1
 	remove_variable = iw_old_d_1
 	remove_variable = iw_old_t_2
@@ -219,17 +154,96 @@ covert_op_update_duration = {
 	remove_variable = iw_old_d_3
 }
 
-# Update durations for all 9 operation types. Called monthly from JE pulse.
-covert_ops_update_all_durations = {
-	covert_op_update_duration = { TYPE = election_interference ACTION = covert_election_interference_action }
-	covert_op_update_duration = { TYPE = financial_subversion ACTION = covert_financial_subversion_action }
-	covert_op_update_duration = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action }
-	covert_op_update_duration = { TYPE = comms_disruption ACTION = covert_comms_disruption_action }
-	covert_op_update_duration = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action }
-	covert_op_update_duration = { TYPE = military_espionage ACTION = covert_military_espionage_action }
-	covert_op_update_duration = { TYPE = influence_campaign ACTION = covert_influence_campaign_action }
-	covert_op_update_duration = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action }
-	covert_op_update_duration = { TYPE = destabilization ACTION = covert_destabilization_action }
+# Refresh all 9 operation type slots. Call after pact creation/destruction
+# to update JE display immediately.
+# Scope: country
+covert_op_refresh_all_targets = {
+	covert_op_track_targets = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_track_targets = { TYPE = financial_subversion ACTION = covert_financial_subversion_action DEFENSE_MOD = country_covert_defense_economic_add }
+	covert_op_track_targets = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action DEFENSE_MOD = country_covert_defense_military_add }
+	covert_op_track_targets = { TYPE = comms_disruption ACTION = covert_comms_disruption_action DEFENSE_MOD = country_covert_defense_military_add }
+	covert_op_track_targets = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action DEFENSE_MOD = country_covert_defense_economic_add }
+	covert_op_track_targets = { TYPE = military_espionage ACTION = covert_military_espionage_action DEFENSE_MOD = country_covert_defense_military_add }
+	covert_op_track_targets = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_track_targets = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_track_targets = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
+}
+
+# Register a newly started operation's target into the next empty slot.
+# Called from accept_effect AFTER covert_op_refresh_all_targets, because the
+# new pact doesn't exist yet when accept_effect fires, so the iterator can't
+# find it. This directly fills the next available slot using scope:target_country.
+# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
+# Scope: country (ROOT = initiator), scope:target_country must be set
+covert_op_register_new_target = {
+	# Compute target defense data
+	set_variable = { name = target_max_ic value = scope:target_country.intelligence_capacity_total }
+	set_variable = { name = target_type_defense value = scope:target_country.modifier:$DEFENSE_MOD$ }
+	# Find next empty slot and fill it. iw_duration_$TYPE$_N is explicitly
+	# initialised to 0 here so the next monthly pulse's age helper increments
+	# it to 1 — matches the prior convention that the first month reads as 1.
+	# This also closes the cancel + immediate-restart bug: without the explicit
+	# reset, the new op would inherit a stale duration left behind by the
+	# previously-cancelled occupant of this slot index.
+	scope:target_country = {
+		capital = {
+			ROOT = {
+				if = {
+					limit = { NOT = { has_variable = iw_target_$TYPE$_1 } }
+					set_variable = { name = iw_target_$TYPE$_1 value = PREV }
+					set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
+					set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
+					set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
+					set_variable = { name = iw_duration_$TYPE$_1 value = 0 }
+				}
+				else_if = {
+					limit = { NOT = { has_variable = iw_target_$TYPE$_2 } }
+					set_variable = { name = iw_target_$TYPE$_2 value = PREV }
+					set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
+					set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
+					set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
+					set_variable = { name = iw_duration_$TYPE$_2 value = 0 }
+				}
+				else_if = {
+					limit = { NOT = { has_variable = iw_target_$TYPE$_3 } }
+					set_variable = { name = iw_target_$TYPE$_3 value = PREV }
+					set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
+					set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
+					set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
+					set_variable = { name = iw_duration_$TYPE$_3 value = 0 }
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# PHASE DURATION TRACKING (PER-SLOT)
+# ============================================================================
+# Duration is per-slot (iw_duration_<TYPE>_1/2/3). When slots shift (pact
+# cancelled, started, or detected), covert_op_track_targets carries duration
+# from the old slot to the new slot by matching target identity. So this
+# helper only needs to age (increment) the durations each month.
+#
+# Parameters: $TYPE$ = short name
+# Scope: country
+covert_op_age_duration = {
+	if = { limit = { has_variable = iw_duration_$TYPE$_1 } change_variable = { name = iw_duration_$TYPE$_1 add = 1 } }
+	if = { limit = { has_variable = iw_duration_$TYPE$_2 } change_variable = { name = iw_duration_$TYPE$_2 add = 1 } }
+	if = { limit = { has_variable = iw_duration_$TYPE$_3 } change_variable = { name = iw_duration_$TYPE$_3 add = 1 } }
+}
+
+# Age durations for all 9 operation types. Called monthly from JE pulse.
+covert_ops_age_all_durations = {
+	covert_op_age_duration = { TYPE = election_interference }
+	covert_op_age_duration = { TYPE = financial_subversion }
+	covert_op_age_duration = { TYPE = infrastructure_sabotage }
+	covert_op_age_duration = { TYPE = comms_disruption }
+	covert_op_age_duration = { TYPE = industrial_espionage }
+	covert_op_age_duration = { TYPE = military_espionage }
+	covert_op_age_duration = { TYPE = influence_campaign }
+	covert_op_age_duration = { TYPE = ideological_subversion }
+	covert_op_age_duration = { TYPE = destabilization }
 }
 
 # ============================================================================

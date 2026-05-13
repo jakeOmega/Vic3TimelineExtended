@@ -183,7 +183,11 @@ covert_warfare.2 = {
 	}
 
 	immediate = {
+		# Cooldown decays via the JE monthly pulse: iw_defender_event_cooldown_age
+		# is incremented each month, and both variables are cleared after 24 months.
+		# Without this, the event can only fire once per defender per game.
 		set_variable = { name = iw_defender_event_cooldown value = yes }
+		set_variable = { name = iw_defender_event_cooldown_age value = 0 }
 	}
 
 	option = {
