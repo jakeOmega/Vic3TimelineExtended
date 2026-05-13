@@ -394,8 +394,11 @@ colonial_empire_je_cleanup_effect = {
 
 	# Country-scope policy modifiers from the three policy buttons. If any
 	# button was active at end-of-JE, its modifier persisted after the JE
-	# vanished; clear them so the country reverts to neutral.
+	# vanished; clear them so the country reverts to neutral. The Invest
+	# program also has a dedicated budget-expense modifier refreshed each
+	# pulse — clear it alongside the policy modifier or it would linger.
 	remove_modifier = colonial_development_investment_modifier
+	remove_modifier = colonial_development_investment_expense_modifier
 	remove_modifier = colonial_military_garrison_modifier
 	remove_modifier = colonial_cultural_assimilation_modifier
 

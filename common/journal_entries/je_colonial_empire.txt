@@ -326,24 +326,21 @@
 				set_variable = { name = colonial_at_100_months value = 0 }
 			}
 
-			# --- GDP-scaled treasury debit while Invest is active ---
-			# Models the real cost of developmental empire: ~0.5% of GDP/mo.
-			# A 1960 UK GDP of ~£700M means roughly -£3.5M/month; substantial
-			# but not bankrupting. Anyone CAN fund it; few AIs do for decades.
+			# --- GDP-scaled monthly expense while Invest is active ---
+			# Refreshes the dedicated expense modifier (country_expenses_add
+			# = 1, scaled here by ~0.5% of GDP) so it shows up as a budget
+			# line item rather than a silent treasury debit. A 1960 UK GDP
+			# of ~£700M means roughly £3.5M/month; substantial but not
+			# bankrupting. The modifier is removed by the policy's remove
+			# button (ce_remove_invest_in_development); the per-pulse
+			# re-application keeps the multiplier in sync with current GDP.
 			if = {
 				limit = { has_modifier = colonial_development_investment_modifier }
-				add_treasury = colonial_invest_monthly_cost
-			}
-
-			# --- Garrison maintenance infamy drip ---
-			# Armed occupation generates a steady trickle of international
-			# infamy ("garrison maintenance" in the JE tooltip). This is the
-			# enduring international-standing cost; the previous prestige
-			# number was too small to matter and was dropped. The one-shot
-			# +5 infamy on activation lives on the button itself.
-			if = {
-				limit = { has_modifier = colonial_military_garrison_modifier }
-				change_infamy = 0.05
+				remove_modifier = colonial_development_investment_expense_modifier
+				add_modifier = {
+					name = colonial_development_investment_expense_modifier
+					multiplier = colonial_invest_monthly_expense
+				}
 			}
 
 			# --- Pressuring great powers leaderboard ---

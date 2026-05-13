@@ -1741,10 +1741,10 @@ foreign_property_protected_modifier = {
 #     resistance grows.
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	# Primary cost: GDP-scaled treasury debit applied via je_colonial_empire
-	# on_monthly_pulse (modifiers can't drain treasury directly; the JE handles
-	# the per-month gold cost). Domestic-anger primary cost: pops expect SoL
-	# gains at home, not abroad.
+	# Ongoing monthly expense is carried by colonial_development_investment_expense_modifier
+	# (re-applied each JE pulse with a GDP-scaled multiplier) so it shows up
+	# in the budget line rather than being a silent treasury debit.
+	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad.
 	state_lower_strata_expected_sol_add = 1
 	state_middle_strata_expected_sol_add = 1
 	# Side benefit: investment IS infrastructure. Migration attraction is
@@ -1754,6 +1754,16 @@ colonial_development_investment_modifier = {
 	building_group_bg_extraction_throughput_add = 0.02
 	# IG anger is handled via ig_approval_effect on the activation button —
 	# the policy is one IGs *react to*, not one that mechanically erodes them.
+}
+
+# Per-pulse-refreshed expense modifier for the Development Investment program.
+# Held isolated (country_expenses_add only) so the JE pulse can re-apply it
+# with a GDP-scaled multiplier without rescaling the other policy effects.
+# Surfaces in the country's budget panel as a line item — players can see
+# what the program is actually costing them.
+colonial_development_investment_expense_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
 }
 
 colonial_military_garrison_modifier = {
@@ -1768,10 +1778,11 @@ colonial_military_garrison_modifier = {
 	# IG anger: the universities and unions don't like brutality
 	interest_group_ig_intelligentsia_pol_str_mult = -0.05
 	interest_group_ig_trade_unions_pol_str_mult = -0.03
-	# Ongoing infamy drip ("garrison maintenance") is applied per-month via
-	# je_colonial_empire on_monthly_pulse — modifiers can't generate infamy
-	# directly. The prestige number was too small to matter and is dropped;
-	# international standing is now expressed through infamy.
+	# International standing is expressed through suppressed infamy decay —
+	# every infamy hit the country has taken (and will take, e.g. wars, the
+	# +5 spike on activation) lingers longer while the garrison is on. The
+	# old flat prestige penalty was too small to matter and is dropped.
+	country_infamy_decay_mult = -0.20
 }
 
 colonial_cultural_assimilation_modifier = {

@@ -111,29 +111,30 @@ colonial_overreach_ratio = {
 	min = 0
 }
 
-# Colonial GDP cost per month for the Investment policy.
-# Used by the JE's monthly pulse to debit treasury proportional to GDP.
-# 0.5% of GDP per month while Invest is active.
-colonial_invest_monthly_cost = {
+# Colonial GDP-scaled monthly expense for the Investment policy. Used as the
+# multiplier on colonial_development_investment_expense_modifier so the cost
+# appears as a line item in the country's budget panel (~0.5% of GDP/month).
+# Positive — multiplier scales country_expenses_add = 1 into actual expenses.
+colonial_invest_monthly_expense = {
 	value = gdp
-	multiply = -0.005
+	multiply = 0.005
 }
 
 # One-shot startup cost for the Development Investment program, scaled to GDP
 # so the gate matches the scale of the empire — ~2% of monthly GDP, applied
 # once on activation. Mirrored by colonial_assimilate_startup_cost so the two
-# program-startup costs read as parallel.
+# program-startup costs read as parallel. Negative because used with add_treasury.
 colonial_invest_startup_cost = {
 	value = gdp
 	multiply = -0.02
 }
 
 # One-shot startup cost for the Cultural Assimilation program. Parallel to
-# colonial_invest_startup_cost — slightly smaller because Assimilation already
-# carries the heavy bureaucracy mult drag.
+# colonial_invest_startup_cost — smaller because Assimilation already carries
+# the heavy bureaucracy mult drag.
 colonial_assimilate_startup_cost = {
 	value = gdp
-	multiply = -0.015
+	multiply = -0.01
 }
 
 # Scope: state. SoL threshold below which the state qualifies as colonial-

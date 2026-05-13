@@ -504,6 +504,7 @@
  colonial_culture_change_action_notification_desc:0 "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] has changed the culture and religion of [TARGET_COUNTRY.GetName]."
  colonial_culture_change_desc:0 "Colonial Culture Change is a [concept_diplomatic_action] that allows a country to change the culture and religion of a colonial subject."
  colonial_development_investment_modifier_desc:0 "The government is investing in [concept_infrastructure] and [Concept('concept_institution', 'institutions')] in colonial territories, draining bureaucratic resources."
+ colonial_development_investment_expense_modifier_desc:0 "Monthly outlay for the Colonial Development Investment program. Scales with national [concept_gdp]; appears as a line item in the budget."
  colonial_empire_collapsed_modifier_desc:0 "Our colonial empire has collapsed. The loss of overseas territories has dealt a severe blow to national [concept_prestige] and living standards."
  colonial_empire_crumbling_modifier_desc:0 "Our colonial empire is crumbling. Widespread unrest and [concept_radical] movements threaten to tear our overseas territories away."
  colonial_empire_solidified_modifier_desc:0 "Our colonial territories have been fully integrated into the nation. Cultural acceptance is high and the overseas lands are now permanent parts of our country."

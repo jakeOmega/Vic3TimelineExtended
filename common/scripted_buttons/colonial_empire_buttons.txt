@@ -46,6 +46,13 @@ ce_invest_in_development = {
 			text = "CE_INVEST_IN_DEVELOPMENT_DESC"
 			add_modifier = { name = colonial_development_investment_modifier }
 		}
+		# Seed the GDP-scaled expense modifier so the budget line shows up
+		# immediately on activation; the JE monthly pulse refreshes it from
+		# here on, keeping the multiplier in sync with current GDP.
+		add_modifier = {
+			name = colonial_development_investment_expense_modifier
+			multiplier = colonial_invest_monthly_expense
+		}
 		# Program startup cost — a one-shot treasury hit so enabling the
 		# program isn't a free toggle. Parallels the Cultural Assimilation
 		# startup cost; the two read as the same flavor of cost.
@@ -82,6 +89,10 @@ ce_remove_invest_in_development = {
 			text = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
 			remove_modifier = colonial_development_investment_modifier
 		}
+		# Drop the budget-line expense too; the JE pulse stops refreshing
+		# it once the policy modifier is gone, but the active copy needs
+		# explicit cleanup or it would linger out a full duration.
+		remove_modifier = colonial_development_investment_expense_modifier
 	}
 }
 
