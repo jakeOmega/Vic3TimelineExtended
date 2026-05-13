@@ -3121,6 +3121,37 @@ decolonization_events.205 = {
 	}
 }
 
+# Event 206: Voluntary Decolonization — empire dissolved on the player's own terms
+# before the bar hit zero. No colony-release effects: the player already handled that.
+decolonization_events.206 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.206.t
+	desc = decolonization_events.206.d
+	flavor = decolonization_events.206.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = decolonization_events.206.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = {
+			name = negotiated_withdrawal_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
 # ============================================================================
 # Metropole-side pressure events (50–52)
 # These drain the colonial stability bar from DOMESTIC conditions in the

@@ -87,6 +87,7 @@
  je_colonial_empire_status_solidified:0 "#G Colonial empire nearly fully integrated.#! The overseas territories are becoming a permanent part of the nation."
  je_colonial_empire_status_stable:0 "#Y Colonial holdings are stable.#! Integration is proceeding, though challenges remain."
  je_colonial_empire_status_strained:0 "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold."
+ je_colonial_empire_voluntary_fail_tt:0 "Ends when all qualifying colonial territories have been voluntarily released — no overseas states or colonial subjects remain — while the Colonial Stability bar is still above zero."
  je_covert_warfare:0 "Covert Warfare"
  je_covert_warfare_desc:0 "Conduct espionage, sabotage, and counter-intelligence in the shadow war between [Concept('concept_great_power', 'great powers')]."
  je_covert_warfare_reason:0 "The covert battlefield is invisible but decisive. Our intelligence services wage shadow wars of subversion and sabotage, while our [concept_intelligence_capacity] protects us from foreign interference."

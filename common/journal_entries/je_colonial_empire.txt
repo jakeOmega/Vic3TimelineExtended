@@ -209,10 +209,35 @@
 		}
 	}
 
-	# Path-dependent failure: did the empire bleed out (garrison-only) or
-	# negotiate its way out (invest + assimilate)?
+	# Third ending: player voluntarily released all colonies before bar hit zero.
+	# Guard bar > 0 so this can't fire on the same tick as the collapse fail.
+	fail = {
+		custom_tooltip = {
+			text = je_colonial_empire_voluntary_fail_tt
+			NOT = {
+				OR = {
+					any_scope_state = { is_overseas_colonial_state = yes }
+					country_has_qualifying_colonial_subject = yes
+				}
+			}
+			scope:journal_entry = {
+				"scripted_bar_progress(colonial_stability_bar)" > 0
+			}
+		}
+	}
+
+	# Path-dependent failure: did the empire bleed out (garrison-only),
+	# negotiate its way out (invest + assimilate), or voluntarily decolonize?
 	on_fail = {
 		if = {
+			limit = {
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" > 0
+				}
+			}
+			trigger_event = { id = decolonization_events.206 }   # Voluntary Decolonization
+		}
+		else_if = {
 			limit = {
 				NAND = {
 					var:colonial_garrison_months >= var:colonial_invest_months

@@ -3,7 +3,7 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 637
+**Total events:** 638
 **Event files:** 35
 
 ## augmentation_events.txt
@@ -818,6 +818,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** Quiet Assimilation
 - **Description:** The empire is gone. Not crumbled, not granted, but absorbed. Generations of patient cultural and administrative integration have made the former colonies into provinces of the metropole, populated by citizens who no longer think of themselves as colonized. The map looks the same; everything underneath has changed.
 - **Flavor:** \"My father was born in the colony,\" the deputy explained. \"My mother was born in the metropole. I was born in the metropole.\"\n\n\"And your children?\"\n\n\"My children won't know the difference between the two. That is the point, isn't it?\"
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
+### decolonization_events.206
+- **Title:** The Last Flag Lowered
+- **Description:** The colonial chapter of [ROOT.GetCountry.GetName]'s history closes — not in collapse, not under international ultimatum, but by decision. No overseas territories remain. What we held, we have chosen to release. Whether history reads this as wisdom or weakness, the timing was ours.
+- **Flavor:** \"We did not wait to be forced,\" the minister told the assembled representatives. \"That is the only distinction history will remember clearly. Everything else — the terms, the dates, the arguments — those will be debated. But this was ours to choose.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
 ### decolonization_events.50
