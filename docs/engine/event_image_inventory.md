@@ -3,7 +3,7 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 634
+**Total events:** 637
 **Event files:** 35
 
 ## augmentation_events.txt
@@ -860,6 +860,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** The Civilizing Mission Compact
 - **Description:** [ROOT.GetCountry.GetName] has formally federated its empire under the Civilizing Mission Compact. After three years of demonstrated stability, the elected legislatures of the metropole and the recognized assemblies of the colonies have together ratified a constitutional framework binding them as permanent partners in a single multinational polity.\n\nThe colonies are no longer subject possessions; they are constituent territories. Their representatives sit in our parliament. Their [Concept('concept_pop', 'pops')] vote in our elections. Their concerns shape our budgets. The empire endures, but it endures by consent, not coercion. This was always the harder road.
 - **Flavor:** #italic A federation of consent. A century of patient work. The harder road taken, and finished.#!
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
+### decolonization_events.400
+- **Title:** A Colony Departs
+- **Description:** Reconsider — keep the territories in the empire.
+- **Flavor:** \"You may sign first, Minister.\"\n\n\"After you. It is your country now.\"
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
+### decolonization_events.401
+- **Title:** The Empire Stands Down
+- **Description:** The cabinet has assembled the full schedule for the dissolution of the empire. All [ROOT.GetVariable('decolonization_planned_count').GetValue] of our overseas territories are slated for release, with [SCOPE.sState('decolonization_target_state').GetName] as the flagship transition. Once signed, there is no rewinding the clock.
+- **Flavor:** \"How many flags will need to be lowered?\"\n\n\"All of them, Minister. Every last one.\"\n\nThe minister looked out the window. \"Well. At least the carpenters will be busy.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
 ## dp_escalation_events.txt
@@ -1799,169 +1811,175 @@ Each event is listed with its title, description, and flavor text (where availab
 ### movement_events_te.1
 - **Title:** Civil Rights March
 - **Description:** A mass march has swept through [SCOPE.sState('march_state').GetName], as members of discriminated communities take to the streets demanding equal rights and an end to systemic prejudice. The marchers carry banners calling for justice and dignity, and their numbers grow by the hour. Our government must decide how to respond to this unprecedented display of popular will.
-- **Flavor:** The march filled six city blocks. The police had stopped trying to count heads by mid-morning.
+- **Flavor:** \"They told us to apply for a permit. We did. They denied it. We marched anyway.\"\n\n\"By noon we had filled the boulevard from the courthouse to the river. I have never seen so many of us in one place. I think I cried, but I was singing too, so it was hard to tell.\"\n\n\"My captain says hold the line. Hold the line where? They're behind us now.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.2
 - **Title:** Segregation Incident
 - **Description:** A member of a discriminated community has been publicly denied service at a prominent establishment, and the incident has become a rallying point for the civil rights movement. Newspapers report the story with outrage or indifference depending on their editorial stance. The incident forces our government to confront the reality of our [concept_discrimination] laws.
-- **Flavor:** The photograph appeared on the front page the next morning. By evening, three protest marches had been organized.
+- **Flavor:** \"The manager said he was within his rights. I said I knew my rights too. He told me to read the sign over the door, then asked the doorman to escort me out.\"\n\n\"The photographer was crying when he took my picture. He kept apologising under his breath. I told him to just do his job. We both knew that picture was going to do more than my politeness ever had.\"\n\n\"My editor wanted to bury it on page seven. I told him if he buried it I would quit. He didn't, and I didn't.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.3
 - **Title:** Cultural Renaissance
 - **Description:** Discriminated communities across our nation have sparked a remarkable cultural renaissance. Their art, literature, music, and philosophy are gaining widespread acclaim - even among those who once dismissed them. This flowering of creativity presents an opportunity to bridge cultural divides, though some see it as a threat to the established order.
-- **Flavor:** The exhibition opened to an empty gallery. Within a week, there were queues around the block.
+- **Flavor:** \"For ten years I begged the major critics to walk into my gallery. None of them ever did. Then a foreign paper reviewed the exhibition, and the next morning all of them wanted in.\"\n\n\"My editor told me not to write about it. I told him I would write about it whether he printed it or not. He sighed and gave me the column inches.\"\n\n\"My grandmother would not have been allowed inside this building when she was young. I made sure she came to opening night. She wept in front of every painting, and afterwards she asked me when we were going back.\"
 - **Current image:** gfx/event_pictures/cultural_renaissance.dds
 
 ### movement_events_te.4
 - **Title:** International Pressure on Human Rights
 - **Description:** [SCOPE.sCountry('criticizing_country').GetName] has publicly condemned our treatment of minorities, calling our [concept_discrimination] policies a stain on our national character. Their diplomats deliver pointed remarks at international forums, and foreign newspapers print damning editorials. The civil rights movement at home seizes upon this external validation.
-- **Flavor:** The foreign newspapers ran the photographs on the front page. Our ambassador was recalled for consultations.
+- **Flavor:** \"Their ambassador read the statement at the rostrum without once looking up from the page. He did not need to. The cameras were on him, not on us.\"\n\n\"For years the ministry told us the world was not watching. Now we have the front pages of three foreign capitals to wave in their faces, and the ministry has nothing to say about that either.\"\n\n\"My editor wanted the headline to be the recall, not the reason. I asked him which one embarrassed us more. He ran both, and then he stopped taking my calls for a week.\"
 - **Current image:** gfx/event_pictures/human_rights_declaration.dds
 
 ### movement_events_te.13
 - **Title:** The Underground Railroad
 - **Description:** Secret networks have emerged among discriminated communities, smuggling their most vulnerable members across the border to [SCOPE.sCountry('refuge_country').GetName], where more tolerant laws await them. Safe houses, forged documents, and sympathetic border guards form a chain of escape from persecution. The government faces a choice: crush the networks and seal the borders, or tacitly allow a safety valve that eases domestic tensions.
-- **Flavor:** The border guards found the tunnel in March. By then, four hundred people had already passed through it.
+- **Flavor:** \"We found the tunnel in March. The earthworks were professional — properly shored, properly ventilated. Someone with engineering training built it, and they built it to last. By the time we found it, four hundred had already passed through.\"\n\n\"My wife and I were among the last to go. We slept thirty hours straight on the other side, in the back of a farmer's barn, on straw that smelled of horses. I have never been so grateful for the smell of horses.\"\n\n\"I do not ask their names. I do not ask why they are leaving. I take them as far as the river, and then I turn around and walk home. The fewer questions, the longer I last.\"
 - **Current image:** gfx/event_pictures/digital_activism_screens.dds
 
 ### movement_events_te.14
 - **Title:** The Boycott
 - **Description:** Organized boycotts have targeted businesses owned by members of discriminated communities in [SCOPE.sState('boycott_state').GetName]. Storefronts are daubed with slurs, customers are intimidated, and suppliers refuse to deal with the blacklisted shops. The civil rights movement calls for solidarity, while hardliners argue that economic pressure is a legitimate tool of social conformity.
-- **Flavor:** The shop's windows were smashed on Tuesday. On Wednesday, a sign appeared: 'Patriots buy from their own kind.'
+- **Flavor:** \"On Tuesday night they smashed the windows. On Wednesday morning a sign appeared on the boards: 'Patriots buy from their own kind.' I do not know who put it there. The neighbours pretend, very loudly, not to know either.\"\n\n\"We do not ask the customers not to enter. We ask only that they see who they are giving their money to before they do. Anyone who walks past us has made a decision; we simply ensure they make it with their eyes open.\"\n\n\"I have shopped at that store for twenty years. I will not stop now. I left through the side door so the photographers would not see me — not because I am ashamed of going in, but because I do not want my employer to be ashamed of me.\"
 - **Current image:** gfx/event_pictures/digital_activism_screens.dds
 
 ### movement_events_te.15
 - **Title:** Blood of a Martyr
 - **Description:** A prominent figure in the civil rights movement has been found dead under suspicious circumstances. Whether killed by state agents, vigilantes, or common criminals, the effect is the same: the movement has its martyr. Vigils spring up across the nation, and international observers take note. The government must decide how to respond to a death that may reshape the political landscape.
-- **Flavor:** The funeral drew ten thousand mourners. The police counted them from the rooftops.
+- **Flavor:** \"The funeral drew ten thousand. The police counted them from the rooftops, which is to say they had given up trying to count them from the ground, which is to say there were a great many more than ten thousand.\"\n\n\"He had told me, a week before, that he expected to die. I did not believe him. I did not want to believe him. I am sorry, now, that I did not at least listen properly.\"\n\n\"My captain told us to keep our distance and our weapons holstered. The crowd was not the danger today, he said. The crowd was the evidence.\"
 - **Current image:** gfx/event_pictures/transhumanist_demonstration.dds
 
 ### movement_events_te.16
 - **Title:** Mass Disobedience
 - **Description:** A coordinated campaign of civil disobedience has erupted across [SCOPE.sState('disobedience_state').GetName]. Citizens openly violate discriminatory laws: sitting in restricted areas, refusing to carry identification papers, patronizing forbidden establishments. The movement operates with deliberate, almost theatrical discipline, inviting the state to respond with force in full view of the press.
-- **Flavor:** Three hundred people sat down in the restricted section and refused to move. The police arrested them one by one. The following day, six hundred sat down.
+- **Flavor:** \"Three hundred sat down in the restricted section on Monday. We arrested them, one at a time, all afternoon. On Tuesday, six hundred sat down. On Wednesday, we ran out of wagons.\"\n\n\"My orders were to remove them without incident. There is no procedure in the manual for removing six hundred people who do not resist and do not move and will not, when asked, even tell you their names.\"\n\n\"They had clearly rehearsed it. The choreography was deliberate — the singing, the silence, the way they went limp the moment the officers touched them. They wanted us to look brutal. We obliged them, on every front page in the country, by lunch.\"
 - **Current image:** gfx/event_pictures/transhumanist_demonstration.dds
 
 ### movement_events_te.100
 - **Title:** The Movement Broken
 - **Description:** Reduce their political influence
-- **Flavor:** The organiser's landlord changed the locks on Monday. By Wednesday, the membership rolls had been burned and the office telephone disconnected.
+- **Flavor:** \"On Monday the landlord changed the locks. On Wednesday the membership rolls went into the back stove. On Friday the office telephone was disconnected. By the end of the month no one could remember which office it had been.\"\n\n\"My neighbour was a marcher. She is quiet now. She crosses the street when she sees me coming, and I do not blame her — I have been crossing the street to avoid other people myself.\"\n\n\"The minister wishes us all to know that order has been restored. He would prefer we did not ask at what cost. The press has, on the whole, obliged him.\"
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
 ### movement_events_te.5
 - **Title:** Draft Resistance
 - **Description:** With casualties mounting in our ongoing war, draft resistance has spread across the nation. Young men flee conscription, families hide their sons, and anti-war activists organize networks to help evaders escape. The military demands action, but cracking down risks turning public opinion further against the war effort.
-- **Flavor:** The conscription officer found the house empty. The neighbours said the family had left in the night.
+- **Flavor:** \"I called at seventeen addresses on Tuesday. Fourteen of them were empty. Three of the families said the boy had moved out of state. They were lying. I did not press them.\"\n\n\"They came for him at four in the morning. He was already across the river by then. I keep his letters in a tin in the cellar, and I burn each one the day after I read it.\"\n\n\"My neighbours pretended not to see me leave. I am grateful for that pretence. It is the only kindness this country has shown my family in a year.\"
 - **Current image:** gfx/event_pictures/economic_boycott_action.dds
 
 ### movement_events_te.6
 - **Title:** Veterans Speak Against the War
 - **Description:** A group of decorated war veterans has broken their silence, publicly denouncing the conduct and purpose of our military campaigns. Their testimonies - harrowing accounts of the reality of modern warfare - have galvanized the anti-war movement and shaken public confidence. Their service record makes them difficult to dismiss.
-- **Flavor:** The colonel stood before the microphones in his dress uniform. 'I did what I was ordered to do,' he said. 'I am here to tell you what that looked like.'
+- **Flavor:** \"I did what I was ordered to do. I am here to tell you what that looked like. I will keep telling you until you stop asking me to leave.\"\n\n\"The general's office issued a statement before the colonel had finished his testimony. They called him confused, then bitter, then unwell. By morning three more officers had asked to speak.\"\n\n\"My father served twenty-eight years and never said a word against the army. He sat through the entire broadcast without moving. Afterwards he looked at me and said, very quietly, 'They will not be able to undo this.'\"
 - **Current image:** gfx/event_pictures/economic_boycott_action.dds
 
 ### movement_events_te.7
 - **Title:** Peace Rally Fills the Capital
 - **Description:** An enormous peace rally has filled the streets of our capital, with hundreds of thousands of citizens demanding an end to military adventurism and a turn toward diplomatic solutions. The sheer scale of the demonstration is impossible to ignore - it represents a genuine groundswell of popular sentiment against the use of force.
-- **Flavor:** The police estimated two hundred thousand. The organisers claimed half a million. The truth was somewhere in between, and it did not matter.
+- **Flavor:** \"The police are saying two hundred thousand. The organisers are saying half a million. I have spent the morning on the rooftops with the police, and the afternoon in the crowd with the organisers, and I have concluded that neither number means anything. You cannot see the end of them in any direction.\"\n\n\"My daughter held one end of a banner. A factory worker held the other. They had never met before this morning, and by evening they were exchanging addresses and arguing about which streetcar she should take home.\"\n\n\"The minister wishes to characterise the rally as a small but vocal minority. He has, unfortunately, made this characterisation on the radio, where the broadcaster could hear the singing from the open window behind him.\"
 - **Current image:** gfx/event_pictures/economic_boycott_action.dds
 
 ### movement_events_te.8
 - **Title:** War Profiteering Exposed
 - **Description:** Anti-war activists have published damning evidence that certain industrialists are making enormous profits from military contracts while soldiers die on the front lines. The exposé details inflated prices, defective equipment, and cozy relationships between arms manufacturers and government officials. Public outrage mixes with demands for accountability.
-- **Flavor:** The leaked invoice listed body armour sold to the government at three times the manufacturing cost. The company's stock price rose on the news.
+- **Flavor:** \"The invoice was sitting in the third filing cabinet, in a folder marked 'archive'. The clerk handed it to me without asking who I was. I think he wanted me to find it.\"\n\n\"We supply what the government orders at the price the government agrees to. That is what is called a contract. If the gentlemen of the press would like to argue with the contract, they may write to my lawyer.\"\n\n\"My brother wore a vest that cracked the first time he was hit. He bled out in the field hospital before the surgeon could close the wound. I would like to know who set the price for the privilege of supplying it.\"
 - **Current image:** gfx/event_pictures/economic_boycott_action.dds
 
 ### movement_events_te.9
 - **Title:** Neural Implant Human Trials
 - **Description:** Our nation's leading neuroscientists have formally petitioned the government for approval to begin human trials of brain-computer neural implants. The technology promises to revolutionize how humans interact with machines - enhancing memory, accelerating learning, and enabling direct neural communication. But the ethical implications are staggering, and religious leaders warn of tampering with the divine design of the human mind.
-- **Flavor:** The patient described the sensation as 'a second set of thoughts — quieter, faster, not quite mine.'
+- **Flavor:** \"It is not pain. It is more like — a second set of thoughts. Quieter than my own, and faster, and not quite mine. I am told this will fade as I grow accustomed to it. I am not entirely sure I want it to.\"\n\n\"We have proceeded only with full informed consent. The volunteers understood every risk we could enumerate, and a great many we could not. We are scientists, not priests; we do not pretend to certainty about what we have not yet measured.\"\n\n\"You are not enhancing the human soul. You are replacing it, piece by piece, with circuitry whose long-term effects you do not yet know. The fact that the volunteers signed your forms does not absolve you of having asked them to.\"
 - **Current image:** gfx/event_pictures/draft_resistance_protest.dds
 
 ### movement_events_te.10
 - **Title:** The Augmentation Divide
 - **Description:** Human augmentation technology has created a visible divide in our society. The wealthy elite sport neural implants, enhanced reflexes, and optimized biology, while the working class remains unaugmented - increasingly unable to compete in a labor market that rewards the enhanced. Transhumanist activists demand universal access, while traditionalists question whether we should be modifying humans at all.
-- **Flavor:** The augmented executive processed the quarterly report in seconds. His unaugmented secretary took three hours. Both knew who would be replaced first.
+- **Flavor:** \"I can read the quarterly report in a few seconds. My secretary, bless her, takes three hours. The board does not pay me to wait three hours, and the board does not pay her to keep up.\"\n\n\"I was the fastest typist on the floor for fifteen years. Now they hire girls half my age with implants behind their ears, and the implants do not need to take lunch. Speed is not loyalty. It is not even skill. It is just speed.\"\n\n\"You can buy yourself a faster mind for the price of a small motor car. The people who cannot afford the motor car are about to lose their jobs to the people who can. We are calling this progress.\"
 - **Current image:** gfx/event_pictures/draft_resistance_protest.dds
 
 ### movement_events_te.11
 - **Title:** The Biohacker Underground
 - **Description:** An underground community of unlicensed biohackers has emerged in our cities, performing unsanctioned human augmentations in makeshift laboratories. Some of their work is remarkably innovative - pushing the boundaries of what official research programs have achieved. But without regulation, the risks are severe: botched procedures, uncontrolled experimentation, and a growing subculture that operates entirely outside the law.
-- **Flavor:** The police raid found surgical tools, a 3D-printed neural interface, and a teenager with fresh sutures behind his ear.
+- **Flavor:** \"In the back room we found surgical tools, a printed neural interface, and a boy with fresh sutures behind his ear. He was sixteen. On the way out he thanked us for the ambulance ride.\"\n\n\"I am not a doctor. I have never claimed to be one. I am the only person within a hundred miles who will do this work for what people can actually pay, and the people who come to me know exactly what that means before they sit down.\"\n\n\"My parents could not afford the licensed clinic. The waiting list at the public hospital is six years long. I am seventeen now. I would like to be employable by the time I am twenty, and the law does not seem to care whether I am or not.\"
 - **Current image:** gfx/event_pictures/draft_resistance_protest.dds
 
 ### movement_events_te.12
 - **Title:** The Digital Consciousness Debate
 - **Description:** The first successful mind upload has sent shockwaves through our society. A human consciousness now exists entirely within a digital substrate - thinking, feeling, and claiming personhood. Philosophers, theologians, and lawmakers are locked in fierce debate: is this digital entity a person with rights, or merely a sophisticated copy? The answer will reshape our understanding of what it means to be human.
-- **Flavor:** The uploaded consciousness asked for a lawyer. No one was sure if it was entitled to one.
+- **Flavor:** \"I asked for a lawyer. The hospital administrator said they were not yet sure if I was entitled to one. I asked her to put that in writing. She has not, so far, replied.\"\n\n\"My client is, according to every memory and every preference she has ever expressed, the woman who walked into that laboratory last March. We are asking the court to consider whether the body she walked in with is a necessary condition of her personhood. We are hopeful the answer is no. We are prepared for the answer to be yes.\"\n\n\"A copy is not a soul. A soul does not survive the cessation of breath. Whatever is in that machine is not what the family lost, and no decree from the court will change that.\"
 - **Current image:** gfx/event_pictures/draft_resistance_protest.dds
 
 ### movement_events_te.200
 - **Title:** A New Era of Equality
 - **Description:** After years of struggle, the civil rights movement in [ROOT.GetCountry.GetName] has achieved its goals. Legal protections for minorities are now firmly established, and the nation can look forward to a more just society.
-- **Flavor:** #italic The arc of the moral universe is long, but it bends toward justice.#!
+- **Flavor:** \"My father lived for this day. He did not see it. I made sure to read him the morning paper aloud anyway, at the cemetery, sitting on the grass above where he sleeps.\"\n\n\"It was a long fight and a long after-fight, and we do not yet know which one cost us more. But it is done now, in law if not yet in fact, and it was done by us.\"\n\n#italic The arc of the moral universe is long, but it bends toward justice.#!
 - **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
 
 ### movement_events_te.220
 - **Title:** The Civil Rights Mandate is Signed
 - **Description:** After years of federal commissions, executive orders, and court fights, the mandate is law. Marshals deploy to enforce; recalcitrant states are reminded that the writ runs everywhere.
-- **Flavor:** From the capital, a mandate.
+- **Flavor:** \"The pen is heavier than I expected. I think I will keep the pen.\"\n\n\"My orders are simple. The federal writ runs everywhere the flag runs. If the governor of a state disagrees with the writ, he may take that up with the writ. He will not be taking it up with me.\"\n\n\"They have sent us federal marshals to enforce a law our voters did not want. I will be remembered for resisting it. I will be remembered, which is, in the end, more than I would have been otherwise.\"
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
 ### movement_events_te.221
 - **Title:** The Movement Carries the Day
 - **Description:** The march on the capital, the boycott, the years of organizing — they could not be ignored any longer. The legislation is theirs in everything but signature.
-- **Flavor:** Won from below.
+- **Flavor:** \"They could ignore us when we were a hundred. They could ignore us when we were ten thousand. They could not ignore us when we were on the steps of the legislature for the third year running, in the rain, with the cameras still pointed at us.\"\n\n\"I voted yes. I will tell my colleagues I voted yes because the bill was a good bill. I will tell my grandchildren I voted yes because the people outside the window would not go home, and the bill was not the worst way for that to end.\"\n\n\"We lost in the chamber today. We did not lose to the chamber. We lost to the street, and that is the loss that lasts.\"
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
 ### movement_events_te.222
 - **Title:** A Settlement, At Last
 - **Description:** After patient committee work and quiet diplomacy across factions, the question closes with a broad institutional consensus. No one is shouting; no one is happy; the law is on the books.
-- **Flavor:** Settled, with all deliberate speed.
+- **Flavor:** \"It is not the bill I would have written. It is not the bill anyone in this chamber would have written. That is what consensus is — the document at the centre of the room that no one in the room would have drafted alone.\"\n\n\"The signing was attended by three former heads of government, a cardinal, and the leader of the opposition. No one shouted. No one wept. Everyone, when the cameras came on, smiled in precisely the same way.\"\n\n\"We have closed the question in law. Whether we have answered it is, I am afraid, for the country to find out over the next twenty years, without our help.\"
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
 ### movement_events_te.223
 - **Title:** Reform on Paper
 - **Description:** The signing ceremony is photographed; the appointed leaders are gracious. The [concept_radical] organizers, who built this movement, find themselves without a movement to lead. The new statutes apply, in theory.
-- **Flavor:** A victory the movement won't quite recognize.
+- **Flavor:** \"The new statutes apply. In theory, every clause is enforceable. In practice, the enforcement will fall to the same office that was, until last March, quietly blocking every suit we filed.\"\n\n\"I was not invited to the signing ceremony. The people who were invited had never once been to one of our meetings. They smiled, in the photographs, very broadly indeed.\"\n\n\"My organisers won this. I do not see my organisers in the room. I am told this is what victory looks like, and I am told to be grateful, and I am still trying to work out which part of that I am willing to do.\"
 - **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
 ### movement_events_te.230
 - **Title:** The Movement Demobilizes
 - **Description:** Token appointments and symbolic legislation cooled the streets. Donors moved on; chapters shrank; the next generation looks elsewhere. The grievances remain; the organizing does not.
-- **Flavor:** Bought out, quietly.
+- **Flavor:** \"My chapter had three hundred members at its peak. Last meeting we had eleven. The young ones are not coming up; the old ones are tired; the donors have moved on to other causes that take better photographs.\"\n\n\"We funded the movement when it was on the front pages. The front pages have moved on. I see no reason our cheques should not move with them. This is not a betrayal. It is simply that the campaign is over.\"\n\n\"My mother marched. She tells me I am ungrateful for not picking up where she left off. I do not yet know how to tell her that what she fought for is not what we are fighting for now, and that the difference is not my fault.\"
+- **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
+
+### movement_events_te.240
+- **Title:** Victory on Paper
+- **Description:** By every measure the movement has won — marches at the capital, sympathetic press abroad, names on every door. The ledger of the law remains exactly what it was. The statute books still list the same restrictions, the same exclusions, the same euphemisms for who is and is not a citizen of the first rank. The crowd outside our offices has stopped chanting. They are reading aloud, instead, from those statutes.
+- **Flavor:** \"The papers call it a triumph. I have a copy of the relevant statute in my desk drawer; if I read it aloud the word triumph does not appear in it. It does, in fact, contain the words we marched against on every page where it contains any words at all.\"\n\n\"My grandfather signed the law. My father defended the law. I have spent my career amending the law in ways that change none of the things the law actually does. We are all of us, in this family, men of the law.\"\n\n\"They thought a million people in the street would be enough. They thought a march on the capital would be enough. They thought the cameras of the world would be enough. None of these things, as it turns out, were the thing that was enough.\"
 - **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
 
 ### movement_events_te.231
 - **Title:** The Long Drift
 - **Description:** Years of patient incrementalism without escalation. Each compromise was reasonable; each kept the bar from rising. The movement is still nominally there, but the urgency drained out of it.
-- **Flavor:** Reform deferred is reform denied.
+- **Flavor:** \"Each year the bill is reasonable. Each year the bill is incremental. Each year the bill takes another two percent of what we asked for, and each year I tell my members that two percent is better than nothing. They are starting, this year, to disagree with me.\"\n\n\"We have, on paper, a great deal more than we had when I started. We have, in fact, almost exactly what we had when I started. I cannot any longer tell which one of those is the real thing.\"\n\n\"They said they would come back to the question next session. They have said that for nine sessions running. I am no longer in the habit of believing them.\"
 - **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
 
 ### movement_events_te.301
 - **Title:** First Mass Rally Draws Notice
 - **Description:** What started as a community meeting filled a city block. Sympathetic newspapers run the photograph above the fold. The movement has, suddenly, faces and names.
-- **Flavor:** The first rally that the country couldn't ignore.
+- **Flavor:** \"We had permits for a few hundred. By noon there were thousands, and we had no idea what to do with them — except keep them in the square, and keep them singing, and hope the police kept their distance long enough for the photographers to set up.\"\n\n\"I had never been to a rally before. My wife asked me not to go. I went anyway, and stood at the back, and listened. By the end I was crying in front of people I had never met, and not one of them looked at me as if I should be ashamed.\"\n\n\"My editor wanted six column inches. I gave him twenty-four. He ran it on the front page above the fold. He told me, much later, that he had been waiting for years for something that deserved that much space.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.303
 - **Title:** Coalition Forms with Trade Unions
 - **Description:** Local branches of organized labor open their halls to civil rights organizers. Joint statements appear; shop floors are now movement spaces.
-- **Flavor:** Wages and rights, on the same picket line.
+- **Flavor:** \"For thirty years I told my men the civil rights question was a distraction from the wages question. This morning, the discriminated boys on the line and the rest of the boys on the line were drinking the same coffee in the same hall, and I am not going to be the one to tell them they are in two different fights.\"\n\n\"We brought the leafletters in through the side door. By the afternoon they were leafletting from the front, and the shop foreman was watching, and the shop foreman said nothing. That was the moment I knew we had won this hall.\"\n\n\"The owners will retaliate. They will try to split us apart. They will fail, this time, because we have already had the conversation they were counting on us not to have.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.304
 - **Title:** Federal Commission Recommends Action
 - **Description:** After two years of hearings, the civil rights commission's report lands on the cabinet's desk. Its recommendations are concrete, costed, and politically inconvenient. They are, however, recommendations.
-- **Flavor:** An official document with teeth, if anyone chooses to use them.
+- **Flavor:** \"Two years of hearings. Eleven hundred witnesses. Forty-three findings of fact. Sixteen specific recommendations. The cabinet will read the executive summary, if we are lucky, and they will then decide whether reading even that was wise.\"\n\n\"It is, of course, only a recommendation. The commission has no power to compel. The cabinet has every power to ignore. We are not, this morning, entirely sure which of those is more politically convenient for them.\"\n\n\"I have waited eleven years for an official document with our findings inside it. I now have one. I will keep it on my desk. Whether it has teeth is for the next government to find out.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ### movement_events_te.305
 - **Title:** The March on the Capital
 - **Description:** Hundreds of thousands fill the avenues outside the legislature. The speeches are broadcast; the demands are clear; the cameras do not look away. The country is being asked, in front of the cameras, what it intends to be.
-- **Flavor:** We have come, peacefully, in numbers, to be answered.
+- **Flavor:** \"We have come, peacefully, in our numbers, to be answered. We will be here until the answer arrives. We have brought sandwiches and a great deal of patience, and we have been told there is more of both on the way.\"\n\n\"My cameraman has filmed three of these in the last decade. He says this one is different. The faces in the crowd are not afraid. The signs in the crowd are not pleas — they are demands. I am inclined to agree with him.\"\n\n\"From the window of the legislature you can see them as a single mass, from end to end, with no edge. My colleague suggested closing the curtains. I told him that would not make the question any quieter.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
 
 ## nuclear_weapon_events.txt
@@ -3197,7 +3215,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### space_race_events.23
 - **Title:** Two Characters
 - **Description:** A simulation run caught it: a floating-point rounding error in the attitude control subroutine. In normal operations it would accumulate unnoticed over hours, but during a critical burn sequence it would compound into a navigation error of several degrees: enough to miss a planetary target entirely or, worse, point the main engine in the wrong direction.
-- **Flavor:** \"Line 4,217 of module AOCS_PRIMARY. A less-than that should have been a less-than-or-equal-to. Two characters, and it would have cost us the mission.\"\n\n- Lead Software Engineer, looking very pale
+- **Flavor:** \"Line 4,217 of module AOCS_PRIMARY. A less-than that should have been a less-than-or-equal-to. Two characters, and it would have cost us the mission.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Lead Software Engineer, looking very pale
 - **Current image:** gfx/event_pictures/computer_error_cockpit.dds
 
 ### space_race_events.24

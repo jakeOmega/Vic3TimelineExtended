@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_exhaustion: Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play   additional_war_exhaustion
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
@@ -147,8 +147,8 @@ has_any_law_commitment: Checks if a country has a commitment to enact any law
 has_any_naval_only_hostilities: Check if the country has naval hostilities with any country it is not also at war with
 has_any_secessionists_broken_out: Check if the country has secessionists broken out Traits: yes/no  Reads gamestate for all scopes.
 has_any_secessionists_growing: Check if the country has any secessionists growing Traits: yes/no  Reads gamestate for all scopes.
-has_any_strait_control: Check if the scoped country has any level of strait control
-has_any_strait_province: Check if the scoped country has any strait
+has_any_strait_control: Check if the scoped country owns a strait province with naval fortification
+has_any_strait_province: Check if the scoped country owns any strait province
 has_any_subventions_on: Check if the scoped country has any level of subventions on a goods   scope:country
 has_any_tariffs_on: Check if the scoped country has any level of tariffs on a goods   scope:country
 has_attitude: Checks if scoped country has a particular attitude towards another country   has_attitude

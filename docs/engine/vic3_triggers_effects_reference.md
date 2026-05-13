@@ -1,8 +1,8 @@
-<!-- Auto-generated from triggers.log @ 2026-05-09T07:54:17+00:00; effects.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log @ 2026-05-12T15:06:59+00:00; effects.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 1734 trigger entries and 2969 effect entries.*
+*Auto-generated from 1764 trigger entries and 3059 effect entries.*
 *93 iterator families, 871 standalone triggers, 369 standalone effects.*
 
 ## Reading Guide
@@ -178,8 +178,8 @@
 - `has_any_naval_only_hostilities` — Check if the country has naval hostilities with any country it is not also at war with
 - `has_any_secessionists_broken_out` — Check if the country has secessionists broken out Traits: yes/no  Reads gamestate for all scopes.
 - `has_any_secessionists_growing` — Check if the country has any secessionists growing Traits: yes/no  Reads gamestate for all scopes.
-- `has_any_strait_control` — Check if the scoped country has any level of strait control → country
-- `has_any_strait_province` — Check if the scoped country has any strait → country
+- `has_any_strait_control` — Check if the scoped country owns a strait province with naval fortification → country
+- `has_any_strait_province` — Check if the scoped country owns any strait province → country
 - `has_any_subventions_on` — Check if the scoped country has any level of subventions on a goods   scope:country → goods
 - `has_any_tariffs_on` — Check if the scoped country has any level of tariffs on a goods   scope:country → goods
 - `has_attitude` — Checks if scoped country has a particular attitude towards another country   has_attitude
@@ -1414,7 +1414,7 @@
 - `is_equal_exchange_for` — Checks if the scoped treaty is considered an equal exchange by target country,   scope:some_treaty → country (scopes: treaty_options, treaty)
 - `is_exchanging_obligations` — Checks if the scoped treaty is exchanging any obligations,   scope:some_treaty (scopes: treaty_options, treaty)
 - `is_fulfilled_by` — Check if the scoped treaty is fulfilled by the given country   scope:treaty → country
-- `is_historical_treaty` — Checks if the scoped treaty was signed before the game start date   scope:some_treaty
+- `is_historical_treaty` — Checks if the scoped treaty was signed before the game start date   scope:some_treaty (scopes: treaty_options, treaty)
 - `is_renegotiation` — Checks if the scoped treaty is amending an existing treaty   scope:some_treaty (scopes: treaty_options, treaty)
 - `was_coerced_with_naval_threat` — Check if the scoped treaty was accepted through threatening naval hostilities
 

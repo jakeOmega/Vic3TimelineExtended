@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-05-09T07:54:17+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-05-12T15:06:59+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 
@@ -856,8 +856,8 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_institution_cost_{institution}_mult`
 
 - Placeholder: `institution` (vocab: `institution`)
-- Members: **17**
-  - Examples: `institution_colonial_affairs`, `institution_health_system`, `institution_migration_controls`, `institution_ministry_of_commerce`, `institution_ministry_of_consumer_protection`, `institution_ministry_of_culture`
+- Members: **18**
+  - Examples: `institution_colonial_affairs`, `institution_health_system`, `institution_home_affairs`, `institution_migration_controls`, `institution_ministry_of_commerce`, `institution_ministry_of_consumer_protection`
 
 ### `country_institution_size_change_speed_{institution}_mult`
 

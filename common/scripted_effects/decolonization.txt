@@ -95,266 +95,488 @@ apply_decolonization_path = {
 	}
 }
 
-form_decolonized_country = { # scope is capital state of new country, must be a homeland of something
-	save_scope_as = new_country_capital
-	owner = { save_scope_as = decolonizing_parent }
+# Preview helper used by the three decolonization buttons. For one candidate
+# state (THIS), determines the country culture that would form there, then
+# flood-fills a per-call region variable across all metropole-owned states
+# that are homelands of that culture and connected to the capital. Also
+# stores the region's state count as a country variable for loc display.
+#
+# Scope (THIS): the candidate capital state.
+# Params:
+#   $REGION_VAR$    — per-call unique variable, marks the flood-fill region.
+#                     Subsequent candidate-picks `NOT = { has_variable = X }`
+#                     against this to avoid overlapping candidate regions.
+#   $COUNT_VAR$     — per-call unique country variable, gets the region size
+#                     (number of states that would be ceded if this candidate
+#                     is released).
+#   $CULTURE_SCOPE$ — per-call unique named scope holding the chosen culture.
+#                     Mirrors form_decolonized_country's 3-fallback selection.
+#
+# After all 3 candidate-previews run, form_decolonized_country's own internal
+# flood-fill (via decolonization_cede_marker) will re-mark the same states at
+# release time. The region/count vars here are purely for UI preview + the
+# top-3 candidate-exclusion logic; they're cleared in event 400's options.
+_decolonization_preview_region = {
+	# Cache the owner once per call so pop-scope culture checks below can
+	# reference it. Same metropole across the 3 candidate calls — overwriting
+	# the named scope is idempotent.
+	owner = { save_scope_as = decolonization_helper_metropole }
+
+	# Culture selection — same 3-fallback chain as form_decolonized_country.
+	# Preferred: a culture that has the candidate state as a homeland.
 	random_scope_culture = {
-		limit = {
-			has_homeland = scope:new_country_capital
+		limit = { has_homeland = prev }
+		save_scope_as = $CULTURE_SCOPE$
+	}
+	# Fallback 1: largest non-metropole-primary pop's culture present here.
+	if = {
+		limit = { NOT = { exists = scope:$CULTURE_SCOPE$ } }
+		ordered_scope_pop = {
+			limit = {
+				NOT = { culture = { is_primary_culture_of = scope:decolonization_helper_metropole } }
+			}
+			order_by = total_size
+			position = 0
+			culture = { save_scope_as = $CULTURE_SCOPE$ }
 		}
-		save_scope_as = new_country_culture
+	}
+	# Fallback 2: any culture present in the state.
+	if = {
+		limit = { NOT = { exists = scope:$CULTURE_SCOPE$ } }
+		random_scope_culture = { save_scope_as = $CULTURE_SCOPE$ }
 	}
 
-	random_list = {
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 0 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+	# Seed: mark the candidate capital itself.
+	set_variable = $REGION_VAR$
+
+	# Flood-fill within the metropole's states. Each `while` iteration adds
+	# one ring of homeland-of-the-new-culture neighbors; loop terminates when
+	# no more unmarked metropole states qualify.
+	owner = {
+		while = {
+			limit = {
+				any_scope_state = {
+					NOT = { has_variable = $REGION_VAR$ }
+					state_region = { is_homeland = scope:$CULTURE_SCOPE$ }
+					any_neighbouring_state = {
+						has_variable = $REGION_VAR$
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+			every_scope_state = {
+				limit = {
+					NOT = { has_variable = $REGION_VAR$ }
+					state_region = { is_homeland = scope:$CULTURE_SCOPE$ }
+					any_neighbouring_state = {
+						has_variable = $REGION_VAR$
+					}
+				}
+				set_variable = $REGION_VAR$
+			}
+		}
+
+		# Count the region. Reset to 0, then increment per marked state.
+		# `prev` from inside the iter = this `owner` block's scope = the country.
+		set_variable = { name = $COUNT_VAR$ value = 0 }
+		every_scope_state = {
+			limit = { has_variable = $REGION_VAR$ }
+			prev = { change_variable = { name = $COUNT_VAR$ add = 1 } }
+		}
+	}
+	debug_log = "DECOL_DEBUG: _decolonization_preview_region completed (region var $REGION_VAR$, count var $COUNT_VAR$)"  # DEBUG_DECOLONIZATION_TRACE
+}
+
+form_decolonized_country = { # scope (THIS) is capital state of new country
+	save_scope_as = new_country_capital
+	owner = { save_scope_as = decolonizing_parent }
+	# Mark the capital with a per-call cede variable. create_dynamic_country's
+	# cede_state_trigger iterates every state in the world; using a variable
+	# is the vanilla idiom (see 00_colonial_administration_buttons.txt). The
+	# `this = scope:X` form is silently rejected by that trigger context.
+	# Cleared in on_created below.
+	scope:new_country_capital = { set_variable = decolonization_cede_marker }
+	debug_log = "DECOL_DEBUG: form_decolonized_country entered, capital=[SCOPE.sState('new_country_capital').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+
+	# Culture selection: prefer a culture that has the capital as homeland;
+	# fall back to largest non-owner-primary pop; last-resort use any culture
+	# present in the state. This makes the call deterministic even when the
+	# indigenous homeland culture has been displaced (a common Round Table case).
+	random_scope_culture = {
+		limit = { has_homeland = scope:new_country_capital }
+		save_scope_as = new_country_culture
+	}
+	if = {
+		limit = { NOT = { exists = scope:new_country_culture } }
+		ordered_scope_pop = {
+			limit = {
+				NOT = { culture = { is_primary_culture_of = scope:decolonizing_parent } }
+			}
+			order_by = total_size
+			position = 0
+			culture = { save_scope_as = new_country_culture }
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:new_country_culture } }
+		random_scope_culture = {
+			save_scope_as = new_country_culture
+		}
+	}
+	# Trip wire — fires only if all three culture-selection branches failed.
+	# Means the state has zero pops, which shouldn't happen given the eligibility
+	# triggers; if it does, create_dynamic_country will reject and no country forms.
+	if = { limit = { NOT = { exists = scope:new_country_culture } } debug_log = "DECOL_DEBUG: BUG — scope:new_country_culture UNSET after all 3 fallbacks; create_dynamic_country will reject" }  # DEBUG_DECOLONIZATION_TRACE
+
+	# Recursive flood-fill: in addition to the capital, also cede every other
+	# metropole-owned state that (a) is a homeland of the new country's primary
+	# culture AND (b) is reachable from the capital via a chain of such states.
+	# Each iteration of `while` expands one ring of neighbors; the limit fails
+	# when no further unmarked metropole state qualifies, naturally terminating.
+	# Without this, a released country would only ever get its single capital
+	# state — Venezuela releasing as just Zulia rather than Zulia + Falcón +
+	# the rest of north-coast Venezuela.
+	while = {
+		limit = {
+			scope:decolonizing_parent = {
+				any_scope_state = {
+					NOT = { has_variable = decolonization_cede_marker }
+					state_region = { is_homeland = scope:new_country_culture }
+					any_neighbouring_state = {
+						has_variable = decolonization_cede_marker
+					}
 				}
 			}
 		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 30 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+		scope:decolonizing_parent = {
+			every_scope_state = {
+				limit = {
+					NOT = { has_variable = decolonization_cede_marker }
+					state_region = { is_homeland = scope:new_country_culture }
+					any_neighbouring_state = {
+						has_variable = decolonization_cede_marker
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
+				set_variable = decolonization_cede_marker
 			}
 		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 60 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+	}
+	debug_log = "DECOL_DEBUG: form_decolonized_country flood-fill complete for culture=[SCOPE.sCulture('new_country_culture').GetName] seeded from [SCOPE.sState('new_country_capital').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+
+	# Picks one of 12 evenly-spaced flag colors for the new country. The branches
+	# are inlined because Paradox parses `color = { R G B }` at script-definition
+	# time, so scripted-effect `$PARAM$` substitution does NOT propagate into a
+	# color literal — a helper-with-color-param approach silently fell back to
+	# "inherit color from origin" (every released country ended up the same color
+	# as the metropole). The random_list wrap, by contrast, IS evaluated at
+	# runtime and varies per call. custom_tooltip suppresses the per-branch 8%
+	# chance display in option-hover.
+	#
+	# create_dynamic_country runs in scope=none, so all values must be explicit
+	# `scope:X` references; `owner`, `this`, and bare identifiers silently no-op.
+	# cede_state_trigger only accepts `has_variable` / `state_region` checks,
+	# not scope identity. Vic3 vanilla caps the dynamic-tag pool at 100 (D00–D99);
+	# `common/country_definitions/zz_te_extended_dynamic.txt` extends it to 1000.
+	custom_tooltip = {
+		text = decolonization_form_country_tt
+		random_list = {
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 216 65 65 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=0)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 90 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 216 140 65 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=30)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 120 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 216 216 65 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=60)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 150 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 140 216 65 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=90)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 180 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 65 216 65 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=120)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 210 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 65 216 140 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=150)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 240 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 65 216 216 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=180)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 270 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 65 140 216 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=210)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 300 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 65 65 216 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=240)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
 				}
 			}
-		}
-		1 = {
-			create_dynamic_country = {
-				origin = owner
-				tier = principality
-				culture = scope:new_country_culture
-				religion = owner.religion
-				capital = THIS
-				cede_state_trigger = {
-					has_variable = decolonization_marker
-				}
-				color = hsv360{ 330 80 80 }
-				on_created = {
-					set_country_type = recognized
-					every_scope_state = {
-						remove_variable = decolonization_marker
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 140 65 216 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=270)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
 					}
-					apply_decolonization_path = yes
-					trigger_event = {id = minor_events_timelineextended.3 }
+				}
+			}
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 216 65 216 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=300)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
+					}
+				}
+			}
+			1 = {
+				create_dynamic_country = {
+					origin = scope:decolonizing_parent
+					tier = principality
+					culture = scope:new_country_culture
+					capital = scope:new_country_capital
+					cede_state_trigger = { has_variable = decolonization_cede_marker }
+					color = { 216 65 140 }
+					on_created = {
+						save_scope_as = new_dynamic_country  # DEBUG_DECOLONIZATION_TRACE
+						debug_log = "DECOL_DEBUG: create_dynamic_country.on_created fired for [SCOPE.sCountry('new_dynamic_country').GetName] (hue=330)"  # DEBUG_DECOLONIZATION_TRACE
+						set_country_type = recognized
+						every_scope_state = {
+							limit = { has_variable = decolonization_cede_marker }
+							remove_variable = decolonization_cede_marker
+							remove_variable = decolonization_marker
+							remove_variable = decolonization_region_1_marker
+							remove_variable = decolonization_region_2_marker
+							remove_variable = decolonization_region_3_marker
+						}
+						apply_decolonization_path = yes
+						trigger_event = { id = minor_events_timelineextended.3 }
+					}
 				}
 			}
 		}

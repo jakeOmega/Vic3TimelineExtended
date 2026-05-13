@@ -3521,3 +3521,304 @@ decolonization_events.301 = {
 		}
 	}
 }
+
+# ============================================================================
+# DECOLONIZATION CONFIRMATION EVENTS
+# Issue #23 — buttons mark eligible states with decolonization_marker and fire
+# one of these events so the player can preview which territories will be lost
+# before commit. Two paths feed the single-state event:
+#   decolonization_path_release_single  → unilateral grant flavor
+#   decolonization_path_round_table     → negotiated transition flavor
+# Planned Full Decolonization fires the multi-state event.
+# ============================================================================
+
+# Event 400: Single-state release confirmation (Release Colonial Territory + Round Table)
+decolonization_events.400 = {
+	type = country_event
+	placement = scope:decolonization_target_state_1
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.400.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.400.d_round_table
+				trigger = { has_variable = decolonization_path_round_table }
+			}
+			triggered_desc = {
+				desc = decolonization_events.400.d_release
+				trigger = { has_variable = decolonization_path_release_single }
+			}
+			triggered_desc = { desc = decolonization_events.400.d_fallback trigger = { always = yes } }
+		}
+	}
+	flavor = decolonization_events.400.f
+
+	duration = 3
+
+	immediate = {
+		debug_log = "DECOL_DEBUG: decolonization_events.400 immediate entered, candidates 1=[SCOPE.sState('decolonization_target_state_1').GetName] 2=[SCOPE.sState('decolonization_target_state_2').GetName] 3=[SCOPE.sState('decolonization_target_state_3').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+	}
+
+	# Option A: Release the largest candidate (target_state_1).
+	# Always available — the button only fires the event if at least one state
+	# matched, so target_1 is guaranteed to exist.
+	option = {
+		name = decolonization_events.400.a
+		trigger = { exists = scope:decolonization_target_state_1 }
+		default_option = yes
+		ai_chance = { base = 5 }
+
+		debug_log = "DECOL_DEBUG: decolonization_events.400 option A selected, releasing [SCOPE.sState('decolonization_target_state_1').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+
+		scope:decolonization_target_state_1 = {
+			form_decolonized_country = yes
+		}
+
+		# Path-specific country modifiers (moved here from the original buttons
+		# so they apply only on confirm, not on the preview click).
+		if = {
+			limit = { has_variable = decolonization_path_round_table }
+			add_modifier = { name = colonial_stability_positive_event months = 12 }
+			add_modifier = { name = peaceful_decolonization_modifier days = normal_modifier_time is_decaying = yes }
+			ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+			ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		}
+		else_if = {
+			limit = { has_variable = decolonization_path_release_single }
+			add_modifier = { name = peaceful_decolonization_modifier days = normal_modifier_time is_decaying = yes }
+			add_modifier = { name = colonial_stability_positive_event months = 8 }
+		}
+		# Cleanup: clear all preview region markers from metropole's remaining
+		# states (ceded states already had theirs cleared in form's on_created)
+		# and clear the per-candidate count variables.
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = decolonization_region_1_marker
+					has_variable = decolonization_region_2_marker
+					has_variable = decolonization_region_3_marker
+					has_variable = decolonization_marker
+				}
+			}
+			remove_variable = decolonization_region_1_marker
+			remove_variable = decolonization_region_2_marker
+			remove_variable = decolonization_region_3_marker
+			remove_variable = decolonization_marker
+		}
+		remove_variable = decolonization_region_1_count
+		remove_variable = decolonization_region_2_count
+		remove_variable = decolonization_region_3_count
+		remove_variable = decolonization_path_round_table
+		remove_variable = decolonization_path_release_single
+	}
+
+	# Option B: Release the second-largest candidate (target_state_2).
+	# Hidden if fewer than 2 colonial states are eligible.
+	option = {
+		name = decolonization_events.400.b
+		trigger = { exists = scope:decolonization_target_state_2 }
+		ai_chance = { base = 2 }
+
+		debug_log = "DECOL_DEBUG: decolonization_events.400 option B selected, releasing [SCOPE.sState('decolonization_target_state_2').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+
+		scope:decolonization_target_state_2 = {
+			form_decolonized_country = yes
+		}
+
+		if = {
+			limit = { has_variable = decolonization_path_round_table }
+			add_modifier = { name = colonial_stability_positive_event months = 12 }
+			add_modifier = { name = peaceful_decolonization_modifier days = normal_modifier_time is_decaying = yes }
+			ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+			ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		}
+		else_if = {
+			limit = { has_variable = decolonization_path_release_single }
+			add_modifier = { name = peaceful_decolonization_modifier days = normal_modifier_time is_decaying = yes }
+			add_modifier = { name = colonial_stability_positive_event months = 8 }
+		}
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = decolonization_region_1_marker
+					has_variable = decolonization_region_2_marker
+					has_variable = decolonization_region_3_marker
+					has_variable = decolonization_marker
+				}
+			}
+			remove_variable = decolonization_region_1_marker
+			remove_variable = decolonization_region_2_marker
+			remove_variable = decolonization_region_3_marker
+			remove_variable = decolonization_marker
+		}
+		remove_variable = decolonization_region_1_count
+		remove_variable = decolonization_region_2_count
+		remove_variable = decolonization_region_3_count
+		remove_variable = decolonization_path_round_table
+		remove_variable = decolonization_path_release_single
+	}
+
+	# Option C: Release the third-largest candidate (target_state_3).
+	# Hidden if fewer than 3 colonial states are eligible.
+	option = {
+		name = decolonization_events.400.c
+		trigger = { exists = scope:decolonization_target_state_3 }
+		ai_chance = { base = 1 }
+
+		debug_log = "DECOL_DEBUG: decolonization_events.400 option C selected, releasing [SCOPE.sState('decolonization_target_state_3').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+
+		scope:decolonization_target_state_3 = {
+			form_decolonized_country = yes
+		}
+
+		if = {
+			limit = { has_variable = decolonization_path_round_table }
+			add_modifier = { name = colonial_stability_positive_event months = 12 }
+			add_modifier = { name = peaceful_decolonization_modifier days = normal_modifier_time is_decaying = yes }
+			ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+			ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		}
+		else_if = {
+			limit = { has_variable = decolonization_path_release_single }
+			add_modifier = { name = peaceful_decolonization_modifier days = normal_modifier_time is_decaying = yes }
+			add_modifier = { name = colonial_stability_positive_event months = 8 }
+		}
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = decolonization_region_1_marker
+					has_variable = decolonization_region_2_marker
+					has_variable = decolonization_region_3_marker
+					has_variable = decolonization_marker
+				}
+			}
+			remove_variable = decolonization_region_1_marker
+			remove_variable = decolonization_region_2_marker
+			remove_variable = decolonization_region_3_marker
+			remove_variable = decolonization_marker
+		}
+		remove_variable = decolonization_region_1_count
+		remove_variable = decolonization_region_2_count
+		remove_variable = decolonization_region_3_count
+		remove_variable = decolonization_path_round_table
+		remove_variable = decolonization_path_release_single
+	}
+
+	# Option D: Reconsider — clean cancel. No country released, all markers cleared.
+	option = {
+		name = decolonization_events.400.d
+		ai_chance = { base = 1 }
+
+		debug_log = "DECOL_DEBUG: decolonization_events.400 option D (cancel) selected"  # DEBUG_DECOLONIZATION_TRACE
+
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = decolonization_region_1_marker
+					has_variable = decolonization_region_2_marker
+					has_variable = decolonization_region_3_marker
+					has_variable = decolonization_marker
+				}
+			}
+			remove_variable = decolonization_region_1_marker
+			remove_variable = decolonization_region_2_marker
+			remove_variable = decolonization_region_3_marker
+			remove_variable = decolonization_marker
+		}
+		remove_variable = decolonization_region_1_count
+		remove_variable = decolonization_region_2_count
+		remove_variable = decolonization_region_3_count
+		remove_variable = decolonization_path_round_table
+		remove_variable = decolonization_path_release_single
+	}
+}
+
+# Event 401: Planned full decolonization confirmation
+decolonization_events.401 = {
+	type = country_event
+	placement = scope:decolonization_target_state
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.401.t
+	desc = decolonization_events.401.d
+	flavor = decolonization_events.401.f
+
+	duration = 3
+
+	immediate = {
+		debug_log = "DECOL_DEBUG: decolonization_events.401 immediate entered"  # DEBUG_DECOLONIZATION_TRACE
+		debug_log = "DECOL_DEBUG: decolonization_events.401 inherited scope:decolonization_target_state=[SCOPE.sState('decolonization_target_state').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+		# Fallback: if scope didn't propagate, pick the largest marked state.
+		if = {
+			limit = { NOT = { exists = scope:decolonization_target_state } }
+			debug_log = "DECOL_DEBUG: decolonization_events.401 scope MISSING — re-finding via marker"  # DEBUG_DECOLONIZATION_TRACE
+			ordered_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				order_by = state_population
+				max = 1
+				save_scope_as = decolonization_target_state
+			}
+		}
+		debug_log = "DECOL_DEBUG: decolonization_events.401 resolved placement state=[SCOPE.sState('decolonization_target_state').GetName]"  # DEBUG_DECOLONIZATION_TRACE
+	}
+
+	# Option A: Proceed with full decolonization
+	option = {
+		name = decolonization_events.401.a
+		default_option = yes
+
+		ai_chance = {
+			base = 5
+		}
+
+		debug_log = "DECOL_DEBUG: decolonization_events.401 option A (proceed) selected"  # DEBUG_DECOLONIZATION_TRACE
+
+		# Release EVERY marked state — fixes the original 3-cap bug. Wrapping
+		# in custom_tooltip with a header makes the option-hover preview show
+		# the auto-generated per-state list ("for each: form a country").
+		custom_tooltip = {
+			text = decolonization_confirm_planned_tt_header
+			every_scope_state = {
+				limit = { has_variable = decolonization_marker }
+				form_decolonized_country = yes
+				remove_variable = decolonization_marker
+			}
+		}
+		add_modifier = {
+			name = peaceful_decolonization_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		remove_variable = decolonization_path_planned
+		remove_variable = decolonization_planned_count
+	}
+
+	# Option B: Reconsider (clean cancel)
+	option = {
+		name = decolonization_events.401.b
+
+		ai_chance = {
+			base = 1
+		}
+
+		debug_log = "DECOL_DEBUG: decolonization_events.401 option B (cancel) selected"  # DEBUG_DECOLONIZATION_TRACE
+
+		every_scope_state = {
+			limit = { has_variable = decolonization_marker }
+			remove_variable = decolonization_marker
+		}
+		remove_variable = decolonization_path_planned
+		remove_variable = decolonization_planned_count
+	}
+}

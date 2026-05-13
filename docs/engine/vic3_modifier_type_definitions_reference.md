@@ -1,8 +1,8 @@
-<!-- Auto-generated from modifiers.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7745 modifier entries.*
+*Auto-generated from 7748 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1156,13 +1156,13 @@ _A bonus or penalty to a specific culture's [concept_fervor], to be proportioned
 - `country_fervor_target_yankee_add`, `country_fervor_target_yao_add`, `country_fervor_target_yemenite_add`, `country_fervor_target_yoruba_add`, `country_fervor_target_yuanzhumin_add`, `country_fervor_target_yue_add`
 - `country_fervor_target_zapotec_add`, `country_fervor_target_zhuang_add`, `country_fervor_target_zulu_add`
 
-### `country_institution_cost_{institution}_mult` (17 members)
+### `country_institution_cost_{institution}_mult` (18 members)
 
 _An increase or reduction to the bur! Bureaucracy cost of bringing Colonial Affairs to the citizens_
 
-- `country_institution_cost_institution_colonial_affairs_mult`, `country_institution_cost_institution_health_system_mult`, `country_institution_cost_institution_migration_controls_mult`, `country_institution_cost_institution_ministry_of_commerce_mult`, `country_institution_cost_institution_ministry_of_consumer_protection_mult`, `country_institution_cost_institution_ministry_of_culture_mult`
-- `country_institution_cost_institution_ministry_of_foreign_affairs_mult`, `country_institution_cost_institution_ministry_of_intelligence_and_security_mult`, `country_institution_cost_institution_ministry_of_propaganda_mult`, `country_institution_cost_institution_ministry_of_religion_mult`, `country_institution_cost_institution_ministry_of_the_environment_mult`, `country_institution_cost_institution_ministry_of_urban_planning_mult`
-- `country_institution_cost_institution_ministry_of_war_mult`, `country_institution_cost_institution_national_bank_mult`, `country_institution_cost_institution_police_mult`, `country_institution_cost_institution_schools_mult`, `country_institution_cost_institution_social_security_mult`
+- `country_institution_cost_institution_colonial_affairs_mult`, `country_institution_cost_institution_health_system_mult`, `country_institution_cost_institution_home_affairs_mult`, `country_institution_cost_institution_migration_controls_mult`, `country_institution_cost_institution_ministry_of_commerce_mult`, `country_institution_cost_institution_ministry_of_consumer_protection_mult`
+- `country_institution_cost_institution_ministry_of_culture_mult`, `country_institution_cost_institution_ministry_of_foreign_affairs_mult`, `country_institution_cost_institution_ministry_of_intelligence_and_security_mult`, `country_institution_cost_institution_ministry_of_propaganda_mult`, `country_institution_cost_institution_ministry_of_religion_mult`, `country_institution_cost_institution_ministry_of_the_environment_mult`
+- `country_institution_cost_institution_ministry_of_urban_planning_mult`, `country_institution_cost_institution_ministry_of_war_mult`, `country_institution_cost_institution_national_bank_mult`, `country_institution_cost_institution_police_mult`, `country_institution_cost_institution_schools_mult`, `country_institution_cost_institution_social_security_mult`
 
 ### `country_institution_impact_{institution}_mult` (11 members)
 
@@ -1847,7 +1847,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (524)
+### country (526)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -2172,6 +2172,8 @@ _Cannon Artillery Offense_
 - `country_ship_construction_add` — **ship_construction! Ship Construction** — The amount of ship_construction! Construction a Country can apply to shipbuilding each week
 - `country_ship_construction_efficiency_add` — **Ship Construction Efficiency** — The efficiency of all ship_construction! Ship Construction, affecting how much Ship Construction is needed per unit of progress
 - `country_ship_construction_progress_max_add` — **Max Ship Construction Progress** — The maximum amount of construction progress a Country can apply to one shipbuilding project each week
+- `country_ship_crew_starting_veterancy_experience_add` — **Starting Ship Crew Experience** — A bonus or penalty to the starting Experience of ship crews.
+- `country_ship_crew_starting_veterancy_experience_mult` — **Starting Ship Crew Experience** — A bonus or penalty to the starting Experience of ship crews.
 - `country_ship_group_capital_ships_construction_efficiency_add` — **Capital Ships Construction Efficiency** — The efficiency of Capital Ships ship_construction! Ship Construction
 - `country_ship_group_capital_ships_construction_progress_max_add` — **Capital Ships Max Construction Progress** — The maximum amount of construction progress a Country can apply to one Capital Ships shipbuilding project each week
 - `country_ship_group_capital_ships_construction_progress_max_mult` — **Capital Ships Max Construction Progress** — The maximum amount of construction progress a Country can apply to one Capital Ships shipbuilding project each week
@@ -2531,8 +2533,8 @@ _Cannon Artillery Offense_
 - `ship_construction_progress_max_mult` — **Max Ship Construction Progress** — The maximum amount of construction progress a Country can apply to one shipbuilding project each week
 - `ship_crew_damage_add` — **Crew Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s crew
 - `ship_crew_damage_mult` — **Crew Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s crew
-- `ship_crew_experience_gain_add` — **Weekly Unit Experience Gain for Ship Crew** — How much Unit Experience is gained by Ship Crew each week so that they can increase their Unit Veterancy Level
-- `ship_crew_experience_gain_mult` — **Weekly Unit Experience Gain for Ship Crew** — How much Unit Experience is gained by Ship Crew each week so that they can increase their Unit Veterancy Level
+- `ship_crew_experience_gain_add` — **Weekly Experience Gain for Ship Crew** — How much Experience is gained by Ship Crew each week so that they can increase their Veterancy Rank
+- `ship_crew_experience_gain_mult` — **Weekly Experience Gain for Ship Crew** — How much Experience is gained by Ship Crew each week so that they can increase their Veterancy Rank
 - `ship_crew_max_add` — **Ship Crew** — An increase or decrease to the amount of Sailors a Ship requires to be fully crewed
 - `ship_crew_max_mult` — **Ship Crew** — An increase or decrease to the amount of Sailors a Ship requires to be fully crewed
 - `ship_critical_hit_chance_add` — **Critical Chance** — An increase or decrease to the probability that the Ship will get a critical hit when attacking
@@ -2831,8 +2833,8 @@ _Cannon Artillery Offense_
 
 - `unit_army_defense_add` — **Army Defense** — A Military Unit’s Defense (Army only)
 - `unit_army_defense_mult` — **Army Defense** — A Military Unit’s Defense (Army only)
-- `unit_army_experience_gain_add` — **Weekly Unit Experience Gain for Armies** — How much Unit Experience is gained by Armies each week so that they can increase their Unit Veterancy Level
-- `unit_army_experience_gain_mult` — **Weekly Unit Experience Gain for Armies** — How much Unit Experience is gained by Armies each week so that they can increase their Unit Veterancy Level
+- `unit_army_experience_gain_add` — **Weekly Experience Gain for Armies** — How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
+- `unit_army_experience_gain_mult` — **Weekly Experience Gain for Armies** — How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
 - `unit_army_offense_add` — **Army Offense** — A Military Unit’s Offense (Army only)
 - `unit_army_offense_mult` — **Army Offense** — A Military Unit’s Offense (Army only)
 - `unit_defense_add` — **Defense** — A Military Unit’s Defense
@@ -2852,8 +2854,8 @@ _Cannon Artillery Offense_
 - `unit_defense_water_add` — **Defense in Flat Terrain** — A Military Unit’s Defense in Flat Terrain
 - `unit_defense_water_mult` — **Defense in Flat Terrain** — A Military Unit’s Defense in Flat Terrain
 - `unit_devastation_mult` — **Devastation** — How much Devastation Military Units inflict on the State Region a battle takes place in
-- `unit_experience_gain_add` — **Weekly Unit Experience Gain for Armies & Navies** — How much Unit Experience is gained by both Armies & Navies each week so that they can increase their Unit Veterancy Level
-- `unit_experience_gain_mult` — **Weekly Unit Experience Gain for Armies & Navies** — How much Unit Experience is gained by both Armies & Navies each week so that they can increase their Unit Veterancy Level
+- `unit_experience_gain_add` — **Weekly Experience Gain for Armies & Navies** — How much Experience is gained by both Armies & Navies each week so that they can increase their Veterancy Rank
+- `unit_experience_gain_mult` — **Weekly Experience Gain for Armies & Navies** — How much Experience is gained by both Armies & Navies each week so that they can increase their Veterancy Rank
 - `unit_kill_rate_add` — **Kill Rate** — How effective a Military Unit is at ensuring their opponent's Casualties end up unable to come back to fight another day.
 - `unit_morale_damage_mult` — **Morale Damage** — The amount of damage a Military Unit inflicts on its enemy's Morale
 - `unit_morale_loss_add` — **Morale Loss** — The amount of Morale a Military Unit loses during battle

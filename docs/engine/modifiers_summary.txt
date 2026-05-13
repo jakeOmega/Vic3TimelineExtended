@@ -1,4 +1,4 @@
-# Auto-generated from modifiers.log @ 2026-05-09T07:54:17+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from modifiers.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 battle|battle_casualties_mult|A bonus or penalty to the number of Casualties this side takes in Battle
 battle|battle_combat_width_mult|A bonus or penalty to the Terrain Combat Width for this side of the Battle
@@ -5258,6 +5258,7 @@ country|country_initiator_war_goal_maneuver_cost_mult|An increase or decrease to
 country|country_institution_colonial_affairs_max_investment_add|A bonus or penalty to the maximum investment level of the Colonial Affairs Institution
 country|country_institution_cost_institution_colonial_affairs_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Colonial Affairs to the citizens
 country|country_institution_cost_institution_health_system_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Health System to the citizens
+country|country_institution_cost_institution_home_affairs_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Home Affairs to the citizens
 country|country_institution_cost_institution_migration_controls_mult|
 country|country_institution_cost_institution_ministry_of_commerce_mult|
 country|country_institution_cost_institution_ministry_of_consumer_protection_mult|
@@ -5679,6 +5680,8 @@ country|country_ship_construction_add|The amount of ship_construction! Construc
 country|country_ship_construction_efficiency_add|The efficiency of all ship_construction! Ship Construction, affecting how much Ship Construction is needed per unit of progress
 country|country_ship_construction_goods_cost_mult|A bonus or penalty to the monetary cost of Ship Construction material necessities.
 country|country_ship_construction_progress_max_add|The maximum amount of construction progress a Country can apply to one shipbuilding project each week
+country|country_ship_crew_starting_veterancy_experience_add|A bonus or penalty to the starting Experience of ship crews.
+country|country_ship_crew_starting_veterancy_experience_mult|A bonus or penalty to the starting Experience of ship crews.
 country|country_ship_group_capital_ships_construction_efficiency_add|The efficiency of Capital Ships ship_construction! Ship Construction
 country|country_ship_group_capital_ships_construction_progress_max_add|The maximum amount of construction progress a Country can apply to one Capital Ships shipbuilding project each week
 country|country_ship_group_capital_ships_construction_progress_max_mult|The maximum amount of construction progress a Country can apply to one Capital Ships shipbuilding project each week
@@ -6522,8 +6525,8 @@ ship|ship_construction_progress_max_add|The maximum amount of construction progr
 ship|ship_construction_progress_max_mult|The maximum amount of construction progress a Country can apply to one shipbuilding project each week
 ship|ship_crew_damage_add|An increase or decrease to the amount of damage a Ship can deal to another Ship’s crew
 ship|ship_crew_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s crew
-ship|ship_crew_experience_gain_add|How much Unit Experience is gained by Ship Crew each week so that they can increase their Unit Veterancy Level
-ship|ship_crew_experience_gain_mult|How much Unit Experience is gained by Ship Crew each week so that they can increase their Unit Veterancy Level
+ship|ship_crew_experience_gain_add|How much Experience is gained by Ship Crew each week so that they can increase their Veterancy Rank
+ship|ship_crew_experience_gain_mult|How much Experience is gained by Ship Crew each week so that they can increase their Veterancy Rank
 ship|ship_crew_max_add|An increase or decrease to the amount of Sailors a Ship requires to be fully crewed
 ship|ship_crew_max_mult|An increase or decrease to the amount of Sailors a Ship requires to be fully crewed
 ship|ship_critical_hit_chance_add|An increase or decrease to the probability that the Ship will get a critical hit when attacking
@@ -7679,8 +7682,8 @@ tax|tax_per_capita_add|The amount of Per Capita Taxes collected from non-peasan
 country|un_membership_obligation|
 unit|unit_army_defense_add|A Military Unit’s Defense (Army only)
 unit|unit_army_defense_mult|A Military Unit’s Defense (Army only)
-unit|unit_army_experience_gain_add|How much Unit Experience is gained by Armies each week so that they can increase their Unit Veterancy Level
-unit|unit_army_experience_gain_mult|How much Unit Experience is gained by Armies each week so that they can increase their Unit Veterancy Level
+unit|unit_army_experience_gain_add|How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
+unit|unit_army_experience_gain_mult|How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
 unit|unit_army_offense_add|A Military Unit’s Offense (Army only)
 unit|unit_army_offense_mult|A Military Unit’s Offense (Army only)
 unit|unit_combat_unit_type_cannon_artillery_offense_mult|Cannon Artillery Offense
@@ -7716,8 +7719,8 @@ unit|unit_defense_travel_harsh_environment_mult|
 unit|unit_defense_water_add|A Military Unit’s Defense in Flat Terrain
 unit|unit_defense_water_mult|A Military Unit’s Defense in Flat Terrain
 unit|unit_devastation_mult|How much Devastation Military Units inflict on the State Region a battle takes place in
-unit|unit_experience_gain_add|How much Unit Experience is gained by both Armies & Navies each week so that they can increase their Unit Veterancy Level
-unit|unit_experience_gain_mult|How much Unit Experience is gained by both Armies & Navies each week so that they can increase their Unit Veterancy Level
+unit|unit_experience_gain_add|How much Experience is gained by both Armies & Navies each week so that they can increase their Veterancy Rank
+unit|unit_experience_gain_mult|How much Experience is gained by both Armies & Navies each week so that they can increase their Veterancy Rank
 unit|unit_kill_rate_add|How effective a Military Unit is at ensuring their opponent's Casualties end up unable to come back to fight another day.
 unit|unit_morale_damage_mult|The amount of damage a Military Unit inflicts on its enemy's Morale
 unit|unit_morale_loss_add|The amount of Morale a Military Unit loses during battle

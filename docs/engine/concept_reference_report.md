@@ -20,7 +20,9 @@ comment on the loc line:
 
 ## Unreviewed Flags
 
-_None._
+### `concept_intelligentsia` (1)
+
+- `localization/english/te_concepts_l_english.yml:451` — referenced by `civil_rights_hollow_victory_modifier_desc`
 
 ## Reviewed Exemptions
 
@@ -29,9 +31,9 @@ _None._
 ## Coverage
 
 - loc files scanned: 29
-- concept references checked: 2811
+- concept references checked: 2817
 - registered concepts (vanilla + mod): 721
-- total flags: 0
-- unreviewed: 0
+- total flags: 1
+- unreviewed: 1
 - exempted: 0
 

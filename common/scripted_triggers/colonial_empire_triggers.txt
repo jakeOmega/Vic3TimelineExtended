@@ -340,6 +340,24 @@ is_overseas_colonial_state = {
 	}
 }
 
+# Looser counterpart of is_overseas_colonial_state, used by the three
+# decolonization BUTTONS (Release Colonial Territory, Round Table Conference,
+# Planned Decolonization) to decide which states are offered for release. The
+# strict trigger above filters out well-integrated overseas territories (high
+# acceptance + SoL parity), but for the player's decolonization choices the
+# more intuitive definition is just "any overseas non-homeland holding of
+# meaningful size." The strict trigger continues to gate the JE itself, the
+# colonial-policy modifiers, and similar mechanics where "colonial-flavored"
+# matters; this looser trigger only controls release eligibility.
+is_decolonization_eligible_state = {
+	custom_tooltip = {
+		text = IS_DECOLONIZATION_ELIGIBLE_STATE_TT
+		NOT = { is_homeland_of_country_cultures = owner }
+		state_population >= 100000
+		is_overseas_from_capital = yes
+	}
+}
+
 # Sibling of is_overseas_from_capital that checks against the OVERLORD's
 # capital instead of the owner's. Used when iterating subjects of a metropole;
 # the subject's own capital is in the colonial region by construction, so the

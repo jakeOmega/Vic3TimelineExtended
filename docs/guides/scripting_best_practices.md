@@ -2201,6 +2201,140 @@ form_decolonized_country = {
 
 **Repo example:** `apply_decolonization_path` + `form_decolonized_country` in `common/scripted_effects/decolonization.txt` — reads `scope:decolonizing_parent.var:colonial_garrison_months` etc. inside the new country's `on_created` to apply the right legacy modifier.
 
+## `create_dynamic_country` Runs in `scope = none`
+
+Per engine docs, `create_dynamic_country` has `scopes = ["none"]`. That means **`owner`, `THIS`, and bare identifiers do not resolve to the surrounding scope chain** — they silently produce null. All parameter values must be one of:
+
+- `root` (the outer scope's root)
+- `prev` (one level up in the chain at call site)
+- Explicit `scope:X` named-scope references
+
+Equally important, `cede_state_trigger` inside `create_dynamic_country` **only accepts** `has_variable = X` and `state_region = s:STATE_NAME` style checks. The identity form `this = scope:X` parses fine but silently matches zero states during the world-state iteration — the new country gets no states and the engine drops the create without logging. All 5 vanilla `cede_state_trigger` blocks use `has_variable`; that's the canonical pattern.
+
+```
+form_decolonized_country = {
+    save_scope_as = new_country_capital
+    owner = { save_scope_as = decolonizing_parent }
+    scope:new_country_capital = { set_variable = decolonization_cede_marker }
+
+    create_dynamic_country = {
+        origin = scope:decolonizing_parent      # NOT `owner` — won't resolve in scope=none
+        culture = scope:new_country_culture
+        capital = scope:new_country_capital     # NOT `THIS` — won't resolve in scope=none
+        cede_state_trigger = {
+            has_variable = decolonization_cede_marker  # NOT `this = scope:X`
+        }
+        ...
+    }
+}
+```
+
+**Repo example:** the 12 inline `create_dynamic_country` branches in `form_decolonized_country` (`common/scripted_effects/decolonization.txt`) — all use `scope:` references throughout and a `has_variable` cede trigger.
+
+## Dynamic Country Pool Is Capped at 100 (D00–D99) by Default
+
+`create_dynamic_country` allocates from tags marked `dynamic_country_definition = yes` in `common/country_definitions/`. Vanilla defines exactly 100 such tags (`D00`–`D99` in `99_dynamic.txt`). When the pool is exhausted — common in long mod saves with revolutions, civil wars, and prior decolonization events — further `create_dynamic_country` calls **silently fail with no error logged**. `on_created` doesn't fire; no country appears.
+
+The mod extends the pool to 1000 by defining `E00`–`M99` (9 letter prefixes × 100 each) in `common/country_definitions/zz_te_extended_dynamic.txt` (the `zz_` prefix sorts it after vanilla's `99_dynamic.txt`). All vanilla tags are 3 chars; 4-char tags are untested. The format is just:
+
+```
+E00 = { dynamic_country_definition = yes }
+...
+M99 = { dynamic_country_definition = yes }
+```
+
+When debugging "create_dynamic_country reaches the call but never fires `on_created`," the dynamic-pool exhaustion is the most-likely cause if all scope/culture/cede inputs check out — verify via a temporary plain-text `debug_log` immediately inside the `create_dynamic_country` block (which fires before the engine consumes the input) vs. the absence of `on_created`'s log (which only fires on successful allocation).
+
+## Scripted-Effect `$X$` Substitution Doesn't Reach Parse-Time Literals
+
+`$PARAM$` substitution in scripted effects works for runtime tokens (variable names, modifier names, scope references, trigger args) but **does not propagate into literals parsed at scripted-effect definition time**. The clearest failure mode is color:
+
+```
+# Does NOT work — `hsv360{ ... }` is parsed before substitution
+_helper = {
+    create_dynamic_country = {
+        ...
+        color = hsv360{ $HUE$ 80 80 }     # silently produces invalid color
+        on_created = { ... }
+    }
+}
+
+# Caller — gets uniform "inherit color from origin" for every call, not 12 hues
+random_list = {
+    1 = { _helper = { HUE = 0 } }
+    1 = { _helper = { HUE = 30 } }
+    ...
+}
+```
+
+The engine reports no error; the malformed color expression triggers the documented "will try to inherit map color from origin if not specified" fallback, so every dynamic country comes out the metropole's color and the bug looks like "random_list isn't actually random."
+
+**Fix**: inline the variants with literal values. For the 12-color decolonization picker, that's 12 inline `create_dynamic_country` branches — verbose but engine-correct. Other patterns (modifier names, variable names, scope refs) substitute fine; the gotcha is specific to types parsed before scripted-effect expansion (`color`, `hsv`, `hsv360`, named-color references, etc.).
+
+## `ordered_scope_state` `position = N` + `check_range_bounds = no` Clamps Out-of-Range
+
+For picking distinct top-N elements:
+
+```
+# DOES NOT WORK reliably — clamps to last valid index when out of range
+ordered_scope_state = { ... position = 0 check_range_bounds = no save_scope_as = top_1 }
+ordered_scope_state = { ... position = 1 check_range_bounds = no save_scope_as = top_2 }
+ordered_scope_state = { ... position = 2 check_range_bounds = no save_scope_as = top_3 }
+```
+
+With only 2 eligible states, the `position = 2` call **does not silently skip** — it clamps to the last valid index (1) and `top_3` ends up the same state as `top_2`. With only 1 eligible state, all three saves end up the same state.
+
+**Working pattern**: three `max = 1` passes with marker exclusion. After each pick marks the state, the next pass's limit excludes already-marked states, so it picks the next-distinct candidate (or saves nothing if none left, leaving `scope:top_N` cleanly unset).
+
+```
+ordered_scope_state = {
+    limit = { ... }
+    order_by = state_population
+    max = 1
+    save_scope_as = top_1
+    set_variable = picked_marker
+}
+ordered_scope_state = {
+    limit = {
+        ...
+        NOT = { has_variable = picked_marker }
+    }
+    order_by = state_population
+    max = 1
+    save_scope_as = top_2
+    set_variable = picked_marker
+}
+# ... etc.
+```
+
+`position = N` does work for tooltip-only contexts (see vanilla `04_india_buttons.txt:748-770`) — the issue is specifically actual mutation/save-scope passes against shorter-than-N lists.
+
+## Conditional `debug_log` for Trustworthy Scope Diagnostics
+
+`debug_log = "... [SCOPE.sState('name').GetName] ..."` can render `NULL_STATE`-style placeholder strings even when the underlying scope IS set — particularly for scopes saved inside the same scripted effect or inside an inner iterator scope. Don't take a `NULL` rendering as proof the scope is missing; use a conditional trip-wire instead:
+
+```
+save_scope_as = new_country_capital
+# Trip wire — fires ONLY if the save genuinely didn't take effect.
+if = {
+    limit = { NOT = { exists = scope:new_country_capital } }
+    debug_log = "BUG — scope:new_country_capital UNSET after save_scope_as"
+}
+```
+
+These are silent in the success case (zero log output) and unambiguously fire in the failure case. Pair with a plain-string entry log to distinguish "code not reached" from "code reached and scope valid":
+
+```
+form_decolonized_country = {
+    save_scope_as = new_country_capital
+    debug_log = "DECOL_DEBUG: form_decolonized_country entered, capital=[SCOPE.sState('new_country_capital').GetName]"
+    if = { limit = { NOT = { exists = scope:new_country_capital } } debug_log = "BUG — capital UNSET" }
+    ...
+}
+```
+
+If the entry log fires but the BUG log doesn't, the scope is valid regardless of how the interpolation renders. **This is the only reliable way to verify scope-save semantics inside scripted-effect bodies** — directly inspecting the interpolated log will produce false negatives.
+
 ## Path-Dependent JE Resolution Pattern
 
 To make a journal entry's `on_complete` / `on_fail` event branch by which policy the player leaned on, **count months active** in country variables in the JE's `on_monthly_pulse`, then dispatch in the resolution effect. Country vars survive across the entire JE lifetime (whereas `has_modifier` only sees the current frame).
