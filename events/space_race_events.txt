@@ -3436,7 +3436,22 @@ space_race_events.23 = {
 	duration = 3
 
 	trigger = { }
-	immediate = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = {
+				place_character_in_void = 6
+			}
+		}
+	}
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
 
 	option = {
 		name = space_race_events.23.a
