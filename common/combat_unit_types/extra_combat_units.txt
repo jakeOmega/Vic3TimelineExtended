@@ -1093,7 +1093,7 @@ combat_unit_type_combined_arms_marines = {
 	unlocking_technologies = { combined_arms }  # era 6
 
 	combat_unit_image = {
-		texture = "gfx/unit_illustrations/combined_arms.dds"
+		texture = "gfx/unit_illustrations/combined_arms_marines.dds"
 	}
 
 	upgrades = {
@@ -1148,8 +1148,7 @@ combat_unit_type_stealth_marines = {
 	unlocking_technologies = { stealth_technology }  # era 8
 
 	combat_unit_image = {
-		# Mod has no dedicated stealth-soldier illustration; reuse vanilla high-tier marines.
-		texture = "gfx/unit_illustrations/marines_eu_high.dds"
+		texture = "gfx/unit_illustrations/stealth_marines.dds"
 	}
 
 	upgrades = {
@@ -1204,7 +1203,7 @@ combat_unit_type_networked_marines = {
 	unlocking_technologies = { jadc2 }  # era 10
 
 	combat_unit_image = {
-		texture = "gfx/unit_illustrations/robotic.dds"
+		texture = "gfx/unit_illustrations/networked_marines.dds"
 	}
 
 	upgrades = {
@@ -1260,8 +1259,6 @@ combat_unit_type_bioenhanced_marines = {
 	unlocking_technologies = { bioenhanced_soldiers }  # era 11
 
 	combat_unit_image = {
-		# No mod-specific bioenhanced-soldier illustration; use vanilla high-tier marine silhouette
-		# (clean human-marine image fits the enhanced-humans theme better than a drone swarm).
-		texture = "gfx/unit_illustrations/marines_eu_high.dds"
+		texture = "gfx/unit_illustrations/bioenhanced_marines.dds"
 	}
 }
