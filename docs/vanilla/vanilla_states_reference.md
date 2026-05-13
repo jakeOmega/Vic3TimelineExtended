@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** state-level mechanics work — incorporation, infrastructure, market access, capital, turmoil, obstinance, devastation, food security, pollution, harvest conditions, hubs and split states. States are the unit buildings attach to, where pops live, and where most modifiers terminate. This doc covers the per-state state machine; the country-scope economy that aggregates all states lives in `vanilla_economy_reference.md`.
 
-> **Last verified against vanilla:** 1.13.4 (Hotfix to "The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
+> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
 >
 > **This doc captures concepts, not exhaustive lists.** State trait catalogs, per-state-region resource limits, per-decree per-state effect lists drift each patch and live in `common/state_traits/`, `map_data/state_regions/`, `common/decrees/`, `common/static_modifiers/`. Read this doc for the *shape*; query the data files for values.
 >

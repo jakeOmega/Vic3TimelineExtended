@@ -222,7 +222,14 @@ def write_local_config(resolved: dict[str, str]) -> None:
 
 def check_vanilla_snapshot(resolved: dict[str, str]) -> None:
     banner("Vanilla docs snapshot")
-    snapshot = Path(resolved["vanilla_snapshot_docs_path"])
+    snapshot_value = resolved.get("vanilla_snapshot_docs_path")
+    if not snapshot_value:
+        info(
+            "vanilla_snapshot_docs_path unset — mod_state_server will fall back to "
+            "the latest Modding-Digests docs/ directory. Acceptable for normal use."
+        )
+        return
+    snapshot = Path(snapshot_value)
     runtime = Path(resolved["vanilla_docs_path"])
     expected_logs = ["modifiers.log", "triggers.log", "effects.log",
                      "event_targets.log", "on_actions.log", "custom_localization.log"]
@@ -233,14 +240,14 @@ def check_vanilla_snapshot(resolved: dict[str, str]) -> None:
         return
     warn(f"Snapshot at {snapshot} is missing: {', '.join(missing)}")
     print()
-    print("  To populate the snapshot:")
+    print("  Either leave this field unset (the server will use the digest fallback),")
+    print("  or populate the snapshot by hand:")
     print("    1. Launch Victoria 3 with NO mods enabled.")
     print("    2. Open the in-game console (`` ` ``) and type:  script_docs")
     print(f"    3. Copy the resulting *.log files from")
     print(f"       {runtime}")
     print(f"       to")
     print(f"       {snapshot}")
-    print("  This is needed by mod_state_server.py to disambiguate vanilla vs mod.")
 
 
 def smoke_test_deploy() -> None:

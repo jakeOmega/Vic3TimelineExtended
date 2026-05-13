@@ -2,7 +2,7 @@
 
 A primer on the **base game's** country-formation mechanics — minor unification, major unification (with leadership and unification plays), special unifications, and the formation event. The full enumerated list of formable countries (with primary cultures, tier requirements, required state percentages) lives in `common/country_formation/`; this doc explains the *system* the catalog runs on.
 
-> **Last verified against vanilla:** 1.13.4 (Hotfix to "The Great Wave"). Wiki source dates this article 1.12. The Federation of the Andes major formable was added in 1.13 (Colossus of the South); other major-unification mechanics (leadership plays, unification plays) have been stable since 1.5.
+> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). Wiki source dates this article 1.12. The Federation of the Andes major formable was added in 1.13 (Colossus of the South); other major-unification mechanics (leadership plays, unification plays) have been stable since 1.5.
 >
 > **This doc captures concepts, not the country list.** The vanilla list of formable countries (~70 entries with required cultures, tiers, regions, state percentages) is in `common/country_formation/00_formable_countries.txt` and `common/country_formation/00_major_formables.txt`; the mod adds more in `common/country_formation/extra_*`. **For "what formables exist" or "what's required to form X"** — query the source or use the mod's `add-formable-country` skill (`.claude/skills/add-formable-country/SKILL.md`), which has the canonical patterns for adding new entries.
 

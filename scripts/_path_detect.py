@@ -146,7 +146,10 @@ def detect_all() -> dict[str, Optional[str]]:
             f"{paradox_docs}/mod/Vic3TimelineExtended" if paradox_docs else None
         ),
         "vanilla_source_repo_path": str(home / "src" / "vic3"),
-        "vanilla_snapshot_docs_path": str(home / "src" / "vic3" / "docs"),
+        # vanilla_snapshot_docs_path intentionally omitted — as of 1.13.5
+        # vanilla no longer ships docs/. mod_state_server falls back to the
+        # auto-pulled Modding-Digests copy. Operators can still set this
+        # explicitly in paths.local.json if they maintain a local snapshot.
         "vic3_modding_digests_path": str(home / "src" / "Modding-Digests"),
         "vanilla_docs_path": (
             f"{paradox_docs}/docs" if paradox_docs else None

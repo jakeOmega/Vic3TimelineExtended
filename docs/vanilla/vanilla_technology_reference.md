@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** technology system works — the three trees, the era-and-prerequisite gating, innovation generation and capacity, technology spread, and the strategic shape of "ahead-of-time" research. This doc covers vanilla mechanics; mod-specific technologies live in their own folders alongside vanilla in `common/technology/technologies/` (see `docs/auto_generated_files.md` for ownership).
 
-> **Last verified against vanilla:** 1.13.4 (Hotfix to "The Great Wave"). Wiki source for this article is dated 1.10; tree contents change every major patch (1.11–1.13 added several Era-V techs and reshuffled some prerequisites). **Verify specific technology IDs against the live game** via `/raw/Technology/<id>` or `docs/engine/technologies.txt` before quoting prerequisites in code.
+> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). Wiki source for this article is dated 1.10; tree contents change every major patch (1.11–1.13 added several Era-V techs and reshuffled some prerequisites). **Verify specific technology IDs against the live game** via `/raw/Technology/<id>` or `docs/engine/technologies.txt` before quoting prerequisites in code.
 >
 > **This doc captures concepts, not the per-tech catalog.** The full enumerated list (eras, prerequisites, descriptions) is auto-generated to `docs/engine/technologies.txt` on every `/reload`; that file is the source of truth for "what techs exist in vanilla and what unlocks what". This doc explains the *system* the catalog runs on.
 >

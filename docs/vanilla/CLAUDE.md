@@ -2,7 +2,7 @@
 
 A condensed "must-know" cheat sheet for vanilla Victoria 3, surfacing the **non-obvious** mechanics that bite mod work. Each entry below has a deep-dive doc — read those for the *why*; this is the *what*.
 
-> **Last verified against vanilla:** 1.13.4 ("The Great Wave"). Numbers are absent on purpose — they drift each patch and live in `common/defines/`. The *mechanism shape* in this doc is durable.
+> **Last verified against vanilla:** 1.13.5 ("The Great Wave"). Numbers are absent on purpose — they drift each patch and live in `common/defines/`. The *mechanism shape* in this doc is durable.
 
 > **Companion source — what *changed* per patch:** [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) (cloned locally to `vic3_modding_digests_path`, auto-pulled on `mod_state_server` cold start). Per-version folders (1.8.7 … 1.13.4) hold `changes_breaking.md`, `changes_script_docs.md`, `changes_data_types.md`, and `changes_files.md`. **The docs in this directory describe what mechanics *are* in 1.13.4; the digests describe how each mechanic *got here*.** Hit the digests before manually diffing `~/src/vic3` between version commits.
 

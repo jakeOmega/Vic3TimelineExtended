@@ -244,7 +244,7 @@ def categorize_key(key, technology_keys):
         return "POLITICAL_MOVEMENTS"
     if key.startswith(("pm_", "pmg_")):
         return "PRODUCTION_METHODS"
-    if key.startswith("combat_unit_"):
+    if key.startswith("combat_unit_") or key.startswith("battle_condition_"):
         return "COMBAT_UNITS"
     if key.startswith("ship_type_"):
         return "SHIP_TYPES"

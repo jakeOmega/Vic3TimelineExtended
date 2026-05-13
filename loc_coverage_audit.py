@@ -119,6 +119,7 @@ def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
 _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] = {
     "Modifiers":              _simple_name,
     "Modifier Types":         _name_and_desc,
+    "Battle Conditions":      _name_and_desc,
     "Character Traits":       _name_and_desc,
     "Journal Entries":        _je_keys,
     "Laws":                   _name_and_desc,
@@ -146,6 +147,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
 _DIR_MAP: dict[str, str] = {
     "Modifiers":              "common/static_modifiers",
     "Modifier Types":         "common/modifier_type_definitions",
+    "Battle Conditions":      "common/battle_conditions",
     "Character Traits":       "common/character_traits",
     "Journal Entries":        "common/journal_entries",
     "Laws":                   "common/laws",

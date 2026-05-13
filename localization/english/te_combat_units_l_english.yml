@@ -3,6 +3,14 @@
 #
 # COMBAT_UNITS
 #
+ battle_condition_fortified_bastion:0 "Fortified Bastion"
+ battle_condition_fortified_bastion_desc:0 "A purpose-built bastion of hardened positions, interlocking firing arcs, and protected reserves — designed to absorb modern firepower and bleed the assault."
+ battle_condition_fortified_position:0 "Fortified Position"
+ battle_condition_fortified_position_desc:0 "The defender holds prepared field fortifications — earthworks, trenches, and forward strongpoints — multiplying defensive depth at the cost of maneuver."
+ battle_condition_fortified_stronghold:0 "Fortified Stronghold"
+ battle_condition_fortified_stronghold_desc:0 "Layered concrete bunkers and pre-sited fields of fire turn the battle space into a regional stronghold. Attackers must grind through every emplacement."
+ battle_condition_impregnable_fortress:0 "Impregnable Fortress"
+ battle_condition_impregnable_fortress_desc:0 "Decades of territorial-defense investment have produced an effectively impregnable fortress complex. The attacker faces overwhelming layered defense at every axis of approach."
  combat_unit_group_aircraft:0 "Aircraft"
  combat_unit_group_tanks:0 "Heavy Tanks"
  combat_unit_type_DEW_tank:0 "DEW Tank"
@@ -13,7 +21,7 @@
  combat_unit_type_bioenhanced_marines_desc:0 "Marines whose biology has been re-engineered for combat: heightened reflexes, fatigue resistance, accelerated wound healing, and pharmacologically-managed cognition. A small bioenhanced detachment can match the combat output of a much larger conventional force.\n\nCost at base prices: #N @money!56110 #!\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bioenhanced_marines')|0] #!"
  combat_unit_type_bomber_aircraft:0 "Propeller Aircraft"
  combat_unit_type_bomber_aircraft_desc:0 "Early aircraft capable of delivering bombs or establishing air superiority.\n\nCost at base prices: #N @money!8400 #!\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_bomber_aircraft')|0] #!"
- combat_unit_type_combined_arms_marines:0 "[concept_combined_arms] Marines"
+ combat_unit_type_combined_arms_marines:0 "Combined Arms Marines"
  combat_unit_type_combined_arms_marines_desc:0 "Marines integrated with mechanized vehicles, attack helicopters, and modern combined-arms doctrine. Capable of seizing a beachhead and pushing inland against entrenched defenders without waiting for follow-on forces.\n\nCost at base prices: #N @money!2420 #!\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_combined_arms_marines')|0] #!"
  combat_unit_type_grey_goo:0 "Utility Fog Phalanx"
  combat_unit_type_grey_goo_desc:0 "Self-organizing clouds of programmable nanomachines that reshape themselves to the battlefield. Utility fog can harden into shields, disperse into reconnaissance dust, or engulf enemies in microscopic disassembly.\n\nCost at base prices: #N @money!24900 #!\nCost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_grey_goo')|0] #!"

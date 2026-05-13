@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** colonization system works — establishing colonies, frontier vs. overseas, colonial claims, malaria gating, colonial-state mechanics, tension and native uprisings, the Colonial Administration subject type, and company colonization. This is a niche but mechanic-rich corner of the game; the mechanics live across `common/laws/00_colonization.txt`, `common/state_traits/`, `common/decisions/`, `common/journal_entries/`, and the Civilizing-Mission JE in `common/journal_entries/`.
 
-> **Last verified against vanilla:** 1.13.4 (Hotfix to "The Great Wave"). Wiki source dates this article 1.10–1.12; native-uprising mechanics, Colonial Administration JE, and company-colonization rights are all 1.10+ content. Verify specific conditions / cooldowns against `common/journal_entries/`, `common/decisions/`, `common/diplomatic_actions/`, and the relevant law file.
+> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). Wiki source dates this article 1.10–1.12; native-uprising mechanics, Colonial Administration JE, and company-colonization rights are all 1.10+ content. Verify specific conditions / cooldowns against `common/journal_entries/`, `common/decisions/`, `common/diplomatic_actions/`, and the relevant law file.
 >
 > **This doc captures concepts, not balance values.** Per-state colonial-growth coefficients, malaria mortality numbers, exact tension thresholds, and per-region colonial-administration starting laws live in data files; reproducing them here would drift. Read this doc for the *shape* of colonization; the parameters belong with the per-region / per-decree definitions.
 

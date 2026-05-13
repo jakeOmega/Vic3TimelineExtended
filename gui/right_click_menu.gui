@@ -13225,11 +13225,11 @@ right_click_menu = {
 }
 
 right_click_menu = {
-	name = "army_movement_menu"
+	name = "army_additional_actions_menu"
 	parentanchor = right
 
 	blockoverride "title_text" {
-		text = "MOVE_MILITARY_FORMATION"
+		text = "ADDITIONAL_ACTIONS_MILITARY_FORMATION"
 	}
 
 	blockoverride "resizeparent_without_fixed_bottom" {}
@@ -13379,11 +13379,11 @@ right_click_menu = {
 }
 
 right_click_menu = {
-	name = "fleet_movement_menu"
+	name = "fleet_additional_actions_menu"
 	parentanchor = right
 
 	blockoverride "title_text" {
-		text = "MOVE_MILITARY_FORMATION"
+		text = "ADDITIONAL_ACTIONS_MILITARY_FORMATION"
 	}
 
 	blockoverride "resizeparent_without_fixed_bottom" {}
@@ -13746,6 +13746,80 @@ right_click_menu = {
 				}
 			}
 
+			### Obsolete ship types - list
+			flowcontainer = {
+				visible = "[GetVariableSystem.Exists('obsolete_ship_types')]"
+				spacing = 10
+				margin_right = 5
+				direction = vertical
+				datamodel = "[ShipTemplateList.GetTypesObsoleteOfGroup(ShipGroup.Self)]"
+
+				item = {
+					flowcontainer = {
+						build_ship_type_flowcontainer = {
+							visible = "[Country.HasDefaultConstructionFleet]"
+							datacontext = "[Country.GetDefaultConstructionFleet]"
+							datacontext = "[ShipTemplateList.GetDefaultTemplateForFleetOfType(MilitaryFormation.Self, ShipType.Self)]"
+
+							blockoverride "cancel_queue_enabled_and_onclick" {
+								tooltip = "FLEET_CANCEL_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								enabled = "[IsValid(ShipTemplate.CancelConstructionForFleet(MilitaryFormation.Self))]"
+								onclick = "[Execute(ShipTemplate.CancelConstructionForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "queue_enabled_and_onclick" {
+								tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+								onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "ship_template_selected_visibility" {
+								visible = "[Not(ObjectsEqual(ShipTemplate.Self, ShipTemplateList.GetDefaultTemplateForFleetOfType(MilitaryFormation.Self, ShipType.Self).Self))]"
+							}
+
+							blockoverride "ship_template_selected_visibility_not" {
+								visible = "[ObjectsEqual(ShipTemplate.Self, ShipTemplateList.GetDefaultTemplateForFleetOfType(MilitaryFormation.Self, ShipType.Self).Self)]"
+							}
+
+							blockoverride "construction_command_desc" {
+								visible = "[Not(StringIsEmpty(GetDesc(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))))]"
+								text = "[GetDesc(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "selected_ship_template_name" {
+								text = "[ShipType.GetNameNoFormatting]"
+							}
+
+							blockoverride "default_template_onclick" {
+								enabled = "[IsValid(ShipTemplate.SetAsDefaultForFleet(MilitaryFormation.Self))]"
+								onclick = "[Execute(ShipTemplate.SetAsDefaultForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "number_of_ships_of_template" {
+								raw_text = "#v [MilitaryFormation.GetShipList.GetNumShipsOfTemplate(ShipTemplate.Self)]#!"
+							}
+
+							blockoverride "compact_ship_template"  {
+								compact_ship_template = {
+									size = { 150 40 }
+
+									blockoverride "tooltip" {}
+
+									blockoverride "button_visibility" {
+										visible = no
+									}
+								}
+							}
+						}
+
+						build_ship_type_flowcontainer = {
+							visible = "[Not(Country.HasDefaultConstructionFleet)]"
+							datacontext = "[ShipTemplateList.GetDefaultTemplateOfType(ShipType.Self)]"
+						}
+					}
+				}
+			}
+
 			### Unavailable ship types - list
 			flowcontainer = {
 				visible = "[GetVariableSystem.Exists('unavailable_ship_types')]"
@@ -13981,6 +14055,99 @@ right_click_menu = {
 
 								blockoverride "button_visibility" {
 									visible = no
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		### Obsolete ship types - list
+		flowcontainer = {
+			visible = "[GetVariableSystem.Exists('obsolete_ship_types')]"
+			direction = vertical
+
+			flowcontainer = {
+				direction = vertical
+				spacing = 10
+				margin_right = 5
+				datacontext = "[ShipTemplateList]"
+				datamodel = "[ShipTemplateList.GetTypesObsoleteOfGroup(ShipGroup.Self)]"
+
+				item = {
+					flowcontainer = {
+						direction = vertical
+
+						build_ship_type_flowcontainer = {
+							datacontext = "[ShipTemplateList.GetDefaultTemplateForFleetOfType(MilitaryFormation.Self, ShipType.Self)]"
+
+							blockoverride "ship_type_tooltip" {
+								tooltipwidget = {
+									FancyTooltip_ShipTemplate = {
+										blockoverride "tooltip_content_before" {
+											custom_tooltip_textbox = {
+												block "construction_command_desc" {
+													visible = "[Not(IsValid(ShipTemplate.QueueConstruction))]"
+													text = "[GetDesc(ShipTemplate.QueueConstruction)]"
+												}
+											}
+
+											custom_tooltip_textbox_with_empty_line = {
+												text = "SHIP_TEMPLATE_CONSTRUCTION_COST_WITH_LABEL"
+											}
+										}
+									}
+								}
+							}
+
+							blockoverride "cancel_queue_enabled_and_onclick" {
+								tooltip = "FLEET_CANCEL_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								enabled = "[IsValid(ShipTemplate.CancelConstructionForFleet(MilitaryFormation.Self))]"
+								onclick = "[Execute(ShipTemplate.CancelConstructionForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "queue_enabled_and_onclick" {
+								tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+								onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "ship_template_selected_visibility" {
+								visible = "[Not(ObjectsEqual(ShipTemplate.Self, ShipTemplateList.GetDefaultTemplateForFleetOfType(MilitaryFormation.Self, ShipType.Self).Self))]"
+							}
+
+							blockoverride "ship_template_selected_visibility_not" {
+								visible = "[ObjectsEqual(ShipTemplate.Self, ShipTemplateList.GetDefaultTemplateForFleetOfType(MilitaryFormation.Self, ShipType.Self).Self)]"
+							}
+
+							blockoverride "construction_command_desc" {
+								visible = "[Not(StringIsEmpty(GetDesc(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))))]"
+								text = "[GetDesc(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "selected_ship_template_name" {
+								text = "[ShipType.GetNameNoFormatting]"
+							}
+
+							blockoverride "default_template_onclick" {
+								enabled = "[IsValid(ShipTemplate.SetAsDefaultForFleet(MilitaryFormation.Self))]"
+								onclick = "[Execute(ShipTemplate.SetAsDefaultForFleet(MilitaryFormation.Self))]"
+							}
+
+							blockoverride "number_of_ships_of_template" {
+								raw_text = "#v [MilitaryFormation.GetShipList.GetNumShipsOfTemplate(ShipTemplate.Self)]#!"
+							}
+
+							blockoverride "compact_ship_template"  {
+								compact_ship_template = {
+									size = { 150 40 }
+
+									blockoverride "tooltip" {}
+
+									blockoverride "button_visibility" {
+										visible = no
+									}
 								}
 							}
 						}
@@ -14303,6 +14470,325 @@ right_click_menu = {
 	}
 }
 
+right_click_menu = {
+	name = "ship_designer_ship_type_menu"
+	parentanchor = right
+
+	blockoverride "title_text" {
+		text = "SHIP_DESIGNER_SELECT_SHIP_TYPE"
+	}
+
+	blockoverride "items" {
+		using = default_content_fade
+		margin_top = 10
+		margin_bottom = 10
+
+		### List of ship types in this group
+		flowcontainer = {
+			direction = vertical
+			#spacing = 10
+			datamodel = "[ShipDesignerPopup.GetShipTypes]"
+
+			item = {
+				button = {
+					using = default_button
+					size = { 300 40 }
+					visible = "[Or(Not(ShipType.IsObsolete(GetPlayer.Self)), GetVariableSystem.Exists('show_obsolete_ship_types'))]"
+					enabled = "[ShipType.HasRequiredTech]"
+					onclick = "[ShipDesignerPopup.SetShipType( ShipType.Self )]"
+					onclick = "[RightClickMenuManager.Close]"
+
+					tooltipwidget = {
+						FancyTooltip_ShipType = {}
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						position = { 10 0 }
+						align = nobaseline
+						using = elide_fontsize_min
+						max_width = 140
+						text = "[ShipType.GetNameNoFormatting]"
+					}
+
+					ship_type_silhouette = {
+						parentanchor = right|vcenter
+						position = { -10 0 }
+
+						blockoverride "fittype" {
+							fittype = end
+						}
+					}
+				}
+			}
+		}
+
+		divider_decorative = {}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			margin_top = 5
+			spacing = 5
+
+			checkbutton = {
+				using = check_button
+				size = { 24 24 }
+				using = tooltip_se
+				onclick = "[GetVariableSystem.Toggle('show_obsolete_ship_types')]"
+				checked = "[GetVariableSystem.Exists('show_obsolete_ship_types')]"
+				tooltip = "SHOW_OBSOLETE_SHIP_TYPES_TOOLTIP"
+			}
+
+			textbox = {
+				autoresize = yes
+				align = nobaseline
+				text = "SHOW_OBSOLETE_SHIP_TYPES"
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "ship_designer_template_menu"
+	widgetanchor = right
+
+	blockoverride "title_text" {
+		text = "SHIP_DESIGNER_SELECT_EXISTING_TEMPLATE"
+	}
+
+	blockoverride "items" {
+		using = default_content_fade
+		margin_top = 10
+		margin_bottom = 10
+
+		flowcontainer = {
+			direction = vertical
+			datamodel = "[ShipTemplateList.GetTemplatesOfType(ShipDesignerPopup.GetCurrentShipType.Self)]"
+
+			item = {
+				button = {
+					using = default_button
+					size = { 300 40 }
+					visible = "[ShipTemplate.IsValid]"
+					onclick = "[ShipDesignerPopup.SetShipTemplate( ShipTemplate.Self )]"
+					onclick = "[RightClickMenuManager.Close]"
+
+					tooltipwidget = {
+						FancyTooltip_ShipTemplate = {}
+					}
+
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+
+						textbox = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
+							margin = { 10 2 }
+							margin_right = 5
+							elide = right
+							align = nobaseline
+							text = "[ShipTemplate.GetNameNoFormatting]"
+						}
+
+						flowcontainer = {
+							spacing = 2
+							margin_right = 10
+							datamodel = "[ShipTemplate.GetModifications]"
+
+							item = {
+								icon = {
+									size = { 24 24 }
+									texture = "[ShipModificationType.GetIcon]"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "ship_designer_skins_menu"
+	parentanchor = left
+	widgetanchor = right
+	datacontext = "[ShipDesignerPopup.GetCurrentShipType]"
+
+	blockoverride "title_text" {
+		text = "SHIP_DESIGNER_SKINS_HEADER"
+	}
+
+	blockoverride "items" {
+		using = default_content_fade
+		margin_top = 10
+		margin_bottom = 10
+
+		### List of skins for the selected ship type
+		flowcontainer = {
+			direction = vertical
+			datamodel = "[ShipDesignerPopup.GetGraphicsTypesAvailable]"
+
+			item = {
+				widget = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					size = { 240 40 }
+
+					tooltip = "[ShipGraphicsType.GetDescription]"
+
+					button = {
+						visible = "[Not(ObjectsEqual(ShipDesignerPopup.GetGraphicsTypeSelected, ShipGraphicsType.Self))]"
+						size = { 100% 100% }
+						using = default_button
+						onclick = "[ShipDesignerPopup.SelectGraphicsType(ShipGraphicsType.Self)]"
+						onclick = "[RightClickMenuManager.Close]"
+
+						textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							position = { 10 0 }
+							align = nobaseline
+							using = elide_fontsize_min
+							max_width = 140
+							text = "[ShipGraphicsType.GetNameNoFormatting]"
+						}
+					}
+
+					widget = {
+						visible = "[ObjectsEqual(ShipDesignerPopup.GetGraphicsTypeSelected, ShipGraphicsType.Self)]"
+						size = { 100% 100% }
+
+						background = {
+							using = paper_bg
+						}
+
+						textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							position = { 10 0 }
+							align = nobaseline
+							using = elide_fontsize_min
+							max_width = 140
+							text = "[ShipGraphicsType.GetNameNoFormatting]"
+						}
+
+						icon = {
+							using = highlighted_square_selection
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "ship_designer_utility_menu"
+	parentanchor = right
+
+	blockoverride "title_text" {
+		text = "SHIP_UTILITY_MODIFICATIONS_SHORT_CONCEPT"
+	}
+
+	blockoverride "items" {
+		using = default_content_fade
+		margin_top = 10
+		margin_bottom = 10
+
+		### Deselect button
+		button = {
+			visible = "[ShipDesignerModSlot.HasSelection]"
+			size = { 345 40 }
+			using = default_button
+			using = ui_item_remove
+			onclick = "[ShipDesignerModSlot.OnDeselectModification]"
+			onclick = "[RightClickMenuManager.Close]"
+
+			textbox = {
+				parentanchor = left|vcenter
+				margin_left = 20
+				autoresize = yes
+				align = nobaseline
+				using = fontsize_large
+				text = "SHIP_DESIGNER_REMOVE_UTILITY_MOD"
+			}
+		}
+
+		### List of utility modifications
+		flowcontainer = {
+			direction = vertical
+			datamodel = "[ShipDesignerModSlot.GetModifications]"
+
+			item = {
+				widget = {
+					visible = "[Or(ShipDesignerModSlot.IsModificationSelectedInSlot(ShipModificationType.Self), Not(ShipDesignerModSlot.IsModificationSelectedInOtherSlot(ShipModificationType.Self)))]"
+					size = { 345 50 }
+
+					button = {
+						visible = "[Not(ShipDesignerModSlot.IsModificationSelectedInSlot(ShipModificationType.Self))]"
+						enabled = "[Not(ShipDesignerModSlot.IsModificationBlocked(ShipModificationType.Self))]"
+						size = { 100% 100% }
+						using = default_button
+						using = ship_designer_modification_wildcard
+						onclick = "[ShipDesignerModSlot.OnSelectModificationForSlot(ShipModificationType.Self)]"
+						onclick = "[RightClickMenuManager.Close]"
+					}
+
+					background = {
+						visible = "[ShipDesignerModSlot.IsModificationSelectedInSlot(ShipModificationType.Self)]"
+						using = paper_bg
+					}
+
+					icon = {
+						visible = "[ShipDesignerModSlot.IsModificationSelectedInSlot(ShipModificationType.Self)]"
+						using = highlighted_square_selection
+					}
+
+					hbox = {
+						margin = { 10 0 }
+						spacing = 5
+
+						icon = {
+							size = { 40 40 }
+							texture = "gfx/interface/buttons/button_icons/plus.dds"
+						}
+
+						textbox = {
+							autoresize = yes
+							align = nobaseline
+							using = elide_fontsize_min
+							max_width = 260
+							using = fontsize_large
+							text = "[ShipModificationType.GetNameNoFormatting]"
+						}
+
+						expand = {}
+
+						icon = {
+							size = { 40 40 }
+							texture = "[ShipModificationType.GetIcon]"
+						}
+					}
+
+					tooltipwidget = {
+						FancyTooltip_ShipModificationType = {
+							blockoverride "tooltip_content_before" {
+								custom_tooltip_textbox_with_empty_line = {
+									visible = "[ShipDesignerModSlot.IsModificationSelectedInSlot(ShipModificationType.Self)]"
+									text = "CURRENTLY_SELECTED"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 types right_click_menu {
 
 	type naval_mission_right_click_item = flowcontainer {
@@ -14410,11 +14896,11 @@ types right_click_menu {
 
 	type ship_building_menu_fixed_top = widget {
 		parentanchor = hcenter
-		size = { 420 75 }
+		size = { 420 85 }
 
 		widget = {
 			parentanchor = hcenter|bottom
-			size = { 100% 60 }
+			size = { 100% 70 }
 
 			textbox = {
 				position = { 0 5 }
@@ -14422,6 +14908,25 @@ types right_click_menu {
 				default_format = "#header"
 				align = nobaseline
 				text = "ADD_SHIPS_OF_GROUP"
+			}
+
+			button = {
+				visible = "[HasDlcFeature('ship_designer')]"
+				size = { 180 40 }
+				parentanchor = right
+				using = default_button
+				onclick = "[PopupManager.ToggleShipDesignerPopup]"
+				onclick = "[RightClickMenuManager.Close]"
+				tooltip = "SHIP_DESIGNER_CREATE_NEW_TEMPLATE"
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					align = nobaseline
+					max_width = 110
+					using = elide_fontsize_min
+					text = "ADD_TEMPLATE"
+				}
 			}
 
 			flowcontainer = {
@@ -14442,24 +14947,24 @@ types right_click_menu {
 					align = nobaseline
 					text = "SHOW_UNAVAILABLE_SHIP_TYPES_OF_GROUP"
 				}
-			}
 
-			button = {
-				visible = "[HasDlcFeature('ship_designer')]"
-				size = { 180 40 }
-				parentanchor = right
-				using = default_button
-				onclick = "[PopupManager.ToggleShipDesignerPopup]"
-				onclick = "[RightClickMenuManager.Close]"
-				tooltip = "SHIP_DESIGNER_CREATE_NEW_TEMPLATE"
+				widget = {
+					size = { 10 1 }
+				}
+
+				checkbutton = {
+					using = check_button
+					size = { 24 24 }
+					using = tooltip_se
+					onclick = "[GetVariableSystem.Toggle('obsolete_ship_types')]"
+					checked = "[GetVariableSystem.Exists('obsolete_ship_types')]"
+					tooltip = "SHOW_OBSOLETE_SHIP_TYPES_TOOLTIP"
+				}
 
 				textbox = {
-					parentanchor = center
 					autoresize = yes
 					align = nobaseline
-					max_width = 110
-					using = elide_fontsize_min
-					text = "ADD_TEMPLATE"
+					text = "SHOW_OBSOLETE_SHIP_TYPES_OF_GROUP"
 				}
 			}
 

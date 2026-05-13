@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** economic systems work, written for AI agents that need context before touching mod content. This doc covers vanilla mechanics only — mod-specific systems (banking cycle, construction-cost scaling, migration crowding, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`.
 
-> **Last verified against vanilla:** 1.13.4 (Hotfix to "The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **This doc lives in the same repo as the patch runbook (`docs/guides/vanilla_patch_runbook.md`) — that runbook tells you to revisit this file on every vanilla bump.**
+> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **This doc lives in the same repo as the patch runbook (`docs/guides/vanilla_patch_runbook.md`) — that runbook tells you to revisit this file on every vanilla bump.**
 >
 > **Verify before relying on names.** Building IDs, modifier names, and good IDs cited below should be verified via the mod state server (`/buildings`, `/raw/Building/<id>`, `/modifier-search?q=`, `/goods`) before you reference them in code. Vanilla renames things across patches.
 >

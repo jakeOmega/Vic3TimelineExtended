@@ -1386,12 +1386,15 @@ types treaty_panel_types
 		size = { 220 100 }
 
 		flowcontainer = {
+			parentanchor = vcenter
 
 			textbox = {
 				autoresize = yes
 				align = nobaseline
 				multiline = yes
-				max_width = 220
+				block "text_maximumsize" {
+					maximumsize = { 220 100 }
+				}
 				using = elide_fontsize_min
 				default_format = "#lore"
 				raw_text = "TREATY_FREE_TEXT"

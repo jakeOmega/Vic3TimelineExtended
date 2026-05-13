@@ -5848,9 +5848,9 @@ types military_formation_panel_types
 				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 55 55 }
 				parentanchor = vcenter
-				tooltip = "MOVE_MILITARY_FORMATION"
+				tooltip = "ADDITIONAL_ACTIONS_MILITARY_FORMATION"
 				using = tooltip_nw
-				onclick = "[RightClickMenuManager.ToggleArmyMovement( MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf )]"
+				onclick = "[RightClickMenuManager.ToggleArmyAdditionalActions( MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf )]"
 
 				blockoverride "icon" {
 					texture = "gfx/interface/icons/commander_order_icons/move.dds"
@@ -5872,7 +5872,7 @@ types military_formation_panel_types
 				tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP"
 				onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
 				enabled = "[MilitaryFormation.CanEditMissionSeaRegions]"
-				using = tooltip_above
+				using = tooltip_ne
 
 				blockoverride "icon" {
 					texture = "gfx/interface/icons/generic_icons/edit_sea_nodes.dds"
@@ -5906,7 +5906,7 @@ types military_formation_panel_types
 				size = { 60 60 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_TRANSFER_UNIT_TOOLTIP"
-				using = tooltip_above
+				using = tooltip_ne
 				onclick = "[PopupManager.ShowTransferFormation( MilitaryFormation.AccessSelf )]"
 
 				blockoverride "icon" {
@@ -5921,13 +5921,13 @@ types military_formation_panel_types
 				}
 			}
 			
-			### Move Fleet Menu
+			### Additional Fleet Actions Menu
 			button_icon_round = {
 				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 60 60 }
 				parentanchor = vcenter
-				tooltip = "MOVE_MILITARY_FORMATION"
-				onclick = "[RightClickMenuManager.ToggleFleetMovement( MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf )]"
+				tooltip = "ADDITIONAL_ACTIONS_MILITARY_FORMATION"
+				onclick = "[RightClickMenuManager.ToggleFleetAdditionalActions( MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf )]"
 				using = tooltip_nw
 
 				blockoverride "icon" {

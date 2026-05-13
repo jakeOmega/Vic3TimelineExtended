@@ -27,6 +27,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
+from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 from urllib.error import URLError
@@ -39,6 +40,7 @@ from path_constants import (
     mod_path,
     vanilla_docs_path,
     vanilla_snapshot_docs_path,
+    vanilla_snapshot_docs_path_default,
     vanilla_source_repo_path,
     mod_loaded_docs_path,
     game_logs_path,
@@ -95,6 +97,7 @@ base_game_paths = {
     "PM Groups": os.path.join(_BASE_COMMON, "production_method_groups"),
     "PMs": os.path.join(_BASE_COMMON, "production_methods"),
     "Ideologies": os.path.join(_BASE_COMMON, "ideologies"),
+    "Battle Conditions": os.path.join(_BASE_COMMON, "battle_conditions"),
     "Buy Packages": os.path.join(_BASE_COMMON, "buy_packages"),
     "Character Interactions": os.path.join(_BASE_COMMON, "character_interactions"),
     "Character Traits": os.path.join(_BASE_COMMON, "character_traits"),
@@ -143,6 +146,7 @@ mod_paths = {
     "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
     "PMs": os.path.join(_MOD_COMMON, "production_methods"),
     "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
+    "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
     "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
     "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
     "Character Traits": os.path.join(_MOD_COMMON, "character_traits"),
@@ -391,14 +395,34 @@ def _ensure_single_instance(replace: bool = False) -> bool:
 ENGINE_DOCS_DIR = vanilla_docs_path  # legacy default; superseded by _engine_docs_source()
 
 
+def _has_engine_logs(path: Optional[str]) -> bool:
+    return bool(
+        path
+        and os.path.isdir(path)
+        and any(
+            os.path.isfile(os.path.join(path, f))
+            for f in ("modifiers.log", "effects.log", "triggers.log")
+        )
+    )
+
+
 def _engine_docs_source() -> tuple[str, str]:
-    """Return (chosen_directory, source_label) — 'vanilla_snapshot' if the
-    repo-mirror snapshot exists, else 'mod_loaded' (fallback)."""
-    if os.path.isdir(vanilla_snapshot_docs_path) and any(
-        os.path.isfile(os.path.join(vanilla_snapshot_docs_path, f))
-        for f in ("modifiers.log", "effects.log", "triggers.log")
-    ):
+    """Return (chosen_directory, source_label).
+
+    Preference order:
+      1. `vanilla_snapshot` — operator-configured `vanilla_snapshot_docs_path`
+         (e.g. populated by running `script_docs` in vanilla without the mod).
+      2. `digest_snapshot` — derived `vanilla_snapshot_docs_path_default` from
+         the highest-version Modding-Digests checkout on disk. Used when the
+         operator doesn't maintain a local snapshot (the common case post-1.13.5,
+         where vanilla no longer ships engine-doc logs).
+      3. `mod_loaded` — runtime fallback; may contain mod-declared entries, so
+         origin tagging is `unknown` and downstream code re-tags from mod-source.
+    """
+    if _has_engine_logs(vanilla_snapshot_docs_path):
         return vanilla_snapshot_docs_path, "vanilla_snapshot"
+    if _has_engine_logs(vanilla_snapshot_docs_path_default):
+        return vanilla_snapshot_docs_path_default, "digest_snapshot"
     return mod_loaded_docs_path, "mod_loaded"
 
 
@@ -1902,7 +1926,9 @@ def _load_engine_docs():
 
     chosen_dir, source_label = _engine_docs_source()
     engine_docs_source_label = source_label
-    default_origin = "vanilla" if source_label == "vanilla_snapshot" else "unknown"
+    default_origin = (
+        "vanilla" if source_label in ("vanilla_snapshot", "digest_snapshot") else "unknown"
+    )
     logger.info(
         f"Engine docs source: {source_label} ({chosen_dir}); default entry origin: {default_origin}"
     )
@@ -3086,9 +3112,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
         # the user last ran `script_docs` in vanilla).
         repo_head = _load_vanilla_repo_head_info()
 
-        def _summarize(p: str) -> dict:
+        def _summarize(p: Optional[str]) -> dict:
             """Return {path, exists, oldest_mtime, files} for a docs dir."""
-            out = {"path": p, "exists": os.path.isdir(p)}
+            out = {"path": p, "exists": bool(p) and os.path.isdir(p)}
             if not out["exists"]:
                 return out
             mtimes = []
@@ -3109,21 +3135,37 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 out["files"] = files
             return out
 
+        active_path_by_label = {
+            "vanilla_snapshot": vanilla_snapshot_docs_path,
+            "digest_snapshot": vanilla_snapshot_docs_path_default,
+            "mod_loaded": mod_loaded_docs_path,
+        }
         vanilla_block = {
             "source_label": engine_docs_source_label or "unknown",
-            "active_path": (
-                vanilla_snapshot_docs_path
-                if engine_docs_source_label == "vanilla_snapshot"
-                else mod_loaded_docs_path
+            "active_path": active_path_by_label.get(
+                engine_docs_source_label, mod_loaded_docs_path
             ),
             "vanilla_snapshot": _summarize(vanilla_snapshot_docs_path),
+            "digest_snapshot": _summarize(vanilla_snapshot_docs_path_default),
             "mod_loaded_snapshot": _summarize(mod_loaded_docs_path),
             "refresh_workflow": {
                 "vanilla": (
                     "Disable the mod in the launcher, launch the game, type "
                     "`script_docs` in the in-game console (~ key), then copy "
                     f"the .log files from {mod_loaded_docs_path}/ to "
-                    f"{vanilla_snapshot_docs_path}/."
+                    + (
+                        f"{vanilla_snapshot_docs_path}/."
+                        if vanilla_snapshot_docs_path
+                        else "the directory in `vanilla_snapshot_docs_path` "
+                             "(currently unset — leave it unset to keep using "
+                             "the digest snapshot below)."
+                    )
+                ),
+                "digest": (
+                    "No action needed — the digest snapshot is auto-pulled from "
+                    "https://github.com/Victoria-3-Modding-Co-op/Modding-Digests "
+                    "on mod_state_server cold start. The highest-version directory "
+                    "with engine-doc logs wins."
                 ),
                 "mod_loaded": (
                     "Enable the mod in the launcher, launch the game, type "

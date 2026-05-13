@@ -8,6 +8,7 @@ End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria
 - [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) clone at `vic3_modding_digests_path` (`~/src/Modding-Digests` by default). The mod state server auto-pulls this on cold start; if absent, run `.venv/bin/python mod_state_server.py` once and it'll clone. The digests short-circuit much of § 3.
 - Mod state server runnable: `python3 mod_state_server.py` (use `python3`, not `python`, on this system).
 - The mod loads cleanly on the prior vanilla (i.e. before starting the migration, the mod is in a known-good state).
+- **Engine-doc baseline:** as of vanilla 1.13.5 the `~/src/vic3/docs/` directory of engine-doc log dumps no longer ships with vanilla — upstream moved them to Modding-Digests. `mod_state_server` resolves the highest-version digest checkout automatically (see `_engine_docs_source()` in `mod_state_server.py`), so `vanilla_snapshot_docs_path` in `paths.local.json` is now optional. Leave it unset to use the digest version, or point it at a hand-maintained local snapshot if you regenerate engine docs via in-game `script_docs`.
 
 ## 1. Snapshot the current mod (BEFORE applying patch)
 
@@ -87,7 +88,26 @@ If the vanilla map changed (states removed/renamed/split), edit `deposits_config
 
 ## 5. GUI override re-merge
 
-For each mod-overridden `.gui` file, run a 3-way merge with vanilla's pre- and post-patch versions. See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.
+**Enumerate the at-risk set deterministically.** Don't rely on agent inference or memory of "which files changed" — vanilla often touches GUIs that look incidental. Use:
+
+```bash
+find /home/jakef/src/Vic3TimelineExtended/gui -name "*.gui" -type f | while read f; do
+  rel="${f#/home/jakef/src/Vic3TimelineExtended/}"
+  vfile="$HOME/src/vic3/game/$rel"
+  if [ -f "$vfile" ]; then
+    changed=$(git -C ~/src/vic3 log --oneline OLD_REF..NEW_REF -- "game/$rel" | head -1)
+    if [ -n "$changed" ]; then
+      echo "AT-RISK: $rel  [$changed]"
+    fi
+  fi
+done
+```
+
+In the 1.13.5 migration, an exploration agent reported 2 at-risk GUI files; the shell loop above found 5. The missed three included `military_formation_panel.gui`, whose unrebased override silently broke the move-formation button because vanilla renamed `ToggleArmyMovement` → `ToggleArmyAdditionalActions` and `MOVE_MILITARY_FORMATION` → `ADDITIONAL_ACTIONS_MILITARY_FORMATION` in the onclick handler.
+
+For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch versions. See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.
+
+**A conflict-free merge is not a clean merge.** `git merge-file` happily produces a 0-conflict result when vanilla's edits don't textually overlap the mod's edits — but vanilla may have renamed a function the mod's untouched code-path still calls. After every merge, grep the merged file for any identifier vanilla deleted/renamed during this patch (use the engine-surface delta from step 3). The engine doesn't log GUI script errors, so a broken onclick handler manifests as a silently unresponsive button, not a `debug.log` entry — there's no runtime safety net.
 
 If vanilla deleted a mod-overridden GUI file (vanilla 1.13 deleted `commander_panel.gui`), delete the mod's override too — keep an issue open to re-apply mod customizations elsewhere if the panel content moved.
 
