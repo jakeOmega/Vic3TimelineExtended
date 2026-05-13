@@ -249,10 +249,18 @@ civil_rights_support_bar = {
 	max_value = 100
 
 	monthly_progress = {
+		# Civil rights movements are generational: the real-world arc from
+		# Brown v. Board to the Fair Housing Act ran ~14 years. The numbers
+		# below are calibrated against ~70 points of bar progress (start = 30,
+		# complete = 100): a maxed-out push run aims for ~5 years; a dedicated
+		# but not all-in run ~7-10 years; a passive-bystander run leaves the
+		# bar drifting near zero. Suppression options can still pull the bar
+		# down rapidly — repression remains the faster path.
+
 		# Base: movement fades when no one is pushing it
 		add = {
 			desc = "cr_base_drift_tt"
-			value = -0.5
+			value = -0.4
 		}
 
 		# Tech tier: social_justice_movements is the maturity gate
@@ -260,7 +268,7 @@ civil_rights_support_bar = {
 			limit = { owner = { has_technology_researched = social_justice_movements } }
 			add = {
 				desc = "cr_social_justice_tech_tt"
-				value = 0.5
+				value = 0.4
 			}
 		}
 
@@ -269,7 +277,7 @@ civil_rights_support_bar = {
 			limit = { owner = { has_severe_discriminatory_minority_law = yes } }
 			add = {
 				desc = "cr_severe_discrim_law_tt"
-				value = -1.0
+				value = -0.5
 			}
 		}
 
@@ -285,18 +293,18 @@ civil_rights_support_bar = {
 			}
 			add = {
 				desc = "cr_progressive_law_tt"
-				value = 1.0
+				value = 0.3
 			}
 		}
 
-		# Per low-acceptance state, capped via min so a 50-state empire doesn't auto-win
+		# Per low-acceptance state, capped via max so a 50-state empire doesn't auto-win
 		if = {
 			limit = { owner = { cr_low_acceptance_count > 0 } }
 			add = {
 				desc = "cr_low_acceptance_states_tt"
 				value = owner.cr_low_acceptance_count
-				multiply = 0.05
-				max = 2.0
+				multiply = 0.0125
+				max = 0.5
 			}
 		}
 
@@ -305,14 +313,14 @@ civil_rights_support_bar = {
 			limit = { owner = { radical_fraction = { value >= 0.10 } } }
 			add = {
 				desc = "cr_radicals_tier1_tt"
-				value = 0.5
+				value = 0.15
 			}
 		}
 		if = {
 			limit = { owner = { radical_fraction = { value >= 0.20 } } }
 			add = {
 				desc = "cr_radicals_tier2_tt"
-				value = 0.5
+				value = 0.15
 			}
 		}
 
@@ -321,21 +329,21 @@ civil_rights_support_bar = {
 			limit = { owner = { has_modifier = cr_grassroots_modifier } }
 			add = {
 				desc = "cr_grassroots_push_tt"
-				value = 0.8
+				value = 0.2
 			}
 		}
 		if = {
 			limit = { owner = { has_modifier = cr_federal_protection_modifier } }
 			add = {
 				desc = "cr_federal_push_tt"
-				value = 1.2
+				value = 0.3
 			}
 		}
 		if = {
 			limit = { owner = { has_modifier = cr_gradualist_modifier } }
 			add = {
 				desc = "cr_gradualist_push_tt"
-				value = 0.4
+				value = 0.1
 			}
 		}
 
@@ -350,23 +358,25 @@ civil_rights_support_bar = {
 			}
 			add = {
 				desc = "cr_cooptation_push_tt"
-				value = 0.6
+				value = 0.15
 			}
 		}
 
-		# Anti-movement policies (push the bar DOWN)
+		# Anti-movement policies (push the bar DOWN). Repression remains the
+		# faster path — suppression and segregationist crackdowns substantially
+		# outpace any single pro-movement modifier.
 		if = {
 			limit = { owner = { has_modifier = cr_suppression_modifier } }
 			add = {
 				desc = "cr_suppression_push_tt"
-				value = -1.0
+				value = -0.6
 			}
 		}
 		if = {
 			limit = { owner = { has_modifier = cr_segregationist_modifier } }
 			add = {
 				desc = "cr_segregationist_push_tt"
-				value = -1.5
+				value = -0.9
 			}
 		}
 
@@ -380,7 +390,7 @@ civil_rights_support_bar = {
 			}
 			add = {
 				desc = "cr_floor_relief_tt"
-				value = 0.5
+				value = 0.4
 			}
 		}
 	}
