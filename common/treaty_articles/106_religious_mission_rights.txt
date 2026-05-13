@@ -35,7 +35,6 @@ religious_mission_rights = {
 	}
 
 	source_modifier = {
-		country_authority_add = -100
 		country_legitimacy_base_add = -5
 	}
 

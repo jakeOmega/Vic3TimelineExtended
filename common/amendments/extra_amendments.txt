@@ -1039,6 +1039,7 @@ amendment_langreform_powerful_academy = {
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_assimilation_mult = 0.10
 		country_primary_culture_fervor_from_laws_add = 5
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.1
 	}
 	possible = { always = yes }
 	would_sponsor = { always = no }

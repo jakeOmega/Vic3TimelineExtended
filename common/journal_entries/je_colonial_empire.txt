@@ -102,8 +102,13 @@
 		custom_tooltip = {
 			text = je_colonial_empire_complete_tt
 			OR = {
-				scope:journal_entry = {
-					"scripted_bar_progress(colonial_stability_bar)" >= 100
+				# Basic completion: 60 months (5 years) sustained at the cap.
+				# Reaching 100 is not enough on its own — the bar must hold.
+				# Longer than the IF Act's 36-mo ≥90 gate so the decision path
+				# stays meaningfully faster for countries that qualify.
+				root = {
+					has_variable = colonial_at_100_months
+					var:colonial_at_100_months >= 60
 				}
 				# IF Act capstone — set by the Imperial Federation Act decision
 				root = {
@@ -161,8 +166,11 @@
 	}
 
 	fail = {
-		scope:journal_entry = {
-			"scripted_bar_progress(colonial_stability_bar)" <= 0
+		custom_tooltip = {
+			text = je_colonial_empire_fail_tt
+			scope:journal_entry = {
+				"scripted_bar_progress(colonial_stability_bar)" <= 0
+			}
 		}
 	}
 
@@ -262,6 +270,25 @@
 			}
 			else = {
 				set_variable = { name = colonial_solidified_months value = 0 }
+			}
+
+			# --- Bar-at-100 sustained-time counter ---
+			# Increments while bar is at the cap; resets if it drops. The basic
+			# completion path requires 36 months at 100 (mirrors the IF Act's
+			# 36-mo ≥90 gate) so reaching the cap isn't an instant win and
+			# leaves room to take the Imperial Federation Act decision.
+			if = {
+				limit = { NOT = { has_variable = colonial_at_100_months } }
+				set_variable = { name = colonial_at_100_months value = 0 }
+			}
+			if = {
+				limit = {
+					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 100 }
+				}
+				change_variable = { name = colonial_at_100_months add = 1 }
+			}
+			else = {
+				set_variable = { name = colonial_at_100_months value = 0 }
 			}
 
 			# --- GDP-scaled treasury debit while Invest is active ---

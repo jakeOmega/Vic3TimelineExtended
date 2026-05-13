@@ -326,6 +326,9 @@ principle_advanced_research_4 = {
 		# Nuclear-gate flavor: military R&D specialization
 		country_military_tech_research_speed_mult = 0.05
 		country_engineers_pol_str_mult = 0.10
+
+		# Ministry caps at level 9; multiply its punch instead of trying to extend the ceiling
+		country_institution_impact_institution_ministry_of_science_mult = 0.10
 	}
 
 	institution = institution_ministry_of_science
@@ -337,9 +340,6 @@ principle_advanced_research_4 = {
 
 		country_tech_group_research_speed_mult = 0.01
 		country_academics_pol_str_mult = 0.05
-
-		# Ministry caps at level 9; multiply its punch instead of trying to extend the ceiling
-		country_institution_impact_institution_ministry_of_science_mult = 0.10
 	}
 
 	ai_weight = {
@@ -373,6 +373,9 @@ principle_advanced_research_5 = {
 		# Mod-system hook: space race
 		country_space_race_max_funding_add = 1
 		country_space_race_progress_mult = 0.10
+
+		# Ministry caps at level 9; multiply its punch instead of trying to extend the ceiling
+		country_institution_impact_institution_ministry_of_science_mult = 0.20
 	}
 
 	power_bloc_modifier = {
@@ -390,8 +393,6 @@ principle_advanced_research_5 = {
 		country_tech_group_research_speed_mult = 0.01
 		country_academics_pol_str_mult = 0.15
 		country_authority_add = 50
-
-		country_institution_impact_institution_ministry_of_science_mult = 0.20
 	}
 
 	ai_weight = {
@@ -1992,7 +1993,7 @@ principle_education_2 = {
 		country_tech_spread_mult = 0.05
 
 		# Literacy growth ramps with institution level (1-9)
-		state_literacy_growth_add = 0.0001
+		state_literacy_growth_add = 0.00005
 	}
 
 	ai_weight = {
@@ -2022,7 +2023,7 @@ principle_education_3 = {
 	institution_modifier = {
 		# School institution gives more tech spread
 		country_tech_spread_mult = 0.10
-		state_literacy_growth_add = 0.0001
+		state_literacy_growth_add = 0.00005
 		state_migration_pull_mult = 0.02
 	}
 
@@ -2067,7 +2068,7 @@ principle_education_4 = {
 		# Modifiers from previous level(s)
 		# School institution gives more tech spread
 		country_tech_spread_mult = 0.10
-		state_literacy_growth_add = 0.00015
+		state_literacy_growth_add = 0.000075
 
 		state_pop_qualifications_mult = 0.05
 		state_migration_pull_mult = 0.05
@@ -2110,7 +2111,7 @@ principle_education_5 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		country_tech_spread_mult = 0.15
-		state_literacy_growth_add = 0.0002
+		state_literacy_growth_add = 0.0001
 		state_pop_qualifications_mult = 0.10
 
 		country_bureaucracy_mult = 0.02
@@ -3779,6 +3780,8 @@ principle_navy_4 = {
 		character_convoy_raiding_mult = 0.25
 		character_naval_mission_area_add = 1
 		country_prestige_from_navy_power_projection_mult = 0.1
+		# Bloc-wide crew training programs season ships before deployment
+		country_ship_crew_starting_veterancy_experience_add = 75
 	}
 
 	power_bloc_modifier = {
@@ -3824,6 +3827,8 @@ principle_navy_5 = {
 		character_blockade_mult = 0.15
 		country_prestige_from_navy_power_projection_mult = 0.2
 		building_port_throughput_add = 0.25
+		# Peak-doctrine bloc supplies veteran crews to every member ship
+		country_ship_crew_starting_veterancy_experience_add = 150
 	}
 
 	power_bloc_modifier = {

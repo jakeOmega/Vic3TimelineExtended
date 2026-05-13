@@ -135,7 +135,7 @@ ce_target_reduction = {
 	}
 	effect = {
 		je:je_banking_cycle = { add_modifier = { name = planning_target_reduction } }
-		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = banking_small_radicals_value strata = upper }
 	}
 }
 
@@ -153,7 +153,7 @@ ce_disable_target_reduction = {
 	possible = { je:je_banking_cycle = { has_modifier = planning_target_reduction } }
 	effect = {
 		je:je_banking_cycle = { remove_modifier = planning_target_reduction }
-		add_loyalists = { value = small_radicals strata = upper }
+		add_loyalists = { value = banking_small_radicals_value strata = upper }
 	}
 }
 
@@ -275,7 +275,7 @@ ce_admin_campaign = {
 	}
 	effect = {
 		je:je_banking_cycle = { add_modifier = { name = planning_admin_campaign } }
-		add_radicals = { value = medium_radicals strata = upper }
+		add_radicals = { value = banking_medium_radicals_value strata = upper }
 	}
 }
 
@@ -292,7 +292,7 @@ ce_disable_admin_campaign = {
 	possible = { je:je_banking_cycle = { has_modifier = planning_admin_campaign } }
 	effect = {
 		je:je_banking_cycle = { remove_modifier = planning_admin_campaign }
-		add_loyalists = { value = small_radicals strata = upper }
+		add_loyalists = { value = banking_small_radicals_value strata = upper }
 	}
 }
 
@@ -492,7 +492,7 @@ cw_disable_dividend_restraint = {
 	possible = { je:je_banking_cycle = { has_modifier = cooperative_dividend_restraint } }
 	effect = {
 		je:je_banking_cycle = { remove_modifier = cooperative_dividend_restraint }
-		add_loyalists = { value = small_radicals strata = middle }
+		add_loyalists = { value = banking_small_radicals_value strata = middle }
 	}
 }
 
@@ -524,7 +524,7 @@ cw_mutual_aid_fund = {
 	}
 	effect = {
 		je:je_banking_cycle = { add_modifier = { name = cooperative_mutual_aid } }
-		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = banking_small_radicals_value strata = lower }
 	}
 }
 
@@ -707,7 +707,7 @@ cw_consumption_ceiling = {
 	}
 	effect = {
 		je:je_banking_cycle = { add_modifier = { name = cooperative_consumption_ceiling } }
-		add_radicals = { value = medium_radicals strata = lower }
+		add_radicals = { value = banking_medium_radicals_value strata = lower }
 	}
 }
 
@@ -725,7 +725,7 @@ cw_disable_consumption_ceiling = {
 	possible = { je:je_banking_cycle = { has_modifier = cooperative_consumption_ceiling } }
 	effect = {
 		je:je_banking_cycle = { remove_modifier = cooperative_consumption_ceiling }
-		add_loyalists = { value = small_radicals strata = lower }
+		add_loyalists = { value = banking_small_radicals_value strata = lower }
 	}
 }
 

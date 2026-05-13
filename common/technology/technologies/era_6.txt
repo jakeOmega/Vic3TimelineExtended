@@ -471,7 +471,7 @@ mass_media = {
 		country_cultural_program_max_funding_add = 1
 		country_mass_media_pb_principles_bool = yes
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
-		state_literacy_growth_add = 0.0001
+		state_literacy_growth_add = 0.00005
 	}
 
 	ai_weight = {
@@ -669,6 +669,8 @@ naval_fire_control_systems = {
 		ship_accuracy_mult = 0.10
 		ship_critical_hit_chance_add = 0.05
 		character_blockade_mult = 0.10
+		# Gunnery drill schools accelerate the crew-experience curve
+		country_ship_crew_starting_veterancy_experience_add = 50
 	}
 
 	unlocking_technologies = {

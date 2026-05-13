@@ -29,7 +29,6 @@ free_port_concession = {
 	}
 
 	source_modifier = {
-		country_authority_add = -100
 	}
 
 	target_modifier = {

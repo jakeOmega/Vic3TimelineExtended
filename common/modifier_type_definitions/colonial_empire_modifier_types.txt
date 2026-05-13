@@ -16,7 +16,7 @@
 # not law-attached and don't fit the modifier-aggregation pattern.
 
 country_colonial_stability_drift_add = {
-	color = neutral
+	color = good
 	decimals = 2
 	script_only = yes
 }
@@ -27,19 +27,19 @@ country_colonial_stability_drift_add = {
 # via GetValueWithBreakdownFor, so the player can see what their laws will
 # contribute BEFORE pressing the button).
 country_colonial_garrison_effectiveness_add = {
-	color = neutral
+	color = good
 	decimals = 2
 	script_only = yes
 }
 
 country_colonial_invest_effectiveness_add = {
-	color = neutral
+	color = good
 	decimals = 2
 	script_only = yes
 }
 
 country_colonial_assim_effectiveness_add = {
-	color = neutral
+	color = good
 	decimals = 2
 	script_only = yes
 }

@@ -93,14 +93,19 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Typical length:** 1–3 sentences (30–80 words). Shorter is better. Let the flavor text carry the literary weight.
 
 ### Flavor Text (`.f`)
-- **Literary, atmospheric, and character-driven.** Flavor text is the creative writing showcase of the event. It sets mood and humanizes the situation.
-- **Most common form: direct speech (quotes).** The vast majority of vanilla flavor texts contain dialogue — quoted speech from unnamed or implied characters reacting to the event's situation. This is the defining stylistic signature of Victoria 3 events.
+- **Literary, atmospheric, and character-driven.** Flavor text is the creative writing showcase of the event. It sets mood and humanizes the situation. It is not a place to summarize what happened — the description (.d) is where the player learns the facts. Flavor text exists to give that situation texture and a human grain.
+- **Typical length:** 3–8 sentences, roughly 50–150 words. Shorter is not better. Flavor text below this range reads as a news ticker and wastes the slot.
+- **Default form: direct speech (quotes).** The vast majority of vanilla flavor texts contain dialogue, and this is the defining stylistic signature of Victoria 3 events. Reach for dialogue first. Use one of the other forms only when you have a specific reason — an epigraph that fits the theme, or a vignette that captures something dialogue can't.
 - **Dialogue conventions:**
   - Multiple speakers are separated by `\n\n` (paragraph breaks).
   - Speakers are almost never named — they are anonymous voices (a farmer, a politician, a soldier, a shopkeeper). This lets the text feel universal rather than character-specific.
   - Dialogue captures the *emotional tone* of the affected faction — arrogant industrialists, pious clergy, cynical soldiers, earnest workers.
-- **Narrative vignettes** are the second common form: short prose scenes describing a moment — a courtroom, a street, a battlefield, a government office. Written in present or past tense with vivid sensory details.
+- **Narrative vignettes** are the second common form: short prose scenes anchored in a specific perspective — what a participant or witness sees, hears, or feels in a particular place at a particular moment. A vignette needs a viewpoint, not just an account of events. Written in present or past tense with vivid sensory detail.
 - **Famous quotes or literary epigraphs** are occasionally used, attributed with `— Author Name` (em-dash).
+- **Anti-patterns to avoid:**
+  - **Two-line reportage.** "X happened. Then Y happened." compressed to a single visual line is the most common failure mode. It can technically clear the length minimum if the sentences are long enough, but it reads as a wire summary, not flavor. If the prose could appear unchanged in a newspaper headline rundown, it isn't doing the job of flavor text.
+  - **Subject-less observation.** Sentences that describe events from no one's vantage point ("The march filled six city blocks. The police stopped counting heads.") read as sterile reportage. Anchor in a perspective — even an unnamed bystander, organiser, officer, journalist, or letter-writer. This is the "show, don't tell" principle from the General Tone section, applied to flavor specifically.
+  - **Formulaic repetition across a chain.** Even if individual entries pass on their own, a journal entry chain where most events share the same compressed structure reads as monotonous and stylistically distinct from the rest of the mod. Vary forms across a chain: dialogue should dominate, with a minority of vignettes and the occasional epigraph for variety. If you've written three events in the chain and they all open with "The [noun] [verbed]. The [other noun]...", stop and rewrite.
 - **Attributed fictional quotes with random character names:** For events where dialogue is attributed to a role (scientist, commander, engineer), use `create_character` in `immediate` to generate a culturally-appropriate character name, then `kill_character` in `after` to clean up. This gives each event a unique, culture-matching name without reusing existing game characters. Pattern:
   - **Script:**
     ```
@@ -130,7 +135,6 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
   - **Do NOT use `random_scope_character`** — countries have few characters (generals, politicians), so the same name would appear across many events.
 - **Formatting in flavor text:** `#bold text#!` for emphasis, `#italic text#!` for italics, `\n` / `\n\n` for line/paragraph breaks. Used sparingly.
 - **Tone:** Sardonic, wry, occasionally darkly humorous. Victoria 3 flavor text frequently has an ironic or world-weary quality.
-- **Typical length:** 3–8 sentences (50–150 words).
 
 ### Option Text (`.a`, `.b`, `.c`, etc.)
 - **Short, punchy, and in the voice of the player/ruler.** Option text is what the player "says" when choosing.
@@ -150,7 +154,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Formal but not archaic.** The writing should feel polished and professional, suitable for a game spanning 1836 to the 2030s. Use language that is timeless where possible.
 - **Modern language is preferred over archaic language** to avoid immersion-breaking anachronisms. For example, use "scientists" not "natural philosophers", since the mod's events often fire in the 20th–21st century. When referencing specific technologies, use the appropriate era's terminology.
 - **Political and class-conscious.** Events frequently frame situations through the lens of class conflict, political ideology, national identity, and institutional power — the core themes of Victoria 3.
-- **Show, don't tell.** Events present situations and let the player interpret them. Descriptions don't editorialize.
+- **Show, don't tell.** Events present situations and let the player interpret them. Descriptions don't editorialize, and flavor text grounds events in a perspective rather than narrating them from nowhere.
 - **Dark humor and irony** are staples.
 - **No modern anachronisms in tone** (no slang, no internet-speak), but the writing should be accessible to modern readers.
 

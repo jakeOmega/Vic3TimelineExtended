@@ -992,6 +992,53 @@ For events that don't know which milestone they're associated with (generic fail
 - Per-JE boolean flags (`sr_failed_<m>`): Set in pulse, checked by effects in events
 - Multi-milestone events: Expand single `change_variable` into per-JE `if` blocks checking `has_variable = sr_active_<m>`
 
+## Idempotent Slot-State Sync: All Parallel Vars in One Pass
+
+If a system stores per-slot state across **parallel variable families** — e.g. `iw_target_<TYPE>_1/2/3` + `iw_duration_<TYPE>_1/2/3` + `iw_detect_<TYPE>_1/2/3` — the helper that rewrites slot assignments must rewrite **all** correlated families in a single call, or split paths will silently desync.
+
+Symptom: state stays correct so long as updates only happen on the monthly pulse (which conventionally runs a "remap durations by target identity" + "rewrite slot vars" pair). But every cancel / break / start / button path that touches slots OUTSIDE that pulse — `manual_break_effect`, `auto_break_effect`, detection-event `after`, `accept_effect`, funding-toggle buttons — runs the slot-rewrite alone and leaves the duration vars pointing at the previous occupant of each slot index. A player who cancels Country A's op and immediately starts on Country B sees B inherit A's months and detonate Phase 3 effects on month 1.
+
+Fix: fold the "duration carry-over by target identity" logic INTO the slot-rewrite helper, so calling it any number of times keeps every family consistent. Then the monthly pulse only needs a pure age-by-1 helper. Concretely (from `common/scripted_effects/covert_warfare_effects.txt`):
+
+```paradox
+covert_op_track_targets = {
+    # Save (target, duration) pairs before clearing.
+    if = { limit = { has_variable = iw_target_$TYPE$_1 }
+        set_variable = { name = iw_old_t_1 value = var:iw_target_$TYPE$_1 }
+        if = { limit = { has_variable = iw_duration_$TYPE$_1 }
+            set_variable = { name = iw_old_d_1 value = var:iw_duration_$TYPE$_1 } }
+        else = { set_variable = { name = iw_old_d_1 value = 0 } }
+    }
+    # ...slots 2, 3...
+
+    # Clear ALL families (target, detect, IC, TD, duration).
+    remove_variable = iw_target_$TYPE$_1   # + every other family at every slot index
+    # ...
+
+    # Reassign slots by iterating current pacts; for each slot fill,
+    # match by target identity against any old slot and carry duration.
+    every_scope_diplomatic_pact = { ...
+        if = { limit = { var:iw_slot_counter = 1 }
+            set_variable = { name = iw_target_$TYPE$_1 value = PREV }
+            # ...detect / IC / TD...
+            if      = { limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_1 } }
+            else_if = { limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_2 } }
+            else_if = { limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_3 } }
+            # else: new entry — the start path (e.g. covert_op_register_new_target) sets duration = 0.
+        }
+        # ...slots 2, 3...
+    }
+}
+```
+
+Three properties to enforce:
+
+1. **All families are wiped and re-emitted in the same helper.** Don't leave any family to "the monthly pulse will fix it next tick" — state can be read between pulses (player UI, detection rolls, displayed slot phases).
+2. **Carry-over matches by stable target identity**, not slot index, since iteration order can shift on cancel. Capital state IDs are stable; pact iteration order is per-tick.
+3. **The "start" path explicitly sets duration = 0 for new entries.** The new pact doesn't exist when `accept_effect` fires, so the track-targets helper can't see it; the register helper must initialise the slot's duration so the next pulse's age helper increments it to 1 (matching prior convention).
+
+Rule of thumb: if you have N parallel variable families indexed by slot, the slot-rewrite helper either touches **all N families together** (idempotent) or **none of them** — never a strict subset. Anything in between is silent desync waiting on a player cancel.
+
 ## Event Architecture
 
 - **Extract large logic blocks into scripted effects.** Event-triggering logic (weighted random_list with many entries) belongs in `common/scripted_effects/`, not inlined in journal entries.
@@ -2214,6 +2261,8 @@ Vanilla concept names like `concept_interest_group`, `concept_authority`, `conce
 
 **Skipping step 1 also produces high-volume runtime log spam.** When the engine renders a loc string containing `[concept_X]` and `concept_X` isn't registered, it falls back to treating the bracket expression as a data-system function call and logs `Could not find data system function 'concept_X'` + `Failed converting statement for 'concept_X'` + `Data error in loc string '<the parent loc key>'` — once per render. Hovering or repainting the offending UI fires hundreds of debug.log lines in seconds and stalls the game (same class of synchronous-log-spam lag as `[b]X[/b]` markdown). The errors don't appear in `loc_coverage_audit` (which only checks loc keys for entities) and they don't appear in `/logs/debug` under the default `mod_only=true` filter — they originate in `pdx_data_factory.cpp` / `pdx_data_localize.cpp`, vanilla source, with no mod path attached. To find them, drop the filters: `curl -s "http://localhost:8950/logs/debug?summary=true&mod_only=false&vanilla_bugs=show&mod_noise=show"` and look for `Could not find data system function 'concept_*'` in `top_repeats`.
 
+**`[concept_X]` does NOT expand inside `@iconname!` texticon syntax.** The icon resolver takes the literal characters between `@` and `!` as a texticon key — it doesn't pre-substitute concept templates. `@[concept_tourism_system]!` is read as "look up a texticon literally named `[concept_tourism_system]`", which fails silently and renders as a missing-icon blank. Symptom in-game: text like "Building ! Tourism Output" (the failed `@...!` leaves the trailing `!` visible) — the loc key is fine, the icon is gone. This is easy to introduce during a bulk concept-tag pass that wraps every occurrence of a word in `[concept_X]` without distinguishing icon contexts. **Rule:** always use a literal icon key inside `@...!` (e.g. `@tourism!`); only `[concept_X]` hyperlinks belong in the surrounding prose. Caught one case in `goods_output_tourism_add/mult` (te_modifiers, May 2026); see commit history.
+
 ## Defined-But-Unused Modifiers
 
 A static modifier definition in `common/static_modifiers/` is dead code unless it appears in at least one `add_modifier`, `add_static_modifier`, or `name = X` reference somewhere. The mod's `colonial_empire_solidified_modifier` was defined but never applied (the JE's monthly pulse only added `_under_pressure` and `_crumbling`) — easy to miss.
@@ -2664,3 +2713,51 @@ When researching mod content (auditing for bugs, inventorying which PMs produce/
 - **For Paradox files, `grep -rn "^xxx = "` shows top-level definitions reliably.** The same trick doesn't work inside nested blocks because indented lines lose the anchor. For nested searches, use the awk pattern above.
 
 - **PMs in different groups within a building SUM additively.** When auditing a building's net effect, sum across all active PMs from all groups — they don't cancel or override each other. See `docs/vanilla/vanilla_economy_reference.md` § 2.
+
+## `any_state` from State Scope Iterates Owner's States, Not Globally
+
+Building `potential = { ... }` blocks evaluate at **state scope**. From state scope, `any_state = { ... }` iterates the **owning country's** states — not every state in the world. The same applies to other state-scope contexts.
+
+The UN HQ building had:
+
+```paradox
+potential = {
+    OR = {
+        any_scope_building = { is_building_type = building_un_headquarters }
+        NOT = { any_state = { any_scope_building = { is_building_type = building_un_headquarters } } }
+    }
+}
+```
+
+Intent: "this state already has the HQ, OR no state anywhere has one." Reality: the `NOT { any_state ... }` only checked the owning country's states, so another country's HQ never disqualified you. Combined with a leaky permission flag, anyone who signed the UN charter could build a second HQ.
+
+**For genuinely global checks**, use a single source of truth (a global variable identifying the unique holder, e.g. `owner = { this = global_var:un_hq_country }`) or wrap the iterator: `any_country = { any_state = { ... } }`. Single-source-of-truth comparisons also self-heal in saves where stale per-country flags exist.
+
+## Event Option Triggers Must Cover the Event's Trigger Surface
+
+If an event fires but **none** of its options' `trigger = { ... }` blocks match for the receiving country, the engine renders the event with **no clickable button** — the player is stuck. Vic3 doesn't auto-fall-back to `default_option = yes` when its trigger fails.
+
+This bit `un_vote.3` (General Assembly Vote Results): the event broadcasts to every UN member, but all three options gated on `has_variable = un_vote_choice`, which only exists for countries that voted. A country that joined the UN *after* the vote was called but *before* results fired passed the event-level trigger, saw the description text, and had no button.
+
+**Rule**: collectively, the option triggers must form a tautology over the event's trigger surface. Treat the `default_option = yes` option as the catch-all — include a `NOT = { has_variable = X }` (or equivalent) branch so it matches everything the other options don't. This is especially load-bearing for broadcast/notification events fired via `every_country = { trigger_event = ... }` where the receiving country's local state varies.
+
+## Concept References in Entity-Name Loc Keys Are Unreliable; Use Plain Text
+
+Loc strings like `combat_unit_type_X:0 "[concept_Y] Name"` or `building_X:0 "[concept_Y] Headquarters"` render the concept's name in the slot and attach a clickable concept tooltip. Two problems recur:
+
+1. **Semantic mismatch.** If the concept describes a different thing than the named entity, the tooltip is misleading. `combat_unit_type_combined_arms_marines:0 "[concept_combined_arms] Marines"` — `concept_combined_arms` is the *doctrine*; the unit is just marines unlocked at the same tech.
+
+2. **Inconsistent rendering across building UI contexts.** Building name slots (panel title, construction queue, right-click menu, alerts) don't all expand concept refs the same way. `building_power_bloc_hq:0 "[concept_power_bloc] Headquarters"` rendered raw `[concept_power_bloc]` in some contexts.
+
+**Rule**: in entity-name loc keys, write plain text. Save `[concept_X]` for `_desc` keys, where rendering is consistent and the link adds context without replacing the name. Modifier-name keys (e.g. `building_group_X_infrastructure_usage_mult`) reliably render concept refs — they go through the modifier system, not the entity-name system.
+
+## Hardcoded UI Gates: Use Script *Effects* to Bypass, Not Script *Triggers*
+
+Some Vic3 entity types have UI repeal/remove buttons gated by hardcoded engine logic that script `can_X` triggers can only **narrow**, never **widen**. The amendment system is the clearest example:
+
+- Engine-enforced gates on the **Repeal** button: parent law has an IG-in-government opposing it, opposing IGs outclout supporters, no cooldown active. (See vanilla `concept_amendment_repeal_desc` and the `REPEAL_AMENDMENT_*` localization keys.)
+- Scriptable `can_repeal = { ... }` trigger on each amendment definition: adds gates *on top* of the engine ones. Cannot remove them.
+
+If the design requires a workflow that bypasses the engine gate (e.g. a player tool to revoke an amendment that no IG opposes), look for the corresponding script **effect**, not a trigger. `remove_amendment = bool` exists on `amendment` scope and skips the cooldown + opposition checks entirely. Wire it through a decision or scripted button with a designer-chosen cost (legitimacy / authority / IG approval hit) to keep balance. Iterators like `every_scope_amendment` (from a law scope) make targeting straightforward.
+
+The general pattern: vanilla UI button → script trigger only narrows; script effect → operates directly on the entity and skips UI gates. Confirm against the engine-doc `effects.log` (`## remove_X` / `## set_X` / `## add_X` entries with `**Supported Scopes**`).

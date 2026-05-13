@@ -11,12 +11,15 @@
 # pre-Era-6 country with no _add source. min=0 preserves the up-only intent
 # (peace laws never cool a play below vanilla rate).
 #
-# `floor = yes` because `add_escalation` (the consuming effect) takes a
+# `round = yes` because `add_escalation` (the consuming effect) takes a
 # literal integer and we use these values as a `while` loop count in
 # st_dp_country_apply_weekly_escalation; non-integer counts would silently
-# misbehave. `max = 10` is a runaway-stacking safety cap — even with every
-# tech _add and an extreme _mult, no single weekly tick can add more than 10
-# escalation in one day (so worst-case spike-day delta is ~+11 with vanilla).
+# misbehave. Round-to-nearest (rather than `floor`) is what survives a
+# positive _add paired with a negative _mult — the prior `floor` truncated
+# residuals like 0.65/week to zero, masking the player-facing modifier.
+# `max = 10` is a runaway-stacking safety cap — even with every tech _add
+# and an extreme _mult, no single weekly tick can add more than 10 escalation
+# in one day (so worst-case spike-day delta is ~+11 with vanilla).
 #
 # Read by `st_dp_country_apply_weekly_escalation` (common/scripted_effects/
 # dp_escalation_effects.txt), which loops `add_escalation = 1` this many
@@ -37,7 +40,7 @@ country_aggressor_dp_escalation_weekly_total = {
 	}
 	min = 0
 	max = 10
-	floor = yes
+	round = yes
 }
 
 country_defender_dp_escalation_weekly_total = {
@@ -54,7 +57,7 @@ country_defender_dp_escalation_weekly_total = {
 	}
 	min = 0
 	max = 10
-	floor = yes
+	round = yes
 }
 
 country_participant_dp_escalation_weekly_total = {
@@ -71,5 +74,5 @@ country_participant_dp_escalation_weekly_total = {
 	}
 	min = 0
 	max = 10
-	floor = yes
+	round = yes
 }

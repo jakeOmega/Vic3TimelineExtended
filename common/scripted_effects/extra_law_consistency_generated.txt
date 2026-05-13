@@ -1194,6 +1194,22 @@ te_fix_inconsistent_lawgroup_army_model = {
 }
 
 te_fix_inconsistent_lawgroup_internal_security = {
+	# Active: law_shinsengumi  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_shinsengumi
+			OR = {
+				NOR = {
+					has_law = law_type:law_bakufu
+				}
+			}
+		}
+		if = {
+			limit = { always = yes }
+			activate_law = law_type:law_secret_police
+		}
+	}
+
 	# Active: law_guaranteed_liberties  ->  detect violation, cascade replacements
 	if = {
 		limit = {

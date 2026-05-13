@@ -294,6 +294,8 @@ network_centric_warfare = {
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
 		country_st_res_tanks_decay_add = 0.005
+		# Networked battle systems shorten the crew-training feedback loop
+		country_ship_crew_starting_veterancy_experience_add = 75
 	}
 
 	unlocking_technologies = {
@@ -496,7 +498,7 @@ knowledge_economy = {
 		country_knowledge_economy_pb_principles_bool = yes
 		country_space_race_max_funding_add = 1
 		country_knowledge_economy_pb_principles_bool = yes
-		state_literacy_growth_add = 0.0001
+		state_literacy_growth_add = 0.00005
 
 		# Colonial empire (je_colonial_empire): information era makes empire
 		# harder to suppress; international scrutiny rises.
@@ -546,7 +548,7 @@ digital_education = {
 		state_education_access_add = -0.1
 		country_digital_ed_pb_principles_bool = yes
 		country_digital_ed_pb_principles_bool = yes
-		state_literacy_growth_add = 0.0002
+		state_literacy_growth_add = 0.0001
 	}
 
 	ai_weight = {

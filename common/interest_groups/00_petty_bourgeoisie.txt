@@ -243,15 +243,19 @@ ig_petty_bourgeoisie = {
 				}
 			}
 		}
-		NOR = {
+		NOT = {
 			is_pop_type = aristocrats
-			trigger_if = {
-				limit = {
-					NOT = {
-						c:BIC ?= owner
-					}
-				}
+		}
+		OR = {
+			NOT = {
 				is_pop_type = capitalists
+			}
+			custom_tooltip = {
+				text = capitalist_in_british_india_tt
+				AND = {
+					is_pop_type = capitalists
+					c:BIC ?= owner
+				}
 			}
 		}
 		OR = {

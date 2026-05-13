@@ -13,7 +13,7 @@
 		country_weekly_innovation_max_add = 100
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
-		state_literacy_growth_add = 0.0001
+		state_literacy_growth_add = 0.00005
 		country_st_res_aeroplanes_decay_add = -0.006
 		country_st_res_tanks_decay_add = -0.004
 	}
@@ -31,7 +31,7 @@ generative_ai = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		state_literacy_growth_add = 0.0002
+		state_literacy_growth_add = 0.0001
 	}
 
 	unlocking_technologies = {

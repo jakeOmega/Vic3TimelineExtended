@@ -1324,7 +1324,7 @@ law_minority_rights_violent_hostility = {
 		# Colonial empire (je_colonial_empire): cruelty laws stabilize garrison
 		# but undermine investment and assimilation. The bar drains heavily.
 		country_colonial_stability_drift_add = -0.7
-		country_colonial_garrison_effectiveness_add = 0.7
+		country_colonial_garrison_effectiveness_add = 1.0
 		country_colonial_invest_effectiveness_add = -0.3
 		country_colonial_assim_effectiveness_add = -0.6
 	}
@@ -3708,6 +3708,9 @@ law_neocolonialism = {
 	modifier = {
 		# Colonial empire (je_colonial_empire): formal empire abandoned -- bar drains
 		country_colonial_stability_drift_add = -0.3
+		country_colonial_garrison_effectiveness_add = -0.1
+		country_colonial_invest_effectiveness_add = 0.25
+		country_colonial_assim_effectiveness_add = -0.25
 	}
 
 	ai_will_do = {
@@ -3929,6 +3932,9 @@ law_littoral_defense = {
 
 		# Coastal flagships own home waters: blockade specialist admirals
 		character_blockade_mult = 0.15
+
+		# Home-waters specialists know their littoral inside-out
+		country_ship_crew_starting_veterancy_experience_add = 75
 	}
 
 	on_activate = {}
@@ -3999,6 +4005,9 @@ law_auxiliary_fleet = {
 
 		# Sustained overseas operations need extended admiral patrol radii
 		character_naval_mission_area_add = 2
+
+		# Months-long sealift rotations build hardened blue-water crews
+		country_ship_crew_starting_veterancy_experience_add = 125
 	}
 
 	on_activate = {}

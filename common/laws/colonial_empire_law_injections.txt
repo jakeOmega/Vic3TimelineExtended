@@ -21,18 +21,26 @@
 INJECT:law_colonial_exploitation = {
 	modifier = {
 		country_colonial_stability_drift_add = 0.5
+		country_colonial_garrison_effectiveness_add = 0.1
+		country_colonial_invest_effectiveness_add = -0.25
+		country_colonial_assim_effectiveness_add = -0.5
 	}
 }
 
 INJECT:law_colonial_resettlement = {
 	modifier = {
 		country_colonial_stability_drift_add = 0.3
+		country_colonial_garrison_effectiveness_add = 0.1
+		country_colonial_invest_effectiveness_add = -0.1
+		country_colonial_assim_effectiveness_add = -0.25
 	}
 }
 
 INJECT:law_no_colonial_affairs = {
 	modifier = {
 		country_colonial_stability_drift_add = -0.6
+		country_colonial_garrison_effectiveness_add = -0.1
+		country_colonial_invest_effectiveness_add = 0.25
 	}
 }
 

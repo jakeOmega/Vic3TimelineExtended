@@ -217,7 +217,7 @@ cb_policy_rate_hike = {
         # Spend 2 points (via the modifier) and cool the cycle
         je:je_banking_cycle = { add_modifier = { name = banking_policy_rate_hike } }
         add_radicals = {
-            value = medium_radicals
+            value = banking_medium_radicals_value
         }
     }
 }
@@ -243,7 +243,7 @@ cb_disable_policy_rate_hike = {
     effect = {
         je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
         add_loyalists = {
-            value = small_radicals
+            value = banking_small_radicals_value
         }
     }
 }
@@ -414,7 +414,7 @@ cb_expand_deposit_guarantee = {
     effect = {
         je:je_banking_cycle = { add_modifier = { name = banking_expand_deposit_guarantee } }
         add_loyalists = {
-            value = small_radicals
+            value = banking_small_radicals_value
         }
     }
 }
@@ -437,7 +437,7 @@ cb_disable_expand_deposit_guarantee = {
     effect = {
         je:je_banking_cycle = { remove_modifier = banking_expand_deposit_guarantee }
         add_radicals = {
-            value = medium_radicals
+            value = banking_medium_radicals_value
         }
     }
 }
