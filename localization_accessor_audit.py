@@ -398,6 +398,7 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         # Scope helpers used in chains
         "MakeScope": "scope_object",
         "ScriptValue": "value",
+        "GetVariable": "scope_object",   # variable holding a scope; GetValue/GetCountry/etc. chain via scope_object
         "Var": "value",
     },
     "scope_object": {

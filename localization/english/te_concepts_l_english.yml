@@ -448,7 +448,7 @@
  civil_disobedience_crackdown_modifier_desc:0 "Mass arrests of civil disobedience participants have restored immediate authority but at great cost to our reputation."
  civil_disobedience_movement_galvanized_desc:0 "The spectacle of peaceful protesters being arrested has galvanized the civil rights movement and attracted international attention."
  civil_rights_government_endorsement_modifier_desc:0 "The government's bold endorsement of the civil rights march has energized [Concept('concept_political_movement', 'political movements')] and given voice to those demanding change."
- civil_rights_hollow_victory_modifier_desc:0 "The movement reached its peak. The law did not move. International observers and our own [Concept('concept_intelligentsia', 'intelligentsia')] noticed."
+ civil_rights_hollow_victory_modifier_desc:0 "The movement reached its peak. The law did not move. International observers and our own [GetInterestGroupVariant('ig_intelligentsia', GetPlayer).GetName] noticed."
  civil_rights_investigation_modifier_desc:0 "A formal investigation into the killing of a civil rights figure has earned some goodwill."
  civil_rights_march_calming_desc:0 "The government's concessions to marchers have calmed the civil rights movement, reducing the urgency of their demands."
  civil_rights_march_momentum_modifier_desc:0 "The peaceful civil rights march has generated positive momentum for reform and raised our nation's profile as a beacon of democracy."

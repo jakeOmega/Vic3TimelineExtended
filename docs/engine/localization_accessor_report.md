@@ -25,15 +25,15 @@ Suppress an intentional flag with a same-line comment:
 
 ## Reviewed Exemptions
 
-- `te_events_l_english.yml:758` — `decolonization_events.400.a` — `[ROOT.GetVariable('decolonization_region_1_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
-- `te_events_l_english.yml:759` — `decolonization_events.400.b` — `[ROOT.GetVariable('decolonization_region_2_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
-- `te_events_l_english.yml:760` — `decolonization_events.400.c` — `[ROOT.GetVariable('decolonization_region_3_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
-- `te_events_l_english.yml:769` — `decolonization_events.401.d` — `[ROOT.GetVariable('decolonization_planned_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
+- `te_events_l_english.yml:762` — `decolonization_events.400.a` — `[ROOT.GetVariable('decolonization_region_1_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
+- `te_events_l_english.yml:763` — `decolonization_events.400.b` — `[ROOT.GetVariable('decolonization_region_2_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
+- `te_events_l_english.yml:764` — `decolonization_events.400.c` — `[ROOT.GetVariable('decolonization_region_3_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
+- `te_events_l_english.yml:773` — `decolonization_events.401.d` — `[ROOT.GetVariable('decolonization_planned_count').GetValue]` — 2026-05-13: ROOT.GetVariable.GetValue is runtime-valid on country scope per existing condemner_rank pattern; audit catalog gap.
 
 ## Coverage
 
 - files_audited: 28
-- chains_scanned: 3325
+- chains_scanned: 3326
 - total flags: 11
 - unreviewed: 7
 - exempted: 4
