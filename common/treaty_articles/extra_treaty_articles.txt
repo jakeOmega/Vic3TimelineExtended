@@ -977,7 +977,10 @@ nuclear_disarmament = {
 	maintenance_paid_by = source_country
 	cost = 200
 
-	source_modifier = {
+	# The restricted party is the TARGET — the country being forced to dismantle
+	# its program. War-goal enforcement applies article modifiers to the article's
+	# named party; using source_modifier here disarmed the *winner* of the war goal.
+	target_modifier = {
 		nuclear_disarmament = yes
 	}
 
@@ -1930,7 +1933,9 @@ nuclear_program_pause = {
 	maintenance_paid_by = source_country
 	cost = 100
 
-	source_modifier = {
+	# The restricted party is the TARGET — same scoping bug as nuclear_disarmament:
+	# source_modifier would freeze the program of the *enforcing* country.
+	target_modifier = {
 		nuclear_program_pause = yes
 	}
 
@@ -1981,17 +1986,15 @@ nuclear_program_pause = {
 	}
 
 	on_entry_into_force = {
-		scope:article_options = {
-			source_country = {
-				# Zero out funding without touching stockpile or progress
-				set_variable = {
-					name = nuclear_weapons_program_funding
-					value = 0
-				}
-				if = {
-					limit = { has_modifier = nuclear_weapon_program_funding }
-					remove_modifier = nuclear_weapon_program_funding
-				}
+		scope:article_options.target_country = {
+			# Zero out funding without touching stockpile or progress
+			set_variable = {
+				name = nuclear_weapons_program_funding
+				value = 0
+			}
+			if = {
+				limit = { has_modifier = nuclear_weapon_program_funding }
+				remove_modifier = nuclear_weapon_program_funding
 			}
 		}
 	}

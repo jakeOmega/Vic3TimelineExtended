@@ -46,6 +46,21 @@ ce_invest_in_development = {
 			text = "CE_INVEST_IN_DEVELOPMENT_DESC"
 			add_modifier = { name = colonial_development_investment_modifier }
 		}
+		# Seed the GDP-scaled expense modifier so the budget line shows up
+		# immediately on activation; the JE monthly pulse refreshes it from
+		# here on, keeping the multiplier in sync with current GDP.
+		add_modifier = {
+			name = colonial_development_investment_expense_modifier
+			multiplier = colonial_invest_monthly_expense
+		}
+		# Program startup cost — a one-shot treasury hit so enabling the
+		# program isn't a free toggle. Parallels the Cultural Assimilation
+		# startup cost; the two read as the same flavor of cost.
+		add_treasury = colonial_invest_startup_cost
+		# IG disapproval (vs. the previous mechanical IG strength erosion).
+		# Industrialists wanted capital at home; the PB resents the diversion.
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -74,6 +89,10 @@ ce_remove_invest_in_development = {
 			text = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
 			remove_modifier = colonial_development_investment_modifier
 		}
+		# Drop the budget-line expense too; the JE pulse stops refreshing
+		# it once the policy modifier is gone, but the active copy needs
+		# explicit cleanup or it would linger out a full duration.
+		remove_modifier = colonial_development_investment_expense_modifier
 	}
 }
 
@@ -195,6 +214,9 @@ ce_cultural_assimilation = {
 			text = "CE_CULTURAL_ASSIMILATION_DESC"
 			add_modifier = { name = colonial_cultural_assimilation_modifier }
 		}
+		# Program startup cost — parallel to Development Investment, so the
+		# two activation costs read as the same flavor of "fund the program."
+		add_treasury = colonial_assimilate_startup_cost
 	}
 }
 
