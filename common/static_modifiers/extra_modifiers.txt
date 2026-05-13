@@ -1966,10 +1966,20 @@ colonial_stability_negative_event = {
 }
 
 # Great power colonial policy stance modifiers (applied when GP chooses a stance)
+# The colonial-stability penalties are the hypocrite tax: an anti-colonial GP
+# still holding colonies sees the ideological dissonance translate into bar
+# drift (always-on while the stance is active) and reduced effectiveness on
+# whichever per-button policy they're actively running. Inert for countries
+# without colonies — these modifier types only contribute when je_colonial_empire
+# is active.
 gp_anti_colonial_policy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = 0.05
 	country_influence_add = 25
+	country_colonial_stability_drift_add = -0.2
+	country_colonial_garrison_effectiveness_add = -0.15
+	country_colonial_invest_effectiveness_add = -0.15
+	country_colonial_assim_effectiveness_add = -0.15
 }
 
 gp_pro_colonial_policy_modifier = {

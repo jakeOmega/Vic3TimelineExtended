@@ -91,6 +91,18 @@
                 }
                 remove_modifier = nuclear_power
             }
+            # Self-heal: the first-nuke branch below only grants nuclear_power
+            # on the initial build (gated on first_nuke_done = 0), so a
+            # disarmed-and-rebuilt country would otherwise be nuclear-armed
+            # without the modifier.
+            if = {
+                limit = {
+                    NOT = { modifier:nuclear_disarmament = yes }
+                    var:nuclear_weapon_stockpile >= 1
+                    NOT = { has_modifier = nuclear_power }
+                }
+                add_modifier = { name = nuclear_power }
+            }
             if = {
                 limit = {
                     modifier:nuclear_program_pause = yes
