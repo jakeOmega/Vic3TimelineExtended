@@ -503,7 +503,6 @@ ww_join_war_button = {
 	visible = {
 		has_variable = ww_active_phase
 		is_at_war = no
-		country_rank >= rank_value:major_power
 	}
 
 	ai_chance = {
@@ -567,6 +566,10 @@ ww_join_war_button = {
 				has_variable = ww_aggressor_side
 				is_at_war = yes
 			}
+		}
+		custom_tooltip = {
+			text = WW_JOIN_WAR_NEEDS_MAJOR_POWER
+			country_rank >= rank_value:major_power
 		}
 	}
 

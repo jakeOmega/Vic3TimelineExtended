@@ -253,15 +253,6 @@ ce_release_colonial_territory = {
 	name = "CE_RELEASE_COLONIAL_TERRITORY"
 	desc = "CE_RELEASE_COLONIAL_TERRITORY_DESC"
 
-	# Visibility uses the looser is_decolonization_eligible_state trigger so the
-	# button offers options consistently with Planned Decolonization. The strict
-	# is_overseas_colonial_state still gates JE entry and policy mechanics.
-	visible = {
-		any_scope_state = {
-			is_decolonization_eligible_state = yes
-		}
-	}
-
 	ai_chance = {
 		value = 0
 		if = {
@@ -354,12 +345,6 @@ ce_planned_decolonization = {
 	name = "CE_PLANNED_DECOLONIZATION"
 	desc = "CE_PLANNED_DECOLONIZATION_DESC"
 
-	visible = {
-		any_scope_state = {
-			is_decolonization_eligible_state = yes
-		}
-	}
-
 	ai_chance = {
 		value = 0
 		# AI does this under moderate pressure now (lowered thresholds)
@@ -431,17 +416,6 @@ ce_planned_decolonization = {
 ce_round_table_conference = {
 	name = "CE_ROUND_TABLE_CONFERENCE"
 	desc = "CE_ROUND_TABLE_CONFERENCE_DESC"
-
-	visible = {
-		any_scope_state = {
-			is_decolonization_eligible_state = yes
-			NOT = {
-				any_scope_pop = {
-					pop_acceptance < acceptance_status_2
-				}
-			}
-		}
-	}
 
 	ai_chance = {
 		value = 0
