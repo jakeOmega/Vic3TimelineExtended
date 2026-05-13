@@ -80,6 +80,15 @@ For these, apply **targeted via `every_scope_character = { limit = { ... } add_m
 
 When in doubt, ask: "if this modifier moved the same amount on every character in the country, would that produce a different gameplay state?" If no — it's relative; needs targeting. If yes — it's absolute; cascade is fine.
 
+## Modifier Design: Paired Infamy Decay/Generation Semantics
+
+When `country_infamy_decay_mult` (positive) and `country_infamy_generation_mult` appear in the same modifier block, the **sign of the generation field encodes the design intent** — don't normalize one to the other.
+
+- **Positive decay + positive generation** = "contrition with hypocrisy backfire." Compliant behavior nets a benefit; aggression while under the modifier nets a penalty. Used for moral-high-ground / reformed-behavior framings (e.g. `un_court_compliance_modifier`, `un_decolonization_champion_modifier`). The generation magnitude should be **somewhat smaller** than the decay magnitude so net-positive when behaving, net-negative when not. Issue #18 introduced this pattern across the UN system.
+- **Positive decay + negative generation** = "structural double-bonus / plausible deniability / soft power." Strictly net-positive regardless of behavior. Used when the framing is "we have institutional cover for our actions" (e.g. `law_private_military_contractors`, `principle_global_security_4/5`). These are *intentional* — not a bug to be fixed by flipping the sign.
+
+When auditing or rebalancing infamy-related modifiers, read the in-fiction framing first: would committing aggression while under this modifier read as ironic / hypocritical? If yes → the first pattern. If no (it's bureaucratic capacity, institutional cover, soft power) → the second. Mark intentionally-asymmetric blocks with `# REVIEWED YYYY-MM-DD (issue #18): structural — <rationale>; no generation_mult pairing` so future thematic audits don't churn them.
+
 ## Expense Scaling with GDP
 
 - **Never use flat `country_expenses_add` values** (e.g., `country_expenses_add = 50000`). Flat values don't scale with country or economy size.

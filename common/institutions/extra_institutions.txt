@@ -32,7 +32,7 @@ institution_ministry_of_foreign_affairs = {
 		country_influence_mult = 0.1
 		country_leverage_generation_mult = 0.05
 		military_formation_interest_gain_mult = 0.1
-		country_infamy_decay_mult = 0.05
+		country_infamy_decay_mult = 0.05  # REVIEWED 2026-05-13 (issue #18): structural — bureaucratic capacity, not contrition; no generation_mult pairing
 	}
 }
 

@@ -87,7 +87,7 @@ company_basic_entertainment = {
 
 	prosperity_modifier = {
 		country_loyalists_from_legitimacy_mult = 0.2
-		country_infamy_decay_mult = 0.2
+		country_infamy_decay_mult = 0.2  # REVIEWED 2026-05-13 (issue #18): structural — narrative-control soft power, not contrition; no generation_mult pairing
 		building_group_bg_urban_facilities_employee_mult = -0.1
 		state_building_generic_media_hq_max_level_add = 1
 	}

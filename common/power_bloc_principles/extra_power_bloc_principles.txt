@@ -452,7 +452,7 @@ principle_defensive_cooperation_5 = {
 		building_mobilization_cost_mult = -0.2
 		country_military_tech_spread_mult = 0.4
 		state_building_conscription_center_max_level_add = 50
-		country_infamy_decay_mult = 0.25
+		country_infamy_decay_mult = 0.25  # REVIEWED 2026-05-13 (issue #18): structural — defensive-pact alignment, not contrition; no generation_mult pairing
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.20
 	}
 
@@ -2262,7 +2262,7 @@ principle_diplomacy_5 = {
 		country_improve_relations_speed_mult = 0.1
 		country_damage_relations_speed_mult = -0.1
 		country_institution_cost_institution_ministry_of_foreign_affairs_mult = -0.5
-		country_infamy_decay_mult = 0.25
+		country_infamy_decay_mult = 0.25  # REVIEWED 2026-05-13 (issue #18): structural — foreign-ministry efficiency, not contrition; no generation_mult pairing
 	}
 
 	institution = institution_ministry_of_foreign_affairs
@@ -2976,6 +2976,7 @@ principle_global_security_4 = {
 
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 40
+		# REVIEWED 2026-05-13 (issue #18): structural double-bonus — "global security power" framing, not contrition; both fields intentional
 		country_infamy_generation_mult = -0.1
 		country_infamy_decay_mult = 0.1
 		country_prestige_from_army_power_projection_mult = 0.2
@@ -3017,6 +3018,7 @@ principle_global_security_5 = {
 
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 40
+		# REVIEWED 2026-05-13 (issue #18): structural double-bonus — "global security power" framing, not contrition; both fields intentional
 		country_infamy_generation_mult = -0.1
 		country_infamy_decay_mult = 0.1
 		country_prestige_from_army_power_projection_mult = 0.2

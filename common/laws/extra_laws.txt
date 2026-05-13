@@ -3836,6 +3836,7 @@ law_private_military_contractors = {
 
 	modifier = {
 		# Plausible deniability: foreign action is laundered through contractors
+		# REVIEWED 2026-05-13 (issue #18): structural double-bonus — deniability framing, not contrition; both fields intentional
 		country_infamy_generation_mult = -0.2
 		country_infamy_decay_mult = 0.2
 		country_radicals_from_conquest_mult = -0.3

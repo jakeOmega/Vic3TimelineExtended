@@ -3075,6 +3075,7 @@ un_ga_resolution_modifier = {
 un_condemnation_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
+	country_infamy_generation_mult = 0.10
 	country_prestige_mult = 0.05
 }
 
@@ -3210,6 +3211,7 @@ un_development_contributor_modifier = {
 un_arms_control_participant_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_infamy_decay_mult = 0.10
+	country_infamy_generation_mult = 0.05
 	unit_kill_rate_add = -0.05
 	unit_devastation_mult = -0.15
 	country_military_goods_cost_mult = -0.05
@@ -3256,6 +3258,7 @@ un_humanitarian_token_modifier = {
 un_court_compliance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
+	country_infamy_generation_mult = 0.10
 	unit_devastation_mult = -0.25
 }
 
@@ -3345,6 +3348,7 @@ un_veto_abolition_modifier = {
 un_decolonization_champion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
+	country_infamy_generation_mult = 0.10
 	country_prestige_mult = 0.05
 }
 
@@ -3373,6 +3377,7 @@ un_coexistence_modifier = {
 un_nonproliferation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
+	country_infamy_generation_mult = 0.10
 	country_prestige_mult = 0.05
 	unit_kill_rate_add = -0.03
 }
@@ -5703,7 +5708,7 @@ cultural_hegemony_effect = {
 	country_loyalists_from_legitimacy_mult = 0.01
 	country_leverage_generation_mult = 0.01
 	country_diplomatic_reputation_add = 0.1  # REVIEWED 2026-05-06: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
-	country_infamy_decay_mult = 0.01
+	country_infamy_decay_mult = 0.01  # REVIEWED 2026-05-13 (issue #18): structural — soft-power package, not contrition; no generation_mult pairing
 	state_assimilation_mult = 0.05
 }
 
