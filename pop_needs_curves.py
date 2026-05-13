@@ -182,13 +182,16 @@ def _change_one(wealth_level, input_match, need_func):
 
 
 def _extract_all_needs(matches):
-    all_needs = set()
+    # Dict preserves first-seen order; iterating `matches` in caller's order
+    # (sorted by wealth level) plus regex match order makes this fully
+    # deterministic across Python runs. A plain set() picks up PYTHONHASHSEED
+    # randomization and reshuffles the insertion order of new needs into
+    # wealth_100..200 blocks every run.
+    seen = {}
     for match in matches:
-        goods = re.findall(r"popneed_\w+ = \d+", match)
-        for good in goods:
-            need = good.split(" = ")[0]
-            all_needs.add(need)
-    return list(all_needs)
+        for good in re.findall(r"popneed_\w+ = \d+", match):
+            seen[good.split(" = ")[0]] = None
+    return list(seen)
 
 
 def _fit_power_law(x, y):
@@ -271,7 +274,11 @@ def generate_buy_packages(dry_run: bool = False, replace_political: bool = False
                             depth -= 1
                         pos += 1
                     goods_end = pos
-                    insert_at = goods_end - 1
+                    # Insert at the start of the line containing the closing
+                    # `}`, not at the `}` itself — otherwise the inserted line
+                    # absorbs the closing-brace indent (`\t}` becomes `\t\t\t{need} = X\n}`)
+                    # and the goods `}` ends up at column 0.
+                    insert_at = block.rfind("\n", 0, goods_end - 1) + 1
                     block = block[:insert_at] + f"\t\t{need_name} = {int(need_val)}\n" + block[insert_at:]
                 else:
                     # fallback: append a goods block
@@ -322,7 +329,7 @@ def generate_buy_packages(dry_run: bool = False, replace_political: bool = False
                                     depth -= 1
                                 pos += 1
                             goods_end = pos
-                            insert_at = goods_end - 1
+                            insert_at = block.rfind("\n", 0, goods_end - 1) + 1
                             block = block[:insert_at] + f"\t\t{need} = {extrapolated}\n" + block[insert_at:]
                         else:
                             block = block.rstrip()[:-1] + f"\n\tgoods = {{\n\t\t{need} = {extrapolated}\n\t}}\n}}"
