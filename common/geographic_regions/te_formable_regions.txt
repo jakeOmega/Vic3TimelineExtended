@@ -24,9 +24,12 @@
 #   UNA -> geographic_region_united_north_america (mod, generated)
 #   UNE -> geographic_region_united_earth (mod, generated)
 #   INM -> geographic_region_intermarium (hand-maintained, below)
+#   EAF -> geographic_region_east_african_federation (hand-maintained, below)
+#         — also referenced by `is_major_east_african_power` in
+#         common/scripted_triggers/formable_gating_triggers.txt.
 #   BHT -> vanilla geographic_region_india (state_regions form, works as-is)
 #   BHA -> use_culture_states (no region needed)
-#   IDN/NUS/EAF -> explicit state lists in country_formation (no region needed)
+#   IDN/NUS -> explicit state lists in country_formation (no region needed)
 
 geographic_region_intermarium = {
 	short_key = "intermarium"
@@ -77,5 +80,30 @@ geographic_region_intermarium = {
 		STATE_SLOVENIA
 		STATE_CROATIA
 		STATE_SLAVONIA
+	}
+}
+
+geographic_region_east_african_federation = {
+	short_key = "east_african_federation"
+
+	state_regions = {
+		# Mirrors EAF's explicit state list in country_formation/te_formable_countries.txt.
+		# Existence here lets `is_in_geographic_region = geographic_region_east_african_federation`
+		# work as a constituent check for the major-formation gating triggers.
+		STATE_KENYA
+		STATE_UGANDA
+		STATE_TANGANYIKA
+		STATE_ZANZIBAR
+		STATE_RIFT_VALLEY
+		STATE_KAZEMBE
+		STATE_LINDI
+		STATE_EQUATORIA
+		STATE_AMHARA
+		STATE_OROMIA
+		STATE_GONDER
+		STATE_ERITREA
+		STATE_SOMALILAND
+		STATE_NORTH_MADAGASCAR
+		STATE_SOUTH_MADAGASCAR
 	}
 }

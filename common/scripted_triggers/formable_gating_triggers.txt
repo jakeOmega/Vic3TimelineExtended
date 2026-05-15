@@ -1,0 +1,279 @@
+# Sophisticated `possible`/`ai_will_do` gating for the major-unification
+# formables in common/country_formation/te_formable_countries.txt.
+#
+# The vanilla rank gate blocks minor formations once a country is at the
+# formable's tier or above. Pan-region political unions (AFU/EUN/UNA/UNE/INM/
+# EAF) are thematically formed by countries that are already powerful, so
+# they are `is_major_formation = yes` to bypass that gate. The triggers
+# below replace the rank gate with world-state conditions so the unification
+# only fires when it would feel earned, not whenever the rank check passes.
+#
+# Three load-bearing conditions per regional union (EU/AFU/UNA/INM/EAF):
+#   1. External rank pressure — at least one external great power that is
+#      globally top-3, i.e. a real outside force the region would unify
+#      *against*. (A rank-8 external GP is not real pressure.)
+#   2. Bloc / alliance saturation — every major regional constituent is
+#      already in ROOT's power bloc, alliance, defensive pact, or customs
+#      union. Rivals don't unify; aligned partners do.
+#   3. Absence of intra-region rivalry / active war between ROOT and any
+#      major regional constituent.
+#
+# `is_major_<region>_power` is dynamic (capital state in the region +
+# country_rank >= major_power), so the trigger composition survives
+# formed countries and shifting borders.
+#
+# UNE (United Earth) gates differently — there is no external bloc to be
+# outweighed by, and the WW3 system is optional content the user does not
+# want to hard-require. Instead UNE asks for a global supermajority: ROOT
+# leads a power bloc that contains essentially all great powers (≤1 GP
+# remains outside), plus alignment / no-rivalry checks against all other
+# great powers.
+
+# === Constituency: "major <region> power" =====================================
+
+is_major_european_power = {
+	country_rank >= rank_value:major_power
+	capital = { is_in_geographic_region = geographic_region_united_europe }
+}
+
+is_major_african_power = {
+	country_rank >= rank_value:major_power
+	capital = { is_in_geographic_region = geographic_region_united_africa }
+}
+
+is_major_north_american_power = {
+	country_rank >= rank_value:major_power
+	capital = { is_in_geographic_region = geographic_region_united_north_america }
+}
+
+is_major_intermarium_power = {
+	country_rank >= rank_value:major_power
+	capital = { is_in_geographic_region = geographic_region_intermarium }
+}
+
+is_major_east_african_power = {
+	country_rank >= rank_value:major_power
+	capital = { is_in_geographic_region = geographic_region_east_african_federation }
+}
+
+# === Shared helpers ============================================================
+
+# Aligned with ROOT via power-bloc co-membership OR a treaty pact OR customs
+# union. Subject relationships and ROOT itself short-circuit to aligned.
+is_aligned_with_root = {
+	OR = {
+		this = ROOT
+		is_subject_of = ROOT
+		is_in_same_power_bloc = ROOT
+		has_treaty_alliance_with = ROOT
+		has_treaty_defensive_pact_with = ROOT
+		is_in_customs_union_with = ROOT
+	}
+}
+
+# In a rivalry or active war with ROOT (intra-region friction blocker).
+is_at_friction_with_root = {
+	OR = {
+		has_war_with = ROOT
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+	}
+}
+
+# === EU (European Union) ======================================================
+
+eu_formation_external_pressure = {
+	# At least one non-European great power sits in the global top-3.
+	any_country = {
+		country_rank >= rank_value:great_power
+		global_country_ranking <= 3
+		NOT = { is_major_european_power = yes }
+		count >= 1
+	}
+}
+
+eu_formation_bloc_aligned = {
+	NOT = {
+		any_country = {
+			is_major_european_power = yes
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+eu_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			is_major_european_power = yes
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}
+
+# === AFU (African Union) ======================================================
+
+afu_formation_external_pressure = {
+	any_country = {
+		country_rank >= rank_value:great_power
+		global_country_ranking <= 3
+		NOT = { is_major_african_power = yes }
+		count >= 1
+	}
+}
+
+afu_formation_bloc_aligned = {
+	NOT = {
+		any_country = {
+			is_major_african_power = yes
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+afu_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			is_major_african_power = yes
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}
+
+# === UNA (United North America) ==============================================
+
+una_formation_external_pressure = {
+	any_country = {
+		country_rank >= rank_value:great_power
+		global_country_ranking <= 3
+		NOT = { is_major_north_american_power = yes }
+		count >= 1
+	}
+}
+
+una_formation_bloc_aligned = {
+	NOT = {
+		any_country = {
+			is_major_north_american_power = yes
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+una_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			is_major_north_american_power = yes
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}
+
+# === INM (Intermarium) ========================================================
+
+inm_formation_external_pressure = {
+	any_country = {
+		country_rank >= rank_value:great_power
+		global_country_ranking <= 3
+		NOT = { is_major_intermarium_power = yes }
+		count >= 1
+	}
+}
+
+inm_formation_bloc_aligned = {
+	NOT = {
+		any_country = {
+			is_major_intermarium_power = yes
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+inm_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			is_major_intermarium_power = yes
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}
+
+# === EAF (East African Federation) ============================================
+
+eaf_formation_external_pressure = {
+	any_country = {
+		country_rank >= rank_value:great_power
+		global_country_ranking <= 3
+		NOT = { is_major_east_african_power = yes }
+		count >= 1
+	}
+}
+
+eaf_formation_bloc_aligned = {
+	NOT = {
+		any_country = {
+			is_major_east_african_power = yes
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+eaf_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			is_major_east_african_power = yes
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}
+
+# === UNE (United Earth) =======================================================
+# WW3 not used as a gate (optional content per user). The supermajority gate
+# is what makes UNE-formation feel earned: ROOT leads a bloc that contains
+# essentially every great power on earth.
+
+une_formation_supermajority = {
+	is_power_bloc_leader = yes
+	# At most one great power exists outside ROOT's power bloc.
+	NOT = {
+		any_country = {
+			country_rank >= rank_value:great_power
+			NOT = { this = ROOT }
+			NOT = { is_in_same_power_bloc = ROOT }
+			count >= 2
+		}
+	}
+}
+
+une_formation_bloc_aligned = {
+	# Any great power not already in ROOT's bloc must be aligned via treaty
+	# or customs union (i.e. friendly outliers, not rivals).
+	NOT = {
+		any_country = {
+			country_rank >= rank_value:great_power
+			NOT = { this = ROOT }
+			NOT = { is_in_same_power_bloc = ROOT }
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+une_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			country_rank >= rank_value:great_power
+			NOT = { this = ROOT }
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}

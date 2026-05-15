@@ -1,13 +1,28 @@
-﻿# Formation rules for the formable countries added by this mod.
+# Formation rules for the formable countries added by this mod.
 #
-# AFU/BHA/NUS/EUN/UNA/UNE/ZHO are major formations (candidates compete via
-# leadership/unification plays); INM/EAF are minor formations (whoever
-# directly controls enough of the required states/region).
+# All major formations: candidates compete via leadership/unification
+# diplomatic plays. AFU/BHA/NUS/EUN/UNA/UNE/ZHO/INM/EAF.
+#
+# The six pan-region political unions (AFU/EUN/UNA/UNE/INM/EAF) are
+# `is_major_formation = yes` so they bypass vanilla's downward-only rank
+# gate — thematically they exist to be formed by countries already at or
+# above their tier (a hegemony forming the EU, etc.), which a minor
+# formation makes impossible.
+#
+# To compensate for losing the rank gate, each carries sophisticated
+# world-state gating in `possible`: external rank pressure (a top-3 GP
+# exists outside the region), bloc / treaty alignment with every major
+# regional constituent, and no rivalry / active war with any of them.
+# UNE is gated on a power-bloc supermajority instead (no external bloc
+# applies for a global unification). All gating triggers live in
+# common/scripted_triggers/formable_gating_triggers.txt.
+#
+# Mirror the load-bearing conditions in `ai_will_do` so the AI doesn't
+# pursue candidacy under conditions that would just block the play.
 #
 # All require the era_6 `decolonization` mod tech (era_6.txt:785).
 # UNE additionally gates on era-11 `quantum_communications` and era-12
-# `space_colonization` — the world-state idiom only becomes plausible once
-# instant global comms exist and humanity is moving off-planet.
+# `space_colonization`.
 #
 # India and Indonesia each have TWO formations:
 #   - Vanilla BHT / IDN (minor, state-list, pan-nationalism gate) — vanilla
@@ -21,20 +36,196 @@
 # formation. ZHO is a NEW tag (Greater China); vanilla CHI is left intact
 # for its early-game minor-formation role (Qing remnants / Taiping etc.).
 
-# === Major formations ===
+# === Pan-region political unions ===
 
 AFU = {
 	geographic_region = geographic_region_united_africa
 
+	is_major_formation = yes
+
+	unification_play = dp_unify_african_union
+	leadership_play = dp_leadership_african_union
+
 	required_states_fraction = 0.5
 
-	ai_will_do = { has_technology_researched = decolonization }
+	ai_will_do = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+		afu_formation_external_pressure = yes
+		afu_formation_bloc_aligned = yes
+		afu_formation_no_internal_rivalry = yes
+	}
 
 	possible = {
 		has_technology_researched = decolonization
 		has_technology_researched = pan-nationalism
+		afu_formation_external_pressure = yes
+		afu_formation_bloc_aligned = yes
+		afu_formation_no_internal_rivalry = yes
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
 	}
 }
+
+EUN = {
+	geographic_region = geographic_region_united_europe
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_european_union
+	leadership_play = dp_leadership_european_union
+
+	required_states_fraction = 0.5
+
+	ai_will_do = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+		eu_formation_external_pressure = yes
+		eu_formation_bloc_aligned = yes
+		eu_formation_no_internal_rivalry = yes
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+		eu_formation_external_pressure = yes
+		eu_formation_bloc_aligned = yes
+		eu_formation_no_internal_rivalry = yes
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+UNA = {
+	geographic_region = geographic_region_united_north_america
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_united_north_america
+	leadership_play = dp_leadership_united_north_america
+
+	required_states_fraction = 0.65
+
+	ai_will_do = {
+		has_technology_researched = decolonization
+		una_formation_external_pressure = yes
+		una_formation_bloc_aligned = yes
+		una_formation_no_internal_rivalry = yes
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		una_formation_external_pressure = yes
+		una_formation_bloc_aligned = yes
+		una_formation_no_internal_rivalry = yes
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+UNE = {
+	geographic_region = geographic_region_united_earth
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_united_earth
+	leadership_play = dp_leadership_united_earth
+
+	required_states_fraction = 0.75
+
+	ai_will_do = {
+		has_technology_researched = quantum_communications
+		has_technology_researched = space_colonization
+		une_formation_supermajority = yes
+		une_formation_bloc_aligned = yes
+		une_formation_no_internal_rivalry = yes
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = quantum_communications
+		has_technology_researched = space_colonization
+		une_formation_supermajority = yes
+		une_formation_bloc_aligned = yes
+		une_formation_no_internal_rivalry = yes
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+INM = {
+	geographic_region = geographic_region_intermarium
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_intermarium
+	leadership_play = dp_leadership_intermarium
+
+	required_states_fraction = 0.65
+
+	ai_will_do = {
+		has_technology_researched = decolonization
+		inm_formation_external_pressure = yes
+		inm_formation_bloc_aligned = yes
+		inm_formation_no_internal_rivalry = yes
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		inm_formation_external_pressure = yes
+		inm_formation_bloc_aligned = yes
+		inm_formation_no_internal_rivalry = yes
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+EAF = {
+	geographic_region = geographic_region_east_african_federation
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_east_african_federation
+	leadership_play = dp_leadership_east_african_federation
+
+	required_states_fraction = 0.65
+
+	ai_will_do = {
+		has_technology_researched = decolonization
+		eaf_formation_external_pressure = yes
+		eaf_formation_bloc_aligned = yes
+		eaf_formation_no_internal_rivalry = yes
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		eaf_formation_external_pressure = yes
+		eaf_formation_bloc_aligned = yes
+		eaf_formation_no_internal_rivalry = yes
+	}
+
+	max_num_formation_candidates = 3
+	can_be_formation_candidate = {
+		country_rank >= rank_value:major_power
+	}
+}
+
+# === Mod replacements for vanilla minor formations ===
 
 BHA = {
 	use_culture_states = yes
@@ -95,31 +286,6 @@ NUS = {
 	}
 }
 
-EUN = {
-	geographic_region = geographic_region_united_europe
-
-	required_states_fraction = 0.5
-
-	ai_will_do = { has_technology_researched = decolonization }
-
-	possible = {
-		has_technology_researched = decolonization
-		has_technology_researched = pan-nationalism
-	}
-}
-
-UNA = {
-	geographic_region = geographic_region_united_north_america
-
-	required_states_fraction = 0.65
-
-	ai_will_do = { has_technology_researched = decolonization }
-
-	possible = {
-		has_technology_researched = decolonization
-	}
-}
-
 ZHO = {
 	use_culture_states = yes
 
@@ -139,65 +305,6 @@ ZHO = {
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
-	}
-}
-
-UNE = {
-	geographic_region = geographic_region_united_earth
-
-	required_states_fraction = 0.75
-
-	ai_will_do = {
-		has_technology_researched = quantum_communications
-		has_technology_researched = space_colonization
-	}
-
-	possible = {
-		has_technology_researched = decolonization
-		has_technology_researched = quantum_communications
-		has_technology_researched = space_colonization
-	}
-}
-
-# === Minor formations ===
-
-INM = {
-	geographic_region = geographic_region_intermarium
-
-	required_states_fraction = 0.65
-
-	ai_will_do = { always = yes }
-
-	possible = {
-		has_technology_researched = decolonization
-	}
-}
-
-EAF = {
-	states = {
-		STATE_KENYA
-		STATE_UGANDA
-		STATE_TANGANYIKA
-		STATE_ZANZIBAR
-		STATE_RIFT_VALLEY
-		STATE_KAZEMBE
-		STATE_LINDI
-		STATE_EQUATORIA
-		STATE_AMHARA
-		STATE_OROMIA
-		STATE_GONDER
-		STATE_ERITREA
-		STATE_SOMALILAND
-		STATE_NORTH_MADAGASCAR
-		STATE_SOUTH_MADAGASCAR
-	}
-
-	required_states_fraction = 0.65
-
-	ai_will_do = { always = yes }
-
-	possible = {
-		has_technology_researched = decolonization
 	}
 }
 
