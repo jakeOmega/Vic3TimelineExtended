@@ -118,7 +118,7 @@
  GW_EMISSION_STANDARDS:0 "Mandate Emission Standards"
  GW_PUBLIC_TRANSIT:0 "Invest in Public Transit"
  GW_REFORESTATION:0 "Subsidise Reforestation"
- GW_REFORESTATION_DESC:0 "Fund large-scale tree planting and land restoration. Costs #v 10 authority#! and improves agricultural output (#v +3%#! [concept_throughput]) while reducing drought severity and duration. Available to all nations once global warming reaches mild levels."
+ GW_REFORESTATION_DESC:0 "Fund large-scale tree planting and land restoration.\n[GetStaticModifier('reforestation_subsidies_modifier').GetDesc]\nAvailable to all nations once global warming reaches mild levels."
  GW_REMOVE_REFORESTATION:0 "End Reforestation Subsidies"
  GW_RENEWABLE_INVESTMENT:0 "Invest in Renewables"
  HE_DISABLE_CONSERVATIVE:0 "Stop: Conservative Tutors"
