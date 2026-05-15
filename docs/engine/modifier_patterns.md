@@ -115,7 +115,7 @@ _Per-culture migration pull modifier; instantiated for every culture used in mod
 
 - Placeholder: `culture` (vocab: `culture`)
 - Members in engine docs: **0**
-- Vocab size: 316; missing entries: 316
+- Vocab size: 317; missing entries: 317
 
 ### `goods_input_{good}_add`
 
@@ -850,7 +850,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_fervor_target_{culture}_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **315**
+- Members: **316**
   - Examples: `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`, `afro_caribbean`
 
 ### `country_institution_cost_{institution}_mult`
@@ -898,7 +898,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_{culture}_cultural_acceptance_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **315**
+- Members: **316**
   - Examples: `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`, `afro_caribbean`
 
 ### `country_{good}_export_tariffs_rate_add`
@@ -1018,7 +1018,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_{culture}_standard_of_living_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **315**
+- Members: **316**
   - Examples: `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`, `afro_caribbean`
 
 ### `state_{poptype}_dependent_wage_mult`
