@@ -2068,7 +2068,7 @@ principle_education_4 = {
 		# Modifiers from previous level(s)
 		# School institution gives more tech spread
 		country_tech_spread_mult = 0.10
-		state_literacy_growth_add = 0.000075
+		state_literacy_growth_add = 0.00008
 
 		state_pop_qualifications_mult = 0.05
 		state_migration_pull_mult = 0.05

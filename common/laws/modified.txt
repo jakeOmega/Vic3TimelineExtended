@@ -455,7 +455,7 @@ REPLACE:law_cultural_exclusion = {
 		state_assimilation_mult = 0.25
 
 		# Colonial empire (je_colonial_empire): hard-line citizenship reinforces assimilation push
-		country_colonial_assim_effectiveness_add = 0.3
+		country_colonial_assim_effectiveness_add = 0.5
 
 		# Civil-rights movement: moderate cultural exclusion feeds activism
 		state_pop_support_movement_civil_rights_mult = 0.1
@@ -575,7 +575,7 @@ REPLACE:law_multicultural = {
 		state_pop_support_movement_civil_rights_mult = -0.2
 
 		# Cultural hegemony: pluralism is a soft-power asset.
-		country_cultural_pull_mult = 0.08
+		country_cultural_pull_mult = 0.05
 	}
 
 	can_impose = {

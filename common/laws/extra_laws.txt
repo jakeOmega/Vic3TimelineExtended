@@ -2009,6 +2009,7 @@ law_unitary_state = {
 		country_authority_add = 200
 		state_incorporation_speed_mult = 0.2
 		country_legislative_override_capacity_add = 1
+		country_colonial_garrison_effectiveness_add = 0.1
 	}
 }
 
@@ -2024,6 +2025,7 @@ law_federal_system = {
 		country_support_separatism_resistance_mult = 0.1
 		state_decree_cost_mult = -0.25
 		country_legislative_override_capacity_add = -1
+		country_colonial_stability_drift_add = 0.1
 	}
 }
 
@@ -2042,6 +2044,8 @@ law_devolution = {
 		state_assimilation_mult = -0.25
 		state_conversion_mult = -0.25
 		country_legislative_override_capacity_add = -2
+		country_colonial_stability_drift_add = 0.25
+		country_colonial_garrison_effectiveness_add = -0.25
 	}
 }
 

@@ -1,15 +1,15 @@
 # Auto-generated from effects.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 interest_group|abandon_revolution|Removes interest group from revolution
-state|activate_building|Activate a building in a state   activate_building
+state|activate_building|Activate a building in a state
 country|activate_law|Activates a law for a country
 country,state|activate_production_method|Activates the named production method for buildings of a certain type in country/state
-state|add_acceptance|Adds an acceptance delta for a culture in a state   add_acceptance
+state|add_acceptance|Adds an acceptance delta for a culture in a state
 law|add_amendment|Adds an amendment to the scoped law.
 state_region|add_arable_land|Add/remove arable land from a state region
-country|add_banned_goods|Adds a total ban of a good to a country   add_banned_goods
+country|add_banned_goods|Adds a total ban of a good to a country
 character|add_career_length|Adds to a character's current career length in a role.
-country|add_change_relations_progress|Add progress towards changing relations between two countries   add_change_relations_progress
+country|add_change_relations_progress|Add progress towards changing relations between two countries
 political_movement|add_character_ideology|Adds a character ideology to the scoped political movement
 character|add_character_role|Adds a new role to a character, works with either archetype or database role
 civil_war|add_civil_war_progress|Adds the specified number of percentage points to a civil war progress (range is [0, 1], 0.1 means 10 percentage points)
@@ -19,12 +19,12 @@ power_bloc|add_cohesion_percent|Adds a percentage-based amount of Cohesion to th
 character|add_commander_rank|Promotes/demotes a character a given amount of military ranks
 country|add_company|Adds company type to a country's companies
 company|add_company_monopoly|Adds a monopoly to a company scope:
-none|add_contextless_journal_entry|Activates a contextless journal entry of the given type   add_contextless_journal_entry
+none|add_contextless_journal_entry|Activates a contextless journal entry of the given type
 country|add_country_monopoly|Adds a monopoly to a country scope:
 state|add_cultural_community|Adds a cultural community for the target culture in the scoped state.
 culture|add_cultural_community_in_state|Adds a cultural community for the scoped culture in the target state.
-culture|add_cultural_obsession|Adds a new obsession to the culture in scope
-culture|add_cultural_taboo|Adds a new taboo to the culture in scope
+culture|add_cultural_obsession|Adds a new obsession to the culture in scope Where X is a goods
+culture|add_cultural_taboo|Adds a new taboo to the culture in scope Where X is a goods
 country|add_culture_acceptance_modifier|Apply a cultural acceptance modifier in the scoped country for the given culture.
 state|add_culture_standard_of_living_modifier|Apply a standard of living modifier in the scoped state for the given culture.
 state,state_region|add_devastation|Add/remove devastation from a state region or a state
@@ -41,15 +41,15 @@ culture|add_fervor|Adds fervor to a scoped culture
 country|add_fervor_target_modifier|Apply a fervor target modifier in the scoped country for the given culture.
 state_region|add_homeland|Adds scoped state region as Homeland for target culture
 interest_group|add_ideology|Adds an ideology to scoped interest group
-party|add_ig_to_party|Adds target interest group to scope party   py:py_key
+party|add_ig_to_party|Adds target interest group to scope party py:py_key
 state_goods|add_imports|Adds a multiplier of imports to the state for the scoped state goods
-diplomatic_play|add_initiator_backers|Add a tag/scope country to the initiator side of a diplomatic play   add_initiator_backers
+diplomatic_play|add_initiator_backers|Add a tag/scope country to the initiator side of a diplomatic play
 country|add_investment_pool|Directly adds money to the investment pool
 journal_entry|add_involved_country|Makes target country an involved country in scope journal entry
-country|add_involvement|Adds involvement for the scoped country in the given strategic region   add_involvement
-none|add_journal_entry|Adds a journal entry to a scoped country's journal, with optional saved scope target   add_journal_entry
+country|add_involvement|Adds involvement for the scoped country in the given strategic region
+none|add_journal_entry|Adds a journal entry to a scoped country's journal, with optional saved scope target
 country|add_law_progress|Adds x% progress to the current checkpoint of the law being passed (range is [0, 1], 0.1 means 10 percentage points)
-power_bloc|add_leverage|Adds the specified amount of leverage for the Power Bloc in scope on the country specified   If the value is positive, also reduces the amount of L...
+power_bloc|add_leverage|Adds the specified amount of leverage for the Power Bloc in scope on the country specified If the value is positive, also reduces the amount of Lev...
 country|add_liberty_desire|Adds Liberty Desire to a Subject Country.
 political_lobby|add_lobby_member|Adds an interest group as a member of scope political lobby
 country|add_loyalists|Adds loyalists to pops in the scoped country.
@@ -60,28 +60,28 @@ new_combat_unit|add_morale|Adds the specified amount of Morale to the Combat Uni
 military_formation|add_organization|Adds the specified amount of Organization to the Military Formation in scope
 company|add_owned_country|Sets the scoped company as a founding company for the target country
 state_region|add_pollution|Increase/decrease pollution level in a scoped state region
-pop|add_pop_wealth|Adds the wealth of the pop   add_pop_wealth
-country|add_primary_culture|Adds a culture to the primary cultures of a country
-power_bloc|add_principle|Adds principle to powerbloc
-journal_entry|add_progress|Adds progress to a journal entry progressbar   add_progress
+pop|add_pop_wealth|Adds the wealth of the pop Where the distribution adding to wealth of the pop
+country|add_primary_culture|Adds a culture to the primary cultures of a country Where X is a culture scope
+power_bloc|add_principle|Adds principle to powerbloc power_bloc
+journal_entry|add_progress|Adds progress to a journal entry progressbar
 country|add_radicals|Adds radicals to pops in the scoped country.
 state|add_radicals_in_state|Adds radicals to pops in the scoped state.
 character|add_random_trait|Adds a random qualifying Trait of the specified category
 state|add_religion_standard_of_living_modifier|Apply a standard of living modifier in the scoped state for the given religion.
 state,state_region|add_resource_potential|Add a building type as a resource potential to a state region
 interest_group|add_ruling_interest_group|Adds interest group to government
-state_region|add_state_trait|add state trait in a scoped state region   add_state_trait
+state_region|add_state_trait|add state trait in a scoped state region
 country|add_supply_ships|Adds number of supply ships to the scoped country
-diplomatic_play|add_target_backers|Add a tag/scope country to the target side of a diplomatic play   add_target_backers
-country|add_taxed_goods|Adds consumption taxes on a good to a country   add_taxed_goods
-country|add_technology_progress|Add technology progress   add_technology_progress
+diplomatic_play|add_target_backers|Add a tag/scope country to the target side of a diplomatic play
+country|add_taxed_goods|Adds consumption taxes on a good to a country
+country|add_technology_progress|Add technology progress Where X is a fixed point and Y is an technology
 country|add_technology_researched|Research the specified technology in a country scope
-none|add_to_global_variable_list|Adds the event target to a variable list for the given duration   add_to_variable_list
-none|add_to_list|Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the (unbroken) event chain
-none|add_to_local_variable_list|Adds the event target to a variable list for the given duration   add_to_variable_list
-none|add_to_temporary_list|Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the same effect
-none|add_to_variable_list|Adds the event target to a variable list for the given duration   add_to_variable_list
-culture|add_tradition_trait|Adds a new tradition trait to the culture in scope
+none|add_to_global_variable_list|Adds the event target to a variable list for the given duration add_to_variable_list
+none|add_to_list|Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the (unbroken) event cha...
+none|add_to_local_variable_list|Adds the event target to a variable list for the given duration add_to_variable_list
+none|add_to_temporary_list|Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the same effect add_to_t...
+none|add_to_variable_list|Adds the event target to a variable list for the given duration Where X is the name of the variable Where Y is an event target An optional days whe...
+culture|add_tradition_trait|Adds a new tradition trait to the culture in scope Where X is a tradition trait
 character|add_trait|Add a trait to a Character
 country|add_treasury|Add/remove money from a country
 war|add_war_exhaustion|Adds war exhaustion to the target country in the scoped war.
@@ -90,31 +90,31 @@ war|add_war_war_support|Adds war support to the target country in the scoped war
 country|annex|Annexes a country
 country|annex_as_civil_war|Annexes a country with all the inheritance effects of a victorious side in a civil war
 country|annex_with_incorporation|Annexes a country, inheriting incorporation of their states
-none|assert_if|Conditionally cause an assert during run time   assert_if
+none|assert_if|Conditionally cause an assert during run time
 none|assert_read|Conditionally cause an assert during read time
-country|call_election|Sets the next election date for country in N months   call_election
+country|call_election|Sets the next election date for country in N months
 country|cancel_enactment|Stops enacting the country's currently enacting law
-none|cancel_imposition|Cancels imposition of the law (not law type) in scope   scope:country.imposed_law
+none|cancel_imposition|Cancels imposition of the law (not law type) in scope scope:country.imposed_law
 state|cede_treaty_port|Cedes a treaty port in scope state to target country
-political_lobby|change_appeasement|Change appeasement of scope political lobby   change_appeasement
+political_lobby|change_appeasement|Change appeasement of scope political lobby
 character|change_character_culture|Changes the culture of the scoped character
 character|change_character_religion|Changes the religion of the scoped character
-none|change_global_variable|Changes the value or a numeric variable   change_variable
+none|change_global_variable|Changes the value or a numeric variable change_variable
 country|change_infamy|Change infamy of scope country
-country|change_institution_investment_level|Add/remove the investment level for the institution   change_institution_investment_level
-none|change_local_variable|Changes the value or a numeric variable   change_variable
-pop|change_pop_culture|Changes the culture of the scoped pop to a specified culture by a specified percentage   change_pop_culture
-pop|change_pop_religion|Changes the religion of the scoped pop to a specified religion by a specified percentage   change_pop_religion
+country|change_institution_investment_level|Add/remove the investment level for the institution
+none|change_local_variable|Changes the value or a numeric variable change_variable
+pop|change_pop_culture|Changes the culture of the scoped pop to a specified culture by a specified percentage
+pop|change_pop_religion|Changes the religion of the scoped pop to a specified religion by a specified percentage
 pop|change_poptype|Changes the type of the pop to the given type
-country|change_relations|Change relations between two countries   change_relations
+country|change_relations|Change relations between two countries
 state,state_region|change_resource_potential|Change the potential max buildings of a resource in a state region.
 country|change_subject_type|Changes the subject type of the country in scope while retaining the current Liberty Desire value.
-country|change_tag|Change the tag for the scoped country   c:GBR
-country|change_tension|Change tension between two countries   change_tension
-none|change_variable|Changes the value or a numeric variable   change_variable
-none|clamp_global_variable|Clamps a variable the specified max and min   clamp_variable
-none|clamp_local_variable|Clamps a variable the specified max and min   clamp_variable
-none|clamp_variable|Clamps a variable the specified max and min   clamp_variable
+country|change_tag|Change the tag for the scoped country c:GBR
+country|change_tension|Change tension between two countries
+none|change_variable|Changes the value or a numeric variable Where X is the name of the numeric variable to modify Where the valid operations are add, subtract, multipl...
+none|clamp_global_variable|Clamps a variable the specified max and min clamp_variable
+none|clamp_local_variable|Clamps a variable the specified max and min clamp_variable
+none|clamp_variable|Clamps a variable the specified max and min Where X is the name of the variable Where Y and Z are script values
 country|clear_debt|Clear country loans = bool
 country|clear_enactment_modifier|Clears the current law enactment modifier of scope country.
 none|clear_global_variable_list|Empties the list
@@ -123,28 +123,28 @@ country|clear_ownership_transfer_fleet|Clears the ownership transfer fleet in th
 none|clear_saved_scope|Clears a saved scope from the top scope
 country|clear_scaled_debt|Clears an amount of debt equal to the defined multiplier on target's max credit
 none|clear_variable_list|Empties the list
-country|complete_objective_subgoal|Completes an objective subgoal   complete_objective_subgoal
+country|complete_objective_subgoal|Completes an objective subgoal
 state|convert_population|Changes X% of the different religion population to the specified religion.
-country|copy_laws|Copies the constitution of the target country scope   Warning: This stops any current enactment.
-country|create_bidirectional_truce|Create a bidirectional truce between two countries   create_bidirectional_truce
+country|copy_laws|Copies the constitution of the target country scope Warning: This stops any current enactment.
+country|create_bidirectional_truce|Create a bidirectional truce between two countries
 state|create_building|Creates a building in the scoped state.
 country|create_character|Creates a character, any option can be omitted.
-none|create_country|Creates a new country   create_country
-country|create_diplomatic_catalyst|Creates a new diplomatic catalyst   create_diplomatic_catalyst
-country|create_diplomatic_pact|Create a diplomatic pact between two countries, with scope country as initiator   create_diplomatic_pact
-country|create_diplomatic_play|Create a diplomatic play with the scoped object as target   create_diplomatic_play
-none|create_dynamic_country|Creates a new country with a dynamic tag   create_dynamic_country
-country|create_incident|Creates a diplomatic incident that generates infamy, with target country as the victim   create_incident
-state|create_mass_migration|Initiates mass migration of a specific culture from a origin country to a scoped state   create_mass_migration
-country|create_military_formation|Creates a military formation   create_military_formation
-country|create_political_lobby|Creates a new political lobby   create_political_lobby
-country|create_political_movement|Creates a political movement of the specified type in the country, culture/religion optional   create_political_movement
+none|create_country|Creates a new country
+country|create_diplomatic_catalyst|Creates a new diplomatic catalyst
+country|create_diplomatic_pact|Create a diplomatic pact between two countries, with scope country as initiator
+country|create_diplomatic_play|Create a diplomatic play with the scoped object as target
+none|create_dynamic_country|Creates a new country with a dynamic tag
+country|create_incident|Creates a diplomatic incident that generates infamy, with target country as the victim
+state|create_mass_migration|Initiates mass migration of a specific culture from a origin country to a scoped state
+country|create_military_formation|Creates a military formation 	# Optional name
+country|create_political_lobby|Creates a new political lobby
+country|create_political_movement|Creates a political movement of the specified type in the country, culture/religion optional
 state|create_pop|Creates a pop in the scoped state
-country|create_power_bloc|Creates a power bloc with the scoped object as leader   create_power_bloc
-country|create_ship|Creates a ship in a scoped country   create_ship
+country|create_power_bloc|Creates a power bloc with the scoped object as leader
+country|create_ship|Creates a ship in a scoped country
 state_region|create_state|creates a state in a state region
 none|create_treaty|Creates a treaty between countries
-country|create_unidirectional_truce|Create a unidirectional truce for one country towards another   create_unidirectional_truce
+country|create_unidirectional_truce|Create a unidirectional truce for one country towards another
 none|custom_description|Wraps effects that get a custom description instead of the auto-generated one
 none|custom_description_no_bullet|Wraps effects that get a custom description instead of the auto-generated one.
 none|custom_label|just a tooltip, the scope as object (for grouping, localization).
@@ -153,36 +153,36 @@ none|custom_tooltip|just a tooltip, the scope as subject (for grouping, localiza
 none|custom_tooltip_no_bullet|just a tooltip, the scope as subject (for grouping, localization).
 ship|damage_ship_hull|Damages a ship's hull by a given amount
 ship|damage_ship_hull_percent|Damages a ship's hull by a given percentage of its total health
-state|deactivate_building|Deactivate a building in a state   deactivate_building
+state|deactivate_building|Deactivate a building in a state
 country|deactivate_law|Deactivates a law for a country
 country|deactivate_parties|Deactivates parties in scoped country.
 none|debug_log|Log a string to the debug log when this effect executes,
 none|debug_log_scopes|Log the current scope to the debug log when this effect executes
 country|decrease_autonomy|Change a country's subject type to a less autonomus one
-military_formation|deploy_to_front|Deploys the scope formation to the target front
-country|disable_temporary_hostilities|Disable temporary hostilities of a given type between two countries   disable_temporary_hostilities
+military_formation|deploy_to_front|Deploys the scope formation to the target front Can also take a base_camp parameter, will use given province to search for the nearest connected ba...
+country|disable_temporary_hostilities|Disable temporary hostilities of a given type between two countries
 party|disband_party|Removes all interest groups from the party, causing it to disband
 political_lobby|disband_political_lobby|Disband scoped political lobby
 character|disinherit_character|Strips the scoped character of their heir status in whichever countries apply.
-none|else|Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met   if
-none|else_if|Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met, and its own limit is met   if
-country|enable_temporary_hostilities|Enable temporary hostilities between two countries for a duration   enable_temporary_hostilities
+none|else|Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met if
+none|else_if|Executes enclosed effects if limit criteria of preceding 'if' or 'else_if' is not met, and its own limit is met if
+country|enable_temporary_hostilities|Enable temporary hostilities between two countries for a duration
 country|end_national_awakening|Ends a cultural awakening:
 diplomatic_play|end_play|End a diplomatic play
-country|end_truce|Ends any truce betweeen two countries
+country|end_truce|Ends any truce betweeen two countries }
 none|error_log|Log a string to the error log when this effect executes,
-country|every_active_law|Iterate through all active laws in a country   every_active_law
-country|every_active_party|Iterate through all active political parties in a country   every_active_party
-none|every_character|Iterate through all characters globally   every_character
-none|every_character_in_exile_pool|Iterate through characters in the exile pool   every_character_in_exile_pool
-none|every_character_in_void|Iterate through characters in the void   every_character_in_void
-character|every_character_role|Iterate through all roles of the scoped character   every_character_role
-country|every_civil_war|Iterate through all civil wars related to the scoped country   every_civil_war
-country|every_cobelligerent_in_diplo_play|Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)   every_cobelligerent_in_diplo_play
-country|every_cobelligerent_in_war|Iterate through all co-belligerents of scope country in all wars   every_cobelligerent_in_war
-battle,building,front,hq,military_formation|every_combat_unit|Iterate through all combat units of input scope   Supported scopes: building, military formation, front, battle   every_combat_unit
-country|every_company|Iterate through all companies in a country   every_company
-none|every_country|Iterate through all countries globally   every_country
+country|every_active_law|Iterate through all active laws in a country
+country|every_active_party|Iterate through all active political parties in a country
+none|every_character|Iterate through all characters globally
+none|every_character_in_exile_pool|Iterate through characters in the exile pool
+none|every_character_in_void|Iterate through characters in the void
+character|every_character_role|Iterate through all roles of the scoped character
+country|every_civil_war|Iterate through all civil wars related to the scoped country
+country|every_cobelligerent_in_diplo_play|Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)
+country|every_cobelligerent_in_war|Iterate through all co-belligerents of scope country in all wars
+battle,building,front,hq,military_formation|every_combat_unit|Iterate through all combat units of input scope Supported scopes: building, military formation, front, battle
+country|every_company|Iterate through all companies in a country
+none|every_country|Iterate through all countries globally
 none|every_country_in_afghanistan|ship_mod_coastal_defence_doctrine
 none|every_country_in_africa|money_amount_multiplier_more_large
 none|every_country_in_allahabad_bombay_line|neg_option_9_modifier
@@ -344,40 +344,40 @@ none|every_country_in_wet_process_region|ship_mod_coastal_defence_doctrine
 none|every_country_in_yugoslavia|ship_mod_jeune_ecole_doctrine
 none|every_country_in_zambezi_basin|money_amount_multiplier_very_large
 none|every_country_in_zanj_old|ship_mod_merchant_navy_doctrine
-country|every_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country   every_country_strategic_region
-none|every_decentralized_country|Iterate through all countries that are decentralized   every_decentralized_country
-country|every_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country   every_diplomatic_catalyst
-none|every_diplomatic_play|Iterate through all diplomatic plays globally   every_diplomatic_play
-country|every_diplomatically_relevant_country|Iterate through all diplomatically relevant countries of a country scope   every_diplomatically_relevant_country
-country|every_direct_subject|Any country directly below current in hierarchy   every_direct_subject
-country|every_enemy_in_diplo_play|Iterate through all enemies of scope country in all diplomatic plays (includes wars)   every_enemy_in_diplo_play
-country|every_enemy_in_war|Iterate through all enemies of scope country in all wars   every_enemy_in_war
-country,state,state_region,strategic_region|every_harvest_condition|Iterate through all harvest conditions affecting a state, state region, strategic region, or country   every_harvest_condition
+country|every_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country
+none|every_decentralized_country|Iterate through all countries that are decentralized
+country|every_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country
+none|every_diplomatic_play|Iterate through all diplomatic plays globally
+country|every_diplomatically_relevant_country|Iterate through all diplomatically relevant countries of a country scope
+country|every_direct_subject|Any country directly below current in hierarchy
+country|every_enemy_in_diplo_play|Iterate through all enemies of scope country in all diplomatic plays (includes wars)
+country|every_enemy_in_war|Iterate through all enemies of scope country in all wars
+country,state,state_region,strategic_region|every_harvest_condition|Iterate through all harvest conditions affecting a state, state region, strategic region, or country
 none|every_in_global_list|Iterate through all items in global list.
-country|every_in_hierarchy|Any country in current hierarchy, including current   every_in_hierarchy
+country|every_in_hierarchy|Any country in current hierarchy, including current
 none|every_in_list|Iterate through all items in list.
 none|every_in_local_list|Iterate through all items in local list.
-political_movement|every_influenced_interest_group|Iterate through all interest groups influenced by a political movement   every_influenced_interest_group
-country|every_interest_group|Iterate through all interest groups in a country   every_interest_group
-country|every_law|Iterate through all laws in a country   every_law
-political_lobby|every_lobby_member|Iterate through all interest group members of a lobby   every_lobby_member
-none|every_market|Iterate through all markets globally   every_market
-market|every_market_goods|Iterate through all active (market) goods in a market   every_market_goods
-party|every_member|Iterate through all interest group members of a party   every_member
-country,front,hq|every_military_formation|Iterate through all military formations currently present at input scope   Supported scopes: country, front, hq   every_military_formation
-country,state,state_region,strategic_region|every_neighbouring_state|Iterate through all states neighbouring a state region   every_neighbouring_state
-country|every_overlord_or_above|Any country above current in hierarchy   every_overlord_or_above
-company|every_owned_country|Iterate through all countries owned by the scoped company   every_owned_country
-diplomatic_pact|every_participant|Any of two participants of the diplomatic pact in a scope   every_participant
-country,interest_group|every_political_lobby|Iterate through all political lobbies in a country or interest group   every_political_lobby
-country|every_political_movement|Iterate through all political movements in a country   every_political_movement
-law|every_possible_amendment_type|Iterate through amendment types that could be added to the scoped law   every_possible_amendment_type
-country|every_potential_party|Iterate through all potential political parties in a country   every_potential_party
-none|every_power_bloc|Iterate through all power blocs   every_power_bloc
-power_bloc|every_power_bloc_member|Iterate through all members of the scoped power bloc including the leader   every_power_bloc_member
-interest_group|every_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law   every_preferred_law
-country,country_definition|every_primary_culture|Primary cultures of the scoped country or country definition   every_primary_culture
-province|every_province|Iterate through all Provinces in the scoped State   every_province
+political_movement|every_influenced_interest_group|Iterate through all interest groups influenced by a political movement
+country|every_interest_group|Iterate through all interest groups in a country
+country|every_law|Iterate through all laws in a country
+political_lobby|every_lobby_member|Iterate through all interest group members of a lobby
+none|every_market|Iterate through all markets globally
+market|every_market_goods|Iterate through all active (market) goods in a market
+party|every_member|Iterate through all interest group members of a party
+country,front,hq|every_military_formation|Iterate through all military formations currently present at input scope Supported scopes: country, front, hq
+country,state,state_region,strategic_region|every_neighbouring_state|Iterate through all states neighbouring a state region
+country|every_overlord_or_above|Any country above current in hierarchy
+company|every_owned_country|Iterate through all countries owned by the scoped company
+diplomatic_pact|every_participant|Any of two participants of the diplomatic pact in a scope
+country,interest_group|every_political_lobby|Iterate through all political lobbies in a country or interest group
+country|every_political_movement|Iterate through all political movements in a country
+law|every_possible_amendment_type|Iterate through amendment types that could be added to the scoped law
+country|every_potential_party|Iterate through all potential political parties in a country
+none|every_power_bloc|Iterate through all power blocs
+power_bloc|every_power_bloc_member|Iterate through all members of the scoped power bloc including the leader
+interest_group|every_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law
+country,country_definition|every_primary_culture|Primary cultures of the scoped country or country definition
+province|every_province|Iterate through all Provinces in the scoped State
 none|every_province_in_afghanistan|money_amount_multiplier_small
 none|every_province_in_africa|country_slave_culture_population
 none|every_province_in_allahabad_bombay_line|gfx_artillery_mobilization_count
@@ -539,42 +539,42 @@ none|every_province_in_wet_process_region|army_projection_comparison
 none|every_province_in_yugoslavia|�wN��
 none|every_province_in_zambezi_basin|~N��
 none|every_province_in_zanj_old|building_levels_extra
-country|every_rival_country|Any country that is being rivaled by the country in a scope   every_rival_country
-country|every_rivaling_country|Any country that is rivaling the country in a scope   every_rivaling_country
-country,front,interest_group,military_formation|every_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation   every_scope_admiral
-country|every_scope_ally|Iterate through all allies to a: country   every_scope_ally
-law|every_scope_amendment|Iterate through amendments of the scoped law   every_scope_amendment
-country,front,hq|every_scope_army|Iterate through all armies currently present at input scope   Supported scopes: country, front, hq   every_scope_army
-treaty|every_scope_article|Iterate through articles of the scoped treaty   every_scope_article
-treaty_options,treaty|every_scope_article_option|Iterate through article_options of the scoped treaty or treaty_options   every_scope_article_option
-country,state|every_scope_building|Iterate through all buildings in a: state, country   every_scope_building
-country,front,interest_group,military_formation|every_scope_character|Iterate through all characters in a: country, interestgroup, or front   every_scope_character
-market,state_region,strategic_region|every_scope_country|Iterate through all countries with a presence in the supported scope (currently: market, strategic region)   every_scope_country
-country,state|every_scope_culture|Iterate through all cultures in the scope   every_scope_culture
-country|every_scope_diplomatic_pact|Any diplomatic pact of the country in a scope   every_scope_diplomatic_pact
-country,hq|every_scope_fleet|Iterate through all fleets currently present at input scope   Supported scopes: country, hq   every_scope_fleet
-war|every_scope_front|Iterate through all Fronts related to the scoped War   every_scope_front
-country,front,interest_group,military_formation|every_scope_general|Iterate through all generals in a: country, interestgroup, front, or military formation   every_scope_general
-country|every_scope_held_interest_marker|Iterate through all interest markers held by a country   every_scope_held_interest_marker
-country,culture|every_scope_homeland_state|Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country   every_scope_hom...
-diplomatic_play|every_scope_initiator_ally|Iterate through all allies to an initiator in a: diplomatic play   every_scope_initiator_ally
-country,state_region,strategic_region|every_scope_interest_marker|Iterate through all interest markers in a: country, strategic region, state region   every_scope_interest_marker
-journal_entry|every_scope_je_involved|Iterate through all involved in a journal entry   every_scope_je_involved
-diplomatic_play|every_scope_play_involved|Iterate through all involved in a: diplomatic play   every_scope_play_involved
-country,front,interest_group,military_formation|every_scope_politician|Iterate through all politicians in a: country or interestgroup   every_scope_politician
-country,culture,interest_group,state|every_scope_pop|Iterate through all pops in a: country, state, interest group, culture   every_scope_pop
-company|every_scope_regional_hqs|Iterate through regional HQs of the scoped company   every_scope_regional_hqs
-country,military_formation|every_scope_ship|Iterate through all ships in a country or military formation   every_scope_ship
-country,front,state_region,strait,strategic_region,theater|every_scope_state|Iterate through all states including provinces from a: country, state_region, theater, front, or strait   every_scope_state
-country,state|every_scope_strait|Iterate through all straits with a land endpoint in the scoped state or country   every_scope_strait
-diplomatic_play|every_scope_target_ally|Iterate through all allies to a target in a: diplomatic play   every_scope_target_ally
-country|every_scope_theater|Iterate through all theaters in a: country   every_scope_theater
-country|every_scope_treaty|Iterate through in force treaties binding the scoped country   every_scope_treaty
-country|every_scope_violate_sovereignty_interested_parties|Iterate through all countries that would be interested if country in scope has their sovereignty violated   every_scope_violate_sovereignty_interes...
-country|every_scope_violate_sovereignty_wars|Iterate through all relevant wars if target country had their sovereignty violated by scoped country   every_scope_violate_sovereignty_wars
-country|every_scope_war|Iterate through all wars related to the scope   every_scope_war
-state|every_sea_node_adjacent_state|Iterate through all states that share a sea node with a state   every_sea_node_adjacent_state
-none|every_state|Iterate through all states globally   every_state
+country|every_rival_country|Any country that is being rivaled by the country in a scope
+country|every_rivaling_country|Any country that is rivaling the country in a scope
+country,front,interest_group,military_formation|every_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation
+country|every_scope_ally|Iterate through all allies to a: country
+law|every_scope_amendment|Iterate through amendments of the scoped law
+country,front,hq|every_scope_army|Iterate through all armies currently present at input scope Supported scopes: country, front, hq
+treaty|every_scope_article|Iterate through articles of the scoped treaty
+treaty_options,treaty|every_scope_article_option|Iterate through article_options of the scoped treaty or treaty_options
+country,state|every_scope_building|Iterate through all buildings in a: state, country
+country,front,interest_group,military_formation|every_scope_character|Iterate through all characters in a: country, interestgroup, or front
+market,state_region,strategic_region|every_scope_country|Iterate through all countries with a presence in the supported scope (currently: market, strategic region)
+country,state|every_scope_culture|Iterate through all cultures in the scope
+country|every_scope_diplomatic_pact|Any diplomatic pact of the country in a scope
+country,hq|every_scope_fleet|Iterate through all fleets currently present at input scope Supported scopes: country, hq
+war|every_scope_front|Iterate through all Fronts related to the scoped War
+country,front,interest_group,military_formation|every_scope_general|Iterate through all generals in a: country, interestgroup, front, or military formation
+country|every_scope_held_interest_marker|Iterate through all interest markers held by a country
+country,culture|every_scope_homeland_state|Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country
+diplomatic_play|every_scope_initiator_ally|Iterate through all allies to an initiator in a: diplomatic play
+country,state_region,strategic_region|every_scope_interest_marker|Iterate through all interest markers in a: country, strategic region, state region
+journal_entry|every_scope_je_involved|Iterate through all involved in a journal entry
+diplomatic_play|every_scope_play_involved|Iterate through all involved in a: diplomatic play
+country,front,interest_group,military_formation|every_scope_politician|Iterate through all politicians in a: country or interestgroup
+country,culture,interest_group,state|every_scope_pop|Iterate through all pops in a: country, state, interest group, culture
+company|every_scope_regional_hqs|Iterate through regional HQs of the scoped company
+country,military_formation|every_scope_ship|Iterate through all ships in a country or military formation
+country,front,state_region,strait,strategic_region,theater|every_scope_state|Iterate through all states including provinces from a: country, state_region, theater, front, or strait
+country,state|every_scope_strait|Iterate through all straits with a land endpoint in the scoped state or country
+diplomatic_play|every_scope_target_ally|Iterate through all allies to a target in a: diplomatic play
+country|every_scope_theater|Iterate through all theaters in a: country
+country|every_scope_treaty|Iterate through in force treaties binding the scoped country
+country|every_scope_violate_sovereignty_interested_parties|Iterate through all countries that would be interested if country in scope has their sovereignty violated
+country|every_scope_violate_sovereignty_wars|Iterate through all relevant wars if target country had their sovereignty violated by scoped country
+country|every_scope_war|Iterate through all wars related to the scope
+state|every_sea_node_adjacent_state|Iterate through all states that share a sea node with a state
+none|every_state|Iterate through all states globally
 none|every_state_in_afghanistan|gfx_capitalship_deploy_count
 none|every_state_in_africa|political_concession_level_3_auth_cost
 none|every_state_in_allahabad_bombay_line|provinces_with_elevated_terrain
@@ -736,7 +736,7 @@ none|every_state_in_wet_process_region|money_amount_multiplier_small
 none|every_state_in_yugoslavia|concentration_of_defensive_mobilized_battalions
 none|every_state_in_zambezi_basin|N��
 none|every_state_in_zanj_old|building_groups_extra
-none|every_state_region|Iterate through all state regions   every_state_region
+none|every_state_region|Iterate through all state regions
 none|every_state_region_in_afghanistan|money_amount_multiplier_more_large
 none|every_state_region_in_africa|money_amount_multiplier_very_large
 none|every_state_region_in_allahabad_bombay_line|money_amount_multiplier_very_large
@@ -898,8 +898,8 @@ none|every_state_region_in_wet_process_region|money_amount_multiplier_large
 none|every_state_region_in_yugoslavia|money_amount_multiplier_more_large
 none|every_state_region_in_zambezi_basin|ship_mod_jeune_ecole_doctrine
 none|every_state_region_in_zanj_old|money_amount_multiplier_very_small
-country|every_strategic_objective|Iterate through all Strategic Objective states from the scoped Country   every_strategic_objective
-none|every_strategic_region|Iterate through all strategic regions globally   every_strategic_region
+country|every_strategic_objective|Iterate through all Strategic Objective states from the scoped Country
+none|every_strategic_region|Iterate through all strategic regions globally
 none|every_strategic_region_in_afghanistan|gfx_infantry_mobilization_count
 none|every_strategic_region_in_africa|ship_mod_merchant_navy_doctrine
 none|every_strategic_region_in_allahabad_bombay_line|free_opium_producing_arable_land
@@ -1061,28 +1061,28 @@ none|every_strategic_region_in_wet_process_region|0��T�
 none|every_strategic_region_in_yugoslavia|gfx_artillery_mobilization_count
 none|every_strategic_region_in_zambezi_basin|gfx_artillery_mobilization_count
 none|every_strategic_region_in_zanj_old|ship_mod_merchant_navy_doctrine
-country|every_subject_of_subject|Any country below direct subjects in hierarchy   every_subject_of_subject
-country|every_subject_or_below|Any country below current in hierarchy   every_subject_or_below
-political_movement|every_supporting_character|Iterate through all characters that support the scoped political movement   every_supporting_character
-none|every_treaty|Iterate through treaties (both in force and drafts)   every_treaty
-country|every_valid_mass_migration_culture|Lists for cultures in the scoped country that are valid for mass migration   every_valid_mass_migration_culture
-war|every_war_participant|Iterate through all participants in a war   every_war_participant
-none|execute_event_option|Execute effects of the specified event option in the specified event   execute_event_option
+country|every_subject_of_subject|Any country below direct subjects in hierarchy
+country|every_subject_or_below|Any country below current in hierarchy
+political_movement|every_supporting_character|Iterate through all characters that support the scoped political movement
+none|every_treaty|Iterate through treaties (both in force and drafts)
+country|every_valid_mass_migration_culture|Lists for cultures in the scoped country that are valid for mass migration
+war|every_war_participant|Iterate through all participants in a war
+none|execute_event_option|Execute effects of the specified event option in the specified event
 character|exile_character|Exile a character to the exile pool
-state_region|finish_harvest_condition|Finish a harvest condition of type in the scoped state region   finish_harvest_condition
+state_region|finish_harvest_condition|Finish a harvest condition of type in the scoped state region
 interest_group|finish_negotiation|Finishes the negotiation that has started for an interest group:
 state|force_resource_depletion|Forces a resource depletion in state
 state|force_resource_discovery|Forces a resource discovery in state
 character|free_character_from_void|Frees a character from the void, if set to no character is deleted instead
 military_formation|fully_mobilize_army|Fully mobilizes scope army
-none|hidden_effect|Enclosed effects are not shown in tooltips   hidden_effect
-none|if|Executes enclosed effects if limit criteria are met   if
+none|hidden_effect|Enclosed effects are not shown in tooltips
+none|if|Executes enclosed effects if limit criteria are met
 interest_group|improve_stance|Improves the stance of an IG on the currently enacting law by the given number of steps:
 country|increase_autonomy|Change a country's subject type to a more autonomus one
 country|join_power_bloc|Scoped country joins the power bloc of the target scoped country
 interest_group|join_revolution|Adds interest group to ongoing revolution
 war|join_war|Makes target join a scoped war in a specific side.
-character|kill_character|Kill a character
+character|kill_character|Kill a character kill_character
 ship|kill_crew|Kills a given amount of a ship's crew
 ship|kill_crew_percent|Kills a given percentage of a ship's crew
 country|kill_population|Kills a number of individuals in the population in the scoped country.
@@ -1096,19 +1096,19 @@ country|liberate_slaves_in_unincorporated_states|Frees all slaves in the country
 country|make_independent|Makes a country independent.
 military_formation|mobilize_army|Mobilizes scope army
 pop|move_partial_pop|Moves the scoped pop to the specified state (they become unemployed)
-pop|move_pop|Moves the scoped pop in its entirety to the specified state (they become unemployed)
-country|ordered_active_law|Iterate through all active laws in a country   ordered_active_law
-country|ordered_active_party|Iterate through all active political parties in a country   ordered_active_party
-none|ordered_character|Iterate through all characters globally   ordered_character
-none|ordered_character_in_exile_pool|Iterate through characters in the exile pool   ordered_character_in_exile_pool
-none|ordered_character_in_void|Iterate through characters in the void   ordered_character_in_void
-character|ordered_character_role|Iterate through all roles of the scoped character   ordered_character_role
-country|ordered_civil_war|Iterate through all civil wars related to the scoped country   ordered_civil_war
-country|ordered_cobelligerent_in_diplo_play|Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)   ordered_cobelligerent_in_diplo_play
-country|ordered_cobelligerent_in_war|Iterate through all co-belligerents of scope country in all wars   ordered_cobelligerent_in_war
-battle,building,front,hq,military_formation|ordered_combat_unit|Iterate through all combat units of input scope   Supported scopes: building, military formation, front, battle   ordered_combat_unit
-country|ordered_company|Iterate through all companies in a country   ordered_company
-none|ordered_country|Iterate through all countries globally   ordered_country
+pop|move_pop|Moves the scoped pop in its entirety to the specified state (they become unemployed) NOTE: VERY IMPORTANT! This effect _may_ change the pop type of...
+country|ordered_active_law|Iterate through all active laws in a country limit
+country|ordered_active_party|Iterate through all active political parties in a country limit
+none|ordered_character|Iterate through all characters globally limit
+none|ordered_character_in_exile_pool|Iterate through characters in the exile pool limit
+none|ordered_character_in_void|Iterate through characters in the void limit
+character|ordered_character_role|Iterate through all roles of the scoped character limit
+country|ordered_civil_war|Iterate through all civil wars related to the scoped country limit
+country|ordered_cobelligerent_in_diplo_play|Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars) limit
+country|ordered_cobelligerent_in_war|Iterate through all co-belligerents of scope country in all wars limit
+battle,building,front,hq,military_formation|ordered_combat_unit|Iterate through all combat units of input scope Supported scopes: building, military formation, front, battle limit
+country|ordered_company|Iterate through all companies in a country limit
+none|ordered_country|Iterate through all countries globally limit
 none|ordered_country_in_afghanistan|power_bloc_mandate_progress_per_unrecognized_major_power_member
 none|ordered_country_in_africa|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_country_in_allahabad_bombay_line|power_bloc_mandate_progress_per_unrecognized_power_member
@@ -1270,40 +1270,40 @@ none|ordered_country_in_wet_process_region|power_bloc_mandate_progress_per_unrec
 none|ordered_country_in_yugoslavia|power_bloc_mandate_progress_per_unrecognized_major_power_member
 none|ordered_country_in_zambezi_basin|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_country_in_zanj_old|power_bloc_mandate_progress_per_unrecognized_power_member
-country|ordered_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country   ordered_country_strategic_region
-none|ordered_decentralized_country|Iterate through all countries that are decentralized   ordered_decentralized_country
-country|ordered_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country   ordered_diplomatic_catalyst
-none|ordered_diplomatic_play|Iterate through all diplomatic plays globally   ordered_diplomatic_play
-country|ordered_diplomatically_relevant_country|Iterate through all diplomatically relevant countries of a country scope   ordered_diplomatically_relevant_country
-country|ordered_direct_subject|Any country directly below current in hierarchy   ordered_direct_subject
-country|ordered_enemy_in_diplo_play|Iterate through all enemies of scope country in all diplomatic plays (includes wars)   ordered_enemy_in_diplo_play
-country|ordered_enemy_in_war|Iterate through all enemies of scope country in all wars   ordered_enemy_in_war
-country,state,state_region,strategic_region|ordered_harvest_condition|Iterate through all harvest conditions affecting a state, state region, strategic region, or country   ordered_harvest_condition
+country|ordered_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country limit
+none|ordered_decentralized_country|Iterate through all countries that are decentralized limit
+country|ordered_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country limit
+none|ordered_diplomatic_play|Iterate through all diplomatic plays globally limit
+country|ordered_diplomatically_relevant_country|Iterate through all diplomatically relevant countries of a country scope limit
+country|ordered_direct_subject|Any country directly below current in hierarchy limit
+country|ordered_enemy_in_diplo_play|Iterate through all enemies of scope country in all diplomatic plays (includes wars) limit
+country|ordered_enemy_in_war|Iterate through all enemies of scope country in all wars limit
+country,state,state_region,strategic_region|ordered_harvest_condition|Iterate through all harvest conditions affecting a state, state region, strategic region, or country limit
 none|ordered_in_global_list|Iterate through all items in global list.
-country|ordered_in_hierarchy|Any country in current hierarchy, including current   ordered_in_hierarchy
+country|ordered_in_hierarchy|Any country in current hierarchy, including current limit
 none|ordered_in_list|Iterate through all items in list.
 none|ordered_in_local_list|Iterate through all items in local list.
-political_movement|ordered_influenced_interest_group|Iterate through all interest groups influenced by a political movement   ordered_influenced_interest_group
-country|ordered_interest_group|Iterate through all interest groups in a country   ordered_interest_group
-country|ordered_law|Iterate through all laws in a country   ordered_law
-political_lobby|ordered_lobby_member|Iterate through all interest group members of a lobby   ordered_lobby_member
-none|ordered_market|Iterate through all markets globally   ordered_market
-market|ordered_market_goods|Iterate through all active (market) goods in a market   ordered_market_goods
-party|ordered_member|Iterate through all interest group members of a party   ordered_member
-country,front,hq|ordered_military_formation|Iterate through all military formations currently present at input scope   Supported scopes: country, front, hq   ordered_military_formation
-country,state,state_region,strategic_region|ordered_neighbouring_state|Iterate through all states neighbouring a state region   ordered_neighbouring_state
-country|ordered_overlord_or_above|Any country above current in hierarchy   ordered_overlord_or_above
-company|ordered_owned_country|Iterate through all countries owned by the scoped company   ordered_owned_country
-diplomatic_pact|ordered_participant|Any of two participants of the diplomatic pact in a scope   ordered_participant
-country,interest_group|ordered_political_lobby|Iterate through all political lobbies in a country or interest group   ordered_political_lobby
-country|ordered_political_movement|Iterate through all political movements in a country   ordered_political_movement
-law|ordered_possible_amendment_type|Iterate through amendment types that could be added to the scoped law   ordered_possible_amendment_type
-country|ordered_potential_party|Iterate through all potential political parties in a country   ordered_potential_party
-none|ordered_power_bloc|Iterate through all power blocs   ordered_power_bloc
-power_bloc|ordered_power_bloc_member|Iterate through all members of the scoped power bloc including the leader   ordered_power_bloc_member
-interest_group|ordered_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law   ordered_preferred_law
-country,country_definition|ordered_primary_culture|Primary cultures of the scoped country or country definition   ordered_primary_culture
-province|ordered_province|Iterate through all Provinces in the scoped State   ordered_province
+political_movement|ordered_influenced_interest_group|Iterate through all interest groups influenced by a political movement limit
+country|ordered_interest_group|Iterate through all interest groups in a country limit
+country|ordered_law|Iterate through all laws in a country limit
+political_lobby|ordered_lobby_member|Iterate through all interest group members of a lobby limit
+none|ordered_market|Iterate through all markets globally limit
+market|ordered_market_goods|Iterate through all active (market) goods in a market limit
+party|ordered_member|Iterate through all interest group members of a party limit
+country,front,hq|ordered_military_formation|Iterate through all military formations currently present at input scope Supported scopes: country, front, hq limit
+country,state,state_region,strategic_region|ordered_neighbouring_state|Iterate through all states neighbouring a state region limit
+country|ordered_overlord_or_above|Any country above current in hierarchy limit
+company|ordered_owned_country|Iterate through all countries owned by the scoped company limit
+diplomatic_pact|ordered_participant|Any of two participants of the diplomatic pact in a scope limit
+country,interest_group|ordered_political_lobby|Iterate through all political lobbies in a country or interest group limit
+country|ordered_political_movement|Iterate through all political movements in a country limit
+law|ordered_possible_amendment_type|Iterate through amendment types that could be added to the scoped law limit
+country|ordered_potential_party|Iterate through all potential political parties in a country limit
+none|ordered_power_bloc|Iterate through all power blocs limit
+power_bloc|ordered_power_bloc_member|Iterate through all members of the scoped power bloc including the leader limit
+interest_group|ordered_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law limit
+country,country_definition|ordered_primary_culture|Primary cultures of the scoped country or country definition limit
+province|ordered_province|Iterate through all Provinces in the scoped State limit
 none|ordered_province_in_afghanistan|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_province_in_africa|power_bloc_mandate_progress_per_insignificant_power_member
 none|ordered_province_in_allahabad_bombay_line|power_bloc_mandate_progress_per_insignificant_power_member
@@ -1465,42 +1465,42 @@ none|ordered_province_in_wet_process_region|power_bloc_mandate_progress_per_insi
 none|ordered_province_in_yugoslavia|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_province_in_zambezi_basin|power_bloc_mandate_progress_per_unrecognized_major_power_member
 none|ordered_province_in_zanj_old|power_bloc_mandate_progress_per_insignificant_power_member
-country|ordered_rival_country|Any country that is being rivaled by the country in a scope   ordered_rival_country
-country|ordered_rivaling_country|Any country that is rivaling the country in a scope   ordered_rivaling_country
-country,front,interest_group,military_formation|ordered_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation   ordered_scope_admiral
-country|ordered_scope_ally|Iterate through all allies to a: country   ordered_scope_ally
-law|ordered_scope_amendment|Iterate through amendments of the scoped law   ordered_scope_amendment
-country,front,hq|ordered_scope_army|Iterate through all armies currently present at input scope   Supported scopes: country, front, hq   ordered_scope_army
-treaty|ordered_scope_article|Iterate through articles of the scoped treaty   ordered_scope_article
-treaty_options,treaty|ordered_scope_article_option|Iterate through article_options of the scoped treaty or treaty_options   ordered_scope_article_option
-country,state|ordered_scope_building|Iterate through all buildings in a: state, country   ordered_scope_building
-country,front,interest_group,military_formation|ordered_scope_character|Iterate through all characters in a: country, interestgroup, or front   ordered_scope_character
-market,state_region,strategic_region|ordered_scope_country|Iterate through all countries with a presence in the supported scope (currently: market, strategic region)   ordered_scope_country
-country,state|ordered_scope_culture|Iterate through all cultures in the scope   ordered_scope_culture
-country|ordered_scope_diplomatic_pact|Any diplomatic pact of the country in a scope   ordered_scope_diplomatic_pact
-country,hq|ordered_scope_fleet|Iterate through all fleets currently present at input scope   Supported scopes: country, hq   ordered_scope_fleet
-war|ordered_scope_front|Iterate through all Fronts related to the scoped War   ordered_scope_front
-country,front,interest_group,military_formation|ordered_scope_general|Iterate through all generals in a: country, interestgroup, front, or military formation   ordered_scope_general
-country|ordered_scope_held_interest_marker|Iterate through all interest markers held by a country   ordered_scope_held_interest_marker
-country,culture|ordered_scope_homeland_state|Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country   ordered_scope_h...
-diplomatic_play|ordered_scope_initiator_ally|Iterate through all allies to an initiator in a: diplomatic play   ordered_scope_initiator_ally
-country,state_region,strategic_region|ordered_scope_interest_marker|Iterate through all interest markers in a: country, strategic region, state region   ordered_scope_interest_marker
-journal_entry|ordered_scope_je_involved|Iterate through all involved in a journal entry   ordered_scope_je_involved
-diplomatic_play|ordered_scope_play_involved|Iterate through all involved in a: diplomatic play   ordered_scope_play_involved
-country,front,interest_group,military_formation|ordered_scope_politician|Iterate through all politicians in a: country or interestgroup   ordered_scope_politician
-country,culture,interest_group,state|ordered_scope_pop|Iterate through all pops in a: country, state, interest group, culture   ordered_scope_pop
-company|ordered_scope_regional_hqs|Iterate through regional HQs of the scoped company   ordered_scope_regional_hqs
-country,military_formation|ordered_scope_ship|Iterate through all ships in a country or military formation   ordered_scope_ship
-country,front,state_region,strait,strategic_region,theater|ordered_scope_state|Iterate through all states including provinces from a: country, state_region, theater, front, or strait   ordered_scope_state
-country,state|ordered_scope_strait|Iterate through all straits with a land endpoint in the scoped state or country   ordered_scope_strait
-diplomatic_play|ordered_scope_target_ally|Iterate through all allies to a target in a: diplomatic play   ordered_scope_target_ally
-country|ordered_scope_theater|Iterate through all theaters in a: country   ordered_scope_theater
-country|ordered_scope_treaty|Iterate through in force treaties binding the scoped country   ordered_scope_treaty
-country|ordered_scope_violate_sovereignty_interested_parties|Iterate through all countries that would be interested if country in scope has their sovereignty violated   ordered_scope_violate_sovereignty_inter...
-country|ordered_scope_violate_sovereignty_wars|Iterate through all relevant wars if target country had their sovereignty violated by scoped country   ordered_scope_violate_sovereignty_wars
-country|ordered_scope_war|Iterate through all wars related to the scope   ordered_scope_war
-state|ordered_sea_node_adjacent_state|Iterate through all states that share a sea node with a state   ordered_sea_node_adjacent_state
-none|ordered_state|Iterate through all states globally   ordered_state
+country|ordered_rival_country|Any country that is being rivaled by the country in a scope limit
+country|ordered_rivaling_country|Any country that is rivaling the country in a scope limit
+country,front,interest_group,military_formation|ordered_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation limit
+country|ordered_scope_ally|Iterate through all allies to a: country limit
+law|ordered_scope_amendment|Iterate through amendments of the scoped law limit
+country,front,hq|ordered_scope_army|Iterate through all armies currently present at input scope Supported scopes: country, front, hq limit
+treaty|ordered_scope_article|Iterate through articles of the scoped treaty limit
+treaty_options,treaty|ordered_scope_article_option|Iterate through article_options of the scoped treaty or treaty_options limit
+country,state|ordered_scope_building|Iterate through all buildings in a: state, country limit
+country,front,interest_group,military_formation|ordered_scope_character|Iterate through all characters in a: country, interestgroup, or front limit
+market,state_region,strategic_region|ordered_scope_country|Iterate through all countries with a presence in the supported scope (currently: market, strategic region) limit
+country,state|ordered_scope_culture|Iterate through all cultures in the scope limit
+country|ordered_scope_diplomatic_pact|Any diplomatic pact of the country in a scope limit
+country,hq|ordered_scope_fleet|Iterate through all fleets currently present at input scope Supported scopes: country, hq limit
+war|ordered_scope_front|Iterate through all Fronts related to the scoped War limit
+country,front,interest_group,military_formation|ordered_scope_general|Iterate through all generals in a: country, interestgroup, front, or military formation limit
+country|ordered_scope_held_interest_marker|Iterate through all interest markers held by a country limit
+country,culture|ordered_scope_homeland_state|Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country limit
+diplomatic_play|ordered_scope_initiator_ally|Iterate through all allies to an initiator in a: diplomatic play limit
+country,state_region,strategic_region|ordered_scope_interest_marker|Iterate through all interest markers in a: country, strategic region, state region limit
+journal_entry|ordered_scope_je_involved|Iterate through all involved in a journal entry limit
+diplomatic_play|ordered_scope_play_involved|Iterate through all involved in a: diplomatic play limit
+country,front,interest_group,military_formation|ordered_scope_politician|Iterate through all politicians in a: country or interestgroup limit
+country,culture,interest_group,state|ordered_scope_pop|Iterate through all pops in a: country, state, interest group, culture limit
+company|ordered_scope_regional_hqs|Iterate through regional HQs of the scoped company limit
+country,military_formation|ordered_scope_ship|Iterate through all ships in a country or military formation limit
+country,front,state_region,strait,strategic_region,theater|ordered_scope_state|Iterate through all states including provinces from a: country, state_region, theater, front, or strait limit
+country,state|ordered_scope_strait|Iterate through all straits with a land endpoint in the scoped state or country limit
+diplomatic_play|ordered_scope_target_ally|Iterate through all allies to a target in a: diplomatic play limit
+country|ordered_scope_theater|Iterate through all theaters in a: country limit
+country|ordered_scope_treaty|Iterate through in force treaties binding the scoped country limit
+country|ordered_scope_violate_sovereignty_interested_parties|Iterate through all countries that would be interested if country in scope has their sovereignty violated limit
+country|ordered_scope_violate_sovereignty_wars|Iterate through all relevant wars if target country had their sovereignty violated by scoped country limit
+country|ordered_scope_war|Iterate through all wars related to the scope limit
+state|ordered_sea_node_adjacent_state|Iterate through all states that share a sea node with a state limit
+none|ordered_state|Iterate through all states globally limit
 none|ordered_state_in_afghanistan|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_state_in_africa|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_state_in_allahabad_bombay_line|power_bloc_mandate_progress_per_unrecognized_regional_power_member
@@ -1662,7 +1662,7 @@ none|ordered_state_in_wet_process_region|power_bloc_mandate_progress_per_unrecog
 none|ordered_state_in_yugoslavia|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_state_in_zambezi_basin|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_state_in_zanj_old|power_bloc_mandate_progress_per_unrecognized_regional_power_member
-none|ordered_state_region|Iterate through all state regions   ordered_state_region
+none|ordered_state_region|Iterate through all state regions limit
 none|ordered_state_region_in_afghanistan|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_state_region_in_africa|power_bloc_mandate_progress_per_unrecognized_major_power_member
 none|ordered_state_region_in_allahabad_bombay_line|power_bloc_mandate_progress_per_unrecognized_major_power_member
@@ -1824,8 +1824,8 @@ none|ordered_state_region_in_wet_process_region|power_bloc_mandate_progress_per_
 none|ordered_state_region_in_yugoslavia|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_state_region_in_zambezi_basin|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_state_region_in_zanj_old|power_bloc_mandate_progress_per_unrecognized_major_power_member
-country|ordered_strategic_objective|Iterate through all Strategic Objective states from the scoped Country   ordered_strategic_objective
-none|ordered_strategic_region|Iterate through all strategic regions globally   ordered_strategic_region
+country|ordered_strategic_objective|Iterate through all Strategic Objective states from the scoped Country limit
+none|ordered_strategic_region|Iterate through all strategic regions globally limit
 none|ordered_strategic_region_in_afghanistan|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_strategic_region_in_africa|power_bloc_mandate_progress_per_insignificant_power_member
 none|ordered_strategic_region_in_allahabad_bombay_line|power_bloc_mandate_progress_per_insignificant_power_member
@@ -1987,30 +1987,30 @@ none|ordered_strategic_region_in_wet_process_region|power_bloc_mandate_progress_
 none|ordered_strategic_region_in_yugoslavia|power_bloc_mandate_progress_per_unrecognized_power_member
 none|ordered_strategic_region_in_zambezi_basin|power_bloc_mandate_progress_per_unrecognized_regional_power_member
 none|ordered_strategic_region_in_zanj_old|power_bloc_mandate_progress_per_insignificant_power_member
-country|ordered_subject_of_subject|Any country below direct subjects in hierarchy   ordered_subject_of_subject
-country|ordered_subject_or_below|Any country below current in hierarchy   ordered_subject_or_below
-political_movement|ordered_supporting_character|Iterate through all characters that support the scoped political movement   ordered_supporting_character
-none|ordered_treaty|Iterate through treaties (both in force and drafts)   ordered_treaty
-country|ordered_valid_mass_migration_culture|Lists for cultures in the scoped country that are valid for mass migration   ordered_valid_mass_migration_culture
-war|ordered_war_participant|Iterate through all participants in a war   ordered_war_participant
+country|ordered_subject_of_subject|Any country below direct subjects in hierarchy limit
+country|ordered_subject_or_below|Any country below current in hierarchy limit
+political_movement|ordered_supporting_character|Iterate through all characters that support the scoped political movement limit
+none|ordered_treaty|Iterate through treaties (both in force and drafts) limit
+country|ordered_valid_mass_migration_culture|Lists for cultures in the scoped country that are valid for mass migration limit
+war|ordered_war_participant|Iterate through all participants in a war limit
 character|place_character_in_void|Banishes a character to the void, duration is how long character is kept before being deleted
-country|play_as|Change which country scoped country's player will play as   play_as
-none|post_audio_event|Runs an audio even on a "persistent" audio object    post_audio_event
+country|play_as|Change which country scoped country's player will play as
+none|post_audio_event|Runs an audio even on a "persistent" audio object
 none|post_notification|Posts notification
 none|post_proposal|Posts proposal
 none|random|run an effect depending on a random chance, do nothing otherwise.
-country|random_active_law|Iterate through all active laws in a country   random_active_law
-country|random_active_party|Iterate through all active political parties in a country   random_active_party
-none|random_character|Iterate through all characters globally   random_character
-none|random_character_in_exile_pool|Iterate through characters in the exile pool   random_character_in_exile_pool
-none|random_character_in_void|Iterate through characters in the void   random_character_in_void
-character|random_character_role|Iterate through all roles of the scoped character   random_character_role
-country|random_civil_war|Iterate through all civil wars related to the scoped country   random_civil_war
-country|random_cobelligerent_in_diplo_play|Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)   random_cobelligerent_in_diplo_play
-country|random_cobelligerent_in_war|Iterate through all co-belligerents of scope country in all wars   random_cobelligerent_in_war
-battle,building,front,hq,military_formation|random_combat_unit|Iterate through all combat units of input scope   Supported scopes: building, military formation, front, battle   random_combat_unit
-country|random_company|Iterate through all companies in a country   random_company
-none|random_country|Iterate through all countries globally   random_country
+country|random_active_law|Iterate through all active laws in a country
+country|random_active_party|Iterate through all active political parties in a country
+none|random_character|Iterate through all characters globally
+none|random_character_in_exile_pool|Iterate through characters in the exile pool
+none|random_character_in_void|Iterate through characters in the void
+character|random_character_role|Iterate through all roles of the scoped character
+country|random_civil_war|Iterate through all civil wars related to the scoped country
+country|random_cobelligerent_in_diplo_play|Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)
+country|random_cobelligerent_in_war|Iterate through all co-belligerents of scope country in all wars
+battle,building,front,hq,military_formation|random_combat_unit|Iterate through all combat units of input scope Supported scopes: building, military formation, front, battle
+country|random_company|Iterate through all companies in a country
+none|random_country|Iterate through all countries globally
 none|random_country_in_afghanistan|army_projection_comparison
 none|random_country_in_africa|gfx_infantry_mobilization_count
 none|random_country_in_allahabad_bombay_line|free_tea_producing_arable_land
@@ -2172,42 +2172,42 @@ none|random_country_in_wet_process_region|annex_subject_base_liberty_desire_chan
 none|random_country_in_yugoslavia|money_amount_multiplier_more_large
 none|random_country_in_zambezi_basin|ship_mod_jeune_ecole_doctrine
 none|random_country_in_zanj_old|ship_mod_jeune_ecole_doctrine
-country|random_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country   random_country_strategic_region
-none|random_decentralized_country|Iterate through all countries that are decentralized   random_decentralized_country
-country|random_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country   random_diplomatic_catalyst
-none|random_diplomatic_play|Iterate through all diplomatic plays globally   random_diplomatic_play
-country|random_diplomatically_relevant_country|Iterate through all diplomatically relevant countries of a country scope   random_diplomatically_relevant_country
-country|random_direct_subject|Any country directly below current in hierarchy   random_direct_subject
-country|random_enemy_in_diplo_play|Iterate through all enemies of scope country in all diplomatic plays (includes wars)   random_enemy_in_diplo_play
-country|random_enemy_in_war|Iterate through all enemies of scope country in all wars   random_enemy_in_war
-country,state,state_region,strategic_region|random_harvest_condition|Iterate through all harvest conditions affecting a state, state region, strategic region, or country   random_harvest_condition
+country|random_country_strategic_region|Iterate through all strategic regions containing states owned by the scoped country
+none|random_decentralized_country|Iterate through all countries that are decentralized
+country|random_diplomatic_catalyst|Iterate through all diplomatic catalysts in the recent memory of a country
+none|random_diplomatic_play|Iterate through all diplomatic plays globally
+country|random_diplomatically_relevant_country|Iterate through all diplomatically relevant countries of a country scope
+country|random_direct_subject|Any country directly below current in hierarchy
+country|random_enemy_in_diplo_play|Iterate through all enemies of scope country in all diplomatic plays (includes wars)
+country|random_enemy_in_war|Iterate through all enemies of scope country in all wars
+country,state,state_region,strategic_region|random_harvest_condition|Iterate through all harvest conditions affecting a state, state region, strategic region, or country
 none|random_in_global_list|Iterate through all items in global list.
-country|random_in_hierarchy|Any country in current hierarchy, including current   random_in_hierarchy
+country|random_in_hierarchy|Any country in current hierarchy, including current
 none|random_in_list|Iterate through all items in list.
 none|random_in_local_list|Iterate through all items in local list.
-political_movement|random_influenced_interest_group|Iterate through all interest groups influenced by a political movement   random_influenced_interest_group
-country|random_interest_group|Iterate through all interest groups in a country   random_interest_group
-country|random_law|Iterate through all laws in a country   random_law
+political_movement|random_influenced_interest_group|Iterate through all interest groups influenced by a political movement
+country|random_interest_group|Iterate through all interest groups in a country
+country|random_law|Iterate through all laws in a country
 none|random_list|Selects one effect from a weighted random list and executes it.
-political_lobby|random_lobby_member|Iterate through all interest group members of a lobby   random_lobby_member
+political_lobby|random_lobby_member|Iterate through all interest group members of a lobby
 none|random_log_scopes|Log the current scope to the random log when this effect executes.
-none|random_market|Iterate through all markets globally   random_market
-market|random_market_goods|Iterate through all active (market) goods in a market   random_market_goods
-party|random_member|Iterate through all interest group members of a party   random_member
-country,front,hq|random_military_formation|Iterate through all military formations currently present at input scope   Supported scopes: country, front, hq   random_military_formation
-country,state,state_region,strategic_region|random_neighbouring_state|Iterate through all states neighbouring a state region   random_neighbouring_state
-country|random_overlord_or_above|Any country above current in hierarchy   random_overlord_or_above
-company|random_owned_country|Iterate through all countries owned by the scoped company   random_owned_country
-diplomatic_pact|random_participant|Any of two participants of the diplomatic pact in a scope   random_participant
-country,interest_group|random_political_lobby|Iterate through all political lobbies in a country or interest group   random_political_lobby
-country|random_political_movement|Iterate through all political movements in a country   random_political_movement
-law|random_possible_amendment_type|Iterate through amendment types that could be added to the scoped law   random_possible_amendment_type
-country|random_potential_party|Iterate through all potential political parties in a country   random_potential_party
-none|random_power_bloc|Iterate through all power blocs   random_power_bloc
-power_bloc|random_power_bloc_member|Iterate through all members of the scoped power bloc including the leader   random_power_bloc_member
-interest_group|random_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law   random_preferred_law
-country,country_definition|random_primary_culture|Primary cultures of the scoped country or country definition   random_primary_culture
-province|random_province|Iterate through all Provinces in the scoped State   random_province
+none|random_market|Iterate through all markets globally
+market|random_market_goods|Iterate through all active (market) goods in a market
+party|random_member|Iterate through all interest group members of a party
+country,front,hq|random_military_formation|Iterate through all military formations currently present at input scope Supported scopes: country, front, hq
+country,state,state_region,strategic_region|random_neighbouring_state|Iterate through all states neighbouring a state region
+country|random_overlord_or_above|Any country above current in hierarchy
+company|random_owned_country|Iterate through all countries owned by the scoped company
+diplomatic_pact|random_participant|Any of two participants of the diplomatic pact in a scope
+country,interest_group|random_political_lobby|Iterate through all political lobbies in a country or interest group
+country|random_political_movement|Iterate through all political movements in a country
+law|random_possible_amendment_type|Iterate through amendment types that could be added to the scoped law
+country|random_potential_party|Iterate through all potential political parties in a country
+none|random_power_bloc|Iterate through all power blocs
+power_bloc|random_power_bloc_member|Iterate through all members of the scoped power bloc including the leader
+interest_group|random_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law
+country,country_definition|random_primary_culture|Primary cultures of the scoped country or country definition
+province|random_province|Iterate through all Provinces in the scoped State
 none|random_province_in_afghanistan|money_amount_multiplier_very_small
 none|random_province_in_africa|ship_mod_coastal_defence_doctrine
 none|random_province_in_allahabad_bombay_line|ship_mod_coastal_defence_doctrine
@@ -2369,42 +2369,42 @@ none|random_province_in_wet_process_region|money_amount_multiplier_more_large
 none|random_province_in_yugoslavia|money_amount_multiplier_large
 none|random_province_in_zambezi_basin|gfx_infantry_mobilization_count
 none|random_province_in_zanj_old|money_amount_multiplier_more_large
-country|random_rival_country|Any country that is being rivaled by the country in a scope   random_rival_country
-country|random_rivaling_country|Any country that is rivaling the country in a scope   random_rivaling_country
-country,front,interest_group,military_formation|random_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation   random_scope_admiral
-country|random_scope_ally|Iterate through all allies to a: country   random_scope_ally
-law|random_scope_amendment|Iterate through amendments of the scoped law   random_scope_amendment
-country,front,hq|random_scope_army|Iterate through all armies currently present at input scope   Supported scopes: country, front, hq   random_scope_army
-treaty|random_scope_article|Iterate through articles of the scoped treaty   random_scope_article
-treaty_options,treaty|random_scope_article_option|Iterate through article_options of the scoped treaty or treaty_options   random_scope_article_option
-country,state|random_scope_building|Iterate through all buildings in a: state, country   random_scope_building
-country,front,interest_group,military_formation|random_scope_character|Iterate through all characters in a: country, interestgroup, or front   random_scope_character
-market,state_region,strategic_region|random_scope_country|Iterate through all countries with a presence in the supported scope (currently: market, strategic region)   random_scope_country
-country,state|random_scope_culture|Iterate through all cultures in the scope   random_scope_culture
-country|random_scope_diplomatic_pact|Any diplomatic pact of the country in a scope   random_scope_diplomatic_pact
-country,hq|random_scope_fleet|Iterate through all fleets currently present at input scope   Supported scopes: country, hq   random_scope_fleet
-war|random_scope_front|Iterate through all Fronts related to the scoped War   random_scope_front
-country,front,interest_group,military_formation|random_scope_general|Iterate through all generals in a: country, interestgroup, front, or military formation   random_scope_general
-country|random_scope_held_interest_marker|Iterate through all interest markers held by a country   random_scope_held_interest_marker
-country,culture|random_scope_homeland_state|Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country   random_scope_ho...
-diplomatic_play|random_scope_initiator_ally|Iterate through all allies to an initiator in a: diplomatic play   random_scope_initiator_ally
-country,state_region,strategic_region|random_scope_interest_marker|Iterate through all interest markers in a: country, strategic region, state region   random_scope_interest_marker
-journal_entry|random_scope_je_involved|Iterate through all involved in a journal entry   random_scope_je_involved
-diplomatic_play|random_scope_play_involved|Iterate through all involved in a: diplomatic play   random_scope_play_involved
-country,front,interest_group,military_formation|random_scope_politician|Iterate through all politicians in a: country or interestgroup   random_scope_politician
-country,culture,interest_group,state|random_scope_pop|Iterate through all pops in a: country, state, interest group, culture   random_scope_pop
-company|random_scope_regional_hqs|Iterate through regional HQs of the scoped company   random_scope_regional_hqs
-country,military_formation|random_scope_ship|Iterate through all ships in a country or military formation   random_scope_ship
-country,front,state_region,strait,strategic_region,theater|random_scope_state|Iterate through all states including provinces from a: country, state_region, theater, front, or strait   random_scope_state
-country,state|random_scope_strait|Iterate through all straits with a land endpoint in the scoped state or country   random_scope_strait
-diplomatic_play|random_scope_target_ally|Iterate through all allies to a target in a: diplomatic play   random_scope_target_ally
-country|random_scope_theater|Iterate through all theaters in a: country   random_scope_theater
-country|random_scope_treaty|Iterate through in force treaties binding the scoped country   random_scope_treaty
-country|random_scope_violate_sovereignty_interested_parties|Iterate through all countries that would be interested if country in scope has their sovereignty violated   random_scope_violate_sovereignty_intere...
-country|random_scope_violate_sovereignty_wars|Iterate through all relevant wars if target country had their sovereignty violated by scoped country   random_scope_violate_sovereignty_wars
-country|random_scope_war|Iterate through all wars related to the scope   random_scope_war
-state|random_sea_node_adjacent_state|Iterate through all states that share a sea node with a state   random_sea_node_adjacent_state
-none|random_state|Iterate through all states globally   random_state
+country|random_rival_country|Any country that is being rivaled by the country in a scope
+country|random_rivaling_country|Any country that is rivaling the country in a scope
+country,front,interest_group,military_formation|random_scope_admiral|Iterate through all admirals in a: country, interestgroup, or military formation
+country|random_scope_ally|Iterate through all allies to a: country
+law|random_scope_amendment|Iterate through amendments of the scoped law
+country,front,hq|random_scope_army|Iterate through all armies currently present at input scope Supported scopes: country, front, hq
+treaty|random_scope_article|Iterate through articles of the scoped treaty
+treaty_options,treaty|random_scope_article_option|Iterate through article_options of the scoped treaty or treaty_options
+country,state|random_scope_building|Iterate through all buildings in a: state, country
+country,front,interest_group,military_formation|random_scope_character|Iterate through all characters in a: country, interestgroup, or front
+market,state_region,strategic_region|random_scope_country|Iterate through all countries with a presence in the supported scope (currently: market, strategic region)
+country,state|random_scope_culture|Iterate through all cultures in the scope
+country|random_scope_diplomatic_pact|Any diplomatic pact of the country in a scope
+country,hq|random_scope_fleet|Iterate through all fleets currently present at input scope Supported scopes: country, hq
+war|random_scope_front|Iterate through all Fronts related to the scoped War
+country,front,interest_group,military_formation|random_scope_general|Iterate through all generals in a: country, interestgroup, front, or military formation
+country|random_scope_held_interest_marker|Iterate through all interest markers held by a country
+country,culture|random_scope_homeland_state|Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country
+diplomatic_play|random_scope_initiator_ally|Iterate through all allies to an initiator in a: diplomatic play
+country,state_region,strategic_region|random_scope_interest_marker|Iterate through all interest markers in a: country, strategic region, state region
+journal_entry|random_scope_je_involved|Iterate through all involved in a journal entry
+diplomatic_play|random_scope_play_involved|Iterate through all involved in a: diplomatic play
+country,front,interest_group,military_formation|random_scope_politician|Iterate through all politicians in a: country or interestgroup
+country,culture,interest_group,state|random_scope_pop|Iterate through all pops in a: country, state, interest group, culture
+company|random_scope_regional_hqs|Iterate through regional HQs of the scoped company
+country,military_formation|random_scope_ship|Iterate through all ships in a country or military formation
+country,front,state_region,strait,strategic_region,theater|random_scope_state|Iterate through all states including provinces from a: country, state_region, theater, front, or strait
+country,state|random_scope_strait|Iterate through all straits with a land endpoint in the scoped state or country
+diplomatic_play|random_scope_target_ally|Iterate through all allies to a target in a: diplomatic play
+country|random_scope_theater|Iterate through all theaters in a: country
+country|random_scope_treaty|Iterate through in force treaties binding the scoped country
+country|random_scope_violate_sovereignty_interested_parties|Iterate through all countries that would be interested if country in scope has their sovereignty violated
+country|random_scope_violate_sovereignty_wars|Iterate through all relevant wars if target country had their sovereignty violated by scoped country
+country|random_scope_war|Iterate through all wars related to the scope
+state|random_sea_node_adjacent_state|Iterate through all states that share a sea node with a state
+none|random_state|Iterate through all states globally
 none|random_state_in_afghanistan|money_amount_multiplier_more_large
 none|random_state_in_africa|money_amount_multiplier_very_large
 none|random_state_in_allahabad_bombay_line|money_amount_multiplier_large
@@ -2566,7 +2566,7 @@ none|random_state_in_wet_process_region|money_amount_multiplier_very_large
 none|random_state_in_yugoslavia|money_amount_multiplier_very_small
 none|random_state_in_zambezi_basin|ship_mod_coastal_defence_doctrine
 none|random_state_in_zanj_old|ship_mod_coastal_defence_doctrine
-none|random_state_region|Iterate through all state regions   random_state_region
+none|random_state_region|Iterate through all state regions
 none|random_state_region_in_afghanistan|ship_mod_merchant_navy_doctrine
 none|random_state_region_in_africa|gfx_artillery_mobilization_count
 none|random_state_region_in_allahabad_bombay_line|free_dye_producing_arable_land
@@ -2728,8 +2728,8 @@ none|random_state_region_in_wet_process_region|money_amount_multiplier_very_smal
 none|random_state_region_in_yugoslavia|money_amount_multiplier_very_small
 none|random_state_region_in_zambezi_basin|ship_mod_coastal_defence_doctrine
 none|random_state_region_in_zanj_old|state_urbanization_rate
-country|random_strategic_objective|Iterate through all Strategic Objective states from the scoped Country   random_strategic_objective
-none|random_strategic_region|Iterate through all strategic regions globally   random_strategic_region
+country|random_strategic_objective|Iterate through all Strategic Objective states from the scoped Country
+none|random_strategic_region|Iterate through all strategic regions globally
 none|random_strategic_region_in_afghanistan|ship_mod_coastal_defence_doctrine
 none|random_strategic_region_in_africa|money_amount_multiplier_more_large
 none|random_strategic_region_in_allahabad_bombay_line|free_cotton_producing_arable_land
@@ -2891,78 +2891,78 @@ none|random_strategic_region_in_wet_process_region|annex_subject_base_liberty_de
 none|random_strategic_region_in_yugoslavia|money_amount_multiplier_medium
 none|random_strategic_region_in_zambezi_basin|0��T�
 none|random_strategic_region_in_zanj_old|ship_mod_jeune_ecole_doctrine
-country|random_subject_of_subject|Any country below direct subjects in hierarchy   random_subject_of_subject
-country|random_subject_or_below|Any country below current in hierarchy   random_subject_or_below
-political_movement|random_supporting_character|Iterate through all characters that support the scoped political movement   random_supporting_character
-none|random_treaty|Iterate through treaties (both in force and drafts)   random_treaty
-country|random_valid_mass_migration_culture|Lists for cultures in the scoped country that are valid for mass migration   random_valid_mass_migration_culture
-war|random_war_participant|Iterate through all participants in a war   random_war_participant
+country|random_subject_of_subject|Any country below direct subjects in hierarchy
+country|random_subject_or_below|Any country below current in hierarchy
+political_movement|random_supporting_character|Iterate through all characters that support the scoped political movement
+none|random_treaty|Iterate through treaties (both in force and drafts)
+country|random_valid_mass_migration_culture|Lists for cultures in the scoped country that are valid for mass migration
+war|random_war_participant|Iterate through all participants in a war
 country|recalculate_pop_ig_support|Recalculates and updates a country's pop IG
 country|regime_change|Executes a regime change by the scope country in the target country.
-country|remove_active_objective_subgoal|Removes an active objective subgoal   remove_active_objective_subgoal
+country|remove_active_objective_subgoal|Removes an active objective subgoal
 amendment|remove_amendment|Removes an amendment immediately without checking cooldown
 character|remove_as_interest_group_leader|Removes a character from position as interest group leader
-country|remove_banned_goods|Removes a total ban of a good from a country   remove_banned_goods
+country|remove_banned_goods|Removes a total ban of a good from a country
 state|remove_building|Remove a building in the scope state
 political_movement|remove_character_ideology|Removes a character ideology from the scoped political movement
 character|remove_character_role|Removes an existing role from a character, works with either archetype or database role
 state_region|remove_claim|Removes scoped state region as a claim for target country
 country|remove_company|Removes company type from a country's companies
-culture|remove_cultural_obsession|Removes a new obsession to the culture in scope
-culture|remove_cultural_taboo|Removes a taboo from the culture in scope
-country|remove_diplomatic_pact|Removes a diplomatic pact between two countries, with scope country as initiator   remove_diplomatic_pact
+culture|remove_cultural_obsession|Removes a new obsession to the culture in scope Where X is a goods
+culture|remove_cultural_taboo|Removes a taboo from the culture in scope Where X is a goods
+country|remove_diplomatic_pact|Removes a diplomatic pact between two countries, with scope country as initiator
 country|remove_enactment_modifier|Removes an enactment-related timed modifier effect to object in scope
 state_goods|remove_exports|Removes a multiplier of exports to the state for the scoped state goods
 none|remove_from_list|Removes the current scope from a named list remove_from_list
 none|remove_global_variable|Removes a variable
 state_region|remove_homeland|Removes scoped state region as Homeland for target culture
 interest_group|remove_ideology|Removes an ideology from scoped interest group
-party|remove_ig_from_party|Removes target interest group from scope party   py:py_key
+party|remove_ig_from_party|Removes target interest group from scope party py:py_key
 state_goods|remove_imports|Removes a multiplier of imports to the state for the scoped state goods
-diplomatic_play|remove_initiator_backers|Remove a tag/scope country from the initiator side of a diplomatic play   remove_initiator_backers
+diplomatic_play|remove_initiator_backers|Remove a tag/scope country from the initiator side of a diplomatic play
 journal_entry|remove_involved_country|Removes target country from involved countries in scope journal entry
-none|remove_list_global_variable|Removes the target from a variable list   remove_list_variable
-none|remove_list_local_variable|Removes the target from a variable list   remove_list_variable
-none|remove_list_variable|Removes the target from a variable list   remove_list_variable
+none|remove_list_global_variable|Removes the target from a variable list remove_list_variable
+none|remove_list_local_variable|Removes the target from a variable list remove_list_variable
+none|remove_list_variable|Removes the target from a variable list Where X is the name of the variable Where Y is an event target
 political_lobby|remove_lobby_member|Removes an interest group as a member of scope political lobby
 none|remove_local_variable|Removes a variable
 country,building,character,institution,interest_group,journal_entry,political_movement,power_bloc,state|remove_modifier|Removes a timed modifier effect to object in scope
 country|remove_monopoly|removes a monopoly in a country scope for a specific building:
 company|remove_owned_country|Removes the scoped company's ownership of the target country
-country|remove_primary_culture|Removes a culture from the primary cultures of a country
-power_bloc|remove_principle|Removes principle from powerbloc
+country|remove_primary_culture|Removes a culture from the primary cultures of a country Where X is a culture scope
+power_bloc|remove_principle|Removes principle from powerbloc power_bloc
 state,state_region|remove_resource_potential|Remove a building type from the resource potentials of a state region
 interest_group|remove_ruling_interest_group|Removes interest group in scope from government
-state_region|remove_state_trait|remove state trait in a scoped state region   remove_state_trait
-diplomatic_play|remove_target_backers|Remove a tag/scope country to the target side of a diplomatic play   remove_target_backers
-country|remove_taxed_goods|Removes consumption taxes on a good from a country   remove_taxed_goods
-culture|remove_tradition_trait|Removes an existing tradition trait from the culture in scope
+state_region|remove_state_trait|remove state trait in a scoped state region
+diplomatic_play|remove_target_backers|Remove a tag/scope country to the target side of a diplomatic play
+country|remove_taxed_goods|Removes consumption taxes on a good from a country
+culture|remove_tradition_trait|Removes an existing tradition trait from the culture in scope Where X is a tradition trait
 character|remove_trait|Remove a trait from a Character
 none|remove_variable|Removes a variable
 diplomatic_play|remove_war_goal|Removes a war goal from a DP.
-character|replace_character_roles|Replaces existing role(s) from a character with another, works with either archetype or database role   replace_character_role
+character|replace_character_roles|Replaces existing role(s) from a character with another, works with either archetype or database role replace_character_role
 state|reset_hub_names|Resets the names of all hubs in a scoped state
 state|reset_state_name|Resets the name of a scoped state
 diplomatic_play|resolve_play_for|effect end diplo play for one side, with it gaining war goals
-character|retire_character|Retire a character
-character|retire_character_if_should_be_culled|Conditionally retire a character if it should be culled
-none|round_global_variable|Rounds a variable to the nearest specified value   round_variable
-none|round_local_variable|Rounds a variable to the nearest specified value   round_variable
-none|round_variable|Rounds a variable to the nearest specified value   round_variable
-none|save_scope_as|Saves the current scope as an arbitrarily-named target to be referenced later in the (unbroken) event chain   save_scope_as
-none|save_scope_value_as|Saves a numerical or bool value as an arbitrarily-named target to be referenced later in the (unbroken) event chain   save_scope_value_as
-none|save_temporary_scope_as|Saves the current scope as an arbitrarily-named temporary target to be referenced later in the same effect   save_temporary_scope_as
-none|save_temporary_scope_value_as|Saves a numerical or bool value as an arbitrarily-named temporary target to be referenced later in the same effect   save_temporary_scope_value_as
+character|retire_character|Retire a character retire_character
+character|retire_character_if_should_be_culled|Conditionally retire a character if it should be culled retire_character_if_should_be_culled
+none|round_global_variable|Rounds a variable to the nearest specified value round_variable
+none|round_local_variable|Rounds a variable to the nearest specified value round_variable
+none|round_variable|Rounds a variable to the nearest specified value Where X is the name of the variable Where Y is a script value
+none|save_scope_as|Saves the current scope as an arbitrarily-named target to be referenced later in the (unbroken) event chain
+none|save_scope_value_as|Saves a numerical or bool value as an arbitrarily-named target to be referenced later in the (unbroken) event chain
+none|save_temporary_scope_as|Saves the current scope as an arbitrarily-named temporary target to be referenced later in the same effect
+none|save_temporary_scope_value_as|Saves a numerical or bool value as an arbitrarily-named temporary target to be referenced later in the same effect
 country|seize_investment_pool|Seize investment pool for the treasury and transfer all private construction queue elements to the government
 character|set_as_adult|Turns the scoped character into an adult if they are not one already.
 ship|set_as_flagship|Assign/unassign the ship as a flagship for the country
 character|set_as_interest_group_leader|Sets a character as interest group leader
 state|set_available_for_autonomous_investment|Sets a building type as available for autonomous investment in the current scoped State
-journal_entry|set_bar_progress|Sets progress for a journal entry scripted progressbar   set_bar_progress
+journal_entry|set_bar_progress|Sets progress for a journal entry scripted progressbar
 political_movement|set_bolstering|Starts/stops bolstering the political movement in scope
-country|set_capital|Set capital state in a country scope
+country|set_capital|Set capital state in a country scope Where X is a state region
 character|set_career_length|Sets the career length from now for a character in a role.
-character|set_character_as_executive|Makes scope character the executive of target company   set_character_as_executive
+character|set_character_as_executive|Makes scope character the executive of target company
 character|set_character_as_ruler|Set scoped character as ruler in their country.
 character|set_character_busy_and_immortal|Mark a character as busy and immortal or clear said mark
 character|set_character_immortal|Set scoped character as immortal.
@@ -2974,88 +2974,88 @@ country|set_country_type|Sets the type of country for a country, for history
 state,state_region|set_devastation|Set devastation to a state region or state
 country|set_diplomats_expelled|Expels diplomats from target country in scoped country
 country|set_electoral_confidence|Set x% electoral confidence in scope country
-country|set_export_tariff_level|Sets export tariff level for a good in scoped country   set_export_tariff_level
+country|set_export_tariff_level|Sets export tariff level for a good in scoped country
 state_goods|set_exports|Sets a multiplier of exports to the state for the scoped state goods
 culture|set_fervor|Sets the fervor of a scoped culture
 character|set_first_name|Changes the first name of a character to a loc key
-none|set_global_variable|Sets a variable   set_variable = { name = X value = Y days = Z }   Where X is the name of the variable used to then access it   Where Y is any even...
+none|set_global_variable|Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event targ...
 country|set_government_wage_level|Sets the government wage level of scoped country
 interest_group|set_has_negotiated|Sets whether an interest group has finished negotiating:
 country|set_heir|Sets the heir of the scoped country to the character scope specified
 character|set_home_country|Set a character's home country.
 character|set_home_country_definition|Set a character's home country directly to a tag, you can use this to avoid making sure that the tag exists, this makes them an exile
-character|set_home_state|Changes the home state of the scoped character   set_home_state
-state|set_hub_name|Sets the name of a hub in a scoped state to a localization string   set_state_name
+character|set_home_state|Changes the home state of the scoped character
+state|set_hub_name|Sets the name of a hub in a scoped state to a localization string set_state_name
 state|set_hub_names|Sets the names of all the hubs in a scoped state to localization strings based on the name of the state region, the type of hub and a specified suffix
 character|set_ideology|Changes scoped character's ideology
 interest_group|set_ig_trait|Adds a trait to the Interest Group, or replaces their current trait with the same approval level
 country|set_immune_to_revolutions|Makes a country immune to revolutions or removes such immunity.
-country|set_import_tariff_level|Sets import tariff level for a good in scoped country   set_import_tariff_level
+country|set_import_tariff_level|Sets import tariff level for a good in scoped country
 state_goods|set_imports|Sets a multiplier of imports to the state for the scoped state goods
-country|set_institution_investment_level|Sets the investment level for an institution   set_institution_investment_level
+country|set_institution_investment_level|Sets the investment level for an institution
 character|set_interest_group|Sets the interest group of the character
 interest_group|set_interest_group_name|Renames interest group to the specified loc key
 character|set_is_noble|Sets the noble flag of the scoped character.
 diplomatic_play|set_key|Set name to a diplomatic play
 character|set_last_name|Changes the last name of a character to a loc key
-none|set_local_variable|Sets a variable   set_variable = { name = X value = Y days = Z }   Where X is the name of the variable used to then access it   Where Y is any even...
-country|set_market_capital|Set market capital in a country scope
+none|set_local_variable|Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event targ...
+country|set_market_capital|Set market capital in a country scope Where X is a state region
 country|set_military_wage_level|Sets the military wage level of scoped country
-country|set_mutual_secret_goal|Set mutual secret AI goal for scope country and target country   set_mutual_secret_goal
+country|set_mutual_secret_goal|Set mutual secret AI goal for scope country and target country
 culture|set_name_format|Sets the name format of a scoped culture
 country|set_next_election_date|Set next election date for country
 country|set_only_legal_party_from_ig|Sets the only party that is legal in a country, used for single-party state law.
-country|set_owes_obligation_to|Set whether a country owes another a obligation   set_owes_obligation
-state_region|set_owner_of_provinces|Gives a set of provinces in a state region to a specific country   set_owner_of_provinces
-pop|set_pop_literacy|Sets the literacy of the pop   set_pop_literacy
-pop|set_pop_qualifications|Sets the pop qualifications of the pop for the given type   set_pop_qualifications
-pop|set_pop_wealth|Sets the wealth of the pop   set_pop_wealth
-country|set_relations|Set relations between two countries   set_relations
-country|set_ruling_interest_groups|Creates a government for the country in scope from a set of interest groups   set_ruling_interest_groups
+country|set_owes_obligation_to|Set whether a country owes another a obligation set_owes_obligation
+state_region|set_owner_of_provinces|Gives a set of provinces in a state region to a specific country
+pop|set_pop_literacy|Sets the literacy of the pop Where the ratio is a script value computing the percentage of (workforce) pops that will be literate
+pop|set_pop_qualifications|Sets the pop qualifications of the pop for the given type Where the qualifications is a script value computing the percentage of (workforce) pops t...
+pop|set_pop_wealth|Sets the wealth of the pop Where wealth is a script values
+country|set_relations|Set relations between two countries
+country|set_ruling_interest_groups|Creates a government for the country in scope from a set of interest groups
 party|set_ruling_party|Adds all interest groups in a party to government and removes all other interest groups from the government
-country|set_secret_goal|Set a secret AI goal for scope country towards another country   set_secret_goal
+country|set_secret_goal|Set a secret AI goal for scope country towards another country
 ship|set_ship_owner|Set ship owner country
 ship|set_ship_owner_multiple|Set ship owner country, use when setting multiple ships in a row to put them in a single ownership transfer fleet, then use clear_ownership_transfe...
-country|set_social_hierarchy|Sets the social hierarchy the scoped country   set_social_hierarchy
+country|set_social_hierarchy|Sets the social hierarchy the scoped country
 state|set_state_name|Sets the name of a scoped state to a localization string
-state|set_state_owner|Set State Owner   set_state_owner = scope
-country|set_state_religion|Changes the state religion of the country to the specified religion
+state|set_state_owner|Set State Owner
+country|set_state_religion|Changes the state religion of the country to the specified religion Where X is a religion scope
 state|set_state_type|Sets a state to a certain type (incorporated, unincorporated, treaty_port)
-country|set_strategy|Set AI strategy for scope country   set_strategy
+country|set_strategy|Set AI strategy for scope country
 building|set_subsidized|Sets whether a building is subsidized
 political_movement|set_suppression|Starts/stops suppressing the political movement in scope
-journal_entry|set_target_technology|Sets a (new) target technology scope for a journal entry   set_target_technology
+journal_entry|set_target_technology|Sets a (new) target technology scope for a journal entry
 country|set_tax_level|Sets the overall tax level of scoped country
-country|set_tension|Set tension between two countries   set_tension
-none|set_variable|Sets a variable   set_variable = { name = X value = Y days = Z }   Where X is the name of the variable used to then access it   Where Y is any even...
+country|set_tension|Set tension between two countries
+none|set_variable|Sets a variable Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) ...
 diplomatic_play|set_war|Set a diplomatic play to be a war
-none|show_as_tooltip|Enclosed effects are only shown in tooltips (but are not actually executed)   show_as_tooltip
-none|sort_global_variable_list|Sorts a variable list   sort_variable_list
-none|sort_local_variable_list|Sorts a variable list   sort_variable_list
-none|sort_variable_list|Sorts a variable list   sort_variable_list
-state_region|spawn_entity_effect|Spawns a temporary entity at the center of the scoped state region for a number of seconds   spawn_entity_effect
+none|show_as_tooltip|Enclosed effects are only shown in tooltips (but are not actually executed)
+none|sort_global_variable_list|Sorts a variable list sort_variable_list
+none|sort_local_variable_list|Sorts a variable list sort_variable_list
+none|sort_variable_list|Sorts a variable list Where X is the name of the variable Where Y is some math script to determine sort order
+state_region|spawn_entity_effect|Spawns a temporary entity at the center of the scoped state region for a number of seconds
 state|start_building_construction|Start constructing a building in a scoped state as a government construction
 state_region|start_earthquake_effect|Starts an earthquake camera shake centered on the scoped state region
 country|start_enactment|Starts enacting the specified law type for the country in scope
-state_region|start_harvest_condition|Start a harvest condition of type (or refresh it if already exists) in the scoped state region   start_harvest_condition
-state_region|start_harvest_condition_with_params|Start a harvest condition of type in scoped state region where intensity and duration(in days) are optionally provided   start_harvest_condition_wi...
-country|start_national_awakening|Starts a cultural awakening   start_national_awakening
+state_region|start_harvest_condition|Start a harvest condition of type (or refresh it if already exists) in the scoped state region
+state_region|start_harvest_condition_with_params|Start a harvest condition of type in scoped state region where intensity and duration(in days) are optionally provided
+country|start_national_awakening|Starts a cultural awakening
 state|start_privately_funded_building_construction|Start constructing a building in a scoped state as a private construction
 country|start_research_random_technology|Scoped country starts research of any random technology they can
 none|start_tutorial_lesson|Starts the tutorial lesson with the given key.
 none|switch|Switch on a trigger for the evaluation of another trigger with an optional fallback trigger.
-country|take_on_scaled_debt|Transfers an amount of debt equal to the defined multiplier on target's max credit   take_on_scaled_debt
-military_formation|teleport_to_front|Teleports the scope formation to the target front
+country|take_on_scaled_debt|Transfers an amount of debt equal to the defined multiplier on target's max credit 	who
+military_formation|teleport_to_front|Teleports the scope formation to the target front Can also take a base_camp parameter, will use given province to search for the nearest connected ...
 character|transfer_character|Transfers current scope character to target country
 country|transfer_subject|Transfers subject from another country to current scope country
 character|transfer_to_formation|Transfers scope character to target formation
-none|trigger_event|Triggers an event for the current scope
-country|try_form_government_with|Tries to form a new govt with provided IGs, If not possible with legitimacy provided will try and add as many IGs into the govt as possible    try_...
+none|trigger_event|Triggers an event for the current scope trigger_event
+country|try_form_government_with|Tries to form a new govt with provided IGs, If not possible with legitimacy provided will try and add as many IGs into the govt as possible  try_fo...
 character|unassign_from_formation|Unassigns the scoped commander from their formation
 state|unset_available_for_autonomous_investment|Sets a building type as unavailable for autonomous investment in the current scoped State
 country|unset_only_legal_party|Returns the country to a non single-party state state, where multiple parties can exist if they are allowed by other laws
 country|update_party_support|Updates party support in scoped country.
 country|validate_subsidies|Validates subsidies across a country's buildings.
-country|violate_sovereignty_join|Target joins scoped war   violate_sovereignty_accept
-none|while|Repeats enclosed effects while limit criteria are met or until set iteration count is reached   while
-treaty|withdraw|Withdraws a country from a treaty   scope:treaty = {
+country|violate_sovereignty_join|Target joins scoped war violate_sovereignty_accept
+none|while|Repeats enclosed effects while limit criteria are met or until set iteration count is reached  while
+treaty|withdraw|Withdraws a country from a treaty scope:treaty = {

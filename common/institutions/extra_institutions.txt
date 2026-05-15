@@ -19,6 +19,7 @@ institution_ministry_of_commerce = {
 		state_trade_advantage_mult = 0.05
 		state_trade_capacity_mult = 0.05
 		country_enactment_success_chance_law_free_trade_add = 0.05
+		country_colonial_invest_effectiveness_add = 0.05
 	}
 }
 
@@ -45,6 +46,7 @@ institution_national_bank = {
 		building_cash_reserves_mult = 0.2
 		state_capitalists_investment_pool_efficiency_mult = 0.05
 		country_government_dividends_efficiency_add = 0.01
+		country_colonial_invest_effectiveness_add = 0.05
 	}
 }
 
@@ -54,6 +56,7 @@ institution_ministry_of_culture = {
 	modifier = {
 		state_assimilation_mult = 0.1
 		state_conversion_mult = 0.1
+		country_colonial_assim_effectiveness_add = 0.05
 		country_primary_culture_fervor_from_laws_add = 2.5
 		country_society_tech_research_speed_mult = 0.05
 		country_cultural_pull_mult = 0.05
@@ -112,6 +115,7 @@ institution_ministry_of_propaganda = {
 		country_primary_culture_fervor_from_laws_add = 2.5
 		country_support_separatism_strength_mult = 0.05
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.05
+		country_colonial_stability_drift_add = 0.05
 	}
 }
 
@@ -131,6 +135,7 @@ institution_ministry_of_thought_control = {
 
 	modifier = {
 		country_monthly_loyalists_add = 0.001
+		country_colonial_stability_drift_add = 0.1
 		country_electoral_confidence_impact_mult = -0.1
 	}
 }
@@ -189,5 +194,11 @@ institution_migration_controls = {
 		country_mass_migration_attraction_mult = -0.1
 		country_migration_restrictiveness_add = 10
 		country_leverage_resistance_mult = 0.05
+	}
+}
+
+INJECT:institution_police = {
+	modifier = {
+		country_colonial_garrison_effectiveness_add = 0.05
 	}
 }

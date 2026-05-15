@@ -194,16 +194,11 @@ colonial_culture_change = {
 
 	ai = {
 		evaluation_chance = {
+			# scope:target_country is unbound in evaluation_chance (proposer scope only);
+			# per-target attitude gating belongs in will_propose / propose_score instead.
 			value = 0.25
 			if = {
 				limit = { country_rank >= rank_value:great_power }
-				add = 0.25
-			}
-			if = {
-				limit = {
-					exists = scope:target_country
-					has_attitude = { who = scope:target_country attitude = domineering }
-				}
 				add = 0.25
 			}
 		}
@@ -954,14 +949,10 @@ voluntary_union = {
 		# number with no breakdown is the worst possible UX.
 
 		evaluation_chance = {
-			value = 0.025
-			# More likely to consider when relations are very high.
-			if = {
-				limit = {
-					scope:target_country.relations:root >= relations_threshold:friendly
-				}
-				add = 0.05
-			}
+			# scope:target_country is unbound here (evaluation_chance runs in proposer scope only);
+			# per-target relations gating belongs in propose_score, which already does it via the
+			# relations bands below.
+			value = 0.05
 		}
 
 		accept_score = {

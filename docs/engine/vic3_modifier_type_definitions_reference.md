@@ -2372,7 +2372,7 @@ _Cannon Artillery Offense_
 - `country_yankee_and_dixie_cultures_obsessed_with_guns` — **Yankee and Dixie Cultures gain an Obsession with Small Arms** — Yankee and Dixie Cultures gain an Obsession with Small Arms
 - `country_yi_cultural_acceptance_add` — **Acceptance of Yi Culture** — A bonus or penalty to a specific culture's [concept_acceptance]
 - `nuclear_disarmament` — **Nuclear Disarmament**
-- `nuclear_program_pause` — **[concept_nuclear_program] Freeze**
+- `nuclear_program_pause` — **Nuclear Program Freeze**
 - `receiving_nuclear_program_aid` — **Receiving [concept_nuclear_program] Aid**
 - `un_membership_obligation` — **UN Membership Obligation**
 

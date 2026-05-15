@@ -88,6 +88,16 @@ Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` su
 
 **Fix:** Re-export each file through the mod's image pipeline (`scripts/image_pipeline/`) at multiple-of-4 dimensions and overwrite. Verify warning count drops to 0 via `curl -s "http://localhost:8950/logs/debug?summary=true"` after the next launch.
 
+### L10. Mod loc-only variables flagged unused
+**Files:**
+- `common/scripted_effects/cultural_hegemony_effects.txt` — `ch_rank_*_{sol,art,prs,tech,raw}` globals
+- `common/scripted_effects/nuclear_weapon_effects.txt` — `nuke_rank_*_stockpile` globals
+- `localization/english/te_concepts_l_english.yml` — `[GetGlobalVariable('…').GetValue]` reads
+
+**Problem:** Mod uses `set_global_variable` to expose per-rank breakdown values (cultural-hegemony component scores, nuclear stockpiles) to tooltip text via `GetGlobalVariable('ch_rank_N_sol')` etc. in concept tooltips. The engine explicitly tracks variable reads but notes "use in localization doesn't count due to technical limitations," emitting `Variable 'X' is set but is never used` (source `jomini_effect.cpp:1135`) once per variable at load. Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** Re-architect the affected loc tooltips to compute their values from script values (which the engine tracks correctly) rather than globals exposed for read. Large refactor with no functional gain; deferred until the wider concept-tooltip system gets revisited. Or, if the engine ever adds loc-read tracking, this self-resolves.
+
 ---
 
 ## Policy

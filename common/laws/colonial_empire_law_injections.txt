@@ -133,7 +133,11 @@ INJECT:law_protected_speech = {
 INJECT:law_secret_police = {
 	modifier = {
 		country_colonial_stability_drift_add = 0.2
-		country_colonial_garrison_effectiveness_add = 0.2
+	}
+	
+	
+	institution_modifier = {
+		country_colonial_garrison_effectiveness_add = 0.1
 	}
 }
 

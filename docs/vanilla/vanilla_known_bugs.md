@@ -746,6 +746,15 @@ PdxDataFetchLocalizedData failed for
 
 Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic.
 
+### `common/diplomatic_actions/28_invite_to_power_bloc.txt:87` — `accept_score` script value reads unset type
+- source: `jomini_scriptvalue.cpp:1659`
+
+```
+common/diplomatic_actions/28_invite_to_power_bloc.txt:87
+```
+
+Vanilla diplomatic action's `accept_score` block evaluates against an unset target during AI consideration and the engine emits "Value of wrong type … Got value of type 'none'". Fires hundreds of times per session as the AI evaluates power-bloc invites. Cosmetic — diplomatic AI behavior is unaffected.
+
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
 ## How to triage a new error-log entry

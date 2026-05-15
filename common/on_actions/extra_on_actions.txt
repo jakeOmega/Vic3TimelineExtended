@@ -1560,6 +1560,7 @@ decolonization_events_on_action = {
 				# active >10 years with intelligentsia in opposition.
 				8 = {
 					trigger = {
+						has_variable = colonial_je_total_months
 						any_scope_state = { is_overseas_colonial_state = yes }
 						var:colonial_je_total_months > 120
 						ig:ig_intelligentsia ?= {
@@ -1574,6 +1575,7 @@ decolonization_events_on_action = {
 				# deployment.
 				8 = {
 					trigger = {
+						has_variable = colonial_garrison_months
 						any_scope_state = { is_overseas_colonial_state = yes }
 						var:colonial_garrison_months > 36
 					}

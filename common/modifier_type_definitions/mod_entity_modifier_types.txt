@@ -3056,11 +3056,6 @@ country_institution_cost_institution_migration_controls_mult = {
 	percent = yes
 }
 
-country_institution_cost_institution_home_affairs_mult = {
-	color = bad
-	percent = yes
-}
-
 country_institution_impact_institution_schools_mult = {
 	color = good
 	percent = yes

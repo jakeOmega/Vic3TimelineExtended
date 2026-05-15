@@ -51,3 +51,13 @@ gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds
 ```
 
 Block-compressed (BC1/BC3) DDS textures need multiple-of-4 width and height; these four mod-side historical-company icons fail that constraint and emit edge-artifact warnings once per file at load. Visual-only — engine still loads the texture. Fix requires re-export through the image pipeline; tracked at `docs/audits/open_issues.md#L9`.
+
+### `jomini_effect.cpp:1135` — variables set for localization tooltip read flagged unused
+- source: `jomini_effect.cpp:1135`
+- tracked: `docs/audits/open_issues.md#l10-mod-loc-only-variables-flagged-unused`
+
+```
+is set but is never used. Note that use in localization doesn't count
+```
+
+Mod uses `set_global_variable` to expose values (cultural-hegemony per-rank breakdowns, nuclear stockpile per-rank) to tooltip text via `GetGlobalVariable('…')` in `localization/english/te_concepts_l_english.yml`. The engine explicitly notes loc reads don't count as uses, so each variable emits an "unused" warning at load. By-design; rearchitecting all loc tooltips to use script values instead would be a large refactor with no functional gain. Tracked at `docs/audits/open_issues.md#L10`.

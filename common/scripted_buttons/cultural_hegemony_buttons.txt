@@ -60,8 +60,8 @@
 				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
 				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
 			}
-			remove_variable = _ch_level_mult
-			remove_variable = _ch_cost_mult
+			# _ch_level_mult / _ch_cost_mult persist on the country; the modifier's
+			# multiplier expression re-reads them each tick, so they must outlive this effect.
 		}
 	}
 }
@@ -112,8 +112,8 @@ ch_decrease_program_funding_button = {
 				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
 				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
 			}
-			remove_variable = _ch_level_mult
-			remove_variable = _ch_cost_mult
+			# _ch_level_mult / _ch_cost_mult persist on the country; the modifier's
+			# multiplier expression re-reads them each tick, so they must outlive this effect.
 		}
 	}
 }

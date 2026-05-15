@@ -1,226 +1,226 @@
 # Auto-generated from triggers.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
-additional_war_exhaustion: Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play   additional_war_exhaustion
+additional_war_exhaustion: Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
-any_active_law: Iterate through all active laws in a country   any_active_law
-any_active_party: Iterate through all active political parties in a country   any_active_party
-any_civil_war: Iterate through all civil wars related to the scoped country   any_civil_war
-any_cobelligerent_in_diplo_play: Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)   any_cobelligerent_in_diplo_play
-any_cobelligerent_in_war: Iterate through all co-belligerents of scope country in all wars   any_cobelligerent_in_war
-any_company: Iterate through all companies in a country   any_company
-any_country_strategic_region: Iterate through all strategic regions containing states owned by the scoped country   any_country_strategic_region
-any_diplomatic_catalyst: Iterate through all diplomatic catalysts in the recent memory of a country   any_diplomatic_catalyst
-any_diplomatically_relevant_country: Iterate through all diplomatically relevant countries of a country scope   any_diplomatically_relevant_country
-any_direct_subject: Any country directly below current in hierarchy   any_direct_subject
-any_enemy_in_diplo_play: Iterate through all enemies of scope country in all diplomatic plays (includes wars)   any_enemy_in_diplo_play
-any_enemy_in_war: Iterate through all enemies of scope country in all wars   any_enemy_in_war
-any_harvest_condition: Iterate through all harvest conditions affecting a state, state region, strategic region, or country   any_harvest_condition
-any_in_hierarchy: Any country in current hierarchy, including current   any_in_hierarchy
-any_interest_group: Iterate through all interest groups in a country   any_interest_group
-any_law: Iterate through all laws in a country   any_law
-any_military_formation: Iterate through all military formations currently present at input scope   Supported scopes: country, front, hq   any_military_formation
-any_neighbouring_state: Iterate through all states neighbouring a state region   any_neighbouring_state
-any_overlord_or_above: Any country above current in hierarchy   any_overlord_or_above
-any_political_lobby: Iterate through all political lobbies in a country or interest group   any_political_lobby
-any_political_movement: Iterate through all political movements in a country   any_political_movement
-any_potential_party: Iterate through all potential political parties in a country   any_potential_party
-any_primary_culture: Primary cultures of the scoped country or country definition   any_primary_culture
-any_rival_country: Any country that is being rivaled by the country in a scope   any_rival_country
-any_rivaling_country: Any country that is rivaling the country in a scope   any_rivaling_country
-any_scope_admiral: Iterate through all admirals in a: country, interestgroup, or military formation   any_scope_admiral
-any_scope_ally: Iterate through all allies to a: country   any_scope_ally
-any_scope_army: Iterate through all armies currently present at input scope   Supported scopes: country, front, hq   any_scope_army
-any_scope_building: Iterate through all buildings in a: state, country   any_scope_building
-any_scope_character: Iterate through all characters in a: country, interestgroup, or front   any_scope_character
-any_scope_culture: Iterate through all cultures in the scope   any_scope_culture
-any_scope_diplomatic_pact: Any diplomatic pact of the country in a scope   any_scope_diplomatic_pact
-any_scope_fleet: Iterate through all fleets currently present at input scope   Supported scopes: country, hq   any_scope_fleet
-any_scope_general: Iterate through all generals in a: country, interestgroup, front, or military formation   any_scope_general
-any_scope_held_interest_marker: Iterate through all interest markers held by a country   any_scope_held_interest_marker
-any_scope_homeland_state: Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country   any_scope_homeland_state
-any_scope_interest_marker: Iterate through all interest markers in a: country, strategic region, state region   any_scope_interest_marker
-any_scope_politician: Iterate through all politicians in a: country or interestgroup   any_scope_politician
-any_scope_pop: Iterate through all pops in a: country, state, interest group, culture   any_scope_pop
-any_scope_ship: Iterate through all ships in a country or military formation   any_scope_ship
-any_scope_state: Iterate through all states including provinces from a: country, state_region, theater, front, or strait   any_scope_state
-any_scope_strait: Iterate through all straits with a land endpoint in the scoped state or country   any_scope_strait
-any_scope_theater: Iterate through all theaters in a: country   any_scope_theater
-any_scope_treaty: Iterate through in force treaties binding the scoped country   any_scope_treaty
-any_scope_violate_sovereignty_interested_parties: Iterate through all countries that would be interested if country in scope has their sovereignty violated   any_scope_violate_sovereignty_interested_parties
-any_scope_violate_sovereignty_wars: Iterate through all relevant wars if target country had their sovereignty violated by scoped country   any_scope_violate_sovereignty_wars
-any_scope_war: Iterate through all wars related to the scope   any_scope_war
-any_strategic_objective: Iterate through all Strategic Objective states from the scoped Country   any_strategic_objective
-any_subject_of_subject: Any country below direct subjects in hierarchy   any_subject_of_subject
-any_subject_or_below: Any country below current in hierarchy   any_subject_or_below
-any_valid_mass_migration_culture: Lists for cultures in the scoped country that are valid for mass migration   any_valid_mass_migration_culture
-approaching_bureaucracy_shortage: Check if Institutions in the country will incur a Bureaucracy shortage eventually Traits: yes/no  Reads gamestate for all scopes.
+any_active_law: Iterate through all active laws in a country
+any_active_party: Iterate through all active political parties in a country
+any_civil_war: Iterate through all civil wars related to the scoped country
+any_cobelligerent_in_diplo_play: Iterate through all co-belligerents of scope country in all diplomatic plays (includes wars)
+any_cobelligerent_in_war: Iterate through all co-belligerents of scope country in all wars
+any_company: Iterate through all companies in a country
+any_country_strategic_region: Iterate through all strategic regions containing states owned by the scoped country
+any_diplomatic_catalyst: Iterate through all diplomatic catalysts in the recent memory of a country
+any_diplomatically_relevant_country: Iterate through all diplomatically relevant countries of a country scope
+any_direct_subject: Any country directly below current in hierarchy
+any_enemy_in_diplo_play: Iterate through all enemies of scope country in all diplomatic plays (includes wars)
+any_enemy_in_war: Iterate through all enemies of scope country in all wars
+any_harvest_condition: Iterate through all harvest conditions affecting a state, state region, strategic region, or country
+any_in_hierarchy: Any country in current hierarchy, including current
+any_interest_group: Iterate through all interest groups in a country
+any_law: Iterate through all laws in a country
+any_military_formation: Iterate through all military formations currently present at input scope Supported scopes: country, front, hq
+any_neighbouring_state: Iterate through all states neighbouring a state region
+any_overlord_or_above: Any country above current in hierarchy
+any_political_lobby: Iterate through all political lobbies in a country or interest group
+any_political_movement: Iterate through all political movements in a country
+any_potential_party: Iterate through all potential political parties in a country
+any_primary_culture: Primary cultures of the scoped country or country definition
+any_rival_country: Any country that is being rivaled by the country in a scope
+any_rivaling_country: Any country that is rivaling the country in a scope
+any_scope_admiral: Iterate through all admirals in a: country, interestgroup, or military formation
+any_scope_ally: Iterate through all allies to a: country
+any_scope_army: Iterate through all armies currently present at input scope Supported scopes: country, front, hq
+any_scope_building: Iterate through all buildings in a: state, country
+any_scope_character: Iterate through all characters in a: country, interestgroup, or front
+any_scope_culture: Iterate through all cultures in the scope
+any_scope_diplomatic_pact: Any diplomatic pact of the country in a scope
+any_scope_fleet: Iterate through all fleets currently present at input scope Supported scopes: country, hq
+any_scope_general: Iterate through all generals in a: country, interestgroup, front, or military formation
+any_scope_held_interest_marker: Iterate through all interest markers held by a country
+any_scope_homeland_state: Iterate through all states that are a homeland for the scoped culture, or a homeland of any primary culture of the scoped country
+any_scope_interest_marker: Iterate through all interest markers in a: country, strategic region, state region
+any_scope_politician: Iterate through all politicians in a: country or interestgroup
+any_scope_pop: Iterate through all pops in a: country, state, interest group, culture
+any_scope_ship: Iterate through all ships in a country or military formation
+any_scope_state: Iterate through all states including provinces from a: country, state_region, theater, front, or strait
+any_scope_strait: Iterate through all straits with a land endpoint in the scoped state or country
+any_scope_theater: Iterate through all theaters in a: country
+any_scope_treaty: Iterate through in force treaties binding the scoped country
+any_scope_violate_sovereignty_interested_parties: Iterate through all countries that would be interested if country in scope has their sovereignty violated
+any_scope_violate_sovereignty_wars: Iterate through all relevant wars if target country had their sovereignty violated by scoped country
+any_scope_war: Iterate through all wars related to the scope
+any_strategic_objective: Iterate through all Strategic Objective states from the scoped Country
+any_subject_of_subject: Any country below direct subjects in hierarchy
+any_subject_or_below: Any country below current in hierarchy
+any_valid_mass_migration_culture: Lists for cultures in the scoped country that are valid for mass migration
+approaching_bureaucracy_shortage: Check if Institutions in the country will incur a Bureaucracy shortage eventually
 arable_land_country: Compare arable land in *all* states
-army_mobilization_option_fraction: Checks that a countries army has a certain percentage of units with a specific monbilization option   scope:country
-army_power_projection: Compare to a country's total army power projection    scope:example_country
-authority: Compares the available authority of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-authority_usage: Compares the consumed authority of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+army_mobilization_option_fraction: Checks that a countries army has a certain percentage of units with a specific monbilization option scope:country
+army_power_projection: Compare to a country's total army power projection  scope:example_country
+authority: Compares the available authority of the scoped country
+authority_usage: Compares the consumed authority of the scoped country
 average_country_infrastructure: Check average infrastructure in all states owned by scope country
 average_incorporated_country_infrastructure: Check average infrastructure in incorporated states owned by the scope country
-average_sol_for_culture: Compares the average standard of living for the target culture in the country   average_sol_for_culture
-average_sol_for_primary_cultures: Compare average standard of living for primary cultures Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-average_sol_for_religion: Compares the average standard of living for the target religion in the country   average_sol_for_religion
-average_sol_for_slaves: Compare average standard of living for enslaved pops Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-bureaucracy: Compares the available bureaucracy of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-bureaucracy_usage: Compares the consumed bureaucracy of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-can_afford_diplomatic_action: Checks if the country in scope can afford the Influence for the specified diplomatic action (pact or ongoing)   can_afford_diplomatic_action
-can_break_diplomatic_pact: Checks if there is a diplomatic pact of the specified type with target country that can be broken by scope country   can_break_diplomatic_pact
-can_create_diplomatic_pact: Checks if a diplomatic pact is valid to create with another country   can_create_diplomatic_pact
+average_sol_for_culture: Compares the average standard of living for the target culture in the country
+average_sol_for_primary_cultures: Compare average standard of living for primary cultures
+average_sol_for_religion: Compares the average standard of living for the target religion in the country
+average_sol_for_slaves: Compare average standard of living for enslaved pops
+bureaucracy: Compares the available bureaucracy of the scoped country
+bureaucracy_usage: Compares the consumed bureaucracy of the scoped country
+can_afford_diplomatic_action: Checks if the country in scope can afford the Influence for the specified diplomatic action (pact or ongoing) Where X = country and Y = diplomatic action type
+can_break_diplomatic_pact: Checks if there is a diplomatic pact of the specified type with target country that can be broken by scope country
+can_create_diplomatic_pact: Checks if a diplomatic pact is valid to create with another country
 can_decrease_autonomy: Check if a subject country is able to become a less autonomous subject type
-can_establish_company: Check if the country can establish a new company Traits: yes/no  Reads gamestate for all scopes.
-can_form_nation: Check if the target country is able to potentially form a nation   can_form_nation
-can_have_as_subject: Checks if a country can have another country as a particular type of subject   can_have_as_subject
-can_have_subjects: Check if the country is able to have subjects of it sown Traits: yes/no  Reads gamestate for all scopes.
+can_establish_company: Check if the country can establish a new company
+can_form_nation: Check if the target country is able to potentially form a nation
+can_have_as_subject: Checks if a country can have another country as a particular type of subject Where X = country and Y = subject type
+can_have_subjects: Check if the country is able to have subjects of it sown
 can_increase_autonomy: Check if a subject country is able to become a more autonomous subject type
 can_leave_power_bloc: Checks if the country in scope can leave its current Power Bloc (returns false if country is not in a Power Bloc)
-can_lobbies_target: Checks if target country is a valid target for lobbies in the scoped country   can_lobbies_target
+can_lobbies_target: Checks if target country is a valid target for lobbies in the scoped country
 can_own_autonomy_be_decreased: Check if scoped country can have it's autonomy decreased
 can_research: True if a country can research an technology
-can_send_diplomatic_action: Checks if a diplomatic action is valid to send by scope country to target country   can_send_diplomatic_action
-can_take_on_scaled_debt: Checks if scoped country can take on a certain amount of scaled debt from another country   can_take_on_scaled_debt
-can_transfer_subject: Check if the target country can be transferred as a subject to the scoped country   scope:country
+can_send_diplomatic_action: Checks if a diplomatic action is valid to send by scope country to target country
+can_take_on_scaled_debt: Checks if scoped country can take on a certain amount of scaled debt from another country Where X = country and Y = decimal value
+can_transfer_subject: Check if the target country can be transferred as a subject to the scoped country scope:country
 can_trigger_event: Check if country can trigger the specified event
-check_area: Compares areas of object to another object Reads gamestate for all scopes.
+check_area: Compares areas of object to another object
 construction_queue_duration: Compares the maximum of all the very roughly approximated weeks remaining to finish the constructions in any queue:
 construction_queue_government_duration: Compares the very roughly approximated weeks remaining to finish the constructions in the government queue:
-construction_queue_num_queued_government_levels: Compares the number of government constructed building levels in the construction queue Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-construction_queue_num_queued_levels: Compares the number of building levels in the construction queue Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-construction_queue_num_queued_private_levels: Compares the number of privately constructed building levels in the construction queue Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+construction_queue_num_queued_government_levels: Compares the number of government constructed building levels in the construction queue
+construction_queue_num_queued_levels: Compares the number of building levels in the construction queue
+construction_queue_num_queued_private_levels: Compares the number of privately constructed building levels in the construction queue
 construction_queue_private_duration: Compares the very roughly approximated weeks remaining to finish the constructions in the private queue:
-country_army_unit_type_fraction: Checks that a country has a certain percentage of a specific army unit type   scope:example_formation
-country_average_cultural_acceptance: Compares the average acceptance of a culture that is present in a country against a value   country_average_cultural_acceptance
+country_army_unit_type_fraction: Checks that a country has a certain percentage of a specific army unit type scope:example_formation
+country_average_cultural_acceptance: Compares the average acceptance of a culture that is present in a country against a value
 country_average_culture_and_religion_pop_acceptance: Average acceptance of country pops of a specific culture and religion.
 country_average_culture_pop_acceptance: Average acceptance of country pops of a specific culture.
 country_average_religion_pop_acceptance: Average acceptance of country pops of a specific religion.
-country_average_religious_acceptance: Compares the average acceptance of a religion that is present in a country against a value   country_average_religious_acceptance
+country_average_religious_acceptance: Compares the average acceptance of a religion that is present in a country against a value
 country_can_have_mass_migration_to: Checks if the scoped country can have mass migration to target country
 country_fervor_primary_culture: Compares with the hightest fervor of a country's primary cultures
-country_has_building_group_levels: Checks the sum of building levels for a building group in a country    country_has_building_group_levels
+country_has_building_group_levels: Checks the sum of building levels for a building group in a country  country_has_building_group_levels
 country_has_building_levels: Checks the sum of building levels for a country
-country_has_building_type_levels: Checks the sum of building levels for a building type in a country    country_has_building_type_levels
+country_has_building_type_levels: Checks the sum of building levels for a building type in a country  country_has_building_type_levels
 country_has_building_type_monopoly: Check if the scoped country has a monopoly of the specified building type
-country_has_country_monopoly: Check if the scoped country has any country monopolies Traits: yes/no  Reads gamestate for all scopes.
-country_has_primary_culture: Checks if a culture is one of the primary cultures in the country   country_has_primary_culture
-country_has_state_religion: Checks if a religion is the state religion in the country   country_has_accepted_religion
+country_has_country_monopoly: Check if the scoped country has any country monopolies
+country_has_primary_culture: Checks if a culture is one of the primary cultures in the country
+country_has_state_religion: Checks if a religion is the state religion in the country country_has_accepted_religion
 country_innovation: Checks the amount of weekly innovation a country produces
 country_or_subject_owns_entire_state_region: Checks whether the scoped country or any of its subjects owns the entire specified state region
 country_rank: Compares a Country's Power Ranking
-country_ship_type_fraction: Checks that a country has a certain fraction of a specific ship type   country_ship_type_fraction
+country_ship_type_fraction: Checks that a country has a certain fraction of a specific ship type
 country_tier: Compare tier of country tag
 country_turmoil: Compares the country's population weighted turmoil
-cultural_acceptance_base: Compares the acceptance from shared cultural traits of a culture in the scoped country against an acceptence value   cultural_acceptance_base
-culture_percent_country: Checks that a country's population has a certain percentage of a specific culture   scope:example_country
-current_law_enactment_score: Check what the scoped country's AI enactment score is for the currently enacting law Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-discriminates_religion: Checks if the scoped country discriminates the given religion (key)   discriminates_religion
+cultural_acceptance_base: Compares the acceptance from shared cultural traits of a culture in the scoped country against an acceptence value
+culture_percent_country: Checks that a country's population has a certain percentage of a specific culture scope:example_country
+current_law_enactment_score: Check what the scoped country's AI enactment score is for the currently enacting law
+discriminates_religion: Checks if the scoped country discriminates the given religion (key)
 economic_dependence: Compares the degree of dependence the country in scope has to the target country.
 electoral_confidence: Compares the electoral confidence of scope country
 empty_agitator_slots: Checks number of empty agitator slots in a country
 enacting_any_law: Checks if you're enacting any law.
-enactment_chance: Compares the current enactment success chance in scope country (including values from enactment modifier) Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-enactment_chance_for_law: Compares the enactment success chance in scope country for given law (including values from enactment modifier)   enactment_chance_for_law
-enactment_chance_for_law_without_enactment_modifier: Compares the enactment success chance in scope country for given law but excludes values from enactment modifier   enactment_chance_for_law_without_enactment_modifier
-enactment_chance_without_enactment_modifier: Compares the current enactment success chance in scope country but excludes values from enactment modifier Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+enactment_chance: Compares the current enactment success chance in scope country (including values from enactment modifier)
+enactment_chance_for_law: Compares the enactment success chance in scope country for given law (including values from enactment modifier)
+enactment_chance_for_law_without_enactment_modifier: Compares the enactment success chance in scope country for given law but excludes values from enactment modifier
+enactment_chance_without_enactment_modifier: Compares the current enactment success chance in scope country but excludes values from enactment modifier
 enactment_phase: Compares the current law enactment phase in scope country.
 enactment_setback_count: Compares the current enactment setback count in scope country.
-enemy_contested_wargoals: Determines the fraction of war goals that enemies in the war are currently contesting   enemy_contested_wargoals
+enemy_contested_wargoals: Determines the fraction of war goals that enemies in the war are currently contesting
 enemy_occupation: Determines the (weighted) enemy occupation score of a country
-expanding_institution: Checks if the institution is expanding   expanding_institution
+expanding_institution: Checks if the institution is expanding
 fixed_expenses: Does the country have this amount of weekly fixed expenses
 fixed_income: Does the country have this amount of weekly fixed income
-gdp_ownership_ratio: Compares the ratio of GDP the specified country owns in the scoped country   gdp_ownership_ratio
+gdp_ownership_ratio: Compares the ratio of GDP the specified country owns in the scoped country
 gdp_per_capita_ranking: Compares a Country's GDP per Capita Ranking (position)
 gdp_ranking: Compares a Country's GDP Ranking (position)
 global_country_ranking: Compares a Country's Power Ranking (position)
 gold_reserves: Does the country have the required gold reserves
 gold_reserves_limit: Compares the country's gold reserves limit
-goods_production_rank: Compare to a country's production leaderboard rank of a good   "goods_production_rank(g:luxury_clothes)" < 10 Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-government_legitimacy: Compare Legitimacy Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+goods_production_rank: Compare to a country's production leaderboard rank of a good "goods_production_rank(g:luxury_clothes)" < 10
+government_legitimacy: Compare Legitimacy
 government_transfer_of_power: Checks country's government's transfer of power
-government_wage_level: Compares the government wage level of scoped country   government_wage_level
-government_wage_level_value: Compares the government wage level value of scoped country   government_wage_level_value
+government_wage_level: Compares the government wage level of scoped country
+government_wage_level_value: Compares the government wage level value of scoped country
 has_active_peace_deal: True if the country is in a war where there is a proposed peace deal
 has_any_law_commitment: Checks if a country has a commitment to enact any law
 has_any_naval_only_hostilities: Check if the country has naval hostilities with any country it is not also at war with
-has_any_secessionists_broken_out: Check if the country has secessionists broken out Traits: yes/no  Reads gamestate for all scopes.
-has_any_secessionists_growing: Check if the country has any secessionists growing Traits: yes/no  Reads gamestate for all scopes.
+has_any_secessionists_broken_out: Check if the country has secessionists broken out
+has_any_secessionists_growing: Check if the country has any secessionists growing
 has_any_strait_control: Check if the scoped country owns a strait province with naval fortification
 has_any_strait_province: Check if the scoped country owns any strait province
-has_any_subventions_on: Check if the scoped country has any level of subventions on a goods   scope:country
-has_any_tariffs_on: Check if the scoped country has any level of tariffs on a goods   scope:country
-has_attitude: Checks if scoped country has a particular attitude towards another country   has_attitude
+has_any_subventions_on: Check if the scoped country has any level of subventions on a goods scope:country
+has_any_tariffs_on: Check if the scoped country has any level of tariffs on a goods scope:country
+has_attitude: Checks if scoped country has a particular attitude towards another country Where X = country and Y = attitude type
 has_building: True if a state/market/state region/country has a building type
 has_civil_war_from_movement_type: Checks if a country is having a civil war started by a particular movement type
-has_claim: Checks if country in scope has a claim on state/state region/country   has_claim
+has_claim: Checks if country in scope has a claim on state/state region/country
 has_company: Checks if a company of the specified type exists in scope country
 has_completed_subgoal: Checks if the scoped country has completed a certain subgoal
 has_consumption_tax: Checks if the country is taxing the target good.
-has_convoys_being_sunk: Check if the country has convoys being sunk through convoy raiding Traits: yes/no  Reads gamestate for all scopes.
-has_diplomatic_pact: Checks if two countries have an active diplomatic pact of type   has_diplomatic_pact
-has_diplomatic_relevance: Checks if target country is diplomatically relevant for scope country   has_diplomatic_relevance
+has_convoys_being_sunk: Check if the country has convoys being sunk through convoy raiding
+has_diplomatic_pact: Checks if two countries have an active diplomatic pact of type Where X = country and Y = diplomatic action type, is_initiator is optional parameter that checks to see if scope country is the origin...
+has_diplomatic_relevance: Checks if target country is diplomatically relevant for scope country
 has_diplomats_expelled: Checks if country in scope has recently expelled diplomats of event target
 has_famine: Check if state or country has famine
-has_free_government_reform: Check if the country has a free (of radicals) government reform    has_free_government_reform
+has_free_government_reform: Check if the country has a free (of radicals) government reform
 has_global_highest_gdp: Checks if the scoped country has the highest GDP
 has_global_highest_innovation: Checks if the scoped country has the highest weekly innovation
-has_government_clout: Does the country's government have the necessary total Clout Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+has_government_clout: Does the country's government have the necessary total Clout
 has_government_type: Is the country's government type as specified
-has_healthy_economy: Check if the country has a healthy economy Traits: yes/no  Reads gamestate for all scopes.
+has_healthy_economy: Check if the country has a healthy economy
 has_inactive_journal_entry: Check if the country has at least one inactive journal entry of the specified type
-has_institution: Checks if scope country has a particular type of institution   has_institution
-has_insurrectionary_interest_groups: Check if the country has Interest Groups that are insurrectionary Traits: yes/no  Reads gamestate for all scopes.
+has_institution: Checks if scope country has a particular type of institution
+has_insurrectionary_interest_groups: Check if the country has Interest Groups that are insurrectionary
 has_interest_marker_in_region: True if scope country has an interest marker in target region
 has_journal_entry: Check if the country has at least one active journal entry of the specified type
-has_law: Checks if a country has a certain law active Traits: law_type scope Reads gamestate for all scopes.
-has_law_commitment: Checks if a country has a commitment to enact a certain law Traits: law_type scope Reads gamestate for all scopes.
-has_law_imposition_rights: Checks if the scoped country has the necessary permits to demand another country enacts a certain law   has_law_imposition_rights
-has_law_or_variant: Checks if a country has a certain law or one its variant laws active Traits: law_type scope Reads gamestate for all scopes.
-has_modifier: Check if a supported scope has a certain timed modifier   Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front   has_modifier
+has_law: Checks if a country has a certain law active
+has_law_commitment: Checks if a country has a commitment to enact a certain law
+has_law_imposition_rights: Checks if the scoped country has the necessary permits to demand another country enacts a certain law
+has_law_or_variant: Checks if a country has a certain law or one its variant laws active
+has_modifier: Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front
 has_objective: Checks if the scoped country has a certain objective type
-has_overlapping_interests: Checks if country in scope has an overlapping interest marker with any of target country's interests   has_overlapping_interests
+has_overlapping_interests: Checks if country in scope has an overlapping interest marker with any of target country's interests
 has_port_country: Check if scoped country has at least one port
 has_possible_decisions: Check if a country has any possible Decisions
-has_potential_to_form_country: Check if the target country could ever be able to form a nation   has_potential_to_form_country
+has_potential_to_form_country: Check if the target country could ever be able to form a nation
 has_power_struggle: Checks if scope Power Bloc has a power struggle
-has_region_stance: Checks if the scoped country's AI has the specified stance for a strategic region   Usage:   region_stance
+has_region_stance: Checks if the scoped country's AI has the specified stance for a strategic region Usage: region_stance
 has_researchable_technology: Check if the country has any researchable technology left.
-has_revolution: Check if the country has revolutionary uprising Traits: yes/no  Reads gamestate for all scopes.
-has_ruling_interest_group: Does the country's government include the named IG Reads gamestate for all scopes.
-has_ruling_interest_group_count: Does the country's government consist of the specified number of IGs Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-has_secret_goal: Checks if scoped country has a particular secret goal towards another country   has_secret_goal
-has_social_hierarchy: Checks if the scoped country has adopted a specific social hierarchy   has_social_hierarchy
+has_revolution: Check if the country has revolutionary uprising
+has_ruling_interest_group: Does the country's government include the named IG
+has_ruling_interest_group_count: Does the country's government consist of the specified number of IGs
+has_secret_goal: Checks if scoped country has a particular secret goal towards another country Where X = country and Y = secret_goal type
+has_social_hierarchy: Checks if the scoped country has adopted a specific social hierarchy
 has_state_in_state_region: Check if country has a state in the state region
-has_strategic_adjacency: Checks if country in scope has a strategic adjacency (direct/coastal/war goal adjacency) to target state/country   has_strategic_adjacency
-has_strategic_land_adjacency: Checks if country in scope has a strategic adjacency (direct land border or war goal adjacency only) to target state/country   has_strategic_adjacency
-has_strategic_region_interest_tier: Checks the scoped country's interest tier rank in a specific strategic region   scope:country
-has_strategy: Checks if country in scope has a particular AI strategy   has_strategy
+has_strategic_adjacency: Checks if country in scope has a strategic adjacency (direct/coastal/war goal adjacency) to target state/country
+has_strategic_land_adjacency: Checks if country in scope has a strategic adjacency (direct land border or war goal adjacency only) to target state/country has_strategic_adjacency
+has_strategic_region_interest_tier: Checks the scoped country's interest tier rank in a specific strategic region scope:country
+has_strategy: Checks if country in scope has a particular AI strategy
 has_subject_relation_with: Checks if country in scope is subject or overlord of event target
 has_sufficient_construction_capacity_for_investment: Check if country has enough construction capacity to be spending all of its incoming investment pool funds.
-has_technology_progress: Does the country have the required progress for an technology   has_technology_progress
-has_technology_researched: True if a country has researched an technology   has_technology_researched
-has_treaty_port_in_market: Checks if the scoped country has a treaty port in target market   c:POR
+has_technology_progress: Does the country have the required progress for an technology Where X is an technology and Y is a fixed point
+has_technology_researched: True if a country has researched an technology
+has_treaty_port_in_market: Checks if the scoped country has a treaty port in target market c:POR
 has_truce_with: Check if a country has a truce with a different target country
 has_war_with: Checks if country in scope is at war with event target
 has_wasted_construction: Check if country is wasting any of its produced construction.
 highest_overlapping_interest_tier: Compares the highest interest tier rank (scope country) among strategic regions where both countries have an interest.
 highest_secession_progress: Compares the highest secession progress of any secession movement in a given country
-in_default: Check if the country is currently in default Traits: yes/no  Reads gamestate for all scopes.
-in_election_campaign: Check if the country is in election campaign period   in_election_campaign
-influence: Compares the available influence of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-influence_usage: Compares the consumed influence of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-institution_investment_level: Compares the level of investment in an institution   institution_investment_level
+in_default: Check if the country is currently in default
+in_election_campaign: Check if the country is in election campaign period
+influence: Compares the available influence of the scoped country
+influence_usage: Compares the consumed influence of the scoped country
+institution_investment_level: Compares the level of investment in an institution
 investment_pool: Does the country have this amount of money saved in its investment pool
 investment_pool_gross_income: Does the country have this amount of gross income (income before expenses) for its investment pool
 investment_pool_net_income: Does the country have this amount of net income (income after expenses) for its investment pool
-is_adjacent_to_country: Checks if country in scope is adjacent to a target country   is_adjacent_to_country
-is_adjacent_to_state: Checks if country in scope is adjacent to a target state   is_adjacent_to_state
+is_adjacent_to_country: Checks if country in scope is adjacent to a target country
+is_adjacent_to_state: Checks if country in scope is adjacent to a target state
 is_ai: True if country scope is controlled by an AI
-is_at_war: Check if the country is at war Traits: yes/no  Reads gamestate for all scopes.
-is_banning_goods: Check if a country is banning a good   is_banning_goods
-is_considered_adjacent_due_to_wargoals: Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play   i...
+is_at_war: Check if the country is at war
+is_banning_goods: Check if a country is banning a good
+is_considered_adjacent_due_to_wargoals: Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play
 is_construction_paused: Check if construction in a state is paused.
 is_country_alive: Checks if the scoped country is alive, i.e.
 is_country_type: Checks the countrys type
@@ -234,23 +234,23 @@ is_diplomatic_play_target: True if country is the target of any diplomatic play
 is_diplomatic_play_undecided_participant: True if country is a undecided participant of any diplomatic play
 is_direct_subject_of: Checks if country in scope is a direct subject (not subject-of-subject) of event target
 is_enacting_law: Checks if the scoped country is enacting a specific law type.
-is_expanding_institution: Are you expanding an institution   is_expanding_institution
+is_expanding_institution: Are you expanding an institution
 is_forced_to_join_plays: Checks if the scoped country is forced to join the target country's Diplomatic Plays
-is_home_country_for: Checks if a country is the home country for target country Traits: country scope Reads gamestate for all scopes.
-is_immune_to_revolutions: Checks if the country has been set to be immune to revolutions via set_immune_to_revolutions   Warning: This does not check if the country is naturally immune to revolutions due to for example bein...
-is_in_customs_union: Check if the country is part of a customs union Traits: yes/no  Reads gamestate for all scopes.
+is_home_country_for: Checks if a country is the home country for target country
+is_immune_to_revolutions: Checks if the country has been set to be immune to revolutions via set_immune_to_revolutions Warning: This does not check if the country is naturally immune to revolutions due to for example being ...
+is_in_customs_union: Check if the country is part of a customs union
 is_in_customs_union_with: Check if the country is in a customs union with scoped country
 is_in_geographic_region: Checks if a scoped object is in a specific geographic region
 is_in_power_bloc: Checks if the country is in a Power Bloc
 is_in_same_power_bloc: Checks if the scoped country is in the same power bloc as the target scoped country
 is_in_war_together: Checks if country in scope is in war on the same side as event target
 is_indirect_subject_of: Checks if country in scope is an indirect subject (subject-of-subject) of event target
-is_insurrectionary: Check if country, movement or IG is insurrectionary Traits: yes/no  Reads gamestate for all scopes.
+is_insurrectionary: Check if country, movement or IG is insurrectionary
 is_involved_in_journal_entry: Check if the country is involved in a specific journal entry
 is_junior_in_customs_union: True if country is a junior country in a customs custom
 is_local_country: Checks if the scoped country is local in specified strategic region
 is_local_player: True if country scope is a player
-is_losing_power_rank: Check if the country is in the process of dropping in power ranking Traits: yes/no  Reads gamestate for all scopes.
+is_losing_power_rank: Check if the country is in the process of dropping in power ranking
 is_market_reachable_for_trade: Check if the scope country can reach the specified market scope for purposes of trade
 is_mass_migration_origin: Checks if the scoped country is the origin of mass migration
 is_mass_migration_origin_of_culture: Checks if the scoped country origin of mass migration of specific culture
@@ -259,95 +259,95 @@ is_not_in_geographic_region: Checks if a scoped object is NOT in a specific geog
 is_owed_obligation_by: Checks if the scoped country is owed a obligation by the target country
 is_player: True if country scope is a player
 is_power_bloc_leader: Checks if the country is a leader of a Power Bloc
-is_researching_technology: Check if the country is actively researching a tech   is_researching_technology
-is_researching_technology_category: Check if the country is actively researching a tech category   is_researching_technology_category
-is_revolutionary: Check if the country, movement or interest group is revolutionary Traits: yes/no  Reads gamestate for all scopes.
-is_secessionist: Check if the country, movement or interest group is secessionist Traits: yes/no  Reads gamestate for all scopes.
+is_researching_technology: Check if the country is actively researching a tech
+is_researching_technology_category: Check if the country is actively researching a tech category
+is_revolutionary: Check if the country, movement or interest group is revolutionary
+is_secessionist: Check if the country, movement or interest group is secessionist
 is_subject: True if country is a subject
 is_subject_of: Checks if country in scope is subject (or subject-of-subject) of event target
 is_subject_type: Checks the country's subject type
-is_supporting_unification_candidate: Check if scope country is supporting a unification candidate for a specific country formation   is_supporting_unification_candidate
-is_taxing_goods: Check if a country is taxing a good   has_embargo
+is_supporting_unification_candidate: Check if scope country is supporting a unification candidate for a specific country formation
+is_taxing_goods: Check if a country is taxing a good has_embargo
 is_unification_candidate: Check if scope country is a unification candidate for country tag
 is_violating_sovereignty_of: Check if the scoped country is violating the sovereignty of a target country
-isolated_states: Compare number of Isolated States Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+isolated_states: Compare number of Isolated States
 leading_producer_of: Checks if country is producing the most of a certain good
 leads_customs_union: Check if any other country is part of this country's customs union
 liberty_desire: Compare trigger for the Liberty Desire value in a scoped country.
 liberty_desire_weekly_progress: Compare trigger for the weekly Liberty Desire progress value in a scoped country.
 liberty_desire_weekly_progress_from_support_independence: Compare trigger for the weekly Liberty Desire progress value from the scoped country having their independence supported.
 literacy_rate: Checks if a pop, state or country has a certain amount of literacy
-loyalist_fraction: Compares loyalist fraction in pops in state or country, all parameters except value are optional   loyalist_fraction
-max_law_enactment_setbacks: Compares to the max number of law enactment setbacks a country can suffer before the law fails Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+loyalist_fraction: Compares loyalist fraction in pops in state or country, all parameters except value are optional
+max_law_enactment_setbacks: Compares to the max number of law enactment setbacks a country can suffer before the law fails
 max_num_companies: The limit of how many companies the scoped country is allowed to have
 military_ship_maintenance_fulfillment: Compares the military ship maintenance fulfillment ratio of a country
-military_wage_level: Compares the military wage level of scoped country   military_wage_level
-military_wage_level_value: Compares the military wage level value of scoped country   military_wage_level_value
-nationalization_cost: Compares the total cost of nationalizing all buildings in scope country owned by the government or pops of target country   nationalization_cost
-naval_power_projection: Compare to a country's total navy power projection    scope:example_country
+military_wage_level: Compares the military wage level of scoped country
+military_wage_level_value: Compares the military wage level value of scoped country
+nationalization_cost: Compares the total cost of nationalizing all buildings in scope country owned by the government or pops of target country
+naval_power_projection: Compare to a country's total navy power projection  scope:example_country
 neighbors_any_power_bloc: Checks if the scoped country neighbors any power bloc.
 neighbors_member_of_same_power_bloc: Checks if the scoped country neighbors any other country belonging to the same power bloc
 neighbors_power_bloc: Checks if the scoped country neighbors the target power bloc.
 net_fixed_income: Does the country have this amount of income after expenses (counting only fixed income & expenses)
 net_total_income: Does the country have this amount of income after expenses (counting all income & expenses)
 num_companies: How many companies the scoped country has
-num_diplomatic_pacts: Compare to a country's number of diplomatic pacts of the specified type   num_diplomatic_pacts
+num_diplomatic_pacts: Compare to a country's number of diplomatic pacts of the specified type
 num_investments_of_type: Checks the number of buildings levels of a given type the scoped country has outside their own country.
 num_political_lobbies: Compare to number of political lobbies in scoped country or interest group
-num_subjects: Compares the number of subjects of scoped country   num_subjects
-num_taxed_goods: Compares the number of consumption taxed goods of scoped country   num_taxed_goods
+num_subjects: Compares the number of subjects of scoped country
+num_taxed_goods: Compares the number of consumption taxed goods of scoped country
 number_of_claims: The number of claims on foreign states the country has
 number_of_possible_decisions: The number of possible Descision a Country can take
 overlord_can_decrease_subject_autonomy: Check if an overlord can decrease a subject autonomy
 owes_obligation_to: Checks if country in scope owes a obligation to event target
 owns_entire_state_region: Check if country owns entire region
 owns_treaty_port_in: Does country own the treaty port in assigned state region
-play_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play   play_participant_has_war_goal_of_type_against
-play_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry   play_side_has_war_goal_of_type_against
+play_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
+play_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
 political_strength_share: Checks the political strength share of a pop type, religion or culture in a country or state.
 politically_involved_ratio: Compares the percentage of politically involved population in a country
-pop_type_percent_country: Checks whether the scoped country has <percent> of its population belonging to the specified pop type   scope:example_country
-potential_diplomatic_play_power_ratio: Check the expected power ratio between scope country side and target country side in a potential diplomatic play   Attempts to predict which sides involved participants will take (if any) so doesn'...
+pop_type_percent_country: Checks whether the scoped country has <percent> of its population belonging to the specified pop type scope:example_country
+potential_diplomatic_play_power_ratio: Check the expected power ratio between scope country side and target country side in a potential diplomatic play Attempts to predict which sides involved participants will take (if any) so doesn't ...
 potential_income: Compare the potential income of the country (weekly income plus tax waste)
 power_bloc_share_gdp: Compare the share of GDP of the country in scope against all its Power Bloc current members, returns -1 if not in a Power Bloc
-power_bloc_share_gdp_with: Compare the share of GDP of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc   "power_bloc_share_gdp_with(scope:country) > 0.2" ...
-power_bloc_share_gdp_without: Compare the share of GDP of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc   "power_bloc_share_gdp_without(scope:country) > 0.2"...
+power_bloc_share_gdp_with: Compare the share of GDP of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc "power_bloc_share_gdp_with(scope:country) > 0.2"
+power_bloc_share_gdp_without: Compare the share of GDP of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc "power_bloc_share_gdp_without(scope:country) > 0.2"
 power_bloc_share_power_projection: Compare the share of Power Projection of the country in scope against all its Power Bloc members, returns -1 if not in a Power Bloc
-power_bloc_share_power_projection_with: Compare the share of Power Projection of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc   "power_bloc_share_power_projection_w...
-power_bloc_share_power_projection_without: Compare the share of Power Projection of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc   "power_bloc_share_power_projection_wit...
+power_bloc_share_power_projection_with: Compare the share of Power Projection of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc "power_bloc_share_power_projection_wit...
+power_bloc_share_power_projection_without: Compare the share of Power Projection of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc "power_bloc_share_power_projection_witho...
 power_bloc_share_prestige: Compare the share of Prestige of the country in scope against all its Power Bloc members, returns -1 if not in a Power Bloc
-power_bloc_share_prestige_with: Compare the share of Prestige of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc   "power_bloc_share_prestige_with(scope:countr...
-power_bloc_share_prestige_without: Compare the share of Prestige of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc   "power_bloc_share_prestige_without(scope:count...
-prestige: Compare prestige Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-primary_cultures_percent_country: Checks that a country's population has a certain percentage of the country's primary cultures   scope:example_country
-produced_authority: Compares the produced authority of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-produced_bureaucracy: Compares the produced bureaucracy of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-produced_influence: Compares the produced influence of the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-radical_fraction: Compares radical fraction in pops in state or country, all parameters except value are optional   radical_fraction
+power_bloc_share_prestige_with: Compare the share of Prestige of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc "power_bloc_share_prestige_with(scope:country)...
+power_bloc_share_prestige_without: Compare the share of Prestige of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc "power_bloc_share_prestige_without(scope:country...
+prestige: Compare prestige
+primary_cultures_percent_country: Checks that a country's population has a certain percentage of the country's primary cultures scope:example_country
+produced_authority: Compares the produced authority of the scoped country
+produced_bureaucracy: Compares the produced bureaucracy of the scoped country
+produced_influence: Compares the produced influence of the scoped country
+radical_fraction: Compares radical fraction in pops in state or country, all parameters except value are optional
 radical_population_fraction: Compares the fraction of the population that are radicals in a given country
-region_score: Compares the aggregated AI strategy region score for the specified strategic region in country scope   Returns 0 in case the country is player controled   region_score
-relative_authority: Compares the unused fraction of authority for the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-relative_bureaucracy: Compares the unused fraction of bureaucracy for the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-relative_influence: Compares the unused fraction of influence for the scoped country Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-religion_percent_country: Checks that a country's population has a certain percentage of a specific religion   scope:example_country
+region_score: Compares the aggregated AI strategy region score for the specified strategic region in country scope Returns 0 in case the country is player controled "region_score(sr:region_key)" >= 300
+relative_authority: Compares the unused fraction of authority for the scoped country
+relative_bureaucracy: Compares the unused fraction of bureaucracy for the scoped country
+relative_influence: Compares the unused fraction of influence for the scoped country
+religion_percent_country: Checks that a country's population has a certain percentage of a specific religion scope:example_country
 ruler_can_have_command: Checks if the country's government type allows its ruler to have command
 scaled_debt: Compare value to a country's debt relative to debt ceiling
 scaled_gold_reserves: Compare value to a country's gold reserves relative to reserves limit
 ship_modification_market_demand_ratio: Goods-weighted buy/sell ratio for the construction goods of the target ship modification, evaluated against the country-scope's market.
-should_set_wargoal: should_set_wargoal = {
-shrinking_institution: Checks if the institution is shrinking   expanding_institution
-size_weighted_lost_battles_fraction: Determines the fraction of battles the target country has lost in the target war, weighted by manpower size of all battles in the war   size_weighted_lost_battles_fraction
+should_set_wargoal: 
+shrinking_institution: Checks if the institution is shrinking expanding_institution
+size_weighted_lost_battles_fraction: Determines the fraction of battles the target country has lost in the target war, weighted by manpower size of all battles in the war
 sol_ranking: Compares a Country's Standard of Living Ranking (position)
-stall_chance: Compares the current enactment stall chance in scope country (including values from enactment modifier) Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
-stall_chance_for_law: Compares the enactment stall chance in scope country for given law (including values from enactment modifier)   stall_chance_for_law
-stall_chance_for_law_without_enactment_modifier: Compares the enactment stall chance in scope country for given law but excludes values from enactment modifier   stall_chance_for_law_without_enactment_modifier
-stall_chance_without_enactment_modifier: Compares the current enactment stall chance in scope country but excludes values from enactment modifier Traits: <, <=, =, !=, >, >= Reads gamestate for all scopes.
+stall_chance: Compares the current enactment stall chance in scope country (including values from enactment modifier)
+stall_chance_for_law: Compares the enactment stall chance in scope country for given law (including values from enactment modifier)
+stall_chance_for_law_without_enactment_modifier: Compares the enactment stall chance in scope country for given law but excludes values from enactment modifier
+stall_chance_without_enactment_modifier: Compares the current enactment stall chance in scope country but excludes values from enactment modifier
 subject_can_increase_autonomy: Check if a subject can increase its autonomy
 supply_network_strength: Compares the country's supply network strength (can exceed 1)
 supply_ship_maintenance_fulfillment: Compares the supply ship maintenance fulfillment ratio of a country
-taking_loans: Check if the country is currently running a weekly deficit and taking loans to compensate Traits: yes/no  Reads gamestate for all scopes.
-tax_level: Compares the overall tax level of scoped country   tax_level
-tax_level_value: Compares the overall tax level integer value of scoped country   income_tax_level_value
+taking_loans: Check if the country is currently running a weekly deficit and taking loans to compensate
+tax_level: Compares the overall tax level of scoped country
+tax_level_value: Compares the overall tax level integer value of scoped country income_tax_level_value
 tax_waste: Compare the tax waste of the country
 tenure_in_current_power_bloc_days: Compare the number of days the country in scope has been a member of their current Power Bloc
 tenure_in_current_power_bloc_months: Compare the number of (whole) months the country in scope has been a member of their current Power Bloc
@@ -361,8 +361,8 @@ total_population_including_subjects_share: Compares the total population in the 
 total_population_share: Compares the total population of a given country's share of the global population
 transfer_money_gross_income: Does the country have this amount of gross income (income before expenses) from money transfer treaties
 transfer_money_net_income: Does the country have this amount of net income (income after expenses) from money transfer treaties
-war_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any war   war_participant_has_war_goal_of_type_against
-war_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country   war_side_has_war_goal_of_type_against
-was_formed_from: Check if a formed country previously had a specific definition   was_formed_from
+war_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any war
+war_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
+was_formed_from: Check if a formed country previously had a specific definition
 wealth_share: Checks the wealth political strength share of a pop type, religion or culture in a country or state.
-would_accept_diplomatic_action: Checks if a country would accept a diplomatic action proposed by another country   would_accept_diplomatic_action
+would_accept_diplomatic_action: Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score, to allow for checking if they would accept with a...

@@ -201,27 +201,25 @@
 	}
 
 	fail = {
-		custom_tooltip = {
-			text = je_colonial_empire_fail_tt
-			scope:journal_entry = {
-				"scripted_bar_progress(colonial_stability_bar)" <= 0
-			}
-		}
-	}
-
-	# Third ending: player voluntarily released all colonies before bar hit zero.
-	# Guard bar > 0 so this can't fire on the same tick as the collapse fail.
-	fail = {
-		custom_tooltip = {
-			text = je_colonial_empire_voluntary_fail_tt
-			NOT = {
-				OR = {
-					any_scope_state = { is_overseas_colonial_state = yes }
-					country_has_qualifying_colonial_subject = yes
+		OR = {
+			custom_tooltip = {
+				text = je_colonial_empire_fail_tt
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" <= 0
 				}
 			}
-			scope:journal_entry = {
-				"scripted_bar_progress(colonial_stability_bar)" > 0
+
+			custom_tooltip = {
+				text = je_colonial_empire_voluntary_fail_tt
+				NOT = {
+					OR = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						country_has_qualifying_colonial_subject = yes
+					}
+				}
+				scope:journal_entry = {
+					"scripted_bar_progress(colonial_stability_bar)" > 0
+				}
 			}
 		}
 	}

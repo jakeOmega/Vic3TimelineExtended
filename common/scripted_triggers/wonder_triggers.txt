@@ -5,17 +5,23 @@
 
 # State scope: true if this state is in at least one recognized continental region.
 # States not covered (e.g. Oceania) return false.
+# custom_tooltip wraps the body because `this = prev` inside the `any_state_in_*`
+# iterators is scope-dependent and the engine warns + emits scope-dependent
+# tooltip text per render (state_this_equal warning) without it.
 state_is_in_recognized_continent = {
-	OR = {
-		any_state_in_africa = { this = prev }
-		any_state_in_europe = { this = prev }
-		any_state_in_north_america = { this = prev }
-		any_state_in_south_america = { this = prev }
-		any_state_in_east_asia = { this = prev }
-		any_state_in_south_east_asia = { this = prev }
-		any_state_in_india = { this = prev }
-		any_state_in_middle_east = { this = prev }
-		any_state_in_central_asia = { this = prev }
+	custom_tooltip = {
+		text = STATE_IS_IN_RECOGNIZED_CONTINENT_TT
+		OR = {
+			any_state_in_africa = { this = prev }
+			any_state_in_europe = { this = prev }
+			any_state_in_north_america = { this = prev }
+			any_state_in_south_america = { this = prev }
+			any_state_in_east_asia = { this = prev }
+			any_state_in_south_east_asia = { this = prev }
+			any_state_in_india = { this = prev }
+			any_state_in_middle_east = { this = prev }
+			any_state_in_central_asia = { this = prev }
+		}
 	}
 }
 
@@ -23,59 +29,63 @@ state_is_in_recognized_continent = {
 # has a building of type $BUILDING_TYPE$.
 # Gate on state_is_in_recognized_continent first — unrecognized states
 # pass vacuously (all NOT blocks succeed because no continent matches).
+# custom_tooltip wraps the body for the same reason as above.
 continent_has_no_building_of_type = {
-	NOT = {
-		AND = {
-			any_state_in_africa = { this = prev }
-			any_state_in_africa = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+	custom_tooltip = {
+		text = CONTINENT_HAS_NO_BUILDING_OF_TYPE_TT
+		NOT = {
+			AND = {
+				any_state_in_africa = { this = prev }
+				any_state_in_africa = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_europe = { this = prev }
-			any_state_in_europe = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_europe = { this = prev }
+				any_state_in_europe = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_north_america = { this = prev }
-			any_state_in_north_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_north_america = { this = prev }
+				any_state_in_north_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_south_america = { this = prev }
-			any_state_in_south_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_south_america = { this = prev }
+				any_state_in_south_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_east_asia = { this = prev }
-			any_state_in_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_east_asia = { this = prev }
+				any_state_in_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_south_east_asia = { this = prev }
-			any_state_in_south_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_south_east_asia = { this = prev }
+				any_state_in_south_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_india = { this = prev }
-			any_state_in_india = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_india = { this = prev }
+				any_state_in_india = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_middle_east = { this = prev }
-			any_state_in_middle_east = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_middle_east = { this = prev }
+				any_state_in_middle_east = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
-	}
-	NOT = {
-		AND = {
-			any_state_in_central_asia = { this = prev }
-			any_state_in_central_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+		NOT = {
+			AND = {
+				any_state_in_central_asia = { this = prev }
+				any_state_in_central_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+			}
 		}
 	}
 }
