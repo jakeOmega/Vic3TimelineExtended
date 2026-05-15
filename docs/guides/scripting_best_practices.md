@@ -497,6 +497,16 @@ To display a current-price value in a tooltip, write a script value of shape `(1
 
 Script values are not parameterizable, so generators that need one SV per (entity, good-mix) tuple should pre-multiply `base_price × quantity` in Python and emit the result as a literal `multiply = N` constant rather than chaining `g:<good> = { multiply = base_price }` + a separate quantity multiply at runtime — keeps the generated file readable and skips a redundant scope hop.
 
+## Treaty-Article `_desc` Can Render as a Name (Concept Tags Won't Re-Evaluate)
+
+The treaty draft / negotiation panel renders each article's inline summary via the engine's `[Article.GetShortDesc]` getter (`gui/treaty_panel.gui:908`, `:919`). When the article has a dedicated `<id>_article_short_desc:0` loc key, `GetShortDesc` returns that. **When the article lacks `<id>_article_short_desc:0`, `GetShortDesc` falls back to `<id>_desc:0`** and renders it in a context that does *not* recursively evaluate `[concept_X]` data-system functions inside the returned string. The concept tag renders raw (e.g. `[concept_nuclear_program] Aid allows...`).
+
+This is the same category as the entity-name `GetNameNoFormatting` bug (concepts don't render in name contexts), just one layer deeper — a `_desc` key looks safe because it's "a description", but it can land in a name-context fallback.
+
+**Rule for treaty article `_desc:0` keys**: don't put a `[concept_X]` ref at the START of the string. Mid-text concept refs are less obviously broken visually (they still render raw mid-summary, but read closer to "a clickable link that didn't render"). Best fix is to add a dedicated `<id>_article_short_desc:0` with terse, name-safe text — the engine prefers that when it exists.
+
+Articles in this repo lacking `_article_short_desc` (so their `_desc` lands in inline-summary context): `money_transfer`, `request_influence`, `crisis_resolution`, `extend_influence`, `education_aid`, `healthcare_aid`, `security_aid`, `science_aid`, `suppress_subject_liberty`, `nuclear_disarmament`, `nuclear_program_aid`, `intelligence_sharing_pact`, `joint_military_exercises`, `join_united_nations`, `nuclear_program_pause`. Adding proper `_article_short_desc` keys to all of them is a follow-up worth doing in one pass.
+
 ## Render Static Modifier Effects in Loc via `[GetStaticModifier('X').GetDesc]`
 
 For button / JE / event description loc that needs to claim *what a static modifier does*, embed the modifier's auto-rendered effect list rather than hand-writing the numbers. The data-system function `[GetStaticModifier('<name>').GetDesc]` renders the static modifier definition's full effect list and auto-updates when the modifier changes.
