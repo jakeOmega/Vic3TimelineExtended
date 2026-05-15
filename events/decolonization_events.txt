@@ -25,6 +25,7 @@ decolonization_events.1 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = decolonization_negotiations_modifier
 			has_modifier = colonial_crackdown_modifier
@@ -211,6 +212,7 @@ decolonization_events.2 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = decolonization_negotiations_modifier
 			has_modifier = colonial_crackdown_modifier
@@ -362,6 +364,7 @@ decolonization_events.3 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = colonial_war_exhaustion_modifier
 			has_modifier = colonial_crackdown_modifier
@@ -503,6 +506,7 @@ decolonization_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = cultural_reclamation_modifier }
 		has_technology_researched = decolonization
 		is_subject = no
@@ -578,6 +582,7 @@ decolonization_events.5 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = post_colonial_partnership_modifier }
 		has_technology_researched = decolonization
 		country_rank >= rank_value:major_power
@@ -660,6 +665,7 @@ decolonization_events.6 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = colonial_reparations_modifier }
 		has_technology_researched = decolonization
 		country_rank >= rank_value:major_power
@@ -746,6 +752,7 @@ decolonization_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = nation_building_investment_modifier
 			has_modifier = foreign_investment_dependency_modifier
@@ -847,6 +854,7 @@ decolonization_events.8 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = decolonization_negotiations_modifier
 			has_modifier = colonial_crackdown_modifier
@@ -935,6 +943,7 @@ decolonization_events.9 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = colonial_integration_progress_modifier
 			has_modifier = colonial_unrest_suppressed_modifier
@@ -1084,6 +1093,7 @@ decolonization_events.10 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = colonial_integration_progress_modifier }
 		has_technology_researched = decolonization
 		any_scope_state = {
@@ -1176,6 +1186,7 @@ decolonization_events.11 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = decolonization_negotiations_modifier
 			has_modifier = gp_condemns_colonialism_modifier
@@ -1285,6 +1296,7 @@ decolonization_events.12 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = gp_supports_colonialism_modifier }
 		has_technology_researched = decolonization
 		any_scope_state = {
@@ -1369,6 +1381,7 @@ decolonization_events.13 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		NOR = {
 			has_modifier = colonial_war_exhaustion_modifier
 			has_modifier = colonial_crackdown_modifier
@@ -1495,6 +1508,7 @@ decolonization_events.14 = {
 	duration = 3
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		country_rank >= rank_value:great_power
 		NOR = {
@@ -1693,6 +1707,7 @@ decolonization_events.15 = {
 	duration = 3
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		# Only fire on true independence — not on overlord-to-overlord transfer
 		# or other transitions where on_become_independent may still pulse.
 		is_subject = no
@@ -1917,6 +1932,7 @@ decolonization_events.16 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2101,6 +2117,7 @@ decolonization_events.17 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2251,6 +2268,7 @@ decolonization_events.18 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2373,6 +2391,7 @@ decolonization_events.19 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		country_rank >= rank_value:great_power
 		NOR = {
@@ -2538,6 +2557,7 @@ decolonization_events.20 = {
 	duration = 3
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		# Always fires when triggered directly by event 19
 		always = yes
 	}
@@ -2684,6 +2704,7 @@ decolonization_events.21 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		has_variable = recently_decolonized
 		is_subject = no
@@ -2815,7 +2836,9 @@ decolonization_events.200 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -2868,7 +2891,9 @@ decolonization_events.201 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -2930,7 +2955,9 @@ decolonization_events.202 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -2988,7 +3015,9 @@ decolonization_events.203 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -3023,7 +3052,9 @@ decolonization_events.204 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -3081,7 +3112,9 @@ decolonization_events.205 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -3137,7 +3170,9 @@ decolonization_events.206 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -3177,6 +3212,7 @@ decolonization_events.50 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
 		scaled_debt > 0.4
@@ -3234,6 +3270,7 @@ decolonization_events.51 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
 		is_at_war = yes
@@ -3280,6 +3317,7 @@ decolonization_events.52 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
 		ig:ig_intelligentsia ?= {
@@ -3340,6 +3378,7 @@ decolonization_events.53 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
 		# JE active for at least 10 years (120 months)
@@ -3402,6 +3441,7 @@ decolonization_events.54 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
 		# Sustained Garrison policy (3+ years) — the soldiers have something
@@ -3459,7 +3499,9 @@ decolonization_events.300 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -3514,7 +3556,9 @@ decolonization_events.301 = {
 
 	duration = 3
 
-	trigger = { }
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 	immediate = { }
 
 	option = {
@@ -3591,6 +3635,10 @@ decolonization_events.400 = {
 	flavor = decolonization_events.400.f
 
 	duration = 3
+
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 
 	immediate = {
 		debug_log = "DECOL_DEBUG: decolonization_events.400 immediate entered, candidates 1=[SCOPE.sState('decolonization_target_state_1').GetName] 2=[SCOPE.sState('decolonization_target_state_2').GetName] 3=[SCOPE.sState('decolonization_target_state_3').GetName]"  # DEBUG_DECOLONIZATION_TRACE
@@ -3786,6 +3834,10 @@ decolonization_events.401 = {
 	flavor = decolonization_events.401.f
 
 	duration = 3
+
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
 
 	immediate = {
 		debug_log = "DECOL_DEBUG: decolonization_events.401 immediate entered"  # DEBUG_DECOLONIZATION_TRACE
