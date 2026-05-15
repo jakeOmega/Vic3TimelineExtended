@@ -3,6 +3,16 @@
 # Reads the decolonizing parent's policy-time variables to decide which
 # legacy modifier, starting laws/IG clout, and diplomatic relations to apply.
 #
+# Relations between the new country and the former colonizer compose two
+# signals additively:
+#   1. Parent policy: Iron Fist −50, Commonwealth +30, Quiet Assimilation +15
+#      (set inside the per-policy if/else_if blocks below).
+#   2. Release type: round table +25, single grant −10, planned liquidation
+#      −25 (applied after, reading decolonization_path_* variables on the
+#      parent set by colonial_empire_buttons.txt). Together: round table
+#      from a Commonwealth parent → +55 (very friendly); planned from an
+#      Iron Fist parent → −75 (hostile).
+#
 # At the end, also applies a 12-month "liberation contagion" -1.0/mo bar
 # drain to every other country running the colonial-empire JE. Produces
 # the historical wave pattern: India 1947 → Burma, Ceylon, Indonesia.
@@ -76,6 +86,38 @@ apply_decolonization_path = {
 			# civilizing mission left a thin elite that runs the new state
 			activate_law = law_type:law_cultural_exclusion
 			activate_law = law_type:law_minority_rights_indifference
+		}
+	}
+
+	# Release-type relations adjustment (additive on top of the policy-based
+	# change_relations inside the if/else_if blocks above). Round table is a
+	# negotiated exit, so the new country starts on better terms; planned
+	# liquidation dumps the whole empire and the new country resents it.
+	if = {
+		limit = {
+			exists = scope:decolonizing_parent
+			scope:decolonizing_parent = { has_variable = decolonization_path_round_table }
+		}
+		scope:decolonizing_parent = {
+			change_relations = { country = ROOT value = 25 }
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:decolonizing_parent
+			scope:decolonizing_parent = { has_variable = decolonization_path_release_single }
+		}
+		scope:decolonizing_parent = {
+			change_relations = { country = ROOT value = -10 }
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:decolonizing_parent
+			scope:decolonizing_parent = { has_variable = decolonization_path_planned }
+		}
+		scope:decolonizing_parent = {
+			change_relations = { country = ROOT value = -25 }
 		}
 	}
 
