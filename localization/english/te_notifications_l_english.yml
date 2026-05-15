@@ -365,7 +365,7 @@
  notification_headlines_tech_pollution_control_name:0 "#b NATIONS BEGIN TO CLEAN UP THEIR ACT #!"
  notification_headlines_tech_pollution_control_tooltip:0 "#header $notification_headlines_tech_pollution_control_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_pollution_control_desc$"
  notification_headlines_tech_pop_culture_desc:1 "From music and movies to fashion and fads, the $HEADLINES_TECH_NAME$ spreading from [SCOPE.sCountry('headlines_pop_culture_researcher').GetName] has a powerful influence on society. #lore It shapes trends, values, and even how people see the world... #!"
- notification_headlines_tech_pop_culture_name:0 "#b FROM MOVIES TO MUSIC, [concept_pop] CULTURE GRIPS THE YOUTH #!"
+ notification_headlines_tech_pop_culture_name:0 "#b FROM MOVIES TO MUSIC, POP CULTURE GRIPS THE YOUTH #!"
  notification_headlines_tech_pop_culture_tooltip:0 "#header $notification_headlines_tech_pop_culture_name$#!\n$TOOLTIP_DELIMITER$\n$notification_headlines_tech_pop_culture_desc$"
  notification_headlines_tech_precision_guided_munitions_desc:1 "Smart bombs and cruise missiles developed by [SCOPE.sCountry('headlines_precision_guided_munitions_researcher').GetAdjective] engineers can now hit their targets with incredible accuracy. #lore These $HEADLINES_TECH_NAME$ make military strikes more effective and reduce collateral damage, at least in theory... #!"
  notification_headlines_tech_precision_guided_munitions_name:0 "#b 'SMART BOMBS' CAN HIT A PINPOINT TARGET #!"
