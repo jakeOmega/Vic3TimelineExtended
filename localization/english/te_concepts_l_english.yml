@@ -1367,7 +1367,7 @@
  nuclear_power:0 "Nuclear Power"
  nuclear_power_desc:0 "Represents the national effects of embracing nuclear power."
  nuclear_program_aid:0 "Nuclear Program Aid"
- nuclear_program_aid_desc:0 "Nuclear Program Aid allows a country to provide assistance to another country in developing its [concept_nuclear_program]."
+ nuclear_program_aid_desc:0 "[concept_nuclear_program] Aid allows a country to provide assistance to another country in developing its nuclear program."
  nuclear_program_pause:0 "Nuclear Program Freeze"
  nuclear_program_pause_desc:0 "This country has agreed to freeze its nuclear weapons program. No new investment is permitted, but existing weapons and progress are preserved."
  nuclear_safety_review:0 "Nuclear Safety Review"
