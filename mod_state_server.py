@@ -17,6 +17,7 @@ import logging
 import logging.handlers
 import os
 import re
+import shutil
 import signal
 import socket
 import subprocess
@@ -406,6 +407,178 @@ def _has_engine_logs(path: Optional[str]) -> bool:
     )
 
 
+_USAGE_TARGET_RE_CACHE: dict[str, re.Pattern] = {}
+
+
+def _engine_docs_find_usage(
+    target: str,
+    *,
+    limit: int = 5,
+    include_defs: bool = False,
+    context_before: int = 1,
+    context_after: int = 3,
+) -> dict:
+    """Scan vanilla `common/` for real-world call sites of `target` (a trigger,
+    effect, or modifier name). Returns context-bracketed snippets with file:line.
+
+    Default filter excludes column-0 `target = {` (definition) and matches inside
+    `common/trigger_localization/` (engine-side display-label cross-references,
+    not script calls). Set `include_defs=true` to disable filtering.
+
+    Backend: ripgrep when available (fast, ~1-2s across vanilla); Python
+    `os.walk` otherwise. Either way the result is capped at `limit`.
+    """
+    if not target or not re.match(r"^[a-z][a-z0-9_]*$", target):
+        return {
+            "name": target,
+            "error": "Invalid target name (expected snake_case identifier).",
+            "uses": [],
+        }
+
+    if not os.path.isdir(_BASE_COMMON):
+        return {
+            "name": target,
+            "error": f"Vanilla common dir not found: {_BASE_COMMON}",
+            "uses": [],
+        }
+
+    # Cache the per-target regex used to filter "call-site" lines from "match
+    # within a longer identifier". A call site has the identifier as a whole
+    # word followed by whitespace and an operator (= < > <= >= !=) or `{`.
+    pat = _USAGE_TARGET_RE_CACHE.get(target)
+    if pat is None:
+        pat = re.compile(
+            r"(^|[^A-Za-z0-9_])" + re.escape(target) + r"\s*(=|<|>|!=|<=|>=|\{)"
+        )
+        _USAGE_TARGET_RE_CACHE[target] = pat
+
+    # Prefer system grep (always available, ~5-10x faster than Python walk on
+    # WSL+NTFS). Fall back to ripgrep, then Python walk.
+    raw_matches: list[tuple[str, int, str]] = []  # (relpath, line_no, line)
+    grep_path = shutil.which("grep")
+    rg_path = shutil.which("rg")
+    backend = "python"
+    try:
+        if grep_path or rg_path:
+            if grep_path:
+                cmd = [
+                    grep_path, "-rn", "-w",
+                    "--include=*.txt",
+                    "--exclude-dir=trigger_localization",
+                    target, _BASE_COMMON,
+                ]
+                backend = "grep"
+            else:
+                cmd = [
+                    rg_path, "-n", "-w", "-t", "txt",
+                    "--max-count", "30",
+                    "--no-heading", "--no-messages",
+                    target, _BASE_COMMON,
+                ]
+                backend = "ripgrep"
+            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
+            for raw in proc.stdout.splitlines():
+                # Format: "<absolute_path>:<line_no>:<line>"
+                head, _, rest = raw.partition(":")
+                line_no_str, _, line = rest.partition(":")
+                try:
+                    line_no = int(line_no_str)
+                except ValueError:
+                    continue
+                rel = os.path.relpath(head, _BASE_COMMON)
+                raw_matches.append((rel, line_no, line))
+        else:
+            for root, _dirs, files in os.walk(_BASE_COMMON):
+                for fname in files:
+                    if not fname.endswith(".txt"):
+                        continue
+                    path = os.path.join(root, fname)
+                    try:
+                        with open(path, "r", encoding="utf-8", errors="replace") as f:
+                            for i, line in enumerate(f, start=1):
+                                if target in line:
+                                    rel = os.path.relpath(path, _BASE_COMMON)
+                                    raw_matches.append((rel, i, line.rstrip("\n")))
+                    except OSError:
+                        continue
+    except subprocess.TimeoutExpired:
+        return {
+            "name": target,
+            "error": "Timed out scanning vanilla common/. Try a more specific name.",
+            "uses": [],
+        }
+    except Exception as e:
+        return {
+            "name": target,
+            "error": f"Scan failed: {e}",
+            "uses": [],
+        }
+
+    # Filter to call sites (not definitions or label cross-references).
+    filtered: list[tuple[str, int, str]] = []
+    for rel, line_no, line in raw_matches:
+        if not include_defs:
+            if rel.startswith("trigger_localization" + os.sep):
+                # Engine-side trigger-localization cross-references — not calls.
+                continue
+            if line.lstrip() != line and (line.lstrip().startswith(target + " ")
+                                          or line.lstrip().startswith(target + "=")):
+                # Indented call site — good.
+                pass
+            elif line.startswith(target):
+                # Column-0 line starting with the name is almost always a definition.
+                # Filter unless include_defs is set.
+                continue
+        if not pat.search(line):
+            continue
+        filtered.append((rel, line_no, line))
+        if len(filtered) >= limit * 4:  # surface a few extras pre-dedupe-by-file
+            break
+
+    # Diversify across files: prefer first hit per file before repeating one file.
+    by_file: dict[str, list[tuple[int, str]]] = {}
+    for rel, line_no, line in filtered:
+        by_file.setdefault(rel, []).append((line_no, line))
+    diversified: list[tuple[str, int, str]] = []
+    while len(diversified) < limit and any(by_file.values()):
+        for rel in list(by_file.keys()):
+            if not by_file[rel]:
+                continue
+            line_no, line = by_file[rel].pop(0)
+            diversified.append((rel, line_no, line))
+            if len(diversified) >= limit:
+                break
+
+    # Read context around each chosen match.
+    uses = []
+    for rel, line_no, line in diversified:
+        abs_path = os.path.join(_BASE_COMMON, rel)
+        snippet_lines: list[str] = []
+        try:
+            with open(abs_path, "r", encoding="utf-8", errors="replace") as f:
+                all_lines = f.readlines()
+            start = max(1, line_no - context_before)
+            end = min(len(all_lines), line_no + context_after)
+            for i in range(start, end + 1):
+                marker = ">" if i == line_no else " "
+                snippet_lines.append(f"{marker} {i:5}: {all_lines[i - 1].rstrip()}")
+        except OSError:
+            snippet_lines = [f"  {line_no}: {line.rstrip()}"]
+        uses.append({
+            "file": rel,
+            "line": line_no,
+            "snippet": "\n".join(snippet_lines),
+        })
+
+    return {
+        "name": target,
+        "total_call_sites_scanned": len(filtered),
+        "returned": len(uses),
+        "backend": backend,
+        "uses": uses,
+    }
+
+
 def _engine_docs_source() -> tuple[str, str]:
     """Return (chosen_directory, source_label).
 
@@ -453,9 +626,15 @@ def _load_vanilla_repo_head_info() -> dict:
 def _parse_effects_triggers_log(filepath: str) -> list[dict]:
     """Parse effects.log / triggers.log format:
     ## name
-    description lines...
+    description prose lines...
+    name = usage_example                # code-like, opens with the entry name
+    Traits: <, <=, =, !=, >, >=         # value-comparison operators (optional)
+    Reads gamestate for all scopes.     # gamestate-read note (optional)
     **Supported Scopes**: scope1, scope2
     **Supported Targets**: target1, target2
+
+    Returns dicts with: name, description (prose only), example, traits, reads,
+    scopes, targets.
     """
     entries = []
     try:
@@ -467,12 +646,20 @@ def _parse_effects_triggers_log(filepath: str) -> list[dict]:
 
     current = None
     for line in lines:
-        line = line.rstrip("\n")
+        line = line.rstrip("\n").rstrip()  # engine docs end lines with "  " (md hard break)
         if line.startswith("## "):
             if current:
                 current["description"] = current["description"].strip()
                 entries.append(current)
-            current = {"name": line[3:].strip(), "description": "", "scopes": [], "targets": []}
+            current = {
+                "name": line[3:].strip(),
+                "description": "",
+                "example": "",
+                "traits": "",
+                "reads": "",
+                "scopes": [],
+                "targets": [],
+            }
         elif current:
             if line.startswith("**Supported Scopes**:"):
                 scopes_text = line.split(":", 1)[1].strip()
@@ -480,6 +667,27 @@ def _parse_effects_triggers_log(filepath: str) -> list[dict]:
             elif line.startswith("**Supported Targets**:"):
                 targets_text = line.split(":", 1)[1].strip()
                 current["targets"] = [t.strip() for t in targets_text.split(",") if t.strip()]
+            elif line.startswith("Traits:"):
+                current["traits"] = line.split(":", 1)[1].strip()
+            elif line.startswith("Reads gamestate") or line.startswith("Reads nothing"):
+                current["reads"] = line.strip()
+            elif (
+                not current["example"]
+                and current["name"]
+                and line
+                and (
+                    line.startswith(current["name"] + " ")
+                    or line.startswith(current["name"] + "=")
+                    or line.startswith(current["name"] + ">")
+                    or line.startswith(current["name"] + "<")
+                    or line == current["name"]
+                )
+            ):
+                # First code-like usage line wins. Format examples:
+                #   active_lens = lens
+                #   global_country_ranking > 42
+                #   amendment_stance = {  (multi-line example follows in description)
+                current["example"] = line.strip()
             else:
                 current["description"] += line + "\n"
     if current:
@@ -5224,10 +5432,25 @@ class ModStateHandler(BaseHTTPRequestHandler):
         GET /engine-docs/<type>?mask=<mask>   - filter by mask (modifiers only)
         GET /engine-docs/<type>?origin=mod|vanilla|unknown - filter by origin tag
         GET /engine-docs/<type>?group=true    - group similar entries
-        GET /engine-docs/origin/<name>        - look up which source defines <name>
-                                                across all doc types (modifiers,
-                                                triggers, effects, …). Useful for
-                                                "is this engine-native or mod?"
+        GET /engine-docs/origin/<name>        - which doc type(s) define <name>,
+                                                with the full schema entry
+                                                (description, example, traits,
+                                                reads, scopes, targets, …).
+                                                Replaces ad-hoc grep when checking
+                                                "does this trigger exist? what
+                                                scope? what's the syntax?".
+        GET /engine-docs/usage/<name>         - real-world call sites of <name>
+                                                from vanilla `common/`. Returns
+                                                file:line + a 4-line snippet per
+                                                hit. Definitions and trigger-
+                                                localization labels are filtered
+                                                out by default. Params:
+                                                  limit=N (default 5)
+                                                  before=N / after=N (context)
+                                                  include_defs=true (keep all)
+                                                Useful when the docs don't cover
+                                                a trigger or you want canonical
+                                                argument shapes from real script.
         """
         if not parts:
             return {
@@ -5236,29 +5459,61 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "source_label": engine_docs_source_label,
             }
 
-        # /engine-docs/origin/<name> — convenience disambiguation lookup
+        # /engine-docs/origin/<name> — disambiguation lookup with full schema
         if parts[0] == "origin":
             if len(parts) < 2:
                 raise KeyError("Usage: /engine-docs/origin/<name>")
             target = parts[1]
             hits = []
+            # Fields surfaced per match. Common to all entry types: name, origin.
+            # Trigger/effect: description, example, traits, reads, scopes, targets.
+            # Modifier: mask, display_name, defined_in, is_*_flags.
+            # custom-localization / on-action / event-target: type-specific subset.
+            _surfaced_fields = (
+                "description", "example", "traits", "reads",
+                "scopes", "targets",
+                "defined_in", "is_script_only", "is_boolean",
+                "mask", "display_name",
+                "mod_redeclares", "mod_redeclared_in", "mod_script_only",
+                "input_scopes", "output_scopes",
+            )
             for dtype, entries in engine_docs.items():
                 for e in entries:
                     if e.get("name") == target:
-                        hits.append({
+                        match = {
                             "type": dtype,
                             "origin": e.get("origin", "unknown"),
-                            **{k: e[k] for k in (
-                                "defined_in", "is_script_only", "is_boolean",
-                                "mask", "display_name",
-                                "mod_redeclares", "mod_redeclared_in", "mod_script_only",
-                            ) if k in e},
-                        })
+                        }
+                        for k in _surfaced_fields:
+                            if k in e and e[k] not in (None, "", [], {}):
+                                match[k] = e[k]
+                        hits.append(match)
             return {
                 "name": target,
                 "found": len(hits) > 0,
                 "matches": hits,
             }
+
+        # /engine-docs/usage/<name> — find real-world usages in vanilla common/.
+        # Returns context-bracketed call sites (definition lines and label
+        # cross-references in scripted_triggers/trigger_localization are filtered
+        # out — usages are always indented inside a block, definitions are at
+        # column 0).
+        if parts[0] == "usage":
+            if len(parts) < 2:
+                raise KeyError("Usage: /engine-docs/usage/<name>?limit=N&include_defs=true")
+            target = parts[1]
+            limit = int(params.get("limit", ["5"])[0])
+            include_defs = params.get("include_defs", ["false"])[0].lower() in ("true", "1", "yes")
+            context_before = int(params.get("before", ["1"])[0])
+            context_after = int(params.get("after", ["3"])[0])
+            return _engine_docs_find_usage(
+                target,
+                limit=limit,
+                include_defs=include_defs,
+                context_before=context_before,
+                context_after=context_after,
+            )
 
         doc_type = parts[0]
         if doc_type not in engine_docs:
