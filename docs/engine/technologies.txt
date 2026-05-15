@@ -979,7 +979,7 @@
 		Unlocks Buildings: Azadi Tower, Kenyatta International Convention Centre
 		Unlocks Laws: Freedom of Information, Neocolonialism
 		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
-7: 27 technologies
+7: 29 technologies
 	Transistor Technology - The transistor is the tiny switch that makes all of our modern electronics possible. Its invention has led to a revolution in computing and communication, changing the world in countless ways.
 		Unlocking Technologies:
 			Modern Tools
@@ -1109,13 +1109,17 @@
 		Unlocking Technologies:
 			Art Deco Architecture
 		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
-8: 23 technologies
 	Satellite Communications - Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.
 		Unlocking Technologies:
 			Space Exploration
 			Cryptography
 		Unlocks Buildings: International Space Station
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Pop Culture - From music and movies to fashion and fads, [concept_pop] culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
+		Unlocking Technologies:
+			Television Broadcasting
+		Unlocks Buildings: Basilica of Our Lady of Peace, Lotus Temple
+8: 21 technologies
 	Advanced Materials Armor - The use of advanced materials like Composite and Reactive Armor makes our military vehicles tougher. Hopefully, this will keep them from blowing up so easily.
 		Unlocking Technologies:
 			Precision Guided Munitions
@@ -1223,10 +1227,6 @@
 		Unlocking Technologies:
 			Television Broadcasting
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
-	Pop Culture - From music and movies to fashion and fads, [concept_pop] culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
-		Unlocking Technologies:
-			Television Broadcasting
-		Unlocks Buildings: Basilica of Our Lady of Peace, Lotus Temple
 9: 28 technologies
 	Hydraulic Fracturing - A controversial but effective way to extract natural gas and oil from underground. It's a boon for the energy industry, but not so much for the environment.
 		Unlocking Technologies:
