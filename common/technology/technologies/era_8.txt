@@ -1,28 +1,4 @@
-﻿satellite_communications = {
-	# Satellite Communications PM for Wireless Telecommunication Industries, Moon Mission PM for Space Program
-	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
-	category = military
-
-	unlocking_technologies = {
-		space_exploration
-		cryptography
-	}
-
-	modifier = {
-		country_weekly_innovation_max_add = 50
-		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
-		country_satcom_pb_principles_bool = yes
-		country_space_race_max_funding_add = 1
-		country_satcom_pb_principles_bool = yes
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-advanced_materials_armor = {
+﻿advanced_materials_armor = {
 	# Reactive Armor Tank unit, Advanced Composite Armor PM for Automotive Industries
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
@@ -493,26 +469,3 @@ video_games = {
 	}
 }
 
-pop_culture = {
-	era = era_8
-	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
-	category = society
-
-	unlocking_technologies = {
-		television_broadcasting
-	}
-
-	modifier = {
-		country_institution_ministry_of_propaganda_max_investment_add = 1
-		country_institution_ministry_of_religion_max_investment_add = 1
-		country_weekly_innovation_max_add = 50
-		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
-		country_institution_ministry_of_culture_max_investment_add = 2
-		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
-		state_homeland_change_speed_mult = 0.10
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
