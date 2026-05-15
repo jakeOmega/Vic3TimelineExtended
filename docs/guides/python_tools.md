@@ -242,6 +242,7 @@ Invoke-RestMethod http://localhost:8950/status
 | `/keys/<EntityType>` | GET | All entity IDs + localized names for a type |
 | `/raw/<EntityType>` | GET | Full raw parsed data for a type |
 | `/raw/<EntityType>/<id>` | GET | Raw parsed data for one entity |
+| `/loc-keys/<EntityType>/<id>` | GET | Resolve the stable family of loc keys an entity exposes (name/desc/...). Seeded set in `LOC_KEY_FAMILIES` (treaty articles, decisions, JEs, decrees, diplo actions/plays, laws, country formations, modifiers, institutions). |
 | `/localize/<key>` | GET | Game key → display text |
 | `/unlocalize/<text>` | GET | Display text → matching game key(s) |
 | `/search?q=<query>` | GET | Search entity IDs, names, and localization |
@@ -279,6 +280,11 @@ Invoke-RestMethod http://localhost:8950/status
 | `/production-methods?building=<id>` | GET | All PMs for a building, grouped by PM group |
 | `/journal-entries` | GET | All journal entries with group |
 | `/journal-entries/<je_id>` | GET | Journal entry detail |
+| `/treaty-articles` | GET | All treaty articles |
+| `/treaty-articles/<id>` | GET | Treaty article detail |
+| `/treaty-articles/<id>/loc-keys` | GET | Treaty article's loc-key family (name / desc / article_short_desc / effects_desc) |
+| `/diplomatic-actions` | GET | All diplomatic action types — the `type =` vocabulary that feeds `has_diplomatic_pact = { who type }`. Each entry carries `category` (general/subject_relation/power_bloc), `groups`, `is_subject_relation`, `is_two_sided_pact`, `subject_type`. |
+| `/diplomatic-actions/<id>` | GET | Detail with full `pact` block and `raw` AST |
 | `/decisions` | GET | All decisions |
 | `/decisions/<id>` | GET | Decision detail |
 | `/script-values` | GET | All script value IDs |
@@ -287,6 +293,8 @@ Invoke-RestMethod http://localhost:8950/status
 | `/decrees/<id>` | GET | Decree detail with modifiers |
 | `/on-actions` | GET | All on-action IDs (mod-only) |
 | `/on-actions/<id>` | GET | On-action raw data |
+| `/gui/render-sites/<loc_key>` | GET | Every GUI file:line (mod + vanilla) that references `<loc_key>` via a known loc attribute (`text` / `tooltip` / `raw_text` / ...). Mechanical scan; one curl replaces a multi-grep over both GUI trees. |
+| `/gui/render-paths/<EntityType>?field=<role>` | GET | Every GUI file:line that renders `<field>` of `<EntityType>` via `[<DataType>.GetX]`. Resolves EntityType → DataType via `ENTITY_TYPE_TO_DATATYPE`, field role → method names via `FIELD_TO_METHODS`. Fields: `name` / `desc` / `icon` / `tooltip`. |
 | `/reload` | POST | Re-parse all files from disk (also regenerates docs) |
 
 #### `/raw/<EntityType>[/<id>]` Response Shape

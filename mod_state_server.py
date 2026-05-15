@@ -128,6 +128,7 @@ base_game_paths = {
     "Journal Entries": os.path.join(_BASE_COMMON, "journal_entries"),
     "Journal Entry Groups": os.path.join(_BASE_COMMON, "journal_entry_groups"),
     "Decisions": os.path.join(_BASE_COMMON, "decisions"),
+    "Country Formation": os.path.join(_BASE_COMMON, "country_formation"),
     "Treaty Articles": os.path.join(_BASE_COMMON, "treaty_articles"),
     "Religions": os.path.join(_BASE_COMMON, "religions"),
     "Decrees": os.path.join(_BASE_COMMON, "decrees"),
@@ -179,6 +180,7 @@ mod_paths = {
     "Journal Entries": os.path.join(_MOD_COMMON, "journal_entries"),
     "Journal Entry Groups": os.path.join(_MOD_COMMON, "journal_entry_groups"),
     "Decisions": os.path.join(_MOD_COMMON, "decisions"),
+    "Country Formation": os.path.join(_MOD_COMMON, "country_formation"),
     "On Actions": os.path.join(_MOD_COMMON, "on_actions"),
     "Treaty Articles": os.path.join(_MOD_COMMON, "treaty_articles"),
     "Religions": os.path.join(_MOD_COMMON, "religions"),
@@ -201,6 +203,90 @@ ms: ModState = None  # type: ignore[assignment]
 startup_elapsed: float = 0.0
 engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
+
+
+# ---------------------------------------------------------------------------
+# Loc-key families: entity type -> [(role, suffix), ...]. Used by /loc-keys
+# to enumerate the stable family of loc keys an entity exposes. Extend as
+# new entity types acquire well-known suffix patterns.
+# ---------------------------------------------------------------------------
+LOC_KEY_FAMILIES: dict[str, list[tuple[str, str]]] = {
+    "Treaty Articles":   [("name", ""), ("desc", "_desc"), ("article_short_desc", "_article_short_desc"), ("effects_desc", "_effects_desc")],
+    "Decisions":         [("name", ""), ("desc", "_desc")],
+    "Journal Entries":   [("name", ""), ("desc", "_desc"), ("reason", "_reason"), ("goal", "_goal")],
+    "Decrees":           [("name", ""), ("desc", "_desc")],
+    "Diplomatic Actions":[("name", ""), ("desc", "_desc")],
+    "Diplomatic Plays":  [("name", ""), ("desc", "_desc"), ("goal", "_goal")],
+    "Laws":              [("name", ""), ("desc", "_desc")],
+    "Country Formation": [("name", ""), ("desc", "_desc")],
+    "Modifiers":         [("name", ""), ("desc", "_desc")],
+    "Institutions":      [("name", ""), ("desc", "_desc")],
+}
+
+
+# ---------------------------------------------------------------------------
+# Entity-type -> engine GUI datatype map. Seeded from data_types_script.txt
+# (e.g. Scope.GetTreatyArticle -> Article). Used by /gui/render-paths to
+# resolve which [Type.GetX] chains render a given entity's fields.
+# ---------------------------------------------------------------------------
+ENTITY_TYPE_TO_DATATYPE: dict[str, str] = {
+    "Treaty Articles": "Article",
+    "Decisions": "Decision",
+    "Decrees": "Decree",
+    "Journal Entries": "JournalEntry",
+    "Laws": "Law",
+    "Buildings": "Building",
+    "Character Interactions": "CharacterInteraction",
+    "Diplomatic Actions": "DiplomaticAction",
+    "Diplomatic Plays": "DiplomaticPlay",
+    "Interest Groups": "InterestGroup",
+    "Goods": "Goods",
+    "Production Methods": "ProductionMethod",
+    "PMs": "ProductionMethod",
+    "Pop Types": "PopType",
+    "Cultures": "Culture",
+    "Religions": "Religion",
+    "Technologies": "Technology",
+    "Institutions": "Institution",
+    "Game Concepts": "Concept",
+    "Country Formation": "CountryFormation",
+}
+
+# Field role -> set of GUI accessor method names that render that field.
+# Broad sets cover the various GetXDesc naming conventions: e.g. Article uses
+# GetEffectsDesc / GetShortDesc / GetImmediateEffectsDesc — not GetDesc.
+FIELD_TO_METHODS: dict[str, set[str]] = {
+    "name": {"GetName", "GetNameNoFormatting", "GetNameForListbox", "GetDisplayName"},
+    "desc": {
+        "GetDesc", "GetDescription", "GetDescriptionNoFormatting",
+        "GetEffectsDesc", "GetShortDesc", "GetImmediateEffectsDesc",
+        "GetEffectDesc", "GetBriefDesc",
+    },
+    "icon": {"GetIcon", "GetIconPath", "GetIconKey", "GetTexture"},
+    "tooltip": {"GetTooltip", "GetTooltipText"},
+}
+
+
+def _loc_keys_for(etype: str, eid: str, loc_dict: dict[str, str]) -> dict:
+    """Pure helper for the /loc-keys endpoint — no ms dependency, so unit tests
+    can pass a hand-built loc dict."""
+    family = LOC_KEY_FAMILIES.get(etype)
+    if family is None:
+        return {
+            "error": f"No loc-key family seeded for entity type {etype!r}",
+            "known_types": sorted(LOC_KEY_FAMILIES.keys()),
+            "hint": "Add an entry to LOC_KEY_FAMILIES in mod_state_server.py to extend.",
+        }
+    keys: dict[str, dict] = {}
+    for role, suffix in family:
+        full_key = eid + suffix
+        found = full_key in loc_dict
+        keys[role] = {
+            "key": full_key,
+            "value": loc_dict.get(full_key, ""),
+            "found": found,
+        }
+    return {"type": etype, "id": eid, "keys": keys}
 
 
 # ---------------------------------------------------------------------------
@@ -510,6 +596,101 @@ def _get_loc_function_index() -> dict:
     if _LOC_FUNCTION_INDEX is None:
         _LOC_FUNCTION_INDEX = _build_loc_function_index()
     return _LOC_FUNCTION_INDEX
+
+
+# ---------------------------------------------------------------------------
+# GUI render-site index — lazily built on first /gui/render-* request.
+# Maps:
+#   by_key[loc_key]                 -> [{file, line, attr, expression}]
+#   by_method[(DataType, Method)]   -> [{file, line, expression}]
+# Powers /gui/render-sites/<loc_key> (mechanical text=... scan) and
+# /gui/render-paths/<EntityType>?field=<role> (entity-method walker).
+# ---------------------------------------------------------------------------
+_GUI_RENDER_INDEX: Optional[dict] = None
+# Match `<attr> = "<loc_key>"` where the value is a bare snake_case loc key
+# (no whitespace, no concept tags). Avoids false positives on free-text labels
+# that happen to be quoted (e.g. `text = "Some literal."`).
+_GUI_TEXT_ATTR_RE = re.compile(
+    r'\b([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"([a-z][a-zA-Z0-9_]*)"'
+)
+# Attributes that the engine treats as loc references (the value gets resolved
+# against the loc dict). Everything else is dropped — most GUI attrs hold
+# literal strings (widget names, paths, colors).
+_GUI_LOC_ATTRS: set[str] = {
+    "text", "tooltip", "tooltip_text", "raw_text", "default_text",
+    "description", "name_tooltip", "button_text", "header", "title",
+    "loc_key", "tooltip_on_focus", "loctext",
+}
+# Match `<DataType>.<Method>` anywhere inside a `[...]` expression. We don't
+# anchor on `[` because vanilla nests calls — e.g. `[Not(StringIsEmpty(Article.GetEffectsDesc))]`
+# — and the inner DataType.Method is the part we care about. False positives
+# are minimal in `.gui` files (which rarely use bare uppercase dotted refs
+# outside data-system expressions); the index is only consulted when both
+# DataType and Method match the lookup.
+_GUI_DATAREF_RE = re.compile(r"\b([A-Z][A-Za-z0-9_]*)\.([A-Z][A-Za-z0-9_]*)")
+
+
+def _build_gui_render_index(scan_roots: list[tuple[str, str]]) -> dict:
+    """Scan GUI files and produce two indexes: by loc key (direct refs) and by
+    (DataType, Method) pair (entity-method walker support).
+
+    `scan_roots` is a list of `(root_path, rel_to)` pairs. Each `rel_to`
+    anchors the path-relative output (e.g. `(base/game, base)` -> "game/gui/..").
+    Parameterized so unit tests can feed a tempdir without touching globals.
+    """
+    by_key: dict[str, list[dict]] = {}
+    by_method: dict[tuple[str, str], list[dict]] = {}
+
+    for root, rel_to in scan_roots:
+        if not os.path.isdir(root):
+            continue
+        for dirpath, _dirs, files in os.walk(root):
+            for fname in files:
+                if not fname.endswith(".gui"):
+                    continue
+                path = os.path.join(dirpath, fname)
+                rel = os.path.relpath(path, rel_to).replace(os.sep, "/")
+                try:
+                    with open(path, "r", encoding="utf-8", errors="replace") as f:
+                        for line_no, line in enumerate(f, start=1):
+                            for m in _GUI_TEXT_ATTR_RE.finditer(line):
+                                attr, key = m.group(1), m.group(2)
+                                if attr not in _GUI_LOC_ATTRS:
+                                    continue
+                                by_key.setdefault(key, []).append({
+                                    "file": rel,
+                                    "line": line_no,
+                                    "attr": attr,
+                                    "expression": m.group(0),
+                                })
+                            if "[" in line:
+                                # Walk each `[...]` expression; scan for
+                                # DataType.Method refs inside (handles nested
+                                # calls like Not(StringIsEmpty(Article.GetX))).
+                                for outer in _LOC_EXPR_RE.finditer(line):
+                                    body = outer.group(1)
+                                    for m in _GUI_DATAREF_RE.finditer(body):
+                                        dtype, method = m.group(1), m.group(2)
+                                        by_method.setdefault((dtype, method), []).append({
+                                            "file": rel,
+                                            "line": line_no,
+                                            "expression": f"[...{dtype}.{method}...]",
+                                        })
+                except OSError:
+                    continue
+    return {"by_key": by_key, "by_method": by_method}
+
+
+def _get_gui_render_index() -> dict:
+    """Return the cached GUI render index, building it on first access. Scans
+    vanilla `<base>/game/gui/` AND mod `<mod_path>/gui/`."""
+    global _GUI_RENDER_INDEX
+    if _GUI_RENDER_INDEX is None:
+        _GUI_RENDER_INDEX = _build_gui_render_index([
+            (os.path.join(base_game_path, "game", "gui"), base_game_path),
+            (os.path.join(mod_path, "gui"), mod_path),
+        ])
+    return _GUI_RENDER_INDEX
 
 
 def _engine_docs_find_usage(
@@ -3261,6 +3442,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "entity-types": lambda: list(ms.mod_parsers.keys()),
             "keys": lambda: self._keys(rest, params),
             "raw": lambda: self._raw(rest),
+            "loc-keys": lambda: self._loc_keys(rest),
             "localize": lambda: self._localize(rest),
             "unlocalize": lambda: self._unlocalize(rest),
             "search": lambda: self._search(params),
@@ -3286,6 +3468,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "institutions": lambda: self._institutions(rest),
             "production-methods": lambda: self._production_methods(rest, params),
             "journal-entries": lambda: self._journal_entries(rest),
+            "treaty-articles": lambda: self._treaty_articles(rest),
+            "diplomatic-actions": lambda: self._diplomatic_actions(rest),
             "decisions": lambda: self._decisions(rest),
             "script-values": lambda: self._script_values(rest),
             "decrees": lambda: self._decrees(rest),
@@ -3296,6 +3480,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "engine-docs": lambda: self._engine_docs(rest, params),
             # Developer reference docs (.md files from base game)
             "dev-docs": lambda: self._dev_docs(rest, params),
+            # GUI render-site lookup (loc key -> GUI files; entity field -> GUI files)
+            "gui": lambda: self._gui(rest, params),
             # Missing localization detection
             "unlocalized": lambda: self._unlocalized(params),
             # Vocabularies (placeholder → values used by pattern matching / validation)
@@ -3351,6 +3537,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/entity-types", "desc": "List of every entity type the parser exposes."},
                 {"path": "/keys/<EntityType>", "desc": "All entity IDs of a given type (e.g. /keys/Buildings)."},
                 {"path": "/raw/<EntityType>/<id>", "desc": "Raw parsed AST for one entity."},
+                {"path": "/loc-keys/<EntityType>/<id>", "desc": "Resolve the stable family of loc keys an entity exposes (name/desc/...) — see LOC_KEY_FAMILIES."},
                 {"path": "/localize/<key>", "desc": "Resolve a localization key to its English string."},
                 {"path": "/unlocalize?q=<text>", "desc": "Reverse-lookup loc keys whose value matches a substring."},
                 {"path": "/search?q=<text>", "desc": "Full-text search across mod + vanilla parsed entities."},
@@ -3362,6 +3549,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
+                {"path": "/treaty-articles/<id?>[/loc-keys]", "desc": "Treaty articles catalog; /<id>/loc-keys returns the article's loc-key family."},
+                {"path": "/diplomatic-actions/<id?>", "desc": "Diplomatic-action catalog with category (subject_relation/power_bloc/general) + pact metadata."},
                 {"path": "/decisions/<id?>", "desc": "Decisions catalog."},
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
@@ -3379,6 +3568,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
                 {"path": "/technology-effects/<tech>", "desc": "Aggregate of all effects applied by a tech."},
                 {"path": "/event-magnitude-audit", "desc": "Hardcoded fast-scaling event-value audit."},
+                {"path": "/gui/render-sites/<loc_key>", "desc": "Every GUI file:line that references <loc_key> via text/tooltip/raw_text/... — mod + vanilla."},
+                {"path": "/gui/render-paths/<EntityType>?field=<role>", "desc": "Every GUI file:line that renders <field> of <EntityType> via [DataType.GetX]. Fields: name/desc/icon/tooltip."},
                 {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
@@ -4210,6 +4401,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 raise KeyError(eid)
             return serialize(data[eid])
         return serialize(data)
+
+    def _loc_keys(self, parts):
+        """GET /loc-keys/<EntityType>/<id>  - resolve the family of loc keys
+        an entity exposes (name, desc, article_short_desc, ...) against the
+        loaded localization map. Stable suffix patterns per type are seeded in
+        LOC_KEY_FAMILIES.
+
+        Returns {"type", "id", "keys": {role: {"key", "value", "found"}}}.
+        A key with `found=true, value=""` is intentionally blank in vanilla
+        (real and common — e.g. money_transfer_desc).
+        """
+        if len(parts) < 2:
+            return {
+                "error": "Usage: /loc-keys/<EntityType>/<id>",
+                "known_types": sorted(LOC_KEY_FAMILIES.keys()),
+            }
+        return _loc_keys_for(parts[0], parts[1], ms.localization)
 
     def _localize(self, parts):
         """GET /localize/<key>  - localize a game key to display text."""
@@ -5338,6 +5546,109 @@ class ModStateHandler(BaseHTTPRequestHandler):
         info["raw"] = serialize(raw)
         return info
 
+    # ---- structured: diplomatic actions -----------------------------------
+    def _diplomatic_actions(self, parts):
+        """GET /diplomatic-actions[/<id>]
+
+        Catalog of `common/diplomatic_actions/` — the `type` vocabulary that
+        feeds `has_diplomatic_pact = { who = X type = Y }`. List form returns
+        summary rows; detail form adds the full `pact` block + raw AST.
+        """
+        actions = ms.get_data("Diplomatic Actions")
+        if not actions:
+            return {"error": "Diplomatic Actions data not loaded"}
+
+        def _summary(aid):
+            ed = get_entity_data(actions[aid])
+            ed_dict = ed if isinstance(ed, dict) else {}
+
+            raw_groups = get_field(ed_dict, "groups", []) or []
+            if isinstance(raw_groups, str):
+                group_list = [raw_groups]
+            elif isinstance(raw_groups, list):
+                group_list = [g for g in raw_groups if isinstance(g, str)]
+            else:
+                group_list = []
+
+            pact = get_field(ed_dict, "pact")
+            if isinstance(pact, list):
+                pact_dict: dict = {}
+                for item in pact:
+                    if isinstance(item, dict):
+                        pact_dict.update(item)
+            elif isinstance(pact, dict):
+                pact_dict = pact
+            else:
+                pact_dict = {}
+
+            subject_type = get_field(pact_dict, "subject_type")
+            is_subject_relation = bool(subject_type) or any(
+                g in ("subject", "overlord") for g in group_list
+            )
+            if is_subject_relation:
+                category = "subject_relation"
+            elif "power_bloc" in group_list:
+                category = "power_bloc"
+            elif group_list:
+                category = group_list[0]
+            else:
+                category = "uncategorized"
+
+            return {
+                "type": "Diplomatic Actions",
+                "id": aid,
+                "name": ms.localize(aid),
+                "category": category,
+                "groups": group_list,
+                "requires_approval": get_field(ed_dict, "requires_approval"),
+                "is_subject_relation": is_subject_relation,
+                "is_two_sided_pact": get_field(pact_dict, "is_two_sided_pact"),
+                "subject_type": subject_type,
+            }
+
+        if parts:
+            aid = parts[0]
+            if aid not in actions:
+                raise KeyError(aid)
+            info = _summary(aid)
+            ed = get_entity_data(actions[aid])
+            ed_dict = ed if isinstance(ed, dict) else {}
+            info["pact"] = serialize(ed_dict.get("pact"))
+            info["raw"] = serialize(actions[aid])
+            return info
+
+        return [_summary(aid) for aid in actions]
+
+    # ---- structured: treaty articles --------------------------------------
+    def _treaty_articles(self, parts):
+        """GET /treaty-articles                       - list all
+           GET /treaty-articles/<id>                  - detail
+           GET /treaty-articles/<id>/loc-keys         - loc-key family"""
+        arts = ms.get_data("Treaty Articles")
+        if not arts:
+            return {"error": "Treaty Articles data not loaded"}
+
+        if not parts:
+            return [
+                {"type": "Treaty Articles", "id": aid, "name": ms.localize(aid)}
+                for aid in arts
+            ]
+
+        aid = parts[0]
+        if aid not in arts:
+            raise KeyError(aid)
+
+        if len(parts) >= 2:
+            if parts[1] == "loc-keys":
+                return self._loc_keys(["Treaty Articles", aid])
+            raise KeyError(parts[1])
+
+        return {
+            "type": "Treaty Articles", "id": aid,
+            "name": ms.localize(aid),
+            "raw": serialize(arts[aid]),
+        }
+
     # ---- structured: decisions --------------------------------------------
     def _decisions(self, parts):
         """GET /decisions[/<decision_id>]"""
@@ -5842,6 +6153,78 @@ class ModStateHandler(BaseHTTPRequestHandler):
         ("Combat Unit Types",    "self"),
         ("Events",               "event"),
     ]
+
+    # ---- GUI render-site lookup --------------------------------------------
+    def _gui(self, parts, params):
+        """GET /gui/render-sites/<loc_key>
+        GET /gui/render-paths/<EntityType>?field=<role>
+
+        Two endpoints under the /gui/ prefix:
+        - render-sites: every GUI file:line that quotes <loc_key> as a known
+          localized attr (text/tooltip/raw_text/...).
+        - render-paths: every GUI file:line that renders <field> of an entity
+          via [DataType.GetX]. Resolves EntityType -> DataType via
+          ENTITY_TYPE_TO_DATATYPE, field -> {GetX, ...} via FIELD_TO_METHODS.
+
+        Both share a single lazily-built GUI index covering mod + vanilla.
+        """
+        if not parts:
+            return {
+                "error": "Usage: /gui/render-sites/<loc_key> or /gui/render-paths/<EntityType>?field=<role>",
+                "supported_fields": sorted(FIELD_TO_METHODS.keys()),
+                "supported_entity_types": sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
+            }
+        sub = parts[0]
+        index = _get_gui_render_index()
+
+        if sub == "render-sites":
+            if len(parts) < 2:
+                return {"error": "Usage: /gui/render-sites/<loc_key>"}
+            key = parts[1]
+            sites = index["by_key"].get(key, [])
+            return {"key": key, "sites": sites, "count": len(sites)}
+
+        if sub == "render-paths":
+            if len(parts) < 2:
+                return {
+                    "error": "Usage: /gui/render-paths/<EntityType>?field=<role>",
+                    "supported_entity_types": sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
+                    "supported_fields": sorted(FIELD_TO_METHODS.keys()),
+                }
+            etype = parts[1]
+            field = (params.get("field") or ["name"])[0]
+            datatype = ENTITY_TYPE_TO_DATATYPE.get(etype)
+            if datatype is None:
+                return {
+                    "error": f"No GUI datatype mapped for entity type {etype!r}",
+                    "supported_entity_types": sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
+                    "hint": "Add an entry to ENTITY_TYPE_TO_DATATYPE in mod_state_server.py to extend.",
+                }
+            methods = FIELD_TO_METHODS.get(field)
+            if methods is None:
+                return {
+                    "error": f"Unknown field {field!r}",
+                    "supported_fields": sorted(FIELD_TO_METHODS.keys()),
+                }
+            sites: list[dict] = []
+            matched: set[str] = set()
+            for method in methods:
+                hits = index["by_method"].get((datatype, method))
+                if not hits:
+                    continue
+                matched.add(method)
+                for hit in hits:
+                    sites.append({**hit, "method": method})
+            return {
+                "entity_type": etype,
+                "datatype": datatype,
+                "field": field,
+                "methods_matched": sorted(matched),
+                "sites": sites,
+                "count": len(sites),
+            }
+
+        raise KeyError(sub)
 
     def _unlocalized(self, params):
         """GET /unlocalized?type=<EntityType>&mod_only=true
