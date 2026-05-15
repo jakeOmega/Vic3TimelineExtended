@@ -1808,6 +1808,33 @@ pmg_rekal_hq = {
 	production_methods = { pm_rekal_hq }
 }
 
+# --- Synthetic rubber companies (issue #43) ---
+pmg_dupont_experimental_station = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_dupont_experimental_station }
+}
+pmg_ig_farben_buna_werke = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_ig_farben_buna_werke }
+}
+pmg_shell_pernis_refinery = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_shell_pernis_refinery }
+}
+pmg_jsr_yokkaichi_complex = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_jsr_yokkaichi_complex }
+}
+pmg_sibur_tobolsk_complex = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_sibur_tobolsk_complex }
+}
+
 # === Company shipyard shared graduates ================================
 # Each of the 13 company shipyards in unique_pms.txt outputs 20 steamers
 # from a single-PM group. The two shared graduate PMs

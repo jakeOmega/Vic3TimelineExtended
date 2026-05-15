@@ -3192,6 +3192,26 @@ Rekal Memory Center (bg_company_buildings):
 	Rekal Memory Services:
 		Rekal Memory Services
 
+DuPont Experimental Station (bg_company_buildings):
+	DuPont Experimental Station:
+		DuPont Experimental Station
+
+IG Farben Buna-Werke (bg_company_buildings):
+	IG Farben Buna-Werke:
+		IG Farben Buna-Werke
+
+Shell Pernis Refinery (bg_company_buildings):
+	Shell Pernis Refinery:
+		Shell Pernis Refinery
+
+JSR Yokkaichi Complex (bg_company_buildings):
+	JSR Yokkaichi Complex:
+		JSR Yokkaichi Complex
+
+Sibur Tobolsk Petrochemical Complex (bg_company_buildings):
+	Sibur Tobolsk Complex:
+		Sibur Tobolsk Complex
+
 Synthetic Clothes Industries (bg_heavy_industry):
 	Unlocking Technology: Art Silk
 	Synthetic Silk:

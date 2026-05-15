@@ -10513,3 +10513,161 @@ pm_advanced_company_shipbuilding = {
 		}
 	}
 }
+# === Synthetic rubber companies (issue #43) ============================
+
+# --- DuPont ---
+pm_dupont_experimental_station = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_mult = 0.03
+			building_munition_plant_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
+			# Output goods
+			goods_output_explosives_add = 150                    # Price:   50, Total cost:  7500.0 (100.00%)
+			# Total input cost: 800.0
+			# Total output cost: 7500.0
+			# Profit: 6700.0
+			# Profit margin: 837.50%
+			# Zero profit price multiplier: 0.11
+			# Employment: 2000
+			# Wage breakeven: 3.35
+		}
+		level_scaled = {
+			building_employment_academics_add = 1000
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 400
+		}
+	}
+}
+
+# --- IG Farben ---
+pm_ig_farben_buna_werke = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_mult = 0.03
+			building_synthetics_plant_rubber_throughput_add = 0.15
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 30                          # Price:   50, Total cost:  1500.0 (78.95%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (21.05%)
+			# Output goods
+			goods_output_rubber_add = 180                        # Price:   40, Total cost:  7200.0 (100.00%)
+			# Total input cost: 1900.0
+			# Total output cost: 7200.0
+			# Profit: 5300.0
+			# Profit margin: 278.95%
+			# Zero profit price multiplier: 0.26
+			# Employment: 2000
+			# Wage breakeven: 2.65
+		}
+		level_scaled = {
+			building_employment_academics_add = 800
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 600
+		}
+	}
+}
+
+# --- Shell ---
+pm_shell_pernis_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_mult = 0.03
+			building_oil_rig_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 40                             # Price:   40, Total cost:  1600.0 (100.00%)
+			# Output goods
+			goods_output_oil_add = 80                            # Price:   40, Total cost:  3200.0 (68.09%)
+			goods_output_fertilizer_add = 50                     # Price:   30, Total cost:  1500.0 (31.91%)
+			# Total input cost: 1600.0
+			# Total output cost: 4700.0
+			# Profit: 3100.0
+			# Profit margin: 193.75%
+			# Zero profit price multiplier: 0.34
+			# Employment: 2000
+			# Wage breakeven: 1.55
+		}
+		level_scaled = {
+			building_employment_academics_add = 400
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 800
+		}
+	}
+}
+
+# --- JSR ---
+pm_jsr_yokkaichi_complex = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_mult = 0.03
+			building_synthetics_plant_rubber_throughput_add = 0.15
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (100.00%)
+			# Output goods
+			goods_output_rubber_add = 160                        # Price:   40, Total cost:  6400.0 (100.00%)
+			# Total input cost: 800.0
+			# Total output cost: 6400.0
+			# Profit: 5600.0
+			# Profit margin: 700.00%
+			# Zero profit price multiplier: 0.12
+			# Employment: 2000
+			# Wage breakeven: 2.80
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 600
+		}
+	}
+}
+
+# --- Sibur ---
+pm_sibur_tobolsk_complex = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_mult = 0.03
+			building_chemical_plant_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 30                             # Price:   40, Total cost:  1200.0 (100.00%)
+			# Output goods
+			goods_output_fertilizer_add = 150                    # Price:   30, Total cost:  4500.0 (100.00%)
+			# Total input cost: 1200.0
+			# Total output cost: 4500.0
+			# Profit: 3300.0
+			# Profit margin: 275.00%
+			# Zero profit price multiplier: 0.27
+			# Employment: 2000
+			# Wage breakeven: 1.65
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 800
+		}
+	}
+}

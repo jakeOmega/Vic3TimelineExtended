@@ -3387,6 +3387,7 @@ company_dupont = {
 		building_chemical_plant
 		building_synthetics_plant_rubber
 		building_munition_plant
+		building_dupont_experimental_station
 	}
 	potential = {
 		always = yes
@@ -3407,6 +3408,7 @@ company_dupont = {
 		country_weekly_innovation_mult = 0.05
 		building_chemical_plant_throughput_add = 0.05
 		building_munition_plant_throughput_add = 0.05
+		state_building_dupont_experimental_station_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_fertilizer
@@ -3431,6 +3433,7 @@ company_ig_farben = {
 	building_types = {
 		building_chemical_plant
 		building_synthetics_plant_rubber
+		building_ig_farben_buna_werke
 	}
 	extension_building_types = {
 		building_dye_plantation
@@ -3454,6 +3457,7 @@ company_ig_farben = {
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.05
 		building_chemical_plant_throughput_add = 0.10
+		state_building_ig_farben_buna_werke_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_german_aniline
@@ -3479,6 +3483,7 @@ company_shell = {
 		building_oil_rig
 		building_chemical_plant
 		building_synthetics_plant_rubber
+		building_shell_pernis_refinery
 	}
 	potential = {
 		always = yes
@@ -3502,6 +3507,7 @@ company_shell = {
 		building_oil_rig_throughput_add = 0.10
 		building_chemical_plant_throughput_add = 0.05
 		country_loan_interest_rate_add = -0.005
+		state_building_shell_pernis_refinery_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
@@ -3525,6 +3531,7 @@ company_jsr = {
 	building_types = {
 		building_synthetics_plant_rubber
 		building_chemical_plant
+		building_jsr_yokkaichi_complex
 	}
 	potential = {
 		always = yes
@@ -3545,6 +3552,7 @@ company_jsr = {
 		country_weekly_innovation_mult = 0.05
 		building_synthetics_plant_rubber_throughput_add = 0.10
 		building_chemical_plant_throughput_add = 0.05
+		state_building_jsr_yokkaichi_complex_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_fertilizer
@@ -3569,6 +3577,7 @@ company_sibur = {
 		building_chemical_plant
 		building_synthetics_plant_rubber
 		building_oil_rig
+		building_sibur_tobolsk_complex
 	}
 	potential = {
 		always = yes
@@ -3589,6 +3598,7 @@ company_sibur = {
 		building_chemical_plant_throughput_add = 0.10
 		building_synthetics_plant_rubber_throughput_add = 0.10
 		building_oil_rig_throughput_add = 0.05
+		state_building_sibur_tobolsk_complex_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
