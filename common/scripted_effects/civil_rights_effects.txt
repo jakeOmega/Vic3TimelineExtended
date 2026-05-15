@@ -31,3 +31,23 @@ cr_ensure_tracker_vars_effect = {
 	if = { limit = { NOT = { has_variable = cr_segregationist_months } }
 		set_variable = { name = cr_segregationist_months value = 0 } }
 }
+
+# JE-end cleanup: remove every country-scope modifier that je_civil_rights's
+# scripted buttons (or on_monthly_pulse) may have attached. The six path
+# modifiers are mutex-by-button but a single playthrough may have run
+# through several (e.g. start grassroots, switch to suppression), so all
+# six must be removed unconditionally. cr_cooptation_expired is the timed
+# bar-suppression marker applied at 12 months of cooptation.
+#
+# Called from je_civil_rights's on_complete, on_fail, on_invalid. Safe to
+# call when the modifiers aren't present (remove_modifier is a no-op for
+# missing modifiers).
+cr_je_cleanup_effect = {
+	remove_modifier = cr_grassroots_modifier
+	remove_modifier = cr_federal_protection_modifier
+	remove_modifier = cr_gradualist_modifier
+	remove_modifier = cr_cooptation_modifier
+	remove_modifier = cr_suppression_modifier
+	remove_modifier = cr_segregationist_modifier
+	remove_modifier = cr_cooptation_expired
+}

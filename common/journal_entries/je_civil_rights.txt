@@ -154,6 +154,11 @@
 		else = {
 			trigger_event = { id = movement_events_te.200 } # generic fallback
 		}
+
+		# Strip the six path modifiers (cr_grassroots/federal/gradualist/cooptation/
+		# suppression/segregationist) and the timed cooptation-expired marker. They
+		# are country-scope and survive the JE's end unless explicitly removed.
+		cr_je_cleanup_effect = yes
 	}
 
 	invalid = {
@@ -168,6 +173,13 @@
 				}
 			}
 		}
+	}
+
+	on_invalid = {
+		# JE invalidated without victory/defeat -- still strip the path modifiers
+		# so they don't persist on the country after the political pretext for
+		# the movement disappeared.
+		cr_je_cleanup_effect = yes
 	}
 
 	fail = {
@@ -200,6 +212,8 @@
 		else = {
 			trigger_event = { id = movement_events_te.231 } # gradualist stagnation
 		}
+
+		cr_je_cleanup_effect = yes
 	}
 
 	on_monthly_pulse = {
