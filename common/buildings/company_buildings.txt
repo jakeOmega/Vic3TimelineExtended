@@ -10589,3 +10589,193 @@ building_rekal_hq = {
 		}
 	}
 }
+
+# --- DuPont ---
+building_dupont_experimental_station = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_dupont_experimental_station
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    can_build_private = {
+        always = no
+    }
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_dupont
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_dupont_experimental_station
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_dupont_experimental_station
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- IG Farben ---
+building_ig_farben_buna_werke = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_ig_farben_buna_werke
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    can_build_private = {
+        always = no
+    }
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_ig_farben
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_ig_farben_buna_werke
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_ig_farben_buna_werke
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Shell ---
+building_shell_pernis_refinery = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_asml.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_shell_pernis_refinery
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    can_build_private = {
+        always = no
+    }
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_shell
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_shell_pernis_refinery
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_shell_pernis_refinery
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- JSR ---
+building_jsr_yokkaichi_complex = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_jsr_yokkaichi_complex
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    can_build_private = {
+        always = no
+    }
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_jsr
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_jsr_yokkaichi_complex
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_jsr_yokkaichi_complex
+                    }
+                }
+            }
+        }
+    }
+}
+
+# --- Sibur ---
+building_sibur_tobolsk_complex = {
+    building_group = bg_company_buildings
+    icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds"
+    expandable = yes
+    downsizeable = yes
+    has_max_level = yes
+    unique = no
+    city_type = city
+    ai_nationalization_desire = 0
+    production_method_groups = {
+        pmg_sibur_tobolsk_complex
+    }
+    required_construction = construction_cost_mega_high
+    ownership_type = self
+    can_build_private = {
+        always = no
+    }
+    background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+    potential = {
+        owner = {
+            has_company = company_type:company_sibur
+        }
+        OR = {
+            any_scope_building = {
+                is_building_type = building_sibur_tobolsk_complex
+            }
+            NOT = {
+                any_state = {
+                    any_scope_building = {
+                        is_building_type = building_sibur_tobolsk_complex
+                    }
+                }
+            }
+        }
+    }
+}

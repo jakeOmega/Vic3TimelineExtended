@@ -10513,3 +10513,198 @@ pm_advanced_company_shipbuilding = {
 		}
 	}
 }
+# === Synthetic rubber companies (issue #43) ============================
+
+# --- DuPont ---
+pm_dupont_experimental_station = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_munition_plant_throughput_add = 0.25
+			goods_output_explosives_mult = 0.10
+			building_university_throughput_add = 0.25
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 100
+			country_military_tech_research_speed_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
+			# Output goods
+			goods_output_explosives_add = 180                    # Price:   50, Total cost:  9000.0 (100.00%)
+			# Total input cost: 800.0
+			# Total output cost: 9000.0
+			# Profit: 8200.0
+			# Profit margin: 1025.00%
+			# Zero profit price multiplier: 0.09
+			# Employment: 2000
+			# Wage breakeven: 4.10
+		}
+		level_scaled = {
+			building_employment_academics_add = 800
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 400
+		}
+	}
+}
+
+# --- IG Farben ---
+pm_ig_farben_buna_werke = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_synthetics_plant_rubber_throughput_add = 0.30
+			goods_output_rubber_mult = 0.10
+			building_chemical_plant_throughput_add = 0.10
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 150
+			country_production_tech_research_speed_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 20                          # Price:   50, Total cost:  1000.0 (71.43%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (28.57%)
+			# Output goods
+			goods_output_rubber_add = 240                        # Price:   40, Total cost:  9600.0 (100.00%)
+			# Total input cost: 1400.0
+			# Total output cost: 9600.0
+			# Profit: 8200.0
+			# Profit margin: 585.71%
+			# Zero profit price multiplier: 0.15
+			# Employment: 2000
+			# Wage breakeven: 4.10
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 600
+		}
+	}
+}
+
+# --- Shell ---
+pm_shell_pernis_refinery = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.25
+			goods_output_oil_mult = 0.10
+			building_chemical_plant_throughput_add = 0.10
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_loan_interest_rate_add = -0.01
+			country_minting_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
+			# Output goods
+			goods_output_oil_add = 200                           # Price:   40, Total cost:  8000.0 (84.21%)
+			goods_output_fertilizer_add = 50                     # Price:   30, Total cost:  1500.0 (15.79%)
+			# Total input cost: 800.0
+			# Total output cost: 9500.0
+			# Profit: 8700.0
+			# Profit margin: 1087.50%
+			# Zero profit price multiplier: 0.08
+			# Employment: 2000
+			# Wage breakeven: 4.35
+		}
+		level_scaled = {
+			building_employment_academics_add = 400
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 800
+		}
+	}
+}
+
+# --- JSR ---
+pm_jsr_yokkaichi_complex = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_synthetics_plant_rubber_throughput_add = 0.30
+			goods_output_rubber_mult = 0.10
+			building_chemical_plant_throughput_add = 0.10
+			building_economy_of_scale_level_cap_add = 5
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 150
+			country_production_tech_research_speed_mult = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (100.00%)
+			# Output goods
+			goods_output_rubber_add = 240                        # Price:   40, Total cost:  9600.0 (100.00%)
+			# Total input cost: 800.0
+			# Total output cost: 9600.0
+			# Profit: 8800.0
+			# Profit margin: 1100.00%
+			# Zero profit price multiplier: 0.08
+			# Employment: 2000
+			# Wage breakeven: 4.40
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 600
+		}
+	}
+}
+
+# --- Sibur ---
+pm_sibur_tobolsk_complex = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.25
+			goods_output_fertilizer_mult = 0.15
+			building_synthetics_plant_rubber_throughput_add = 0.15
+			building_economy_of_scale_level_cap_add = 5
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 100
+			country_production_tech_research_speed_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 25                             # Price:   40, Total cost:  1000.0 (100.00%)
+			# Output goods
+			goods_output_fertilizer_add = 320                    # Price:   30, Total cost:  9600.0 (100.00%)
+			# Total input cost: 1000.0
+			# Total output cost: 9600.0
+			# Profit: 8600.0
+			# Profit margin: 860.00%
+			# Zero profit price multiplier: 0.10
+			# Employment: 2000
+			# Wage breakeven: 4.30
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 800
+		}
+	}
+}

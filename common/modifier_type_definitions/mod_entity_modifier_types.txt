@@ -3426,3 +3426,29 @@ state_fortification_level_add = {
 	percent = no
 	decimals = 0
 }
+
+# Synthetic rubber companies (issue #43) bespoke building max-level adds
+state_building_dupont_experimental_station_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_ig_farben_buna_werke_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_shell_pernis_refinery_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_jsr_yokkaichi_complex_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_sibur_tobolsk_complex_max_level_add = {
+	color = good
+	percent = no
+}
