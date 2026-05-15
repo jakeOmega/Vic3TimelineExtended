@@ -10520,8 +10520,15 @@ pm_dupont_experimental_station = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_mult = 0.03
-			building_munition_plant_throughput_add = 0.10
+			building_munition_plant_throughput_add = 0.25
+			goods_output_explosives_mult = 0.10
+			building_university_throughput_add = 0.25
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 100
+			country_military_tech_research_speed_mult = 0.05
 		}
 	}
 	building_modifiers = {
@@ -10529,18 +10536,18 @@ pm_dupont_experimental_station = {
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Output goods
-			goods_output_explosives_add = 150                    # Price:   50, Total cost:  7500.0 (100.00%)
+			goods_output_explosives_add = 180                    # Price:   50, Total cost:  9000.0 (100.00%)
 			# Total input cost: 800.0
-			# Total output cost: 7500.0
-			# Profit: 6700.0
-			# Profit margin: 837.50%
-			# Zero profit price multiplier: 0.11
+			# Total output cost: 9000.0
+			# Profit: 8200.0
+			# Profit margin: 1025.00%
+			# Zero profit price multiplier: 0.09
 			# Employment: 2000
-			# Wage breakeven: 3.35
+			# Wage breakeven: 4.10
 		}
 		level_scaled = {
-			building_employment_academics_add = 1000
-			building_employment_engineers_add = 600
+			building_employment_academics_add = 800
+			building_employment_engineers_add = 800
 			building_employment_machinists_add = 400
 		}
 	}
@@ -10551,28 +10558,35 @@ pm_ig_farben_buna_werke = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_mult = 0.03
-			building_synthetics_plant_rubber_throughput_add = 0.15
+			building_synthetics_plant_rubber_throughput_add = 0.30
+			goods_output_rubber_mult = 0.10
+			building_chemical_plant_throughput_add = 0.10
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 150
+			country_production_tech_research_speed_mult = 0.05
 		}
 	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_sulfur_add = 30                          # Price:   50, Total cost:  1500.0 (78.95%)
-			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (21.05%)
+			goods_input_sulfur_add = 20                          # Price:   50, Total cost:  1000.0 (71.43%)
+			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (28.57%)
 			# Output goods
-			goods_output_rubber_add = 180                        # Price:   40, Total cost:  7200.0 (100.00%)
-			# Total input cost: 1900.0
-			# Total output cost: 7200.0
-			# Profit: 5300.0
-			# Profit margin: 278.95%
-			# Zero profit price multiplier: 0.26
+			goods_output_rubber_add = 240                        # Price:   40, Total cost:  9600.0 (100.00%)
+			# Total input cost: 1400.0
+			# Total output cost: 9600.0
+			# Profit: 8200.0
+			# Profit margin: 585.71%
+			# Zero profit price multiplier: 0.15
 			# Employment: 2000
-			# Wage breakeven: 2.65
+			# Wage breakeven: 4.10
 		}
 		level_scaled = {
-			building_employment_academics_add = 800
-			building_employment_engineers_add = 600
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 800
 			building_employment_machinists_add = 600
 		}
 	}
@@ -10583,24 +10597,31 @@ pm_shell_pernis_refinery = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_mult = 0.03
-			building_oil_rig_throughput_add = 0.10
+			building_oil_rig_throughput_add = 0.25
+			goods_output_oil_mult = 0.10
+			building_chemical_plant_throughput_add = 0.10
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_loan_interest_rate_add = -0.01
+			country_minting_mult = 0.05
 		}
 	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 40                             # Price:   40, Total cost:  1600.0 (100.00%)
+			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (100.00%)
 			# Output goods
-			goods_output_oil_add = 80                            # Price:   40, Total cost:  3200.0 (68.09%)
-			goods_output_fertilizer_add = 50                     # Price:   30, Total cost:  1500.0 (31.91%)
-			# Total input cost: 1600.0
-			# Total output cost: 4700.0
-			# Profit: 3100.0
-			# Profit margin: 193.75%
-			# Zero profit price multiplier: 0.34
+			goods_output_oil_add = 200                           # Price:   40, Total cost:  8000.0 (84.21%)
+			goods_output_fertilizer_add = 50                     # Price:   30, Total cost:  1500.0 (15.79%)
+			# Total input cost: 800.0
+			# Total output cost: 9500.0
+			# Profit: 8700.0
+			# Profit margin: 1087.50%
+			# Zero profit price multiplier: 0.08
 			# Employment: 2000
-			# Wage breakeven: 1.55
+			# Wage breakeven: 4.35
 		}
 		level_scaled = {
 			building_employment_academics_add = 400
@@ -10615,8 +10636,16 @@ pm_jsr_yokkaichi_complex = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_mult = 0.03
-			building_synthetics_plant_rubber_throughput_add = 0.15
+			building_synthetics_plant_rubber_throughput_add = 0.30
+			goods_output_rubber_mult = 0.10
+			building_chemical_plant_throughput_add = 0.10
+			building_economy_of_scale_level_cap_add = 5
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 150
+			country_production_tech_research_speed_mult = 0.10
 		}
 	}
 	building_modifiers = {
@@ -10624,14 +10653,14 @@ pm_jsr_yokkaichi_complex = {
 			# Input goods
 			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (100.00%)
 			# Output goods
-			goods_output_rubber_add = 160                        # Price:   40, Total cost:  6400.0 (100.00%)
+			goods_output_rubber_add = 240                        # Price:   40, Total cost:  9600.0 (100.00%)
 			# Total input cost: 800.0
-			# Total output cost: 6400.0
-			# Profit: 5600.0
-			# Profit margin: 700.00%
-			# Zero profit price multiplier: 0.12
+			# Total output cost: 9600.0
+			# Profit: 8800.0
+			# Profit margin: 1100.00%
+			# Zero profit price multiplier: 0.08
 			# Employment: 2000
-			# Wage breakeven: 2.80
+			# Wage breakeven: 4.40
 		}
 		level_scaled = {
 			building_employment_academics_add = 600
@@ -10646,23 +10675,31 @@ pm_sibur_tobolsk_complex = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_mult = 0.03
-			building_chemical_plant_throughput_add = 0.10
+			building_chemical_plant_throughput_add = 0.25
+			goods_output_fertilizer_mult = 0.15
+			building_synthetics_plant_rubber_throughput_add = 0.15
+			building_economy_of_scale_level_cap_add = 5
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 100
+			country_production_tech_research_speed_mult = 0.05
 		}
 	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_oil_add = 30                             # Price:   40, Total cost:  1200.0 (100.00%)
+			goods_input_oil_add = 25                             # Price:   40, Total cost:  1000.0 (100.00%)
 			# Output goods
-			goods_output_fertilizer_add = 150                    # Price:   30, Total cost:  4500.0 (100.00%)
-			# Total input cost: 1200.0
-			# Total output cost: 4500.0
-			# Profit: 3300.0
-			# Profit margin: 275.00%
-			# Zero profit price multiplier: 0.27
+			goods_output_fertilizer_add = 320                    # Price:   30, Total cost:  9600.0 (100.00%)
+			# Total input cost: 1000.0
+			# Total output cost: 9600.0
+			# Profit: 8600.0
+			# Profit margin: 860.00%
+			# Zero profit price multiplier: 0.10
 			# Employment: 2000
-			# Wage breakeven: 1.65
+			# Wage breakeven: 4.30
 		}
 		level_scaled = {
 			building_employment_academics_add = 600

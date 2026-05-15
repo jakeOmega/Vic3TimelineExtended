@@ -3406,8 +3406,9 @@ company_dupont = {
 	}
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.05
-		building_chemical_plant_throughput_add = 0.05
-		building_munition_plant_throughput_add = 0.05
+		country_society_tech_research_speed_mult = 0.05
+		building_chemical_plant_throughput_add = 0.10
+		building_munition_plant_throughput_add = 0.10
 		state_building_dupont_experimental_station_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -3456,7 +3457,9 @@ company_ig_farben = {
 	}
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.05
-		building_chemical_plant_throughput_add = 0.10
+		country_production_tech_research_speed_mult = 0.05
+		building_chemical_plant_throughput_add = 0.15
+		building_synthetics_plant_rubber_throughput_add = 0.10
 		state_building_ig_farben_buna_werke_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -3504,9 +3507,10 @@ company_shell = {
 		}
 	}
 	prosperity_modifier = {
-		building_oil_rig_throughput_add = 0.10
-		building_chemical_plant_throughput_add = 0.05
-		country_loan_interest_rate_add = -0.005
+		building_oil_rig_throughput_add = 0.15
+		building_chemical_plant_throughput_add = 0.10
+		country_loan_interest_rate_add = -0.01
+		country_minting_mult = 0.05
 		state_building_shell_pernis_refinery_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -3550,8 +3554,10 @@ company_jsr = {
 	}
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.05
-		building_synthetics_plant_rubber_throughput_add = 0.10
-		building_chemical_plant_throughput_add = 0.05
+		country_production_tech_research_speed_mult = 0.10
+		building_synthetics_plant_rubber_throughput_add = 0.20
+		building_chemical_plant_throughput_add = 0.10
+		goods_output_rubber_mult = 0.05
 		state_building_jsr_yokkaichi_complex_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -3595,9 +3601,11 @@ company_sibur = {
 		country_has_primary_culture = cu:russian
 	}
 	prosperity_modifier = {
-		building_chemical_plant_throughput_add = 0.10
-		building_synthetics_plant_rubber_throughput_add = 0.10
-		building_oil_rig_throughput_add = 0.05
+		country_production_tech_research_speed_mult = 0.10
+		building_chemical_plant_throughput_add = 0.20
+		building_synthetics_plant_rubber_throughput_add = 0.15
+		building_oil_rig_throughput_add = 0.10
+		goods_output_fertilizer_mult = 0.05
 		state_building_sibur_tobolsk_complex_max_level_add = 1
 	}
 	possible_prestige_goods = {
