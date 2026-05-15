@@ -2836,9 +2836,7 @@ decolonization_events.200 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -2891,9 +2889,7 @@ decolonization_events.201 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -2955,9 +2951,7 @@ decolonization_events.202 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3015,9 +3009,7 @@ decolonization_events.203 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3052,9 +3044,7 @@ decolonization_events.204 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3112,9 +3102,7 @@ decolonization_events.205 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3170,9 +3158,7 @@ decolonization_events.206 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3499,9 +3485,7 @@ decolonization_events.300 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3556,9 +3540,7 @@ decolonization_events.301 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 	immediate = { }
 
 	option = {
@@ -3636,9 +3618,7 @@ decolonization_events.400 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 
 	immediate = {
 		debug_log = "DECOL_DEBUG: decolonization_events.400 immediate entered, candidates 1=[SCOPE.sState('decolonization_target_state_1').GetName] 2=[SCOPE.sState('decolonization_target_state_2').GetName] 3=[SCOPE.sState('decolonization_target_state_3').GetName]"  # DEBUG_DECOLONIZATION_TRACE
@@ -3835,9 +3815,7 @@ decolonization_events.401 = {
 
 	duration = 3
 
-	trigger = {
-		has_journal_entry = je_colonial_empire
-	}
+	is_triggered_only = yes
 
 	immediate = {
 		debug_log = "DECOL_DEBUG: decolonization_events.401 immediate entered"  # DEBUG_DECOLONIZATION_TRACE
