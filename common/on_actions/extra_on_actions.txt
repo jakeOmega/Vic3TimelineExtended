@@ -102,7 +102,6 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		resettlement_transfer_on_action
-		gui_state_employment_on_action
 	}
 }
 
