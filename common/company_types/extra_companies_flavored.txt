@@ -2082,6 +2082,11 @@ company_roche = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_opium
+		# The mod localizes the `fertilizer` good as "chemicals"; pharma
+		# companies build chemical_plant alongside synthetics_plant_opium,
+		# and chemical_plant output dwarfs the pharma side, so the chemicals
+		# prestige good is the bigger lever for these companies.
+		prestige_good_generic_fertilizer
 	}
     ai_will_do = {
         has_technology_researched = modern_pharmaceuticals
@@ -2131,6 +2136,7 @@ company_pfizer = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_opium
+		prestige_good_generic_fertilizer
 	}
     ai_will_do = {
         has_technology_researched = modern_pharmaceuticals
