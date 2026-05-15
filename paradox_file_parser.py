@@ -14,7 +14,17 @@ class ParadoxFileParser:
         self.data = {}
 
     def tokenize(self, text):
-        token_pattern = r'hsv(?:360)?\{\s*\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s*\}|\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:\|/$@]+'
+        # Typed-literal forms: rgb{ R G B }, hsv{ H S V }, hsv360{ H S V },
+        # hex{ ... } are color literals in vanilla. Tokenized as ONE token
+        # so parse_object doesn't mis-read the body as key/value pairs.
+        # @[ident] is a script-time substitution expression (occupation_values.txt).
+        # Allowing optional whitespace between the keyword and `{` matches
+        # `hsv360 \t{ ... }` forms seen in some flag definitions.
+        token_pattern = (
+            r'(?:rgb|hsv360|hsv|hex)\s*\{[^}]*\}'
+            r'|@\[[^\]]+\]'
+            r'|\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:\|/$@]+'
+        )
         text = "\n".join(
             [
                 line.split("#")[0]
@@ -61,8 +71,26 @@ class ParadoxFileParser:
         return tokens[0] != "{"
 
     def is_value_dictionary(self, tokens):
+        """A `{ ... }` block is a dictionary if a conditional (=, >=, etc.)
+        appears at the OUTER depth — not inside a nested object.
+
+        Old behavior: any conditional anywhere inside counted, which
+        misclassified `{ { x = 1 } { x = 2 } }` (a list of anonymous
+        objects) as a dict and broke parse_object. Now lists of objects
+        route through parse_list instead.
+        """
         value_tokens = self.extract_tokens_within_braces(tokens)
-        return any([t in conditional_tokens for t in value_tokens])
+        depth = 0
+        for tok in value_tokens:
+            if tok == "{":
+                depth += 1
+                continue
+            if tok == "}":
+                depth -= 1
+                continue
+            if depth == 0 and tok in conditional_tokens:
+                return True
+        return False
 
     def next_token(self, tokens):
         if len(tokens) == 0:
@@ -80,7 +108,34 @@ class ParadoxFileParser:
             return self.parse_list(list_tokens), tokens[len(list_tokens) + 2 :]
 
     def parse_list(self, tokens):
-        return tokens
+        """Walk top-level tokens of a list value. Bare `{ ... }` items
+        recurse into parse_object so list-of-anonymous-objects shapes
+        (vanilla ship_name_definitions, terrain textures, treaty articles_to_create)
+        produce a list of dicts rather than raising.
+        """
+        result = []
+        i = 0
+        n = len(tokens)
+        while i < n:
+            tok = tokens[i]
+            if tok == "{":
+                # Find matching close brace, then recurse on the inner block.
+                depth = 1
+                j = i + 1
+                while j < n and depth > 0:
+                    if tokens[j] == "{":
+                        depth += 1
+                    elif tokens[j] == "}":
+                        depth -= 1
+                    j += 1
+                # tokens[i:j] is the brace-delimited block including both braces.
+                nested, _ = self.parse_object(tokens[i:j])
+                result.append(nested)
+                i = j
+            else:
+                result.append(tok)
+                i += 1
+        return result
 
     def parse_simple_value(self, tokens):
         return tokens[0], tokens[1:]
