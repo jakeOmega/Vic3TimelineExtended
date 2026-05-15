@@ -410,6 +410,108 @@ def _has_engine_logs(path: Optional[str]) -> bool:
 _USAGE_TARGET_RE_CACHE: dict[str, re.Pattern] = {}
 
 
+# Loc-function index — lazily built on first /engine-docs/loc-functions request.
+# Maps token -> {"count": N, "examples": [{file, line, expression}], "kind": ...}.
+_LOC_FUNCTION_INDEX: Optional[dict] = None
+_LOC_EXPR_RE = re.compile(r"\[([^\]]+)\]")
+_LOC_IDENT_RE = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*")
+# Identifier "kind" classification:
+# - "scope":    all-uppercase keyword (ROOT, SCOPE, THIS, PREV, ...).
+# - "method":   appears only after a `.` in vanilla (e.g. GetName, GetDesc).
+# - "function": appears at expression start (e.g. GetStaticModifier, Concept).
+# - "accessor": lowercase-then-CamelCase (sCharacter, sState — "string getters").
+
+
+def _is_function_like_ident(ident: str) -> bool:
+    """Filter tokens to function-like identifiers — those carrying at least one
+    uppercase letter. Excludes lowercase-only keys like `concept_homeland`."""
+    return bool(ident) and any(c.isupper() for c in ident)
+
+
+def _build_loc_function_index() -> dict:
+    """Scan vanilla loc + GUI files for `[...]` expressions, tokenize the
+    function-like identifiers, and return an index of name -> usage stats.
+
+    Cached after first build (call `_get_loc_function_index` from endpoints).
+    Single-pass over ~16 MB of text; ~2-4s on WSL+NTFS.
+    """
+    index: dict[str, dict] = {}
+    max_examples_per_token = 8
+
+    scan_roots = [
+        os.path.join(base_game_path, "game", "localization", "english"),
+        os.path.join(base_game_path, "game", "gui"),
+    ]
+    exts = {".yml", ".gui"}
+
+    for root in scan_roots:
+        if not os.path.isdir(root):
+            continue
+        for dirpath, _dirs, files in os.walk(root):
+            for fname in files:
+                ext = os.path.splitext(fname)[1].lower()
+                if ext not in exts:
+                    continue
+                path = os.path.join(dirpath, fname)
+                rel = os.path.relpath(path, base_game_path).replace(os.sep, "/")
+                try:
+                    with open(path, "r", encoding="utf-8", errors="replace") as f:
+                        for line_no, line in enumerate(f, start=1):
+                            if "[" not in line:
+                                continue
+                            for m in _LOC_EXPR_RE.finditer(line):
+                                expr = m.group(0)  # full `[...]`
+                                body = m.group(1)
+                                # Tokenize identifiers; classify position.
+                                # We track first-seen kind heuristically:
+                                # method if previous char is `.`, else opener.
+                                for tm in _LOC_IDENT_RE.finditer(body):
+                                    ident = tm.group(0)
+                                    if not _is_function_like_ident(ident):
+                                        continue
+                                    prev_char = body[tm.start() - 1] if tm.start() > 0 else ""
+                                    is_method = prev_char == "."
+                                    entry = index.get(ident)
+                                    if entry is None:
+                                        if ident.isupper() and len(ident) >= 2:
+                                            kind = "scope"
+                                        elif ident[0].islower():
+                                            kind = "accessor"
+                                        elif is_method:
+                                            kind = "method"
+                                        else:
+                                            kind = "function"
+                                        entry = {
+                                            "count": 0,
+                                            "kind": kind,
+                                            "examples": [],
+                                            "first_seen": f"{rel}:{line_no}",
+                                        }
+                                        index[ident] = entry
+                                    entry["count"] += 1
+                                    if len(entry["examples"]) < max_examples_per_token:
+                                        # Avoid duplicate expressions among examples.
+                                        if not any(
+                                            e["expression"] == expr for e in entry["examples"]
+                                        ):
+                                            entry["examples"].append({
+                                                "file": rel,
+                                                "line": line_no,
+                                                "expression": expr,
+                                            })
+                except OSError:
+                    continue
+    return index
+
+
+def _get_loc_function_index() -> dict:
+    """Return the cached loc-function index, building it on first access."""
+    global _LOC_FUNCTION_INDEX
+    if _LOC_FUNCTION_INDEX is None:
+        _LOC_FUNCTION_INDEX = _build_loc_function_index()
+    return _LOC_FUNCTION_INDEX
+
+
 def _engine_docs_find_usage(
     target: str,
     *,
@@ -5451,6 +5553,24 @@ class ModStateHandler(BaseHTTPRequestHandler):
                                                 Useful when the docs don't cover
                                                 a trigger or you want canonical
                                                 argument shapes from real script.
+        GET /engine-docs/loc-functions        - index of data-system loc
+                                                functions (GetStaticModifier,
+                                                GetValueWithBreakdownFor,
+                                                Concept, AddTextIf, …) found by
+                                                scanning vanilla loc + GUI for
+                                                `[...]` expressions. Sorted by
+                                                count desc. Params:
+                                                  q=<substring>
+                                                  kind=function|method|scope|accessor
+                                                  min_count=N
+                                                  limit=N (default 100)
+                                                  include_examples=true
+        GET /engine-docs/loc-functions/<name> - single function with up to 8
+                                                vanilla `[...]` example
+                                                expressions and file:line of
+                                                first sighting. Use when
+                                                researching the canonical loc
+                                                idiom for a feature.
         """
         if not parts:
             return {
@@ -5492,6 +5612,60 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "name": target,
                 "found": len(hits) > 0,
                 "matches": hits,
+            }
+
+        # /engine-docs/loc-functions[/<name>] — index of loc-rendering function
+        # tokens discovered by scanning vanilla loc + GUI files for `[...]`
+        # expressions. Surfaces the data-system functions the engine exposes
+        # (GetStaticModifier, GetValueWithBreakdownFor, GetNameNoFormatting,
+        # Concept, AddTextIf, …) which are not in any vanilla doc — they have
+        # to be reverse-engineered from real-world usage.
+        if parts[0] == "loc-functions":
+            index = _get_loc_function_index()
+            if len(parts) >= 2:
+                name = parts[1]
+                entry = index.get(name)
+                if entry is None:
+                    return {"name": name, "found": False, "examples": []}
+                limit = int(params.get("limit", ["8"])[0])
+                return {
+                    "name": name,
+                    "found": True,
+                    "kind": entry["kind"],
+                    "count": entry["count"],
+                    "first_seen": entry["first_seen"],
+                    "examples": entry["examples"][:limit],
+                }
+            # Listing: q substring filter, min_count cutoff, kind filter, limit.
+            query = params.get("q", [""])[0]
+            min_count = int(params.get("min_count", ["0"])[0])
+            kind_filter = params.get("kind", [""])[0].lower()
+            limit = int(params.get("limit", ["100"])[0])
+            include_examples = params.get("include_examples", ["false"])[0].lower() in (
+                "true", "1", "yes"
+            )
+            rows = []
+            for ident, entry in index.items():
+                if query and query.lower() not in ident.lower():
+                    continue
+                if entry["count"] < min_count:
+                    continue
+                if kind_filter and entry["kind"] != kind_filter:
+                    continue
+                row = {
+                    "name": ident,
+                    "kind": entry["kind"],
+                    "count": entry["count"],
+                }
+                if include_examples:
+                    row["example"] = entry["examples"][0]["expression"] if entry["examples"] else ""
+                rows.append(row)
+            rows.sort(key=lambda r: (-r["count"], r["name"]))
+            return {
+                "total_distinct_functions": len(index),
+                "filtered": len(rows),
+                "returned": min(len(rows), limit),
+                "entries": rows[:limit],
             }
 
         # /engine-docs/usage/<name> — find real-world usages in vanilla common/.

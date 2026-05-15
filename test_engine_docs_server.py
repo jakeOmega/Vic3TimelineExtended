@@ -267,5 +267,117 @@ class OriginHandlerSchemaTests(unittest.TestCase):
         self.assertEqual(r["matches"], [])
 
 
+class LocFunctionIndexTests(unittest.TestCase):
+    """Verify the loc-function index discovers canonical data-system functions
+    from vanilla loc + GUI files. Integration-flavored: skip when vanilla
+    isn't present."""
+
+    @classmethod
+    def setUpClass(cls):
+        loc_root = os.path.join(mss.base_game_path, "game", "localization", "english")
+        if not os.path.isdir(loc_root):
+            raise unittest.SkipTest(f"Vanilla loc dir not found: {loc_root}")
+        # Force a fresh index for this test class.
+        mss._LOC_FUNCTION_INDEX = None
+        cls.index = mss._get_loc_function_index()
+
+    def test_canonical_functions_indexed(self):
+        # Functions that I (the agent) had to discover by ad-hoc grep when
+        # working on issue #31 — they should appear in the index with usage
+        # counts consistent with vanilla.
+        for name in (
+            "GetStaticModifier",
+            "GetValueWithBreakdownFor",
+            "GetNameNoFormatting",
+            "Concept",
+            "AddTextIf",
+        ):
+            self.assertIn(name, self.index, f"Expected {name} in loc-function index")
+            self.assertGreater(self.index[name]["count"], 0)
+            self.assertGreater(len(self.index[name]["examples"]), 0)
+
+    def test_kind_classification(self):
+        # GetStaticModifier appears at expression start (e.g. [GetStaticModifier('X').GetDesc])
+        # — classified as `function`.
+        self.assertEqual(self.index["GetStaticModifier"]["kind"], "function")
+        # GetValueWithBreakdownFor is always called after a dot — classified as `method`.
+        self.assertEqual(self.index["GetValueWithBreakdownFor"]["kind"], "method")
+        # ROOT is all-uppercase — classified as `scope`.
+        self.assertEqual(self.index["ROOT"]["kind"], "scope")
+        # sCharacter starts lowercase, has CamelCase tail — classified as `accessor`.
+        self.assertEqual(self.index["sCharacter"]["kind"], "accessor")
+
+    def test_lowercase_only_idents_excluded(self):
+        # Tokens like `concept_pop` are entity references, not functions — they
+        # should not appear in the function-like index.
+        self.assertNotIn("concept_pop", self.index)
+        self.assertNotIn("concept_homeland", self.index)
+
+    def test_examples_carry_file_and_line(self):
+        for ex in self.index["GetStaticModifier"]["examples"]:
+            self.assertIn("file", ex)
+            self.assertIn("line", ex)
+            self.assertIn("expression", ex)
+            # The expression is the full `[...]` substring.
+            self.assertTrue(ex["expression"].startswith("["))
+            self.assertTrue(ex["expression"].endswith("]"))
+
+
+class LocFunctionEndpointTests(unittest.TestCase):
+    """Verify the /engine-docs/loc-functions endpoint surfaces the index."""
+
+    @classmethod
+    def setUpClass(cls):
+        loc_root = os.path.join(mss.base_game_path, "game", "localization", "english")
+        if not os.path.isdir(loc_root):
+            raise unittest.SkipTest(f"Vanilla loc dir not found: {loc_root}")
+        # Reuse the cached index from the previous class if present.
+        mss._get_loc_function_index()
+
+    def _call(self, parts, params=None):
+        cls = mss.ModStateHandler
+        return cls._engine_docs(self=None, parts=parts, params=params or {})
+
+    def test_listing_sorted_by_count_desc(self):
+        r = self._call(["loc-functions"], {"limit": ["5"]})
+        self.assertIn("entries", r)
+        self.assertEqual(r["returned"], 5)
+        counts = [e["count"] for e in r["entries"]]
+        self.assertEqual(counts, sorted(counts, reverse=True))
+
+    def test_listing_q_filter(self):
+        r = self._call(["loc-functions"], {"q": ["StaticModifier"], "limit": ["20"]})
+        for e in r["entries"]:
+            self.assertIn("staticmodifier", e["name"].lower())
+        # GetStaticModifier should be in the filtered set.
+        names = {e["name"] for e in r["entries"]}
+        self.assertIn("GetStaticModifier", names)
+
+    def test_listing_kind_filter(self):
+        r = self._call(["loc-functions"], {"kind": ["scope"], "limit": ["10"]})
+        for e in r["entries"]:
+            self.assertEqual(e["kind"], "scope")
+
+    def test_single_function_returns_examples(self):
+        r = self._call(["loc-functions", "GetStaticModifier"], {"limit": ["3"]})
+        self.assertTrue(r["found"])
+        self.assertEqual(r["name"], "GetStaticModifier")
+        self.assertEqual(r["kind"], "function")
+        self.assertLessEqual(len(r["examples"]), 3)
+        self.assertGreater(len(r["examples"]), 0)
+        self.assertIn("expression", r["examples"][0])
+
+    def test_unknown_function_returns_not_found(self):
+        r = self._call(["loc-functions", "PhantomFunctionXyz"], {})
+        self.assertFalse(r["found"])
+        self.assertEqual(r["examples"], [])
+
+    def test_min_count_filter(self):
+        # GetNameNoFormatting has 1000+ uses; min_count=1000 should keep it.
+        r = self._call(["loc-functions"], {"min_count": ["1000"], "limit": ["50"]})
+        for e in r["entries"]:
+            self.assertGreaterEqual(e["count"], 1000)
+
+
 if __name__ == "__main__":
     unittest.main()
