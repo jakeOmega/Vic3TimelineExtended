@@ -497,6 +497,38 @@ To display a current-price value in a tooltip, write a script value of shape `(1
 
 Script values are not parameterizable, so generators that need one SV per (entity, good-mix) tuple should pre-multiply `base_price × quantity` in Python and emit the result as a literal `multiply = N` constant rather than chaining `g:<good> = { multiply = base_price }` + a separate quantity multiply at runtime — keeps the generated file readable and skips a redundant scope hop.
 
+## Render Static Modifier Effects in Loc via `[GetStaticModifier('X').GetDesc]`
+
+For button / JE / event description loc that needs to claim *what a static modifier does*, embed the modifier's auto-rendered effect list rather than hand-writing the numbers. The data-system function `[GetStaticModifier('<name>').GetDesc]` renders the static modifier definition's full effect list and auto-updates when the modifier changes.
+
+```yaml
+ GW_CARBON_TAX_DESC:0 "Levy a carbon tax on coal and oil industries across your market.\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!."
+```
+
+Reasoning + when this matters: hardcoded effect numbers in button-desc loc drift the moment the underlying modifier is tuned. The Global Warming buttons hit this — `GW_CARBON_TAX_DESC` claimed "+3% tax capacity" while `carbon_tax_modifier` had been retuned to +10% manufacturing tax + +100% extraction tax. Use `GetDesc` whenever (a) the loc describes a single static modifier and (b) the description shows up in a UI tooltip context (any context that renders `[…]` data-system functions). Keep flavor framing + availability conditions as plain text.
+
+Caveats:
+- `GetStaticModifier('X').GetDesc` renders the *modifier definition's* effects. If the button charges authority/prestige *outside* the modifier (separate `add_authority` in the effect block), that cost is not in the rendered desc — keep it as hardcoded framing.
+- Related accessors exist: `.GetName`, `.GetName|v`, plus `[<scope>.GetModifier.GetValueWithBreakdownFor('<field_name>')]` for rendering a single computed modifier-field value with its contributor breakdown. The latter is what JE descriptions use to show "your current cultural pull is X (here's why)".
+- Surface the catalog of available loc-rendering helpers with `curl /engine-docs/loc-functions?q=<substring>` — the mod state server scans vanilla loc + GUI for `[…]` expressions and indexes 8.8k functions/methods/accessors with usage examples.
+
+## `is_major_formation = yes` Bypasses the Downward-Only Rank Gate
+
+Minor country formations carry a hardcoded downward-only rank gate: a country at or above the formable's tier *cannot form it*. So if you define a `hegemony`-tier formable as a minor formation, no hegemony-tier country can ever form it — and the country definitions tab silently hides the entry. Adding `is_major_formation = yes` to the formation entry bypasses the rank gate entirely (replacing it with the major-formation candidacy mechanic: leadership/unification diplomatic plays + `max_num_formation_candidates` + `can_be_formation_candidate`).
+
+When you see a formable that "should be available but isn't" for a high-tier country, this is usually the cause. The fix shape: convert to `is_major_formation = yes`, wire `unification_play` / `leadership_play` (the plays must exist in `common/diplomatic_plays/`), set `max_num_formation_candidates` and `can_be_formation_candidate`, then add explicit `possible` triggers to compensate for losing the rank gate (the rank gate was doing meaningful filtering — losing it lets the formation fire under conditions that may not feel earned). See `common/country_formation/te_formable_countries.txt` for the mod's pattern, and the `add-formable-country` skill for the workflow.
+
+## Vanilla `triggers.log` Is Incomplete — Use `/engine-docs/usage/<name>`
+
+The vanilla engine-doc dump (`triggers.log` / `effects.log`) does not document every engine-recognized identifier. Post-1.13.5 vanilla scripts use `has_treaty_defensive_pact_with`, `has_treaty_alliance_with`, `has_treaty_*_with` family triggers that have no entry in `triggers.log`. They exist; they work in script; they're just undocumented.
+
+Workflow when verifying a candidate trigger name:
+1. `curl /engine-docs/origin/<name>` — quick is-it-documented + schema-if-yes lookup.
+2. If `found: false`, run `curl /engine-docs/usage/<name>?limit=3` — scans vanilla `common/` for real call sites and returns file:line + snippets. If usage exists, the trigger works in script; the snippets show argument shape.
+3. If `usage` returns zero hits, the name doesn't exist — pick a different identifier.
+
+Common undocumented-but-real triggers worth knowing: `has_treaty_defensive_pact_with`, `has_treaty_alliance_with`, `has_treaty_guarantee_independence_with`, `has_treaty_support_independence_with`, `has_treaty_trade_privilege_with`, `has_treaty_foreign_investment_rights_with`, `has_truce_with`, `has_subject_relation_with`, `is_in_customs_union_with`.
+
 ## `GetName` / `GetAdjective` Require `.GetCountry` Accessor
 
 `GetName`, `GetAdjective`, `GetAdjectiveNoFormatting`, etc. are methods on the **Country data type**, NOT on ROOT directly. Even in country_events where you might expect ROOT = country, you must use `.GetCountry` to access country-type methods. Vanilla uses `[ROOT.GetCountry.GetName]` (80+ event uses) and never `[ROOT.GetName]` (0 event uses) — treat the `.GetCountry` hop as mandatory.
