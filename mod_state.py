@@ -56,8 +56,10 @@ class ModState:
                         self.load_files_from_directory(
                             entity_type, mod_dir_path, base_game=False
                         )
-                    else:
-                        print(f"WARNING: Mod directory not found: {mod_dir_path}")
+                    # else: mod has no override for this entity type — expected
+                    # whenever a vanilla type is registered in mod_paths for
+                    # forward-compat without an actual override on disk.
+                    # Vanilla data is already loaded above, so this is benign.
 
         # Load mod-only entity types (not in base game)
         if not diff and isinstance(mod_dir, dict):

@@ -1,6 +1,12 @@
-import unittest
-from paradox_file_parser import ParadoxFileParser
+import io
 import json
+import os
+import sys
+import tempfile
+import unittest
+
+from mod_state import ModState
+from paradox_file_parser import ParadoxFileParser
 
 
 class ParadoxFileParserTests(unittest.TestCase):
@@ -234,6 +240,36 @@ class ParadoxFileParserTests(unittest.TestCase):
         self.assertEqual(value, [
             {"type": ("=", "name_list"), "name_list": ("=", ["Y", "Z"])},
         ])
+
+    def test_missing_mod_override_directory_is_silent(self):
+        """Registering an entity type in mod_paths without an on-disk override
+        is a legitimate pattern — it reserves the slot so future mod content
+        can override vanilla. As long as the base game directory exists,
+        ModState must NOT print a warning for the absent mod-side dir."""
+        with tempfile.TemporaryDirectory() as tmp:
+            base_root = os.path.join(tmp, "base")
+            mod_root = os.path.join(tmp, "mod")
+            os.makedirs(os.path.join(base_root, "cultures"))
+            # Write a minimal valid culture so the parser has something to read.
+            with open(os.path.join(base_root, "cultures", "00_a.txt"), "w") as f:
+                f.write("test_culture = {\n\tcolor = rgb{ 1 2 3 }\n}\n")
+            # mod dir for the same entity type intentionally does NOT exist.
+            base_dirs = {"Cultures": os.path.join(base_root, "cultures")}
+            mod_dirs  = {"Cultures": os.path.join(mod_root,  "cultures")}
+
+            buf = io.StringIO()
+            old_stdout = sys.stdout
+            sys.stdout = buf
+            try:
+                ms = ModState(base_dirs, mod_dirs)
+            finally:
+                sys.stdout = old_stdout
+            output = buf.getvalue()
+            self.assertNotIn(
+                "Mod directory not found", output,
+                f"Spurious warning printed: {output!r}",
+            )
+            self.assertIn("test_culture", ms.mod_parsers["Cultures"].data)
 
     def test_dummy(self):
         d1 = {"key1": ("=", "value1")}
