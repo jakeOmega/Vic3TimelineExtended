@@ -1115,7 +1115,7 @@
 			Cryptography
 		Unlocks Buildings: International Space Station
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
-	Pop Culture - From music and movies to fashion and fads, [concept_pop] culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
+	Pop Culture - From music and movies to fashion and fads, pop culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.
 		Unlocking Technologies:
 			Television Broadcasting
 		Unlocks Buildings: Basilica of Our Lady of Peace, Lotus Temple

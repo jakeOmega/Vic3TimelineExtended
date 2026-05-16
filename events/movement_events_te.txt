@@ -76,8 +76,8 @@ movement_events_te.1 = {
 				is_decaying = yes
 			}
 		}
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = very_small_radicals strata = upper }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 	}
 
 	option = {
@@ -97,9 +97,8 @@ movement_events_te.1 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = medium_radicals strata = lower }
-		add_radicals = { value = small_radicals strata = middle }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 	}
 
 	option = {
@@ -128,9 +127,9 @@ movement_events_te.1 = {
 				set_ideology = ideology:ideology_multicultural
 			}
 		}
-		add_loyalists = { value = medium_radicals strata = lower }
+		social_progressive_reform_major_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = medium_radicals strata = upper }
 	}
 }
 
@@ -181,8 +180,8 @@ movement_events_te.2 = {
 			}
 		}
 		# Enforce existing law - stability but simmering anger
-		add_loyalists = { value = small_radicals strata = upper }
-		add_radicals = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 
@@ -197,8 +196,8 @@ movement_events_te.2 = {
 			days = short_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = very_small_radicals strata = upper }
-		add_loyalists = { value = very_small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = short_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = very_small_radicals }
 	}
 
 	option = {
@@ -223,9 +222,9 @@ movement_events_te.2 = {
 				is_decaying = yes
 			}
 		}
+		social_progressive_reform_major_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = small_radicals strata = upper }
 	}
 }
 
@@ -282,8 +281,9 @@ movement_events_te.3 = {
 			value = yearly_gross_income
 			multiply = -0.2
 		}
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = very_small_radicals strata = upper }
 	}
 
 	option = {
@@ -312,8 +312,9 @@ movement_events_te.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 		add_radicals = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = upper }
 	}
 }
 
@@ -393,8 +394,9 @@ movement_events_te.4 = {
 			ANTI_AMOUNT = -1
 			FACTOR = appeasement_relations_decreased
 		}
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 		add_radicals = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = upper }
 		scope:civil_rights_movement = {
 			add_modifier = {
 				name = international_criticism_movement_radicalism
@@ -424,8 +426,9 @@ movement_events_te.4 = {
 			value = 20
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:criticizing_country }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = upper }
 		scope:civil_rights_movement = {
 			add_modifier = {
 				name = international_criticism_promises
@@ -453,7 +456,7 @@ movement_events_te.4 = {
 			value = -50
 		}
 		create_diplomatic_catalyst = { type = catalyst_diplomatic_incident target = scope:criticizing_country }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 	}
 }
 
@@ -519,7 +522,8 @@ movement_events_te.13 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 		change_relations = {
 			country = scope:refuge_country
 			value = -20
@@ -538,7 +542,7 @@ movement_events_te.13 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = very_small_radicals strata = lower }
+		discriminated_pops_loyalty_effect = { VALUE = very_small_radicals }
 	}
 
 	option = {
@@ -555,9 +559,9 @@ movement_events_te.13 = {
 			value = yearly_gross_income
 			multiply = -0.25
 		}
-		add_loyalists = { value = small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_loyalists = { value = very_small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = upper }
 		change_relations = {
 			country = scope:refuge_country
 			value = 10
@@ -626,8 +630,8 @@ movement_events_te.14 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = very_small_radicals strata = lower }
-		add_radicals = { value = very_small_radicals strata = upper }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = very_small_radicals }
 	}
 
 	option = {
@@ -647,8 +651,8 @@ movement_events_te.14 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = upper }
-		add_radicals = { value = medium_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 	}
 
 	option = {
@@ -668,9 +672,9 @@ movement_events_te.14 = {
 				is_decaying = yes
 			}
 		}
-		add_loyalists = { value = small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = upper }
 	}
 }
 
@@ -724,9 +728,9 @@ movement_events_te.15 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = upper }
 	}
 
 	option = {
@@ -753,8 +757,8 @@ movement_events_te.15 = {
 				is_decaying = yes
 			}
 		}
-		add_radicals = { value = medium_radicals strata = lower }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 	}
 
 	option = {
@@ -833,9 +837,9 @@ movement_events_te.16 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = medium_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 		add_radicals = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = upper }
 	}
 
 	option = {
@@ -849,8 +853,8 @@ movement_events_te.16 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = very_small_radicals strata = upper }
+		social_progressive_reaction_effect = { DAYS = short_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 	}
 
 	option = {
@@ -870,9 +874,9 @@ movement_events_te.16 = {
 				is_decaying = yes
 			}
 		}
-		add_loyalists = { value = medium_radicals strata = lower }
+		social_progressive_reform_major_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = medium_radicals }
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = medium_radicals strata = upper }
 	}
 }
 
@@ -909,8 +913,8 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = upper }
-		add_radicals = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 	}
 
 	option = {
@@ -927,7 +931,7 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -944,8 +948,8 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = upper }
-		add_radicals = { value = medium_radicals strata = lower }
+		social_regressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 	}
 
 	option = {
@@ -966,8 +970,8 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = upper }
-		add_radicals = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 	}
 
 	option = {
@@ -984,8 +988,8 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = upper }
-		add_radicals = { value = large_radicals strata = lower }
+		social_regressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = large_radicals }
 	}
 }
 
@@ -1757,7 +1761,7 @@ movement_events_te.12 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 		add_radicals = { value = medium_radicals pop_type = academics }
 	}
 
@@ -1790,9 +1794,9 @@ movement_events_te.12 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		social_progressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = small_radicals strata = upper }
 	}
 }
 

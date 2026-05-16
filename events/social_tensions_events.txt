@@ -90,8 +90,9 @@ social_tensions_events.1 = {
 		}
 		highlighted_option = yes
 		add_modifier = { name = terror_surveillance_modifier days = long_modifier_time is_decaying = yes }
-		add_radicals = { value = very_small_radicals strata = lower }
-		add_loyalists = { value = small_radicals strata = upper }
+		discriminated_pops_radicalism_effect = { VALUE = very_small_radicals }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_intrusive_surveillance } add = 5 }
@@ -445,9 +446,9 @@ social_tensions_events.5 = {
 	option = { # Defend the police - order is paramount
 		name = social_tensions_events.5.a
 		add_modifier = { name = police_defended_modifier days = normal_modifier_time is_decaying = yes }
-		add_radicals = { value = large_radicals strata = lower }
+		discriminated_pops_radicalism_effect = { VALUE = large_radicals }
 		add_loyalists = { value = small_radicals pop_type = officers }
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 5 }
@@ -460,7 +461,8 @@ social_tensions_events.5 = {
 		default_option = yes
 		add_modifier = { name = police_reform_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = officers }
-		add_loyalists = { value = small_radicals strata = lower }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_restorative_justice } add = 5 }
@@ -475,8 +477,8 @@ social_tensions_events.5 = {
 		highlighted_option = yes
 		add_modifier = { name = police_accountability_modifier days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = officers }
-		add_loyalists = { value = medium_radicals strata = lower }
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = medium_radicals }
+		social_progressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_rehabilitation_focused_criminal_justice } add = 5 }
@@ -547,7 +549,8 @@ social_tensions_events.6 = {
 				add_modifier = { name = riot_property_damage_modifier days = short_modifier_time is_decaying = yes }
 			}
 		}
-		add_radicals = { value = medium_radicals strata = lower }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 3 }
@@ -558,8 +561,8 @@ social_tensions_events.6 = {
 		name = social_tensions_events.6.b
 		default_option = yes
 		add_modifier = { name = riot_concessions_modifier days = normal_modifier_time is_decaying = yes }
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = small_radicals strata = upper }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_restorative_justice } add = 3 }
@@ -576,7 +579,7 @@ social_tensions_events.6 = {
 		}
 		highlighted_option = yes
 		add_modifier = { name = riot_commission_modifier days = long_modifier_time is_decaying = yes }
-		add_loyalists = { value = small_radicals strata = lower }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ai_chance = {
 			base = 3
@@ -940,7 +943,8 @@ social_tensions_events.11 = {
 		name = social_tensions_events.11.a
 		default_option = yes
 		add_modifier = { name = immigration_welcome_modifier days = long_modifier_time is_decaying = yes }
-		add_loyalists = { value = small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_radicals = { value = small_radicals pop_type = aristocrats }
 		ai_chance = {
 			base = 5
@@ -952,7 +956,8 @@ social_tensions_events.11 = {
 		name = social_tensions_events.11.b
 		add_modifier = { name = immigration_restrict_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals pop_type = aristocrats }
-		add_radicals = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
@@ -971,8 +976,8 @@ social_tensions_events.11 = {
 		}
 		highlighted_option = yes
 		add_modifier = { name = immigration_integrate_modifier days = long_modifier_time is_decaying = yes }
-		add_loyalists = { value = medium_radicals strata = lower }
-		add_radicals = { value = small_radicals strata = upper }
+		social_progressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = medium_radicals }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }
@@ -1033,8 +1038,8 @@ social_tensions_events.12 = {
 		name = social_tensions_events.12.a
 		add_modifier = { name = nativist_appeased_modifier days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals pop_type = aristocrats }
-		add_radicals = { value = medium_radicals strata = lower }
-		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_ethnostate } add = 5 }
@@ -1046,8 +1051,8 @@ social_tensions_events.12 = {
 		default_option = yes
 		add_modifier = { name = nativist_countered_modifier days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = aristocrats }
-		add_loyalists = { value = small_radicals strata = lower }
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_multicultural } add = 5 }

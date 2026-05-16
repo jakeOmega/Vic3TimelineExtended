@@ -1,0 +1,112 @@
+# ======================================================================
+#  Social-axis reaction helpers
+#
+#  Replacement for strata-targeted radicals/loyalists in events that
+#  model reactions to socially-progressive/regressive policies (civil
+#  rights, women's rights, LGBTQ+ rights, religious tolerance, etc.).
+#  Strata reactions baked in "lower class = socially progressive" which
+#  doesn't hold; reactions to social-axis policies cut along IGs and
+#  movements, not strata. See docs/audits/strata_social_axis_exceptions.md
+#  for the inverse — events where strata reactions are genuinely the
+#  economic content (banking-cycle creditor-vs-debtor incidence, etc.).
+#
+#  Coverage: the four IGs whose social-axis lean is consistent regardless
+#  of leadership ideology — intelligentsia (progressive), devout (regressive),
+#  rural folk (regressive), armed forces (regressive). For swing IGs
+#  (industrialists, trade unions, petty bourgeoisie) gate explicitly on
+#  leader ideology per-event — the helper would have to model too many
+#  branches to be useful for those.
+#
+#  Pop-targeted reactions (e.g. discriminated minorities radicalizing
+#  when discrimination is enforced) stay per-event since the right pop
+#  filter depends on the specific event's framing (pop_acceptance for
+#  ethnic minorities, has_pop_religion for religious minorities, etc.).
+# ======================================================================
+
+# Reaction to a socially progressive reform (e.g. minority rights extension,
+# women's enfranchisement, secularization, LGBTQ+ rights):
+#   intelligentsia approves; devout, rural folk, armed forces disapprove.
+# Parameters:
+#   $DAYS$ — duration script value (short_modifier_time, normal_modifier_time,
+#            long_modifier_time, very_long_modifier_time).
+#
+# Usage: social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+social_progressive_reaction_effect = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_negative_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_negative_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = $DAYS$ }
+}
+
+# Reaction to a socially regressive policy (e.g. minority rights rollback,
+# enforcement of discrimination, religious suppression, restrictive moral law):
+#   intelligentsia disapproves; devout, rural folk, armed forces approve.
+# Parameters:
+#   $DAYS$ — duration script value (as above).
+#
+# Usage: social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+social_regressive_reaction_effect = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_positive_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = $DAYS$ }
+}
+
+# Stronger variant for high-stakes social reform (broad civil rights extension,
+# constitutional amendments, etc.) — uses very_negative for the opposing IGs.
+# Parameters: $DAYS$
+social_progressive_reform_major_reaction_effect = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier      DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_very_negative_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_very_negative_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier      DAYS = $DAYS$ }
+}
+
+# Stronger variant for high-stakes regressive policy (enforced discrimination,
+# religious purges, etc.).
+# Parameters: $DAYS$
+social_regressive_reform_major_reaction_effect = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier      DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_positive_modifier      DAYS = $DAYS$ }
+	ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier      DAYS = $DAYS$ }
+}
+
+# Discriminated-minority pop reactions — used in civil-rights / minority-rights
+# / religious-tolerance events where strata used to stand in for the discriminated
+# minority itself. Filters on `pop_acceptance < acceptance_status_4` (the
+# standard "not fully accepted" threshold — matches existing civil-rights trigger
+# usage across the mod).
+#
+# Use `discriminated_pops_loyalty_effect` when the policy chosen advances the
+# minority's interests (rights extension, integration, anti-discrimination
+# enforcement). Use `discriminated_pops_radicalism_effect` when the policy
+# rolls back rights, suppresses the minority, or enforces existing discrimination.
+#
+# Scope: country. Iterates incorporated states only; unincorporated states
+# don't generate political pressure.
+#
+# Parameters:
+#   $VALUE$ — named script value for radicals/loyalists scale (very_small_radicals,
+#             small_radicals, medium_radicals, large_radicals).
+#
+# Usage: discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+discriminated_pops_loyalty_effect = {
+	every_scope_state = {
+		limit = { is_incorporated = yes }
+		every_scope_pop = {
+			limit = { pop_acceptance < acceptance_status_4 }
+			add_loyalists = { value = $VALUE$ }
+		}
+	}
+}
+
+discriminated_pops_radicalism_effect = {
+	every_scope_state = {
+		limit = { is_incorporated = yes }
+		every_scope_pop = {
+			limit = { pop_acceptance < acceptance_status_4 }
+			add_radicals = { value = $VALUE$ }
+		}
+	}
+}

@@ -675,10 +675,7 @@ un_events.6 = {
 			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
-		}
+		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Trigger vote for all other UN members
 		hidden_effect = {
 			every_country = {
@@ -710,10 +707,8 @@ un_events.6 = {
 		}
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
+		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -886,11 +881,8 @@ un_events.7 = {
 		custom_tooltip = un_authority_change_minus_3
 		change_variable = { name = un_authority add = -3 }
 		change_relations = { country = scope:crisis_country value = -10 }
-		add_loyalists = {
-			value = very_small_radicals
-			strata = upper
-		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# At moderate authority, GPs refusing aid face diplomatic consequences
 		if = {
 			limit = {
@@ -912,11 +904,8 @@ un_events.7 = {
 			}
 			custom_tooltip = un_refuse_aid_severe_penalty_tt
 			change_variable = { name = un_authority add = -5 }
-			add_radicals = {
-				value = small_radicals
-				strata = lower
-			}
-			ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+			ig_approval_effect = { IG = ig_trade_unions   MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+			ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		}
 	}
 }
@@ -980,11 +969,8 @@ un_events.8 = {
 		}
 		custom_tooltip = un_authority_change_plus_5
 		change_variable = { name = un_authority add = 5 }
-		add_radicals = {
-			value = small_radicals
-			strata = upper
-		}
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces  MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Option B: Contest the jurisdiction
@@ -1019,11 +1005,8 @@ un_events.8 = {
 		}
 		custom_tooltip = un_authority_change_minus_8
 		change_variable = { name = un_authority add = -8 }
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -1187,12 +1170,8 @@ un_events.10 = {
 		}
 		custom_tooltip = un_authority_change_plus_15
 		change_variable = { name = un_authority add = 15 }
-		# Costs authority to rally
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
-		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
 	# Option B: Propose incremental fixes
@@ -1222,11 +1201,8 @@ un_events.10 = {
 		}
 		custom_tooltip = un_authority_change_minus_10
 		change_variable = { name = un_authority add = -10 }
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 }
 
@@ -1317,10 +1293,7 @@ un_events.11 = {
 		}
 		custom_tooltip = un_authority_change_minus_1
 		change_variable = { name = un_authority add = -1 }
-		add_loyalists = {
-			value = very_small_radicals
-			strata = upper
-		}
+		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
 	# Option C: Propose abolishing the veto power entirely
@@ -1341,10 +1314,8 @@ un_events.11 = {
 		custom_tooltip = un_authority_change_plus_3
 		change_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:veto_power value = -10 }
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -2164,11 +2135,7 @@ un_events.18 = {
 		}
 		# Proposer commits to resettlement
 		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		add_radicals = {
-			value = small_radicals
-			strata = lower
-		}
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
 		# Trigger vote for all other UN members
 		hidden_effect = {
 			every_country = {
@@ -2226,11 +2193,7 @@ un_events.18 = {
 			limit = { exists = scope:refugee_source }
 			change_relations = { country = scope:refugee_source value = -10 }
 		}
-		add_loyalists = {
-			value = small_radicals
-			strata = lower
-		}
-		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 		remove_global_variable = un_vote_active
 	}
 }

@@ -136,8 +136,7 @@ society_technology_events.2 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals strata = upper }
-		add_loyalists = { value = medium_radicals strata = lower }
+		social_progressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -151,7 +150,7 @@ society_technology_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
@@ -206,8 +205,7 @@ society_technology_events.3 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals pop_type = clergymen }
-		add_loyalists = { value = small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -252,8 +250,7 @@ society_technology_events.3 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals pop_type = clergymen }
-		add_loyalists = { value = medium_radicals strata = lower }
+		social_progressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 	}
 }
 
@@ -306,8 +303,7 @@ society_technology_events.4 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = small_radicals pop_type = clergymen }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -330,8 +326,7 @@ society_technology_events.4 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 	}
 }
 
@@ -375,8 +370,7 @@ society_technology_events.5 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = very_small_radicals pop_type = clergymen }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -394,8 +388,7 @@ society_technology_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = very_small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 	}
 }
 
@@ -568,9 +561,7 @@ society_technology_events.7 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = medium_radicals strata = lower }
-		add_radicals = { value = medium_radicals pop_type = clergymen }
-		add_radicals = { value = small_radicals strata = upper }
+		social_progressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -589,8 +580,7 @@ society_technology_events.7 = {
 			}
 		}
 		# Quiet tolerance - don't escalate
-		add_loyalists = { value = very_small_radicals strata = lower }
-		add_radicals = { value = very_small_radicals pop_type = clergymen }
+		social_progressive_reaction_effect = { DAYS = short_modifier_time }
 	}
 
 	option = {
@@ -614,8 +604,7 @@ society_technology_events.7 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = medium_radicals strata = lower }
+		social_regressive_reform_major_reaction_effect = { DAYS = normal_modifier_time }
 	}
 
 	# --- PROGRESSIVE OPTIONS (basic_protections or comprehensive_rights) ---
@@ -641,8 +630,7 @@ society_technology_events.7 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = small_radicals pop_type = clergymen }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -657,7 +645,6 @@ society_technology_events.7 = {
 			base = 3
 		}
 		# Acknowledge but maintain distance
-		add_loyalists = { value = very_small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals pop_type = clergymen }
 	}
 
@@ -678,8 +665,7 @@ society_technology_events.7 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_loyalists = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = medium_radicals strata = lower }
+		social_regressive_reform_major_reaction_effect = { DAYS = normal_modifier_time }
 	}
 }
 
@@ -1047,8 +1033,8 @@ society_technology_events.11 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals strata = lower }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 	}
 
 	option = {
@@ -1089,7 +1075,7 @@ society_technology_events.11 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = very_small_radicals strata = lower }
+		discriminated_pops_radicalism_effect = { VALUE = very_small_radicals }
 		add_loyalists = { value = small_radicals strata = middle }
 	}
 }
@@ -1148,7 +1134,7 @@ society_technology_events.12 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -1172,8 +1158,7 @@ society_technology_events.12 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = lower }
-		add_radicals = { value = very_small_radicals strata = upper }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 }
 
@@ -1224,7 +1209,7 @@ society_technology_events.13 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = very_small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -1243,7 +1228,7 @@ society_technology_events.13 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -1435,7 +1420,7 @@ society_technology_events.15 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		add_radicals = { value = very_small_radicals strata = upper }
+		social_progressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -1454,7 +1439,7 @@ society_technology_events.15 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 	}
 }
 
@@ -2260,7 +2245,7 @@ society_technology_events.25 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = very_small_radicals pop_type = academics }
-		add_loyalists = { value = small_radicals strata = lower }
+		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
 	option = {
@@ -2292,7 +2277,7 @@ society_technology_events.25 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = { value = small_radicals strata = lower }
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
 	}
 }
 
@@ -2510,8 +2495,8 @@ society_technology_events.28 = {
 			is_decaying = yes
 		}
 		add_radicals = { value = small_radicals pop_type = clergymen }
-		add_radicals = { value = very_small_radicals strata = lower }
-		add_loyalists = { value = small_radicals strata = upper }
+		social_regressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = very_small_radicals }
 	}
 
 	option = {
