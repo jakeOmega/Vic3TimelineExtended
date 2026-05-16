@@ -45,7 +45,7 @@ company_volkswagen = {
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
-		prestige_good_performance_engines
+		prestige_good_brunn_type_engines
 	}
 	ai_will_do = {
 		has_technology_researched = modern_automotive_technology
@@ -1392,7 +1392,7 @@ company_airbus = {
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_aircraft
-		prestige_good_performance_engines 
+		prestige_good_brunn_type_engines
 	}
     ai_will_do = {
         has_technology_researched = supersonic_aircraft
@@ -1504,7 +1504,7 @@ company_hyundai = {
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
-		prestige_good_performance_engines
+		prestige_good_brunn_type_engines
 	}
     ai_will_do = {
         has_technology_researched = modern_automotive_technology
@@ -2599,8 +2599,8 @@ company_ferrari = {
 		state_building_ferrari_maranello_factory_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_luxury_automobiles 
-		prestige_good_performance_engines 
+		prestige_good_luxury_automobiles
+		prestige_good_brunn_type_engines
 	}
     ai_will_do = {
         has_technology_researched = modern_automotive_technology

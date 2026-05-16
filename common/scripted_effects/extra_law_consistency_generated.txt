@@ -3040,10 +3040,3 @@ te_fix_inconsistent_laws = {
 	te_fix_inconsistent_lawgroup_ministry_of_consumer_protection = yes
 	te_fix_inconsistent_lawgroup_ministry_of_religion = yes
 }
-
-# Wrapper for on_law_activated (root = law scope) → owner-scope dispatch.
-te_fix_inconsistent_laws_from_law_scope = {
-	owner = {
-		te_fix_inconsistent_laws = yes
-	}
-}

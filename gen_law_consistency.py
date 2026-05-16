@@ -471,17 +471,14 @@ def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
 
 
 def emit_dispatcher(ordered_groups):
+    # The on_law_activated wrapper `te_fix_inconsistent_laws_from_law_scope`
+    # is defined as an on_action in common/on_actions/extra_on_actions.txt
+    # (must be an on_action, not a scripted_effect, since on_actions invoke
+    # other on_actions by tag and won't resolve scripted_effect names).
     out = ["te_fix_inconsistent_laws = {"]
     for g in ordered_groups:
         helper = f"te_fix_inconsistent_lawgroup_{g[len('lawgroup_'):]}"
         out.append(f"\t{helper} = yes")
-    out.append("}")
-    out.append("")
-    out.append("# Wrapper for on_law_activated (root = law scope) → owner-scope dispatch.")
-    out.append("te_fix_inconsistent_laws_from_law_scope = {")
-    out.append("\towner = {")
-    out.append("\t\tte_fix_inconsistent_laws = yes")
-    out.append("\t}")
     out.append("}")
     return "\n".join(out)
 

@@ -244,7 +244,7 @@ modern_election_events.3 = {
 		add_modifier = { name = me_climate_pledge_modifier days = normal_modifier_time }
 		ai_chance = {
 			base = 5
-			modifier = { trigger = { any_active_party = { is_party_type = green_party is_marginal = no } } add = 5 }
+			modifier = { trigger = { any_active_party = { is_party_type = green_party any_member = { NOT = { ig_counts_as_marginal = yes } } } } add = 5 }
 			modifier = { trigger = { has_law = law_type:law_ministry_of_the_environment } add = 3 }
 		}
 	}

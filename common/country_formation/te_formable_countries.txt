@@ -1,4 +1,4 @@
-# Formation rules for the formable countries added by this mod.
+﻿# Formation rules for the formable countries added by this mod.
 #
 # All major formations: candidates compete via leadership/unification
 # diplomatic plays. AFU/BHA/NUS/EUN/UNA/UNE/ZHO/INM/EAF.

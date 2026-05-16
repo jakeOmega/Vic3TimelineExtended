@@ -1,4 +1,4 @@
-# ======================================================================
+﻿# ======================================================================
 #  Social-axis reaction helpers
 #
 #  Replacement for strata-targeted radicals/loyalists in events that
@@ -74,8 +74,9 @@ social_regressive_reform_major_reaction_effect = {
 
 # Discriminated-minority pop reactions — used in civil-rights / minority-rights
 # / religious-tolerance events where strata used to stand in for the discriminated
-# minority itself. Filters on `pop_acceptance < acceptance_status_4` (the
-# standard "not fully accepted" threshold — matches existing civil-rights trigger
+# minority itself. Iterates cultures present in the country and targets those
+# with country-wide acceptance below `acceptance_status_4` (the standard
+# "not fully accepted" threshold — matches existing civil-rights trigger
 # usage across the mod).
 #
 # Use `discriminated_pops_loyalty_effect` when the policy chosen advances the
@@ -83,8 +84,10 @@ social_regressive_reform_major_reaction_effect = {
 # enforcement). Use `discriminated_pops_radicalism_effect` when the policy
 # rolls back rights, suppresses the minority, or enforces existing discrimination.
 #
-# Scope: country. Iterates incorporated states only; unincorporated states
-# don't generate political pressure.
+# Scope: country.
+#
+# Wrapped in `custom_tooltip` to suppress per-culture tooltip explosion in
+# countries with many cultures (large empires post-aggressive-conquest).
 #
 # Parameters:
 #   $VALUE$ — named script value for radicals/loyalists scale (very_small_radicals,
@@ -92,21 +95,47 @@ social_regressive_reform_major_reaction_effect = {
 #
 # Usage: discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 discriminated_pops_loyalty_effect = {
-	every_scope_state = {
-		limit = { is_incorporated = yes }
-		every_scope_pop = {
-			limit = { pop_acceptance < acceptance_status_4 }
-			add_loyalists = { value = $VALUE$ }
+	custom_tooltip = {
+		text = discriminated_pops_loyalty_effect_tt
+		every_scope_culture = {
+			save_temporary_scope_as = discriminated_culture
+			prev = {
+				if = {
+					limit = {
+						country_average_culture_pop_acceptance = {
+							culture = scope:discriminated_culture
+							value < acceptance_status_4
+						}
+					}
+					add_loyalists = {
+						culture = scope:discriminated_culture
+						value = $VALUE$
+					}
+				}
+			}
 		}
 	}
 }
 
 discriminated_pops_radicalism_effect = {
-	every_scope_state = {
-		limit = { is_incorporated = yes }
-		every_scope_pop = {
-			limit = { pop_acceptance < acceptance_status_4 }
-			add_radicals = { value = $VALUE$ }
+	custom_tooltip = {
+		text = discriminated_pops_radicalism_effect_tt
+		every_scope_culture = {
+			save_temporary_scope_as = discriminated_culture
+			prev = {
+				if = {
+					limit = {
+						country_average_culture_pop_acceptance = {
+							culture = scope:discriminated_culture
+							value < acceptance_status_4
+						}
+					}
+					add_radicals = {
+						culture = scope:discriminated_culture
+						value = $VALUE$
+					}
+				}
+			}
 		}
 	}
 }

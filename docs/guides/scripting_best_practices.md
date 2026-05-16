@@ -54,6 +54,8 @@ When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemo
 
 **Both `days = N` and `months = N` are valid `add_modifier` / `cooldown` syntax** when N is a literal integer (vanilla uses `months = 12`, `months = 120`, etc. — see `paris_commune_pulse_events.txt`, `alaska_events.txt`, `canal_events.txt`). The bug pattern this section warns about is *only* mixing the `*_modifier_time` script values (defined in days) with the `months =` keyword. A code review that flags every `months = N` as a bug will produce false positives — verify against vanilla precedent before "fixing".
 
+**`set_variable` accepts `days = N` only for engine-side auto-cleanup, NOT `months`.** The fields are `name`, `value`, optionally `days = N` (variable auto-clears after N days). There is no `months` field. `set_variable = { name = X value = 6 months = yes }` parse-errors with `Named value not found: yes: yes` because the parser sees `value = 6` + an orphan `months = yes` pair. If you want a months-based cooldown, either use `days = (months × 30)` for engine cleanup, or — if your system already decrements the variable in an `on_action` monthly pulse (e.g. `space_race_on_actions.txt`'s `change_variable subtract = 1` on `sr_failure_cooldown`) — drop the time field entirely and store the months-count in `value`. Don't double-up engine cleanup and manual decrement.
+
 ## Modifier Design: Don't Borrow Modifiers from Other Systems
 
 Each mod system should define its own modifiers. Do NOT reuse modifiers from another system (e.g. using `intelligence_capacity_defense` from covert warfare in a cultural hegemony event). Cross-system modifier sharing:
@@ -370,6 +372,7 @@ state_pop_support_movement_<name>_mult = {
 - **`has_journal_entry = je_X` PostValidates that `je_X` exists in the JE database.** Referencing a nonexistent JE key (typo, mod removal, vanilla rename) yields `PostValidate of trigger 'has_journal_entry' returned false` at the trigger line. Vanilla unification JEs are `je_german_unification`, `je_risorgimento`, `je_reunify_china` — there is no `je_unite_germany` or `je_unite_italy`. Validate the key against `common/journal_entries/` before referencing.
 - **Event-target / scope names need `scope:` prefix when used as a scope-switcher in war_goal/diplomatic_action contexts.** Bare `creator_country = { ... }` in a wargoal's `possible` or `on_enforced` parses as an unknown trigger/effect — comments listing the available scopes (e.g. `# scopes: root = holder, creator_country, diplomatic_play, ...`) document the *event targets* in scope, not bareword scope-switchers. Correct: `scope:creator_country = { ... }`. Vanilla wargoal files only ever reference `creator_country` in those scope comments, never as a bare block.
 - **Scripted triggers that read `scope:X` internally must be called with `= yes`, not `= scope:X`.** A scripted trigger defined as `is_irredentist_candidate_for = { scope:target_country = { ... } }` already reads `scope:target_country` from the *calling* scope — calling it as `is_irredentist_candidate_for = scope:target_country` produces `Malformed token: scope:target_country` because the parser doesn't accept event-target tokens as scripted-trigger arguments. Correct: `is_irredentist_candidate_for = yes`. The vanilla AI-strategy callsite shape is the reference (`other.txt` in mod uses the right form).
+- **Scripted triggers with named `$PLACEHOLDER$` parameters require named-arg call syntax `= { PLACEHOLDER = value }`, not positional `= value`.** Vanilla `has_treaty_alliance_with` / `has_treaty_defensive_pact_with` (in `00_diplomacy_triggers.txt:33,48`) take `$TARGET$`. Calling `has_treaty_alliance_with = ROOT` produces a 4-error cascade: `Compiling source for has_treaty_alliance_with failed for missing arguments: TARGET, TARGET` at the vanilla definition site, then `script_parse_error: Malformed token: ROOT` at the caller, then `PostValidate of trigger 'has_treaty_alliance_with' returned false`. All four resolve by writing `has_treaty_alliance_with = { TARGET = ROOT }`. Before referencing any vanilla scripted trigger, check its definition for `$X$` placeholders — positional form only works for parameterless `= yes`/`= scope:X` triggers.
 
 ## Scope Chain Issues with `add_modifier` + Script Values
 
@@ -2980,3 +2983,38 @@ Sizing guidance for decaying event modifiers:
 - For long-term structural effects on large economies, the value rounds to 0 in the tooltip at the magnitudes that wouldn't unbalance — prefer a different lever (influence, loan-interest, treaty articles).
 
 Same trap applies to any other `country_weekly_*_mult` / `country_weekly_*_add` modifier — read the field name and confirm tick interval before sizing.
+
+## On_actions vs Scripted_effects: Separate Namespaces
+
+`on_actions = { ... }` blocks inside an on_action (e.g. `on_law_activated = { on_actions = { my_helper my_other_helper } }`) resolve names against the **on_action** registry only, not the scripted_effect registry. Defining `my_helper = { owner = { do_something = yes } }` in `common/scripted_effects/*.txt` and then calling it via an `on_actions = { my_helper }` chain produces `No on_action scripted with tag my_helper cannot link` at engine startup — the helper silently never fires.
+
+The fix is to define the wrapper as an on_action (in `common/on_actions/*.txt`) with the standard `effect = { ... }` shape, then have it invoke the scripted_effect work:
+
+```
+my_helper = {
+    effect = {
+        owner = {
+            my_scripted_effect = yes
+        }
+    }
+}
+```
+
+Vanilla sibling in `extra_on_actions.txt`: `fix_incompatible_laws_from_law_scope`. If you have an autogenerator that emits scripted_effects, keep the *aggregator* scripted_effect (which does the actual work) in the generated file and define the *on_action wrapper* by hand in an `on_actions/` file. Don't try to satisfy the on_actions chain by emitting a scripted_effect with the same name — the names live in different namespaces.
+
+## Engine Caps Surface as Asserts, Not Validation Errors
+
+Some engine-level caps are hardcoded and only surface in debug.log via `pdx_assert.cpp:637` lines, not through `script_parse_error` or `engine-coverage` validators. Known caps:
+
+- **Max 3 prestige goods per base_good.** `Assertion failed: Exceeding maximum amount of Prestige Goods per Goods for engines (3)` fires when a 4th `prestige_good_X = { base_good = engines ... }` entity is loaded. Before adding a mod prestige good, count vanilla's existing entries on that base_good:
+  ```bash
+  grep -B1 "base_good = engines" "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/common/prestige_goods/"*.txt | grep "^prestige_good_"
+  ```
+  Most base_goods are at ≤2 in vanilla, but engines/automobiles/artillery/porcelain/wine/tobacco/meat/radios/silk/small_arms/merchant_marine are at 3 — adding any 4th will assert.
+
+## Trigger / Effect Scope Asymmetries: `add_loyalists` vs `add_radicals`, `is_marginal`
+
+Some sibling triggers/effects don't share scope rules. Two cases bitten repeatedly in this mod:
+
+- **`add_loyalists` is country-scope only; `add_radicals` is dual-scope (country + pop).** Calling `add_loyalists = { value = X }` inside `every_scope_pop = { ... }` silently no-ops with `Inconsistent effect scopes (pop vs. country)`. The parallel `add_radicals = { value = X }` in the same loop *does* work because `add_radicals` accepts pop scope. Refactor `add_loyalists` callers to country scope and use the `culture = X` / `pop_type = X` / `strata = X` filter parameters. Canonical "iterate cultures, target by acceptance" pattern: `every_scope_culture { save_temporary_scope_as = X; prev { if = { limit = { country_average_culture_pop_acceptance = { culture = scope:X value < acceptance_status_4 } } add_loyalists = { culture = scope:X value = $VALUE$ } } } }` (or use `prev = prev` chain like `colonial_empire_triggers.txt:478-490`).
+- **`is_marginal` is IG-scope only, not party-scope.** Calling `any_active_party = { is_party_type = green_party is_marginal = no }` produces `Inconsistent trigger scopes (party vs. interest_group)`. Use `any_member = { NOT = { ig_counts_as_marginal = yes } }` (iterates the party's member IGs) for a party-scoped marginality test that approximates "non-marginal party". Vanilla precedent: `00_ip4_victoria_scripted_triggers.txt:713-725` defines `ig_counts_as_marginal` as the canonical IG-scope marginality wrapper.

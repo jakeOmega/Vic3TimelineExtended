@@ -1,4 +1,4 @@
-# Sophisticated `possible`/`ai_will_do` gating for the major-unification
+﻿# Sophisticated `possible`/`ai_will_do` gating for the major-unification
 # formables in common/country_formation/te_formable_countries.txt.
 #
 # The vanilla rank gate blocks minor formations once a country is at the
@@ -65,8 +65,8 @@ is_aligned_with_root = {
 		this = ROOT
 		is_subject_of = ROOT
 		is_in_same_power_bloc = ROOT
-		has_treaty_alliance_with = ROOT
-		has_treaty_defensive_pact_with = ROOT
+		has_treaty_alliance_with = { TARGET = ROOT }
+		has_treaty_defensive_pact_with = { TARGET = ROOT }
 		is_in_customs_union_with = ROOT
 	}
 }

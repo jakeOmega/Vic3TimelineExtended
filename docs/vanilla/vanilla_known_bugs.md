@@ -486,6 +486,42 @@ Loading Font File
 
 Informational engine logging during font loading (~56 entries per session). Not errors. Anchor + signature ensures only literal font-load info is hidden — any genuine `pdx_font.cpp:88` error with a different message would still surface.
 
+### `pdx_3dtypes.cpp:217` — mesh asset load timing instrumentation
+- source: `pdx_3dtypes.cpp:217`
+
+```
+Total time "
+```
+
+Engine emits per-mesh load duration (e.g. `Total time "male_outfit_indian_tatya_tope_mesh" in 20 ms`) for every 3D model loaded at startup — ~671 entries per session, dominating debug.log if unfiltered. Pure asset-loading telemetry, not errors. Substring signature `Total time "` is narrow enough to avoid catching genuine future errors from the same source.
+
+### `pdx_assert.cpp:637` — `IsWithinBounds( ProvinceIndex )` engine assertion
+- source: `pdx_assert.cpp:637`
+
+```
+Assertion failed: IsWithinBounds( ProvinceIndex )
+```
+
+Vanilla engine internal — fires during province-index lookups in some unspecified pathway. Not actionable from script, not mod-introduced. Recurs across sessions.
+
+### `pdx_assert.cpp:637` — `_ProvinceSet.GetNumRanges() <= 1` engine assertion
+- source: `pdx_assert.cpp:637`
+
+```
+Assertion failed: _ProvinceSet.GetNumRanges() <= 1
+```
+
+Vanilla engine internal — `_ProvinceSet` accumulating more than one range during some province aggregation operation. Not actionable from script, not mod-introduced. Recurs across sessions.
+
+### `pdx_assert.cpp:637` — int→float precision loss assertion
+- source: `pdx_assert.cpp:637`
+
+```
+Assertion failed: Possible loss of data when converting from int to float
+```
+
+Vanilla engine internal — numeric coercion safety check, fires during some unspecified vanilla calculation. Not actionable from script, not mod-introduced.
+
 ### `defines.cpp:230` — Jomini engine-shared `00_audio_persistent_objects.txt` define warnings
 - source: `defines.cpp:230`
 

@@ -76,12 +76,6 @@ prestige_good_advanced_telecom = {
 	texture = "gfx/interface/icons/goods_icons/prestige/telephones.dds"
 }
 
-prestige_good_performance_engines = {
-	base_good = engines
-	prestige_bonus = 0.15
-	texture = "gfx/interface/icons/goods_icons/prestige/locomotives.dds"
-}
-
 prestige_good_resort_travel = {
 	base_good = tourism
 	prestige_bonus = 0.2
