@@ -6346,6 +6346,7 @@ POST_LOAD_GENERATORS = [
     ("gen_pb_principle_unlock_descs", "gen_pb_principle_unlock_descs"),
     ("gen_un_button_descs",           "gen_un_button_descs"),
     ("gen_law_consistency",           "gen_law_consistency"),
+    ("gen_company_building_cleanup",  "scripts.generators.gen_company_building_cleanup"),
     ("organize_loc",                  "organize_loc"),
     ("event_magnitude_audit",         "event_magnitude_audit"),
     ("modifier_visibility_audit",     "modifier_visibility_audit"),

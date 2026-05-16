@@ -243,5 +243,19 @@ def main() -> int:
 	return 0
 
 
+def regenerate(mod_state=None):
+	"""Post-load entry point used by mod_state_server.POST_LOAD_GENERATORS.
+
+	`mod_state` is unused — the generator reads `common/buildings/company_buildings.txt`
+	and `common/company_types/*.txt` directly off disk via path_constants.
+	"""
+	building_map = load_company_building_map()
+	content = render_cleanup_effect(building_map)
+	current = OUTPUT_PATH.read_text(encoding="utf-8-sig") if OUTPUT_PATH.exists() else ""
+	if current != content:
+		OUTPUT_PATH.write_text(content, encoding="utf-8-sig", newline="\n")
+	return {}
+
+
 if __name__ == "__main__":
 	raise SystemExit(main())

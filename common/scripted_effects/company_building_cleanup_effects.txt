@@ -590,6 +590,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_dupont_experimental_station
+			NOT = {
+				owner = {
+					has_company = company_dupont
+				}
+			}
+		}
+		remove_building = building_dupont_experimental_station
+	}
+	if = {
+		limit = {
 			has_building = building_duro_la_felguera_steelworks
 			NOT = {
 				owner = {
@@ -1037,6 +1048,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_generic_furniture_showroom
+			NOT = {
+				owner = {
+					has_company = company_basic_home_goods
+				}
+			}
+		}
+		remove_building = building_generic_furniture_showroom
+	}
+	if = {
+		limit = {
 			has_building = building_generic_granary_complex
 			NOT = {
 				owner = {
@@ -1087,6 +1109,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_generic_logistics_hub
+	}
+	if = {
+		limit = {
+			has_building = building_generic_lumber_yard
+			NOT = {
+				owner = {
+					has_company = company_basic_forestry
+				}
+			}
+		}
+		remove_building = building_generic_lumber_yard
 	}
 	if = {
 		limit = {
@@ -1492,6 +1525,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_ig_farben_buna_werke
+			NOT = {
+				owner = {
+					has_company = company_ig_farben
+				}
+			}
+		}
+		remove_building = building_ig_farben_buna_werke
+	}
+	if = {
+		limit = {
 			has_building = building_ikea_almhult_campus
 			NOT = {
 				owner = {
@@ -1632,6 +1676,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_john_holt_lagos_trading_house
+	}
+	if = {
+		limit = {
+			has_building = building_jsr_yokkaichi_complex
+			NOT = {
+				owner = {
+					has_company = company_jsr
+				}
+			}
+		}
+		remove_building = building_jsr_yokkaichi_complex
 	}
 	if = {
 		limit = {
@@ -2603,6 +2658,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_shell_pernis_refinery
+			NOT = {
+				owner = {
+					has_company = company_shell
+				}
+			}
+		}
+		remove_building = building_shell_pernis_refinery
+	}
+	if = {
+		limit = {
 			has_building = building_sherkat_shemali_cotton_gin
 			NOT = {
 				owner = {
@@ -2633,6 +2699,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_shopify_fulfillment_hub
+	}
+	if = {
+		limit = {
+			has_building = building_sibur_tobolsk_complex
+			NOT = {
+				owner = {
+					has_company = company_sibur
+				}
+			}
+		}
+		remove_building = building_sibur_tobolsk_complex
 	}
 	if = {
 		limit = {
