@@ -101,7 +101,7 @@
     "common/scripted_effects/dp_escalation_effects.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
-      "recent_findings": 0
+      "recent_findings": 1
     },
     "common/on_actions/repeatable_events_on_actions.txt": {
       "last_audited": "2026-05-16",
