@@ -249,10 +249,7 @@ modern_election_events.3 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -432,10 +429,7 @@ modern_election_events.5 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_petty_bourgeoisie }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 }
@@ -571,14 +565,8 @@ modern_election_events.7 = {
 			limit = { exists = scope:corp_party }
 			scope:corp_party = { add_momentum = momentum_large }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
@@ -588,14 +576,8 @@ modern_election_events.7 = {
 			limit = { exists = scope:labor_party }
 			scope:labor_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 3 }
 	}
@@ -1017,10 +999,7 @@ modern_election_events.12 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_large }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
@@ -1030,10 +1009,7 @@ modern_election_events.12 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }
 	}
@@ -1048,10 +1024,7 @@ modern_election_events.12 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -1112,14 +1085,8 @@ modern_election_events.13 = {
 			limit = { exists = scope:press_party }
 			scope:press_party = { add_momentum = momentum_large }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
@@ -1129,10 +1096,7 @@ modern_election_events.13 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }
 	}
@@ -1143,10 +1107,7 @@ modern_election_events.13 = {
 			limit = { exists = scope:press_party }
 			scope:press_party = { add_momentum = momentum_small }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -1232,10 +1193,7 @@ modern_election_events.14 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals strata = middle }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -1316,10 +1274,7 @@ modern_election_events.15 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals strata = lower }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -1373,10 +1328,7 @@ modern_election_events.16 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_equal_rights_platform_modifier days = normal_modifier_time }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = { base = 5 }
 	}
@@ -1387,14 +1339,8 @@ modern_election_events.16 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = { base = 3 }
 	}
@@ -1479,10 +1425,7 @@ modern_election_events.17 = {
 
 	option = { # Frame space as a matter of national prestige
 		name = modern_election_events.17.c
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		if = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_small }
@@ -1538,10 +1481,7 @@ modern_election_events.18 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 3 }
 	}
@@ -1553,10 +1493,7 @@ modern_election_events.18 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = very_small_radicals strata = upper }
 		ai_chance = { base = 5 }
@@ -1573,10 +1510,7 @@ modern_election_events.18 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_landowners }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -1734,14 +1668,8 @@ modern_election_events.20 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = middle }
 		ai_chance = { base = 5 }
 	}
@@ -1752,10 +1680,7 @@ modern_election_events.20 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 3 }
 	}
@@ -1832,10 +1757,7 @@ modern_election_events.21 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_pollution_cleanup_modifier days = normal_modifier_time }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
@@ -1845,10 +1767,7 @@ modern_election_events.21 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 3 }
 	}
@@ -1864,10 +1783,7 @@ modern_election_events.21 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -1937,10 +1853,7 @@ modern_election_events.22 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_petty_bourgeoisie }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
@@ -2002,14 +1915,8 @@ modern_election_events.23 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 
@@ -2019,10 +1926,7 @@ modern_election_events.23 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }
 	}
@@ -2039,10 +1943,7 @@ modern_election_events.23 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 }
@@ -2095,10 +1996,7 @@ modern_election_events.24 = {
 			scope:govt_party = { add_momentum = momentum_large }
 		}
 		add_modifier = { name = me_security_crackdown_modifier days = normal_modifier_time }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals }
 		ai_chance = { base = 5 }
 	}
@@ -2109,10 +2007,7 @@ modern_election_events.24 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 3 }
 	}
@@ -2129,10 +2024,7 @@ modern_election_events.24 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -2263,14 +2155,8 @@ modern_election_events.26 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_rural_folk }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_petty_bourgeoisie }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 
@@ -2281,14 +2167,8 @@ modern_election_events.26 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 5 }
 	}
 
@@ -2303,10 +2183,7 @@ modern_election_events.26 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -2359,14 +2236,8 @@ modern_election_events.27 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_open_borders_campaign_modifier days = normal_modifier_time }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = { base = 4 }
 	}
@@ -2379,14 +2250,8 @@ modern_election_events.27 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_border_security_campaign_modifier days = normal_modifier_time }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals }
 		ai_chance = { base = 5 }
 	}
@@ -2476,10 +2341,7 @@ modern_election_events.28 = {
 			scope:govt_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -2531,14 +2393,8 @@ modern_election_events.29 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_large }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 5 }
 	}
@@ -2550,10 +2406,7 @@ modern_election_events.29 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 
@@ -2638,10 +2491,7 @@ modern_election_events.30 = {
 	option = { # Deploy military cyber countermeasures
 		name = modern_election_events.30.c
 		add_modifier = { name = me_election_infrastructure_hardened_modifier days = normal_modifier_time }
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_armed_forces }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = very_small_radicals strata = middle }
 		ai_chance = { base = 4 }
 	}
@@ -2694,14 +2544,8 @@ modern_election_events.31 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals }
 		ai_chance = { base = 4 }
 	}
@@ -2713,10 +2557,7 @@ modern_election_events.31 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_devout }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
 		ai_chance = { base = 5 }
 	}
@@ -2732,10 +2573,7 @@ modern_election_events.31 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_intelligentsia }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 }
@@ -2944,14 +2782,8 @@ modern_election_events.34 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_rural_folk }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 
@@ -2962,14 +2794,8 @@ modern_election_events.34 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_rural_folk }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 5 }
 	}
@@ -3036,14 +2862,8 @@ modern_election_events.35 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = { base = 4 }
 	}
 
@@ -3053,14 +2873,8 @@ modern_election_events.35 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_trade_unions }
-			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
-		}
-		every_interest_group = {
-			limit = { is_interest_group_type = ig_industrialists }
-			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
-		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 5 }
 	}
