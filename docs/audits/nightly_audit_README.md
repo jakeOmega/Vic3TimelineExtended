@@ -6,7 +6,7 @@ A scheduled Claude Code Routine that audits a small rotating slice of mod conten
 
 Each run:
 
-1. **Selector** (`scripts/nightly_audit_select.py`) walks `common/`, `events/`, `gui/`, `localization/english/`, `map_data/`, `gfx/`; excludes auto-generated files; scores each remaining file by `days_since_last_audit + recency_boost + jitter`; greedy-picks under a 2500-line / 8-file budget. Large files are sliced to ≤600 lines, picking the contiguous range with least overlap to prior coverage.
+1. **Selector** (`scripts/nightly_audit_select.py`) walks `common/`, `events/`, `gui/`, `localization/english/`, `map_data/`, `gfx/`; excludes auto-generated files; scores each remaining file by `days_since_last_audit + recency_boost + jitter`; iteratively greedy-picks under a 2500-line / 15-file budget, applying a per-new-doc penalty after the seed pick so picks cluster by shared docs (minimizes the auditor's pre-reading list). Large files are sliced to ≤600 lines, picking the contiguous range with least overlap to prior coverage.
 2. The selector writes:
    - `docs/audits/nightly/<date>/prompt.md` — the audit prompt with doc-reading list, targets, checklists, focus ranking, auto-fix rule, wrap-up instructions.
    - `docs/audits/nightly/<date>/targets.json` — machine-readable manifest.
@@ -64,6 +64,7 @@ At the top of `scripts/nightly_audit_select.py`:
 | `SLICE_CAP` | 600 | Max lines per file slice. Larger slice = fewer files per night. |
 | `RECENT_FINDINGS_CAP` | 3 | Cap on `recent_findings` for the recency boost. |
 | `DECAY_DAYS` | 90 | After this many days, `recent_findings` decays by half. |
+| `NEW_DOC_PENALTY` | 5.0 | Per-new-doc penalty when greedy-picking later files (each new doc the candidate would add to the auditor's reading list costs this many days of staleness equivalent). Higher = tighter clustering by doc affinity; lower = recency dominates. |
 
 Add to or remove from `EXCLUDED_REGISTRY_GLOBS` when a generator starts/stops wholly-regenerating a file.
 Add to or remove from `INTENTIONALLY_NOT_EXCLUDED` when a file's relationship to its generator changes (partially-managed vs hand-authored vs out-of-scope).

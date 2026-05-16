@@ -35,6 +35,12 @@ SLICE_CAP = 600
 RECENT_FINDINGS_CAP = 3
 LARGE_NUM = 100_000
 DECAY_DAYS = 90
+# Per-new-doc penalty applied during greedy selection. Each doc a candidate
+# would add to the auditor's reading list subtracts this much from its effective
+# score, biasing picks toward files that share docs with already-selected
+# targets. ~5 days of staleness equivalent — soft cluster, stale outliers still
+# break in.
+NEW_DOC_PENALTY = 5.0
 
 SCAN_ROOTS = ["common", "events", "gui", "localization/english", "map_data", "gfx"]
 
@@ -380,45 +386,81 @@ def area_and_docs(rel: str) -> tuple[str, list[str]]:
 
 def select_targets(candidates: list[tuple[Path, str, int]], state: dict,
                    today: Date, rng: random.Random) -> list[dict]:
-    """Greedy pick under LINE_BUDGET / FILE_CAP, with per-file slicing."""
-    scored = [
-        (score_candidate(rel, state, today, rng), abs_path, rel, line_count)
-        for abs_path, rel, line_count in candidates
-    ]
-    scored.sort(key=lambda x: x[0], reverse=True)
+    """Iterative greedy pick under LINE_BUDGET / FILE_CAP, with per-file
+    slicing and a marginal-new-doc penalty.
+
+    Seed pick is by base score alone. For each subsequent pick the effective
+    score is `base - NEW_DOC_PENALTY * |candidate.docs - selected_docs|`,
+    biasing toward files that don't expand the auditor's reading list.
+    """
+    pool = []
+    for abs_path, rel, line_count in candidates:
+        base = score_candidate(rel, state, today, rng)
+        _, docs = area_and_docs(rel)
+        pool.append({
+            "base": base,
+            "abs_path": abs_path,
+            "rel": rel,
+            "line_count": line_count,
+            "docs": docs,
+        })
 
     targets: list[dict] = []
     total_lines = 0
-    for score, abs_path, rel, line_count in scored:
-        if len(targets) >= FILE_CAP:
-            break
-        file_state = state.get("files", {}).get(rel, {})
-        partial = file_state.get("partial_coverage", []) or []
-        if line_count > SLICE_CAP:
-            line_range = list(pick_slice(line_count, partial))
-            slice_lines = line_range[1] - line_range[0] + 1
+    selected_docs: set[str] = set()
+
+    while pool and len(targets) < FILE_CAP:
+        if not targets:
+            # Seed: pure base-score order.
+            pool.sort(key=lambda c: c["base"], reverse=True)
         else:
-            line_range = None
-            slice_lines = line_count
-        if total_lines + slice_lines > LINE_BUDGET and targets:
-            # Skip — keeps us under budget — but keep iterating to try smaller files
-            continue
-        if total_lines + slice_lines > LINE_BUDGET:
-            # First pick exceeds budget alone (huge file scenario) — take the slice anyway
-            pass
-        area, docs = area_and_docs(rel)
-        targets.append({
-            "path": rel,
-            "line_range": line_range,
-            "lines": slice_lines,
-            "area": area,
-            "docs": docs,
-            "score": round(score, 3),
-            "last_audited": file_state.get("last_audited"),
-            "audit_count": file_state.get("audit_count", 0),
-            "recent_findings": file_state.get("recent_findings", 0),
-        })
-        total_lines += slice_lines
+            pool.sort(
+                key=lambda c: c["base"]
+                - NEW_DOC_PENALTY * len(set(c["docs"]) - selected_docs),
+                reverse=True,
+            )
+
+        picked_idx: int | None = None
+        for i, cand in enumerate(pool):
+            file_state = state.get("files", {}).get(cand["rel"], {})
+            partial = file_state.get("partial_coverage", []) or []
+            if cand["line_count"] > SLICE_CAP:
+                line_range = list(pick_slice(cand["line_count"], partial))
+                slice_lines = line_range[1] - line_range[0] + 1
+            else:
+                line_range = None
+                slice_lines = cand["line_count"]
+
+            if total_lines + slice_lines > LINE_BUDGET and targets:
+                # Doesn't fit — try the next candidate (some may be smaller).
+                continue
+
+            # Either fits, or this is the seed and exceeds budget alone — take it.
+            area, docs = area_and_docs(cand["rel"])
+            effective = cand["base"] - NEW_DOC_PENALTY * len(
+                set(docs) - selected_docs
+            ) if targets else cand["base"]
+            targets.append({
+                "path": cand["rel"],
+                "line_range": line_range,
+                "lines": slice_lines,
+                "area": area,
+                "docs": docs,
+                "score": round(effective, 3),
+                "last_audited": file_state.get("last_audited"),
+                "audit_count": file_state.get("audit_count", 0),
+                "recent_findings": file_state.get("recent_findings", 0),
+            })
+            total_lines += slice_lines
+            selected_docs.update(docs)
+            picked_idx = i
+            break
+
+        if picked_idx is None:
+            # No remaining candidate fits the budget.
+            break
+        pool.pop(picked_idx)
+
     return targets
 
 
