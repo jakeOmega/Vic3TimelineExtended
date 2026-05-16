@@ -15,7 +15,9 @@ File findings as GitHub issues; fix what's trivially fixable as PRs.
 - `docs/vanilla/CLAUDE.md`
 - `docs/audits/open_issues.md`
 - `docs/vanilla/vanilla_known_bugs.md`
+- `docs/vanilla/vanilla_war_reference.md`
 - `docs/audits/script_parameterization_audit.md`
+- `docs/audits/nightly_checklists/production_methods_and_buildings.md`
 - `docs/audits/nightly_checklists/scripted_effects_and_triggers.md`
 
 Also skim `gh issue list --search nightly-audit --state open --limit 30` and
@@ -25,23 +27,32 @@ Also skim `gh issue list --search nightly-audit --state open --limit 30` and
 
 | # | File | Lines | Area | Last audited | Count | Recent findings |
 |---|---|---|---|---|---|---|
-| 1 | `common/on_actions/space_race_on_actions.txt` | all (105) | scripted_effects_and_triggers | never | 0 | 0 |
-| 2 | `common/on_actions/te_construction_market_on_actions.txt` | all (344) | scripted_effects_and_triggers | never | 0 | 0 |
-| 3 | `common/scripted_triggers/covert_warfare_triggers.txt` | all (43) | scripted_effects_and_triggers | never | 0 | 0 |
-| 4 | `common/scripted_progress_bars/scripted_progress_bars.md` | all (40) | scripted_effects_and_triggers | never | 0 | 0 |
-| 5 | `common/scripted_effects/company_building_cleanup_effects.txt` | 1–600 (600) | scripted_effects_and_triggers | never | 0 | 0 |
-| 6 | `common/scripted_effects/sol_expectations_effects.txt` | all (198) | scripted_effects_and_triggers | never | 0 | 0 |
-| 7 | `common/scripted_effects/social_axis_effects.txt` | all (112) | scripted_effects_and_triggers | never | 0 | 0 |
-| 8 | `common/defines/te_construction_market_defines.txt` | all (9) | scripted_effects_and_triggers | never | 0 | 0 |
-| 9 | `common/on_actions/wonder_events_on_actions.txt` | all (265) | scripted_effects_and_triggers | never | 0 | 0 |
-| 10 | `common/scripted_effects/cultural_hegemony_effects.txt` | 1–600 (600) | scripted_effects_and_triggers | never | 0 | 0 |
-| 11 | `common/script_values/gui_chart_script_values.txt` | all (54) | scripted_effects_and_triggers | never | 0 | 0 |
-| 12 | `common/scripted_progress_bars/st_res_progress_bars.txt` | all (76) | scripted_effects_and_triggers | never | 0 | 0 |
-| 13 | `common/on_actions/sol_expectations_on_actions.txt` | all (13) | scripted_effects_and_triggers | never | 0 | 0 |
-| 14 | `common/on_actions/langreform_events_on_actions.txt` | all (11) | scripted_effects_and_triggers | never | 0 | 0 |
-| 15 | `common/script_values/civil_rights_values.txt` | all (20) | scripted_effects_and_triggers | never | 0 | 0 |
+| 1 | `common/mobilization_options/extra_mobilization_options.txt` | 1–600 (600) | production_methods_and_buildings | never | 0 | 0 |
+| 2 | `common/mobilization_option_groups/extra_mobilization_groups.txt` | all (4) | production_methods_and_buildings | never | 0 | 0 |
+| 3 | `common/_meta/duplicate_image_allowlist.yml` | 1–600 (600) | scripted_effects_and_triggers | never | 0 | 0 |
+| 4 | `common/battle_conditions/extra_battle_conditions.txt` | all (296) | production_methods_and_buildings | never | 0 | 0 |
+| 5 | `common/_meta/modifier_patterns.yml` | all (240) | scripted_effects_and_triggers | never | 0 | 0 |
+| 6 | `common/ship_modifications/extra_utility_modifications.txt` | all (202) | production_methods_and_buildings | never | 0 | 0 |
+| 7 | `common/combat_unit_groups/extra_combat_unit_groups.txt` | all (13) | production_methods_and_buildings | never | 0 | 0 |
+| 8 | `common/mobilization_options/_mobilization_options.info` | all (87) | production_methods_and_buildings | never | 0 | 0 |
+| 9 | `common/scripted_triggers/irredentism_triggers.txt` | all (205) | scripted_effects_and_triggers | never | 0 | 0 |
+| 10 | `common/on_actions/social_tensions_on_actions.txt` | all (29) | scripted_effects_and_triggers | never | 0 | 0 |
+| 11 | `common/on_actions/modern_election_on_actions.txt` | all (50) | scripted_effects_and_triggers | never | 0 | 0 |
+| 12 | `common/script_values/te_construction_market_sector_placement_values.txt` | all (100) | scripted_effects_and_triggers | never | 0 | 0 |
+| 13 | `common/script_values/te_map_mode_script_values.txt` | all (39) | scripted_effects_and_triggers | never | 0 | 0 |
+| 14 | `common/scripted_triggers/resource_discovery_triggers.txt` | all (6) | scripted_effects_and_triggers | never | 0 | 0 |
+| 15 | `common/on_actions/legacy_modifier_cleanup.txt` | all (23) | scripted_effects_and_triggers | never | 0 | 0 |
 
-**Budget**: 2490 of 2500 lines, 15 of 15 files.
+**Budget**: 2494 of 2500 lines, 15 of 15 files.
+
+## Registry drift
+
+`docs/auto_generated_files.md` and `EXCLUDED_GLOBS` (in `scripts/nightly_audit_select.py`) have drifted.
+Investigate as part of this audit; if action is needed, update `EXCLUDED_GLOBS` or `INTENTIONALLY_NOT_EXCLUDED` in the script accordingly.
+
+**In registry but not excluded** (newly generator-managed files? — add to `EXCLUDED_GLOBS` or `INTENTIONALLY_NOT_EXCLUDED`):
+
+- `common/company_types/*.txt`
 
 ## Focus ranking
 
