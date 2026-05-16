@@ -12,8 +12,6 @@
 #   - common/war_goal_types/te_reunify_country.txt
 #   - common/diplomatic_actions/extra_diplo_actions.txt (voluntary_union)
 #   - events/irredentism_events.txt
-#
-# Design notes live in /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md
 # ============================================================================
 
 # Country scope, takes scope:target_country.
@@ -76,6 +74,7 @@ irredentist_unifier_can_act = {
 		# Leader-ideology drivers across any ruling IG
 		any_interest_group = {
 			is_in_government = yes
+			has_leader = yes
 			OR = {
 				leader = { has_ideology = ideology:ideology_jingoist_leader }
 				leader = { has_ideology = ideology:ideology_fascist }
@@ -100,10 +99,11 @@ irredentist_unifier_can_act = {
 # its own bloc leader / has no bloc, or the bloc leader has previously set
 # the approval var via Event 5a.
 #
-# The `exists = var:irredentist_war_approval` guard is per
-# scripting_best_practices.md §666 (object-ref vars need exists check beyond
-# has_variable). The var is set on ROOT to point at scope:target_country, so
-# we additionally check it's set against THIS target.
+# The `exists = var:irredentist_war_approval` guard follows the object-ref
+# var pattern in scripting_best_practices.md § "Guard Scope References in
+# Triggers" (object-ref vars need exists check beyond has_variable). The var
+# is set on ROOT to point at scope:target_country, so we additionally check
+# it's set against THIS target.
 irredentist_bloc_check_war = {
 	custom_tooltip = {
 		text = te_irredentist_bloc_check_war_tt
