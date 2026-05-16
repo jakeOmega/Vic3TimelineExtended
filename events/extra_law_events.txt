@@ -1825,14 +1825,8 @@ extra_law_events.24 = {
 		add_enactment_modifier = {
 			name = govprin_popular_assembly_advance
 		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
-		}
-		add_loyalists = {
-			value = small_radicals
-			strata = lower
-		}
+		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	option = { # Bring the opposition into the process
@@ -2754,14 +2748,8 @@ extra_law_events.28 = {
 		add_enactment_modifier = {
 			name = amendment_compromise_modifier
 		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
-		}
-		add_loyalists = {
-			value = small_radicals
-			strata = lower
-		}
+		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 	}
 
 	option = { # Official bilingualism
@@ -2987,14 +2975,8 @@ extra_law_events.30 = {
 		add_enactment_modifier = {
 			name = amendment_compromise_modifier
 		}
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
-		add_radicals = {
-			value = very_small_radicals
-			strata = lower
-		}
+		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
+		discriminated_pops_radicalism_effect = { VALUE = very_small_radicals }
 	}
 
 	option = { # Community service alternative (compromise when passing tough law)

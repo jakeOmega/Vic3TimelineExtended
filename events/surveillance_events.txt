@@ -44,10 +44,8 @@ surveillance_events.1 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Prosecute the whistleblower
@@ -76,10 +74,10 @@ surveillance_events.1 = {
 		add_radicals = {
 			value = small_radicals
 			pop_type = academics
-		}		add_loyalists = {
-			value = very_small_radicals
-			strata = upper
-		}	}
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	}
 }
 
 # Event 2: Data Breach
@@ -122,10 +120,8 @@ surveillance_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		add_radicals = {
-			value = very_small_radicals
-			strata = upper
-		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Use breach to justify more surveillance
@@ -154,10 +150,9 @@ surveillance_events.2 = {
 		add_radicals = {
 			value = very_small_radicals
 			pop_type = academics
-		}		add_loyalists = {
-			value = very_small_radicals
-			strata = upper
-		}	}
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
 }
 
 # Event 3: Hacker Collective Attack
