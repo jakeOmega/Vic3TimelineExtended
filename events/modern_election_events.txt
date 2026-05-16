@@ -56,7 +56,10 @@ modern_election_events.1 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small_decrease }
 		}
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_unregulated_internet } add = 3 }
+		}
 	}
 
 	option = { # Let the opposition have their moment
@@ -66,13 +69,20 @@ modern_election_events.1 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_freedom_of_information } add = 2 }
+		}
 	}
 
 	option = { # Call for digital restraint
 		name = modern_election_events.1.c
 		add_modifier = { name = me_digital_decorum_modifier days = short_modifier_time }
-		ai_chance = { base = 2 }
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { has_law = law_type:law_state_controlled_internet } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_ministry_of_thought_control } add = 3 }
+		}
 	}
 }
 
@@ -132,7 +142,11 @@ modern_election_events.2 = {
 			scope:opp_party = { add_momentum = momentum_large_decrease }
 		}
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_fascist } } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_outlawed_dissent } add = 2 }
+		}
 	}
 
 	option = { # Publicly expose the forgery
@@ -144,7 +158,10 @@ modern_election_events.2 = {
 		}
 		add_loyalists = { value = small_radicals }
 		add_modifier = { name = me_deepfake_exposed_modifier days = short_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 3 }
+		}
 	}
 
 	option = { # Ban AI-generated campaign content
@@ -155,7 +172,11 @@ modern_election_events.2 = {
 		}
 		add_modifier = { name = me_ai_content_ban_modifier days = normal_modifier_time }
 		add_loyalists = { value = medium_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_state_controlled_internet } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_strong_privacy_rights } add = 2 }
+		}
 	}
 }
 
@@ -221,7 +242,11 @@ modern_election_events.3 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_climate_pledge_modifier days = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { any_active_party = { is_party_type = green_party is_marginal = no } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_ministry_of_the_environment } add = 3 }
+		}
 	}
 
 	option = { # Double down on economic growth
@@ -235,7 +260,11 @@ modern_election_events.3 = {
 			scope:green_scope = { add_momentum = momentum_medium_decrease }
 		}
 		add_radicals = { value = small_radicals strata = lower }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_no_ministry_of_the_environment } add = 2 }
+		}
 	}
 
 	option = { # Form a bipartisan climate task force
@@ -250,7 +279,10 @@ modern_election_events.3 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 2 }
+		}
 	}
 }
 
@@ -308,7 +340,11 @@ modern_election_events.4 = {
 			scope:opp_party = { add_momentum = momentum_small_decrease }
 		}
 		add_radicals = { value = small_radicals strata = middle }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_minimal_privacy_protection } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_unregulated_internet } add = 2 }
+		}
 	}
 
 	option = { # Reject the practice outright
@@ -318,7 +354,10 @@ modern_election_events.4 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small }
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_strong_privacy_rights } add = 3 }
+		}
 	}
 
 	option = { # Regulate data use in campaigns
@@ -332,7 +371,11 @@ modern_election_events.4 = {
 		}
 		add_modifier = { name = me_data_regulation_modifier days = normal_modifier_time }
 		add_loyalists = { value = medium_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_moderate_data_privacy } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_strong_privacy_rights } add = 3 }
+		}
 	}
 }
 
@@ -401,7 +444,10 @@ modern_election_events.5 = {
 			scope:populist_scope = { add_momentum = momentum_small_decrease }
 		}
 		add_radicals = { value = small_radicals strata = lower }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party is_marginal = no } } add = 3 }
+		}
 	}
 
 	option = { # Dismiss them as demagogues
@@ -415,7 +461,11 @@ modern_election_events.5 = {
 			limit = { NOT = { exists = scope:populist_scope } exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_wealth_voting } add = 3 }
+		}
 	}
 
 	option = { # Engage with grassroots concerns
@@ -430,7 +480,11 @@ modern_election_events.5 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_universal_suffrage } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_publicly_funded_elections } add = 2 }
+		}
 	}
 }
 
@@ -491,7 +545,11 @@ modern_election_events.6 = {
 			scope:opp_party = { add_momentum = momentum_medium_decrease }
 		}
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_fascist } } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_outlawed_dissent } add = 2 }
+		}
 	}
 
 	option = { # Launch a public investigation
@@ -499,13 +557,21 @@ modern_election_events.6 = {
 		default_option = yes
 		add_modifier = { name = me_foreign_interference_investigation_modifier days = normal_modifier_time }
 		add_loyalists = { value = medium_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_freedom_of_information } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_open_government } add = 3 }
+		}
 	}
 
 	option = { # Strengthen cyber defenses silently
 		name = modern_election_events.6.c
 		add_modifier = { name = me_cyber_defense_modifier days = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_state_secrets } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+		}
 	}
 }
 
@@ -567,7 +633,11 @@ modern_election_events.7 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
+			modifier = { trigger = { ig:ig_industrialists = { is_in_government = yes } } add = 3 }
+		}
 	}
 
 	option = { # Denounce corporate influence
@@ -579,7 +649,11 @@ modern_election_events.7 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ig:ig_trade_unions = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_cooperative_ownership } add = 3 }
+		}
 	}
 
 	option = { # Match their spending with party funds
@@ -589,7 +663,10 @@ modern_election_events.7 = {
 			scope:labor_party = { add_momentum = momentum_small }
 		}
 		add_modifier = { name = me_campaign_spending_spree_modifier days = short_modifier_time }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_publicly_funded_elections } add = 3 }
+		}
 	}
 }
 
@@ -647,7 +724,10 @@ modern_election_events.8 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals strata = lower }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_universal_suffrage } add = 3 }
+		}
 	}
 
 	option = { # Dismiss youth politics as naive
@@ -657,7 +737,11 @@ modern_election_events.8 = {
 			scope:govt_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = small_radicals strata = lower }
-		ai_chance = { base = 2 }
+		ai_chance = {
+			base = 2
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_wealth_voting } add = 3 }
+		}
 	}
 
 	option = { # Channel their energy into civic reform
@@ -679,7 +763,11 @@ modern_election_events.8 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = medium_radicals strata = lower }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_comprehensive_rights } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_full_equality_and_protection } add = 5 }
+		}
 	}
 }
 
@@ -758,7 +846,10 @@ modern_election_events.9 = {
 			}
 		}
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_jingoist } } add = 2 }
+		}
 	}
 
 	option = { # Take the high road
@@ -775,7 +866,10 @@ modern_election_events.9 = {
 				scope:opp_party = { add_momentum = momentum_small_decrease }
 			}
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_freedom_of_conscience } add = 2 }
+		}
 	}
 
 	option = { # Spin it into a relatable moment
@@ -792,7 +886,10 @@ modern_election_events.9 = {
 			}
 		}
 		add_modifier = { name = me_media_savvy_modifier days = short_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party } } add = 3 }
+		}
 	}
 }
 
@@ -844,13 +941,19 @@ modern_election_events.10 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party } } add = 3 }
+		}
 	}
 
 	option = { # Distance from celebrity politics
 		name = modern_election_events.10.b
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 2 }
+		}
 	}
 
 	option = { # Recruit your own celebrity endorsement
@@ -863,7 +966,10 @@ modern_election_events.10 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small }
 		}
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party } } add = 2 }
+		}
 	}
 }
 
@@ -920,7 +1026,11 @@ modern_election_events.11 = {
 			limit = { exists = scope:opp_party }
 			scope:opp_party = { add_momentum = momentum_small_decrease }
 		}
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_ministry_of_thought_control } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_ministry_of_propaganda } add = 3 }
+		}
 	}
 
 	option = { # Dismiss it as mere propaganda
@@ -930,7 +1040,10 @@ modern_election_events.11 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 3 }
+		}
 	}
 
 	option = { # Counter with our own broadcast
@@ -944,7 +1057,10 @@ modern_election_events.11 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_ministry_of_propaganda } add = 2 }
+		}
 	}
 }
 
@@ -1000,7 +1116,11 @@ modern_election_events.12 = {
 			scope:govt_party = { add_momentum = momentum_large }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ig:ig_armed_forces = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_mass_conscription } add = 3 }
+		}
 	}
 
 	option = { # Question their fitness for civilian office
@@ -1011,7 +1131,10 @@ modern_election_events.12 = {
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_professional_army } add = 2 }
+		}
 	}
 
 	option = { # Challenge them to a policy debate
@@ -1025,7 +1148,10 @@ modern_election_events.12 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 2 }
+		}
 	}
 }
 
@@ -1087,7 +1213,11 @@ modern_election_events.13 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ig:ig_industrialists = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_strict_ip_protection } add = 2 }
+		}
 	}
 
 	option = { # Reject the press baron's influence
@@ -1098,7 +1228,11 @@ modern_election_events.13 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_freedom_of_information } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 2 }
+		}
 	}
 
 	option = { # Negotiate editorial independence
@@ -1108,7 +1242,10 @@ modern_election_events.13 = {
 			scope:press_party = { add_momentum = momentum_small }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_publicly_funded_elections } add = 2 }
+		}
 	}
 }
 
@@ -1169,7 +1306,11 @@ modern_election_events.14 = {
 		}
 		add_modifier = { name = me_anti_communist_campaign_modifier days = normal_modifier_time }
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_fascist } } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_outlawed_dissent } add = 3 }
+		}
 	}
 
 	option = { # Defend civil liberties
@@ -1179,7 +1320,11 @@ modern_election_events.14 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_right_of_assembly } add = 3 }
+		}
 	}
 
 	option = { # Propose a bipartisan anti-extremism commission
@@ -1194,7 +1339,10 @@ modern_election_events.14 = {
 		}
 		add_loyalists = { value = small_radicals strata = middle }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 2 }
+		}
 	}
 }
 
@@ -1250,7 +1398,11 @@ modern_election_events.15 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_large }
 		}
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ig:ig_industrialists = { is_in_government = yes } } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
+		}
 	}
 
 	option = { # Warn that bubbles always burst
@@ -1260,7 +1412,11 @@ modern_election_events.15 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals strata = middle }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_command_economy } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_cooperative_ownership } add = 2 }
+		}
 	}
 
 	option = { # Promise to share the wealth with everyone
@@ -1275,7 +1431,11 @@ modern_election_events.15 = {
 		}
 		add_loyalists = { value = small_radicals strata = lower }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_wage_subsidies } add = 3 }
+		}
 	}
 }
 
@@ -1330,7 +1490,11 @@ modern_election_events.16 = {
 		add_modifier = { name = me_equal_rights_platform_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = upper }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_comprehensive_rights } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_full_equality_and_protection } add = 5 }
+		}
 	}
 
 	option = { # Defend traditions and the status quo
@@ -1342,7 +1506,11 @@ modern_election_events.16 = {
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = lower }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_racial_segregation } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_minority_rights_discrimination } add = 3 }
+		}
 	}
 
 	option = { # Propose gradual, measured reform
@@ -1357,7 +1525,10 @@ modern_election_events.16 = {
 		}
 		add_loyalists = { value = small_radicals }
 		add_radicals = { value = very_small_radicals strata = middle }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_protected_class } add = 3 }
+		}
 	}
 }
 
@@ -1410,7 +1581,10 @@ modern_election_events.17 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_space_program_pledge_modifier days = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ig:ig_intelligentsia = { is_in_government = yes } } add = 3 }
+		}
 	}
 
 	option = { # Redirect space funds to earthbound problems
@@ -1420,7 +1594,11 @@ modern_election_events.17 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals strata = lower }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_old_age_pension } add = 2 }
+			modifier = { trigger = { has_law = law_type:law_wage_subsidies } add = 2 }
+		}
 	}
 
 	option = { # Frame space as a matter of national prestige
@@ -1430,7 +1608,11 @@ modern_election_events.17 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_small }
 		}
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ig:ig_armed_forces = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_mass_conscription } add = 2 }
+		}
 	}
 }
 
@@ -1483,7 +1665,11 @@ modern_election_events.18 = {
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_outlawed_dissent } add = 3 }
+		}
 	}
 
 	option = { # Embrace the youth movement
@@ -1496,7 +1682,11 @@ modern_election_events.18 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = very_small_radicals strata = upper }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_right_of_assembly } add = 3 }
+		}
 	}
 
 	option = { # Open a dialogue with student leaders
@@ -1511,7 +1701,10 @@ modern_election_events.18 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_dedicated_police } add = 2 }
+		}
 	}
 }
 
@@ -1586,7 +1779,10 @@ modern_election_events.19 = {
 				scope:govt_party = { add_momentum = momentum_medium_decrease }
 			}
 		}
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party } } add = 2 }
+		}
 	}
 
 	option = { # Present a calm, statesmanlike image
@@ -1596,7 +1792,10 @@ modern_election_events.19 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_small }
 		}
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 2 }
+		}
 	}
 
 	option = { # Make a bold live policy announcement
@@ -1616,7 +1815,10 @@ modern_election_events.19 = {
 				add_radicals = { value = small_radicals }
 			}
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party } } add = 2 }
+		}
 	}
 }
 
@@ -1671,7 +1873,11 @@ modern_election_events.20 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = middle }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_womens_suffrage } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_women_in_the_workplace } add = 3 }
+		}
 	}
 
 	option = { # Appeal to traditional values
@@ -1682,7 +1888,11 @@ modern_election_events.20 = {
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_no_womens_rights } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_state_religion } add = 3 }
+		}
 	}
 
 	option = { # Adopt women's rights as a core platform plank
@@ -1704,7 +1914,11 @@ modern_election_events.20 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = medium_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_comprehensive_rights } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_full_equality_and_protection } add = 5 }
+		}
 	}
 }
 
@@ -1758,7 +1972,11 @@ modern_election_events.21 = {
 		}
 		add_modifier = { name = me_pollution_cleanup_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_ministry_of_the_environment } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 2 }
+		}
 	}
 
 	option = { # Defend jobs over the environment
@@ -1769,7 +1987,11 @@ modern_election_events.21 = {
 		}
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
+			modifier = { trigger = { ig:ig_trade_unions = { is_in_government = yes } } add = 3 }
+		}
 	}
 
 	option = { # Invest in green technology
@@ -1784,7 +2006,10 @@ modern_election_events.21 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ig:ig_industrialists = { is_in_government = yes } } add = 2 }
+		}
 	}
 }
 
@@ -1843,7 +2068,11 @@ modern_election_events.22 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_small_decrease }
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_wealth_voting } add = 3 }
+		}
 	}
 
 	option = { # Embrace populist appeal
@@ -1854,7 +2083,11 @@ modern_election_events.22 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_universal_suffrage } add = 2 }
+		}
 	}
 
 	option = { # Challenge them to debate policy substance
@@ -1864,7 +2097,10 @@ modern_election_events.22 = {
 			limit = { exists = scope:govt_party }
 			scope:govt_party = { add_momentum = momentum_small }
 		}
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 2 }
+		}
 	}
 }
 
@@ -1917,7 +2153,11 @@ modern_election_events.23 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_open_source_genetics } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_corporate_genetic_licensing } add = 3 }
+		}
 	}
 
 	option = { # Call for an outright moratorium
@@ -1928,7 +2168,11 @@ modern_election_events.23 = {
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_ban_on_genetic_modification } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_state_religion } add = 3 }
+		}
 	}
 
 	option = { # Establish a genetics ethics commission
@@ -1944,7 +2188,10 @@ modern_election_events.23 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_corporate_genetic_licensing } add = 3 }
+		}
 	}
 }
 
@@ -1998,7 +2245,12 @@ modern_election_events.24 = {
 		add_modifier = { name = me_security_crackdown_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { is_at_war = yes } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+		}
 	}
 
 	option = { # Warn against eroding civil liberties
@@ -2009,7 +2261,11 @@ modern_election_events.24 = {
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_protected_speech } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_right_of_assembly } add = 3 }
+		}
 	}
 
 	option = { # Propose measured, bipartisan security reform
@@ -2025,7 +2281,10 @@ modern_election_events.24 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_dedicated_police } add = 2 }
+		}
 	}
 }
 
@@ -2078,7 +2337,11 @@ modern_election_events.25 = {
 		}
 		add_modifier = { name = me_security_crackdown_modifier days = normal_modifier_time }
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_intrusive_surveillance } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+		}
 	}
 
 	option = { # Condemn the surveillance program
@@ -2093,7 +2356,11 @@ modern_election_events.25 = {
 			scope:govt_party = { add_momentum = momentum_medium_decrease }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_strong_privacy_rights } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_freedom_of_information } add = 3 }
+		}
 	}
 
 	option = { # Pass transparency legislation
@@ -2104,7 +2371,10 @@ modern_election_events.25 = {
 		}
 		add_modifier = { name = me_transparency_act_modifier days = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_open_government } add = 5 }
+		}
 	}
 }
 
@@ -2157,7 +2427,11 @@ modern_election_events.26 = {
 		}
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_protectionism } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_mercantilism } add = 3 }
+		}
 	}
 
 	option = { # Champion free trade and open markets
@@ -2169,7 +2443,11 @@ modern_election_events.26 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_free_trade } add = 5 }
+			modifier = { trigger = { any_active_party = { is_party_type = free_trade_party } } add = 3 }
+		}
 	}
 
 	option = { # Propose fair trade reforms
@@ -2184,7 +2462,10 @@ modern_election_events.26 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_protectionism } add = 2 }
+		}
 	}
 }
 
@@ -2239,7 +2520,11 @@ modern_election_events.27 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = lower }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_no_migration_controls } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_multicultural } add = 3 }
+		}
 	}
 
 	option = { # Secure our borders first
@@ -2253,7 +2538,11 @@ modern_election_events.27 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_closed_borders } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_national_supremacy } add = 3 }
+		}
 	}
 
 	option = { # Invest in climate solutions at the source
@@ -2267,7 +2556,11 @@ modern_election_events.27 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_ministry_of_the_environment } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_ministry_of_international_aid } add = 3 }
+		}
 	}
 }
 
@@ -2319,7 +2612,11 @@ modern_election_events.28 = {
 			scope:govt_party = { add_momentum = momentum_large }
 		}
 		add_radicals = { value = small_radicals strata = middle }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_technocracy } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_algorithmic_governance } add = 5 }
+		}
 	}
 
 	option = { # Reject machine politics entirely
@@ -2329,7 +2626,10 @@ modern_election_events.28 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_strong_privacy_rights } add = 3 }
+		}
 	}
 
 	option = { # Disclose AI use and campaign transparently
@@ -2342,7 +2642,11 @@ modern_election_events.28 = {
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_open_government } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_moderate_data_privacy } add = 2 }
+		}
 	}
 }
 
@@ -2396,7 +2700,11 @@ modern_election_events.29 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_universal_basic_income } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_command_economy } add = 3 }
+		}
 	}
 
 	option = { # Denounce it as fiscal irresponsibility
@@ -2407,7 +2715,11 @@ modern_election_events.29 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_no_social_security } add = 3 }
+		}
 	}
 
 	option = { # Propose a limited pilot program
@@ -2422,7 +2734,11 @@ modern_election_events.29 = {
 		}
 		add_loyalists = { value = small_radicals }
 		add_radicals = { value = very_small_radicals strata = upper }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_wage_subsidies } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 2 }
+		}
 	}
 }
 
@@ -2474,7 +2790,11 @@ modern_election_events.30 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { any_interest_group = { has_ideology = ideology:ideology_jingoist } } add = 2 }
+			modifier = { trigger = { has_law = law_type:law_isolationism } add = 2 }
+		}
 	}
 
 	option = { # Demand an election integrity review
@@ -2485,7 +2805,11 @@ modern_election_events.30 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_freedom_of_information } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_open_government } add = 3 }
+		}
 	}
 
 	option = { # Deploy military cyber countermeasures
@@ -2493,7 +2817,11 @@ modern_election_events.30 = {
 		add_modifier = { name = me_election_infrastructure_hardened_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = very_small_radicals strata = middle }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ig:ig_armed_forces = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+		}
 	}
 }
 
@@ -2547,7 +2875,12 @@ modern_election_events.31 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_unrestricted_augmentation } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_mandatory_augmentation } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_regulated_augmentation_market } add = 2 }
+		}
 	}
 
 	option = { # Demand only natural-born candidates
@@ -2559,7 +2892,12 @@ modern_election_events.31 = {
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_no_augmentation } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_ban_on_genetic_modification } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_state_religion } add = 3 }
+		}
 	}
 
 	option = { # Regulate enhancement but allow candidacy
@@ -2574,7 +2912,11 @@ modern_election_events.31 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_medical_augmentation_only } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_regulated_augmentation_market } add = 3 }
+		}
 	}
 }
 
@@ -2627,7 +2969,11 @@ modern_election_events.32 = {
 			scope:opp_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_universal_suffrage } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_devolution } add = 3 }
+		}
 	}
 
 	option = { # They left our soil — no representation
@@ -2637,7 +2983,11 @@ modern_election_events.32 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		add_radicals = { value = small_radicals }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_national_supremacy } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 3 }
+		}
 	}
 
 	option = { # Offer nonvoting observer status
@@ -2652,7 +3002,10 @@ modern_election_events.32 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_federal_system } add = 2 }
+		}
 	}
 }
 
@@ -2706,7 +3059,12 @@ modern_election_events.33 = {
 			scope:opp_party = { add_momentum = momentum_large }
 		}
 		add_radicals = { value = small_radicals strata = upper }
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { has_law = law_type:law_technocracy } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_direct_democracy } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_algorithmic_governance } add = 5 }
+		}
 	}
 
 	option = { # Defend traditional elections
@@ -2717,7 +3075,12 @@ modern_election_events.33 = {
 			scope:govt_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { has_law = law_type:law_universal_suffrage } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_landed_voting } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_wealth_voting } add = 3 }
+		}
 	}
 
 	option = { # Propose voluntary neural polling as a supplement
@@ -2731,7 +3094,10 @@ modern_election_events.33 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals strata = upper }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_technocracy } add = 2 }
+		}
 	}
 }
 
@@ -2784,7 +3150,11 @@ modern_election_events.34 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ig:ig_industrialists = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_commercialized_agriculture } add = 3 }
+		}
 	}
 
 	option = { # Defend traditional farming
@@ -2797,7 +3167,12 @@ modern_election_events.34 = {
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ig:ig_rural_folk = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_agrarianism } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_tenant_farmers } add = 2 }
+		}
 	}
 
 	option = { # Promise coexistence of both approaches
@@ -2811,7 +3186,10 @@ modern_election_events.34 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals strata = middle }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 2 }
+		}
 	}
 }
 
@@ -2864,7 +3242,12 @@ modern_election_events.35 = {
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { ig:ig_industrialists = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_laissez_faire } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_technocracy } add = 3 }
+		}
 	}
 
 	option = { # Protect human workers at all costs
@@ -2876,7 +3259,11 @@ modern_election_events.35 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals strata = lower }
-		ai_chance = { base = 5 }
+		ai_chance = {
+			base = 5
+			modifier = { trigger = { ig:ig_trade_unions = { is_in_government = yes } } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_worker_protections } add = 3 }
+		}
 	}
 
 	option = { # Phase in automation with retraining programs
@@ -2891,6 +3278,10 @@ modern_election_events.35 = {
 			scope:opp_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals strata = middle }
-		ai_chance = { base = 4 }
+		ai_chance = {
+			base = 4
+			modifier = { trigger = { has_law = law_type:law_wage_subsidies } add = 3 }
+			modifier = { trigger = { has_law = law_type:law_interventionism } add = 2 }
+		}
 	}
 }
