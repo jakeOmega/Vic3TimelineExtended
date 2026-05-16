@@ -60,7 +60,7 @@ At the top of `scripts/nightly_audit_select.py`:
 | Constant | Default | Purpose |
 |---|---|---|
 | `LINE_BUDGET` | 2500 | Total mod-content lines per night. Raise for deeper coverage / lower for tighter focus. |
-| `FILE_CAP` | 8 | Max files per night. |
+| `FILE_CAP` | 15 | Max files per night. |
 | `SLICE_CAP` | 600 | Max lines per file slice. Larger slice = fewer files per night. |
 | `RECENT_FINDINGS_CAP` | 3 | Cap on `recent_findings` for the recency boost. |
 | `DECAY_DAYS` | 90 | After this many days, `recent_findings` decays by half. |

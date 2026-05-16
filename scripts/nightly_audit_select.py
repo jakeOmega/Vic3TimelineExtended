@@ -30,7 +30,7 @@ AUTOGEN_REGISTRY = REPO_ROOT / "docs/auto_generated_files.md"
 CHECKLIST_DIR = REPO_ROOT / "docs/audits/nightly_checklists"
 
 LINE_BUDGET = 2500
-FILE_CAP = 8
+FILE_CAP = 15
 SLICE_CAP = 600
 RECENT_FINDINGS_CAP = 3
 LARGE_NUM = 100_000
