@@ -698,6 +698,7 @@ sr_mission_failure_effect = {
 		days = normal_modifier_time
 		is_decaying = yes
 	}
+	set_variable = { name = sr_failure_cooldown value = 6 months = yes }
 	add_radicals = { value = medium_radicals pop_type = academics }
 }
 
@@ -708,6 +709,7 @@ sr_mission_catastrophic_failure_effect = {
 		days = long_modifier_time
 		is_decaying = yes
 	}
+	set_variable = { name = sr_failure_cooldown value = 6 months = yes }
 	add_radicals = { value = large_radicals pop_type = academics }
 	add_radicals = { value = medium_radicals }
 }
