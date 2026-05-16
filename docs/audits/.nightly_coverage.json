@@ -373,6 +373,87 @@
       "last_audited": "2026-05-16",
       "audit_count": 1,
       "recent_findings": 0
+    },
+    "common/static_modifiers/extra_modifiers.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/modifier_type_definitions/cultural_hegemony_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/power_bloc_extra_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/homelands_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/colonial_empire_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/space_race_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/subjugation_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/static_modifiers/ministry_law_enactment_modifiers.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/banking_cycle_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/sol_expectations_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/nuclear_program_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/static_modifiers/sol_expectations_modifiers.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/tech_gate_modifier_types.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/static_modifiers/law_enactment_modifiers.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 1
     }
   }
 }

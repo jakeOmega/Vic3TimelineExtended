@@ -1,6 +1,6 @@
 {
   "date": "2026-05-16",
-  "total_lines": 2494,
+  "total_lines": 2064,
   "line_budget": 2500,
   "file_cap": 15,
   "slice_cap": 600,
@@ -13,7 +13,7 @@
   },
   "targets": [
     {
-      "path": "common/mobilization_options/extra_mobilization_options.txt",
+      "path": "common/static_modifiers/extra_modifiers.txt",
       "line_range": [
         1,
         600
@@ -21,174 +21,190 @@
       "lines": 600,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/mobilization_option_groups/extra_mobilization_groups.txt",
+      "path": "common/modifier_type_definitions/cultural_hegemony_modifier_types.txt",
       "line_range": null,
-      "lines": 4,
+      "lines": 31,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/_meta/duplicate_image_allowlist.yml",
-      "line_range": [
-        1,
-        600
-      ],
-      "lines": 600,
-      "area": "scripted_effects_and_triggers",
-      "docs": [],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/battle_conditions/extra_battle_conditions.txt",
+      "path": "common/modifier_type_definitions/power_bloc_extra_modifier_types.txt",
       "line_range": null,
-      "lines": 296,
+      "lines": 140,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/_meta/modifier_patterns.yml",
+      "path": "common/modifier_type_definitions/homelands_modifier_types.txt",
       "line_range": null,
-      "lines": 240,
-      "area": "scripted_effects_and_triggers",
-      "docs": [],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/ship_modifications/extra_utility_modifications.txt",
-      "line_range": null,
-      "lines": 202,
+      "lines": 49,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/combat_unit_groups/extra_combat_unit_groups.txt",
+      "path": "common/modifier_type_definitions/colonial_empire_modifier_types.txt",
       "line_range": null,
-      "lines": 13,
+      "lines": 45,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/mobilization_options/_mobilization_options.info",
+      "path": "common/modifier_type_definitions/space_race_modifier_types.txt",
       "line_range": null,
-      "lines": 87,
+      "lines": 43,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/scripted_triggers/irredentism_triggers.txt",
+      "path": "common/modifier_type_definitions/subjugation_modifier_types.txt",
       "line_range": null,
-      "lines": 205,
-      "area": "scripted_effects_and_triggers",
+      "lines": 70,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/on_actions/social_tensions_on_actions.txt",
+      "path": "common/static_modifiers/ministry_law_enactment_modifiers.txt",
       "line_range": null,
-      "lines": 29,
-      "area": "scripted_effects_and_triggers",
+      "lines": 198,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/on_actions/modern_election_on_actions.txt",
+      "path": "common/modifier_type_definitions/banking_cycle_modifier_types.txt",
       "line_range": null,
-      "lines": 50,
-      "area": "scripted_effects_and_triggers",
+      "lines": 75,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/script_values/te_construction_market_sector_placement_values.txt",
+      "path": "common/modifier_type_definitions/sol_expectations_modifier_types.txt",
       "line_range": null,
-      "lines": 100,
-      "area": "scripted_effects_and_triggers",
+      "lines": 109,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/script_values/te_map_mode_script_values.txt",
+      "path": "common/modifier_type_definitions/nuclear_program_modifier_types.txt",
       "line_range": null,
-      "lines": 39,
-      "area": "scripted_effects_and_triggers",
+      "lines": 55,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/scripted_triggers/resource_discovery_triggers.txt",
+      "path": "common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt",
       "line_range": null,
-      "lines": 6,
-      "area": "scripted_effects_and_triggers",
+      "lines": 69,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/on_actions/legacy_modifier_cleanup.txt",
+      "path": "common/static_modifiers/sol_expectations_modifiers.txt",
       "line_range": null,
-      "lines": 23,
-      "area": "scripted_effects_and_triggers",
+      "lines": 14,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/modifier_type_definitions/tech_gate_modifier_types.txt",
+      "line_range": null,
+      "lines": 313,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/static_modifiers/law_enactment_modifiers.txt",
+      "line_range": null,
+      "lines": 253,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
       ],
       "last_audited": null,
       "audit_count": 0,
