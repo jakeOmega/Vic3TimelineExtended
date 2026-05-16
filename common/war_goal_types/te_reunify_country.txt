@@ -15,8 +15,6 @@
 # states (vanilla_diplomacy_reference.md §5.3) -- we don't double-tax by
 # halving on top. The wargoal inherits annex_country's infamy structure
 # and lets the engine apply the cultural discount.
-#
-# See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
 # ============================================================================
 
 te_reunify_country = {

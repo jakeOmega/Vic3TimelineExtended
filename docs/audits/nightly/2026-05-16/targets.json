@@ -1,6 +1,6 @@
 {
   "date": "2026-05-16",
-  "total_lines": 2497,
+  "total_lines": 2500,
   "line_budget": 2500,
   "file_cap": 15,
   "slice_cap": 600,
@@ -11,192 +11,142 @@
   },
   "targets": [
     {
-      "path": "common/journal_entries/je_colonial_empire.txt",
+      "path": "common/ship_name_definitions/99_extra_ship_name_definitions_fallbacks.txt",
       "line_range": null,
-      "lines": 580,
-      "area": "journal_entries",
+      "lines": 307,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/systems/journal_entry_systems.md",
-        "docs/systems/mod_systems.md"
+        "docs/vanilla/vanilla_war_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/scripted_effects/ig_approval_effects.txt",
+      "path": "common/defines/extra_defines.txt",
       "line_range": null,
-      "lines": 23,
+      "lines": 143,
       "area": "scripted_effects_and_triggers",
+      "docs": [],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/war_goal_types/te_reunify_country.txt",
+      "line_range": null,
+      "lines": 208,
+      "area": "production_methods_and_buildings",
       "docs": [
-        "docs/audits/script_parameterization_audit.md"
+        "docs/vanilla/vanilla_war_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "events/modern_election_events.txt",
+      "path": "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt",
+      "line_range": null,
+      "lines": 110,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt.bak",
+      "line_range": null,
+      "lines": 108,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ship_types/extra_ship_types.txt",
       "line_range": [
         1,
         600
       ],
       "lines": 600,
-      "area": "events",
-      "docs": [
-        "docs/guides/event_creation_guide.md",
-        "docs/vanilla/vanilla_politics_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/modifier_type_definitions/un_membership_modifier_types.txt",
-      "line_range": null,
-      "lines": 12,
       "area": "production_methods_and_buildings",
       "docs": [
-        "docs/engine/vic3_modifier_type_definitions_reference.md",
-        "docs/engine/modifier_patterns.md"
+        "docs/vanilla/vanilla_war_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/modifier_type_definitions/global_warming_modifier_types.txt",
+      "path": "common/combat_unit_types/extra_combat_units.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gfx/interface/icons/company_icons/historical_company_icons/resize.bat",
+      "line_range": null,
+      "lines": 28,
+      "area": "general",
+      "docs": [],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gfx/portraits/portrait_modifiers/te_clothes.txt",
       "line_range": null,
       "lines": 91,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/engine/vic3_modifier_type_definitions_reference.md",
-        "docs/engine/modifier_patterns.md"
-      ],
+      "area": "general",
+      "docs": [],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/prestige_goods/extra_prestige_goods.txt",
+      "path": "common/decisions/extra_decisions.txt",
       "line_range": null,
-      "lines": 95,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/vanilla/vanilla_economy_reference.md"
-      ],
+      "lines": 303,
+      "area": "scripted_effects_and_triggers",
+      "docs": [],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/institutions/extra_institutions.txt",
-      "line_range": null,
-      "lines": 204,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_politics_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/static_modifiers/heir_education_modifiers.txt",
-      "line_range": null,
-      "lines": 29,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/engine/vic3_modifier_type_definitions_reference.md",
-        "docs/engine/modifier_patterns.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "events/social_tensions_events.txt",
-      "line_range": [
-        1,
-        600
-      ],
-      "lines": 600,
-      "area": "events",
-      "docs": [
-        "docs/guides/event_creation_guide.md",
-        "docs/vanilla/vanilla_politics_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/ideologies/manual_update_ideologies.txt",
+      "path": "common/discrimination_traits/extra_traits.txt",
       "line_range": null,
       "lines": 1,
       "area": "laws_and_politics",
       "docs": [
-        "docs/vanilla/vanilla_politics_reference.md"
+        "docs/vanilla/vanilla_pops_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/game_concepts/extra_concepts.txt",
-      "line_range": null,
-      "lines": 166,
-      "area": "localization",
-      "docs": [
-        "docs/engine/concept_reference_report.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/scripted_effects/dp_escalation_effects.txt",
-      "line_range": null,
-      "lines": 63,
-      "area": "scripted_effects_and_triggers",
-      "docs": [
-        "docs/audits/script_parameterization_audit.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/on_actions/repeatable_events_on_actions.txt",
-      "line_range": null,
-      "lines": 15,
-      "area": "scripted_effects_and_triggers",
-      "docs": [
-        "docs/audits/script_parameterization_audit.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/country_ranks/extra_country_ranks.txt",
-      "line_range": null,
-      "lines": 17,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_formable_countries_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/political_movements/modified_political_movements.txt",
+      "path": "common/scripted_rules/extra_rules.txt",
       "line_range": null,
       "lines": 1,
-      "area": "laws_and_politics",
+      "area": "scripted_effects_and_triggers",
       "docs": [
-        "docs/vanilla/vanilla_politics_reference.md"
+        "docs/audits/script_parameterization_audit.md"
       ],
       "last_audited": null,
       "audit_count": 0,
