@@ -15,16 +15,20 @@ File findings as GitHub issues; fix what's trivially fixable as PRs.
 - `docs/vanilla/CLAUDE.md`
 - `docs/audits/open_issues.md`
 - `docs/vanilla/vanilla_known_bugs.md`
+- `docs/systems/journal_entry_systems.md`
+- `docs/systems/mod_systems.md`
 - `docs/audits/script_parameterization_audit.md`
+- `docs/guides/event_creation_guide.md`
+- `docs/vanilla/vanilla_politics_reference.md`
 - `docs/engine/vic3_modifier_type_definitions_reference.md`
 - `docs/engine/modifier_patterns.md`
-- `docs/guides/event_creation_guide.md`
 - `docs/vanilla/vanilla_economy_reference.md`
-- `docs/systems/mod_systems.md`
-- `docs/vanilla/vanilla_diplomacy_reference.md`
-- `docs/vanilla/treaty_articles_reference.md`
+- `docs/engine/concept_reference_report.md`
+- `docs/vanilla/vanilla_formable_countries_reference.md`
 - `docs/audits/nightly_checklists/events.md`
+- `docs/audits/nightly_checklists/journal_entries.md`
 - `docs/audits/nightly_checklists/laws_and_politics.md`
+- `docs/audits/nightly_checklists/localization.md`
 - `docs/audits/nightly_checklists/production_methods_and_buildings.md`
 - `docs/audits/nightly_checklists/scripted_effects_and_triggers.md`
 
@@ -35,16 +39,23 @@ Also skim `gh issue list --search nightly-audit --state open --limit 30` and
 
 | # | File | Lines | Area | Last audited | Count | Recent findings |
 |---|---|---|---|---|---|---|
-| 1 | `common/on_actions/cultural_hegemony_on_actions.txt` | all (95) | scripted_effects_and_triggers | never | 0 | 0 |
-| 2 | `common/static_modifiers/te_construction_market_modifiers.txt` | all (18) | production_methods_and_buildings | never | 0 | 0 |
-| 3 | `events/te_construction_market_pulse_events.txt` | all (104) | events | never | 0 | 0 |
-| 4 | `events/te_map_modes_events.txt` | all (70) | events | never | 0 | 0 |
-| 5 | `common/on_actions/treaty_article_events_on_actions.txt` | all (38) | scripted_effects_and_triggers | never | 0 | 0 |
-| 6 | `common/diplomatic_actions/nuke.txt` | all (404) | laws_and_politics | never | 0 | 0 |
-| 7 | `common/scripted_triggers/wonder_triggers.txt` | all (109) | scripted_effects_and_triggers | never | 0 | 0 |
-| 8 | `common/scripted_progress_bars/un_progress_bars.txt` | all (10) | scripted_effects_and_triggers | never | 0 | 0 |
+| 1 | `common/journal_entries/je_colonial_empire.txt` | all (580) | journal_entries | never | 0 | 0 |
+| 2 | `common/scripted_effects/ig_approval_effects.txt` | all (23) | scripted_effects_and_triggers | never | 0 | 0 |
+| 3 | `events/modern_election_events.txt` | 1–600 (600) | events | never | 0 | 0 |
+| 4 | `common/modifier_type_definitions/un_membership_modifier_types.txt` | all (12) | production_methods_and_buildings | never | 0 | 0 |
+| 5 | `common/modifier_type_definitions/global_warming_modifier_types.txt` | all (91) | production_methods_and_buildings | never | 0 | 0 |
+| 6 | `common/prestige_goods/extra_prestige_goods.txt` | all (95) | production_methods_and_buildings | never | 0 | 0 |
+| 7 | `common/institutions/extra_institutions.txt` | all (204) | laws_and_politics | never | 0 | 0 |
+| 8 | `common/static_modifiers/heir_education_modifiers.txt` | all (29) | production_methods_and_buildings | never | 0 | 0 |
+| 9 | `events/social_tensions_events.txt` | 1–600 (600) | events | never | 0 | 0 |
+| 10 | `common/ideologies/manual_update_ideologies.txt` | all (1) | laws_and_politics | never | 0 | 0 |
+| 11 | `common/game_concepts/extra_concepts.txt` | all (166) | localization | never | 0 | 0 |
+| 12 | `common/scripted_effects/dp_escalation_effects.txt` | all (63) | scripted_effects_and_triggers | never | 0 | 0 |
+| 13 | `common/on_actions/repeatable_events_on_actions.txt` | all (15) | scripted_effects_and_triggers | never | 0 | 0 |
+| 14 | `common/country_ranks/extra_country_ranks.txt` | all (17) | laws_and_politics | never | 0 | 0 |
+| 15 | `common/political_movements/modified_political_movements.txt` | all (1) | laws_and_politics | never | 0 | 0 |
 
-**Budget**: 848 of 2500 lines, 8 of 8 files.
+**Budget**: 2497 of 2500 lines, 15 of 15 files.
 
 ## Focus ranking
 
