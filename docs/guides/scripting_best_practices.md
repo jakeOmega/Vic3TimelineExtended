@@ -2962,3 +2962,31 @@ Those countries pass `NOT = { has_modifier = X_modifier }` and re-trigger the gl
 **Join-time catch-up**: if the per-country modifier carries gameplay effects beyond gating, factor a catch-up scripted_effect (apply each ratified-state's modifier from its global flag, idempotently) and call it from every system-join callsite — late joiners then receive the in-force conventions' effects, matching in-fiction expectation. Idempotent (skip if modifier already present) makes it safe to call from any path.
 
 Repo example: `events/un_events.txt` `un_events.21` / `un_events.22` triggers now gate on `un_agency_itlos` / `un_agency_icc` (set in the `un_vote.2` "RESOLUTION PASSED" branch). `common/scripted_effects/un_vote_effects.txt` `un_apply_ratified_conventions` is called from `un_join_button`, `je_united_nations` monthly pulse treaty auto-enrollment, and `un_events.1` charter Option A.
+
+## `create_treaty` Effect for Forced/Imposed Treaties From Events
+
+The engine supports programmatic treaty creation from script effects via `create_treaty` (see `engine-docs/effects` for the full schema). Useful when an event narrative produces a structural bilateral relationship that should outlast a 3-year decaying modifier — e.g. neocolonial arrangements, post-war reparations, client-state economic concessions.
+
+Key fields:
+- `first_country` / `second_country` — the two parties.
+- `is_draft = no` — the treaty enters force immediately on the resolution date (vanilla default is `yes`, which would leave the treaty as a draft requiring proposal). Set `no` for "imposed" treaties.
+- `binding_period = { years = N }` — minimum duration before either side may withdraw.
+- `articles_to_create = { ... }` — list of article entries. Each `{ article = X source_country = Y target_country = Z inputs = { ... } }`. Directed articles (`kind = directed` on the article def) **must** specify source/target; mutual articles must not. `inputs` is empty for articles like `foreign_investment_rights`, `trade_privilege`, `alliance`; required for goods-transfer / state-cession / etc. (see article def's `required_inputs`).
+- `name` — loc key for the treaty's display name. **Use unquoted**, matching vanilla precedent in `treaty_of_london_events.txt` / `history/treaties/00_historical_treaties.txt` (`name = treaty_name_X`, not `name = "treaty_name_X"`). The mod state server tolerates both, but vanilla convention is unquoted.
+
+Each article's `usage_limit = once_per_side` means if a treaty already exists with the same source-target-article combination, the article add may be silently rejected. Real risk if vanilla diplomatic actions could have established the article earlier; cheap-but-defensive gate: `NOT = { any_scope_treaty = { binds = SECOND any_scope_article = { has_type = X source_country = FIRST } } }`.
+
+Reusability pattern: wrap `create_treaty` in a parameterized scripted_effect (`$FIRST$`, `$SECOND$`, `$YEARS$`, optionally per-article toggles) so future events fall back to the same shape. Repo example: `common/scripted_effects/decolonization.txt` `impose_neocolonial_investment_trade_treaty = { FIRST = ... SECOND = ... YEARS = 25 }` called from `decolonization_events.3` Option C — forges a 25-year binding treaty with `foreign_investment_rights` + `trade_privilege` both directed metropole→ex-colony.
+
+## `country_weekly_investment_pool_mult` Is Per-Week, Not Per-Year
+
+The mod-defined `country_weekly_investment_pool_mult` (`common/modifier_type_definitions/banking_cycle_modifier_types.txt`) multiplies the **weekly** investment-pool contribution, not the annual. Easy to swing 50× too strong if treated as a yearly rate.
+
+Vanilla cycle phases (`financial_cycle_phase_*_coop`) use ±0.015 per week as short-duration shock states. Linear approximation: 0.015 × 52 ≈ 80%/year — enormous, only sustainable for a few weeks at a time.
+
+Sizing guidance for decaying event modifiers:
+- 3-year decaying ceiling: ±0.005/wk (~25%/yr linear). Visible in tooltip; not unbalancing for a temporary state.
+- Higher (±0.01+) only for brief shock modifiers or one-shot pulses.
+- For long-term structural effects on large economies, the value rounds to 0 in the tooltip at the magnitudes that wouldn't unbalance — prefer a different lever (influence, loan-interest, treaty articles).
+
+Same trap applies to any other `country_weekly_*_mult` / `country_weekly_*_add` modifier — read the field name and confirm tick interval before sizing.

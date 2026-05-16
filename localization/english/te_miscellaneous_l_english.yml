@@ -2005,6 +2005,7 @@
  treaty_name_demilitarization_agreement:0 "Demilitarization Agreement"
  treaty_name_minority_rights_convention:0 "Convention on Minority Rights"
  treaty_name_nationalization_accord:0 "Nationalization Accord"
+ treaty_name_neocolonial_arrangement:0 "[FIRST_COUNTRY.GetAdjectiveNoFormatting]-[SECOND_COUNTRY.GetAdjectiveNoFormatting] Neocolonial Arrangement"
  treaty_name_open_door_agreement:0 "Open Door Agreement"
  treaty_name_privatization_mandate:0 "Privatization Mandate"
  treaty_name_public_health_cooperation_agreement:0 "Public Health Cooperation Agreement"

@@ -2092,6 +2092,22 @@ un_vote.2 = {
 				limit = { has_global_variable = un_vote_topic_decolonization }
 				custom_tooltip = un_vote_decolonization_passed_tt
 				change_variable = { name = un_authority add = 10 }
+				# Cash the loc promise of "Colonial powers face increased
+				# international pressure" — apply a one-shot decaying
+				# pressure modifier on every overseas-colonial owner.
+				hidden_effect = {
+					every_country = {
+						limit = {
+							any_scope_state = { is_overseas_colonial_state = yes }
+							NOT = { has_modifier = anti_colonial_momentum_modifier }
+						}
+						add_modifier = {
+							name = anti_colonial_momentum_modifier
+							days = normal_modifier_time
+							is_decaying = yes
+						}
+					}
+				}
 			}
 
 			# ---- Pandemic: WHO established ----
@@ -2158,9 +2174,9 @@ un_vote.2 = {
 						# Remove old cost to re-apply with updated count-based scaling
 						je:je_united_nations ?= { if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost } }
 						je:je_united_nations ?= { add_modifier = {
-							name = un_peacekeeping_contributor_cost
-							multiplier = un_peacekeeping_total_expense_value
-						} }
+								name = un_peacekeeping_contributor_cost
+								multiplier = un_peacekeeping_total_expense_value
+							} }
 						add_modifier = {
 							name = un_peacekeeping_cooldown
 							days = long_modifier_time

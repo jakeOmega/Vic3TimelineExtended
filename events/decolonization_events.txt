@@ -464,6 +464,11 @@ decolonization_events.3 = {
 				is_decaying = yes
 			}
 		}
+		impose_neocolonial_investment_trade_treaty = {
+			FIRST = root
+			SECOND = scope:rebellious_subject
+			YEARS = 25
+		}
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time

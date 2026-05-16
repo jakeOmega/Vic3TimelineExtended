@@ -740,7 +740,7 @@
  decolonization_events.21.d:0 "The [Concept('concept_great_power', 'great powers')] circle our young nation like hawks, each offering friendship and aid with strings carefully hidden. [SCOPE.sCountry('anti_colonial_gp').GetName] promises solidarity against imperialism. [SCOPE.sCountry('pro_colonial_gp').GetName] offers trade and investment. A growing movement among newly independent nations proposes a third way: non-alignment."
  decolonization_events.21.f:0 "\"They call it a 'sphere of influence',\" the foreign minister explained to the cabinet. \"What it means in practice is that you smile at one superpower and the other one stops selling you wheat.\"\n\n\"And if we smile at neither?\"\n\n\"Then both of them stop selling you wheat.\"\n\nThe cabinet considered this for some time. The agriculture minister opened his folder and closed it again."
  decolonization_events.21.t:0 "The Non-Aligned Path"
- decolonization_events.3.a:0 "Lay down our arms."
+ decolonization_events.3.a:0 "Withdraw our forces and recognize independence."
  decolonization_events.3.b:0 "Hold the line."
  decolonization_events.3.c:0 "Grant independence with conditions."
  decolonization_events.3.d:0 "Armed resistance in [SCOPE.sCountry('rebellious_subject').GetName] has erupted into open conflict. Guerrilla fighters strike at our garrisons and the violence exacts a heavy toll on both sides. Our commanders demand reinforcements even as the treasury groans under the weight of continued occupation."

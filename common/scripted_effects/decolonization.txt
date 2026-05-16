@@ -685,3 +685,37 @@ colonial_empire_je_cleanup_effect = {
 		remove_modifier = colonial_overlord_collapsing_subject_ld_modifier
 	}
 }
+
+# Forge an immediately-binding "neocolonial arrangement" treaty between a
+# former metropole and a newly-independent ex-colony. The metropole gets
+# foreign investment rights and a trade privilege in the ex-colony's
+# market, locked in for $YEARS$ years. Designed to be called from any
+# event that produces a neocolonial outcome (currently
+# decolonization_events.3 Option C; future Suez-style or Cold-War
+# client-state outcomes can reuse the same shape).
+#
+# Parameters:
+#   FIRST  — the metropole (rights holder; source of both articles)
+#   SECOND — the dependent ex-colony (rights granter; target of both articles)
+#   YEARS  — binding period in years (e.g. 25)
+impose_neocolonial_investment_trade_treaty = {
+	create_treaty = {
+		name = treaty_name_neocolonial_arrangement
+		first_country = $FIRST$
+		second_country = $SECOND$
+		is_draft = no
+		binding_period = { years = $YEARS$ }
+		articles_to_create = {
+			{
+				article = foreign_investment_rights
+				source_country = $FIRST$
+				target_country = $SECOND$
+			}
+			{
+				article = trade_privilege
+				source_country = $FIRST$
+				target_country = $SECOND$
+			}
+		}
+	}
+}

@@ -83,6 +83,31 @@ un_vote_apply_treaty_modifier = {
 			is_decaying = yes
 		}
 	}
+	# Voting YES on decolonization is a public commitment — great powers
+	# that do so adopt the anti-colonial stance variable consumed by the
+	# je_colonial_empire bar (via colonial_gp_condemners_count). Setting
+	# the cooldown variable prevents decolonization_events.14 from firing
+	# afterward and letting the player re-deliberate the same stance.
+	if = {
+		limit = {
+			has_variable = un_topic_decolonization
+			country_rank >= rank_value:great_power
+		}
+		set_variable = gp_anti_colonial_stance
+		if = {
+			limit = { has_variable = gp_pro_colonial_stance }
+			remove_variable = gp_pro_colonial_stance
+		}
+		set_variable = { name = gp_colonial_policy_cooldown days = 1095 }
+		if = {
+			limit = { NOT = { has_modifier = gp_anti_colonial_policy_modifier } }
+			add_modifier = {
+				name = gp_anti_colonial_policy_modifier
+				days = 1095
+				is_decaying = yes
+			}
+		}
+	}
 	if = {
 		limit = {
 			has_variable = un_topic_pandemic

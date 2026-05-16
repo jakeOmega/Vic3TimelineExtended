@@ -1649,6 +1649,9 @@ colonial_crackdown_modifier = {
 	country_prestige_mult = -0.05
 	country_prestige_from_army_power_projection_mult = 0.05
 	country_bureaucracy_mult = -0.05
+	country_colonial_garrison_effectiveness_add = 0.20
+	country_military_goods_cost_mult = 0.10
+	interest_group_ig_intelligentsia_pol_str_mult = 0.10
 }
 
 peaceful_decolonization_modifier = {
@@ -1660,8 +1663,7 @@ peaceful_decolonization_modifier = {
 
 colonial_war_exhaustion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_prestige_mult = -0.15
-	state_standard_of_living_add = -1
+	country_prestige_mult = -0.10
 	country_prestige_from_army_power_projection_mult = -0.10
 }
 
@@ -2008,13 +2010,16 @@ neocolonial_economic_extraction_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_influence_add = 40
 	country_prestige_mult = 0.05
+	country_colonial_invest_effectiveness_add = 0.15
 }
 
 neocolonial_dependency_imposed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_prestige_mult = -0.05
-	state_standard_of_living_add = 1
+	state_standard_of_living_add = -1
 	country_influence_add = -25
+	country_loan_interest_rate_add = 0.01
+	country_weekly_investment_pool_mult = -0.005
 }
 
 anti_colonial_momentum_modifier = {
