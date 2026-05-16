@@ -1,4 +1,45 @@
 {
   "version": 1,
-  "files": {}
+  "files": {
+    "common/on_actions/cultural_hegemony_on_actions.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/static_modifiers/te_construction_market_modifiers.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "events/te_construction_market_pulse_events.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "events/te_map_modes_events.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/on_actions/treaty_article_events_on_actions.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/diplomatic_actions/nuke.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 2
+    },
+    "common/scripted_triggers/wonder_triggers.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_progress_bars/un_progress_bars.txt": {
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  }
 }

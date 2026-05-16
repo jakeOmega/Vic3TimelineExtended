@@ -428,7 +428,7 @@ nuclear_industrial_strike = {
 	}
 }
 
-nuclear_first_stike = { # Scope is target state
+nuclear_first_strike = { # Scope is target state
 	save_scope_as = target_state
 	scope:attacking_country = {
 		custom_tooltip = {
