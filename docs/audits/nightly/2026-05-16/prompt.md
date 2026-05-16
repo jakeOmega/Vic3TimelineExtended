@@ -15,11 +15,7 @@ File findings as GitHub issues; fix what's trivially fixable as PRs.
 - `docs/vanilla/CLAUDE.md`
 - `docs/audits/open_issues.md`
 - `docs/vanilla/vanilla_known_bugs.md`
-- `docs/vanilla/vanilla_war_reference.md`
-- `docs/vanilla/vanilla_pops_reference.md`
 - `docs/audits/script_parameterization_audit.md`
-- `docs/audits/nightly_checklists/laws_and_politics.md`
-- `docs/audits/nightly_checklists/production_methods_and_buildings.md`
 - `docs/audits/nightly_checklists/scripted_effects_and_triggers.md`
 
 Also skim `gh issue list --search nightly-audit --state open --limit 30` and
@@ -29,20 +25,23 @@ Also skim `gh issue list --search nightly-audit --state open --limit 30` and
 
 | # | File | Lines | Area | Last audited | Count | Recent findings |
 |---|---|---|---|---|---|---|
-| 1 | `common/ship_name_definitions/99_extra_ship_name_definitions_fallbacks.txt` | all (307) | production_methods_and_buildings | never | 0 | 0 |
-| 2 | `common/defines/extra_defines.txt` | all (143) | scripted_effects_and_triggers | never | 0 | 0 |
-| 3 | `common/war_goal_types/te_reunify_country.txt` | all (208) | production_methods_and_buildings | never | 0 | 0 |
-| 4 | `common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt` | all (110) | production_methods_and_buildings | never | 0 | 0 |
-| 5 | `common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt.bak` | all (108) | production_methods_and_buildings | never | 0 | 0 |
-| 6 | `common/ship_types/extra_ship_types.txt` | 1–600 (600) | production_methods_and_buildings | never | 0 | 0 |
-| 7 | `common/combat_unit_types/extra_combat_units.txt` | 1–600 (600) | production_methods_and_buildings | never | 0 | 0 |
-| 8 | `gfx/interface/icons/company_icons/historical_company_icons/resize.bat` | all (28) | general | never | 0 | 0 |
-| 9 | `gfx/portraits/portrait_modifiers/te_clothes.txt` | all (91) | general | never | 0 | 0 |
-| 10 | `common/decisions/extra_decisions.txt` | all (303) | scripted_effects_and_triggers | never | 0 | 0 |
-| 11 | `common/discrimination_traits/extra_traits.txt` | all (1) | laws_and_politics | never | 0 | 0 |
-| 12 | `common/scripted_rules/extra_rules.txt` | all (1) | scripted_effects_and_triggers | never | 0 | 0 |
+| 1 | `common/on_actions/space_race_on_actions.txt` | all (105) | scripted_effects_and_triggers | never | 0 | 0 |
+| 2 | `common/on_actions/te_construction_market_on_actions.txt` | all (344) | scripted_effects_and_triggers | never | 0 | 0 |
+| 3 | `common/scripted_triggers/covert_warfare_triggers.txt` | all (43) | scripted_effects_and_triggers | never | 0 | 0 |
+| 4 | `common/scripted_progress_bars/scripted_progress_bars.md` | all (40) | scripted_effects_and_triggers | never | 0 | 0 |
+| 5 | `common/scripted_effects/company_building_cleanup_effects.txt` | 1–600 (600) | scripted_effects_and_triggers | never | 0 | 0 |
+| 6 | `common/scripted_effects/sol_expectations_effects.txt` | all (198) | scripted_effects_and_triggers | never | 0 | 0 |
+| 7 | `common/scripted_effects/social_axis_effects.txt` | all (112) | scripted_effects_and_triggers | never | 0 | 0 |
+| 8 | `common/defines/te_construction_market_defines.txt` | all (9) | scripted_effects_and_triggers | never | 0 | 0 |
+| 9 | `common/on_actions/wonder_events_on_actions.txt` | all (265) | scripted_effects_and_triggers | never | 0 | 0 |
+| 10 | `common/scripted_effects/cultural_hegemony_effects.txt` | 1–600 (600) | scripted_effects_and_triggers | never | 0 | 0 |
+| 11 | `common/script_values/gui_chart_script_values.txt` | all (54) | scripted_effects_and_triggers | never | 0 | 0 |
+| 12 | `common/scripted_progress_bars/st_res_progress_bars.txt` | all (76) | scripted_effects_and_triggers | never | 0 | 0 |
+| 13 | `common/on_actions/sol_expectations_on_actions.txt` | all (13) | scripted_effects_and_triggers | never | 0 | 0 |
+| 14 | `common/on_actions/langreform_events_on_actions.txt` | all (11) | scripted_effects_and_triggers | never | 0 | 0 |
+| 15 | `common/script_values/civil_rights_values.txt` | all (20) | scripted_effects_and_triggers | never | 0 | 0 |
 
-**Budget**: 2500 of 2500 lines, 12 of 15 files.
+**Budget**: 2490 of 2500 lines, 15 of 15 files.
 
 ## Focus ranking
 
