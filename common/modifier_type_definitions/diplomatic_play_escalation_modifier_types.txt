@@ -8,13 +8,18 @@
 
 # --- Diplomatic-play weekly escalation (read by st_dp_country_apply_weekly_escalation) ---
 # CADENCE: applied once per week (4× per month via on_monthly_pulse_country dispatch).
+# ROLES: roles are mutually exclusive per (country, play). Initiator → aggressor_*,
+# target → defender_*, every other committed member → participant_*. The apply effect
+# enforces this with NOT = { initiator_is/target_is = scope:mover } in the participant
+# branch — so a country never double-counts on a play where it is initiator/target.
 # STACKING: aggressor_*/defender_* are safe for mass attachment (laws, techs, principles)
 # because at most one country fills each role per play. participant_* is APPLIED PER
-# COMMITTED COUNTRY in the play and stacks additively — a play with N participants
-# gets N× the participant contribution. Reserve participant_* for narrow single-country
-# uses (one-off event modifiers, unique character traits); never attach to laws/techs/
-# principles or any modifier source many countries hold simultaneously, or escalation
-# explodes for plays with many backers (e.g. Britain + Indian princely states).
+# THIRD-PARTY JOINER in the play and stacks additively — a play with N joiners (not
+# counting initiator/target) gets N× the participant contribution. Reserve participant_*
+# for narrow single-country uses (one-off event modifiers, unique character traits);
+# never attach to laws/techs/principles or any modifier source many countries hold
+# simultaneously, or escalation explodes for plays with many backers (e.g. Britain +
+# Indian princely states all joining as participants).
 country_aggressor_diplomatic_play_escalation_weekly_add = {
 	color = bad
 	percent = no

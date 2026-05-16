@@ -2,8 +2,11 @@
 # Diplomatic-play weekly escalation apply effect
 # ============================================================================
 # Country-driven: each country contributes its own deltas to plays in the
-# appropriate role. Avoids needing a `target` event-target hop on the play
-# scope (engine only exposes `initiator`).
+# appropriate role. Roles are mutually exclusive per (country, play): a
+# country fills exactly one of aggressor / defender / participant on each
+# play it is in (the participant branch's limit explicitly excludes the
+# initiator and target). Avoids needing a `target` event-target hop on the
+# play scope (engine only exposes `initiator`).
 #
 # Called from dp_escalation_events.1 (events/dp_escalation_events.txt) and
 # inline at week 0 from st_dp_escalation_weekly_schedule (extra_on_actions.txt).
@@ -46,13 +49,19 @@ st_dp_country_apply_weekly_escalation = {
 			}
 		}
 	}
-	# PARTICIPANT — every play I am a committed member of
+	# PARTICIPANT — plays I am a committed member of, but NOT as initiator or target
+	# (is_diplomatic_play_committed_participant = yes is true for initiator/target too,
+	# so we explicitly exclude them here to keep the three role contributions exclusive
+	# — otherwise an initiator/target with a participant_* modifier source would
+	# double-count both aggressor/defender AND participant on the same play.)
 	if = {
 		limit = { is_diplomatic_play_committed_participant = yes }
 		save_temporary_scope_as = mover
 		every_diplomatic_play = {
 			limit = {
 				any_scope_play_involved = { this = scope:mover }
+				NOT = { initiator_is = scope:mover }
+				NOT = { target_is = scope:mover }
 			}
 			while = {
 				count = scope:mover.country_participant_dp_escalation_weekly_total
