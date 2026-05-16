@@ -57,7 +57,7 @@
             limit = { exists = scope:second_state }
             scope:second_state = {
                 save_scope_as = target_state
-                nuclear_first_stike = yes
+                nuclear_first_strike = yes
             }
         }
     }
@@ -381,6 +381,15 @@ tactical_nuke_diplo_action = {
                         }
                         add = {
                             value = b:building_naval_fortification.level
+                            divide = 100
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_building = building_naval_logistics_center
+                        }
+                        add = {
+                            value = b:building_naval_logistics_center.level
                             divide = 100
                         }
                     }

@@ -1,0 +1,114 @@
+{
+  "date": "2026-05-16",
+  "total_lines": 848,
+  "line_budget": 2500,
+  "file_cap": 8,
+  "slice_cap": 600,
+  "report_requested": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/on_actions/cultural_hegemony_on_actions.txt",
+      "line_range": null,
+      "lines": 95,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/static_modifiers/te_construction_market_modifiers.txt",
+      "line_range": null,
+      "lines": 18,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/te_construction_market_pulse_events.txt",
+      "line_range": null,
+      "lines": 104,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_economy_reference.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/te_map_modes_events.txt",
+      "line_range": null,
+      "lines": 70,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/on_actions/treaty_article_events_on_actions.txt",
+      "line_range": null,
+      "lines": 38,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/diplomatic_actions/nuke.txt",
+      "line_range": null,
+      "lines": 404,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/wonder_triggers.txt",
+      "line_range": null,
+      "lines": 109,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_progress_bars/un_progress_bars.txt",
+      "line_range": null,
+      "lines": 10,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    }
+  ]
+}
