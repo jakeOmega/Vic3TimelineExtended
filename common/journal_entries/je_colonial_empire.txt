@@ -353,9 +353,9 @@
 
 			# --- Bar-at-100 sustained-time counter ---
 			# Increments while bar is at the cap; resets if it drops. The basic
-			# completion path requires 36 months at 100 (mirrors the IF Act's
-			# 36-mo ≥90 gate) so reaching the cap isn't an instant win and
-			# leaves room to take the Imperial Federation Act decision.
+			# completion path requires 60 months at 100 (longer than the IF
+			# Act's 36-mo ≥90 gate) so reaching the cap isn't an instant win
+			# and leaves the IF Act decision as the meaningfully faster route.
 			if = {
 				limit = { NOT = { has_variable = colonial_at_100_months } }
 				set_variable = { name = colonial_at_100_months value = 0 }
