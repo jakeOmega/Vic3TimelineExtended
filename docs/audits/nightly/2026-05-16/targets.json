@@ -1,6 +1,6 @@
 {
   "date": "2026-05-16",
-  "total_lines": 2500,
+  "total_lines": 2490,
   "line_budget": 2500,
   "file_cap": 15,
   "slice_cap": 600,
@@ -11,21 +11,96 @@
   },
   "targets": [
     {
-      "path": "common/ship_name_definitions/99_extra_ship_name_definitions_fallbacks.txt",
+      "path": "common/on_actions/space_race_on_actions.txt",
       "line_range": null,
-      "lines": 307,
-      "area": "production_methods_and_buildings",
+      "lines": 105,
+      "area": "scripted_effects_and_triggers",
       "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
+        "docs/audits/script_parameterization_audit.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/defines/extra_defines.txt",
+      "path": "common/on_actions/te_construction_market_on_actions.txt",
       "line_range": null,
-      "lines": 143,
+      "lines": 344,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/covert_warfare_triggers.txt",
+      "line_range": null,
+      "lines": 43,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_progress_bars/scripted_progress_bars.md",
+      "line_range": null,
+      "lines": 40,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/company_building_cleanup_effects.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/sol_expectations_effects.txt",
+      "line_range": null,
+      "lines": 198,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/social_axis_effects.txt",
+      "line_range": null,
+      "lines": 112,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/defines/te_construction_market_defines.txt",
+      "line_range": null,
+      "lines": 9,
       "area": "scripted_effects_and_triggers",
       "docs": [],
       "last_audited": null,
@@ -33,117 +108,84 @@
       "recent_findings": 0
     },
     {
-      "path": "common/war_goal_types/te_reunify_country.txt",
+      "path": "common/on_actions/wonder_events_on_actions.txt",
       "line_range": null,
-      "lines": 208,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt",
-      "line_range": null,
-      "lines": 110,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt.bak",
-      "line_range": null,
-      "lines": 108,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/ship_types/extra_ship_types.txt",
-      "line_range": [
-        1,
-        600
-      ],
-      "lines": 600,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/combat_unit_types/extra_combat_units.txt",
-      "line_range": [
-        1,
-        600
-      ],
-      "lines": 600,
-      "area": "production_methods_and_buildings",
-      "docs": [
-        "docs/vanilla/vanilla_war_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "gfx/interface/icons/company_icons/historical_company_icons/resize.bat",
-      "line_range": null,
-      "lines": 28,
-      "area": "general",
-      "docs": [],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "gfx/portraits/portrait_modifiers/te_clothes.txt",
-      "line_range": null,
-      "lines": 91,
-      "area": "general",
-      "docs": [],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/decisions/extra_decisions.txt",
-      "line_range": null,
-      "lines": 303,
+      "lines": 265,
       "area": "scripted_effects_and_triggers",
-      "docs": [],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/discrimination_traits/extra_traits.txt",
-      "line_range": null,
-      "lines": 1,
-      "area": "laws_and_politics",
       "docs": [
-        "docs/vanilla/vanilla_pops_reference.md"
+        "docs/audits/script_parameterization_audit.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/scripted_rules/extra_rules.txt",
+      "path": "common/scripted_effects/cultural_hegemony_effects.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/gui_chart_script_values.txt",
       "line_range": null,
-      "lines": 1,
+      "lines": 54,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_progress_bars/st_res_progress_bars.txt",
+      "line_range": null,
+      "lines": 76,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/on_actions/sol_expectations_on_actions.txt",
+      "line_range": null,
+      "lines": 13,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/on_actions/langreform_events_on_actions.txt",
+      "line_range": null,
+      "lines": 11,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/civil_rights_values.txt",
+      "line_range": null,
+      "lines": 20,
       "area": "scripted_effects_and_triggers",
       "docs": [
         "docs/audits/script_parameterization_audit.md"
