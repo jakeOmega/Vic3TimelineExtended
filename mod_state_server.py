@@ -862,6 +862,21 @@ def _engine_docs_find_usage(
     }
 
 
+def _vanilla_data_loaded() -> bool:
+    """Cheap precondition: does base_game_path resolve to a populated
+    `game/common` directory? Used by /status to refuse `ready` when the
+    vanilla clone didn't materialize (typical bootstrap failure mode —
+    see issue #93). Vanilla `game/common/` ships hundreds of subdirs, so
+    fewer than ~10 entries means the path is empty/broken."""
+    try:
+        common = os.path.join(base_game_path, "game", "common")
+        if not os.path.isdir(common):
+            return False
+        return len(os.listdir(common)) > 10
+    except OSError:
+        return False
+
+
 def _engine_docs_source() -> tuple[str, str]:
     """Return (chosen_directory, source_label).
 
@@ -3362,6 +3377,14 @@ def _render_effect_text(eff, indent, lines):
 # ---------------------------------------------------------------------------
 # Request handler
 # ---------------------------------------------------------------------------
+class _ServiceNotReady(Exception):
+    """Raised by an endpoint when the server is in a degraded state. Caught
+    in do_GET and translated to an HTTP non-200 response (defaults to 503)."""
+    def __init__(self, payload: dict, status: int = 503):
+        self.payload = payload
+        self.status = status
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- routing ----------------------------------------------------------
@@ -3377,6 +3400,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"error": f"Not found: {exc}", "hint": "GET /help for the endpoint inventory."},
                 404,
             )
+        except _ServiceNotReady as exc:
+            self._respond_json(exc.payload, exc.status)
         except Exception as exc:
             logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
             self._respond_json({"error": str(exc)}, 500)
@@ -3609,6 +3634,22 @@ class ModStateHandler(BaseHTTPRequestHandler):
         }
 
     def _status(self):
+        # Bootstrap precondition: refuse `ready` (HTTP 503) when vanilla data
+        # didn't materialize. cloud_setup.sh's existing `curl -sf` readiness
+        # gate then naturally fails loud after the 180 s ceiling instead of
+        # running the audit blind. See issue #93 for the failure mode.
+        if not _vanilla_data_loaded():
+            raise _ServiceNotReady({
+                "status": "degraded",
+                "ready": False,
+                "pid": os.getpid(),
+                "reason": (
+                    f"Vanilla data not loaded — {base_game_path}/game/common "
+                    "is missing or empty. Check the bootstrap clone step "
+                    "(cloud) or VIC3_BASE_GAME (local dev)."
+                ),
+            })
+
         uptime = time.time() - _server_start_time if _server_start_time else 0
         engine_mtimes = {}
         oldest = None
@@ -3717,6 +3758,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         return {
             "status": "running",
+            "ready": True,
             "pid": os.getpid(),
             "uptime_seconds": round(uptime, 1),
             "startup_seconds": round(startup_elapsed, 1),
