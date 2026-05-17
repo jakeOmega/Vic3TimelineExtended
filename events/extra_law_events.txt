@@ -3977,3 +3977,2157 @@ extra_law_events.36 = {
 		}
 	}
 }
+
+# ======================================================================
+#  STALL EVENTS  (.37 – .60)
+#
+#  Vanilla-style stall events that fire alongside the existing advance
+#  / cautious events. Two-option tradeoff: option A eats a setback
+#  (sharp, 3-strikes-fail risk); option B accepts a drag modifier plus
+#  a thematic secondary cost (radicals among a relevant strata, IG
+#  approval loss, or authority spend for governance-principle laws).
+#  See common/static_modifiers/law_enactment_modifiers.txt header for
+#  the three-flavor design rationale.
+# ======================================================================
+
+# ======================================================================
+#  37 – Bankers Block the Bill  (Financial Regulation – stall flavor)
+# ======================================================================
+extra_law_events.37 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.37.t
+	desc = extra_law_events.37.d
+	flavor = extra_law_events.37.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_prudential_narrow_banking
+			is_enacting_law = law_type:law_central_bank_independence
+			is_enacting_law = law_type:law_directed_credit_development_banks
+		}
+		NOR = {
+			has_modifier = finreg_bankers_lobby_advance
+			has_modifier = finreg_bankers_lobby_cautious
+			has_modifier = finreg_bankers_lobby_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.37.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.37.b
+		add_enactment_modifier = {
+			name = finreg_bankers_lobby_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  38 – Bank Run Triggers Doubt  (Financial Regulation – stall flavor)
+# ======================================================================
+extra_law_events.38 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.38.t
+	desc = extra_law_events.38.d
+	flavor = extra_law_events.38.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_prudential_narrow_banking
+			is_enacting_law = law_type:law_central_bank_independence
+			is_enacting_law = law_type:law_universal_banking_light_prudence
+		}
+		NOR = {
+			has_modifier = finreg_bank_panic_advance
+			has_modifier = finreg_bank_panic_cautious
+			has_modifier = finreg_bank_panic_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.38.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.38.b
+		add_enactment_modifier = {
+			name = finreg_bank_panic_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  39 – Gold Outflow Crisis  (Monetary Policy – stall flavor)
+# ======================================================================
+extra_law_events.39 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.39.t
+	desc = extra_law_events.39.d
+	flavor = extra_law_events.39.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_gold_standard
+			is_enacting_law = law_type:law_fiat_currency
+			is_enacting_law = law_type:law_digital_currency
+		}
+		NOR = {
+			has_modifier = monpol_gold_hoarders_advance
+			has_modifier = monpol_gold_hoarders_cautious
+			has_modifier = monpol_gold_hoarders_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.39.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.39.b
+		add_enactment_modifier = {
+			name = monpol_gold_hoarders_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  40 – Hyperinflation Panic  (Monetary Policy – stall flavor)
+# ======================================================================
+extra_law_events.40 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.40.t
+	desc = extra_law_events.40.d
+	flavor = extra_law_events.40.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_fiat_currency
+		NOR = {
+			has_modifier = monpol_printing_press_advance
+			has_modifier = monpol_printing_press_cautious
+			has_modifier = monpol_printing_press_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.40.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.40.b
+		add_enactment_modifier = {
+			name = monpol_printing_press_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  41 – Civil Liberties Outcry  (Privacy Rights – stall flavor)
+# ======================================================================
+extra_law_events.41 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.41.t
+	desc = extra_law_events.41.d
+	flavor = extra_law_events.41.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_moderate_data_privacy
+			is_enacting_law = law_type:law_strong_privacy_rights
+			is_enacting_law = law_type:law_intrusive_surveillance
+		}
+		NOR = {
+			has_modifier = privacy_surveillance_debate_advance
+			has_modifier = privacy_surveillance_debate_cautious
+			has_modifier = privacy_surveillance_debate_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.41.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.41.b
+		add_enactment_modifier = {
+			name = privacy_surveillance_debate_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  42 – The Counter-Campaign  (Internet Governance – stall flavor)
+# ======================================================================
+extra_law_events.42 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.42.t
+	desc = extra_law_events.42.d
+	flavor = extra_law_events.42.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_net_neutrality
+			is_enacting_law = law_type:law_state_controlled_internet
+			is_enacting_law = law_type:law_unregulated_internet
+		}
+		NOR = {
+			has_modifier = internet_viral_campaign_advance
+			has_modifier = internet_viral_campaign_cautious
+			has_modifier = internet_viral_campaign_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.42.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.42.b
+		add_enactment_modifier = {
+			name = internet_viral_campaign_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  43 – Pulpit Against Progress  (Genetic Rights – stall flavor)
+# ======================================================================
+extra_law_events.43 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.43.t
+	desc = extra_law_events.43.d
+	flavor = extra_law_events.43.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_ban_on_genetic_modification
+			is_enacting_law = law_type:law_corporate_genetic_licensing
+			is_enacting_law = law_type:law_open_source_genetics
+			is_enacting_law = law_type:law_state_eugenics_program
+		}
+		NOR = {
+			has_modifier = genetics_ethics_debate_advance
+			has_modifier = genetics_ethics_debate_cautious
+			has_modifier = genetics_ethics_debate_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.43.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.43.b
+		add_enactment_modifier = {
+			name = genetics_ethics_debate_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  44 – Captains of Industry Rally  (Antitrust – stall flavor)
+# ======================================================================
+extra_law_events.44 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.44.t
+	desc = extra_law_events.44.d
+	flavor = extra_law_events.44.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_trust_busting
+			is_enacting_law = law_type:law_regulated_utilities
+			is_enacting_law = law_type:law_dirigisme
+		}
+		NOR = {
+			has_modifier = antitrust_public_outrage_advance
+			has_modifier = antitrust_public_outrage_cautious
+			has_modifier = antitrust_public_outrage_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.44.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.44.b
+		add_enactment_modifier = {
+			name = antitrust_public_outrage_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  45 – Scholars in Revolt  (Intellectual Property – stall flavor)
+# ======================================================================
+extra_law_events.45 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.45.t
+	desc = extra_law_events.45.d
+	flavor = extra_law_events.45.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_strict_ip_protection
+			is_enacting_law = law_type:law_open_source_innovation
+			is_enacting_law = law_type:law_creative_commons
+		}
+		NOR = {
+			has_modifier = ip_piracy_debate_advance
+			has_modifier = ip_piracy_debate_cautious
+			has_modifier = ip_piracy_debate_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.45.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.45.b
+		add_enactment_modifier = {
+			name = ip_piracy_debate_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  46 – Generals Question the Wisdom  (Rules of War – stall flavor)
+# ======================================================================
+extra_law_events.46 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.46.t
+	desc = extra_law_events.46.d
+	flavor = extra_law_events.46.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_war_crimes_forbidden
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+		}
+		NOR = {
+			has_modifier = row_atrocity_reports_advance
+			has_modifier = row_atrocity_reports_cautious
+			has_modifier = row_atrocity_reports_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.46.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.46.b
+		add_enactment_modifier = {
+			name = row_atrocity_reports_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  47 – The Officers' Petition  (Rules of War – stall flavor)
+# ======================================================================
+extra_law_events.47 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.47.t
+	desc = extra_law_events.47.d
+	flavor = extra_law_events.47.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+		}
+		NOR = {
+			has_modifier = row_military_pushback_advance
+			has_modifier = row_military_pushback_cautious
+			has_modifier = row_military_pushback_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.47.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.47.b
+		add_enactment_modifier = {
+			name = row_military_pushback_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  48 – Tough on Crime  (Criminal Justice – stall flavor)
+# ======================================================================
+extra_law_events.48 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.48.t
+	desc = extra_law_events.48.d
+	flavor = extra_law_events.48.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_restorative_justice
+			is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
+		}
+		NOR = {
+			has_modifier = crimjust_reform_debate_advance
+			has_modifier = crimjust_reform_debate_cautious
+			has_modifier = crimjust_reform_debate_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.48.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.48.b
+		add_enactment_modifier = {
+			name = crimjust_reform_debate_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  49 – The Mother Tongue Defended  (Language Policy – stall flavor)
+# ======================================================================
+extra_law_events.49 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.49.t
+	desc = extra_law_events.49.d
+	flavor = extra_law_events.49.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_civic_monolingualism
+			is_enacting_law = law_type:law_multilingual_federalism
+			is_enacting_law = law_type:law_linguistic_purity
+			is_enacting_law = law_type:law_state_led_language_reform
+			is_enacting_law = law_type:law_ubiquitous_translation
+		}
+		NOR = {
+			has_modifier = langpol_cultural_resistance_advance
+			has_modifier = langpol_cultural_resistance_cautious
+			has_modifier = langpol_cultural_resistance_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.49.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.49.b
+		add_enactment_modifier = {
+			name = langpol_cultural_resistance_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  50 – Money in the Shadows  (Electoral Finance – stall flavor)
+# ======================================================================
+extra_law_events.50 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.50.t
+	desc = extra_law_events.50.d
+	flavor = extra_law_events.50.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_donation_limits
+			is_enacting_law = law_type:law_publicly_funded_elections
+		}
+		NOR = {
+			has_modifier = electfin_donor_scandal_advance
+			has_modifier = electfin_donor_scandal_cautious
+			has_modifier = electfin_donor_scandal_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.50.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.50.b
+		add_enactment_modifier = {
+			name = electfin_donor_scandal_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  51 – Regional Resistance  (State Power – stall flavor)
+# ======================================================================
+extra_law_events.51 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.51.t
+	desc = extra_law_events.51.d
+	flavor = extra_law_events.51.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_federal_system
+			is_enacting_law = law_type:law_devolution
+			is_enacting_law = law_type:law_unitary_state
+		}
+		NOR = {
+			has_modifier = statepower_autonomy_debate_advance
+			has_modifier = statepower_autonomy_debate_cautious
+			has_modifier = statepower_autonomy_debate_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.51.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.51.b
+		add_enactment_modifier = {
+			name = statepower_autonomy_debate_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  52 – The Sanctity of the Body  (Human Augmentation – stall flavor)
+# ======================================================================
+extra_law_events.52 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.52.t
+	desc = extra_law_events.52.d
+	flavor = extra_law_events.52.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/automation_robots_factory.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_unrestricted_augmentation
+			is_enacting_law = law_type:law_medical_augmentation_only
+			is_enacting_law = law_type:law_regulated_augmentation_market
+			is_enacting_law = law_type:law_mandatory_augmentation
+			is_enacting_law = law_type:law_human_purity
+		}
+		NOR = {
+			has_modifier = augment_ethics_board_advance
+			has_modifier = augment_ethics_board_cautious
+			has_modifier = augment_ethics_board_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.52.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.52.b
+		add_enactment_modifier = {
+			name = augment_ethics_board_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  53 – Houses of the Aggrieved  (Inheritance – stall flavor)
+# ======================================================================
+extra_law_events.53 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.53.t
+	desc = extra_law_events.53.d
+	flavor = extra_law_events.53.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_non_inheritable_usage_rights
+		}
+		NOR = {
+			has_modifier = inherit_succession_dispute_advance
+			has_modifier = inherit_succession_dispute_cautious
+			has_modifier = inherit_succession_dispute_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.53.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.53.b
+		add_enactment_modifier = {
+			name = inherit_succession_dispute_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  54 – Pulpit Outcry  (LGBTQ Rights – stall flavor)
+# ======================================================================
+extra_law_events.54 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.54.t
+	desc = extra_law_events.54.d
+	flavor = extra_law_events.54.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_basic_protections
+			is_enacting_law = law_type:law_comprehensive_rights
+			is_enacting_law = law_type:law_full_equality_and_protection
+		}
+		NOR = {
+			has_modifier = lgbtq_public_petition_advance
+			has_modifier = lgbtq_public_petition_cautious
+			has_modifier = lgbtq_public_petition_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.54.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.54.b
+		add_enactment_modifier = {
+			name = lgbtq_public_petition_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  55 – Family Values Movement  (Family Policy – stall flavor)
+# ======================================================================
+extra_law_events.55 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.55.t
+	desc = extra_law_events.55.d
+	flavor = extra_law_events.55.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_pro_natalist_subsidies
+			is_enacting_law = law_type:law_state_sponsored_family_planning
+			is_enacting_law = law_type:law_population_control_measures
+			is_enacting_law = law_type:law_communal_child_rearing
+		}
+		NOR = {
+			has_modifier = famrep_demographic_debate_advance
+			has_modifier = famrep_demographic_debate_cautious
+			has_modifier = famrep_demographic_debate_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.55.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.55.b
+		add_enactment_modifier = {
+			name = famrep_demographic_debate_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  56 – State Secrets in Question  (Right to Information – stall flavor)
+# ======================================================================
+extra_law_events.56 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.56.t
+	desc = extra_law_events.56.d
+	flavor = extra_law_events.56.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/media_press_freedom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_freedom_of_information
+			is_enacting_law = law_type:law_open_government
+		}
+		NOR = {
+			has_modifier = rti_whistleblower_advance
+			has_modifier = rti_whistleblower_cautious
+			has_modifier = rti_whistleblower_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.56.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.56.b
+		add_enactment_modifier = {
+			name = rti_whistleblower_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  57 – Majority Backlash  (Minority Rights – stall flavor)
+# ======================================================================
+extra_law_events.57 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.57.t
+	desc = extra_law_events.57.d
+	flavor = extra_law_events.57.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_minority_rights_protection
+			is_enacting_law = law_type:law_minority_rights_affirmative_action
+			is_enacting_law = law_type:law_minority_rights_indifference
+		}
+		NOR = {
+			has_modifier = minrights_solidarity_march_advance
+			has_modifier = minrights_solidarity_march_cautious
+			has_modifier = minrights_solidarity_march_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.57.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.57.b
+		add_enactment_modifier = {
+			name = minrights_solidarity_march_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  58 – Capital Flight Threatens  (Welfare – stall flavor)
+# ======================================================================
+extra_law_events.58 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.58.t
+	desc = extra_law_events.58.d
+	flavor = extra_law_events.58.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_universal_basic_income
+			is_enacting_law = law_type:law_post-scarcity
+		}
+		NOR = {
+			has_modifier = welfare_automation_fears_advance
+			has_modifier = welfare_automation_fears_cautious
+			has_modifier = welfare_automation_fears_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.58.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.58.b
+		add_enactment_modifier = {
+			name = welfare_automation_fears_stall
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+	}
+}
+
+# ======================================================================
+#  59 – The Algorithm Fails  (Algorithmic Governance – stall flavor)
+# ======================================================================
+extra_law_events.59 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.59.t
+	desc = extra_law_events.59.d
+	flavor = extra_law_events.59.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_algorithmic_governance
+		NOR = {
+			has_modifier = govprin_technocrat_showcase_advance
+			has_modifier = govprin_technocrat_showcase_cautious
+			has_modifier = govprin_technocrat_showcase_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.59.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.59.b
+		add_enactment_modifier = {
+			name = govprin_technocrat_showcase_stall
+		}
+		add_authority = -200
+	}
+}
+
+# ======================================================================
+#  60 – Demagogues at the Forum  (Direct Democracy – stall flavor)
+# ======================================================================
+extra_law_events.60 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.60.t
+	desc = extra_law_events.60.d
+	flavor = extra_law_events.60.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_direct_democracy
+		NOR = {
+			has_modifier = govprin_popular_assembly_advance
+			has_modifier = govprin_popular_assembly_cautious
+			has_modifier = govprin_popular_assembly_stall
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			law_stance = {
+				law = owner.currently_enacting_law.type
+				value < neutral
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		random_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				law_stance = {
+					law = owner.currently_enacting_law.type
+					value < neutral
+				}
+			}
+			save_scope_as = opposing_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.60.a
+		default_option = yes
+		trigger = { enactment_setback_count < max_setbacks_minus_one }
+		highlighted_option = yes
+		add_enactment_setback = 1
+		scope:opposing_ig = {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+	}
+
+	option = {
+		name = extra_law_events.60.b
+		add_enactment_modifier = {
+			name = govprin_popular_assembly_stall
+		}
+		add_authority = -200
+	}
+}
