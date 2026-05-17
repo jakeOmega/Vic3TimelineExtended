@@ -9,6 +9,9 @@ paths.local.json
 docs/engine/error_log_digest.md
 docs/engine/commented_vanilla_pms.txt
 docs/engine/commented_vanilla_military_units.txt
+# Per-machine catch-up marker for the nightly audit wrapper (Windows Task Scheduler
+# gate); committing would force-overwrite every other developer's clock.
+docs/audits/.nightly_last_run
 *.log
 *.log.*
 *.pid

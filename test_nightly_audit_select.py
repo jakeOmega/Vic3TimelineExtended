@@ -9,6 +9,7 @@ deterministic.
 
 import random
 import sys
+import tempfile
 import unittest
 from datetime import date as Date
 from pathlib import Path
@@ -27,6 +28,7 @@ from nightly_audit_select import (
     area_and_docs,
     days_since,
     detect_registry_drift,
+    resolve_output_dir,
     select_targets,
 )
 
@@ -292,6 +294,57 @@ class RegistryDriftTest(unittest.TestCase):
                 "(if generator-input/partially-managed) in scripts/nightly_audit_select.py."
             ),
         )
+
+
+# --------------------------------------------------------------------------- #
+# Manual re-run versioning
+# --------------------------------------------------------------------------- #
+
+class ResolveOutputDirTest(unittest.TestCase):
+    """`resolve_output_dir` is what lets the /nightly-audit skill safely re-run
+    same-day without clobbering the existing prompt/targets the prior run's
+    PR body links to. Scheduled runs leave allow_rerun=False and keep
+    overwriting (idempotent under the marker-gate)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.base = Path(self.tmp.name)
+        self.date = "2026-05-17"
+
+    def test_no_existing_dir_returns_bare_date(self):
+        path, label = resolve_output_dir(self.base, self.date, allow_rerun=True)
+        self.assertEqual(path, self.base / self.date)
+        self.assertEqual(label, self.date)
+
+    def test_allow_rerun_false_always_returns_bare_date(self):
+        """Scheduled-path behavior: pass through unchanged even if dir exists."""
+        (self.base / self.date).mkdir()
+        path, label = resolve_output_dir(self.base, self.date, allow_rerun=False)
+        self.assertEqual(path, self.base / self.date)
+        self.assertEqual(label, self.date)
+
+    def test_existing_dir_returns_v2(self):
+        (self.base / self.date).mkdir()
+        path, label = resolve_output_dir(self.base, self.date, allow_rerun=True)
+        self.assertEqual(path, self.base / f"{self.date}-v2")
+        self.assertEqual(label, f"{self.date}-v2")
+
+    def test_existing_v2_returns_v3(self):
+        (self.base / self.date).mkdir()
+        (self.base / f"{self.date}-v2").mkdir()
+        path, label = resolve_output_dir(self.base, self.date, allow_rerun=True)
+        self.assertEqual(path, self.base / f"{self.date}-v3")
+        self.assertEqual(label, f"{self.date}-v3")
+
+    def test_gaps_in_version_sequence_take_the_next_gap(self):
+        """If v2 and v4 exist but not v3 (unlikely but possible if a run was
+        deleted), the next pick fills the v3 gap. Keeps the sequence dense."""
+        (self.base / self.date).mkdir()
+        (self.base / f"{self.date}-v2").mkdir()
+        (self.base / f"{self.date}-v4").mkdir()
+        path, label = resolve_output_dir(self.base, self.date, allow_rerun=True)
+        self.assertEqual(label, f"{self.date}-v3")
 
 
 if __name__ == "__main__":
