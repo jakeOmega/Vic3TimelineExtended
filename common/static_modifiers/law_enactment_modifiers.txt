@@ -353,3 +353,244 @@ amendment_purist_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.02
 }
+
+# ======================================================================
+#  DEBATE MODIFIERS (paired directional choices)
+#
+#  Each system gets two modifiers naming a policy direction. Both apply
+#  the same +0.03 success_add — neither is "the right answer" for
+#  enactment speed. The choice in the corresponding debate event is
+#  about WHO benefits (IG alignment), not how fast the law moves.
+# ======================================================================
+
+# ----- Financial Regulation -----
+finreg_industry_consultation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+finreg_public_consultation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+finreg_speculator_crackdown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+finreg_deposit_guarantees = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Monetary Policy -----
+monpol_aristocrat_settlement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+monpol_industrial_alignment = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+monpol_wage_indexation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+monpol_capital_protection = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Privacy Rights -----
+privacy_civil_liberties_carve_outs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+privacy_national_security_exemptions = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Internet Governance -----
+internet_freedom_safeguards = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+internet_content_moderation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Genetic Rights -----
+genetics_research_exemption = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+genetics_religious_carve_outs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Antitrust -----
+antitrust_established_firms_carve_out = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+antitrust_strict_enforcement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Intellectual Property -----
+ip_creator_protection = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+ip_public_domain_expansion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Rules of War -----
+row_strict_humanitarian = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+row_realpolitik_exemptions = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+row_civilian_oversight = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+row_military_self_regulation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Criminal Justice -----
+crimjust_rehabilitation_focus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+crimjust_retribution_focus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Language Policy -----
+langpol_pluralist_accommodation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+langpol_assimilationist_push = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Electoral Finance -----
+electfin_hard_caps = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+electfin_voluntary_disclosure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- State Power -----
+statepower_federal_protections = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+statepower_centralized = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Human Augmentation -----
+augment_permissive_ethics = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+augment_restrictive_ethics = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Inheritance -----
+inherit_equal_split = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+inherit_primogeniture_preserved = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- LGBTQ Rights -----
+lgbtq_marriage_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+lgbtq_employment_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Family & Reproductive Policy -----
+famrep_pronatalist_incentives = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+famrep_family_planning = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Right to Information -----
+rti_transparency_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+rti_stability_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Minority Rights -----
+minrights_affirmative_action = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+minrights_equal_treatment = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Welfare (UBI / Post-Scarcity) -----
+welfare_retraining_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+welfare_ubi_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+
+# ----- Governance Principles (Algorithmic / Direct Democracy / Neocameralism) -----
+govprin_tech_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+govprin_human_first = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+govprin_direct_voting = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.03
+}
+govprin_deliberative_chambers = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_law_enactment_success_add = 0.03
+}
