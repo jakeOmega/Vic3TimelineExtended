@@ -83,6 +83,24 @@ ch_program_funding_cost_mult = {
 	min = 0
 }
 
+# JE-multiplier wrappers. `add_modifier = { ... multiplier = X }` on a JE
+# re-evaluates X each tick at JE scope, where the country's vars and
+# accessors (gdp, var:ch_program_funding_level, modifier:...) are unreachable
+# directly. Walk JE→owner→country via `owner = { ... }` (same pattern as
+# `cultural_hegemony_modifier_mult` below). Country-scope callers (display
+# strings, button-effect `value = ch_program_funding_*` reads) keep using
+# the underlying SVs directly; the wrappers exist solely for JE multiplier
+# slots.
+ch_program_funding_level_value_for_je = {
+	value = 0
+	owner = { add = ch_program_funding_level_value }
+}
+
+ch_program_funding_cost_mult_for_je = {
+	value = 0
+	owner = { add = ch_program_funding_cost_mult }
+}
+
 ch_program_funding_level_display = {
 	value = ch_program_funding_level_value
 	round = yes

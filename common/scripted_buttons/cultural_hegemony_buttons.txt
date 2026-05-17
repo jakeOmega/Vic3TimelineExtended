@@ -46,22 +46,13 @@
 				clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
 			}
 
-			# Pre-compute multipliers in country scope; passing the script values
-			# directly into the JE-scoped add_modifier would evaluate them in JE
-			# scope, where the underlying variables / gdp accessor are unreachable.
-			save_scope_as = _ch_country
-			set_variable = { name = _ch_level_mult value = ch_program_funding_level_value }
-			set_variable = { name = _ch_cost_mult value = ch_program_funding_cost_mult }
-
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
 			if = {
-				limit = { var:_ch_level_mult >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
+				limit = { ch_program_funding_level_value >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
 			}
-			# _ch_level_mult / _ch_cost_mult persist on the country; the modifier's
-			# multiplier expression re-reads them each tick, so they must outlive this effect.
 		}
 	}
 }
@@ -101,19 +92,13 @@ ch_decrease_program_funding_button = {
 			change_variable = { name = ch_program_funding_level subtract = 1 }
 			clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
 
-			save_scope_as = _ch_country
-			set_variable = { name = _ch_level_mult value = ch_program_funding_level_value }
-			set_variable = { name = _ch_cost_mult value = ch_program_funding_cost_mult }
-
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
 			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
 			if = {
-				limit = { var:_ch_level_mult >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = scope:_ch_country.var:_ch_level_mult } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = scope:_ch_country.var:_ch_cost_mult } }
+				limit = { ch_program_funding_level_value >= 1 }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
+				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
 			}
-			# _ch_level_mult / _ch_cost_mult persist on the country; the modifier's
-			# multiplier expression re-reads them each tick, so they must outlive this effect.
 		}
 	}
 }
@@ -155,7 +140,7 @@ ch_world_exposition_button = {
 
 	effect = {
 		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult } }
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult_for_je } }
 	}
 }
 

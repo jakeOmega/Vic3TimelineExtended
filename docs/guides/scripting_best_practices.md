@@ -3012,6 +3012,31 @@ Some engine-level caps are hardcoded and only surface in debug.log via `pdx_asse
   ```
   Most base_goods are at ≤2 in vanilla, but engines/automobiles/artillery/porcelain/wine/tobacco/meat/radios/silk/small_arms/merchant_marine are at 3 — adding any 4th will assert.
 
+## JE `add_modifier { multiplier = X }` Re-Evaluates at JE Scope Each Tick
+
+When you call `add_modifier = { name = X multiplier = <expr> }` from inside a JE-scope block (e.g. `je:my_je ?= { add_modifier = { ... multiplier = my_sv } }`), the multiplier expression is stored with the modifier and **re-evaluated every tick** while the modifier is active. At re-eval time the scope is the JE, not the country — country accessors like `gdp`, `var:X`, `modifier:X`, and `scope:<saved_scope_name>` (if the saved scope came from a now-defunct event/effect chain) are unreachable directly and silently return type-`none`. The engine logs this as `Value of wrong type in '<file>:<line>'. Got value of type 'none'` from `jomini_scriptvalue.cpp:1659`, anchored on the line of the originating `add_modifier` block (not the SV definition).
+
+**Don't workaround with `save_scope_as` + `set_variable` on the country**, then reference `scope:<saved>.var:X` in the multiplier — the saved-scope reference doesn't persist across ticks (only the country variable does), so the multiplier still resolves to `none` at the next tick.
+
+**Canonical fix**: introduce a JE-multiplier wrapper SV that walks the JE→owner→country chain explicitly via `owner = { ... }`, then call the existing country-scope SV from inside that block. Vanilla pattern (`cultural_hegemony_modifier_mult`):
+
+```
+my_country_sv = {           # Country-scope SV; uses bare country accessors
+    add = var:my_country_var
+    add = gdp
+}
+
+my_country_sv_for_je = {    # JE-multiplier wrapper
+    value = 0
+    owner = { add = my_country_sv }
+}
+
+# Call site in JE-scope add_modifier:
+je:my_je ?= { add_modifier = { name = X multiplier = my_country_sv_for_je } }
+```
+
+Keep country-scope callers (display loc reads via `MakeScope.ScriptValue`, button-effect `limit` checks, etc.) on the bare `my_country_sv` — those don't need the wrapper.
+
 ## Stellaris/EU4 Idioms That Silently Fail in Vic3
 
 Several Paradox-Clausewitz idioms common in Stellaris and EU4 mod scripts do NOT exist in Vic3 1.13.x. The engine reports them as "Unknown trigger type" / "Unknown effect" / "Unexpected token" at runtime parse — the script doesn't compile and the gated logic silently never fires. If you're porting concepts from another Paradox game, check vanilla Vic3 first:
