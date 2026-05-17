@@ -2042,6 +2042,8 @@
  te_research_speed_boost:0 "Domestic Research Stimulus"
  te_research_speed_chill:0 "Research Climate Cools"
  te_subjugation_strength_sufficient_tt:0 "Our Subjugation Strength against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (base [concept_prestige] ratio plus any identity-conditional bonuses)"
+ te_trade_center_boost:0 "Merchant Quarter Bustles"
+ te_trade_center_chill:0 "Merchant Quarter Sluggish"
  too_much_private_construction:0 "Excess [concept_private_construction]"
  trade_embargo_imposed_modifier:0 "Trade Embargo Imposed"
  trade_embargo_suffered_modifier:0 "Trade Embargo"
