@@ -27,74 +27,96 @@ te_construction_market_per_site = {
 		}
 		divide = te_construction_market_num_sites
 	}
-	#subtract = 1
 }
 
-# te_construction_market_employment_adjusted_per_site = {
-# 	value = owner.te_construction_market_per_site
-# 	divide = this.te_construction_market_employee_slots_filled
-# }
+# Per-site target adjusted for actual staffing of THIS site. Used as the
+# `multiplier` on te_construction_market_capacity_modifier (defined to
+# `building_throughput_add = 1`), so the final per-site throughput equals
+# `effective_per_site`. The "subtract = 1" yields `per_site - 1` so the
+# resulting modifier-value plus the engine's implicit +1 baseline lands
+# exactly at `per_site`.
+#
+# Conservation: total throughput across sites = num_sites × per_site =
+# total_use_target, regardless of staffing distribution. Inverse-scaling
+# by staffing means an understaffed site contributes the same as a fully
+# staffed one (its workers are individually more productive).
+te_construction_market_employment_adjusted_per_site = {
+	value = owner.te_construction_market_per_site
+	# Floor staffing at 0.1 to avoid divide-by-zero (matches the staircase's
+	# lowest non-zero bucket). A 0-9% staffed site receives a 10× per-site
+	# target — large but bounded.
+	if = {
+		limit = { has_employee_slots_filled = { pop_type = laborers percent = 0.1 } }
+		divide = te_construction_market_employee_slots_filled
+	}
+	else = {
+		multiply = 10
+	}
+	subtract = 1
+}
 
-# te_construction_market_employee_slots_filled = {
-# 	value = 0
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.1 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.2 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.3 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.4 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.5 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.6 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.7 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.8 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 0.9 }
-# 		}
-# 		add = 0.1
-# 	}
-# 	if = {
-# 		limit = {
-# 			has_employee_slots_filled = { pop_type = laborers percent = 1 }
-# 		}
-# 		add = 0.1
-# 	}
-# }
+# Building-scope staircase approximating laborer fill fraction. 10 buckets
+# of +0.1, so a fully-staffed site reads 1.0 and an empty one reads 0.0.
+te_construction_market_employee_slots_filled = {
+	value = 0
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.1 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.2 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.3 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.4 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.5 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.6 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.7 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.8 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 0.9 }
+		}
+		add = 0.1
+	}
+	if = {
+		limit = {
+			has_employee_slots_filled = { pop_type = laborers percent = 1 }
+		}
+		add = 0.1
+	}
+}

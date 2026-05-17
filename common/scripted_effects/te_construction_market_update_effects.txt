@@ -47,31 +47,23 @@ te_construction_market_country_update_private_share = {
 
 
 te_construction_market_apply_per_site_modifier = {
-	set_local_variable = {
-		name = te_construction_market_per_site_local
-		value = te_construction_market_per_site
-	}
-	change_local_variable = {
-		name = te_construction_market_per_site_local
-		subtract = 1
-	}
-
 	every_scope_building = {
 		limit = {
 			is_building_type = te_construction_market_site
 		}
 		remove_modifier = te_construction_market_capacity_modifier
-		# save_scope_as = te_construction_market_current_building
 		if = {
 			limit = {
 				occupancy > 1
 			}
 			te_construction_market_reset_site = yes
-
 		}
+		# Per-site multiplier evaluated in building scope — understaffed
+		# sites get a proportionally larger target so total throughput
+		# tracks total_use_target regardless of staffing distribution.
 		add_modifier = {
 			name = te_construction_market_capacity_modifier
-			multiplier = local_var:te_construction_market_per_site_local
+			multiplier = te_construction_market_employment_adjusted_per_site
 		}
 	}
 }
