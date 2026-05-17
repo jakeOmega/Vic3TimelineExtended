@@ -3031,3 +3031,1001 @@ ministry_law_events.38 = {
 		}
 	}
 }
+
+# ======================================================================
+#  DEBATE EVENTS  (.39 – .57)
+#
+#  Vanilla-style debate events for ministry-law enactment. Both options
+#  apply a directional +0.03 enactment modifier; choice is IG alignment.
+# ======================================================================
+
+# ======================================================================
+#  39 – Professional or Loyalist Staffing  (Generic Staffing – debate)
+# ======================================================================
+ministry_law_events.39 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.39.t
+	desc = ministry_law_events.39.d
+	flavor = ministry_law_events.39.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_any_ministry_law = yes
+		NOR = {
+			has_modifier = ministry_staffing_professional
+			has_modifier = ministry_staffing_loyalist
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.39.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_staffing_professional }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		add_loyalists = { value = small_radicals strata = middle }
+	}
+
+	option = {
+		name = ministry_law_events.39.b
+		add_enactment_modifier = { name = ministry_staffing_loyalist }
+		add_loyalists = { value = small_radicals strata = upper }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  40 – Lean or Generous Budget  (Generic Budget – debate)
+# ======================================================================
+ministry_law_events.40 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.40.t
+	desc = ministry_law_events.40.d
+	flavor = ministry_law_events.40.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_any_ministry_law = yes
+		NOR = {
+			has_modifier = ministry_budget_lean
+			has_modifier = ministry_budget_generous
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.40.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_budget_lean }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.40.b
+		add_enactment_modifier = { name = ministry_budget_generous }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  41 – Consolidate or Coexist  (Generic Turf – debate)
+# ======================================================================
+ministry_law_events.41 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.41.t
+	desc = ministry_law_events.41.d
+	flavor = ministry_law_events.41.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_any_ministry_law = yes
+		NOR = {
+			has_modifier = ministry_turf_consolidate
+			has_modifier = ministry_turf_coexist
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.41.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_turf_consolidate }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.41.b
+		add_enactment_modifier = { name = ministry_turf_coexist }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  42 – Swift or Phased Dissolution  (Generic Dissolution – debate)
+# ======================================================================
+ministry_law_events.42 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.42.t
+	desc = ministry_law_events.42.d
+	flavor = ministry_law_events.42.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_dissolving_any_ministry_law = yes
+		NOR = {
+			has_modifier = ministry_dissolution_swift
+			has_modifier = ministry_dissolution_phased
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.42.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_dissolution_swift }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		add_radicals = { value = small_radicals strata = middle }
+	}
+
+	option = {
+		name = ministry_law_events.42.b
+		add_enactment_modifier = { name = ministry_dissolution_phased }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  43 – Civilian-Led or General-Led  (Ministry of War – debate)
+# ======================================================================
+ministry_law_events.43 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.43.t
+	desc = ministry_law_events.43.d
+	flavor = ministry_law_events.43.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_war
+		NOR = {
+			has_modifier = ministry_war_civilian_led
+			has_modifier = ministry_war_general_led
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.43.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_war_civilian_led }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.43.b
+		add_enactment_modifier = { name = ministry_war_general_led }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  44 – Hawkish or Dovish Diplomacy  (Ministry of Foreign Affairs – debate)
+# ======================================================================
+ministry_law_events.44 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.44.t
+	desc = ministry_law_events.44.d
+	flavor = ministry_law_events.44.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_foreign_affairs
+		NOR = {
+			has_modifier = ministry_fa_hawkish
+			has_modifier = ministry_fa_dovish
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.44.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_fa_hawkish }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.44.b
+		add_enactment_modifier = { name = ministry_fa_dovish }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  45 – Protectionist or Free Trade  (Ministry of Commerce – debate)
+# ======================================================================
+ministry_law_events.45 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.45.t
+	desc = ministry_law_events.45.d
+	flavor = ministry_law_events.45.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_commerce
+		NOR = {
+			has_modifier = ministry_commerce_protectionist
+			has_modifier = ministry_commerce_free_trade
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.45.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_commerce_protectionist }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.45.b
+		add_enactment_modifier = { name = ministry_commerce_free_trade }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  46 – State-Curated or Independent Grants  (Ministry of Culture – debate)
+# ======================================================================
+ministry_law_events.46 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.46.t
+	desc = ministry_law_events.46.d
+	flavor = ministry_law_events.46.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_culture
+		NOR = {
+			has_modifier = ministry_culture_state_curated
+			has_modifier = ministry_culture_independent_grants
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.46.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_culture_state_curated }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.46.b
+		add_enactment_modifier = { name = ministry_culture_independent_grants }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  47 – Pro-Capital or Pro-Labor  (Ministry of Labor – debate)
+# ======================================================================
+ministry_law_events.47 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.47.t
+	desc = ministry_law_events.47.d
+	flavor = ministry_law_events.47.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_pro_labor_ministry_of_labor
+			is_enacting_law = law_type:law_pro_capital_ministry_of_labor
+		}
+		NOR = {
+			has_modifier = ministry_labor_pro_capital
+			has_modifier = ministry_labor_pro_labor
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.47.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_labor_pro_capital }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.47.b
+		add_enactment_modifier = { name = ministry_labor_pro_labor }
+		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  48 – Strict or Voluntary Regulations  (Ministry of Environment – debate)
+# ======================================================================
+ministry_law_events.48 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.48.t
+	desc = ministry_law_events.48.d
+	flavor = ministry_law_events.48.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_the_environment
+		NOR = {
+			has_modifier = ministry_env_strict_mandatory
+			has_modifier = ministry_env_voluntary
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.48.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_env_strict_mandatory }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.48.b
+		add_enactment_modifier = { name = ministry_env_voluntary }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  49 – Domestic or Foreign Focus  (Ministry of Intelligence – debate)
+# ======================================================================
+ministry_law_events.49 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.49.t
+	desc = ministry_law_events.49.d
+	flavor = ministry_law_events.49.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_intelligence_and_security
+		NOR = {
+			has_modifier = ministry_intel_domestic_focus
+			has_modifier = ministry_intel_foreign_focus
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.49.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_intel_domestic_focus }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.49.b
+		add_enactment_modifier = { name = ministry_intel_foreign_focus }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  50 – Generous or Restrictive Resettlement  (Ministry of Refugee Affairs – debate)
+# ======================================================================
+ministry_law_events.50 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.50.t
+	desc = ministry_law_events.50.d
+	flavor = ministry_law_events.50.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_refugee_affairs
+		NOR = {
+			has_modifier = ministry_refugee_generous
+			has_modifier = ministry_refugee_restrictive
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.50.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_refugee_generous }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.50.b
+		add_enactment_modifier = { name = ministry_refugee_restrictive }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  51 – State-Controlled or Private Partnership  (Ministry of Propaganda – debate)
+# ======================================================================
+ministry_law_events.51 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.51.t
+	desc = ministry_law_events.51.d
+	flavor = ministry_law_events.51.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_propaganda
+		NOR = {
+			has_modifier = ministry_prop_state_controlled
+			has_modifier = ministry_prop_private_partnership
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.51.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_prop_state_controlled }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.51.b
+		add_enactment_modifier = { name = ministry_prop_private_partnership }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  52 – Basic or Applied Research  (Ministry of Science – debate)
+# ======================================================================
+ministry_law_events.52 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.52.t
+	desc = ministry_law_events.52.d
+	flavor = ministry_law_events.52.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_science
+		NOR = {
+			has_modifier = ministry_sci_basic_focus
+			has_modifier = ministry_sci_applied_focus
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.52.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_sci_basic_focus }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.52.b
+		add_enactment_modifier = { name = ministry_sci_applied_focus }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  53 – Permissive or Restrictive Thought Standards  (Ministry of Thought Control – debate)
+# ======================================================================
+ministry_law_events.53 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.53.t
+	desc = ministry_law_events.53.d
+	flavor = ministry_law_events.53.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_thought_control
+		NOR = {
+			has_modifier = ministry_thought_permissive
+			has_modifier = ministry_thought_restrictive
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.53.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_thought_permissive }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.53.b
+		add_enactment_modifier = { name = ministry_thought_restrictive }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  54 – Strict or Industry-Led Standards  (Ministry of Consumer Protection – debate)
+# ======================================================================
+ministry_law_events.54 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.54.t
+	desc = ministry_law_events.54.d
+	flavor = ministry_law_events.54.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_consumer_protection
+		NOR = {
+			has_modifier = ministry_consumer_strict
+			has_modifier = ministry_consumer_industry_led
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.54.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_consumer_strict }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.54.b
+		add_enactment_modifier = { name = ministry_consumer_industry_led }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  55 – Density or Sprawl  (Ministry of Urban Planning – debate)
+# ======================================================================
+ministry_law_events.55 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.55.t
+	desc = ministry_law_events.55.d
+	flavor = ministry_law_events.55.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_urban_planning
+		NOR = {
+			has_modifier = ministry_urban_density_focused
+			has_modifier = ministry_urban_sprawl_friendly
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.55.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_urban_density_focused }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.55.b
+		add_enactment_modifier = { name = ministry_urban_sprawl_friendly }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  56 – Established Faith or Pluralist  (Ministry of Religion – debate)
+# ======================================================================
+ministry_law_events.56 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.56.t
+	desc = ministry_law_events.56.d
+	flavor = ministry_law_events.56.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_religion
+		NOR = {
+			has_modifier = ministry_religion_established_faith
+			has_modifier = ministry_religion_pluralist
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.56.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_religion_established_faith }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.56.b
+		add_enactment_modifier = { name = ministry_religion_pluralist }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  57 – Strategic or Humanitarian Aid  (Ministry of International Aid – debate)
+# ======================================================================
+ministry_law_events.57 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.57.t
+	desc = ministry_law_events.57.d
+	flavor = ministry_law_events.57.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/ministry_establishment.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_international_aid
+		NOR = {
+			has_modifier = ministry_aid_strategic
+			has_modifier = ministry_aid_humanitarian
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = ministry_law_events.57.a
+		default_option = yes
+		add_enactment_modifier = { name = ministry_aid_strategic }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = ministry_law_events.57.b
+		add_enactment_modifier = { name = ministry_aid_humanitarian }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
