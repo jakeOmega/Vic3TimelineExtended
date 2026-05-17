@@ -658,11 +658,13 @@ finreg_banking_stability = {
 }
 monpol_currency_stability = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_minting_add = 100
+	# Base 1 — apply with multiplier = sv_money_flow_event_small for GDP-scaled minting.
+	country_minting_add = 1
 }
 monpol_currency_devaluation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_minting_add = -100
+	# Base -1 — apply with multiplier = sv_money_flow_event_small for GDP-scaled effect.
+	country_minting_add = -1
 }
 antitrust_market_competition_boost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
