@@ -37,7 +37,19 @@ force=0
 # anywhere readable otherwise. Tee so interactive runs still see output.
 mkdir -p "$log_dir"
 run_log="$log_dir/${today}.log"
+
+# Touch the file immediately so it shows up in `ls` even if the rest of
+# the script fails before the first log line, and record an invocation
+# header. Without this, a wsl.exe / bash-profile failure produces no
+# file at all and you have to dig through Task Scheduler history.
+{ printf '\n==== %s invocation (pid=%s) ====\n' "$(date -Iseconds)" "$$"; } >> "$run_log"
+
+# Tee subprocess for the rest of the script. Track its PID so we can
+# wait for it to flush after the script exits (otherwise the tail of
+# the log can lag a few seconds — surprising when you `ls` right after).
 exec > >(tee -a "$run_log") 2>&1
+tee_pid=$!
+trap 'rc=$?; exec >&- 2>&-; [ -n "${tee_pid:-}" ] && wait "$tee_pid" 2>/dev/null; exit $rc' EXIT
 
 for arg in "$@"; do
     case "$arg" in
