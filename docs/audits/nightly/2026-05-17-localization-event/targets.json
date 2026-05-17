@@ -1,0 +1,41 @@
+{
+  "date": "2026-05-17",
+  "run_label": "2026-05-17-localization-event",
+  "total_lines": 600,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": true,
+  "filters": {
+    "areas": [
+      "localization"
+    ],
+    "include": [
+      "*event*"
+    ],
+    "exclude": []
+  },
+  "skip_nightly_marker": true,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "localization/english/te_events_l_english.yml",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    }
+  ]
+}
