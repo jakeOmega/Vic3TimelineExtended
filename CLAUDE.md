@@ -110,6 +110,15 @@ Keep additions short — one paragraph or a bullet, not a treatise. Bar: would t
 - **Never hand-edit auto-generated files.** Always edit the generator's input and re-run. Full ownership map: `docs/auto_generated_files.md`. Quick check while exploring: `git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localization/`.
 - Use `python3` on this system (no `python` alias). README/CLAUDE.md `python <script>.py` invocations all work as `python3`.
 
+### Stacked PRs must target `main`, not the parent feature branch
+
+When opening dependent PRs (PR B builds on PR A's branch), `gh pr create --base <parent-feature-branch>` makes B *merge into the parent branch, not into main*. GitHub does NOT auto-retarget the child when the parent merges — merging B in that state lands its content in the (now-merged-and-deleted) parent branch and silently strands the changes. We've hit this twice (#87-#91, #96-#97). Two safe paths:
+
+1. **Always use `--base main`** even for stacked work. The child's diff against main will include the parent's commits until the parent merges (diff temporarily looks bigger), but the merge target is correct from day one.
+2. **Retarget the child's base to main before merging the parent**: `gh pr edit <child> --base main`. Must happen while the child is still open — `gh pr edit --base` rejects closed PRs.
+
+Symptom of the bug: parent PR merges to main, child PRs show `MERGED` in `gh pr view`, but `git log main` doesn't include their commits and the file content on main doesn't reflect the changes. Recovery: push the latest descendant branch as a new ref and open a fresh PR to main (e.g., #98 recovered this session's #96/#97).
+
 ## Deployment topology
 - This repo lives on the WSL/Linux side (`mod_path`, e.g. `~/src/Vic3TimelineExtended`).
 - The engine reads from the Windows-side mod folder (`mod_deploy_target`, e.g. `/mnt/c/Users/<winuser>/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended`).
