@@ -327,13 +327,6 @@ ministry_law_events.5 = {
 		add_enactment_modifier = {
 			name = ministry_war_generals_advance
 		}
-		scope:armed_forces_ig = {
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
 	}
@@ -552,13 +545,6 @@ ministry_law_events.8 = {
 		add_enactment_modifier = {
 			name = ministry_culture_patronage_cautious
 		}
-		scope:intelligentsia_ig = {
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
 	}
@@ -746,13 +732,6 @@ ministry_law_events.10 = {
 		default_option = yes
 		add_enactment_modifier = {
 			name = ministry_env_smokestacks_advance
-		}
-		scope:industrialists_ig = {
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		# Domain side-effect
 		add_modifier = { name = ministry_env_pollution_reduction days = normal_modifier_time }
@@ -949,13 +928,6 @@ ministry_law_events.13 = {
 		add_enactment_modifier = {
 			name = ministry_prop_loudspeaker_advance
 		}
-		scope:intelligentsia_ig = {
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
 	}
@@ -1023,13 +995,6 @@ ministry_law_events.14 = {
 		default_option = yes
 		add_enactment_modifier = {
 			name = ministry_sci_laboratory_advance
-		}
-		scope:intelligentsia_ig = {
-			add_modifier = {
-				name = ig_approval_positive_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
@@ -1165,13 +1130,6 @@ ministry_law_events.16 = {
 		default_option = yes
 		add_enactment_modifier = {
 			name = ministry_consumer_tainted_advance
-		}
-		scope:industrialists_ig = {
-			add_modifier = {
-				name = ig_approval_negative_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
 		}
 		# Domain side-effect
 		add_modifier = { name = ministry_consumer_protection days = normal_modifier_time }
@@ -3035,7 +2993,6 @@ ministry_law_events.39 = {
 		add_enactment_modifier = { name = ministry_staffing_professional }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
-		add_loyalists = { value = small_radicals strata = middle }
 	}
 
 	option = {
@@ -3088,7 +3045,6 @@ ministry_law_events.40 = {
 		add_enactment_modifier = { name = ministry_budget_lean }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
-		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3096,7 +3052,6 @@ ministry_law_events.40 = {
 		add_enactment_modifier = { name = ministry_budget_generous }
 		# Domain side-effect: budget — generous funding draws down treasury
 		add_treasury = negate(sv_treasury_event_medium)
-		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3149,7 +3104,6 @@ ministry_law_events.41 = {
 		add_enactment_modifier = { name = ministry_turf_coexist }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
-		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3195,7 +3149,6 @@ ministry_law_events.42 = {
 		add_enactment_modifier = { name = ministry_dissolution_swift }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
-		add_radicals = { value = small_radicals strata = middle }
 	}
 
 	option = {
@@ -3203,7 +3156,6 @@ ministry_law_events.42 = {
 		add_enactment_modifier = { name = ministry_dissolution_phased }
 		# Domain side-effect: dissolution — swift cuts free up treasury
 		add_treasury = sv_treasury_event_small
-		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3249,7 +3201,6 @@ ministry_law_events.43 = {
 		add_enactment_modifier = { name = ministry_war_civilian_led }
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
-		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3309,7 +3260,6 @@ ministry_law_events.44 = {
 		add_enactment_modifier = { name = ministry_fa_dovish }
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_drain days = normal_modifier_time }
-		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3355,7 +3305,6 @@ ministry_law_events.45 = {
 		add_enactment_modifier = { name = ministry_commerce_protectionist }
 		# Domain side-effect
 		add_modifier = { name = welfare_investment_chill days = normal_modifier_time }
-		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3415,7 +3364,6 @@ ministry_law_events.46 = {
 		add_enactment_modifier = { name = ministry_culture_independent_grants }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
-		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3516,7 +3464,6 @@ ministry_law_events.48 = {
 		add_enactment_modifier = { name = ministry_env_strict_mandatory }
 		# Domain side-effect
 		add_modifier = { name = ministry_env_pollution_reduction days = normal_modifier_time }
-		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3569,7 +3516,6 @@ ministry_law_events.49 = {
 		add_enactment_modifier = { name = ministry_intel_domestic_focus }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
-		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3629,7 +3575,6 @@ ministry_law_events.50 = {
 		add_enactment_modifier = { name = ministry_refugee_restrictive }
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
-		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3675,7 +3620,6 @@ ministry_law_events.51 = {
 		add_enactment_modifier = { name = ministry_prop_state_controlled }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time }
-		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3728,7 +3672,6 @@ ministry_law_events.52 = {
 		add_enactment_modifier = { name = ministry_sci_basic_focus }
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
-		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3788,7 +3731,6 @@ ministry_law_events.53 = {
 		add_enactment_modifier = { name = ministry_thought_restrictive }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
-		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }
 
@@ -3834,7 +3776,6 @@ ministry_law_events.54 = {
 		add_enactment_modifier = { name = ministry_consumer_strict }
 		# Domain side-effect
 		add_modifier = { name = ministry_consumer_protection days = normal_modifier_time }
-		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3939,7 +3880,6 @@ ministry_law_events.56 = {
 		add_enactment_modifier = { name = ministry_religion_established_faith }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
-		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 
 	option = {
@@ -3999,6 +3939,5 @@ ministry_law_events.57 = {
 		add_enactment_modifier = { name = ministry_aid_humanitarian }
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
-		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
 	}
 }

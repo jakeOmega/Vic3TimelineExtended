@@ -115,16 +115,21 @@ def find_option_block(text: str, event_id: int, option: str):
 
 
 SECONDARY_EFFECT_PATTERNS = [
+    # add_loyalists / add_radicals (single-line or multi-line).
     re.compile(
-        r"\n\t+add_(?:loyalists|radicals)\s*=\s*\{[^{}]*?\n\t+\}",
+        r"\n\t+add_(?:loyalists|radicals)\s*=\s*\{[^{}]*\}",
         re.DOTALL,
     ),
+    # scope:<X>_ig = { add_modifier = { ... ig_approval_*_modifier ... } }
+    # — any IG suffix (opposing_ig, devout_ig, industrialists_ig, etc.).
     re.compile(
-        r"\n\t+scope:opposing_ig\s*=\s*\{\s*\n[^{}]*?add_modifier\s*=\s*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\n\t+\}\s*\n\t+\}",
+        r"\n\t+scope:[a-z_]+_ig\s*=\s*\{[^{}]*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\}[^{}]*\}",
         re.DOTALL,
     ),
+    # ig:<ig_X> ?= { add_modifier = { ... ig_approval_*_modifier ... } }
     re.compile(
-        r"\n\t+ig:ig_[a-z_]+\s*\?=\s*\{\s*add_modifier\s*=\s*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\}\s*\}",
+        r"\n\t+ig:ig_[a-z_]+\s*\?=\s*\{[^{}]*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\}[^{}]*\}",
+        re.DOTALL,
     ),
 ]
 
@@ -152,13 +157,22 @@ def retrofit_option(text: str, event_id: int, option: str, domain: str):
             matches.append((m.start(), m.end()))
 
     if matches:
+        # Replace the FIRST matched secondary effect with the domain modifier; strip
+        # any other matched secondary effects so the option's only side-effect is the
+        # single domain modifier (no orphan add_radicals/ig_approval lines).
         matches.sort()
         rep_start, rep_end = matches[0]
         indent_match = re.match(r"\n(\t+)", block[rep_start:])
         indent = indent_match.group(1) if indent_match else "\t\t"
         payload = "\n" + build_payload(domain, indent)
-        new_block = block[:rep_start] + payload + block[rep_end:]
-        msg = f"OK: event {event_id} option {option} → {domain} (swap)"
+        new_block = block
+        for i in range(len(matches) - 1, -1, -1):
+            ms, me = matches[i]
+            if i == 0:
+                new_block = new_block[:ms] + payload + new_block[me:]
+            else:
+                new_block = new_block[:ms] + new_block[me:]
+        msg = f"OK: event {event_id} option {option} → {domain} (swap×{len(matches)})"
     else:
         aem_match = re.search(r"\n(\t+)add_enactment_modifier", block)
         indent = aem_match.group(1) if aem_match else "\t\t"
@@ -197,8 +211,14 @@ def retrofit_treasury(text: str, event_id: int, option: str, amount, comment: st
         indent_match = re.match(r"\n(\t+)", block[rep_start:])
         indent = indent_match.group(1) if indent_match else indent
         payload = f"\n{indent}# Domain side-effect: {comment}\n{indent}add_treasury = {amount}"
-        new_block = block[:rep_start] + payload + block[rep_end:]
-        msg = f"OK: event {event_id} option {option} → add_treasury = {amount} (swap)"
+        new_block = block
+        for i in range(len(matches) - 1, -1, -1):
+            ms, me = matches[i]
+            if i == 0:
+                new_block = new_block[:ms] + payload + new_block[me:]
+            else:
+                new_block = new_block[:ms] + new_block[me:]
+        msg = f"OK: event {event_id} option {option} → add_treasury = {amount} (swap×{len(matches)})"
     else:
         close_pos = block.rfind("}")
         if close_pos < 0:
