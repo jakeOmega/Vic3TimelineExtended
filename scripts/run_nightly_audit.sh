@@ -68,15 +68,34 @@ else
     log "today=$today, last_run=${last_run:-<never>} — proceeding"
 fi
 
-# ---- 3. Server health -------------------------------------------------------
-if ! curl -sf http://localhost:8950/status >/dev/null 2>&1; then
-    log "ERROR: mod_state_server is not responding on :8950"
-    log "  Start it manually:  .venv/bin/python mod_state_server.py"
-    log "  Or open VS Code in this repo — it auto-starts."
-    log "  Aborting so the audit doesn't run against missing vanilla data."
-    exit 1
+# ---- 3. Server health (autostart if needed) ---------------------------------
+server_log="/tmp/mod_state_server.log"
+if curl -sf http://localhost:8950/status >/dev/null 2>&1; then
+    log "mod_state_server is already healthy"
+else
+    if [ ! -x ".venv/bin/python" ]; then
+        log "ERROR: .venv/bin/python not found — can't autostart mod_state_server"
+        log "  Run python3 scripts/setup.py once to bootstrap .venv."
+        exit 1
+    fi
+    log "mod_state_server not responding; starting it (~60–110 s warmup)"
+    nohup .venv/bin/python mod_state_server.py >"$server_log" 2>&1 &
+    disown || true
+
+    # mod_state_server is idempotent on startup (PID file check), so a
+    # concurrent VS Code-launched instance won't cause two servers.
+    deadline=$((SECONDS + 180))
+    until curl -sf http://localhost:8950/status >/dev/null 2>&1; do
+        if [ $SECONDS -ge $deadline ]; then
+            log "ERROR: mod_state_server did not become ready within 180 s"
+            log "---- $server_log tail ----"
+            tail -n 60 "$server_log" 2>/dev/null || true
+            exit 1
+        fi
+        sleep 3
+    done
+    log "mod_state_server is ready"
 fi
-log "mod_state_server is healthy"
 
 # ---- 4. Generate today's prompt ---------------------------------------------
 log "running scripts/nightly_audit_select.py"
