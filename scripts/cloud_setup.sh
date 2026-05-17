@@ -6,7 +6,10 @@
 # What it does, in order:
 #   1. Sparse-shallow-clone the private vanilla repo (jakeOmega/vic3) into
 #      ../vic3. Only game/common, game/localization/english, game/gui,
-#      game/map_data are fetched (~150 MB instead of 2 GB).
+#      game/map_data are fetched (~150 MB instead of 2 GB). Uses native
+#      `git clone` — auth is handled by the Routines GitHub proxy in the
+#      cloud sandbox, and by the developer's local git credentials in dev
+#      envs. No `gh` binary or explicit token needed.
 #   2. Shallow-clone the public Modding-Digests repo into ~/Modding-Digests.
 #      mod_state_server uses its highest-version /docs as the engine-doc
 #      snapshot (modifier-search, /engine-docs/origin/, etc.).
@@ -21,9 +24,12 @@
 # Re-running is safe: each step short-circuits when its target already
 # exists / is up. On failure to start the server within 180 s, the script
 # dumps the server log and exits non-zero so the routine fails loudly
-# instead of running the audit blind.
+# instead of running the audit blind. An ERR trap (below) does the same
+# for any other non-zero exit — needed because when the script is `source`d
+# from a parent shell whose errexit state differs, `set -e` alone has been
+# observed to miss command-not-found failures (see issue #93).
 
-set -euo pipefail
+set -Eeuo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
@@ -33,22 +39,44 @@ digests_dir="${HOME}/Modding-Digests"
 
 log() { printf '[cloud_setup] %s\n' "$*"; }
 
+trap 'rc=$?; log "ERROR: bootstrap failed at line $LINENO (exit $rc)"; \
+      if [ -f /tmp/mod_state_server.log ]; then \
+        log "---- /tmp/mod_state_server.log tail ----"; \
+        tail -n 60 /tmp/mod_state_server.log; \
+      fi; \
+      exit $rc' ERR
+
 # ---------------------------------------------------------------------------
-# 1. Vanilla repo (private — requires gh auth)
+# 1. Vanilla repo (private — auth via Routines GitHub proxy or local git creds)
 # ---------------------------------------------------------------------------
 if [ -d "${vanilla_dir}/.git" ]; then
   log "vanilla repo already present at ${vanilla_dir}; skipping clone"
 else
   log "cloning jakeOmega/vic3 -> ${vanilla_dir} (sparse, depth=1)"
-  # `gh repo clone` forwards flags after `--` to git. `--sparse` initializes
-  # an empty sparse-checkout (cone mode) so only the toplevel is materialized
+  # Native `git clone` — auth is handled transparently by the Routines
+  # GitHub proxy in the cloud sandbox, and by the developer's local git
+  # credentials in dev envs. No `gh` binary or explicit token needed.
+  # `--sparse` initializes cone mode so only the toplevel is materialized
   # before we explicitly opt in to the dirs we want via `sparse-checkout set`.
-  gh repo clone jakeOmega/vic3 "${vanilla_dir}" -- --depth=1 --sparse
+  git clone --depth=1 --filter=blob:none --sparse \
+      "https://github.com/jakeOmega/vic3.git" "${vanilla_dir}"
   git -C "${vanilla_dir}" sparse-checkout set \
     game/common \
     game/localization/english \
     game/gui \
     game/map_data
+
+  # Hard-fail if the clone silently no-op'd. Caught issue #93's gh-missing
+  # case once; guards against future variants — proxy mis-config, network
+  # glitch, sparse-checkout regression, wrong branch, etc.
+  if [ ! -d "${vanilla_dir}/game/common" ] \
+     || [ -z "$(ls -A "${vanilla_dir}/game/common" 2>/dev/null)" ]; then
+    log "ERROR: vanilla clone did not materialize at ${vanilla_dir}/game/common"
+    log "---- ${vanilla_dir} listing ----"
+    ls -la "${vanilla_dir}" 2>/dev/null || true
+    ls -la "${vanilla_dir}/game" 2>/dev/null || true
+    exit 1
+  fi
   log "vanilla sparse checkout ready ($(du -sh "${vanilla_dir}/game" 2>/dev/null | cut -f1) materialized)"
 fi
 
