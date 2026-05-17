@@ -444,7 +444,7 @@
  POPULATION_TRANSFER_BLOCKED_BY_MULTICULTURAL:0 "Cannot demand forced population transfers under Universal Citizenship"
  POPULATION_TRANSFER_BLOCKED_HIGH_ACCEPTANCE:0 "Cannot demand transfer of cultures that already have high acceptance in the other country"
  POP_LOW_GPD_PER_CAPITA:0 "Low State [Concept('concept_gdp_per_capita', 'GDP per Capita')]"
- POWER_BLOC_COHESION_LEADER_INFAMY:"[concept_power_bloc_leader]'s' [concept_infamy] ($identity_diplomatic$)\n   [COUNTRY.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetInfamy|-0]#!"
+ POWER_BLOC_COHESION_LEADER_INFAMY:"[concept_power_bloc_leader]'s [concept_infamy] ($identity_diplomatic$)\n   [COUNTRY.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetInfamy|-0]#!"
  POWER_BLOC_COHESION_LEGITIMACY_DIPLOMATIC:"[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short$')] [concept_legitimacy] ($identity_diplomatic$)"
  POWER_BLOC_COHESION_WORST_INFAMY_DIPLOMATIC:"[concept_power_bloc_member] member with highest [concept_infamy] ($identity_diplomatic$)\n   [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetInfamy|-0]#!"
  POWER_BLOC_MANDATE_PROGRESS_GLOBAL_GDP:"From [concept_power_bloc] containing [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_gdp_share')|V]% of world [Concept('concept_gdp', 'GDP')] ($identity_diplomatic$)"

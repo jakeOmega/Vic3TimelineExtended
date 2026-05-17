@@ -595,6 +595,84 @@
       "last_audited": "2026-05-17",
       "audit_count": 1,
       "recent_findings": 0
+    },
+    "events/probe_result_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "localization/english/te_game_rules_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_technologies_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "localization/english/te_production_methods_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "localization/english/te_miscellaneous_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "localization/english/te_combat_units_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_ship_types_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_companies_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_institutions_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_mobilization_options_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/scripted_progress_bars/heir_education_progress_bars.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/company_charter_types/extra_charters.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
     }
   }
 }

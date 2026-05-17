@@ -1470,7 +1470,7 @@
 			Additive Manufacturing
 			Advanced Structural Engineering
 		Unlocks Buildings: Deep-Sea Mine
-	Quantum Computing - By harnessing the strange [Concept('concept_power_bloc_principle', 'principles')] of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems.
+	Quantum Computing - By harnessing the strange principles of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems.
 		Unlocking Technologies:
 			Machine Learning
 			Early Nanotechnology

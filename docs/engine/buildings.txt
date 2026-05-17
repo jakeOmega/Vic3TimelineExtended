@@ -1830,7 +1830,7 @@ Financial Districts (bg_financial_districts):
 		$pm_privately_owned$
 		$pm_publicly_traded$
 		Increased Clergy Oversight
-		Electronic Brokarage
+		Electronic Brokerage
 		Digital Trading
 		Automated Trading
 		Hobbyist Management
@@ -1938,7 +1938,7 @@ Company Headquarter (bg_company_headquarter):
 		$pm_manor_house_principle_divine_economics_2$
 		$pm_government_run$
 		$pm_worker_cooperative$
-		Electronic Brokarage
+		Electronic Brokerage
 		Digital Trading
 		Automated Trading
 		Hobbyist Management
@@ -1967,7 +1967,7 @@ Regional Company Headquarter (bg_company_regional_headquarter):
 		$pm_manor_house_principle_divine_economics_2$
 		$pm_government_run$
 		$pm_worker_cooperative$
-		Electronic Brokarage
+		Electronic Brokerage
 		Digital Trading
 		Automated Trading
 		Hobbyist Management

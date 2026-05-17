@@ -249,7 +249,7 @@
  quantum_communications:0 "Quantum Communications"
  quantum_communications_desc:0 "Quantum technology can provide us with unbreakable channels for communication. It's the ultimate in secure messaging, protecting our most sensitive information from prying eyes."
  quantum_computing:0 "Quantum Computing"
- quantum_computing_desc:0 "By harnessing the strange [Concept('concept_power_bloc_principle', 'principles')] of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems."
+ quantum_computing_desc:0 "By harnessing the strange principles of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems."
  quantum_materials:0 "Quantum Materials"
  quantum_materials_desc:0 "Engineered substances with unique quantum properties. These materials could lead to breakthroughs in energy, computing, and telecommunications, changing the world as we know it."
  radar:0 "Radar"
