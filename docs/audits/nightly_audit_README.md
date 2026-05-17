@@ -22,9 +22,9 @@ Each run:
 | `scripts/nightly_audit_select.py` | Target selector, prompt generator. Stdlib only. |
 | `docs/audits/.nightly_coverage.json` | Per-file audit state. Committed. |
 | `docs/audits/nightly_checklists/*.md` | 8 per-area checklists (events, journal_entries, laws_and_politics, production_methods_and_buildings, technologies, localization, gui, scripted_effects_and_triggers). |
-| `docs/audits/nightly/<date>/prompt.md` | Generated per run — the audit prompt. |
-| `docs/audits/nightly/<date>/targets.json` | Generated per run — machine-readable target list. |
-| `docs/audits/nightly/<date>/report.md` | Optional summary. Off by default; enable with `--report`. |
+| `docs/audits/nightly/<run-label>/prompt.md` | Generated per run — the audit prompt. `<run-label>` is `<date>` for the first/scheduled run of the day, `<date>-v2`, `-v3`, ... for manual skill re-runs. |
+| `docs/audits/nightly/<run-label>/targets.json` | Generated per run — machine-readable target list. Includes the `run_label` field. |
+| `docs/audits/nightly/<run-label>/report.md` | Optional summary. Off by default; enable with `--report`. |
 
 ## Execution model
 
@@ -75,7 +75,14 @@ python3 scripts/nightly_audit_select.py --report
 
 # Custom output directory (for testing)
 python3 scripts/nightly_audit_select.py --out-dir /tmp/audit-test
+
+# Manual re-run on a day that's already been audited — picks the next available
+# -v2/-v3/... suffix instead of clobbering the existing dir. This is what the
+# /nightly-audit skill uses; the scheduled wrapper deliberately omits it.
+python3 scripts/nightly_audit_select.py --allow-rerun
 ```
+
+Since today's targets get bumped to `last_audited=<today>` after the first run wraps up, a same-day v2 invocation naturally picks a different slice — the recency-based scoring deprioritizes files that were already audited today. To re-examine the same v1 slice, read `docs/audits/nightly/<date>/prompt.md` directly rather than re-generating.
 
 ## Tuning knobs
 
