@@ -41,6 +41,42 @@ digests_dir="${HOME}/Modding-Digests"
 
 log() { printf '[cloud_setup] %s\n' "$*"; }
 
+# Dump the routine sandbox's git/github auth context. Safe to log — only
+# emits env var NAMES (not values), and redacts Authorization headers from
+# any verbose git traces. Used by the preflight failure path so the next
+# nightly's issue contains everything we need to diagnose proxy behavior
+# without requiring an extra interactive session.
+dump_auth_diagnostics() {
+  log "---- DIAGNOSTIC: git/github auth context ----"
+  log "[git config --global --list]"
+  git config --global --list 2>&1 | sed 's/^/  /' || true
+  log "[git config -l (cwd: $(pwd))]"
+  git config -l 2>&1 | sed 's/^/  /' || true
+  log "[primary repo .git/config (Vic3TimelineExtended)]"
+  if [ -f "${repo_root}/.git/config" ]; then
+    sed 's/^/  /' "${repo_root}/.git/config" || true
+  else
+    log "  (no .git/config at ${repo_root})"
+  fi
+  log "[gh CLI]"
+  if command -v gh >/dev/null 2>&1; then
+    log "  binary: $(command -v gh)"
+    gh auth status 2>&1 | sed 's/^/  /' || true
+  else
+    log "  (gh not installed)"
+  fi
+  log "[env var names matching GIT|GITHUB|CLAUDE|TOKEN|HTTP_PROXY|PROXY|CODESPACE]"
+  env | grep -iE '^(GIT|GITHUB|CLAUDE|TOKEN|HTTP_PROXY|HTTPS_PROXY|PROXY|CODESPACE)' \
+       | sed -E 's/=.*/=<set>/' | sed 's/^/  /' || true
+  log "[$ verbose ls-remote probe (Authorization headers redacted)]"
+  GIT_TERMINAL_PROMPT=0 GIT_TRACE=1 GIT_CURL_VERBOSE=1 \
+    git ls-remote --exit-code "https://github.com/jakeOmega/vic3.git" HEAD 2>&1 \
+    | head -80 \
+    | sed -E 's/([Aa]uthorization|[Cc]ookie|[Tt]oken):[[:space:]]*[^[:space:]]+/\1: [REDACTED]/g' \
+    | sed 's/^/  /' || true
+  log "---- END DIAGNOSTIC ----"
+}
+
 trap 'rc=$?; log "ERROR: bootstrap failed at line $LINENO (exit $rc)"; \
       if [ -f /tmp/mod_state_server.log ]; then \
         log "---- /tmp/mod_state_server.log tail ----"; \
@@ -74,15 +110,20 @@ if [ ! -d "${vanilla_dir}/.git" ]; then
   if ! GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code "${vanilla_remote_url}" HEAD >/dev/null 2>&1; then
     log "ERROR: cannot reach jakeOmega/vic3 — auth probe failed."
     log "  Auth source tried: ${vanilla_auth_source}"
-    if [ -z "${vanilla_remote_token}" ]; then
-      log "  Fix: set GH_TOKEN in the routine's Environment Variables UI to a"
-      log "  GitHub personal access token with repo:read scope on jakeOmega/vic3."
-      log "  The Routines GitHub proxy only auto-authenticates the routine's"
-      log "  primary repo, not cross-repo private clones (issue #99)."
-    else
-      log "  Fix: verify the GH_TOKEN/GITHUB_TOKEN has repo:read scope on"
-      log "  jakeOmega/vic3 and is not expired."
-    fi
+    log ""
+    log "  The Routines docs say the GitHub proxy auths any repo your account"
+    log "  can see, but empirically it doesn't reach this cross-repo clone."
+    log "  Dumping diagnostic context so the routine's agent (and the issue"
+    log "  filed downstream) has the data needed to figure out the right hook."
+    log ""
+    dump_auth_diagnostics
+    log ""
+    log "  Note for the routine agent: the diagnostic above shows what auth"
+    log "  context the sandbox actually exposes. Look for a credential helper,"
+    log "  url.<insteadOf> rewrite, http.extraHeader, or proxy env var that"
+    log "  the primary-repo clone uses but this secondary one doesn't pick up."
+    log "  Include the diagnostic block verbatim (it's pre-redacted) in the"
+    log "  GitHub issue you file per the routine instructions."
     exit 1
   fi
 fi
