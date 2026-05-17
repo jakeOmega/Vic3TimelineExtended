@@ -6131,3 +6131,1350 @@ extra_law_events.60 = {
 		add_authority = -200
 	}
 }
+
+# ======================================================================
+#  DEBATE EVENTS  (.61 – .84)
+#
+#  Vanilla-style debate events. Both options apply a directional
+#  enactment modifier (+0.03 success_add each) — neither dominates
+#  for enactment speed. Choice is about IG alignment, not pace.
+#  See common/static_modifiers/law_enactment_modifiers.txt header for
+#  the four-flavor design (advance / cautious / stall / debate).
+# ======================================================================
+
+# ======================================================================
+#  61 – Industry vs Public Consultation  (Financial Regulation – debate)
+# ======================================================================
+extra_law_events.61 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.61.t
+	desc = extra_law_events.61.d
+	flavor = extra_law_events.61.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_prudential_narrow_banking
+			is_enacting_law = law_type:law_central_bank_independence
+			is_enacting_law = law_type:law_directed_credit_development_banks
+		}
+		NOR = {
+			has_modifier = finreg_industry_consultation
+			has_modifier = finreg_public_consultation
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.61.a
+		default_option = yes
+		add_enactment_modifier = { name = finreg_industry_consultation }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.61.b
+		add_enactment_modifier = { name = finreg_public_consultation }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  62 – Speculator Crackdown vs Deposit Guarantees  (Financial Regulation – debate)
+# ======================================================================
+extra_law_events.62 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.62.t
+	desc = extra_law_events.62.d
+	flavor = extra_law_events.62.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_prudential_narrow_banking
+			is_enacting_law = law_type:law_central_bank_independence
+			is_enacting_law = law_type:law_universal_banking_light_prudence
+		}
+		NOR = {
+			has_modifier = finreg_speculator_crackdown
+			has_modifier = finreg_deposit_guarantees
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.62.a
+		default_option = yes
+		add_enactment_modifier = { name = finreg_speculator_crackdown }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.62.b
+		add_enactment_modifier = { name = finreg_deposit_guarantees }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		add_radicals = { value = small_radicals strata = middle }
+	}
+}
+
+# ======================================================================
+#  63 – Aristocratic Settlement vs Industrial Alignment  (Monetary Policy – debate)
+# ======================================================================
+extra_law_events.63 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.63.t
+	desc = extra_law_events.63.d
+	flavor = extra_law_events.63.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_gold_standard
+			is_enacting_law = law_type:law_fiat_currency
+			is_enacting_law = law_type:law_digital_currency
+		}
+		NOR = {
+			has_modifier = monpol_aristocrat_settlement
+			has_modifier = monpol_industrial_alignment
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.63.a
+		default_option = yes
+		add_enactment_modifier = { name = monpol_aristocrat_settlement }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.63.b
+		add_enactment_modifier = { name = monpol_industrial_alignment }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  64 – Wage Indexation vs Capital Protection  (Monetary Policy – debate)
+# ======================================================================
+extra_law_events.64 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.64.t
+	desc = extra_law_events.64.d
+	flavor = extra_law_events.64.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_fiat_currency
+		NOR = {
+			has_modifier = monpol_wage_indexation
+			has_modifier = monpol_capital_protection
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.64.a
+		default_option = yes
+		add_enactment_modifier = { name = monpol_wage_indexation }
+		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.64.b
+		add_enactment_modifier = { name = monpol_capital_protection }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  65 – Civil Liberties vs National Security  (Privacy Rights – debate)
+# ======================================================================
+extra_law_events.65 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.65.t
+	desc = extra_law_events.65.d
+	flavor = extra_law_events.65.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_moderate_data_privacy
+			is_enacting_law = law_type:law_strong_privacy_rights
+			is_enacting_law = law_type:law_intrusive_surveillance
+		}
+		NOR = {
+			has_modifier = privacy_civil_liberties_carve_outs
+			has_modifier = privacy_national_security_exemptions
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.65.a
+		default_option = yes
+		add_enactment_modifier = { name = privacy_civil_liberties_carve_outs }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.65.b
+		add_enactment_modifier = { name = privacy_national_security_exemptions }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  66 – Freedom Safeguards vs Content Moderation  (Internet Governance – debate)
+# ======================================================================
+extra_law_events.66 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.66.t
+	desc = extra_law_events.66.d
+	flavor = extra_law_events.66.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_net_neutrality
+			is_enacting_law = law_type:law_state_controlled_internet
+			is_enacting_law = law_type:law_unregulated_internet
+		}
+		NOR = {
+			has_modifier = internet_freedom_safeguards
+			has_modifier = internet_content_moderation
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.66.a
+		default_option = yes
+		add_enactment_modifier = { name = internet_freedom_safeguards }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.66.b
+		add_enactment_modifier = { name = internet_content_moderation }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  67 – Research Exemption vs Religious Carve-Outs  (Genetic Rights – debate)
+# ======================================================================
+extra_law_events.67 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.67.t
+	desc = extra_law_events.67.d
+	flavor = extra_law_events.67.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_ban_on_genetic_modification
+			is_enacting_law = law_type:law_corporate_genetic_licensing
+			is_enacting_law = law_type:law_open_source_genetics
+			is_enacting_law = law_type:law_state_eugenics_program
+		}
+		NOR = {
+			has_modifier = genetics_research_exemption
+			has_modifier = genetics_religious_carve_outs
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.67.a
+		default_option = yes
+		add_enactment_modifier = { name = genetics_research_exemption }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.67.b
+		add_enactment_modifier = { name = genetics_religious_carve_outs }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  68 – Established Firms vs Strict Enforcement  (Antitrust – debate)
+# ======================================================================
+extra_law_events.68 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.68.t
+	desc = extra_law_events.68.d
+	flavor = extra_law_events.68.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_trust_busting
+			is_enacting_law = law_type:law_regulated_utilities
+			is_enacting_law = law_type:law_dirigisme
+		}
+		NOR = {
+			has_modifier = antitrust_established_firms_carve_out
+			has_modifier = antitrust_strict_enforcement
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.68.a
+		default_option = yes
+		add_enactment_modifier = { name = antitrust_established_firms_carve_out }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.68.b
+		add_enactment_modifier = { name = antitrust_strict_enforcement }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  69 – Creator Protection vs Public Domain  (Intellectual Property – debate)
+# ======================================================================
+extra_law_events.69 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.69.t
+	desc = extra_law_events.69.d
+	flavor = extra_law_events.69.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_strict_ip_protection
+			is_enacting_law = law_type:law_open_source_innovation
+			is_enacting_law = law_type:law_creative_commons
+		}
+		NOR = {
+			has_modifier = ip_creator_protection
+			has_modifier = ip_public_domain_expansion
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.69.a
+		default_option = yes
+		add_enactment_modifier = { name = ip_creator_protection }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.69.b
+		add_enactment_modifier = { name = ip_public_domain_expansion }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  70 – Strict Humanitarian vs Realpolitik  (Rules of War – debate)
+# ======================================================================
+extra_law_events.70 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.70.t
+	desc = extra_law_events.70.d
+	flavor = extra_law_events.70.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_war_crimes_forbidden
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+		}
+		NOR = {
+			has_modifier = row_strict_humanitarian
+			has_modifier = row_realpolitik_exemptions
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.70.a
+		default_option = yes
+		add_enactment_modifier = { name = row_strict_humanitarian }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.70.b
+		add_enactment_modifier = { name = row_realpolitik_exemptions }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  71 – Civilian Oversight vs Military Self-Regulation  (Rules of War – debate)
+# ======================================================================
+extra_law_events.71 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.71.t
+	desc = extra_law_events.71.d
+	flavor = extra_law_events.71.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_humanitarian_regulations
+			is_enacting_law = law_type:law_limited_war
+		}
+		NOR = {
+			has_modifier = row_civilian_oversight
+			has_modifier = row_military_self_regulation
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.71.a
+		default_option = yes
+		add_enactment_modifier = { name = row_civilian_oversight }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.71.b
+		add_enactment_modifier = { name = row_military_self_regulation }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  72 – Rehabilitation vs Retribution  (Criminal Justice – debate)
+# ======================================================================
+extra_law_events.72 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.72.t
+	desc = extra_law_events.72.d
+	flavor = extra_law_events.72.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_restorative_justice
+			is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
+		}
+		NOR = {
+			has_modifier = crimjust_rehabilitation_focus
+			has_modifier = crimjust_retribution_focus
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.72.a
+		default_option = yes
+		add_enactment_modifier = { name = crimjust_rehabilitation_focus }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.72.b
+		add_enactment_modifier = { name = crimjust_retribution_focus }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  73 – Pluralist Accommodation vs Assimilationist Push  (Language Policy – debate)
+#  Cultural/regional framing: minority-loyalists/radicals via lower strata
+# ======================================================================
+extra_law_events.73 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.73.t
+	desc = extra_law_events.73.d
+	flavor = extra_law_events.73.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_civic_monolingualism
+			is_enacting_law = law_type:law_multilingual_federalism
+			is_enacting_law = law_type:law_linguistic_purity
+			is_enacting_law = law_type:law_state_led_language_reform
+			is_enacting_law = law_type:law_ubiquitous_translation
+		}
+		NOR = {
+			has_modifier = langpol_pluralist_accommodation
+			has_modifier = langpol_assimilationist_push
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.73.a
+		default_option = yes
+		add_enactment_modifier = { name = langpol_pluralist_accommodation }
+		add_loyalists = { value = small_radicals strata = lower }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.73.b
+		add_enactment_modifier = { name = langpol_assimilationist_push }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		add_radicals = { value = small_radicals strata = lower }
+	}
+}
+
+# ======================================================================
+#  74 – Hard Caps vs Voluntary Disclosure  (Electoral Finance – debate)
+# ======================================================================
+extra_law_events.74 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.74.t
+	desc = extra_law_events.74.d
+	flavor = extra_law_events.74.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_donation_limits
+			is_enacting_law = law_type:law_publicly_funded_elections
+		}
+		NOR = {
+			has_modifier = electfin_hard_caps
+			has_modifier = electfin_voluntary_disclosure
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.74.a
+		default_option = yes
+		add_enactment_modifier = { name = electfin_hard_caps }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.74.b
+		add_enactment_modifier = { name = electfin_voluntary_disclosure }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  75 – Federal Protections vs Centralized  (State Power – debate)
+#  Regional framing: landowners as regional-power proxy, intelligentsia as centralizers
+# ======================================================================
+extra_law_events.75 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.75.t
+	desc = extra_law_events.75.d
+	flavor = extra_law_events.75.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_federal_system
+			is_enacting_law = law_type:law_devolution
+			is_enacting_law = law_type:law_unitary_state
+		}
+		NOR = {
+			has_modifier = statepower_federal_protections
+			has_modifier = statepower_centralized
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.75.a
+		default_option = yes
+		add_enactment_modifier = { name = statepower_federal_protections }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.75.b
+		add_enactment_modifier = { name = statepower_centralized }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  76 – Permissive Ethics vs Restrictive  (Human Augmentation – debate)
+# ======================================================================
+extra_law_events.76 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.76.t
+	desc = extra_law_events.76.d
+	flavor = extra_law_events.76.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/automation_robots_factory.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_unrestricted_augmentation
+			is_enacting_law = law_type:law_medical_augmentation_only
+			is_enacting_law = law_type:law_regulated_augmentation_market
+			is_enacting_law = law_type:law_mandatory_augmentation
+			is_enacting_law = law_type:law_human_purity
+		}
+		NOR = {
+			has_modifier = augment_permissive_ethics
+			has_modifier = augment_restrictive_ethics
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.76.a
+		default_option = yes
+		add_enactment_modifier = { name = augment_permissive_ethics }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.76.b
+		add_enactment_modifier = { name = augment_restrictive_ethics }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  77 – Equal Split vs Primogeniture  (Inheritance – debate)
+# ======================================================================
+extra_law_events.77 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.77.t
+	desc = extra_law_events.77.d
+	flavor = extra_law_events.77.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_non_inheritable_usage_rights
+		}
+		NOR = {
+			has_modifier = inherit_equal_split
+			has_modifier = inherit_primogeniture_preserved
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.77.a
+		default_option = yes
+		add_enactment_modifier = { name = inherit_equal_split }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.77.b
+		add_enactment_modifier = { name = inherit_primogeniture_preserved }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  78 – Marriage First vs Employment First  (LGBTQ Rights – debate)
+#  Note: both options upset ig_devout; choice is which progressive constituency benefits
+# ======================================================================
+extra_law_events.78 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.78.t
+	desc = extra_law_events.78.d
+	flavor = extra_law_events.78.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_basic_protections
+			is_enacting_law = law_type:law_comprehensive_rights
+			is_enacting_law = law_type:law_full_equality_and_protection
+		}
+		NOR = {
+			has_modifier = lgbtq_marriage_first
+			has_modifier = lgbtq_employment_first
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.78.a
+		default_option = yes
+		add_enactment_modifier = { name = lgbtq_marriage_first }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.78.b
+		add_enactment_modifier = { name = lgbtq_employment_first }
+		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  79 – Pro-Natalist vs Family Planning  (Family Policy – debate)
+# ======================================================================
+extra_law_events.79 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.79.t
+	desc = extra_law_events.79.d
+	flavor = extra_law_events.79.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_pro_natalist_subsidies
+			is_enacting_law = law_type:law_state_sponsored_family_planning
+			is_enacting_law = law_type:law_population_control_measures
+			is_enacting_law = law_type:law_communal_child_rearing
+		}
+		NOR = {
+			has_modifier = famrep_pronatalist_incentives
+			has_modifier = famrep_family_planning
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.79.a
+		default_option = yes
+		add_enactment_modifier = { name = famrep_pronatalist_incentives }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.79.b
+		add_enactment_modifier = { name = famrep_family_planning }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  80 – Transparency First vs Stability First  (Right to Information – debate)
+# ======================================================================
+extra_law_events.80 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.80.t
+	desc = extra_law_events.80.d
+	flavor = extra_law_events.80.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/media_press_freedom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_freedom_of_information
+			is_enacting_law = law_type:law_open_government
+		}
+		NOR = {
+			has_modifier = rti_transparency_first
+			has_modifier = rti_stability_first
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.80.a
+		default_option = yes
+		add_enactment_modifier = { name = rti_transparency_first }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.80.b
+		add_enactment_modifier = { name = rti_stability_first }
+		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  81 – Affirmative Action vs Equal Treatment  (Minority Rights – debate)
+#  Cultural framing: lower-strata loyalists/radicals for minority sympathy
+# ======================================================================
+extra_law_events.81 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.81.t
+	desc = extra_law_events.81.d
+	flavor = extra_law_events.81.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_minority_rights_protection
+			is_enacting_law = law_type:law_minority_rights_affirmative_action
+			is_enacting_law = law_type:law_minority_rights_indifference
+		}
+		NOR = {
+			has_modifier = minrights_affirmative_action
+			has_modifier = minrights_equal_treatment
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.81.a
+		default_option = yes
+		add_enactment_modifier = { name = minrights_affirmative_action }
+		add_loyalists = { value = small_radicals strata = lower }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.81.b
+		add_enactment_modifier = { name = minrights_equal_treatment }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		add_radicals = { value = small_radicals strata = lower }
+	}
+}
+
+# ======================================================================
+#  82 – Retraining First vs UBI First  (Welfare – debate)
+#  Both options upset ig_industrialists; choice is which beneficiary
+# ======================================================================
+extra_law_events.82 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.82.t
+	desc = extra_law_events.82.d
+	flavor = extra_law_events.82.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_universal_basic_income
+			is_enacting_law = law_type:law_post-scarcity
+		}
+		NOR = {
+			has_modifier = welfare_retraining_first
+			has_modifier = welfare_ubi_first
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.82.a
+		default_option = yes
+		add_enactment_modifier = { name = welfare_retraining_first }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.82.b
+		add_enactment_modifier = { name = welfare_ubi_first }
+		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  83 – Tech First vs Human Oversight  (Algorithmic Governance – debate)
+# ======================================================================
+extra_law_events.83 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.83.t
+	desc = extra_law_events.83.d
+	flavor = extra_law_events.83.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_algorithmic_governance
+		NOR = {
+			has_modifier = govprin_tech_first
+			has_modifier = govprin_human_first
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.83.a
+		default_option = yes
+		add_enactment_modifier = { name = govprin_tech_first }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.83.b
+		add_enactment_modifier = { name = govprin_human_first }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
+
+# ======================================================================
+#  84 – Direct Voting vs Deliberative Chambers  (Direct Democracy – debate)
+# ======================================================================
+extra_law_events.84 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.84.t
+	desc = extra_law_events.84.d
+	flavor = extra_law_events.84.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_direct_democracy
+		NOR = {
+			has_modifier = govprin_direct_voting
+			has_modifier = govprin_deliberative_chambers
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = { save_scope_as = current_law_scope }
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = {
+		name = extra_law_events.84.a
+		default_option = yes
+		add_enactment_modifier = { name = govprin_direct_voting }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+
+	option = {
+		name = extra_law_events.84.b
+		add_enactment_modifier = { name = govprin_deliberative_chambers }
+		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
+		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+	}
+}
