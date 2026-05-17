@@ -239,7 +239,7 @@
  je_iw_type_header_industrial_espionage:0 "\n\n$TOOLTIP_DELIMITER$\n  #bold Industrial Espionage#!"
  je_iw_type_header_influence_campaign:0 "\n\n$TOOLTIP_DELIMITER$\n  #bold Influence Campaign#!"
  je_iw_type_header_infrastructure_sabotage:0 "\n\n$TOOLTIP_DELIMITER$\n  #bold [concept_infrastructure] Sabotage#!"
- je_iw_type_header_military_espionage:0 "\n$TOOLTIP_DELIMITER$\n  #bold Military Espionage#!"
+ je_iw_type_header_military_espionage:0 "\n\n$TOOLTIP_DELIMITER$\n  #bold Military Espionage#!"
  je_mental_health_crisis:0 "Mental Health Crisis"
  je_mental_health_crisis_desc:0 "Modern life has produced an epidemic of depression, anxiety, and addiction. Decide how the state will respond."
  je_mental_health_status_crisis:0 "#R The mental health crisis deepens.#! Without rehabilitative justice, society treats symptoms as crimes."
