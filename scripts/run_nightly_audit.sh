@@ -31,6 +31,14 @@ log_dir="docs/audits/nightly/logs"
 today="$(date +%Y-%m-%d)"
 force=0
 
+# Capture everything (wrapper output + claude --print output + server
+# autostart log lines) in one per-day file. Required for the Windows
+# Task Scheduler path — wsl.exe's stdout/stderr aren't persisted
+# anywhere readable otherwise. Tee so interactive runs still see output.
+mkdir -p "$log_dir"
+run_log="$log_dir/${today}.log"
+exec > >(tee -a "$run_log") 2>&1
+
 for arg in "$@"; do
     case "$arg" in
         --force) force=1 ;;
@@ -111,18 +119,15 @@ fi
 log "prompt ready at $prompt_path"
 
 # ---- 5. Run audit via claude --print ----------------------------------------
-mkdir -p "$log_dir"
-audit_log="$log_dir/${today}.log"
-log "invoking claude --print (audit output streams to $audit_log)"
-
+log "invoking claude --print (output appends to $run_log via exec tee above)"
 # --permission-mode auto: accept tool calls without prompting (we're headless).
 # Stdin = the prompt; --print runs to completion and exits.
-if ! claude --print --permission-mode auto < "$prompt_path" >"$audit_log" 2>&1; then
+if ! claude --print --permission-mode auto < "$prompt_path"; then
     rc=$?
-    log "ERROR: claude --print exited $rc (see $audit_log)"
+    log "ERROR: claude --print exited $rc"
     exit $rc
 fi
-log "audit completed; output in $audit_log"
+log "audit completed"
 
 # ---- 6. Update marker -------------------------------------------------------
 mkdir -p "$(dirname "$marker_file")"
