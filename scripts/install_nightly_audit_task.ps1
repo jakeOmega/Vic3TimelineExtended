@@ -27,12 +27,22 @@ param(
 )
 
 if (-not $WslDistro) {
-    $WslDistro = (wsl.exe --list --quiet | Where-Object { $_ -and $_.Trim() } | Select-Object -First 1).Trim()
+    # wsl.exe writes UTF-16 LE by default. PowerShell 5.1's default ASCII
+    # decoding turns "Ubuntu" into "U`0b`0u`0n`0t`0u`0" — invisible in
+    # Write-Host but the embedded NULs truncate the Task Scheduler XML
+    # value at the first byte, leaving the stored distro as just "U" and
+    # the whole rest of the argument string lost. Set WSL_UTF8 for new
+    # WSL (≥0.65.1) AND strip NULs from the result as a belt-and-braces
+    # fallback for older WSL.
+    $env:WSL_UTF8 = "1"
+    $WslDistro = (wsl.exe --list --quiet | ForEach-Object { ($_ -replace "`0", "").Trim() } | Where-Object { $_ } | Select-Object -First 1)
     if (-not $WslDistro) {
         throw "Could not detect a default WSL distro. Pass -WslDistro <name> explicitly."
     }
     Write-Host "Auto-detected WSL distro: $WslDistro"
 }
+# Defensive: if -WslDistro was passed but somehow contains NULs, scrub them.
+$WslDistro = ($WslDistro -replace "`0", "").Trim()
 
 # Action: wsl.exe -d <distro> -- bash -lc 'cd <repo> && ./scripts/run_nightly_audit.sh'
 # Using `bash -lc` so the user's login profile is sourced — gives the script
