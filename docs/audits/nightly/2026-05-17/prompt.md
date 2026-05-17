@@ -16,8 +16,7 @@ File findings as GitHub issues; fix what's trivially fixable as PRs.
 - `docs/audits/open_issues.md`
 - `docs/vanilla/vanilla_known_bugs.md`
 - `docs/guides/event_creation_guide.md`
-- `docs/vanilla/vanilla_diplomacy_reference.md`
-- `docs/vanilla/treaty_articles_reference.md`
+- `docs/vanilla/vanilla_politics_reference.md`
 - `docs/audits/nightly_checklists/events.md`
 - `docs/audits/nightly_checklists/laws_and_politics.md`
 - `docs/audits/nightly_checklists/localization.md`
@@ -40,30 +39,16 @@ Also skim `gh issue list --search nightly-audit --state open --limit 30` and
 
 | # | File | Lines | Area | Last audited | Count | Recent findings |
 |---|---|---|---|---|---|---|
-| 1 | `events/un_vote_events.txt` | 1–600 (600) | events | never | 0 | 0 |
-| 2 | `common/diplomatic_plays/extra_diplomatic_plays.txt` | all (1) | laws_and_politics | never | 0 | 0 |
-| 3 | `common/treaty_articles/extra_treaty_articles.txt` | 1–600 (600) | laws_and_politics | never | 0 | 0 |
-| 4 | `common/power_bloc_identities/_power_bloc_identities.info` | all (13) | laws_and_politics | never | 0 | 0 |
-| 5 | `localization/english/te_religion_l_english.yml` | all (249) | localization | never | 0 | 0 |
-| 6 | `events/minor_events.txt` | 1–600 (600) | events | never | 0 | 0 |
-| 7 | `common/treaty_articles/106_religious_mission_rights.txt` | all (339) | laws_and_politics | never | 0 | 0 |
-| 8 | `common/power_bloc_principles/_power_bloc_principles.info` | all (13) | laws_and_politics | never | 0 | 0 |
-| 9 | `common/diplomatic_plays/_diplomatic_plays.info` | all (30) | laws_and_politics | never | 0 | 0 |
-| 10 | `localization/english/te_decrees_l_english.yml` | all (34) | localization | never | 0 | 0 |
-| 11 | `common/subject_types/modified.txt` | all (1) | laws_and_politics | never | 0 | 0 |
-| 12 | `common/power_bloc_principle_groups/_power_bloc_principle_groups.info` | all (13) | laws_and_politics | never | 0 | 0 |
-| 13 | `localization/english/te_goods_and_needs_l_english.yml` | all (7) | localization | never | 0 | 0 |
+| 1 | `events/environmentalism_events.txt` | 1–600 (600) | events | never | 0 | 0 |
+| 2 | `common/laws/modified.txt` | 1–600 (600) | laws_and_politics | never | 0 | 0 |
+| 3 | `common/government_types/timeline_extended_governments.txt` | all (143) | laws_and_politics | never | 0 | 0 |
+| 4 | `events/ministry_law_events.txt` | 1–600 (600) | events | never | 0 | 0 |
+| 5 | `localization/english/te_journal_entries_l_english.yml` | all (475) | localization | never | 0 | 0 |
+| 6 | `common/institutions/_institutions.info` | all (5) | laws_and_politics | never | 0 | 0 |
+| 7 | `localization/english/te_ideologies_l_english.yml` | all (69) | localization | never | 0 | 0 |
+| 8 | `common/political_movement_pop_support/political_movement_pop_support.md` | all (8) | laws_and_politics | never | 0 | 0 |
 
-**Budget**: 2500 of 2500 lines, 13 of 15 files.
-
-## Registry drift
-
-`docs/auto_generated_files.md` and `EXCLUDED_GLOBS` (in `scripts/nightly_audit_select.py`) have drifted.
-Investigate as part of this audit; if action is needed, update `EXCLUDED_GLOBS` or `INTENTIONALLY_NOT_EXCLUDED` in the script accordingly.
-
-**In registry but not excluded** (newly generator-managed files? — add to `EXCLUDED_GLOBS` or `INTENTIONALLY_NOT_EXCLUDED`):
-
-- `common/company_types/*.txt`
+**Budget**: 2500 of 2500 lines, 8 of 15 files.
 
 ## Focus ranking
 

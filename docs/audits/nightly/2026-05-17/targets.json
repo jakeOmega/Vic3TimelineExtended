@@ -6,14 +6,12 @@
   "slice_cap": 600,
   "report_requested": false,
   "registry_drift": {
-    "in_registry_not_excluded": [
-      "common/company_types/*.txt"
-    ],
+    "in_registry_not_excluded": [],
     "excluded_globs_not_in_registry": []
   },
   "targets": [
     {
-      "path": "events/un_vote_events.txt",
+      "path": "events/environmentalism_events.txt",
       "line_range": [
         1,
         600
@@ -22,28 +20,14 @@
       "area": "events",
       "docs": [
         "docs/guides/event_creation_guide.md",
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
+        "docs/vanilla/vanilla_politics_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/diplomatic_plays/extra_diplomatic_plays.txt",
-      "line_range": null,
-      "lines": 1,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/treaty_articles/extra_treaty_articles.txt",
+      "path": "common/laws/modified.txt",
       "line_range": [
         1,
         600
@@ -51,40 +35,26 @@
       "lines": 600,
       "area": "laws_and_politics",
       "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
+        "docs/vanilla/vanilla_politics_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/power_bloc_identities/_power_bloc_identities.info",
+      "path": "common/government_types/timeline_extended_governments.txt",
       "line_range": null,
-      "lines": 13,
+      "lines": 143,
       "area": "laws_and_politics",
       "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
+        "docs/vanilla/vanilla_politics_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "localization/english/te_religion_l_english.yml",
-      "line_range": null,
-      "lines": 249,
-      "area": "localization",
-      "docs": [
-        "docs/guides/event_creation_guide.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "events/minor_events.txt",
+      "path": "events/ministry_law_events.txt",
       "line_range": [
         1,
         600
@@ -92,55 +62,17 @@
       "lines": 600,
       "area": "events",
       "docs": [
-        "docs/guides/event_creation_guide.md"
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/treaty_articles/106_religious_mission_rights.txt",
+      "path": "localization/english/te_journal_entries_l_english.yml",
       "line_range": null,
-      "lines": 339,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/power_bloc_principles/_power_bloc_principles.info",
-      "line_range": null,
-      "lines": 13,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "common/diplomatic_plays/_diplomatic_plays.info",
-      "line_range": null,
-      "lines": 30,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "localization/english/te_decrees_l_english.yml",
-      "line_range": null,
-      "lines": 34,
+      "lines": 475,
       "area": "localization",
       "docs": [
         "docs/guides/event_creation_guide.md"
@@ -150,38 +82,36 @@
       "recent_findings": 0
     },
     {
-      "path": "common/subject_types/modified.txt",
+      "path": "common/institutions/_institutions.info",
       "line_range": null,
-      "lines": 1,
+      "lines": 5,
       "area": "laws_and_politics",
       "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
+        "docs/vanilla/vanilla_politics_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,
       "recent_findings": 0
     },
     {
-      "path": "common/power_bloc_principle_groups/_power_bloc_principle_groups.info",
+      "path": "localization/english/te_ideologies_l_english.yml",
       "line_range": null,
-      "lines": 13,
-      "area": "laws_and_politics",
-      "docs": [
-        "docs/vanilla/vanilla_diplomacy_reference.md",
-        "docs/vanilla/treaty_articles_reference.md"
-      ],
-      "last_audited": null,
-      "audit_count": 0,
-      "recent_findings": 0
-    },
-    {
-      "path": "localization/english/te_goods_and_needs_l_english.yml",
-      "line_range": null,
-      "lines": 7,
+      "lines": 69,
       "area": "localization",
       "docs": [
         "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movement_pop_support/political_movement_pop_support.md",
+      "line_range": null,
+      "lines": 8,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
       ],
       "last_audited": null,
       "audit_count": 0,

@@ -300,7 +300,16 @@ environmentalism_events.5 = {
 		}
 		any_scope_state = {
 			is_incorporated = yes
-			any_scope_building = { is_building_type = building_wheat_farm }
+			any_scope_building = {
+				OR = {
+					is_building_type = building_wheat_farm
+					is_building_type = building_rye_farm
+					is_building_type = building_rice_farm
+					is_building_type = building_maize_farm
+					is_building_type = building_millet_farm
+					is_building_type = building_livestock_ranch
+				}
+			}
 		}
 	}
 
