@@ -522,6 +522,60 @@ Assertion failed: Possible loss of data when converting from int to float
 
 Vanilla engine internal — numeric coercion safety check, fires during some unspecified vanilla calculation. Not actionable from script, not mod-introduced.
 
+### `pdx_assert.cpp:637` — vanilla `building_company_basic_<good>` duplicate seeding
+- source: `pdx_assert.cpp:637`
+
+```
+Tried to create building of Type building_company_basic_
+```
+
+Vanilla company-charter auto-creation tries to create the same `building_company_basic_<good>` twice on save-restore or initial seeding (also reported separately from `building_manager.cpp:1792`, registered above). The assertion is the engine-side complaint about the duplicate. Different cpp source but same root cause — register both since either may surface depending on which subsystem the duplicate hits first.
+
+### `pdx_assert.cpp:637` — `DownsizeMilitaryBuildingsToUnitCount` engine assertion
+- source: `pdx_assert.cpp:637`
+
+```
+Assertion failed: DownsizeMilitaryBuildingsToUnitCount
+```
+
+Vanilla engine internal — fires when the engine downsizes military buildings (conscription centers, barracks) to match unit count and an internal invariant is violated. Not actionable from script.
+
+### `pdx_assert.cpp:637` — leader generation failure
+- source: `pdx_assert.cpp:637`
+
+```
+Assertion failed: Failed to generate leader for
+```
+
+Vanilla engine internal — character-generator failure when an IG needs a new leader (existing leader died, was retired, or the IG just spawned) but no eligible character template matches. Engine recovers by leaving the IG leaderless until a candidate becomes eligible. Not mod-introduced; depends on country/culture/religion availability.
+
+### `pdx_assert.cpp:637` — `War.GetWarParticipant().IsValid()` engine assertion
+- source: `pdx_assert.cpp:637`
+
+```
+Assertion failed: War.GetWarParticipant
+```
+
+Vanilla engine internal — war participant lookup returns an invalid reference, typically during war start/end transitions. Not actionable from script.
+
+### `jomini_scriptvalue.cpp:295` — anonymous Div/0 in script value
+- source: `jomini_scriptvalue.cpp:295`
+
+```
+Div/0 in a script value. Sorry, we don't know where at this point.
+```
+
+The engine's own admission: it detected a divide-by-zero somewhere in a script-value evaluation tree but lost the call-site context. Same family as the `naval_battle_size` / `inherent_accept_score` div-by-zero bugs already registered above — script values that divide by an expression that's sometimes 0 (e.g. `divide = scope:X.something` where `something` can be unset/zero). Vanilla has many such sites; without a file path the entry can't be traced to a specific origin, so this catches the residual that the named-file div/0 entries don't cover.
+
+### `common/journal_entries/06_cuba.txt:379` — script value tree-eval type-none
+- `common/journal_entries/06_cuba.txt:379`
+
+```
+Value of wrong type in 'common/journal_entries/06_cuba.txt:379'. Got value of type 'none'
+```
+
+Same family as `command_values.txt:373` and `inherent_accept_score` (above) — vanilla script-value evaluation traverses the full tree before applying `if/limit` gates, producing a type-`none` read when the gated branch would have skipped at runtime. Reports the line of the containing script value block. Not actionable from this mod.
+
 ### `defines.cpp:230` — Jomini engine-shared `00_audio_persistent_objects.txt` define warnings
 - source: `defines.cpp:230`
 

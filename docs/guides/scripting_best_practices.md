@@ -3012,6 +3012,26 @@ Some engine-level caps are hardcoded and only surface in debug.log via `pdx_asse
   ```
   Most base_goods are at ≤2 in vanilla, but engines/automobiles/artillery/porcelain/wine/tobacco/meat/radios/silk/small_arms/merchant_marine are at 3 — adding any 4th will assert.
 
+## Stellaris/EU4 Idioms That Silently Fail in Vic3
+
+Several Paradox-Clausewitz idioms common in Stellaris and EU4 mod scripts do NOT exist in Vic3 1.13.x. The engine reports them as "Unknown trigger type" / "Unknown effect" / "Unexpected token" at runtime parse — the script doesn't compile and the gated logic silently never fires. If you're porting concepts from another Paradox game, check vanilla Vic3 first:
+
+| Stellaris/EU4 form | Vic3 equivalent | Notes |
+|---|---|---|
+| `is_triggered_only = yes` | (omit) | Vic3 events without a `trigger = { }` block don't auto-fire — they only run when something explicitly calls `trigger_event = { id = X }`. The `is_triggered_only` keyword does not exist; including it produces "Unexpected token: is_triggered_only" at the line. |
+| `has_country_flag = X` | `has_variable = X` | Vic3 uses script variables for flag-like booleans. Set with `set_variable = { name = X value = yes }` and optionally `days = N` for auto-expiry. `has_variable` returns true if the variable exists at all. |
+| `set_country_flag = X` | `set_variable = { name = X value = yes }` | Same — Vic3 has no flag concept. For a timed flag (vanilla Stellaris idiom `set_country_flag = { flag = X days = N }`), use `set_variable = { name = X value = yes days = N }`. |
+| `remove_country_flag = X` | `remove_variable = X` | Same. |
+| `has_leader = yes` (at IG scope) | (omit) or `exists = leader` | Vic3 IGs almost always have a leader. The downstream `leader = { has_ideology = X }` block fails-soft when leader is absent (no error), so `has_leader = yes` is usually unnecessary. If you do want the guard, `exists = leader` is the Vic3 form. |
+
+**Detection cookbook**: when the engine reports "Unknown trigger type: X" or "Unknown effect: X" or "Unexpected token: X" on a keyword that *looks* valid (especially something with `_country_flag`, `_triggered_only`, `has_leader`, or other Stellaris-style prefixes), the first check is "does this keyword exist in vanilla Vic3?":
+
+```bash
+grep -rl "<keyword>" "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/" | head -3
+```
+
+Zero hits = the keyword is engine-foreign. The engine treats "Unknown trigger type" as a NON-cascade error (it doesn't propagate to downstream lines), so the line reported is the actual culprit — don't waste time searching for an upstream parse error that doesn't exist.
+
 ## Trigger / Effect Scope Asymmetries: `add_loyalists` vs `add_radicals`, `is_marginal`
 
 Some sibling triggers/effects don't share scope rules. Two cases bitten repeatedly in this mod:

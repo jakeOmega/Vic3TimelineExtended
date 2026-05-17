@@ -30,8 +30,8 @@
 		#   that involved bar=0 (negotiated withdrawal or crumbling collapse).
 		#   The voluntary fail path (bar>0, no colonies) sets NO cooldown --
 		#   reacquiring colonies retriggers the JE immediately.
-		NOT = { has_country_flag = colonial_empire_completed }
-		NOT = { has_country_flag = colonial_empire_collapsed_recently }
+		NOT = { has_variable = colonial_empire_completed }
+		NOT = { has_variable = colonial_empire_collapsed_recently }
 	}
 
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -213,7 +213,7 @@
 		# Permanent re-entry block. Any successful completion (bar 100 hold or
 		# IF Act capstone) commits the player out of further je_colonial_empire
 		# runs even if colonies are reacquired later.
-		set_country_flag = colonial_empire_completed
+		set_variable = { name = colonial_empire_completed value = yes }
 	}
 
 	fail = {
@@ -266,11 +266,11 @@
 			# Bar reached zero -- 10-year cooldown blocks re-entry even if
 			# colonies are reacquired. Voluntary fail (bar>0) above does not
 			# set this flag, so peaceful decolonizers can re-engage freely.
-			set_country_flag = { flag = colonial_empire_collapsed_recently days = 3650 }
+			set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
 		}
 		else = {
 			trigger_event = { id = decolonization_events.201 }   # The Empire Crumbles (bloody)
-			set_country_flag = { flag = colonial_empire_collapsed_recently days = 3650 }
+			set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
 		}
 
 		# Subject-holders: instead of forced release, every qualifying

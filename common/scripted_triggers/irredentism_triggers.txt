@@ -71,10 +71,11 @@ irredentist_unifier_can_act = {
 		has_law = law_type:law_council_republic
 		has_law = law_type:law_multicultural
 
-		# Leader-ideology drivers across any ruling IG
+		# Leader-ideology drivers across any ruling IG. `leader = { has_ideology ... }`
+		# fails-soft when the IG has no leader, so no separate `exists = leader` guard
+		# is needed (vanilla 00_liberalism.txt uses the same pattern).
 		any_interest_group = {
 			is_in_government = yes
-			has_leader = yes
 			OR = {
 				leader = { has_ideology = ideology:ideology_jingoist_leader }
 				leader = { has_ideology = ideology:ideology_fascist }

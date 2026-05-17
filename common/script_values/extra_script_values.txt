@@ -578,22 +578,29 @@ market_carbon_capture_script_value = {
 	market = {
 		every_scope_country = {
 			# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
+			# Split into two iterations to avoid the nested if/limit pattern that
+			# confuses the engine's static scope analyzer (false "market vs. building"
+			# scope warning) inside script values.
 			every_scope_building = {
-				limit = { is_building_type = building_synthetics_plant_oil }
-				if = {
-					limit = { has_active_production_method = pm_synthetic_oil_2 }
-					add = {
-						value = this.level
-						multiply = occupancy
-						multiply = -0.06  # 300 oil * 2 weight / 10000
-					}
+				limit = {
+					is_building_type = building_synthetics_plant_oil
+					has_active_production_method = pm_synthetic_oil_2
 				}
-				else = {
-					add = {
-						value = this.level
-						multiply = occupancy
-						multiply = -0.036  # 180 oil * 2 weight / 10000
-					}
+				add = {
+					value = this.level
+					multiply = occupancy
+					multiply = -0.06  # 300 oil * 2 weight / 10000
+				}
+			}
+			every_scope_building = {
+				limit = {
+					is_building_type = building_synthetics_plant_oil
+					NOT = { has_active_production_method = pm_synthetic_oil_2 }
+				}
+				add = {
+					value = this.level
+					multiply = occupancy
+					multiply = -0.036  # 180 oil * 2 weight / 10000
 				}
 			}
 			every_scope_building = {

@@ -446,7 +446,7 @@ modern_election_events.5 = {
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 4
-			modifier = { trigger = { any_active_party = { is_party_type = populist_party is_marginal = no } } add = 3 }
+			modifier = { trigger = { any_active_party = { is_party_type = populist_party any_member = { NOT = { ig_counts_as_marginal = yes } } } } add = 3 }
 		}
 	}
 
