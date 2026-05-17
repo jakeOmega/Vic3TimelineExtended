@@ -241,6 +241,8 @@
  ig_trait_custom_religion_traditionalist_loyal_desc:0 "Our religious authorities have called for an increase in the birth rate among our faithful, believing that a larger population will strengthen our society and ensure the continuity of our traditions."
  ig_trait_custom_religion_traditionalist_unhappy:0 "Obscurantism"
  ig_trait_custom_religion_traditionalist_unhappy_desc:0 "Our religious authorities have called for the suppression of knowledge and the restriction of information, believing that ignorance is a virtue and that enlightenment leads to heresy."
+ ministry_religion_established_faith:0 "Religion Ministry: Established Faith Privileges"
+ ministry_religion_pluralist:0 "Religion Ministry: Pluralist Framework"
  ministry_religion_pulpit_advance:0 "Religion Ministry: Pulpit Advance"
  ministry_religion_pulpit_advance_desc:0 "A strong positive boost to ministry law enactment progress from a recent event."
  ministry_religion_pulpit_cautious:0 "Religion Ministry: Pulpit Cautious Advance"
