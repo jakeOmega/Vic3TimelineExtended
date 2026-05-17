@@ -594,3 +594,109 @@ govprin_deliberative_chambers = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_law_enactment_success_add = 0.03
 }
+
+# ======================================================================
+#  DOMAIN SIDE-EFFECT MODIFIERS  (issue #92)
+#
+#  Used by selected options in extra-law and ministry-law enactment
+#  events to replace the formulaic add_radicals / ig_approval secondary
+#  effect with a thematic, system-appropriate timed modifier.
+#
+#  All applied as `add_modifier = { name = X days = normal_modifier_time }`.
+# ======================================================================
+
+# ----- Shared cross-system (referenced from both extra-law and ministry events) -----
+te_research_speed_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_weekly_innovation_add = 50
+}
+te_research_speed_chill = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_weekly_innovation_add = -50
+}
+te_legitimacy_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 2
+}
+te_legitimacy_drain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_legitimacy_base_add = -2
+}
+te_authority_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_authority_add = 100
+}
+te_authority_drain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_add = -100
+}
+te_diplomatic_relations_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_improve_relations_speed_mult = 0.25
+}
+te_diplomatic_relations_drain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_improve_relations_speed_mult = -0.25
+}
+te_military_morale_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	unit_morale_recovery_mult = 0.10
+}
+te_military_morale_drain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	unit_morale_recovery_mult = -0.10
+}
+
+# ----- Extra-law system-specific -----
+finreg_interest_rate_hike = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_loan_interest_rate_add = 0.01
+}
+finreg_banking_stability = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_company_throughput_bonus_add = 0.05
+}
+monpol_currency_stability = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_minting_add = 100
+}
+monpol_currency_devaluation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_minting_add = -100
+}
+antitrust_market_competition_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_company_throughput_bonus_add = 0.05
+}
+crimjust_radicalism_uptick = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	state_radicals_from_political_movements_mult = 0.10
+}
+langpol_assimilation_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_assimilation_mult = 0.15
+}
+augment_health_panic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_mortality_mult = 0.05
+}
+inherit_wealth_consolidation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_aristocrats_pol_str_mult = 0.10
+}
+lgbtq_social_progress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_acceptance_no_shared_tradition_trait_add = 5
+}
+famrep_birth_rate_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_birth_rate_mult = 0.10
+}
+minrights_majority_grievance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	state_loyalists_from_political_movements_mult = -0.10
+}
+welfare_investment_chill = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_self_investment_chance_add = -0.05
+}
