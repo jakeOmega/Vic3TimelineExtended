@@ -40,11 +40,13 @@ The headless wrapper is fired by a Windows Scheduled Task (registered via `scrip
 
 ### One-time setup
 
-From a Windows PowerShell session in the repo (no admin needed):
+From a Windows PowerShell session — open `powershell.exe` (not `cmd`; cmd refuses UNC paths as CWD), `cd \\wsl.localhost\<distro>\home\<you>\src\Vic3TimelineExtended`, then:
 
 ```powershell
-pwsh -ExecutionPolicy Bypass -File scripts\install_nightly_audit_task.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\install_nightly_audit_task.ps1
 ```
+
+Use built-in `powershell.exe` (Windows PowerShell 5.1) — not `pwsh.exe`, which requires a separate PowerShell 7 install. The script's cmdlets (`Register-ScheduledTask`, etc.) ship with the Windows `ScheduledTasks` module since Windows 8, so PS 5.1 is sufficient. No admin needed.
 
 Auto-detects your default WSL distro; pass `-WslDistro <name>`, `-RepoPathInWsl <path>`, `-DailyTime HH:MM`, or `-TaskName <string>` to override. Re-runnable — overwrites any existing task with the same name. The task runs as your current user so the WSL identity (and `claude` CLI auth) match interactive use.
 

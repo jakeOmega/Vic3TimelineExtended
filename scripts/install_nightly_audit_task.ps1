@@ -5,9 +5,15 @@
 # never need to keep the box on overnight to catch a fixed slot.
 #
 # Run once from a Windows PowerShell session (no admin needed — the task
-# runs as the current user, which matches the WSL user's identity):
+# runs as the current user, which matches the WSL user's identity). Open
+# `powershell.exe` (not cmd — cmd refuses UNC paths as CWD), `cd` to the
+# repo on the WSL share, then:
 #
-#     pwsh -ExecutionPolicy Bypass -File scripts\install_nightly_audit_task.ps1
+#     powershell -ExecutionPolicy Bypass -File .\scripts\install_nightly_audit_task.ps1
+#
+# Use built-in `powershell.exe` (PS 5.1) — not `pwsh.exe`, which needs a
+# separate PowerShell 7 install. The ScheduledTasks cmdlets used here ship
+# with Windows since 8, so PS 5.1 is fine.
 #
 # Re-run after changing the WSL distro name / repo path / username — it
 # overwrites any existing task with the same name.
