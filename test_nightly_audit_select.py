@@ -20,11 +20,13 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import nightly_audit_select as nas
 from nightly_audit_select import (
     FILE_CAP,
+    INTENTIONALLY_NOT_EXCLUDED,
     LINE_BUDGET,
     NEW_DOC_PENALTY,
     RECENT_FINDINGS_CAP,
     area_and_docs,
     days_since,
+    detect_registry_drift,
     select_targets,
 )
 
@@ -254,6 +256,42 @@ class SelectTargetsTest(unittest.TestCase):
         targets = select_targets(cands, state, self.today, random.Random(0))
         self.assertEqual(len(targets), 1)
         self.assertIsNotNone(targets[0]["line_range"])
+
+
+# --------------------------------------------------------------------------- #
+# Registry drift
+# --------------------------------------------------------------------------- #
+
+class RegistryDriftTest(unittest.TestCase):
+    """Integration tests against the real `docs/auto_generated_files.md` and the
+    in-script `EXCLUDED_GLOBS` / `INTENTIONALLY_NOT_EXCLUDED` lists. These flag
+    drift the moment a hand-authored input directory enters the registry
+    without a matching classification entry — the noise issue #75 surfaced."""
+
+    def test_company_types_classified_as_intentional_input(self):
+        """Registry lists `common/company_types/*.txt` as input to
+        gen_company_building_cleanup.py. It must remain audit-eligible (it's
+        hand-authored data, not generator output), so it belongs in
+        INTENTIONALLY_NOT_EXCLUDED — not EXCLUDED_GLOBS."""
+        self.assertIn("common/company_types/*.txt", INTENTIONALLY_NOT_EXCLUDED)
+
+    def test_no_unclassified_registry_drift(self):
+        """`detect_registry_drift()` must return an empty `drift_added` list:
+        every registry-listed audit-relevant path is either in EXCLUDED_GLOBS
+        (wholly generator-managed, skip) or INTENTIONALLY_NOT_EXCLUDED (partial
+        or input-only, keep auditing). A non-empty list means a new generator
+        landed without classification — fix by adding the path to whichever
+        list applies."""
+        drift_added, _ = detect_registry_drift()
+        self.assertEqual(
+            drift_added,
+            [],
+            msg=(
+                f"Unclassified entries in docs/auto_generated_files.md: {drift_added}. "
+                "Add each to EXCLUDED_GLOBS (if generator-output) or INTENTIONALLY_NOT_EXCLUDED "
+                "(if generator-input/partially-managed) in scripts/nightly_audit_select.py."
+            ),
+        )
 
 
 if __name__ == "__main__":
