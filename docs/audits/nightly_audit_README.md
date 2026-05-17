@@ -28,9 +28,11 @@ Each run:
 
 ## Routine setup
 
-The routine's **Instructions** field should be approximately:
+The routine's **Instructions** field is canonical at [`scripts/nightly_audit_routine_instructions.md`](../../scripts/nightly_audit_routine_instructions.md) — paste the file contents (everything below the leading HTML comment + `---`) verbatim into the Anthropic Routines UI. The UI does not auto-pull; re-paste whenever that file changes.
 
-> Run `python3 scripts/nightly_audit_select.py`, then read and follow `docs/audits/nightly/$(date +%Y-%m-%d)/prompt.md` end-to-end. Take the dedup, focus-ranking, auto-fix, and wrap-up steps literally. If you cannot complete the audit, follow the prompt's "Failure handling" section before exiting.
+The instructions are deliberately thin: `source ./scripts/cloud_setup.sh` to bootstrap the sandbox (shallow-sparse-clones vanilla into `../vic3`, clones `Modding-Digests`, sets `VIC3_*` env vars, creates `.venv`, starts `mod_state_server` and waits for `/status`), then `python3 scripts/nightly_audit_select.py` to generate `docs/audits/nightly/<date>/prompt.md`, then read and follow that file. The per-night prompt — not the routine instructions — owns the dedup, focus-ranking, auto-fix, fast-verify, and wrap-up workflow. Bootstrap failure and selector failure both route to the same "open a `priority:critical` issue, don't touch the state file" failure path.
+
+Without `cloud_setup.sh`, the audit Claude has no `/modifier-search`, `/engine-docs/origin/*`, or `/reload?mod_only=true&audits_only=true` to query and regresses to raw file reads — exactly the failure mode this setup exists to prevent.
 
 Keep the file-based prompt approach (don't inline checklist content into the Routine Instructions field) — this preserves an audit trail per night and lets you edit checklists without touching the routine config.
 
@@ -92,17 +94,18 @@ This means the agent's narrowing decision ("which registry entries are wholly-re
 
 ## Routines sandbox notes
 
-> **To be filled in after running a one-off probing routine.** The first deployment should answer these so future sessions can rely on them:
->
-> - **Working directory at routine start** — affects path assumptions in the selector.
-> - **`gh` CLI availability** — if not present, document the GitHub API-via-curl fallback that works with the connection's auth (issue creation: `gh issue create` → `curl -X POST https://api.github.com/repos/<owner>/<repo>/issues …`; PR creation: `gh pr create` → corresponding API call).
-> - **Python version** — confirm stdlib-only constraints are met.
-> - **Date access** — confirm `datetime.date.today()` returns the expected date in the sandbox's TZ.
-> - **Git identity** — what author shows on commits/PRs the audit creates.
-> - **Branch push capability** — confirm pushing a feature branch works (the audit needs this for auto-fix and state-bump PRs).
-> - **Auto-merge availability** — if the repo doesn't have auto-merge enabled, state-bump-only PRs stay open until manually merged. Note here whether that's the current state.
+Pre-filled from what's true after `scripts/cloud_setup.sh` runs. **The first deployment should confirm these and overwrite anything that's wrong:**
 
-Once probed, edit this section with the answers; the audit prompt's wrap-up logic relies on knowing the answers, especially around PR creation.
+- **Working directory at routine start**: assumed to be the repo root (the routine instructions `source ./scripts/cloud_setup.sh` from there).
+- **`gh` CLI availability**: required (the bootstrap clones the private `jakeOmega/vic3` via `gh repo clone`). If unavailable, the bootstrap fails fast; fall back to the GitHub-API-via-curl pattern (`gh issue create` → `curl -X POST https://api.github.com/repos/<owner>/<repo>/issues …`).
+- **Python version**: `python3` with the standard packages from `requirements.txt` (the bootstrap creates `.venv` and `pip install`s). Server-side code requires the `regex` package; the system `python3` alone is insufficient.
+- **Date access**: assumed `datetime.date.today()` returns local-date — confirm in first run; if the sandbox is UTC and you straddle midnight, prompts/state files may land under the "wrong" date.
+- **Git identity**: TBD on first run (`git config user.name && git config user.email`). The audit's PRs / commits will show whatever the sandbox is configured with.
+- **Branch push capability**: TBD on first run (auto-fix PRs and the state-bump PR both need to push a feature branch).
+- **Auto-merge availability**: TBD per repo settings. If disabled, state-bump-only PRs stay open until merged manually.
+- **Server availability**: after `scripts/cloud_setup.sh`, `mod_state_server` is running on `http://localhost:8950`. Use `?mod_only=true&audits_only=true` on `/reload` for fast verify cycles (~25 s vs ~90 s for an unflagged reload; no working-tree side effects beyond `docs/engine/*_report.md`).
+
+Edit this section as the first deployment fills in the TBDs.
 
 ## What this audit does NOT do
 
