@@ -646,6 +646,14 @@ te_military_morale_drain = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	unit_morale_recovery_mult = -0.10
 }
+te_trade_center_boost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_trade_center_throughput_add = 0.10
+}
+te_trade_center_chill = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_trade_center_throughput_add = -0.10
+}
 
 # ----- Extra-law system-specific -----
 finreg_interest_rate_hike = {

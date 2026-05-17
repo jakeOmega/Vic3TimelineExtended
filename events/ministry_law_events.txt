@@ -477,7 +477,7 @@ ministry_law_events.7 = {
 			name = ministry_commerce_trade_cautious
 		}
 		# Domain side-effect
-		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
+		add_modifier = { name = te_trade_center_boost days = normal_modifier_time }
 	}
 }
 
