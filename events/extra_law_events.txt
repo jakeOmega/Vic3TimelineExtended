@@ -289,11 +289,9 @@ extra_law_events.4 = {
 	option = { # The power to print is the power to prosper
 		name = extra_law_events.4.a
 		default_option = yes
-		trigger = {
-			enactment_phase < 2
+		add_enactment_modifier = {
+			name = monpol_printing_press_advance
 		}
-		highlighted_option = yes
-		add_enactment_phase = 1
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -1737,14 +1735,12 @@ extra_law_events.23 = {
 		NOT = { currently_enacting_law = scope:current_law_scope }
 	}
 
-	option = { # The demonstration speaks for itself - skip ahead
+	option = { # The demonstration speaks for itself - forge ahead!
 		name = extra_law_events.23.a
 		default_option = yes
-		trigger = {
-			enactment_phase < 2
+		add_enactment_modifier = {
+			name = govprin_technocrat_showcase_advance
 		}
-		highlighted_option = yes
-		add_enactment_phase = 1
 		add_radicals = {
 			value = medium_radicals
 		}
