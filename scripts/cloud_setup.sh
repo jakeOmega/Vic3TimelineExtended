@@ -6,10 +6,12 @@
 # What it does, in order:
 #   1. Sparse-shallow-clone the private vanilla repo (jakeOmega/vic3) into
 #      ../vic3. Only game/common, game/localization/english, game/gui,
-#      game/map_data are fetched (~150 MB instead of 2 GB). Uses native
-#      `git clone` — auth is handled by the Routines GitHub proxy in the
-#      cloud sandbox, and by the developer's local git credentials in dev
-#      envs. No `gh` binary or explicit token needed.
+#      game/map_data are fetched (~150 MB instead of 2 GB). Auth in the
+#      Routines sandbox requires `GH_TOKEN` in the routine's Environment
+#      Variables — the proxy that auto-authenticates the routine's primary
+#      repo does NOT cover cross-repo private clones (see issue #99). In
+#      local dev, the script falls back to whatever credentials git is
+#      already configured with.
 #   2. Shallow-clone the public Modding-Digests repo into ~/Modding-Digests.
 #      mod_state_server uses its highest-version /docs as the engine-doc
 #      snapshot (modifier-search, /engine-docs/origin/, etc.).
@@ -47,28 +49,61 @@ trap 'rc=$?; log "ERROR: bootstrap failed at line $LINENO (exit $rc)"; \
       exit $rc' ERR
 
 # ---------------------------------------------------------------------------
-# 1. Vanilla repo (private — auth via Routines GitHub proxy or local git creds)
+# 1. Vanilla repo (private — needs GH_TOKEN in routines; local git creds otherwise)
 # ---------------------------------------------------------------------------
+# Auth resolution: prefer GH_TOKEN (or GITHUB_TOKEN) embedded in the URL.
+# The Routines GitHub proxy doesn't auto-authenticate cross-repo private
+# clones — only the routine's primary repo — so a token is required in the
+# sandbox (set it in the routine's Environment Variables UI; see issue #99).
+# In local dev, leaving the token unset falls back to whatever credentials
+# git already has configured.
+vanilla_remote_token="${GH_TOKEN:-${GITHUB_TOKEN:-}}"
+if [ -n "${vanilla_remote_token}" ]; then
+  vanilla_remote_url="https://x-access-token:${vanilla_remote_token}@github.com/jakeOmega/vic3.git"
+  vanilla_auth_source="GH_TOKEN/GITHUB_TOKEN env"
+else
+  vanilla_remote_url="https://github.com/jakeOmega/vic3.git"
+  vanilla_auth_source="ambient git credentials (no GH_TOKEN/GITHUB_TOKEN env)"
+fi
+
+# Preflight: cheap auth probe before the (slower) clone. Fails fast with an
+# actionable message if the token is missing or wrong, so the routine log
+# doesn't bury the cause under git's terse "could not read Username" line.
+if [ ! -d "${vanilla_dir}/.git" ]; then
+  log "preflight: probing jakeOmega/vic3 auth via ${vanilla_auth_source}"
+  if ! GIT_TERMINAL_PROMPT=0 git ls-remote --exit-code "${vanilla_remote_url}" HEAD >/dev/null 2>&1; then
+    log "ERROR: cannot reach jakeOmega/vic3 — auth probe failed."
+    log "  Auth source tried: ${vanilla_auth_source}"
+    if [ -z "${vanilla_remote_token}" ]; then
+      log "  Fix: set GH_TOKEN in the routine's Environment Variables UI to a"
+      log "  GitHub personal access token with repo:read scope on jakeOmega/vic3."
+      log "  The Routines GitHub proxy only auto-authenticates the routine's"
+      log "  primary repo, not cross-repo private clones (issue #99)."
+    else
+      log "  Fix: verify the GH_TOKEN/GITHUB_TOKEN has repo:read scope on"
+      log "  jakeOmega/vic3 and is not expired."
+    fi
+    exit 1
+  fi
+fi
+
 if [ -d "${vanilla_dir}/.git" ]; then
   log "vanilla repo already present at ${vanilla_dir}; skipping clone"
 else
   log "cloning jakeOmega/vic3 -> ${vanilla_dir} (sparse, depth=1)"
-  # Native `git clone` — auth is handled transparently by the Routines
-  # GitHub proxy in the cloud sandbox, and by the developer's local git
-  # credentials in dev envs. No `gh` binary or explicit token needed.
   # `--sparse` initializes cone mode so only the toplevel is materialized
   # before we explicitly opt in to the dirs we want via `sparse-checkout set`.
-  git clone --depth=1 --filter=blob:none --sparse \
-      "https://github.com/jakeOmega/vic3.git" "${vanilla_dir}"
+  GIT_TERMINAL_PROMPT=0 git clone --depth=1 --filter=blob:none --sparse \
+      "${vanilla_remote_url}" "${vanilla_dir}"
   git -C "${vanilla_dir}" sparse-checkout set \
     game/common \
     game/localization/english \
     game/gui \
     game/map_data
 
-  # Hard-fail if the clone silently no-op'd. Caught issue #93's gh-missing
-  # case once; guards against future variants — proxy mis-config, network
-  # glitch, sparse-checkout regression, wrong branch, etc.
+  # Hard-fail if the clone silently no-op'd. Guards against variants the
+  # preflight can't catch — sparse-checkout regression, post-clone disk
+  # issue, etc.
   if [ ! -d "${vanilla_dir}/game/common" ] \
      || [ -z "$(ls -A "${vanilla_dir}/game/common" 2>/dev/null)" ]; then
     log "ERROR: vanilla clone did not materialize at ${vanilla_dir}/game/common"
