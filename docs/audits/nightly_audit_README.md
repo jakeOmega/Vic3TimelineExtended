@@ -26,15 +26,35 @@ Each run:
 | `docs/audits/nightly/<date>/targets.json` | Generated per run — machine-readable target list. |
 | `docs/audits/nightly/<date>/report.md` | Optional summary. Off by default; enable with `--report`. |
 
-## Routine setup
+## Execution model
 
-The routine's **Instructions** field is canonical at [`scripts/nightly_audit_routine_instructions.md`](../../scripts/nightly_audit_routine_instructions.md) — paste the file contents (everything below the leading HTML comment + `---`) verbatim into the Anthropic Routines UI. The UI does not auto-pull; re-paste whenever that file changes.
+Local-only as of issues #93/#99/#100 — the Anthropic Routines proxy is hard-scoped to one repo per session and cannot reach private `jakeOmega/vic3` for the vanilla clone, with no safe in-sandbox workaround (env vars and setup scripts are both public, the OAuth token lives on a parent-process file descriptor not reachable from a subshell). The cloud routine was retired; the audit now runs against the user's local `mod_state_server` (which already has vanilla on disk via `path_constants.base_game_path`).
 
-The instructions are deliberately thin: `source ./scripts/cloud_setup.sh` to bootstrap the sandbox (shallow-sparse-clones vanilla into `../vic3`, clones `Modding-Digests`, sets `VIC3_*` env vars, creates `.venv`, starts `mod_state_server` and waits for `/status`), then `python3 scripts/nightly_audit_select.py` to generate `docs/audits/nightly/<date>/prompt.md`, then read and follow that file. The per-night prompt — not the routine instructions — owns the dedup, focus-ranking, auto-fix, fast-verify, and wrap-up workflow. Bootstrap failure and selector failure both route to the same "open a `priority:critical` issue, don't touch the state file" failure path.
+Two entry points share the same per-day catch-up gate (`docs/audits/.nightly_last_run`):
 
-Without `cloud_setup.sh`, the audit Claude has no `/modifier-search`, `/engine-docs/origin/*`, or `/reload?mod_only=true&audits_only=true` to query and regresses to raw file reads — exactly the failure mode this setup exists to prevent.
+1. **`/nightly-audit` slash command** — runs the audit in your current Claude Code session. Defined at `.claude/skills/nightly-audit/SKILL.md`. Use this for on-demand runs or to manually catch up. Invokes the selector, then has Claude read and follow the generated prompt directly.
 
-Keep the file-based prompt approach (don't inline checklist content into the Routine Instructions field) — this preserves an audit trail per night and lets you edit checklists without touching the routine config.
+2. **`scripts/run_nightly_audit.sh`** — headless wrapper. Verifies the server, runs the selector, pipes today's prompt into `claude --print --permission-mode auto`, writes the date marker on success. Idempotent — `--force` re-runs even if today's marker is already set.
+
+The headless wrapper is fired by a Windows Scheduled Task (registered via `scripts/install_nightly_audit_task.ps1`) that triggers **at every logon AND daily at 04:00**. The script's date-marker gate dedups, so booting at 11 AM, 4 PM, and 9 PM only runs the audit once — and a missed 04:00 because the machine was off still gets caught up at the next logon.
+
+### One-time setup
+
+From a Windows PowerShell session in the repo (no admin needed):
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File scripts\install_nightly_audit_task.ps1
+```
+
+Auto-detects your default WSL distro; pass `-WslDistro <name>`, `-RepoPathInWsl <path>`, `-DailyTime HH:MM`, or `-TaskName <string>` to override. Re-runnable — overwrites any existing task with the same name. The task runs as your current user so the WSL identity (and `claude` CLI auth) match interactive use.
+
+Prereqs:
+- `mod_state_server` running on `:8950` at audit time. It auto-starts under VS Code; if you don't keep VS Code open continuously, either add it to startup, run it as a separate scheduled task, or accept the audit will be skipped (the wrapper exits clean and the marker stays stale, so the next invocation retries).
+- `claude` CLI on `$PATH` for the WSL user. Confirm via `wsl -- bash -lc 'which claude'`.
+
+### Failure handling
+
+If the wrapper aborts (server unhealthy, selector errors, `claude --print` non-zero exit), the marker is NOT updated — the next trigger retries. Stderr from each run lands in `docs/audits/nightly/logs/<date>.log`. The audit prompt itself owns the "file a `priority:critical` `nightly-audit:failure` issue" rule for in-audit failures.
 
 ## Invoking manually
 
@@ -92,22 +112,12 @@ Every selector run diffs `docs/auto_generated_files.md` against `EXCLUDED_REGIST
 
 This means the agent's narrowing decision ("which registry entries are wholly-regenerated vs partially-managed") gets re-validated continuously, without requiring scheduled manual review.
 
-## Routines sandbox notes
+## Local execution notes
 
-Pre-filled from what's true after `scripts/cloud_setup.sh` runs. **The first deployment should confirm these and overwrite anything that's wrong:**
-
-- **Working directory at routine start**: assumed to be the repo root (the routine instructions `source ./scripts/cloud_setup.sh` from there).
-- **GitHub auth for the vanilla clone (UNRESOLVED)**: the Routines proxy advertises "your account can reach any repo it can see", but empirically the cross-repo clone of the private `jakeOmega/vic3` fails with `could not read Username` (issue #99). The cloud environment UI explicitly forbids putting secrets in either the Environment Variables field or the Setup Script (both are visible to anyone editing the env), so the `GH_TOKEN` workaround initially shipped in f381668 is not safe. `cloud_setup.sh` now embeds `GH_TOKEN`/`GITHUB_TOKEN` in the clone URL if present (works in local dev) and falls back to ambient credentials; on preflight failure it dumps a redaction-safe diagnostic block (git config, gh status, env names, verbose `ls-remote`) so the next failed routine surfaces enough info to figure out what auth hook the proxy actually exposes. See `scripts/nightly_audit_routine_instructions.md` for the routine-side probes the agent runs in the same failure path.
-- **`gh` CLI availability**: not required for bootstrap — the clone uses native `git`. `gh` is still useful during the audit phase for `gh issue list` / `gh issue create`; install it from the routine's setup script if you want those convenience calls, otherwise the audit will fall back to `curl https://api.github.com/...`.
-- **`/status` precondition**: as of issue #93's fix, `mod_state_server` returns HTTP 503 from `/status` when `base_game_path/game/common` is missing or near-empty. The bootstrap's existing `curl -sf` readiness gate catches this without further script changes — bootstrap fails loud after the 180 s ceiling instead of running the audit blind.
-- **Python version**: `python3` with the standard packages from `requirements.txt` (the bootstrap creates `.venv` and `pip install`s). Server-side code requires the `regex` package; the system `python3` alone is insufficient.
-- **Date access**: assumed `datetime.date.today()` returns local-date — confirm in first run; if the sandbox is UTC and you straddle midnight, prompts/state files may land under the "wrong" date.
-- **Git identity**: TBD on first run (`git config user.name && git config user.email`). The audit's PRs / commits will show whatever the sandbox is configured with.
-- **Branch push capability**: TBD on first run (auto-fix PRs and the state-bump PR both need to push a feature branch).
-- **Auto-merge availability**: TBD per repo settings. If disabled, state-bump-only PRs stay open until merged manually.
-- **Server availability**: after `scripts/cloud_setup.sh`, `mod_state_server` is running on `http://localhost:8950`. Use `?mod_only=true&audits_only=true` on `/reload` for fast verify cycles (~25 s vs ~90 s for an unflagged reload; no working-tree side effects beyond `docs/engine/*_report.md`).
-
-Edit this section as the first deployment fills in the TBDs.
+- **`/status` precondition** (from issue #93's fix, still useful): `mod_state_server` returns HTTP 503 from `/status` when `base_game_path/game/common` is missing or near-empty. The headless wrapper's `curl -sf` health check catches this and aborts loud rather than running against missing vanilla.
+- **`claude --print` permission mode**: the wrapper uses `--permission-mode auto` so the audit runs unattended. Avoid `--dangerously-skip-permissions` unless you really mean it.
+- **Catch-up marker**: `docs/audits/.nightly_last_run` is a one-line file holding the YYYY-MM-DD of the last successful run. Both entry points update it; both gate on it. The wrapper exits 0 (not error) when today's marker is already set — that's the "missed schedule but already caught up" case.
+- **Per-run log**: `docs/audits/nightly/logs/<date>.log` captures the headless run's stdout + stderr. Tail it if you want to see what the unattended Claude did.
 
 ## What this audit does NOT do
 
@@ -117,4 +127,4 @@ Edit this section as the first deployment fills in the TBDs.
 
 ## Schedule
 
-Set via the Anthropic Routines UI; the selector is execution-agnostic. Reasonable starting cadence: nightly at the user's local off-hours. Lower the cadence (e.g. every 2 nights) if coverage builds too fast for the user to triage outputs.
+Set via Windows Task Scheduler (see "Execution model" above for the one-time install). Default: every logon + daily at 04:00, dedup'd by the date marker. Adjust `-DailyTime HH:MM` when re-running `install_nightly_audit_task.ps1` if you want a different fixed slot. Lower the cadence (every 2 nights, weekly) by editing the catch-up gate in `scripts/run_nightly_audit.sh` to compare against `today - N days`.
