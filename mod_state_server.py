@@ -3387,15 +3387,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
         params = parse_qs(parsed.query)
         if parts == ["reload"]:
             engine_only = (params.get("engine_only") or ["false"])[0].lower() == "true"
+            audits_only = (params.get("audits_only") or ["false"])[0].lower() == "true"
+            mod_only = (params.get("mod_only") or ["false"])[0].lower() == "true"
             try:
                 if engine_only:
                     _reload_engine_only()
                     self._respond_json({"status": "engine-only reload complete"})
                 else:
-                    _load_mod_state()
+                    _load_mod_state(audits_only=audits_only, mod_only=mod_only)
                     body = {
                         "status": "reloaded",
                         "startup_seconds": startup_elapsed,
+                        "mode": (
+                            "mod_only+audits_only" if mod_only and audits_only
+                            else "mod_only" if mod_only
+                            else "audits_only" if audits_only
+                            else "full"
+                        ),
                     }
                     # Surface any actionable findings from the post-load chain
                     # (e.g. modifier_visibility_audit's unreviewed sub-threshold
@@ -3529,7 +3537,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return {
             "see_also": "docs/guides/python_tools.md for full workflow examples.",
             "post": {
-                "/reload": "Re-parse mod + vanilla; runs post-load generators and audits. ?engine_only=true skips the ModState rebuild.",
+                "/reload": (
+                    "Re-parse mod + vanilla; runs post-load generators and audits. "
+                    "Flags: ?engine_only=true skips ModState rebuild; "
+                    "?mod_only=true reuses the cached vanilla parse (fast); "
+                    "?audits_only=true skips the file-rewriting generators (only runs the audits). "
+                    "?mod_only=true&audits_only=true is the fast 'verify my edits' path "
+                    "(~25s vs ~90s full, no working-tree side effects beyond docs/engine/*_report.md)."
+                ),
             },
             "get": [
                 {"path": "/status", "desc": "Server uptime, entity-type list, engine-docs freshness, vanilla-snapshot staleness."},
@@ -6337,7 +6352,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
 # one of these scripts. Failures are logged and skipped — they don't block
 # server startup. The /reload?engine_only=true path bypasses _load_mod_state
 # entirely, so these don't run there.
-POST_LOAD_GENERATORS = [
+# File-rewriting generators. They regenerate mod content on disk from configs
+# + vanilla data, so running them mid-audit dirties the working tree.
+POST_LOAD_REGENERATORS = [
     ("pop_needs_curves",              "pop_needs_curves"),
     ("apply_ideologies",              "apply_ideologies"),
     ("ig_feminism",                   "ig_feminism"),
@@ -6348,6 +6365,12 @@ POST_LOAD_GENERATORS = [
     ("gen_law_consistency",           "gen_law_consistency"),
     ("gen_company_building_cleanup",  "scripts.generators.gen_company_building_cleanup"),
     ("organize_loc",                  "organize_loc"),
+    ("gen_event_inventory",           "gen_event_inventory"),
+]
+
+# Read-only audits that surface findings without writing files. Safe to run
+# repeatedly mid-audit (see POST /reload?audits_only=true).
+POST_LOAD_AUDITS = [
     ("event_magnitude_audit",         "event_magnitude_audit"),
     ("modifier_visibility_audit",     "modifier_visibility_audit"),
     ("kill_character_audit",          "kill_character_audit"),
@@ -6355,8 +6378,9 @@ POST_LOAD_GENERATORS = [
     ("concept_reference_audit",       "concept_reference_audit"),
     ("localization_accessor_audit",   "localization_accessor_audit"),
     ("mod_structure_audit",           "mod_structure_audit"),
-    ("gen_event_inventory",           "gen_event_inventory"),
 ]
+
+POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
 
 
 # Return-dict keys whose nonzero values indicate "actionable issue surfaced
@@ -6371,13 +6395,14 @@ _POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails")
 _post_load_warnings: list[dict] = []
 
 
-def _run_post_load_generators(mod_state):
+def _run_post_load_generators(mod_state, *, audits_only=False):
     global _post_load_warnings
     _post_load_warnings = []
     if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
         logger.info("[post-load] skipped via VIC3_SKIP_POST_LOAD_GENERATORS")
         return
-    for label, module_name in POST_LOAD_GENERATORS:
+    generators = POST_LOAD_AUDITS if audits_only else POST_LOAD_GENERATORS
+    for label, module_name in generators:
         t0 = time.monotonic()
         try:
             mod = importlib.import_module(module_name)
@@ -6481,15 +6506,41 @@ def _ensure_modding_digests_fresh() -> None:
         logger.warning(f"[digests] git not invokable: {exc}; continuing")
 
 
-def _load_mod_state():
+# Snapshot of vanilla loc (English), populated on the first full load and
+# reused by /reload?mod_only=true to skip re-reading vanilla .yml files.
+# Refreshed on every full /reload (no flags) so vanilla bumps propagate.
+_VANILLA_LOC_CACHE: Optional[dict] = None
+
+
+def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    logger.info("Loading mod state… (this may take a minute)")
+    global _VANILLA_LOC_CACHE
+
+    if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
+        # mod_only is a fast incremental path; without cached state it has
+        # no meaning. Fall back rather than failing so /reload?mod_only=true
+        # always behaves usefully.
+        logger.info("[reload] mod_only requested but no cached state; doing full load")
+        mod_only = False
+
+    mode_tag = " (mod-only)" if mod_only else ""
+    if audits_only:
+        mode_tag += " (audits-only)"
+    logger.info(f"Loading mod state{mode_tag}…")
     t0 = time.time()
-    try:
-        ms = ModState(base_game_paths, mod_paths)
-    except Exception as e:
-        logger.error(f"Failed to initialize ModState: {e}\n{traceback.format_exc()}")
-        raise
+
+    if mod_only:
+        try:
+            ms.reload_mod(mod_paths)
+        except Exception as e:
+            logger.error(f"Failed to reload mod state: {e}\n{traceback.format_exc()}")
+            raise
+    else:
+        try:
+            ms = ModState(base_game_paths, mod_paths)
+        except Exception as e:
+            logger.error(f"Failed to initialize ModState: {e}\n{traceback.format_exc()}")
+            raise
 
     # Invalidate per-load caches so stale annotator outputs / inverted-index
     # entries don't leak across reloads.
@@ -6497,9 +6548,23 @@ def _load_mod_state():
     _tech_unlocks_index_cache = None
     _annotator_compute_cache.clear()
 
-    # Load localization — wrap each call so one bad directory doesn't kill everything
+    # Localization: cache vanilla once, then layer mod (+ replace) on top
+    # each load. On mod_only we reuse the snapshot to skip re-reading the
+    # vanilla .yml files (typically the second-largest cost in a reload).
+    if mod_only:
+        ms.localization = dict(_VANILLA_LOC_CACHE)
+        ms._reverse_loc = None
+    else:
+        vanilla_loc_dir = os.path.join(base_game_path, "game", "localization", "english")
+        try:
+            if os.path.isdir(vanilla_loc_dir):
+                ms.add_localization(vanilla_loc_dir)
+            else:
+                logger.warning(f"Localization directory not found: {vanilla_loc_dir}")
+        except Exception as e:
+            logger.error(f"Failed to load localization from {vanilla_loc_dir}: {e}")
+        _VANILLA_LOC_CACHE = dict(ms.localization)
     for loc_dir in [
-        os.path.join(base_game_path, "game", "localization", "english"),
         os.path.join(mod_path, "localization", "english"),
         os.path.join(mod_path, "localization", "english", "replace"),
     ]:
@@ -6517,17 +6582,18 @@ def _load_mod_state():
         f"({len(ms.mod_parsers)} entity types, {len(ms.localization)} loc keys)"
     )
 
-    # Load engine documentation
-    try:
-        _load_engine_docs()
-    except Exception as e:
-        logger.error(f"Failed to load engine docs: {e}\n{traceback.format_exc()}")
+    if not mod_only:
+        # Engine docs and dev reference docs come from vanilla / Modding-Digests
+        # and don't change with mod edits — skip on mod_only reloads.
+        try:
+            _load_engine_docs()
+        except Exception as e:
+            logger.error(f"Failed to load engine docs: {e}\n{traceback.format_exc()}")
 
-    # Load developer reference docs (.md files from base game)
-    try:
-        _load_dev_reference_docs()
-    except Exception as e:
-        logger.error(f"Failed to load dev reference docs: {e}\n{traceback.format_exc()}")
+        try:
+            _load_dev_reference_docs()
+        except Exception as e:
+            logger.error(f"Failed to load dev reference docs: {e}\n{traceback.format_exc()}")
 
     # Regenerate docs/engine/ text files from the freshly parsed data
     try:
@@ -6539,7 +6605,7 @@ def _load_mod_state():
     # Run idempotent transformers that regenerate mod content from configs
     # + vanilla data (e.g. pop_needs_curves, apply_ideologies). See
     # POST_LOAD_GENERATORS above and docs/guides/python_tools.md for details.
-    _run_post_load_generators(ms)
+    _run_post_load_generators(ms, audits_only=audits_only)
 
 
 def main():

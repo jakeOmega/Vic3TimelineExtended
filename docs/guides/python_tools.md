@@ -8,7 +8,7 @@ Reference for all Python utility scripts and the background data server.
 
 ## Auto-run on server reload
 
-`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical roster is `POST_LOAD_GENERATORS` in `mod_state_server.py`; each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. The `?engine_only=true` reload path bypasses `_load_mod_state` and so skips these.
+`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 10 file-rewriting generators) and `POST_LOAD_AUDITS` (the 7 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
 
 **Audit warnings**: when a generator's return dict contains `unreviewed > 0` or `hard_fails > 0`, the runner logs `[post-load WARN] <label> surfaced issues: <key>=<n>` at WARNING level and adds an entry to the `/reload` response's `warnings` array — caller sees regressions in the same response, no log-scraping required. Add new actionable counter names to `_POST_LOAD_WARN_KEYS` in `mod_state_server.py` if a new audit invents one.
 
@@ -295,7 +295,17 @@ Invoke-RestMethod http://localhost:8950/status
 | `/on-actions/<id>` | GET | On-action raw data |
 | `/gui/render-sites/<loc_key>` | GET | Every GUI file:line (mod + vanilla) that references `<loc_key>` via a known loc attribute (`text` / `tooltip` / `raw_text` / ...). Mechanical scan; one curl replaces a multi-grep over both GUI trees. |
 | `/gui/render-paths/<EntityType>?field=<role>` | GET | Every GUI file:line that renders `<field>` of `<EntityType>` via `[<DataType>.GetX]`. Resolves EntityType → DataType via `ENTITY_TYPE_TO_DATATYPE`, field role → method names via `FIELD_TO_METHODS`. Fields: `name` / `desc` / `icon` / `tooltip`. |
-| `/reload` | POST | Re-parse all files from disk (also regenerates docs) |
+| `/reload` | POST | Re-parse all files from disk + run post-load chain (regenerators + audits). Flags compose; see table below. |
+
+##### `/reload` flag table
+
+| Query | Cost | Working-tree side effects | What it skips | When to use |
+|---|---|---|---|---|
+| (none) | ~30–60 s | regenerator output under `common/`, `localization/english/`, `events/` + audit reports under `docs/engine/` | nothing | Normal "I edited mod files, re-run everything" reload. |
+| `?engine_only=true` | <1 s | none | the entire ModState rebuild (only re-reads engine-doc snapshots) | After re-launching the game with no mod-file edits, when you only want freshly-typed `script_docs` output to be picked up. |
+| `?audits_only=true` | ~80 s | audit reports under `docs/engine/*_report.md` only | the 10 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
+| `?mod_only=true` | ~25 s | regenerator output (as above) | the vanilla parse + vanilla loc re-read (uses cached snapshot from the previous full load) + the engine-docs / dev-refs reload | When you've only edited mod files and want a quick reload. Vanilla cache is opt-in — if you bump vanilla, run an unflagged `/reload` to refresh it. |
+| `?mod_only=true&audits_only=true` | ~25 s | audit reports under `docs/engine/*_report.md` only | both regenerators *and* the vanilla re-read | **The fast-verify path used by the nightly audit.** Safe to call after every batch of fixes. |
 
 #### `/raw/<EntityType>[/<id>]` Response Shape
 

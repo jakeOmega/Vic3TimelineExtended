@@ -1,3 +1,4 @@
+import copy
 import os
 from collections import defaultdict
 
@@ -73,6 +74,26 @@ class ModState:
                         )
                     else:
                         print(f"WARNING: Mod-only directory not found: {dir_path}")
+
+    def reload_mod(self, mod_dir):
+        # Re-parse mod files in place, reusing the cached vanilla parse in
+        # self.base_parsers. Caller is responsible for resetting/repopulating
+        # self.localization (vanilla loc is cached at the server layer).
+        for entity_type, parser in self.base_parsers.items():
+            fresh = ParadoxFileParser()
+            fresh.data = copy.deepcopy(parser.data)
+            self.mod_parsers[entity_type] = fresh
+        if not isinstance(mod_dir, dict):
+            return
+        for entity_type, dir_path in mod_dir.items():
+            if not os.path.isdir(dir_path):
+                continue
+            if entity_type not in self.mod_parsers:
+                # Mod-only entity type with no vanilla side.
+                self.mod_parsers[entity_type] = ParadoxFileParser()
+                if entity_type not in self.base_parsers:
+                    self.base_parsers[entity_type] = ParadoxFileParser()
+            self.load_files_from_directory(entity_type, dir_path, base_game=False)
 
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
         for file_name in os.listdir(dir_path):
