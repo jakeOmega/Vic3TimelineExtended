@@ -15,10 +15,9 @@ File findings as GitHub issues; fix what's trivially fixable as PRs.
 - `docs/vanilla/CLAUDE.md`
 - `docs/audits/open_issues.md`
 - `docs/vanilla/vanilla_known_bugs.md`
-- `docs/vanilla/vanilla_war_reference.md`
-- `docs/audits/script_parameterization_audit.md`
+- `docs/engine/vic3_modifier_type_definitions_reference.md`
+- `docs/engine/modifier_patterns.md`
 - `docs/audits/nightly_checklists/production_methods_and_buildings.md`
-- `docs/audits/nightly_checklists/scripted_effects_and_triggers.md`
 
 Also skim `gh issue list --search nightly-audit --state open --limit 30` and
 `gh issue list --state open --limit 30` to avoid duplicate filings.
@@ -27,23 +26,23 @@ Also skim `gh issue list --search nightly-audit --state open --limit 30` and
 
 | # | File | Lines | Area | Last audited | Count | Recent findings |
 |---|---|---|---|---|---|---|
-| 1 | `common/mobilization_options/extra_mobilization_options.txt` | 1–600 (600) | production_methods_and_buildings | never | 0 | 0 |
-| 2 | `common/mobilization_option_groups/extra_mobilization_groups.txt` | all (4) | production_methods_and_buildings | never | 0 | 0 |
-| 3 | `common/_meta/duplicate_image_allowlist.yml` | 1–600 (600) | scripted_effects_and_triggers | never | 0 | 0 |
-| 4 | `common/battle_conditions/extra_battle_conditions.txt` | all (296) | production_methods_and_buildings | never | 0 | 0 |
-| 5 | `common/_meta/modifier_patterns.yml` | all (240) | scripted_effects_and_triggers | never | 0 | 0 |
-| 6 | `common/ship_modifications/extra_utility_modifications.txt` | all (202) | production_methods_and_buildings | never | 0 | 0 |
-| 7 | `common/combat_unit_groups/extra_combat_unit_groups.txt` | all (13) | production_methods_and_buildings | never | 0 | 0 |
-| 8 | `common/mobilization_options/_mobilization_options.info` | all (87) | production_methods_and_buildings | never | 0 | 0 |
-| 9 | `common/scripted_triggers/irredentism_triggers.txt` | all (205) | scripted_effects_and_triggers | never | 0 | 0 |
-| 10 | `common/on_actions/social_tensions_on_actions.txt` | all (29) | scripted_effects_and_triggers | never | 0 | 0 |
-| 11 | `common/on_actions/modern_election_on_actions.txt` | all (50) | scripted_effects_and_triggers | never | 0 | 0 |
-| 12 | `common/script_values/te_construction_market_sector_placement_values.txt` | all (100) | scripted_effects_and_triggers | never | 0 | 0 |
-| 13 | `common/script_values/te_map_mode_script_values.txt` | all (39) | scripted_effects_and_triggers | never | 0 | 0 |
-| 14 | `common/scripted_triggers/resource_discovery_triggers.txt` | all (6) | scripted_effects_and_triggers | never | 0 | 0 |
-| 15 | `common/on_actions/legacy_modifier_cleanup.txt` | all (23) | scripted_effects_and_triggers | never | 0 | 0 |
+| 1 | `common/static_modifiers/extra_modifiers.txt` | 1–600 (600) | production_methods_and_buildings | never | 0 | 0 |
+| 2 | `common/modifier_type_definitions/cultural_hegemony_modifier_types.txt` | all (31) | production_methods_and_buildings | never | 0 | 0 |
+| 3 | `common/modifier_type_definitions/power_bloc_extra_modifier_types.txt` | all (140) | production_methods_and_buildings | never | 0 | 0 |
+| 4 | `common/modifier_type_definitions/homelands_modifier_types.txt` | all (49) | production_methods_and_buildings | never | 0 | 0 |
+| 5 | `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | all (45) | production_methods_and_buildings | never | 0 | 0 |
+| 6 | `common/modifier_type_definitions/space_race_modifier_types.txt` | all (43) | production_methods_and_buildings | never | 0 | 0 |
+| 7 | `common/modifier_type_definitions/subjugation_modifier_types.txt` | all (70) | production_methods_and_buildings | never | 0 | 0 |
+| 8 | `common/static_modifiers/ministry_law_enactment_modifiers.txt` | all (198) | production_methods_and_buildings | never | 0 | 0 |
+| 9 | `common/modifier_type_definitions/banking_cycle_modifier_types.txt` | all (75) | production_methods_and_buildings | never | 0 | 0 |
+| 10 | `common/modifier_type_definitions/sol_expectations_modifier_types.txt` | all (109) | production_methods_and_buildings | never | 0 | 0 |
+| 11 | `common/modifier_type_definitions/nuclear_program_modifier_types.txt` | all (55) | production_methods_and_buildings | never | 0 | 0 |
+| 12 | `common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt` | all (69) | production_methods_and_buildings | never | 0 | 0 |
+| 13 | `common/static_modifiers/sol_expectations_modifiers.txt` | all (14) | production_methods_and_buildings | never | 0 | 0 |
+| 14 | `common/modifier_type_definitions/tech_gate_modifier_types.txt` | all (313) | production_methods_and_buildings | never | 0 | 0 |
+| 15 | `common/static_modifiers/law_enactment_modifiers.txt` | all (253) | production_methods_and_buildings | never | 0 | 0 |
 
-**Budget**: 2494 of 2500 lines, 15 of 15 files.
+**Budget**: 2064 of 2500 lines, 15 of 15 files.
 
 ## Registry drift
 
