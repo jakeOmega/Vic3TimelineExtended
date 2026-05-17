@@ -255,7 +255,7 @@ decree_natalism_initiative = {
 	}
 }
 
-decree_tax_breakes = {
+decree_tax_breaks = {
 	texture = "gfx/interface/icons/decree/decree_road_maintenance.dds"
 	modifier = {
 		state_tax_collection_mult = -0.5

@@ -90,6 +90,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/goods/*.txt": "input to pm_costs.py — vanilla goods data, not generator output",
     "common/ideologies/*.txt": "input to apply_ideologies.py — vanilla ideology data (modified.txt is the actual output)",
     "common/strategic_regions/*.txt": "input to gen_formable_regions.py — vanilla data, not generator output",
+    "common/company_types/*.txt": "input to gen_company_building_cleanup.py — hand-authored company definitions",
     "common/modifier_type_definitions/tech_gate_modifier_types.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored modifier defs",
     "common/power_bloc_principles/extra_power_bloc_principles.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored",
 }

@@ -263,7 +263,7 @@ decrees:
   - decree_promote_tourism
   - decree_road_maintenance
   - decree_subsidize_immigration
-  - decree_tax_breakes
+  - decree_tax_breaks
   - decree_trade_reform
   - decree_war_propaganda
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
