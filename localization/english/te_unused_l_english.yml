@@ -31,7 +31,7 @@
  OUTREACH_BUREAUCRACY_COST_UPDATED:0 "Outreach Bureaucracy Cost Updated - We will gain or lose a modifier costing #N 10#! [concept_bureaucracy] per million people in target countries. It will update monthly."
  POLICY_ACTIVE_GREEN_BUILDING_CODES:0 "Green building codes enacted"
  POLICY_POSSIBLE_GREEN_BUILDING_CODES:0 "Wants Green Building Codes"
- POP_LOW_GPD_PER_CAPITA_REL:0 "Low State [Concept('concept_gdp_per_capita', 'GDP per Capita')] compared to global average (@money![SCOPE.GetRootScope.ScriptValue('global_gdp_per_capita')|2*])"
+ POP_LOW_GDP_PER_CAPITA_REL:0 "Low State [Concept('concept_gdp_per_capita', 'GDP per Capita')] compared to global average (@money![SCOPE.GetRootScope.ScriptValue('global_gdp_per_capita')|2*])"
  QUALIFICATIONS_INSUFFICIENT_DEMAND_DECAY:0 "Insufficient demand for job"
  SEIZE_COMPANY:0 "Seize"
  SR_COOLDOWN_10_TT:0 "#Y 10 months#! until [concept_space_race] progress resumes."

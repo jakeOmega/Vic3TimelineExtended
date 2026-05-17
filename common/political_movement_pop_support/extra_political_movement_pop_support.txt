@@ -7,5 +7,5 @@ movement_support_high_pollution = {
 }
 
 movement_support_low_gpd_per_capita = {
-	name = POP_LOW_GPD_PER_CAPITA
+	name = POP_LOW_GDP_PER_CAPITA
 }
