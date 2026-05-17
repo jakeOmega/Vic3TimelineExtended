@@ -475,3 +475,29 @@ ministry_aid_humanitarian = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_law_enactment_success_add = 0.03
 }
+
+# ======================================================================
+#  DOMAIN SIDE-EFFECT MODIFIERS  (issue #92)
+#
+#  Ministry-specific timed modifiers used by selected options in
+#  ministry_law_events.txt to replace formulaic add_radicals /
+#  ig_approval secondary effects with thematic side effects.
+#
+#  Shared cross-system modifiers (te_research_speed_boost,
+#  te_legitimacy_boost, te_authority_boost, te_diplomatic_relations_*,
+#  te_military_morale_*) live in law_enactment_modifiers.txt and are
+#  referenced from ministry events.
+# ======================================================================
+
+ministry_env_pollution_reduction = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_pollution_generation_add = -3
+}
+ministry_consumer_protection = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_food_industry_throughput_add = -0.02
+}
+ministry_urban_housing_strain = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_infrastructure_mult = -0.05
+}

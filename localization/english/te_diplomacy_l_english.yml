@@ -93,6 +93,8 @@
  tactical_nuke_diplo_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has launched a Tactical [concept_nuclear_strike]."
  tactical_nuke_diplo_action_action_notification_name:0 "Tactical [concept_nuclear_strike] Launched"
  tactical_nuke_diplo_action_desc:0 "Launch a tactical [concept_nuclear_strike] on a military target."
+ te_diplomatic_relations_boost:0 "Diplomatic Goodwill"
+ te_diplomatic_relations_drain:0 "Diplomatic Friction"
  trade_diplomacy_modifier:0 "Trade Diplomacy"
  trade_diplomacy_modifier_desc:0 "We chose diplomacy over sanctions, maintaining trade flows but appearing unwilling to confront our rival."
  treaty_name_education_and_training_pact:0 "Education and Training Pact"
