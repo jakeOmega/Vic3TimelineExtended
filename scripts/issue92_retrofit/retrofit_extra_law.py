@@ -133,19 +133,24 @@ def find_option_block(text: str, event_id: int, option: str):
 
 
 SECONDARY_EFFECT_PATTERNS = [
-    # Multi-line: add_loyalists / add_radicals
+    # add_loyalists / add_radicals (single-line or multi-line; greedy on inner content
+    # but [^{}] guarantees we don't escape the brace block).
     re.compile(
-        r"\n\t+add_(?:loyalists|radicals)\s*=\s*\{[^{}]*?\n\t+\}",
+        r"\n\t+add_(?:loyalists|radicals)\s*=\s*\{[^{}]*\}",
         re.DOTALL,
     ),
-    # Multi-line: scope:opposing_ig = { add_modifier = { ... ig_approval_*_modifier ... } }
+    # scope:<X>_ig = { add_modifier = { ... ig_approval_*_modifier ... } }
+    # (multi-line). Matches opposing_ig, devout_ig, industrialists_ig, etc.
+    # Needs to skip past the inner add_modifier braces — use a 2-deep match.
     re.compile(
-        r"\n\t+scope:opposing_ig\s*=\s*\{\s*\n[^{}]*?add_modifier\s*=\s*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\n\t+\}\s*\n\t+\}",
+        r"\n\t+scope:[a-z_]+_ig\s*=\s*\{[^{}]*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\}[^{}]*\}",
         re.DOTALL,
     ),
-    # Single-line: ig:<ig_X> ?= { add_modifier = { ... ig_approval_*_modifier ... } }
+    # ig:<ig_X> ?= { add_modifier = { ... ig_approval_*_modifier ... } }
+    # (typically single-line in debate events).
     re.compile(
-        r"\n\t+ig:ig_[a-z_]+\s*\?=\s*\{\s*add_modifier\s*=\s*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\}\s*\}",
+        r"\n\t+ig:ig_[a-z_]+\s*\?=\s*\{[^{}]*\{[^{}]*?ig_approval_(?:positive|negative)_modifier[^{}]*?\}[^{}]*\}",
+        re.DOTALL,
     ),
 ]
 
@@ -170,8 +175,10 @@ def retrofit_option(text: str, event_id: int, option: str, domain: str):
         mult_suffix = " multiplier = sv_money_flow_event_small"
 
     if matches:
-        # Sort and pick the FIRST secondary effect to replace
-        # (for debate events, the option has two paired ig blocks — we keep one, replace one)
+        # Replace the FIRST secondary effect with the domain modifier line; REMOVE
+        # any other matched secondary effects (so the option's only side-effect is
+        # the single domain modifier — no orphan add_radicals/ig_approval lines).
+        # For debate events with two paired ig blocks, both get removed.
         matches.sort()
         rep_start, rep_end = matches[0]
         indent_match = re.match(r"\n(\t+)", block[rep_start:])
@@ -180,15 +187,20 @@ def retrofit_option(text: str, event_id: int, option: str, domain: str):
             f"\n{indent}# Domain side-effect\n"
             f"{indent}add_modifier = {{ name = {domain} days = normal_modifier_time{mult_suffix} }}"
         )
-        new_block = block[:rep_start] + replacement + block[rep_end:]
-        msg = f"OK: event {event_id} option {option} → {domain} (swap)"
+        # Walk matches in REVERSE order so index positions stay valid as we shrink.
+        new_block = block
+        for i in range(len(matches) - 1, -1, -1):
+            ms, me = matches[i]
+            if i == 0:
+                new_block = new_block[:ms] + replacement + new_block[me:]
+            else:
+                new_block = new_block[:ms] + new_block[me:]
+        msg = f"OK: event {event_id} option {option} → {domain} (swap×{len(matches)})"
     else:
         # Bare option (only add_enactment_modifier). Insert domain modifier before
         # the option's closing `}`.
-        # Use the indent of the add_enactment_modifier line for consistency.
         aem_match = re.search(r"\n(\t+)add_enactment_modifier", block)
         indent = aem_match.group(1) if aem_match else "\t\t"
-        # Find the final `}` of the option block (last char)
         close_pos = block.rfind("}")
         if close_pos < 0:
             return text, f"NO CLOSE BRACE: event {event_id} option {option}"
@@ -196,8 +208,6 @@ def retrofit_option(text: str, event_id: int, option: str, domain: str):
             f"{indent}# Domain side-effect\n"
             f"{indent}add_modifier = {{ name = {domain} days = normal_modifier_time{mult_suffix} }}\n"
         )
-        # Insert before the line containing the close brace
-        # Walk back to find the start of the line with the closing brace
         line_start = block.rfind("\n", 0, close_pos) + 1
         new_block = block[:line_start] + insertion + block[line_start:]
         msg = f"OK: event {event_id} option {option} → {domain} (insert)"
