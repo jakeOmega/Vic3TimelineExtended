@@ -676,12 +676,16 @@
     },
     "localization/english/te_events_l_english.yml": {
       "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1,
+      "audit_count": 2,
+      "recent_findings": 3,
       "partial_coverage": [
         [
           1,
           600
+        ],
+        [
+          601,
+          1200
         ]
       ]
     }
