@@ -5,8 +5,9 @@
 #   Hardened Positions = 3/level, Territorial Defense = 1/level.
 # Max building level = 5, max fort/level = 4 (hardened + territorial) = 20 max.
 # Tiers: basic (any), Stronghold (5+), Bastion (10+), Impregnable (15+).
-# All tiers are mutually exclusive via NOT blocks. Higher tiers have higher
-# weight so they are preferentially selected when multiple tiers are possible.
+# All tiers are mutually exclusive via NOT blocks. Each lower tier zeros out
+# its weight once the next-higher tier becomes eligible, ensuring strict
+# higher-tier dominance at eligibility transitions.
 
 battle_condition_fortified_position = {
 	icon = "gfx/interface/icons/battle_conditions/battle_condition_dug_in.dds"
@@ -14,7 +15,7 @@ battle_condition_fortified_position = {
 	modifier = {
 		unit_army_defense_mult = 0.2
 		unit_morale_loss_mult = -0.1
-        battle_combat_width_mult = -0.2
+		battle_combat_width_mult = -0.2
 	}
 
 	possible = {
@@ -47,7 +48,7 @@ battle_condition_fortified_position = {
 			}
 			add = 1
 		}
-        if = {
+		if = {
 			limit = {
 				province = {
 					state = {
@@ -57,7 +58,7 @@ battle_condition_fortified_position = {
 			}
 			add = 1
 		}
-        if = {
+		if = {
 			limit = {
 				province = {
 					state = {
@@ -67,7 +68,7 @@ battle_condition_fortified_position = {
 			}
 			add = 1
 		}
-        if = {
+		if = {
 			limit = {
 				province = {
 					state = {
@@ -76,6 +77,17 @@ battle_condition_fortified_position = {
 				}
 			}
 			add = 1
+		}
+		# Strict-dominance zero-out: yield to Stronghold once it's eligible.
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 5
+					}
+				}
+			}
+			multiply = 0
 		}
 	}
 }
@@ -87,7 +99,7 @@ battle_condition_fortified_stronghold = {
 		unit_army_defense_mult = 0.35
 		unit_morale_loss_mult = -0.2
 		unit_kill_rate_add = 0.1
-        battle_combat_width_mult = -0.4
+		battle_combat_width_mult = -0.4
 	}
 
 	possible = {
@@ -119,7 +131,7 @@ battle_condition_fortified_stronghold = {
 			}
 			add = 2
 		}
-        if = {
+		if = {
 			limit = {
 				province = {
 					state = {
@@ -129,7 +141,7 @@ battle_condition_fortified_stronghold = {
 			}
 			add = 2
 		}
-        if = {
+		if = {
 			limit = {
 				province = {
 					state = {
@@ -139,7 +151,7 @@ battle_condition_fortified_stronghold = {
 			}
 			add = 2
 		}
-        if = {
+		if = {
 			limit = {
 				province = {
 					state = {
@@ -149,7 +161,18 @@ battle_condition_fortified_stronghold = {
 			}
 			add = 2
 		}
-    }
+		# Strict-dominance zero-out: yield to Bastion once it's eligible.
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 10
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
 }
 
 battle_condition_fortified_bastion = {
@@ -160,7 +183,7 @@ battle_condition_fortified_bastion = {
 		unit_morale_loss_mult = -0.3
 		unit_kill_rate_add = 0.15
 		unit_recovery_rate_add = 0.05
-        battle_combat_width_mult = -0.6
+		battle_combat_width_mult = -0.6
 	}
 
 	possible = {
@@ -182,45 +205,56 @@ battle_condition_fortified_bastion = {
 	weight = {
 		value = 10
 		if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 11
-                    }
-                }
-            }
-            add = 3
-        }
-        if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 12
-                    }
-                }
-            }
-            add = 3
-        }
-        if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 13
-                    }
-                }
-            }
-            add = 3
-        }
-        if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 14
-                    }
-                }
-            }
-            add = 3
-        }
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 11
+					}
+				}
+			}
+			add = 3
+		}
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 12
+					}
+				}
+			}
+			add = 3
+		}
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 13
+					}
+				}
+			}
+			add = 3
+		}
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 14
+					}
+				}
+			}
+			add = 3
+		}
+		# Strict-dominance zero-out: yield to Impregnable once it's eligible.
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 15
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 }
 
@@ -232,7 +266,7 @@ battle_condition_impregnable_fortress = {
 		unit_morale_loss_mult = -0.4
 		unit_kill_rate_add = 0.2
 		unit_recovery_rate_add = 0.1
-        battle_combat_width_mult = -0.8
+		battle_combat_width_mult = -0.8
 	}
 
 	possible = {
@@ -253,44 +287,44 @@ battle_condition_impregnable_fortress = {
 	weight = {
 		value = 15
 		if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 16
-                    }
-                }
-            }
-            add = 4
-        }
-        if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 17
-                    }
-                }
-            }
-            add = 4
-        }
-        if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 18
-                    }
-                }
-            }
-            add = 4
-        }
-        if = {
-            limit = {
-                province = {
-                    state = {
-                        modifier:state_fortification_level_add >= 19
-                    }
-                }
-            }
-            add = 4
-        }
-    }
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 16
+					}
+				}
+			}
+			add = 4
+		}
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 17
+					}
+				}
+			}
+			add = 4
+		}
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 18
+					}
+				}
+			}
+			add = 4
+		}
+		if = {
+			limit = {
+				province = {
+					state = {
+						modifier:state_fortification_level_add >= 19
+					}
+				}
+			}
+			add = 4
+		}
+	}
 }
