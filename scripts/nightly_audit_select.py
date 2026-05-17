@@ -281,6 +281,11 @@ def enumerate_candidates() -> list[tuple[Path, str, int]]:
             rel = path.relative_to(REPO_ROOT).as_posix()
             if matches_any_glob(rel, EXCLUDED_GLOBS):
                 continue
+            # Schema/template files vanilla ships alongside data
+            # (_institutions.info, political_movements.md, etc.) — docs,
+            # not data; the audit can't act on them.
+            if rel.startswith("common/") and path.suffix in (".md", ".info"):
+                continue
             if is_binary_file(path):
                 continue
             if has_autogen_marker(path):
