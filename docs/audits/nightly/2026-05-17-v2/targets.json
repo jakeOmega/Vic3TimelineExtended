@@ -1,0 +1,169 @@
+{
+  "date": "2026-05-17",
+  "run_label": "2026-05-17-v2",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/probe_result_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_game_rules_l_english.yml",
+      "line_range": null,
+      "lines": 69,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_technologies_l_english.yml",
+      "line_range": null,
+      "lines": 332,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_production_methods_l_english.yml",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_miscellaneous_l_english.yml",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_combat_units_l_english.yml",
+      "line_range": null,
+      "lines": 65,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_ship_types_l_english.yml",
+      "line_range": null,
+      "lines": 43,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_companies_l_english.yml",
+      "line_range": null,
+      "lines": 103,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_institutions_l_english.yml",
+      "line_range": null,
+      "lines": 22,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_mobilization_options_l_english.yml",
+      "line_range": null,
+      "lines": 59,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_progress_bars/heir_education_progress_bars.txt",
+      "line_range": null,
+      "lines": 6,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_charter_types/extra_charters.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    }
+  ]
+}
