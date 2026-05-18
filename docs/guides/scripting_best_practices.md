@@ -384,6 +384,33 @@ state_pop_support_movement_<name>_mult = {
 - **JE scope can't read country properties (`gdp`, `prestige`, etc.) inside `multiplier =`.** `je:my_je ?= { add_modifier = { name = X multiplier = some_script_value } }` will return `'none'` from `jomini_scriptvalue.cpp` if the script value reads a country property, because the engine re-evaluates the multiplier in JE scope each tick and JE scope only auto-resolves `var:` reads, not country properties. Country *vars* work (`var:my_var` resolves against the JE owner). **Fix:** cache the script value to a country var before scoping into the JE, and reference it as `root.var:X` in the multiplier. Refresh the cache from the JE's `on_monthly_pulse` so the value tracks. Mod example: `un_buttons.txt` for peacekeeping/development contributor cost; cache var refresh in `je_united_nations.txt` `on_monthly_pulse`.
 - **Script values that read `global_var:X` need a `has_global_variable = X` gate.** A monthly on-action pulse that fires before any yearly pulse will hit `'none'` when the global cache hasn't been populated yet. Wrap the body in `if = { limit = { has_global_variable = X } ... }`. Mod example: `cultural_pull_total` and `cultural_pull_from_sol` in `cultural_hegemony_script_values.txt`.
 - **Variables backing `add_modifier { multiplier = ... }` must persist beyond the call site.** The engine re-evaluates the `multiplier` expression on subsequent ticks (decay/tooltip), not just at add time. Removing the variable right after `add_modifier` makes every later evaluation read `var:X` as `'none'` and emit `Value of wrong type ... Got value of type 'none'` from `jomini_scriptvalue.cpp` per re-eval. **Fix:** never `remove_variable` a name that's referenced by a still-active modifier's multiplier — leave the variable set; it can be safely overwritten by the next `set_variable` call. Vanilla pattern: `c:FRA.var:PRC_money_transfer` in `01_paris_commune.txt` is set at JE start, used in `add_modifier { multiplier = ... }`, and never removed. Mod example: `population_transfer_effect` originally removed `pop_transfer_count` after the disruption modifier was added; reverted, and the runtime errors disappeared.
+- **`add_modifier { multiplier = <script_value> }` inside `every_scope_building` evaluates the multiplier in the OUTER (country) scope, NOT the building scope of the iteration.** A multiplier script value that reads building-scope-only triggers like `occupancy` or `has_employee_slots_filled` will resolve those triggers as if from country scope — they return their undefined fallback (typically "false" / 0), and any if/else branching against them takes the wrong path. Diagnostic fingerprint: a per-site staffing-compensator with a `multiply = 10` fallback else branch silently fires every tick regardless of actual building staffing, producing throughput +1000%+ regardless of state.
+- **Workarounds that LOOK like they should work but silently default to multiplier=1.0:** `save_temporary_scope_value_as = { name = X value = <script_value> }` + `multiplier = scope:X` — vanilla `scope:X` only resolves saved entity scopes followed by an accessor, not bare numeric scope values, so the engine falls back to 1.0. `save_temporary_scope_as = X` + `multiplier = scope:X.<script_value>` — vanilla `scope:X.<accessor>` only traverses to value-triggers (like `scope:ig.amenability_level`), not script values. **Diagnostic fingerprint:** throughput stuck at exactly +100% (`building_throughput_add = 1` × multiplier=1.0) regardless of input state.
+- **Buildings do not appear to support variables.** `set_variable` inside `every_scope_building` silently fails to write; the subsequent `scope:current_site.var:X` lookup returns nothing → multiplier defaults to 1.0. No vanilla examples of `set_variable` in building scope or `scope:building.var:X` exist; vanilla's `scope:X.var:Y` is always against `ig` / `country` / `state` / `character` scopes.
+- **Working pattern: country-variable handoff.** Compute the building-scope value at country scope via `prev`, write it to a country variable on `owner`, then have `add_modifier` read `owner.var:X`. The variable lookup works from the outer-scope evaluation context. Clear the variable at start AND end of the effect to avoid stale values bleeding across ticks. Mod example: `te_construction_market_apply_per_site_modifier` in `common/scripted_effects/te_construction_market_update_effects.txt`.
+  ```
+  te_apply_per_site_modifier = {
+      remove_variable = te_cm_capacity_mult  # clear stale
+      every_scope_building = {
+          limit = { is_building_type = my_site }
+          remove_modifier = my_capacity_modifier
+          owner = {
+              # 'prev' here = the building; the script value evaluates in
+              # building scope and writes the result to the country var.
+              set_variable = {
+                  name = te_cm_capacity_mult
+                  value = prev.my_employment_adjusted_per_site
+              }
+          }
+          add_modifier = {
+              name = my_capacity_modifier
+              multiplier = owner.var:te_cm_capacity_mult
+          }
+      }
+      remove_variable = te_cm_capacity_mult  # clean up var inspector
+  }
+  ```
+  **Multi-site caveat:** each iteration overwrites the variable. If the engine processes set_variable + add_modifier as immediate pairs per iteration, each site gets its own value (correct). If add_modifier is somehow deferred so it reads the variable AFTER all iterations, every site gets the LAST iteration's value (broken across sites). Verify empirically for multi-site countries before relying on the conservation invariant.
 - **Inline `multiplier = { ... divide = { value = X min = Y } ... }` block-form arithmetic in `add_modifier` is fragile — prefer the flat-scalar paris-commune pattern.** Even with persistent variables, a multiplier block that nests a `divide = { value = country_trigger min = … }` (or any sub-block whose `value =` reads a country trigger like `total_population`) re-evaluates that nested block on every decay tick and intermittently returns `'none'` from `jomini_scriptvalue.cpp:1659`, even when the outer scope is valid. Reported file:line is often the start-of-effect line (e.g. a blank line just before the multiplier block) rather than the actual offending line — don't trust the line number, look at the multiplier block. **Fix:** precompute the final scalar at apply-time into a country variable using `set_variable`'s inline `value = { ... }` script-value block (where country triggers like `total_population` resolve correctly), then read it flat in the multiplier: `set_variable = { name = X value = { value = var:input  divide = { value = total_population min = 1 }  min = 0.25  max = 2 } }` → `add_modifier = { ... multiplier = scope:source_country.var:X }`. The multiplier becomes a single variable lookup with no nested script-value evaluation per tick. **Do NOT** factor the divide out as `change_variable = { divide = total_population }` (or `divide = my_script_value`): empirically the `divide=` operand of `change_variable` only resolves numeric literals and `var:Y` references, not bare country triggers or script-value names — both silently return `'none'` despite the engine docs claiming script values are accepted, and the failure corrupts the variable so the later multiplier read also returns `'none'`. Mod example: `population_transfer_effect` in `extra_effects.txt`.
 
 ## Modifier Values Are NOT Recalculated Within a Single Effect Block
@@ -3063,3 +3090,77 @@ Some sibling triggers/effects don't share scope rules. Two cases bitten repeated
 
 - **`add_loyalists` is country-scope only; `add_radicals` is dual-scope (country + pop).** Calling `add_loyalists = { value = X }` inside `every_scope_pop = { ... }` silently no-ops with `Inconsistent effect scopes (pop vs. country)`. The parallel `add_radicals = { value = X }` in the same loop *does* work because `add_radicals` accepts pop scope. Refactor `add_loyalists` callers to country scope and use the `culture = X` / `pop_type = X` / `strata = X` filter parameters. Canonical "iterate cultures, target by acceptance" pattern: `every_scope_culture { save_temporary_scope_as = X; prev { if = { limit = { country_average_culture_pop_acceptance = { culture = scope:X value < acceptance_status_4 } } add_loyalists = { culture = scope:X value = $VALUE$ } } } }` (or use `prev = prev` chain like `colonial_empire_triggers.txt:478-490`).
 - **`is_marginal` is IG-scope only, not party-scope.** Calling `any_active_party = { is_party_type = green_party is_marginal = no }` produces `Inconsistent trigger scopes (party vs. interest_group)`. Use `any_member = { NOT = { ig_counts_as_marginal = yes } }` (iterates the party's member IGs) for a party-scoped marginality test that approximates "non-marginal party". Vanilla precedent: `00_ip4_victoria_scripted_triggers.txt:713-725` defines `ig_counts_as_marginal` as the canonical IG-scope marginality wrapper.
+
+## `debug_log` Loc-String Templating Limitations
+
+`debug_log = "message"` accepts loc-string templating per the engine docs ("ROOT, SCOPE and PREV available"), but the templating engine in this context is a SUBSET of the full .yml loc parser. Patterns that work in localization files fail silently in `debug_log` and emit `pdx_data_localize.cpp:136 | Data error in loc string '<raw template>'` per render.
+
+**What works:**
+- `[SCOPE.ScriptValue('my_sv')|0]` — script value, formatted as integer (note: NO `.MakeScope`)
+- `[SCOPE.ScriptValue('my_sv')|3]` — script value, 3 decimal places
+- `[SCOPE.GetTag]`, `[SCOPE.GetName]`, `[SCOPE.sParty('X').GetNameNoFormatting]` — string accessors
+
+**What silently fails (emits "Data error in loc string"):**
+- `[SCOPE.MakeScope.ScriptValue('my_sv')|0]` — the canonical .yml-loc pattern. `.MakeScope` on an already-scoped reference is rejected.
+- `[SCOPE.Var('my_var').GetValue|0]` — variable access via `.Var(...).GetValue` doesn't resolve.
+- `[SCOPE.MakeScope.Var('my_var').GetValue|0]` — same.
+
+**Workaround for variables:** wrap them in a script value, then read the script value:
+```paradox
+# In common/script_values/my_debug_values.txt:
+my_var_sv = {
+    if = {
+        limit = { has_variable = my_var }
+        value = var:my_var
+    }
+    else = { value = -1 }
+}
+```
+```
+debug_log = "DEBUG my_var=[SCOPE.ScriptValue('my_var_sv')|0]"
+```
+
+**Workaround for engine triggers** (e.g. `construction_queue_num_queued_government_levels`, `modifier:X`): also wrap in a script value, since `ScriptValue('X')` only accepts script-value names, not bare triggers.
+
+**Discovery cookbook:** when adding new templated `debug_log` calls, drop a series of `TE_PROBE1 [...]`, `TE_PROBE2 [...]` lines with candidate syntaxes, relaunch once, and grep the log — successful probes print numeric values, failed ones print "Data error in loc string" with the raw bracket text. This is how the `[SCOPE.ScriptValue('X')|N]` form (vs the .yml-loc `[SCOPE.MakeScope.ScriptValue('X')|N]`) was originally discovered.
+
+### Debug instrumentation pattern
+
+When debugging a calculation chain in a running game (a multi-step script-value pipeline, a modifier whose effective value seems wrong, etc.), build a one-shot debug snapshot effect that dumps all relevant values per tick. Pattern that worked well for the `te_construction_market` 1→16 throughput investigation:
+
+1. **One scripted effect** (e.g. `te_construction_market_debug_log`) that emits ~15 `TAG_PREFIX: name=value` lines per call via `debug_log`. Stable tag (`TE_CM_DEBUG`) for greppability (`curl /logs/debug?q=TE_CM_DEBUG`).
+2. **Wrapper script values for triggers/modifiers** the templating can't read directly. `[SCOPE.ScriptValue('X')|N]` only accepts script value names — wrap `construction_queue_num_queued_government_levels`, `modifier:country_private_construction_allocation_mult`, raw `var:X` reads, etc., in throwaway script values (`te_construction_market_debug_*` in a `_debug_values.txt` file) so the snapshot can reference them.
+3. **Variable-backup pattern.** Each value the snapshot logs is also written to a country variable (`te_cm_dbg_*`). When the in-game log rotates past the snapshot data (Vic3 caps debug.log at 524KB × 6 generations — a texture-error flood can wipe the snapshots in seconds), the user can still read the values via the in-game Variable Inspector (debug-mode → right-click country → View Variables).
+4. **Wire into player-triggered events first** (button effects, infrequent on-actions) to avoid drowning the log. Add a weekly-pulse wiring gated on `is_ai = no` only when across-tick deltas matter. Never wire from every-country every-week pulses (one log line per AI country per tick = log dies).
+5. **Keep the instrumentation in its own files** (`_debug_effects.txt`, `_debug_values.txt`) with a clear "REMOVE this file" comment at the top, so cleanup at the end is a `rm` + one edit per call site. Mod precedent: the four-file pattern (effect + wrapper SVs + GUI wire-up + pulse wire-up) used during the construction-market diagnosis.
+
+**Always investigate log noise alongside instrumentation.** If `debug.log` is dominated by an unrelated error (the `Could not find texture` flood from an empty-icon modifier was the killer in this session), fix the noise source FIRST or the snapshot data won't survive long enough to read. `curl 'http://localhost:8950/logs/debug?summary=true'` shows the category breakdown — if one category dominates, find and fix it before relying on log-based debugging.
+
+## Building Lifecycle Effect Gotchas
+
+- **`create_building` on an existing building of the same type ADDS levels rather than setting them.** A "reset this site to level 1" helper that does `if = { has_building = X if = { level < 1 } remove_building = X }` then unconditionally `create_building = { building = X level = 1 }` will end up *incrementing* the existing N-level building by 1 each call instead of resetting it. For a true set-to-level-N pattern, always `remove_building` first (when present and at the wrong level), then `create_building`:
+  ```paradox
+  set_specified_level = {
+      if = {
+          limit = {
+              has_building = $SPEC_TYPE$
+              NOT = { b:$SPEC_TYPE$.level = $SPEC_LEVEL$ }
+          }
+          remove_building = $SPEC_TYPE$
+      }
+      if = {
+          limit = { NOT = { has_building = $SPEC_TYPE$ } }
+          create_building = { building = $SPEC_TYPE$ level = $SPEC_LEVEL$ }
+      }
+  }
+  ```
+  The `NOT = { level = N }` guard is critical — without it, a no-op call (current level already matches target) still does remove + create, which fires all employed pops and triggers a multi-week re-hire cycle. Mod fix: `te_construction_market_set_specified_level` in `te_construction_market_build_effects.txt`, called from border-change recalcs (war end, formables, capitulation, yearly pulse) — without the guard, every recalc fired employees and tanked the country's construction.
+- **A modifier with `icon = ""` or no `icon` field at all floods `debug.log` with `virtualfilesystem.cpp:569 | Could not find texture due to 'VFSOpen Error:  not found'` once per UI render.** With the modifier visible in the construction panel or building UI, this can be hundreds of lines per second — enough to roll all 6 generations of `debug.log` (524KB cap each) in seconds, pushing actual signal entries (e.g. `TE_CM_DEBUG` snapshots) out of recoverability. Always specify a real icon path. Vanilla and mod both use `gfx/interface/icons/timed_modifier_icons/modifier_<noun>_<polarity>.dds` paths (e.g. `modifier_gear_positive.dds`, `modifier_coins_negative.dds`) — copy from an adjacent working modifier rather than guessing.
+
+## Building Group Funding: `is_government_funded` Pays For All Goods Inputs
+
+Setting `is_government_funded = yes` on a `common/building_groups/` entry makes the country's treasury pay for the entire goods-input cost of every building in that group, regardless of how the building's *output* is allocated downstream. Critically, this means:
+
+- A government-funded building producing `country_construction_add` (which is then split between gov / private queues via `country_private_construction_allocation_mult`) has its goods inputs paid entirely by the government, even when the engine routes 90%+ of the construction output to the private queue.
+- The mod's `te_construction_market_bg` is `is_government_funded = yes`. When `total_use_target` inflates (e.g. `public_target = 1` + investment-pool-derived `private_use_target = 13`), the government pays for 14 construction goods/wk worth of inputs (~£28K) while only ~9% of the resulting construction capacity actually goes to the government queue (~1.3/wk). The "private" portion is private only in name; it's government money buying construction services that produce output the private queue then consumes.
+- **When designing market-clearing systems whose outputs feed both public and private channels:** if the consumer building is `is_government_funded`, the player's "set my target to N" knob doesn't actually limit their expense to N × price — the system can over-buy on private's behalf at the government's expense. Either drop `is_government_funded`, split the system into separate gov-funded and self-funded buildings, or cap the "private" target tightly. The mod accepts this trade in `te_construction_market_bg` because preserving cross-queue conservation matters more than precise government-expense matching to the player's target.

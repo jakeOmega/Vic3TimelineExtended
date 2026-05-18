@@ -160,6 +160,9 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Show, don't tell.** Events present situations and let the player interpret them. Descriptions don't editorialize, and flavor text grounds events in a perspective rather than narrating them from nowhere.
 - **Dark humor and irony** are staples.
 - **No modern anachronisms in tone** (no slang, no internet-speak), but the writing should be accessible to modern readers.
+- **Avoid dichotomous and epigrammatic styles.** Two common failure modes that read as authored rather than observed:
+  - **Dichotomous framing** sets up a clean "on the one hand X, on the other hand Y" or "some say A, others B" structure. It reads as a debate-club summary rather than a situation. People living through an event don't experience it as a balanced two-sided dilemma — they experience it from inside one perspective with the other side as an obstacle, irritant, or absence. If you find yourself writing a balanced pro/con paragraph in flavor or description, rewrite from one specific viewpoint (a worker, a clerk, a soldier) and let the other side appear only as it intrudes on that perspective.
+  - **Epigrammatic writing** packs every sentence into a pithy, aphoristic, quotable form ("Bread today, freedom tomorrow." / "Capital flows where conscience cannot follow."). Occasional epigrams are fine — vanilla uses attributed historical quotes as flavor — but stringing them back-to-back reads as a slogan generator rather than text. Aphorisms work because of contrast with surrounding ordinary prose; without the contrast they wear thin within two sentences. If multiple sentences in a row sound like they could be embroidered on a banner, rewrite the connective tissue as plain observation or dialogue.
 
 ## Event Design Guidelines
 
