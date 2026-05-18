@@ -19787,3 +19787,96 @@ REPLACE:pm_trade_center_principle_external_trade_2 = {
 		}
 	}
 }
+
+####################################################################
+### Shipyard civilian/naval focus PMs (GitHub issue #113).
+###
+### Player-choice PMG layered on top of the era-tier base PMG. Each
+### focus PM applies the same `goods_output_<civilian-ship>_mult` to
+### every civilian-hull good the shipyard might be producing, so the
+### percentage lands on whichever era-good the active base PM emits.
+### The naval and wartime tiers stack `country_ship_construction_add`
+### additively on the base PM's value (same modifier vanilla shipyards
+### already use at +5/+10/+15/+20 per shipyard).
+###
+### Civilian focus carries a -5 penalty and is gated via
+### unlocking_production_methods on all base PMs giving ≥+6
+### country_ship_construction_add, so the net never goes below 0.
+### pm_basic_shipbuilding (+5) is deliberately excluded — pairing
+### civilian focus with it would zero out construction.
+####################################################################
+
+pm_focus_civilian_production = {
+	texture = "gfx/interface/icons/production_method_icons/no_military_shipbuilding.dds"
+
+	unlocking_production_methods = {
+		pm_complex_shipbuilding
+		pm_metal_shipbuilding
+		pm_arc_welding_shipbuilding
+		pm_modular_shipbuilding
+		pm_diesel_shipbuilding
+		pm_robotic_ship_assembly
+		pm_advanced_metamaterials_shipbuilding
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_ship_construction_add = -5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_output_clippers_mult = 0.25
+			goods_output_steamers_mult = 0.25
+			goods_output_motor_ships_mult = 0.25
+			goods_output_magnetic_drive_ships_mult = 0.25
+		}
+	}
+}
+
+pm_focus_balanced_production = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+}
+
+pm_focus_naval_production = {
+	texture = "gfx/interface/icons/production_method_icons/military_shipbuilding_steam.dds"
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_ship_construction_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_output_clippers_mult = -0.20
+			goods_output_steamers_mult = -0.20
+			goods_output_motor_ships_mult = -0.20
+			goods_output_magnetic_drive_ships_mult = -0.20
+		}
+	}
+}
+
+pm_focus_wartime_mobilization = {
+	texture = "gfx/interface/icons/production_method_icons/military_shipbuilding_steam_2.dds"
+
+	unlocking_laws = {
+		law_total_war
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_ship_construction_add = 15
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_output_clippers_mult = -0.40
+			goods_output_steamers_mult = -0.40
+			goods_output_motor_ships_mult = -0.40
+			goods_output_magnetic_drive_ships_mult = -0.40
+		}
+	}
+}

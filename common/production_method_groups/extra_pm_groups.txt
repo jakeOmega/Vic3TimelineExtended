@@ -1606,3 +1606,19 @@ INJECT:pmg_base_building_naval_fortification = {
 		pm_naval_fortification_integrated_defense
 	}
 }
+
+# Shipyard civilian/naval focus group (GitHub issue #113). Layered onto
+# building_shipyard alongside the era-tier pmg_base_building_shipyard so
+# players can deliberately shift output between civilian hulls and naval
+# combat construction capacity. Wartime tier is gated by law_total_war.
+pmg_shipyard_focus = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_military.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_focus_civilian_production
+		pm_focus_balanced_production
+		pm_focus_naval_production
+		pm_focus_wartime_mobilization
+	}
+}
