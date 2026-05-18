@@ -81,8 +81,8 @@ Dynamic-modifier templates parameterized over canonical vocabularies (goods, bui
 ### `building_{building}_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
-- Members in engine docs: **134**
-- Vocab size: 1019; missing entries: 885
+- Members in engine docs: **148**
+- Vocab size: 1019; missing entries: 871
 
 ### `building_{building}_throughput_mult`
 

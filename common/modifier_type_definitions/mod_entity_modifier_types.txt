@@ -734,6 +734,92 @@ building_space_mine_throughput_add = {
 	decimals = 0
 }
 
+# Custom-mine throughput modifiers (GH #110). State traits in common/state_traits/te_mining_traits.txt
+# reference these; without registration the engine silently no-ops them.
+building_manganese_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_chromium_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_specialty_alloy_metal_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_copper_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_bauxite_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_precious_minor_base_metal_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_nickel_cobalt_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_lithium_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_rare_earth_metals_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_platinum_group_metals_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_graphite_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_phosphate_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_potash_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_industrial_mineral_salt_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 building_solar_collector_throughput_add = {
 	color = good
 	percent = yes

@@ -1,0 +1,197 @@
+# State traits for the mod's custom mineable resources (GH #110).
+#
+# Mod custom mines (defined in common/buildings/extra_buildings.txt) need
+# regional quality/ease-of-mining bonuses analogous to vanilla traits like
+# state_trait_bergslagen (iron+lead) or state_trait_appalachian_coal. Deposit
+# size is already modelled by amounts in deposits_config.json; these traits
+# represent quality.
+#
+# Throughput modifiers must be registered in
+# common/modifier_type_definitions/mod_entity_modifier_types.txt.
+#
+# Trait references are attached to states via state_trait_config.json,
+# injected by resources.py into map_data/state_regions/*.txt on every regen.
+#
+# INJECT: directives extend existing vanilla state traits (e.g. atacama_desert,
+# bone_valley) so the in-game state encyclopedia shows one geographic trait
+# per region instead of stacking a vanilla + mod trait on the same feature.
+
+# ── Africa ───────────────────────────────────────────────────────────────
+
+state_trait_bushveld_complex = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_platinum_group_metals_mine_throughput_add = 0.2
+		building_chromium_mine_throughput_add = 0.2
+		building_specialty_alloy_metal_mine_throughput_add = 0.1
+	}
+}
+
+state_trait_copperbelt = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_copper_mine_throughput_add = 0.2
+		building_nickel_cobalt_mine_throughput_add = 0.1
+	}
+}
+
+state_trait_moroccan_phosphate = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_phosphate_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_madagascar_graphite = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_graphite_mine_throughput_add = 0.2
+	}
+}
+
+# ── Americas ─────────────────────────────────────────────────────────────
+
+state_trait_atacama_copper_belt = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_copper_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_sudbury_basin = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_nickel_cobalt_mine_throughput_add = 0.2
+		building_platinum_group_metals_mine_throughput_add = 0.1
+	}
+}
+
+state_trait_saskatchewan_potash = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_potash_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_great_basin_borates = {
+	icon = "gfx/interface/icons/state_trait_icons/dry_climate.dds"
+	modifier = {
+		building_industrial_mineral_salt_mine_throughput_add = 0.15
+	}
+}
+
+state_trait_jamaican_bauxite = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_bauxite_mine_throughput_add = 0.15
+	}
+}
+
+# ── Asia / Pacific ───────────────────────────────────────────────────────
+
+state_trait_bayan_obo = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_rare_earth_metals_mine_throughput_add = 0.2
+		building_specialty_alloy_metal_mine_throughput_add = 0.1
+	}
+}
+
+state_trait_ceylon_graphite = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_graphite_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_nauru_phosphate = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_phosphate_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_weipa_bauxite = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_bauxite_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_pilbara = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_manganese_mine_throughput_add = 0.1
+	}
+}
+
+# ── Europe / Caucasus ────────────────────────────────────────────────────
+
+state_trait_cornish_tin = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_precious_minor_base_metal_mine_throughput_add = 0.15
+	}
+}
+
+state_trait_erzgebirge = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_precious_minor_base_metal_mine_throughput_add = 0.15
+		building_lithium_mine_throughput_add = 0.1
+	}
+}
+
+state_trait_stassfurt_salts = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_potash_mine_throughput_add = 0.2
+		building_industrial_mineral_salt_mine_throughput_add = 0.15
+	}
+}
+
+state_trait_kola_apatite = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_phosphate_mine_throughput_add = 0.15
+		building_rare_earth_metals_mine_throughput_add = 0.1
+	}
+}
+
+state_trait_nikopol_manganese = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_manganese_mine_throughput_add = 0.2
+	}
+}
+
+state_trait_chiatura_manganese = {
+	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
+	modifier = {
+		building_manganese_mine_throughput_add = 0.2
+	}
+}
+
+# ── Middle East ──────────────────────────────────────────────────────────
+
+state_trait_dead_sea_potash = {
+	icon = "gfx/interface/icons/state_trait_icons/dry_climate.dds"
+	modifier = {
+		building_potash_mine_throughput_add = 0.15
+		building_industrial_mineral_salt_mine_throughput_add = 0.1
+	}
+}
+
+# ── INJECT: extensions of vanilla traits ─────────────────────────────────
+
+INJECT:state_trait_atacama_desert = {
+	modifier = {
+		building_lithium_mine_throughput_add = 0.2
+	}
+}
+
+INJECT:state_trait_bone_valley = {
+	modifier = {
+		building_phosphate_mine_throughput_add = 0.2
+	}
+}

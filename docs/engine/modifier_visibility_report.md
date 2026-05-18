@@ -28,9 +28,9 @@ _None._
 
 ## Coverage
 
-- files_audited: 251
-- modifiers_in_registry_with_decimals: 2708
-- registry_hits: 7255
+- files_audited: 252
+- modifiers_in_registry_with_decimals: 2722
+- registry_hits: 7287
 - total flags: 3
 - unreviewed: 0
 - exempted: 3

@@ -42,6 +42,7 @@ building|building_artillery_foundry_throughput_add|A bonus or penalty to both in
 building|building_automotive_industry_throughput_add|A bonus or penalty to both input and output of Automotive Industries
 building|building_banana_plantation_throughput_add|
 building|building_barrack_throughput_add|A bonus or penalty to both input and output of Barracks
+building|building_bauxite_mine_throughput_add|
 building|building_big_ben_throughput_add|
 building|building_bureaucrats_fertility_mult|
 building|building_bureaucrats_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire bureaucrats! Bureaucrats.
@@ -60,6 +61,7 @@ building|building_cash_reserves_mult|A bonus or penalty to the maximum Cash Rese
 building|building_central_park_throughput_add|
 building|building_chemical_plant_throughput_add|A bonus or penalty to both input and output of Fertilizer Plants
 building|building_chichen_itza_throughput_add|
+building|building_chromium_mine_throughput_add|
 building|building_clergymen_fertility_mult|
 building|building_clergymen_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire clergymen! Clergymen.
 building|building_clergymen_mortality_mult|
@@ -80,6 +82,7 @@ building|building_company_regional_headquarter_throughput_add|
 building|building_company_worker_dividends_add|An increase or decrease to the amount of Dividends paid to the Workforce by Building levels owned by Companies.
 building|building_conscription_center_throughput_add|
 building|building_construction_sector_throughput_add|A bonus or penalty to both input and output of Construction Sector
+building|building_copper_mine_throughput_add|
 building|building_cotton_plantation_throughput_add|A bonus or penalty to both input and output of Cotton Plantations
 building|building_cristo_redentor_throughput_add|
 building|building_deportee_mortality_mult|
@@ -150,6 +153,7 @@ building|building_gold_mine_throughput_add|A bonus or penalty to both input and 
 building|building_goods_input_mult|An adjustment to the amount of Goods Consumed by a Building.
 building|building_government_administration_throughput_add|A bonus or penalty to both input and output of Government Administration
 building|building_gran_teatro_de_la_habana_throughput_add|
+building|building_graphite_mine_throughput_add|
 building|building_group_bg_agriculture_academics_fertility_mult|
 building|building_group_bg_agriculture_academics_mortality_mult|
 building|building_group_bg_agriculture_academics_standard_of_living_add|
@@ -3909,6 +3913,7 @@ building|building_hagia_sophia_throughput_add|
 building|building_halloween_castledracula_throughput_add|
 building|building_highway_throughput_add|
 building|building_hydro_plant_throughput_add|
+building|building_industrial_mineral_salt_mine_throughput_add|
 building|building_iron_mine_throughput_add|A bonus or penalty to both input and output of Iron Mines
 building|building_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire new employees.
 building|building_kaiserforum_1_throughput_add|
@@ -3925,6 +3930,7 @@ building|building_laborers_standard_of_living_add|A bonus or penalty to the Stan
 building|building_land_logistics_center_throughput_add|
 building|building_lead_mine_throughput_add|A bonus or penalty to both input and output of Lead Mines
 building|building_level_bureaucracy_cost_add|Increasing amount of Bureaucracy spent per goverment owned building level
+building|building_lithium_mine_throughput_add|
 building|building_livestock_ranch_throughput_add|A bonus or penalty to both input and output of Livestock Ranches
 building|building_logging_camp_throughput_add|
 building|building_machinists_fertility_mult|
@@ -3935,6 +3941,7 @@ building|building_machinists_shares_mult|
 building|building_machinists_standard_of_living_add|A bonus or penalty to the Standard of Living for employed machinists! Machinists.
 building|building_machu_picchu_throughput_add|
 building|building_maize_farm_throughput_add|A bonus or penalty to both input and output of Maize Farms
+building|building_manganese_mine_throughput_add|
 building|building_manila_cathedral_monument_throughput_add|
 building|building_manila_cathedral_original_throughput_add|
 building|building_manila_cathedral_ruins_throughput_add|
@@ -3957,6 +3964,7 @@ building|building_naval_administration_training_rate_mult|How much Manpower can 
 building|building_naval_fortification_throughput_add|
 building|building_naval_logistics_center_throughput_add|
 building|building_network_infrastructure_throughput_add|
+building|building_nickel_cobalt_mine_throughput_add|
 building|building_nuclear_plant_throughput_add|
 building|building_observatorygreenwich_throughput_add|
 building|building_officers_fertility_mult|
@@ -3978,10 +3986,15 @@ building|building_peasants_standard_of_living_add|A bonus or penalty to the Stan
 building|building_pena_convent_throughput_add|
 building|building_pena_palace_throughput_add|
 building|building_petra_throughput_add|
+building|building_phosphate_mine_throughput_add|
+building|building_platinum_group_metals_mine_throughput_add|
 building|building_port_throughput_add|A bonus or penalty to both input and output of Port
+building|building_potash_mine_throughput_add|
 building|building_power_bloc_statue_throughput_add|
 building|building_power_plant_throughput_add|A bonus or penalty to both input and output of Power Plants
+building|building_precious_minor_base_metal_mine_throughput_add|
 building|building_railway_throughput_add|A bonus or penalty to both input and output of Railway
+building|building_rare_earth_metals_mine_throughput_add|
 building|building_renewable_energy_plant_throughput_add|
 building|building_rice_farm_throughput_add|A bonus or penalty to both input and output of Rice Farms
 building|building_robotics_industry_throughput_add|
@@ -4017,6 +4030,7 @@ building|building_soldiers_shares_mult|
 building|building_soldiers_standard_of_living_add|A bonus or penalty to the Standard of Living for employed soldiers! Servicemen.
 building|building_space_mine_throughput_add|
 building|building_space_program_throughput_add|
+building|building_specialty_alloy_metal_mine_throughput_add|
 building|building_statue_of_liberty_throughput_add|
 building|building_steel_mill_throughput_add|A bonus or penalty to both input and output of Steel Mills
 building|building_subsistence_farm_throughput_add|A bonus or penalty to both input and output of Subsistence Farms

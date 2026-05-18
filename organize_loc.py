@@ -222,6 +222,7 @@ CATEGORIES = [
     "RELIGION",
     "SHIP_MODIFICATIONS",
     "SHIP_TYPES",
+    "STATE_TRAITS",
     "TECHNOLOGIES",
     "MISCELLANEOUS",
     "UNUSED",
@@ -254,6 +255,8 @@ def categorize_key(key, technology_keys):
         return "SHIP_MODIFICATIONS"
     if key.startswith("mobilization_option_"):
         return "MOBILIZATION_OPTIONS"
+    if key.startswith("state_trait_"):
+        return "STATE_TRAITS"
     if key.startswith("building_"):
         return "BUILDINGS"
     if key.startswith(("law_", "lawgroup_")):

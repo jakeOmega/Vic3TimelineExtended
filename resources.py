@@ -78,6 +78,8 @@ RESOURCE_BLOCK_RE = re.compile(
 )
 TYPE_LINE_RE = re.compile(r'(?m)^\s*type\s*=\s*"([^"]+)"\s*$')
 UNDISC_LINE_RE = re.compile(r"(?m)^\s*undiscovered_amount\s*=\s*(\d+)\s*$")
+TRAITS_RE = re.compile(r"(?m)^(\s*)traits\s*=\s*\{([^}]*)\}")
+SUBSISTENCE_RE = re.compile(r'(?m)^(\s*)subsistence_building\s*=\s*"[^"]*"\s*$')
 
 
 def load_mapping(path: Path) -> dict:
@@ -206,7 +208,38 @@ def new_amount(score: int, subgood: str) -> int:
     return int(new_val / 5) * 5
 
 
-def process_state_block(block_text: str, state_name: str, mapping: dict) -> str:
+def process_traits_block(block_text: str, state_name: str, trait_mapping: dict) -> str:
+    """Inject state-trait references into a state's `traits = { ... }` block.
+
+    Driven by state_trait_config.json. Dedupes existing entries; if the state
+    has no traits block, inserts one after the subsistence_building line.
+    Early-returns when the state has no mapped traits to avoid diff churn.
+    """
+    new_traits = trait_mapping.get(state_name)
+    if not new_traits:
+        return block_text
+    m = TRAITS_RE.search(block_text)
+    if m:
+        existing = re.findall(r'"([^"]+)"', m.group(2))
+        merged = list(dict.fromkeys(existing + list(new_traits)))
+        if merged == existing:
+            return block_text
+        rebuilt = m.group(1) + 'traits = { ' + ' '.join(f'"{t}"' for t in merged) + ' }'
+        return block_text[: m.start()] + rebuilt + block_text[m.end():]
+    sm = SUBSISTENCE_RE.search(block_text)
+    if not sm:
+        return block_text  # extremely rare; skip rather than misplace
+    indent = sm.group(1)
+    line = f'\n{indent}traits = {{ ' + ' '.join(f'"{t}"' for t in new_traits) + ' }'
+    return block_text[: sm.end()] + line + block_text[sm.end():]
+
+
+def process_state_block(
+    block_text: str,
+    state_name: str,
+    mapping: dict,
+    trait_mapping: dict | None = None,
+) -> str:
     """Add/merge resource blocks for this state and return modified block text."""
     # Determine indentation based on other keys; default to 4 spaces
     # Find first non-empty line within block to steal indentation
@@ -243,10 +276,19 @@ def process_state_block(block_text: str, state_name: str, mapping: dict) -> str:
     #prefix_re = re.compile(rf"(?m)^(\s*){re.escape(state_name)}(\s*=\s*\{{)")
     #block_text = prefix_re.sub(r"\1REPLACE:" + state_name + r"\2", block_text, count=1)
 
+    if trait_mapping:
+        block_text = process_traits_block(block_text, state_name, trait_mapping)
+
     return block_text
 
 
-def process_file(in_path: Path, out_path: Path, mapping: dict, verbose: bool = True):
+def process_file(
+    in_path: Path,
+    out_path: Path,
+    mapping: dict,
+    trait_mapping: dict | None = None,
+    verbose: bool = True,
+):
     text = in_path.read_text(encoding="utf-8")
     pieces = []
     last = 0
@@ -254,7 +296,7 @@ def process_file(in_path: Path, out_path: Path, mapping: dict, verbose: bool = T
 
     for name, start, end in iter_state_blocks(text):
         block = text[start : end + 1]
-        updated = process_state_block(block, name, mapping)
+        updated = process_state_block(block, name, mapping, trait_mapping)
         pieces.append(text[last:start])
         pieces.append(updated)
         last = end + 1
@@ -279,8 +321,32 @@ def discover_files(root: Path, recursive: bool):
         yield from (p for p in root.glob("*.txt") if p.is_file())
 
 
+def load_trait_mapping(path: Path) -> dict:
+    """Load state_trait_config.json: { STATE_X: [trait_key, ...] }.
+
+    Strips any keys starting with '_' (used for inline JSON comments).
+    Returns {} if the file is missing — keeps resources.py usable in repos
+    that haven't adopted the trait-injection feature yet.
+    """
+    if not path.exists():
+        return {}
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    out = {}
+    for state, traits in data.items():
+        if state.startswith("_"):
+            continue
+        if not isinstance(traits, list):
+            raise ValueError(
+                f"state_trait_config: value for {state!r} must be a list of trait keys"
+            )
+        out[state] = [str(t) for t in traits]
+    return out
+
+
 def _run(verbose: bool):
     mapping = load_mapping(mod_path / "deposits_config.json")
+    trait_mapping = load_trait_mapping(mod_path / "state_trait_config.json")
     input = base_game_path / "game" / "map_data" / "state_regions"
     output = mod_path / "map_data" / "state_regions"
 
@@ -291,7 +357,7 @@ def _run(verbose: bool):
     for in_path in files:
         rel = in_path.relative_to(input)
         out_path = output / rel
-        process_file(in_path, out_path, mapping, verbose=verbose)
+        process_file(in_path, out_path, mapping, trait_mapping=trait_mapping, verbose=verbose)
 
 
 def main():

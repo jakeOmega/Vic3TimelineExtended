@@ -1,0 +1,30 @@
+{
+  "_comment": "Maps STATE_X -> list of state_trait_* keys to add to that state's traits = { ... } block. Consumed by resources.py during map_data/state_regions regeneration. Only NEW-mode traits go here; INJECT-mode traits (atacama_desert, bone_valley) extend vanilla traits already attached to vanilla states. See common/state_traits/te_mining_traits.txt and GH #110.",
+
+  "STATE_ANTOFAGASTA": ["state_trait_atacama_copper_belt"],
+  "STATE_ONTARIO": ["state_trait_sudbury_basin"],
+  "STATE_SASKATCHEWAN": ["state_trait_saskatchewan_potash"],
+  "STATE_NEVADA": ["state_trait_great_basin_borates"],
+  "STATE_JAMAICA": ["state_trait_jamaican_bauxite"],
+
+  "STATE_TRANSVAAL": ["state_trait_bushveld_complex"],
+  "STATE_KATANGA": ["state_trait_copperbelt"],
+  "STATE_ZAMBIA": ["state_trait_copperbelt"],
+  "STATE_INNER_MOROCCO": ["state_trait_moroccan_phosphate"],
+  "STATE_NORTH_MADAGASCAR": ["state_trait_madagascar_graphite"],
+
+  "STATE_QUEENSLAND": ["state_trait_weipa_bauxite"],
+  "STATE_WESTERN_AUSTRALIA": ["state_trait_pilbara"],
+  "STATE_NAURU": ["state_trait_nauru_phosphate"],
+  "STATE_CEYLON": ["state_trait_ceylon_graphite"],
+  "STATE_ALXA": ["state_trait_bayan_obo"],
+
+  "STATE_WEST_COUNTRY": ["state_trait_cornish_tin"],
+  "STATE_SAXONY": ["state_trait_erzgebirge"],
+  "STATE_ANHALT": ["state_trait_stassfurt_salts"],
+  "STATE_KOLA": ["state_trait_kola_apatite"],
+  "STATE_TAURIDA": ["state_trait_nikopol_manganese"],
+  "STATE_GREATER_CAUCASUS": ["state_trait_chiatura_manganese"],
+
+  "STATE_PALESTINE": ["state_trait_dead_sea_potash"]
+}

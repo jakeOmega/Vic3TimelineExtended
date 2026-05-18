@@ -94,7 +94,7 @@ Notes:
 
 | Script | Purpose | Run |
 |--------|---------|-----|
-| `organize_loc.py` | Sorts localization keys alphabetically, detects unused keys, finds implicit keys. **Auto-runs on every server reload.** When introducing a new content family, add its prefix to `categorize_key` (e.g. `ship_type_*` → `SHIP_TYPES`) so its keys don't fall into MISCELLANEOUS. | `python organize_loc.py` |
+| `organize_loc.py` | Sorts localization keys alphabetically, detects unused keys, finds implicit keys. **Auto-runs on every server reload.** When introducing a new content family, add its prefix to `categorize_key` (e.g. `ship_type_*` → `SHIP_TYPES`) so its keys don't fall into MISCELLANEOUS. **4+ token gotcha:** the fallback rule is `re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4 → CONCEPTS, else MISCELLANEOUS`. A bare `state_trait_bushveld_complex` (4 tokens) lands in MISCELLANEOUS while its `_desc` lands in CONCEPTS — splitting the family across two files. Any new prefix whose base key has 4+ tokens needs an explicit `startswith` rule even if you're "fine with MISCELLANEOUS." | `python organize_loc.py` |
 | `gen_ministry_events.py` | Generates `events/ministry_law_events.txt` (ministry law events). | `python gen_ministry_events.py` |
 | `scripts/generators/gen_loc_files.py` | Generates localization YAML for `extra_law_events` and `ministry_law_events`. | `python scripts/generators/gen_loc_files.py` |
 | `scripts/generators/gen_event.py` | Event scaffolding tool. Generates boilerplate event definitions + loc entries from compact JSON specs or CLI args. Handles ID allocation, BOM encoding, and triggered_desc chains. Three subcommands: `next-id`, `batch`, `scaffold`. | See **Event Scaffolding** section below. |

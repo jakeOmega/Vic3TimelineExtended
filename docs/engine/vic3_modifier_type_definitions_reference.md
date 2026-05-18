@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7753 modifier entries.*
+*Auto-generated from 7767 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -981,31 +981,33 @@ _A bonus or penalty to the Standard of Living of employees in Agriculture Buildi
 - `building_total_antimatter_facility_progress`, `building_total_consciousness_network_progress`, `building_total_mind_upload_nexus_progress`, `building_total_nanofabrication_center_progress`, `building_total_orbital_battlestation_progress`, `building_total_solar_collector_progress`
 - `building_total_space_elevator_progress`
 
-### `building_{building}_throughput_add` (134 members)
+### `building_{building}_throughput_add` (148 members)
 
 - `building_advanced_material_fabricator_throughput_add`, `building_aerospace_industry_throughput_add`, `building_airport_throughput_add`, `building_angkor_wat_throughput_add`, `building_argebam_throughput_add`, `building_arms_industry_throughput_add`
-- `building_art_academy_throughput_add`, `building_artillery_foundry_throughput_add`, `building_automotive_industry_throughput_add`, `building_banana_plantation_throughput_add`, `building_barrack_throughput_add`, `building_big_ben_throughput_add`
-- `building_capitol_hill_throughput_add`, `building_central_park_throughput_add`, `building_chemical_plant_throughput_add`, `building_chichen_itza_throughput_add`, `building_coal_mine_throughput_add`, `building_coffee_plantation_throughput_add`
-- `building_company_headquarter_throughput_add`, `building_company_regional_headquarter_throughput_add`, `building_conscription_center_throughput_add`, `building_construction_sector_throughput_add`, `building_cotton_plantation_throughput_add`, `building_cristo_redentor_throughput_add`
-- `building_dye_plantation_throughput_add`, `building_easter_island_heads_throughput_add`, `building_eiffel_tower_throughput_add`, `building_electrics_industry_appliances_throughput_add`, `building_electrics_industry_radio_throughput_add`, `building_electrics_industry_throughput_add`
-- `building_electronic_components_and_semiconductor_industry_throughput_add`, `building_estacion_de_madrid_atocha_throughput_add`, `building_explosives_factory_throughput_add`, `building_eye_of_sahara_throughput_add`, `building_financial_district_throughput_add`, `building_fishing_wharf_throughput_add`
-- `building_food_industry_throughput_add`, `building_forbidden_city_throughput_add`, `building_furniture_manufactory_throughput_add`, `building_fusion_plant_throughput_add`, `building_giza_necropolis_throughput_add`, `building_glassworks_throughput_add`
-- `building_gold_field_throughput_add`, `building_gold_mine_throughput_add`, `building_government_administration_throughput_add`, `building_gran_teatro_de_la_habana_throughput_add`, `building_hagia_sophia_throughput_add`, `building_halloween_castledracula_throughput_add`
-- `building_highway_throughput_add`, `building_hydro_plant_throughput_add`, `building_iron_mine_throughput_add`, `building_kaiserforum_1_throughput_add`, `building_kaiserforum_2_throughput_add`, `building_kaiserforum_3_throughput_add`
-- `building_kaiserforum_4_throughput_add`, `building_khaju_bridge_throughput_add`, `building_land_logistics_center_throughput_add`, `building_lead_mine_throughput_add`, `building_livestock_ranch_throughput_add`, `building_logging_camp_throughput_add`
-- `building_machu_picchu_throughput_add`, `building_maize_farm_throughput_add`, `building_manila_cathedral_monument_throughput_add`, `building_manila_cathedral_original_throughput_add`, `building_manila_cathedral_ruins_throughput_add`, `building_manor_house_throughput_add`
-- `building_martandsuntemple_throughput_add`, `building_millet_farm_throughput_add`, `building_mosque_of_djenne_throughput_add`, `building_motor_industry_throughput_add`, `building_munition_plant_throughput_add`, `building_naval_administration_throughput_add`
-- `building_naval_fortification_throughput_add`, `building_naval_logistics_center_throughput_add`, `building_network_infrastructure_throughput_add`, `building_nuclear_plant_throughput_add`, `building_observatorygreenwich_throughput_add`, `building_oil_rig_throughput_add`
-- `building_opium_plantation_throughput_add`, `building_panama_canal_throughput_add`, `building_paper_mill_throughput_add`, `building_pena_convent_throughput_add`, `building_pena_palace_throughput_add`, `building_petra_throughput_add`
-- `building_port_throughput_add`, `building_power_bloc_statue_throughput_add`, `building_power_plant_throughput_add`, `building_railway_throughput_add`, `building_renewable_energy_plant_throughput_add`, `building_rice_farm_throughput_add`
-- `building_robotics_industry_throughput_add`, `building_rubber_plantation_throughput_add`, `building_rye_farm_throughput_add`, `building_sagrada_familia_cathedral_1_throughput_add`, `building_sagrada_familia_cathedral_2_throughput_add`, `building_sagrada_familia_cathedral_3_throughput_add`
-- `building_saint_basils_cathedral_throughput_add`, `building_shipyard_throughput_add`, `building_silk_plantation_throughput_add`, `building_skyscraper_throughput_add`, `building_software_industry_throughput_add`, `building_solar_collector_throughput_add`
-- `building_space_mine_throughput_add`, `building_space_program_throughput_add`, `building_statue_of_liberty_throughput_add`, `building_steel_mill_throughput_add`, `building_subsistence_farm_throughput_add`, `building_subsistence_fishing_village_throughput_add`
-- `building_subsistence_orchard_throughput_add`, `building_subsistence_pasture_throughput_add`, `building_subsistence_rice_farm_throughput_add`, `building_suez_canal_throughput_add`, `building_sugar_plantation_throughput_add`, `building_sulfur_mine_throughput_add`
-- `building_synthetics_plant_oil_throughput_add`, `building_synthetics_plant_rubber_throughput_add`, `building_synthetics_plant_throughput_add`, `building_taj_mahal_throughput_add`, `building_tea_plantation_throughput_add`, `building_temple_of_poseidon_throughput_add`
-- `building_textile_mill_throughput_add`, `building_tobacco_plantation_throughput_add`, `building_tooling_workshop_throughput_add`, `building_tourism_industry_throughput_add`, `building_trade_center_throughput_add`, `building_university_throughput_add`
-- `building_urban_center_throughput_add`, `building_vatican_city_throughput_add`, `building_victoria_terminus_throughput_add`, `building_vineyard_throughput_add`, `building_wat_arun_throughput_add`, `building_whaling_station_throughput_add`
-- `building_wheat_farm_throughput_add`, `building_white_house_throughput_add`
+- `building_art_academy_throughput_add`, `building_artillery_foundry_throughput_add`, `building_automotive_industry_throughput_add`, `building_banana_plantation_throughput_add`, `building_barrack_throughput_add`, `building_bauxite_mine_throughput_add`
+- `building_big_ben_throughput_add`, `building_capitol_hill_throughput_add`, `building_central_park_throughput_add`, `building_chemical_plant_throughput_add`, `building_chichen_itza_throughput_add`, `building_chromium_mine_throughput_add`
+- `building_coal_mine_throughput_add`, `building_coffee_plantation_throughput_add`, `building_company_headquarter_throughput_add`, `building_company_regional_headquarter_throughput_add`, `building_conscription_center_throughput_add`, `building_construction_sector_throughput_add`
+- `building_copper_mine_throughput_add`, `building_cotton_plantation_throughput_add`, `building_cristo_redentor_throughput_add`, `building_dye_plantation_throughput_add`, `building_easter_island_heads_throughput_add`, `building_eiffel_tower_throughput_add`
+- `building_electrics_industry_appliances_throughput_add`, `building_electrics_industry_radio_throughput_add`, `building_electrics_industry_throughput_add`, `building_electronic_components_and_semiconductor_industry_throughput_add`, `building_estacion_de_madrid_atocha_throughput_add`, `building_explosives_factory_throughput_add`
+- `building_eye_of_sahara_throughput_add`, `building_financial_district_throughput_add`, `building_fishing_wharf_throughput_add`, `building_food_industry_throughput_add`, `building_forbidden_city_throughput_add`, `building_furniture_manufactory_throughput_add`
+- `building_fusion_plant_throughput_add`, `building_giza_necropolis_throughput_add`, `building_glassworks_throughput_add`, `building_gold_field_throughput_add`, `building_gold_mine_throughput_add`, `building_government_administration_throughput_add`
+- `building_gran_teatro_de_la_habana_throughput_add`, `building_graphite_mine_throughput_add`, `building_hagia_sophia_throughput_add`, `building_halloween_castledracula_throughput_add`, `building_highway_throughput_add`, `building_hydro_plant_throughput_add`
+- `building_industrial_mineral_salt_mine_throughput_add`, `building_iron_mine_throughput_add`, `building_kaiserforum_1_throughput_add`, `building_kaiserforum_2_throughput_add`, `building_kaiserforum_3_throughput_add`, `building_kaiserforum_4_throughput_add`
+- `building_khaju_bridge_throughput_add`, `building_land_logistics_center_throughput_add`, `building_lead_mine_throughput_add`, `building_lithium_mine_throughput_add`, `building_livestock_ranch_throughput_add`, `building_logging_camp_throughput_add`
+- `building_machu_picchu_throughput_add`, `building_maize_farm_throughput_add`, `building_manganese_mine_throughput_add`, `building_manila_cathedral_monument_throughput_add`, `building_manila_cathedral_original_throughput_add`, `building_manila_cathedral_ruins_throughput_add`
+- `building_manor_house_throughput_add`, `building_martandsuntemple_throughput_add`, `building_millet_farm_throughput_add`, `building_mosque_of_djenne_throughput_add`, `building_motor_industry_throughput_add`, `building_munition_plant_throughput_add`
+- `building_naval_administration_throughput_add`, `building_naval_fortification_throughput_add`, `building_naval_logistics_center_throughput_add`, `building_network_infrastructure_throughput_add`, `building_nickel_cobalt_mine_throughput_add`, `building_nuclear_plant_throughput_add`
+- `building_observatorygreenwich_throughput_add`, `building_oil_rig_throughput_add`, `building_opium_plantation_throughput_add`, `building_panama_canal_throughput_add`, `building_paper_mill_throughput_add`, `building_pena_convent_throughput_add`
+- `building_pena_palace_throughput_add`, `building_petra_throughput_add`, `building_phosphate_mine_throughput_add`, `building_platinum_group_metals_mine_throughput_add`, `building_port_throughput_add`, `building_potash_mine_throughput_add`
+- `building_power_bloc_statue_throughput_add`, `building_power_plant_throughput_add`, `building_precious_minor_base_metal_mine_throughput_add`, `building_railway_throughput_add`, `building_rare_earth_metals_mine_throughput_add`, `building_renewable_energy_plant_throughput_add`
+- `building_rice_farm_throughput_add`, `building_robotics_industry_throughput_add`, `building_rubber_plantation_throughput_add`, `building_rye_farm_throughput_add`, `building_sagrada_familia_cathedral_1_throughput_add`, `building_sagrada_familia_cathedral_2_throughput_add`
+- `building_sagrada_familia_cathedral_3_throughput_add`, `building_saint_basils_cathedral_throughput_add`, `building_shipyard_throughput_add`, `building_silk_plantation_throughput_add`, `building_skyscraper_throughput_add`, `building_software_industry_throughput_add`
+- `building_solar_collector_throughput_add`, `building_space_mine_throughput_add`, `building_space_program_throughput_add`, `building_specialty_alloy_metal_mine_throughput_add`, `building_statue_of_liberty_throughput_add`, `building_steel_mill_throughput_add`
+- `building_subsistence_farm_throughput_add`, `building_subsistence_fishing_village_throughput_add`, `building_subsistence_orchard_throughput_add`, `building_subsistence_pasture_throughput_add`, `building_subsistence_rice_farm_throughput_add`, `building_suez_canal_throughput_add`
+- `building_sugar_plantation_throughput_add`, `building_sulfur_mine_throughput_add`, `building_synthetics_plant_oil_throughput_add`, `building_synthetics_plant_rubber_throughput_add`, `building_synthetics_plant_throughput_add`, `building_taj_mahal_throughput_add`
+- `building_tea_plantation_throughput_add`, `building_temple_of_poseidon_throughput_add`, `building_textile_mill_throughput_add`, `building_tobacco_plantation_throughput_add`, `building_tooling_workshop_throughput_add`, `building_tourism_industry_throughput_add`
+- `building_trade_center_throughput_add`, `building_university_throughput_add`, `building_urban_center_throughput_add`, `building_vatican_city_throughput_add`, `building_victoria_terminus_throughput_add`, `building_vineyard_throughput_add`
+- `building_wat_arun_throughput_add`, `building_whaling_station_throughput_add`, `building_wheat_farm_throughput_add`, `building_white_house_throughput_add`
 
 ### `building_{poptype}_fertility_mult` (15 members)
 

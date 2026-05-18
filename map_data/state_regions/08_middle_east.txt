@@ -200,6 +200,7 @@ STATE_TRANSJORDAN = {
 STATE_PALESTINE = {
     id = 406
     subsistence_building = "building_subsistence_farm"
+    traits = { "state_trait_dead_sea_potash" }
     provinces = { "x0EC997" "x136A0C" "x365E8F" "x605060" "x60D060" "xC9CBC0" "xE05060" "xE0D060" }
     city = "xC9CBC0"
     port = "x605060"
