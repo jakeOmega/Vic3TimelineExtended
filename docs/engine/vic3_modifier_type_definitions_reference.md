@@ -2359,7 +2359,7 @@ _Cannon Artillery Offense_
 - `country_wage_second_rate_citizen_mult` — **Wage for the acceptance_status_4! Second-class Citizen Status** — A bonus or penalty to the Wage for the acceptance_status_4! Second-class Citizen Status.
 - `country_wage_violent_hostility_mult` — **Wage for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to the Wage for the acceptance_status_1! Violent Hostility Status.
 - `country_war_exhaustion_casualties_mult` — **War Exhaustion from Casualties** — An increase or decrease to the amount of War Exhaustion a Country suffers in War due to Casualties inflicted on them
-- `country_war_support_monthly_add_religion` — **Furvor Monthly Add**
+- `country_war_support_monthly_add_religion` — **Fervor Monthly Add**
 - `country_weekly_innovation_add` — **Innovation** — The amount of innovation! Innovation gained or lost each week
 - `country_weekly_innovation_max_add` — **Maximum Innovation Investment** — The maximum amount of innovation! Innovation that can be invested into a Technology each week
 - `country_weekly_innovation_mult` — **Innovation** — The amount of innovation! Innovation gained or lost each week

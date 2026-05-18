@@ -6606,3 +6606,47 @@ sm_te_unused_mandate_reserve = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	power_bloc_cohesion_add = 1
 }
+
+# ============================================================================
+# AGRICULTURAL DIFFUSION - applied via agdiff_apply_diffusion_effect to every
+# country except the first researcher of a transformative ag tech. Each carries
+# a fraction (~50%) of the local tech's state_arable_land_mult. The non-decaying
+# duration models "the technique is in the world now; you can adopt it on the
+# cheap even if your scientists never invented it." Diffused modifiers stack
+# additively with the local tech bonus once the country researches itself.
+# Triggered by on_acquired_technology -> agdiff_handle_tech_acquired_effect.
+# ============================================================================
+agdiff_nitrogen_fixation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_arable_land_mult = 0.15
+}
+
+agdiff_modern_chemical_processes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_arable_land_mult = 0.15
+}
+
+agdiff_green_revolution = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_arable_land_mult = 0.60
+}
+
+agdiff_gene_splicing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_arable_land_mult = 0.15
+}
+
+agdiff_biotechnology = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_arable_land_mult = 0.25
+}
+
+# First-mover prestige reward — modest, decaying. Applied to the country that
+# researches a diffusion-eligible ag tech first. Distinguishes the originator
+# (CIMMYT/IRRI/Borlaug/Haber) from later adopters so research still feels
+# rewarded even though everyone else gets the global diffusion bonus.
+agdiff_first_mover_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+	country_authority_mult = 0.05
+}

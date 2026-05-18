@@ -1,0 +1,148 @@
+# Agricultural Diffusion Effects
+#
+# Models global propagation of transformative agricultural techniques:
+# the first country to research a diffusion-eligible tech triggers a global
+# event applying a permanent state_arable_land_mult modifier to every country
+# (including itself), representing how Haber-Bosch / Green Revolution /
+# biotech adoption spread beyond their inventors via FAO/CIMMYT/IRRI/USAID.
+# The first researcher additionally gets agdiff_first_mover_prestige.
+#
+# Naming follows the world_first_* / is_world_first_* / first_*_country
+# pattern established by nuclear weapons (common/journal_entries/
+# timeline_extended_journal_entries.txt:140-164).
+#
+# Diffusion-eligible techs: nitrogen_fixation, modern_chemical_processes,
+# green_revolution, gene_splicing, biotechnology.
+#
+# Wired in via on_acquired_technology in common/on_actions/extra_on_actions.txt.
+
+# --- Per-tech entry points --------------------------------------------------
+# One named helper per tech so the on_acquired_technology hook can dispatch
+# with a `has_technology_researched` guard without needing $TECH$-keyed
+# has_global_variable lookups (which the parser handles fine but greps poorly).
+
+agdiff_on_nitrogen_fixation_researched = {
+	agdiff_handle_tech_acquired_effect = {
+		TECH = nitrogen_fixation
+		DIFFUSION_MODIFIER = agdiff_nitrogen_fixation
+		EVENT = agricultural_diffusion_events.1
+	}
+}
+
+agdiff_on_modern_chemical_processes_researched = {
+	agdiff_handle_tech_acquired_effect = {
+		TECH = modern_chemical_processes
+		DIFFUSION_MODIFIER = agdiff_modern_chemical_processes
+		EVENT = agricultural_diffusion_events.2
+	}
+}
+
+agdiff_on_green_revolution_researched = {
+	agdiff_handle_tech_acquired_effect = {
+		TECH = green_revolution
+		DIFFUSION_MODIFIER = agdiff_green_revolution
+		EVENT = agricultural_diffusion_events.3
+	}
+}
+
+agdiff_on_gene_splicing_researched = {
+	agdiff_handle_tech_acquired_effect = {
+		TECH = gene_splicing
+		DIFFUSION_MODIFIER = agdiff_gene_splicing
+		EVENT = agricultural_diffusion_events.4
+	}
+}
+
+agdiff_on_biotechnology_researched = {
+	agdiff_handle_tech_acquired_effect = {
+		TECH = biotechnology
+		DIFFUSION_MODIFIER = agdiff_biotechnology
+		EVENT = agricultural_diffusion_events.5
+	}
+}
+
+# --- Core dispatch ----------------------------------------------------------
+# Called by the per-tech helpers above. Only the first researcher trips the
+# global-first branch; subsequent researchers get the local tech modifier
+# (already attached by the tech entity) plus whatever diffusion modifier they
+# previously received when the first researcher fired this effect.
+agdiff_handle_tech_acquired_effect = {
+	if = {
+		limit = { NOT = { has_global_variable = world_first_$TECH$ } }
+		set_global_variable = { name = world_first_$TECH$ value = yes }
+		set_global_variable = { name = first_$TECH$_country value = ROOT }
+		set_variable = { name = is_world_first_$TECH$ value = yes }
+		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
+		# Broadcast the permanent diffusion modifier to every country,
+		# including the first researcher (every_country DOES iterate ROOT,
+		# per vanilla usage that explicitly excludes ROOT with NOT = { THIS = ROOT }).
+		# The modifier stacks additively with the local tech bonus, so first-
+		# researchers and later researchers end at the same total arable_land
+		# bonus; the first researcher is distinguished by the prestige modifier
+		# and the country-event narrative below.
+		every_country = {
+			limit = { is_country_type = recognized }
+			add_modifier = { name = $DIFFUSION_MODIFIER$ }
+		}
+		# Country-event narrative: same event ID to first researcher and
+		# others; the event uses triggered_desc on is_world_first_$TECH$ to
+		# branch between first-mover and notification flavor.
+		trigger_event = { id = $EVENT$ }
+		every_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				is_country_type = recognized
+			}
+			trigger_event = { id = $EVENT$ days = 14 }
+		}
+	}
+}
+
+# --- Backfill for newly-formed countries -----------------------------------
+# Countries that come into existence AFTER the first researcher (decolonization,
+# release-as-subject, formables, civil-war secession) miss the every_country
+# broadcast in agdiff_handle_tech_acquired_effect. This catch-up effect adds
+# any diffusion modifier whose global-first flag is already set but which
+# isn't yet on the country. Wired into on_country_formed and the three
+# release on-actions in common/on_actions/extra_on_actions.txt.
+#
+# Without this, decolonized 1960+ African nations (the exact target of issue
+# #114) would get zero benefit from the Green Revolution diffusion that fired
+# years before they existed.
+agdiff_backfill_diffusion_for_country = {
+	if = {
+		limit = {
+			has_global_variable = world_first_nitrogen_fixation
+			NOT = { has_modifier = agdiff_nitrogen_fixation }
+		}
+		add_modifier = { name = agdiff_nitrogen_fixation }
+	}
+	if = {
+		limit = {
+			has_global_variable = world_first_modern_chemical_processes
+			NOT = { has_modifier = agdiff_modern_chemical_processes }
+		}
+		add_modifier = { name = agdiff_modern_chemical_processes }
+	}
+	if = {
+		limit = {
+			has_global_variable = world_first_green_revolution
+			NOT = { has_modifier = agdiff_green_revolution }
+		}
+		add_modifier = { name = agdiff_green_revolution }
+	}
+	if = {
+		limit = {
+			has_global_variable = world_first_gene_splicing
+			NOT = { has_modifier = agdiff_gene_splicing }
+		}
+		add_modifier = { name = agdiff_gene_splicing }
+	}
+	if = {
+		limit = {
+			has_global_variable = world_first_biotechnology
+			NOT = { has_modifier = agdiff_biotechnology }
+		}
+		add_modifier = { name = agdiff_biotechnology }
+	}
+}

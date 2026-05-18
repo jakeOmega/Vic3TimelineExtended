@@ -1,0 +1,234 @@
+﻿namespace = agricultural_diffusion_events
+
+# Agricultural diffusion events. One event per diffusion-eligible tech.
+# Triggered from agdiff_handle_tech_acquired_effect in
+# common/scripted_effects/agricultural_diffusion_effects.txt.
+#
+# The SAME event id fires on both the first researcher (immediately) and on
+# every other recognized country (delay 14 days). Branching:
+#   - First researcher: has_variable = is_world_first_<tech> -> .t_first / .d_first / .f_first / .a_first
+#   - Others:           default                              -> .t       / .d       / .f       / .a
+#
+# Per-event-flavor desc/title references global_var:first_<tech>_country to
+# name the originator (e.g., "Argentine wheat researchers...").
+
+# ============================================================================
+# Event 1: Nitrogen Fixation (Haber-Bosch synthesis, era 6 / ~1909-13)
+# ============================================================================
+agricultural_diffusion_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/green_industry_factory.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_nitrogen_fixation } desc = agricultural_diffusion_events.1.t_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.1.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_nitrogen_fixation } desc = agricultural_diffusion_events.1.d_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.1.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_nitrogen_fixation } desc = agricultural_diffusion_events.1.f_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.1.f }
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = agricultural_diffusion_events.1.a_first
+		trigger = { has_variable = is_world_first_nitrogen_fixation }
+		default_option = yes
+	}
+	option = {
+		name = agricultural_diffusion_events.1.a
+		trigger = { NOT = { has_variable = is_world_first_nitrogen_fixation } }
+		default_option = yes
+	}
+}
+
+# ============================================================================
+# Event 2: Modern Chemical Processes (mid-century petrochemicals, era 6 / ~1930s)
+# ============================================================================
+agricultural_diffusion_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/industrial_pollution.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_modern_chemical_processes } desc = agricultural_diffusion_events.2.t_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.2.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_modern_chemical_processes } desc = agricultural_diffusion_events.2.d_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.2.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_modern_chemical_processes } desc = agricultural_diffusion_events.2.f_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.2.f }
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = agricultural_diffusion_events.2.a_first
+		trigger = { has_variable = is_world_first_modern_chemical_processes }
+		default_option = yes
+	}
+	option = {
+		name = agricultural_diffusion_events.2.a
+		trigger = { NOT = { has_variable = is_world_first_modern_chemical_processes } }
+		default_option = yes
+	}
+}
+
+# ============================================================================
+# Event 3: Green Revolution (Borlaug, CIMMYT/IRRI, era 7 / ~1960s)
+# This is the headline event — biggest arable_land jump in the system.
+# ============================================================================
+agricultural_diffusion_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/synthetic_crops.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_green_revolution } desc = agricultural_diffusion_events.3.t_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.3.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_green_revolution } desc = agricultural_diffusion_events.3.d_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.3.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_green_revolution } desc = agricultural_diffusion_events.3.f_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.3.f }
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = agricultural_diffusion_events.3.a_first
+		trigger = { has_variable = is_world_first_green_revolution }
+		default_option = yes
+	}
+	option = {
+		name = agricultural_diffusion_events.3.a
+		trigger = { NOT = { has_variable = is_world_first_green_revolution } }
+		default_option = yes
+	}
+}
+
+# ============================================================================
+# Event 4: Gene Splicing (Bt cotton / glyphosate-tolerant soy, era 8 / ~1980s)
+# ============================================================================
+agricultural_diffusion_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/genetic_engineering.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_gene_splicing } desc = agricultural_diffusion_events.4.t_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.4.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_gene_splicing } desc = agricultural_diffusion_events.4.d_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.4.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_gene_splicing } desc = agricultural_diffusion_events.4.f_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.4.f }
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = agricultural_diffusion_events.4.a_first
+		trigger = { has_variable = is_world_first_gene_splicing }
+		default_option = yes
+	}
+	option = {
+		name = agricultural_diffusion_events.4.a
+		trigger = { NOT = { has_variable = is_world_first_gene_splicing } }
+		default_option = yes
+	}
+}
+
+# ============================================================================
+# Event 5: Biotechnology (Golden Rice / marker-assisted breeding, era 9 / ~1990s+)
+# ============================================================================
+agricultural_diffusion_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/synthetic_food_laboratory.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_biotechnology } desc = agricultural_diffusion_events.5.t_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.5.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_biotechnology } desc = agricultural_diffusion_events.5.d_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.5.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = is_world_first_biotechnology } desc = agricultural_diffusion_events.5.f_first }
+			triggered_desc = { trigger = { always = yes } desc = agricultural_diffusion_events.5.f }
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = agricultural_diffusion_events.5.a_first
+		trigger = { has_variable = is_world_first_biotechnology }
+		default_option = yes
+	}
+	option = {
+		name = agricultural_diffusion_events.5.a
+		trigger = { NOT = { has_variable = is_world_first_biotechnology } }
+		default_option = yes
+	}
+}

@@ -45,7 +45,7 @@ biotechnology = {
 	category = production
 
 	modifier = {
-		state_arable_land_mult = 0.2
+		state_arable_land_mult = 0.50
 		country_institution_ministry_of_science_max_investment_add = 1
 	}
 

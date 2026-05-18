@@ -248,6 +248,52 @@ on_acquired_technology = {
 		fix_incompatible_laws
 		te_modifier_update_on_technology_on_action
 		cultural_hegemony_tech_first_on_action
+		agricultural_diffusion_on_action
+	}
+}
+
+# Dispatcher for the agricultural diffusion system.
+# Fires on every tech acquisition; each guard combines
+# `has_technology_researched = <T>` with `NOT = has_global_variable = world_first_<T>`,
+# so only the first researcher of each diffusion-eligible tech actually
+# triggers the broadcast. See common/scripted_effects/agricultural_diffusion_effects.txt.
+agricultural_diffusion_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_technology_researched = nitrogen_fixation
+				NOT = { has_global_variable = world_first_nitrogen_fixation }
+			}
+			agdiff_on_nitrogen_fixation_researched = yes
+		}
+		if = {
+			limit = {
+				has_technology_researched = modern_chemical_processes
+				NOT = { has_global_variable = world_first_modern_chemical_processes }
+			}
+			agdiff_on_modern_chemical_processes_researched = yes
+		}
+		if = {
+			limit = {
+				has_technology_researched = green_revolution
+				NOT = { has_global_variable = world_first_green_revolution }
+			}
+			agdiff_on_green_revolution_researched = yes
+		}
+		if = {
+			limit = {
+				has_technology_researched = gene_splicing
+				NOT = { has_global_variable = world_first_gene_splicing }
+			}
+			agdiff_on_gene_splicing_researched = yes
+		}
+		if = {
+			limit = {
+				has_technology_researched = biotechnology
+				NOT = { has_global_variable = world_first_biotechnology }
+			}
+			agdiff_on_biotechnology_researched = yes
+		}
 	}
 }
 
@@ -2584,6 +2630,44 @@ te_unused_mandate_reserve_on_action = {
 					add_modifier = { name = sm_te_unused_mandate_reserve multiplier = 3 months = 13 }
 				}
 			}
+		}
+	}
+}
+
+# --- Agricultural diffusion: backfill for newly-formed countries -----------
+# The agdiff broadcast in agricultural_diffusion_effects.txt only reaches
+# countries that exist at the moment of first research. Decolonized 1960+
+# African states, formables, and released subjects are exactly the cohort
+# the issue is about, so we have to catch them on creation.
+on_country_formed = {
+	on_actions = {
+		agdiff_backfill_on_country_formed
+	}
+}
+
+# scope:target = newly released country (per vanilla 00_code_on_actions.txt)
+on_country_released_as_independent = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+on_country_released_as_own_subject = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+agdiff_backfill_on_country_formed = {
+	effect = {
+		agdiff_backfill_diffusion_for_country = yes
+	}
+}
+
+agdiff_backfill_on_released_country = {
+	effect = {
+		scope:target = {
+			agdiff_backfill_diffusion_for_country = yes
 		}
 	}
 }
