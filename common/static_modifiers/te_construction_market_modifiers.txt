@@ -5,7 +5,7 @@
 # `multiplier = te_construction_market_per_site` so each construction site
 # absorbs its share of the country's total construction-use target.
 te_construction_market_capacity_modifier = {
-	#icon = ""
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 1
 }
 

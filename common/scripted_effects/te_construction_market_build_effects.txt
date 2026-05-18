@@ -1,4 +1,4 @@
-﻿
+
 te_construction_market_replace_building = {
 	every_scope_building = {
 		limit = { is_building_type = $OLD_TYPE$ }
@@ -18,23 +18,44 @@ te_construction_market_replace_building = {
 	}
 }
 
+# Set the building to exactly SPEC_LEVEL.
+# - If absent: create at SPEC_LEVEL.
+# - If present at the right level: do nothing (avoid destroy/recreate
+#   churn that would fire all employees every weekly/recalc tick).
+# - If present at a different level: remove, then create at SPEC_LEVEL.
+#
+# Previous form was the no-op-when-level-already-matches case BUT with the
+# inverted comparison (only removed when current < target), and unconditional
+# create_building afterwards. Because create_building stacks levels onto an
+# existing building of the same type, any call where current >= target added
+# a level instead of resetting. Border-change recalcs in
+# te_construction_market_on_actions fire this with SPEC_LEVEL = 1 repeatedly
+# (every war / formable / secession / market change / yearly pulse), so an
+# existing level-N site would creep up by 1 each event — directly responsible
+# for the multi-level sites that triggered the staffing-compensator
+# throughput inflation.
+#
+# The "skip when level already matches" guard avoids the inverse failure
+# mode: unconditional remove+create on every recalc destroys the site,
+# fires all employees, and the next tick repeats the cycle — leaving the
+# state with no effective construction throughput at all.
 te_construction_market_set_specified_level = {
-
 	if = {
 		limit = {
 			has_building = $SPEC_TYPE$
+			NOT = { b:$SPEC_TYPE$.level = $SPEC_LEVEL$ }
 		}
-		if = {
-			limit = {
-				b:$SPEC_TYPE$.level < $SPEC_LEVEL$
-			}
-			remove_building = $SPEC_TYPE$
-		}
+		remove_building = $SPEC_TYPE$
 	}
 
-	te_construction_market_build_specified_level = {
-		SPEC_TYPE = $SPEC_TYPE$
-		SPEC_LEVEL = $SPEC_LEVEL$
+	if = {
+		limit = {
+			NOT = { has_building = $SPEC_TYPE$ }
+		}
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = $SPEC_TYPE$
+			SPEC_LEVEL = $SPEC_LEVEL$
+		}
 	}
 }
 

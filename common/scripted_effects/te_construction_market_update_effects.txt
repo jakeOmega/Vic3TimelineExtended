@@ -47,37 +47,55 @@ te_construction_market_country_update_private_share = {
 
 
 te_construction_market_apply_per_site_modifier = {
+	# Per-site capacity modifier (te_construction_market_capacity_modifier
+	# = `building_throughput_add = 1`), scaled by the staffing-adjusted
+	# per-site target.
+	#
+	# Why the country-variable handoff: `add_modifier = { multiplier = X }`
+	# inside `every_scope_building` evaluates X in the OUTER (country)
+	# scope, not the building scope of the iteration. The compensator
+	# in te_construction_market_employment_adjusted_per_site reads
+	# `occupancy`, which is undefined at country scope — the else branch
+	# fires (multiply 10), modifier inflates to +1000%+.
+	#
+	# Several attempted workarounds (save_temporary_scope_value_as,
+	# save_temporary_scope_as + scope:X.<script_value>, set_variable on
+	# building + scope:X.var:Y) all silently fell back to multiplier=1.
+	# Buildings appear not to support variables; saved-scope traversal
+	# only works for value-triggers, not script values.
+	#
+	# Working pattern: write the building-scope-evaluated value into a
+	# country variable (via `owner = { set_variable { value = prev.<script_value> } }`),
+	# then have add_modifier read `owner.var:te_cm_capacity_mult`. The
+	# country-scope variable lookup works even from add_modifier's
+	# outer-scope evaluation context.
+	#
+	# Clear at start each call so a stale value never leaks across ticks
+	# or partial iterations.
+	remove_variable = te_cm_capacity_mult
 	every_scope_building = {
 		limit = {
 			is_building_type = te_construction_market_site
 		}
 		remove_modifier = te_construction_market_capacity_modifier
-		if = {
-			limit = {
-				occupancy > 1
+		# Compute in building scope (prev = this building), write to
+		# country variable on the owner.
+		owner = {
+			set_variable = {
+				name = te_cm_capacity_mult
+				value = prev.te_construction_market_employment_adjusted_per_site
 			}
-			te_construction_market_reset_site = yes
 		}
-		# Per-site multiplier evaluated in building scope — understaffed
-		# sites get a proportionally larger target so total throughput
-		# tracks total_use_target regardless of staffing distribution.
 		add_modifier = {
 			name = te_construction_market_capacity_modifier
-			multiplier = te_construction_market_employment_adjusted_per_site
+			multiplier = owner.var:te_cm_capacity_mult
 		}
 	}
+	# Clear the temp variable so it doesn't appear in the country's
+	# variable inspector and doesn't get picked up by anything else.
+	remove_variable = te_cm_capacity_mult
 }
 
-
-te_construction_market_reset_site = {
-	state = {
-		remove_building = te_construction_market_site
-		create_building = {
-			building = te_construction_market_site
-			level = 1
-		}
-	}
-}
 
 te_construction_market_update_price_stabilizer = {
 	# if = {
