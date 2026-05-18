@@ -933,6 +933,8 @@
  WW_WAR_PROPAGANDA_BUTTON:0 "Launch War Propaganda"
  WW_WAR_PROPAGANDA_BUTTON_DESC:0 "Mobilize the press and media for the war effort. Boosts morale and authority but generates disapproval from intellectuals."
  addiction_public_health_modifier:0 "Addiction Public Health Program"
+ agdiff_first_mover_prestige:0 "Agricultural Innovator"
+ agdiff_modern_chemical_processes:0 "Petrochemical Inputs Diffusion"
  ai_assisted_governance_modifier:0 "AI-Assisted Governance"
  ai_policing_banned_modifier:0 "AI Policing Banned"
  amendment_corporate_data_exemption:0 "Corporate Data Access Exemption"

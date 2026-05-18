@@ -12,21 +12,21 @@ INJECT:military_aviation = {
 }
 
 INJECT:intensive_agriculture = {
-    modifier = {
-		state_arable_land_mult = 0.05
+	modifier = {
+		state_arable_land_mult = 0.10
 	}
 }
 
 INJECT:improved_fertilizer = {
-    modifier = {
-		state_arable_land_mult = 0.05
+	modifier = {
+		state_arable_land_mult = 0.15
 	}
 }
 
 INJECT:nitrogen_fixation = {
-    modifier = {
-        state_arable_land_mult = 0.05
-    }
+	modifier = {
+		state_arable_land_mult = 0.30
+	}
 }
 
 INJECT:nationalism = {

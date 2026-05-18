@@ -3,8 +3,40 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 638
-**Event files:** 35
+**Total events:** 729
+**Event files:** 36
+
+## agricultural_diffusion_events.txt
+
+### agricultural_diffusion_events.1
+- **Title:** Nitrogen Fixation Goes Global
+- **Description:** Reports reach us that [GetGlobalVariable('first_nitrogen_fixation_country').GetCountry.GetName] has industrialized the synthesis of ammonia from atmospheric nitrogen. The technical details have been widely published; engineering firms in the major industrial nations are already licensing the process. Within a few years, ammonia plants and the synthetic fertilizers they produce will be available to any country with the capital to build them.
+- **Flavor:** Even without inventing the process ourselves, our farms will benefit. Synthetic fertilizer is now a commodity on the world market, and our agronomists will not be denied access to it.
+- **Current image:** gfx/event_pictures/green_industry_factory.dds
+
+### agricultural_diffusion_events.2
+- **Title:** Petrochemical Fertilizers Reach the World Market
+- **Description:** Industrial chemists in [GetGlobalVariable('first_modern_chemical_processes_country').GetCountry.GetName] have demonstrated the next generation of synthetic fertilizers: ammonium nitrate, urea, and superphosphate compounds produced through catalytic petrochemistry. The techniques are spreading through international engineering firms and trade fairs.
+- **Flavor:** Cheaper inputs, higher yields. Our farmers will feel the difference within a single growing season.
+- **Current image:** gfx/event_pictures/industrial_pollution.dds
+
+### agricultural_diffusion_events.3
+- **Title:** The Green Revolution Reaches Us
+- **Description:** Plant breeders working under the sponsorship of [GetGlobalVariable('first_green_revolution_country').GetCountry.GetName] and a constellation of international research institutes have developed high-yielding semi-dwarf cultivars of the staple cereals. Demonstration plots, extension agents, and shipments of foundation seed are arriving in our country. Our own agronomists, in cooperation with their visiting counterparts, are establishing trials.
+- **Flavor:** The new varieties demand fertilizer, water, and disciplined management — but where those conditions can be met, the yields are transformative. Our peasantry will feed a population none of our forebears could have sustained.
+- **Current image:** gfx/event_pictures/synthetic_crops.dds
+
+### agricultural_diffusion_events.4
+- **Title:** Transgenic Seed Lines Become Available
+- **Description:** Commercial transgenic cultivars developed by seed companies in [GetGlobalVariable('first_gene_splicing_country').GetCountry.GetName] are entering the international seed trade. Bt cotton, herbicide-tolerant soybean and maize, and pest-resistant vegetable lines are licensed in dozens of countries despite continuing public controversy.
+- **Flavor:** Our farmers, like those everywhere, will weigh the seed price and royalty terms against the gains in yield and labour. Most will adopt.
+- **Current image:** gfx/event_pictures/genetic_engineering.dds
+
+### agricultural_diffusion_events.5
+- **Title:** Biotech Cultivars Cross Borders
+- **Description:** Plant scientists working under the sponsorship of [GetGlobalVariable('first_biotechnology_country').GetCountry.GetName] have produced a new generation of crop varieties: micronutrient-enriched staples, salt- and drought-tolerant cultivars, and disease-resistant lines developed through marker-assisted breeding and targeted genetic modification. Humanitarian foundations and commercial seed companies are deploying them internationally.
+- **Flavor:** Even where the political debate over the technology continues, the cultivars are spreading. Our farms will plant what feeds our people.
+- **Current image:** gfx/event_pictures/synthetic_food_laboratory.dds
 
 ## augmentation_events.txt
 
@@ -17,37 +49,37 @@ Each event is listed with its title, description, and flavor text (where availab
 ### augmentation_events.2
 - **Title:** Black Market Implants
 - **Description:** A spate of deaths from faulty black market implants has shocked the nation. Underground clinics offer dangerous augmentations to those who cannot afford regulated procedures. Something must be done.
-- **Flavor:** The coroner counted three this week — all young, all poor, all fitted with implants that should never have been sold.
+- **Flavor:** \"Three this week,\" the coroner said. \"All young. All poor. All fitted with implants that should never have been sold.\"\n\n\"Same supplier?\"\n\n\"Likely. The wiring on two of them was identical. Cheap solder. Off-the-shelf actuators. Done in a back room by someone who watched a video.\"\n\n\"Are we any closer to the back room?\"\n\n\"We are closer to a hundred back rooms. The one supplier has multiplied. Cheaper, easier to hide.\"
 - **Current image:** gfx/event_pictures/underground_augmentation_clinic.dds
 
 ### augmentation_events.3
 - **Title:** Workplace Discrimination
 - **Description:** Employers are quietly replacing unaugmented workers with enhanced employees who can work faster, think sharper, and never tire. Unions are furious, warning of a new underclass of 'naturals' locked out of the economy.
-- **Flavor:** The hiring notice read 'enhanced reflexes preferred.'
+- **Flavor:** \"The hiring notice read 'enhanced reflexes preferred.'\"\n\n\"And the unaugmented applicants?\"\n\n\"Forty-three of them. None made it past the first screening. The hiring manager did not even bother with the interview slots — the screening rejected them automatically. He told me later that the company's reflex-test cutoff happens to match exactly the threshold no natural human can clear.\"
 - **Current image:** gfx/event_pictures/neo_luddite_protest.dds
 
 ### augmentation_events.4
 - **Title:** Religious Condemnation
 - **Description:** The [SCOPE.gsInterestGroup('devout_ig').GetName] have declared human augmentation an affront to divine creation. Religious leaders thunder that humanity is \"playing God\" and demand restrictions on all enhancement technologies.
-- **Flavor:** The archbishop held up a photograph of a chrome-plated hand and asked his congregation: 'Is this still a child of God?'
+- **Flavor:** The archbishop held up a photograph of a chrome-plated hand and asked his congregation a question.\n\n\"Is this still a child of God?\"\n\nThe pews were silent for a long moment. A man in the back stood up. He held out his own hand. The hand was chrome-plated, with cables running into the cuff of his shirt.\n\n\"Father,\" he said, \"I came here today to ask you the same question.\"
 - **Current image:** gfx/event_pictures/augmented_criminal.dds
 
 ### augmentation_events.5
 - **Title:** Augmented Crime Wave
 - **Description:** A wave of crimes committed by augmented individuals has overwhelmed law enforcement. Enhanced strength, built-in hacking tools, and sensory augmentations have given criminals capabilities that traditional policing cannot match.
-- **Flavor:** The suspect vaulted a three-metre wall without breaking stride. His legs had been replaced six months ago. The officers pursuing him had not.
+- **Flavor:** The suspect vaulted a three-metre wall without breaking stride. His legs had been replaced six months ago. The officers pursuing him had not.\n\n\"How many of these now?\" the inspector asked at the morning briefing.\n\n\"This is the seventh suspect this month we have lost over a wall.\"\n\n\"And the budget for augmentation?\"\n\n\"The budget has been pending for two years. The criminals do not wait for the budget.\"
 - **Current image:** gfx/event_pictures/augmentation_divide.dds
 
 ### augmentation_events.100
 - **Title:** The Great Divide
 - **Description:** (no localization)
-- **Flavor:** The last unaugmented factory in the city closed on a Tuesday. There was nobody left who could work it at the speed the market required.
+- **Flavor:** The last unaugmented factory in the city closed on a Tuesday. There was nobody left who could work it at the speed the market required.\n\nThe owner stood in the empty floor with the foreman.\n\n\"What will you do?\" the foreman asked.\n\n\"Retrain. Augment. Reopen as something else.\"\n\n\"And the workers who do not want the augmentation?\"\n\n\"Are no longer my workers. They are the city's problem now. The city has not yet noticed.\"
 - **Current image:** gfx/event_pictures/unaugmented_underclass.dds
 
 ### augmentation_events.200
 - **Title:** The Augmented Society
 - **Description:** Human augmentation technology has been fully integrated into [ROOT.GetCountry.GetAdjective] society. Once controversial, enhanced capabilities are now widely accepted as the next step in human development.
-- **Flavor:** #italic We did not cease to be human — we became more.#!
+- **Flavor:** \"We did not cease to be human,\" the philosopher said. \"We became more.\"\n\n\"More what?\"\n\n\"More of what we always were. Stronger. Quicker. Longer-lived. The question of whether we are still human is the wrong question. The question is whether we are still the same humans, and the answer is no. We are different humans now. And that is what every generation has always become.\"
 - **Current image:** gfx/event_pictures/augmented_harmony.dds
 
 ## banking_cycle_events.txt
@@ -61,37 +93,37 @@ Each event is listed with its title, description, and flavor text (where availab
 ### banking_cycle_events.101
 - **Title:** Overextended Production Directive
 - **Description:** Central planning authorities have issued a surge of new production directives that exceed the logistical capacity of the transport network. Coal shipments are arriving at the wrong depots, machine-tool allocations cross in transit, and three separate ministries have ordered the same factory to simultaneously serve different sectors. The pressure manifests not as panic in the markets but as invisible friction building deep within the supply chain.
-- **Flavor:** \"The trains have three different manifests and none of them have the same cargo.\"\n\n\"Then they must have been written by three different bureaus.\"
+- **Flavor:** \"The trains have three different manifests and none of them have the same cargo.\"\n\n\"Then they must have been written by three different bureaus.\"\n\n\"Three. And each is willing to swear under oath that theirs is the correct one.\"\n\n\"What did the cargo actually contain?\"\n\n\"Cement. Bound for a factory that was demolished in nineteen-thirty-eight.\"
 - **Current image:** gfx/event_pictures/gosplan_factory_hall.dds
 
 ### banking_cycle_events.151
 - **Title:** Dividend Anticipation Wave
 - **Description:** Collective enterprises are reporting an unusual surge of early dividend votes ahead of the quarterly settlement. Worker-owners are confident in near-term returns and have voted themselves generous payouts, but the treasury bookkeepers warn that maintenance reserves and reinvestment funds are being drawn down faster than income can replenish them. Town centres are booming; cooperative machinery is quietly going unserviced.
-- **Flavor:** \"We've voted generous dividends: the members deserve it.\"\n\n\"And who will mend the machinery next year?\"
+- **Flavor:** \"We've voted generous dividends — the members deserve it.\"\n\n\"And who will mend the machinery next year?\"\n\n\"The cooperative will. As it always has. As it always will.\"\n\n\"With which reserves? The dividend vote drew them down by sixty percent.\"\n\n\"With next year's surplus, then. We are confident.\"\n\n\"Confidence does not lubricate bearings.\"
 - **Current image:** gfx/event_pictures/cooperative_market_success.dds
 
 ### banking_cycle_events.104
 - **Title:** Critical Input Cascade Failure
-- **Description:** A key industrial hub: a coal depot, a rail switching yard, a tool-making facility: has failed, and its absence is rippling outward through the entire planned network. Factories in three sectors have idled their lines awaiting inputs that will not arrive. This is not a crisis of confidence but of logistics: the plan's interdependencies have produced a cascade that no single ministry can contain alone.
-- **Flavor:** \"The coal depot outside the city is empty. The locomotives sit idle.\"\n\n\"Then find another depot. There are eight. Why are they all empty?\"
+- **Description:** A key industrial hub — a coal depot, a rail switching yard, a tool-making facility — has failed, and its absence is rippling outward through the entire planned network. Factories in three sectors have idled their lines awaiting inputs that will not arrive. This is not a crisis of confidence but of logistics: the plan's interdependencies have produced a cascade that no single ministry can contain alone.
+- **Flavor:** \"The coal depot outside the city is empty. The locomotives sit idle.\"\n\n\"Then find another depot. There are eight. Why are they all empty?\"\n\n\"Because the foreman of the second was promised coal by the foreman of the third, who was waiting for the seventh, which was supposed to be filled by the first.\"\n\n\"And the first?\"\n\n\"Empty since Wednesday.\"
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
 ### banking_cycle_events.154
 - **Title:** Cooperative Insolvency Wave
 - **Description:** A simultaneous wave of aggressive dividend payouts and reduced working hours has drained operating cash from cooperatives across the network. Shops are pausing production while reconciling payroll with supplier invoices; smaller collectives cannot meet maintenance schedules. Unlike a bank run, there is no single point of failure: the crisis is distributed, social, and deeply intertwined with member expectations.
-- **Flavor:** \"Our members demanded a payout and we gave it. We did the right thing.\"\n\n\"Until the lathe breaks and there's no funds to fix it.\"
+- **Flavor:** \"Our members demanded a payout and we gave it. We did the right thing.\"\n\n\"Until the lathe breaks and there's no funds to fix it.\"\n\n\"The lathe will not break this quarter.\"\n\n\"It broke last quarter. We borrowed against next quarter's earnings to repair it. Now we have borrowed against next year's, and the lathe is still operating on a piece of wire someone wrapped around the spindle in January.\"\n\n\"Then we need a payout vote that admits this.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.106
 - **Title:** Agricultural Quota Shortfall
 - **Description:** Harvest returns are falling well below plan quotas for the season. The problem is not crop failure but logistics: transport allocation orders were misfiled, regional distribution plans were miscoordinated, and urban granaries show surpluses while rural depots run empty. Planners now face the question of whether to extend emergency production credit, accept the shortfall, or source abroad to cover the gap.
-- **Flavor:** \"The wagons are returning with straw and not grain.\"\n\n\"Who sent the wrong manifest?\"
+- **Flavor:** \"The wagons are returning with straw and not grain.\"\n\n\"Who sent the wrong manifest?\"\n\n\"Nobody. The granary requisition was filed by the central allocator. The wagon allocation was filed by the regional dispatcher. Neither of them mentioned the harvest schedule, because nobody asked them to.\"\n\n\"Then we will starve through paperwork.\"
 - **Current image:** gfx/event_pictures/gosplan_factory_hall.dds
 
 ### banking_cycle_events.156
 - **Title:** Rural Cooperative Harvest Shortfall
 - **Description:** Several agricultural cooperatives have reported that generous dividend policies and shortened working periods have left them with insufficient funds to sustain harvest operations. Storage and maintenance were cut to meet payout expectations; now that the shortfall is visible, the cooperative network debates whether to redirect mutual-aid reserves, accept the shortfall gracefully, or import supplies and charge costs back to the affected members.
-- **Flavor:** \"We shared our harvest out to keep everyone fed. Now we have nothing for the winter repairs.\"\n\n\"Then we will stand together. But who will mend the plow?\"
+- **Flavor:** \"We shared our harvest out to keep everyone fed. Now we have nothing for the winter repairs.\"\n\n\"Then we will stand together. But who will mend the plow?\"\n\n\"The plow will be mended when the snow lifts. The barn will be patched when the wood arrives. Until then, the cooperative will eat, the cooperative will repair what it can, and the cooperative will write to the federation for the rest.\"\n\n\"And if the federation cannot help?\"\n\n\"Then the cooperative will discover what solidarity means at its limit.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.2
@@ -150,14 +182,14 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.110
 - **Title:** Plan Reserve Fund Depletion
-- **Description:** The national planning reserve: maintained to service procurement commitments and smooth supply disruptions: is running dangerously low. The cause is not speculation or bond-market panic, but an accumulation of logistics shortfalls, underperforming export sectors, and overcommitted five-year targets. Unless addressed, essential procurement guarantees will begin to lapse and critical suppliers will stop accepting plan-backed orders.
-- **Flavor:** \"Our five-year plan assumed steady grain shipments and an export surplus. Without them, the Treasury's ledger looks very different.\"\n\n\"Then someone must revise the plan.\"
+- **Description:** The national planning reserve — maintained to service procurement commitments and smooth supply disruptions — is running dangerously low. The cause is not speculation or bond-market panic, but an accumulation of logistics shortfalls, underperforming export sectors, and overcommitted five-year targets. Unless addressed, essential procurement guarantees will begin to lapse and critical suppliers will stop accepting plan-backed orders.
+- **Flavor:** \"Our five-year plan assumed steady grain shipments and an export surplus. Without them, the Treasury's ledger looks very different.\"\n\n\"Then someone must revise the plan.\"\n\n\"Someone has been revising the plan for eighteen months. Each revision is a small concession. Together they are an entirely different document.\"\n\n\"And nobody has noticed?\"\n\n\"Nobody has been willing to add them up.\"
 - **Current image:** gfx/event_pictures/state_bank_reserves.dds
 
 ### banking_cycle_events.160
 - **Title:** Federation Capital Reserve Crisis
-- **Description:** The federation's shared capital reserve: used to service inter-cooperative agreements, mutual guarantees, and [concept_infrastructure] bonds: has been significantly depleted. Member cooperatives have continued to draw on it through dividend-linked [Concept('concept_obligation', 'obligations')] while contributing less than projected. The council must now choose between austerity, new credit, or a partial default on some commitments, each with different consequences for trust between federation members.
-- **Flavor:** \"Council treasuries are strained; members demand payouts while infrastructure needs repair.\"\n\n\"The ledger won't balance itself: someone must vote for sacrifice.\"
+- **Description:** The federation's shared capital reserve — used to service inter-cooperative agreements, mutual guarantees, and [concept_infrastructure] bonds — has been significantly depleted. Member cooperatives have continued to draw on it through dividend-linked [Concept('concept_obligation', 'obligations')] while contributing less than projected. The council must now choose between austerity, new credit, or a partial default on some commitments, each with different consequences for trust between federation members.
+- **Flavor:** \"Council treasuries are strained; members demand payouts while infrastructure needs repair.\"\n\n\"The ledger won't balance itself — someone must vote for sacrifice.\"\n\n\"And the cooperatives that vote for sacrifice will see their members defect to the cooperatives that didn't.\"\n\n\"Then we ask all of them to sacrifice at once. The whole federation, in one resolution.\"\n\n\"They will vote it down.\"\n\n\"They will. And then we will explain why we are defaulting on the inter-cooperative agreements they were defending.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.11
@@ -192,14 +224,14 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.115
 - **Title:** Foreign Exchange Allocation Collapse
-- **Description:** The national allocation of foreign exchange has been exhausted months ahead of schedule. Industries that depend on imported components: machine tools, chemical feedstocks, precision instruments: are facing imminent supply collapse. The central planning authority must decide how to allocate the remaining reserves: defend current production at the cost of future flexibility, restrict imports to critical sectors only, or accept that some production targets simply cannot be met this cycle.
-- **Flavor:** \"We have no foreign currency left to import coal. Without coal, the turbines stop.\"\n\n\"Then the turbines stop.\"
+- **Description:** The national allocation of foreign exchange has been exhausted months ahead of schedule. Industries that depend on imported components — machine tools, chemical feedstocks, precision instruments — are facing imminent supply collapse. The central planning authority must decide how to allocate the remaining reserves: defend current production at the cost of future flexibility, restrict imports to critical sectors only, or accept that some production targets simply cannot be met this cycle.
+- **Flavor:** \"We have no foreign currency left to import coal. Without coal, the turbines stop.\"\n\n\"Then the turbines stop.\"\n\n\"And the factories that draw their power from those turbines stop. And the rail lines that move the output of those factories stop. And the export earnings that buy the next month's coal stop.\"\n\n\"Then the turbines stop sooner.\"
 - **Current image:** gfx/event_pictures/state_bank_reserves.dds
 
 ### banking_cycle_events.165
 - **Title:** Import Cost Spiral
 - **Description:** The currency's depreciation is feeding directly into the cost base of cooperatives that depend on imported inputs: textile dyes, machine spares, chemical additives. Federation pricing coordination has struggled to absorb the shock, and member cooperatives are reporting that production runs are becoming uneconomical. The council faces a choice between deploying reserves, pivoting to domestic sourcing, or accepting the full force of adjustment.
-- **Flavor:** \"If the exchange rate keeps moving like this, the cooperative can't buy the parts to fix the looms.\"\n\n\"Then we build our own parts, or we stop.\"
+- **Flavor:** \"If the exchange rate keeps moving like this, the cooperative can't buy the parts to fix the looms.\"\n\n\"Then we build our own parts, or we stop.\"\n\n\"We don't know how to build the dye injectors. The patents are German, the tooling is German, the chemists are German.\"\n\n\"Then we learn. The federation has six other textile cooperatives. Among the seven of us, we have one chemist who used to work for the Bavarian dye trust.\"\n\n\"That is not enough.\"\n\n\"That is a beginning.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.16
@@ -209,15 +241,15 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** gfx/event_pictures/central_bank_policy.dds
 
 ### banking_cycle_events.116
-- **Title:** Gosplan vs. the Party Secretary
-- **Description:** A public dispute has broken out between senior Gosplan economists and the Party Secretary's office over the direction of monetary and financial allocations. The technocrats argue that current plan parameters must be respected to maintain credibility with foreign trading partners and domestic industrial coordinators; the Party argues that political priorities: employment targets, popular consumption: must take precedence over bureaucratic rigidity. The resolution will define how planning decisions are made for the next several years.
-- **Flavor:** \"Should the monetary office bow to ministers or stick to its technical remit?\"\n\n\"The answer defines how the plan is run.\"
+- **Title:** The Bureau and the Secretariat
+- **Description:** A public dispute has broken out between senior planning-bureau economists and the secretariat over the direction of monetary and financial allocations. The technocrats argue that current plan parameters must be respected to maintain credibility with foreign trading partners and domestic industrial coordinators; the secretariat argues that political priorities — employment targets, popular consumption — must take precedence over bureaucratic rigidity. The resolution will define how planning decisions are made for the next several years.
+- **Flavor:** \"Should the monetary office bow to ministers or stick to its technical remit?\"\n\n\"The answer defines how the plan is run.\"\n\n\"The technocrats have credibility with our trading partners. The secretariat has authority with our workers.\"\n\n\"Then we must lose one to keep the other.\"\n\n\"Or we find a way to convince the workers that credibility with foreign partners is what feeds them next winter. That is the harder fight.\"
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
 ### banking_cycle_events.166
 - **Title:** Federation Council Election Dispute
-- **Description:** A contested election within the Federation Council has produced two rival factions with sharply different visions. One faction: rooted in the older cooperative tradition: argues that financial discipline, democratic accountability, and transparent bookkeeping must govern the federation's financial decisions. A younger reformist faction argues for pragmatic flexibility: professional management, efficiency gains, and less procedural constraint. The outcome will shape how the cooperative federation governs its shared capital for a generation.
-- **Flavor:** \"Shall the councils decide or the technocrats? Both claim to care for workers' interests.\"\n\n\"Then let the members vote on which kind of workers' interest they prefer.\"
+- **Description:** A contested election within the Federation Council has produced two rival factions with sharply different visions. One faction — rooted in the older cooperative tradition — argues that financial discipline, democratic accountability, and transparent bookkeeping must govern the federation's financial decisions. A younger reformist faction argues for pragmatic flexibility: professional management, efficiency gains, and less procedural constraint. The outcome will shape how the cooperative federation governs its shared capital for a generation.
+- **Flavor:** \"Shall the councils decide or the technocrats? Both claim to care for workers' interests.\"\n\n\"Then let the members vote on which kind of workers' interest they prefer.\"\n\n\"The members will vote for whichever side promises them larger dividends sooner.\"\n\n\"Then we will have answered the question — and we will not like the answer.\"
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.17
@@ -228,14 +260,14 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.117
 - **Title:** Unofficial Artisan Market Emergence
-- **Description:** An informal economy of artisan workshops, private household production, and semi-legal exchange networks has been flourishing alongside the official plan. These blat networks fill supply gaps the plan cannot reach: consumer goods, small repairs, personal services: but they also divert labor and materials from official targets. Planning authorities are divided between tolerating them as a useful safety valve, formalising and taxing them, or cracking down in the name of plan discipline.
-- **Flavor:** \"They've authorised more vouchers for home goods. The factory can't keep up with spares.\"\n\n\"The unofficial markets fill the gap. Why does that bother you?\"
+- **Description:** An informal economy of artisan workshops, private household production, and semi-legal exchange networks has been flourishing alongside the official plan. These informal exchange networks fill supply gaps the plan cannot reach — consumer goods, small repairs, personal services — but they also divert labor and materials from official targets. Planning authorities are divided between tolerating them as a useful safety valve, formalising and taxing them, or cracking down in the name of plan discipline.
+- **Flavor:** \"They've authorised more vouchers for home goods. The factory can't keep up with spares.\"\n\n\"The unofficial markets fill the gap. Why does that bother you?\"\n\n\"Because the spares the unofficial markets sell are stolen from the factory. The voucher orders the spares we can't produce because our parts are walking out the back door.\"\n\n\"Then the cure is making more spares, not closing the markets.\"\n\n\"That is also possible. Yes.\"
 - **Current image:** gfx/event_pictures/state_bank_reserves.dds
 
 ### banking_cycle_events.167
 - **Title:** Cooperative Member Loan Fever
 - **Description:** Member-owned credit unions are reporting an unprecedented surge in personal loan applications from cooperative members: primarily for household goods and small improvements. The loans are sound individually, but collectively they are depleting the shared credit pool and reducing the reserves available for capital reinvestment. Some council members argue that financial autonomy is a core cooperative value; others warn that individual borrowing fever is quietly hollowing out collective capacity.
-- **Flavor:** \"Members voted for easier borrowing. It's popular today.\"\n\n\"Ask them again when the credit union runs dry.\"
+- **Flavor:** \"Members voted for easier borrowing. It's popular today.\"\n\n\"Ask them again when the credit union runs dry.\"\n\n\"They will not be asked then. They will be told.\"\n\n\"And how will they take it?\"\n\n\"Badly. They voted for a thing the council approved. They expect the council to deliver it. The council's job, in their view, is to make the loans happen, not to refuse them.\"\n\n\"Then we will be remembered as the council that refused. And the next council will preside over the default.\"
 - **Current image:** gfx/event_pictures/cooperative_market_success.dds
 
 ### banking_cycle_events.18
@@ -259,13 +291,13 @@ Each event is listed with its title, description, and flavor text (where availab
 ### banking_cycle_events.120
 - **Title:** Parallel Allocation Network Uncovered
 - **Description:** Internal security has uncovered an extensive parallel network of informal allocation intermediaries: factory managers, transport officials, and procurement clerks who have been quietly rerouting plan-allocated resources through unofficial channels. Those involved describe it as filling the gaps the plan leaves behind. Critics see it as systematic corruption that undermines the integrity of central planning and creates hidden systemic risks that appear in no official ledger.
-- **Flavor:** \"They call it 'the parallel supply line.' But it is the plan itself that failed to reach these depots.\"\n\n\"Accountability begins with an audit. Start there.\"
+- **Flavor:** \"They call it 'the parallel supply line.' But it is the plan itself that failed to reach these depots.\"\n\n\"Accountability begins with an audit. Start there.\"\n\n\"And after the audit?\"\n\n\"After the audit, we will discover that the parallel supply line is moving more material than the official one, and was the only reason this region's factories met quota at all.\"\n\n\"Then we audit quietly.\"
 - **Current image:** gfx/event_pictures/black_market_underground.dds
 
 ### banking_cycle_events.170
 - **Title:** Shadow Dividend Extraction Scheme
 - **Description:** An internal audit of the cooperative federation has uncovered a pattern of off-books lending and shadow dividend extraction: some member cooperatives have been recording income below its true value, distributing undisclosed [concept_dividends] to insider members, and creating informal credit pools that operate entirely outside the federation's coordination framework. The scheme is fragile; any single insolvency could expose the whole network.
-- **Flavor:** \"They lend each other when the bank won't. It's solidarity until someone can't pay back.\"\n\n\"Then it is not solidarity. It is a shadow bank wearing cooperative clothes.\"
+- **Flavor:** \"They lend each other when the bank won't. It's solidarity until someone can't pay back.\"\n\n\"Then it is not solidarity. It is a shadow bank wearing cooperative clothes.\"\n\n\"And what shall we do about it?\"\n\n\"What we always do about a shadow bank. Bring it into the light, audit it honestly, and pray the light is what it survives.\"\n\n\"And if it doesn't survive?\"\n\n\"Then we learn how much of the cooperative federation was built on the same shadow.\"
 - **Current image:** gfx/event_pictures/cooperative_market_success.dds
 
 ### banking_cycle_events.21
@@ -421,97 +453,97 @@ Each event is listed with its title, description, and flavor text (where availab
 ### banking_cycle_events.50
 - **Title:** Five-Year Plan Shortfall
 - **Description:** The latest reports from our planning bureaus paint a troubling picture. Production across several key sectors has fallen well short of the targets set by the current economic plan. Factory output quotas are being missed, and the supply chain disruptions are beginning to cascade through the planned economy.
-- **Flavor:** The auditor put down his pen and asked to see the original ledgers. There were no original ledgers.
+- **Flavor:** \"The factory reported a hundred and ten percent of quota. The freight cars at the rail siding tell a different story.\"\n\n\"How different?\"\n\n\"Eighty-seven percent. Maybe less. There is a discrepancy of three thousand tons of steel that nobody can account for.\"\n\n\"And the director?\"\n\n\"Asks why we insist on counting what the plan has already counted for us.\"
 - **Current image:** gfx/event_pictures/gosplan_factory_hall.dds
 
 ### banking_cycle_events.51
 - **Title:** Factory Director Corruption
 - **Description:** An internal audit has revealed that several factory directors have been systematically falsifying their production reports. Output figures were inflated to meet quota targets, while actual production lagged far behind. The discovery calls into question the reliability of our entire planning apparatus.
-- **Flavor:** They reported success on paper while the warehouses stood half-empty.
+- **Flavor:** \"He has been director here for nine years. Every year his factory exceeds its quota by precisely three percent.\"\n\n\"Three percent every year? Through depressions, shortages, equipment failures?\"\n\n\"Three percent. Every year. Without fail.\"\n\n\"Then he is either a genius, a liar, or both.\"
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
 ### banking_cycle_events.52
 - **Title:** Resource Hoarding Crisis
 - **Description:** Regional planning authorities have been stockpiling critical raw materials and intermediate goods well beyond their allocated quotas. This hoarding behavior is disrupting the central allocation system, creating artificial shortages in some sectors while others sit on mountains of surplus they refuse to release.
-- **Flavor:** Every commissar builds their own private reserve, and the plan suffers for it.
+- **Flavor:** \"The southern oblast is sitting on enough copper wire to electrify three provinces. They claim it is a contingency reserve.\"\n\n\"A contingency against what?\"\n\n\"Against the central allocator failing to deliver. Against another oblast taking their share. Against next year's quota being raised again.\"\n\n\"In other words, against us.\"\n\n\"In other words, against us.\"
 - **Current image:** gfx/event_pictures/gosplan_factory_hall.dds
 
 ### banking_cycle_events.53
 - **Title:** Black Market Emergence
 - **Description:** As state-controlled supply chains struggle to meet demand, an informal economy has begun to flourish in the shadows. Citizens are trading goods outside official channels, and a network of black marketeers is providing what the planned economy cannot. The practice is widespread enough that enforcement has become difficult.
-- **Flavor:** Where the state fails to provide, the people find a way: legal or otherwise.
+- **Flavor:** \"The ration coupon entitles me to two kilos of meat per month. My wife buys four from a neighbor who works at the slaughterhouse.\"\n\n\"That neighbor is breaking the law.\"\n\n\"That neighbor is feeding my children. The state passed the law. The neighbor is feeding my children. I know which one I am loyal to today.\"
 - **Current image:** gfx/event_pictures/black_market_underground.dds
 
 ### banking_cycle_events.54
 - **Title:** Worker Motivation Campaign
 - **Description:** With the economy in a period of relative stability, the state has an opportunity to boost productivity through a nationwide motivation campaign. Various proposals have been put forward: material incentives, ideological appeals, or targeted bonuses for strategic industries.
-- **Flavor:** The revolution asks everything of its workers. Perhaps it is time to give something back.
+- **Flavor:** \"The posters say each worker holds the future of the republic in their hands.\"\n\n\"And the canteen still serves the same cabbage soup it has served for nine years.\"\n\n\"You think a bonus would change minds?\"\n\n\"I think a bonus would change shifts. Whether it changes minds is a question for the Party. The shift is what we need by Friday.\"
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
 ### banking_cycle_events.55
 - **Title:** Socialist Fraternal Aid
-- **Description:** An ideological ally has offered a package of economic cooperation credits to help stabilize our planning cycle. The aid would include technical advisors, preferential trade terms, and direct financial assistance: but it comes with expectations of closer political alignment and joint economic planning committees.
-- **Flavor:** Solidarity between socialist states is a noble ideal: but it always comes with a price.
+- **Description:** An ideological ally has offered a package of economic cooperation credits to help stabilize our planning cycle. The aid would include technical advisors, preferential trade terms, and direct financial assistance — but it comes with expectations of closer political alignment and joint economic planning committees.
+- **Flavor:** \"They are offering us five hundred million in long-term credits, at favorable rates. Their delegation arrives Friday.\"\n\n\"And the conditions?\"\n\n\"Two seats on our planning committee. A revision of our import targets to align with theirs. Quarterly progress reviews.\"\n\n\"That is not aid. That is partnership with the smaller word crossed out.\"
 - **Current image:** gfx/event_pictures/state_bank_reserves.dds
 
 ### banking_cycle_events.56
 - **Title:** Industrial Sabotage Investigation
 - **Description:** Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Whether the cause is actual sabotage by foreign agents, internal dissent, or simply aging [concept_infrastructure], the disruptions are significant enough to demand a response.
-- **Flavor:** Is it the enemy within, the enemy without, or simply the rust of time?
+- **Flavor:** \"Three turbines, two assembly lines, one boiler. All in the same week, all in different factories.\"\n\n\"Sabotage?\"\n\n\"The reports from State Security say so. The reports from the engineers say the equipment was installed in 1923 and was supposed to be replaced in 1948.\"\n\n\"Then we have a saboteur in every factory in the country, and his name is the maintenance budget.\"
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
 ### banking_cycle_events.57
 - **Title:** Collectivization Efficiency Drive
 - **Description:** The state planning commission has proposed a sweeping consolidation program, merging smaller workshops and artisan enterprises into larger, more efficient state-run industrial complexes. Proponents argue this will unlock economies of scale, while critics warn of disruption and lost local expertise.
-- **Flavor:** Bigger is better: or so the central planners insist.
+- **Flavor:** \"The seventeen workshops on this street produce roughly the same volume as the single state combine across town.\"\n\n\"At lower cost per unit?\"\n\n\"At higher cost per unit. But the seventeen workshops also feed seventeen families of master craftsmen who know things the combine will never learn.\"\n\n\"The combine produces. The craftsmen know. Which do we keep?\"
 - **Current image:** gfx/event_pictures/gosplan_factory_hall.dds
 
 ### banking_cycle_events.60
 - **Title:** Federation Governance Dispute
 - **Description:** A heated disagreement has erupted among the cooperative federations over how to reinvest collective surplus funds. Some cooperatives want to prioritize worker [concept_dividends], while others argue for reinvestment in shared [concept_infrastructure]. The dispute has paralyzed the federation council and no consensus appears imminent.
-- **Flavor:** Democracy is wonderful: until everyone disagrees on what to do with the money.
+- **Flavor:** \"The vote on the surplus failed for the fourth time this month.\"\n\n\"Same split?\"\n\n\"Same split. Eight cooperatives want dividends in October. Eight want to roll the surplus into the new rail spur. The remaining three abstain on principle, because they say the question is wrong.\"\n\n\"Then we will deadlock until the snow falls.\"
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.61
 - **Title:** Free Rider Problem
-- **Description:** Several cooperatives have been benefiting from shared federation [concept_infrastructure]: collective purchasing agreements, mutual insurance funds, and logistics networks: without contributing their fair share to maintenance costs. The arrangement is breeding resentment among the cooperatives that carry the burden.
-- **Flavor:** Mutual aid works splendidly: until someone decides to take without giving.
+- **Description:** Several cooperatives have been benefiting from shared federation [concept_infrastructure] — collective purchasing agreements, mutual insurance funds, and logistics networks — without contributing their fair share to maintenance costs. The arrangement is breeding resentment among the cooperatives that carry the burden.
+- **Flavor:** \"The Spinners' Collective has not paid into the shared warehouse fund in three years.\"\n\n\"And they use the warehouse?\"\n\n\"They use it more than anyone. They argue that since the federation chose to build it, the federation can pay for it.\"\n\n\"And what do the cooperatives who do pay say?\"\n\n\"They say they are tired of being the federation's conscience.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.62
 - **Title:** Democratic Investment Gridlock
 - **Description:** The cooperative councils have been debating a major capital investment project for months. Every faction has a different priority, every vote ends in stalemate, and the window of opportunity is beginning to close. The democratic process that defines cooperative governance is becoming an obstacle to action.
-- **Flavor:** A hundred opinions, a thousand [Concept('concept_amendment', 'amendments')], and still no decision.
+- **Flavor:** \"The investment proposal is on its eleventh draft.\"\n\n\"Eleven?\"\n\n\"Six [Concept('concept_amendment', 'amendments')] from the rail cooperatives. Four from the textile council. One from the regional federation, which everyone has agreed to ignore because it would require rewriting the proposal from scratch.\"\n\n\"And when will the vote happen?\"\n\n\"When the [Concept('concept_amendment', 'amendments')] stop arriving. Which is to say, never.\"
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.63
 - **Title:** Worker-Owner Burnout
 - **Description:** The dual burden of productive labor and democratic governance is taking its toll on worker-owners across the cooperative sector. Attendance at council meetings is declining, decision quality is suffering, and productivity is falling as exhausted workers struggle to fulfill both roles during an economic downturn.
-- **Flavor:** They are workers and managers and legislators all at once: and the weight is crushing them.
+- **Flavor:** \"Comrade Vasilenko fell asleep in the council meeting last night.\"\n\n\"During a vote?\"\n\n\"During the vote on his own [Concept('concept_amendment', 'amendments')]. He worked the morning shift, ran the cooperative's purchasing review through the afternoon, and made it to the council chamber at seven. The vote was at quarter past midnight.\"\n\n\"And we wonder why the decisions are getting worse.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.64
 - **Title:** Cooperative Export Success
-- **Description:** Cooperative-produced goods have gained a reputation for quality and ethical production in international markets. Foreign buyers are placing larger orders, and several trade delegations have expressed interest in establishing permanent import agreements. This is an opportunity to expand: but expansion carries its own risks.
-- **Flavor:** The world is discovering what worker-owned enterprises can achieve.
+- **Description:** Cooperative-produced goods have gained a reputation for quality and ethical production in international markets. Foreign buyers are placing larger orders, and several trade delegations have expressed interest in establishing permanent import agreements. This is an opportunity to expand — but expansion carries its own risks.
+- **Flavor:** \"The order from the foreign buyer is for ten thousand units. Our entire annual production is twelve thousand.\"\n\n\"Then we expand.\"\n\n\"And if next year they buy from someone cheaper, we are left with a doubled workforce and half the orders. Cooperatives do not lay off members the way capitalists do.\"\n\n\"Then we expand carefully.\"
 - **Current image:** gfx/event_pictures/cooperative_market_success.dds
 
 ### banking_cycle_events.65
 - **Title:** Mutual Insurance Fund Strain
-- **Description:** The cooperative mutual insurance fund: the collective safety net that covers members during downturns: is under severe strain. Claims have surged as cooperatives struggle, and the fund's reserves are dangerously low. Without action, the entire mutual support system could collapse.
-- **Flavor:** The safety net was woven for ordinary times, not for storms like this.
+- **Description:** The cooperative mutual insurance fund — the collective safety net that covers members during downturns — is under severe strain. Claims have surged as cooperatives struggle, and the fund's reserves are dangerously low. Without action, the entire mutual support system could collapse.
+- **Flavor:** \"Claims this quarter exceeded contributions by a factor of four.\"\n\n\"How long can the reserves cover that?\"\n\n\"Six months. Eight if we suspend the discretionary payouts. After that, the fund either takes a special levy or it fails.\"\n\n\"And a fund that fails the first time it is truly needed will not be trusted to exist a second time.\"
 - **Current image:** gfx/event_pictures/cooperative_strain.dds
 
 ### banking_cycle_events.66
 - **Title:** Innovation Through Collaboration
-- **Description:** A grassroots movement among cooperatives has begun openly sharing industrial innovations, production techniques, and process improvements across the cooperative network. This collaborative approach to innovation is accelerating technological adoption: though some argue it undermines individual cooperatives' competitive advantages.
-- **Flavor:** When knowledge flows freely, everyone rises: or so the optimists say.
+- **Description:** A grassroots movement among cooperatives has begun openly sharing industrial innovations, production techniques, and process improvements across the cooperative network. This collaborative approach to innovation is accelerating technological adoption, though some argue it undermines individual cooperatives' competitive advantages.
+- **Flavor:** \"The Bonn collective published their improved loom design in the federation bulletin. Six other cooperatives are already retooling.\"\n\n\"And the Bonn collective?\"\n\n\"Now competes with six factories using their own design. Their orders are down twenty percent.\"\n\n\"Did they expect anything else?\"\n\n\"They said they expected solidarity. They did not specify what solidarity should look like in their order book.\"
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.67
 - **Title:** Generational Leadership Transition
 - **Description:** The founding generation of worker-owners who built the cooperative economy is reaching retirement age. The younger generation, raised in a cooperative system they didn't create, has different priorities and expectations. The transition is causing friction in governance councils across the country.
-- **Flavor:** The founders built the house. Their children want to remodel it.
+- **Flavor:** \"The founding chair is seventy-three. She has chaired every council meeting since 1924.\"\n\n\"And she will not retire?\"\n\n\"She will retire when there is a successor she trusts. She does not trust the young chair who wants to bring in professional accountants. She does not trust the young chair who wants to dissolve the federation entirely. She does not trust the third candidate because the third candidate is her own daughter.\"\n\n\"Then she will chair forever.\"
 - **Current image:** gfx/event_pictures/cooperative_assembly_hall.dds
 
 ### banking_cycle_events.46
@@ -549,13 +581,13 @@ Each event is listed with its title, description, and flavor text (where availab
 ### covert_warfare.1
 - **Title:** Operation Compromised
 - **Description:** Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable.
-- **Flavor:** The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.
+- **Flavor:** The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.\n\nThe minister was woken at five.\n\n\"How bad?\" he asked.\n\n\"They have the names. The dates. The recordings. The denials we prepared for last month's operation will not cover the current one.\"\n\n\"Then we prepare new denials.\"\n\n\"The new denials will be plausible to no one. We are choosing the cover story for a different audience now — not the foreign ministries, but our own newspapers.\"
 - **Current image:** gfx/event_pictures/espionage_dead_drop.dds
 
 ### covert_warfare.2
 - **Title:** Foreign Interference Detected
 - **Description:** Our counterintelligence services have uncovered evidence of a sustained foreign covert campaign targeting our [Concept('concept_institution', 'institutions')]. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond.
-- **Flavor:** The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.
+- **Flavor:** \"The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.\"\n\n\"Foreign?\"\n\n\"Foreign. The signature matches three other operations we have catalogued over the last two years. The same patience. The same restraint. The same preference for influence over disruption.\"\n\n\"And the response?\"\n\n\"That is your decision, Minister. Ours was to detect it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\"
 - **Current image:** gfx/event_pictures/espionage_dead_drop.dds
 
 ## cultural_hegemony_events.txt
@@ -569,7 +601,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### cultural_hegemony.2
 - **Title:** Foreign Cultural Infiltration
 - **Description:** Foreign films, music, and literature are increasingly dominating the cultural landscape of [ROOT.GetCountry.GetName]. Traditional values are being displaced by imported ideas, and the younger generation seems more interested in foreign trends than in their own heritage.
-- **Flavor:** The children sang along to foreign songs they barely understood, while their grandparents shook their heads and wondered when exactly the world had changed.
+- **Flavor:** The children sang along to foreign songs they barely understood, while their grandparents shook their heads and wondered when exactly the world had changed.\n\n\"It changed the year the radio became affordable,\" the village schoolmaster told them. \"You did not notice because it changed in the next room, not in this one. Now it has changed in this room too. The grandchildren are still the grandchildren. They simply sing different songs.\"
 - **Current image:** gfx/event_pictures/brain_drain_airport.dds
 
 ### cultural_hegemony.3
@@ -605,55 +637,55 @@ Each event is listed with its title, description, and flavor text (where availab
 ### cultural_hegemony.8
 - **Title:** The World is Watching
 - **Description:** [ROOT.GetCountry.GetName]'s cultural influence has reached a level where it can no longer be ignored. Our art, our media, and our way of life are being discussed, debated, and emulated in foreign capitals. We stand at a crossroads: invest further in our cultural projection, or consolidate our domestic strengths.
-- **Flavor:** They wore our fashions in Shanghai, hummed our melodies in Kinshasa, and debated our philosophers in Buenos Aires — all without a single soldier crossing a border.
+- **Flavor:** \"They wore our fashions in Shanghai, hummed our melodies in Kinshasa, and debated our philosophers in Buenos Aires — all without a single soldier crossing a border.\"\n\n\"And what does that buy us?\"\n\n\"Influence. Sympathy. A generation of foreign students who will be foreign ministers in twenty years. We do not get to direct what they do with the influence we sold them. We only get to notice that it was sold cheaply, and that it appreciated faster than any commodity.\"
 - **Current image:** gfx/event_pictures/cultural_exhibition_grand.dds
 
 ### cultural_hegemony.9
 - **Title:** The Cultural Hegemon
 - **Description:** [ROOT.GetCountry.GetName] now stands as the undisputed cultural center of the world. Our language is the language of diplomacy, our media shapes global opinion, and our political model is the one others aspire to emulate. This is a position of immense power — and immense responsibility.
-- **Flavor:** When the world needed a word for progress, they borrowed ours.
+- **Flavor:** \"When the world needed a word for progress, they borrowed ours.\"\n\n\"And the word came with attached meanings.\"\n\n\"Of course it did. Every loanword does. The meanings travel with the word. The borrowing nation believes it is borrowing the surface; it borrows the assumption underneath. By the time it notices, the assumption is part of its own thinking. This is what cultural hegemony actually is — not what the textbooks describe, but what happens after.\"
 - **Current image:** gfx/event_pictures/cultural_exhibition_grand.dds
 
 ### cultural_hegemony.10
 - **Title:** International Art Exhibition
 - **Description:** Our artists have produced works that captivate audiences from Paris to Tokyo. The international press lavishes praise upon [ROOT.GetCountry.GetAdjective] galleries and exhibitions. We have the opportunity to send a touring collection abroad, spreading our cultural influence — or we could sell the rights commercially and let the market decide what our art is worth.
-- **Flavor:** They came for the brushstrokes and left with a new worldview.
+- **Flavor:** \"They came for the brushstrokes and left with a new worldview.\"\n\n\"That was the point of the tour, wasn't it?\"\n\n\"Yes. The unstated point. We sent them paintings. They received an argument. Whether they noticed the argument is the difference between art and propaganda — and the difference, as always, was deniable.\"
 - **Current image:** gfx/event_pictures/media_broadcast_global.dds
 
 ### cultural_hegemony.11
 - **Title:** Tourism Golden Age
 - **Description:** Word of [ROOT.GetCountry.GetAdjective] culture has spread far and wide, and now foreigners arrive in droves to see our monuments, taste our cuisine, and experience our way of life. This influx of visitors brings opportunity — but also a choice between developing lasting [concept_infrastructure] or simply extracting as much profit as possible while the boom lasts.
-- **Flavor:** The tourists take photographs; we take their money.
+- **Flavor:** \"The tourists take photographs; we take their money.\"\n\n\"And next year?\"\n\n\"Next year we hope they bring more tourists. Each photograph is an advertisement we did not pay for. The hospitality investment pays for itself in three seasons. The cultural prestige pays for itself across a generation.\"
 - **Current image:** gfx/event_pictures/fashion_diaspora_influence.dds
 
 ### cultural_hegemony.12
 - **Title:** World-Class Universities
 - **Description:** The world's brightest minds seek admission to [ROOT.GetCountry.GetAdjective] universities. Our research institutions set the standard that other nations aspire to match. We can open our doors wider with international scholarships — attracting talent but also bearing the costs — or focus exclusively on our own citizens' education.
-- **Flavor:** They enrolled as foreigners and graduated as advocates.
+- **Flavor:** \"They enrolled as foreigners and graduated as advocates.\"\n\n\"For us, or for themselves?\"\n\n\"For ideas they first encountered here. Which becomes, in the long run, the same thing. The professor who taught them is in their cabinets now. The textbook they argued with is in their schools. Whatever we taught them, they teach again.\"
 - **Current image:** gfx/event_pictures/cultural_backlash_protest.dds
 
 ### cultural_hegemony.13
 - **Title:** Lingua Franca
 - **Description:** Diplomats negotiate in our tongue. Scientists publish in it. Merchants trade in it. The [ROOT.GetCountry.GetAdjective] language has become the world's default mode of communication — a lingua franca that opens doors and shapes thought. We can formalize this dominance through state-sponsored academies abroad, or let the invisible hand of commerce and scholarship continue its work.
-- **Flavor:** When they dream of a better future, they dream in our words.
+- **Flavor:** \"When they dream of a better future, they dream in our words.\"\n\n\"And when they dream of revolution?\"\n\n\"The same words. The same syntax. The same metaphors of progress and reaction. We did not intend it. We simply published more, in more places, for longer. The language followed the books, and the dreams followed the language.\"
 - **Current image:** gfx/event_pictures/fashion_diaspora_influence.dds
 
 ### cultural_hegemony.14
 - **Title:** Foreign Entertainment Wave
 - **Description:** Foreign entertainment has swept through [ROOT.GetCountry.GetName] like a tide. [SCOPE.sCountry('cultural_hegemon').GetAdjective] music fills our dance halls, their plays dominate our theaters, and their novels sit on every bookshelf. The people seem to enjoy it — but our traditionalists warn that our own cultural identity is being eroded from within.
-- **Flavor:** Their melodies are catchy, but the lyrics are not in our language.
+- **Flavor:** \"Their melodies are catchy, but the lyrics are not in our language.\"\n\n\"And our children sing them anyway?\"\n\n\"Word for word. They do not know what the lyrics mean. They learn the meaning later, and by the time they learn it, the song is the soundtrack of their summer. Restricting the imports would only make the songs harder to find, not less wanted.\"
 - **Current image:** gfx/event_pictures/cultural_backlash_protest.dds
 
 ### cultural_hegemony.15
 - **Title:** Foreign Education Model
 - **Description:** Reformers in [ROOT.GetCountry.GetName] point to [SCOPE.sCountry('cultural_hegemon').GetAdjective] universities as the gold standard. They propose restructuring our entire education system along foreign lines — new curricula, new examination methods, and professors trained abroad. The results could be transformative, but the ideological implications of such wholesale adoption trouble many.
-- **Flavor:** We taught their textbooks, and they taught us to think differently.
+- **Flavor:** \"We taught their textbooks, and they taught us to think differently.\"\n\n\"And the unintended consequences?\"\n\n\"The graduates think in the structure of the imported curriculum. They argue in its categories. They define the problems it taught them to define. Whether this serves our interest or theirs is a question we have not asked carefully enough.\"
 - **Current image:** gfx/event_pictures/cultural_debate_panel.dds
 
 ### cultural_hegemony.16
 - **Title:** Hegemonic Convergence
 - **Description:** The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its institutions with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence.
-- **Flavor:** \"When a great nation speaks, smaller nations must decide whether to echo the words — or find their own voice and bear the consequences.\"
+- **Flavor:** \"When a great nation speaks, smaller nations must decide whether to echo the words — or find their own voice and bear the consequences.\"\n\n\"And what is the consequence?\"\n\n\"Of echoing? Slow erosion of distinct identity. Of resisting? Steady friction with the great nation. Neither is an emergency. Both add up. The choice is which kind of slow loss the country prefers, and the choice is rarely made consciously.\"
 - **Current image:** gfx/event_pictures/tech_innovation_showcase.dds
 
 ## decolonization_events.txt
@@ -750,13 +782,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.16
 - **Title:** The Partition Question
-- **Description:** The colonial boundaries that now define our nation were drawn in foreign capitals by men who never set foot in this land. Our people live on both sides of lines that mean nothing to them. Neighboring [SCOPE.sCountry('partition_neighbor').GetName] shares our blood and our tongue: yet the departing powers divided us with a stroke of the pen.
+- **Description:** The colonial boundaries that now define our nation were drawn in foreign capitals by men who never set foot in this land. Our people live on both sides of lines that mean nothing to them. Neighboring [SCOPE.sCountry('partition_neighbor').GetName] shares our blood and our tongue — yet the departing powers divided us with a stroke of the pen.
 - **Flavor:** The old woman stood at the border post, looking across at her sister's village.\n\n\"Before the foreigners came, we walked freely between the valleys. My grandmother's grave is on the other side of this line.\"\n\nThe customs officer shifted uncomfortably.\n\n\"It is a different country now, mother.\"\n\n\"It is the same earth.\"
 - **Current image:** gfx/event_pictures/partition_border_drawing.dds
 
 ### decolonization_events.17
 - **Title:** Whose Country Is This?
-- **Description:** The borders inherited from colonial rule cut through communities and traditional territories. Our neighbor [SCOPE.sCountry('border_rival').GetName]: born in the same wave of independence: makes claims that overlap with ours. Both nations cite history. Neither can cite justice.
+- **Description:** The borders inherited from colonial rule cut through communities and traditional territories. Our neighbor [SCOPE.sCountry('border_rival').GetName] — born in the same wave of independence — makes claims that overlap with ours. Both nations cite history. Neither can cite justice.
 - **Flavor:** \"This river has been our boundary since before your empire, before any empire,\" the local chief told the negotiator.\n\n\"Unfortunately,\" the negotiator replied, \"the treaty says the boundary runs through the middle of the market square.\"\n\n\"That is because the man who drew the treaty had never seen a market square.\"
 - **Current image:** gfx/event_pictures/post_colonial_tensions.dds
 
@@ -768,7 +800,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.19
 - **Title:** The Crisis
-- **Description:** [SCOPE.sCountry('nationalizing_country').GetName]: once our possession: has seized foreign-owned assets in a wave of nationalist [concept_fervor]. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.
+- **Description:** [SCOPE.sCountry('nationalizing_country').GetName] — once our possession — has seized foreign-owned assets in a wave of nationalist [concept_fervor]. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.
 - **Flavor:** \"The canal is ours,\" the telegram read. \"We built it. We died building it. And now it is ours.\"\n\nThe foreign secretary crumpled it and dropped it in the waste basket.\n\n\"Prepare the contingency plans,\" he told the room. \"All of them.\"\n\n\"Sir, the Americans have already issued a statement urging restraint.\"\n\n\"The Americans can urge whatever they like. It is our canal.\"\n\nA silence. Someone coughed.\n\n\"Is it, sir?\"
 - **Current image:** gfx/event_pictures/colonial_departure.dds
 
@@ -787,13 +819,13 @@ Each event is listed with its title, description, and flavor text (where availab
 ### decolonization_events.200
 - **Title:** The Empire Endures
 - **Description:** Against the tide of history, [ROOT.GetCountry.GetName] has maintained firm control over its colonial possessions. Through integration policies and investment, the empire has solidified its overseas territories into an enduring part of the nation.
-- **Flavor:** #italic The flag will not be lowered.#!
+- **Flavor:** \"The flag will not be lowered,\" the minister said into the microphones.\n\nThe foreign correspondents took notes. They had been expecting the announcement to go the other way. They had pre-written the obituary of the empire and now had to revise it under deadline.\n\n\"For how long?\" one of them asked.\n\n\"For as long as it takes. The empire is what we have decided it will be. That decision is made and remade every morning. This morning we made it the same way.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
 ### decolonization_events.201
 - **Title:** The Empire Crumbles
 - **Description:** The colonial edifice of [ROOT.GetCountry.GetName] has collapsed. Independence movements, international pressure, and administrative exhaustion have combined to force withdrawal from overseas territories. New nations emerge from the ruins of empire.
-- **Flavor:** #italic The sun has set at last.#!
+- **Flavor:** \"The sun has set at last,\" the deputy minister remarked, looking out the window at no particular sunset.\n\n\"And in the new colonies?\"\n\n\"They are not the new colonies. They are the new nations. The distinction is the entire point of the last decade. Whether we adapt to the distinction is what the next decade is for. The empire is gone. What remains is the question of what we became after the empire.\"
 - **Current image:** gfx/event_pictures/failed_state_aftermath.dds
 
 ### decolonization_events.202
@@ -847,25 +879,25 @@ Each event is listed with its title, description, and flavor text (where availab
 ### decolonization_events.53
 - **Title:** The Universities Speak
 - **Description:** The campuses of [ROOT.GetCountry.GetName] are aflame with anti-colonial sentiment. Lecture halls fill not for the syllabus but for the petitions; quad statues are graffitied with the names of executed colonial dissidents; visiting lecturers from former colonies are received like heads of state. The young intelligentsia, denied a seat at the table, has built its own table on the lawn outside the chancellery.
-- **Flavor:** #italic They will not be lectured to about decorum.#!
+- **Flavor:** \"They will not be lectured to about decorum,\" the dean said.\n\n\"And the chancellor?\"\n\n\"Has invited the leaders inside. There will be a forum, formal, on the record. The universities have demanded a seat at the table. They have it. The empire's defenders are about to discover what happens when the academy decides it will no longer make the case for them. The forum is the end of the alibi.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
 ### decolonization_events.54
 - **Title:** The Veterans' Protest
 - **Description:** Soldiers home from the colonies have begun organizing. They have seen what they have seen — and what they have done — and they are no longer quiet about it. The petty bourgeoisie, the small-business backbone of the war economy, sides with them: their sons, their employees, their friends. The pension halls are full; the parade grounds are not.
-- **Flavor:** #italic \"I served. I came home. I will not serve again.\"#!
+- **Flavor:** \"I served,\" the old veteran said. \"I came home. I will not serve again.\"\n\n\"And your sons?\"\n\n\"Will not serve either. I will not permit it. I have lived through enough wars to know which ones we should be fighting, and the next war they propose is not one of them. The pension will pay for both of them through university. The pension is the only thing the empire ever gave me that I will be passing on.\"
 - **Current image:** gfx/event_pictures/military_parade.dds
 
 ### decolonization_events.300
 - **Title:** The Imperial Federation Act
 - **Description:** [ROOT.GetCountry.GetName] has formally federated its empire. After three years of unbroken stability, the assembled deputies of the metropole and the colonies have ratified the act binding them together under a single, indissoluble crown. Where there were disparate possessions there is now one structure. The Iron Fist that held them is now the Iron Hand that joins them; the world's accommodation, however reluctant, is final.\n\nThere will still be voices of dissent. They will be answered, as they have been answered, with the means we have always preferred.
-- **Flavor:** #italic The empire stands. The empire is now a fact, not a question.#!
+- **Flavor:** \"The empire is now a fact, not a question,\" the architect of the act told the parliament.\n\n\"And the dissenters?\"\n\n\"Will be answered, as they have been answered, with the means we have always preferred. The federation is complete. The constitutional acts are signed. The map will not be redrawn in our lifetimes. The voices of dissent will be answered, but they will not change the map.\"
 - **Current image:** gfx/event_pictures/military_parade.dds
 
 ### decolonization_events.301
 - **Title:** The Civilizing Mission Compact
 - **Description:** [ROOT.GetCountry.GetName] has formally federated its empire under the Civilizing Mission Compact. After three years of demonstrated stability, the elected legislatures of the metropole and the recognized assemblies of the colonies have together ratified a constitutional framework binding them as permanent partners in a single multinational polity.\n\nThe colonies are no longer subject possessions; they are constituent territories. Their representatives sit in our parliament. Their [Concept('concept_pop', 'pops')] vote in our elections. Their concerns shape our budgets. The empire endures, but it endures by consent, not coercion. This was always the harder road.
-- **Flavor:** #italic A federation of consent. A century of patient work. The harder road taken, and finished.#!
+- **Flavor:** \"A federation of consent,\" the chief negotiator said, signing the final page of the compact. \"A century of patient work.\"\n\n\"And the dissenters?\"\n\n\"Voted in their own legislatures. Lost the vote, in some places narrowly. Conceded. We did not have to make them concede. That is the difference between this federation and every previous one. The harder road was taken. The harder road is finished.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
 ### decolonization_events.400
@@ -989,31 +1021,31 @@ Each event is listed with its title, description, and flavor text (where availab
 ### environmentalism_events.17
 - **Title:** Off the Brink
 - **Description:** For the first time in years, global temperatures have fallen below catastrophic levels. The crisis has not ended, but the immediate spiral has slowed. In [ROOT.GetCountry.GetName], planners are debating whether to preserve emergency mobilization or begin a cautious return to normal administration.
-- **Flavor:** \"The numbers are real. We are no longer in freefall.\"\n\n\"So we celebrate?\"\n\n\"No. We breathe, then keep working. The numbers are better, not good.\"
+- **Flavor:** \"The numbers are real. We are no longer in freefall.\"\n\n\"So we celebrate?\"\n\n\"No. We breathe, then keep working. The numbers are better, not good. The next ten years are when we discover whether the better-not-good was the bottom of a curve, or a brief plateau before the curve resumed.\"
 - **Current image:** gfx/event_pictures/wildfire_inferno.dds
 
 ### environmentalism_events.18
 - **Title:** The Heat Recedes
 - **Description:** Warming has fallen below the severe threshold. Failures that once seemed unavoidable are becoming manageable, and emergency forecasts are softening. Ministries in [ROOT.GetCountry.GetName] must now choose whether to consolidate long-term mitigation or relax controls to accelerate short-term growth.
-- **Flavor:** \"The worst projections have been pushed back.\"\n\n\"Because we acted - not because the danger vanished.\"\n\n\"And if we stop acting?\"\n\n\"Then the projections return.\"
+- **Flavor:** \"The worst projections have been pushed back.\"\n\n\"Because we acted - not because the danger vanished.\"\n\n\"And if we stop acting?\"\n\n\"Then the projections return. The danger is what it was. The intervention is what has held it off. Mistaking the intervention for the cure is the most expensive mistake we could make from this point forward.\"
 - **Current image:** gfx/event_pictures/green_industry_factory.dds
 
 ### environmentalism_events.19
 - **Title:** A Cooler Decade
 - **Description:** Temperatures have now dropped below the one-degree mark. The mood in [ROOT.GetCountry.GetName] is cautiously optimistic: harvest volatility is easing and disaster response costs are stabilizing. Yet policymakers disagree on whether this is the beginning of durable recovery or merely an interlude.
-- **Flavor:** \"People are calling it a return to normal.\"\n\n\"Normal?\" The climatologist shook her head. \"The emissions targets held. If they stop holding, the numbers go back up. It's that simple.\"
+- **Flavor:** \"People are calling it a return to normal.\"\n\n\"Normal?\" The climatologist shook her head. \"The emissions targets held. If they stop holding, the numbers go back up. It's that simple.\"\n\n\"And the politicians who say the crisis is over?\"\n\n\"Will be voted out by the next generation, when the next generation discovers that the crisis was paused, not ended. We are not finished. We are paused.\"
 - **Current image:** gfx/event_pictures/ecological_collapse_panorama.dds
 
 ### environmentalism_events.20
 - **Title:** Below the Line
 - **Description:** Global temperatures have fallen below the threshold that first triggered international alarm. In [ROOT.GetCountry.GetName], voices across government claim the climate emergency has passed. Others argue that abandoning core safeguards now would invite another surge.
-- **Flavor:** \"We have earned this respite.\"\n\n\"Respite, yes. Immunity, no.\"\n\nOutside the ministry, one banner read #italic Mission Accomplished#! while another read #italic Don't Repeat the Experiment#!.
+- **Flavor:** \"We have earned this respite.\"\n\n\"Respite, yes. Immunity, no.\"\n\nOutside the ministry, one banner read #italic Mission Accomplished#! while another read #italic Don't Repeat the Experiment#!.\n\n\"Which sign is right?\" the minister asked.\n\n\"Both. Today both are right. The banners cannot stay up forever, and whichever one comes down first tells us which posture the country chose.\"
 - **Current image:** gfx/event_pictures/ecological_collapse_panorama.dds
 
 ### environmentalism_events.21
 - **Title:** Near Baseline
 - **Description:** For the first time since industrial expansion transformed the world economy, measured warming has returned near baseline. [ROOT.GetCountry.GetName] can treat this as proof of a new long-term model - or as permission to scale back and trust that markets alone will preserve the balance.
-- **Flavor:** \"We wanted to be remembered as the generation that averted collapse.\"\n\n\"Then keep the system running. The moment you stop, the readings start climbing again.\"
+- **Flavor:** \"We wanted to be remembered as the generation that averted collapse.\"\n\n\"Then keep the system running. The moment you stop, the readings start climbing again.\"\n\n\"And the credit?\"\n\n\"The credit goes to whoever's in office when the readings drop. The blame goes to whoever's in office when they climb. The decarbonized framework is what holds the line either way. Institutionalize it, and the line holds without depending on who is in office.\"
 - **Current image:** gfx/event_pictures/green_sustainable_city.dds
 
 ## extra_law_events.txt
@@ -1219,7 +1251,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### extra_law_events.34
 - **Title:** A Question of Conscience
 - **Description:** The [SCOPE.gsInterestGroup('devout_ig').GetName] have made their position clear: they will cease their opposition to [SCOPE.sLaw('current_law_scope').GetName] if - and only if - a religious exemption clause is added. Houses of worship, religious schools, and faith-based charities would be exempt from the law's requirements. It is a bitter pill for reformers, but without it the bill may never pass.
-- **Flavor:** "Render unto Caesar the things which are Caesar's, they said. But when Caesar legislates the bedroom, even the pulpit has an opinion."
+- **Flavor:** \"Render unto Caesar the things which are Caesar's, they said. But when Caesar legislates the bedroom, even the pulpit has an opinion.\"\n\n\"And do the parishioners listen?\"\n\n\"They listen. Whether they obey is a different question. The bill will pass or fall by what they do in the polling booth, not by what they nod at in the pew.\"
 - **Current image:** gfx/event_pictures/drug_policy_hearing.dds
 
 ### extra_law_events.35
@@ -1234,30 +1266,318 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"They have gone mad,\" the old merchant said, folding his newspaper with trembling hands. \"Utterly, irretrievably mad.\"\n\n\"Mad?\" his son replied. \"Or merely ahead of their time?\"\n\n\"There is no difference, boy. Not when the mobs are at the gates.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
+### extra_law_events.37
+- **Title:** Bankers Block the Bill
+- **Description:** The [SCOPE.gsInterestGroup('opposing_ig').GetName] have closed ranks against [SCOPE.sLaw('current_law_scope').GetName]. Their lobbyists pace the corridors of power, calling in every favor and dropping every hint of capital flight.
+- **Flavor:** \"Make no mistake — if this passes in its current form, we cannot guarantee the depositors will remain calm. We do not issue threats. We merely describe weather.\"\n\n\"You describe the weather you intend to make.\"\n\n\"That is one interpretation. The other is that we describe weather we have spent forty years learning to read.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.38
+- **Title:** Bank Run Triggers Doubt
+- **Description:** A run on the country's largest commercial banks has erupted in the major cities. Newspapers describe lines stretching for blocks, and the [SCOPE.gsInterestGroup('opposing_ig').GetName] blame the proposed [SCOPE.sLaw('current_law_scope').GetName] for spooking depositors.
+- **Flavor:** \"I withdrew my savings yesterday. My neighbor did the same. The notes said the system was sound. The notes also said it would never come to this.\"\n\n\"And tomorrow?\"\n\n\"Tomorrow I see whether the bank still opens its doors. If it does, my savings buy me a week. If it does not, my savings buy me nothing — and neither do anyone else's.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.39
+- **Title:** Gold Outflow Crisis
+- **Description:** Word of the proposed [SCOPE.sLaw('current_law_scope').GetName] has triggered a quiet exodus of specie from the vaults. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn of imminent insolvency if the legislation moves forward.
+- **Flavor:** \"Gold flows to where it is welcome and away from where it is suspect. The mere shadow of this bill has sent it overseas. What will the substance do?\"\n\n\"The gold returns when the policy proves wise.\"\n\n\"The gold does not return on faith. It returns on evidence, and the evidence takes years. Meanwhile the vaults are empty and the interest rates climb.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.40
+- **Title:** Hyperinflation Panic
+- **Description:** Industry has caught wind of the proposed currency reform under [SCOPE.sLaw('current_law_scope').GetName] and reacted with the worst possible interpretation. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn of imminent runaway prices.
+- **Flavor:** \"A barrel of flour cost ten coins this morning. Twelve this afternoon. What will it cost tomorrow if the printing press is unchained?\"\n\n\"It is not the press that drives the price. It is the speculator hoarding the flour.\"\n\n\"Find me a speculator and I will sell him my last sack. The price is the price. The reason is whatever you say it is.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.41
+- **Title:** Civil Liberties Outcry
+- **Description:** The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized public hearings condemning [SCOPE.sLaw('current_law_scope').GetName] as an assault on the dignity of the private citizen. Pamphlets and broadsheets carry their arguments into every parlor.
+- **Flavor:** \"A government that knows everything is a government that fears everything. We have not fought for centuries to install a watchman in our own bedroom.\"\n\n\"The watchman will keep you safe.\"\n\n\"The watchman will keep me observed. There is a difference, and the next generation will learn it the hard way if we forget it now.\"
+- **Current image:** gfx/event_pictures/surveillance_cameras_cityscape.dds
+
+### extra_law_events.42
+- **Title:** The Counter-Campaign
+- **Description:** Opponents of [SCOPE.sLaw('current_law_scope').GetName] have mounted a coordinated communications campaign in the press. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have spent freely to flood the channels with counter-messaging.
+- **Flavor:** \"You can fight bad speech with more speech. Or you can pass a law. Only one of these reflects credit on a free people.\"\n\n\"And the other?\"\n\n\"The other reflects credit on whoever holds the pen when the law is drafted. That is a more practical kind of credit, but it is not the same kind.\"
+- **Current image:** gfx/event_pictures/surveillance_cameras_cityscape.dds
+
+### extra_law_events.43
+- **Title:** Pulpit Against Progress
+- **Description:** Sermons across the country have denounced [SCOPE.sLaw('current_law_scope').GetName] as an affront to natural order. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have mobilized congregations to write their representatives in unprecedented numbers.
+- **Flavor:** \"There are doors that man was not meant to open. The next generation will inherit our restraint, or our hubris. May God forgive us if we choose the latter.\"\n\n\"And what shall the next generation do without the restraint?\"\n\n\"They will pass their own laws. They always do. But by then we shall not be the ones who handed them the keys.\"
+- **Current image:** gfx/event_pictures/genetics_laboratory.dds
+
+### extra_law_events.44
+- **Title:** Captains of Industry Rally
+- **Description:** The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized an unprecedented public counter-offensive against [SCOPE.sLaw('current_law_scope').GetName]. Their newspapers thunder warnings of economic collapse if the legislation passes.
+- **Flavor:** \"Break us up and you break the engine that built this nation. The trusts are not enemies of prosperity — they ARE prosperity.\"\n\n\"And the small firms you destroyed to become so?\"\n\n\"Were the engines of a smaller nation. We built a larger one. You may take the larger one apart if you wish, but you will not get the smaller one back.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.45
+- **Title:** Scholars in Revolt
+- **Description:** Petitions signed by the country's leading academics circulate against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the proposed regime will choke the free flow of ideas that learning depends on.
+- **Flavor:** \"Knowledge unshared is knowledge wasted. We do not pen our students inside libraries, nor should we pen ideas inside ledgers.\"\n\n\"And the researcher who needs to eat?\"\n\n\"Will eat, because society values learning. Or will starve, because we have decided not to. The arithmetic is the same — only the moral is different.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.46
+- **Title:** Generals Question the Wisdom
+- **Description:** The [SCOPE.gsInterestGroup('opposing_ig').GetName] have leaked memoranda to the press arguing that [SCOPE.sLaw('current_law_scope').GetName] will tie commanders' hands in the next war. Editorials demand the government answer the charge.
+- **Flavor:** \"You ask my men to fight an enemy that obeys no rules — and to do so with one arm bound behind their backs. I cannot in good conscience send them out under such terms.\"\n\n\"The rules exist for the ages, General. Not for one campaign.\"\n\n\"And the men who die in the campaign will be remembered for the ages. Or perhaps not. Perhaps the ages will be too busy congratulating themselves on their principles.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.47
+- **Title:** The Officers' Petition
+- **Description:** A formal petition signed by hundreds of serving officers has been delivered to the parliament. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame [SCOPE.sLaw('current_law_scope').GetName] as a civilian intrusion into military judgment.
+- **Flavor:** \"We do not seek to govern; we seek only to be permitted to do our duty. Bind us with these rules and we will keep them — and lose the next war for our trouble.\"\n\n\"You petition the parliament. The parliament's job is to decide.\"\n\n\"The parliament's job is to decide. Ours is to fight. When the decisions of one make the duties of the other impossible, someone must say so. We are saying so.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.48
+- **Title:** Tough on Crime
+- **Description:** Press campaigns sponsored by the [SCOPE.gsInterestGroup('opposing_ig').GetName] denounce [SCOPE.sLaw('current_law_scope').GetName] as a softening of public safety. Lurid accounts of recent crimes fill the front pages.
+- **Flavor:** \"Compassion for the criminal is cruelty to the victim. The voters know this in their bones, even when their representatives pretend not to.\"\n\n\"And what would the victim have us do?\"\n\n\"The victim would have us prevent the next crime. Whether that means longer sentences or better schools is the argument we ought to be having — instead we are arguing about whether the criminal is feeling sufficient remorse.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.49
+- **Title:** The Mother Tongue Defended
+- **Description:** Cultural societies and local press have mobilized against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will erase generations of linguistic heritage.
+- **Flavor:** \"A people without its language is a people without its memory. We will not sit silent while you legislate our grandmothers into footnotes.\"\n\n\"The law does not forbid the language. It only requires the official one.\"\n\n\"A language not used in the marketplace, not heard in the courthouse, not taught in the schoolhouse — what becomes of such a language? It becomes a museum exhibit. We are not yet ready to be museum exhibits.\"
+- **Current image:** gfx/event_pictures/language_reform_classroom.dds
+
+### extra_law_events.50
+- **Title:** Money in the Shadows
+- **Description:** Investigative reports have surfaced documenting how the [SCOPE.gsInterestGroup('opposing_ig').GetName] are routing campaign funds through new opaque channels to avoid [SCOPE.sLaw('current_law_scope').GetName]. The bill suddenly looks toothless.
+- **Flavor:** \"Pass any law you wish. Money is water — it finds the cracks. Until you address the cracks, all your laws are just bureaucratic theater.\"\n\n\"Then where are the cracks?\"\n\n\"In the disclosure rules. In the bearer-bond loophole. In the offshore registries. In all the places the bill was carefully written not to mention.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.51
+- **Title:** Regional Resistance
+- **Description:** Provincial assemblies have declared [SCOPE.sLaw('current_law_scope').GetName] an overreach. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are coordinating a multi-regional campaign against the bill's passage.
+- **Flavor:** \"We did not join this union to be told from afar how to govern our own valleys. If this passes, the next petition you receive may be a less polite one.\"\n\n\"Is that a threat?\"\n\n\"It is a forecast. The provinces have memories, and memories of being overruled by capitals last longer than the people who do the overruling.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.52
+- **Title:** The Sanctity of the Body
+- **Description:** Religious authorities and medical ethicists have united against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will set the country down a path from which there is no return.
+- **Flavor:** \"The body is a temple — not a workshop. Once we license the alteration of human nature, we lose the right to call ourselves human in any meaningful sense.\"\n\n\"And the child born with a disease the alteration could cure?\"\n\n\"Is suffering as humans have always suffered. We do not abolish the disease by abolishing what makes us human. We bear the suffering. That is what it means to be human.\"
+- **Current image:** gfx/event_pictures/automation_robots_factory.dds
+
+### extra_law_events.53
+- **Title:** Houses of the Aggrieved
+- **Description:** Old families have closed ranks against [SCOPE.sLaw('current_law_scope').GetName], leveraging centuries of accumulated influence. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as confiscatory in everything but name.
+- **Flavor:** \"You propose to dispose of our grandfathers' work with a stroke of the pen. Forgive us if we find this less than persuasive.\"\n\n\"Your grandfathers' work is also our grandfathers' work. They built the country we live in. We propose to share it differently.\"\n\n\"You propose to take it. The euphemism is admirable, but the result is the same.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.54
+- **Title:** Pulpit Outcry
+- **Description:** Sermons across the country denounce [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized petition drives and public rallies in unprecedented numbers.
+- **Flavor:** \"We are not bigots — we are conservatives. There is a difference, and the law you propose threatens to abolish it.\"\n\n\"What is the difference?\"\n\n\"A bigot believes the wrong people exist. A conservative believes the right people deserve the world they grew up in. The law you propose tells the conservative he has been the bigot all along.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.55
+- **Title:** Family Values Movement
+- **Description:** A nationwide movement has coalesced around opposition to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame it as state intrusion into the most sacred domestic sphere.
+- **Flavor:** \"The state has no business in the nursery. Pass this and you will have the people you deserve — and the demographic crisis you have engineered.\"\n\n\"The state already pays for the schools the nursery sends children to.\"\n\n\"And we send the children gladly. We do not send them to be raised. That is a distinction the bill collapses, and the country will feel the loss in twenty years.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.56
+- **Title:** State Secrets in Question
+- **Description:** The [SCOPE.gsInterestGroup('opposing_ig').GetName] have warned in unusually public terms that [SCOPE.sLaw('current_law_scope').GetName] will compromise vital state functions. Editorial pages quote anonymous officials forecasting disaster.
+- **Flavor:** \"Sunlight, we are told, is the best disinfectant. It is also the best way to read your enemy's mail. We cannot expose every file to public view without exposing the country to its rivals.\"\n\n\"The bill provides exemptions for matters of state security.\"\n\n\"The exemptions are for what we declare. The damage is from what we miss. We will miss things. We always do.\"
+- **Current image:** gfx/event_pictures/media_press_freedom.dds
+
+### extra_law_events.57
+- **Title:** Majority Backlash
+- **Description:** Counter-demonstrations have erupted in response to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as preferential treatment that the majority will not tolerate.
+- **Flavor:** \"We have nothing against them. We only object to being told we must love them, by people who do not know our towns and have never lived alongside them.\"\n\n\"The law does not legislate love.\"\n\n\"It legislates the consequences of withholding it. The distinction is academic when one is the schoolteacher being told what to teach.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.58
+- **Title:** Capital Flight Threatens
+- **Description:** The [SCOPE.gsInterestGroup('opposing_ig').GetName] have begun publicly discussing relocation of investments abroad if [SCOPE.sLaw('current_law_scope').GetName] passes. The talk alone is already moving markets.
+- **Flavor:** \"You may legislate generosity, but you cannot legislate the wealth that pays for it. Make us your enemies and we will simply become someone else's friends.\"\n\n\"And your factories?\"\n\n\"The factories cannot move. But the next factories can be built elsewhere. And the orders from abroad can flow to someone else's workers. The capital we hold is the smallest part of what we control.\"
+- **Current image:** gfx/event_pictures/labor_strike_picket.dds
+
+### extra_law_events.59
+- **Title:** The Algorithm Fails
+- **Description:** A high-profile failure of an algorithmic governance pilot has hit the news. Critics seize on it as evidence that [SCOPE.sLaw('current_law_scope').GetName] is dangerous folly, and the [SCOPE.gsInterestGroup('opposing_ig').GetName] demand the bill be reconsidered.
+- **Flavor:** \"The model that was supposed to optimize the city's waste collection has, somehow, optimized a fleet of trucks straight into the river. This is what we are about to put in charge of our laws.\"\n\n\"The model has been fixed.\"\n\n\"The model has been patched. There is a difference. The next failure will be in a different optimization, and the optimization after that. We will be patching the model when the trucks have been on the riverbed for a decade.\"
+- **Current image:** gfx/event_pictures/labor_strike_picket.dds
+
+### extra_law_events.60
+- **Title:** Demagogues at the Forum
+- **Description:** Trial runs of direct citizen voting under preview of [SCOPE.sLaw('current_law_scope').GetName] have been captured by populist agitators. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue this confirms their worst fears about mob rule.
+- **Flavor:** \"The crowd that cheered loudest in the square last night was the one that voted to demolish the public library. This is the wisdom you propose to make sovereign?\"\n\n\"The crowd will learn.\"\n\n\"The crowd will learn after the library is gone. The argument for democracy is not that the crowd is wise — it is that someone has to choose, and a king is no better. But let us at least be honest about the company we keep.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.61
+- **Title:** Industry or Public Consultation?
+- **Description:** The drafting committee for [SCOPE.sLaw('current_law_scope').GetName] faces a choice: pre-clear the bill with the affected institutions, or build a public mandate by airing it in the press first. Each path costs the goodwill of the other side.
+- **Flavor:** \"Show us the bill before the public sees it, and we will give you the benefit of our experience. Read about it in the morning paper, and we will give you the benefit of our resistance.\"\n\n\"That sounds remarkably like blackmail.\"\n\n\"It is consultation. Whether you call it blackmail depends on whether you think the consultation should be optional.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.62
+- **Title:** Crackdown or Guarantees?
+- **Description:** With panic spreading, the bill's drafters face a fork: punish those who caused the panic, or insure the public against the next one. The [SCOPE.sLaw('current_law_scope').GetName] can lean either way.
+- **Flavor:** \"You can hunt the wolves, or you can build a stronger fence. We argue for both, of course — but if forced to choose, we have very different favorites.\"\n\n\"Which side are you on?\"\n\n\"The side that has lost the most sheep. Which makes us, today, the side that argues loudest for the wolf hunt. Tomorrow we may argue for the fence.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.63
+- **Title:** Aristocratic or Industrial Currency?
+- **Description:** Currency reform under [SCOPE.sLaw('current_law_scope').GetName] needs an anchor. Old wealth wants the gold-bond foundation; new wealth wants the production-and-trade foundation. The country must choose one constituency to keep close.
+- **Flavor:** \"A currency reflects the people who hold it. Whose hands matter more to you — those that have always held wealth, or those that are making it now?\"\n\n\"Both. We need both.\"\n\n\"You need both, but you must choose one to anchor the law. The unchosen one will adapt. The chosen one will dictate. Pick which dictation you find more tolerable.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.64
+- **Title:** Index Wages or Protect Capital?
+- **Description:** The fiat-currency framework needs a safety valve. Labor wants wages indexed to inflation; capital wants a clause shielding cross-border investments from currency moves. Both clauses, naturally, are mutually exclusive.
+- **Flavor:** \"You will protect one of us at the expense of the other. Pick wisely. The party you fail to protect today will remember it for a long time.\"\n\n\"Then we will protect both.\"\n\n\"You cannot. The clauses are mutually exclusive. Whichever one survives the markup tells me where the next election will be lost.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.65
+- **Title:** Civil Liberties or National Security?
+- **Description:** The privacy bill [SCOPE.sLaw('current_law_scope').GetName] needs a carve-out clause. Civil libertarians want exemptions for journalists and lawyers; the security state wants exemptions for national-security investigations. Each clause closes the other's door.
+- **Flavor:** \"Either the journalist can keep her source, or the spy can name his target. A law that promises both promises one and delivers the other.\"\n\n\"Which one would it deliver?\"\n\n\"The spy. It always delivers the spy. The journalist gets the language of protection; the spy gets the implementing regulation.\"
+- **Current image:** gfx/event_pictures/surveillance_cameras_cityscape.dds
+
+### extra_law_events.66
+- **Title:** Freedom Safeguards or Content Moderation?
+- **Description:** The internet bill [SCOPE.sLaw('current_law_scope').GetName] reaches the moderation question. The free-speech contingent wants safeguards against takedowns; the safety contingent wants a content-moderation framework. Choose one as the bill's frame.
+- **Flavor:** \"You wrote a law about communication. You will end up writing a law about everything that can be communicated. Choose your principle now — you will not get to choose it later.\"\n\n\"The principle is freedom, with safeguards.\"\n\n\"The principle is one of those two words. Whichever you write first will swallow the other within five years of the bill's passage. Pick the one you can live with.\"
+- **Current image:** gfx/event_pictures/surveillance_cameras_cityscape.dds
+
+### extra_law_events.67
+- **Title:** Research Exemption or Religious Carve-Outs?
+- **Description:** Genetic-research legislation under [SCOPE.sLaw('current_law_scope').GetName] needs a final clause. Scientists ask for a broad research exemption; religious authorities ask for explicit carve-outs allowing them to refuse procedures. Both cannot fit cleanly.
+- **Flavor:** \"Conscience and curiosity are both rights, but they ask for different things from the law. The state must side with one, even if it claims to honor both.\"\n\n\"And if I side with curiosity?\"\n\n\"Then the priest will hear his conscience overruled in his own pulpit. He will live with it. He will also vote, and his neighbors will too.\"
+- **Current image:** gfx/event_pictures/genetics_laboratory.dds
+
+### extra_law_events.68
+- **Title:** Carve-Out the Big Firms or Apply Strictly?
+- **Description:** The antitrust bill [SCOPE.sLaw('current_law_scope').GetName] faces its key question: do established firms get a transition carve-out, or does enforcement apply across the board? Small business and big business want opposite answers.
+- **Flavor:** \"Apply the law strictly and you destroy what works. Carve out the giants and you protect what doesn't. The voters will judge whichever choice you make.\"\n\n\"And how shall they judge?\"\n\n\"By the prices in the shops next year. By the wages they take home in five. By how many of them work for the carve-outs in ten. The judgment is slow, but it is exact.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.69
+- **Title:** Creator Protection or Public Domain?
+- **Description:** The intellectual-property framework in [SCOPE.sLaw('current_law_scope').GetName] tilts one way or the other. Established creators want strong protection; libraries, researchers, and reformers want public-domain expansion. The drafting committee picks a side.
+- **Flavor:** \"The painter wants to be paid. The student wants to learn. The law must decide which of them is harder to refuse.\"\n\n\"They will both want both.\"\n\n\"They will both ask for both. Granting both is a different matter. The question is which one gets to call us niggardly when we fall short — and the answer is in the structure of the law, not its sentiments.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.70
+- **Title:** Strict Humanitarian Code or Realpolitik Exemptions?
+- **Description:** The rules-of-war bill [SCOPE.sLaw('current_law_scope').GetName] needs a final shape. Reformers want a clean humanitarian code; the military wants explicit exemptions for operational realities. The principle is not negotiable, except that it now is.
+- **Flavor:** \"A clean code looks beautiful in the abstract and falls apart in the field. An exemption-riddled code looks ugly on paper and survives the contact with reality. Choose which kind of ugliness you can live with.\"\n\n\"The exemption-riddled code creates the abuses it pretends to prevent.\"\n\n\"And the clean code creates martyrs out of officers who could not, in practice, obey it. Pick your scandal. The press will write about whichever you give them.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.71
+- **Title:** Civilian Oversight or Military Self-Regulation?
+- **Description:** The bill [SCOPE.sLaw('current_law_scope').GetName] needs a compliance regime. Reformers want civilian oversight panels; the military wants self-regulation with internal courts. The mechanism shapes the law's whole tone.
+- **Flavor:** \"Tell us who watches us and we will tell you what kind of law it really is.\"\n\n\"And what does that tell you?\"\n\n\"Whether the law was written by the people who will have to live under it, or by the people who will live above it. The two groups never produce the same draft.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.72
+- **Title:** Rehabilitation or Retribution?
+- **Description:** The criminal-justice bill [SCOPE.sLaw('current_law_scope').GetName] needs a guiding philosophy. Reformers want rehabilitation as the core principle; conservatives want retribution and deterrence to lead. Both philosophies cannot anchor the same statute.
+- **Flavor:** \"We can fix the criminal, or we can punish him. The state has the resources to commit to one of these. It does not have the resources to do both half-heartedly.\"\n\n\"The bill funds both.\"\n\n\"The bill funds both for two years. Then the rehabilitation budget will be cut, because punishment makes better campaign material than therapy. We have seen this before.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.73
+- **Title:** Pluralist or Assimilationist?
+- **Description:** Language policy under [SCOPE.sLaw('current_law_scope').GetName] reaches its turning point. Cultural societies want a pluralist accommodation; traditionalists want an assimilationist push. The country picks a long-term direction.
+- **Flavor:** \"A nation is held together by what its people say to each other. The law will determine whether that conversation has one tongue or many.\"\n\n\"And if the conversation has many?\"\n\n\"Then the nation has many sub-conversations, each strong, each distinct, each occasionally talking past the others. That is one kind of strength. The other is to have one conversation, lesser in variety but easier to govern. Both are real choices.\"
+- **Current image:** gfx/event_pictures/language_reform_classroom.dds
+
+### extra_law_events.74
+- **Title:** Hard Caps or Voluntary Disclosure?
+- **Description:** The election-finance bill [SCOPE.sLaw('current_law_scope').GetName] reaches its enforcement question. Reformers want hard donation caps; industry wants voluntary disclosure with matching public funds. Both cannot anchor the law.
+- **Flavor:** \"Limit me and I will find a way around your limit. Make me disclose, and at least the public will know what I did.\"\n\n\"And if the public does not care?\"\n\n\"Then the public deserves the politics it gets. The disclosure regime is for the public's sake, not mine. I would have preferred no rule at all.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.75
+- **Title:** Federal Protections or Centralized?
+- **Description:** The state-power bill [SCOPE.sLaw('current_law_scope').GetName] faces the moment of truth. Regional powers want federal protections written into the bill; centralizers want a unified administration. Each side will read the other's victory as a defeat.
+- **Flavor:** \"The provinces have memory. The capital has ambition. The law must decide which to honor — there is no compromise that both will recognize.\"\n\n\"There is always a compromise.\"\n\n\"There is always a compromise written on the page. There is rarely a compromise that survives implementation. The capital will implement. The provinces will remember. The compromise will be neither.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.76
+- **Title:** Permissive or Restrictive Ethics?
+- **Description:** The augmentation bill [SCOPE.sLaw('current_law_scope').GetName] reaches its ethics framework. Scientists want a permissive regime with oversight; religious authorities want a restrictive regime with research exceptions. The default tilt matters.
+- **Flavor:** \"Begin with 'yes, except' and you will end up with a society that says yes. Begin with 'no, unless' and you will end up with a society that says no. The first word in the law is the whole law.\"\n\n\"And the exceptions?\"\n\n\"The exceptions narrow over time when the default is permissive. They widen over time when the default is restrictive. The law's centre of gravity is wherever the law's first word puts it. Choose the first word with care.\"
+- **Current image:** gfx/event_pictures/automation_robots_factory.dds
+
+### extra_law_events.77
+- **Title:** Equal Split or Primogeniture?
+- **Description:** The inheritance bill [SCOPE.sLaw('current_law_scope').GetName] reaches the bedrock question. New-money families want equal split among heirs; old-money families want primogeniture preserved. The principle is not arithmetic — it is whose families survive.
+- **Flavor:** \"Equal inheritance dissolves the great houses in three generations. Primogeniture preserves them for ten. The state will choose which timeline it lives in.\"\n\n\"And the cadet sons?\"\n\n\"Will become lawyers, soldiers, merchants. They will build the next generation's wealth in places the old houses do not reach. Whether this is progress or loss depends on which side of the great house you are sitting on.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.78
+- **Title:** Marriage Rights or Employment Rights First?
+- **Description:** The LGBTQ bill [SCOPE.sLaw('current_law_scope').GetName] reaches its prioritization moment. Advocates split: marriage rights as the symbol, or employment protections as the substance? The bill can lead with one.
+- **Flavor:** \"The wedding ring or the paycheck. Both matter, but the law must lead with one. Which one you lead with tells the country what kind of equality you mean.\"\n\n\"And what kind do we mean?\"\n\n\"If you ask the country, the country will answer in pieces. The lawyer will say marriage; the worker will say wages. Both will be telling you what their own lives need first. The law tells us what the state thinks is most worth fighting for.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.79
+- **Title:** Pro-Natalist or Family Planning?
+- **Description:** The family-policy bill [SCOPE.sLaw('current_law_scope').GetName] needs a primary direction. Traditionalists want pro-natalist incentives; reformers want comprehensive family planning. The bill's core philosophy will be read for decades.
+- **Flavor:** \"You can subsidize more babies, or you can subsidize choice about babies. The treasury can afford one of these as a flagship. Pick which.\"\n\n\"Both are necessary.\"\n\n\"Both are necessary. Neither will get full funding. The flagship one will be defended in every speech; the other will be defended only by the people who use it. The flagship one wins.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.80
+- **Title:** Transparency or Stability First?
+- **Description:** The right-to-information bill [SCOPE.sLaw('current_law_scope').GetName] reaches its presumption question. Transparency advocates want disclosure as the default; the security establishment wants stability-protective exemptions written in. The presumption matters.
+- **Flavor:** \"Begin with disclosure and you build a state that explains itself. Begin with exemptions and you build a state that need not. The architecture is the policy.\"\n\n\"And we explain ourselves now.\"\n\n\"You explain when asked. The bill decides whether the default is asking or being told. The difference is small in any one case. Over a decade, the difference is the whole posture of the state.\"
+- **Current image:** gfx/event_pictures/media_press_freedom.dds
+
+### extra_law_events.81
+- **Title:** Affirmative Action or Equal Treatment?
+- **Description:** The minority-rights bill [SCOPE.sLaw('current_law_scope').GetName] reaches the framework question. Reformers want affirmative-action measures; centrists want equal-treatment guarantees. The choice of principle shapes a generation.
+- **Flavor:** \"Treat people equally and the old inequalities persist. Treat them differently to fix the old inequalities and you create new ones. Pick your error.\"\n\n\"There is no error-free path.\"\n\n\"There is no error-free path, and the people who tell you there is are selling you the other party's bill. Decide which mistakes you can defend in twenty years, and write the law accordingly.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.82
+- **Title:** Retraining or UBI?
+- **Description:** The welfare bill [SCOPE.sLaw('current_law_scope').GetName] reaches its philosophical fork. Reformers want retraining programs first; advocates want UBI as the safety net. Industry warns of the cost either way; the choice is which constituency the bill is for.
+- **Flavor:** \"Teach a man to fish, the proverb says. Give a man a fish, the modern reformer answers. Either way, someone pays for the boat. The state must decide which message it wants to send.\"\n\n\"Can we send both?\"\n\n\"You can send both. The message is whichever one gets the larger budget line. The country will read the budget line, not the speech.\"
+- **Current image:** gfx/event_pictures/labor_strike_picket.dds
+
+### extra_law_events.83
+- **Title:** Tech First or Human Oversight First?
+- **Description:** The algorithmic-governance bill [SCOPE.sLaw('current_law_scope').GetName] reaches its operational question. Technocrats want the algorithm to lead with human override available; humanists want human oversight throughout with algorithmic support. The default matters.
+- **Flavor:** \"When the algorithm says one thing and the human says another, which one wins by default? That answer is the entire law.\"\n\n\"The human can always override.\"\n\n\"The human can always override on paper. In practice, the override carries a paperwork burden, a review meeting, and a recorded justification. The default wins. It always does.\"
+- **Current image:** gfx/event_pictures/labor_strike_picket.dds
+
+### extra_law_events.84
+- **Title:** Direct Voting or Deliberative Chambers?
+- **Description:** The direct-democracy bill [SCOPE.sLaw('current_law_scope').GetName] reaches its instrument question. Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here.
+- **Flavor:** \"A vote of all the people takes a day. A deliberation by a hundred chosen by lot takes a week and produces a better answer. The state must decide which it values more.\"\n\n\"Better by whose standard?\"\n\n\"By every standard except the speed of the answer. Which is, of course, the standard that wins most arguments in politics. Hence the difficulty of getting the deliberative model adopted.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
 ## heir_education_events.txt
 
 ### heir_education_events.1
 - **Title:** A Promising Pupil
 - **Description:** The tutors report that the [concept_heir] has shown remarkable aptitude in their studies, grasping complex material with surprising ease. The court is quietly impressed.
-- **Flavor:** \"The young one asked a question today that I myself could not answer. I had to consult three volumes before I found it.\"\n\n\"And?\
+- **Flavor:** \"The young one asked a question today that I myself could not answer. I had to consult three volumes before I found it.\"\n\n\"And?\"\n\n\"And it was a question about the limits of royal authority. The volumes were not encouraging. I will need to revise the curriculum before the next lesson.\"\n\n\"You are training a sovereign, not a scholar.\"\n\n\"I had thought so. The young one is making it harder to tell the difference.\"
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
 ### heir_education_events.2
 - **Title:** A Difficult Student
 - **Description:** The [concept_heir] has grown restless and resistant to instruction, questioning the purpose of their studies and testing the patience of every tutor in the palace.
-- **Flavor:** \"I will not learn another dead language! What use is Attic Greek to a modern sovereign?\
+- **Flavor:** \"I will not learn another dead language! What use is Attic Greek to a modern sovereign?\"\n\n\"Your grandfather knew six.\"\n\n\"My grandfather lost two wars and the third only just. Perhaps the six languages were not the source of his strength.\"\n\nThe tutor wrote down the response, sighed, and rewrote it before showing it to the regent. The original phrasing, he judged, would have ended his employment.\"
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
 ### heir_education_events.3
 - **Title:** Foreign Correspondence
 - **Description:** Our allies have extended an invitation for the [concept_heir] to spend time abroad, studying at their finest institutions. The experience would be invaluable for diplomatic training, though some worry about foreign influence on the young sovereign.
-- **Flavor:** \"To understand the world, one must first leave home.\"\n\n\"And to rule it, one must eventually come back.\"
+- **Flavor:** \"To understand the world, one must first leave home.\"\n\n\"And to rule it, one must eventually come back.\"\n\n\"And in the meantime?\"\n\n\"In the meantime, the heir learns three languages, six histories, and the manners of every court in Europe. None of it will be of use here. All of it will shape how the heir thinks about here when they return. That is the value of leaving — not the knowledge brought back, but the change in the eye that returns.\"
 - **Current image:** gfx/event_pictures/royal_education_tutoring.dds
 
 ### heir_education_events.200
 - **Title:** A Prince's Education
 - **Description:** The education of [ROOT.GetCountry.GetName]'s [concept_heir] is complete. Years of tutoring, study, and carefully managed experiences have shaped the young royal into a future monarch — for better or worse.
-- **Flavor:** #italic The crown awaits one who may prove worthy of it.#!
+- **Flavor:** \"The crown awaits one who may prove worthy of it,\" the old tutor said, more to himself than to the regent.\n\n\"And will the new one?\"\n\n\"That is the question every generation asks of the next. The answer is rarely the one we hoped for. Sometimes it is better. The young one is better in some ways. Worse in others. The total will be a sovereign, which is more than we deserve and less than we asked for.\"
 - **Current image:** gfx/event_pictures/heir_education_outcome.dds
 
 ## international_relations_events.txt
@@ -1357,43 +1677,43 @@ Each event is listed with its title, description, and flavor text (where availab
 ### irredentism.1
 - **Title:** The Diaspora Calls
 - **Description:** Communities of [SCOPE.sCountry('irr_unifier').GetAdjective] in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the [concept_homeland] — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.
-- **Flavor:** What is owed to a people of our own blood living under another flag?
+- **Flavor:** \"They are our blood. They live under another flag, but they are our blood.\"\n\n\"And what do they want from us?\"\n\n\"They want what every diaspora wants. To be remembered. To be claimed. To know that the homeland has not forgotten them — and to know what we would do if their flag changed.\"
 - **Current image:** europenorthamerica_native_american
 
 ### irredentism.2
 - **Title:** Foreign Power Demands Our Land
 - **Description:** A diplomatic note has been delivered. The government of our same-culture neighbor demands one of our states back, citing kinship and historical right. The press is outraged; the Foreign Ministry is meeting in continuous session.
-- **Flavor:** Whose nation is this?
+- **Flavor:** \"They want the state. They want all of it. They cite a treaty signed in seventeen-twenty-eight and a census taken under the second emperor.\"\n\n\"And the people of the state?\"\n\n\"Have not been asked. Both sides are speaking on their behalf. Neither side has noticed.\"
 - **Current image:** europenorthamerica_rich_and_poor
 
 ### irredentism.3
 - **Title:** An Opportunity for Union
 - **Description:** Relations with [SCOPE.sCountry('target_country').GetName] are warm enough that voices on both sides have begun to whisper of voluntary union. They share our culture; their lands hold pieces of our heartland. The moment, if it exists, is fragile.
-- **Flavor:** A union of equals, freely entered.
+- **Flavor:** \"They have proposed a union. Freely entered, equal partners, shared parliament.\"\n\n\"And the smaller print?\"\n\n\"They are the larger nation. The shared parliament will be majority theirs. Equal partners is a phrase that survives the signing ceremony and rarely the first decade.\"
 - **Current image:** africa_diplomats_negotiating
 
 ### irredentism.4
 - **Title:** A Sister Nation Asks Us to Join
 - **Description:** A formal proposal has arrived. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. There are voices in our parliament for it; there are voices against.
-- **Flavor:** What is a nation, if not a choice?
+- **Flavor:** \"The formal offer arrived this morning. They are offering union — full citizenship, shared institutions, no border.\"\n\n\"And we are to dissolve ourselves into them?\"\n\n\"That is what union means in the smaller country. The benefits will be real. The flag will be theirs. The question is what is more precious — the prosperity that follows the union, or the name that does not.\"
 - **Current image:** africa_diplomats_negotiating
 
 ### irredentism.7
 - **Title:** [SCOPE.sCountry('irr_requester').GetName] Asks Us to Bless a War
 - **Description:** Our bloc client [SCOPE.sCountry('irr_requester').GetName] requests our blessing to wage a war of reunification against [SCOPE.sCountry('target_country').GetName]. The decision is ours; refusing risks straining the bloc.
-- **Flavor:** When clients ask for blessing, leaders learn the price of leadership.
+- **Flavor:** \"They want our blessing for a war of reunification.\"\n\n\"And if we refuse?\"\n\n\"The bloc fractures. They believed our solidarity meant approval as well as protection. We are about to teach them the difference. The lesson will be expensive.\"
 - **Current image:** africa_diplomats_negotiating
 
 ### irredentism.8
 - **Title:** [SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union
 - **Description:** Our [Concept('concept_power_bloc_member', 'bloc member')] [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName]. We may bless the merger or forbid it.
-- **Flavor:** Sister-nations finding their way to one flag — but on whose terms?
+- **Flavor:** \"The bloc member has been offered union. They are considering it.\"\n\n\"And we can bless or forbid?\"\n\n\"We can. The blessing strengthens the cause but loses a useful client. The forbid keeps the client and strains the cause. Both decisions are bets on the shape of the next decade. Neither bet is safe.\"
 - **Current image:** africa_diplomats_negotiating
 
 ### irredentism.6
 - **Title:** [SCOPE.sCountry('irr_annexed_country').GetName] Absorbed by [SCOPE.sCountry('irr_unifier').GetName]
 - **Description:** (no localization)
-- **Flavor:** Borders move; the map remembers.
+- **Flavor:** \"Two nations became one this morning. Peacefully, in one telling; by force, in another.\"\n\n\"Which is the true version?\"\n\n\"The treaty was signed. The treaty was also signed at gunpoint. Both can be true. The map will record only the result. The remembrance is what the families pass to their grandchildren — and the grandchildren will not agree on what to remember.\"
 - **Current image:** africa_diplomats_negotiating
 
 ## mental_health_events.txt
@@ -1401,43 +1721,43 @@ Each event is listed with its title, description, and flavor text (where availab
 ### mental_health_events.1
 - **Title:** The Burnout Epidemic
 - **Description:** Reports of widespread workplace burnout have reached alarming levels. Productivity is declining as workers collapse under the pressure of modern life. Medical professionals warn of a systemic crisis.
-- **Flavor:** The doctor asked how many hours. Sixty a week, the patient said. Sometimes seventy. She did not mention the weekends.
+- **Flavor:** \"How many hours?\" the doctor asked.\n\n\"Sixty a week. Sometimes seventy.\"\n\nShe did not mention the weekends. The doctor wrote down sixty and added a note that the patient was understating, because everyone understated.\n\n\"What are you here for?\" he asked her.\n\n\"I can't remember,\" she said. \"I'm too tired to remember.\"
 - **Current image:** gfx/event_pictures/workplace_burnout.dds
 
 ### mental_health_events.2
 - **Title:** Youth Mental Health Crisis
 - **Description:** Youth suicide and self-harm rates have reached unprecedented levels. Experts point to social media, academic pressure, and social isolation as contributing factors. Parents demand government intervention.
-- **Flavor:** The school counsellor's waiting list had forty-three names on it. She was the only counsellor in the district.
+- **Flavor:** The school counsellor's waiting list had forty-three names on it. She was the only counsellor in the district. The girl who came in on Tuesday had been on the list for six weeks.\n\n\"It's about my friend,\" the girl said, by way of opening. \"I'm worried.\"\n\nThe counsellor wrote this down. She wrote down friend in quotation marks. She had learned, six weeks at a time, that the friend in such conversations was almost never the friend.
 - **Current image:** gfx/event_pictures/youth_mental_health_crisis.dds
 
 ### mental_health_events.3
 - **Title:** The Addiction Crisis
 - **Description:** A devastating addiction crisis is sweeping the nation. Whether it's synthetic opioids, digital addiction, or new designer drugs, millions are falling into dependency. Hospitals are overwhelmed, families are shattered, and productive capacity is declining.
-- **Flavor:** The clinic's waiting room held a factory worker, a banker's wife, and a sixteen-year-old student. None of them looked at each other.
+- **Flavor:** The clinic's waiting room held a factory worker, a banker's wife, and a sixteen-year-old student. None of them looked at each other.\n\nThe nurse called the names in turn. Each of them rose, glanced at the others as if seeing them for the first time, and walked through to the back. Each of them was the only person in the room they recognized as themselves. Each of them was wrong. They had more in common than any of them was prepared to admit.
 - **Current image:** gfx/event_pictures/addiction_struggle.dds
 
 ### mental_health_events.4
 - **Title:** Veteran PTSD Wave
 - **Description:** Soldiers returning from recent conflicts are struggling with severe PTSD, overwhelming existing mental health services. The images of traumatized veterans on the streets are becoming impossible to ignore.
-- **Flavor:** The veteran's wife said he hadn't slept through the night since he came home. That was three years ago.
+- **Flavor:** The veteran's wife said he hadn't slept through the night since he came home. That was three years ago.\n\n\"What does he do, when he can't sleep?\" the doctor asked.\n\n\"He goes to the garage. He cleans tools that were already clean. He counts the bolts in his toolbox. Once I found him with a flashlight, walking the perimeter of the house.\"\n\n\"And in the morning?\"\n\n\"In the morning he says nothing, and goes to work.\"
 - **Current image:** gfx/event_pictures/ptsd_soldier_returning.dds
 
 ### mental_health_events.5
 - **Title:** Institutional Care Scandal
 - **Description:** Investigative journalists have exposed horrific conditions in state mental health institutions: patients restrained for days, unsanitary conditions, and widespread abuse. The public is outraged and demanding reform.
-- **Flavor:** The photographs showed restraint marks on the patients' wrists. The facility director said conditions were 'in line with standard practice.'
+- **Flavor:** The photographs showed restraint marks on the patients' wrists. The facility director said conditions were \"in line with standard practice.\"\n\n\"Whose standard?\" the journalist asked.\n\n\"The standard of any such facility.\"\n\n\"Show me another facility.\"\n\nThe director did not, and the photographs ran in the morning edition under the headline the editor had drafted before the interview began.
 - **Current image:** gfx/event_pictures/institutional_abuse_exposed.dds
 
 ### mental_health_events.100
 - **Title:** A Crisis Ignored
 - **Description:** (no localization)
-- **Flavor:** The funding request was denied for the third consecutive year. The waiting list grew longer.
+- **Flavor:** The funding request was denied for the third consecutive year. The waiting list grew longer.\n\nThe minister gave the same speech he had given the last two years. The journalists who had covered both previous speeches did not bother to take notes. The waiting list, as it had been the year before and the year before that, was forty-three names in one school district and counting.\n\n\"What do we tell the families?\" someone asked.\n\nThe minister did not answer. He had not been asked, in the end.
 - **Current image:** gfx/event_pictures/mental_health_stigma.dds
 
 ### mental_health_events.200
 - **Title:** A Healthier Nation
 - **Description:** [ROOT.GetCountry.GetName] has built a comprehensive mental health [concept_infrastructure]. Stigma has been reduced, care is accessible, and the nation's psychological well-being has seen marked improvement.
-- **Flavor:** #italic It is no measure of health to be well-adjusted to a profoundly sick society.#!
+- **Flavor:** \"It is no measure of health,\" the old psychiatrist said, \"to be well-adjusted to a profoundly sick society.\"\n\nHe had been saying this for fifty years, and the profession had treated it as a quiet dissent. He said it at this year's conference and it earned a standing ovation.\n\n\"The society is not yet healthy. But it is no longer profoundly sick. In our field, that is what counts as progress.\"
 - **Current image:** gfx/event_pictures/mental_health_supported.dds
 
 ## ministry_law_events.txt
@@ -1446,115 +1766,343 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** Staffing the New Ministry
 - **Description:** The government has begun the enormous task of standing up [SCOPE.sLaw('current_law_scope').GetName]. Advertisements for clerks, administrators, and departmental heads have been posted across every public notice board, and a flood of applications - some qualified, many spectacularly not - has poured in.
 - **Flavor:** The new ministry shall require, at minimum, fourteen senior administrators, forty-two departmental heads, two hundred and seven clerks, and - if the budget permits - a reliable doorman. I trust these positions will be filled strictly on merit, which is to say, by the cousins of those already appointed.
-- **Current image:** gfx/event_pictures/ministry_establishment.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.2
 - **Title:** The Budget Debate
 - **Description:** Parliament has erupted into heated argument over the proposed funding for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] insist the money would be better spent elsewhere, while proponents argue that the new ministry cannot function without proper resources.
 - **Flavor:** The honorable member claims this ministry will cost a mere trifle. Allow me to remind him that the last 'trifle' we approved has consumed an entire wing of the treasury and shows no sign of producing anything more useful than memoranda addressed to other memoranda.
-- **Current image:** gfx/event_pictures/ministry_establishment.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.3
 - **Title:** Bureaucratic Turf Wars
 - **Description:** The creation of [SCOPE.sLaw('current_law_scope').GetName] has provoked a turf war among existing government departments. Senior officials who have managed these matters for years are reluctant to cede authority to a new ministry and its untested staff.
 - **Flavor:** The permanent secretary looked as though I had asked him to hand over his firstborn child. 'You cannot simply take the Trade Division,' he said, clutching his files to his chest. 'I have been nurturing this department since before you were in Parliament.'
-- **Current image:** gfx/event_pictures/ministry_establishment.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.4
 - **Title:** The Redundant Clerks
 - **Description:** With the proposed passage of [SCOPE.sLaw('current_law_scope').GetName], hundreds of government employees face the prospect of redundancy. The corridors of the soon-to-be-dissolved ministry are filled with anxious functionaries, their desks already half-packed, their futures uncertain.
 - **Flavor:** Twenty-three years I have given to this ministry. Twenty-three years of filing, stamping, and indexing. And now they tell me my services are no longer required. I suppose I shall have to learn what it is that ordinary people do with their afternoons.
-- **Current image:** gfx/event_pictures/ministry_establishment.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.5
 - **Title:** The Generals' War Room
 - **Description:** Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a pointed memorandum regarding the proposed [SCOPE.sLaw('current_law_scope').GetName]. They insist that military matters require military expertise, and that civilian bureaucrats have no business directing the affairs of war.
 - **Flavor:** The Field Marshal was blunt: 'You may legislate all you wish about the procurement of boot-leather and the allocation of rations. But the moment a clerk in a morning coat presumes to tell me how to deploy a brigade, I shall tender my resignation and advise my officers to do the same.'
-- **Current image:** gfx/event_pictures/ministry_establishment.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.6
 - **Title:** The Ambassador's Dilemma
 - **Description:** A [concept_diplomatic_incident] with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName].
 - **Flavor:** The ambassador, it transpires, greeted the foreign dignitary with the traditional salutation for a funeral rather than a state banquet. The dignitary was not amused. I am told relations have been set back by approximately a decade.
-- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.7
 - **Title:** The Merchant's Petition
 - **Description:** A delegation of merchants and manufacturers, led by prominent members of the [SCOPE.gsInterestGroup('industrialists_ig').GetName], has presented a petition regarding [SCOPE.sLaw('current_law_scope').GetName]. They argue that the chaos of competing regulations and tariffs is strangling commerce, and that a coordinated ministry is essential.
 - **Flavor:** I must apply to three different offices to export a single crate of textiles. The first grants me a permit, the second demands a different permit, and the third informs me that both permits expired yesterday. A Ministry of Commerce would, at the very least, reduce the permits to one.
-- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.8
 - **Title:** The Artist's Subsidy
 - **Description:** The debate over [SCOPE.sLaw('current_law_scope').GetName] has drawn the nation's artists and intellectuals into a furious argument. Some in the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] welcome state patronage as the foundation of a cultural renaissance, while others see it as the first step toward censorship and conformity.
 - **Flavor:** The poet stood before the committee and declared that he would sooner burn his manuscripts than submit them for government approval. The painter beside him quietly noted that government approval came with a very generous stipend, and asked where one might apply.
-- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.9
 - **Title:** Capital vs. Labor
 - **Description:** The proposed [SCOPE.sLaw('current_law_scope').GetName] has ignited the eternal struggle between capital and labor. Factory owners and workers' representatives have each mounted fierce campaigns, and the question of whose interests the new ministry will serve has become the dominant political issue of the season.
 - **Flavor:** The factory owner slammed his fist on the table: 'A ministry that coddles workers will bankrupt us all!' The union leader replied without blinking: 'A ministry that coddles owners already exists - it is called the rest of the government.'
-- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.10
 - **Title:** The Smokestack Question
 - **Description:** The [SCOPE.gsInterestGroup('industrialists_ig').GetName] have mounted a vigorous campaign against [SCOPE.sLaw('current_law_scope').GetName], arguing that environmental regulation will cripple the nation's industry and cost thousands of jobs. Meanwhile, reports of poisoned rivers and blackened skies have galvanized public support.
 - **Flavor:** The factory owner pointed at his smokestacks and said they employed four hundred men. The fisherman downstream pointed at his empty nets and said the river had been dead for two years. The committee heard both testimonies and adjourned without a ruling.
-- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.11
 - **Title:** The Shadow Files
 - **Description:** Leaked documents have revealed the extraordinary capabilities that [SCOPE.sLaw('current_law_scope').GetName] would grant to the state - surveillance networks, informant systems, and the power to operate beyond ordinary legal oversight. The public is uneasy, though some argue such tools are the price of security.
 - **Flavor:** The leaked memorandum was clinical in its language: 'Full spectrum monitoring of communications, including private correspondence, shall be considered a standard operational capability.' The journalist who published it has since found it prudent to relocate abroad.
-- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.12
 - **Title:** The Refugee Ship
 - **Description:** A ship carrying hundreds of displaced persons has arrived in our harbor, their [concept_homeland] torn apart by war and famine. The sight of desperate families huddled on the docks has given urgency to the debate over [SCOPE.sLaw('current_law_scope').GetName].
 - **Flavor:** The woman held her infant up to the customs officer and said, in halting words he could barely understand, 'Please. This is all I have left.' Behind her, the queue stretched to the end of the pier.
-- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.13
 - **Title:** The Loudspeaker State
 - **Description:** The proposal to establish [SCOPE.sLaw('current_law_scope').GetName] has sent a chill through the nation's newspaper offices and printing houses. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] fear that a ministry devoted to controlling information will transform the free press into a megaphone for the state.
 - **Flavor:** The editor-in-chief received the proposed regulations and read them twice. Then he looked at his staff and said, 'Gentlemen, we have two choices: we can print what they tell us to print, or we can start looking for honest work.'
-- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.14
 - **Title:** The Laboratory of the State
 - **Description:** A breakthrough at a university laboratory has reignited the debate over [SCOPE.sLaw('current_law_scope').GetName]. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] argue that only coordinated state investment can turn such discoveries into practical advances, while skeptics warn that bureaucrats make poor scientists.
 - **Flavor:** The professor presented his findings with quiet pride. The parliamentarian beside me leaned over and whispered, 'Very impressive. Now, can it win a war?' I fear that is precisely the question the Ministry will be created to answer.
-- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.15
 - **Title:** The Watchers
 - **Description:** Reports of underground resistance networks have given fresh ammunition to supporters of [SCOPE.sLaw('current_law_scope').GetName]. Pamphlets circulate in secret, suspicious meetings are held in cellars, and the authorities fear that dissent is spreading faster than it can be monitored.
 - **Flavor:** The informant's report was terse: 'They meet every Thursday in the back room of the printer's shop. They read forbidden texts and discuss ideas that would make your blood run cold.' When asked what these ideas were, he admitted he hadn't actually attended a meeting, but had heard about them from another informant.
-- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.16
 - **Title:** The Tainted Product
 - **Description:** A scandal has erupted after dozens of citizens fell ill from a contaminated product sold by a prominent manufacturer. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] protest that it was an isolated incident, but investigators found that the company had been cutting costs at the expense of safety for years.
 - **Flavor:** The label promised 'Pure and Wholesome.' The chemist's analysis found sawdust, chalk, and a substance he diplomatically described as 'of uncertain animal origin.' When confronted, the manufacturer protested that his competitors used far worse.
-- **Current image:** gfx/event_pictures/ministry_reform.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.17
 - **Title:** The City Rises
 - **Description:** The nation's cities are growing at a pace that alarms even their most enthusiastic boosters. Tenements spring up overnight, sewage systems overflow, and the air grows thick with soot. The case for [SCOPE.sLaw('current_law_scope').GetName] has never been more urgent - or more controversial.
 - **Flavor:** I walked through the new district this morning. In the space where a meadow stood last year, there are now fourteen tenement blocks, a factory, and precisely zero public parks. The developer assured me that a park was planned, but it kept being replaced by more profitable buildings.
-- **Current image:** gfx/event_pictures/ministry_reform.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.18
 - **Title:** The Pulpit and the State
 - **Description:** The proposal for [SCOPE.sLaw('current_law_scope').GetName] has provoked a fierce reaction from the [SCOPE.gsInterestGroup('devout_ig').GetName]. Some clerics welcome state support as a means to spread the faith, while others fear that government involvement will turn the church into an instrument of political control.
 - **Flavor:** The bishop's letter was measured: 'The church has survived empires, revolutions, and heresies without the assistance of a government ministry. We are not entirely certain we require one now. That said, if such a ministry were to include a generous building fund for cathedrals, we would be willing to hear the proposal in greater detail.'
-- **Current image:** gfx/event_pictures/ministry_reform.dds
+- **Current image:** (unknown)
 
 ### ministry_law_events.19
 - **Title:** The Distant Crisis
 - **Description:** Reports of a devastating famine in a foreign land have filled the newspapers with harrowing images. Humanitarian organizations are pleading for the government to act, and supporters of [SCOPE.sLaw('current_law_scope').GetName] argue that a dedicated ministry is the only way to respond effectively to such crises.
 - **Flavor:** The photograph showed a child with ribs like a birdcage, staring at the camera with enormous, uncomprehending eyes. It appeared on the front page of every major newspaper, and by noon the Prime Minister's office had received ten thousand letters demanding action.
-- **Current image:** gfx/event_pictures/ministry_reform.dds
+- **Current image:** (unknown)
+
+### ministry_law_events.20
+- **Title:** Underqualified Hires Exposed
+- **Description:** A series of high-profile scandals has surfaced from the recruitment campaign for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] thunder that the new ministry is being filled by patronage hacks, not professionals.
+- **Flavor:** \"We were promised a ministry of experts. What we got was a ministry of cousins. The country deserves better, and so does the institution.\"\n\n\"Names?\"\n\n\"The deputy director is the minister's brother-in-law. The procurement chief is the minister's college roommate. The press secretary is the minister's wife's cousin. We could go on. The list is twelve pages.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.21
+- **Title:** Treasury Pushes Back
+- **Description:** The Ministry of Finance has issued a formal memorandum opposing the budgetary commitments for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] echo the warning in increasingly strident terms.
+- **Flavor:** \"Every coin allocated here is a coin taken from elsewhere. The minister has not done the arithmetic. We have, and the answer alarms us.\"\n\n\"What did the arithmetic show?\"\n\n\"A first-year cost the bill claims will be modest, and a five-year cost the bill prefers not to mention. The five-year cost is what bankrupts ministries — and us along with them.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.22
+- **Title:** Bureaucratic Sabotage
+- **Description:** Rival departments are quietly obstructing the establishment of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make sport of the resulting confusion in the press.
+- **Flavor:** \"You cannot create a new river by digging in the desert. You must redirect existing water — and that means quarrelling with everyone whose field went dry.\"\n\n\"And the quarrels are quiet so far.\"\n\n\"The quarrels are private so far. Loud and private are different things. Wait until the budget moves and see how private they remain.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.23
+- **Title:** Final Stand of the Bureau
+- **Description:** Career officials slated for redundancy under [SCOPE.sLaw('current_law_scope').GetName] have mounted an unexpectedly effective rearguard action. The [SCOPE.gsInterestGroup('opposing_ig').GetName] take up their cause in public.
+- **Flavor:** \"We have served three governments and weathered two reorganizations. We will weather this one too — or we will make the cost of dissolving us memorable.\"\n\n\"What does 'memorable' mean here?\"\n\n\"It means the files that the new ministry will need to do its job. We do not threaten to misplace them. We merely note that the indexing system is something we devised, and not all of us are eager to explain it to our replacements.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.24
+- **Title:** The General Staff Withholds Cooperation
+- **Description:** Senior officers have made it quietly known that [SCOPE.sLaw('current_law_scope').GetName] will not receive their full cooperation. The [SCOPE.gsInterestGroup('opposing_ig').GetName] speak of constitutional concerns.
+- **Flavor:** \"We will obey the law. We will not pretend to like it, and we will not promise to make it work. Those are different things, sir.\"\n\n\"And if it does not work?\"\n\n\"Then someone will say we should have warned them. We are warning them now, in writing, on the record. The decision is still parliament's. We are merely defending our future reputations.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.25
+- **Title:** Foreign Capitals Take Note
+- **Description:** Ambassadors have begun making pointed inquiries about [SCOPE.sLaw('current_law_scope').GetName] and what it may signal. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill is generating exactly the wrong kind of attention abroad.
+- **Flavor:** \"A nation's foreign policy is read by its rivals as a book of intentions. The current chapter, regrettably, is being read in capitals that have long memories.\"\n\n\"And what does the chapter say?\"\n\n\"It says we are reorganizing our state to project something. They cannot quite decide what. While they decide, their navies move closer to ours, and their ambassadors return our calls more slowly.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.26
+- **Title:** Merchants Lobby Against
+- **Description:** A coalition of trading houses has hired some of the country's sharpest counsel to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make their case in every chamber that will listen.
+- **Flavor:** \"A ministry that meddles in trade is a ministry that learns the value of meddling by costing the country its export markets. We have seen this play before — and it always ends the same way.\"\n\n\"You sound certain.\"\n\n\"I sound experienced. The same speech has been delivered to four previous ministries by four previous lobbies, and each time the ministry won and the markets shrank. We are not yet too tired to give the speech once more.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.27
+- **Title:** Artists Decry State Patronage
+- **Description:** A manifesto signed by leading artists and writers has circulated in opposition to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as creeping censorship.
+- **Flavor:** \"The painter who eats from the state's hand soon paints what the state asks for. We did not become artists to become courtiers.\"\n\n\"And the painter who eats from no hand at all?\"\n\n\"Eats less. We accept it. We knew the terms when we chose the brush. We did not choose the salary, and we will not be told what colour to use because the salary now exists.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.28
+- **Title:** Strikes Threaten the Ministry
+- **Description:** Coordinated industrial action has erupted over the labor provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are organizing a wider walkout if the bill proceeds.
+- **Flavor:** \"You wanted a labor ministry. Here is labor's reply — we do not consent to being administered. Govern us, and we will withhold what we alone can give.\"\n\n\"And what is it that you alone can give?\"\n\n\"Our hands. The factories are not industrial machines. They are arrangements between owners and us. The arrangement requires our cooperation. Cooperation has a price, and the price is consultation before legislation.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.29
+- **Title:** Industry's Counter-Attack
+- **Description:** Industrialists have launched a coordinated public-affairs campaign against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the proposed regulations will drive plants overseas.
+- **Flavor:** \"The smoke from our furnaces is the smell of prosperity. Regulate it away and you will not regulate the smell — only the prosperity.\"\n\n\"And the children with breathing problems?\"\n\n\"Will work in the factories when they are old enough. Their parents would prefer a paycheck and a cough to no paycheck and clean air. We have asked them. The vote was not close.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.30
+- **Title:** The Shadow Bureau Pushes Back
+- **Description:** Existing security services have made it discreetly known that [SCOPE.sLaw('current_law_scope').GetName] is unwelcome. The [SCOPE.gsInterestGroup('opposing_ig').GetName] speak in dark hints about operational consequences.
+- **Flavor:** \"The shadows do not consent to be moved. You may legislate the chairs in the room, but the men who sit in them outlast every minister.\"\n\n\"And the minister will outlast the next election?\"\n\n\"The minister might. We will outlast the next four. The arithmetic is on our side. Patience is the bureau's only weapon, and the only one it has ever needed.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.31
+- **Title:** The Crisis Worsens
+- **Description:** Just as [SCOPE.sLaw('current_law_scope').GetName] approaches passage, a fresh wave of refugees has overwhelmed border stations. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue the moment is the worst possible for institutional changes.
+- **Flavor:** \"You build the ship while the storm is breaking. Either you finish in time, or you watch what you have built so far wash away.\"\n\n\"And if we pause?\"\n\n\"If we pause, we watch the storm without the ship at all. The choice is between a half-built ship and no ship. Neither is good. One is worse.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.32
+- **Title:** The Press Rebels
+- **Description:** Independent newspapers have closed ranks against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as the first step toward state-controlled media.
+- **Flavor:** \"When the state opens an office of public information, it is to spread information about itself. Where this leads, history has already written.\"\n\n\"And history has examples to the contrary.\"\n\n\"History has exceptions. The rule is what the office becomes in its third minister, not its first. The first minister always promises restraint. The third minister always discovers the rules can be rewritten.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.33
+- **Title:** Academics Walk Out
+- **Description:** Leading scientists have walked out of consultation meetings on [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will politicize research funding.
+- **Flavor:** \"Science is a slow conversation between honest people. Insert a politician into that conversation and you will get neither science nor honest people.\"\n\n\"The bill includes a research council to insulate the science from the politics.\"\n\n\"The research council is appointed by the minister. The minister is appointed by the party. The party is appointed by the voters. The voters do not vote on physics. They vote on prices. Eventually the physics learns to speak of prices.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.34
+- **Title:** Whistleblowers Emerge
+- **Description:** Documents leaked from preliminary work on [SCOPE.sLaw('current_law_scope').GetName] have made their way to opposition journals. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make excellent use of them.
+- **Flavor:** \"I signed an oath of secrecy. I did not sign an oath of complicity. The two are not the same, and the public deserves to know the difference.\"\n\n\"And the cost of that distinction?\"\n\n\"My career. Possibly my freedom. Likely my pension. The public will receive the documents. I will receive the consequences. The two are also not the same — but they are linked.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.35
+- **Title:** Corporate Counter-Lobby
+- **Description:** Major manufacturers have mounted an unprecedented lobbying effort against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue that the new oversight will paralyze ordinary commerce.
+- **Flavor:** \"You want a ministry to protect consumers from defective products. We agree, in principle. We disagree, in particular, about which products are defective. Welcome to the next decade of litigation.\"\n\n\"And in the meantime?\"\n\n\"In the meantime, the products are still sold. The lawsuits move slowly. The consumers continue to consume. The lawyers grow wealthier. The cycle has a steady-state economy of its own.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.36
+- **Title:** Neighborhood Resistance
+- **Description:** Residents of major cities have organized against the urban-planning provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as bulldozers-by-bureaucracy.
+- **Flavor:** \"I lived on this block when the city wall stood across the road. I will not be moved by a ministry that has not yet drawn breath.\"\n\n\"The ministry promises generous compensation.\"\n\n\"Compensation is for what you can replace. I cannot replace the schoolhouse my children attended, or the corner where I met my wife. The ministry's compensation is for a house. I have a home. They are not the same thing.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.37
+- **Title:** The Faithful Protest
+- **Description:** Religious authorities have organized public demonstrations against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] decry it as state intrusion into matters of conscience.
+- **Flavor:** \"Render unto Caesar what is Caesar's, but the ministry you propose to create asks Caesar to render unto itself what belongs to God. It is not a bargain we recognize.\"\n\n\"The ministry does not propose to legislate God.\"\n\n\"It proposes to legislate the practices through which we approach Him. The distinction is theological. The effect is administrative. The two collapse the moment the inspector arrives at the door of the church.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.38
+- **Title:** Domestic Priorities Trump Foreign
+- **Description:** Critics seize on domestic hardship to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame foreign aid as money taken from the mouths of struggling citizens.
+- **Flavor:** \"Charity, the proverb says, begins at home. Yet here we are about to charter a ministry to send our wealth abroad while our own children go without. Explain that, if you can.\"\n\n\"The aid creates allies we will need.\"\n\n\"Allies for the next war, perhaps. Today's children cannot wait for the next war to receive their dinner. The voters know this. They will remember it on the next ballot.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.39
+- **Title:** Professional or Loyalist Staffing?
+- **Description:** The new ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its staff. The intelligentsia argue for competitive examinations; the governing party argues for patronage that rewards political support. Both make their case in the corridor.
+- **Flavor:** \"You can staff this ministry with the best people, or with your people. Both are reasonable answers — to different questions about what the ministry is for.\"\n\n\"What is the difference, in operation?\"\n\n\"The best people will tell you when your policy will fail. Your people will help you fail more comfortably. Both have their uses. The question is whether the ministry exists to succeed or to govern.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.40
+- **Title:** Lean Operation or Generous Funding?
+- **Description:** The budget hearing for [SCOPE.sLaw('current_law_scope').GetName] reaches the moment of truth. Industry wants a lean operation; small-business representatives want generous funding to ensure quality delivery. The split is sharp.
+- **Flavor:** \"Every coin in the budget came from someone's pocket. The question is whether it returns as service or whether it stays as savings.\"\n\n\"And which is better for the country?\"\n\n\"The country has no single answer. The pocket that emptied wants the savings. The hand that waits in line for service wants the service. The ministry exists in the gap between these two answers. Choose which side of the gap you stand on.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.41
+- **Title:** Consolidate or Coexist?
+- **Description:** The new ministry under [SCOPE.sLaw('current_law_scope').GetName] must define its scope. Reformers want it to consolidate authority from existing departments; traditionalists want it to coexist alongside them. The administrative diagram is the policy.
+- **Flavor:** \"A ministry that consolidates is a ministry that gets things done. A ministry that coexists is a ministry that keeps the peace. The state needs both — but cannot have both at once.\"\n\n\"Then we choose consolidation, and accept the noise.\"\n\n\"Then you choose the noise. The consolidation comes second, after the political negotiations the noise requires. The order matters. Choose consolidation first, and you spend two years apologizing for it.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.42
+- **Title:** Swift or Phased Dissolution?
+- **Description:** The wind-down of the ministry under [SCOPE.sLaw('current_law_scope').GetName] needs a timeline. Industry wants a swift dissolution to reduce costs; small-business interests want a phased approach that preserves continuity. Pick the rhythm.
+- **Flavor:** \"Rip off the bandage and you spare the patient long suffering. Peel it slowly and you spare the patient sudden shock. We disagree about the patient.\"\n\n\"Who is the patient?\"\n\n\"The ministry's staff, in one telling. The country's businesses, in another. The state's reputation, in a third. Each version of the patient requires a different bandage. Pick the patient and the method follows.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.43
+- **Title:** Civilian-Led or General-Led?
+- **Description:** The ministry of war under [SCOPE.sLaw('current_law_scope').GetName] needs a leadership model. Civilian reformers want a civilian-led ministry with military advisors; the general staff wants a general-led ministry with civilian oversight.
+- **Flavor:** \"A ministry of war run by civilians can be reasoned with. A ministry of war run by generals can be trusted. We have always preferred one or the other.\"\n\n\"And which leads to fewer wars?\"\n\n\"Neither, historically. The civilians invent wars the generals would have refused. The generals fight wars the civilians would have negotiated out of. Both kinds of war are wars. Pick the kind you wish to lose more rarely.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.44
+- **Title:** Hawkish or Dovish Diplomacy?
+- **Description:** The doctrine of the ministry of foreign affairs under [SCOPE.sLaw('current_law_scope').GetName] needs setting. The general staff wants a hawkish posture; the intelligentsia argues for engagement-first diplomacy. The doctrine echoes for decades.
+- **Flavor:** \"You can speak softly and carry a big stick, or you can speak loudly and skip the stick. The first works longer, but only if you can credibly threaten the second.\"\n\n\"And the stick we carry?\"\n\n\"Is the navy. Is the army. Is the willingness to use them. The diplomats do not need to mention any of this to be heard mentioning it. That is the whole point of speaking softly.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.45
+- **Title:** Protectionist or Free Trade?
+- **Description:** The ministry of commerce under [SCOPE.sLaw('current_law_scope').GetName] needs its founding orientation. Industrialists want protectionist tariffs to nurture home production; merchants want free trade to lower input costs.
+- **Flavor:** \"Protect the factories and you raise the price of bread. Open the borders and you raise the unemployment of factory workers. The ministry will be remembered for the choice.\"\n\n\"And the unemployed worker who pays less for bread?\"\n\n\"Eats more cheaply while looking for work in industries that no longer exist. The bread is a small consolation. The choice rests on which constituency screams loudest at the ballot box.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.46
+- **Title:** State-Curated or Independent Grants?
+- **Description:** The ministry of culture under [SCOPE.sLaw('current_law_scope').GetName] needs its patronage model. Religious authorities want state-curated patronage with content guidance; artists want independent grants free of editorial direction.
+- **Flavor:** \"You can pay for art that pleases you, or for art that surprises you. The first builds monuments; the second builds new ideas. Pick the kind of country you want.\"\n\n\"And which kind of country lasts longer?\"\n\n\"The monument-building country is remembered. The idea-building country is borrowed from. Both kinds of legacy are real. Neither is automatic. The ministry's choice is which kind of legacy it intends to invest in.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.47
+- **Title:** Pro-Capital or Pro-Labor?
+- **Description:** The ministry of labor under [SCOPE.sLaw('current_law_scope').GetName] needs its operating philosophy. Industrialists want a pro-capital framework prioritizing flexibility; the trade unions want a pro-labor framework prioritizing protection.
+- **Flavor:** \"The ministry will spend the next generation deciding cases. The framework you give it now will tilt every verdict.\"\n\n\"And the framework is what?\"\n\n\"Whose interests the ministry presumes are paramount when the two sides disagree. The presumption can be revisited, but it usually is not. The first framework becomes the precedent, and the precedent becomes the law.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.48
+- **Title:** Strict or Voluntary Regulations?
+- **Description:** The environmental ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its enforcement model. Scientists want strict mandatory regulations with criminal penalties; industry wants voluntary standards with industry-led monitoring.
+- **Flavor:** \"Mandate compliance and you breed resistance. Invite cooperation and you breed minimum effort. The state chooses which kind of failure it can tolerate.\"\n\n\"Is there a third option?\"\n\n\"There is. Mandate compliance and inspect rigorously. The inspections cost money the bill has not allocated. So we end up with a fourth option — mandate compliance, inspect occasionally, and pretend the inspections are doing their job.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.49
+- **Title:** Domestic or Foreign Focus?
+- **Description:** The intelligence ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its primary remit. The general staff wants a domestic-surveillance focus; the intelligentsia argues for a foreign-intelligence focus that keeps secret police at bay.
+- **Flavor:** \"Look outward and you protect the borders. Look inward and you protect the regime. They are not the same thing.\"\n\n\"And the regime is, in turn, what guards the borders.\"\n\n\"So they say, in the speeches. In practice, the inward-looking service grows; the outward-looking service is starved. The regime ends up well-defended against its own citizens and surprised by its actual enemies.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.50
+- **Title:** Generous or Restrictive Resettlement?
+- **Description:** The refugee-affairs ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its founding posture. The intelligentsia wants generous resettlement; religious authorities want restrictive resettlement to preserve domestic harmony.
+- **Flavor:** \"Open the door and you welcome the stranger. Keep it shut and you reassure the neighbor. The state must decide which welcome matters more.\"\n\n\"And the neighbors who do not feel reassured?\"\n\n\"Will vote for someone who promises to shut the door. The political mathematics is unforgiving. The moral mathematics is the opposite. The bill cannot satisfy both.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.51
+- **Title:** State-Controlled or Private Partnership?
+- **Description:** The propaganda ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its operating model. The general staff wants state-controlled output; industrialists want a private-partnership model that contracts out production.
+- **Flavor:** \"State propaganda speaks with one voice — yours. Privatized propaganda speaks with many voices — all working for the same paycheck. Pick your poison.\"\n\n\"And which serves the country better?\"\n\n\"Neither is for the country. Both are for whoever pays. The question is whether you prefer your propaganda obvious or disguised. The first you can argue with. The second you can only outbid.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.52
+- **Title:** Basic or Applied Research?
+- **Description:** The science ministry under [SCOPE.sLaw('current_law_scope').GetName] needs a research priority. The intelligentsia wants basic-research focus; industry wants applied-research focus with commercial outcomes prioritized.
+- **Flavor:** \"Fund curiosity and you may never see the return. Fund applications and you will never see the breakthroughs that would have come from the curiosity.\"\n\n\"How much of each?\"\n\n\"That is the question that requires fifty years of evidence to answer, and we have a budget meeting on Thursday. The political balance is what gets written into the founding statute. The scientific balance is what the founding statute fails to predict.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.53
+- **Title:** Permissive or Restrictive Standards?
+- **Description:** The thought-control ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its default standard. The intelligentsia wants permissive standards with narrow exceptions; the general staff wants restrictive standards with narrow tolerances.
+- **Flavor:** \"You will be wrong sometimes. The question is whether you would rather be wrong by permitting what should have been refused, or refusing what should have been permitted.\"\n\n\"And which error is worse?\"\n\n\"That depends on whose ox is gored. The newspaper editor will tell you that refusing what should have been permitted is worse, until his own publication is denied a license. Then he will tell you the other way.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.54
+- **Title:** Strict or Industry-Led Standards?
+- **Description:** The consumer-protection ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its enforcement model. Small-business representatives want strict mandatory standards; industrialists want industry-led self-regulation.
+- **Flavor:** \"Let the industry write the rules and the rules will be lenient. Let the regulators write them and the rules will be unworkable. Someone always writes them.\"\n\n\"Can they write them together?\"\n\n\"They can sit in the same room and agree on words that mean different things to each side. The lawyers will then earn handsome fees explaining which meaning prevails. The country pays for the lawyers either way.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.55
+- **Title:** Density or Sprawl?
+- **Description:** The urban-planning ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its model. The intelligentsia wants density-focused planning; landowners want sprawl-friendly zoning that preserves property values.
+- **Flavor:** \"Build the city up and you cram strangers into one neighborhood. Build the city out and you pave the countryside. Both choices will be remembered as a betrayal by someone.\"\n\n\"And the population must live somewhere.\"\n\n\"The population must, yes. The question is whose neighborhood absorbs them. The ministry's first decision tells the country which constituencies it will be willing to inconvenience, and which it will not.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.56
+- **Title:** Established Faith or Pluralist?
+- **Description:** The religion ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its founding model. Religious authorities want established-faith privileges; the intelligentsia wants a pluralist framework treating all confessions equally.
+- **Flavor:** \"Privilege one faith and you cement its claim on the public square. Treat them equally and you reduce them all to one private option among many. The choice is the future of the soul of the country.\"\n\n\"And what does the country's soul prefer?\"\n\n\"The country's soul is not a single thing. The majority's soul wants its faith honoured. The minorities' souls want their existence respected. The ministry's choice tells everyone which of these the state intends to deliver.\"
+- **Current image:** (unknown)
+
+### ministry_law_events.57
+- **Title:** Strategic or Humanitarian Aid?
+- **Description:** The international-aid ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its allocation principle. The general staff wants strategic allocation tied to alliance interests; the intelligentsia wants humanitarian allocation tied to need.
+- **Flavor:** \"Foreign aid is policy by other means. The question is which means — 'help our friends,' or 'help those who need it most.' These are different ministries dressed up alike.\"\n\n\"And the public's view?\"\n\n\"The public alternates. In peacetime the public prefers humanitarian. In tense moments the public prefers strategic. The bill must pick one. The bill's first minister will spend the next four years apologizing for the unchosen one.\"
+- **Current image:** (unknown)
 
 ## minor_events.txt
 
@@ -1665,151 +2213,151 @@ Each event is listed with its title, description, and flavor text (where availab
 ### modern_election_events.11
 - **Title:** Voice of the Nation
 - **Description:** A thunderous radio address by a firebrand politician has seized the airwaves, with households across [ROOT.GetCountry.GetNameNoFlag] gathered around their wireless sets. The speech — part jeremiad, part rallying cry — has electrified supporters and horrified opponents in equal measure. Every newspaper is reprinting excerpts, and party operatives are scrambling to decide whether to amplify the broadcast or counter it before the next edition goes to print.
-- **Flavor:** #italic The crackling voice fills every parlor and pub, Half the country has never heard a candidate speak before.#!
+- **Flavor:** \"He spoke for forty minutes. People stopped what they were doing to listen.\"\n\n\"All of them?\"\n\n\"Enough of them. The pubs went quiet. The factory whistles were ignored. My mother knit faster — she said she had to do something with her hands while her ears were taken.\"
 - **Current image:** gfx/event_pictures/election_debate_stage.dds
 
 ### modern_election_events.12
 - **Title:** The War Hero Steps Up
 - **Description:** A decorated military hero, beloved by the armed forces and known to every citizen through newsreel footage, has announced their entry into the campaign. Their uniform and medals carry an authority that no civilian politician can match. The question now is whether military valor translates into political acumen — and whether the other parties can withstand such star power.
-- **Flavor:** #italic A chest full of medals and a head full of convictions — a potent combination on the campaign trail.#!
+- **Flavor:** \"The crowd cheered every medal he named. Some of them were watching tears run down their cheeks.\"\n\n\"And his policies?\"\n\n\"He hasn't announced any yet. I'm not sure they'll matter. He stood on the platform in the uniform and the crowd already had him in office.\"
 - **Current image:** gfx/event_pictures/election_debate_stage.dds
 
 ### modern_election_events.13
 - **Title:** Press Baron's Endorsement
 - **Description:** The most powerful newspaper [concept_magnate] in [ROOT.GetCountry.GetNameNoFlag] has thrown the weight of their media empire behind a party. Morning editions across the nation trumpet the endorsement in bold headlines, while editorial pages dutifully fall in line. The rival press scrambles to respond, but the sheer volume of coverage is overwhelming.
-- **Flavor:** #italic Eight newspapers, three radio stations, one editorial line. The opposition's rebuttal appeared on page fourteen.#!
+- **Flavor:** \"Did you see the morning editions?\"\n\n\"All eight of them. All identical. The headline writers must have been issued the headline.\"\n\n\"And the opposition's response?\"\n\n\"Page fourteen of the one paper still owned by someone else. Three column inches. Below the racing results.\"
 - **Current image:** gfx/event_pictures/election_debate_stage.dds
 
 ### modern_election_events.14
 - **Title:** Red Menace
 - **Description:** Anti-communist hysteria has gripped the campaign trail. Accusations of communist infiltration dominate headlines, with candidates falling over themselves to prove their patriotic credentials. Lists of suspected sympathizers circulate in hushed tones, and any association with leftist movements — however tenuous — is treated as political poison. The atmosphere borders on paranoia.
-- **Flavor:** #italic Are you now, or have you ever been...#!
+- **Flavor:** \"They asked the question on television. Live. With the microphone on.\"\n\n\"And the answer?\"\n\n\"The answer doesn't matter. Half the country heard the question. They've already decided what they think of the man being asked it. The hearing is a formality.\"
 - **Current image:** gfx/event_pictures/election_debate_stage.dds
 
 ### modern_election_events.15
 - **Title:** Economic Miracle
 - **Description:** The economy of [ROOT.GetCountry.GetNameNoFlag] is booming. Factories run at full capacity, unemployment is a distant memory, and consumer confidence soars to unprecedented heights. The incumbent government naturally claims credit for the miracle, while the opposition warns that unsustainable growth will inevitably end in tears. Voters, for the moment, are content — but contentment is a fickle thing.
-- **Flavor:** #italic The unemployment figures were the lowest in a generation. Nobody wanted to hear about the debt.#!
+- **Flavor:** \"The unemployment numbers are the best in twenty years. The polling reflects it.\"\n\n\"And the debt figures?\"\n\n\"The debt figures are also the worst in twenty years. The polling does not reflect that. We tried bringing it up at three different campaign stops. The crowd booed.\"
 - **Current image:** gfx/event_pictures/election_debate_stage.dds
 
 ### modern_election_events.16
 - **Title:** A Question of Equality
 - **Description:** The civil rights movement has burst into the campaign with undeniable force. Marchers fill the streets demanding equal treatment under the law, and every candidate must now take a stand. To champion equality risks alienating traditionalists; to ignore the movement risks being on the wrong side of history. The nation watches, and the ballot box will deliver its verdict.
-- **Flavor:** #italic Fifty thousand marchers on the capital steps, and every candidate pretending they were there first.#!
+- **Flavor:** \"Fifty thousand people. The largest demonstration since the war.\"\n\n\"And the candidates?\"\n\n\"All three of them are issuing statements claiming they have always supported the movement. Two of them are not entirely lying. The third was on record opposing it last year.\"
 - **Current image:** gfx/event_pictures/voter_registration_queue.dds
 
 ### modern_election_events.17
 - **Title:** The Space Card
 - **Description:** Headlines blaze with news of our nation's space achievements. Rockets pierce the heavens, and the public imagination soars with them. On the campaign trail, space has become the ultimate symbol of national prowess — and the ultimate budget battleground. Candidates must choose: reach for the stars, or tend to more earthly concerns?
-- **Flavor:** #italic The rocket launched at noon. By evening, three candidates had given speeches about it.#!
+- **Flavor:** \"The launch was on every channel.\"\n\n\"And what did the candidates say?\"\n\n\"The first said it proves the country can do great things. The second said the funds would be better spent on schools. The third tried to say both. The third is polling worst.\"
 - **Current image:** gfx/event_pictures/voter_registration_queue.dds
 
 ### modern_election_events.18
 - **Title:** Campus Uprising
 - **Description:** Students at the nation's universities have erupted in protest, their anger spilling from lecture halls into the streets. Banners denounce government policy, teach-ins draw hundreds, and the evening news carries images of young idealists facing down authority. The movement has injected raw energy into the campaign — energy that could fuel a political revolution or provoke a brutal backlash.
-- **Flavor:** #italic The average age of the protesters outside Parliament was twenty-two. The average age inside was fifty-eight.#!
+- **Flavor:** \"There are five thousand of them on the lawn.\"\n\n\"And what do they want?\"\n\n\"They want to be heard. They are willing to be specific later. The first demand is that the men with the average age of fifty-eight come down and listen.\"
 - **Current image:** gfx/event_pictures/voter_registration_queue.dds
 
 ### modern_election_events.19
 - **Title:** The Great Debate
 - **Description:** For the first time, the leading candidates will face each other on live television. Millions will tune in, judging not just their policies but their composure, their wit, their very appearance. Political strategists are frantic — no one knows how the new medium will reshape the rules of engagement. One thing is certain: when the cameras turn on, there will be nowhere to hide.
-- **Flavor:** #italic Thirty million viewers. Two candidates. One close-up that lasted three seconds too long.#!
+- **Flavor:** \"Thirty million people watched the debate.\"\n\n\"And what did they take from it?\"\n\n\"They took the moment when the camera held on his face for three seconds while he tried to recall the answer. The policy positions are forgotten. The three seconds will be on every newscast for the rest of the week.\"
 - **Current image:** gfx/event_pictures/election_night_results.dds
 
 ### modern_election_events.20
 - **Title:** A Woman's Place
 - **Description:** A trailblazing woman has risen to [concept_prominence] on the campaign trail, challenging centuries of political convention. Her candidacy has galvanized supporters who see in her the promise of a new era, while provoking fierce resistance from those who believe that some traditions should not bend. The debate over women in politics has become impossible to ignore.
-- **Flavor:** #italic She stands at the podium, and the old guard shifts uncomfortably in their seats.#!
+- **Flavor:** \"She has been speaking for twenty minutes. She has not yet been interrupted.\"\n\n\"That is itself remarkable.\"\n\n\"It is. The men in the front row have been waiting for an opening to challenge her. She has given them none. She has simply continued, and the crowd has continued listening, and the men have begun to look uncomfortable in their chairs.\"
 - **Current image:** gfx/event_pictures/election_night_results.dds
 
 ### modern_election_events.21
 - **Title:** Toxic Legacy
 - **Description:** An industrial disaster has left a scar on the landscape and the public consciousness. Rivers run foul, communities report mysterious illnesses, and the companies responsible deflect blame with practiced ease. In the heat of the campaign, [concept_pollution_system] has become the issue no candidate can avoid. The question is whether economic growth and environmental protection can coexist.
-- **Flavor:** #italic The smokestacks still churn, and the voters are beginning to cough.#!
+- **Flavor:** \"The river outside the plant ran orange last week.\"\n\n\"And the plant?\"\n\n\"Still operating. Still employing four thousand people. The candidate who promised to shut it down has lost the local poll by twenty points. The candidate who promised to clean it up while keeping it open has won by ten.\"
 - **Current image:** gfx/event_pictures/election_night_results.dds
 
 ### modern_election_events.22
 - **Title:** The Outsider Candidate
 - **Description:** A beloved figure from the world of entertainment — with no political experience whatsoever — has announced their candidacy. Their fame guarantees attention, their populist instincts draw crowds, and their utter disregard for political convention delights and terrifies in equal measure. The professional politicians are left spluttering: how do you debate someone who rewrites the rules?
-- **Flavor:** #italic Forty years in public service, and the polls say he's losing to someone whose greatest achievement is a box-office record.#!
+- **Flavor:** \"Forty years he has served. Three terms in cabinet. A treaty bearing his name.\"\n\n\"And the polls?\"\n\n\"The polls have him losing by twelve points. To an entertainer whose previous experience was a sitcom about a cruise ship. The voters say they want change. The entertainer is change.\"
 - **Current image:** gfx/event_pictures/election_night_results.dds
 
 ### modern_election_events.23
 - **Title:** The Genome Question
 - **Description:** Advances in genetic engineering have forced their way into the campaign. Scientists hail the potential to cure diseases and feed the world; religious leaders warn of humanity playing God. Voters are deeply divided between excitement and apprehension, and every candidate must stake out a position on where the line between progress and hubris should be drawn.
-- **Flavor:** #italic The candidate promised to cure cancer. Her opponent promised to preserve the soul. Voters were not sure which was more ambitious.#!
+- **Flavor:** \"She said she would fund the research to end hereditary disease in a generation.\"\n\n\"And her opponent?\"\n\n\"Said that to engineer the human genome was to play God. Both speeches drew standing ovations. The voters applauded the cure and the soul without seeing the contradiction. The candidates noticed.\"
 - **Current image:** gfx/event_pictures/political_scandal_expose.dds
 
 ### modern_election_events.24
 - **Title:** Rally 'Round the Flag
 - **Description:** A major security incident has shaken [ROOT.GetCountry.GetNameNoFlag] to its core, and the campaign trail has been transformed overnight. The usual partisan squabbles feel suddenly trivial in the face of genuine threat. Some voices demand a forceful crackdown; others warn that surrendering liberties in the name of security plays into the enemy's hands. The nation holds its breath.
-- **Flavor:** #italic Within forty-eight hours, every candidate had a security policy. Most of them had been written overnight.#!
+- **Flavor:** \"The first statement came within an hour. Stern, dignified, condemning the attack.\"\n\n\"And the policies?\"\n\n\"The policies appeared within forty-eight hours. Comprehensive, detailed, costed. Most of them had been written overnight by people who had never thought about the subject until the attack happened.\"
 - **Current image:** gfx/event_pictures/political_scandal_expose.dds
 
 ### modern_election_events.25
 - **Title:** The Leak
 - **Description:** A whistleblower has exposed a vast, classified surveillance program operated by the government of [ROOT.GetCountry.GetNameNoFlag]. The revelations dominate every news cycle: citizens monitored without warrant, private communications intercepted at scale, dissidents tracked. The campaign has suddenly become a referendum on the balance between security and privacy.
-- **Flavor:** #italic The leaked documents ran to four hundred pages. The public read the summary. The summary was enough.#!
+- **Flavor:** \"Four hundred pages of operational detail.\"\n\n\"Has anyone read them?\"\n\n\"The journalists have. The public has read the summary. The summary fits on a postcard. It says that the agency listens to every telephone call in the country. That is all the public needed to know.\"
 - **Current image:** gfx/event_pictures/political_scandal_expose.dds
 
 ### modern_election_events.26
 - **Title:** Trade War Rhetoric
 - **Description:** Globalization has produced winners and losers, and on the campaign trail, the losers are making themselves heard. Shuttered factories, displaced workers, and communities left behind by the march of international commerce fuel a potent backlash. Protectionist rhetoric fills rally halls, while free-trade advocates warn that turning inward will impoverish everyone.
-- **Flavor:** #italic The shuttered factory made a better backdrop than any speechwriter could have scripted.#!
+- **Flavor:** \"He gave the speech in front of the closed factory.\"\n\n\"And the speech?\"\n\n\"Was as good as the speechwriter could manage. The factory was better. The factory said everything the speech tried to say, and said it without needing any words. The candidate stood there and let the building do the work.\"
 - **Current image:** gfx/event_pictures/political_scandal_expose.dds
 
 ### modern_election_events.27
 - **Title:** Shores of the Displaced
 - **Description:** Climate refugees are arriving at the borders of [ROOT.GetCountry.GetNameNoFlag] in growing numbers, displaced by rising seas, failed harvests, and uninhabitable heat. The humanitarian crisis has become an electoral flashpoint, pitting compassion against concerns about resources, identity, and the limits of generosity. No candidate can afford to look away.
-- **Flavor:** #italic The photograph of the child at the border appeared in every morning edition. Both parties claimed it proved their point.#!
+- **Flavor:** \"The photograph was on every front page this morning.\"\n\n\"And what does it prove?\"\n\n\"To one party, it proves we must open the doors. To the other, it proves we must close them. Both parties believe they have won the news cycle. The photograph itself is silent on the question.\"
 - **Current image:** gfx/event_pictures/grassroots_canvassing.dds
 
 ### modern_election_events.28
 - **Title:** The Machine Behind the Curtain
 - **Description:** It has come to light that a major party's campaign strategy is being managed not by human operatives, but by a machine learning system. The AI analyzes polling data, crafts messaging, allocates resources, and even writes speeches. The rival parties are outraged — though several have quietly begun procurement enquiries of their own.
-- **Flavor:** #italic The campaign manager was fired three weeks ago. The polling numbers have improved since.#!
+- **Flavor:** \"There is no campaign manager.\"\n\n\"What do you mean, there is no campaign manager?\"\n\n\"The campaign manager was fired three weeks ago. The decisions are being made by the analytics system. The polling has improved. Nobody on the staff is comfortable saying so out loud.\"
 - **Current image:** gfx/event_pictures/grassroots_canvassing.dds
 
 ### modern_election_events.29
 - **Title:** Free Money?
 - **Description:** Universal basic income has erupted into the campaign as the most divisive economic proposal in a generation. Proponents paint a vision of liberation from drudgery, a floor beneath which no citizen can fall. Opponents brandish projections of fiscal catastrophe and warn of the death of the work ethic. In a world of increasing automation, the idea refuses to go away.
-- **Flavor:** #italic The pilot programme cost a fortune. The pilot programme worked. Both facts were politically inconvenient.#!
+- **Flavor:** \"The pilot programme has finished. We have the data.\"\n\n\"And?\"\n\n\"It worked. The recipients did not stop working. They started small businesses. They went back to school. They reported they were happier. The programme also cost more than projected. Neither party can decide which fact to lead with.\"
 - **Current image:** gfx/event_pictures/grassroots_canvassing.dds
 
 ### modern_election_events.30
 - **Title:** Lights Out
 - **Description:** On the eve of the vote, a sophisticated cyberattack has struck the election [concept_infrastructure] of [ROOT.GetCountry.GetNameNoFlag]. Voter rolls display errors, electronic tallying systems go dark, and confusion spreads across polling stations. Whether this is the work of foreign adversaries, domestic saboteurs, or mere technical failure, the integrity of the entire election is now in question.
-- **Flavor:** #italic The backup generators failed at six polling stations. By morning, the conspiracy theories outnumbered the ballots.#!
+- **Flavor:** \"Six polling stations lost power at the same minute.\"\n\n\"Coordinated?\"\n\n\"The investigators say no. The voters say yes. By morning the social platforms had circulated three competing theories about who was responsible. None of them mentioned the obvious explanation, which is that the backup generators are twenty years old and we have always known this.\"
 - **Current image:** gfx/event_pictures/election_interference_cyber.dds
 
 ### modern_election_events.31
 - **Title:** Designer Candidate
 - **Description:** A politician who has openly undergone genetic enhancement has entered the race, boasting superior cognitive abilities, disease resistance, and physical stamina. Their very existence challenges fundamental assumptions about equality of opportunity in democracy. If enhanced humans gain political power, what happens to the unenhanced majority? The campaign has become a battleground for the future of the human species.
-- **Flavor:** #italic The candidate could recite pi to ten thousand digits. Her opponents asked if that qualified her to govern.#!
+- **Flavor:** \"She named every supreme court ruling of the last fifty years, in order, by date.\"\n\n\"And her opponents?\"\n\n\"Are asking whether the ability to do so qualifies her for office, or merely demonstrates the unfair advantage she received in the womb. Both arguments will be tested at the ballot box. Neither will be settled there.\"
 - **Current image:** gfx/event_pictures/genetic_engineering.dds
 
 ### modern_election_events.32
 - **Title:** One Small Vote for Man
 - **Description:** Citizens of [ROOT.GetCountry.GetNameNoFlag] living in orbital habitats and off-world colonies have transmitted a formal demand for electoral representation. They contribute taxes, serve in the military, and maintain their citizenship — yet they cannot cast a ballot that counts. The campaign must now grapple with a question the founders never anticipated: does democracy extend beyond the atmosphere?
-- **Flavor:** #italic Three hundred kilometers above, they watch the election they cannot participate in.#!
+- **Flavor:** \"The petition arrived from the orbital habitat this morning.\"\n\n\"What does it ask?\"\n\n\"For the vote. They have citizenship. They pay taxes. Their children attend the same schools as our children, via the satellite link. They cannot cast a ballot. They are asking why. We do not have a good answer.\"
 - **Current image:** gfx/event_pictures/orbital_earth_view.dds
 
 ### modern_election_events.33
 - **Title:** Thought Made Manifest
 - **Description:** A [concept_radical] proposal has seized the campaign: replace elections entirely with neural-interface direct democracy, where citizens register their preferences in real time through brain-computer interfaces. Proponents argue this would be the purest form of democratic expression ever conceived. Critics warn of manipulation, coercion, and the erasure of deliberation. The technology exists — but should it be used?
-- **Flavor:** #italic The focus group registered their preferences in real time, without speaking. None of them could explain why they had chosen as they did.#!
+- **Flavor:** \"The neural-interface focus group recorded preferences down to the millisecond.\"\n\n\"And the preferences?\"\n\n\"Were sharper, more decisive than the spoken-interview group. The respondents could not explain why they had chosen as they did. They said the interface had felt like reading their own minds back to them. Several of them found the experience disturbing.\"
 - **Current image:** gfx/event_pictures/neural_interface.dds
 
 ### modern_election_events.34
 - **Title:** Harvest of Votes
 - **Description:** Synthetic food production has upended agriculture across [ROOT.GetCountry.GetNameNoFlag], and the campaign has become a proxy war between laboratory-grown futures and traditional farming communities. Industrial interests push the revolution as inevitable progress; rural communities see it as an existential threat to their way of life. Every candidate must choose a side in the battle for the nation's dinner table.
-- **Flavor:** #italic The lab-grown steak cost half the price. The farmer's son asked what he was supposed to do now.#!
+- **Flavor:** \"The synthetic protein factory opened last month. The steak is indistinguishable.\"\n\n\"And the farms?\"\n\n\"Are losing customers. The farmer outside town asked me, at the rally, what his son was supposed to do. I did not have an answer. The candidate who claimed to have one is leading in the polls. His answer was vague, but the farmer wanted to be told something.\"
 - **Current image:** gfx/event_pictures/synthetic_crops.dds
 
 ### modern_election_events.35
 - **Title:** The Autonomous Question
 - **Description:** Autonomous systems — from self-driving vehicles to AI-managed factories — have displaced millions of workers across [ROOT.GetCountry.GetNameNoFlag]. The campaign has become a battle over the future of human labor itself. Do we accelerate into a post-work paradise, or fight to preserve the dignity of human employment? The displaced workers filling rally halls want answers, not platitudes.
-- **Flavor:** #italic The factory produced more than ever. The car park was empty.#!
+- **Flavor:** \"The factory's output is up forty percent this year.\"\n\n\"And the staff?\"\n\n\"Down sixty. The car park used to be full at shift change. Now it has three cars in it, all belonging to security. The candidate who promises retraining is polling well. The candidate who promises to slow the automation is polling better.\"
 - **Current image:** gfx/event_pictures/automation_factory.dds
 
 ## movement_events_te.txt
@@ -2053,7 +2601,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### nuclear_weapon_events.11
 - **Title:** A City Erased in [SCOPE.sState('target_state').GetName]
 - **Description:** A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName]!
-- **Flavor:** The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\n\nThe world has changed forever.
+- **Flavor:** Smoke continues to rise from where the city stood. Communications with [SCOPE.sState('target_state').GetName] are intermittent at best. Initial casualty estimates of #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! are almost certainly low; rescue teams who have managed to approach the outskirts report that the inner districts are inaccessible and likely to remain so for weeks. Survivors from the periphery describe a flash that seemed to last seconds rather than the fraction of a second physicists had described in the briefings, and a wind that arrived with the temperature of an open furnace.\n\nThe world has changed forever.
 - **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
 
 ### nuclear_weapon_events.12
@@ -2065,7 +2613,7 @@ Each event is listed with its title, description, and flavor text (where availab
 ### nuclear_weapon_events.13
 - **Title:** Nuclear Nightmare Averted
 - **Description:** [SCOPE.sCountry('target_country').GetName] has attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]! Our defenses have stopped the attack.
-- **Flavor:** Against all odds, our defensive systems have thwarted a catastrophe of unimaginable scale. The enemy's missile was intercepted before it could rain destruction upon our land. The air is thick with relief, but the specter of what could have been looms large. Our vigilance has saved countless lives, yet we know that such a reprieve may not come again so easily. We must remain ever watchful.
+- **Flavor:** Our missile shield held. The intercept profile from the radar trace will be classified, the engineers will be discreetly bonused, and the public will be told only what is necessary to maintain confidence in the system. The classified version of the report includes the warning that a saturating attack — five missiles, ten, twenty — would have produced very different results. The system worked. The system is also already obsolete against the next configuration our adversaries will deploy. Both facts are true and both are uncomfortable.
 - **Current image:** gfx/event_pictures/nuclear_defense_shield.dds
 
 ### nuclear_weapon_events.14
@@ -2083,43 +2631,43 @@ Each event is listed with its title, description, and flavor text (where availab
 ### nuclear_weapon_events.16
 - **Title:** Foreign War Escalates to Nuclear Conflict
 - **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('target_country').GetName] launching a [concept_nuclear_strike] devestating [SCOPE.sState('target_state').GetName].
-- **Flavor:** The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.
+- **Flavor:** Reports from the affected region arrive piecemeal and contradict each other. What is confirmed: a nuclear device has been detonated within the boundaries of [SCOPE.sState('target_state').GetName], and the foreign powers involved are now bound to whatever follows from that fact. Casualty estimates of #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! are the lowest figure cited; the highest figures are several times that. The diplomatic establishment of every country is presently in continuous session.\n\nThe taboo is broken. Whether the breach widens or stops at one weapon is the only question that matters now.
 - **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
 
 ### nuclear_weapon_events.17
 - **Title:** I Am Become Death
 - **Description:** For the first time in human history, a nuclear weapon has been used in combat. Our forces have unleashed a destructive power beyond anything the world has ever known. The mushroom cloud that rose over the battlefield marks the dawn of a new and terrible era — one from which there may be no return.
-- **Flavor:** #italic Now I am become Death, the destroyer of worlds.#!
+- **Flavor:** \"The flash was seen for fifty miles. The cloud rose past the troposphere. The radio reports stopped from every receiver within a hundred kilometres of the target.\"\n\n\"And the enemy?\"\n\n\"Has not yet replied. The replies, when they come, will determine whether the war ends today or whether it has only just begun. The bomb has done its work. The diplomacy has not yet begun its own.\"
 - **Current image:** gfx/event_pictures/nuclear_false_alarm_panic.dds
 
 ### nuclear_weapon_events.18
 - **Title:** Nuclear Proliferation Alert
 - **Description:** Intelligence reports suggest that [SCOPE.sCountry('proliferating_country').GetName] is making rapid progress in its nuclear weapons program and may be approaching the capability to produce an atomic weapon. The prospect of another nation joining the nuclear club has sent shockwaves through diplomatic circles.
-- **Flavor:** #italic The genie is out of the bottle, and there is no putting it back.#!
+- **Flavor:** \"They are within a year. Possibly six months. The intelligence is good.\"\n\n\"And our response?\"\n\n\"The minister wants an ultimatum. The general staff wants a sabotage operation. The diplomats want to convene a non-proliferation conference. All three plans are sitting on the desk. They are mutually exclusive. None of them, in isolation, will stop the program.\"\n\n\"Then which do we pick?\"\n\n\"The one that buys us time. The genie is out of the bottle. We are choosing how many bottles, not whether.\"
 - **Current image:** gfx/event_pictures/tactical_nuclear_strike.dds
 
 ### nuclear_weapon_events.19
 - **Title:** Critical Incident
 - **Description:** A serious accident at our nuclear research facility has killed several scientists and contaminated part of the laboratory complex. While the incident has been contained, it has exposed significant gaps in our safety protocols and set back our weapons program considerably.
-- **Flavor:** #italic The investigation report, when it arrives, will be classified at the highest level — but the empty chairs in the laboratory speak volumes.#!
+- **Flavor:** \"Eleven dead. The wing is contaminated. We will not be able to use it for years.\"\n\n\"And the program?\"\n\n\"Continues. With new protocols, with more redundancy, with a budget for the next round of casualties already provisionally drafted. The investigation report will be classified at the highest level. The empty chairs in the laboratory will not be classified, because there is no way to classify the silence at lunchtime.\"
 - **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
 
 ### nuclear_weapon_events.20
 - **Title:** Unexpected Dividends
 - **Description:** Our nuclear weapons researchers have stumbled upon applications of their work that extend far beyond military purposes. Advances in nuclear physics, radiation medicine, and materials science could yield significant civilian benefits — if we are willing to divert resources from the weapons program.
-- **Flavor:** #italic Sometimes the most important discoveries are the ones you weren't looking for.#!
+- **Flavor:** \"The scattering experiments produced data we did not expect. Some of it has applications in medicine. Some in materials science. None of it has anything to do with the weapon.\"\n\n\"And the budget for following it up?\"\n\n\"The weapons program will not pay for it. The civilian program does not yet exist. We are about to discover whether the country values knowledge for its own sake or only when it can be aimed at someone.\"
 - **Current image:** gfx/event_pictures/nuclear_false_alarm_panic.dds
 
 ### nuclear_weapon_events.21
 - **Title:** A Moment of Terror
 - **Description:** A malfunction in our early warning system triggered a false alarm, briefly indicating an incoming [concept_nuclear_strike]. For several agonizing minutes, our military command stood on the brink of ordering a retaliatory launch before the error was identified. The incident has shaken everyone involved to their core.
-- **Flavor:** #italic The officer who made the call to wait will never be publicly recognized. But the world owes them everything.#!
+- **Flavor:** \"How close did we come?\" the minister asked.\n\n\"Two minutes. Possibly three. The colonel ordered a hold pending second confirmation. By the time the second confirmation came, the first reading had been re-checked and identified as a flock of geese at a particular angle.\"\n\n\"And the colonel?\"\n\n\"Will not be decorated. The incident does not officially exist. The colonel saved every life in three countries by waiting an extra minute, and we will not be able to tell anyone.\"
 - **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
 
 ### nuclear_weapon_events.22
 - **Title:** The Mushroom Cloud's Shadow
 - **Description:** A mass movement against nuclear weapons has taken root across our cities. Tens of thousands march through the streets carrying banners depicting mushroom clouds and demanding disarmament. The protesters cut across class and political lines, unified by a primal fear of atomic annihilation.
-- **Flavor:** #italic They carry photographs of what happened to the cities that were hit. No argument can compete with those images.#!
+- **Flavor:** \"They are carrying photographs of the cities that were hit.\"\n\n\"And how many of them?\"\n\n\"Fifty thousand at the parliament gates this morning. By Friday it will be a hundred thousand at the defense ministry. The photographs do not need arguments. The photographs are the argument. Whatever we say in response will sound clinical, and the clinical sounds like complicity.\"
 - **Current image:** gfx/event_pictures/nuclear_power_debate.dds
 
 ## post_scarcity_events.txt
@@ -2127,37 +2675,37 @@ Each event is listed with its title, description, and flavor text (where availab
 ### post_scarcity_events.1
 - **Title:** Mass Unemployment Protests
 - **Description:** Automation has made millions of workers redundant. Angry crowds fill the streets, demanding the government address the growing crisis of purposelessness. The old economic order is crumbling.
-- **Flavor:** The factory ran three shifts. None of them required a single human worker. The former employees gathered outside the gates each morning out of habit.
+- **Flavor:** The factory ran three shifts. None of them required a single human worker. The former employees gathered outside the gates each morning out of habit.\n\n\"What are they waiting for?\" the supervisor asked the security chief.\n\n\"They are not waiting. They are remembering. The gates open at the same hour every day. The crowd has been gathering at the same hour for thirty years. It will take more than two months of unemployment to change that.\"\n\n\"And when the habit fades?\"\n\n\"When the habit fades, we will discover what they have decided to do instead. So far they have not decided.\"
 - **Current image:** gfx/event_pictures/post_scarcity_unemployment.dds
 
 ### post_scarcity_events.2
 - **Title:** The Meaning Crisis
 - **Description:** With basic needs met and work no longer necessary, a crisis of meaning sweeps through society. Depression and aimlessness rise as people struggle to find purpose in a world where labor is obsolete.
-- **Flavor:** The man sat in a comfortable apartment — rent paid, food delivered, nothing required of him — and stared at the ceiling until noon.
+- **Flavor:** The man sat in a comfortable apartment — rent paid, food delivered, nothing required of him — and stared at the ceiling until noon.\n\nA caseworker called.\n\n\"How are you settling in?\" she asked.\n\n\"I am settled. I am settled and I am bored and I am surprised at how heavy boredom feels.\"\n\n\"There are programmes for that. Classes, volunteer placements, community groups.\"\n\n\"I know. I have not yet decided which programme will be the one I am ashamed of having needed.\"
 - **Current image:** gfx/event_pictures/meaning_crisis_abundance.dds
 
 ### post_scarcity_events.3
 - **Title:** AI Replaces Bureaucrats
 - **Description:** AI systems have advanced to the point where they can replace human bureaucrats entirely. Government functions from tax collection to urban planning could be handled by algorithms more efficiently than any human administrator. But many question the wisdom of surrendering governance to machines.
-- **Flavor:** The permit was approved in eleven seconds. The applicant had expected a six-week wait. He wasn't sure whether to be relieved or unsettled.
+- **Flavor:** The permit was approved in eleven seconds. The applicant had expected a six-week wait. He wasn't sure whether to be relieved or unsettled.\n\nHe asked the clerk who had filed his application.\n\n\"There is no clerk,\" she said. \"There is a screen and a server. I am here to direct you to them and to confirm that you spoke to a person at some point in the process. The system has decided you are not a fraud. The system has decided you qualify. The system has decided faster than any human ever could.\"\n\n\"And if it is wrong?\"\n\n\"Then you appeal. To another system. Which will decide that question in twelve seconds.\"
 - **Current image:** gfx/event_pictures/ai_governance_system.dds
 
 ### post_scarcity_events.4
 - **Title:** Neo-Luddite Terrorism
 - **Description:** A [concept_radical] anti-technology movement has attacked automation [concept_infrastructure], destroying factories and data centers. Calling themselves the \"New Luddites,\" they argue that machines are stealing human purpose and dignity. Their violence has divided public opinion.
-- **Flavor:** They smashed the assembly line with crowbars and set the server room on fire. The company had the replacement units operational within a week.
+- **Flavor:** They smashed the assembly line with crowbars and set the server room on fire. The company had the replacement units operational within a week.\n\n\"Was it worth it?\" the journalist asked the surviving organizer.\n\n\"The factory replaced the units. The factory did not replace the conversation. The country is talking about what we did. The country had not been talking about what the factories had done. We are not winning. We are no longer being ignored.\"
 - **Current image:** gfx/event_pictures/neo_luddite_protest.dds
 
 ### post_scarcity_events.5
 - **Title:** Art Renaissance
 - **Description:** Freed from the necessity of labor, citizens are pouring their energy into creative pursuits. A cultural renaissance is blossoming: art, music, literature, and philosophy flourish as humanity explores what it means to live beyond scarcity.
-- **Flavor:** With nothing to earn and nowhere to be, she picked up a paintbrush for the first time in thirty years.
+- **Flavor:** With nothing to earn and nowhere to be, she picked up a paintbrush for the first time in thirty years.\n\nHer daughter visited that weekend and stared at the painting on the easel.\n\n\"Mother. I did not know you painted.\"\n\n\"I did not, for thirty years. The bills came due each month, and the painting did not pay them. The bills no longer come due. The painting still does not pay them. The painting is what is left.\"
 - **Current image:** gfx/event_pictures/art_renaissance_future.dds
 
 ### post_scarcity_events.200
 - **Title:** Beyond Scarcity
 - **Description:** [ROOT.GetCountry.GetName] has achieved what was once thought impossible: a post-scarcity economy. Automation and advanced production have rendered material want a thing of the past for most citizens.
-- **Flavor:** #italic From each according to their ability, to each according to their needs — at last, not a slogan but a description.#!
+- **Flavor:** \"From each according to their ability,\" the old economist said. \"To each according to their needs.\"\n\n\"And what does that mean, now that it is actually the description rather than the slogan?\"\n\n\"It means we have to be honest about ability. It means we have to be honest about need. Neither category is as obvious as the slogan made it sound. We are about to spend the next century arguing the definitions.\"
 - **Current image:** gfx/event_pictures/post_scarcity_achieved.dds
 
 ## probe_result_events.txt
@@ -2762,13 +3310,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.5
 - **Title:** Colony: Arcadia Planitia
-- **Description:** Arcadia Planitia's mid-northern latitude offers the best compromise between solar energy availability and near-surface ice access on Mars. The terrain is relatively flat, the ice table is shallow, and the seasonal temperature variations are among the mildest on the planet. If Mars will ever have a true city: not just a research station: this is where it begins.
+- **Description:** Arcadia Planitia's mid-northern latitude offers the best compromise between solar energy availability and near-surface ice access on Mars. The terrain is relatively flat, the ice table is shallow, and the seasonal temperature variations are among the mildest on the planet. If Mars will ever have a true city — not just a research station — this is where it begins.
 - **Flavor:** \"Minus eighty is a warm day here. The newcomers always complain. Give them a year — they'll call it balmy.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Station Meteorologist
 - **Current image:** gfx/event_pictures/colony_arcadia_planitia.dds
 
 ### space_race_colony_events.6
 - **Title:** Colony: Ceres
-- **Description:** Ceres, the largest body in the asteroid belt, has been a target since the early days of spaceflight planning. With a surface gravity of only 0.03g, water ice confirmed across its surface, and a strategic position between Mars and Jupiter, it is the natural waystation for deep-space operations. The bright spots of Occator Crater: sodium carbonate deposits from subsurface brine: hint at a geologically active interior.
+- **Description:** Ceres, the largest body in the asteroid belt, has been a target since the early days of spaceflight planning. With a surface gravity of only 0.03g, water ice confirmed across its surface, and a strategic position between Mars and Jupiter, it is the natural waystation for deep-space operations. The bright spots of Occator Crater — sodium carbonate deposits from subsurface brine — hint at a geologically active interior.
 - **Flavor:** \"The advantage of Ceres is simple: it is halfway to everywhere, and it has everything we need. The disadvantage is that it is halfway from everywhere too.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Supply Chain Director
 - **Current image:** gfx/event_pictures/colony_ceres.dds
 
@@ -2792,7 +3340,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.10
 - **Title:** Colony: 10 Hygiea
-- **Description:** Nearly spherical and dark as coal, Hygiea is the fourth largest asteroid and the largest member of its own collisional family. Its surface is rich in carbonaceous material and volatiles: water ice, ammonia, methane: making it a natural supply depot for settlements deeper in the belt. The low surface gravity (about 0.003g) makes landing and launch trivially easy.
+- **Description:** Nearly spherical and dark as coal, Hygiea is the fourth largest asteroid and the largest member of its own collisional family. Its surface is rich in carbonaceous material and volatiles — water ice, ammonia, methane — making it a natural supply depot for settlements deeper in the belt. The low surface gravity (about 0.003g) makes landing and launch trivially easy.
 - **Flavor:** \"Dark, round, and rich in carbon. Not glamorous, but the colony that makes the fuel that runs the fleet.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Fuel Processing Director
 - **Current image:** gfx/event_pictures/colony_hygiea.dds
 
@@ -2804,13 +3352,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.12
 - **Title:** Colony: Europa
-- **Description:** Beneath Europa's cracked ice shell lies a global saltwater ocean, kept liquid by tidal heating. This ocean contains roughly twice the water of all Earth's oceans combined. The ice surface is geologically young: constantly resurfaced by cryovolcanic activity: and the lineae suggest material exchange between surface and ocean. If life exists elsewhere in our solar system, Europa's ocean floor vents are the most likely place.
+- **Description:** Beneath Europa's cracked ice shell lies a global saltwater ocean, kept liquid by tidal heating. This ocean contains roughly twice the water of all Earth's oceans combined. The ice surface is geologically young — constantly resurfaced by cryovolcanic activity — and the lineae suggest material exchange between surface and ocean. If life exists elsewhere in our solar system, Europa's ocean floor vents are the most likely place.
 - **Flavor:** \"Beneath the ice, an ocean older than life on Earth. Every sensor we lower makes us hold our breath.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Astrobiology Team Lead
 - **Current image:** gfx/event_pictures/colony_europa.dds
 
 ### space_race_colony_events.13
 - **Title:** Colony: Ganymede
-- **Description:** Ganymede is the largest moon in the solar system: bigger than Mercury: and the only moon with its own magnetosphere. This intrinsic magnetic field, though weak, creates a pocket of reduced radiation within Jupiter's lethal belts. Combined with its size, subsurface ocean, and silicate-rich surface, Ganymede is the natural capital of the Jovian system.
+- **Description:** Ganymede is the largest moon in the solar system — bigger than Mercury — and the only moon with its own magnetosphere. This intrinsic magnetic field, though weak, creates a pocket of reduced radiation within Jupiter's lethal belts. Combined with its size, subsurface ocean, and silicate-rich surface, Ganymede is the natural capital of the Jovian system.
 - **Flavor:** \"Its own magnetic field. Its own geology. Ganymede is less a moon and more a planet that never left home.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Colony Administrator
 - **Current image:** gfx/event_pictures/colony_ganymede.dds
 
@@ -2834,7 +3382,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.17
 - **Title:** Colony: Venus Cloud Habitat
-- **Description:** At 50 kilometers altitude in Venus's atmosphere, conditions are startlingly Earth-like: one atmosphere of pressure, temperatures between 0 and 50 degrees Celsius, and protection from cosmic radiation by the thick atmosphere above. Our aerostatic habitat: part balloon, part sealed structure: floats in this temperate zone. Below lies a hellscape of 460°C surface temperatures and crushing pressure; above, sulfuric acid clouds. Between them, we have found a home.
+- **Description:** At 50 kilometers altitude in Venus's atmosphere, conditions are startlingly Earth-like: one atmosphere of pressure, temperatures between 0 and 50 degrees Celsius, and protection from cosmic radiation by the thick atmosphere above. Our aerostatic habitat — part balloon, part sealed structure — floats in this temperate zone. Below lies a hellscape of 460°C surface temperatures and crushing pressure; above, sulfuric acid clouds. Between them, we have found a home.
 - **Flavor:** \"Fifty kilometers up, the temperature is pleasant, the pressure is breathable, and there is acid rain above and a furnace below. We call it paradise.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Habitat Chief Engineer
 - **Current image:** gfx/event_pictures/colony_venus_cloud.dds
 
@@ -2870,7 +3418,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.23
 - **Title:** Colony: Iapetus
-- **Description:** Iapetus refuses to be ordinary. One hemisphere is as dark as coal; the other, bright as snow. A massive equatorial ridge: up to 20 kilometers high: girdles the moon like the seam on a tennis ball. No satisfactory explanation exists for either feature. Our colony is positioned on the boundary between dark and light terrain, with the ridge visible as a wall on the horizon.
+- **Description:** Iapetus refuses to be ordinary. One hemisphere is as dark as coal; the other, bright as snow. A massive equatorial ridge — up to 20 kilometers high — girdles the moon like the seam on a tennis ball. No satisfactory explanation exists for either feature. Our colony is positioned on the boundary between dark and light terrain, with the ridge visible as a wall on the horizon.
 - **Flavor:** \"Half the moon is white ice, the other half is dark as coal, with a mountain range running along the equator like a belt. Nobody has explained any of this.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Planetary Scientist
 - **Current image:** gfx/event_pictures/colony_saturn_icy_moon.dds
 
@@ -2888,7 +3436,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.26
 - **Title:** Colony: Miranda
-- **Description:** Miranda is the geological puzzle of the Uranian system. Despite being only 470 kilometers across, it displays terrain that should not exist on a body this small: Verona Rupes, a 20-kilometer cliff: the tallest in the solar system: and chevron-shaped ridged regions called coronae that suggest the moon was shattered and reassembled, or experienced extreme tidal heating in its past.
+- **Description:** Miranda is the geological puzzle of the Uranian system. Despite being only 470 kilometers across, it displays terrain that should not exist on a body this small: Verona Rupes, a 20-kilometer cliff — the tallest in the solar system — and chevron-shaped ridged regions called coronae that suggest the moon was shattered and reassembled, or experienced extreme tidal heating in its past.
 - **Flavor:** \"A cliff twenty kilometers high. You could jump off and have ten minutes of freefall before landing. Not that anyone has tried. Yet.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Geological Survey Lead
 - **Current image:** gfx/event_pictures/colony_uranus_moon.dds
 
@@ -2924,7 +3472,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.32
 - **Title:** Colony: Makemake
-- **Description:** Makemake's surface is coated in methane and ethane ice that shifts in spectral properties as the dwarf planet's elliptical orbit carries it nearer and farther from the distant Sun. With no known atmosphere and no confirmed moons for years after its discovery: until tiny S/2015 (136472) 1 was spotted: Makemake offers a pristine laboratory for studying the primordial composition of the outer solar system.
+- **Description:** Makemake's surface is coated in methane and ethane ice that shifts in spectral properties as the dwarf planet's elliptical orbit carries it nearer and farther from the distant Sun. With no known atmosphere and no confirmed moons for years after its discovery — until tiny S/2015 (136472) 1 was spotted — Makemake offers a pristine laboratory for studying the primordial composition of the outer solar system.
 - **Flavor:** \"Frozen since the birth of the solar system. Every core sample is a time capsule from four and a half billion years ago. We are the first to open them.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Chief Geochemist
 - **Current image:** gfx/event_pictures/colony_deep_kuiper.dds
 
@@ -2936,7 +3484,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_colony_events.34
 - **Title:** Colony: Sedna
-- **Description:** Sedna occupies one of the most extreme orbits known: a 11,400-year ellipse that carries it from 76 AU at perihelion to over 900 AU at aphelion: deep into the inner Oort Cloud. We have caught it near perihelion, when it is: by its standards: close. Our outpost here is the most distant permanent human habitation, farther from the Sun than any settlement has ever been or likely will be for generations. The Sun is barely distinguishable from the brighter stars.
+- **Description:** Sedna occupies one of the most extreme orbits known — a 11,400-year ellipse that carries it from 76 AU at perihelion to over 900 AU at aphelion — deep into the inner Oort Cloud. We have caught it near perihelion, when it is — by its standards — close. Our outpost here is the most distant permanent human habitation, farther from the Sun than any settlement has ever been or likely will be for generations. The Sun is barely distinguishable from the brighter stars.
 - **Flavor:** \"Eleven thousand years to orbit the Sun once. We are the furthest humans from Earth. The next star is still unfathomably far. But we are here.\"\n\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Expedition Commander
 - **Current image:** gfx/event_pictures/colony_sedna.dds
 
@@ -2957,49 +3505,49 @@ Each event is listed with its title, description, and flavor text (where availab
 ### space_race_events.3
 - **Title:** The Eagle Has Landed
 - **Description:** Billions watch as the lander touches down on the lunar surface. The first human feet press into regolith that has lain undisturbed since the formation of the solar system. A flag is planted, instruments are deployed, and for a brief shining moment the divisions of Earth seem impossibly petty.
-- **Flavor:** \"Mission Control: we have landed. The surface is fine and powdery. I can see our boot prints stretching back to the lander. It is... quiet here. Quiet in a way that has no earthly comparison.\"\n\n- First words from the lunar surface
+- **Flavor:** \"Mission Control: we have landed. The surface is fine and powdery. I can see our boot prints stretching back to the lander. It is... quiet here. Quiet in a way that has no earthly comparison.\"\n\n— First words from the lunar surface
 - **Current image:** gfx/event_pictures/moon_landing_footprint.dds
 
 ### space_race_events.4
 - **Title:** Voices from the Void
 - **Description:** After years of patient waiting, our probe has transmitted its final survey package. The measurements and imagery from its chosen target will occupy scientists for decades, vindicating a mission that once looked like pure speculation.
-- **Flavor:** \"We aimed a machine at the dark and asked it a question years ago. Tonight, it finally answered. Not with certainty, but with enough data to redraw the textbooks.\"\n\n- Probe Communications Lead, aged seventy-three
+- **Flavor:** \"We aimed a machine at the dark and asked it a question years ago. Tonight, it finally answered. Not with certainty, but with enough data to redraw the textbooks.\"\n\n— Probe Communications Lead, aged seventy-three
 - **Current image:** gfx/event_pictures/deep_space_probe_encounter.dds
 
 ### space_race_events.5
 - **Title:** Where the Eagle Shall Land
 - **Description:** The lunar landing site selection committee has narrowed the options to four candidates. Shackleton Crater near the south pole offers access to permanently shadowed regions that may contain water ice: scientifically invaluable but extremely hazardous. The Equatorial Plain offers well-mapped terrain and reliable conditions. The Sea of Tranquility, first mapped by early telescopes, offers a flat expanse ideal for a symbolically powerful landing. And the far side of the Moon, radio-shielded from Earth, is perfect for deep-space observation but demands autonomous navigation.
-- **Flavor:** \"Shackleton is a geologist's dream and a pilot's nightmare. The crater rim gets sunlight, but one degree off course and you're in permanent shadow at minus 170 Celsius.\"\n\n- Landing Site Review Board\n\n\"The equatorial sites are boring. Safe, yes. But boring. And boring doesn't win the space race.\"\n\n- Program Chief Scientist
+- **Flavor:** \"Shackleton is a geologist's dream and a pilot's nightmare. The crater rim gets sunlight, but one degree off course and you're in permanent shadow at minus 170 Celsius.\"\n\n— Landing Site Review Board\n\n\"The equatorial sites are boring. Safe, yes. But boring. And boring doesn't win the space race.\"\n\n— Program Chief Scientist
 - **Current image:** gfx/event_pictures/moon_site_selection.dds
 
 ### space_race_events.6
 - **Title:** Foothold on Another World
 - **Description:** The first permanent habitat module has been pressurized and declared operational. A crew of specialists will maintain a continuous human presence on the Moon: the first time our species has truly lived beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.
-- **Flavor:** \"You get used to the gravity. You get used to the recycled air and the freeze-dried everything. What you never get used to is looking up through the viewport and seeing Earth: whole and blue and impossibly far away: and knowing that everyone you've ever loved is on that little marble.\"\n\n- Lunar Base Crew Member, personal diary entry
+- **Flavor:** \"You get used to the gravity. You get used to the recycled air and the freeze-dried everything. What you never get used to is looking up through the viewport and seeing Earth — whole and blue and impossibly far away — and knowing that everyone you've ever loved is on that little marble.\"\n\n— Lunar Base Crew Member, personal diary entry
 - **Current image:** gfx/event_pictures/lunar_base_dome.dds
 
 ### space_race_events.7
 - **Title:** Red Soil, New World
 - **Description:** After months of transit through the void, the lander descends through Mars' thin atmosphere and sets down in a cloud of rust-colored dust. The crew reports nominal conditions. For the first time, human beings stand on the surface of another planet.
-- **Flavor:** \"Earth is a blue star in the evening sky. I watched it set behind Olympus Mons last night. The loneliness is extraordinary: and so is the privilege.\"\n\n- First crew member to set foot on Mars, personal log\n\n\"We're not explorers anymore. We're settlers. That word means something different when there's no road home.\"\n\n- Mission Commander
+- **Flavor:** \"Earth is a blue star in the evening sky. I watched it set behind Olympus Mons last night. The loneliness is extraordinary — and so is the privilege.\"\n\n— First crew member to set foot on Mars, personal log\n\n\"We're not explorers anymore. We're settlers. That word means something different when there's no road home.\"\n\n— Mission Commander
 - **Current image:** gfx/event_pictures/mars_dusty_landing.dds
 
 ### space_race_events.8
 - **Title:** The Longest Voyage
 - **Description:** Our probe stands ready on the launch pad: a testament to decades of propulsion research. Aimed at the nearest stars, light-years away, it will be the first human artifact to cross interstellar space. Even at a significant fraction of light speed, the journey will take years. Then the data must travel back at the speed of light. We will not hear from this probe for over a decade.\n\nHow shall we configure the drive system?
-- **Flavor:** The Sun will be just another star in its cameras.
+- **Flavor:** \"The Sun will be just another star in its cameras,\" the mission director said.\n\n\"And the cameras still work?\"\n\n\"At those distances, the cameras will not need to work very hard. The Sun will be a point of light, indistinguishable from any other point. The data we sent the probe to collect is everything that is not the Sun. That is the entire point of going so far.\"
 - **Current image:** gfx/event_pictures/interstellar_probe_departure.dds
 
 ### space_race_events.10
 - **Title:** A Costly Miscalculation
 - **Description:** The ambitious timeline has claimed its toll. A catastrophic failure during testing has destroyed the mission vehicle and set our program back significantly. Engineers scramble through the wreckage while government officials demand answers.
-- **Flavor:** \"They said we were going too fast. They were right. But we had no choice: the others are breathing down our necks.\"\n\n- Senior Engineer, standing amid the ruins of the launch complex\n\n\"Fix it. Fix it and fly again. That's all we can do.\"\n\n- Program Director, three hours after the explosion
+- **Flavor:** \"They said we were going too fast. They were right. But we had no choice: the others are breathing down our necks.\"\n\n— Senior Engineer, standing amid the ruins of the launch complex\n\n\"Fix it. Fix it and fly again. That's all we can do.\"\n\n— Program Director, three hours after the explosion
 - **Current image:** gfx/event_pictures/launch_pad_explosion.dds
 
 ### space_race_events.11
 - **Title:** Technical Difficulties
 - **Description:** A technical anomaly has forced a mission delay. While no lives were lost, the issue demands careful investigation before the program can resume. Engineers believe the root cause is well understood, but weeks of lost time cannot be recovered.
-- **Flavor:** \"It's a valve. A single valve, and two weeks to replace it. Two weeks we didn't have.\"\n\n- Lead Propulsion Engineer
+- **Flavor:** \"It's a valve. A single valve, and two weeks to replace it. Two weeks we didn't have.\"\n\n— Lead Propulsion Engineer
 - **Current image:** gfx/event_pictures/mission_delay_hangar.dds
 
 ### space_race_events.20
@@ -3011,211 +3559,211 @@ Each event is listed with its title, description, and flavor text (where availab
 ### space_race_events.30
 - **Title:** Promising Trajectory
 - **Description:** A test vehicle has successfully reached the edge of space and returned intact. The telemetry data exceeds expectations: the heat shield performed flawlessly and the guidance systems achieved remarkable precision.
-- **Flavor:** \"She flew straight and true. If the numbers hold, we're ready for a human payload within months.\"\n\n- Chief Test Engineer, reviewing flight data
+- **Flavor:** \"She flew straight and true. If the numbers hold, we're ready for a human payload within months.\"\n\n— Chief Test Engineer, reviewing flight data
 - **Current image:** gfx/event_pictures/rocket_ascending_sky.dds
 
 ### space_race_events.31
 - **Title:** The Kessler Threshold
 - **Description:** As our orbital program accelerates, so does the cloud of spent rocket stages, dead satellites, and assorted debris accumulating in low Earth orbit. Scientists warn that an uncontrolled cascade could render entire orbital bands unusable.
-- **Flavor:** \"Every bolt, every fleck of paint up there is a bullet at orbital velocity. We're building a minefield around our own planet.\"\n\n- Orbital Dynamics Researcher\n\n\"A manageable problem: if we manage it now rather than later.\"\n\n- Space Agency Deputy Director
+- **Flavor:** \"Every bolt, every fleck of paint up there is a bullet at orbital velocity. We're building a minefield around our own planet.\"\n\n— Orbital Dynamics Researcher\n\n\"A manageable problem: if we manage it now rather than later.\"\n\n— Space Agency Deputy Director
 - **Current image:** gfx/event_pictures/kessler_debris_field.dds
 
 ### space_race_events.32
 - **Title:** Who Goes to the Moon?
 - **Description:** Applications for the astronaut program have flooded in: thousands of hopefuls from every walk of life. The selection committee must decide the character of the crew that will represent [ROOT.GetCountry.GetName] on the Moon.
-- **Flavor:** \"I was a schoolteacher before this. Now they tell me I might walk on the Moon. My students think I've gone mad.\"\n\n- Astronaut Candidate #4,417\n\n\"We need flyers, not dreamers. Test pilots who've stared death in the face and told it to wait.\"\n\n- Selection Board Chairman
+- **Flavor:** \"I was a schoolteacher before this. Now they tell me I might walk on the Moon. My students think I've gone mad.\"\n\n— Astronaut Candidate #4,417\n\n\"We need flyers, not dreamers. Test pilots who've stared death in the face and told it to wait.\"\n\n— Selection Board Chairman
 - **Current image:** gfx/event_pictures/astronaut_candidate_training.dds
 
 ### space_race_events.33
 - **Title:** Water on Mars
 - **Description:** Orbital surveys of Mars have revealed spectroscopic signatures consistent with subsurface water ice in a region near the planned landing zone. If confirmed, this discovery could dramatically simplify in-situ resource utilization for a permanent base.
-- **Flavor:** \"Water is life. Water is fuel. Water is everything on Mars. If that ice is real, we just found our front door.\"\n\n- Mission Geologist
+- **Flavor:** \"Water is life. Water is fuel. Water is everything on Mars. If that ice is real, we just found our front door.\"\n\n— Mission Geologist
 - **Current image:** gfx/event_pictures/mars_dusty_landing.dds
 
 ### space_race_events.34
 - **Title:** The Instrument Debate
-- **Description:** Our interstellar probe design has reached a critical decision point. The mass budget is finite, and every kilogram trades against delta-v. Our scientists are divided: some want to maximize the instrument suite: cameras, spectrometers, magnetometers, a radar sounder: arguing that we may never send another. Others insist on stripping down to essentials to shave years off the transit time. A third faction proposes opening the instrument slots to international partners.
-- **Flavor:** Every gram is a bargain between knowledge and time.
+- **Description:** Our interstellar probe design has reached a critical decision point. The mass budget is finite, and every kilogram trades against delta-v. Our scientists are divided — some want to maximize the instrument suite — cameras, spectrometers, magnetometers, a radar sounder: arguing that we may never send another. Others insist on stripping down to essentials to shave years off the transit time. A third faction proposes opening the instrument slots to international partners.
+- **Flavor:** \"Every gram is a bargain between knowledge and time,\" the payload manager said.\n\n\"And the bargain this mission?\"\n\n\"Twelve kilograms of instruments. Six months of design. Two weeks of integration. If we wanted to add another instrument, we would need to remove an existing one or wait for the next launch. The next launch is in eighteen months.\"
 - **Current image:** gfx/event_pictures/moon_site_selection.dds
 
 ### space_race_events.35
 - **Title:** Supply Chain to the Stars
 - **Description:** As our colonization program expands, the logistics have become a system unto themselves. Launch windows, orbital mechanics, delta-v budgets, radiation exposure limits for perishable cargo: our planners must coordinate across dozens of variables to keep the settlements supplied. A debate has emerged about how to structure the interplanetary supply chain.
-- **Flavor:** The tyranny of the rocket equation respects no schedule.
+- **Flavor:** \"The tyranny of the rocket equation respects no schedule,\" the chief engineer told the press.\n\n\"Plain English, please.\"\n\n\"More fuel means more weight means more fuel. The mathematics is unforgiving. The schedule we publish is the schedule the equation permits us to publish. If we want a sooner launch, we need a smaller payload or a better engine. Neither is available this quarter.\"
 - **Current image:** gfx/event_pictures/supply_logistics_planning.dds
 
 ### space_race_events.36
 - **Title:** Lunar Helium-3
 - **Description:** Geological surveys of the lunar base's surrounding terrain have uncovered deposits of Helium-3 far richer than predicted. This isotope, precious fuel for fusion reactors, could transform the Moon from a scientific outpost into an economic engine.
-- **Flavor:** \"We came here for science. We may stay for profit.\"\n\n- Lunar Base Commander, reviewing the geological survey data\n\n\"The Moon isn't just a stepping stone anymore. It's a gold mine: and every spacefaring nation knows it.\"\n\n- Economic correspondent, broadcasting from Earth
+- **Flavor:** \"We came here for science. We may stay for profit.\"\n\n— Lunar Base Commander, reviewing the geological survey data\n\n\"The Moon isn't just a stepping stone anymore. It's a gold mine — and every spacefaring nation knows it.\"\n\n— Economic correspondent, broadcasting from Earth
 - **Current image:** gfx/event_pictures/lunar_base_dome.dds
 
 ### space_race_events.37
 - **Title:** Pale Blue Dot
 - **Description:** Our deep space probe has transmitted the first high-resolution images of the outer solar system back to Earth. The photographs reveal stunning detail: the swirling bands of gas giants, the cracked ice of distant moons, rings lit by a Sun that is little more than a bright star.
-- **Flavor:** \"They're just photographs. Light captured by a machine billions of kilometers away. But when I saw them... I wept. I think everyone in the control room did.\"\n\n- Probe Mission Director
+- **Flavor:** \"They're just photographs. Light captured by a machine billions of kilometers away. But when I saw them... I wept. I think everyone in the control room did.\"\n\n— Probe Mission Director
 - **Current image:** gfx/event_pictures/deep_space_probe_encounter.dds
 
 ### space_race_events.40
 - **Title:** The Invisible Storm
 - **Description:** Dosimetry data from test flights reveals that radiation exposure beyond the magnetosphere exceeds initial models. The Van Allen belts and galactic cosmic rays present a serious obstacle to long-duration crewed missions. Engineers must decide how to shield the crew without exceeding the mass budget.
-- **Flavor:** \"A centimeter of aluminum stops nothing out there. The protons go straight through. We need mass: or magnets: or both.\"\n\n- Radiation Protection Officer, reviewing dosimetry results\n\n\"Every kilogram of shielding is a kilogram we can't use for propellant or life support. The equation is unforgiving.\"\n\n- Chief Mission Architect
+- **Flavor:** \"A centimeter of aluminum stops nothing out there. The protons go straight through. We need mass — or magnets — or both.\"\n\n— Radiation Protection Officer, reviewing dosimetry results\n\n\"Every kilogram of shielding is a kilogram we can't use for propellant or life support. The equation is unforgiving.\"\n\n— Chief Mission Architect
 - **Current image:** gfx/event_pictures/radiation_hazard_space.dds
 
 ### space_race_events.41
 - **Title:** The Tyranny of the Rocket Equation
 - **Description:** Cost analysis of the current mission profile is sobering. Every kilogram delivered to the lunar or Martian surface costs orders of magnitude more than its Earth-side equivalent. The program's economics depend entirely on reducing the cost per kilogram to orbit.
-- **Flavor:** \"Tsiolkovsky's equation doesn't negotiate. You either throw more mass out the back or you find a way around the equation entirely.\"\n\n- Senior Propulsion Engineer\n\n\"The elevator changes everything: if we have one. If we don't, it's chemical rockets all the way, and the budget bleeds.\"\n\n- Program Financial Controller
+- **Flavor:** \"Tsiolkovsky's equation doesn't negotiate. You either throw more mass out the back or you find a way around the equation entirely.\"\n\n— Senior Propulsion Engineer\n\n\"The elevator changes everything: if we have one. If we don't, it's chemical rockets all the way, and the budget bleeds.\"\n\n— Program Financial Controller
 - **Current image:** gfx/event_pictures/supply_logistics_planning.dds
 
 ### space_race_events.42
 - **Title:** Twenty Minutes of Silence
 - **Description:** At opposition, the signal delay between Earth and Mars ranges from four to twenty-four minutes each way. Any crisis on the Martian surface must be resolved by the crew before Mission Control even learns about it. The implications for spacecraft autonomy and crew training are profound.
-- **Flavor:** \"By the time they hear us scream, we'll already be dead or saved. That's the math.\"\n\n- Mars Transit Crew Commander, during pre-flight simulation\n\n\"We're not just sending people to Mars. We're sending a self-contained civilization that happens to receive very delayed mail from Earth.\"\n\n- Communications Systems Lead
+- **Flavor:** \"By the time they hear us scream, we'll already be dead or saved. That's the math.\"\n\n— Mars Transit Crew Commander, during pre-flight simulation\n\n\"We're not just sending people to Mars. We're sending a self-contained civilization that happens to receive very delayed mail from Earth.\"\n\n— Communications Systems Lead
 - **Current image:** gfx/event_pictures/mars_communication_room.dds
 
 ### space_race_events.43
 - **Title:** The Loop Must Close
-- **Description:** Long-duration habitation requires a life-support system that recycles nearly everything: air, water, and waste: with minimal resupply from Earth. Current recycling rates hover around 90%, but sustained habitation demands 98% or better. The engineering challenge is as much biological as mechanical.
-- **Flavor:** \"A submarine can stay sealed for six months. We need to stay sealed for years. The difference isn't engineering: it's ecology. We're building a biosphere in a tin can.\"\n\n- Life Support Systems Lead\n\n\"The algae reactors are the lungs. The bacterial processors are the kidneys. If either fails, everyone dies together. No pressure.\"\n\n- Lead Bioengineer, with a humorless smile
+- **Description:** Long-duration habitation requires a life-support system that recycles nearly everything — air, water, and waste — with minimal resupply from Earth. Current recycling rates hover around 90%, but sustained habitation demands 98% or better. The engineering challenge is as much biological as mechanical.
+- **Flavor:** \"A submarine can stay sealed for six months. We need to stay sealed for years. The difference isn't engineering: it's ecology. We're building a biosphere in a tin can.\"\n\n— Life Support Systems Lead\n\n\"The algae reactors are the lungs. The bacterial processors are the kidneys. If either fails, everyone dies together. No pressure.\"\n\n— Lead Bioengineer, with a humorless smile
 - **Current image:** gfx/event_pictures/life_support_biosphere.dds
 
 ### space_race_events.44
 - **Title:** Coronal Mass Ejection Warning
 - **Description:** Solar monitoring stations detect a massive coronal ejection directed toward the inner solar system. Within hours, a wave of charged particles will sweep across the path of our current mission assets. Crew and sensitive electronics are at risk.
-- **Flavor:** \"The Sun just threw a billion tons of plasma at us. We have about fourteen hours to get everyone behind the water wall or into the storm shelter.\"\n\n- Solar Weather Officer, alarm sounding in the background
+- **Flavor:** \"The Sun just threw a billion tons of plasma at us. We have about fourteen hours to get everyone behind the water wall or into the storm shelter.\"\n\n— Solar Weather Officer, alarm sounding in the background
 - **Current image:** gfx/event_pictures/radiation_hazard_space.dds
 
 ### space_race_events.45
 - **Title:** Slingshot Trajectories
 - **Description:** The navigation team presents three trajectory options for the outer system probe. Each uses different combinations of planetary gravity assists to reach the target. The choice of trajectory determines not only travel time but which planets the probe will photograph along the way.
-- **Flavor:** \"We're going to throw a spacecraft at Jupiter and miss on purpose. Jupiter's gravity will grab it, spin it around, and fling it toward Saturn faster than any rocket could. Free delta-v: courtesy of Kepler and Newton.\"\n\n- Orbital Mechanics Lead, briefing the program director
+- **Flavor:** \"We're going to throw a spacecraft at Jupiter and miss on purpose. Jupiter's gravity will grab it, spin it around, and fling it toward Saturn faster than any rocket could. Free delta-v: courtesy of Kepler and Newton.\"\n\n— Orbital Mechanics Lead, briefing the program director
 - **Current image:** gfx/event_pictures/deep_space_probe_encounter.dds
 
 ### space_race_events.46
 - **Title:** Living Off the Land
 - **Description:** The first in-situ resource utilization tests have been completed. Automated processors have successfully extracted oxygen from regolith samples, demonstrating that future missions need not carry all their consumables from Earth. The question now is how far to push the technology.
-- **Flavor:** \"We baked Moon dust at 900 degrees and got breathable oxygen. Not a lot: a few liters per hour: but it works. The physics works. Everything else is scaling.\"\n\n- ISRU Test Lead, from the surface operations module
+- **Flavor:** \"We baked Moon dust at 900 degrees and got breathable oxygen. Not a lot — a few liters per hour — but it works. The physics works. Everything else is scaling.\"\n\n— ISRU Test Lead, from the surface operations module
 - **Current image:** gfx/event_pictures/lunar_base_dome.dds
 
 ### space_race_events.47
 - **Title:** Impact at Orbital Velocity
-- **Description:** A micrometeorite: no larger than a grain of sand, but traveling at 20 kilometers per second: has struck one of our orbital assets. The impact punctured the outer hull and damaged a secondary system. Standard Whipple shielding absorbed most of the kinetic energy, but the incident underscores the constant hazard of operating in the debris environment.
-- **Flavor:** \"A pebble. A pebble at seven times the speed of a rifle bullet. Out here, even dust is ammunition.\"\n\n- Station Damage Assessment Officer, examining the fist-sized crater in the hull
+- **Description:** A micrometeorite — no larger than a grain of sand, but traveling at 20 kilometers per second — has struck one of our orbital assets. The impact punctured the outer hull and damaged a secondary system. Standard Whipple shielding absorbed most of the kinetic energy, but the incident underscores the constant hazard of operating in the debris environment.
+- **Flavor:** \"A pebble. A pebble at seven times the speed of a rifle bullet. Out here, even dust is ammunition.\"\n\n— Station Damage Assessment Officer, examining the fist-sized crater in the hull
 - **Current image:** gfx/event_pictures/kessler_debris_field.dds
 
 ### space_race_events.48
 - **Title:** The Long Dark
-- **Description:** Psych evaluations from the latest long-duration crew reveal troubling patterns: increased irritability, withdrawal, sleep disruption, and what the psychologists are calling 'Earth-longing': a persistent, low-grade grief for the planet they left behind. Mission performance remains adequate, but the human cost of isolation is becoming measurable.
-- **Flavor:** \"I dreamed of rain last night. Real rain, not the recycled shower. I stood in a field and let it hit my face. When I woke up, I couldn't stop crying. This place is going to break us if we don't find a way to stay human out here.\"\n\n- Anonymous crew journal entry, flagged by the monitoring AI\n\n\"Morale is a consumable. We are learning: too late: how quickly it depletes.\"\n\n- Mission Psychologist, in a classified report to the program director
+- **Description:** Psych evaluations from the latest long-duration crew reveal troubling patterns — increased irritability, withdrawal, sleep disruption, and what the psychologists are calling 'Earth-longing' — a persistent, low-grade grief for the planet they left behind. Mission performance remains adequate, but the human cost of isolation is becoming measurable.
+- **Flavor:** \"I dreamed of rain last night. Real rain, not the recycled shower. I stood in a field and let it hit my face. When I woke up, I couldn't stop crying. This place is going to break us if we don't find a way to stay human out here.\"\n\n— Anonymous crew journal entry, flagged by the monitoring AI\n\n\"Morale is a consumable. We are learning — too late — how quickly it depletes.\"\n\n— Mission Psychologist, in a classified report to the program director
 - **Current image:** gfx/event_pictures/crew_psychology_isolation.dds
 
 ### space_race_events.49
 - **Title:** Fuel in the Void
 - **Description:** Engineers propose constructing an orbital propellant depot: a refueling station in low Earth orbit where spacecraft can top off their tanks before departing for deep space. The concept would revolutionize mission architecture by decoupling launch mass from mission delta-v requirements.
-- **Flavor:** \"Stop trying to carry everything in one launch. Put the fuel up there first, park it in orbit, and then your deep-space ship can be half the size. It's not rocket science: well, it is, but it's good rocket science.\"\n\n- Orbital Depot Concept Lead, presenting to the program board
+- **Flavor:** \"Stop trying to carry everything in one launch. Put the fuel up there first, park it in orbit, and then your deep-space ship can be half the size. It's not rocket science: well, it is, but it's good rocket science.\"\n\n— Orbital Depot Concept Lead, presenting to the program board
 - **Current image:** gfx/event_pictures/supply_logistics_planning.dds
 
 ### space_race_events.50
 - **Title:** The Private Sector Steps Up
 - **Description:** Our nation's leading private space company has achieved a significant technical breakthrough in reusable launch systems. Their cost-per-kilogram to orbit is now a fraction of what the government program achieves. The question of how to integrate private capabilities with national space objectives has become urgent.
-- **Flavor:** \"Their rockets land themselves. Backwards. On a barge. In the ocean. And they do it for a tenth of what our program spends per launch.\"\n\n- Government Program Director, watching a private sector landing broadcast\n\n\"We don't care about flags. We care about margins. But if the government wants to buy seats on our rockets, we'll paint whatever flag they like on the side.\"\n\n- Private Launch Company CEO
+- **Flavor:** \"Their rockets land themselves. Backwards. On a barge. In the ocean. And they do it for a tenth of what our program spends per launch.\"\n\n— Government Program Director, watching a private sector landing broadcast\n\n\"We don't care about flags. We care about margins. But if the government wants to buy seats on our rockets, we'll paint whatever flag they like on the side.\"\n\n— Private Launch Company CEO
 - **Current image:** gfx/event_pictures/private_rocket_landing.dds
 
 ### space_race_events.51
 - **Title:** Tickets to the Stars
 - **Description:** With orbital capability now proven, entrepreneurs propose offering suborbital and orbital flights to wealthy civilians. The revenue could partially offset program costs, but critics argue that turning humanity's greatest achievement into a luxury experience cheapens the endeavor.
-- **Flavor:** \"Two hundred thousand per seat for a suborbital hop. For orbital, considerably more. The waiting list is already fourteen months long.\"\n\n- Space Tourism Venture Prospectus\n\n\"We did not claw our way to the edge of space so that billionaires could experience weightlessness for six minutes.\"\n\n- Academy of Sciences Chair, in an open letter
+- **Flavor:** \"Two hundred thousand per seat for a suborbital hop. For orbital, considerably more. The waiting list is already fourteen months long.\"\n\n— Space Tourism Venture Prospectus\n\n\"We did not claw our way to the edge of space so that billionaires could experience weightlessness for six minutes.\"\n\n— Academy of Sciences Chair, in an open letter
 - **Current image:** gfx/event_pictures/space_tourism_luxury.dds
 
 ### space_race_events.52
 - **Title:** A Station for All Nations
 - **Description:** Several spacefaring nations have proposed constructing a jointly operated orbital station: a permanent laboratory in space, crewed continuously and funded cooperatively. The scientific benefits are substantial, but sharing a platform with rivals means sharing technology, procedures, and perhaps secrets.
-- **Flavor:** \"Imagine a laboratory where gravity is a variable, not a constant. Where materials science, biology, and physics can be studied in ways impossible on Earth. That's what an orbital station offers: if we can agree on who pays for it and who gets the data.\"\n\n- International Space Cooperation Proposal, executive summary\n\n\"They want us to bolt our module onto their station and pretend we're all friends up there. We're not friends. We're competitors who happen to share an orbit.\"\n\n- Skeptical Military Advisor
+- **Flavor:** \"Imagine a laboratory where gravity is a variable, not a constant. Where materials science, biology, and physics can be studied in ways impossible on Earth. That's what an orbital station offers: if we can agree on who pays for it and who gets the data.\"\n\n— International Space Cooperation Proposal, executive summary\n\n\"They want us to bolt our module onto their station and pretend we're all friends up there. We're not friends. We're competitors who happen to share an orbit.\"\n\n— Skeptical Military Advisor
 - **Current image:** gfx/event_pictures/international_station_construction.dds
 
 ### space_race_events.53
 - **Title:** Off-World Industry Meets the Space Program
 - **Description:** Our extraplanetary mining operations have matured to the point where they can supply raw materials to the space program directly. Integrating the industrial base with the exploration program would create efficiencies: asteroid-derived metals for spacecraft construction, lunar regolith for radiation shielding, and orbital fuel synthesis from captured volatiles.
-- **Flavor:** \"We're mining nickel-iron from a body that has no atmosphere, no permits, and no labor laws. Bringing that supply chain home to the space program closes a loop that's been open since we started throwing things into orbit.\"\n\n- Extraplanetary Operations Director
+- **Flavor:** \"We're mining nickel-iron from a body that has no atmosphere, no permits, and no labor laws. Bringing that supply chain home to the space program closes a loop that's been open since we started throwing things into orbit.\"\n\n— Extraplanetary Operations Director
 - **Current image:** gfx/event_pictures/international_station_construction.dds
 
 ### space_race_events.54
 - **Title:** Re-entry Equations
 - **Description:** The thermal protection system for the crew capsule must survive temperatures exceeding 1,600 degrees Celsius during atmospheric re-entry. The engineering team is divided between three approaches, each with different mass, cost, and reliability characteristics.
-- **Flavor:** \"At Mach 25, the air in front of the capsule turns to plasma. The heat shield is the only thing between the crew and a temperature hotter than the surface of the Sun. We do not get to be creative here. We get to be right.\"\n\n- Thermal Protection Systems Lead
+- **Flavor:** \"At Mach 25, the air in front of the capsule turns to plasma. The heat shield is the only thing between the crew and a temperature hotter than the surface of the Sun. We do not get to be creative here. We get to be right.\"\n\n— Thermal Protection Systems Lead
 - **Current image:** gfx/event_pictures/reentry_fireball.dds
 
 ### space_race_events.55
 - **Title:** The Elevator Advantage
 - **Description:** Our operational space elevator reduces the cost of reaching orbit by two orders of magnitude compared to chemical rockets. The program logistics team proposes routing all non-time-critical cargo through the elevator, reserving rocket launches for crew transfers and urgent payloads.
-- **Flavor:** \"The elevator puts a ton in geostationary orbit for the price of shipping it from one continent to another. That single fact changes the economics of everything we do beyond the atmosphere.\"\n\n- Space Program Logistics Director
+- **Flavor:** \"The elevator puts a ton in geostationary orbit for the price of shipping it from one continent to another. That single fact changes the economics of everything we do beyond the atmosphere.\"\n\n— Space Program Logistics Director
 - **Current image:** gfx/event_pictures/supply_logistics_planning.dds
 
 ### space_race_events.60
 - **Title:** Voices from Alpha Centauri
 - **Description:** (no localization)
-- **Flavor:** The signal took years to arrive. The data was garbled, incomplete, and utterly without precedent.
+- **Flavor:** \"The signal took years to arrive. The data was garbled, incomplete, and utterly without precedent.\"\n\n\"What does it say?\"\n\n\"We are still decoding. What we have so far suggests something we did not know how to look for. The instrument was not designed for what it appears to have detected. We are now designing a new instrument to confirm the detection. The new instrument will take eight years to deliver results.\"
 - **Current image:** (unknown)
 
 ### space_race_events.12
 - **Title:** Inferno on the Pad
-- **Description:** The fuel ignited without warning. The launch vehicle was consumed in a fireball that could be seen for miles, reducing the launch complex to twisted metal and scorched concrete. Miraculously, the pad crew escaped the blast radius: but the vehicle and months of preparation are gone.
-- **Flavor:** \"The cameras caught it all. Three seconds from nominal readings to complete destruction. The fuel manifold ruptured at the coupling: a joint we'd tested a hundred times.\"\n\n- Lead Propulsion Engineer, reviewing telemetry in the aftermath
+- **Description:** The fuel ignited without warning. The launch vehicle was consumed in a fireball that could be seen for miles, reducing the launch complex to twisted metal and scorched concrete. Miraculously, the pad crew escaped the blast radius — but the vehicle and months of preparation are gone.
+- **Flavor:** \"The cameras caught it all. Three seconds from nominal readings to complete destruction. The fuel manifold ruptured at the coupling: a joint we'd tested a hundred times.\"\n\n— Lead Propulsion Engineer, reviewing telemetry in the aftermath
 - **Current image:** gfx/event_pictures/launch_pad_explosion.dds
 
 ### space_race_events.13
 - **Title:** Silence from the Deep
 - **Description:** Contact with the probe has been lost. The last telemetry showed nominal operations, then: silence. The deep-space network rotates its dishes, sweeping the sky where the probe should be, but receives nothing. Hundreds of millions of miles away, our creation drifts in the void, deaf and mute.
-- **Flavor:** \"We're listening on every frequency. The probe knows how to call home: if it still can.\"\n\n- Tracking Station Director, 72 hours after signal loss\n\n\"Build another one. We've lost probes before. We've never stopped sending them.\"\n\n- Chief Scientist
+- **Flavor:** \"We're listening on every frequency. The probe knows how to call home: if it still can.\"\n\n— Tracking Station Director, 72 hours after signal loss\n\n\"Build another one. We've lost probes before. We've never stopped sending them.\"\n\n— Chief Scientist
 - **Current image:** gfx/event_pictures/deep_space_silence.dds
 
 ### space_race_events.14
 - **Title:** Breach in the Night
-- **Description:** Alarms tore through the habitat module at 0347 local time. A microcrack in the hull: missed by inspection, aggravated by thermal cycling: had become a breach. Atmospheric pressure dropped thirty percent before emergency systems engaged. The crew sealed the affected section, but the damage to both equipment and morale is immense.
-- **Flavor:** \"You hear the air leaving. That's the sound you train for but pray you never hear. A whistle that gets higher as the pressure drops.\"\n\n- Mission Commander, post-incident debrief
+- **Description:** Alarms tore through the habitat module at 0347 local time. A microcrack in the hull — missed by inspection, aggravated by thermal cycling — had become a breach. Atmospheric pressure dropped thirty percent before emergency systems engaged. The crew sealed the affected section, but the damage to both equipment and morale is immense.
+- **Flavor:** \"You hear the air leaving. That's the sound you train for but pray you never hear. A whistle that gets higher as the pressure drops.\"\n\n— Mission Commander, post-incident debrief
 - **Current image:** gfx/event_pictures/habitat_breach_alarm.dds
 
 ### space_race_events.15
 - **Title:** The Computer Says No
 - **Description:** Twelve minutes from the surface, the guidance computer began issuing contradictory commands. The descent trajectory, calculated to thread the needle between crater walls, was suddenly unreliable. The crew stared at instruments that told them they were simultaneously too high and too low. In mission control, a terrible decision waited.
-- **Flavor:** \"Computer says go. Computer says no-go. Computer says-\" The pilot's hand hovered over the manual override switch. Everything they'd trained for came down to this.\n\n- Voice recording, descent communications log
+- **Flavor:** \"Computer says go. Computer says no-go. Computer says-\" The pilot's hand hovered over the manual override switch. Everything they'd trained for came down to this.\n\n— Voice recording, descent communications log
 - **Current image:** gfx/event_pictures/computer_error_cockpit.dds
 
 ### space_race_events.16
 - **Title:** The Bolts That Didn't Fire
-- **Description:** The first stage performed flawlessly. Then came the moment of separation: and the explosive bolts failed to fire. The second stage ignited with the first still attached, creating a violent tumbling motion that overwhelmed attitude control. The vehicle broke apart seconds later, scattering debris across a hundred-mile corridor downrange.
-- **Flavor:** \"Separation: negative. Negative sep. We have a tumble. Flight, we have a tumble.\"\n\n- Range Safety Officer, final transmission before vehicle destruction\n\n\"All those engines worked perfectly. It was eight bolts that didn't.\"\n\n- Chief Engineer, in the review board
+- **Description:** The first stage performed flawlessly. Then came the moment of separation — and the explosive bolts failed to fire. The second stage ignited with the first still attached, creating a violent tumbling motion that overwhelmed attitude control. The vehicle broke apart seconds later, scattering debris across a hundred-mile corridor downrange.
+- **Flavor:** \"Separation: negative. Negative sep. We have a tumble. Flight, we have a tumble.\"\n\n— Range Safety Officer, final transmission before vehicle destruction\n\n\"All those engines worked perfectly. It was eight bolts that didn't.\"\n\n— Chief Engineer, in the review board
 - **Current image:** gfx/event_pictures/launch_pad_explosion.dds
 
 ### space_race_events.17
 - **Title:** Heart of the Mission
 - **Description:** The mission surgeon's report was blunt: acute cardiac arrhythmia, likely triggered by prolonged microgravity adaptation. The affected crew member is stable but in no condition to continue operations. With the nearest hospital millions of miles away, every minute of delay in treatment is a risk calculation that no protocol fully covers.
-- **Flavor:** \"We trained for this scenario. We just never thought it would actually happen: not to our crew, not this far from home.\"\n\n- Flight Surgeon, speaking to the press after the decision was announced
+- **Flavor:** \"We trained for this scenario. We just never thought it would actually happen: not to our crew, not this far from home.\"\n\n— Flight Surgeon, speaking to the press after the decision was announced
 - **Current image:** gfx/event_pictures/crew_medical_crisis.dds
 
 ### space_race_events.18
 - **Title:** The Paper Trail
 - **Description:** Investigative journalists have uncovered evidence of systematic cost overruns, falsified safety certifications, and a culture of schedule pressure that silenced engineers who raised concerns. The revelations threaten to erode public confidence in the entire space program just as it reaches a critical phase.
-- **Flavor:** \"The reports were filed. The warnings were given. Management chose the launch date over the data.\"\n\n- Anonymous whistleblower, quoted in the morning papers\n\n\"We will find out exactly what happened, and heads will roll.\"\n\n- Parliamentary Committee Chair
+- **Flavor:** \"The reports were filed. The warnings were given. Management chose the launch date over the data.\"\n\n— Anonymous whistleblower, quoted in the morning papers\n\n\"We will find out exactly what happened, and heads will roll.\"\n\n— Parliamentary Committee Chair
 - **Current image:** gfx/event_pictures/program_scandal_newsroom.dds
 
 ### space_race_events.19
 - **Title:** Shadows on the Launchpad
 - **Description:** Anomalous tool marks on a critical fuel line. An access log showing unauthorized entries at 3 AM. A suspiciously precise failure that destroyed exactly the component most difficult to replace. Intelligence officials suspect deliberate sabotage: perhaps from a rival power that cannot afford to see us succeed.
-- **Flavor:** \"Coincidence has a pattern, and this pattern spells intent. Someone wanted this vehicle to fail.\"\n\n- Head of Program Security\n\n\"Or we just had a bad batch of titanium fittings. Let's not start an international incident over metallurgy.\"\n\n- Chief Engineer, urging caution
+- **Flavor:** \"Coincidence has a pattern, and this pattern spells intent. Someone wanted this vehicle to fail.\"\n\n— Head of Program Security\n\n\"Or we just had a bad batch of titanium fittings. Let's not start an international incident over metallurgy.\"\n\n— Chief Engineer, urging caution
 - **Current image:** gfx/event_pictures/sabotage_investigation.dds
 
 ### space_race_events.21
 - **Title:** The Missing Parts
 - **Description:** A critical shipment of precision-machined components has been delayed indefinitely. The supplier cites raw material shortages and unexpected demand, but the result is the same: our integration schedule just slipped by weeks. Without these parts, the vehicle sits incomplete on the assembly floor.
-- **Flavor:** \"You can't fly to space on promises. You need machined titanium, and right now there's a six-week backlog at every forge on the continent.\"\n\n- Program Logistics Director
+- **Flavor:** \"You can't fly to space on promises. You need machined titanium, and right now there's a six-week backlog at every forge on the continent.\"\n\n— Program Logistics Director
 - **Current image:** gfx/event_pictures/mission_delay_hangar.dds
 
 ### space_race_events.22
 - **Title:** Grounded by the Sky
 - **Description:** A massive storm system has settled over the launch site with no sign of departure. Upper-level wind shear readings exceed every safety margin in the book. The vehicle stands ready on the pad, fully fueled and flight-capable: waiting for weather that refuses to cooperate. Each day of delay costs money and, more critically, narrows the orbital mechanics window.
-- **Flavor:** \"Nature doesn't care about our launch schedule. The jet stream is where it wants to be, and we will wait.\"\n\n- Range Weather Officer, morning briefing
+- **Flavor:** \"Nature doesn't care about our launch schedule. The jet stream is where it wants to be, and we will wait.\"\n\n— Range Weather Officer, morning briefing
 - **Current image:** gfx/event_pictures/mission_delay_hangar.dds
 
 ### space_race_events.23
@@ -3227,61 +3775,61 @@ Each event is listed with its title, description, and flavor text (where availab
 ### space_race_events.24
 - **Title:** The Price of the Stars
 - **Description:** The Budget Committee has summoned the program director for testimony. With domestic priorities competing for funds and no tangible return yet visible to the average voter, influential legislators are questioning whether the nation can justify the expense. The program's future hangs on a hearing room presentation.
-- **Flavor:** \"Senator, I understand the cost concerns. But I would remind the committee that our rivals are not holding budget hearings: they are building rockets.\"\n\n- Program Director, opening statement
+- **Flavor:** \"Senator, I understand the cost concerns. But I would remind the committee that our rivals are not holding budget hearings: they are building rockets.\"\n\n— Program Director, opening statement
 - **Current image:** gfx/event_pictures/budget_hearing_congress.dds
 
 ### space_race_events.25
 - **Title:** Microns of Failure
 - **Description:** Quality inspection has flagged an entire batch of turbopump impellers: the tolerances are outside specification by microns, but in a system operating at thousands of RPM and extreme temperatures, microns matter. Every unit in the last three months of production must be pulled and re-inspected. Some are already installed in vehicles being prepared for launch.
-- **Flavor:** \"Microns. We're talking about the width of a bacterium. And it's enough to shatter a turbopump at full thrust.\"\n\n- Chief Quality Inspector, examining the impeller under magnification
+- **Flavor:** \"Microns. We're talking about the width of a bacterium. And it's enough to shatter a turbopump at full thrust.\"\n\n— Chief Quality Inspector, examining the impeller under magnification
 - **Current image:** gfx/event_pictures/mission_delay_hangar.dds
 
 ### space_race_events.26
 - **Title:** When Politics Reaches Orbit
 - **Description:** A sudden deterioration in international relations has disrupted the space program's operations. Foreign-sourced components are stuck in customs. Tracking station access in allied nations is now politically sensitive. Technical exchange agreements signed in better times are being quietly frozen by nervous diplomats.
-- **Flavor:** \"We had a handshake agreement with their space agency: data sharing, tracking support, the works. Now their foreign ministry won't return our calls.\"\n\n- International Cooperation Director
+- **Flavor:** \"We had a handshake agreement with their space agency: data sharing, tracking support, the works. Now their foreign ministry won't return our calls.\"\n\n— International Cooperation Director
 - **Current image:** gfx/event_pictures/budget_hearing_congress.dds
 
 ### space_race_events.70
 - **Title:** Inferno at the Launch Complex
 - **Description:** A catastrophic explosion has torn through the primary launch complex. The detonation occurred during a routine fueling procedure, sending a column of fire hundreds of meters into the sky. Emergency crews found the pad reduced to twisted wreckage, and the surrounding support structures sustained severe damage. Hundreds of engineers and technicians working in the blast radius did not survive.
-- **Flavor:** \"The sound reached the control room before the shockwave did. Then the windows blew in. By the time we pulled ourselves off the floor and looked at the monitors, there was nothing left to monitor.\"\n\n- Launch Director, in the aftermath
+- **Flavor:** \"The sound reached the control room before the shockwave did. Then the windows blew in. By the time we pulled ourselves off the floor and looked at the monitors, there was nothing left to monitor.\"\n\n— Launch Director, in the aftermath
 - **Current image:** gfx/event_pictures/launch_pad_explosion.dds
 
 ### space_race_events.71
 - **Title:** Silent Capsule
-- **Description:** During a routine pressure integrity test of the crew capsule, the primary seal failed without warning. The capsule depressurized in seconds. The test crew: experienced engineers performing a standard checkout procedure: had no time to reach emergency equipment. An entire team of our brightest minds, lost in an instant to a failed gasket.
-- **Flavor:** \"They were the best we had. Not astronauts: the engineers who made astronauts possible. They died in a chair on the ground, doing the job nobody else could do.\"\n\n- Program Director, addressing the press
+- **Description:** During a routine pressure integrity test of the crew capsule, the primary seal failed without warning. The capsule depressurized in seconds. The test crew — experienced engineers performing a standard checkout procedure — had no time to reach emergency equipment. An entire team of our brightest minds, lost in an instant to a failed gasket.
+- **Flavor:** \"They were the best we had. Not astronauts: the engineers who made astronauts possible. They died in a chair on the ground, doing the job nobody else could do.\"\n\n— Program Director, addressing the press
 - **Current image:** gfx/event_pictures/capsule_seal_failure.dds
 
 ### space_race_events.72
 - **Title:** Fire in the Assembly Building
 - **Description:** A fire broke out in the main integration facility during the night shift. Quick-thinking technicians activated fire suppression systems before the blaze could reach the fuel storage, but the damage to sensitive equipment and clean-room environments is extensive. No casualties, but the repair timeline will slow the program.
-- **Flavor:** \"The clean room is anything but. Soot on every surface, water damage from the suppression system, and the centrifuge is a write-off. We'll be rebuilding test capability for months.\"\n\n- Facility Manager, surveying the damage
+- **Flavor:** \"The clean room is anything but. Soot on every surface, water damage from the suppression system, and the centrifuge is a write-off. We'll be rebuilding test capability for months.\"\n\n— Facility Manager, surveying the damage
 - **Current image:** gfx/event_pictures/assembly_building_fire.dds
 
 ### space_race_events.73
 - **Title:** Stars and Scandals
 - **Description:** An investigative journalist has published a devastating exposé of cost overruns and financial mismanagement within the space program. Contracts awarded to connected firms at inflated prices, expense accounts that defy belief, and schedule milestones fabricated to justify continued funding. Public trust in the program has been severely damaged.
-- **Flavor:** \"The public was told that every dollar went to the stars. It turns out quite a few of those dollars went to beach houses and luxury automobiles.\"\n\n- Investigative Report, lead paragraph\n\n\"These are teething problems of a program growing faster than its oversight. We need reform, not cancellation.\"\n\n- Space Program Advisory Board Chair
+- **Flavor:** \"The public was told that every dollar went to the stars. It turns out quite a few of those dollars went to beach houses and luxury automobiles.\"\n\n— Investigative Report, lead paragraph\n\n\"These are teething problems of a program growing faster than its oversight. We need reform, not cancellation.\"\n\n— Space Program Advisory Board Chair
 - **Current image:** gfx/event_pictures/program_scandal_newsroom.dds
 
 ### space_race_events.74
 - **Title:** An Unexpected Breakthrough
 - **Description:** A team of engineers working on a perplexing propulsion problem has achieved a fundamental breakthrough. Their novel approach to thrust vectoring and fuel efficiency dramatically exceeds theoretical predictions. If validated, this innovation could revolutionize the program's capabilities and accelerate the current mission timeline.
-- **Flavor:** \"We were trying to fix a combustion instability problem. Instead we found a way to extract thirty percent more impulse from the same propellant mass. Sometimes the best discoveries happen when you're looking for something else entirely.\"\n\n- Lead Propulsion Engineer
+- **Flavor:** \"We were trying to fix a combustion instability problem. Instead we found a way to extract thirty percent more impulse from the same propellant mass. Sometimes the best discoveries happen when you're looking for something else entirely.\"\n\n— Lead Propulsion Engineer
 - **Current image:** gfx/event_pictures/engineering_breakthrough_lab.dds
 
 ### space_race_events.75
 - **Title:** The Parts That Didn't Come
-- **Description:** Critical precision components: guidance gyroscopes, radiation-hardened electronics, and specialty alloys: have failed to arrive on schedule. The suppliers report production delays caused by competing defense contracts and raw material shortages. Without these components, major integration milestones cannot proceed.
-- **Flavor:** \"We can build a rocket that reaches orbit, but we can't build the bearings for the gyroscope that points it there. Three companies on Earth make them to our specifications, and all three are six months behind.\"\n\n- Supply Chain Director, in a progress review meeting
+- **Description:** Critical precision components — guidance gyroscopes, radiation-hardened electronics, and specialty alloys — have failed to arrive on schedule. The suppliers report production delays caused by competing defense contracts and raw material shortages. Without these components, major integration milestones cannot proceed.
+- **Flavor:** \"We can build a rocket that reaches orbit, but we can't build the bearings for the gyroscope that points it there. Three companies on Earth make them to our specifications, and all three are six months behind.\"\n\n— Supply Chain Director, in a progress review meeting
 - **Current image:** gfx/event_pictures/mission_delay_hangar.dds
 
 ### space_race_events.76
 - **Title:** Program Discontinued
 - **Description:** With the space program facilities no longer operational, [ROOT.GetCountry.GetAdjective] ambitions beyond Earth have been shelved. The scientists and engineers who dedicated themselves to the mission now seek new assignments, and the vast [concept_infrastructure] built for the program sits idle.
-- **Flavor:** #italic The stars will have to wait.#!
+- **Flavor:** \"The stars will have to wait,\" the program director told the assembled engineers.\n\n\"For how long?\"\n\n\"Until the budget recovers. Until the political will returns. Until the country remembers why we started. Five years, perhaps. Possibly twenty. The stars are patient. The crews who would have flown to them are less so. We will lose talent before we lose the destination.\"
 - **Current image:** gfx/event_pictures/program_cancelled_empty.dds
 
 ### space_race_events.80
@@ -3313,13 +3861,13 @@ Each event is listed with its title, description, and flavor text (where availab
 ### surveillance_events.1
 - **Title:** The Whistleblower
 - **Description:** A government insider has leaked classified documents revealing the extent of state surveillance on ordinary citizens. The revelations have sparked outrage among civil liberties advocates and a fierce debate about security versus privacy.
-- **Flavor:** The leaked files filled fourteen boxes. A clerk in the ministry had been copying them for six months before anyone noticed.
+- **Flavor:** The leaked files filled fourteen boxes. A clerk in the ministry had been copying them for six months before anyone noticed.\n\n\"How did he manage it?\" the inspector asked.\n\n\"He used the photocopier in his department, after hours, three nights a week. He used a paper trolley. He carried the boxes out through the loading dock, where the security cameras had been broken for two years.\"\n\n\"And the cameras?\"\n\n\"Were on the maintenance schedule. The maintenance was outsourced. The contract had been allowed to lapse. The lapsing of the contract was noticed by exactly one person in this building. That person was the clerk.\"
 - **Current image:** gfx/event_pictures/whistleblower_documents.dds
 
 ### surveillance_events.2
 - **Title:** The Data Breach
 - **Description:** A massive data breach has exposed the personal information of millions of citizens. Private correspondence, financial records, and intimate details are now public. The government faces a reckoning.
-- **Flavor:** Names, addresses, medical records, private correspondence — all of it posted on a public server. The government learned about it from the newspapers.
+- **Flavor:** Names, addresses, medical records, private correspondence — all of it posted on a public server. The government learned about it from the newspapers.\n\n\"How long was the database exposed?\" the journalist asked at the press conference.\n\n\"We are reviewing the timeline.\"\n\n\"How many citizens were affected?\"\n\n\"We are reviewing the numbers.\"\n\n\"Why are you reviewing things the database itself would record?\"\n\nThe spokesperson did not answer. The next day, the database stopped recording the things that would have answered.\"
 - **Current image:** gfx/event_pictures/data_breach_screens.dds
 
 ### surveillance_events.3
@@ -3331,25 +3879,25 @@ Each event is listed with its title, description, and flavor text (where availab
 ### surveillance_events.4
 - **Title:** Predictive Policing
 - **Description:** AI-powered systems can now predict crimes before they happen, identifying potential offenders through behavioral analysis. Law enforcement is eager to deploy the technology, but civil liberties groups warn of a dystopian future where citizens are punished for crimes they have not yet committed.
-- **Flavor:** The system flagged two hundred and twelve individuals as potential offenders last quarter. Thirty-seven were arrested. None had yet committed a crime.
+- **Flavor:** The system flagged two hundred and twelve individuals as potential offenders last quarter. Thirty-seven were arrested. None had yet committed a crime.\n\n\"What was the basis for the arrests?\" the defense lawyer asked at the hearing.\n\n\"The system identified a behavioural pattern consistent with intent.\"\n\n\"Consistent with intent? My client has not been to that neighbourhood in six months.\"\n\n\"That is consistent with avoidance of routine surveillance, which is one of the markers the system tracks.\"\n\n\"And what is consistent with innocence?\"\n\n\"The system was not designed to identify that.\"
 - **Current image:** gfx/event_pictures/predictive_policing_ai.dds
 
 ### surveillance_events.5
 - **Title:** Foreign Cyber-Espionage
 - **Description:** Intelligence services have uncovered evidence that a rival power has been conducting systematic cyber-espionage against our government and critical [concept_infrastructure]. The breach is extensive and has compromised sensitive data.
-- **Flavor:** The breach was discovered on a Monday. By Thursday, the analysts had mapped its extent. By Friday, they wished they hadn't.
+- **Flavor:** The breach was discovered on a Monday. By Thursday, the analysts had mapped its extent. By Friday, they wished they hadn't.\n\n\"How long had they been inside?\" the minister asked.\n\n\"Two years. Possibly three. The earliest indicators of presence predate our current logging system.\"\n\n\"And what did they take?\"\n\n\"Everything they could find. Personnel files. Operational records. The complete schedule of cabinet meetings. They knew when you would be where, and with whom, for the last eighteen months.\"\n\n\"And what did they do with what they took?\"\n\n\"That is the question we cannot answer. The answer is in the consequences of decisions you have already made, and we have no way of unpicking which of those decisions were affected.\"
 - **Current image:** gfx/event_pictures/cyber_espionage_network.dds
 
 ### surveillance_events.100
 - **Title:** The Security State
 - **Description:** (no localization)
-- **Flavor:** The cameras covered every street corner, every public building, every transport hub. Citizens had stopped noticing them.
+- **Flavor:** The cameras covered every street corner, every public building, every transport hub. Citizens had stopped noticing them.\n\n\"A successful surveillance state is not one that watches everyone,\" the minister said at the conference. \"It is one whose citizens have forgotten they are being watched.\"\n\n\"And ours have forgotten?\"\n\n\"Ours have. The cameras are simply part of the architecture now. Like lampposts. The footage is reviewed by no one in particular and everyone in general, which amounts to the same thing.\"
 - **Current image:** gfx/event_pictures/surveillance_state_complete.dds
 
 ### surveillance_events.200
 - **Title:** Digital Freedom Secured
 - **Description:** The digital rights movement in [ROOT.GetCountry.GetName] has succeeded. Comprehensive privacy protections are now law, ensuring citizens' digital lives remain their own.
-- **Flavor:** #italic The watchers have been watched, and found wanting.#!
+- **Flavor:** \"The watchers have been watched,\" the new digital rights commissioner said at her swearing-in. \"And found wanting.\"\n\n\"And the watching continues?\"\n\n\"The watching continues, in both directions. The difference now is that the public has a name and an office to ask. The information will not always be flattering to the agency. That is the point. Accountability is not the absence of surveillance — it is the surveillance of the surveillance.\"
 - **Current image:** gfx/event_pictures/digital_freedom_secured.dds
 
 ## te_construction_market_building_events.txt
@@ -3659,25 +4207,25 @@ Each event is listed with its title, description, and flavor text (where availab
 ### wonder_events.1
 - **Title:** The Tether Descends
 - **Description:** Engineers report that the space elevator's tether, spooling down from the counterweight station in geostationary orbit, has entered the lower atmosphere and is approaching the ground anchor site. The [ROOT.GetCountry.GetAdjectiveNoFormatting] space program is the talk of the world's scientific community.
-- **Flavor:** - Do you see it? That thread coming down from the sky, so thin you can barely make it out?\n\n- I see it. The first real ladder to the stars.\n\n- We'll remember this day. The day gravity became optional.
+- **Flavor:** \"Do you see it? That thread coming down from the sky, so thin you can barely make it out?\"\n\n\"I see it. The first real ladder to the stars.\"\n\n\"We'll remember this day. The day gravity became optional.\"
 - **Current image:** gfx/event_pictures/space_elevator_tether_descending.dds
 
 ### wonder_events.2
 - **Title:** Structural Anomaly
 - **Description:** Monitoring stations detect alarming oscillations in the space elevator's tether during construction. Engineers warn that resonance patterns could lead to catastrophic failure if not addressed immediately.
-- **Flavor:** - The readings are off the charts. The tether is singing, and not in a good way.\n\n- How long before it becomes critical?\n\n- If we're lucky? Weeks. If we're not, we find out the hard way.
+- **Flavor:** \"The readings are off the charts. The tether is singing, and not in a good way.\"\n\n\"How long before it becomes critical?\"\n\n\"If we're lucky? Weeks. If we're not, we find out the hard way.\"
 - **Current image:** gfx/event_pictures/space_elevator_structural_alarm.dds
 
 ### wonder_events.3
 - **Title:** Gateway to the Stars
 - **Description:** The completed space elevator has made orbital access routine. Scientists, entrepreneurs, and diplomats from across the globe petition for access to [ROOT.GetCountry.GetAdjectiveNoFormatting] orbital facilities.
-- **Flavor:** - Thirty hours. That's all it takes to climb from the ground to geostationary orbit. The electromagnetic climbers run day and night. The old rockets seem like covered wagons by comparison.\n\n- And everyone wants a ticket.
+- **Flavor:** \"Thirty hours. That's all it takes to climb from the ground to geostationary orbit. The electromagnetic climbers run day and night. The old rockets seem like covered wagons by comparison.\"\n\n\"And everyone wants a ticket.\"
 - **Current image:** gfx/event_pictures/space_elevator_generation.dds
 
 ### wonder_events.4
 - **Title:** The New Silk Road
 - **Description:** At the space elevator's current capacity, orbital commerce has become routine. Nations and corporations compete for launch slots, and the elevator state has become a nexus of unprecedented trade.
-- **Flavor:** - Silk, spices, gold. Those were the treasures of the old roads. Ours carry advanced materials, processed data, and the hopes of ten billion people.\n\n- And the profits are rather better.
+- **Flavor:** \"Silk, spices, gold. Those were the treasures of the old roads. Ours carry advanced materials, processed data, and the hopes of ten billion people.\"\n\n\"And the profits are rather better.\"
 - **Current image:** gfx/event_pictures/space_elevator_generation.dds
 
 ### wonder_events.5
@@ -3689,127 +4237,127 @@ Each event is listed with its title, description, and flavor text (where availab
 ### wonder_events.6
 - **Title:** The Astronaut Generation
 - **Description:** A generation raised in the shadow of the space elevator has come of age. These young engineers and scientists grew up treating orbital access as routine, and their ambitions are correspondingly vast.
-- **Flavor:** - When I was young, space was a dream. For my students, it's a commute. Do you understand what that means?\n\n- It means they'll build things we can't even imagine.
+- **Flavor:** \"When I was young, space was a dream. For my students, it's a commute. Do you understand what that means?\"\n\n\"It means they'll build things we can't even imagine.\"
 - **Current image:** gfx/event_pictures/space_elevator_generation.dds
 
 ### wonder_events.7
 - **Title:** Orbital Sovereignty
 - **Description:** Foreign powers demand that orbital [concept_infrastructure] be governed under international law, arguing that no single nation should control access to space. The diplomatic pressure is mounting.
-- **Flavor:** - The elevator was built with our money, our engineers, our vision. And now they want to make it a commons?\n\n- They don't want to share it. They want to control what we do with it.\n\n- Then let them build their own.
+- **Flavor:** \"The elevator was built with our money, our engineers, our vision. And now they want to make it a commons?\"\n\n\"They don't want to share it. They want to control what we do with it.\"\n\n\"Then let them build their own.\"
 - **Current image:** gfx/event_pictures/orbital_peace_deterrence.dds
 
 ### wonder_events.10
 - **Title:** First Light
 - **Description:** The first orbital solar collector has completed alignment and begun transmitting power via microwave beam to the ground rectenna. Instruments confirm a steady output, and the [ROOT.GetCountry.GetAdjectiveNoFormatting] solar collector program is officially operational.
-- **Flavor:** - The rectenna is live. Gigawatts, pouring in from orbit: invisible, silent, and continuous. You can't see the beam, but you can see the lights coming on across the grid.\n\n- It doesn't look like much.\n\n- That's the beauty of it. The most powerful energy source in history, and it's invisible.
+- **Flavor:** \"The rectenna is live. Gigawatts, pouring in from orbit: invisible, silent, and continuous. You can't see the beam, but you can see the lights coming on across the grid.\"\n\n\"It doesn't look like much.\"\n\n\"That's the beauty of it. The most powerful energy source in history, and it's invisible.\"
 - **Current image:** gfx/event_pictures/orbital_earth_view.dds
 
 ### wonder_events.11
 - **Title:** Beam Misalignment
 - **Description:** A calibration error in the orbital collector's phased array causes the microwave beam to drift off the rectenna, irradiating several square kilometers of surrounding countryside. Prolonged exposure damages crops and disrupts electronics across the affected zone. Public alarm is considerable.
-- **Flavor:** - The beam drifted three degrees off the rectenna. Three degrees! Every electronic device in the zone is dead, and the crops are cooked from microwave exposure.\n\n- Could it have hit a city?\n\n- If the error had been in the other direction? Absolutely.
+- **Flavor:** \"The beam drifted three degrees off the rectenna. Three degrees! Every electronic device in the zone is dead, and the crops are cooked from microwave exposure.\"\n\n\"Could it have hit a city?\"\n\n\"If the error had been in the other direction? Absolutely.\"
 - **Current image:** gfx/event_pictures/solar_beam_misalignment.dds
 
 ### wonder_events.12
 - **Title:** The Power Surplus
 - **Description:** The orbital solar collector is producing power far in excess of current demand. Electricity prices have plummeted, making energy-intensive industries suddenly viable at scales previously unimaginable.
-- **Flavor:** - We're generating more power than we can use. Factories that were marginal are now printing money. The smelters alone have tripled output.\n\n- And this is only one collector.
+- **Flavor:** \"We're generating more power than we can use. Factories that were marginal are now printing money. The smelters alone have tripled output.\"\n\n\"And this is only one collector.\"
 - **Current image:** gfx/event_pictures/solar_power_surplus.dds
 
 ### wonder_events.13
 - **Title:** The End of Night
 - **Description:** With the solar collector array at full capacity, the nation effectively has access to unlimited clean energy. The implications extend far beyond mere electricity; this is a fundamental transformation of what civilization can achieve.
-- **Flavor:** - Do you know what unlimited energy means? Unlimited fresh water. Unlimited agriculture. Unlimited manufacturing. The only constraint on human ambition is human imagination.\n\n- And the other nations?\n\n- They'll either buy our power or build their own.
+- **Flavor:** \"Do you know what unlimited energy means? Unlimited fresh water. Unlimited agriculture. Unlimited manufacturing. The only constraint on human ambition is human imagination.\"\n\n\"And the other nations?\"\n\n\"They'll either buy our power or build their own.\"
 - **Current image:** gfx/event_pictures/solar_power_surplus.dds
 
 ### wonder_events.14
 - **Title:** Solar Storm Warning
 - **Description:** Astronomers detect a massive coronal mass ejection heading directly for the orbital collector array. The electromagnetic pulse could damage the collectors' sensitive electronics if they remain operational.
-- **Flavor:** - The sun giveth and the sun taketh away. This CME could fry every circuit board in the array if we don't shut down.\n\n- And if we do shut down?\n\n- Half the continent loses power for a month.
+- **Flavor:** \"The sun giveth and the sun taketh away. This CME could fry every circuit board in the array if we don't shut down.\"\n\n\"And if we do shut down?\"\n\n\"Half the continent loses power for a month.\"
 - **Current image:** gfx/event_pictures/solar_storm_orbital_threat.dds
 
 ### wonder_events.15
 - **Title:** The Sunlight Monopoly
 - **Description:** International voices accuse [ROOT.GetCountry.GetName] of monopolizing orbital energy, arguing that sunlight in space belongs to all humanity. Several nations call for the solar collectors to be placed under international oversight.
-- **Flavor:** - They want our collectors. Publicly they call it fair access. Privately they call it the energy weapon.\n\n- Are they wrong? We could shut off power to half the world's receivers if we chose.\n\n- Which is precisely why we won't give it up.
+- **Flavor:** \"They want our collectors. Publicly they call it fair access. Privately they call it the energy weapon.\"\n\n\"Are they wrong? We could shut off power to half the world's receivers if we chose.\"\n\n\"Which is precisely why we won't give it up.\"
 - **Current image:** gfx/event_pictures/solar_monopoly_debate.dds
 
 ### wonder_events.20
 - **Title:** The High Ground
 - **Description:** Intelligence reports indicate that rival nations are deeply alarmed by the orbital weapons platform [concept_under_construction]. Military attaches have been recalled, and defensive postures are shifting worldwide.
-- **Flavor:** - They're watching us build it. Every spy satellite, every signals intercept. They know what this is.\n\n- Good. Let them watch. By the time it's operational, the balance of power will have shifted permanently.\n\n- Or they try to stop us before it's finished.\n\n- That's why we have the Navy.
+- **Flavor:** \"They're watching us build it. Every spy satellite, every signals intercept. They know what this is.\"\n\n\"Good. Let them watch. By the time it's operational, the balance of power will have shifted permanently.\"\n\n\"Or they try to stop us before it's finished.\"\n\n\"That's why we have the Navy.\"
 - **Current image:** gfx/event_pictures/orbital_battlestation_construction.dds
 
 ### wonder_events.21
 - **Title:** Eye of God
 - **Description:** The orbital battlestation's sensor suite can track individual vehicles and resolve meter-scale objects across the globe. Every major military movement on Earth is visible in real time. The intelligence advantage is decisive.
-- **Flavor:** - We can see their armor columns marshaling. We can track every warship in every ocean. We can watch their missile convoys move in real time.\n\n- And they know we can see them?\n\n- That's the best part. They know, and they can't do a thing about it.
+- **Flavor:** \"We can see their armor columns marshaling. We can track every warship in every ocean. We can watch their missile convoys move in real time.\"\n\n\"And they know we can see them?\"\n\n\"That's the best part. They know, and they can't do a thing about it.\"
 - **Current image:** gfx/event_pictures/orbital_surveillance_earth.dds
 
 ### wonder_events.22
 - **Title:** Peace Through Superior Firepower
 - **Description:** The orbital battlestation has fundamentally altered the global strategic calculus. No conventional force can challenge a nation with orbital fire support, and rival powers are beginning to seek diplomatic accommodation.
-- **Flavor:** - Three border disputes settled this month. Two territorial claims abandoned. One unilateral ceasefire.\n\n- All without firing a shot.\n\n- The best weapons are the ones you never use.
+- **Flavor:** \"Three border disputes settled this month. Two territorial claims abandoned. One unilateral ceasefire.\"\n\n\"All without firing a shot.\"\n\n\"The best weapons are the ones you never use.\"
 - **Current image:** gfx/event_pictures/orbital_peace_deterrence.dds
 
 ### wonder_events.23
 - **Title:** Misfire from Orbit
 - **Description:** A targeting malfunction on the orbital battlestation causes a kinetic impactor to fire along an unintended trajectory. The projectile strikes the ocean near a coastal city, and the resulting shockwave shatters windows, capsizes boats, and injures dozens on shore.
-- **Flavor:** - The impactor hit water twelve kilometers from the harbor. The shockwave alone did this much damage.\n\n- If it had struck land?\n\n- A crater the size of a city block. And it's on every news feed on the planet.
+- **Flavor:** \"The impactor hit water twelve kilometers from the harbor. The shockwave alone did this much damage.\"\n\n\"If it had struck land?\"\n\n\"A crater the size of a city block. And it's on every news feed on the planet.\"
 - **Current image:** gfx/event_pictures/orbital_misfire_impact.dds
 
 ### wonder_events.24
 - **Title:** Arms Race in Orbit
 - **Description:** Rival powers have begun their own orbital weapons programs in response to the [ROOT.GetCountry.GetAdjectiveNoFormatting] battlestation. The militarization of space is accelerating beyond anyone's projections.
-- **Flavor:** - They're building their own. Crude, compared to ours, but give them five years.\n\n- Then we need to stay five years ahead.\n\n- That's what they said about nuclear weapons. We ended up with enough to destroy the world twelve times over.\n\n- Thirteen. But who's counting?
+- **Flavor:** \"They're building their own. Crude, compared to ours, but give them five years.\"\n\n\"Then we need to stay five years ahead.\"\n\n\"That's what they said about nuclear weapons. We ended up with enough to destroy the world twelve times over.\"\n\n\"Thirteen. But who's counting?\"
 - **Current image:** gfx/event_pictures/orbital_battlestation_construction.dds
 
 ### wonder_events.25
 - **Title:** Rods from God
 - **Description:** The orbital battlestation has achieved global strike capability. Kinetic energy weapons can reach any point on Earth within minutes, delivering devastating force without nuclear fallout.
-- **Flavor:** - Tungsten rods, six meters long and half a meter across, dropped from orbit at eight kilometers per second. No warhead needed. The kinetic energy alone is equivalent to dozens of tons of high explosive.\n\n- And no radiation.\n\n- Clean. Precise. And we can put one through any roof on Earth within thirty minutes.
+- **Flavor:** \"Tungsten rods, six meters long and half a meter across, dropped from orbit at eight kilometers per second. No warhead needed. The kinetic energy alone is equivalent to dozens of tons of high explosive.\"\n\n\"And no radiation.\"\n\n\"Clean. Precise. And we can put one through any roof on Earth within thirty minutes.\"
 - **Current image:** gfx/event_pictures/orbital_peace_deterrence.dds
 
 ### wonder_events.26
 - **Title:** The Shield of Civilization
 - **Description:** Astronomers detect a near-Earth asteroid on a collision course with a populated region. The orbital battlestation, originally designed for warfare, is the only asset capable of deflecting it in time.
-- **Flavor:** - The irony isn't lost on me. We built a weapon to threaten our enemies, and it just saved us all.\n\n- The asteroid was three hundred meters across. It would have leveled a region the size of a small country.\n\n- Fire the interceptors.\n\n- Interceptors away. God help us all.
+- **Flavor:** \"The irony isn't lost on me. We built a weapon to threaten our enemies, and it just saved us all.\"\n\n\"The asteroid was three hundred meters across. It would have leveled a region the size of a small country.\"\n\n\"Fire the interceptors.\"\n\n\"Interceptors away. God help us all.\"
 - **Current image:** gfx/event_pictures/space_debris_collision.dds
 
 ### wonder_events.30
 - **Title:** Breakthrough at the Collider
 - **Description:** Scientists at the [concept_antimatter_facility] report stable containment of macroscopic quantities of antihydrogen for the first time. The breakthrough opens the door to practical antimatter applications.
-- **Flavor:** - One milligram. That's what we have. One milligram of antihydrogen, suspended in a Penning trap.\n\n- One milligram. The energy equivalent of forty-three tons of TNT.\n\n- Imagine what we'll do with a gram.
+- **Flavor:** \"One milligram. That's what we have. One milligram of antihydrogen, suspended in a Penning trap.\"\n\n\"One milligram. The energy equivalent of forty-three tons of TNT.\"\n\n\"Imagine what we'll do with a gram.\"
 - **Current image:** gfx/event_pictures/antimatter_containment_glow.dds
 
 ### wonder_events.31
 - **Title:** Containment Breach
 - **Description:** A magnetic containment failure at the [concept_antimatter_facility] causes a localized annihilation event. The explosion destroys a wing of the facility and kills dozens of scientists and engineers.
-- **Flavor:** - The magnetic field fluctuated for less than a nanosecond. That's all it took. The antimatter touched the containment wall and...\n\n- How much was released?\n\n- Micrograms. The blast equivalent of a hundred kilograms of high explosive, concentrated in a point smaller than an atom. The containment wing did its job: barely.
+- **Flavor:** \"The magnetic field fluctuated for less than a nanosecond. That's all it took. The antimatter touched the containment wall and...\"\n\n\"How much was released?\"\n\n\"Micrograms. The blast equivalent of a hundred kilograms of high explosive, concentrated in a point smaller than an atom. The containment wing did its job: barely.\"
 - **Current image:** gfx/event_pictures/antimatter_containment_breach.dds
 
 ### wonder_events.32
 - **Title:** The Power of Annihilation
 - **Description:** Antimatter-catalyzed propulsion and weapons systems are entering the prototype phase. Military planners are ecstatic. Formations with antimatter-powered logistics will have limitless range, and antimatter warheads will render conventional arsenals obsolete.
-- **Flavor:** - An antimatter-fueled aircraft never needs to land. A fleet with antimatter propulsion can sustain operations indefinitely at maximum speed.\n\n- And the weapons?\n\n- A warhead with a milligram of antimatter has the yield of a massive conventional bomb. Scale it up from there.
+- **Flavor:** \"An antimatter-fueled aircraft never needs to land. A fleet with antimatter propulsion can sustain operations indefinitely at maximum speed.\"\n\n\"And the weapons?\"\n\n\"A warhead with a milligram of antimatter has the yield of a massive conventional bomb. Scale it up from there.\"
 - **Current image:** gfx/event_pictures/antimatter_weapons_prototype.dds
 
 ### wonder_events.33
 - **Title:** Antimatter Diplomacy
 - **Description:** The mere existence of practical antimatter weapons has fundamentally altered the diplomatic landscape. Nations that once challenged [ROOT.GetCountry.GetName] now seek accommodation and alliance.
-- **Flavor:** - The ambassadors are very polite now. Have you noticed?\n\n- There's nothing quite like the ability to annihilate a city with a warhead the size of a suitcase to improve diplomatic relations.\n\n- An oversimplification.\n\n- But not an inaccurate one.
+- **Flavor:** \"The ambassadors are very polite now. Have you noticed?\"\n\n\"There's nothing quite like the ability to annihilate a city with a warhead the size of a suitcase to improve diplomatic relations.\"\n\n\"An oversimplification.\"\n\n\"But not an inaccurate one.\"
 - **Current image:** gfx/event_pictures/antimatter_diplomacy_power.dds
 
 ### wonder_events.34
 - **Title:** The Annihilation Incident
 - **Description:** An accident during routine antimatter transfer causes an uncontrolled release of energy. The resulting explosion is detected by monitoring stations worldwide, triggering international alarm.
-- **Flavor:** - The seismographs registered it as a 3.5. Except it wasn't an earthquake.\n\n- How many casualties?\n\n- Thirty-seven confirmed. The facility will need months of repair.\n\n- And the international reaction?\n\n- Exactly what you'd expect when an unexplained explosion with the seismic signature of a bomb goes off inside a classified facility.
+- **Flavor:** \"The seismographs registered it as a 3.5. Except it wasn't an earthquake.\"\n\n\"How many casualties?\"\n\n\"Thirty-seven confirmed. The facility will need months of repair.\"\n\n\"And the international reaction?\"\n\n\"Exactly what you'd expect when an unexplained explosion with the seismic signature of a bomb goes off inside a classified facility.\"
 - **Current image:** gfx/event_pictures/antimatter_containment_breach.dds
 
 ### wonder_events.35
 - **Title:** The Annihilation Drive
 - **Description:** The [concept_antimatter_facility] is now producing enough fuel to power a new generation of engines. Antimatter propulsion makes global logistics trivial and opens the door to rapid interplanetary transit.
-- **Flavor:** - Earth to Mars in three weeks. Earth to Jupiter in two months. These aren't projections. These are timetables.\n\n- And military applications?\n\n- Any formation, anywhere on Earth, within hours. The concept of distance as a strategic constraint is over.
+- **Flavor:** \"Earth to Mars in three weeks. Earth to Jupiter in two months. These aren't projections. These are timetables.\"\n\n\"And military applications?\"\n\n\"Any formation, anywhere on Earth, within hours. The concept of distance as a strategic constraint is over.\"
 - **Current image:** gfx/event_pictures/antimatter_propulsion_drive.dds
 
 ## world_war_events.txt

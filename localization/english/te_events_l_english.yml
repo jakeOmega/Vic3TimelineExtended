@@ -1,6 +1,50 @@
 ﻿l_english:
 
 #
+# AGRICULTURAL_DIFFUSION_EVENTS
+#
+ agricultural_diffusion_events.1.a:0 "Our agriculture will adapt."
+ agricultural_diffusion_events.1.a_first:0 "A new era of agriculture begins."
+ agricultural_diffusion_events.1.d:0 "Reports reach us that [GetGlobalVariable('first_nitrogen_fixation_country').GetCountry.GetName] has industrialized the synthesis of ammonia from atmospheric nitrogen. The technical details have been widely published; engineering firms in the major industrial nations are already licensing the process. Within a few years, ammonia plants and the synthetic fertilizers they produce will be available to any country with the capital to build them."
+ agricultural_diffusion_events.1.d_first:0 "Our chemists have demonstrated industrial synthesis of ammonia from atmospheric nitrogen and hydrogen. For all of human history, fertilizer has come from animal manure, decomposed organic matter, or finite deposits of guano and saltpeter. No longer. We can now manufacture nitrogen fertilizer in unlimited quantity, from air and natural gas, in any chemical plant we choose to build."
+ agricultural_diffusion_events.1.f:0 "Even without inventing the process ourselves, our farms will benefit. Synthetic fertilizer is now a commodity on the world market, and our agronomists will not be denied access to it."
+ agricultural_diffusion_events.1.f_first:0 "The bottleneck on agricultural productivity that has bounded every civilization in history has been broken. The age of nitrate diplomacy — of fighting over Peruvian guano cliffs and Chilean saltpeter mines — is ending. Every nation that masters this process can feed a population that no agrarian society could have imagined."
+ agricultural_diffusion_events.1.t:0 "Nitrogen Fixation Goes Global"
+ agricultural_diffusion_events.1.t_first:0 "We Fix Nitrogen from the Air"
+ agricultural_diffusion_events.2.a:0 "Adopt the new inputs."
+ agricultural_diffusion_events.2.a_first:0 "We will industrialize the soil."
+ agricultural_diffusion_events.2.d:0 "Industrial chemists in [GetGlobalVariable('first_modern_chemical_processes_country').GetCountry.GetName] have demonstrated the next generation of synthetic fertilizers: ammonium nitrate, urea, and superphosphate compounds produced through catalytic petrochemistry. The techniques are spreading through international engineering firms and trade fairs."
+ agricultural_diffusion_events.2.d_first:0 "Our chemical industry has mastered catalytic synthesis at industrial scale: ammonium nitrate, urea, concentrated phosphates, granulated mixed fertilizers — all produced more cheaply and in greater volume than the previous generation thought possible. The same processes yield pesticides, herbicides, and the additives that preserve and fortify processed food."
+ agricultural_diffusion_events.2.f:0 "Cheaper inputs, higher yields. Our farmers will feel the difference within a single growing season."
+ agricultural_diffusion_events.2.f_first:0 "A handful of large chemical works can now supply the fertilizer requirements of entire nations. The cost of agricultural inputs collapses; the yield ceiling of every crop rises with it."
+ agricultural_diffusion_events.2.t:0 "Petrochemical Fertilizers Reach the World Market"
+ agricultural_diffusion_events.2.t_first:0 "Petrochemicals Transform Agriculture"
+ agricultural_diffusion_events.3.a:0 "Distribute the seed."
+ agricultural_diffusion_events.3.a_first:0 "Feed the world."
+ agricultural_diffusion_events.3.d:0 "Plant breeders working under the sponsorship of [GetGlobalVariable('first_green_revolution_country').GetCountry.GetName] and a constellation of international research institutes have developed high-yielding semi-dwarf cultivars of the staple cereals. Demonstration plots, extension agents, and shipments of foundation seed are arriving in our country. Our own agronomists, in cooperation with their visiting counterparts, are establishing trials."
+ agricultural_diffusion_events.3.d_first:0 "Plant breeders working in our agricultural research institutes have produced semi-dwarf cultivars — strains of wheat, rice, and maize whose shorter stalks can carry vastly heavier grain heads without lodging. Combined with synthetic fertilizer, controlled irrigation, and integrated pest management, the new varieties promise to double or triple yields per hectare. Field trials are already exceeding our most optimistic projections."
+ agricultural_diffusion_events.3.f:0 "The new varieties demand fertilizer, water, and disciplined management — but where those conditions can be met, the yields are transformative. Our peasantry will feed a population none of our forebears could have sustained."
+ agricultural_diffusion_events.3.f_first:0 "This is not an incremental improvement; this is a discontinuity. International research foundations and our own diplomatic services will carry these seeds, and the integrated management package they require, to every nation willing to receive them. Within a generation, the spectre of mass agrarian famine may be banished from the human condition."
+ agricultural_diffusion_events.3.t:0 "The Green Revolution Reaches Us"
+ agricultural_diffusion_events.3.t_first:0 "We Launch the Green Revolution"
+ agricultural_diffusion_events.4.a:0 "Permit and regulate the new seed."
+ agricultural_diffusion_events.4.a_first:0 "License the technology globally."
+ agricultural_diffusion_events.4.d:0 "Commercial transgenic cultivars developed by seed companies in [GetGlobalVariable('first_gene_splicing_country').GetCountry.GetName] are entering the international seed trade. Bt cotton, herbicide-tolerant soybean and maize, and pest-resistant vegetable lines are licensed in dozens of countries despite continuing public controversy."
+ agricultural_diffusion_events.4.d_first:0 "Our molecular biologists have produced commercial cultivars whose genomes incorporate genes from unrelated species: cotton expressing a bacterial insecticidal toxin, soy and maize tolerant of broad-spectrum herbicides, varieties resistant to specific viral and fungal pathogens. Field trials are complete; the first commercial planting is underway."
+ agricultural_diffusion_events.4.f:0 "Our farmers, like those everywhere, will weigh the seed price and royalty terms against the gains in yield and labour. Most will adopt."
+ agricultural_diffusion_events.4.f_first:0 "The technique opens an entire new class of crop improvements: traits no conventional breeder could have introduced are now available in a handful of seasons. Royalties and licensing arrangements will follow the seed wherever it is planted."
+ agricultural_diffusion_events.4.t:0 "Transgenic Seed Lines Become Available"
+ agricultural_diffusion_events.4.t_first:0 "We Engineer the First Transgenic Crops"
+ agricultural_diffusion_events.5.a:0 "Adopt the new varieties."
+ agricultural_diffusion_events.5.a_first:0 "Designed crops, designed nutrition."
+ agricultural_diffusion_events.5.d:0 "Plant scientists working under the sponsorship of [GetGlobalVariable('first_biotechnology_country').GetCountry.GetName] have produced a new generation of crop varieties: micronutrient-enriched staples, salt- and drought-tolerant cultivars, and disease-resistant lines developed through marker-assisted breeding and targeted genetic modification. Humanitarian foundations and commercial seed companies are deploying them internationally."
+ agricultural_diffusion_events.5.d_first:0 "Our research institutes have integrated molecular marker techniques, genomic selection, and targeted gene editing into a coherent crop improvement programme. Beta-carotene-enriched rice, salt-tolerant cereals, drought-tolerant maize, and micronutrient-fortified staple foods are emerging from the pipeline at unprecedented speed."
+ agricultural_diffusion_events.5.f:0 "Even where the political debate over the technology continues, the cultivars are spreading. Our farms will plant what feeds our people."
+ agricultural_diffusion_events.5.f_first:0 "We can now design crops for specific environments and specific nutritional deficiencies, rather than waiting for them to emerge from decades of conventional breeding."
+ agricultural_diffusion_events.5.t:0 "Biotech Cultivars Cross Borders"
+ agricultural_diffusion_events.5.t_first:0 "We Master Agricultural Biotechnology"
+
+#
 # AUGMENTATION_EVENTS
 #
  augmentation_events.1.a:0 "Subsidize augmentation for all"

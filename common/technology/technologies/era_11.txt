@@ -128,7 +128,7 @@ genetic_engineering = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		state_arable_land_mult = 0.25
+		state_arable_land_mult = 0.50
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 	}
 
