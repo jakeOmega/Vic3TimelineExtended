@@ -89,7 +89,10 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Heavy use of scope references** to name IGs, characters, states, countries, and laws dynamically: `[SCOPE.gsInterestGroup('landowners_ig').GetName]`, `[SCOPE.sCharacter('leader').GetFullName]`, `[ROOT.GetCountry.GetAdjectiveNoFormatting]`.
 - **Gender-neutral character references** use the engine's pronoun functions: `[SCOPE.sCharacter('X').GetSheHe]`, `[SCOPE.sCharacter('X').GetHerHis]`, `[SCOPE.sCharacter('X').GetHerselfHimself]`.
 - **No formatting codes** in descriptions (no `#bold`, `#italic`, `#R`, etc.). Descriptions are plain text with scope interpolation only.
-- **Exception:** `#N` (newline with emphasis) is occasionally used for mechanical warnings in DLC events.
+- **Exceptions:**
+  - `#N` (newline with emphasis) for mechanical warnings in DLC events.
+  - `#G`/`#R`/`#b` for **mechanical thresholds or required actions** — e.g. `#G 2/3 supermajority#!` to highlight a vote threshold, or `#b [concept_migration_pull]#!` to flag a required setup action. Reference: `un_vote.*.d_expulsion*` and `te_map_modes.1.d`. Use only when the highlighted text names a number, threshold, or action the player must understand to choose between options — not for decorative emphasis.
+  - `#v` is the engine's **value-formatting convention** (e.g. `#v [SCOPE.…ScriptValue('temperature_anomaly_display')]#! °C`) and is NOT a `#bold`-style color code. It is always permitted where a live numeric value is displayed inside a description. Reference: `environmentalism_events.*.d`.
 - **Typical length:** 1–3 sentences (30–80 words). Shorter is better. Let the flavor text carry the literary weight.
 
 ### Flavor Text (`.f`)
@@ -101,7 +104,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
   - Speakers are almost never named — they are anonymous voices (a farmer, a politician, a soldier, a shopkeeper). This lets the text feel universal rather than character-specific.
   - Dialogue captures the *emotional tone* of the affected faction — arrogant industrialists, pious clergy, cynical soldiers, earnest workers.
 - **Narrative vignettes** are the second common form: short prose scenes anchored in a specific perspective — what a participant or witness sees, hears, or feels in a particular place at a particular moment. A vignette needs a viewpoint, not just an account of events. Written in present or past tense with vivid sensory detail.
-- **Famous quotes or literary epigraphs** are occasionally used, attributed with `— Author Name` (em-dash).
+- **Famous quotes or literary epigraphs** are occasionally used, attributed with `— Author Name` (em-dash). A genuine, historically attributed quote may stand alone as the entire flavor text without satisfying the 50–150 word guideline — the quote *is* the flavor. This is the only sanctioned single-line flavor form; invented aphorisms do not qualify. Reference: `nuclear_weapon_events.10.f_world_first` ("Now I am become Death, the destroyer of worlds." — Oppenheimer). Use sparingly; if you cannot name the historical author, write dialogue or vignette instead.
 - **Anti-patterns to avoid:**
   - **Two-line reportage.** "X happened. Then Y happened." compressed to a single visual line is the most common failure mode. It can technically clear the length minimum if the sentences are long enough, but it reads as a wire summary, not flavor. If the prose could appear unchanged in a newspaper headline rundown, it isn't doing the job of flavor text.
   - **Subject-less observation.** Sentences that describe events from no one's vantage point ("The march filled six city blocks. The police stopped counting heads.") read as sterile reportage. Anchor in a perspective — even an unnamed bystander, organiser, officer, journalist, or letter-writer. This is the "show, don't tell" principle from the General Tone section, applied to flavor specifically.
