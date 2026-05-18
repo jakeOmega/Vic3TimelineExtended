@@ -2,8 +2,7 @@
 # IRREDENTISM SCRIPT VALUES
 #
 # Drive AI strategy weighting and event firing rate for the same-culture +
-# claims reunification system. See common/scripted_triggers/irredentism_triggers.txt
-# and /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
+# claims reunification system. See common/scripted_triggers/irredentism_triggers.txt.
 #
 # Both values are evaluated in unifier scope and expect scope:target_country
 # (or ROOT.target_country for AI-strategy contexts) to be set.
