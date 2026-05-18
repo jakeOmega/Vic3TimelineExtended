@@ -222,6 +222,11 @@ _DOC_MAPPING_RAW: list[tuple[str, list[str], str]] = [
 
 DOC_MAPPING = [(re.compile(p), docs, area) for p, docs, area in _DOC_MAPPING_RAW]
 
+# Set of area names known to the selector, derived from DOC_MAPPING above.
+# Used to validate `--areas` CLI tokens; an unknown area is a typo, not a
+# silently empty filter.
+VALID_AREAS = sorted({area for _, _, area in _DOC_MAPPING_RAW})
+
 
 # --------------------------------------------------------------------------- #
 # File enumeration & exclusion
@@ -299,6 +304,33 @@ def enumerate_candidates() -> list[tuple[Path, str, int]]:
                 continue
             candidates.append((path, rel, line_count))
     return candidates
+
+
+def apply_filters(
+    candidates: list[tuple[Path, str, int]],
+    areas: set[str] | None,
+    includes: list[str] | None,
+    excludes: list[str] | None,
+) -> list[tuple[Path, str, int]]:
+    """Restrict candidates by area name and/or path globs.
+
+    `areas` is an intersection: a candidate must resolve (via area_and_docs) to
+    one of the named areas. `includes` is a disjunction: at least one glob must
+    match the repo-relative path. `excludes` is a disjunction applied last:
+    any match drops the candidate.
+    """
+    out: list[tuple[Path, str, int]] = []
+    for abs_path, rel, line_count in candidates:
+        if areas:
+            area, _ = area_and_docs(rel)
+            if area not in areas:
+                continue
+        if includes and not any(fnmatch.fnmatch(rel, g) for g in includes):
+            continue
+        if excludes and any(fnmatch.fnmatch(rel, g) for g in excludes):
+            continue
+        out.append((abs_path, rel, line_count))
+    return out
 
 
 # --------------------------------------------------------------------------- #
@@ -392,8 +424,9 @@ def area_and_docs(rel: str) -> tuple[str, list[str]]:
 
 
 def select_targets(candidates: list[tuple[Path, str, int]], state: dict,
-                   today: Date, rng: random.Random) -> list[dict]:
-    """Iterative greedy pick under LINE_BUDGET / FILE_CAP, with per-file
+                   today: Date, rng: random.Random,
+                   line_budget: int = LINE_BUDGET) -> list[dict]:
+    """Iterative greedy pick under `line_budget` / FILE_CAP, with per-file
     slicing and a marginal-new-doc penalty.
 
     Seed pick is by base score alone. For each subsequent pick the effective
@@ -438,7 +471,7 @@ def select_targets(candidates: list[tuple[Path, str, int]], state: dict,
                 line_range = None
                 slice_lines = cand["line_count"]
 
-            if total_lines + slice_lines > LINE_BUDGET and targets:
+            if total_lines + slice_lines > line_budget and targets:
                 # Doesn't fit — try the next candidate (some may be smaller).
                 continue
 
@@ -557,26 +590,67 @@ def detect_registry_drift() -> tuple[list[str], list[str]]:
 # Output directory resolution (manual re-run versioning)
 # --------------------------------------------------------------------------- #
 
-def resolve_output_dir(base: Path, date_str: str, allow_rerun: bool) -> tuple[Path, str]:
+_SLUG_RE = re.compile(r"[^a-zA-Z0-9]+")
+
+
+def _slug_token(s: str, max_len: int = 20) -> str:
+    """Normalize a glob/path fragment into a directory-safe slug."""
+    cleaned = _SLUG_RE.sub("-", s).strip("-").lower()
+    return cleaned[:max_len].rstrip("-")
+
+
+def derive_filter_slug(areas: set[str] | None, includes: list[str] | None,
+                       excludes: list[str] | None) -> str | None:
+    """Build a short, directory-safe label from the active filters.
+
+    Returns None if no filter is active. Slug format: `<areas>[-<include>][-not-<exclude>]`,
+    capped at ~40 chars total.
+    """
+    if not (areas or includes or excludes):
+        return None
+    parts: list[str] = []
+    if areas:
+        if len(areas) >= 4:
+            parts.append("multi")
+        else:
+            parts.append("-".join(sorted(areas)))
+    if includes:
+        tok = _slug_token(includes[0])
+        if tok:
+            parts.append(tok)
+    if excludes:
+        tok = _slug_token(excludes[0])
+        if tok:
+            parts.append(f"not-{tok}")
+    slug = "-".join(p for p in parts if p)
+    return slug[:40].rstrip("-") or None
+
+
+def resolve_output_dir(base: Path, date_str: str, allow_rerun: bool,
+                       filter_slug: str | None = None) -> tuple[Path, str]:
     """Pick the output directory and matching run label.
 
-    Default (`allow_rerun=False`): always `<base>/<date_str>`, even if it
-    already exists — the wrapper-driven scheduled path overwrites.
+    Default (`allow_rerun=False`, no filter): always `<base>/<date_str>`, even
+    if it already exists — the wrapper-driven scheduled path overwrites.
 
-    Manual skill re-runs pass `allow_rerun=True`: if `<base>/<date_str>` already
-    exists, return `<base>/<date_str>-v2`, then `-v3`, etc., so prior runs'
-    `prompt.md` / `targets.json` aren't clobbered. The run label (`<date_str>`
-    or `<date_str>-vN`) is also returned so branch names and PR-body dir links
-    in the rendered prompt point at the actual on-disk path.
+    Filtered runs (`filter_slug` set): base label is `<date_str>-<filter_slug>`
+    instead of `<date_str>`. Re-run versioning still applies on top.
+
+    Manual skill re-runs pass `allow_rerun=True`: if the base label dir already
+    exists, return `<base label>-v2`, then `-v3`, etc., so prior runs'
+    `prompt.md` / `targets.json` aren't clobbered. The run label is also returned
+    so branch names and PR-body dir links in the rendered prompt point at the
+    actual on-disk path.
     """
+    base_label = f"{date_str}-{filter_slug}" if filter_slug else date_str
     if not allow_rerun:
-        return base / date_str, date_str
-    if not (base / date_str).exists():
-        return base / date_str, date_str
+        return base / base_label, base_label
+    if not (base / base_label).exists():
+        return base / base_label, base_label
     n = 2
-    while (base / f"{date_str}-v{n}").exists():
+    while (base / f"{base_label}-v{n}").exists():
         n += 1
-    label = f"{date_str}-v{n}"
+    label = f"{base_label}-v{n}"
     return base / label, label
 
 
@@ -584,9 +658,23 @@ def resolve_output_dir(base: Path, date_str: str, allow_rerun: bool) -> tuple[Pa
 # Prompt rendering
 # --------------------------------------------------------------------------- #
 
+def _format_filter_summary(filters: dict) -> str:
+    """Human-readable filter summary for the prompt heading."""
+    parts: list[str] = []
+    if filters.get("areas"):
+        parts.append(f"areas={','.join(sorted(filters['areas']))}")
+    if filters.get("include"):
+        parts.append(f"include={','.join(filters['include'])}")
+    if filters.get("exclude"):
+        parts.append(f"exclude={','.join(filters['exclude'])}")
+    return "; ".join(parts) if parts else "no filters"
+
+
 def render_prompt(date_str: str, run_label: str, targets: list[dict],
                   drift_added: list[str], drift_orphaned: list[str],
-                  with_report: bool) -> str:
+                  with_report: bool, targeted: bool = False,
+                  filters: dict | None = None,
+                  line_budget: int = LINE_BUDGET) -> str:
     # Deduplicated doc-reading list (always-read first, then per-target docs)
     doc_list: list[str] = list(ALWAYS_READ)
     used_areas: set[str] = set()
@@ -601,13 +689,25 @@ def render_prompt(date_str: str, run_label: str, targets: list[dict],
             doc_list.append(cl)
 
     lines: list[str] = []
-    if run_label == date_str:
+    if targeted:
+        summary = _format_filter_summary(filters or {})
+        lines.append(f"# Nightly mod audit — {date_str} (targeted: {summary})")
+    elif run_label == date_str:
         lines.append(f"# Nightly mod audit — {date_str}")
     else:
         lines.append(f"# Nightly mod audit — {date_str} (manual re-run: {run_label})")
     lines.append("")
     lines.append("Generated by `scripts/nightly_audit_select.py`. Read `docs/audits/nightly_audit_README.md` first if you haven't.")
     lines.append("")
+    if targeted:
+        lines.append("## Targeted run")
+        lines.append("")
+        lines.append("This run was scoped via filters — only the matching slice was selected.")
+        lines.append("Per-file state in `docs/audits/.nightly_coverage.json` should be updated")
+        lines.append("as normal (audited files age their staleness clock), but **do NOT update")
+        lines.append("`docs/audits/.nightly_last_run`** on completion — a full nightly audit")
+        lines.append("hasn't run today and tonight's scheduled or manual full audit should still fire.")
+        lines.append("")
     lines.append("## What you're doing")
     lines.append("")
     lines.append("Audit the slice of mod content below for things the procedural audits *don't* catch:")
@@ -648,7 +748,7 @@ def render_prompt(date_str: str, run_label: str, targets: list[dict],
         )
     lines.append("")
     total = sum(t["lines"] for t in targets)
-    lines.append(f"**Budget**: {total} of {LINE_BUDGET} lines, {len(targets)} of {FILE_CAP} files.")
+    lines.append(f"**Budget**: {total} of {line_budget} lines, {len(targets)} of {FILE_CAP} files.")
     lines.append("")
 
     if drift_added or drift_orphaned:
@@ -792,6 +892,38 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out-dir", help="Override the output directory (honored verbatim; bypasses re-run versioning).")
     parser.add_argument("--allow-rerun", action="store_true", help="If today's output dir already exists, write to <date>-v2/-v3/... instead of overwriting. Used by the /nightly-audit skill; scheduled runs leave this off.")
     parser.add_argument("--report", action="store_true", help="Instruct the audit prompt to also write docs/audits/nightly/<run-label>/report.md.")
+    parser.add_argument(
+        "--areas",
+        help=(
+            "Comma-separated area names to restrict the candidate pool to "
+            f"(targeted run). Valid: {', '.join(VALID_AREAS)}."
+        ),
+    )
+    parser.add_argument(
+        "--include",
+        action="append",
+        default=[],
+        help=(
+            "Repeatable glob (matched against the repo-relative path) restricting "
+            "the candidate pool. Multiple --include flags are OR'd. Combines with "
+            "--areas via intersection. Targeted run."
+        ),
+    )
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help=(
+            "Repeatable glob (matched against the repo-relative path) dropping "
+            "candidates from the pool. Applied after --include. Targeted run."
+        ),
+    )
+    parser.add_argument(
+        "--budget",
+        type=int,
+        default=None,
+        help=f"Override the per-run line budget (default: {LINE_BUDGET}). Tuning knob only; does not on its own make a run 'targeted'.",
+    )
     args = parser.parse_args(argv)
 
     if args.date:
@@ -804,10 +936,49 @@ def main(argv: list[str] | None = None) -> int:
         today = Date.today()
     date_str = today.isoformat()
 
+    areas: set[str] | None = None
+    if args.areas:
+        requested = [a.strip() for a in args.areas.split(",") if a.strip()]
+        unknown = [a for a in requested if a not in VALID_AREAS]
+        if unknown:
+            print(
+                f"--areas: unknown name(s) {unknown}. Valid: {', '.join(VALID_AREAS)}",
+                file=sys.stderr,
+            )
+            return 2
+        areas = set(requested)
+
+    includes: list[str] = list(args.include or [])
+    excludes: list[str] = list(args.exclude or [])
+
+    if args.budget is not None and args.budget <= 0:
+        print(f"--budget must be a positive integer, got {args.budget}", file=sys.stderr)
+        return 2
+    line_budget = args.budget if args.budget is not None else LINE_BUDGET
+
+    targeted = bool(areas or includes or excludes)
+    filter_slug = derive_filter_slug(areas, includes, excludes)
+    filters_payload = {
+        "areas": sorted(areas) if areas else [],
+        "include": includes,
+        "exclude": excludes,
+    }
+
     rng = seeded_rng(date_str)
     state = load_state()
     candidates = enumerate_candidates()
-    targets = select_targets(candidates, state, today, rng)
+    if targeted:
+        filtered = apply_filters(candidates, areas, includes, excludes)
+        if not filtered:
+            print(
+                f"no candidates after filters: areas={sorted(areas) if areas else []} "
+                f"include={includes} exclude={excludes}. Check for typo'd globs or "
+                f"an empty intersection.",
+                file=sys.stderr,
+            )
+            return 2
+        candidates = filtered
+    targets = select_targets(candidates, state, today, rng, line_budget=line_budget)
     drift_added, drift_orphaned = detect_registry_drift()
 
     if not targets:
@@ -822,17 +993,23 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.out_dir:
         out_dir = Path(args.out_dir)
-        run_label = date_str
+        run_label = date_str if not filter_slug else f"{date_str}-{filter_slug}"
     else:
-        out_dir, run_label = resolve_output_dir(OUT_DIR_BASE, date_str, args.allow_rerun)
+        out_dir, run_label = resolve_output_dir(
+            OUT_DIR_BASE, date_str, args.allow_rerun, filter_slug=filter_slug
+        )
     prompt_path = out_dir / "prompt.md"
     targets_path = out_dir / "targets.json"
 
-    prompt_text = render_prompt(date_str, run_label, targets, drift_added, drift_orphaned, args.report)
+    prompt_text = render_prompt(
+        date_str, run_label, targets, drift_added, drift_orphaned, args.report,
+        targeted=targeted, filters=filters_payload, line_budget=line_budget,
+    )
 
     if args.dry_run:
-        rerun_note = "" if run_label == date_str else f"  rerun_label={run_label}"
-        print(f"[dry-run] date={date_str}  selected={len(targets)}  lines={total_lines}/{LINE_BUDGET}  areas: {area_summary}{rerun_note}")
+        rerun_note = "" if run_label == date_str else f"  run_label={run_label}"
+        targeted_note = "  [targeted]" if targeted else ""
+        print(f"[dry-run] date={date_str}  selected={len(targets)}  lines={total_lines}/{line_budget}  areas: {area_summary}{rerun_note}{targeted_note}")
         if drift_added or drift_orphaned:
             print(f"[dry-run] registry drift: added={len(drift_added)} orphaned={len(drift_orphaned)}")
         print()
@@ -852,10 +1029,16 @@ def main(argv: list[str] | None = None) -> int:
                 "date": date_str,
                 "run_label": run_label,
                 "total_lines": total_lines,
-                "line_budget": LINE_BUDGET,
+                "line_budget": line_budget,
                 "file_cap": FILE_CAP,
                 "slice_cap": SLICE_CAP,
                 "report_requested": bool(args.report),
+                "targeted": targeted,
+                "filters": filters_payload,
+                # Marker policy: the /nightly-audit skill reads this and skips
+                # writing docs/audits/.nightly_last_run when true, so a partial
+                # targeted run doesn't suppress tonight's full audit.
+                "skip_nightly_marker": targeted,
                 "registry_drift": {
                     "in_registry_not_excluded": drift_added,
                     "excluded_globs_not_in_registry": drift_orphaned,
@@ -879,7 +1062,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         f.write("\n")
 
-    print(f"date={date_str}  selected={len(targets)}  lines={total_lines}/{LINE_BUDGET}  areas: {area_summary}")
+    targeted_note = "  [targeted]" if targeted else ""
+    print(f"date={date_str}  selected={len(targets)}  lines={total_lines}/{line_budget}  areas: {area_summary}{targeted_note}")
     if drift_added or drift_orphaned:
         print(f"registry drift: in-registry-not-excluded={len(drift_added)} excluded-not-in-registry={len(drift_orphaned)}")
     print(f"prompt:  {prompt_path.relative_to(REPO_ROOT)}")

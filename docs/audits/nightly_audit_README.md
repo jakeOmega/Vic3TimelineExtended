@@ -84,6 +84,40 @@ python3 scripts/nightly_audit_select.py --allow-rerun
 
 Since today's targets get bumped to `last_audited=<today>` after the first run wraps up, a same-day v2 invocation naturally picks a different slice — the recency-based scoring deprioritizes files that were already audited today. To re-examine the same v1 slice, read `docs/audits/nightly/<date>/prompt.md` directly rather than re-generating.
 
+## Targeted audits
+
+The selector can scope a run to a subset of the candidate pool. Useful when you want a deep pass on one area without burning the day's coverage on unrelated files.
+
+| Flag | Purpose |
+|---|---|
+| `--areas <comma-sep>` | Restrict to the named areas. Valid: `events`, `gui`, `journal_entries`, `laws_and_politics`, `localization`, `production_methods_and_buildings`, `scripted_effects_and_triggers`, `technologies`. Unknown name exits 2 with the valid list. |
+| `--include <glob>` | Repeatable. Keep only paths matching at least one glob via `fnmatch` against the repo-relative path. Combines with `--areas` via intersection. |
+| `--exclude <glob>` | Repeatable. Drop paths matching any glob. Applied after `--include`. |
+| `--budget <int>` | Override the per-run line budget (default `LINE_BUDGET`). Tuning knob only — does not on its own make a run "targeted". |
+
+Examples:
+
+```bash
+# Event localization only
+python3 scripts/nightly_audit_select.py --areas localization --include '*event*'
+
+# Just the UN events files, smaller budget
+python3 scripts/nightly_audit_select.py --include 'events/un_*.txt' --budget 1000
+
+# Everything except gfx and gui
+python3 scripts/nightly_audit_select.py --exclude 'gfx/*' --exclude 'gui/*'
+```
+
+Targeted runs:
+
+- Write to `docs/audits/nightly/<date>-<filter-slug>/` (e.g. `2026-05-17-localization-event/`). Re-run versioning (`-v2`, `-v3`) layers on top.
+- Set `targeted: true` and `skip_nightly_marker: true` in `targets.json`.
+- Do **not** update `docs/audits/.nightly_last_run` on completion — the partial slice doesn't satisfy the day's full-audit promise, so tonight's scheduled wrapper still fires. The skill's step 4 reads `skip_nightly_marker` and branches accordingly.
+- Do update `docs/audits/.nightly_coverage.json` per audited file via the prompt's wrap-up — those files naturally age and are less likely to be picked again by the next full nightly.
+- Exit 2 with a clear error if filters yield zero candidates (typo'd glob, empty intersection). Don't fall back to the unfiltered pool — that silently defeats the user's intent.
+
+The `/nightly-audit` skill (`.claude/skills/nightly-audit/SKILL.md`) accepts targeted-run requests in natural language and translates them into selector flags — see the translation table there.
+
 ## Tuning knobs
 
 At the top of `scripts/nightly_audit_select.py`:

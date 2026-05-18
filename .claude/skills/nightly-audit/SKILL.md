@@ -1,5 +1,5 @@
 ---
-description: Run today's nightly mod audit interactively in this Claude Code session. Use when the user types /nightly-audit, or when the user asks to "run the audit", "do the nightly", or "trigger today's audit". Generates the per-day prompt via the selector, then has Claude follow that prompt end-to-end. Pairs with the headless scripts/run_nightly_audit.sh that fires from Windows Task Scheduler on logon — both update the same .nightly_last_run marker so they don't double-audit.
+description: Run a judgment-based mod audit interactively in this Claude Code session — either today's full nightly slice OR a user-scoped targeted slice. Triggers on /nightly-audit, generic phrasings ("run the audit", "do the nightly", "trigger today's audit"), AND area-targeted phrasings like "audit event localization", "audit the laws", "audit journal entries tonight", "review the GUI files", "deep pass on UN events" — any "audit/review <area or file pattern>" request where the area maps to one of the selector's known areas (events, gui, journal_entries, laws_and_politics, localization, production_methods_and_buildings, scripted_effects_and_triggers, technologies) or to a `common/`/`events/`/`gui/`/`localization/` file pattern. The selector translates the scope into flags; bare invocations get today's rotation slice. Generates the per-day prompt via the selector, then has Claude follow that prompt end-to-end. Pairs with the headless scripts/run_nightly_audit.sh that fires from Windows Task Scheduler on logon — both update the same .nightly_last_run marker so they don't double-audit.
 ---
 
 # Run today's nightly mod audit
@@ -34,16 +34,31 @@ If the curl fails or status isn't `running`, start the server yourself per CLAUD
 
    Scheduled runs via `scripts/run_nightly_audit.sh` deliberately do *not* pass this flag — the marker-gate keeps them at one run per day.
 
+   **Targeted runs.** If the user's `/nightly-audit` message includes a scope (an area name, a file pattern, a directory, "only X tonight", etc.), translate it into selector flags and append them. Valid areas: `events`, `gui`, `journal_entries`, `laws_and_politics`, `localization`, `production_methods_and_buildings`, `scripted_effects_and_triggers`, `technologies`. Globs match the repo-relative path via `fnmatch`. Examples:
+
+   | User says | You run |
+   |---|---|
+   | `/nightly-audit` (bare) | `python3 scripts/nightly_audit_select.py --allow-rerun` |
+   | "audit event localization", `/nightly-audit event loc` | `python3 scripts/nightly_audit_select.py --allow-rerun --areas localization --include '*event*'` |
+   | "audit only journal entries tonight" | `python3 scripts/nightly_audit_select.py --allow-rerun --areas journal_entries` |
+   | "deep pass on UN events, 1000 lines max" | `python3 scripts/nightly_audit_select.py --allow-rerun --include 'events/un_*.txt' --budget 1000` |
+   | "skip the gfx and gui stuff tonight" | `python3 scripts/nightly_audit_select.py --allow-rerun --exclude 'gfx/*' --exclude 'gui/*'` |
+
+   Targeted runs write to `docs/audits/nightly/YYYY-MM-DD-<slug>/` (slug derived from filters), distinct from the bare `YYYY-MM-DD/` of a full nightly. The selector exits 2 with a clear error if an area name is misspelled or the filter combination is empty — fix the flags and re-run rather than falling back to an unfiltered audit silently.
+
 2. **Read the prompt file in full.** It owns the dedup workflow, focus ranking, auto-fix rule, fast-verify loop, and wrap-up instructions — everything the cloud routine's instructions used to defer to. Don't skip ahead.
 
 3. **Execute the audit per that prompt.** That includes the dedup pass (skim recent `gh issue list` and `docs/audits/nightly/*/` outputs), the per-area checklists in `docs/audits/nightly_checklists/`, the auto-fix cap (5 files / 50 lines across all PRs that night), and the wrap-up (state-bump PR, summary issue/comment as the prompt directs).
 
-4. **On successful completion, update the catch-up marker.** Write today's date so the headless wrapper (`scripts/run_nightly_audit.sh`) won't double-run if Windows Task Scheduler fires next:
+4. **On successful completion, conditionally update the catch-up marker.** Check the run's `targets.json` first:
    ```bash
-   date +%Y-%m-%d > docs/audits/.nightly_last_run
+   python3 -c "import json,sys; d=json.load(open('docs/audits/nightly/<run-label>/targets.json')); sys.exit(0 if d.get('skip_nightly_marker') else 1)" \
+     && echo "targeted run — marker left untouched so tonight's full audit can still fire" \
+     || date +%Y-%m-%d > docs/audits/.nightly_last_run
    ```
-   Manual re-runs (v2+) still write today's bare date here — the marker exists to gate the *scheduled* wrapper, which doesn't care how many manual passes have happened.
-   Don't write the marker if the audit aborted mid-run — leaving it stale lets the next invocation retry.
+   - **Full runs** (`skip_nightly_marker: false`): write today's date so the headless wrapper (`scripts/run_nightly_audit.sh`) won't double-run if Windows Task Scheduler fires next. Manual re-runs (v2+) still write today's bare date — the marker exists to gate the *scheduled* wrapper.
+   - **Targeted runs** (`skip_nightly_marker: true`): skip the marker write. The targeted slice doesn't satisfy the full nightly's coverage promise; per-file aging via `.nightly_coverage.json` still happens (handled in the prompt's wrap-up), which naturally deprioritizes those files in the next full run.
+   - Don't write the marker if the audit aborted mid-run — leaving it stale lets the next invocation retry.
 
 ## Failure handling
 

@@ -9,6 +9,8 @@
 	COMPANY_PROSPERITY_EMPLOYED_LEVELS_MAX = 75					# Max target prosperity from fully employed building levels
 	COMPANY_ON_ESTABLISH_COOLDOWN_MONTHS = 12
 	COMPANY_MONOPOLY_COOLDOWN_MONTHS = 6				# Cooldown in months after establishing a companies monopoly before you can revoke its monopoly
+	WORLD_MARKET_MONOPOLY_MIN_SHARE	= 0.667				# For a market to be considered to have a world market monopoly, it has to control a greater share of exports than this
+	MONOPOLY_PRICE_IMPACT = 0.9
 }
 
 NPolitics = {
