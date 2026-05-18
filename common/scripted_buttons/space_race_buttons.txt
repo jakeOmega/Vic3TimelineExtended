@@ -15,7 +15,7 @@ sr_btn_safe_suborbital = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -55,7 +55,7 @@ sr_btn_ambitious_suborbital = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -174,7 +174,7 @@ sr_btn_safe_orbital = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -214,7 +214,7 @@ sr_btn_ambitious_orbital = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -333,7 +333,7 @@ sr_btn_safe_moon_landing = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -373,7 +373,7 @@ sr_btn_ambitious_moon_landing = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -492,7 +492,7 @@ sr_btn_safe_probe = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -532,7 +532,7 @@ sr_btn_ambitious_probe = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -651,7 +651,7 @@ sr_btn_safe_moon_base = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -691,7 +691,7 @@ sr_btn_ambitious_moon_base = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -810,7 +810,7 @@ sr_btn_safe_mars_landing = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -850,7 +850,7 @@ sr_btn_ambitious_mars_landing = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -969,7 +969,7 @@ sr_btn_safe_interstellar_probe = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -1009,7 +1009,7 @@ sr_btn_ambitious_interstellar_probe = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {
@@ -1130,7 +1130,7 @@ sr_btn_safe_solar_colonization = {
 	ai_chance = {
 		value = 50
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = -20
 		}
 	}
@@ -1172,7 +1172,7 @@ sr_btn_ambitious_solar_colonization = {
 	ai_chance = {
 		value = 30
 		if = {
-			limit = { country_rank = rank_value:great_power }
+			limit = { country_rank >= rank_value:great_power }
 			add = 30
 		}
 		if = {

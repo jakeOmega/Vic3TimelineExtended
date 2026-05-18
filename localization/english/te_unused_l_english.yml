@@ -160,6 +160,8 @@
  combat_unit_type_swarm_coordination_vessel:0 "Swarm Coordination Vessel"
  combat_unit_type_swarm_coordination_vessel_desc:0 "Swarm coordination vessels are specialized warships equipped with advanced command and control systems, which can coordinate large numbers of autonomous drones and vehicles.\n\nCost at base prices: #N @money!3060 #!"
  compliance_costs:0 "Compliance costs for businesses"
+ concept_superpower_desc_added:0 "\n\n$concept_superpowers$ gain the following benefits:\n[GetRankModifier('superpower').GetDesc]"
+ concept_superpower_short:0 "Superpower"
  corporate_concessions_article_short_desc:0 "[SOURCE_COUNTRY.GetNameNoFormatting] will grant corporate concessions"
  corporate_concessions_effects_desc:0 "• Boosts company [concept_throughput] in the source country.\n• Increases political radicalism.\n• Source country loses [concept_authority].\n• Target country gains [concept_prestige] and company construction efficiency."
  covert_comms_disruption_action_effect_desc_first:0 "[COUNTRY.GetAdjectiveNoFlag] launches covert communications disruption operations against [TARGET_COUNTRY.GetName]"

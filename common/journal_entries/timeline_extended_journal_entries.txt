@@ -23,7 +23,7 @@
 
     possible = {
         OR = {
-            country_rank = rank_value:great_power
+            country_rank >= rank_value:great_power
             AND = {
                 country_rank = rank_value:major_power
                 has_technology_researched = ICBMs

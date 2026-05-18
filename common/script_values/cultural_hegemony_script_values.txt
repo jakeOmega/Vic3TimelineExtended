@@ -268,6 +268,16 @@ country_prestige_share_pct = {
 	multiply = 100
 }
 
+# Live version of country_prestige_share_pct that does not depend on the
+# cultural-hegemony yearly cache. Used by the superpower country_rank
+# gate in extra_country_ranks.txt so the rank works regardless of
+# whether the cultural_hegemony_enabled game rule is on.
+country_live_prestige_share_pct = {
+	value = prestige
+	divide = global_prestige_total
+	multiply = 100
+}
+
 # Prestige absolute (scaled down to comparable range)
 country_prestige_absolute = {
 	value = prestige
@@ -295,7 +305,7 @@ cultural_pull_from_sol = {
 	max = cultural_pull_sol_max
 	# Scale by country rank
 	if = {
-		limit = { country_rank = rank_value:great_power }
+		limit = { country_rank >= rank_value:great_power }
 		# Full value - no change
 	}
 	else_if = {

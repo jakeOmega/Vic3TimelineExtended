@@ -179,7 +179,7 @@ is_industrial_production_allowed = {
 # True if the country is a Great Power or a Major Power. Country scope.
 is_great_or_major_power = {
 	OR = {
-		country_rank = rank_value:great_power
+		country_rank >= rank_value:great_power
 		country_rank = rank_value:major_power
 	}
 }

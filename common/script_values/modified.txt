@@ -155,7 +155,7 @@ power_bloc_leverage_gain = {
 			value = 0.9
 			if = {
 				limit = {
-					scope:target.country_rank = rank_value:great_power
+					scope:target.country_rank >= rank_value:great_power
 				}
 				add = -0.6
 			}
@@ -337,7 +337,7 @@ power_bloc_great_power_non_leader_members = {
 		if = {
 			limit = {
 				is_power_bloc_leader = no
-				country_rank = rank_value:great_power
+				country_rank >= rank_value:great_power
 			}
 			add = 1
 		}

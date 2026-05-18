@@ -21,7 +21,7 @@ je_covert_warfare = {
 	possible = {
 		OR = {
 			AND = {
-				country_rank = rank_value:great_power
+				country_rank >= rank_value:great_power
 				covert_operation_max_slots >= 4
 			}
 			AND = {
@@ -379,7 +379,7 @@ je_covert_warfare = {
 						limit = { is_at_war = yes }
 						# Great powers at war: max funding
 						if = {
-							limit = { country_rank = rank_value:great_power }
+							limit = { country_rank >= rank_value:great_power }
 							set_variable = { name = iw_funding_level value = iw_funding_level_max }
 						}
 						else = {
@@ -391,14 +391,14 @@ je_covert_warfare = {
 					else_if = {
 						limit = {
 							covert_operations_active >= 3
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 						}
 						set_variable = { name = iw_funding_level value = 3 }
 					}
 					# Great powers with few ops: high funding (better tradecraft)
 					else_if = {
 						limit = {
-							country_rank = rank_value:great_power
+							country_rank >= rank_value:great_power
 							NOT = { in_default = yes }
 						}
 						set_variable = { name = iw_funding_level value = 3 }

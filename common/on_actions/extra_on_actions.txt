@@ -130,6 +130,26 @@ on_monthly_pulse_country = {
 		te_pm_retooling_weekly_schedule
 		st_dp_escalation_weekly_schedule
 		te_fix_inconsistent_laws_country_pulse
+		superpower_ascension_check_on_action
+	}
+}
+
+# Fires the one-shot superpower-ascension event the first time a country
+# is recognised at the Superpower rank. The `has_been_superpower_ever`
+# variable is sticky — if the country later drops below Superpower and
+# climbs back, no second ascension event fires. The engine has no
+# on_country_rank_changed hook (only a particle effect for great_power
+# ascension exists), so a monthly poll is the correct pattern here.
+superpower_ascension_check_on_action = {
+	effect = {
+		if = {
+			limit = {
+				country_rank >= rank_value:superpower
+				NOT = { has_variable = has_been_superpower_ever }
+			}
+			set_variable = has_been_superpower_ever
+			trigger_event = { id = superpower_events.1 }
+		}
 	}
 }
 

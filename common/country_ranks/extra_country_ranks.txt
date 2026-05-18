@@ -15,3 +15,60 @@ INJECT:major_power = {
 		country_intelligence_capacity_add = 5
 	}
 }
+
+# Superpower tier (GitHub issue #111) — sits above great_power.
+# Gated on:
+#   1. Holding nuclear weapons (mod `nuclear_power` modifier, granted by
+#      the nuclear-weapons-program JE on first detonation).
+#   2. A share of global prestige >= 30%. At 30%, three holders would
+#      require >90% of world prestige between them, so two-superpower
+#      Cold War bipolarity is the natural equilibrium.
+# Also keeps the great_power prestige floors so the gate cannot be passed
+# by a tiny world with one nuclear power.
+# icon_index = 4 reuses great_power's badge for safety (vanilla GUI tested
+# 1–4; index 5+ is untested). A custom Superpower badge is a follow-up.
+superpower = {
+	rank_value = 8
+	icon_index = 4
+
+	enforce_subject_rank_check = yes
+
+	diplo_pact_cost = 2.5
+	treaty_article_cost = 2.5
+
+	prestige_average_threshold = 5.0
+	prestige_relative_threshold = 0.75
+
+	infamy_aggressor_scaling = 0.30
+	infamy_target_scaling = 0.30
+
+	ai_pool_character_multiplier = 1.0
+	ai_innovation_critical_threshold = 0.85
+
+	possible = {
+		has_modifier = nuclear_power
+		country_live_prestige_share_pct >= 30
+	}
+
+	valid_country_types = {
+		recognized
+		colonial
+		company
+	}
+
+	modifier = {
+		country_influence_add = 1500
+		country_diplomatic_play_maneuvers_add = 150
+		country_loan_interest_rate_mult = -0.75
+		country_agitator_slots_add = 3
+		country_support_independence_weekly_liberty_desire_add = 0.30
+		state_migration_pull_mult = 0.50
+		country_leverage_resistance_add = 2000
+		country_free_charters_add = 2
+		country_max_unassigned_generals_add = 5
+		country_max_unassigned_admirals_add = 5
+		country_cultural_pull_mult = 0.50
+		country_covert_operation_slot_add = 4
+		country_intelligence_capacity_add = 20
+	}
+}

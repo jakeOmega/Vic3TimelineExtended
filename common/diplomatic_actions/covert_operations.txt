@@ -169,7 +169,7 @@ covert_election_interference_action = {
 				add = 10
 			}
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 			if = {
@@ -309,7 +309,7 @@ covert_financial_subversion_action = {
 				add = 10
 			}
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 			if = {
@@ -440,7 +440,7 @@ covert_infrastructure_sabotage_action = {
 		propose_score = {
 			value = 15
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 		}
@@ -564,7 +564,7 @@ covert_comms_disruption_action = {
 		propose_score = {
 			value = 15
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 		}
@@ -700,7 +700,7 @@ covert_industrial_espionage_action = {
 		propose_score = {
 			value = 10
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 		}
@@ -828,7 +828,7 @@ covert_military_espionage_action = {
 		propose_score = {
 			value = 10
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 		}
@@ -972,7 +972,7 @@ covert_influence_campaign_action = {
 		propose_score = {
 			value = 8
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 7
 			}
 			if = {
@@ -1137,7 +1137,7 @@ covert_ideological_subversion_action = {
 				add = 8
 			}
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 		}
@@ -1294,7 +1294,7 @@ covert_destabilization_action = {
 		propose_score = {
 			value = 5
 			if = {
-				limit = { country_rank = rank_value:great_power }
+				limit = { country_rank >= rank_value:great_power }
 				add = 5
 			}
 			if = {
