@@ -396,10 +396,18 @@ on_character_recruitment = {
 }
 te_on_character_recruitment = {
 	effect = {
-		owner = {
-			if = {
-				limit = { modifier:country_combined_arms_bonus_enabled_bool = yes }
-				apply_combined_arms_bonuses = yes
+		# Combined-arms recompute walks every general; non-general recruits
+		# (politicians, agitators, admirals, executives) don't change the
+		# output, so skip the work. Matches the narrowing already applied
+		# in te_on_building_built (is_building_type = building_barrack) and
+		# te_on_military_formation_created. Pure perf trim, behavior-neutral.
+		if = {
+			limit = { has_role = general }
+			owner = {
+				if = {
+					limit = { modifier:country_combined_arms_bonus_enabled_bool = yes }
+					apply_combined_arms_bonuses = yes
+				}
 			}
 		}
 	}
