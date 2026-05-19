@@ -279,41 +279,11 @@ on_acquired_technology = {
 # triggers the broadcast. See common/scripted_effects/agricultural_diffusion_effects.txt.
 agricultural_diffusion_on_action = {
 	effect = {
-		if = {
-			limit = {
-				has_technology_researched = nitrogen_fixation
-				NOT = { has_global_variable = world_first_nitrogen_fixation }
-			}
-			agdiff_on_nitrogen_fixation_researched = yes
-		}
-		if = {
-			limit = {
-				has_technology_researched = modern_chemical_processes
-				NOT = { has_global_variable = world_first_modern_chemical_processes }
-			}
-			agdiff_on_modern_chemical_processes_researched = yes
-		}
-		if = {
-			limit = {
-				has_technology_researched = green_revolution
-				NOT = { has_global_variable = world_first_green_revolution }
-			}
-			agdiff_on_green_revolution_researched = yes
-		}
-		if = {
-			limit = {
-				has_technology_researched = gene_splicing
-				NOT = { has_global_variable = world_first_gene_splicing }
-			}
-			agdiff_on_gene_splicing_researched = yes
-		}
-		if = {
-			limit = {
-				has_technology_researched = biotechnology
-				NOT = { has_global_variable = world_first_biotechnology }
-			}
-			agdiff_on_biotechnology_researched = yes
-		}
+		agdiff_dispatch_if_first = { TECH = nitrogen_fixation }
+		agdiff_dispatch_if_first = { TECH = modern_chemical_processes }
+		agdiff_dispatch_if_first = { TECH = green_revolution }
+		agdiff_dispatch_if_first = { TECH = gene_splicing }
+		agdiff_dispatch_if_first = { TECH = biotechnology }
 	}
 }
 

@@ -16,6 +16,23 @@
 #
 # Wired in via on_acquired_technology in common/on_actions/extra_on_actions.txt.
 
+# --- Dispatcher (called from agricultural_diffusion_on_action) --------------
+# Guard + dispatch in one parameterized block: if $TECH$ is researched and
+# no country has yet claimed the world-first, call the per-tech wrapper.
+# Replaces five back-to-back inline if-blocks at the on-action call site.
+# The wrapper effect name agdiff_on_$TECH$_researched is built via parse-time
+# text substitution — same mechanism agdiff_handle_tech_acquired_effect uses
+# for $DIFFUSION_MODIFIER$ and $EVENT$.
+agdiff_dispatch_if_first = {
+	if = {
+		limit = {
+			has_technology_researched = $TECH$
+			NOT = { has_global_variable = world_first_$TECH$ }
+		}
+		agdiff_on_$TECH$_researched = yes
+	}
+}
+
 # --- Per-tech entry points --------------------------------------------------
 # One named helper per tech so the on_acquired_technology hook can dispatch
 # with a `has_technology_researched` guard without needing $TECH$-keyed
@@ -109,40 +126,23 @@ agdiff_handle_tech_acquired_effect = {
 # Without this, decolonized 1960+ African nations (the exact target of issue
 # #114) would get zero benefit from the Green Revolution diffusion that fired
 # years before they existed.
+# Backfill one tech: if the world-first flag is set but this country lacks
+# the diffusion modifier, apply it. The agdiff_$TECH$ modifier name follows
+# the convention established by the five per-tech wrappers above.
+agdiff_backfill_one_tech = {
+	if = {
+		limit = {
+			has_global_variable = world_first_$TECH$
+			NOT = { has_modifier = agdiff_$TECH$ }
+		}
+		add_modifier = { name = agdiff_$TECH$ }
+	}
+}
+
 agdiff_backfill_diffusion_for_country = {
-	if = {
-		limit = {
-			has_global_variable = world_first_nitrogen_fixation
-			NOT = { has_modifier = agdiff_nitrogen_fixation }
-		}
-		add_modifier = { name = agdiff_nitrogen_fixation }
-	}
-	if = {
-		limit = {
-			has_global_variable = world_first_modern_chemical_processes
-			NOT = { has_modifier = agdiff_modern_chemical_processes }
-		}
-		add_modifier = { name = agdiff_modern_chemical_processes }
-	}
-	if = {
-		limit = {
-			has_global_variable = world_first_green_revolution
-			NOT = { has_modifier = agdiff_green_revolution }
-		}
-		add_modifier = { name = agdiff_green_revolution }
-	}
-	if = {
-		limit = {
-			has_global_variable = world_first_gene_splicing
-			NOT = { has_modifier = agdiff_gene_splicing }
-		}
-		add_modifier = { name = agdiff_gene_splicing }
-	}
-	if = {
-		limit = {
-			has_global_variable = world_first_biotechnology
-			NOT = { has_modifier = agdiff_biotechnology }
-		}
-		add_modifier = { name = agdiff_biotechnology }
-	}
+	agdiff_backfill_one_tech = { TECH = nitrogen_fixation }
+	agdiff_backfill_one_tech = { TECH = modern_chemical_processes }
+	agdiff_backfill_one_tech = { TECH = green_revolution }
+	agdiff_backfill_one_tech = { TECH = gene_splicing }
+	agdiff_backfill_one_tech = { TECH = biotechnology }
 }
