@@ -3,8 +3,9 @@
 # that lack population collapse: either reverting to decentralized
 # (uncolonized) land or being absorbed by a culturally similar neighbor.
 #
-# Fired from colonial_collapse_on_action (on_yearly_pulse_country).
-# Only one country (the first to fire) runs the global sweep per year.
+# Fired from colonial_collapse_on_action (on_yearly_pulse_country) — each
+# country runs the limit block against itself on its own yearly pulse and
+# self-collapses if it matches the tiny-and-poor + neutral-context criteria.
 
 colonial_collapse_effect = {
 	# Gate: only run if at least one country in the world has decolonization tech
