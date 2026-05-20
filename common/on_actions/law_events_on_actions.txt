@@ -11,7 +11,12 @@
 #    STALL    – opposition narrative (pushback events that fit when
 #               the law faces resistance; options still advance)
 #
-#  Some events appear in two categories where the narrative fits both.
+#  Some events appear in two categories where the narrative fits both
+#  (e.g. an opposition-IG event with debate-style options can sit in
+#  both DEBATE and STALL).
+#
+#  Compromise/amendment events live in DEBATE only — their narratives
+#  are about deal-making, not opposition pushback.
 # ======================================================================
 
 # Root = owner Country of the Law
@@ -70,6 +75,7 @@ on_law_checkpoint_debate = {
 		# --- Ministry Law Events ---
 		10 = ministry_law_events.2	# The Budget Debate (Generic – funding contested)
 		10 = ministry_law_events.3	# Bureaucratic Turf Wars (Generic – jurisdictional conflict)
+		10 = ministry_law_events.4	# The Redundant Clerks (Generic – dissolution dilemma)
 		10 = ministry_law_events.5	# The Generals' War Room (War – civilian vs. military control)
 		10 = ministry_law_events.8	# The Artist's Subsidy (Culture – artists divided)
 		10 = ministry_law_events.9	# Capital vs. Labor (Labor – competing visions)
@@ -96,18 +102,8 @@ on_law_checkpoint_stall = {
 		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
 		10 = extra_law_events.22	# The Automation Question (Welfare – competing interests clash)
 
-		# --- Amendment Events (also in stall - amendments can break deadlocks) ---
-		10 = extra_law_events.28	# The Language Compromise (Language Policy – Amendment)
-		10 = extra_law_events.29	# The Trust Question (Antitrust – Amendment)
-		10 = extra_law_events.30	# The Sentencing Debate (Criminal Justice – Amendment)
-		10 = extra_law_events.31	# The Privacy Bargain (Privacy Rights – Amendment)
-		10 = extra_law_events.32	# Laws of the New Battlefield (Rules of War – Amendment)
-		10 = extra_law_events.33	# Small Donors, Big Voices (Electoral Finance – Amendment)
-		10 = extra_law_events.34	# A Question of Conscience (LGBTQ Rights – Amendment)
-
 		# --- Ministry Law Events ---
 		10 = ministry_law_events.2	# The Budget Debate (Generic – fiscal opposition)
-		10 = ministry_law_events.4	# The Redundant Clerks (Generic – dissolution resistance)
 		10 = ministry_law_events.5	# The Generals' War Room (War – generals resist civilian control)
 		10 = ministry_law_events.10	# The Smokestack Question (Environment – industry blocks regulation)
 		10 = ministry_law_events.13	# The Loudspeaker State (Propaganda – press opposition)
