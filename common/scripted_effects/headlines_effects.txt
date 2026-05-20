@@ -1,0 +1,33 @@
+# Headlines Effects
+#
+# Posts the one-time "tech researched" headline for $TECH$ to every human
+# player the first time anyone researches it. Called once per tracked tech from
+# extra_headlines_tech in common/on_actions/headlines.txt (the
+# on_acquired_technology handler).
+#
+# $TECH$ is built into four parse-time-substituted names:
+#   - has_technology_researched = $TECH$        (the gate)
+#   - headlines_$TECH$_researched               (global var, one-shot guard)
+#   - headlines_$TECH$_researcher               (saved scope -- LOAD-BEARING:
+#       read by [SCOPE.sCountry('headlines_<TECH>_researcher').GetName] in
+#       localization/english/te_notifications_l_english.yml)
+#   - headlines_tech_$TECH$                      (notification id)
+#
+# Same $TECH$-substitution mechanism as agdiff_dispatch_if_first in
+# agricultural_diffusion_effects.txt. To track a new tech, add one
+# `headlines_tech_announce_effect = { TECH = X }` line in headlines.txt plus the
+# matching notification_headlines_tech_X_* loc keys.
+headlines_tech_announce_effect = {
+	if = {
+		limit = {
+			has_technology_researched = $TECH$
+			NOT = { has_global_variable = headlines_$TECH$_researched }
+		}
+		set_global_variable = headlines_$TECH$_researched
+		save_scope_as = headlines_$TECH$_researcher
+		every_country = {
+			limit = { is_ai = no }
+			post_notification = headlines_tech_$TECH$
+		}
+	}
+}
