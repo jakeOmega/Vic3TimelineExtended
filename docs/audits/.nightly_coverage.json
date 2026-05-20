@@ -1,6 +1,89 @@
 {
   "version": 1,
   "files": {
+    "common/named_colors/extra_goods_colors.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "common/religions/custom_religion.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "gui/treaty_panel.gui": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "gui/principle_selection_window.gui": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "gui/building_details_panel.gui": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "gui/states_panel.gui": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "gui/zzz_extra_goods_texticons.gui": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "gui/journal_entry_widgets/strategic_reserve_widget.gui": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_pulse_effects.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/extra_geography_triggers.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/te_map_modes_triggers.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_pulse_values.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/on_actions/cultural_hegemony_events_on_actions.txt": {
+      "last_audited": "2026-05-20",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/_meta/duplicate_image_allowlist.yml": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
@@ -89,8 +172,8 @@
       "recent_findings": 1
     },
     "common/discrimination_traits/extra_traits.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/game_concepts/extra_concepts.txt": {
@@ -434,8 +517,8 @@
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/scripted_triggers/covert_warfare_triggers.txt": {
