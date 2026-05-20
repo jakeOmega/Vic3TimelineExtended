@@ -527,6 +527,10 @@ To display a current-price value in a tooltip, write a script value of shape `(1
 
 Script values are not parameterizable, so generators that need one SV per (entity, good-mix) tuple should pre-multiply `base_price × quantity` in Python and emit the result as a literal `multiply = N` constant rather than chaining `g:<good> = { multiply = base_price }` + a separate quantity multiply at runtime — keeps the generated file readable and skips a redundant scope hop.
 
+## Ship Crew (`ship_crew_max_add`) Must Be a Multiple of 100
+
+The engine hires sailors to a ship in units of 100, so a ship type whose `ship_crew_max_add` is not a multiple of 100 crews only to the **multiple of 100 just below** its stated capacity (e.g. 250 → 200, 220 → 200), silently wasting the remainder. All 21 vanilla ship types use clean multiples of 100 (200…1200), so vanilla never trips this. When adding or tuning mod ships in `common/ship_types/extra_ship_types.txt`, keep `ship_crew_max_add` on a multiple of 100; round the smallest drone/auto crews **up** to 100 rather than down to 0.
+
 ## Render Static Modifier Effects in Loc via `[GetStaticModifier('X').GetDesc]`
 
 For button / JE / event description loc that needs to claim *what a static modifier does*, embed the modifier's auto-rendered effect list rather than hand-writing the numbers. The data-system function `[GetStaticModifier('<name>').GetDesc]` renders the static modifier definition's full effect list and auto-updates when the modifier changes.
