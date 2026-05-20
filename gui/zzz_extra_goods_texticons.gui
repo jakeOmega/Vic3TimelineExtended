@@ -97,3 +97,23 @@ texticon = {
 		fontsize = 18
 	}
 }
+
+texticon = {
+	icon = motor_ships
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/motor_ships.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = magnetic_drive_ships
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/magnetic_drive_ships.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
