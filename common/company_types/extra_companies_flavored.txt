@@ -1472,11 +1472,11 @@ company_hyundai = {
 	building_types = {
 		building_automotive_industry
 		building_motor_industry
-		building_robotics_industry
 		building_shipyard
 		building_hyundai_ulsan_factory
 	}
 	extension_building_types = {
+		building_robotics_industry
 		building_steel_mill
 	}
 	potential = {
@@ -3392,7 +3392,7 @@ company_dupont = {
 	building_types = {
 		building_chemical_plant
 		building_synthetics_plant_rubber
-		building_munition_plant
+		building_explosives_factory
 		building_dupont_experimental_station
 	}
 	potential = {

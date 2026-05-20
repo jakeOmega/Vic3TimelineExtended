@@ -1122,8 +1122,8 @@ INJECT:building_steel_mill = {
 
 INJECT:building_shipyard = {
 	production_method_groups = {
-		pmg_maintenance
 		pmg_shipyard_focus
+		pmg_maintenance
 	}
 }
 
