@@ -83,27 +83,26 @@ agdiff_on_biotechnology_researched = {
 # global-first branch; subsequent researchers get the local tech modifier
 # (already attached by the tech entity) plus whatever diffusion modifier they
 # previously received when the first researcher fired this effect.
+#
+# Modifiers are NOT applied here — they are granted in the event option
+# (agricultural_diffusion_events.<n>) so the engine renders them in the option
+# tooltip, making the bonus visible rather than opaque. The first researcher's
+# option adds both agdiff_first_mover_prestige and the diffusion modifier; every
+# other recognized country's option adds the diffusion modifier. The global/
+# local variables below MUST be set before trigger_event fires, because the
+# option branch keys off has_variable = is_world_first_$TECH$.
+# $DIFFUSION_MODIFIER$ is retained on the per-tech wrappers as readable
+# tech->modifier documentation; the actual add_modifier lives in the events.
 agdiff_handle_tech_acquired_effect = {
 	if = {
 		limit = { NOT = { has_global_variable = world_first_$TECH$ } }
 		set_global_variable = { name = world_first_$TECH$ value = yes }
 		set_global_variable = { name = first_$TECH$_country value = ROOT }
 		set_variable = { name = is_world_first_$TECH$ value = yes }
-		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
-		# Broadcast the permanent diffusion modifier to every country,
-		# including the first researcher (every_country DOES iterate ROOT,
-		# per vanilla usage that explicitly excludes ROOT with NOT = { THIS = ROOT }).
-		# The modifier stacks additively with the local tech bonus, so first-
-		# researchers and later researchers end at the same total arable_land
-		# bonus; the first researcher is distinguished by the prestige modifier
-		# and the country-event narrative below.
-		every_country = {
-			limit = { is_country_type = recognized }
-			add_modifier = { name = $DIFFUSION_MODIFIER$ }
-		}
 		# Country-event narrative: same event ID to first researcher and
 		# others; the event uses triggered_desc on is_world_first_$TECH$ to
-		# branch between first-mover and notification flavor.
+		# branch between first-mover and notification flavor, and applies the
+		# corresponding modifiers in its option.
 		trigger_event = { id = $EVENT$ }
 		every_country = {
 			limit = {

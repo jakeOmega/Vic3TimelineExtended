@@ -48,11 +48,14 @@ agricultural_diffusion_events.1 = {
 		name = agricultural_diffusion_events.1.a_first
 		trigger = { has_variable = is_world_first_nitrogen_fixation }
 		default_option = yes
+		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
+		add_modifier = { name = agdiff_nitrogen_fixation }
 	}
 	option = {
 		name = agricultural_diffusion_events.1.a
 		trigger = { NOT = { has_variable = is_world_first_nitrogen_fixation } }
 		default_option = yes
+		add_modifier = { name = agdiff_nitrogen_fixation }
 	}
 }
 
@@ -92,11 +95,14 @@ agricultural_diffusion_events.2 = {
 		name = agricultural_diffusion_events.2.a_first
 		trigger = { has_variable = is_world_first_modern_chemical_processes }
 		default_option = yes
+		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
+		add_modifier = { name = agdiff_modern_chemical_processes }
 	}
 	option = {
 		name = agricultural_diffusion_events.2.a
 		trigger = { NOT = { has_variable = is_world_first_modern_chemical_processes } }
 		default_option = yes
+		add_modifier = { name = agdiff_modern_chemical_processes }
 	}
 }
 
@@ -137,11 +143,14 @@ agricultural_diffusion_events.3 = {
 		name = agricultural_diffusion_events.3.a_first
 		trigger = { has_variable = is_world_first_green_revolution }
 		default_option = yes
+		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
+		add_modifier = { name = agdiff_green_revolution }
 	}
 	option = {
 		name = agricultural_diffusion_events.3.a
 		trigger = { NOT = { has_variable = is_world_first_green_revolution } }
 		default_option = yes
+		add_modifier = { name = agdiff_green_revolution }
 	}
 }
 
@@ -181,11 +190,14 @@ agricultural_diffusion_events.4 = {
 		name = agricultural_diffusion_events.4.a_first
 		trigger = { has_variable = is_world_first_gene_splicing }
 		default_option = yes
+		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
+		add_modifier = { name = agdiff_gene_splicing }
 	}
 	option = {
 		name = agricultural_diffusion_events.4.a
 		trigger = { NOT = { has_variable = is_world_first_gene_splicing } }
 		default_option = yes
+		add_modifier = { name = agdiff_gene_splicing }
 	}
 }
 
@@ -225,10 +237,13 @@ agricultural_diffusion_events.5 = {
 		name = agricultural_diffusion_events.5.a_first
 		trigger = { has_variable = is_world_first_biotechnology }
 		default_option = yes
+		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
+		add_modifier = { name = agdiff_biotechnology }
 	}
 	option = {
 		name = agricultural_diffusion_events.5.a
 		trigger = { NOT = { has_variable = is_world_first_biotechnology } }
 		default_option = yes
+		add_modifier = { name = agdiff_biotechnology }
 	}
 }
