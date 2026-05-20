@@ -17,6 +17,11 @@
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/ai_strategies/other.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/battle_conditions/extra_battle_conditions.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
@@ -225,6 +230,11 @@
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/on_actions/cultural_hegemony_events_on_actions.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/on_actions/cultural_hegemony_on_actions.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
@@ -232,6 +242,17 @@
     },
     "common/on_actions/extra_on_actions.txt": {
       "last_audited": "2026-05-18",
+      "audit_count": 1,
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/on_actions/headlines.txt": {
+      "last_audited": "2026-05-19",
       "audit_count": 1,
       "recent_findings": 1,
       "partial_coverage": [
@@ -341,6 +362,11 @@
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/script_values/dp_escalation_script_values.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/script_values/gui_chart_script_values.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
@@ -356,15 +382,41 @@
       "audit_count": 1,
       "recent_findings": 1
     },
+    "common/script_values/te_construction_market_target_values.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/script_values/te_map_mode_script_values.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/script_values/world_war_values.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
     "common/scripted_buttons/colonial_empire_buttons.txt": {
       "last_audited": "2026-05-18",
       "audit_count": 1,
       "recent_findings": 0
+    },
+    "common/scripted_effects/banking_cycle_effects.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_effects/colonial_collapse_effects.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 1
     },
     "common/scripted_effects/combined_arms_effects.txt": {
       "last_audited": "2026-05-18",
@@ -403,6 +455,11 @@
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/scripted_effects/nuclear_weapon_effects.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/scripted_effects/social_axis_effects.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
@@ -410,6 +467,16 @@
     },
     "common/scripted_effects/sol_expectations_effects.txt": {
       "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_sector_placement_effects.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/treaty_article_effects.txt": {
+      "last_audited": "2026-05-19",
       "audit_count": 1,
       "recent_findings": 0
     },
@@ -443,6 +510,11 @@
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/scripted_triggers/extra_geography_triggers.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
     "common/scripted_triggers/formable_gating_triggers.txt": {
       "last_audited": "2026-05-18",
       "audit_count": 1,
@@ -463,10 +535,25 @@
       "audit_count": 1,
       "recent_findings": 0
     },
+    "common/scripted_triggers/misc_triggers.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
     "common/scripted_triggers/resource_discovery_triggers.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
       "recent_findings": 0
+    },
+    "common/scripted_triggers/te_map_modes_triggers.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/un_permanent_member_triggers.txt": {
+      "last_audited": "2026-05-19",
+      "audit_count": 1,
+      "recent_findings": 1
     },
     "common/scripted_triggers/wonder_triggers.txt": {
       "last_audited": "2026-05-16",
