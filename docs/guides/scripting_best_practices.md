@@ -2067,11 +2067,13 @@ scope:treaty ?= {
 }
 ```
 
-Use BOTH if the rejection should apply against existing pacts AND the same draft. Vanilla example: `06_transfer_state.txt` filters its own draft via `scope:treaty ?= { NOT = { any_scope_article_option = { ... } } }`. The mod's nuclear aid / disarmament / pause articles previously used only `any_scope_treaty`, which is why a single draft could bundle aid + freeze and pass each article's `possible` clause individually (fixed 2026-05-03).
+Use BOTH if the rejection should apply against existing pacts AND the same draft. Vanilla example: `06_transfer_state.txt` filters its own draft via `scope:treaty ?= { NOT = { any_scope_article_option = { ... } } }`.
+
+**`scope:treaty` is not populated with sibling drafts inside `possible` — put the same-draft check in `can_ratify`.** `possible` is evaluated per-article when deciding what can be added to the draft; at that point `scope:treaty` either doesn't exist or doesn't yet contain the other sibling articles, so the iterator finds nothing and the check is silently a no-op. `can_ratify` runs at finalize-time over the assembled draft and is where vanilla universally places `scope:treaty ?= { any_scope_article_option = { ... } }`. Grep confirms: **zero** vanilla treaty articles reference `scope:treaty` inside `possible` (audited 2026-05-19); every cross-article and self-duplicate check lives in `can_ratify`, almost always wrapped in a `custom_tooltip` so the player sees the conflict. The mod's nuclear-pair fix was placed in `possible` first (commit `b32e5d1`), which is why draft-time it silently let aid + freeze through; corrected to `can_ratify` (2026-05-19).
 
 `scope:treaty` is a power_bloc/treaty scope and may not exist in every evaluation context — guard with `?=` (optional). `any_scope_article_option` (note the `_option` suffix) is the right iterator for draft articles, since it includes the article's parameter inputs (`source_country`, `target_country`) needed for filtering.
 
-**Symmetric checks required.** A cross-article exclusion has to be wired in BOTH articles — if only A rejects B, the player can still create a draft by adding B first then A. Both `possible` clauses must check the other type.
+**Symmetric checks required.** A cross-article exclusion has to be wired in BOTH articles — if only A rejects B, the player can still create a draft by adding B first then A. Both `can_ratify` clauses must check the other type.
 
 ## Top-Level Database Collisions: Use `INJECT:` Instead of Re-Declaring
 

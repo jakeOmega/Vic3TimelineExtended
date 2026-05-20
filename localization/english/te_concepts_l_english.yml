@@ -17,6 +17,7 @@
  AI_CULTURAL_TENSION:0 "from cultural tensions"
  AI_CULTURAL_UNREST:0 "from severe cultural unrest"
  AI_CULTURE_DISCRIMINATED:0 "from our culture being discriminated"
+ AI_DEFIANT_SUBJECT:0 "from defiant subject"
  AI_DISCRIMINATORY_LAWS:0 "from having discriminatory laws"
  AI_DOMINEERING_ATTITUDE:0 "from domineering attitude"
  AI_ETHNOSTATE:0 "from being an ethnostate"

@@ -923,13 +923,15 @@ suppress_subject_liberty = {
 		inherent_accept_score = {
 			value = 0
 			if = {
-				limit = { scope:target_country = this } # Evaluator is the Overlord (source)
+				# source_modifier (country_liberty_desire_add) applies to the subject,
+				# so source = subject and target = overlord. Evaluator here is the overlord.
+				limit = { scope:target_country = this }
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 					value = 50
 				}
 				if = {
-					limit = { scope:target_country = { has_attitude = { who = root attitude = rebellious } } }
+					limit = { scope:source_country = { has_attitude = { who = scope:target_country attitude = rebellious } } }
 					add = {
 						desc = "AI_REBELLIOUS_SUBJECT"
 						value = 25
@@ -940,6 +942,22 @@ suppress_subject_liberty = {
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 					value = -50
+				}
+				# Subject's own attitude toward overlord — rebellious/defiant
+				# subjects refuse to swallow further autonomy losses.
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = rebellious } }
+					add = {
+						desc = "AI_REBELLIOUS_SUBJECT"
+						value = -200
+					}
+				}
+				else_if = {
+					limit = { has_attitude = { who = scope:target_country attitude = defiant } }
+					add = {
+						desc = "AI_DEFIANT_SUBJECT"
+						value = -100
+					}
 				}
 				if = {
 					limit = { scope:source_country.relations:target_country >= relations_threshold:cordial }
@@ -956,7 +974,7 @@ suppress_subject_liberty = {
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = loyal } }
+					limit = { has_attitude = { who = scope:target_country attitude = loyal } }
 					add = {
 						desc = "AI_LOYAL_ATTITUDE"
 						value = 15
@@ -997,16 +1015,6 @@ nuclear_disarmament = {
 		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
 		# Do not demand disarmament from a country that is receiving (or promised) nuclear aid
 		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
-		# Same-treaty conflict: disallow if the in-construction draft already
-		# contains nuclear_program_aid targeting the same country.
-		NOT = {
-			scope:treaty ?= {
-				any_scope_article_option = {
-					has_type = nuclear_program_aid
-					target_country = scope:other_country
-				}
-			}
-		}
 	}
 
 	can_ratify = {
@@ -1025,6 +1033,23 @@ nuclear_disarmament = {
 							has_type = nuclear_program_aid
 							target_country = scope:other_country
 						}
+					}
+				}
+			}
+		}
+		# Same-draft conflict: same check, but reading from the in-construction
+		# treaty (scope:treaty + any_scope_article_option is the only iterator
+		# that sees siblings being authored right now; the any_scope_treaty
+		# check above only catches IN-FORCE treaties). Vanilla pattern:
+		# 06_transfer_state.txt § can_ratify. Lives in can_ratify because
+		# scope:treaty is not populated with sibling drafts inside `possible`.
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:treaty ?= {
+					any_scope_article_option = {
+						has_type = nuclear_program_aid
+						target_country = scope:other_country
 					}
 				}
 			}
@@ -1268,21 +1293,6 @@ nuclear_program_aid = {
 				}
 			}
 		}
-		# Same-treaty conflict: disallow if the in-construction draft already
-		# contains a nuclear_disarmament or nuclear_program_pause article
-		# targeting the same country. (any_scope_treaty above only catches
-		# IN-FORCE treaties; this catches the same draft.)
-		NOT = {
-			scope:treaty ?= {
-				any_scope_article_option = {
-					OR = {
-						has_type = nuclear_disarmament
-						has_type = nuclear_program_pause
-					}
-					target_country = scope:other_country
-				}
-			}
-		}
 		# NPT enforcement: At high UN authority with IAEA, nuclear aid is forbidden
 		custom_tooltip = {
 			text = nuclear_aid_blocked_by_npt_tt
@@ -1317,6 +1327,26 @@ nuclear_program_aid = {
 							has_type = nuclear_program_aid
 							source_country = scope:source_country
 						}
+					}
+				}
+			}
+		}
+		# Same-draft conflict: disallow if the in-construction treaty already
+		# contains a nuclear_disarmament or nuclear_program_pause article
+		# targeting the same country. scope:treaty + any_scope_article_option
+		# sees siblings being authored right now; this lives in can_ratify
+		# because scope:treaty is not populated with siblings inside `possible`
+		# (vanilla pattern: 06_transfer_state.txt § can_ratify).
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:treaty ?= {
+					any_scope_article_option = {
+						OR = {
+							has_type = nuclear_disarmament
+							has_type = nuclear_program_pause
+						}
+						target_country = scope:other_country
 					}
 				}
 			}
@@ -1963,25 +1993,27 @@ nuclear_program_pause = {
 				}
 			}
 		}
-		# Same-treaty conflict: disallow if the in-construction draft already
-		# contains nuclear_program_aid targeting the same country. (any_scope_treaty
-		# above only iterates IN-FORCE treaties, so this is the only check that
-		# catches a draft that bundles aid + pause together — vanilla pattern from
-		# 06_transfer_state.txt.)
-		NOT = {
-			scope:treaty ?= {
-				any_scope_article_option = {
-					has_type = nuclear_program_aid
-					target_country = scope:other_country
-				}
-			}
-		}
 	}
 
 	can_ratify = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = nuclear_program_pause }
+		}
+		# Same-draft conflict: scope:treaty + any_scope_article_option is the
+		# only iterator that sees siblings being authored in the current draft.
+		# Lives in can_ratify because scope:treaty is not populated with sibling
+		# drafts inside `possible` (vanilla pattern: 06_transfer_state.txt).
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:treaty ?= {
+					any_scope_article_option = {
+						has_type = nuclear_program_aid
+						target_country = scope:other_country
+					}
+				}
+			}
 		}
 	}
 
