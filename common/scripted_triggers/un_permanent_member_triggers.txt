@@ -14,13 +14,6 @@ is_un_permanent_member = {
 	je:je_united_nations ?= { has_modifier = un_permanent_member_modifier }
 }
 
-# Whether THIS country can cast a veto right now.
-# Requires: permanent member, in the UN, and not under a recent-veto cooldown.
-can_cast_un_veto = {
-	is_un_permanent_member = yes
-	je:je_united_nations ?= { has_modifier = un_member_modifier }
-}
-
 # Whether the currently-active UN vote topic is *binding* (vetoable).
 # The 5 binding types are sanctions, peacekeeping_request, icc, condemn, reform.
 # All other topics are recommendatory and cannot be vetoed.

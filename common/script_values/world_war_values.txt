@@ -3,19 +3,6 @@
 # WORLD WAR SCRIPT VALUES
 # ============================================================================
 
-# Number of great powers with opposing ideology to ROOT
-ww_opposing_great_powers = {
-	value = 0
-	every_country = {
-		limit = {
-			country_rank >= rank_value:great_power
-			NOT = { this = root }
-			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-		}
-		add = 1
-	}
-}
-
 # Ideological tension - higher when more great powers have fundamentally opposed ideologies
 ww_ideological_tension = {
 	value = 0
@@ -56,44 +43,6 @@ ww_ideological_tension = {
 	if = {
 		limit = { is_at_war = yes }
 		add = 20
-	}
-	min = 0
-	max = 100
-}
-
-# How many countries are involved in the world war (both sides)
-ww_belligerent_count = {
-	value = 0
-	every_country = {
-		limit = {
-			OR = {
-				has_variable = ww_aggressor_side
-				has_variable = ww_defender_side
-			}
-		}
-		add = 1
-	}
-}
-
-# War exhaustion pressure - grows over time during the war
-ww_war_exhaustion_pressure = {
-	value = 0
-	if = {
-		limit = { has_variable = ww_years_elapsed }
-		add = var:ww_years_elapsed
-		multiply = 5
-	}
-	# Losing territory increases exhaustion
-	if = {
-		limit = { is_at_war = yes }
-		every_scope_state = {
-			limit = { is_under_colonization = no }
-			# Each occupied state adds pressure
-			if = {
-				limit = { has_modifier = ww_devastation_modifier }
-				add = 2
-			}
-		}
 	}
 	min = 0
 	max = 100
