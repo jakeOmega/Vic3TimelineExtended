@@ -128,6 +128,100 @@ ATTITUDE_SCORES = {
     "strongly_approve": 2,
 }
 
+# ── Variant candidate gates ─────────────────────────────────────────────────
+#
+# Vanilla marks tag/condition-restricted flavor variants with `parent = law_X`.
+# These can be legitimate replacements *for the country they're flavored for*
+# (e.g. JAP should be allowed to land on Terakoya when private_schools becomes
+# invalid). Each entry below is the variant's `is_visible` block minus any
+# same-lawgroup `NOT = { has_law = law_type:X }` mutex clauses — those are
+# implicitly satisfied at activate_law time, since each group permits only one
+# active law. Variants not listed here are excluded from candidate sets.
+#
+# Source-of-truth: vanilla `is_visible` blocks in common/laws/*.txt. Regenerate
+# this table when vanilla changes (warning printed at generation if unknown
+# `parent = law_X` laws appear).
+VARIANT_CANDIDATE_GATES = {
+    # Japan-specific
+    "law_terakoya":              ["c:JAP ?= this"],
+    "law_bakufu":                ["c:JAP ?= this"],
+    "law_sakoku":                [
+        "country_has_primary_culture = cu:japanese",
+        "any_scope_state = { state_region = s:STATE_KYUSHU is_largest_state_in_region = yes }",
+    ],
+    "law_shinsengumi":           ["country_has_primary_culture = cu:japanese"],
+    "law_warrior_caste":         ["country_has_primary_culture = cu:japanese"],
+
+    # Han/China-specific
+    "law_canton_system":         [
+        "any_primary_culture = { has_discrimination_trait = heritage_han }",
+        "any_scope_state = { state_region = s:STATE_GUANGDONG is_largest_state_in_region = yes }",
+    ],
+
+    # Austria/Romania
+    "law_neo_absolutism":        ["c:AUS ?= this", "has_global_variable = neo_absolutism_victory"],
+    "law_manorialism":           [
+        "OR = {",
+        "\tc:AUS ?= this",
+        "\tAND = {",
+        "\t\texists = c:AUS",
+        "\t\tis_subject_of = c:AUS",
+        "\t\tOR = {",
+        "\t\t\tis_subject_type = subject_type_crown_land",
+        "\t\t\tis_subject_type = subject_type_personal_union",
+        "\t\t}",
+        "\t\tc:AUS ?= { has_law = law_type:law_manorialism }",
+        "\t}",
+        "\tcountry_has_primary_culture = cu:romanian",
+        "}",
+    ],
+    "law_crownland_diets":       [
+        "OR = {",
+        "\tc:AUS ?= this",
+        "\tAND = {",
+        "\t\texists = c:AUS",
+        "\t\tis_subject_of = c:AUS",
+        "\t}",
+        "}",
+    ],
+    "law_organic_regulation":    ["country_has_primary_culture = cu:romanian", "is_subject = yes"],
+
+    # Islamic / Ottoman
+    "law_people_of_the_book":    ["country_is_islamic = yes", "NOT = { c:TUR ?= this }"],
+    "law_millet_system":         ["c:TUR ?= this"],
+
+    # Mongolia
+    "law_chiefs_distribute_aid": ["c:MON ?= this"],
+    "law_women_in_the_fields":   ["c:MON ?= this"],  # NOR of same-group women's-rights laws stripped (mutex)
+
+    # Latin/Romance-language Mediterranean
+    "law_latifundias":           [
+        "any_primary_culture = { OR = {",
+        "\thas_discrimination_trait = language_hispanophone",
+        "\thas_discrimination_trait = language_lusophone",
+        "\thas_discrimination_trait = language_italian",
+        "} }",
+        "hidden_trigger = { NOT = { has_variable = upgraded_latifundias_law_var } }",
+    ],
+    "law_expanded_latifundias":  [
+        "any_primary_culture = { OR = {",
+        "\thas_discrimination_trait = language_hispanophone",
+        "\thas_discrimination_trait = language_lusophone",
+        "\thas_discrimination_trait = language_italian",
+        "} }",
+        "hidden_trigger = { has_variable = upgraded_latifundias_law_var }",
+    ],
+
+    # Generic colonial / new-world
+    "law_homesteading":          [
+        "OR = {",
+        "\tcountry_is_colonial_or_company = yes",
+        "\tcapital ?= { is_in_geographic_region = geographic_region_new_world }",
+        "}",
+    ],
+    "law_colonial_administration": ["country_is_colonial_or_company = yes"],
+}
+
 OUTPUT_PATH = os.path.join(
     mod_path, "common", "scripted_effects", "extra_law_consistency_generated.txt"
 )
@@ -244,11 +338,21 @@ def parse_laws():
         unlocking = _law_id_list(body.get("unlocking_laws"))
         unlocking += [lid for lid in _law_id_list(body.get("requires_law_or")) if lid not in unlocking]
 
+        # Vanilla marks tag/condition-restricted flavor variants with
+        # `parent = law_X` (e.g. law_terakoya parent=law_private_schools,
+        # law_bakufu parent=law_autocracy, law_sakoku parent=law_isolationism).
+        # These have `is_visible` country/tag gates and `can_impose = always = no`;
+        # they are not legitimate replacement candidates for the consistency walk.
+        parent = _string_value(body.get("parent"))
+        if not (isinstance(parent, str) and parent.startswith("law_")):
+            parent = None
+
         laws[law_id] = {
             "group": group,
             "progressiveness": progressiveness,
             "unlocking_laws": unlocking,
             "disallowing_laws": _law_id_list(body.get("disallowing_laws")),
+            "parent": parent,
             "file_order": file_order.get(law_id, 1_000_000),
         }
     return laws
@@ -357,7 +461,13 @@ def constraint_having_groups(laws):
 
 def candidate_order(active_law_id, group_law_ids, laws, attitudes):
     """Return list of candidate replacement law_ids (excluding active_law_id),
-    ordered by progressiveness distance, then ideology distance, then file order."""
+    ordered by progressiveness distance, then ideology distance, then file order.
+
+    Variant laws (`parent = law_X`) are included only if listed in
+    VARIANT_CANDIDATE_GATES. Their gate clauses are added to the validity check
+    at emit time so the replacement only fires for the country/condition the
+    variant is flavored for (e.g. JAP for Terakoya).
+    """
     L = laws[active_law_id]
 
     def sort_key(c_id):
@@ -366,7 +476,11 @@ def candidate_order(active_law_id, group_law_ids, laws, attitudes):
         ideo_dist = ideology_distance(active_law_id, c_id, attitudes)
         return (prog_dist, ideo_dist, c["file_order"], c_id)
 
-    candidates = [lid for lid in group_law_ids if lid != active_law_id]
+    candidates = [
+        lid for lid in group_law_ids
+        if lid != active_law_id
+        and (laws[lid].get("parent") is None or lid in VARIANT_CANDIDATE_GATES)
+    ]
     candidates.sort(key=sort_key)
     return candidates
 
@@ -394,22 +508,30 @@ def _violation_clause(law, indent):
     return f"{indent}OR = {{\n" + "\n".join(parts) + f"\n{indent}}}"
 
 
-def _validity_clause(law, indent):
+def _validity_clause(law_id, law, indent):
     """Emit the inverse: candidate `law` is currently valid (constraints met).
 
     Uses an AND-by-default `limit = { ... }`-style block. Returns the inner
     lines (without the surrounding `limit = { ... }`). Empty string means the
     law has no constraints and is unconditionally valid.
+
+    For variants with an entry in VARIANT_CANDIDATE_GATES, the gate clauses
+    are prepended so the candidate only fires for the country/condition the
+    variant is flavored for.
     """
     lines = []
+    gate = VARIANT_CANDIDATE_GATES.get(law_id)
+    if gate:
+        for gate_line in gate:
+            lines.append(f"{indent}{gate_line}")
     if law["unlocking_laws"]:
         body = "\n".join(
-            f"{indent}\thas_law = law_type:{law_id}" for law_id in law["unlocking_laws"]
+            f"{indent}\thas_law = law_type:{lid}" for lid in law["unlocking_laws"]
         )
         lines.append(f"{indent}OR = {{\n{body}\n{indent}}}")
     if law["disallowing_laws"]:
         body = "\n".join(
-            f"{indent}\thas_law = law_type:{law_id}" for law_id in law["disallowing_laws"]
+            f"{indent}\thas_law = law_type:{lid}" for lid in law["disallowing_laws"]
         )
         lines.append(f"{indent}NOR = {{\n{body}\n{indent}}}")
     return "\n".join(lines)
@@ -443,7 +565,7 @@ def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
         first = True
         for cand_id in candidates:
             cand = laws[cand_id]
-            validity = _validity_clause(cand, "\t\t\t\t")
+            validity = _validity_clause(cand_id, cand, "\t\t\t\t")
             kw = "if" if first else "else_if"
             first = False
             if validity:
@@ -505,6 +627,20 @@ def build_output(laws, attitudes):
     # Lawgroups in LAWGROUP_PRIORITY but with no constraint-having laws are
     # silently skipped; print summary so the user sees what's actually emitted.
     print(f"[gen_law_consistency] {len(ordered_groups)} groups emit helpers: {ordered_groups}")
+
+    variants = sorted(lid for lid, law in laws.items() if law.get("parent"))
+    gated = [lid for lid in variants if lid in VARIANT_CANDIDATE_GATES]
+    skipped = [lid for lid in variants if lid not in VARIANT_CANDIDATE_GATES]
+    if gated:
+        print(
+            f"[gen_law_consistency] {len(gated)} variant laws included with candidate gate: {gated}"
+        )
+    if skipped:
+        # If this prints, vanilla added a new variant; add it to VARIANT_CANDIDATE_GATES.
+        print(
+            f"WARNING: {len(skipped)} variant laws have parent= but no entry in VARIANT_CANDIDATE_GATES (excluded from candidates): {skipped}",
+            file=sys.stderr,
+        )
 
     parts = [HEADER]
     for g in ordered_groups:

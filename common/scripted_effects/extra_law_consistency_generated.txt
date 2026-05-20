@@ -12,6 +12,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 		}
 		if = {
 			limit = {
+				country_is_colonial_or_company = yes
 				NOR = {
 					has_law = law_type:law_anarchy
 				}
@@ -97,6 +98,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 		}
 		else_if = {
 			limit = {
+				country_is_colonial_or_company = yes
 				NOR = {
 					has_law = law_type:law_anarchy
 				}
@@ -130,6 +132,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 		}
 		if = {
 			limit = {
+				country_is_colonial_or_company = yes
 				NOR = {
 					has_law = law_type:law_anarchy
 				}
@@ -191,6 +194,7 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		if = {
 			limit = {
+				c:JAP ?= this
 				OR = {
 					has_law = law_type:law_monarchy
 					has_law = law_type:law_social_monarchy
@@ -200,6 +204,8 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		else_if = {
 			limit = {
+				c:AUS ?= this
+				has_global_variable = neo_absolutism_victory
 				OR = {
 					has_law = law_type:law_monarchy
 				}
@@ -225,6 +231,8 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		if = {
 			limit = {
+				c:AUS ?= this
+				has_global_variable = neo_absolutism_victory
 				OR = {
 					has_law = law_type:law_monarchy
 				}
@@ -240,8 +248,15 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			activate_law = law_type:law_autocracy
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				country_has_primary_culture = cu:romanian
+				is_subject = yes
+			}
 			activate_law = law_type:law_organic_regulation
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_oligarchy
 		}
 	}
 
@@ -257,6 +272,7 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		if = {
 			limit = {
+				c:JAP ?= this
 				OR = {
 					has_law = law_type:law_monarchy
 					has_law = law_type:law_social_monarchy
@@ -273,8 +289,15 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			activate_law = law_type:law_autocracy
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				country_has_primary_culture = cu:romanian
+				is_subject = yes
+			}
 			activate_law = law_type:law_organic_regulation
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_oligarchy
 		}
 	}
 
@@ -298,8 +321,15 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			activate_law = law_type:law_landed_voting
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				country_has_primary_culture = cu:romanian
+				is_subject = yes
+			}
 			activate_law = law_type:law_organic_regulation
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_algorithmic_governance
 		}
 	}
 
@@ -330,8 +360,15 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			activate_law = law_type:law_wealth_voting
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				country_has_primary_culture = cu:romanian
+				is_subject = yes
+			}
 			activate_law = law_type:law_organic_regulation
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_algorithmic_governance
 		}
 	}
 
@@ -872,6 +909,8 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		if = {
 			limit = {
+				country_is_islamic = yes
+				NOT = { c:TUR ?= this }
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -900,6 +939,7 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		if = {
 			limit = {
+				c:TUR ?= this
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -924,6 +964,7 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		if = {
 			limit = {
+				c:TUR ?= this
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -934,6 +975,8 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		else_if = {
 			limit = {
+				country_is_islamic = yes
+				NOT = { c:TUR ?= this }
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -982,6 +1025,7 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		else_if = {
 			limit = {
+				c:TUR ?= this
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -992,6 +1036,8 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		else_if = {
 			limit = {
+				country_is_islamic = yes
+				NOT = { c:TUR ?= this }
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -1032,6 +1078,7 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		else_if = {
 			limit = {
+				c:TUR ?= this
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -1042,6 +1089,8 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		else_if = {
 			limit = {
+				country_is_islamic = yes
+				NOT = { c:TUR ?= this }
 				OR = {
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_monarchy
@@ -1069,6 +1118,13 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		if = {
 			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+					}
+				}
 				NOR = {
 					has_law = law_type:law_council_republic
 				}
@@ -1254,6 +1310,8 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 		}
 		if = {
 			limit = {
+				any_primary_culture = { has_discrimination_trait = heritage_han }
+				any_scope_state = { state_region = s:STATE_GUANGDONG is_largest_state_in_region = yes }
 				OR = {
 					has_law = law_type:law_traditionalism
 				}
@@ -1262,6 +1320,8 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 		}
 		else_if = {
 			limit = {
+				country_has_primary_culture = cu:japanese
+				any_scope_state = { state_region = s:STATE_KYUSHU is_largest_state_in_region = yes }
 				OR = {
 					has_law = law_type:law_traditionalism
 				}
@@ -1286,6 +1346,8 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 		}
 		if = {
 			limit = {
+				country_has_primary_culture = cu:japanese
+				any_scope_state = { state_region = s:STATE_KYUSHU is_largest_state_in_region = yes }
 				OR = {
 					has_law = law_type:law_traditionalism
 				}
@@ -1318,6 +1380,8 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 		}
 		if = {
 			limit = {
+				any_primary_culture = { has_discrimination_trait = heritage_han }
+				any_scope_state = { state_region = s:STATE_GUANGDONG is_largest_state_in_region = yes }
 				OR = {
 					has_law = law_type:law_traditionalism
 				}
@@ -1437,8 +1501,54 @@ te_fix_inconsistent_lawgroup_land_reform = {
 			}
 		}
 		if = {
-			limit = { always = yes }
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+						OR = {
+							is_subject_type = subject_type_crown_land
+							is_subject_type = subject_type_personal_union
+						}
+						c:AUS ?= { has_law = law_type:law_manorialism }
+					}
+					country_has_primary_culture = cu:romanian
+				}
+			}
 			activate_law = law_type:law_manorialism
+		}
+		else_if = {
+			limit = {
+				any_primary_culture = { OR = {
+					has_discrimination_trait = language_hispanophone
+					has_discrimination_trait = language_lusophone
+					has_discrimination_trait = language_italian
+				} }
+				hidden_trigger = { NOT = { has_variable = upgraded_latifundias_law_var } }
+				NOR = {
+					has_law = law_type:law_council_republic
+				}
+			}
+			activate_law = law_type:law_latifundias
+		}
+		else_if = {
+			limit = {
+				any_primary_culture = { OR = {
+					has_discrimination_trait = language_hispanophone
+					has_discrimination_trait = language_lusophone
+					has_discrimination_trait = language_italian
+				} }
+				hidden_trigger = { has_variable = upgraded_latifundias_law_var }
+				NOR = {
+					has_law = law_type:law_council_republic
+				}
+			}
+			activate_law = law_type:law_expanded_latifundias
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_tenant_farmers
 		}
 	}
 
@@ -1452,6 +1562,12 @@ te_fix_inconsistent_lawgroup_land_reform = {
 		}
 		if = {
 			limit = {
+				any_primary_culture = { OR = {
+					has_discrimination_trait = language_hispanophone
+					has_discrimination_trait = language_lusophone
+					has_discrimination_trait = language_italian
+				} }
+				hidden_trigger = { has_variable = upgraded_latifundias_law_var }
 				NOR = {
 					has_law = law_type:law_council_republic
 				}
@@ -1459,8 +1575,26 @@ te_fix_inconsistent_lawgroup_land_reform = {
 			activate_law = law_type:law_expanded_latifundias
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+						OR = {
+							is_subject_type = subject_type_crown_land
+							is_subject_type = subject_type_personal_union
+						}
+						c:AUS ?= { has_law = law_type:law_manorialism }
+					}
+					country_has_primary_culture = cu:romanian
+				}
+			}
 			activate_law = law_type:law_manorialism
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_tenant_farmers
 		}
 	}
 
@@ -1474,6 +1608,12 @@ te_fix_inconsistent_lawgroup_land_reform = {
 		}
 		if = {
 			limit = {
+				any_primary_culture = { OR = {
+					has_discrimination_trait = language_hispanophone
+					has_discrimination_trait = language_lusophone
+					has_discrimination_trait = language_italian
+				} }
+				hidden_trigger = { NOT = { has_variable = upgraded_latifundias_law_var } }
 				NOR = {
 					has_law = law_type:law_council_republic
 				}
@@ -1481,8 +1621,26 @@ te_fix_inconsistent_lawgroup_land_reform = {
 			activate_law = law_type:law_latifundias
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+						OR = {
+							is_subject_type = subject_type_crown_land
+							is_subject_type = subject_type_personal_union
+						}
+						c:AUS ?= { has_law = law_type:law_manorialism }
+					}
+					country_has_primary_culture = cu:romanian
+				}
+			}
 			activate_law = law_type:law_manorialism
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_tenant_farmers
 		}
 	}
 
@@ -1495,8 +1653,17 @@ te_fix_inconsistent_lawgroup_land_reform = {
 			}
 		}
 		if = {
-			limit = { always = yes }
+			limit = {
+				OR = {
+					country_is_colonial_or_company = yes
+					capital ?= { is_in_geographic_region = geographic_region_new_world }
+				}
+			}
 			activate_law = law_type:law_homesteading
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_peasant_proprietorship
 		}
 	}
 
@@ -1600,8 +1767,27 @@ te_fix_inconsistent_lawgroup_education_system = {
 			activate_law = law_type:law_religious_schools
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				c:JAP ?= this
+			}
 			activate_law = law_type:law_terakoya
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_state_religion
+				}
+			}
+			activate_law = law_type:law_private_schools
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_state_religion
+					has_law = law_type:law_serfdom
+				}
+			}
+			activate_law = law_type:law_public_schools
 		}
 	}
 
@@ -1616,8 +1802,35 @@ te_fix_inconsistent_lawgroup_education_system = {
 			}
 		}
 		if = {
-			limit = { always = yes }
+			limit = {
+				c:JAP ?= this
+			}
 			activate_law = law_type:law_terakoya
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_compulsory_primary_school
+				}
+			}
+			activate_law = law_type:law_no_schools
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_state_religion
+				}
+			}
+			activate_law = law_type:law_private_schools
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_state_religion
+					has_law = law_type:law_serfdom
+				}
+			}
+			activate_law = law_type:law_public_schools
 		}
 	}
 
@@ -1630,8 +1843,37 @@ te_fix_inconsistent_lawgroup_education_system = {
 			}
 		}
 		if = {
-			limit = { always = yes }
+			limit = {
+				c:JAP ?= this
+			}
 			activate_law = law_type:law_terakoya
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_state_religion
+					has_law = law_type:law_serfdom
+				}
+			}
+			activate_law = law_type:law_public_schools
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_total_separation
+					has_law = law_type:law_state_atheism
+					has_law = law_type:law_serfdom
+				}
+			}
+			activate_law = law_type:law_religious_schools
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_compulsory_primary_school
+				}
+			}
+			activate_law = law_type:law_no_schools
 		}
 	}
 
@@ -1653,8 +1895,28 @@ te_fix_inconsistent_lawgroup_education_system = {
 			activate_law = law_type:law_private_schools
 		}
 		else_if = {
-			limit = { always = yes }
+			limit = {
+				c:JAP ?= this
+			}
 			activate_law = law_type:law_terakoya
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_total_separation
+					has_law = law_type:law_state_atheism
+					has_law = law_type:law_serfdom
+				}
+			}
+			activate_law = law_type:law_religious_schools
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_compulsory_primary_school
+				}
+			}
+			activate_law = law_type:law_no_schools
 		}
 	}
 
