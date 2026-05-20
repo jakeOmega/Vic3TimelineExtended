@@ -349,13 +349,13 @@ Shipyards (bg_ship_construction):
 		Diesel-Powered Shipbuilding
 		Robotic Ship Assembly
 		Advanced Metamaterials Shipbuilding
-	Maintenance:
-		Maintenance
 	Production Focus:
 		Civilian Hull Production
 		Balanced Production
 		Naval Priority
 		Wartime Mobilization
+	Maintenance:
+		Maintenance
 
 Automotive Industries (bg_heavy_industry):
 	Unlocking Technology: Combustion Engine
