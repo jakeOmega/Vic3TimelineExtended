@@ -226,7 +226,7 @@ forced_law_through_event_consequences_large = {
 	country_radicals_from_legitimacy_mult = 0.25
 	political_movement_radicalism_from_enactment_disapproval_mult = 0.50
 	political_movement_pop_attraction_mult = 0.20
-	political_movement_radicalism_add = 1
+	political_movement_radicalism_add = 0.1
 }
 
 nuclear_power = {
