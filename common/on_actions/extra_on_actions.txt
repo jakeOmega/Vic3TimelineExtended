@@ -135,16 +135,76 @@ on_monthly_pulse_country = {
 }
 
 # Fires the one-shot superpower-ascension event the first time a country
-# is recognised at the Superpower rank. The `has_been_superpower_ever`
-# variable is sticky — if the country later drops below Superpower and
-# climbs back, no second ascension event fires. The engine has no
+# reaches Superpower rank AND holds the nuclear_power modifier (the
+# event's flavor text explicitly references "the stockpile of nuclear
+# arms we have assembled"). The `has_been_superpower_ever` variable is
+# sticky — if the country later drops below Superpower and climbs back,
+# no second ascension event fires. The engine has no
 # on_country_rank_changed hook (only a particle effect for great_power
 # ascension exists), so a monthly poll is the correct pattern here.
+#
+# Diagnostic block below (tagged DEBUG_SUPERPOWER_TRACE) is investigating
+# a confirmed-bypassed rank gate: common/country_ranks/extra_country_ranks.txt
+# declares `possible = { has_modifier = nuclear_power ... }` for the
+# superpower rank, but countries reach the rank without that modifier.
+# Grep `# DEBUG_SUPERPOWER_TRACE` to remove once root cause is identified.
 superpower_ascension_check_on_action = {
 	effect = {
+		# === DIAGNOSTIC: one-shot per-country deep dive ===
 		if = {
 			limit = {
 				country_rank >= rank_value:superpower
+				NOT = { has_variable = superpower_diag_logged }
+			}
+			set_variable = { name = superpower_diag_logged value = yes }  # DEBUG_SUPERPOWER_TRACE
+			debug_log_scopes = yes  # DEBUG_SUPERPOWER_TRACE
+			if = {
+				limit = { has_modifier = nuclear_power }
+				debug_log = "SUPERPOWER_DIAG: [ROOT.GetName] at superpower WITH nuclear_power (expected path)"  # DEBUG_SUPERPOWER_TRACE
+			}
+			else = {
+				debug_log = "SUPERPOWER_DIAG: BUG [ROOT.GetName] at superpower WITHOUT nuclear_power -- rank possible{} not enforced"  # DEBUG_SUPERPOWER_TRACE
+				if = {
+					limit = { has_journal_entry = je_nuclear_program }
+					debug_log = "SUPERPOWER_DIAG:   je_nuclear_program = OPEN"  # DEBUG_SUPERPOWER_TRACE
+				}
+				else = {
+					debug_log = "SUPERPOWER_DIAG:   je_nuclear_program = CLOSED"  # DEBUG_SUPERPOWER_TRACE
+				}
+				if = {
+					limit = { has_variable = nuclear_weapon_stockpile }
+					debug_log = "SUPERPOWER_DIAG:   var:nuclear_weapon_stockpile EXISTS"  # DEBUG_SUPERPOWER_TRACE
+				}
+				else = {
+					debug_log = "SUPERPOWER_DIAG:   var:nuclear_weapon_stockpile UNSET"  # DEBUG_SUPERPOWER_TRACE
+				}
+				if = {
+					limit = { country_live_prestige_share_pct >= 30 }
+					debug_log = "SUPERPOWER_DIAG:   prestige_share>=30 = YES"  # DEBUG_SUPERPOWER_TRACE
+				}
+				else = {
+					debug_log = "SUPERPOWER_DIAG:   prestige_share>=30 = NO (rank possible{} doubly bypassed)"  # DEBUG_SUPERPOWER_TRACE
+				}
+				if = {
+					limit = { is_subject = yes }
+					debug_log = "SUPERPOWER_DIAG:   is_subject = YES (subject rank inheritance suspect)"  # DEBUG_SUPERPOWER_TRACE
+				}
+			}
+		}
+		# === DIAGNOSTIC: state-flip detector — clear flag if country drops out so re-ascension re-logs ===
+		if = {
+			limit = {
+				has_variable = superpower_diag_logged
+				country_rank < rank_value:superpower
+			}
+			debug_log = "SUPERPOWER_DIAG: [ROOT.GetName] DROPPED from superpower rank -- clearing diag flag for re-detection"  # DEBUG_SUPERPOWER_TRACE
+			remove_variable = superpower_diag_logged  # DEBUG_SUPERPOWER_TRACE
+		}
+		# === Event firing (defensively gated on nuclear_power so flavor text matches) ===
+		if = {
+			limit = {
+				country_rank >= rank_value:superpower
+				has_modifier = nuclear_power
 				NOT = { has_variable = has_been_superpower_ever }
 			}
 			set_variable = has_been_superpower_ever
@@ -2003,7 +2063,22 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = television_broadcasting
 					NOT = { has_modifier = rre_religious_right_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOT = { has_law = law_type:law_state_atheism }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.10
+					}
 				}
 				trigger_event = { id = religious_revival_events.1 }
 			}
@@ -2013,27 +2088,71 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = pop_culture
 					NOT = { has_modifier = rre_televangelism_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOT = { has_law = law_type:law_state_atheism }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.10
+					}
 				}
 				trigger_event = { id = religious_revival_events.2 }
 			}
 
-			# Liberation Theology (civil_rights_movement, era 7)
+			# Liberation Theology (civil_rights_movement, era 7) — atheism carve-out preserved
 			8 = {
 				trigger = {
 					has_technology_researched = civil_rights_movement
 					NOT = { has_modifier = rre_liberation_theology_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.10
+					}
 				}
 				trigger_event = { id = religious_revival_events.3 }
 			}
 
-			# One Nation Under God (globalization, era 9)
+			# One Nation Under God (globalization, era 9) — rebound event, 0.15 cap
 			8 = {
 				trigger = {
 					has_technology_researched = globalization
 					NOT = { has_modifier = rre_religious_nationalism_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOT = { has_law = law_type:law_state_atheism }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.15
+					}
 				}
 				trigger_event = { id = religious_revival_events.4 }
 			}
@@ -2043,27 +2162,71 @@ society_technology_events_on_action = {
 				trigger = {
 					has_technology_researched = social_media
 					NOT = { has_modifier = rre_digital_faith_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOT = { has_law = law_type:law_state_atheism }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.10
+					}
 				}
 				trigger_event = { id = religious_revival_events.5 }
 			}
 
-			# The Culture War (sexual_revolution, era 8)
+			# The Culture War (sexual_revolution, era 8) — rebound event, 0.15 cap
 			8 = {
 				trigger = {
 					has_technology_researched = sexual_revolution
 					NOT = { has_modifier = rre_culture_war_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOT = { has_law = law_type:law_state_atheism }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.15
+					}
 				}
 				trigger_event = { id = religious_revival_events.6 }
 			}
 
-			# Faith-Based Welfare (social_justice_movements, era 9)
+			# Faith-Based Welfare (social_justice_movements, era 9) — rebound event, 0.15 cap, atheism carve-out preserved
 			8 = {
 				trigger = {
 					has_technology_researched = social_justice_movements
 					NOT = { has_modifier = rre_faith_services_modifier }
-					any_interest_group = { is_interest_group_type = ig_devout ig_clout < 0.20 }
+					NOR = {
+						has_law = law_type:law_state_religion
+						has_law = law_type:law_millet_system
+						has_law = law_type:law_people_of_the_book
+					}
+					NOR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_oligarchy
+					}
+					NOT = { has_variable = rre_recent_cooldown }
+					any_interest_group = {
+						is_interest_group_type = ig_devout
+						ig_clout > 0.02
+						ig_clout < 0.15
+					}
 				}
 				trigger_event = { id = religious_revival_events.7 }
 			}
