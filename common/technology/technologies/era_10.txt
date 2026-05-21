@@ -221,7 +221,6 @@ jadc2 = {
 		country_institution_ministry_of_war_max_investment_add = 1
 		country_general_rank_impact_mult = 1.0
 		country_admiral_rank_impact_mult = 1.0
-		character_command_limit_add = 2
 		character_advancement_speed_mult = 0.25
 		character_max_offensive_battles_add = 1
 	}
