@@ -6,7 +6,9 @@
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
-	state_homeland_creation_threshold_add = 1.0
+	# Creation base 0.60 = "normal" 60% of state pop; citizenship + minority-rights laws push it
+	# lower (more ethnocentric) or higher (more pluralist), clamped to [0.10, 0.90] in the script value.
+	state_homeland_creation_threshold_add = 0.60
 	state_homeland_removal_threshold_add = 0.0
 
 	state_building_resettlement_colony_max_level_add = 1

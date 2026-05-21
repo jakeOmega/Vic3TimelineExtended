@@ -154,8 +154,8 @@ homeland_culture_disappear_threshold = {
 }
 homeland_culture_form_threshold = {
 	value = modifier:state_homeland_creation_threshold_add
-	min = 0.0
-	max = 1.0
+	min = 0.10
+	max = 0.90
 }
 
 # Annual chance (0-100) that homeland creation/removal fires in this state

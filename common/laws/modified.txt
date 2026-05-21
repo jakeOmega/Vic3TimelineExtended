@@ -175,9 +175,9 @@ REPLACE:law_ethnostate = {
 
 		goods_output_tourism_mult = -0.20
 
-		# Homeland system: ethnostate aggressively reshapes cultural demographics
+		# Homeland system: ethnostate aggressively reshapes cultural demographics (most ethnocentric citizenship law)
 		country_homelands_can_change_bool = yes
-		state_homeland_creation_threshold_add = -0.10
+		state_homeland_creation_threshold_add = -0.20
 		state_homeland_removal_threshold_add = 0.10
 		state_homeland_change_speed_mult = 0.50
 
@@ -265,9 +265,10 @@ REPLACE:law_national_supremacy = {
 
 		country_bureaucracy_investment_cost_factor_mult = -0.15
 
-		# Homeland system: national supremacy promotes primary culture homelands
-		country_homelands_can_change_bool = yes
-		state_homeland_creation_threshold_add = -0.05
+		# Homeland system: national supremacy is the ethnocentrism-neutral anchor (0.00 = base 60% creation threshold).
+		# Does NOT self-enable the system — these deltas only apply once it is enabled by an extreme law (ethnostate /
+		# violent_hostility), the decolonization tech, or a power-bloc principle.
+		state_homeland_creation_threshold_add = 0.00
 		state_homeland_removal_threshold_add = 0.05
 		state_homeland_change_speed_mult = 0.25
 
@@ -362,6 +363,13 @@ REPLACE:law_racial_segregation = {
 
 		goods_output_tourism_mult = -0.05
 
+		# Homeland system: racial citizenship reshapes demographics along lineage lines (ethnocentric side, below national supremacy).
+		# Does NOT self-enable the system — these deltas only apply once it is enabled by an extreme law (ethnostate /
+		# violent_hostility), the decolonization tech, or a power-bloc principle.
+		state_homeland_creation_threshold_add = -0.10
+		state_homeland_removal_threshold_add = 0.05
+		state_homeland_change_speed_mult = 0.25
+
 		# Colonial empire (je_colonial_empire): segregationist citizenship
 		country_colonial_stability_drift_add = -0.1
 
@@ -453,6 +461,10 @@ REPLACE:law_cultural_exclusion = {
 		country_primary_culture_fervor_from_laws_add = 5
 
 		state_assimilation_mult = 0.25
+
+		# Homeland system: assimilatory citizenship is open by adoption, so it resists new exclusive homelands
+		# (inclusive side; no can_change bool, consistent with multiculturalism — only nudges the threshold if the system is enabled elsewhere)
+		state_homeland_creation_threshold_add = 0.10
 
 		# Colonial empire (je_colonial_empire): hard-line citizenship reinforces assimilation push
 		country_colonial_assim_effectiveness_add = 0.5
@@ -560,8 +572,8 @@ REPLACE:law_multicultural = {
 
 		country_bureaucracy_investment_cost_factor_mult = 0.25
 
-		# Homeland system: multiculturalism resists new exclusive homelands, protects existing minorities
-		state_homeland_creation_threshold_add = 0.10
+		# Homeland system: multiculturalism resists new exclusive homelands, protects existing minorities (least ethnocentric)
+		state_homeland_creation_threshold_add = 0.20
 		state_homeland_removal_threshold_add = -0.05
 		state_homeland_change_speed_mult = -0.25
 

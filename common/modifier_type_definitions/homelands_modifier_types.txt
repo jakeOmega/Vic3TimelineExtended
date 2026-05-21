@@ -14,11 +14,12 @@ country_homelands_can_change_bool = {
 	script_only = yes
 }
 
-# Pop % threshold for creating a new homeland (base 1.0 in base_values)
+# Pop % threshold for creating a new homeland (base 0.60 in base_values, clamped to [0.10, 0.90])
 # State-level: modified by laws (all states), decrees (per-state), buildings, etc.
 # Lower value = easier to form homelands; higher = harder
 state_homeland_creation_threshold_add = {
 	color = bad
+	percent = yes
 	game_data = {
 		ai_value = 0
 	}
@@ -30,6 +31,7 @@ state_homeland_creation_threshold_add = {
 # Higher value = minority homelands erased sooner; lower = they persist longer
 state_homeland_removal_threshold_add = {
 	color = good
+	percent = yes
 	game_data = {
 		ai_value = 0
 	}
