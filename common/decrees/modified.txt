@@ -1,4 +1,8 @@
-﻿INJECT:decree_promote_national_values = {
+﻿# Deliberately large (+300%, ~6x the strongest law on this field): this decree is
+# an authority-costing single-state lever meant to dramatically accelerate homeland
+# change in one targeted state, not a passive nationwide trickle. The high magnitude
+# is intentional — not a 0.3 decimal typo. # REVIEWED 2026-05-21: intended per design.
+INJECT:decree_promote_national_values = {
 	modifier = {
 		state_homeland_change_speed_mult = 3.0
 	}

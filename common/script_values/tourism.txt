@@ -1037,7 +1037,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ENTRE_DOURO_E_MINHO }
-		value = 90 # The Alhambra in Granada, Sierra Nevada mountains, and Mediterranean coast.
+		value = 90 # Porto's historic centre, the terraced Douro wine valley, and the medieval cities of Braga and Guimarães.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_UPPER_ANDALUSIA }
