@@ -479,6 +479,7 @@ python mod_state_client.py modifier-search goods_output
 10. **Tech dependencies:** `/tech-tree/<tech_id>` for prerequisites, `/technology-effects/<tech_id>` for comprehensive effects.
 11. **Look up triggers/effects by scope:** `/engine-docs/effects?scope=country`, `/engine-docs/triggers?scope=building`.
 12. **Developer reference templates:** `/dev-docs/production_methods`, `/dev-docs/buildings`, etc. for official game developer documentation of entity file structures.
+13. **Hit a capability gap? File an issue.** If the server can't answer a question it structurally should, or you find yourself falling back to manual `git grep` / file-reading / by-hand cross-referencing or validation that an endpoint could automate, open a GitHub issue (`gh issue create --label enhancement --label tooling`) proposing the endpoint — including the exact query you needed, the desired URL + return JSON, and the manual fallback you used — then proceed with the workaround for now. This is how `/modifier-grants/<name>` (#128) came to be: a homeland rebalance fell back to raw grep because nothing answered "which laws/techs/principles grant modifier X". See CLAUDE.md § "File issues for mod-state-server capability gaps".
 
 ### Direct Import for Python Generators
 

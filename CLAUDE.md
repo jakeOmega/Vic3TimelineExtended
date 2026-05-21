@@ -103,6 +103,11 @@ When you discover something generally applicable — engine quirk, refactor patt
 
 Keep additions short — one paragraph or a bullet, not a treatise. Bar: would the next Claude instance hit the same gotcha or solve the same problem from scratch without this note?
 
+### File issues for mod-state-server capability gaps
+The mod state server is the primary introspection tool, but it has blind spots. When you hit one — **the server can't answer a question it structurally should**, or **you fall back to manual `git grep` / file-reading / by-hand cross-referencing or validation for mod work an endpoint could automate** — open a GitHub issue (`gh issue create --label enhancement --label tooling`) proposing the capability, then proceed with the manual workaround for the task at hand. The issue is cheap insurance against the next agent re-doing the same manual sweep. Don't bother filing for one-off curiosities the existing endpoints already cover, or for genuinely engine-side questions the server has no way to know.
+
+Be concrete in the issue: the exact query/validation you needed, the endpoint shape (URL + return JSON) that would answer it, the entity types involved, and the manual fallback you used this time. Issue #128 came exactly from this — a homeland rebalance fell back to raw `git grep` because no endpoint answered "which laws/techs/principles grant modifier X"; the resulting `/modifier-grants/<name>` endpoint now does. Endpoint inventory + AI-agent workflow: `docs/guides/python_tools.md`.
+
 ### Editing conventions
 - Brace-based Paradox files use **tab** indentation. Run `python scripts/format_paradox_tabs.py <files>` after large edits.
 - After editing mod files, `POST /reload` to refresh the server's view (auto-deploy will already have synced files into the Paradox mod folder).
