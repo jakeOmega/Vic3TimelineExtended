@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log @ 2026-05-20T22:04:03+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 

@@ -10,7 +10,7 @@ Each `kill_character` in `events/` should satisfy BOTH:
 Suppress an intentional flag with a same-line comment:
 `kill_character = scope:X  # REVIEWED YYYY-MM-DD: rationale`
 
-Files audited: **37**.  
+Files audited: **36**.  
 Total `kill_character` occurrences flagged: **0**.  
 Hard fails (neither guard): **0**.  
 Defense-in-depth gaps (only one guard): **0**.  

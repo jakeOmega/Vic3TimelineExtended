@@ -1,4 +1,4 @@
-# Auto-generated from custom_localization.log @ 2026-05-12T15:06:59+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from custom_localization.log @ 2026-05-20T22:04:03+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 character|BR_Dede|random_valid=no
 character|BR_DoDa|random_valid=no

@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 730
-**Event files:** 37
+**Total events:** 729
+**Event files:** 36
 
 ## agricultural_diffusion_events.txt
 
@@ -3855,14 +3855,6 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** The Mars mission architecture must be decided. A direct landing puts boots on the surface fastest but carries enormous risk. An orbital-first approach establishes a station in Mars orbit before attempting a landing, building experience methodically. Sending robotic precursors to prepare a landing site and cache supplies is safest but slowest, and may allow rivals to land first.
 - **Flavor:** \"Direct is bold. Orbital-first is smart. Robotic precursors are safe. We can only pick one, and whichever we choose defines a generation.\"\n\n— Mars Architecture Review Board
 - **Current image:** gfx/event_pictures/space_station.dds
-
-## superpower_events.txt
-
-### superpower_events.1
-- **Title:** Ascendance to Superpower Status
-- **Description:** The stockpile of nuclear arms we have assembled, joined with the unmatched [concept_prestige] our flag now commands across the world, has placed [ROOT.GetName] in a category beyond that of any [concept_great_power] of the previous era. We are a $concept_superpower$ — and the world's diplomats, soldiers, and statesmen must reckon with us as such.
-- **Flavor:** From this day forward, no question of global consequence may be settled without our voice.
-- **Current image:** gfx/event_pictures/un_charter_signing.dds
 
 ## surveillance_events.txt
 

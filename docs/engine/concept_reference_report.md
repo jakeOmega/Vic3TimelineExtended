@@ -24,14 +24,14 @@ _None._
 
 ## Reviewed Exemptions
 
-- `localization/english/te_concepts_l_english.yml:2109` — `superpower_desc` references `concept_superpower_desc` — **2026-05-18**: concept_superpower_desc is a loc-key reference (not a registered concept) — mirrors vanilla great_power_desc / major_power_desc pattern.
+_None._
 
 ## Coverage
 
 - loc files scanned: 30
-- concept references checked: 2848
-- registered concepts (vanilla + mod): 722
-- total flags: 1
+- concept references checked: 2843
+- registered concepts (vanilla + mod): 721
+- total flags: 0
 - unreviewed: 0
-- exempted: 1
+- exempted: 0
 
