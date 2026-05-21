@@ -65,12 +65,12 @@
       "recent_findings": 0
     },
     "common/scripted_triggers/extra_geography_triggers.txt": {
-      "last_audited": "2026-05-20",
+      "last_audited": "2026-05-19",
       "audit_count": 1,
-      "recent_findings": 0
+      "recent_findings": 1
     },
     "common/scripted_triggers/te_map_modes_triggers.txt": {
-      "last_audited": "2026-05-20",
+      "last_audited": "2026-05-19",
       "audit_count": 1,
       "recent_findings": 0
     },
@@ -80,7 +80,7 @@
       "recent_findings": 0
     },
     "common/on_actions/cultural_hegemony_events_on_actions.txt": {
-      "last_audited": "2026-05-20",
+      "last_audited": "2026-05-19",
       "audit_count": 1,
       "recent_findings": 0
     },
@@ -313,11 +313,6 @@
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/on_actions/cultural_hegemony_events_on_actions.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
     "common/on_actions/cultural_hegemony_on_actions.txt": {
       "last_audited": "2026-05-16",
       "audit_count": 1,
@@ -416,8 +411,8 @@
       "recent_findings": 0
     },
     "common/political_movements/modified_political_movements.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/power_bloc_identities/_power_bloc_identities.info": {
@@ -593,11 +588,6 @@
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/scripted_triggers/extra_geography_triggers.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
     "common/scripted_triggers/formable_gating_triggers.txt": {
       "last_audited": "2026-05-18",
       "audit_count": 1,
@@ -625,11 +615,6 @@
     },
     "common/scripted_triggers/resource_discovery_triggers.txt": {
       "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/te_map_modes_triggers.txt": {
-      "last_audited": "2026-05-19",
       "audit_count": 1,
       "recent_findings": 0
     },
@@ -924,6 +909,79 @@
       "audit_count": 1,
       "last_audited": "2026-05-17",
       "recent_findings": 1
+    },
+    "common/scripted_effects/te_construction_market_ai_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/script_values/tourism.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/script_values/un_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/on_actions/law_events_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_buttons/banking_alt_economy_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_effects/decolonization.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_effects/civil_rights_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/nuke_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/headlines_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/decrees/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1
+    },
+    "common/laws/movement_attraction_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
     }
   }
 }
