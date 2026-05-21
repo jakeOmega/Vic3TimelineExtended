@@ -862,6 +862,201 @@ def _engine_docs_find_usage(
     }
 
 
+# ---------------------------------------------------------------------------
+# Reverse modifier-GRANT lookup  (issue #128)
+#
+# `/engine-docs/usage/<name>` greps for effect/trigger CALL sites and is blind
+# to `modifier = { <name> = <value> }` APPLICATION blocks inside laws, techs,
+# principles, amendments, decrees, buildings, and static modifiers. This scans
+# those entity files directly (the parser discards file/line, so a file scan is
+# the only way to satisfy the {entity_type, entity_id, file, line, value}
+# contract) and answers "which entities GRANT modifier X, and at what value?".
+#
+# Entity types scanned, matching the issue's explicit list. `mode`:
+#   "wrapped" — modifier keys live inside a named bag block (modifier = {...},
+#               member_modifier = {...}, tax_modifier_high = {...}, etc.).
+#   "direct"  — modifier keys are direct fields of the entity (static
+#               modifiers have no wrapper).
+# ---------------------------------------------------------------------------
+MODIFIER_GRANT_SOURCES: list[tuple[str, str, str]] = [
+    ("Laws",         "laws",                                       "wrapped"),
+    ("Technologies", os.path.join("technology", "technologies"),   "wrapped"),
+    ("Decrees",      "decrees",                                    "wrapped"),
+    ("Amendments",   "amendments",                                 "wrapped"),
+    ("Principles",   "power_bloc_principles",                      "wrapped"),
+    ("Buildings",    "buildings",                                  "wrapped"),
+    ("Modifiers",    "static_modifiers",                           "direct"),
+]
+
+# Named blocks (immediate child of an entity) whose contents are modifier
+# key=value grants. Verified by enumeration across mod + vanilla. Weight blocks
+# (ai_enact_weight_modifier) and effect calls (add_modifier) are NOT here, and
+# in any case can't false-positive a *specific* modifier-name query since they
+# hold value/add/name keys, not modifier keys.
+_MODIFIER_BAG_BLOCKS: frozenset[str] = frozenset({
+    "modifier",
+    "member_modifier", "leader_modifier", "non_leader_modifier",
+    "power_bloc_modifier", "institution_modifier", "sponsor_modifier",
+    "tax_modifier_very_low", "tax_modifier_low", "tax_modifier_medium",
+    "tax_modifier_high", "tax_modifier_very_high",
+    "construction_modifier",
+})
+# Per-unit scaling sub-wrappers that may sit between a bag and its grant lines.
+_SCALING_WRAPPERS: frozenset[str] = frozenset({
+    "workforce_scaled", "level_scaled", "unscaled", "timed_modifier",
+})
+
+_GRANT_OPENER_RE = re.compile(r"^\s*(?:INJECT:|REPLACE:)?([A-Za-z_][\w]*)\s*=\s*\{")
+_GRANT_LINE_RE = re.compile(
+    r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(-?\d+(?:\.\d+)?|yes|no)\s*$"
+)
+
+
+def _grant_block_label(name_stack: list, mode: str):
+    """Return the block label if `name_stack` (one frame per open brace, [0] =
+    entity) places the current line inside a modifier-grant context, else None.
+
+    direct: keys must be direct entity fields (stack == [entity]).
+    wrapped: the first block inside the entity must be a known modifier bag;
+             only per-unit scaling wrappers may nest between it and the line."""
+    if mode == "direct":
+        return "direct" if len(name_stack) == 1 else None
+    if len(name_stack) < 2 or name_stack[1] not in _MODIFIER_BAG_BLOCKS:
+        return None
+    label = name_stack[1]
+    for extra in name_stack[2:]:
+        if extra not in _SCALING_WRAPPERS:
+            return None
+        label += "/" + extra
+    return label
+
+
+def _scan_file_for_grants(abs_path: str, rel: str, entity_type: str, mode: str,
+                          origin: str, target):
+    """Yield grant dicts for one file. Line-by-line state machine: tracks the
+    column-0 entity opener and a name stack parallel to brace depth. Paradox
+    files are one-token-per-line, so a line is an opener, a grant, or a closer;
+    single-line `bag = { k = v }` with inline numerics does not occur in the
+    scanned dirs (verified) and is a documented blind spot."""
+    try:
+        with open(abs_path, "r", encoding="utf-8-sig", errors="replace") as f:
+            lines = f.readlines()
+    except OSError:
+        return
+    depth = 0
+    name_stack: list = []
+    current_entity = None
+    for lineno, raw in enumerate(lines, 1):
+        text = raw.split("#", 1)[0]
+
+        # Grant candidate (no brace on the line) — test in current context.
+        gm = _GRANT_LINE_RE.match(text)
+        if gm and current_entity is not None and "{" not in text and "}" not in text:
+            key, value = gm.group(1), gm.group(2)
+            if target is None or key == target:
+                label = _grant_block_label(name_stack, mode)
+                if label is not None:
+                    if value in ("yes", "no"):
+                        coerced = value
+                    else:
+                        coerced = float(value) if "." in value else int(value)
+                    yield {
+                        "entity_type": entity_type,
+                        "entity_id": current_entity,
+                        "origin": origin,
+                        "file": rel,
+                        "line": lineno,
+                        "value": coerced,
+                        "block": label,
+                    }
+
+        # Update brace depth + name stack from this line.
+        opener = _GRANT_OPENER_RE.match(text)
+        opens = text.count("{")
+        closes = text.count("}")
+        if opener and opens:
+            if depth == 0:
+                current_entity = opener.group(1)
+            name_stack.append(opener.group(1))
+            for _ in range(opens - 1):
+                name_stack.append(None)
+            depth += opens
+        elif opens:
+            for _ in range(opens):
+                name_stack.append(None)
+            depth += opens
+        for _ in range(closes):
+            if name_stack:
+                name_stack.pop()
+            depth -= 1
+            if depth <= 0:
+                depth = 0
+                current_entity = None
+                name_stack = []
+
+
+def _find_modifier_grants(target: str, *, scope: str = "both",
+                          limit: int = 200) -> dict:
+    """Enumerate every entity that GRANTS modifier `target` across the entity
+    types in MODIFIER_GRANT_SOURCES. `scope` in {mod, vanilla, both}."""
+    if not target or not re.match(r"^[a-z_][a-z0-9_]*$", target):
+        return {
+            "name": target,
+            "error": "Invalid target name (expected snake_case identifier).",
+            "grants": [],
+        }
+    if scope not in ("mod", "vanilla", "both"):
+        return {
+            "name": target,
+            "error": "scope must be one of: mod, vanilla, both.",
+            "grants": [],
+        }
+
+    # (origin, common-root, repo-root-for-relpath)
+    roots: list[tuple[str, str, str]] = []
+    if scope in ("mod", "both"):
+        roots.append(("mod", _MOD_COMMON, mod_path))
+    if scope in ("vanilla", "both"):
+        roots.append(("vanilla", _BASE_COMMON, os.path.join(base_game_path, "game")))
+
+    grants: list[dict] = []
+    truncated = False
+    for entity_type, subdir, mode in MODIFIER_GRANT_SOURCES:
+        for origin, common_root, repo_root in roots:
+            scan_dir = os.path.join(common_root, subdir)
+            if not os.path.isdir(scan_dir):
+                continue
+            for dirpath, _dirs, files in os.walk(scan_dir):
+                for fname in sorted(files):
+                    if not fname.endswith(".txt") or fname.startswith("_"):
+                        continue
+                    abs_path = os.path.join(dirpath, fname)
+                    rel = os.path.relpath(abs_path, repo_root)
+                    for grant in _scan_file_for_grants(
+                        abs_path, rel, entity_type, mode, origin, target
+                    ):
+                        grants.append(grant)
+                        if len(grants) >= limit:
+                            truncated = True
+                            break
+                    if truncated:
+                        break
+                if truncated:
+                    break
+            if truncated:
+                break
+        if truncated:
+            break
+
+    return {
+        "name": target,
+        "scope": scope,
+        "returned": len(grants),
+        "truncated": truncated,
+        "grants": grants,
+    }
+
+
 def _vanilla_data_loaded() -> bool:
     """Cheap precondition: does base_game_path resolve to a populated
     `game/common` directory? Used by /status to refuse `ready` when the
@@ -3489,6 +3684,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "references": lambda: self._references(rest),
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
+            "modifier-grants": lambda: self._modifier_grants(rest, params),
             "unlocked-by": lambda: self._unlocked_by(rest),
             "tech-unlocks": lambda: self._tech_unlocks(rest, params),
             "annotators": lambda: self._annotators(),
@@ -3603,6 +3799,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/tech-unlocks/<tech>", "desc": "What a tech unlocks (PMs, buildings, laws, etc.)."},
                 {"path": "/unlocked-by/<entity>", "desc": "Inverse of tech-unlocks: what gates an entity."},
                 {"path": "/modifier-search?q=<name>", "desc": "Validate / discover modifier keys against the engine catalog."},
+                {"path": "/modifier-grants/<name>?scope=both", "desc": "Reverse lookup: every law/tech/principle/amendment/decree/building/static-modifier that GRANTS modifier <name>, with file:line + value."},
                 {"path": "/modifier-patterns/<sub?>", "desc": "Modifier pattern catalog and discovered families."},
                 {"path": "/engine-docs/<section>/<key?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization)."},
                 {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
@@ -4561,6 +4758,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "group_id": group_id,
             "group_name": ms.localize(group_id),
         }
+        desc = ms.get_description(law_id)
+        if desc:
+            info["description"] = desc
         tech = get_field(ld, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
             info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
@@ -5460,6 +5660,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _format_institution_detail(self, iid, raw):
         ed = get_entity_data(raw)
         info = {"type": "Institutions", "id": iid, "name": ms.localize(iid)}
+        desc = ms.get_description(iid)
+        if desc:
+            info["description"] = desc
         tech = get_field(ed, "unlocking_technologies")
         if tech and isinstance(tech, list) and tech:
             info["unlocking_technology"] = {"type": "Technologies", "id": tech[0], "name": ms.localize(tech[0])}
@@ -5756,6 +5959,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 raise KeyError(did)
             ed = get_entity_data(decrees[did])
             info = {"type": "Decrees", "id": did, "name": ms.localize(did)}
+            desc = ms.get_description(did)
+            if desc:
+                info["description"] = desc
             modifier = get_field(ed, "modifier")
             if modifier and isinstance(modifier, dict):
                 info["modifier"] = {
@@ -5769,6 +5975,30 @@ class ModStateHandler(BaseHTTPRequestHandler):
             {"type": "Decrees", "id": did, "name": ms.localize(did)}
             for did in decrees
         ]
+
+    # ---- reverse modifier-grant lookup ------------------------------------
+    def _modifier_grants(self, parts, params):
+        """GET /modifier-grants/<modifier_name>?scope=both&limit=200
+
+        Enumerate every entity that GRANTS the modifier (Laws, Technologies,
+        Power Bloc Principles, Amendments, Decrees, Buildings, Static
+        Modifiers), returning {entity_type, entity_id, origin, file, line,
+        value, block} per site. Complements /engine-docs/usage, which only
+        finds effect/trigger call sites. scope: mod | vanilla | both.
+
+        Note: under scope=both a modifier the mod INJECTs/REPLACEs into a
+        vanilla entity is reported twice (vanilla original + mod patch) for the
+        same entity_id; `origin` disambiguates. Use scope=mod for the mod's
+        effective additions only."""
+        if not parts:
+            return {"error": "Provide a modifier name, e.g. "
+                    "/modifier-grants/state_homeland_creation_threshold_add"}
+        scope = params.get("scope", ["both"])[0]
+        try:
+            limit = int(params.get("limit", ["200"])[0])
+        except ValueError:
+            limit = 200
+        return _find_modifier_grants(parts[0], scope=scope, limit=limit)
 
     # ---- structured: on-actions -------------------------------------------
     def _on_actions(self, parts):

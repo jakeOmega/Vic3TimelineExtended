@@ -250,5 +250,146 @@ class GuiRenderEndpointsTests(unittest.TestCase):
         self.assertIn("Treaty Articles", data["supported_entity_types"])
 
 
+# ---------------------------------------------------------------------------
+# #128 — reverse modifier-grant lookup (_scan_file_for_grants /
+#        _grant_block_label / _find_modifier_grants). Pure file-scan helpers,
+#        exercised over hand-written tempfiles; live lookup gated behind import.
+# ---------------------------------------------------------------------------
+class ModifierGrantBlockLabelTests(unittest.TestCase):
+    def test_direct_mode_depth_one(self):
+        self.assertEqual(mss._grant_block_label(["base_values"], "direct"), "direct")
+        self.assertIsNone(mss._grant_block_label(["base_values", "modifier"], "direct"))
+
+    def test_wrapped_known_bag(self):
+        self.assertEqual(mss._grant_block_label(["law_x", "modifier"], "wrapped"), "modifier")
+        self.assertEqual(
+            mss._grant_block_label(["p_x", "member_modifier"], "wrapped"), "member_modifier")
+
+    def test_wrapped_rejects_non_bag(self):
+        # possible/ai_weight blocks are not modifier bags.
+        self.assertIsNone(mss._grant_block_label(["law_x", "possible"], "wrapped"))
+        self.assertIsNone(mss._grant_block_label(["law_x"], "wrapped"))
+
+    def test_wrapped_scaling_wrapper_nested(self):
+        self.assertEqual(
+            mss._grant_block_label(["b", "construction_modifier", "workforce_scaled"], "wrapped"),
+            "construction_modifier/workforce_scaled",
+        )
+
+
+class ModifierGrantScanTests(unittest.TestCase):
+    def _scan(self, body, entity_type="Laws", mode="wrapped", target="target_mod"):
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, "f.txt")
+            with open(p, "w", encoding="utf-8") as fh:
+                fh.write(body)
+            return list(mss._scan_file_for_grants(
+                p, "common/x/f.txt", entity_type, mode, "mod", target))
+
+    def test_law_modifier_block(self):
+        out = self._scan(
+            "law_x = {\n\tmodifier = {\n\t\ttarget_mod = 0.5\n\t}\n}\n")
+        self.assertEqual(len(out), 1)
+        g = out[0]
+        self.assertEqual(g["entity_id"], "law_x")
+        self.assertEqual(g["block"], "modifier")
+        self.assertEqual(g["value"], 0.5)
+        self.assertEqual(g["line"], 3)
+
+    def test_static_modifier_direct_with_inject_prefix(self):
+        out = self._scan(
+            "INJECT:base_values = {\n\tother = 1\n\ttarget_mod = 0.6\n}\n",
+            entity_type="Modifiers", mode="direct")
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["entity_id"], "base_values")  # prefix stripped
+        self.assertEqual(out[0]["block"], "direct")
+        self.assertEqual(out[0]["value"], 0.6)
+
+    def test_principle_two_tiers_and_other_block(self):
+        body = (
+            "p_x = {\n"
+            "\tmember_modifier = {\n\t\ttarget_mod = 0.2\n\t}\n"
+            "\tmember_modifier = {\n\t\ttarget_mod = 0.4\n\t}\n"
+            "\tinstitution_modifier = {\n\t\ttarget_mod = 0.1\n\t}\n"
+            "}\n")
+        out = self._scan(body, entity_type="Principles")
+        self.assertEqual(len(out), 3)
+        self.assertEqual([g["block"] for g in out],
+                         ["member_modifier", "member_modifier", "institution_modifier"])
+        self.assertEqual([g["value"] for g in out], [0.2, 0.4, 0.1])
+
+    def test_rejects_nested_non_modifier_scopes(self):
+        body = (
+            "p_x = {\n"
+            "\tpossible = {\n\t\ttarget_mod = 5\n\t}\n"
+            "\tai_weight = {\n\t\ttarget_mod = 9\n\t}\n"
+            "\tmodifier = {\n\t\ttarget_mod = 0.3\n\t}\n"
+            "}\n")
+        out = self._scan(body)
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["value"], 0.3)
+        self.assertEqual(out[0]["block"], "modifier")
+
+    def test_whole_word_match_not_substring(self):
+        out = self._scan(
+            "law_x = {\n\tmodifier = {\n\t\ttarget_mod_extra = 1\n\t}\n}\n")
+        self.assertEqual(out, [])
+
+    def test_boolean_value(self):
+        out = self._scan(
+            "law_x = {\n\tmodifier = {\n\t\ttarget_mod = yes\n\t}\n}\n")
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["value"], "yes")
+
+    def test_target_none_captures_all_keys(self):
+        out = self._scan(
+            "law_x = {\n\tmodifier = {\n\t\ta_add = 1\n\t\tb_mult = 2\n\t}\n}\n",
+            target=None)
+        self.assertEqual(len(out), 2)
+
+    def test_trailing_comment_stripped(self):
+        out = self._scan(
+            "law_x = {\n\tmodifier = {\n\t\ttarget_mod = 0.5 # note\n\t}\n}\n")
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["value"], 0.5)
+
+
+class ModifierGrantLookupTests(unittest.TestCase):
+    """Live import-level test against the real mod tree (no server needed)."""
+    def test_invalid_identifier(self):
+        r = mss._find_modifier_grants("Not Valid")
+        self.assertIn("error", r)
+        self.assertEqual(r["grants"], [])
+
+    def test_bad_scope(self):
+        r = mss._find_modifier_grants("state_assimilation_mult", scope="bogus")
+        self.assertIn("error", r)
+
+    def test_empty_result(self):
+        r = mss._find_modifier_grants("phantom_modifier_does_not_exist_xyz")
+        self.assertEqual(r["returned"], 0)
+
+    @unittest.skipUnless(os.path.isdir(mss._MOD_COMMON), "mod common/ not found")
+    def test_homeland_modifier_grants_from_mod(self):
+        r = mss._find_modifier_grants(
+            "state_homeland_creation_threshold_add", scope="mod", limit=300)
+        self.assertGreater(r["returned"], 0)
+        types = {g["entity_type"] for g in r["grants"]}
+        # Mod's homelands system grants this from laws + the base_values static.
+        self.assertIn("Laws", types)
+        self.assertIn("Modifiers", types)
+        for g in r["grants"]:
+            self.assertTrue(g["file"] and g["line"] >= 1)
+            self.assertIn("block", g)
+            self.assertEqual(g["origin"], "mod")
+
+    @unittest.skipUnless(os.path.isdir(mss._MOD_COMMON), "mod common/ not found")
+    def test_limit_truncates(self):
+        r = mss._find_modifier_grants(
+            "state_homeland_creation_threshold_add", scope="mod", limit=2)
+        self.assertEqual(r["returned"], 2)
+        self.assertTrue(r["truncated"])
+
+
 if __name__ == "__main__":
     unittest.main()
