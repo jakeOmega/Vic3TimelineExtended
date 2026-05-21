@@ -164,6 +164,3 @@ concept_religious_revival = {}
 concept_custom_religion = {}
 concept_state_collapse_system = {}
 concept_pollution_system = {}
-
-# Country ranks (GitHub issue #111)
-concept_superpower = {}

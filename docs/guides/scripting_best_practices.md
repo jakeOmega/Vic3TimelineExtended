@@ -552,6 +552,14 @@ Minor country formations carry a hardcoded downward-only rank gate: a country at
 
 When you see a formable that "should be available but isn't" for a high-tier country, this is usually the cause. The fix shape: convert to `is_major_formation = yes`, wire `unification_play` / `leadership_play` (the plays must exist in `common/diplomatic_plays/`), set `max_num_formation_candidates` and `can_be_formation_candidate`, then add explicit `possible` triggers to compensate for losing the rank gate (the rank gate was doing meaningful filtering — losing it lets the formation fire under conditions that may not feel earned). See `common/country_formation/te_formable_countries.txt` for the mod's pattern, and the `add-formable-country` skill for the workflow.
 
+## `possible = {}` Is Silently Ignored on Custom `country_ranks`
+
+The vanilla `00_country_ranks.txt` header comment claims `possible = {}` "must evaluate to true for rank to be able to be assigned" — but the engine **never enforces it on custom ranks**, with no error logged. We added a `superpower` rank gated on `possible = { has_modifier = nuclear_power; country_live_prestige_share_pct >= 30 }`; countries reached the rank with neither condition met (confirmed by debug-log trace, 2026-05-19). Tellingly, **vanilla has zero `possible` blocks on any rank** — the code path was never exercised by the engine team. What *is* enforced: `prestige_average_threshold` (multiple of world-average prestige) and `prestige_relative_threshold` (relative to the prestige leader, who sits at 1.0 — so any value > 1.0 is unreachable by every country).
+
+Implications:
+- **Don't gate a custom rank on `possible`.** Express the gate through the enforced prestige thresholds, or drive the effect off a static modifier applied/removed from an on-action instead of a rank.
+- **To retire a custom rank without breaking a save in progress**, set its `prestige_relative_threshold` above 1.0 (e.g. `999`) so no country qualifies. The engine then demotes any current holder to the next rank down on its normal recompute — the same code path that demotes great powers on prestige loss — leaving no dangling rank reference. Delete the rank block in a later release once saves no longer carry the rank.
+
 ## Vanilla `triggers.log` Is Incomplete — Use `/engine-docs/usage/<name>`
 
 The vanilla engine-doc dump (`triggers.log` / `effects.log`) does not document every engine-recognized identifier. Post-1.13.5 vanilla scripts use `has_treaty_defensive_pact_with`, `has_treaty_alliance_with`, `has_treaty_*_with` family triggers that have no entry in `triggers.log`. They exist; they work in script; they're just undocumented.

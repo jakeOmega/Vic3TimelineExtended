@@ -3610,14 +3610,6 @@
  space_race_events.83.t:0 "The Mars Strategy"
 
 #
-# SUPERPOWER_EVENTS
-#
- superpower_events.1.a:0 "A new age dawns."
- superpower_events.1.d:0 "The stockpile of nuclear arms we have assembled, joined with the unmatched [concept_prestige] our flag now commands across the world, has placed [ROOT.GetName] in a category beyond that of any [concept_great_power] of the previous era. We are a $concept_superpower$ — and the world's diplomats, soldiers, and statesmen must reckon with us as such."
- superpower_events.1.f:0 "From this day forward, no question of global consequence may be settled without our voice."
- superpower_events.1.t:0 "Ascendance to Superpower Status"
-
-#
 # SURVEILLANCE_EVENTS
 #
  surveillance_events.1.a:0 "Protect the whistleblower"
