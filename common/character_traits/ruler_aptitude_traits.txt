@@ -522,7 +522,7 @@ ruler_exceptional_diplomat = {
 
 	country_modifier = {
 		country_prestige_mult = 0.20
-		country_diplomatic_reputation_add = 3
+		country_diplomatic_reputation_add = 10
 		country_influence_mult = 0.25
 		country_infamy_generation_mult = -0.2
 		interest_group_amenability_add = 10
