@@ -12,6 +12,8 @@ Slice: 15 files / 2499 lines — `laws_and_politics` (14) + `scripted_effects_an
 2. **`common/laws/colonial_empire_law_injections.txt:133-142` — secret_police colonial garrison contribution mis-placed in `institution_modifier`.**
    All five sibling laws put `country_colonial_garrison_effectiveness_add` in a plain `modifier` block (flat, read via `owner.modifier:X`). `law_secret_police` alone placed its 0.1 in `institution_modifier`, so it scaled 0→0.1 with `institution_home_affairs` investment instead of applying flat. Git history (`b359b19`) confirms the original IF-block precedent was flat (`add = { value = 0.2 }` gated on the law) — and the file header explicitly claims "magnitudes match the corresponding IF-block values." **Fixed → moved into the `modifier` block (flat, matching siblings).** Value kept at current 0.1; the historical 0.2→0.1 halving is left as a separate balance question (not changed unilaterally).
 
+3. **`common/political_movement_pop_support/extra_political_movement_pop_support.txt:9-11` — removed orphaned `movement_support_low_gpd_per_capita`** (follow-up at user request). The factor was referenced by no movement (only the wired sibling `movement_support_high_pollution` survives) and carried a `gpd` typo. Removed the entity and its directly-tied live loc key `POP_LOW_GDP_PER_CAPITA` (`te_miscellaneous_l_english.yml:446`). Left `POP_LOW_GDP_PER_CAPITA_REL` in `te_unused_l_english.yml` untouched — the deliberate revival parking-lot, orphaned independently.
+
 ## Checked clean / non-findings
 
 - **Modifier validity** — all suspect modifier names across the slice (`state_pollution_reduction_health_mult`, `country_state_religion_wages_mult`, `country_loyalism_increases_full_acceptance_mult`, `political_movement_radicalism_from_enactment_disapproval_mult`, the colonial/legislative/cultural-pull/sol-expectations families, dynamic `_institution_<name>_mult` patterns, etc.) validate EXACT via `/modifier-search`.
@@ -23,7 +25,6 @@ Slice: 15 files / 2499 lines — `laws_and_politics` (14) + `scripted_effects_an
 
 - **`common/state_traits/te_harbor_traits.txt`** (untracked) — header `# temp, for cheaty game with friend`; deliberate personal content. Note: under `common/` it *will* rsync-deploy to the game. Left to the user.
 - **`assassinate_foreign`** (`extra_interactions.txt:59`, `# doesn't work D:`) — player-exposed but non-functional; dates to the **initial commit (2024-03-25)**, long-parked with explicit dev awareness. Treated like other dormant content; not filed as noise.
-- **`movement_support_low_gpd_per_capita`** (`extra_political_movement_pop_support.txt:9`) — `gpd` typo, but the factor is orphaned (referenced by no movement; loc lives in `te_unused_l_english.yml`). Dormant; cosmetic.
 
 ## Verify
 `POST /reload?mod_only=true&audits_only=true` → `status: reloaded`, `warnings: 0`.
