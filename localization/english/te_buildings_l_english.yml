@@ -91,7 +91,7 @@
  building_dassault_merignac_plant:0 "Dassault Merignac Plant"
  building_de_beers_sorting_office:0 "De Beers Sorting Office"
  building_de_beers_sorting_office_desc:0 "The De Beers diamond sorting and valuation office, controlling the global flow of rough diamonds from South African mines to world markets."
- building_deportee_mortality_mult:0 "Deportatee Mortality Multiplier"
+ building_deportee_mortality_mult:0 "Deportee Mortality Multiplier"
  building_deportee_mortality_mult_desc:0 "A percentage change to mortality among deportee laborers in this building"
  building_disney_world:0 "Disney World"
  building_dmc_mulhouse_mills:0 "DMC Mulhouse Thread Mills"
@@ -265,7 +265,7 @@
  building_ilva_bagnoli_steelworks:0 "ILVA Bagnoli Steelworks"
  building_imperial_arsenal_golden_horn:0 "Imperial Arsenal Golden Horn"
  building_imperial_tobacco_wills_factory:0 "Imperial Tobacco Wills Factory"
- building_industrial_mineral_salt_mine:0 "Industrial Mineral and Salt Mine
+ building_industrial_mineral_salt_mine:0 "Industrial Mineral and Salt Mine"
  building_industrial_mineral_salt_mine_throughput_add:0 "$building_industrial_mineral_salt_mine$ building [concept_throughput]"
  building_infosys_mysore_campus:0 "Infosys Mysore Campus"
  building_ingolstadt_power_station:0 "Ingolstadt Power Station"

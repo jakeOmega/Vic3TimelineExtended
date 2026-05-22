@@ -186,7 +186,7 @@
  WW_REARM_BUTTON:0 "Begin Rearmament"
  addiction_public_health_modifier_desc:0 "A public health approach to addiction has improved outcomes and reduced mortality."
  adopt_local_culture:0 "Adopt Local Culture"
- adopt_local_culture_desc:0 "Our state exists entire outside of the [Concept('concept_homeland', 'homelands')] of our primary culture. Perhaps it is time for the local culture to become our primary culture."
+ adopt_local_culture_desc:0 "Our state exists entirely outside of the [Concept('concept_homeland', 'homelands')] of our primary culture. Perhaps it is time for the local culture to become our primary culture."
  advanced_materials:0 "Advanced Materials"
  advanced_materials_armor:0 "Advanced Materials Armor"
  advanced_materials_armor_desc:0 "The use of advanced materials like Composite and Reactive Armor makes our military vehicles tougher. Hopefully, this will keep them from blowing up so easily."

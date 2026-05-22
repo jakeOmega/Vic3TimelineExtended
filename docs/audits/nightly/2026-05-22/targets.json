@@ -1,0 +1,206 @@
+{
+  "date": "2026-05-22",
+  "run_label": "2026-05-22",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "localization/english/te_laws_l_english.yml",
+      "line_range": null,
+      "lines": 345,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_power_blocs_l_english.yml",
+      "line_range": null,
+      "lines": 55,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_buildings_l_english.yml",
+      "line_range": null,
+      "lines": 556,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_ship_modifications_l_english.yml",
+      "line_range": null,
+      "lines": 237,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_formable_countries_l_english.yml",
+      "line_range": null,
+      "lines": 161,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_un_button_effects_l_english.yml",
+      "line_range": null,
+      "lines": 18,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_concepts_l_english.yml",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_diplomacy_l_english.yml",
+      "line_range": null,
+      "lines": 112,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/agricultural_diffusion_events.txt",
+      "line_range": null,
+      "lines": 234,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/replace/timeline_extended_override_l_english.yml",
+      "line_range": null,
+      "lines": 69,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_power_bloc_unlocks_l_english.yml",
+      "line_range": null,
+      "lines": 93,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entry_groups/timeline_extended_je_groups.txt",
+      "line_range": null,
+      "lines": 11,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/static_modifiers/te_map_mode_modifiers.txt",
+      "line_range": null,
+      "lines": 7,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/modified_political_movements.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-21",
+      "audit_count": 2,
+      "recent_findings": 0
+    }
+  ]
+}

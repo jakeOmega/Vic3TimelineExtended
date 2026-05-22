@@ -192,8 +192,8 @@
       "recent_findings": 1
     },
     "common/ideologies/manual_update_ideologies.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/institutions/_institutions.info": {
@@ -411,8 +411,8 @@
       "recent_findings": 0
     },
     "common/political_movements/modified_political_movements.txt": {
-      "last_audited": "2026-05-21",
-      "audit_count": 2,
+      "last_audited": "2026-05-22",
+      "audit_count": 3,
       "recent_findings": 0
     },
     "common/power_bloc_identities/_power_bloc_identities.info": {
@@ -1068,6 +1068,77 @@
     "common/character_traits/extra_character_traits.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "localization/english/te_laws_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 3
+    },
+    "localization/english/te_power_blocs_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/te_buildings_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 2
+    },
+    "localization/english/te_ship_modifications_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/te_formable_countries_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/te_un_button_effects_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "localization/english/te_concepts_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "localization/english/te_diplomacy_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "events/agricultural_diffusion_events.txt": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/replace/timeline_extended_override_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/te_power_bloc_unlocks_l_english.yml": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/journal_entry_groups/timeline_extended_je_groups.txt": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/static_modifiers/te_map_mode_modifiers.txt": {
+      "last_audited": "2026-05-22",
+      "audit_count": 1,
       "recent_findings": 0
     }
   }

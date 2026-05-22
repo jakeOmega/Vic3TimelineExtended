@@ -44,7 +44,7 @@
  diplomatic_alignment_action_notification_name:0 "Diplomatic Alignment"
  diplomatic_alignment_action_propose_name:0 "Diplomatic Alignment"
  diplomatic_alignment_desc:0 "Diplomatic Alignment is a [concept_diplomatic_action] that allows a country to influence the foreign policy of another country."
- diplomatic_alignment_pact_desc:0 "Aligns [TARGET_COUNTRY.GetName] is aligning foreign policy with [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ diplomatic_alignment_pact_desc:0 "[TARGET_COUNTRY.GetName] is aligning its foreign policy with [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  diplomatic_overture_modifier:0 "Diplomatic Overture"
  diplomatic_overture_modifier_desc:0 "Our diplomats are pursuing negotiations and diplomatic engagement to resolve international tensions."
  diplomatic_overture_rebuffed_modifier:0 "Diplomatic Overture Rebuffed"
