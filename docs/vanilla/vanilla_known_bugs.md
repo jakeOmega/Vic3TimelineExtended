@@ -418,6 +418,48 @@ is_immortal trigger [ Wrong scope for trigger: none, expected character ]
 
 Iberian regency event references `scope:ig_candidate_1` without ensuring the saved scope was established earlier in the chain. Cascades into multiple wrong-scope effects/triggers downstream — same shape as `movement_events.txt:815` and `agitators_law_events.txt:921`. One root cause, five log lines.
 
+### `common/scripted_triggers/00_ip4_victoria_scripted_triggers.txt` — `owner` trigger called in `amendment_type` scope
+
+```
+owner trigger [ Wrong scope for trigger: amendment_type, expected country, building, character, new_combat_unit, company, decree, institution, interest_marker, interest_group, journal_entry, law, market
+```
+
+Iberia DLC (IP4) scripted trigger calls `owner` while scoped to an `amendment_type`, which the trigger doesn't support. Vanilla bug. Skip.
+
+### `common/scripted_triggers/ip4_negotiation_triggers.txt:156` — `any_interest_group` in `law` scope
+
+```
+any_interest_group trigger [ Wrong scope for trigger: law, expected country ]
+```
+
+Vanilla IP4 negotiation trigger iterates `any_interest_group` from a `law` scope (expected country). Also surfaces via `common/scripted_effects/04_neg_event_options_scripted_effects.txt` and `events/iberia_events/negotiation_events.txt:267` in the call chain, plus a sibling `owner trigger [ Wrong scope for trigger: amendment_type ]` (same root family as the `00_ip4_victoria_scripted_triggers.txt` entry above). Vanilla bug. Skip.
+
+### `common/scripted_effects/00_expedition_effects.txt:3` — `unassign_from_formation` on a commander not in a formation
+
+```
+unassign_from_formation effect [ Scope commander is not assigned to a formation ]
+```
+
+Vanilla `set_as_expedition_leader` calls `unassign_from_formation = yes` on a character who isn't currently assigned to a formation. Fires when an expedition leader is picked from a non-mobilized commander (e.g. `west_america_expedition_events.txt`). Harmless — the unassign is a no-op. Vanilla bug. Skip.
+
+### `events/ig_revolutions.txt:289` — `join_revolution` with no growing revolution
+
+```
+join_revolution effect [ InterestGroup's country doesn't have a valid growing revolution ]
+```
+
+Vanilla revolution event calls `join_revolution` on an IG whose country has no growing revolution at the time the effect resolves (the precondition lapsed between event fire and option). Vanilla bug — the effect should be guarded but isn't. Skip.
+
+### `common/naval_mission_types/00_naval_mission_types.txt:97` — `source_country` read on a non-directed treaty article
+
+```
+Can only get source_country of directed articles. cultural_exchange_program is not directed
+Event target link 'source_country' returned an unset scope
+Invalid left side during comparison 'source_country'
+```
+
+Vanilla naval-mission logic at `:97` calls `source_country` on a treaty article unconditionally, but `source_country` is only valid on *directed* articles. The error names the mod's mutual article `cultural_exchange_program` (`common/treaty_articles/108_cultural_exchange.txt`) because that's what's in scope when a country with that article active evaluates the mission — but the unsafe assumption is in **vanilla** code (vanilla mutual articles like defensive pacts trip it identically). The mod article correctly uses `kind = mutual`; making it directed would be wrong. Three log lines, one vanilla root cause. Register-and-skip; cannot be fixed mod-side.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -844,6 +886,62 @@ common/diplomatic_actions/28_invite_to_power_bloc.txt:87
 ```
 
 Vanilla diplomatic action's `accept_score` block evaluates against an unset target during AI consideration and the engine emits "Value of wrong type … Got value of type 'none'". Fires hundreds of times per session as the AI evaluates power-bloc invites. Cosmetic — diplomatic AI behavior is unaffected.
+
+### `navy_ai.cpp:3585` — no naval mission type possible for a country
+- source: `navy_ai.cpp:3585`
+
+```
+No naval mission type possible for
+```
+
+Engine naval-AI complains that a country (commonly Great Britain) has zero currently-eligible naval missions — every mission's `possible`/`potential` triggers fail simultaneously for that AI's situation. Vanilla naval-AI noise, no script path. Cosmetic.
+
+### `pdx_assert.cpp:637` — "dead Formation" exile/loiter/reposition asserts
+- source: `pdx_assert.cpp:637`
+
+```
+dead Formation
+```
+
+Engine assertions fired when formation bookkeeping (exile-status update, `loiter`, reposition) targets a formation that has already died (e.g. `Trying to update exile status for dead Formation '15th Prussian Army'`, `Trying to make dead Formation '6th Sicilian Army' loiter`, `Trying to reposition a dead formation`). Distinct from the `Trying to reposition an invalid formation` assert above; signature `dead Formation` disambiguates. Cosmetic.
+
+### `building_manager.cpp:1575` — building level reduced to fit support cap
+- source: `building_manager.cpp:1575`
+
+```
+and can only support
+```
+
+Engine reports that a state has more levels of a building type than the state can support (e.g. `Building in Natalia has 10 of building type Barracks and can only support 5, its level will be reduced`) and auto-downsizes. Normal vanilla rebalancing, not an error. Cosmetic.
+
+### `pdx_data_callstack.cpp:52` — vanilla GUI `interest_group_top` animation on missing widget
+- source: `pdx_data_callstack.cpp:52`
+
+```
+FindChild('interest_group_top')
+```
+
+Vanilla GUI script calls `FindChild('interest_group_top').TriggerAnimation('show')` on a panel where that child widget isn't present in the current layout, so `FindChild` returns null. Not a mod widget (`interest_group_top` is absent from the mod's `gui/`). Cosmetic; the animation is simply skipped.
+
+### `pdx_data_callstack.cpp:52` — vanilla power-bloc participant accessors return null
+- source: `pdx_data_callstack.cpp:52`
+
+```
+GetParticipantWithLowestLeaderRelations
+GetParticipantWithHighestLibertyDesire
+```
+
+Vanilla power-bloc UI loc reads `GetPowerBloc.GetParticipantWith{LowestLeaderRelations,HighestLibertyDesire}.GetName`, but the participant promote returns null when the bloc has no qualifying member (e.g. a single-member bloc, or none meeting the relation/liberty-desire criterion). Same `pdx_data_callstack.cpp:52` source as the `interest_group_top` entry; the two `GetParticipant*` signatures disambiguate. Cosmetic.
+
+### `pdx_data_factory.cpp:1466`/`:1092` — vanilla `relevant_ig` custom-loc `GetFullName`
+- source: `pdx_data_factory.cpp:1466`
+- source: `pdx_data_factory.cpp:1092`
+
+```
+gsInterestGroup('relevant_ig').GetFullName
+```
+
+Vanilla custom-loc reads `SCOPE.gsInterestGroup('relevant_ig').GetFullName` where the `relevant_ig` data-system function isn't registered in the rendering context, emitting "Could not find data system function 'GetFullName'" (`:1466`) and the companion "Failed converting statement" (`:1092`). Not a mod loc (`relevant_ig` is absent from the mod's `gui/`, `common/`, `events/`). One vanilla root cause, two cpp emit points. Cosmetic.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
