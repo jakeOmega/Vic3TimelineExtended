@@ -8,7 +8,7 @@ Reference for all Python utility scripts and the background data server.
 
 ## Auto-run on server reload
 
-`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 10 file-rewriting generators) and `POST_LOAD_AUDITS` (the 7 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
+`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 10 file-rewriting generators) and `POST_LOAD_AUDITS` (the 9 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
 
 **Audit warnings**: when a generator's return dict contains `unreviewed > 0` or `hard_fails > 0`, the runner logs `[post-load WARN] <label> surfaced issues: <key>=<n>` at WARNING level and adds an entry to the `/reload` response's `warnings` array — caller sees regressions in the same response, no log-scraping required. Add new actionable counter names to `_POST_LOAD_WARN_KEYS` in `mod_state_server.py` if a new audit invents one.
 
@@ -28,6 +28,8 @@ Reference for all Python utility scripts and the background data server.
 | `kill_character_audit` | `docs/engine/kill_character_audit.md` |
 | `loc_coverage_audit` | `docs/engine/loc_coverage_report.md` |
 | `mod_structure_audit` | `docs/engine/mod_structure_report.md` — flags brace-balance failures, silent-INJECT failures (INJECTs targeting mod-only or REPLACEd entities), and within-namespace top-level collisions. Subdirs that merge by design (`on_actions/`, `defines/`, `history/`) are excluded from collision detection. |
+| `loc_render_audit` | `docs/engine/loc_render_report.md` — flags bracket-style formatting tags (`[b]`, `[/i]`, …) in loc values. Vic3 has no such tags; the engine treats `[b]` as a failing data-system-function and floods the log, causing in-game lag. (An `#…#!` balance check was scoped out — 2341 vanilla false positives; Vic3 splits formatting across concatenated loc fragments.) |
+| `any_limit_audit` | `docs/engine/any_limit_report.md` — flags `limit = { }` placed as an immediate child of an `any_*` counting trigger (silently ignored by the engine → meaning flip). Discriminates correctly: a `limit` inside a nested `every_*`/`trigger_if` within the `any_*` is legitimate and not flagged. |
 | `gen_event_inventory` | `docs/engine/event_image_inventory.md` |
 
 **Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).
