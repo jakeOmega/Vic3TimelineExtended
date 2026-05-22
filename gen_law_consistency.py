@@ -23,6 +23,16 @@ Replacement-candidate ordering when active law L is invalid:
         distance = sum |a_L[i] − a_C[i]|).
     3. Final tiebreak: file/source order.
 
+Each candidate is emitted with a validity guard (`limit = { ... }`) that must
+hold for the `activate_law` to fire: its own `unlocking_laws`/`disallowing_laws`
+are satisfied, any variant gate matches, AND every `unlocking_technologies` tech
+is researched. The tech check is essential because `activate_law` ignores a
+law's `unlocking_technologies` — without it the walk could drop a country into a
+law it could never enact. A candidate with none of these (constraint-free,
+non-variant, tech-free) is the cascade's unconditional terminal fallback; groups
+lacking such a law get a generation-time WARNING (their cascade may leave a
+violation unresolved until the relevant tech is researched).
+
 Output: common/scripted_effects/extra_law_consistency_generated.txt
 Auto-runs via mod_state_server `_run_post_load_generators`.
 
@@ -283,9 +293,34 @@ def _law_id_list(v):
     return []
 
 
+def _id_list(v):
+    """Extract a flat list of identifiers from a `{ a b c }`-style block.
+
+    Like `_law_id_list` but accepts any identifier (e.g. technology names in an
+    `unlocking_technologies` block), not just `law_*`.
+    """
+    v = _string_value(v)
+    if v is None:
+        return []
+    if isinstance(v, str):
+        return [v]
+    if isinstance(v, list):
+        out = []
+        for item in v:
+            item = _string_value(item)
+            if isinstance(item, str):
+                out.append(item)
+            elif isinstance(item, dict):
+                out.extend(k for k in item if isinstance(k, str))
+        return out
+    if isinstance(v, dict):
+        return [k for k in v if isinstance(k, str)]
+    return []
+
+
 def parse_laws():
     """Return dict: law_id -> {group, progressiveness, unlocking_laws,
-    disallowing_laws, file_order}.
+    disallowing_laws, unlocking_technologies, file_order}.
 
     File order: integer rank in the order laws are first encountered across
     vanilla files (alphabetical) then mod files (alphabetical). Used as the
@@ -352,6 +387,7 @@ def parse_laws():
             "progressiveness": progressiveness,
             "unlocking_laws": unlocking,
             "disallowing_laws": _law_id_list(body.get("disallowing_laws")),
+            "unlocking_technologies": _id_list(body.get("unlocking_technologies")),
             "parent": parent,
             "file_order": file_order.get(law_id, 1_000_000),
         }
@@ -513,7 +549,8 @@ def _validity_clause(law_id, law, indent):
 
     Uses an AND-by-default `limit = { ... }`-style block. Returns the inner
     lines (without the surrounding `limit = { ... }`). Empty string means the
-    law has no constraints and is unconditionally valid.
+    law has no constraints, no variant gate, and no unlocking_technologies — it
+    is unconditionally valid and serves as the cascade's terminal fallback.
 
     For variants with an entry in VARIANT_CANDIDATE_GATES, the gate clauses
     are prepended so the candidate only fires for the country/condition the
@@ -534,6 +571,11 @@ def _validity_clause(law_id, law, indent):
             f"{indent}\thas_law = law_type:{lid}" for lid in law["disallowing_laws"]
         )
         lines.append(f"{indent}NOR = {{\n{body}\n{indent}}}")
+    # activate_law ignores a law's unlocking_technologies, so the consistency
+    # walk must check them itself or it can drop a country into a law it could
+    # never enact. Multiple techs are an AND gate (AND-by-default limit block).
+    for tech in law.get("unlocking_technologies", []):
+        lines.append(f"{indent}has_technology_researched = {tech}")
     return "\n".join(lines)
 
 
@@ -639,6 +681,33 @@ def build_output(laws, attitudes):
         # If this prints, vanilla added a new variant; add it to VARIANT_CANDIDATE_GATES.
         print(
             f"WARNING: {len(skipped)} variant laws have parent= but no entry in VARIANT_CANDIDATE_GATES (excluded from candidates): {skipped}",
+            file=sys.stderr,
+        )
+
+    # A cascade is only guaranteed to resolve a violation if its group contains
+    # at least one law that is a valid candidate under every condition: no
+    # unlocking_laws, no disallowing_laws, not a tag-restricted variant, and no
+    # unlocking_technologies. Tech gating (added because activate_law ignores
+    # unlocking_technologies) means a tech-gated constraint-free law is no longer
+    # an unconditional terminal. Warn for any group lacking such a fallback — its
+    # cascade may leave a violating law in place until the relevant tech is
+    # researched (benign: re-checked on monthly pulse / on_law_activated).
+    def _has_unconditional_fallback(group_id):
+        for lid in grouped.get(group_id, []):
+            law = laws[lid]
+            if (not law["unlocking_laws"]
+                    and not law["disallowing_laws"]
+                    and not law.get("parent")
+                    and not law.get("unlocking_technologies")):
+                return True
+        return False
+
+    no_fallback = [g for g in ordered_groups if not _has_unconditional_fallback(g)]
+    if no_fallback:
+        print(
+            f"WARNING: {len(no_fallback)} constrained lawgroups have no tech-free, "
+            f"constraint-free fallback law; their consistency cascade may not resolve "
+            f"a violation until the relevant tech is researched: {no_fallback}",
             file=sys.stderr,
         )
 
