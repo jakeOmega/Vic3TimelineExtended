@@ -192,8 +192,8 @@
       "recent_findings": 1
     },
     "common/ideologies/manual_update_ideologies.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/institutions/_institutions.info": {
@@ -979,6 +979,88 @@
       "recent_findings": 1
     },
     "common/laws/movement_attraction_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/character_traits/combined_arms_traits.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1
+    },
+    "common/laws/extra_laws.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/parties/technocratic_party.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/political_movement_pop_support/extra_political_movement_pop_support.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1
+    },
+    "common/character_traits/ruler_aptitude_traits.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          895
+        ]
+      ]
+    },
+    "common/laws/colonial_empire_law_injections.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/laws/legislative_override_capacity.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/state_traits/te_harbor_traits.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1
+    },
+    "common/laws/sol_expectations_vanilla_injections.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/laws/construction_system_law_injections.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/interest_group_traits/custom_religion_traits.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/interest_group_traits/sol_expectations_vanilla_injections.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/laws/modified_health_system.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/character_traits/extra_character_traits.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
       "recent_findings": 0

@@ -1,0 +1,206 @@
+{
+  "date": "2026-05-21",
+  "run_label": "2026-05-21-v2",
+  "total_lines": 2495,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/character_traits/combined_arms_traits.txt",
+      "line_range": null,
+      "lines": 196,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/laws/extra_laws.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/parties/technocratic_party.txt",
+      "line_range": null,
+      "lines": 266,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movement_pop_support/extra_political_movement_pop_support.txt",
+      "line_range": null,
+      "lines": 11,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/character_traits/ruler_aptitude_traits.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/laws/colonial_empire_law_injections.txt",
+      "line_range": null,
+      "lines": 148,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/laws/legislative_override_capacity.txt",
+      "line_range": null,
+      "lines": 283,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/state_traits/te_harbor_traits.txt",
+      "line_range": null,
+      "lines": 13,
+      "area": "scripted_effects_and_triggers",
+      "docs": [],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/laws/sol_expectations_vanilla_injections.txt",
+      "line_range": null,
+      "lines": 97,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/laws/construction_system_law_injections.txt",
+      "line_range": null,
+      "lines": 60,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/interest_group_traits/custom_religion_traits.txt",
+      "line_range": null,
+      "lines": 162,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/interest_group_traits/sol_expectations_vanilla_injections.txt",
+      "line_range": null,
+      "lines": 13,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/laws/modified_health_system.txt",
+      "line_range": null,
+      "lines": 18,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/character_traits/extra_character_traits.txt",
+      "line_range": null,
+      "lines": 27,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  ]
+}
