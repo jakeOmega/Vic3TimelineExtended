@@ -14,11 +14,40 @@
 #   - events/irredentism_events.txt
 # ============================================================================
 
+# State scope, references ROOT (the unifier). The concrete object Options A/C
+# and the wargoal act on: a state that is a homeland of one of ROOT's primary
+# cultures, claimed by ROOT, AND still actually inhabited by co-ethnic pops.
+# The pop check is what stops pure map-flag homelands (a "homeland" state with
+# no living co-ethnics) from generating diaspora/reunification hooks.
+irr_claimed_populated_home_state = {
+	is_homeland_of_country_cultures = ROOT
+	has_claim_by = ROOT
+	any_scope_pop = {
+		culture = { is_primary_culture_of = ROOT }
+	}
+}
+
+# Target scope, references ROOT (the unifier). Reachability gate: a union is
+# only feasible if the two nations share a land border OR both touch the sea
+# (sea-linkable by convoy). Filters out distant, landlocked, non-adjacent
+# targets that make unification nonsensical.
+irr_target_reachable = {
+	OR = {
+		is_adjacent_to_country = ROOT
+		AND = {
+			any_scope_state = { is_coastal = yes }
+			ROOT = { any_scope_state = { is_coastal = yes } }
+		}
+	}
+}
+
 # Country scope, takes scope:target_country.
 # Returns true when ROOT and scope:target_country are in principle a candidate
 # pair for irredentist pressure: tech unlocked, share at least one primary
-# culture, ROOT holds a claim on at least one home-culture state of target,
-# and neither side is in a subject relationship that would block direct action.
+# culture, ROOT holds a claim on at least one home-culture state of target
+# that is still populated by co-ethnics, the target is reachable (land border
+# or shared sea access), and neither side is in a subject relationship that
+# would block direct action.
 #
 # Bloc compatibility is intentionally NOT filtered here -- path-specific gates
 # (`irredentist_bloc_check_war` / `_peace`) and the engine-level Defensive
@@ -36,13 +65,14 @@ is_irredentist_candidate_for = {
 		is_primary_culture_of = scope:target_country
 	}
 
-	# At least one of target's owned states is homeland of ROOT's primary
-	# culture and is claimed by ROOT.
+	# At least one of target's owned states is a homeland of ROOT's primary
+	# culture, claimed by ROOT, and still populated by co-ethnics -- and the
+	# target must be reachable (land border or shared sea access).
 	scope:target_country = {
 		any_scope_state = {
-			is_homeland_of_country_cultures = ROOT
-			has_claim_by = ROOT
+			irr_claimed_populated_home_state = yes
 		}
+		irr_target_reachable = yes
 	}
 
 	# Avoid degenerate same-country / shared-subject cases.

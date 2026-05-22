@@ -47,7 +47,8 @@ irredentism.1 = {
 		has_technology_researched = decolonization
 		irredentist_unifier_can_act = yes
 		NOT = { is_country_type = decentralized }
-		# At least one valid candidate exists.
+		# At least one valid candidate exists: shares a primary culture, owns a
+		# claimed home state still populated by our co-ethnics, and is reachable.
 		any_country = {
 			NOT = { THIS = ROOT }
 			NOT = { is_country_type = decentralized }
@@ -55,15 +56,16 @@ irredentism.1 = {
 				any_primary_culture = { is_primary_culture_of = PREV }
 			}
 			any_scope_state = {
-				is_homeland_of_country_cultures = ROOT
-				has_claim_by = ROOT
+				irr_claimed_populated_home_state = yes
 			}
+			irr_target_reachable = yes
 		}
 	}
 
 	immediate = {
 		save_scope_as = irr_unifier
-		# Pick a same-culture, claim-holding candidate.
+		# Pick a same-culture, claim-holding, reachable candidate whose claimed
+		# home state still holds our co-ethnics (mirrors the trigger gate above).
 		random_country = {
 			limit = {
 				NOT = { THIS = ROOT }
@@ -72,18 +74,26 @@ irredentism.1 = {
 					any_primary_culture = { is_primary_culture_of = PREV }
 				}
 				any_scope_state = {
-					is_homeland_of_country_cultures = ROOT
-					has_claim_by = ROOT
+					irr_claimed_populated_home_state = yes
 				}
+				irr_target_reachable = yes
 			}
 			save_scope_as = target_country
 		}
-		# Pick the specific state we'd demand back if the player picks option C.
+		# Save the specific culture shared with the target -- the diaspora the
+		# event text refers to. random_primary_culture so the rendered culture is
+		# always one that actually drove the match (a multi-culture unifier may
+		# share only one of its primaries with the target).
+		random_primary_culture = {
+			limit = { is_primary_culture_of = scope:target_country }
+			save_scope_as = irr_shared_culture
+		}
+		# Pick the specific state we'd demand back if the player picks option C --
+		# a claimed home state still populated by our co-ethnics.
 		scope:target_country = {
 			random_scope_state = {
 				limit = {
-					is_homeland_of_country_cultures = ROOT
-					has_claim_by = ROOT
+					irr_claimed_populated_home_state = yes
 				}
 				save_scope_as = irr_demanded_state
 			}
