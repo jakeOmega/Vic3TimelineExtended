@@ -211,6 +211,10 @@ forced_law_through_event_enactment_large = {
 forced_law_through_event_consequences_small = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	interest_group_in_opposition_approval_add = -1
+	# Penalty-on-use: forcing a law temporarily depletes override capacity. Applied via the
+	# event's 5-year is_decaying add_modifier, so the residual erodes linearly back to 0 and the
+	# raw-float gates re-open gradually. Headroom above a gate buffers this — see extra_script_values.txt.
+	country_legislative_override_capacity_add = -1
 }
 
 forced_law_through_event_consequences_medium = {
@@ -219,6 +223,7 @@ forced_law_through_event_consequences_medium = {
 	country_legitimacy_base_add = -5
 	political_movement_radicalism_from_enactment_disapproval_mult = 0.25
 	political_movement_pop_attraction_mult = 0.10
+	country_legislative_override_capacity_add = -2
 }
 
 forced_law_through_event_consequences_large = {
@@ -229,6 +234,7 @@ forced_law_through_event_consequences_large = {
 	political_movement_radicalism_from_enactment_disapproval_mult = 0.50
 	political_movement_pop_attraction_mult = 0.20
 	political_movement_radicalism_add = 1
+	country_legislative_override_capacity_add = -3
 }
 
 nuclear_power = {

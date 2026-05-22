@@ -192,3 +192,92 @@ INJECT:law_collectivized_agriculture = {
 		country_legislative_override_capacity_add = 2
 	}
 }
+
+# Governance Principles (form of government) — a secondary axis to distribution_of_power: how much
+# the executive form itself eases bypassing procedure. Small (±1) so it stacks sensibly on top of
+# the distribution-of-power values rather than blowing past the event gates.
+INJECT:law_monarchy = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_theocracy = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_corporate_state = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_presidential_republic = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_parliamentary_republic = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_council_republic = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_chiefdom = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+# Policing — coercive enforcement capacity. Scaled modestly (fractional) so it nudges rather than
+# dominates; militarized policing is the only whole point here.
+INJECT:law_no_police = {
+	modifier = {
+		country_legislative_override_capacity_add = -0.5
+	}
+}
+
+INJECT:law_dedicated_police = {
+	modifier = {
+		country_legislative_override_capacity_add = 0.5
+	}
+}
+
+INJECT:law_militarized_police = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+# Internal Security — national_guard is a domestic reserve force, deliberately weaker than the
+# secret_police/shinsengumi (+1) political-control apparatus. law_no_home_affairs is left at 0:
+# the mere absence of a ministry is a neutral baseline, not an active constraint (law_guaranteed_liberties
+# at -2 stays the only negative here — active liberty protection).
+INJECT:law_national_guard = {
+	modifier = {
+		country_legislative_override_capacity_add = 0.5
+	}
+}
+
+# Bureaucracy — entrenched/dispersed selection methods constrain the current ruler and resist
+# override; only law_appointed_bureaucrats (+1, the ruler's own appointees) centralizes.
+INJECT:law_hereditary_bureaucrats = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
+INJECT:law_crownland_diets = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}

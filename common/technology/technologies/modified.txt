@@ -80,7 +80,7 @@ INJECT:investment_banks = {
 INJECT:mass_surveillance = {
 	modifier = {
 		country_mass_surveillance_pb_principles_bool = yes
-		country_mass_surveillance_pb_principles_bool = yes
+		country_legislative_override_capacity_add = 1
 	}
 }
 

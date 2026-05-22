@@ -343,8 +343,8 @@ automated_surveillance = {
 		country_institution_home_affairs_max_investment_add = 1
 		country_institution_police_max_investment_add = 1
 		country_auto_surveillance_pb_principles_bool = yes
-		country_auto_surveillance_pb_principles_bool = yes
 		character_coup_strength_mult = -0.10
+		country_legislative_override_capacity_add = 1
 	}
 
 	ai_weight = {
@@ -640,6 +640,7 @@ cybersecurity = {
 		country_voting_power_mult = 0.1
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.05
+		country_legislative_override_capacity_add = -1
 	}
 
 	ai_weight = {

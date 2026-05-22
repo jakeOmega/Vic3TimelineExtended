@@ -318,6 +318,8 @@ Invoke-RestMethod http://localhost:8950/status
 | `?mod_only=true` | ~25 s | regenerator output (as above) | the vanilla parse + vanilla loc re-read (uses cached snapshot from the previous full load) + the engine-docs / dev-refs reload | When you've only edited mod files and want a quick reload. Vanilla cache is opt-in — if you bump vanilla, run an unflagged `/reload` to refresh it. |
 | `?mod_only=true&audits_only=true` | ~25 s | audit reports under `docs/engine/*_report.md` only | both regenerators *and* the vanilla re-read | **The fast-verify path used by the nightly audit.** Safe to call after every batch of fixes. |
 
+> **Caveat — editing modifier-type schemas:** if your edit changed a `decimals` / `percent` / `script_only` field in `common/modifier_type_definitions/`, the fast paths above do **not** rebuild the modifier-decimals registry that `modifier_visibility_audit` reads (`_union_mod_modifier_types`). It keeps the pre-edit value and emits false "displays as +0" flags. Restart the server (`mod_state_server.py --replace`) or run an unflagged full `/reload` to refresh it. (A plain re-launch without `--replace` is refused while the old PID is alive.)
+
 #### `/raw/<EntityType>[/<id>]` Response Shape
 
 The path takes a **display type name** (URL-encoded with `%20`, e.g. `/raw/Ship%20Types/ship_type_nuclear_submarine`, `/raw/Ship%20Modifications/ship_mod_*`) — not the Python class name. `/entity-types` lists the valid values; `/raw/<unknown>` returns `{"error": "Not found: '<X>'"}`.

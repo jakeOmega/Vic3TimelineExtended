@@ -116,6 +116,7 @@ institution_ministry_of_propaganda = {
 		country_support_separatism_strength_mult = 0.05
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.05
 		country_colonial_stability_drift_add = 0.05
+		country_legislative_override_capacity_add = 0.2
 	}
 }
 
@@ -137,6 +138,7 @@ institution_ministry_of_thought_control = {
 		country_monthly_loyalists_add = 0.001
 		country_colonial_stability_drift_add = 0.1
 		country_electoral_confidence_impact_mult = -0.1
+		country_legislative_override_capacity_add = 0.4
 	}
 }
 
@@ -200,5 +202,6 @@ institution_migration_controls = {
 INJECT:institution_police = {
 	modifier = {
 		country_colonial_garrison_effectiveness_add = 0.05
+		country_legislative_override_capacity_add = 0.1
 	}
 }

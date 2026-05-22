@@ -23,10 +23,26 @@ adjusted_produced_authority = {
 }
 
 forced_law_through_event_capacity_discount = {
-	# Diminishing returns: capacity ≤ 4 = full cost, capacity ≥ 5 = 4/capacity
-	# (e.g., +5 → 0.80, +6 → 0.67, +8 → 0.50, +16 → 0.25). Approaches 0 but never reaches it.
+	# Authority-cost multiplier on forcing a law, scaled by override capacity. Two segments:
+	#   capacity 2–4 → modest relief  1 - 0.03*(cap-1)  (cap2=0.97, cap3=0.94, cap4=0.91) — the
+	#       penalty-buffer (extra_modifiers.txt) and tier access are the main reward for these points.
+	#   capacity ≥5 → deep discount  4/capacity  (cap5=0.80, cap8=0.50, cap16=0.25) — approaches 0,
+	#       never reaches it. The drop at 4→5 rewards crossing into deep-override territory.
+	# Reads the RAW float sum — no floor/round, so fractional institution sources and the decaying
+	# penalty both count proportionally.
 	value = 1
 	if = {
+		limit = {
+			"modifier:country_legislative_override_capacity_add" >= 2
+			"modifier:country_legislative_override_capacity_add" < 5
+		}
+		subtract = {
+			value = modifier:country_legislative_override_capacity_add
+			subtract = 1
+			multiply = 0.03
+		}
+	}
+	else_if = {
 		limit = { "modifier:country_legislative_override_capacity_add" >= 5 }
 		multiply = 4
 		divide = {

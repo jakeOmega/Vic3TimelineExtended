@@ -3339,9 +3339,8 @@ country_monthly_loyalists_add = {
 country_legislative_override_capacity_add = {
 	color = neutral
 	percent = no
-	decimals = 0
+	decimals = 1
 	game_data = { ai_value = 50 }
-	script_only = yes
 }
 
 state_infrastructure_from_aeroplanes_consumption_add = {

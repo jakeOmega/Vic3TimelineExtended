@@ -8,7 +8,7 @@ REPLACE:principle_food_standardization_2 = {
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_food_industry_throughput_add = 0.1
 	}
-	
+
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
 	}
@@ -48,5 +48,20 @@ INJECT:principle_external_trade_3 = {
 	member_modifier = {
 		country_influence_add = 100
 		goods_input_merchant_marine_mult = -0.25
+	}
+}
+
+# Creative Legislature is the dedicated "ease law enactment" principle group — the natural home for
+# bloc-wide legislative override capacity. Tiers restate cumulatively, so the value is the total at
+# that tier (tiers 4/5 carry +3/+4 inline in extra_power_bloc_principles.txt).
+INJECT:principle_creative_legislature_2 = {
+	member_modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:principle_creative_legislature_3 = {
+	member_modifier = {
+		country_legislative_override_capacity_add = 2
 	}
 }

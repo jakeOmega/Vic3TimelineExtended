@@ -719,6 +719,7 @@ principle_police_coordination_5 = {
 		country_disallow_law_no_police_bool = yes
 		country_suppression_cost_mult = -0.5
 		country_leader_has_law_enactment_success_mult = 0.05
+		country_legislative_override_capacity_add = 1
 	}
 
 	leader_modifier = {
@@ -1087,6 +1088,7 @@ principle_creative_legislature_4 = {
 		country_legitimacy_base_add = 10
 		country_lobby_leverage_generation_mult = 0.1
 		country_leader_has_law_enactment_success_mult = 0.05
+		country_legislative_override_capacity_add = 3
 	}
 
 	ai_weight = {
@@ -1113,6 +1115,7 @@ principle_creative_legislature_5 = {
 		country_lobby_leverage_generation_mult = 0.2
 		country_opposition_ig_approval_add = 2
 		country_leader_has_law_enactment_success_mult = 0.1
+		country_legislative_override_capacity_add = 4
 	}
 
 	ai_weight = {
@@ -1556,6 +1559,7 @@ principle_ideological_truth_5 = {
 		country_enactment_success_chance_law_ministry_of_propaganda_add = 0.2
 		country_institution_cost_institution_ministry_of_propaganda_mult = -0.5
 		country_leader_has_law_enactment_success_mult = 0.2
+		country_legislative_override_capacity_add = 1
 	}
 
 	institution = institution_ministry_of_propaganda
