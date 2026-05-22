@@ -391,5 +391,130 @@ class ModifierGrantLookupTests(unittest.TestCase):
         self.assertTrue(r["truncated"])
 
 
+# ---------------------------------------------------------------------------
+# #131 — Principles / Amendments registration + structured endpoints
+# ---------------------------------------------------------------------------
+class PrinciplesAmendmentsRegistryTests(unittest.TestCase):
+    def test_registered_in_both_path_dicts(self):
+        for et, sub in (
+            ("Principles", "power_bloc_principles"),
+            ("Principle Groups", "power_bloc_principle_groups"),
+            ("Amendments", "amendments"),
+        ):
+            self.assertIn(et, mss.base_game_paths)
+            self.assertIn(et, mss.mod_paths)
+            self.assertTrue(mss.base_game_paths[et].endswith(sub))
+            self.assertTrue(mss.mod_paths[et].endswith(sub))
+
+    @unittest.skipUnless(_server_up(), "mod_state_server not running")
+    def test_principle_detail_has_modifier_blocks(self):
+        d = _get("/principles/principle_food_standardization_2")
+        self.assertEqual(d["type"], "Principles")
+        self.assertIn("modifier_blocks", d)
+        blocks = {b["block"] for b in d["modifier_blocks"]}
+        self.assertIn("member_modifier", blocks)
+        self.assertIn("group_levels", d)  # reverse-looked-up from Principle Groups
+
+    @unittest.skipUnless(_server_up(), "mod_state_server not running")
+    def test_amendment_detail_resolves_parent_and_modifiers(self):
+        d = _get("/amendments/amendment_geheime_staatskonferenz_metternich")
+        self.assertEqual(d["parent"]["id"], "law_autocracy")
+        self.assertIn("country_legitimacy_base_add", d["modifiers"])
+        self.assertEqual(d["allowed_laws"][0]["id"], "law_autocracy")
+
+
+# ---------------------------------------------------------------------------
+# #132 — scripted-effects / scripted-triggers caller index
+# ---------------------------------------------------------------------------
+class ScriptedHelperEndpointTests(unittest.TestCase):
+    def test_extract_parameters_finds_placeholders(self):
+        raw = ("=", {"add_modifier": ("=", {"name": ("=", "$GOOD$_mod")}),
+                     "x_$RANK$_add": ("=", "$RANK$")})
+        self.assertEqual(mss._extract_parameters(raw), ["GOOD", "RANK"])
+
+    def test_caller_type_classification(self):
+        self.assertEqual(mss._caller_type("events/foo_events.txt"), "Events")
+        self.assertEqual(
+            mss._caller_type("common/scripted_effects/x.txt"), "Scripted Effects")
+        self.assertEqual(
+            mss._caller_type("common/on_actions/x.txt"), "On Actions")
+
+    def test_scan_file_for_calls_captures_args(self):
+        from collections import defaultdict
+        with tempfile.TemporaryDirectory() as td:
+            fp = os.path.join(td, "ev.txt")
+            with open(fp, "w", encoding="utf-8") as fh:
+                fh.write(
+                    "homeland.3 = {\n"
+                    "\timmediate = {\n"
+                    "\t\tte_apply_homeland_deltas = {\n"
+                    "\t\t\tGOOD = grain\n"
+                    "\t\t\tRANK = 2\n"
+                    "\t\t}\n"
+                    "\t\tsome_trigger = yes\n"
+                    "\t}\n"
+                    "}\n"
+                )
+            index: dict = defaultdict(list)
+            callables = frozenset({"te_apply_homeland_deltas", "some_trigger"})
+            mss._scan_file_for_calls(fp, "events/ev.txt", "mod", callables, index)
+            self.assertEqual(len(index["te_apply_homeland_deltas"]), 1)
+            rec = index["te_apply_homeland_deltas"][0]
+            self.assertEqual(rec["id"], "homeland.3")
+            self.assertEqual(rec["line"], 3)
+            self.assertEqual(rec["args"], {"GOOD": "grain", "RANK": 2})
+            self.assertEqual(len(index["some_trigger"]), 1)
+            self.assertEqual(index["some_trigger"][0]["args"], {})
+
+    @unittest.skipUnless(_server_up(), "mod_state_server not running")
+    def test_scripted_effect_detail_has_callers(self):
+        listing = _get("/scripted-effects")
+        withp = [e for e in listing if e.get("parameters")]
+        self.assertTrue(withp)
+        d = _get("/scripted-effects/" + withp[0]["id"])
+        self.assertIn("callers", d)
+        self.assertIn("parameters", d)
+        self.assertIn("raw", d)
+
+
+# ---------------------------------------------------------------------------
+# #133 — mod-vs-vanilla diff
+# ---------------------------------------------------------------------------
+class DiffEndpointTests(unittest.TestCase):
+    def test_diff_entity_fields_flattens_and_keeps_both_sides(self):
+        # Operates on raw parser data: dict values are ('=', value) tuples.
+        vanilla = {"modifier": ("=", {"a_mult": ("=", "0.1"),
+                                      "b_add": ("=", "5")})}
+        mod = {"modifier": ("=", {"a_mult": ("=", "0.2"),
+                                  "c_add": ("=", "3")})}
+        added, removed, changed = mss._diff_entity_fields(vanilla, mod)
+        self.assertEqual(added, {"modifier.c_add": "3"})
+        self.assertEqual(removed, {"modifier.b_add": "5"})
+        self.assertEqual(
+            changed, {"modifier.a_mult": {"vanilla": "0.1", "mod": "0.2"}})
+
+    def test_diff_entity_fields_mod_only_all_added(self):
+        added, removed, changed = mss._diff_entity_fields(
+            {}, {"type": ("=", "country_event"), "hidden": ("=", "yes")})
+        self.assertEqual(set(added), {"type", "hidden"})
+        self.assertEqual(removed, {})
+        self.assertEqual(changed, {})
+
+    def test_paradox_text_renders_nested_block(self):
+        text = mss._paradox_text(
+            "x", ("=", {"modifier": ("=", {"a_mult": ("=", "0.1")})}))
+        self.assertIn("x = {", text)
+        self.assertIn("\tmodifier = {", text)
+        self.assertIn("\t\ta_mult = 0.1", text)
+
+    @unittest.skipUnless(_server_up(), "mod_state_server not running")
+    def test_diff_replaced_principle(self):
+        d = _get("/diff/Principles/principle_food_standardization_2")
+        self.assertTrue(d["in_vanilla"])
+        self.assertIn("added", d)
+        self.assertIn("removed", d)
+        self.assertIn("changed", d)
+
+
 if __name__ == "__main__":
     unittest.main()

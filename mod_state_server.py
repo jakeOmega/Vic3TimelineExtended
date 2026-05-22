@@ -11,6 +11,7 @@ Query:  Invoke-RestMethod http://localhost:8950/status
 Logs:   mod_state_server.log (rotated each startup, previous kept as .log.1)
 """
 
+import difflib
 import importlib
 import json
 import logging
@@ -132,6 +133,9 @@ base_game_paths = {
     "Treaty Articles": os.path.join(_BASE_COMMON, "treaty_articles"),
     "Religions": os.path.join(_BASE_COMMON, "religions"),
     "Decrees": os.path.join(_BASE_COMMON, "decrees"),
+    "Principles": os.path.join(_BASE_COMMON, "power_bloc_principles"),
+    "Principle Groups": os.path.join(_BASE_COMMON, "power_bloc_principle_groups"),
+    "Amendments": os.path.join(_BASE_COMMON, "amendments"),
     # Vocabularies the engine needs but the loader didn't include before:
     "Cultures": os.path.join(_BASE_COMMON, "cultures"),
     "Country Ranks": os.path.join(_BASE_COMMON, "country_ranks"),
@@ -185,6 +189,9 @@ mod_paths = {
     "Treaty Articles": os.path.join(_MOD_COMMON, "treaty_articles"),
     "Religions": os.path.join(_MOD_COMMON, "religions"),
     "Decrees": os.path.join(_MOD_COMMON, "decrees"),
+    "Principles": os.path.join(_MOD_COMMON, "power_bloc_principles"),
+    "Principle Groups": os.path.join(_MOD_COMMON, "power_bloc_principle_groups"),
+    "Amendments": os.path.join(_MOD_COMMON, "amendments"),
     "Events": os.path.join(mod_path, "events"),
     # Mod-side counterparts of the new vocabularies (most are vanilla-only, but
     # listed so the mod can override them in future).
@@ -1055,6 +1062,226 @@ def _find_modifier_grants(target: str, *, scope: str = "both",
         "truncated": truncated,
         "grants": grants,
     }
+
+
+# ---------------------------------------------------------------------------
+# Scripted-effect / scripted-trigger caller index (issue #132)
+# ---------------------------------------------------------------------------
+# The parser discards file/line, so call sites come from a raw, brace-aware scan
+# of every script-bearing .txt in the mod and vanilla — the same reason
+# _scan_file_for_grants exists. Built lazily on first request and cached in
+# _call_index_cache; invalidated on /reload (see _load_mod_state). One pass
+# populates the index for *all* helpers, so any subsequent lookup is a dict hit.
+_call_index_cache: dict | None = None
+
+_CALL_FLAG_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*(yes|no)\s*$")
+_CALL_INLINE_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*\{(.*)\}\s*$")
+_CALL_OPENER_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*\{")
+_ENTITY_OPENER_RE = re.compile(
+    r"^\s*(?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?([A-Za-z_][\w.]*)\s*=\s*\{"
+)
+_ARG_RE = re.compile(r"^\s*([A-Za-z_]\w*)\s*=\s*(.+?)\s*$")
+_INLINE_ARG_RE = re.compile(r"([A-Za-z_]\w*)\s*=\s*([^\s{}]+)")
+_PARAM_RE = re.compile(r"\$([A-Za-z0-9_]+)\$")
+
+
+def _coerce_arg(v: str):
+    v = v.strip().strip('"')
+    try:
+        return int(v)
+    except ValueError:
+        try:
+            return float(v)
+        except ValueError:
+            return v
+
+
+def _caller_type(rel: str) -> str:
+    """Best-effort entity-type label for a call-site file path."""
+    parts = rel.replace("\\", "/").split("/")
+    if parts and parts[0] == "events":
+        return "Events"
+    pretty = {
+        "on_actions": "On Actions",
+        "scripted_effects": "Scripted Effects",
+        "scripted_triggers": "Scripted Triggers",
+        "scripted_buttons": "Scripted Buttons",
+        "journal_entries": "Journal Entries",
+        "decisions": "Decisions",
+    }
+    if "common" in parts:
+        i = parts.index("common")
+        if i + 1 < len(parts):
+            return pretty.get(parts[i + 1], parts[i + 1])
+    return parts[-1] if parts else "?"
+
+
+def _extract_parameters(raw) -> list:
+    """Detect $X$ placeholders in a helper body via its serialized form."""
+    blob = json.dumps(serialize(raw))
+    return sorted(set(_PARAM_RE.findall(blob)))
+
+
+def _scan_file_for_calls(abs_path: str, rel: str, origin: str,
+                         callables: frozenset, index: dict) -> None:
+    """Brace-aware scan of one file; append every call site of a known helper to
+    *index* keyed by helper name. Tracks the depth-0 enclosing entity and parses
+    scalar args passed to multi-line and inline `helper = { ARG = v }` calls."""
+    try:
+        with open(abs_path, encoding="utf-8-sig", errors="replace") as fh:
+            lines = fh.readlines()
+    except OSError:
+        return
+    ctype = _caller_type(rel)
+    depth = 0
+    current_entity = None
+    call_stack: list = []  # [{"inner": <depth where args live>, "rec": <caller>}]
+    for lineno, raw in enumerate(lines, 1):
+        text = raw.split("#", 1)[0]
+        opens = text.count("{")
+        closes = text.count("}")
+
+        # 1) capture scalar args for the innermost open multi-line call block
+        if (call_stack and opens == 0 and closes == 0
+                and depth == call_stack[-1]["inner"]):
+            am = _ARG_RE.match(text)
+            if am:
+                call_stack[-1]["rec"]["args"][am.group(1)] = _coerce_arg(am.group(2))
+
+        # 2) flag-form call: helper = yes / no
+        fm = _CALL_FLAG_RE.match(text)
+        if fm and fm.group(1) in callables and current_entity is not None:
+            index[fm.group(1)].append({
+                "type": ctype, "id": current_entity, "origin": origin,
+                "file": rel, "line": lineno, "args": {}})
+        # 3) inline call: helper = { ARG = v ... } balanced on one line
+        elif opens == closes and opens >= 1:
+            im = _CALL_INLINE_RE.match(text)
+            if im and im.group(1) in callables and current_entity is not None:
+                args = {k: _coerce_arg(v)
+                        for k, v in _INLINE_ARG_RE.findall(im.group(2))}
+                index[im.group(1)].append({
+                    "type": ctype, "id": current_entity, "origin": origin,
+                    "file": rel, "line": lineno, "args": args})
+
+        # 4) block opener (opens>closes): depth-0 entity, or a multi-line call
+        if opens > closes:
+            if depth == 0:
+                em = _ENTITY_OPENER_RE.match(text)
+                current_entity = em.group(1) if em else None
+            else:
+                cm = _CALL_OPENER_RE.match(text)
+                if cm and cm.group(1) in callables and current_entity is not None:
+                    rec = {"type": ctype, "id": current_entity, "origin": origin,
+                           "file": rel, "line": lineno, "args": {}}
+                    index[cm.group(1)].append(rec)
+                    call_stack.append({"inner": depth + 1, "rec": rec})
+
+        # 5) advance depth; pop call blocks that have closed; reset at top level
+        depth += opens - closes
+        while call_stack and depth < call_stack[-1]["inner"]:
+            call_stack.pop()
+        if depth <= 0:
+            depth = 0
+            current_entity = None
+            call_stack = []
+
+
+def _build_call_index() -> dict:
+    """Scan mod + vanilla script-bearing trees once, returning
+    {helper_name: [caller, ...]} for every scripted effect/trigger."""
+    callables: frozenset = frozenset(
+        set((ms.get_data("Scripted Effects") or {}).keys())
+        | set((ms.get_data("Scripted Triggers") or {}).keys())
+    )
+    index: dict = defaultdict(list)
+    if not callables:
+        return index
+    # (origin, base-dir-holding events/+common/, repo-root-for-relpath)
+    roots = [("mod", mod_path, mod_path)]
+    _vanilla_game = os.path.join(base_game_path, "game")
+    if os.path.isdir(_vanilla_game):
+        roots.append(("vanilla", _vanilla_game, _vanilla_game))
+    for origin, base, repo_root in roots:
+        for sub in ("events", "common"):
+            scan_dir = os.path.join(base, sub)
+            if not os.path.isdir(scan_dir):
+                continue
+            for dirpath, _dirs, files in os.walk(scan_dir):
+                for fname in files:
+                    if not fname.endswith(".txt"):
+                        continue
+                    abs_path = os.path.join(dirpath, fname)
+                    rel = os.path.relpath(abs_path, repo_root)
+                    _scan_file_for_calls(abs_path, rel, origin, callables, index)
+    return dict(index)
+
+
+def _get_call_index() -> dict:
+    global _call_index_cache
+    if _call_index_cache is None:
+        _call_index_cache = _build_call_index()
+    return _call_index_cache
+
+
+# ---------------------------------------------------------------------------
+# Mod-vs-vanilla entity diff (issue #133)
+# ---------------------------------------------------------------------------
+# ModState holds both parses — base_parsers (vanilla) and mod_parsers (merged,
+# with INJECT:/REPLACE: applied). This is an in-memory, merge-directive-aware
+# field-level comparison; _compare_dicts in the parser drops the vanilla side
+# for scalar changes, so we walk both dicts here to keep both values.
+def _unwrap_val(v):
+    return v[1] if isinstance(v, tuple) and len(v) >= 2 else v
+
+
+def _diff_entity_fields(vanilla, mod, prefix=""):
+    """Recursive field-level diff of two entity-data dicts, returning
+    (added, removed, changed) with flattened dotted keys
+    (e.g. `modifier.state_homeland_creation_threshold_add`). `changed[key]`
+    is `{"vanilla": v, "mod": m}` with both sides serialized."""
+    added: dict = {}
+    removed: dict = {}
+    changed: dict = {}
+    vkeys = set(vanilla) if isinstance(vanilla, dict) else set()
+    mkeys = set(mod) if isinstance(mod, dict) else set()
+    for k in mkeys - vkeys:
+        added[prefix + k] = serialize(_unwrap_val(mod[k]))
+    for k in vkeys - mkeys:
+        removed[prefix + k] = serialize(_unwrap_val(vanilla[k]))
+    for k in vkeys & mkeys:
+        vv = _unwrap_val(vanilla[k])
+        mv = _unwrap_val(mod[k])
+        if isinstance(vv, dict) and isinstance(mv, dict):
+            a, r, c = _diff_entity_fields(vv, mv, prefix + k + ".")
+            added.update(a)
+            removed.update(r)
+            changed.update(c)
+        else:
+            sv = serialize(vv)
+            smv = serialize(mv)
+            if sv != smv:
+                changed[prefix + k] = {"vanilla": sv, "mod": smv}
+    return added, removed, changed
+
+
+def _paradox_text(name, entity, indent=0):
+    """Render a parsed entity back to Paradox-ish script text (for ?format=text
+    unified diffs). Not a faithful writer — readable, stable field ordering."""
+    pad = "\t" * indent
+    val = _unwrap_val(entity)
+    if isinstance(val, dict):
+        lines = [f"{pad}{name} = {{"]
+        for k, v in val.items():
+            lines.append(_paradox_text(k, v, indent + 1))
+        lines.append(f"{pad}}}")
+        return "\n".join(lines)
+    if isinstance(val, list):
+        if all(not isinstance(x, (dict, tuple, list)) for x in val):
+            inner = " ".join(str(x) for x in val)
+            return f"{pad}{name} = {{ {inner} }}"
+        return "\n".join(_paradox_text(name, x, indent) for x in val)
+    return f"{pad}{name} = {val}"
 
 
 def _vanilla_data_loaded() -> bool:
@@ -2805,6 +3032,21 @@ def get_field(data, key, default=None):
     return val
 
 
+def _unwrap_modifiers(block_dict):
+    """Flatten a modifier-bag dict {key: ('=', value)} to {key: value}.
+
+    Scalars are returned as-is (matching _format_law_detail's modifier handling);
+    nested dicts/lists (e.g. scaling wrappers) are serialized for JSON safety.
+    """
+    out = {}
+    if not isinstance(block_dict, dict):
+        return out
+    for k, v in block_dict.items():
+        val = v[1] if isinstance(v, tuple) and len(v) >= 2 else v
+        out[k] = serialize(val) if isinstance(val, (dict, list, tuple)) else val
+    return out
+
+
 def _data_contains_string(obj, needle):
     """Recursively check if *needle* appears as a string value anywhere in the data tree."""
     if isinstance(obj, str):
@@ -3682,6 +3924,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "ideologies": lambda: self._ideologies(rest),
             # Analytical endpoints
             "references": lambda: self._references(rest),
+            "diff": lambda: self._diff(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
             "modifier-grants": lambda: self._modifier_grants(rest, params),
@@ -3701,7 +3944,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "diplomatic-actions": lambda: self._diplomatic_actions(rest),
             "decisions": lambda: self._decisions(rest),
             "script-values": lambda: self._script_values(rest),
+            "scripted-effects": lambda: self._scripted_effects(rest),
+            "scripted-triggers": lambda: self._scripted_triggers(rest),
             "decrees": lambda: self._decrees(rest),
+            "principles": lambda: self._principles(rest),
+            "amendments": lambda: self._amendments(rest),
             "on-actions": lambda: self._on_actions(rest),
             # Technology effects endpoint
             "technology-effects": lambda: self._technology_effects(rest),
@@ -4772,6 +5019,95 @@ class ModStateHandler(BaseHTTPRequestHandler):
             info["modifiers"] = {}
             for k, v in modifiers.items():
                 info["modifiers"][k] = v[1] if isinstance(v, tuple) else v
+        info["raw"] = serialize(raw)
+        return info
+
+    # ---- structured: power bloc principles --------------------------------
+    def _principles(self, parts):
+        """GET /principles[/<principle_id>]"""
+        principles = ms.get_data("Principles")
+        if not principles:
+            return {"error": "Principles data not loaded"}
+        if parts:
+            pid = parts[0]
+            if pid not in principles:
+                raise KeyError(pid)
+            return self._format_principle_detail(pid, principles[pid])
+        return [
+            {"type": "Principles", "id": pid, "name": ms.localize(pid)}
+            for pid in principles
+        ]
+
+    def _principle_group_index(self):
+        """principle_id -> {group_id, levels:[...]} from Principle Groups' levels lists."""
+        out: dict = {}
+        groups = ms.get_data("Principle Groups") or {}
+        for gid, raw in groups.items():
+            levels = get_field(get_entity_data(raw), "levels")
+            if isinstance(levels, list):
+                for lvl in levels:
+                    out[lvl] = {"group_id": gid, "levels": list(levels)}
+        return out
+
+    def _format_principle_detail(self, pid, raw):
+        pd = get_entity_data(raw)
+        info: dict = {"type": "Principles", "id": pid, "name": ms.localize(pid)}
+        desc = ms.get_description(pid)
+        if desc:
+            info["description"] = desc
+        grp = self._principle_group_index().get(pid)
+        if grp:
+            info["group_id"] = grp["group_id"]
+            info["group_name"] = ms.localize(grp["group_id"])
+            info["group_levels"] = grp["levels"]
+        # Emit each present modifier-bag block (member_modifier, institution_modifier,
+        # power_bloc_modifier, leader_modifier, …) in file order.
+        blocks = []
+        if isinstance(pd, dict):
+            for k, v in pd.items():
+                if k not in _MODIFIER_BAG_BLOCKS:
+                    continue
+                val = v[1] if isinstance(v, tuple) and len(v) >= 2 else v
+                if isinstance(val, dict):
+                    blocks.append({"block": k, "modifiers": _unwrap_modifiers(val)})
+        if blocks:
+            info["modifier_blocks"] = blocks
+        info["raw"] = serialize(raw)
+        return info
+
+    # ---- structured: power bloc amendments --------------------------------
+    def _amendments(self, parts):
+        """GET /amendments[/<amendment_id>]"""
+        amendments = ms.get_data("Amendments")
+        if not amendments:
+            return {"error": "Amendments data not loaded"}
+        if parts:
+            aid = parts[0]
+            if aid not in amendments:
+                raise KeyError(aid)
+            return self._format_amendment_detail(aid, amendments[aid])
+        return [
+            {"type": "Amendments", "id": aid, "name": ms.localize(aid)}
+            for aid in amendments
+        ]
+
+    def _format_amendment_detail(self, aid, raw):
+        ad = get_entity_data(raw)
+        info: dict = {"type": "Amendments", "id": aid, "name": ms.localize(aid)}
+        desc = ms.get_description(aid)
+        if desc:
+            info["description"] = desc
+        parent = get_field(ad, "parent")
+        if parent:
+            info["parent"] = {"type": "Laws", "id": parent, "name": ms.localize(parent)}
+        allowed = get_field(ad, "allowed_laws")
+        if isinstance(allowed, list):
+            info["allowed_laws"] = [
+                {"type": "Laws", "id": lw, "name": ms.localize(lw)} for lw in allowed
+            ]
+        mods = get_field(ad, "modifier")
+        if isinstance(mods, dict):
+            info["modifiers"] = _unwrap_modifiers(mods)
         info["raw"] = serialize(raw)
         return info
 
@@ -5946,6 +6282,72 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         return [{"type": "Script Values", "id": svid} for svid in svs]
 
+    # ---- mod-vs-vanilla diff ----------------------------------------------
+    def _diff(self, parts, params):
+        """GET /diff/<EntityType>/<id>[?format=text]"""
+        if len(parts) < 2:
+            return {"error": "Provide /diff/<EntityType>/<id>"}
+        etype, eid = parts[0], parts[1]
+        if etype not in ms.mod_parsers:
+            raise KeyError(etype)
+        mod_data = ms.get_data(etype) or {}
+        if eid not in mod_data:
+            raise KeyError(eid)
+        base_parser = ms.base_parsers.get(etype)
+        base_data = base_parser.data if base_parser is not None else {}
+        in_vanilla = eid in base_data
+
+        fmt = (params.get("format", [""])[0] or "").lower()
+        if fmt == "text":
+            van_text = _paradox_text(eid, base_data[eid]) if in_vanilla else ""
+            mod_text = _paradox_text(eid, mod_data[eid])
+            diff = difflib.unified_diff(
+                van_text.splitlines(), mod_text.splitlines(),
+                fromfile=f"vanilla/{etype}/{eid}",
+                tofile=f"mod/{etype}/{eid}", lineterm="",
+            )
+            return {
+                "type": etype, "id": eid, "in_vanilla": in_vanilla,
+                "format": "text", "diff": "\n".join(diff),
+            }
+
+        mod_entity = get_entity_data(mod_data[eid])
+        van_entity = get_entity_data(base_data[eid]) if in_vanilla else {}
+        added, removed, changed = _diff_entity_fields(van_entity, mod_entity)
+        return {
+            "type": etype, "id": eid, "in_vanilla": in_vanilla,
+            "added": added, "removed": removed, "changed": changed,
+        }
+
+    # ---- structured: scripted effects / triggers --------------------------
+    def _scripted_effects(self, parts):
+        """GET /scripted-effects[/<id>]"""
+        return self._scripted_helper("Scripted Effects", parts)
+
+    def _scripted_triggers(self, parts):
+        """GET /scripted-triggers[/<id>]"""
+        return self._scripted_helper("Scripted Triggers", parts)
+
+    def _scripted_helper(self, etype, parts):
+        data = ms.get_data(etype)
+        if not data:
+            return {"error": f"{etype} data not loaded"}
+        if parts:
+            hid = parts[0]
+            if hid not in data:
+                raise KeyError(hid)
+            return {
+                "type": etype,
+                "id": hid,
+                "parameters": _extract_parameters(data[hid]),
+                "callers": _get_call_index().get(hid, []),
+                "raw": serialize(data[hid]),
+            }
+        return [
+            {"type": etype, "id": hid, "parameters": _extract_parameters(raw)}
+            for hid, raw in data.items()
+        ]
+
     # ---- structured: decrees ----------------------------------------------
     def _decrees(self, parts):
         """GET /decrees[/<decree_id>]"""
@@ -6786,7 +7188,7 @@ _VANILLA_LOC_CACHE: Optional[dict] = None
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _VANILLA_LOC_CACHE
+    global _VANILLA_LOC_CACHE, _call_index_cache
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
         # mod_only is a fast incremental path; without cached state it has
@@ -6818,6 +7220,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     # entries don't leak across reloads.
     _last_validation_report = None
     _tech_unlocks_index_cache = None
+    _call_index_cache = None
     _annotator_compute_cache.clear()
 
     # Localization: cache vanilla once, then layer mod (+ replace) on top

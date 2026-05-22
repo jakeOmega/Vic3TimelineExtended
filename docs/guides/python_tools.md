@@ -289,8 +289,17 @@ Invoke-RestMethod http://localhost:8950/status
 | `/decisions/<id>` | GET | Decision detail |
 | `/script-values` | GET | All script value IDs |
 | `/script-values/<id>` | GET | Script value raw data |
+| `/scripted-effects` | GET | All scripted-effect IDs, each with its `parameters` (`$X$` placeholders) |
+| `/scripted-effects/<id>` | GET | Scripted-effect detail: `parameters`, `callers` (every call site — events, on_actions, journal entries, other helpers, **and vanilla** — with `file`/`line`/`origin` and parsed args), `raw`. The caller index is a brace-aware file scan (the parser drops file/line); built lazily on first request (~25s) and cached until the next `/reload`. **First stop before changing a parameterized helper's signature** — enumerates every caller and the args each passes. |
+| `/scripted-triggers` | GET | All scripted-trigger IDs with `parameters` |
+| `/scripted-triggers/<id>` | GET | Scripted-trigger detail (same shape as `/scripted-effects/<id>`) |
 | `/decrees` | GET | All decrees |
 | `/decrees/<id>` | GET | Decree detail with modifiers |
+| `/principles` | GET | All Power Bloc principle IDs |
+| `/principles/<id>` | GET | Principle detail: resolved `name`/`description`, `group_id`/`group_name`/`group_levels` (reverse-looked-up from Principle Groups), and `modifier_blocks` (each present `member_modifier`/`institution_modifier`/`power_bloc_modifier`/… bag as `{block, modifiers}`). `Principles`, `Principle Groups`, and `Amendments` are now first-class entity types — `/keys/Principles`, `/raw/Principles/<id>`, `/filter`, `/references` all work too. |
+| `/amendments` | GET | All amendment IDs |
+| `/amendments/<id>` | GET | Amendment detail: `name`/`description`, `parent` law, `allowed_laws`, and `modifiers`. |
+| `/diff/<EntityType>/<id>` | GET | **Mod-vs-vanilla field-level diff** — what the mod actually changes for an entity vs the vanilla baseline (merge-directive aware; ModState holds both parses). Returns `{in_vanilla, added, removed, changed}` with flattened dotted keys (`modifier.state_homeland_creation_threshold_add`); `changed[key]` is `{vanilla, mod}`. `in_vanilla: false` ⇒ the whole entity is `added`. `?format=text` gives a `difflib` unified diff over a Paradox-ish render of the two blocks. **Use for any `REPLACE:`/`INJECT:` override audit or vanilla version bump** instead of hand-diffing against `~/src/vic3`. |
 | `/on-actions` | GET | All on-action IDs (mod-only) |
 | `/on-actions/<id>` | GET | On-action raw data |
 | `/gui/render-sites/<loc_key>` | GET | Every GUI file:line (mod + vanilla) that references `<loc_key>` via a known loc attribute (`text` / `tooltip` / `raw_text` / ...). Mechanical scan; one curl replaces a multi-grep over both GUI trees. |
