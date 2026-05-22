@@ -862,8 +862,7 @@
 	Modern Skyscrapers - Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.
 		Unlocking Technologies:
 			Modern Materials
-		Unlocks Buildings: 0 "Industrial Mineral and Salt Mine
-, CN Tower, Empire State Building
+		Unlocks Buildings: CN Tower, Empire State Building, Industrial Mineral and Salt Mine
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Advanced Agricultural Statistics - By applying modern statistical methods to farming, we can make agriculture more efficient. This means bigger harvests and fatter livestock, all thanks to the magic of numbers.
 		Unlocking Technologies:
@@ -920,7 +919,7 @@
 			Nitrogen Fixation
 			Isoprene
 		Unlocks Buildings: Lithium Mine
-		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Aluminum Mass Production - We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.
 		Unlocking Technologies:
 			Arc Welding
@@ -1255,7 +1254,7 @@
 			Computer Networks
 		Unlocks Buildings: Large Hadron Collider, Lotte World Tower
 		Unlocks Laws: Net Neutrality, State-Controlled Internet, Unregulated Internet
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Digital Telecommunications - The switch from analog to digital has made our communication systems much more efficient and versatile. Now we can enjoy clearer calls and faster data, most of the time.
 		Unlocking Technologies:
 			Fiber Optics
@@ -1567,7 +1566,7 @@
 			Generative AI
 			Programmable Matter
 			Autonomous Vehicles
-		Unlocks PMs: 16 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
 	Advanced Nanofabrication - We can now create incredibly small and precise structures. This level of control at the nanoscale is set to revolutionize everything from electronics to medicine.
 		Unlocking Technologies:
 			Synthetic Biology

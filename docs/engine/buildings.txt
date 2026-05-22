@@ -238,7 +238,7 @@ Explosives Factory (bg_heavy_industry):
 			Monthly Pollution: 25
 		Ammonium Nitrate Explosives
 		Metamaterial Explosives
-	Automation:
+	pmg_automation_building_explosives_factory:
 		Manual Batch Processing
 		Continuous Processing
 			Monthly Pollution: 2.5
@@ -246,7 +246,7 @@ Explosives Factory (bg_heavy_industry):
 			Monthly Pollution: 5
 		Distributed Control Systems
 			Monthly Pollution: 5
-		AI Managed Chemical Plant
+		AI Managed Explosives Factory
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
@@ -4422,8 +4422,7 @@ Potash Mine (bg_discoverable_mining):
 		Tailings Treatment
 			Monthly Pollution: -10
 
-0 "Industrial Mineral and Salt Mine
- (bg_discoverable_mining):
+Industrial Mineral and Salt Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Skyscrapers
 	Mining Equipment:
 		Picks and Shovels

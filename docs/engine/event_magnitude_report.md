@@ -12,11 +12,13 @@ _None._
 
 ## Reviewed Exemptions
 
-_None._
+- `events/te_formable_formation_events.txt:57` — `formation_te.1` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
+- `events/te_formable_formation_events.txt:98` — `formation_te.2` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
+- `events/te_formation_overrides.txt:91` — `formation.17` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: verbatim vanilla formation.17 body — unchanged from vanilla's own usage
 
 ## Coverage
 
-- files_audited: 36
-- total flags: 0
+- files_audited: 38
+- total flags: 3
 - unreviewed: 0
-- exempted: 0
+- exempted: 3

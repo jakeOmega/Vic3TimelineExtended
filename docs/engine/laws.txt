@@ -520,7 +520,7 @@ Antitrust & Market Structure:
 		Large firms are socialized or reorganized into public and worker cooperatives. Prices and output are directed, prioritizing equity and stability over market competition.
 Ministry of Foreign Affairs:
 	No Ministry of Foreign Affairs
-		We have no Ministry of Foreign Affairs
+		We have no Ministry of Foreign Affairs.
 	Ministry of Foreign Affairs Established [progressiveness=25] - Unlocking Technology: International Relations
 		The Ministry of Foreign Affairs manages the nation's diplomatic relations, international treaties, and foreign policy.
 Ministry of War:
@@ -542,7 +542,7 @@ Ministry of Culture:
 	No Ministry of Culture
 		We have no Ministry of Culture.
 	Ministry of Culture Established [progressiveness=25] - Unlocking Technology: Mass Propaganda
-		he Ministry of Culture promotes the nation's cultural heritage, arts, and creative industries, fostering national identity and cultural diversity.
+		The Ministry of Culture promotes the nation's cultural heritage, arts, and creative industries, fostering national identity and cultural diversity.
 Ministry of Labor:
 	No Ministry of Labor [progressiveness=25]
 		We have no Ministry of Labor.
@@ -574,7 +574,7 @@ Ministry of Science:
 	No Ministry of Science
 		We have no Ministry of Science.
 	Ministry of Science Established [progressiveness=25] - Unlocking Technology: Nuclear Weapons
-		The Ministry of Science manages the nation's emergency services, including disaster relief, search and rescue, and emergency medical services.
+		The Ministry of Science manages the nation's scientific research, technological development, and innovation efforts.
 Ministry of Thought Control:
 	No Ministry of Thought Control [progressiveness=25]
 		We have no Ministry of Thought Control.

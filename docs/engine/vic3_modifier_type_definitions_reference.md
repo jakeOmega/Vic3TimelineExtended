@@ -1745,7 +1745,7 @@ _Cannon Artillery Offense_
 - `building_cash_reserves_mult` — **Maximum Cash Reserves** — A bonus or penalty to the maximum Cash Reserves that Buildings can retain.
 - `building_company_government_dividends_add` — **Company Government Dividends** — An increase or decrease to the amount of Government Dividends paid by Company Headquarters.
 - `building_company_worker_dividends_add` — **Company Workforce Dividends** — An increase or decrease to the amount of Dividends paid to the Workforce by Building levels owned by Companies.
-- `building_deportee_mortality_mult` — **Deportatee Mortality Multiplier**
+- `building_deportee_mortality_mult` — **Deportee Mortality Multiplier**
 - `building_economy_of_scale_level_cap_add` — **Economy of Scale Building Level Cap** — The maximum number of Building levels that can confer Economy of Scale effects.
 - `building_employment_deportee_add` — **Deportee Labor Positions**
 - `building_goods_input_mult` — **Goods Input** — An adjustment to the amount of Goods Consumed by a Building.

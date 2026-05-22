@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 729
-**Event files:** 36
+**Total events:** 733
+**Event files:** 38
 
 ## agricultural_diffusion_events.txt
 
@@ -3947,6 +3947,34 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** (no localization)
 - **Flavor:** (none)
 - **Current image:** (unknown)
+
+## te_formable_formation_events.txt
+
+### formation_te.1
+- **Title:** The Republic of Bharat
+- **Description:** From the Khyber to Cape Comorin, the dream of a single Indian nation has long outrun its reach. Today that dream takes the shape of a state. The heartland is one — Delhi and Bombay, Bengal and the Deccan answer to a single flag. Yet the work of unity is unfinished: the Muslim-majority west and east, the Himalayan kingdoms, and the island of Ceylon all lie beyond our borders, and many within them are kin who look to us still.
+- **Flavor:** Long years in bondage ended in a moment which history seldom offers.
+- **Current image:** asia_hinduism_sikhism
+
+### formation_te.2
+- **Title:** Merdeka — The Free Archipelago
+- **Description:** Across thirteen thousand islands, a single people now calls itself one nation. Java and Sumatra, Borneo and the Celebes, the Moluccas and Papua are bound together at last. But the archipelago does not end at our frontier: the Malay peninsula, the northern shore of Borneo, and the eastern half of New Guinea share our seas and our blood, and remain to be gathered in.
+- **Flavor:** From Sabang to Merauke, one homeland, one tongue, one people.
+- **Current image:** asia_politician_parliament_motion
+
+### formation_te.10
+- **Title:** An Island of Resistance
+- **Description:** [scope:polo_target_country.GetName] sits encircled by our territory, a princely holdout whose ruler refuses to accede to the Union. Its court pleads sovereignty and dreams of independence, but a foreign-aligned state lodged in our heartland is a dagger we cannot ignore. The Cabinet is divided on how firmly to press the matter.
+- **Flavor:** Geography has already decided this question; only the manner of its answer remains.
+- **Current image:** asia_sepoy_mutiny
+
+## te_formation_overrides.txt
+
+### formation.17
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** unspecific_signed_contract
 
 ## te_map_modes_events.txt
 
