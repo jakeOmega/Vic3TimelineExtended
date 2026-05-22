@@ -537,6 +537,14 @@ pm_large_scale_earth_movers_tech_metals_mine = {
 		}
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_continuous_miners_building_tech_metals_mine
+		pm_diesel_pump_building_tech_metals_mine
+		pm_high_pressure_hydraulic_pump_building_tech_metals_mine
+		pm_smart_miners_building_tech_metals_mine
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -837,6 +845,13 @@ pm_geophysical_survey_techniques_tech_metals_mine = {
 		workforce_scaled = {
 			state_pollution_generation_add = 5
 		}
+	}
+
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_continuous_miners_building_tech_metals_mine
+		pm_high_pressure_hydraulic_pump_building_tech_metals_mine
+		pm_smart_miners_building_tech_metals_mine
 	}
 
 	building_modifiers = {
@@ -1144,6 +1159,13 @@ pm_ore_sorting_and_separation_technology_tech_metals_mine = {
 		}
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_continuous_miners_building_tech_metals_mine
+		pm_high_pressure_hydraulic_pump_building_tech_metals_mine
+		pm_smart_miners_building_tech_metals_mine
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1448,6 +1470,13 @@ pm_laser_excavation_technology_tech_metals_mine = {
 		workforce_scaled = {
 			state_pollution_generation_add = 5
 		}
+	}
+
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_continuous_miners_building_tech_metals_mine
+		pm_high_pressure_hydraulic_pump_building_tech_metals_mine
+		pm_smart_miners_building_tech_metals_mine
 	}
 
 	building_modifiers = {
@@ -3428,13 +3457,13 @@ factory_farm_building_tobacco_plantation = {
 			# Profit: 2650.0
 			# Profit margin: 278.95%
 			# Zero profit price multiplier: 0.26
-			# Employment: 4250
-			# Wage breakeven: 0.62
+			# Employment: 4750
+			# Wage breakeven: 0.56
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 2500
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 			building_employment_engineers_add = 250
@@ -3469,13 +3498,13 @@ factory_farm_building_sugar_plantation = {
 			# Profit: 2650.0
 			# Profit margin: 278.95%
 			# Zero profit price multiplier: 0.26
-			# Employment: 4250
-			# Wage breakeven: 0.62
+			# Employment: 6750
+			# Wage breakeven: 0.39
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 4500
 			building_employment_farmers_add = 1500
 			building_employment_machinists_add = 500
 			building_employment_engineers_add = 250
@@ -3740,13 +3769,13 @@ GMO_plantation_building_tobacco_plantation = {
 			# Profit: 5500.0
 			# Profit margin: 220.00%
 			# Zero profit price multiplier: 0.31
-			# Employment: 3000
-			# Wage breakeven: 1.83
+			# Employment: 4500
+			# Wage breakeven: 1.22
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 1000
+			building_employment_laborers_add = 2500
 			building_employment_farmers_add = 1000
 			building_employment_machinists_add = 500
 			building_employment_engineers_add = 500
@@ -3778,13 +3807,13 @@ GMO_plantation_building_sugar_plantation = {
 			# Profit: 5000.0
 			# Profit margin: 200.00%
 			# Zero profit price multiplier: 0.33
-			# Employment: 3000
-			# Wage breakeven: 1.67
+			# Employment: 6500
+			# Wage breakeven: 0.77
 		}
 
 		level_scaled = {
 			# profit
-			building_employment_laborers_add = 1000
+			building_employment_laborers_add = 4500
 			building_employment_farmers_add = 1000
 			building_employment_machinists_add = 500
 			building_employment_engineers_add = 500
@@ -5687,6 +5716,14 @@ pm_bespoke_alloys = {
 		programmable_matter
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_electric_arc_process
+		pm_aluminum_substitution
+		pm_chromium_substitution
+		pm_microgravity_alloying
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -6002,6 +6039,14 @@ pm_robotic_food_processing = {
 
 	unlocking_technologies = {
 		supply_chain_management
+	}
+
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_baking_powder
+		pm_food_additives
+		pm_sweeteners
+		pm_programmable_food_synthesis
 	}
 
 	building_modifiers = {
@@ -7568,6 +7613,154 @@ pm_ai_managed_chemical_plant = {
 	required_input_goods = digital_access
 }
 
+pm_ai_managed_explosives_factory = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p0.dds"
+
+	unlocking_technologies = {
+		artificial_intelligence
+	}
+
+	# Explosives-specific split of pm_ai_managed_chemical_plant (shared across 14
+	# chemical/synthetic plants). Gated to explosives' advanced base PMs so the
+	# AI employment cut stays non-negative there (pm_employment_audit).
+	unlocking_production_methods = {
+		pm_ammonium_nitrate_explosives
+		pm_metamaterial_explosives
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_robotics_add = 5                         # Price:   80, Total cost:   400.0 (20.78%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (15.58%)
+			goods_input_merchant_marine_add = 0.50               # Price:   50, Total cost:    25.0 (1.30%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (62.34%)
+			# Output goods
+			# Total input cost: 1925.0
+			# Total output cost: 0
+			# Profit: -1925.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -5490
+			# Wage breakeven: 0.35
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -2000
+			building_employment_machinists_add = -1000
+			building_employment_shopkeepers_add = -500
+			building_employment_engineers_add = -1990
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
+pm_advanced_process_control_explosives_factory = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p2.dds"
+
+	unlocking_technologies = {
+		modern_chemical_processes
+	}
+
+	# Explosives-specific split of pm_advanced_process_control; gated to explosives
+	# base PMs that absorb the cut (pm_employment_audit).
+	unlocking_production_methods = {
+		pm_ammonia-soda_process
+		pm_vacuum_evaporation
+		pm_ammonium_nitrate_explosives
+		pm_metamaterial_explosives
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (55.17%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (41.38%)
+			goods_input_merchant_marine_add = 0.50               # Price:   50, Total cost:    25.0 (3.45%)
+			# Output goods
+			# Total input cost: 725.0
+			# Total output cost: 0
+			# Profit: -725.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -3000
+			# Wage breakeven: 0.24
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -1400
+			building_employment_machinists_add = -550
+			building_employment_engineers_add = -800
+			building_employment_shopkeepers_add = -250
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_distributed_control_systems_explosives_factory = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_green_p0.dds"
+
+	unlocking_technologies = {
+		world_wide_web
+	}
+
+	# Explosives-specific split of pm_distributed_control_systems; gated to
+	# explosives advanced base PMs that absorb the cut (pm_employment_audit).
+	unlocking_production_methods = {
+		pm_ammonium_nitrate_explosives
+		pm_metamaterial_explosives
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (30.19%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (22.64%)
+			goods_input_merchant_marine_add = 0.50               # Price:   50, Total cost:    25.0 (1.89%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (45.28%)
+			# Output goods
+			# Total input cost: 1325.0
+			# Total output cost: 0
+			# Profit: -1325.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -4300
+			# Wage breakeven: 0.31
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -1800
+			building_employment_machinists_add = -800
+			building_employment_engineers_add = -1300
+			building_employment_shopkeepers_add = -400
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
+}
+
 REPLACE:pm_telephones = {
 	texture = "gfx/interface/icons/production_method_icons/telephones.dds"
 	building_modifiers = {
@@ -8716,14 +8909,14 @@ pm_modern_farming_rice_farm = {
 			# Profit: 1400.0
 			# Profit margin: 38.89%
 			# Zero profit price multiplier: 0.72
-			# Employment: 5000
-			# Wage breakeven: 0.28
+			# Employment: 8000
+			# Wage breakeven: 0.17
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 2500
+			building_employment_laborers_add = 5000
 			building_employment_farmers_add = 2000
-			building_employment_engineers_add = 500
+			building_employment_engineers_add = 1000
 		}
 	}
 }
@@ -8776,14 +8969,14 @@ pm_designed_crops_rice_farm = {
 			# Profit: 12200.0
 			# Profit margin: 254.17%
 			# Zero profit price multiplier: 0.28
-			# Employment: 3500
-			# Wage breakeven: 3.49
+			# Employment: 7000
+			# Wage breakeven: 1.74
 		}
 
 		level_scaled = {
-			building_employment_laborers_add = 2500
-			building_employment_farmers_add = 500
-			building_employment_engineers_add = 500
+			building_employment_laborers_add = 5000
+			building_employment_farmers_add = 1000
+			building_employment_engineers_add = 1000
 		}
 	}
 
@@ -9316,13 +9509,13 @@ pm_skidders_and_forwarders = {
 			# Profit: -740.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -3250
-			# Wage breakeven: 0.23
+			# Employment: -2250
+			# Wage breakeven: 0.33
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = -250
-			building_employment_laborers_add = -2500
+			building_employment_laborers_add = -1500
 			building_employment_machinists_add = -500
 		}
 	}
@@ -9577,13 +9770,13 @@ pm_rocket_artillery = {
 			# Profit: 5600.0
 			# Profit margin: 133.33%
 			# Zero profit price multiplier: 0.43
-			# Employment: 5000
-			# Wage breakeven: 1.12
+			# Employment: 6000
+			# Wage breakeven: 0.93
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = 500
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 1500
 			building_employment_engineers_add = 1000
 		}
@@ -9619,13 +9812,13 @@ pm_precision_guided_shells = {
 			# Profit: 7400.0
 			# Profit margin: 142.31%
 			# Zero profit price multiplier: 0.41
-			# Employment: 5000
-			# Wage breakeven: 1.48
+			# Employment: 6000
+			# Wage breakeven: 1.23
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = 500
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 1500
 			building_employment_engineers_add = 1000
 		}
@@ -9659,13 +9852,13 @@ pm_electromagnetic_projectors = {
 			# Profit: 9000.0
 			# Profit margin: 115.38%
 			# Zero profit price multiplier: 0.46
-			# Employment: 5000
-			# Wage breakeven: 1.80
+			# Employment: 6000
+			# Wage breakeven: 1.50
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = 500
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 1500
 			building_employment_engineers_add = 1000
 		}
@@ -9699,13 +9892,13 @@ pm_programmable_matter_artillery = {
 			# Profit: 10600.0
 			# Profit margin: 89.83%
 			# Zero profit price multiplier: 0.53
-			# Employment: 5000
-			# Wage breakeven: 2.12
+			# Employment: 6000
+			# Wage breakeven: 1.77
 		}
 
 		level_scaled = {
 			building_employment_shopkeepers_add = 500
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 1500
 			building_employment_engineers_add = 1000
 		}
@@ -11455,6 +11648,13 @@ pm_advanced_assembly_lines_building_furniture_manufactory = {
 		}
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_lathe
+		pm_mechanized_workshops
+		pm_programmable_matter_furniture
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -11493,6 +11693,17 @@ pm_advanced_assembly_lines_building_tooling_workshop = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
 		}
+	}
+
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_pig_iron
+		pm_steel
+		pm_rubber_grips
+		pm_material_handling_equipment
+		pm_electrochemical_machining
+		pm_industrial_robotics
+		pm_nanobot_assemblers
 	}
 
 	building_modifiers = {
@@ -11572,6 +11783,17 @@ pm_advanced_assembly_lines_building_arms_industry = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
 		}
+	}
+
+	# Gated to advanced base PMs (consistent L3000+) that absorb this PM's cut (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_semiautomatic_rifles
+		pm_networked_small_arms
+		pm_programmable_matter_small_arms
+		pm_rocket_artillery
+		pm_precision_guided_shells
+		pm_electromagnetic_projectors
+		pm_programmable_matter_artillery
 	}
 
 	building_modifiers = {
@@ -11654,6 +11876,12 @@ pm_robotic_assembly_lines_building_furniture_manufactory = {
 		}
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_mechanized_workshops
+		pm_programmable_matter_furniture
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -11692,6 +11920,16 @@ pm_robotic_assembly_lines_building_tooling_workshop = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
 		}
+	}
+
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_steel
+		pm_rubber_grips
+		pm_material_handling_equipment
+		pm_electrochemical_machining
+		pm_industrial_robotics
+		pm_nanobot_assemblers
 	}
 
 	building_modifiers = {
@@ -11734,6 +11972,16 @@ pm_robotic_assembly_lines_building_motor_industry = {
 		}
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_diesel_engines
+		pm_electric_engines
+		pm_gas_turbine_engines
+		pm_hydrogen_fuel_cell_engines
+		pm_graphene_electric_motors
+		pm_fusion_battery_motors
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -11767,6 +12015,14 @@ pm_ai_managed_building_furniture_manufactory = {
 
 	unlocking_technologies = {
 		artificial_intelligence
+	}
+
+	# Gated to base PMs that employ enough to absorb this PM's employment
+	# cut (laborers -3000 / machinists -1250 / engineers -740). Without the
+	# gate, low-tier base PMs drive employment negative. See pm_employment_audit.
+	unlocking_production_methods = {
+		pm_mechanized_workshops
+		pm_programmable_matter_furniture
 	}
 
 	building_modifiers = {
@@ -11806,6 +12062,15 @@ pm_ai_managed_building_tooling_workshop = {
 		artificial_intelligence
 	}
 
+	# Gated to base PMs that employ enough to absorb this PM's employment
+	# cut (laborers -3000 / machinists -500 / engineers -990). See pm_employment_audit.
+	unlocking_production_methods = {
+		pm_material_handling_equipment
+		pm_electrochemical_machining
+		pm_industrial_robotics
+		pm_nanobot_assemblers
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -11840,6 +12105,15 @@ pm_ai_managed_building_motor_industry = {
 
 	unlocking_technologies = {
 		artificial_intelligence
+	}
+
+	# Gated to base PMs that employ enough to absorb this PM's employment
+	# cut (laborers -1500 / machinists -1000 / engineers -1990). See pm_employment_audit.
+	unlocking_production_methods = {
+		pm_gas_turbine_engines
+		pm_hydrogen_fuel_cell_engines
+		pm_graphene_electric_motors
+		pm_fusion_battery_motors
 	}
 
 	building_modifiers = {
@@ -11879,6 +12153,17 @@ pm_ai_managed_building_arms_industry = {
 		artificial_intelligence
 	}
 
+	# Gated to advanced base PMs (consistent L3000+) that absorb this PM's cut (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_semiautomatic_rifles
+		pm_networked_small_arms
+		pm_programmable_matter_small_arms
+		pm_rocket_artillery
+		pm_precision_guided_shells
+		pm_electromagnetic_projectors
+		pm_programmable_matter_artillery
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -11914,6 +12199,17 @@ pm_ai_managed_building_munition_plant = {
 
 	unlocking_technologies = {
 		artificial_intelligence
+	}
+
+	# Gated to base PMs that employ enough to absorb this PM's employment
+	# cut (laborers -2500 / machinists -1250 / engineers -740). See pm_employment_audit.
+	unlocking_production_methods = {
+		pm_explosive_shells
+		pm_modern_cartridges
+		pm_smart_fuzes
+		pm_networked_munitions
+		pm_swarm_release_munitions
+		pm_programmable_munitions
 	}
 
 	building_modifiers = {
@@ -12021,6 +12317,14 @@ pm_textile_finishing_machinery = {
 		transistors
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_sewing_machines
+		pm_dye_workshops
+		pm_electric_sewing_machines
+		pm_programmable_matter_clothing
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -12052,6 +12356,13 @@ pm_ai_managed_textile_factory = {
 
 	unlocking_technologies = {
 		artificial_intelligence
+	}
+
+	# Gated to base PMs that employ enough to absorb this PM's employment
+	# cut (laborers -3000 / machinists -1000 / engineers -490). See pm_employment_audit.
+	unlocking_production_methods = {
+		pm_electric_sewing_machines
+		pm_programmable_matter_clothing
 	}
 
 	building_modifiers = {
@@ -13305,11 +13616,11 @@ pm_motor_trawlers = {
 			# Profit: 4750.0
 			# Profit margin: 380.00%
 			# Zero profit price multiplier: 0.21
-			# Employment: 3500
-			# Wage breakeven: 1.36
+			# Employment: 4000
+			# Wage breakeven: 1.19
 		}
 		level_scaled = {
-			building_employment_laborers_add = 2500
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 750
 			building_employment_engineers_add = 250
 		}
@@ -13342,11 +13653,11 @@ pm_motor_whaling_ships = {
 			# Profit: 2250.0
 			# Profit margin: 214.29%
 			# Zero profit price multiplier: 0.32
-			# Employment: 2500
-			# Wage breakeven: 0.90
+			# Employment: 4000
+			# Wage breakeven: 0.56
 		}
 		level_scaled = {
-			building_employment_laborers_add = 1500
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 750
 			building_employment_engineers_add = 250
 		}
@@ -13453,11 +13764,11 @@ pm_magnetic_drive_trawlers = {
 			# Profit: 7550.0
 			# Profit margin: 520.69%
 			# Zero profit price multiplier: 0.16
-			# Employment: 3500
-			# Wage breakeven: 2.16
+			# Employment: 4500
+			# Wage breakeven: 1.68
 		}
 		level_scaled = {
-			building_employment_laborers_add = 2000
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 1000
 			building_employment_engineers_add = 500
 		}
@@ -13491,11 +13802,11 @@ pm_magnetic_drive_whaling_ships = {
 			# Profit: 3300.0
 			# Profit margin: 200.00%
 			# Zero profit price multiplier: 0.33
-			# Employment: 2500
-			# Wage breakeven: 1.32
+			# Employment: 4500
+			# Wage breakeven: 0.73
 		}
 		level_scaled = {
-			building_employment_laborers_add = 1000
+			building_employment_laborers_add = 3000
 			building_employment_machinists_add = 1000
 			building_employment_engineers_add = 500
 		}
@@ -15177,6 +15488,14 @@ pm_computer_aided_design = {
 		computer_aided_design
 	}
 
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_reinforced_concrete_buildings
+		pm_arc_welded_buildings
+		pm_nanomaterial_buildings
+		pm_advanced_construction
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -15211,6 +15530,14 @@ pm_3d_printed_buildings = {
 
 	unlocking_technologies = {
 		additive_manufacturing
+	}
+
+	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	unlocking_production_methods = {
+		pm_reinforced_concrete_buildings
+		pm_arc_welded_buildings
+		pm_nanomaterial_buildings
+		pm_advanced_construction
 	}
 
 	building_modifiers = {

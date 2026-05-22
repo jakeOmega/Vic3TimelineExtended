@@ -329,7 +329,7 @@ INJECT:building_chemical_plant = {
 
 INJECT:building_explosives_factory = {
 	production_method_groups = {
-		pmg_automation_building_chemical_plant
+		pmg_automation_building_explosives_factory
 		pmg_maintenance
 	}
 }

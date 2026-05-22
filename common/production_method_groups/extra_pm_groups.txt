@@ -894,6 +894,17 @@ REPLACE_OR_CREATE:pmg_automation_building_chemical_plant = {
 		pm_ai_managed_chemical_plant
 	}
 }
+
+REPLACE_OR_CREATE:pmg_automation_building_explosives_factory = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_manual_batch_processing
+		pm_continuous_processing
+		pm_advanced_process_control_explosives_factory
+		pm_distributed_control_systems_explosives_factory
+		pm_ai_managed_explosives_factory
+	}
+}
 REPLACE_OR_CREATE:pmg_base_building_advanced_material_fabricator = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {

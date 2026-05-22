@@ -531,6 +531,36 @@ Script values are not parameterizable, so generators that need one SV per (entit
 
 The engine hires sailors to a ship in units of 100, so a ship type whose `ship_crew_max_add` is not a multiple of 100 crews only to the **multiple of 100 just below** its stated capacity (e.g. 250 → 200, 220 → 200), silently wasting the remainder. All 21 vanilla ship types use clean multiples of 100 (200…1200), so vanilla never trips this. When adding or tuning mod ships in `common/ship_types/extra_ship_types.txt`, keep `ship_crew_max_add` on a multiple of 100; round the smallest drone/auto crews **up** to 100 rather than down to 0.
 
+## PM Combinations Can Drive Employment Negative (`pm_employment_audit`)
+
+A building employs one PM per PM group; total employment for a profession is the
+**sum of `building_employment_<prof>_add` across the active PMs** (one per group).
+Automation/refinement PMs legitimately carry *negative* adds — but a player can
+pick a combination whose per-profession total goes **below zero**, which is
+incoherent. Vanilla avoids this by tuning each automation PM so the *lowest*
+vanilla base PM lands at exactly 0; two mod patterns break that invariant:
+
+1. **Mod base PMs below the vanilla floor** — new high-tech base PMs (`GMO_*`,
+   `magnetic_drive_*`) employing fewer workers than vanilla's lowest. Fix: raise
+   the mod base PM's employment to the floor so automation reaches 0.
+2. **Mod automation tiers cutting more than the base employs** (`pm_ai_managed_*`,
+   `pm_advanced_assembly_lines_*`). Fix: gate them with
+   `unlocking_production_methods` to the advanced base PMs that absorb the cut.
+
+`unlocking_production_methods = { ... }` means the PM is selectable only when **at
+least one** referenced PM is active **in the same building's combination** (it does
+*not* gate on tech — that's `unlocking_technologies`). Gating a PM **shared across
+buildings** restricts it everywhere, so a cutter shared by many buildings (e.g. a
+chemical-automation PM used by 14 plants) must be **split** into a building-specific
+copy before gating, not gated in place.
+
+`pm_employment_audit.py` enumerates the valid combinations per building (honoring
+`unlocking_production_methods`) and flags any negative-total profession; it runs on
+every `POST /reload` and writes `docs/engine/pm_employment_report.md`. **Editing
+`level_scaled` employment values requires a non-`audits_only` reload** so `pm_costs.py`
+refreshes the `# Employment`/cost comments (`extra_pms.txt` is hand-authored except
+those comment headers).
+
 ## Render Static Modifier Effects in Loc via `[GetStaticModifier('X').GetDesc]`
 
 For button / JE / event description loc that needs to claim *what a static modifier does*, embed the modifier's auto-rendered effect list rather than hand-writing the numbers. The data-system function `[GetStaticModifier('<name>').GetDesc]` renders the static modifier definition's full effect list and auto-updates when the modifier changes.
