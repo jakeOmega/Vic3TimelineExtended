@@ -227,15 +227,43 @@ EAF = {
 
 # === Mod replacements for vanilla minor formations ===
 
+# India forms from its modern core only. Pre-1.x this used `use_culture_states`,
+# which demanded ~75% of every homeland state of all 23 Indian cultures — i.e.
+# control of the whole subcontinent from Baluchistan to Bangladesh before India
+# could form at all. The explicit core list below scopes the *requirement* to
+# the modern-India interior; the Pakistan / Bangladesh / Nepal-Bhutan / Ceylon
+# periphery is granted as claims by formation_te.bharat instead (events/
+# te_formable_formation_events.txt), and Muslim-ruled in-core holdouts (chiefly
+# Hyderabad) are handled by the religion guard + Operation Polo chain below.
 BHA = {
-	use_culture_states = yes
+	states = {
+		STATE_ASSAM
+		STATE_AWADH
+		STATE_BIHAR
+		STATE_BOMBAY
+		STATE_MALWA
+		STATE_CIRCARS
+		STATE_DELHI
+		STATE_GUJARAT
+		STATE_HYDERABAD
+		STATE_MADRAS
+		STATE_MYSORE
+		STATE_CENTRAL_PROVINCES
+		STATE_WEST_BENGAL
+		STATE_ORISSA
+		STATE_RAJPUTANA
+		STATE_TRAVANCORE
+		STATE_KURNOOL
+		STATE_BUNDELKHAND
+		STATE_AGRA
+	}
 
 	is_major_formation = yes
 
 	unification_play = dp_unify_india
 	leadership_play = dp_leadership_india
 
-	required_states_fraction = 0.75
+	required_states_fraction = 0.65
 
 	ai_will_do = { has_technology_researched = decolonization }
 
@@ -247,18 +275,37 @@ BHA = {
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
 	}
+
+	# Emergent partition: a Muslim-ruled state inside the core (e.g. Hyderabad
+	# under the Nizam — culture deccani, state religion sunni) cannot be swept up
+	# by Indian unification, mirroring how a dual-monarchy Austria is exempted
+	# from German unification. It survives as an independent holdout that a
+	# formed India can later absorb via the Operation Polo event chain. A Hindu
+	# owner of the same state is absorbed normally — ownership decides the fate.
+	can_be_unification_target = {
+		NOT = {
+			OR = {
+				country_has_state_religion = rel:sunni
+				country_has_state_religion = rel:shiite
+				country_has_state_religion = rel:ibadi
+			}
+		}
+	}
 }
 
+# Indonesia forms from its modern core only. Malaya (peninsular Malaysia) and
+# North Borneo (Sabah/Sarawak/Brunei) are dropped from the requirement and
+# granted as claims by formation_te.nusantara instead, alongside Eastern New
+# Guinea (PNG). No religion guard — Indonesia's split from its neighbours is
+# geographic, not religious.
 NUS = {
 	states = {
 		STATE_ACEH
 		STATE_CENTRAL_JAVA
 		STATE_EAST_BORNEO
 		STATE_EAST_JAVA
-		STATE_MALAYA
 		STATE_MOLUCCAS
 		STATE_CELEBES
-		STATE_NORTH_BORNEO
 		STATE_NORTH_SUMATRA
 		STATE_SOUTH_SUMATRA
 		STATE_SUNDA_ISLANDS

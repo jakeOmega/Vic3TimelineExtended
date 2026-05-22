@@ -1,0 +1,165 @@
+namespace = formation_te
+
+# ============================================================================
+# BESPOKE FORMATION EVENTS — India (BHA) & Indonesia (NUS)
+#
+# These replace the generic formation.17 popup for BHA / NUS (suppressed by
+# adding the two tags to formation.17's NOR self-guard — see
+# events/te_formation_overrides.txt). They are dispatched from
+# on_country_formed in common/on_actions/extra_on_actions.txt; each self-guards
+# by tag, so only the matching one resolves.
+#
+# Each grants a long unification-prestige modifier (reusing the vanilla
+# `unification_prestige` modifier) and explicit claims on the periphery states
+# excluded from the formable's required core, via the scripted effects in
+# common/scripted_effects/te_formable_claims_effects.txt.
+#
+#  formation_te.1   India formed — "The Republic of Bharat"
+#  formation_te.2   Indonesia formed — "Merdeka — The Free Archipelago"
+#  formation_te.10  Operation Polo — annex a Muslim-ruled enclave holdout (India)
+#
+# See /home/jakef/.claude/plans/i-think-the-india-twinkling-wilkinson.md
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# formation_te.1 — India (BHA) forms
+# ----------------------------------------------------------------------------
+formation_te.1 = {
+	type = country_event
+	placement = root
+
+	title = formation_te.1.t
+	desc = formation_te.1.d
+	flavor = formation_te.1.f
+
+	event_image = { video = "asia_hinduism_sikhism" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		c:BHA ?= this
+	}
+
+	immediate = {
+		save_scope_as = formation_country
+		every_country = {
+			limit = { has_diplomatic_relevance = root }
+			post_notification = unification_notification_generic
+		}
+	}
+
+	option = {
+		name = formation_te.1.a
+		default_option = yes
+		add_modifier = {
+			name = unification_prestige	# REVIEWED 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
+			days = very_long_modifier_time
+		}
+		give_claims_on_te_india_periphery = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# formation_te.2 — Indonesia (NUS) forms
+# ----------------------------------------------------------------------------
+formation_te.2 = {
+	type = country_event
+	placement = root
+
+	title = formation_te.2.t
+	desc = formation_te.2.d
+	flavor = formation_te.2.f
+
+	event_image = { video = "asia_politician_parliament_motion" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		c:NUS ?= this
+	}
+
+	immediate = {
+		save_scope_as = formation_country
+		every_country = {
+			limit = { has_diplomatic_relevance = root }
+			post_notification = unification_notification_generic
+		}
+	}
+
+	option = {
+		name = formation_te.2.a
+		default_option = yes
+		add_modifier = {
+			name = unification_prestige	# REVIEWED 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
+			days = very_long_modifier_time
+		}
+		give_claims_on_te_indonesia_periphery = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# formation_te.10 — Operation Polo
+#
+# Dispatched from operation_polo_on_action (on_monthly_pulse_country) for a
+# formed India when an independent, sub-minor-power, Muslim-ruled state survives
+# bordered by Indian territory — the Hyderabad/Nizam holdout the formation
+# religion guard (can_be_unification_target) deliberately leaves behind. India
+# may annex it by force ("police action", high infamy), pressure it into
+# accession (great-power-only, lower infamy), or leave it be.
+#
+# scope:polo_target_country = the holdout (saved by the on_action).
+# ----------------------------------------------------------------------------
+formation_te.10 = {
+	type = country_event
+	placement = root
+
+	title = formation_te.10.t
+	desc = formation_te.10.d
+	flavor = formation_te.10.f
+
+	event_image = { video = "asia_sepoy_mutiny" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:polo_target_country
+	}
+
+	immediate = {
+		set_variable = { name = operation_polo_cooldown days = 730 }
+	}
+
+	# Police action — annex by force.
+	option = {
+		name = formation_te.10.a
+		default_option = yes
+		change_infamy = 20
+		annex = scope:polo_target_country
+		ai_chance = { factor = 2 }
+	}
+
+	# Pressure into accession — only credible for a great power. Lower outcry.
+	option = {
+		name = formation_te.10.b
+		trigger = {
+			country_rank >= rank_value:major_power
+		}
+		change_infamy = 8
+		annex = scope:polo_target_country
+		ai_chance = { factor = 1 }
+	}
+
+	# Respect their sovereignty — for now.
+	option = {
+		name = formation_te.10.c
+		ai_chance = { factor = 1 }
+	}
+}

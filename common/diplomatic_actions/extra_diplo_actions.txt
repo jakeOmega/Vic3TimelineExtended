@@ -962,7 +962,7 @@ voluntary_union = {
 			# stance is a strong NO; positive factors must accumulate to flip it.
 			add = {
 				desc = "VOLUNTARY_UNION_ACCEPT_BASELINE"
-				value = -75
+				value = -60
 			}
 
 			# === Hard nopes ===
@@ -983,21 +983,21 @@ voluntary_union = {
 				limit = { scope:actor.relations:root >= relations_threshold:friendly }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_REL_FRIENDLY"
-					value = 60
+					value = 70
 				}
 			}
 			else_if = {
 				limit = { scope:actor.relations:root >= relations_threshold:amicable }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_REL_AMICABLE"
-					value = 30
+					value = 45
 				}
 			}
 			else_if = {
 				limit = { scope:actor.relations:root >= relations_threshold:cordial }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_REL_CORDIAL"
-					value = 10
+					value = 20
 				}
 			}
 			else_if = {
@@ -1042,14 +1042,14 @@ voluntary_union = {
 				limit = { has_attitude = { who = scope:actor attitude = wary } }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_ATT_WARY"
-					value = -25
+					value = -10
 				}
 			}
 			else_if = {
 				limit = { has_attitude = { who = scope:actor attitude = cooperative } }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_ATT_COOPERATIVE"
-					value = 30
+					value = 35
 				}
 			}
 			else_if = {
@@ -1063,7 +1063,7 @@ voluntary_union = {
 				limit = { has_attitude = { who = scope:actor attitude = protective } }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_ATT_PROTECTIVE"
-					value = 40
+					value = 45
 				}
 			}
 
@@ -1084,7 +1084,7 @@ voluntary_union = {
 				}
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_PEACEFUL_IGS"
-					value = 20
+					value = 25
 				}
 			}
 			if = {
@@ -1109,7 +1109,7 @@ voluntary_union = {
 				}
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_ARMED_FORCES_OPPOSE"
-					value = -25
+					value = -15
 				}
 			}
 
@@ -1151,7 +1151,34 @@ voluntary_union = {
 				limit = { has_modifier = irr_cultural_ties_modifier }
 				add = {
 					desc = "VOLUNTARY_UNION_ACCEPT_CULTURAL_TIES"
-					value = 15
+					value = 20
+				}
+			}
+
+			# === Protection appeal: a small kin-state joining a powerful protector ===
+			# voluntary_union_eligible already requires the proposer outrank the
+			# target; this rewards a *wide* gap -- the in-fiction draw of dissolving
+			# into a strong same-culture great/major power for security. ROOT is the
+			# recipient here, so NOT = { country_rank >= rank_value:major_power }
+			# means the target itself sits below major-power rank.
+			if = {
+				limit = {
+					scope:actor = { country_rank >= rank_value:great_power }
+					NOT = { country_rank >= rank_value:major_power }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_PROTECTION_GREAT"
+					value = 20
+				}
+			}
+			else_if = {
+				limit = {
+					scope:actor = { country_rank >= rank_value:major_power }
+					NOT = { country_rank >= rank_value:major_power }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_ACCEPT_PROTECTION_MAJOR"
+					value = 10
 				}
 			}
 		}

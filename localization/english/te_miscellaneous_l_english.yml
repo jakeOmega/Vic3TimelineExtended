@@ -881,6 +881,8 @@
  VOLUNTARY_UNION_ACCEPT_OUR_BLOC_LEADER:0 "They lead our [concept_power_bloc] -- alignment is natural"
  VOLUNTARY_UNION_ACCEPT_PEACEFUL_IGS:0 "Our government has pacifist or humanitarian voices"
  VOLUNTARY_UNION_ACCEPT_PRIOR_OPENNESS:0 "We previously signalled openness to union"
+ VOLUNTARY_UNION_ACCEPT_PROTECTION_GREAT:0 "As a small nation, union with a great power of our own people would shelter us under its protection"
+ VOLUNTARY_UNION_ACCEPT_PROTECTION_MAJOR:0 "Union with a powerful nation of our own people would offer us protection"
  VOLUNTARY_UNION_ACCEPT_REL_AMICABLE:0 "Our relations are amicable"
  VOLUNTARY_UNION_ACCEPT_REL_COLD:0 "Our relations are cold"
  VOLUNTARY_UNION_ACCEPT_REL_CORDIAL:0 "Our relations are cordial"

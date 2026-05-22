@@ -1,0 +1,40 @@
+# ============================================================================
+# Formable claims-on-formation effects
+#
+# Called from the bespoke formation events (events/te_formable_formation_events.txt)
+# when India (BHA) / Indonesia (NUS) form. They grant claims on the periphery
+# states deliberately excluded from each formable's required core, so the new
+# nation starts with an irredentist agenda on the rest of its region rather than
+# having to control all of it to form in the first place.
+#
+# Claim idiom mirrors vanilla give_claims_on_germany / manifest_destiny.txt:
+# claim a named state-region for ROOT only where ROOT does not already own it.
+# ============================================================================
+
+give_claims_on_te_india_periphery = {
+	# Pakistan
+	s:STATE_BALUCHISTAN = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	s:STATE_SINDH = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	s:STATE_PASHTUNISTAN = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	s:STATE_QUETTA = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	s:STATE_HILL_PUNJAB = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	# Partition-split Punjab / Kashmir
+	s:STATE_PUNJAB = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	s:STATE_KASHMIR = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	# Bangladesh
+	s:STATE_EAST_BENGAL = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	# Sri Lanka
+	s:STATE_CEYLON = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	# Nepal / Bhutan / Sikkim (folded into the Himalaya states in vanilla)
+	s:STATE_HIMALAYAS = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	s:STATE_EASTERN_HIMALAYAS = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+}
+
+give_claims_on_te_indonesia_periphery = {
+	# Peninsular Malaysia
+	s:STATE_MALAYA = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	# North Borneo (Sabah / Sarawak / Brunei)
+	s:STATE_NORTH_BORNEO = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+	# Eastern New Guinea (Papua New Guinea)
+	s:STATE_EASTERN_NEW_GUINEA = { if = { limit = { any_scope_state = { NOT = { owner = ROOT } } } add_claim = ROOT } }
+}

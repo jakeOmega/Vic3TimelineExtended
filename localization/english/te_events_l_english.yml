@@ -1461,6 +1461,24 @@
  extra_law_events.9.t:0 "The Pirate's Dilemma"
 
 #
+# FORMATION_TE
+#
+ formation_te.1.a:0 "Our claims extend to all of the subcontinent."
+ formation_te.1.d:0 "From the Khyber to Cape Comorin, the dream of a single Indian nation has long outrun its reach. Today that dream takes the shape of a state. The heartland is one — Delhi and Bombay, Bengal and the Deccan answer to a single flag. Yet the work of unity is unfinished: the Muslim-majority west and east, the Himalayan kingdoms, and the island of Ceylon all lie beyond our borders, and many within them are kin who look to us still."
+ formation_te.1.f:0 "Long years in bondage ended in a moment which history seldom offers."
+ formation_te.1.t:0 "The Republic of Bharat"
+ formation_te.10.a:0 "Launch a police action and annex [scope:polo_target_country.GetName]."
+ formation_te.10.b:0 "Pressure [scope:polo_target_country.GetName] into accession."
+ formation_te.10.c:0 "Respect their sovereignty — for now."
+ formation_te.10.d:0 "[scope:polo_target_country.GetName] sits encircled by our territory, a princely holdout whose ruler refuses to accede to the Union. Its court pleads sovereignty and dreams of independence, but a foreign-aligned state lodged in our heartland is a dagger we cannot ignore. The Cabinet is divided on how firmly to press the matter."
+ formation_te.10.f:0 "Geography has already decided this question; only the manner of its answer remains."
+ formation_te.10.t:0 "An Island of Resistance"
+ formation_te.2.a:0 "The archipelago is not yet whole."
+ formation_te.2.d:0 "Across thirteen thousand islands, a single people now calls itself one nation. Java and Sumatra, Borneo and the Celebes, the Moluccas and Papua are bound together at last. But the archipelago does not end at our frontier: the Malay peninsula, the northern shore of Borneo, and the eastern half of New Guinea share our seas and our blood, and remain to be gathered in."
+ formation_te.2.f:0 "From Sabang to Merauke, one homeland, one tongue, one people."
+ formation_te.2.t:0 "Merdeka — The Free Archipelago"
+
+#
 # HEIR_EDUCATION_EVENTS
 #
  heir_education_events.1.a:0 "Encourage them to excel!"
