@@ -71,6 +71,33 @@ forced_law_through_event_authority_multiplier_large = {
 	multiply = 3
 }
 
+# Actual authority cost each override tier imposes = the forced_law_through_event
+# modifier's base country_authority_add (250) times the tier multiplier above,
+# which already folds in the capacity discount + authority_mult compensation.
+# Used to gate the event options on the cost they'll *actually* pay rather than
+# the undiscounted base, so high override capacity relaxes the requirement.
+# NOTE: 250 must stay in sync with forced_law_through_event's country_authority_add.
+forced_law_through_event_authority_cost_small = {
+	value = 250
+	multiply = forced_law_through_event_authority_multiplier_small
+}
+forced_law_through_event_authority_cost_medium = {
+	value = 250
+	multiply = forced_law_through_event_authority_multiplier_medium
+}
+forced_law_through_event_authority_cost_large = {
+	value = 250
+	multiply = forced_law_through_event_authority_multiplier_large
+}
+
+# Authority-cost reduction (%) from the current capacity discount, for display in
+# the Forceful Legislation event panel. 0 below capacity 2, rising with capacity.
+forced_law_override_discount_pct_display = {
+	value = 1
+	subtract = forced_law_through_event_capacity_discount
+	multiply = 100
+}
+
 construction_cost_super_high = 2000
 construction_cost_mega_high = 5000
 construction_cost_extreme = 10000
