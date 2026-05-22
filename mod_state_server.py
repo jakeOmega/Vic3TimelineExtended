@@ -6650,6 +6650,8 @@ POST_LOAD_AUDITS = [
     ("concept_reference_audit",       "concept_reference_audit"),
     ("localization_accessor_audit",   "localization_accessor_audit"),
     ("mod_structure_audit",           "mod_structure_audit"),
+    ("loc_render_audit",              "loc_render_audit"),
+    ("any_limit_audit",               "any_limit_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
