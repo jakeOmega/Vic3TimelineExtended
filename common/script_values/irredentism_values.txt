@@ -239,3 +239,22 @@ irredentist_pressure_score = {
 
 	min = 0
 }
+
+# Ratio of the demanding unifier's army projection to ROOT's own. Evaluated in
+# the *target* scope (irredentism.2) with scope:irr_unifier = the demander.
+# >= 2 means the demander roughly doubles our strength (a target with little
+# hope of winning should fold); <= 0.5 means we clearly outmatch them (defy).
+# Denominator floored by skipping the divide when our projection is < 1, which
+# leaves the demander's raw projection -- correctly reading as "hopelessly
+# outmatched" when we have no army at all.
+irr_demander_army_ratio = {
+	value = 0
+	if = {
+		limit = { exists = scope:irr_unifier }
+		add = scope:irr_unifier.army_power_projection
+		if = {
+			limit = { army_power_projection >= 1 }
+			divide = army_power_projection
+		}
+	}
+}

@@ -6521,12 +6521,6 @@ irr_defiance_modifier = {
 }
 
 # Target chose to negotiate (Event 2B). Less national pride; more pragmatism.
-irr_negotiating_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_radicals_from_political_movements_mult = 0.05
-	country_pact_leverage_generation_mult = 0.05
-}
-
 # Unifier offered voluntary union (Event 3A). A mild, mult-based prestige
 # bump (statesmanship); _mult keeps duration scaling bounded
 # (event_magnitude_audit flagged the prior _add form as fast-scaling).

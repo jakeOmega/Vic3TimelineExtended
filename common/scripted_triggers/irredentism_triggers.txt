@@ -41,13 +41,35 @@ irr_target_reachable = {
 	}
 }
 
+# Target scope (THIS = the prospective union target), references ROOT (the
+# unifier). The "same nation" test: the target shares at least one primary
+# culture with ROOT, AND owns no homeland of a primary culture ROOT lacks.
+# Primary cultures the target merely lists but holds no homeland of (e.g. Slovak
+# after a Czecho-Slovak state loses all its Slovak land) don't disqualify it --
+# only territory it actually holds counts. This stops a multi-culture empire (or
+# a country whose shared culture is just one of several) from being wholly
+# absorbed: divided-nation unions (both German, both Korean) pass; an empire
+# still holding foreign homelands does not. `owner` resolves to the target,
+# since any_scope_state iterates the target's own states.
+irr_target_same_nation = {
+	# Shares at least one primary culture -- the basis for union.
+	any_primary_culture = { is_primary_culture_of = ROOT }
+	# Owns no homeland of one of its OWN primary cultures that ROOT doesn't share.
+	NOT = {
+		any_scope_state = {
+			is_homeland_of_country_cultures = owner
+			NOT = { is_homeland_of_country_cultures = ROOT }
+		}
+	}
+}
+
 # Country scope, takes scope:target_country.
 # Returns true when ROOT and scope:target_country are in principle a candidate
-# pair for irredentist pressure: tech unlocked, share at least one primary
-# culture, ROOT holds a claim on at least one home-culture state of target
-# that is still populated by co-ethnics, the target is reachable (land border
-# or shared sea access), and neither side is in a subject relationship that
-# would block direct action.
+# pair for irredentist pressure: tech unlocked, the target is substantially the
+# same nation (irr_target_same_nation), ROOT holds a claim on at least one
+# home-culture state of target that is still populated by co-ethnics, the target
+# is reachable (land border or shared sea access), and neither side is in a
+# subject relationship that would block direct action.
 #
 # Bloc compatibility is intentionally NOT filtered here -- path-specific gates
 # (`irredentist_bloc_check_war` / `_peace`) and the engine-level Defensive
@@ -60,15 +82,11 @@ is_irredentist_candidate_for = {
 		NOT = { is_country_type = decentralized }
 	}
 
-	# Same primary culture (strict): share at least one primary culture.
-	any_primary_culture = {
-		is_primary_culture_of = scope:target_country
-	}
-
-	# At least one of target's owned states is a homeland of ROOT's primary
-	# culture, claimed by ROOT, and still populated by co-ethnics -- and the
-	# target must be reachable (land border or shared sea access).
+	# The target must be substantially the same nation (shares a primary culture
+	# and holds no foreign-culture homelands), own a claimed home state still
+	# populated by co-ethnics, and be reachable (land border or shared sea access).
 	scope:target_country = {
+		irr_target_same_nation = yes
 		any_scope_state = {
 			irr_claimed_populated_home_state = yes
 		}
