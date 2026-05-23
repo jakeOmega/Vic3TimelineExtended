@@ -1,0 +1,171 @@
+{
+  "date": "2026-05-23",
+  "run_label": "2026-05-23",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [
+      "common/scripted_buttons/un_buttons.txt",
+      "common/static_modifiers/extra_modifiers.txt"
+    ],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/power_bloc_identities/extra_power_bloc_identities.txt",
+      "line_range": null,
+      "lines": 132,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/treaty_articles/102_seize_company.txt",
+      "line_range": null,
+      "lines": 237,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/treaty_articles/101_disband_company.txt",
+      "line_range": null,
+      "lines": 229,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/diplomatic_actions/extra_diplo_actions.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/power_bloc_principles/modified.txt",
+      "line_range": null,
+      "lines": 67,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/treaty_articles/109_enforce_emissions_reduction.txt",
+      "line_range": null,
+      "lines": 316,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/treaty_articles/104_corporate_concessions.txt",
+      "line_range": null,
+      "lines": 259,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/diplomatic_actions/covert_operations.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/civil_rights_triggers.txt",
+      "line_range": null,
+      "lines": 49,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_progress_bars/un_progress_bars.txt",
+      "line_range": null,
+      "lines": 10,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_rules/extra_rules.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-20",
+      "audit_count": 2,
+      "recent_findings": 0
+    }
+  ]
+}

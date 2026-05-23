@@ -574,13 +574,13 @@
       "recent_findings": 0
     },
     "common/scripted_progress_bars/un_progress_bars.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "last_audited": "2026-05-20",
-      "audit_count": 2,
+      "last_audited": "2026-05-23",
+      "audit_count": 3,
       "recent_findings": 0
     },
     "common/scripted_triggers/covert_warfare_triggers.txt": {
@@ -1139,6 +1139,63 @@
     "common/static_modifiers/te_map_mode_modifiers.txt": {
       "last_audited": "2026-05-22",
       "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/power_bloc_identities/extra_power_bloc_identities.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/treaty_articles/102_seize_company.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/treaty_articles/101_disband_company.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/diplomatic_actions/extra_diplo_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/power_bloc_principles/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/treaty_articles/109_enforce_emissions_reduction.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 1
+    },
+    "common/treaty_articles/104_corporate_concessions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/diplomatic_actions/covert_operations.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_triggers/civil_rights_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
       "recent_findings": 0
     }
   }
