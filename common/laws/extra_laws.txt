@@ -3801,7 +3801,6 @@ law_algorithmic_governance = {
 		country_law_enactment_time_mult = -0.5
 		country_law_enactment_stall_mult = -0.25
 
-		country_legitimacy_govt_total_votes_add = -20
 		country_legitimacy_govt_leader_clout_add = 10
 		country_legitimacy_ideological_incoherence_mult = -0.3
 		state_radicals_and_loyalists_from_sol_change_mult = 1.0

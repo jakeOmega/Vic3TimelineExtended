@@ -775,3 +775,110 @@ UNE = {
 		}
 	}
 }
+
+# === Dar-Al-Islam / Caliphate ===
+# Theocracy is the iconic "The Caliphate". Monarchy carries ruler-culture
+# 2nd-axis flavor at priority 5 (Turkish/Arab/Persian → historical caliphates),
+# falling through to a generic Sultanate for any other Muslim ruler.
+
+DAR = {
+	dynamic_country_name = { # Default / republic / federation
+		name = dyn_c_islamic_federation
+		adjective = DAR_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+			NOT = { coa_def_communist_flag_trigger = yes }
+			NOT = { coa_def_technocracy_flag_trigger = yes }
+		}
+	}
+	dynamic_country_name = { # Communist — Islamic socialism
+		name = dyn_c_islamic_socialist_republic
+		adjective = DAR_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Fascist — Pan-Islamic League
+		name = dyn_c_pan_islamic_league
+		adjective = DAR_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_fascist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Theocracy — The Caliphate (iconic)
+		name = dyn_c_the_caliphate
+		adjective = dyn_c_caliphate_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Turkish-led monarchy — Ottoman Caliphate
+		name = dyn_c_ottoman_caliphate
+		adjective = dyn_c_ottoman_caliphate_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= { has_culture = cu:turkish }
+			}
+		}
+	}
+	dynamic_country_name = { # Arab-led monarchy — Rashidun Caliphate
+		name = dyn_c_rashidun_caliphate
+		adjective = dyn_c_rashidun_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= {
+					OR = {
+						has_culture = cu:mashriqi
+						has_culture = cu:maghrebi
+						has_culture = cu:bedouin
+						has_culture = cu:misri
+					}
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Persian-led monarchy — Safavid revival
+		name = dyn_c_safavid_caliphate
+		adjective = dyn_c_safavid_adj
+		is_main_tag_only = yes
+		priority = 5
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+			scope:actor ?= {
+				ruler ?= { has_culture = cu:persian }
+			}
+		}
+	}
+	dynamic_country_name = { # Generic monarchy — Sultanate
+		name = dyn_c_islamic_sultanate
+		adjective = DAR_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Technocracy — House of Wisdom (Bayt al-Hikma)
+		name = dyn_c_house_of_wisdom
+		adjective = dyn_c_house_of_wisdom_adj
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_technocracy_flag_trigger = yes
+		}
+	}
+}

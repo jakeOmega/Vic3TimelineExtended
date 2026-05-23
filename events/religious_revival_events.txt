@@ -77,6 +77,7 @@ religious_revival_events.1 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_1_fired }
 	}
 
 	# Embrace the religious vote
@@ -105,6 +106,7 @@ religious_revival_events.1 = {
 		}
 		add_modifier = {
 			name = rre_religious_right_modifier
+			days = very_long_modifier_time
 		}
 		add_loyalists = {
 			value = medium_radicals
@@ -229,6 +231,7 @@ religious_revival_events.2 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_2_fired }
 	}
 
 	# Give them the airwaves
@@ -253,6 +256,7 @@ religious_revival_events.2 = {
 		}
 		add_modifier = {
 			name = rre_televangelism_modifier
+			days = very_long_modifier_time
 		}
 		add_loyalists = {
 			value = medium_radicals
@@ -368,6 +372,7 @@ religious_revival_events.3 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_3_fired }
 	}
 
 	# The faithful speak for the oppressed
@@ -392,6 +397,7 @@ religious_revival_events.3 = {
 		}
 		add_modifier = {
 			name = rre_liberation_theology_modifier
+			days = very_long_modifier_time
 		}
 		add_loyalists = {
 			value = medium_radicals
@@ -510,6 +516,7 @@ religious_revival_events.4 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_4_fired }
 	}
 
 	# Our nation's soul is bound to its faith
@@ -653,6 +660,7 @@ religious_revival_events.5 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_5_fired }
 	}
 
 	# Let faith flourish in the digital age
@@ -677,6 +685,7 @@ religious_revival_events.5 = {
 		}
 		add_modifier = {
 			name = rre_digital_faith_modifier
+			days = very_long_modifier_time
 		}
 		add_loyalists = {
 			value = medium_radicals
@@ -780,6 +789,7 @@ religious_revival_events.6 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_6_fired }
 	}
 
 	# Stand with tradition
@@ -930,6 +940,7 @@ religious_revival_events.7 = {
 			save_scope_as = devout_ig
 		}
 		set_variable = { name = rre_recent_cooldown years = 5 }
+		set_variable = { name = rre_revival_7_fired }
 	}
 
 	# Fund faith-based institutions

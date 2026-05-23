@@ -448,7 +448,7 @@
  POWER_BLOC_MANDATE_PROGRESS_GLOBAL_GDP:"From [concept_power_bloc] containing [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_gdp_share')|V]% of world [Concept('concept_gdp', 'GDP')] ($identity_diplomatic$)"
  POWER_BLOC_MANDATE_PROGRESS_GLOBAL_POPULATION:"From [concept_power_bloc] containing [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_population_share')|V]% of world population ($identity_diplomatic$)"
  PROTECT_FOREIGN_PROPERTY_RELATIONS_TT:0 "#G +20#! relations with all countries that own significant portions of our economy."
- REQ_BASE_SCIENCE_AID_ARTICLE:0 "Requires Basic Science Aid Article"
+ REQ_BASE_SCIENCE_AID_ARTICLE:0 "Requires a Modernization Aid agreement (in force or in this treaty)"
  SEIZE_COMPANY_ACQUISITION_BENEFIT:0 "from acquiring a rival's company"
  SEIZE_COMPANY_ALREADY_HAS:0 "[TARGET_COUNTRY.GetNameNoFormatting] already has a company of this type"
  SEIZE_COMPANY_BASE_RELUCTANCE:0 "from reluctance to surrender a company"

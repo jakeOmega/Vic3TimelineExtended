@@ -1,9 +1,9 @@
 ﻿# Formation rules for the formable countries added by this mod.
 #
 # All major formations: candidates compete via leadership/unification
-# diplomatic plays. AFU/BHA/NUS/EUN/UNA/UNE/ZHO/INM/EAF.
+# diplomatic plays. AFU/BHA/NUS/EUN/UNA/UNE/ZHO/INM/EAF/DAR.
 #
-# The six pan-region political unions (AFU/EUN/UNA/UNE/INM/EAF) are
+# The seven pan-region political unions (AFU/EUN/UNA/UNE/INM/EAF/DAR) are
 # `is_major_formation = yes` so they bypass vanilla's downward-only rank
 # gate — thematically they exist to be formed by countries already at or
 # above their tier (a hegemony forming the EU, etc.), which a minor
@@ -65,8 +65,12 @@ AFU = {
 	}
 
 	max_num_formation_candidates = 3
+	# Candidacy is engine-gated on "has a primary culture in AFU's culture list"
+	# alone — which leaks across regions (e.g. a Misri-primary Arabia, capital in
+	# Hedjaz, qualifies via misri ∈ AFU.cultures). Bind candidacy to an
+	# African-capital power so the African Union is led from Africa.
 	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
+		is_major_african_power = yes
 	}
 }
 
@@ -97,8 +101,10 @@ EUN = {
 	}
 
 	max_num_formation_candidates = 3
+	# Bind candidacy to a region-capital power (see AFU). Engine candidacy is
+	# culture-only, which leaks across regions where culture lists overlap.
 	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
+		is_major_european_power = yes
 	}
 }
 
@@ -128,7 +134,7 @@ UNA = {
 
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
+		is_major_north_american_power = yes
 	}
 }
 
@@ -191,7 +197,7 @@ INM = {
 
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
+		is_major_intermarium_power = yes
 	}
 }
 
@@ -221,7 +227,77 @@ EAF = {
 
 	max_num_formation_candidates = 3
 	can_be_formation_candidate = {
-		country_rank >= rank_value:major_power
+		is_major_east_african_power = yes
+	}
+}
+
+# Pan-Islamic Caliphate. Like the other pan-region unions it carries the
+# external-pressure / bloc-aligned / no-internal-rivalry triple (DAR-scoped,
+# in formable_gating_triggers.txt). What makes it distinct is the religion
+# gate: only a country under an Islamic state religion (sunni/shiite/ibadi)
+# may proclaim the Caliphate. That is a requirement on the FORMER, so it sits
+# in `possible` — NOT a `can_be_unification_target` guard (which would instead
+# decide which states get swept up, the wrong axis for "who may form it").
+#
+# The Islamic-state-religion check alone is insufficient: a country keeps its
+# (culture/ruler-derived) state-religion value even under secular church-state
+# law, so e.g. a Total Separation state still reads as "Sunni". A Caliphate
+# must actually establish OR at least tolerate that religion, so we also forbid
+# the two genuinely secular church-state laws via NOR: law_total_separation and
+# law_state_atheism. The four permitted laws — state_religion, people_of_the_book,
+# millet_system, freedom_of_conscience — all describe an officially-Islamic state
+# (freedom_of_conscience = officially Sunni but at ease with Shia / People of the
+# Book, the historical millet/dhimmi norm).
+DAR = {
+	geographic_region = geographic_region_dar_al_islam
+
+	is_major_formation = yes
+
+	unification_play = dp_unify_dar_al_islam
+	leadership_play = dp_leadership_dar_al_islam
+
+	required_states_fraction = 0.5
+
+	ai_will_do = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+		dar_formation_external_pressure = yes
+		dar_formation_bloc_aligned = yes
+		dar_formation_no_internal_rivalry = yes
+		OR = {
+			country_has_state_religion = rel:sunni
+			country_has_state_religion = rel:shiite
+			country_has_state_religion = rel:ibadi
+		}
+		NOR = {
+			has_law_or_variant = law_type:law_total_separation
+			has_law_or_variant = law_type:law_state_atheism
+		}
+	}
+
+	possible = {
+		has_technology_researched = decolonization
+		has_technology_researched = pan-nationalism
+		dar_formation_external_pressure = yes
+		dar_formation_bloc_aligned = yes
+		dar_formation_no_internal_rivalry = yes
+		OR = {
+			country_has_state_religion = rel:sunni
+			country_has_state_religion = rel:shiite
+			country_has_state_religion = rel:ibadi
+		}
+		NOR = {
+			has_law_or_variant = law_type:law_total_separation
+			has_law_or_variant = law_type:law_state_atheism
+		}
+	}
+
+	max_num_formation_candidates = 3
+	# Bind candidacy to a power whose capital is in the Islamic world (see AFU) —
+	# otherwise an Indian (bengali/panjabi/sindi/baluchi) or Malay candidate leaks
+	# in via shared cultures, even though it could never lead the Caliphate.
+	can_be_formation_candidate = {
+		is_major_dar_al_islam_power = yes
 	}
 }
 
@@ -272,8 +348,13 @@ BHA = {
 	}
 
 	max_num_formation_candidates = 3
+	# Bind candidacy to an India-capital power. Engine candidacy is culture-only,
+	# and baluchi/bengali/panjabi/sindi are shared with DAR, so an out-of-region
+	# power (e.g. Persia) could otherwise leak in. A Pakistan-capital state stays
+	# a valid candidate — its capital is inside geographic_region_india.
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
+		capital = { is_in_geographic_region = geographic_region_india }
 	}
 
 	# Emergent partition: a Muslim-ruled state inside the core (e.g. Hyderabad
@@ -328,8 +409,10 @@ NUS = {
 	}
 
 	max_num_formation_candidates = 3
+	# Bind candidacy to an Indonesia-capital power (malay is shared with DAR).
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
+		capital = { is_in_geographic_region = geographic_region_indonesia }
 	}
 }
 
@@ -350,8 +433,11 @@ ZHO = {
 	}
 
 	max_num_formation_candidates = 3
+	# Bind candidacy to a China-capital power (mongol/tibetan/uighur are shared
+	# with neighbours; deliberately excludes Manchuria per geographic_region_china).
 	can_be_formation_candidate = {
 		country_rank >= rank_value:major_power
+		capital = { is_in_geographic_region = geographic_region_china }
 	}
 }
 

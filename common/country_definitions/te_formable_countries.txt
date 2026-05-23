@@ -387,3 +387,46 @@ UNE = {
 	}
 	capital = STATE_WEST_SWITZERLAND
 }
+
+DAR = {
+	color = { 20 110 70 }
+
+	country_type = recognized
+
+	tier = hegemony
+
+	cultures = {
+		# Arab
+		mashriqi
+		maghrebi
+		bedouin
+		misri
+		# Turkic
+		turkish
+		azerbaijani
+		uzbek
+		# Iranian
+		persian
+		kurdish
+		pashtun
+		baluchi
+		# North African / Berber
+		berber
+		# South Asian Muslim
+		panjabi
+		sindi
+		bengali
+		# Sahel / Horn
+		hausa
+		fulbe
+		kanuri
+		songhai
+		sudanese
+		somali
+		# East African
+		swahili
+		# Maritime SE Asia (Muslim Malay world)
+		malay
+	}
+	capital = STATE_HEDJAZ
+}

@@ -3,12 +3,12 @@
 #
 # The vanilla rank gate blocks minor formations once a country is at the
 # formable's tier or above. Pan-region political unions (AFU/EUN/UNA/UNE/INM/
-# EAF) are thematically formed by countries that are already powerful, so
+# EAF/DAR) are thematically formed by countries that are already powerful, so
 # they are `is_major_formation = yes` to bypass that gate. The triggers
 # below replace the rank gate with world-state conditions so the unification
 # only fires when it would feel earned, not whenever the rank check passes.
 #
-# Three load-bearing conditions per regional union (EU/AFU/UNA/INM/EAF):
+# Three load-bearing conditions per regional union (EU/AFU/UNA/INM/EAF/DAR):
 #   1. External rank pressure — at least one external great power that is
 #      globally top-3, i.e. a real outside force the region would unify
 #      *against*. (A rank-8 external GP is not real pressure.)
@@ -54,6 +54,11 @@ is_major_intermarium_power = {
 is_major_east_african_power = {
 	country_rank >= rank_value:major_power
 	capital = { is_in_geographic_region = geographic_region_east_african_federation }
+}
+
+is_major_dar_al_islam_power = {
+	country_rank >= rank_value:major_power
+	capital = { is_in_geographic_region = geographic_region_dar_al_islam }
 }
 
 # === Shared helpers ============================================================
@@ -229,6 +234,42 @@ eaf_formation_no_internal_rivalry = {
 	NOT = {
 		any_country = {
 			is_major_east_african_power = yes
+			is_at_friction_with_root = yes
+			count >= 1
+		}
+	}
+}
+
+# === DAR (Dar-Al-Islam / Caliphate) ===========================================
+# Pan-Islamic union. The Islamic-state-religion requirement (in country_formation
+# `possible`) decides eligibility; these three decide whether world conditions
+# warrant unification — same shape as EU/AFU. Internal-rivalry friction is the
+# load-bearing one here (Sunni-Shia, Arab-Persian, Turkish-Arab tensions all
+# read as rivalry/war between major Muslim powers).
+
+dar_formation_external_pressure = {
+	any_country = {
+		country_rank >= rank_value:great_power
+		global_country_ranking <= 3
+		NOT = { is_major_dar_al_islam_power = yes }
+		count >= 1
+	}
+}
+
+dar_formation_bloc_aligned = {
+	NOT = {
+		any_country = {
+			is_major_dar_al_islam_power = yes
+			NOT = { is_aligned_with_root = yes }
+			count >= 1
+		}
+	}
+}
+
+dar_formation_no_internal_rivalry = {
+	NOT = {
+		any_country = {
+			is_major_dar_al_islam_power = yes
 			is_at_friction_with_root = yes
 			count >= 1
 		}
