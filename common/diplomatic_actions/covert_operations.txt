@@ -69,6 +69,10 @@ covert_election_interference_action = {
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_election_interference_action } }
 		}
 		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
@@ -221,6 +225,10 @@ covert_financial_subversion_action = {
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_financial_subversion_action } }
 		}
 		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
@@ -364,6 +372,10 @@ covert_infrastructure_sabotage_action = {
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_infrastructure_sabotage_action } }
 		}
 		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
@@ -486,6 +498,10 @@ covert_comms_disruption_action = {
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_comms_disruption_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_truce_tt
@@ -615,6 +631,10 @@ covert_industrial_espionage_action = {
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_industrial_espionage_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_truce_tt
@@ -752,6 +772,10 @@ covert_military_espionage_action = {
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_military_espionage_action } }
 		}
 		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
@@ -875,6 +899,10 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_influence_campaign_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_truce_tt
@@ -1028,6 +1056,10 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_ideological_subversion_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_truce_tt
@@ -1187,6 +1219,10 @@ covert_destabilization_action = {
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
 			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_destabilization_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_truce_tt

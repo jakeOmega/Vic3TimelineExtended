@@ -1268,3 +1268,114 @@ voluntary_union = {
 		}
 	}
 }
+
+# ============================================================================
+# VOLUNTARY UNION (DECENTRALIZED)
+#
+# Companion to voluntary_union for absorbing DECENTRALIZED powers. A separate
+# action is required because decentralized countries have has_politics = no --
+# they have no government that can *consent*, so the approval-based voluntary_union
+# can never resolve against them (vanilla excludes decentralized from every
+# requires_approval action for this reason). This action is therefore
+# `requires_approval = no`: a one-shot peaceful annex, modeled on vanilla's
+# invoke_doctrine_of_lapse (46_doctrine_of_lapse.txt). "Voluntary" is a courtesy
+# label -- there is no other party to assent.
+#
+# Tiering:
+#   - decolonization (era 6): same-culture decentralized powers only (irr_target_same_nation).
+#   - globalization  (era 9): culture gate lifts -- any decentralized power, enabling
+#     late-game consolidation of all remaining stateless lands under centralized states.
+#
+# Reuses the irredentism reachability / same-nation triggers (irredentism_triggers.txt);
+# deliberately does NOT call voluntary_union_eligible / is_irredentist_candidate_for,
+# whose amicable-relations + claimed-co-ethnic-home-state gates a decentralized
+# target can never satisfy.
+# ============================================================================
+voluntary_union_decentralized = {
+	groups = { general }
+	requires_approval = no            # decentralized has has_politics = no -> cannot consent
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	should_notify_third_parties = yes
+	is_hostile = no
+	show_in_lens = no
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+
+	selectable = {
+		# Same activation floor as voluntary_union / the irredentism system.
+		# Also implicitly excludes decentralized actors (can_research = no).
+		has_technology_researched = decolonization
+	}
+
+	potential = {
+		scope:target_country = {
+			is_country_type = decentralized
+		}
+	}
+
+	possible = {
+		scope:target_country = {
+			is_country_type = decentralized
+			# Reachability: land border OR both sides touch the sea (convoy-linkable).
+			irr_target_reachable = yes
+		}
+		is_diplomatic_play_committed_participant = no
+		NOT = { has_truce_with = scope:target_country }
+		# Era-6 floor permits only same-culture decentralized powers; globalization
+		# (era 9) lifts the culture gate for full late-game consolidation.
+		custom_tooltip = {
+			text = voluntary_union_decentralized_culture_tt
+			OR = {
+				has_technology_researched = globalization
+				scope:target_country = { irr_target_same_nation = yes }
+			}
+		}
+	}
+
+	accept_effect = {
+		# Notify interested third parties BEFORE the annex -- the scripted effect
+		# walks scope:target_country's strategic regions (still valid here). Set up
+		# the scope aliases the effect expects (shared with voluntary_union).
+		save_scope_as = irr_unifier
+		scope:target_country = {
+			save_scope_as = irr_annexed_country
+		}
+		te_irredentism_notify_third_parties_effect = { PEACEFUL = yes }
+		annex = scope:target_country
+	}
+
+	ai = {
+		# No accept_score -- requires_approval = no means there is no target-side
+		# decision. AI proposing centralized neighbors absorb reachable decentralized
+		# lands, driving the world toward full centralization. Kept conservative;
+		# tune after playtest (overlaps thematically with colonization).
+		evaluation_chance = {
+			value = 0.1
+		}
+
+		propose_score = {
+			value = 0
+
+			add = {
+				desc = "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_BASELINE"
+				value = 5
+			}
+
+			# Same-culture co-ethnic land is a stronger pull than a foreign-culture grab.
+			if = {
+				limit = {
+					scope:target_country = { irr_target_same_nation = yes }
+				}
+				add = {
+					desc = "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_SAME_CULTURE"
+					value = 5
+				}
+			}
+		}
+
+		will_propose = {
+			always = yes
+		}
+	}
+}
