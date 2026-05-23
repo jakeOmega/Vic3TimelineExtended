@@ -52,9 +52,7 @@ irredentism.1 = {
 		any_country = {
 			NOT = { THIS = ROOT }
 			NOT = { is_country_type = decentralized }
-			ROOT = {
-				any_primary_culture = { is_primary_culture_of = PREV }
-			}
+			irr_target_same_nation = yes
 			any_scope_state = {
 				irr_claimed_populated_home_state = yes
 			}
@@ -70,9 +68,7 @@ irredentism.1 = {
 			limit = {
 				NOT = { THIS = ROOT }
 				NOT = { is_country_type = decentralized }
-				ROOT = {
-					any_primary_culture = { is_primary_culture_of = PREV }
-				}
+				irr_target_same_nation = yes
 				any_scope_state = {
 					irr_claimed_populated_home_state = yes
 				}
@@ -98,7 +94,10 @@ irredentism.1 = {
 				save_scope_as = irr_demanded_state
 			}
 		}
-		# Also pick an unclaimed home-state for the "stoke" option, if any.
+		# Also pick an unclaimed home-state for the "stoke" option, if any. Save
+		# the state_region too so Option A can add the claim at region scope --
+		# the vanilla idiom (s:STATE_X = { add_claim }) that renders in the
+		# option tooltip, rather than a nested state->region scope hop.
 		scope:target_country = {
 			random_scope_state = {
 				limit = {
@@ -106,6 +105,7 @@ irredentism.1 = {
 					NOT = { has_claim_by = ROOT }
 				}
 				save_scope_as = irr_unclaimed_home_state
+				state_region = { save_scope_as = irr_unclaimed_home_region }
 			}
 		}
 	}
@@ -129,14 +129,15 @@ irredentism.1 = {
 				add = -1
 			}
 		}
-		# If we found an unclaimed home state, claim it.
+		# If we found an unclaimed home state, claim it (region scope so the
+		# tooltip renders the gained claim).
 		if = {
-			limit = { exists = scope:irr_unclaimed_home_state }
-			scope:irr_unclaimed_home_state = {
-				state_region = { add_claim = ROOT }
-			}
+			limit = { exists = scope:irr_unclaimed_home_region }
+			scope:irr_unclaimed_home_region = { add_claim = ROOT }
 		}
-		change_infamy = 5
+		# Agitation/claim-laying is a modest provocation -- much lighter than
+		# actually opening a play (Option C's path), so a small infamy hit.
+		change_infamy = 1
 		change_relations = {
 			country = scope:target_country
 			value = -10
@@ -168,6 +169,9 @@ irredentism.1 = {
 			country = scope:target_country
 			value = 15
 		}
+		# Spell out the payoff: the cultural-ties bond makes them likelier to
+		# accept a future voluntary union.
+		custom_tooltip = irredentism.1.b.tt
 		# Lasting goodwill -- biases voluntary_union AI in their direction.
 		add_modifier = {
 			name = irr_cultural_ties_modifier
@@ -210,13 +214,11 @@ irredentism.1 = {
 			is_diplomatic_play_committed_participant = no
 			scope:target_country = { is_diplomatic_play_committed_participant = no }
 		}
-		change_infamy = 2
-		create_diplomatic_play = {
-			target_country = scope:target_country
-			type = dp_return_state
-			target_state = scope:irr_demanded_state
-		}
-		# Notify the target with Event 2 (narrative + IG reactions).
+		# The demand is a diplomatic note, not yet a play: it triggers a decision
+		# on the target (irredentism.2). If they REFUSE, that event opens the
+		# return-state diplomatic play; if they CEDE, the state transfers
+		# peacefully. The custom_tooltip makes this two-step flow explicit.
+		custom_tooltip = irredentism.1.c.tt
 		scope:target_country = {
 			trigger_event = { id = irredentism.2 days = 5 }
 		}
@@ -246,9 +248,13 @@ irredentism.1 = {
 }
 
 # ============================================================================
-# Event 2: "[Other] Demands Our Lands"
-# Fires on the target country after Event 1 option C creates a return-state
-# play. Cosmetic + IG reaction options -- the play itself is already in motion.
+# Event 2: "[Demander] Demands [State]"
+# Fires on the target after Event 1 option C delivers the demand (no play yet).
+# The target decides: CEDE the state peacefully (set_state_owner) or REFUSE,
+# which is what actually opens the return-state diplomatic play (initiated by
+# scope:irr_unifier). AI fold/defy weighting reads relative army strength via
+# irr_demander_army_ratio. scope:irr_unifier / scope:irr_demanded_state
+# propagate from Event 1 (same pattern as Event 3 -> Event 4).
 # ============================================================================
 irredentism.2 = {
 	type = country_event
@@ -270,15 +276,26 @@ irredentism.2 = {
 		save_scope_as = irr_target
 	}
 
-	# --- Option A: Stand defiant ---
+	# --- Option A: Refuse the demand -- they must take it by force ---
 	option = {
 		name = irredentism.2.a
 		default_option = yes
 		ai_chance = {
 			base = 3
+			# Warlike governments dig in.
 			modifier = {
 				trigger = { irredentist_war_tilt >= 1 }
 				add = 2
+			}
+			# Confident when we clearly outmatch the demander.
+			modifier = {
+				trigger = { irr_demander_army_ratio <= 0.5 }
+				add = 3
+			}
+			# Reluctant to defy a power that badly outguns us.
+			modifier = {
+				trigger = { irr_demander_army_ratio >= 2 }
+				add = -2
 			}
 		}
 		add_modifier = {
@@ -292,26 +309,54 @@ irredentism.2 = {
 				days = normal_modifier_time
 			}
 		}
+		# Refusal is what triggers force: the demander opens the return-state
+		# diplomatic play (and bears its infamy as the initiator). custom_tooltip
+		# because the play-creation runs inside scope:irr_unifier and the engine
+		# won't reliably render a clear consequence line otherwise.
+		custom_tooltip = irredentism.2.a.tt
+		scope:irr_unifier = {
+			create_diplomatic_play = {
+				target_country = ROOT
+				type = dp_return_state
+				target_state = scope:irr_demanded_state
+			}
+		}
 	}
 
-	# --- Option B: Try to negotiate ---
+	# --- Option B: Cede the state peacefully ---
 	option = {
 		name = irredentism.2.b
 		ai_chance = {
 			base = 1
+			# Peaceful governments prefer to yield rather than fight kin.
 			modifier = {
 				trigger = { irredentist_war_tilt <= -1 }
 				add = 2
 			}
+			# Fold when meaningfully outmatched...
+			modifier = {
+				trigger = { irr_demander_army_ratio >= 2 }
+				add = 4
+			}
+			# ...and fold hard when hopelessly so.
+			modifier = {
+				trigger = { irr_demander_army_ratio >= 4 }
+				add = 4
+			}
+			# Don't capitulate to someone weaker than us.
+			modifier = {
+				trigger = { irr_demander_army_ratio <= 0.5 }
+				add = -3
+			}
 		}
-		create_diplomatic_catalyst = {
-			type = catalyst_event_negative
-			target = ROOT
+		# Peaceful transfer of the demanded state to the demander -- no war.
+		scope:irr_demanded_state = {
+			set_state_owner = scope:irr_unifier
 		}
-		add_modifier = {
-			name = irr_negotiating_modifier
-			days = 1825
-			is_decaying = yes
+		# De-escalation goodwill toward the power we accommodated.
+		change_relations = {
+			country = scope:irr_unifier
+			value = 10
 		}
 	}
 }
@@ -346,14 +391,12 @@ irredentism.3 = {
 		NOT = { is_country_type = decentralized }
 		any_country = {
 			NOT = { THIS = ROOT }
-			ROOT = {
-				any_primary_culture = { is_primary_culture_of = PREV }
-			}
+			irr_target_same_nation = yes
 			ROOT.relations:THIS >= relations_threshold:amicable
 			any_scope_state = {
-				is_homeland_of_country_cultures = ROOT
-				has_claim_by = ROOT
+				irr_claimed_populated_home_state = yes
 			}
+			irr_target_reachable = yes
 		}
 	}
 
@@ -362,14 +405,12 @@ irredentism.3 = {
 		random_country = {
 			limit = {
 				NOT = { THIS = ROOT }
-				ROOT = {
-					any_primary_culture = { is_primary_culture_of = PREV }
-				}
+				irr_target_same_nation = yes
 				ROOT.relations:THIS >= relations_threshold:amicable
 				any_scope_state = {
-					is_homeland_of_country_cultures = ROOT
-					has_claim_by = ROOT
+					irr_claimed_populated_home_state = yes
 				}
+				irr_target_reachable = yes
 			}
 			save_scope_as = target_country
 		}

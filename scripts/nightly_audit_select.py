@@ -96,6 +96,8 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/modifier_type_definitions/mod_entity_modifier_types.txt": "referenced by resources.py as the registration target for mining throughput modifiers; bodies hand-authored",
     "common/power_bloc_principles/extra_power_bloc_principles.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored",
     "common/state_traits/te_mining_traits.txt": "trait definitions hand-authored; resources.py only references trait names when injecting state_regions/*.txt",
+    "common/scripted_buttons/un_buttons.txt": "input to gen_un_button_descs.py — button bodies hand-authored; generator only reads each button's modifiers to produce te_un_button_effects_l_english.yml",
+    "common/static_modifiers/extra_modifiers.txt": "input to gen_un_button_descs.py — modifier defs hand-authored; generator reads them to produce the UN_*_EFFECTS loc, never writes here",
 }
 
 ALWAYS_READ = [

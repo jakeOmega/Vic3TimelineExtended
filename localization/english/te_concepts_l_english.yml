@@ -1161,8 +1161,6 @@
  irr_cultural_ties_modifier_desc:0 "We have invested in cultural exchange with our same-culture neighbor. Goodwill flows both ways."
  irr_defiance_modifier:0 "Defiance Against Foreign Demands"
  irr_defiance_modifier_desc:0 "We refused to cede our lands to a foreign power claiming kinship. National pride is up; [Concept('concept_loyalist', 'loyalists')] rally."
- irr_negotiating_modifier:0 "Open to Negotiation"
- irr_negotiating_modifier_desc:0 "We are at the table with a same-culture power that demanded our lands. The talks are not popular at home."
  irr_offered_union_modifier_desc:0 "We have offered union to a sister nation. The proposal is itself a piece of statecraft."
  irr_open_to_union_modifier_desc:0 "Our government is amenable to voluntary union with a same-culture power."
  irr_rejected_union_modifier_desc:0 "We turned down a proposal of union from a same-culture power. The decision galvanizes some and disappoints others."
