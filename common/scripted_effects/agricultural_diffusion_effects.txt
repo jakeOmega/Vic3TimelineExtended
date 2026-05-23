@@ -22,7 +22,7 @@
 # Replaces five back-to-back inline if-blocks at the on-action call site.
 # The wrapper effect name agdiff_on_$TECH$_researched is built via parse-time
 # text substitution — same mechanism agdiff_handle_tech_acquired_effect uses
-# for $DIFFUSION_MODIFIER$ and $EVENT$.
+# for $EVENT$.
 agdiff_dispatch_if_first = {
 	if = {
 		limit = {
@@ -41,7 +41,6 @@ agdiff_dispatch_if_first = {
 agdiff_on_nitrogen_fixation_researched = {
 	agdiff_handle_tech_acquired_effect = {
 		TECH = nitrogen_fixation
-		DIFFUSION_MODIFIER = agdiff_nitrogen_fixation
 		EVENT = agricultural_diffusion_events.1
 	}
 }
@@ -49,7 +48,6 @@ agdiff_on_nitrogen_fixation_researched = {
 agdiff_on_modern_chemical_processes_researched = {
 	agdiff_handle_tech_acquired_effect = {
 		TECH = modern_chemical_processes
-		DIFFUSION_MODIFIER = agdiff_modern_chemical_processes
 		EVENT = agricultural_diffusion_events.2
 	}
 }
@@ -57,7 +55,6 @@ agdiff_on_modern_chemical_processes_researched = {
 agdiff_on_green_revolution_researched = {
 	agdiff_handle_tech_acquired_effect = {
 		TECH = green_revolution
-		DIFFUSION_MODIFIER = agdiff_green_revolution
 		EVENT = agricultural_diffusion_events.3
 	}
 }
@@ -65,7 +62,6 @@ agdiff_on_green_revolution_researched = {
 agdiff_on_gene_splicing_researched = {
 	agdiff_handle_tech_acquired_effect = {
 		TECH = gene_splicing
-		DIFFUSION_MODIFIER = agdiff_gene_splicing
 		EVENT = agricultural_diffusion_events.4
 	}
 }
@@ -73,7 +69,6 @@ agdiff_on_gene_splicing_researched = {
 agdiff_on_biotechnology_researched = {
 	agdiff_handle_tech_acquired_effect = {
 		TECH = biotechnology
-		DIFFUSION_MODIFIER = agdiff_biotechnology
 		EVENT = agricultural_diffusion_events.5
 	}
 }
@@ -83,27 +78,25 @@ agdiff_on_biotechnology_researched = {
 # global-first branch; subsequent researchers get the local tech modifier
 # (already attached by the tech entity) plus whatever diffusion modifier they
 # previously received when the first researcher fired this effect.
+#
+# Modifier application lives in the event OPTIONS (agricultural_diffusion_events),
+# not here: only option-level add_modifier renders in the event tooltip, so a
+# broadcast-then-notify split would read as a no-op to the player. This effect
+# only sets the world-first flags (which gate the events' triggered_desc /
+# option triggers) and fires the events. The first researcher gets the event
+# immediately and applies the diffusion + first-mover-prestige modifiers via its
+# .a_first option; every other recognized country gets the event after 14 days
+# and applies just the diffusion modifier via its .a option.
 agdiff_handle_tech_acquired_effect = {
 	if = {
 		limit = { NOT = { has_global_variable = world_first_$TECH$ } }
 		set_global_variable = { name = world_first_$TECH$ value = yes }
 		set_global_variable = { name = first_$TECH$_country value = ROOT }
 		set_variable = { name = is_world_first_$TECH$ value = yes }
-		add_modifier = { name = agdiff_first_mover_prestige days = very_long_modifier_time is_decaying = yes }
-		# Broadcast the permanent diffusion modifier to every country,
-		# including the first researcher (every_country DOES iterate ROOT,
-		# per vanilla usage that explicitly excludes ROOT with NOT = { THIS = ROOT }).
-		# The modifier stacks additively with the local tech bonus, so first-
-		# researchers and later researchers end at the same total arable_land
-		# bonus; the first researcher is distinguished by the prestige modifier
-		# and the country-event narrative below.
-		every_country = {
-			limit = { is_country_type = recognized }
-			add_modifier = { name = $DIFFUSION_MODIFIER$ }
-		}
 		# Country-event narrative: same event ID to first researcher and
 		# others; the event uses triggered_desc on is_world_first_$TECH$ to
-		# branch between first-mover and notification flavor.
+		# branch between first-mover and notification flavor, and applies the
+		# diffusion / prestige modifiers in its options (see above).
 		trigger_event = { id = $EVENT$ }
 		every_country = {
 			limit = {

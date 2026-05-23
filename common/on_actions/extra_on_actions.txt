@@ -1983,7 +1983,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = television_broadcasting
-					NOT = { has_modifier = rre_religious_right_modifier }
+					NOT = { has_variable = rre_revival_1_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
 						has_law = law_type:law_state_religion
@@ -2008,7 +2008,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = pop_culture
-					NOT = { has_modifier = rre_televangelism_modifier }
+					NOT = { has_variable = rre_revival_2_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
 						has_law = law_type:law_state_religion
@@ -2033,7 +2033,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = civil_rights_movement
-					NOT = { has_modifier = rre_liberation_theology_modifier }
+					NOT = { has_variable = rre_revival_3_fired }
 					NOR = {
 						has_law = law_type:law_state_religion
 						has_law = law_type:law_millet_system
@@ -2057,7 +2057,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = globalization
-					NOT = { has_modifier = rre_religious_nationalism_modifier }
+					NOT = { has_variable = rre_revival_4_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
 						has_law = law_type:law_state_religion
@@ -2082,7 +2082,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = social_media
-					NOT = { has_modifier = rre_digital_faith_modifier }
+					NOT = { has_variable = rre_revival_5_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
 						has_law = law_type:law_state_religion
@@ -2107,7 +2107,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = sexual_revolution
-					NOT = { has_modifier = rre_culture_war_modifier }
+					NOT = { has_variable = rre_revival_6_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
 						has_law = law_type:law_state_religion
@@ -2132,7 +2132,7 @@ society_technology_events_on_action = {
 			8 = {
 				trigger = {
 					has_technology_researched = social_justice_movements
-					NOT = { has_modifier = rre_faith_services_modifier }
+					NOT = { has_variable = rre_revival_7_fired }
 					NOR = {
 						has_law = law_type:law_state_religion
 						has_law = law_type:law_millet_system
