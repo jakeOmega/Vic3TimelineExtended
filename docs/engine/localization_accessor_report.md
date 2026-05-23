@@ -22,7 +22,7 @@ _None._
 ## Coverage
 
 - files_audited: 29
-- chains_scanned: 3489
+- chains_scanned: 3490
 - total flags: 0
 - unreviewed: 0
 - exempted: 0
