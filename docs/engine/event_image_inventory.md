@@ -1676,13 +1676,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### irredentism.1
 - **Title:** The Diaspora Calls
-- **Description:** Communities of [SCOPE.sCountry('irr_unifier').GetAdjective] in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the [concept_homeland] — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.
+- **Description:** [SCOPE.sCulture('irr_shared_culture').GetName] communities in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the [concept_homeland] — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.
 - **Flavor:** \"They are our blood. They live under another flag, but they are our blood.\"\n\n\"And what do they want from us?\"\n\n\"They want what every diaspora wants. To be remembered. To be claimed. To know that the homeland has not forgotten them — and to know what we would do if their flag changed.\"
 - **Current image:** europenorthamerica_native_american
 
 ### irredentism.2
-- **Title:** Foreign Power Demands Our Land
-- **Description:** A diplomatic note has been delivered. The government of our same-culture neighbor demands one of our states back, citing kinship and historical right. The press is outraged; the Foreign Ministry is meeting in continuous session.
+- **Title:** [SCOPE.sCountry('irr_unifier').GetName] Demands [SCOPE.sState('irr_demanded_state').GetName]
+- **Description:** [SCOPE.sCountry('irr_unifier').GetName] — a nation of our own people — has delivered a formal demand for the return of [SCOPE.sState('irr_demanded_state').GetName], citing kinship and historical right. We can yield the state peacefully, or refuse and brace for the diplomatic confrontation that is sure to follow. The press is outraged; the Foreign Ministry is meeting in continuous session.
 - **Flavor:** \"They want the state. They want all of it. They cite a treaty signed in seventeen-twenty-eight and a census taken under the second emperor.\"\n\n\"And the people of the state?\"\n\n\"Have not been asked. Both sides are speaking on their behalf. Neither side has noticed.\"
 - **Current image:** europenorthamerica_rich_and_poor
 
@@ -2114,7 +2114,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### minor_events_timelineextended.2
 - **Title:** Forceful Legislation
-- **Description:** As the process to pass the law begins, your advisors present an option: should we bypass some of the usual legislative process to speed the implementation of this law?
+- **Description:** As the process to pass the law begins, your advisors present an option: should we bypass some of the usual legislative process to speed the implementation of this law?\n\n#bold [concept_legislative_override_capacity]:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]\n#bold [concept_authority] Cost Reduction:#! #G [ROOT.GetCountry.MakeScope.ScriptValue('forced_law_override_discount_pct_display')|0]%#!
 - **Flavor:** Your advisors are divided. Some urge swift passage before opposition can mobilize. Others warn that forcing a law through will cost you goodwill you may need later.
 - **Current image:** gfx/event_pictures/victorian_gentleman_duel.dds
 

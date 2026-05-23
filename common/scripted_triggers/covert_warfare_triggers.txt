@@ -18,6 +18,13 @@ is_covert_operation_pact = {
 	}
 }
 
+# Target eligibility shared by all covert actions. Decentralized countries have
+# has_politics = no / has_economy = no -- no centralized apparatus to subvert --
+# so they are never a valid covert target. Scope: country (prospective target).
+covert_action_valid_target = {
+	NOT = { is_country_type = decentralized }
+}
+
 # Check if the country has not reached the per-type cap for a given op type.
 # Parameters: $TYPE$ = diplomatic_action_type key (e.g. covert_election_interference_action)
 # Scope: country
