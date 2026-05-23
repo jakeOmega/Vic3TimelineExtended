@@ -78,12 +78,16 @@ enforce_emissions_reduction = {
 				# Set treaty flag so remove buttons are blocked
 				set_variable = has_emissions_reduction_treaty
 
-				# Apply all market-wide GW mitigation modifiers
+				# Apply all market-wide GW mitigation modifiers.
+				# NOTE: use prev.market_capital (prev = source_country) here, NOT
+				# ROOT.market_capital. on_entry_into_force runs in treaty_article scope,
+				# so ROOT is the article (no .market_capital) — unlike the GW scripted
+				# buttons this idiom was lifted from, where ROOT is the acting country.
 				if = {
 					limit = { NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } } }
 					every_country = {
 						limit = {
-							market_capital = ROOT.market_capital
+							market_capital = prev.market_capital
 							NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
 						}
 						je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
@@ -93,7 +97,7 @@ enforce_emissions_reduction = {
 					limit = { NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } } }
 					every_country = {
 						limit = {
-							market_capital = ROOT.market_capital
+							market_capital = prev.market_capital
 							NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
 						}
 						je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
@@ -103,7 +107,7 @@ enforce_emissions_reduction = {
 					limit = { NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } } }
 					every_country = {
 						limit = {
-							market_capital = ROOT.market_capital
+							market_capital = prev.market_capital
 							NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
 						}
 						je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
