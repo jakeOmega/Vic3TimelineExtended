@@ -783,19 +783,6 @@ science_aid_2 = {
 	}
 
 	possible = {
-		# This upgraded pact requires the original to be active between the two countries.
-		# This is checked by looking for an existing treaty with the 'science_aid' article.
-		custom_tooltip = {
-			text = REQ_BASE_SCIENCE_AID_ARTICLE
-			any_scope_treaty = {
-				binds = scope:other_country
-				any_scope_article = {
-					has_type = science_aid
-					source_country = root
-				}
-			}
-		}
-
 		techs_researched > scope:other_country.techs_researched
 		country_rank > scope:other_country.country_rank
 		institution_investment_level = {
@@ -808,6 +795,32 @@ science_aid_2 = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = science_aid_2 }
+		}
+		# This upgraded pact requires the base Modernization Aid (science_aid)
+		# article either already IN FORCE with this counterparty, OR authored as
+		# a sibling in the CURRENT draft. The same-draft branch
+		# (scope:treaty + any_scope_article_option) only works in can_ratify --
+		# scope:treaty is unpopulated inside `possible`. Must be ONE custom_tooltip
+		# wrapping a single OR: separate tooltip blocks would be ANDed, wrongly
+		# demanding both paths at once. Vanilla pattern: 06_transfer_state.txt.
+		custom_tooltip = {
+			text = REQ_BASE_SCIENCE_AID_ARTICLE
+			OR = {
+				any_scope_treaty = {
+					binds = scope:other_country
+					any_scope_article = {
+						has_type = science_aid
+						source_country = scope:source_country
+					}
+				}
+				scope:treaty ?= {
+					any_scope_article_option = {
+						has_type = science_aid
+						source_country = scope:source_country
+						target_country = scope:other_country
+					}
+				}
+			}
 		}
 	}
 
