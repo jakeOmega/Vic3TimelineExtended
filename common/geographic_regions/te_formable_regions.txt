@@ -27,6 +27,9 @@
 #   EAF -> geographic_region_east_african_federation (hand-maintained, below)
 #         — also referenced by `is_major_east_african_power` in
 #         common/scripted_triggers/formable_gating_triggers.txt.
+#   DAR -> geographic_region_dar_al_islam (hand-maintained, below)
+#         — also referenced by `is_major_dar_al_islam_power` in
+#         common/scripted_triggers/formable_gating_triggers.txt.
 #   BHT -> vanilla geographic_region_india (state_regions form, works as-is)
 #   BHA -> use_culture_states (no region needed)
 #   IDN/NUS -> explicit state lists in country_formation (no region needed)
@@ -105,5 +108,111 @@ geographic_region_east_african_federation = {
 		STATE_SOMALILAND
 		STATE_NORTH_MADAGASCAR
 		STATE_SOUTH_MADAGASCAR
+	}
+}
+
+geographic_region_dar_al_islam = {
+	short_key = "dar_al_islam"
+
+	state_regions = {
+		# Mirrors DAR's required-states region for major formation, and lets
+		# `is_in_geographic_region = geographic_region_dar_al_islam` drive the
+		# `is_major_dar_al_islam_power` constituency check in
+		# common/scripted_triggers/formable_gating_triggers.txt.
+		# --- Arabia ---
+		STATE_HEDJAZ
+		STATE_NEJD
+		STATE_HAIL
+		STATE_YEMEN
+		STATE_OMAN
+		STATE_ABU_DHABI
+		# --- Levant ---
+		STATE_SYRIA
+		STATE_ALEPPO
+		STATE_DEIR_EZ_ZOR
+		STATE_LEBANON
+		STATE_PALESTINE
+		STATE_TRANSJORDAN
+		# --- Iraq ---
+		STATE_MOSUL
+		STATE_BAGHDAD
+		STATE_BASRA
+		# --- Egypt + Sinai ---
+		STATE_LOWER_EGYPT
+		STATE_MIDDLE_EGYPT
+		STATE_UPPER_EGYPT
+		STATE_SINAI
+		STATE_MATRUH
+		# --- Maghreb / North Africa ---
+		STATE_TUNISIA
+		STATE_ALGIERS
+		STATE_ORAN
+		STATE_CONSTANTINE
+		STATE_INNER_MOROCCO
+		STATE_MARRAKECH
+		STATE_FEZ
+		STATE_AL_RIF
+		STATE_TRIPOLI
+		STATE_LIBYA
+		# --- Anatolia / Turkey ---
+		STATE_EASTERN_THRACE  # Constantinople — Ottoman capital, seat of the Caliphate
+		STATE_HUDAVENDIGAR
+		STATE_AYDIN
+		STATE_KONYA
+		STATE_ANKARA
+		STATE_KASTAMONU
+		STATE_KARS
+		STATE_ERZURUM
+		STATE_TRABZON
+		STATE_DIYARBAKIR
+		STATE_ADANA
+		# --- Persia ---
+		STATE_ISFAHAN
+		STATE_IRAKAJEMI
+		STATE_TABRIZ
+		STATE_FARS
+		STATE_KERMAN
+		STATE_KHORASAN
+		STATE_MAZANDARAN
+		STATE_KHUZESTAN
+		STATE_LURISTAN
+		STATE_PERSIAN_KURDISTAN
+		# --- Caucasus (Muslim) ---
+		STATE_AZERBAIJAN
+		STATE_ARMENIA
+		# --- Central Asia ---
+		STATE_UZBEKIA
+		STATE_SAMARA
+		STATE_TARTARIA
+		STATE_KIRGHIZIA
+		STATE_TAJIKISTAN
+		STATE_TURKMENIA
+		STATE_BALKH
+		# --- Afghanistan ---
+		STATE_HERAT
+		STATE_KABUL
+		STATE_KANDAHAR
+		STATE_PASHTUNISTAN
+		STATE_CENTRAL_HIGHLANDS
+		# --- Pakistan / Muslim South Asia ---
+		STATE_BALUCHISTAN
+		STATE_NORTHERN_BALUCHISTAN
+		STATE_QUETTA
+		STATE_SINDH
+		STATE_PUNJAB
+		STATE_HILL_PUNJAB
+		STATE_KASHMIR
+		STATE_EAST_BENGAL
+		# --- Sudan / Sahel ---
+		STATE_DONGOLA
+		STATE_KORDOFAN
+		STATE_DARFUR
+		STATE_BLUE_NILE
+		STATE_TIMBUKTU
+		STATE_NIGER
+		STATE_CHAD
+		# --- Horn of Africa ---
+		STATE_SOMALILAND
+		STATE_ERITREA
 	}
 }
