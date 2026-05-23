@@ -715,6 +715,8 @@ add = {
 
 The `desc` value is a loc key whose string explains what this term contributes. Mod content that omits `desc` produces a hidden term — bare numbers with no breakdown is the worst possible UX for diplomatic acceptance.
 
+**Acceptance threshold: the AI accepts iff `accept_score` evaluates to strictly `> 0`** (per the vanilla engine doc, `common/diplomatic_actions/diplomatic_action.md`: *"If this value evaluates to above zero, AI will accept this action if proposed"*). It's a hard binary cliff by default, so design around a `0` boundary: a strongly negative baseline (e.g. `-75`) that positive factors must accumulate past. Setting **`uses_random_approval = yes`** on the action turns that cliff into a probability — a positive score becomes a % chance to accept (`+30` → 30%). Most actions leave it off (binary). Knowing which mode you're in is load-bearing for tuning the magnitudes: under binary, a target one point short always declines; under random, the same point is a 1% swing.
+
 ## `random_list` Requires Literal Integer Weights
 
 - `random_list` weight keys must be **literal integers**: `10 = { ... }`, `90 = { ... }`.
@@ -2345,6 +2347,14 @@ form_decolonized_country = {
 ```
 
 **Repo example:** the 12 inline `create_dynamic_country` branches in `form_decolonized_country` (`common/scripted_effects/decolonization.txt`) — all use `scope:` references throughout and a `has_variable` cede trigger.
+
+## Peaceful State Transfer: There Is No `cede_state` Effect — Use `set_state_owner`
+
+To hand a single state to another country outside of a war/play (e.g. an event where a target peacefully accepts a territorial demand), there is **no standalone `cede_state` effect** — `cede_state_trigger` is only a sub-key of `create_dynamic_country`. The transfer effect is **`set_state_owner`** (state scope, takes a country): `scope:demanded_state = { set_state_owner = scope:new_owner }`. Caveat: it's a **raw ownership flip**, not the tidy bookkeeping a `dp_return_state` play does on victory — the state typically lands **unincorporated** for the new owner (pop unhappiness) and any **pre-existing claim the new owner held remains**. If a clean result matters, chain `remove_claim = <state_region>` and `start_incorporating = <state>` after the transfer. Repo example: `irredentism.2`'s "Cede the state peacefully" option (`events/irredentism_events.txt`).
+
+## Don't Debug a Code Bug From a Stale Event Instance
+
+Vic3 hot-reloads **localization** on save-reload but does **not** re-run event scripts that already fired and are sitting in the save's event queue. So after editing an event's `immediate`/scopes and reloading a save taken *after* that event fired, the open event renders with the **new loc** against the **scopes saved by the old code** — producing empty `[SCOPE.sCulture('x').GetName]`-style tokens (scope never saved) and "impossible" content (a target the old, looser gate selected that the new gate would reject). Symptom signature: **an empty interpolation token + a target/value that the current code shouldn't be able to produce.** Don't chase it as a code bug — pick any option to clear the stale instance, then confirm against a *freshly-fired* event. (This is exactly what produced the "communities in Bornu" empty-culture report during the irredentism rework.)
 
 ## Dynamic Country Pool Is Capped at 100 (D00–D99) by Default
 
