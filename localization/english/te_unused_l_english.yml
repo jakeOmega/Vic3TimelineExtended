@@ -258,7 +258,7 @@
  environmental_events.3.a:0 "Crack down, but acknowledge grievances"
  environmental_events.3.b:0 "Use incident to justify environmental reforms"
  environmental_events.3.c:0 "Label all environmentalists as terrorists"
- environmental_events.3.d:0 "A [concept_radical] environmentalist cell has sabotaged industrial [concept_infrastructure], destroying pipelines and setting fire to a factory. While the public condemns the violence, many sympathize with the underlying cause. The government must respond carefully."
+ environmental_events.3.d:0 "A radical environmentalist cell has sabotaged industrial [concept_infrastructure], destroying pipelines and setting fire to a factory. While the public condemns the violence, many sympathize with the underlying cause. The government must respond carefully."
  environmental_events.3.f:0 "The pipeline burned for three days before anyone claimed responsibility."
  environmental_events.3.t:0 "Eco-Terrorism"
  environmental_events.4.a:0 "Launch a massive cleanup effort"

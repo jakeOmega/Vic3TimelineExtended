@@ -231,7 +231,7 @@
  law_state_controlled_internet:0 "State-Controlled Internet"
  law_state_controlled_internet_desc:0 "The state heavily monitors, censors, and controls all internet traffic within its borders."
  law_state_eugenics_program:"State Eugenics Program"
- law_state_eugenics_program_desc:"The state mandates genetic [concept_screening] and 'enhancements' to guide the evolution of its populace."
+ law_state_eugenics_program_desc:"The state mandates genetic screening and 'enhancements' to guide the evolution of its populace."
  law_state_intellectual_property:0 "State Intellectual Property"
  law_state_intellectual_property_desc:0 "Patents, copyrights, and industrial designs are owned by the state and licensed freely to domestic firms; foreign access is gated and expensive. State research bureaus coordinate where private R&D would otherwise duplicate effort, but the apparatus consumes administrative capacity and starves the capitalist [concept_investment_pool] of monopoly rents."
  law_state_led_language_reform:0 "State-Led Language Reform"
