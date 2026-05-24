@@ -139,6 +139,7 @@ trait_combined_arms_air_superiority = {
 
 	command_modifier = {
 		unit_offense_mult = 0.05
+		# REVIEWED 2026-05-24: deliberately large (+100%). character_advancement_speed_mult only governs how often a general accrues advancement (battle frequency), not combat power; a peer-magnitude 0.05 would be imperceptible. This is the air-superiority synergy's signature payoff, gated on aircraft + >=2 groups.
 		character_advancement_speed_mult = 1
 	}
 

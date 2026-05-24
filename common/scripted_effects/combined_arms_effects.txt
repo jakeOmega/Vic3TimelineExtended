@@ -152,7 +152,7 @@ apply_combined_arms_bonuses = {
 				}
 				add_trait = trait_combined_arms_armor
 			}
-			# Air Superiority: offense+morale damage bonus
+			# Air Superiority: unit offense + sharply faster commander advancement
 			if = {
 				limit = {
 					local_var:ca_groups >= 2
