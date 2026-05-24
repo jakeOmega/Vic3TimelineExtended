@@ -1,0 +1,97 @@
+# Orphaned Event Report
+
+Events defined in `events/` with no self-firing mechanism (`mean_time_to_happen`) that are never referenced by any `trigger_event` / dispatch list across `events/`, `common/`, `gui/`. These are unreachable dead content (the engine reports them as `Event X is orphaned` at game start).
+
+- Events defined: **733** (dispatch-required candidates: **733**)
+- Distinct referenced ids seen: **652**
+- Orphaned (unreviewed): **84**
+- Orphaned (REVIEWED-suppressed): **0**
+
+## Unreviewed orphans
+
+- `extra_law_events.38` — events/extra_law_events.txt:4020
+- `extra_law_events.39` — events/extra_law_events.txt:4107
+- `extra_law_events.40` — events/extra_law_events.txt:4194
+- `extra_law_events.41` — events/extra_law_events.txt:4277
+- `extra_law_events.42` — events/extra_law_events.txt:4372
+- `extra_law_events.43` — events/extra_law_events.txt:4459
+- `extra_law_events.44` — events/extra_law_events.txt:4547
+- `extra_law_events.45` — events/extra_law_events.txt:4634
+- `extra_law_events.46` — events/extra_law_events.txt:4723
+- `extra_law_events.47` — events/extra_law_events.txt:4810
+- `extra_law_events.48` — events/extra_law_events.txt:4896
+- `extra_law_events.49` — events/extra_law_events.txt:4982
+- `extra_law_events.50` — events/extra_law_events.txt:5071
+- `extra_law_events.51` — events/extra_law_events.txt:5157
+- `extra_law_events.52` — events/extra_law_events.txt:5246
+- `extra_law_events.53` — events/extra_law_events.txt:5335
+- `extra_law_events.54` — events/extra_law_events.txt:5421
+- `extra_law_events.55` — events/extra_law_events.txt:5510
+- `extra_law_events.56` — events/extra_law_events.txt:5598
+- `extra_law_events.57` — events/extra_law_events.txt:5684
+- `extra_law_events.58` — events/extra_law_events.txt:5771
+- `extra_law_events.59` — events/extra_law_events.txt:5857
+- `extra_law_events.60` — events/extra_law_events.txt:5940
+- `extra_law_events.61` — events/extra_law_events.txt:6033
+- `extra_law_events.62` — events/extra_law_events.txt:6089
+- `extra_law_events.63` — events/extra_law_events.txt:6145
+- `extra_law_events.64` — events/extra_law_events.txt:6201
+- `extra_law_events.65` — events/extra_law_events.txt:6253
+- `extra_law_events.66` — events/extra_law_events.txt:6309
+- `extra_law_events.67` — events/extra_law_events.txt:6365
+- `extra_law_events.68` — events/extra_law_events.txt:6422
+- `extra_law_events.69` — events/extra_law_events.txt:6478
+- `extra_law_events.70` — events/extra_law_events.txt:6534
+- `extra_law_events.71` — events/extra_law_events.txt:6590
+- `extra_law_events.72` — events/extra_law_events.txt:6645
+- `extra_law_events.73` — events/extra_law_events.txt:6701
+- `extra_law_events.74` — events/extra_law_events.txt:6759
+- `extra_law_events.75` — events/extra_law_events.txt:6815
+- `extra_law_events.76` — events/extra_law_events.txt:6871
+- `extra_law_events.77` — events/extra_law_events.txt:6929
+- `extra_law_events.78` — events/extra_law_events.txt:6985
+- `extra_law_events.79` — events/extra_law_events.txt:7041
+- `extra_law_events.80` — events/extra_law_events.txt:7098
+- `extra_law_events.81` — events/extra_law_events.txt:7154
+- `extra_law_events.82` — events/extra_law_events.txt:7211
+- `extra_law_events.83` — events/extra_law_events.txt:7266
+- `extra_law_events.84` — events/extra_law_events.txt:7318
+- `ministry_law_events.21` — events/ministry_law_events.txt:1447
+- `ministry_law_events.22` — events/ministry_law_events.txt:1530
+- `ministry_law_events.23` — events/ministry_law_events.txt:1615
+- `ministry_law_events.24` — events/ministry_law_events.txt:1700
+- `ministry_law_events.25` — events/ministry_law_events.txt:1783
+- `ministry_law_events.26` — events/ministry_law_events.txt:1866
+- `ministry_law_events.27` — events/ministry_law_events.txt:1949
+- `ministry_law_events.28` — events/ministry_law_events.txt:2034
+- `ministry_law_events.29` — events/ministry_law_events.txt:2120
+- `ministry_law_events.30` — events/ministry_law_events.txt:2203
+- `ministry_law_events.31` — events/ministry_law_events.txt:2286
+- `ministry_law_events.32` — events/ministry_law_events.txt:2369
+- `ministry_law_events.33` — events/ministry_law_events.txt:2452
+- `ministry_law_events.34` — events/ministry_law_events.txt:2535
+- `ministry_law_events.35` — events/ministry_law_events.txt:2618
+- `ministry_law_events.36` — events/ministry_law_events.txt:2701
+- `ministry_law_events.37` — events/ministry_law_events.txt:2784
+- `ministry_law_events.38` — events/ministry_law_events.txt:2867
+- `ministry_law_events.39` — events/ministry_law_events.txt:2957
+- `ministry_law_events.40` — events/ministry_law_events.txt:3009
+- `ministry_law_events.41` — events/ministry_law_events.txt:3064
+- `ministry_law_events.42` — events/ministry_law_events.txt:3116
+- `ministry_law_events.43` — events/ministry_law_events.txt:3168
+- `ministry_law_events.44` — events/ministry_law_events.txt:3220
+- `ministry_law_events.45` — events/ministry_law_events.txt:3272
+- `ministry_law_events.46` — events/ministry_law_events.txt:3324
+- `ministry_law_events.47` — events/ministry_law_events.txt:3376
+- `ministry_law_events.48` — events/ministry_law_events.txt:3431
+- `ministry_law_events.49` — events/ministry_law_events.txt:3483
+- `ministry_law_events.50` — events/ministry_law_events.txt:3535
+- `ministry_law_events.51` — events/ministry_law_events.txt:3587
+- `ministry_law_events.52` — events/ministry_law_events.txt:3639
+- `ministry_law_events.53` — events/ministry_law_events.txt:3691
+- `ministry_law_events.54` — events/ministry_law_events.txt:3743
+- `ministry_law_events.55` — events/ministry_law_events.txt:3795
+- `ministry_law_events.56` — events/ministry_law_events.txt:3847
+- `ministry_law_events.57` — events/ministry_law_events.txt:3899
+
+Wire each into the appropriate dispatch pool, delete it, or add an inline `# REVIEWED YYYY-MM-DD: rationale` on its `<id> = {` line if it is dispatched via a dynamically-built id.

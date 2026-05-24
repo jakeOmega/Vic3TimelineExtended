@@ -7062,6 +7062,7 @@ POST_LOAD_AUDITS = [
     ("loc_render_audit",              "loc_render_audit"),
     ("any_limit_audit",               "any_limit_audit"),
     ("pm_employment_audit",           "pm_employment_audit"),
+    ("orphaned_event_audit",          "orphaned_event_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
