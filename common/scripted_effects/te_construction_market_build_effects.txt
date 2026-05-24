@@ -1,4 +1,4 @@
-
+﻿
 te_construction_market_replace_building = {
 	every_scope_building = {
 		limit = { is_building_type = $OLD_TYPE$ }

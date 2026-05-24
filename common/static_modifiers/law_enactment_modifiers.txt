@@ -1,4 +1,4 @@
-# ======================================================================
+﻿# ======================================================================
 #  ENACTMENT MODIFIERS  –  used by events/extra_law_events.txt
 #
 #  Design principle:  enactment events come in three flavors, matching

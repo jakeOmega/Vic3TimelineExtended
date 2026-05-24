@@ -353,7 +353,7 @@ te_on_character_recruitment = {
 		# in te_on_building_built (is_building_type = building_barrack) and
 		# te_on_military_formation_created. Pure perf trim, behavior-neutral.
 		if = {
-			limit = { has_role = general }
+			limit = { has_role_of_type = general }
 			owner = {
 				if = {
 					limit = { modifier:country_combined_arms_bonus_enabled_bool = yes }

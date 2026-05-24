@@ -101,6 +101,7 @@ on_law_checkpoint_stall = {
 		10 = extra_law_events.15	# The Question of Autonomy (State Power – regional resistance)
 		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
 		10 = extra_law_events.22	# The Automation Question (Welfare – competing interests clash)
+		10 = extra_law_events.37	# Bankers Block the Bill (Financial Regulation – financiers stall the bill)
 
 		# --- Ministry Law Events ---
 		10 = ministry_law_events.2	# The Budget Debate (Generic – fiscal opposition)
@@ -109,5 +110,6 @@ on_law_checkpoint_stall = {
 		10 = ministry_law_events.13	# The Loudspeaker State (Propaganda – press opposition)
 		10 = ministry_law_events.15	# The Watchers (Thought Control – resistance and backlash)
 		10 = ministry_law_events.16	# The Tainted Product (Consumer Protection – manufacturers fight back)
+		10 = ministry_law_events.20	# Underqualified Hires Exposed (Generic Staffing – patronage scandal stalls)
 	}
 }

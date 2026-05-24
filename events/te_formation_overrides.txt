@@ -1,4 +1,4 @@
-namespace = formation
+﻿namespace = formation
 
 # ============================================================================
 # VANILLA OVERRIDE — formation.17 (generic "a nation has emerged" popup)

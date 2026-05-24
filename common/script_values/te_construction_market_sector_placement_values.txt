@@ -1,4 +1,4 @@
-te_construction_market_buildings_under_construction = {
+﻿te_construction_market_buildings_under_construction = {
 	value = 0
 	every_scope_building = {
 		limit = {

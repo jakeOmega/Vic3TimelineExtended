@@ -5929,7 +5929,8 @@ extra_law_events.59 = {
 		add_enactment_modifier = {
 			name = govprin_technocrat_showcase_stall
 		}
-		add_authority = -200
+		# Domain side-effect
+		add_modifier = { name = te_authority_drain days = normal_modifier_time }
 	}
 }
 
@@ -6011,7 +6012,6 @@ extra_law_events.60 = {
 		add_enactment_modifier = {
 			name = govprin_popular_assembly_stall
 		}
-		add_authority = -200
 		# Domain side-effect
 		add_modifier = { name = te_authority_drain days = normal_modifier_time }
 	}

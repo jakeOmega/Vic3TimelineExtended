@@ -1730,7 +1730,7 @@ sol_expectations_lower_shift_value = {
 financial_cycle_government_fiscal_policy_effect_size = {
 	value = total_expenses
 	subtract = income
-	divide = gdp
+	divide = { value = gdp min = 1 }
 	multiply = 100 # deficit spending 1% of GDP per year adds 1 point to the financial cycle monthly (5x previous; was effectively dormant at typical 1-3% deficit levels)
 }
 

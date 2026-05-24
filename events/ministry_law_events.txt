@@ -3051,7 +3051,10 @@ ministry_law_events.40 = {
 		name = ministry_law_events.40.b
 		add_enactment_modifier = { name = ministry_budget_generous }
 		# Domain side-effect: budget — generous funding draws down treasury
-		add_treasury = negate(sv_treasury_event_medium)
+		add_treasury = {
+			value = sv_treasury_event_medium
+			multiply = -1
+		}
 	}
 }
 

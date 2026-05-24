@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # Formable claims-on-formation effects
 #
 # Called from the bespoke formation events (events/te_formable_formation_events.txt)

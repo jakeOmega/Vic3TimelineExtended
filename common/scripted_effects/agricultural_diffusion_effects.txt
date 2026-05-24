@@ -1,4 +1,4 @@
-# Agricultural Diffusion Effects
+﻿# Agricultural Diffusion Effects
 #
 # Models global propagation of transformative agricultural techniques:
 # the first country to research a diffusion-eligible tech triggers a global

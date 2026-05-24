@@ -1,4 +1,4 @@
-# State traits for the mod's custom mineable resources (GH #110).
+﻿# State traits for the mod's custom mineable resources (GH #110).
 #
 # Mod custom mines (defined in common/buildings/extra_buildings.txt) need
 # regional quality/ease-of-mining bonuses analogous to vanilla traits like

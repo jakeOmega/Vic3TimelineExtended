@@ -1,4 +1,4 @@
-# Headlines Effects
+﻿# Headlines Effects
 #
 # Posts the one-time "tech researched" headline for $TECH$ to every human
 # player the first time anyone researches it. Called once per tracked tech from

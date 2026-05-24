@@ -806,11 +806,16 @@ science_aid_2 = {
 		custom_tooltip = {
 			text = REQ_BASE_SCIENCE_AID_ARTICLE
 			OR = {
-				any_scope_treaty = {
-					binds = scope:other_country
-					any_scope_article = {
-						has_type = science_aid
-						source_country = scope:source_country
+				# any_scope_treaty requires a country scope (vanilla 00_alliance.txt
+				# wraps it in scope:first_country). In can_ratify the ambient scope is
+				# the treaty, so scope to the proposer before iterating its treaties.
+				scope:source_country ?= {
+					any_scope_treaty = {
+						binds = scope:other_country
+						any_scope_article = {
+							has_type = science_aid
+							source_country = scope:source_country
+						}
 					}
 				}
 				scope:treaty ?= {

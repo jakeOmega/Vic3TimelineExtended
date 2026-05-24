@@ -1,4 +1,4 @@
-namespace = formation_te
+﻿namespace = formation_te
 
 # ============================================================================
 # BESPOKE FORMATION EVENTS — India (BHA) & Indonesia (NUS)
