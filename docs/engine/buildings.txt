@@ -3676,7 +3676,7 @@ Space Elevator (bg_private_infrastructure):
 	Space Elevator:
 		Space Elevator
 
-Extraplanetary Base (bg_space):
+Extraplanetary Base (bg_exotic):
 	Unlocking Technology: Asteroid Mining
 	Base Building Space Mine:
 		Asteroid Mine
@@ -3685,7 +3685,7 @@ Extraplanetary Base (bg_space):
 	Maintenance:
 		Maintenance
 
-Deep-Sea Mine (bg_space):
+Deep-Sea Mine (bg_exotic):
 	Unlocking Technology: Abyssal Plain Mining
 	Deep-Sea Mine:
 		Deep-Sea Mining

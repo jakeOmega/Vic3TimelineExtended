@@ -1358,7 +1358,7 @@ untagged.
 
 **`localization/english/te_concepts_l_english.yml`**
 
-- L348 `bg_space` (matched `Infrastructure`)
+- L348 `bg_exotic` (matched `Infrastructure`)
   > Space Infrastructure
 - L438 `ch_tourism_infrastructure` (matched `Infrastructure`)
   > Tourism Infrastructure

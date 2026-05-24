@@ -23,7 +23,7 @@ REPLACE:bg_construction = {
 }
 
 
-REPLACE_OR_CREATE:bg_space = {
+REPLACE_OR_CREATE:bg_exotic = {
 	parent_group = bg_high_tech
 	economy_of_scale = no
 }

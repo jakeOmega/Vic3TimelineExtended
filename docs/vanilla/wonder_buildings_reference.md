@@ -16,7 +16,7 @@ All wonder buildings follow the two-building construction pattern established by
 
 2. **Completed Wonder Building** (`building_X`)
    - `buildable = no`, `expandable = no`
-   - `building_group = bg_private_infrastructure` or `bg_space`
+   - `building_group = bg_private_infrastructure` or `bg_exotic`
    - `ownership_type = self`
    - Created exclusively by the scripted effect (never by the player directly)
    - Can be upgraded by rebuilding the construction site (up to some max level)
@@ -216,7 +216,7 @@ Antimatter will NOT be a tradeable good (new goods are computationally expensive
 **Rationale:** Antimatter production is fundamentally an energy-conversion process — you smash particles together at enormous energy cost to produce tiny amounts of antimatter. Hence the huge electricity input.
 
 **Completed: `building_antimatter_facility`**
-- `building_group = bg_space` (or new `bg_advanced_military`)
+- `building_group = bg_exotic` (or new `bg_advanced_military`)
 - `ownership = self`
 
 | Per Level | Input | Output |

@@ -895,7 +895,7 @@ REPLACE_OR_CREATE:building_space_elevator = {
 }
 
 REPLACE_OR_CREATE:building_space_mine = {
-	building_group = bg_space
+	building_group = bg_exotic
 	icon = "gfx/interface/icons/building_icons/space_base.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -915,7 +915,7 @@ REPLACE_OR_CREATE:building_space_mine = {
 }
 
 REPLACE_OR_CREATE:building_ocean_mine = {
-	building_group = bg_space
+	building_group = bg_exotic
 	icon = "gfx/interface/icons/building_icons/deep_sea_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -930,7 +930,7 @@ REPLACE_OR_CREATE:building_ocean_mine = {
 	}
 
 	required_construction = construction_cost_mega_high
-
+	has_max_level = no
 	possible = {
 		is_coastal = yes
 	}
