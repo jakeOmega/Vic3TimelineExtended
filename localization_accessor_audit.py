@@ -175,6 +175,30 @@ _MAGIC_SCOPES_BY_CONTEXT: dict[str, dict[str, str]] = {
         "WAR_GOAL": "war_goal",
         "WAR_GOAL_DRAFT": "war_goal_draft",
     },
+    # Notification / proposal-notification / break-notification *descs* of a
+    # diplomatic action render in a context where the bare actor scope is NOT
+    # bound — `[COUNTRY.…]` resolves to nullptr (every-frame log spam). The
+    # actor is `[INITIATOR_COUNTRY.…]`, the target `[TARGET_COUNTRY.…]` (vanilla
+    # convention). Same scope table as `diplomatic_actions` but with `COUNTRY`
+    # removed, and `COUNTRY` / `GetDiplomaticPact` explicitly denied below.
+    "diplomatic_action_notifications": {
+        "TARGET_COUNTRY": "country",
+        "STATE": "state",
+        "INITIATOR_COUNTRY": "country",
+        "MARKET": "market",
+        "GOODS": "market_goods",
+        "STATE_GOODS": "market_goods",
+        "BUILDING": "building",
+        "CHARACTER": "character",
+        "INTEREST_GROUP": "interest_group",
+        "CULTURE": "culture",
+        "SCOPE": "scope_object",
+        "ROOT": "country",
+        "DiplomaticAction": "diplomatic_action",
+        "DiplomaticPlay": "diplomatic_play",
+        "WAR_GOAL": "war_goal",
+        "WAR_GOAL_DRAFT": "war_goal_draft",
+    },
     "war_goals": {
         "WAR_GOAL_DRAFT": "war_goal_draft",
         "WAR_GOAL": "war_goal",
@@ -778,6 +802,38 @@ def _build_permissive_scopes() -> dict[str, str]:
 _MAGIC_SCOPES_BY_CONTEXT["permissive"] = _build_permissive_scopes()
 
 
+# Scopes that are affirmatively WRONG (unbound) in a given context, even though
+# the permissive union would otherwise admit them. Without this, dropping a
+# scope from a context's magic table is not enough to flag it — the permissive
+# fallback in validate_chain re-admits any scope known to *some* context. These
+# entries short-circuit that fallback for the high-value diplomatic-notification
+# case (issue #149).
+_DENIED_SCOPES_BY_CONTEXT: dict[str, dict[str, str]] = {
+    "diplomatic_action_notifications": {
+        "COUNTRY": (
+            "bare 'COUNTRY' is unbound in diplomatic-action notification descs "
+            "(renders nullptr, spams 'Promote COUNTRY returned nullptr' every "
+            "frame) — the actor is [INITIATOR_COUNTRY.…], the target "
+            "[TARGET_COUNTRY.…]"
+        ),
+    },
+}
+
+# Accessor steps that are affirmatively null in a given context, regardless of
+# the first-step scope. `GetDiplomaticPact` resolves to an active pact only in
+# `_pact_desc` (pact already formed); in notification / proposal / break descs
+# there is no pact yet, so `[SCOPE.GetRootScope.GetDiplomaticPact.…]` is null.
+_DENIED_ACCESSORS_BY_CONTEXT: dict[str, dict[str, str]] = {
+    "diplomatic_action_notifications": {
+        "GetDiplomaticPact": (
+            "'GetDiplomaticPact' resolves null in notification/proposal/break "
+            "descs (no active pact at this stage) — reference the parties "
+            "directly via [INITIATOR_COUNTRY.…] / [TARGET_COUNTRY.…]"
+        ),
+    },
+}
+
+
 # Vanilla-extracted accessors. Generated once from a vanilla loc audit pass.
 # Most are terminal `value`-returning UI accessors that don't appear in the
 # engine's event-targets log. The type-changing entries (e.g. GetRuler ->
@@ -934,15 +990,24 @@ def classify_context(
         return "war_goals"
     if key.startswith("je_") or key in je_keys:
         return "journal_entries"
+    # Diplomatic-action notification *descs*: the bare actor scope is unbound
+    # here (see `diplomatic_action_notifications` context). Checked before the
+    # general diplomatic suffixes so these route to the stricter context.
+    for suffix in (
+        "_action_notification_desc",
+        "_proposal_notification_desc",
+        "_action_notification_break_desc",
+    ):
+        if key.endswith(suffix) and key[: -len(suffix)] in diplo_action_keys:
+            return "diplomatic_action_notifications"
     # Diplomatic-action-related keys: the action name AND its standard suffixes.
     for suffix in (
         "", "_desc", "_action_name", "_action_propose_name",
-        "_action_notification_name", "_action_notification_desc",
+        "_action_notification_name",
         "_action_break_name", "_action_notification_break_name",
-        "_action_notification_break_desc",
         "_proposal_accepted_name", "_proposal_accepted_desc",
         "_proposal_declined_name", "_proposal_declined_desc",
-        "_proposal_notification_name", "_proposal_notification_desc",
+        "_proposal_notification_name",
         "_proposal_notification_effects_desc", "_pact_desc",
     ):
         if suffix and key.endswith(suffix):
@@ -1076,6 +1141,18 @@ def validate_chain(chain: Chain, context: str, catalog: dict[str, dict[str, str]
 
     magic = _MAGIC_SCOPES_BY_CONTEXT.get(context, {})
     permissive = _MAGIC_SCOPES_BY_CONTEXT["permissive"]
+
+    # Context-specific denials take precedence over both the magic table and the
+    # permissive fallback: a scope that is bound in some other context but
+    # affirmatively unbound here (issue #149).
+    denied_scopes = _DENIED_SCOPES_BY_CONTEXT.get(context, {})
+    if first in denied_scopes:
+        return denied_scopes[first]
+    denied_accessors = _DENIED_ACCESSORS_BY_CONTEXT.get(context, {})
+    if denied_accessors:
+        for step_full in chain.steps:
+            if _step_name(step_full) in denied_accessors:
+                return denied_accessors[_step_name(step_full)]
 
     if first in magic:
         current = magic[first]
