@@ -134,8 +134,8 @@ def main() -> None:
         parts.append(rekey(cache[old], old, new))
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text("\n".join(parts) + "\n", encoding="utf-8")
-    line_count = OUT.read_text().count("\n")
+    OUT.write_text("\n".join(parts) + "\n", encoding="utf-8-sig")  # emit Paradox BOM
+    line_count = OUT.read_text(encoding="utf-8-sig").count("\n")
     print(f"wrote {OUT} ({line_count} lines, {len(SHIPS)} ship blocks)")
 
 

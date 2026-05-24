@@ -85,7 +85,9 @@ def process_and_update_production_methods_grouped(
         pms_file_list = pms_file_path
     pms_data = ""
     for file_path in pms_file_list:
-        with open(file_path, "r", encoding='utf-8') as file:
+        # utf-8-sig strips any leading BOM on read so the utf-8-sig writes below
+        # emit exactly one BOM (Paradox wants BOM; double-BOM is a parse error).
+        with open(file_path, "r", encoding='utf-8-sig') as file:
             pms_data += file.read() + "\n"
 
     pms_pattern = re.compile(r"([\w-]+) = \{\s*(.*?)\n\}", re.DOTALL)
@@ -199,15 +201,16 @@ def process_and_update_production_methods_grouped(
     if write_path is None:
         if isinstance(pms_file_path, str):
             # Write the updated content back to the production methods file
-            with open(pms_file_path, "w", encoding="utf-8") as file:
+            # (utf-8-sig: emit the BOM the Clausewitz engine expects on mod .txt)
+            with open(pms_file_path, "w", encoding="utf-8-sig") as file:
                 file.write(updated_pms_data)
         else:
             raise ValueError(
                 "write_path must be specified if multiple production methods files are provided."
             )
     else:
-        # Write the updated content to a new file
-        with open(write_path, "w", encoding="utf-8") as file:
+        # Write the updated content to a new file (utf-8-sig: emit BOM)
+        with open(write_path, "w", encoding="utf-8-sig") as file:
             file.write(updated_pms_data)
 
 

@@ -289,7 +289,8 @@ def process_file(
     trait_mapping: dict | None = None,
     verbose: bool = True,
 ):
-    text = in_path.read_text(encoding="utf-8")
+    # utf-8-sig strips any leading BOM so the utf-8-sig write below emits one BOM.
+    text = in_path.read_text(encoding="utf-8-sig")
     pieces = []
     last = 0
     changed_any = False
@@ -307,7 +308,7 @@ def process_file(
     out_text = "".join(pieces)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(out_text, encoding="utf-8")
+    out_path.write_text(out_text, encoding="utf-8-sig")  # emit Paradox BOM
 
     if verbose:
         action = "modified" if changed_any else "copied"

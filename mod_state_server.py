@@ -7042,6 +7042,11 @@ POST_LOAD_REGENERATORS = [
     ("gen_company_building_cleanup",  "scripts.generators.gen_company_building_cleanup"),
     ("organize_loc",                  "organize_loc"),
     ("gen_event_inventory",           "gen_event_inventory"),
+    # Keep LAST: prepend UTF-8 BOM to any mod .txt the generators above (or a
+    # hand-authored file) left without one, so the engine stops warning. It's a
+    # file-rewriting generator, so it lives here (not in POST_LOAD_AUDITS) and
+    # is skipped on audits_only / mod_only fast reloads. (#148)
+    ("bom_normalizer",                "bom_normalizer"),
 ]
 
 # Read-only audits that surface findings without writing files. Safe to run
