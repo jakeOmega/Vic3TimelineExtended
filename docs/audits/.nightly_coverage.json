@@ -223,8 +223,8 @@
       ]
     },
     "common/mobilization_option_groups/extra_mobilization_groups.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/mobilization_options/_mobilization_options.info": {
@@ -614,9 +614,9 @@
       "recent_findings": 0
     },
     "common/scripted_triggers/resource_discovery_triggers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
+      "last_audited": "2026-05-24",
+      "audit_count": 2,
+      "recent_findings": 1
     },
     "common/scripted_triggers/un_permanent_member_triggers.txt": {
       "last_audited": "2026-05-19",
@@ -1196,6 +1196,69 @@
     "common/scripted_triggers/civil_rights_triggers.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/space_race_effects.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/script_values/extra_script_values.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/script_values/te_construction_market_ai_values.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/messages/extra_messages.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_effects/un_vote_effects.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/customizable_localization/zzz_extra_custom_loc.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/space_race_triggers.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_formable_claims_effects.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/flag_definitions/te_formable_countries.txt": {
+      "last_audited": "2026-05-24",
+      "audit_count": 1,
       "recent_findings": 0
     }
   }
