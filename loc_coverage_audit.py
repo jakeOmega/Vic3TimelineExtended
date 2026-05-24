@@ -14,10 +14,11 @@ entity's opening line:
     prestige_loss_tiny = { # REVIEWED 2026-05-08: backwards-compat alias
 
 Coverage: static modifiers, character traits, journal entries, laws, decrees,
-scripted buttons, buildings, production methods, goods, company types,
-combat unit types, ship types, ideologies, interest groups, institutions,
-subject types, mobilization options, diplomatic actions, pop needs,
-decisions, events. Skips scripted_effects/triggers, on_actions, modifier
+scripted buttons, buildings, production methods, production method groups,
+goods, government types,
+company types, combat unit types, ship types, ideologies, interest groups,
+institutions, subject types, mobilization options, diplomatic actions, pop
+needs, decisions, events. Skips scripted_effects/triggers, on_actions, modifier
 type definitions, script values (most are arithmetic helpers — only those
 referenced in `custom_tooltip` need loc, deferred until reports show gaps).
 """
@@ -127,7 +128,9 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Scripted Buttons":       _explicit_name_field,
     "Buildings":              _name_and_desc,
     "PMs":                    _name_and_desc,
+    "PM Groups":              _simple_name,
     "Goods":                  _simple_name,
+    "Government Types":       _name_and_desc,
     "Company Types":          _name_and_desc,
     "Combat Unit Types":      _simple_name,
     "Ship Types":             _simple_name,
@@ -155,7 +158,9 @@ _DIR_MAP: dict[str, str] = {
     "Scripted Buttons":       "common/scripted_buttons",
     "Buildings":              "common/buildings",
     "PMs":                    "common/production_methods",
+    "PM Groups":              "common/production_method_groups",
     "Goods":                  "common/goods",
+    "Government Types":       "common/government_types",
     "Company Types":          "common/company_types",
     "Combat Unit Types":      "common/combat_unit_types",
     "Ship Types":             "common/ship_types",
@@ -451,8 +456,20 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from mod_state import ModState
-    from path_constants import mod_path
+    from path_constants import mod_path, base_game_path
     import mod_state_server  # for base_game_paths / mod_paths
     ms = ModState(mod_state_server.base_game_paths, mod_state_server.mod_paths)
+    # ModState starts with empty localization and only fills it via
+    # add_localization() -- the server does this at load time, but a bare
+    # construction does not. Without it has_localization() is always False and
+    # every entity false-flags. Load the same vanilla + mod english dirs the
+    # server feeds it (see mod_state_server.reload) so the CLI matches.
+    for _loc_dir in (
+        os.path.join(base_game_path, "game", "localization", "english"),
+        os.path.join(mod_path, "localization", "english"),
+        os.path.join(mod_path, "localization", "english", "replace"),
+    ):
+        if os.path.isdir(_loc_dir):
+            ms.add_localization(_loc_dir)
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))

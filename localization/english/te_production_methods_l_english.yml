@@ -892,6 +892,7 @@
  pmg_automation_building_aerospace_industry:0 "Automation"
  pmg_automation_building_chemical_plant:0 "Automation"
  pmg_automation_building_electronic_components:0 "Automation"
+ pmg_automation_building_explosives_factory:0 "Automation"
  pmg_automation_building_network:0 "Network Maintenance Automation"
  pmg_automation_building_software:0 "Automation Building Network"
  pmg_axiom_space_hq:0 "Axiom Station Operations"

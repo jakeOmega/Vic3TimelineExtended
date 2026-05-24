@@ -302,6 +302,62 @@ class AuditTests(unittest.TestCase):
         result = audit(ms, mod_path=tmp)
         self.assertEqual(result.flags, [])
 
+    def test_government_type_missing_name_flagged(self):
+        # Regression for gov_algorithmic_directorate: a mod-new government type
+        # with no loc key leaks the raw name into the government panel.
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/government_types/x.txt", "gov_test = {\n}\n")
+        ms = FakeMS(
+            mod_data={"Government Types": {"gov_test": {}}},
+            base_data={"Government Types": {}},
+            loc_keys=set(),  # name missing
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual(len(result.flags), 1)
+        self.assertEqual(result.flags[0].missing_keys, ["gov_test"])
+
+    def test_government_type_name_present_not_flagged(self):
+        # Name present, desc optional -> no flag (matches the existing mod
+        # government types, which carry a name but no _desc).
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/government_types/x.txt", "gov_test = {\n}\n")
+        ms = FakeMS(
+            mod_data={"Government Types": {"gov_test": {}}},
+            base_data={"Government Types": {}},
+            loc_keys={"gov_test"},
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual(result.flags, [])
+
+    def test_pm_group_missing_name_flagged(self):
+        # Regression for pmg_automation_building_explosives_factory: a mod-new
+        # production method group with no loc key leaks the raw name into the
+        # building's PM-selection UI. PMGs are name-only (no _desc convention).
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/production_method_groups/x.txt", "pmg_test = {\n}\n")
+        ms = FakeMS(
+            mod_data={"PM Groups": {"pmg_test": {}}},
+            base_data={"PM Groups": {}},
+            loc_keys=set(),  # name missing
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual(len(result.flags), 1)
+        self.assertEqual(result.flags[0].category, "PM Groups")
+        self.assertEqual(result.flags[0].missing_keys, ["pmg_test"])
+
+    def test_pm_group_name_present_not_flagged(self):
+        # Name present -> no flag. A vanilla-override PMG (present in base too)
+        # is also covered by the generic vanilla-override path.
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/production_method_groups/x.txt", "pmg_test = {\n}\n")
+        ms = FakeMS(
+            mod_data={"PM Groups": {"pmg_test": {}}},
+            base_data={"PM Groups": {}},
+            loc_keys={"pmg_test"},
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual(result.flags, [])
+
 
 class RenderTests(unittest.TestCase):
     def test_empty_report_smoke(self):
