@@ -827,6 +827,14 @@ my_script_value = {
 - **War and truce checks:** Peacetime diplomatic actions need both war AND truce checks in `requirement_to_maintain`, not just in `possible`
 - Format: `requirement_to_maintain = { trigger = { custom_tooltip = { text = tooltip_key NOT = { condition } } } }`
 
+## AI Never Autonomously Targets Decentralized Countries With Whole-Country Diplomatic Actions
+
+The player UI lets you target a `decentralized` country with a country-targeted diplomatic action (if `potential`/`possible` permit), but the **AI never proposes such an action on its own** — the engine doesn't enumerate decentralized countries as candidate targets for the AI's diplomatic-action loop, no matter how the `ai = { evaluation_chance / will_propose / propose_score }` block is tuned. Vanilla AI only reaches decentralized polities via **state-targeted** actions (`da_stake_colonial_claim`, which selects the decentralized country's *states*) or **wartime** actions (`violate_sovereignty`, gated `is_at_war = yes` + warleader). There is no vanilla precedent for an autonomous peacetime, whole-country diplomatic action against a decentralized target.
+
+Symptom: the action works when the player takes it (so `possible` passes and the effect is sound), but AI countries never use it despite always-evaluate + `will_propose = always` + a competitive score + no log errors. By elimination, the target simply never reaches AI evaluation.
+
+Fix pattern: drive the AI path from a pulse on-action (e.g. `on_yearly_pulse_country`) gated `is_ai = yes`, reusing the *same* eligibility triggers as the action's `possible` block, and perform the effect (`annex`, etc.) directly. The player keeps the diplomatic action; the `is_ai` split is forced by the engine limitation, not a design choice. Notify third parties **before** the annex (saved scopes propagate to events fired on observers; the annexed country's name still resolves for the tick) — the engine's `should_notify_third_parties` only fires for the actual player action, not for an on-action `annex`. See `te_ai_decentralized_absorption_effect` + `irredentism.9`.
+
 ## Building Group Trigger Name
 
 - The trigger to check a building's group is `is_building_group = bg_X`, NOT `building_group = bg_X`.
