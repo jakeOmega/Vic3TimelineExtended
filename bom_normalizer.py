@@ -70,7 +70,7 @@ def normalize_bom(mod_path: str) -> dict:
     }
 
 
-def regenerate(mod_state) -> dict:
+def regenerate(mod_state=None) -> dict:
     """POST_LOAD_GENERATORS entry point. Normalizes BOM across the mod tree.
 
     Returns a summary dict matching the generator protocol. `files_normalized`
