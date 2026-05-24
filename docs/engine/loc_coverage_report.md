@@ -28,7 +28,7 @@ _None._
 
 ## Coverage
 
-- files audited: 122
+- files audited: 127
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

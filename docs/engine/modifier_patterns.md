@@ -146,9 +146,8 @@ _Flat additive to the output of a specific good across the economy._
 _Multiplicative bonus to a specific good's output._
 
 - Placeholder: `good` (vocab: `good`)
-- Members in engine docs: **63**
-- Vocab size: 65; missing entries: 2
-  - Missing values: `magnetic_drive_ships`, `motor_ships`
+- Members in engine docs: **65**
+- Vocab size: 65; missing entries: 0
 
 ### `goods_sales_tax_{good}_add`
 

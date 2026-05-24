@@ -6257,6 +6257,7 @@ goods|goods_output_luxury_clothes_mult|
 goods|goods_output_luxury_furniture_add|The amount of luxury_furniture! Luxury Furniture produced by buildings
 goods|goods_output_luxury_furniture_mult|
 goods-output|goods_output_magnetic_drive_ships_add|
+goods-output|goods_output_magnetic_drive_ships_mult|
 goods|goods_output_manowars_add|The amount of manowars! Man-o-Wars produced by buildings
 goods|goods_output_manowars_mult|A bonus or penalty to the amount of manowars! Man-o-Wars produced by buildings
 goods|goods_output_meat_add|The amount of meat! Meat produced by buildings
@@ -6264,6 +6265,7 @@ goods|goods_output_meat_mult|
 goods|goods_output_merchant_marine_add|The amount of merchant_marine! Merchant Marine produced by buildings
 goods|goods_output_merchant_marine_mult|
 goods-output|goods_output_motor_ships_add|
+goods-output|goods_output_motor_ships_mult|
 goods|goods_output_oil_add|The amount of oil! Oil produced by buildings
 goods|goods_output_oil_mult|A bonus or penalty to the amount of oil! Oil produced by buildings
 goods|goods_output_opium_add|The amount of opium! Opium produced by buildings

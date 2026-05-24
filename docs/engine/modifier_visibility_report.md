@@ -29,7 +29,7 @@ _None._
 ## Coverage
 
 - files_audited: 257
-- modifiers_in_registry_with_decimals: 2722
+- modifiers_in_registry_with_decimals: 2724
 - registry_hits: 7312
 - total flags: 3
 - unreviewed: 0

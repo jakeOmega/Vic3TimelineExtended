@@ -1,0 +1,163 @@
+{
+  "date": "2026-05-24",
+  "run_label": "2026-05-24",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/scripted_effects/space_race_effects.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/extra_script_values.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/te_construction_market_ai_values.txt",
+      "line_range": null,
+      "lines": 80,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/messages/extra_messages.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/un_vote_effects.txt",
+      "line_range": null,
+      "lines": 322,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/customizable_localization/zzz_extra_custom_loc.txt",
+      "line_range": null,
+      "lines": 177,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/space_race_triggers.txt",
+      "line_range": null,
+      "lines": 50,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/te_formable_claims_effects.txt",
+      "line_range": null,
+      "lines": 40,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/flag_definitions/te_formable_countries.txt",
+      "line_range": null,
+      "lines": 21,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_formable_countries_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/resource_discovery_triggers.txt",
+      "line_range": null,
+      "lines": 6,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/mobilization_option_groups/extra_mobilization_groups.txt",
+      "line_range": null,
+      "lines": 4,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  ]
+}

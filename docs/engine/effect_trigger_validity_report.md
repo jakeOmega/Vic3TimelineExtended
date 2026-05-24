@@ -2,8 +2,8 @@
 
 Lowercase LHS keywords in `events/`, `common/scripted_effects`, `common/scripted_triggers`, `common/on_actions` that are neither a known engine effect/trigger/scope/control-flow keyword (per the frozen vanilla catalog) nor a mod-defined name — plus `funcname(...)` call-syntax, which Paradox script never uses. The engine silently ignores these until a runtime game-load `Unknown effect/trigger` error.
 
-- Files scanned: **106**, keys checked: **66196**
-- Catalog size: **6924** + mod-defined names: **1326**
+- Files scanned: **105**, keys checked: **66193**
+- Catalog size: **6924** + mod-defined names: **1324**
 - Flags (unreviewed): **0**
 - Flags (REVIEWED-suppressed): **0**
 

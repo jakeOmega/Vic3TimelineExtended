@@ -1766,343 +1766,343 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** Staffing the New Ministry
 - **Description:** The government has begun the enormous task of standing up [SCOPE.sLaw('current_law_scope').GetName]. Advertisements for clerks, administrators, and departmental heads have been posted across every public notice board, and a flood of applications - some qualified, many spectacularly not - has poured in.
 - **Flavor:** The new ministry shall require, at minimum, fourteen senior administrators, forty-two departmental heads, two hundred and seven clerks, and - if the budget permits - a reliable doorman. I trust these positions will be filled strictly on merit, which is to say, by the cousins of those already appointed.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.2
 - **Title:** The Budget Debate
 - **Description:** Parliament has erupted into heated argument over the proposed funding for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] insist the money would be better spent elsewhere, while proponents argue that the new ministry cannot function without proper resources.
 - **Flavor:** The honorable member claims this ministry will cost a mere trifle. Allow me to remind him that the last 'trifle' we approved has consumed an entire wing of the treasury and shows no sign of producing anything more useful than memoranda addressed to other memoranda.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.3
 - **Title:** Bureaucratic Turf Wars
 - **Description:** The creation of [SCOPE.sLaw('current_law_scope').GetName] has provoked a turf war among existing government departments. Senior officials who have managed these matters for years are reluctant to cede authority to a new ministry and its untested staff.
 - **Flavor:** The permanent secretary looked as though I had asked him to hand over his firstborn child. 'You cannot simply take the Trade Division,' he said, clutching his files to his chest. 'I have been nurturing this department since before you were in Parliament.'
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.4
 - **Title:** The Redundant Clerks
 - **Description:** With the proposed passage of [SCOPE.sLaw('current_law_scope').GetName], hundreds of government employees face the prospect of redundancy. The corridors of the soon-to-be-dissolved ministry are filled with anxious functionaries, their desks already half-packed, their futures uncertain.
 - **Flavor:** Twenty-three years I have given to this ministry. Twenty-three years of filing, stamping, and indexing. And now they tell me my services are no longer required. I suppose I shall have to learn what it is that ordinary people do with their afternoons.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.5
 - **Title:** The Generals' War Room
 - **Description:** Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a pointed memorandum regarding the proposed [SCOPE.sLaw('current_law_scope').GetName]. They insist that military matters require military expertise, and that civilian bureaucrats have no business directing the affairs of war.
 - **Flavor:** The Field Marshal was blunt: 'You may legislate all you wish about the procurement of boot-leather and the allocation of rations. But the moment a clerk in a morning coat presumes to tell me how to deploy a brigade, I shall tender my resignation and advise my officers to do the same.'
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.6
 - **Title:** The Ambassador's Dilemma
 - **Description:** A [concept_diplomatic_incident] with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName].
 - **Flavor:** The ambassador, it transpires, greeted the foreign dignitary with the traditional salutation for a funeral rather than a state banquet. The dignitary was not amused. I am told relations have been set back by approximately a decade.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
 
 ### ministry_law_events.7
 - **Title:** The Merchant's Petition
 - **Description:** A delegation of merchants and manufacturers, led by prominent members of the [SCOPE.gsInterestGroup('industrialists_ig').GetName], has presented a petition regarding [SCOPE.sLaw('current_law_scope').GetName]. They argue that the chaos of competing regulations and tariffs is strangling commerce, and that a coordinated ministry is essential.
 - **Flavor:** I must apply to three different offices to export a single crate of textiles. The first grants me a permit, the second demands a different permit, and the third informs me that both permits expired yesterday. A Ministry of Commerce would, at the very least, reduce the permits to one.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
 
 ### ministry_law_events.8
 - **Title:** The Artist's Subsidy
 - **Description:** The debate over [SCOPE.sLaw('current_law_scope').GetName] has drawn the nation's artists and intellectuals into a furious argument. Some in the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] welcome state patronage as the foundation of a cultural renaissance, while others see it as the first step toward censorship and conformity.
 - **Flavor:** The poet stood before the committee and declared that he would sooner burn his manuscripts than submit them for government approval. The painter beside him quietly noted that government approval came with a very generous stipend, and asked where one might apply.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
 
 ### ministry_law_events.9
 - **Title:** Capital vs. Labor
 - **Description:** The proposed [SCOPE.sLaw('current_law_scope').GetName] has ignited the eternal struggle between capital and labor. Factory owners and workers' representatives have each mounted fierce campaigns, and the question of whose interests the new ministry will serve has become the dominant political issue of the season.
 - **Flavor:** The factory owner slammed his fist on the table: 'A ministry that coddles workers will bankrupt us all!' The union leader replied without blinking: 'A ministry that coddles owners already exists - it is called the rest of the government.'
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
 
 ### ministry_law_events.10
 - **Title:** The Smokestack Question
 - **Description:** The [SCOPE.gsInterestGroup('industrialists_ig').GetName] have mounted a vigorous campaign against [SCOPE.sLaw('current_law_scope').GetName], arguing that environmental regulation will cripple the nation's industry and cost thousands of jobs. Meanwhile, reports of poisoned rivers and blackened skies have galvanized public support.
 - **Flavor:** The factory owner pointed at his smokestacks and said they employed four hundred men. The fisherman downstream pointed at his empty nets and said the river had been dead for two years. The committee heard both testimonies and adjourned without a ruling.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
 
 ### ministry_law_events.11
 - **Title:** The Shadow Files
 - **Description:** Leaked documents have revealed the extraordinary capabilities that [SCOPE.sLaw('current_law_scope').GetName] would grant to the state - surveillance networks, informant systems, and the power to operate beyond ordinary legal oversight. The public is uneasy, though some argue such tools are the price of security.
 - **Flavor:** The leaked memorandum was clinical in its language: 'Full spectrum monitoring of communications, including private correspondence, shall be considered a standard operational capability.' The journalist who published it has since found it prudent to relocate abroad.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
 
 ### ministry_law_events.12
 - **Title:** The Refugee Ship
 - **Description:** A ship carrying hundreds of displaced persons has arrived in our harbor, their [concept_homeland] torn apart by war and famine. The sight of desperate families huddled on the docks has given urgency to the debate over [SCOPE.sLaw('current_law_scope').GetName].
 - **Flavor:** The woman held her infant up to the customs officer and said, in halting words he could barely understand, 'Please. This is all I have left.' Behind her, the queue stretched to the end of the pier.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
 
 ### ministry_law_events.13
 - **Title:** The Loudspeaker State
 - **Description:** The proposal to establish [SCOPE.sLaw('current_law_scope').GetName] has sent a chill through the nation's newspaper offices and printing houses. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] fear that a ministry devoted to controlling information will transform the free press into a megaphone for the state.
 - **Flavor:** The editor-in-chief received the proposed regulations and read them twice. Then he looked at his staff and said, 'Gentlemen, we have two choices: we can print what they tell us to print, or we can start looking for honest work.'
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
 
 ### ministry_law_events.14
 - **Title:** The Laboratory of the State
 - **Description:** A breakthrough at a university laboratory has reignited the debate over [SCOPE.sLaw('current_law_scope').GetName]. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] argue that only coordinated state investment can turn such discoveries into practical advances, while skeptics warn that bureaucrats make poor scientists.
 - **Flavor:** The professor presented his findings with quiet pride. The parliamentarian beside me leaned over and whispered, 'Very impressive. Now, can it win a war?' I fear that is precisely the question the Ministry will be created to answer.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
 
 ### ministry_law_events.15
 - **Title:** The Watchers
 - **Description:** Reports of underground resistance networks have given fresh ammunition to supporters of [SCOPE.sLaw('current_law_scope').GetName]. Pamphlets circulate in secret, suspicious meetings are held in cellars, and the authorities fear that dissent is spreading faster than it can be monitored.
 - **Flavor:** The informant's report was terse: 'They meet every Thursday in the back room of the printer's shop. They read forbidden texts and discuss ideas that would make your blood run cold.' When asked what these ideas were, he admitted he hadn't actually attended a meeting, but had heard about them from another informant.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_policy_debate.dds
 
 ### ministry_law_events.16
 - **Title:** The Tainted Product
 - **Description:** A scandal has erupted after dozens of citizens fell ill from a contaminated product sold by a prominent manufacturer. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] protest that it was an isolated incident, but investigators found that the company had been cutting costs at the expense of safety for years.
 - **Flavor:** The label promised 'Pure and Wholesome.' The chemist's analysis found sawdust, chalk, and a substance he diplomatically described as 'of uncertain animal origin.' When confronted, the manufacturer protested that his competitors used far worse.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_reform.dds
 
 ### ministry_law_events.17
 - **Title:** The City Rises
 - **Description:** The nation's cities are growing at a pace that alarms even their most enthusiastic boosters. Tenements spring up overnight, sewage systems overflow, and the air grows thick with soot. The case for [SCOPE.sLaw('current_law_scope').GetName] has never been more urgent - or more controversial.
 - **Flavor:** I walked through the new district this morning. In the space where a meadow stood last year, there are now fourteen tenement blocks, a factory, and precisely zero public parks. The developer assured me that a park was planned, but it kept being replaced by more profitable buildings.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_reform.dds
 
 ### ministry_law_events.18
 - **Title:** The Pulpit and the State
 - **Description:** The proposal for [SCOPE.sLaw('current_law_scope').GetName] has provoked a fierce reaction from the [SCOPE.gsInterestGroup('devout_ig').GetName]. Some clerics welcome state support as a means to spread the faith, while others fear that government involvement will turn the church into an instrument of political control.
 - **Flavor:** The bishop's letter was measured: 'The church has survived empires, revolutions, and heresies without the assistance of a government ministry. We are not entirely certain we require one now. That said, if such a ministry were to include a generous building fund for cathedrals, we would be willing to hear the proposal in greater detail.'
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_reform.dds
 
 ### ministry_law_events.19
 - **Title:** The Distant Crisis
 - **Description:** Reports of a devastating famine in a foreign land have filled the newspapers with harrowing images. Humanitarian organizations are pleading for the government to act, and supporters of [SCOPE.sLaw('current_law_scope').GetName] argue that a dedicated ministry is the only way to respond effectively to such crises.
 - **Flavor:** The photograph showed a child with ribs like a birdcage, staring at the camera with enormous, uncomprehending eyes. It appeared on the front page of every major newspaper, and by noon the Prime Minister's office had received ten thousand letters demanding action.
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_reform.dds
 
 ### ministry_law_events.20
 - **Title:** Underqualified Hires Exposed
 - **Description:** A series of high-profile scandals has surfaced from the recruitment campaign for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] thunder that the new ministry is being filled by patronage hacks, not professionals.
 - **Flavor:** \"We were promised a ministry of experts. What we got was a ministry of cousins. The country deserves better, and so does the institution.\"\n\n\"Names?\"\n\n\"The deputy director is the minister's brother-in-law. The procurement chief is the minister's college roommate. The press secretary is the minister's wife's cousin. We could go on. The list is twelve pages.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.21
 - **Title:** Treasury Pushes Back
 - **Description:** The Ministry of Finance has issued a formal memorandum opposing the budgetary commitments for [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] echo the warning in increasingly strident terms.
 - **Flavor:** \"Every coin allocated here is a coin taken from elsewhere. The minister has not done the arithmetic. We have, and the answer alarms us.\"\n\n\"What did the arithmetic show?\"\n\n\"A first-year cost the bill claims will be modest, and a five-year cost the bill prefers not to mention. The five-year cost is what bankrupts ministries — and us along with them.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.22
 - **Title:** Bureaucratic Sabotage
 - **Description:** Rival departments are quietly obstructing the establishment of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make sport of the resulting confusion in the press.
 - **Flavor:** \"You cannot create a new river by digging in the desert. You must redirect existing water — and that means quarrelling with everyone whose field went dry.\"\n\n\"And the quarrels are quiet so far.\"\n\n\"The quarrels are private so far. Loud and private are different things. Wait until the budget moves and see how private they remain.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.23
 - **Title:** Final Stand of the Bureau
 - **Description:** Career officials slated for redundancy under [SCOPE.sLaw('current_law_scope').GetName] have mounted an unexpectedly effective rearguard action. The [SCOPE.gsInterestGroup('opposing_ig').GetName] take up their cause in public.
 - **Flavor:** \"We have served three governments and weathered two reorganizations. We will weather this one too — or we will make the cost of dissolving us memorable.\"\n\n\"What does 'memorable' mean here?\"\n\n\"It means the files that the new ministry will need to do its job. We do not threaten to misplace them. We merely note that the indexing system is something we devised, and not all of us are eager to explain it to our replacements.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.24
 - **Title:** The General Staff Withholds Cooperation
 - **Description:** Senior officers have made it quietly known that [SCOPE.sLaw('current_law_scope').GetName] will not receive their full cooperation. The [SCOPE.gsInterestGroup('opposing_ig').GetName] speak of constitutional concerns.
 - **Flavor:** \"We will obey the law. We will not pretend to like it, and we will not promise to make it work. Those are different things, sir.\"\n\n\"And if it does not work?\"\n\n\"Then someone will say we should have warned them. We are warning them now, in writing, on the record. The decision is still parliament's. We are merely defending our future reputations.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.25
 - **Title:** Foreign Capitals Take Note
 - **Description:** Ambassadors have begun making pointed inquiries about [SCOPE.sLaw('current_law_scope').GetName] and what it may signal. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill is generating exactly the wrong kind of attention abroad.
 - **Flavor:** \"A nation's foreign policy is read by its rivals as a book of intentions. The current chapter, regrettably, is being read in capitals that have long memories.\"\n\n\"And what does the chapter say?\"\n\n\"It says we are reorganizing our state to project something. They cannot quite decide what. While they decide, their navies move closer to ours, and their ambassadors return our calls more slowly.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.26
 - **Title:** Merchants Lobby Against
 - **Description:** A coalition of trading houses has hired some of the country's sharpest counsel to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make their case in every chamber that will listen.
 - **Flavor:** \"A ministry that meddles in trade is a ministry that learns the value of meddling by costing the country its export markets. We have seen this play before — and it always ends the same way.\"\n\n\"You sound certain.\"\n\n\"I sound experienced. The same speech has been delivered to four previous ministries by four previous lobbies, and each time the ministry won and the markets shrank. We are not yet too tired to give the speech once more.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.27
 - **Title:** Artists Decry State Patronage
 - **Description:** A manifesto signed by leading artists and writers has circulated in opposition to [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as creeping censorship.
 - **Flavor:** \"The painter who eats from the state's hand soon paints what the state asks for. We did not become artists to become courtiers.\"\n\n\"And the painter who eats from no hand at all?\"\n\n\"Eats less. We accept it. We knew the terms when we chose the brush. We did not choose the salary, and we will not be told what colour to use because the salary now exists.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.28
 - **Title:** Strikes Threaten the Ministry
 - **Description:** Coordinated industrial action has erupted over the labor provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are organizing a wider walkout if the bill proceeds.
 - **Flavor:** \"You wanted a labor ministry. Here is labor's reply — we do not consent to being administered. Govern us, and we will withhold what we alone can give.\"\n\n\"And what is it that you alone can give?\"\n\n\"Our hands. The factories are not industrial machines. They are arrangements between owners and us. The arrangement requires our cooperation. Cooperation has a price, and the price is consultation before legislation.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.29
 - **Title:** Industry's Counter-Attack
 - **Description:** Industrialists have launched a coordinated public-affairs campaign against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the proposed regulations will drive plants overseas.
 - **Flavor:** \"The smoke from our furnaces is the smell of prosperity. Regulate it away and you will not regulate the smell — only the prosperity.\"\n\n\"And the children with breathing problems?\"\n\n\"Will work in the factories when they are old enough. Their parents would prefer a paycheck and a cough to no paycheck and clean air. We have asked them. The vote was not close.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.30
 - **Title:** The Shadow Bureau Pushes Back
 - **Description:** Existing security services have made it discreetly known that [SCOPE.sLaw('current_law_scope').GetName] is unwelcome. The [SCOPE.gsInterestGroup('opposing_ig').GetName] speak in dark hints about operational consequences.
 - **Flavor:** \"The shadows do not consent to be moved. You may legislate the chairs in the room, but the men who sit in them outlast every minister.\"\n\n\"And the minister will outlast the next election?\"\n\n\"The minister might. We will outlast the next four. The arithmetic is on our side. Patience is the bureau's only weapon, and the only one it has ever needed.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.31
 - **Title:** The Crisis Worsens
 - **Description:** Just as [SCOPE.sLaw('current_law_scope').GetName] approaches passage, a fresh wave of refugees has overwhelmed border stations. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue the moment is the worst possible for institutional changes.
 - **Flavor:** \"You build the ship while the storm is breaking. Either you finish in time, or you watch what you have built so far wash away.\"\n\n\"And if we pause?\"\n\n\"If we pause, we watch the storm without the ship at all. The choice is between a half-built ship and no ship. Neither is good. One is worse.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.32
 - **Title:** The Press Rebels
 - **Description:** Independent newspapers have closed ranks against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as the first step toward state-controlled media.
 - **Flavor:** \"When the state opens an office of public information, it is to spread information about itself. Where this leads, history has already written.\"\n\n\"And history has examples to the contrary.\"\n\n\"History has exceptions. The rule is what the office becomes in its third minister, not its first. The first minister always promises restraint. The third minister always discovers the rules can be rewritten.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.33
 - **Title:** Academics Walk Out
 - **Description:** Leading scientists have walked out of consultation meetings on [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the bill will politicize research funding.
 - **Flavor:** \"Science is a slow conversation between honest people. Insert a politician into that conversation and you will get neither science nor honest people.\"\n\n\"The bill includes a research council to insulate the science from the politics.\"\n\n\"The research council is appointed by the minister. The minister is appointed by the party. The party is appointed by the voters. The voters do not vote on physics. They vote on prices. Eventually the physics learns to speak of prices.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.34
 - **Title:** Whistleblowers Emerge
 - **Description:** Documents leaked from preliminary work on [SCOPE.sLaw('current_law_scope').GetName] have made their way to opposition journals. The [SCOPE.gsInterestGroup('opposing_ig').GetName] make excellent use of them.
 - **Flavor:** \"I signed an oath of secrecy. I did not sign an oath of complicity. The two are not the same, and the public deserves to know the difference.\"\n\n\"And the cost of that distinction?\"\n\n\"My career. Possibly my freedom. Likely my pension. The public will receive the documents. I will receive the consequences. The two are also not the same — but they are linked.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.35
 - **Title:** Corporate Counter-Lobby
 - **Description:** Major manufacturers have mounted an unprecedented lobbying effort against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] argue that the new oversight will paralyze ordinary commerce.
 - **Flavor:** \"You want a ministry to protect consumers from defective products. We agree, in principle. We disagree, in particular, about which products are defective. Welcome to the next decade of litigation.\"\n\n\"And in the meantime?\"\n\n\"In the meantime, the products are still sold. The lawsuits move slowly. The consumers continue to consume. The lawyers grow wealthier. The cycle has a steady-state economy of its own.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.36
 - **Title:** Neighborhood Resistance
 - **Description:** Residents of major cities have organized against the urban-planning provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame the bill as bulldozers-by-bureaucracy.
 - **Flavor:** \"I lived on this block when the city wall stood across the road. I will not be moved by a ministry that has not yet drawn breath.\"\n\n\"The ministry promises generous compensation.\"\n\n\"Compensation is for what you can replace. I cannot replace the schoolhouse my children attended, or the corner where I met my wife. The ministry's compensation is for a house. I have a home. They are not the same thing.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.37
 - **Title:** The Faithful Protest
 - **Description:** Religious authorities have organized public demonstrations against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] decry it as state intrusion into matters of conscience.
 - **Flavor:** \"Render unto Caesar what is Caesar's, but the ministry you propose to create asks Caesar to render unto itself what belongs to God. It is not a bargain we recognize.\"\n\n\"The ministry does not propose to legislate God.\"\n\n\"It proposes to legislate the practices through which we approach Him. The distinction is theological. The effect is administrative. The two collapse the moment the inspector arrives at the door of the church.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.38
 - **Title:** Domestic Priorities Trump Foreign
 - **Description:** Critics seize on domestic hardship to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] frame foreign aid as money taken from the mouths of struggling citizens.
 - **Flavor:** \"Charity, the proverb says, begins at home. Yet here we are about to charter a ministry to send our wealth abroad while our own children go without. Explain that, if you can.\"\n\n\"The aid creates allies we will need.\"\n\n\"Allies for the next war, perhaps. Today's children cannot wait for the next war to receive their dinner. The voters know this. They will remember it on the next ballot.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.39
 - **Title:** Professional or Loyalist Staffing?
 - **Description:** The new ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its staff. The intelligentsia argue for competitive examinations; the governing party argues for patronage that rewards political support. Both make their case in the corridor.
 - **Flavor:** \"You can staff this ministry with the best people, or with your people. Both are reasonable answers — to different questions about what the ministry is for.\"\n\n\"What is the difference, in operation?\"\n\n\"The best people will tell you when your policy will fail. Your people will help you fail more comfortably. Both have their uses. The question is whether the ministry exists to succeed or to govern.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.40
 - **Title:** Lean Operation or Generous Funding?
 - **Description:** The budget hearing for [SCOPE.sLaw('current_law_scope').GetName] reaches the moment of truth. Industry wants a lean operation; small-business representatives want generous funding to ensure quality delivery. The split is sharp.
 - **Flavor:** \"Every coin in the budget came from someone's pocket. The question is whether it returns as service or whether it stays as savings.\"\n\n\"And which is better for the country?\"\n\n\"The country has no single answer. The pocket that emptied wants the savings. The hand that waits in line for service wants the service. The ministry exists in the gap between these two answers. Choose which side of the gap you stand on.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.41
 - **Title:** Consolidate or Coexist?
 - **Description:** The new ministry under [SCOPE.sLaw('current_law_scope').GetName] must define its scope. Reformers want it to consolidate authority from existing departments; traditionalists want it to coexist alongside them. The administrative diagram is the policy.
 - **Flavor:** \"A ministry that consolidates is a ministry that gets things done. A ministry that coexists is a ministry that keeps the peace. The state needs both — but cannot have both at once.\"\n\n\"Then we choose consolidation, and accept the noise.\"\n\n\"Then you choose the noise. The consolidation comes second, after the political negotiations the noise requires. The order matters. Choose consolidation first, and you spend two years apologizing for it.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.42
 - **Title:** Swift or Phased Dissolution?
 - **Description:** The wind-down of the ministry under [SCOPE.sLaw('current_law_scope').GetName] needs a timeline. Industry wants a swift dissolution to reduce costs; small-business interests want a phased approach that preserves continuity. Pick the rhythm.
 - **Flavor:** \"Rip off the bandage and you spare the patient long suffering. Peel it slowly and you spare the patient sudden shock. We disagree about the patient.\"\n\n\"Who is the patient?\"\n\n\"The ministry's staff, in one telling. The country's businesses, in another. The state's reputation, in a third. Each version of the patient requires a different bandage. Pick the patient and the method follows.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.43
 - **Title:** Civilian-Led or General-Led?
 - **Description:** The ministry of war under [SCOPE.sLaw('current_law_scope').GetName] needs a leadership model. Civilian reformers want a civilian-led ministry with military advisors; the general staff wants a general-led ministry with civilian oversight.
 - **Flavor:** \"A ministry of war run by civilians can be reasoned with. A ministry of war run by generals can be trusted. We have always preferred one or the other.\"\n\n\"And which leads to fewer wars?\"\n\n\"Neither, historically. The civilians invent wars the generals would have refused. The generals fight wars the civilians would have negotiated out of. Both kinds of war are wars. Pick the kind you wish to lose more rarely.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.44
 - **Title:** Hawkish or Dovish Diplomacy?
 - **Description:** The doctrine of the ministry of foreign affairs under [SCOPE.sLaw('current_law_scope').GetName] needs setting. The general staff wants a hawkish posture; the intelligentsia argues for engagement-first diplomacy. The doctrine echoes for decades.
 - **Flavor:** \"You can speak softly and carry a big stick, or you can speak loudly and skip the stick. The first works longer, but only if you can credibly threaten the second.\"\n\n\"And the stick we carry?\"\n\n\"Is the navy. Is the army. Is the willingness to use them. The diplomats do not need to mention any of this to be heard mentioning it. That is the whole point of speaking softly.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.45
 - **Title:** Protectionist or Free Trade?
 - **Description:** The ministry of commerce under [SCOPE.sLaw('current_law_scope').GetName] needs its founding orientation. Industrialists want protectionist tariffs to nurture home production; merchants want free trade to lower input costs.
 - **Flavor:** \"Protect the factories and you raise the price of bread. Open the borders and you raise the unemployment of factory workers. The ministry will be remembered for the choice.\"\n\n\"And the unemployed worker who pays less for bread?\"\n\n\"Eats more cheaply while looking for work in industries that no longer exist. The bread is a small consolation. The choice rests on which constituency screams loudest at the ballot box.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.46
 - **Title:** State-Curated or Independent Grants?
 - **Description:** The ministry of culture under [SCOPE.sLaw('current_law_scope').GetName] needs its patronage model. Religious authorities want state-curated patronage with content guidance; artists want independent grants free of editorial direction.
 - **Flavor:** \"You can pay for art that pleases you, or for art that surprises you. The first builds monuments; the second builds new ideas. Pick the kind of country you want.\"\n\n\"And which kind of country lasts longer?\"\n\n\"The monument-building country is remembered. The idea-building country is borrowed from. Both kinds of legacy are real. Neither is automatic. The ministry's choice is which kind of legacy it intends to invest in.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.47
 - **Title:** Pro-Capital or Pro-Labor?
 - **Description:** The ministry of labor under [SCOPE.sLaw('current_law_scope').GetName] needs its operating philosophy. Industrialists want a pro-capital framework prioritizing flexibility; the trade unions want a pro-labor framework prioritizing protection.
 - **Flavor:** \"The ministry will spend the next generation deciding cases. The framework you give it now will tilt every verdict.\"\n\n\"And the framework is what?\"\n\n\"Whose interests the ministry presumes are paramount when the two sides disagree. The presumption can be revisited, but it usually is not. The first framework becomes the precedent, and the precedent becomes the law.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.48
 - **Title:** Strict or Voluntary Regulations?
 - **Description:** The environmental ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its enforcement model. Scientists want strict mandatory regulations with criminal penalties; industry wants voluntary standards with industry-led monitoring.
 - **Flavor:** \"Mandate compliance and you breed resistance. Invite cooperation and you breed minimum effort. The state chooses which kind of failure it can tolerate.\"\n\n\"Is there a third option?\"\n\n\"There is. Mandate compliance and inspect rigorously. The inspections cost money the bill has not allocated. So we end up with a fourth option — mandate compliance, inspect occasionally, and pretend the inspections are doing their job.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.49
 - **Title:** Domestic or Foreign Focus?
 - **Description:** The intelligence ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its primary remit. The general staff wants a domestic-surveillance focus; the intelligentsia argues for a foreign-intelligence focus that keeps secret police at bay.
 - **Flavor:** \"Look outward and you protect the borders. Look inward and you protect the regime. They are not the same thing.\"\n\n\"And the regime is, in turn, what guards the borders.\"\n\n\"So they say, in the speeches. In practice, the inward-looking service grows; the outward-looking service is starved. The regime ends up well-defended against its own citizens and surprised by its actual enemies.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.50
 - **Title:** Generous or Restrictive Resettlement?
 - **Description:** The refugee-affairs ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its founding posture. The intelligentsia wants generous resettlement; religious authorities want restrictive resettlement to preserve domestic harmony.
 - **Flavor:** \"Open the door and you welcome the stranger. Keep it shut and you reassure the neighbor. The state must decide which welcome matters more.\"\n\n\"And the neighbors who do not feel reassured?\"\n\n\"Will vote for someone who promises to shut the door. The political mathematics is unforgiving. The moral mathematics is the opposite. The bill cannot satisfy both.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.51
 - **Title:** State-Controlled or Private Partnership?
 - **Description:** The propaganda ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its operating model. The general staff wants state-controlled output; industrialists want a private-partnership model that contracts out production.
 - **Flavor:** \"State propaganda speaks with one voice — yours. Privatized propaganda speaks with many voices — all working for the same paycheck. Pick your poison.\"\n\n\"And which serves the country better?\"\n\n\"Neither is for the country. Both are for whoever pays. The question is whether you prefer your propaganda obvious or disguised. The first you can argue with. The second you can only outbid.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.52
 - **Title:** Basic or Applied Research?
 - **Description:** The science ministry under [SCOPE.sLaw('current_law_scope').GetName] needs a research priority. The intelligentsia wants basic-research focus; industry wants applied-research focus with commercial outcomes prioritized.
 - **Flavor:** \"Fund curiosity and you may never see the return. Fund applications and you will never see the breakthroughs that would have come from the curiosity.\"\n\n\"How much of each?\"\n\n\"That is the question that requires fifty years of evidence to answer, and we have a budget meeting on Thursday. The political balance is what gets written into the founding statute. The scientific balance is what the founding statute fails to predict.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.53
 - **Title:** Permissive or Restrictive Standards?
 - **Description:** The thought-control ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its default standard. The intelligentsia wants permissive standards with narrow exceptions; the general staff wants restrictive standards with narrow tolerances.
 - **Flavor:** \"You will be wrong sometimes. The question is whether you would rather be wrong by permitting what should have been refused, or refusing what should have been permitted.\"\n\n\"And which error is worse?\"\n\n\"That depends on whose ox is gored. The newspaper editor will tell you that refusing what should have been permitted is worse, until his own publication is denied a license. Then he will tell you the other way.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.54
 - **Title:** Strict or Industry-Led Standards?
 - **Description:** The consumer-protection ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its enforcement model. Small-business representatives want strict mandatory standards; industrialists want industry-led self-regulation.
 - **Flavor:** \"Let the industry write the rules and the rules will be lenient. Let the regulators write them and the rules will be unworkable. Someone always writes them.\"\n\n\"Can they write them together?\"\n\n\"They can sit in the same room and agree on words that mean different things to each side. The lawyers will then earn handsome fees explaining which meaning prevails. The country pays for the lawyers either way.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.55
 - **Title:** Density or Sprawl?
 - **Description:** The urban-planning ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its model. The intelligentsia wants density-focused planning; landowners want sprawl-friendly zoning that preserves property values.
 - **Flavor:** \"Build the city up and you cram strangers into one neighborhood. Build the city out and you pave the countryside. Both choices will be remembered as a betrayal by someone.\"\n\n\"And the population must live somewhere.\"\n\n\"The population must, yes. The question is whose neighborhood absorbs them. The ministry's first decision tells the country which constituencies it will be willing to inconvenience, and which it will not.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.56
 - **Title:** Established Faith or Pluralist?
 - **Description:** The religion ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its founding model. Religious authorities want established-faith privileges; the intelligentsia wants a pluralist framework treating all confessions equally.
 - **Flavor:** \"Privilege one faith and you cement its claim on the public square. Treat them equally and you reduce them all to one private option among many. The choice is the future of the soul of the country.\"\n\n\"And what does the country's soul prefer?\"\n\n\"The country's soul is not a single thing. The majority's soul wants its faith honoured. The minorities' souls want their existence respected. The ministry's choice tells everyone which of these the state intends to deliver.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ### ministry_law_events.57
 - **Title:** Strategic or Humanitarian Aid?
 - **Description:** The international-aid ministry under [SCOPE.sLaw('current_law_scope').GetName] needs its allocation principle. The general staff wants strategic allocation tied to alliance interests; the intelligentsia wants humanitarian allocation tied to need.
 - **Flavor:** \"Foreign aid is policy by other means. The question is which means — 'help our friends,' or 'help those who need it most.' These are different ministries dressed up alike.\"\n\n\"And the public's view?\"\n\n\"The public alternates. In peacetime the public prefers humanitarian. In tense moments the public prefers strategic. The bill must pick one. The bill's first minister will spend the next four years apologizing for the unchosen one.\"
-- **Current image:** (unknown)
+- **Current image:** gfx/event_pictures/ministry_establishment.dds
 
 ## minor_events.txt
 

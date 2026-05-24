@@ -238,7 +238,7 @@ Explosives Factory (bg_heavy_industry):
 			Monthly Pollution: 25
 		Ammonium Nitrate Explosives
 		Metamaterial Explosives
-	pmg_automation_building_explosives_factory:
+	Automation:
 		Manual Batch Processing
 		Continuous Processing
 			Monthly Pollution: 2.5

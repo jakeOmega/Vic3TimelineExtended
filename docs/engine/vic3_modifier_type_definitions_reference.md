@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7767 modifier entries.*
+*Auto-generated from 7769 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1435,7 +1435,7 @@ _An increase or decrease to amount of Political Strength gained from the Votes o
 - `goods_output_sulfur_add`, `goods_output_tanks_add`, `goods_output_tea_add`, `goods_output_tech_metals_add`, `goods_output_telephones_add`, `goods_output_tobacco_add`
 - `goods_output_tools_add`, `goods_output_tourism_add`, `goods_output_transportation_add`, `goods_output_wine_add`, `goods_output_wood_add`
 
-### `goods_output_{good}_mult` (63 members)
+### `goods_output_{good}_mult` (65 members)
 
 - `goods_output_advanced_materials_mult`, `goods_output_aeroplanes_mult`, `goods_output_ammunition_mult`, `goods_output_artillery_mult`, `goods_output_automobiles_mult`, `goods_output_clippers_mult`
 - `goods_output_clothes_mult`, `goods_output_coal_mult`, `goods_output_coffee_mult`, `goods_output_construction_mult`, `goods_output_consumer_appliances_mult`, `goods_output_digital_access_mult`
@@ -1443,11 +1443,11 @@ _An increase or decrease to amount of Political Strength gained from the Votes o
 - `goods_output_fabric_mult`, `goods_output_fertilizer_mult`, `goods_output_fine_art_mult`, `goods_output_fish_mult`, `goods_output_fruit_mult`, `goods_output_furniture_mult`
 - `goods_output_glass_mult`, `goods_output_gold_mult`, `goods_output_grain_mult`, `goods_output_groceries_mult`, `goods_output_hardwood_mult`, `goods_output_iron_mult`
 - `goods_output_ironclads_mult`, `goods_output_launch_capacity_mult`, `goods_output_lead_mult`, `goods_output_liquor_mult`, `goods_output_luxury_clothes_mult`, `goods_output_luxury_furniture_mult`
-- `goods_output_manowars_mult`, `goods_output_meat_mult`, `goods_output_merchant_marine_mult`, `goods_output_oil_mult`, `goods_output_opium_mult`, `goods_output_paper_mult`
-- `goods_output_porcelain_mult`, `goods_output_radios_mult`, `goods_output_robotics_mult`, `goods_output_rubber_mult`, `goods_output_services_mult`, `goods_output_silk_mult`
-- `goods_output_small_arms_mult`, `goods_output_steamers_mult`, `goods_output_steel_mult`, `goods_output_sugar_mult`, `goods_output_sulfur_mult`, `goods_output_tanks_mult`
-- `goods_output_tea_mult`, `goods_output_tech_metals_mult`, `goods_output_telephones_mult`, `goods_output_tobacco_mult`, `goods_output_tools_mult`, `goods_output_tourism_mult`
-- `goods_output_transportation_mult`, `goods_output_wine_mult`, `goods_output_wood_mult`
+- `goods_output_magnetic_drive_ships_mult`, `goods_output_manowars_mult`, `goods_output_meat_mult`, `goods_output_merchant_marine_mult`, `goods_output_motor_ships_mult`, `goods_output_oil_mult`
+- `goods_output_opium_mult`, `goods_output_paper_mult`, `goods_output_porcelain_mult`, `goods_output_radios_mult`, `goods_output_robotics_mult`, `goods_output_rubber_mult`
+- `goods_output_services_mult`, `goods_output_silk_mult`, `goods_output_small_arms_mult`, `goods_output_steamers_mult`, `goods_output_steel_mult`, `goods_output_sugar_mult`
+- `goods_output_sulfur_mult`, `goods_output_tanks_mult`, `goods_output_tea_mult`, `goods_output_tech_metals_mult`, `goods_output_telephones_mult`, `goods_output_tobacco_mult`
+- `goods_output_tools_mult`, `goods_output_tourism_mult`, `goods_output_transportation_mult`, `goods_output_wine_mult`, `goods_output_wood_mult`
 
 ### `goods_trade_advantage_{good}_mult` (42 members)
 
