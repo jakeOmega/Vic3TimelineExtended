@@ -687,6 +687,8 @@
  te_yearly_temp_change_up_red:0 "#R"
  traditional_energy_interest:0 "Traditional energy dependence"
  un_authority_change_plus_10:0 "#G [concept_un_authority]: +10#!"
+ voluntary_union_decentralized_action_notification_third_party_desc:0 "[INITIATOR_COUNTRY.GetName] has peacefully integrated the decentralized power of [TARGET_COUNTRY.GetName]."
+ voluntary_union_decentralized_action_notification_third_party_name:0 "Decentralized Power Integrated"
  war_goal_te_reunify_country:0 "Reunify with [WAR_GOAL_DRAFT.GetTarget.GetName]"
  war_goal_te_reunify_country_desc:0 "[WAR_GOAL_DRAFT.GetHolder.GetName] absorbs [WAR_GOAL_DRAFT.GetTarget.GetName] in the name of national reunification."
  war_goal_te_reunify_country_sway_desc:0 "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by allowing them to reunify with [WAR_GOAL_DRAFT.GetTarget.GetName]."

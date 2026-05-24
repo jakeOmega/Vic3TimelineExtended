@@ -104,16 +104,18 @@ irredentism.1 = {
 					is_homeland_of_country_cultures = ROOT
 					NOT = { has_claim_by = ROOT }
 				}
-				save_scope_as = irr_unclaimed_home_state
 				state_region = { save_scope_as = irr_unclaimed_home_region }
 			}
 		}
 	}
 
 	# --- Option A: Stoke irredentism ---
+	# Only offered when we found a co-ethnic homeland the target owns that we
+	# don't already claim -- otherwise "stoke for more claims" has nothing to
+	# claim and the option would read as a broken promise.
 	option = {
 		name = irredentism.1.a
-		default_option = yes
+		trigger = { exists = scope:irr_unclaimed_home_region }
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -129,12 +131,9 @@ irredentism.1 = {
 				add = -1
 			}
 		}
-		# If we found an unclaimed home state, claim it (region scope so the
-		# tooltip renders the gained claim).
-		if = {
-			limit = { exists = scope:irr_unclaimed_home_region }
-			scope:irr_unclaimed_home_region = { add_claim = ROOT }
-		}
+		# Claim the unclaimed home state (region scope so the tooltip renders the
+		# gained claim). Existence is guaranteed by the option trigger above.
+		scope:irr_unclaimed_home_region = { add_claim = ROOT }
 		# Agitation/claim-laying is a modest provocation -- much lighter than
 		# actually opening a play (Option C's path), so a small infamy hit.
 		change_infamy = 1
@@ -225,8 +224,11 @@ irredentism.1 = {
 	}
 
 	# --- Option D: Bide our time ---
+	# Default because Option A can be hidden (no unclaimed home state); biding is
+	# the neutral, always-available timeout fallback.
 	option = {
 		name = irredentism.1.bide
+		default_option = yes
 		ai_chance = {
 			base = 1
 			modifier = {

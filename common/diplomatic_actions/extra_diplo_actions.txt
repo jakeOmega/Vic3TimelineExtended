@@ -1315,6 +1315,9 @@ voluntary_union_decentralized = {
 	}
 
 	possible = {
+		# Tech gate lives here (not only in selectable) so it gates the AI too --
+		# selectable is an unreliable AI gate. Mirrors the era-6 floor the player sees.
+		has_technology_researched = decolonization
 		scope:target_country = {
 			is_country_type = decentralized
 			# Reachability: land border OR both sides touch the sea (convoy-linkable).
@@ -1334,14 +1337,13 @@ voluntary_union_decentralized = {
 	}
 
 	accept_effect = {
-		# Notify interested third parties BEFORE the annex -- the scripted effect
-		# walks scope:target_country's strategic regions (still valid here). Set up
-		# the scope aliases the effect expects (shared with voluntary_union).
-		save_scope_as = irr_unifier
-		scope:target_country = {
-			save_scope_as = irr_annexed_country
-		}
-		te_irredentism_notify_third_parties_effect = { PEACEFUL = yes }
+		# Decentralized absorption is colonial-style, not kinship reunification, so it
+		# deliberately does NOT route through te_irredentism_notify_third_parties_effect.
+		# That effect fires the same-culture irredentism.6 event -- wrong framing here
+		# ("same culture, same flag, cite kinship"), and its country-scope `placement`
+		# read post-annex renders as NULL_STATE. Third-party awareness is handled by the
+		# engine via should_notify_third_parties = yes, using this action's own
+		# *_action_notification_third_party_* loc (scope-correct INITIATOR/TARGET tokens).
 		annex = scope:target_country
 	}
 
@@ -1351,7 +1353,10 @@ voluntary_union_decentralized = {
 		# lands, driving the world toward full centralization. Kept conservative;
 		# tune after playtest (overlaps thematically with colonization).
 		evaluation_chance = {
-			value = 0.1
+			# Max on either evaluation_chance scale (0-1 fraction or 0-100 percent):
+			# evaluate every month, like vanilla's most aggressive peaceful-annex
+			# actions. The user wants AI to absorb decentralized lands whenever possible.
+			value = 100
 		}
 
 		propose_score = {
@@ -1359,7 +1364,7 @@ voluntary_union_decentralized = {
 
 			add = {
 				desc = "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_BASELINE"
-				value = 5
+				value = 20
 			}
 
 			# Same-culture co-ethnic land is a stronger pull than a foreign-culture grab.
