@@ -491,7 +491,7 @@ Genetic Rights:
 	Open-Source Genetics [progressiveness=25] - Unlocking Technology: Synthetic Biology
 		The genetic code is the shared heritage of all life; research and modification are placed in the public domain to accelerate progress.
 	State Eugenics Program - Unlocking Technology: Genetic Engineering
-		The state mandates genetic [concept_screening] and 'enhancements' to guide the evolution of its populace.
+		The state mandates genetic screening and 'enhancements' to guide the evolution of its populace.
 Language Policy:
 	Local Vernacular
 		Administration and schooling follow local custom. The state sets no uniform language standard, producing a patchwork of practices and identities.

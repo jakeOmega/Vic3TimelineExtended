@@ -3,7 +3,7 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 733
+**Total events:** 734
 **Event files:** 38
 
 ## agricultural_diffusion_events.txt
@@ -86,7 +86,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.1
 - **Title:** Speculative Mania
-- **Description:** Reports are flooding in from every trading floor and financial institution: a wave of speculative [concept_fervor] has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.
+- **Description:** Reports are flooding in from every trading floor and financial institution: a wave of speculative fervor has gripped the markets. New ventures are attracting staggering sums, share prices climb daily, and fortunes are being made - at least on paper. Our central bankers are divided on whether this exuberance reflects genuine economic strength or a dangerous delusion.
 - **Flavor:** \"I put in five hundred on Monday. By Thursday it was twelve hundred. I've never seen anything like it.\"\n\n\"You haven't seen anything yet, friend. My broker says this is just the beginning.\"\n\n\"That's what they said about the last one, too.\"
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
@@ -800,7 +800,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.19
 - **Title:** The Crisis
-- **Description:** [SCOPE.sCountry('nationalizing_country').GetName] — once our possession — has seized foreign-owned assets in a wave of nationalist [concept_fervor]. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.
+- **Description:** [SCOPE.sCountry('nationalizing_country').GetName] — once our possession — has seized foreign-owned assets in a wave of nationalist fervor. Our investments, built over decades, are being expropriated without adequate compensation. Military commanders insist a sharp intervention would restore order. Diplomats warn that the world has changed.
 - **Flavor:** \"The canal is ours,\" the telegram read. \"We built it. We died building it. And now it is ours.\"\n\nThe foreign secretary crumpled it and dropped it in the waste basket.\n\n\"Prepare the contingency plans,\" he told the room. \"All of them.\"\n\n\"Sir, the Americans have already issued a statement urging restraint.\"\n\n\"The Americans can urge whatever they like. It is our canal.\"\n\nA silence. Someone coughed.\n\n\"Is it, sir?\"
 - **Current image:** gfx/event_pictures/colonial_departure.dds
 
@@ -1178,7 +1178,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.22
 - **Title:** The Automation Question
-- **Description:** The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding [concept_radical] action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all.
+- **Description:** The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding radical action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all.
 - **Flavor:** "The loom does not eat. The steam-hammer does not sleep. The calculating engine does not demand a pension. And yet the men they replaced must still feed their families. If the machines have taken the work, then the machines must pay the wages."
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
@@ -1714,6 +1714,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** [SCOPE.sCountry('irr_annexed_country').GetName] Absorbed by [SCOPE.sCountry('irr_unifier').GetName]
 - **Description:** (no localization)
 - **Flavor:** \"Two nations became one this morning. Peacefully, in one telling; by force, in another.\"\n\n\"Which is the true version?\"\n\n\"The treaty was signed. The treaty was also signed at gunpoint. Both can be true. The map will record only the result. The remembrance is what the families pass to their grandchildren — and the grandchildren will not agree on what to remember.\"
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.9
+- **Title:** [SCOPE.sCountry('irr_dc_target').GetName] Integrated by [SCOPE.sCountry('irr_dc_annexer').GetName]
+- **Description:** [SCOPE.sCountry('irr_dc_annexer').GetName] has peacefully integrated the decentralized power of [SCOPE.sCountry('irr_dc_target').GetName]. We hold interests in the region and a position to consider.
+- **Flavor:** \"The maps gained another color this morning, and the people another capital to petition.\"
 - **Current image:** africa_diplomats_negotiating
 
 ## mental_health_events.txt
@@ -2344,7 +2350,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.33
 - **Title:** Thought Made Manifest
-- **Description:** A [concept_radical] proposal has seized the campaign: replace elections entirely with neural-interface direct democracy, where citizens register their preferences in real time through brain-computer interfaces. Proponents argue this would be the purest form of democratic expression ever conceived. Critics warn of manipulation, coercion, and the erasure of deliberation. The technology exists — but should it be used?
+- **Description:** A radical proposal has seized the campaign: replace elections entirely with neural-interface direct democracy, where citizens register their preferences in real time through brain-computer interfaces. Proponents argue this would be the purest form of democratic expression ever conceived. Critics warn of manipulation, coercion, and the erasure of deliberation. The technology exists — but should it be used?
 - **Flavor:** \"The neural-interface focus group recorded preferences down to the millisecond.\"\n\n\"And the preferences?\"\n\n\"Were sharper, more decisive than the spoken-interview group. The respondents could not explain why they had chosen as they did. They said the interface had felt like reading their own minds back to them. Several of them found the experience disturbing.\"
 - **Current image:** gfx/event_pictures/neural_interface.dds
 
@@ -2692,7 +2698,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### post_scarcity_events.4
 - **Title:** Neo-Luddite Terrorism
-- **Description:** A [concept_radical] anti-technology movement has attacked automation [concept_infrastructure], destroying factories and data centers. Calling themselves the \"New Luddites,\" they argue that machines are stealing human purpose and dignity. Their violence has divided public opinion.
+- **Description:** A radical anti-technology movement has attacked automation [concept_infrastructure], destroying factories and data centers. Calling themselves the \"New Luddites,\" they argue that machines are stealing human purpose and dignity. Their violence has divided public opinion.
 - **Flavor:** They smashed the assembly line with crowbars and set the server room on fire. The company had the replacement units operational within a week.\n\n\"Was it worth it?\" the journalist asked the surviving organizer.\n\n\"The factory replaced the units. The factory did not replace the conversation. The country is talking about what we did. The country had not been talking about what the factories had done. We are not winning. We are no longer being ignored.\"
 - **Current image:** gfx/event_pictures/neo_luddite_protest.dds
 
@@ -4416,7 +4422,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.10
 - **Title:** Home Front Rally
-- **Description:** A surge of patriotic [concept_fervor] sweeps the nation. Citizens line the streets waving flags, factories run double shifts, and volunteers flood recruitment offices. The will to fight has never been stronger.
+- **Description:** A surge of patriotic fervor sweeps the nation. Citizens line the streets waving flags, factories run double shifts, and volunteers flood recruitment offices. The will to fight has never been stronger.
 - **Flavor:** The factory foreman wiped his hands on his apron and addressed the morning shift. 'Double production this week,' he said. 'The front needs shells more than you need sleep.'\n\nNo one complained. The woman at the lathe had received a telegram yesterday. Her husband was not coming home. She picked up her tools and worked a sixteen-hour shift without a word.
 - **Current image:** gfx/event_pictures/home_front_factory.dds
 
