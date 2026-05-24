@@ -920,3 +920,38 @@ irredentism.6 = {
 		remove_variable = irr_notify_peaceful_flag
 	}
 }
+
+# ============================================================================
+#  9 – Decentralized power integrated (third-party notification)
+#  Fired from te_ai_decentralized_absorption_effect (on_yearly_pulse_country)
+#  to interested third parties when an AI country peacefully integrates a
+#  reachable decentralized power. The player's voluntary_union_decentralized
+#  action notifies third parties via the engine (should_notify_third_parties);
+#  this is the AI-path equivalent. Placed on the annexer (always alive); fired
+#  days = 0 before the annex so the target scope's name still resolves.
+# ============================================================================
+irredentism.9 = {
+	type = country_event
+
+	placement = scope:irr_dc_annexer
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.9.t
+	desc = irredentism.9.d
+	flavor = irredentism.9.f
+
+	duration = 3
+
+	# Dedupe if the observer holds interest in several of the target's regions.
+	cooldown = { years = 1 }
+
+	option = {
+		name = irredentism.9.a
+		default_option = yes
+	}
+}

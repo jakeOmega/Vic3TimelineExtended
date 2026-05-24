@@ -1352,11 +1352,17 @@ voluntary_union_decentralized = {
 		# decision. AI proposing centralized neighbors absorb reachable decentralized
 		# lands, driving the world toward full centralization. Kept conservative;
 		# tune after playtest (overlaps thematically with colonization).
+		# NOTE: this ai block only governs the *player* UI surfacing. The engine
+		# never offers decentralized countries as autonomous AI diplomatic-action
+		# targets (vanilla AI only reaches decentralized via state-targeted actions
+		# like da_stake_colonial_claim, or wartime violate_sovereignty), so the AI
+		# never evaluates this action no matter how it is scored. The AI absorption
+		# path is driven from on_yearly_pulse_country via
+		# te_ai_decentralized_absorption_effect, which reuses the same eligibility
+		# gates as `possible` above.
 		evaluation_chance = {
-			# Max on either evaluation_chance scale (0-1 fraction or 0-100 percent):
-			# evaluate every month, like vanilla's most aggressive peaceful-annex
-			# actions. The user wants AI to absorb decentralized lands whenever possible.
-			value = 100
+			# 0-1 probability (vanilla max ~0.5); 1.0 = always evaluate.
+			value = 1
 		}
 
 		propose_score = {

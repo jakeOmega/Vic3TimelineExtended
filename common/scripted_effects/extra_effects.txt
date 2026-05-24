@@ -1361,3 +1361,63 @@ te_irredentism_notify_third_parties_effect = {
 		}
 	}
 }
+
+# AI-side driver for decentralized absorption. Runs from on_yearly_pulse_country
+# (ROOT = the pulsing country). The player uses the voluntary_union_decentralized
+# diplomatic action; the engine never offers decentralized countries as autonomous
+# AI diplomatic-action targets, so the AI path is driven here with the SAME
+# eligibility gates the action's `possible` block uses (decolonization/globalization
+# tech, irr_target_reachable, same-nation culture floor). Absorbs at most one
+# reachable decentralized neighbour per year. Notifies interested third parties
+# BEFORE the annex (irredentism.9) so the target scope is still alive for its name.
+te_ai_decentralized_absorption_effect = {
+	if = {
+		limit = {
+			is_ai = yes
+			has_technology_researched = decolonization
+			is_diplomatic_play_committed_participant = no
+		}
+		save_scope_as = irr_dc_annexer
+		random_country = {
+			limit = {
+				is_country_type = decentralized
+				irr_target_reachable = yes
+				NOT = { has_truce_with = scope:irr_dc_annexer }
+				# Era-6 floor: same-culture only; globalization (era 9) lifts it.
+				# Mirrors voluntary_union_decentralized_culture_tt in the action.
+				OR = {
+					scope:irr_dc_annexer = { has_technology_researched = globalization }
+					irr_target_same_nation = yes
+				}
+			}
+			save_scope_as = irr_dc_target
+		}
+		if = {
+			limit = { exists = scope:irr_dc_target }
+			# Notify interested third parties while the target still exists.
+			# Same audience as te_irredentism_notify_third_parties_effect:
+			# non-decentralized minor+ powers with interest in the target's region.
+			scope:irr_dc_target = {
+				every_country_strategic_region = {
+					save_temporary_scope_as = irr_dc_region
+					every_country = {
+						limit = {
+							NOT = { THIS = scope:irr_dc_annexer }
+							NOT = { THIS = scope:irr_dc_target }
+							NOT = { is_country_type = decentralized }
+							country_rank >= rank_value:minor_power
+							has_strategic_region_interest_tier = {
+								strategic_region = scope:irr_dc_region
+								value >= 2
+							}
+						}
+						trigger_event = { id = irredentism.9 days = 0 }
+					}
+				}
+			}
+			scope:irr_dc_annexer = {
+				annex = scope:irr_dc_target
+			}
+		}
+	}
+}

@@ -226,6 +226,19 @@ on_yearly_pulse_country = {
 		add_arable_land_effect_on_action
 		assign_aptitude_traits_on_action
 		te_unused_mandate_reserve_on_action
+		te_ai_decentralized_absorption_on_action
+	}
+}
+
+# AI DECENTRALIZED ABSORPTION - the engine never offers decentralized countries
+# as autonomous AI diplomatic-action targets, so the player's voluntary_union_
+# decentralized action has no AI counterpart on its own. This drives the AI path,
+# reusing the action's eligibility gates. Absorbs at most one reachable
+# decentralized neighbour per AI country per year. See common/scripted_effects/
+# extra_effects.txt (te_ai_decentralized_absorption_effect).
+te_ai_decentralized_absorption_on_action = {
+	effect = {
+		te_ai_decentralized_absorption_effect = yes
 	}
 }
 

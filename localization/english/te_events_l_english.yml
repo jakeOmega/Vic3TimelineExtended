@@ -1630,6 +1630,10 @@
  irredentism.8.d:0 "Our [Concept('concept_power_bloc_member', 'bloc member')] [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName]. We may bless the merger or forbid it."
  irredentism.8.f:0 "\"The bloc member has been offered union. They are considering it.\"\n\n\"And we can bless or forbid?\"\n\n\"We can. The blessing strengthens the cause but loses a useful client. The forbid keeps the client and strains the cause. Both decisions are bets on the shape of the next decade. Neither bet is safe.\""
  irredentism.8.t:0 "[SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union"
+ irredentism.9.a:0 "We take note"
+ irredentism.9.d:0 "[SCOPE.sCountry('irr_dc_annexer').GetName] has peacefully integrated the decentralized power of [SCOPE.sCountry('irr_dc_target').GetName]. We hold interests in the region and a position to consider."
+ irredentism.9.f:0 "\"The maps gained another color this morning, and the people another capital to petition.\""
+ irredentism.9.t:0 "[SCOPE.sCountry('irr_dc_target').GetName] Integrated by [SCOPE.sCountry('irr_dc_annexer').GetName]"
 
 #
 # MENTAL_HEALTH_EVENTS
