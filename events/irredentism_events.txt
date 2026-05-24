@@ -863,7 +863,7 @@ irredentism.8 = {
 # ============================================================================
 irredentism.6 = {
 	type = country_event
-	placement = scope:irr_annexed_country
+	placement = scope:irr_unifier
 
 	event_image = { video = "africa_diplomats_negotiating" }
 

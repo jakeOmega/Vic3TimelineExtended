@@ -27,6 +27,16 @@
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 285
+    }
+
+    resource = {
+        type = "building_precious_minor_base_metal_mine"
+        undiscovered_amount = 150
+    }
     naval_exit_id = 3122
 }
 

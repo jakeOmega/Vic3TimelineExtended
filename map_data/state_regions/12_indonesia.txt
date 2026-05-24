@@ -20,6 +20,11 @@
         type = "building_rubber_plantation"
         undiscovered_amount = 40
     }
+
+    resource = {
+        type = "building_precious_minor_base_metal_mine"
+        undiscovered_amount = 115
+    }
     naval_exit_id = 3051
 }
 
