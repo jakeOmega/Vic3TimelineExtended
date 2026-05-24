@@ -50,7 +50,6 @@ All generator-produced docs files live under `docs/engine/`. Manually-curated au
 | `docs/engine/event_image_inventory.md` | `gen_event_inventory.py` | server start + `POST /reload` (post-load chain). Inventory of all mod events used to drive custom event-image generation. |
 | `docs/engine/orphaned_event_report.md` | `orphaned_event_audit.py` | server start + `POST /reload` (post-load chain). Flags non-self-firing events defined but never referenced by any dispatch path. |
 | `docs/engine/effect_trigger_validity_report.md` | `effect_trigger_validity_audit.py` | server start + `POST /reload` (post-load chain). Flags effect/trigger keywords not in the engine catalog (and `funcname(...)` call-syntax). |
-| `docs/engine/effect_trigger_valid_keys.txt` | `effect_trigger_validity_audit.py bootstrap` | **one-shot**, re-run on a vanilla bump (see `vanilla_patch_runbook.md`). Frozen union of effect/trigger summary names + vanilla effect-corpus LHS keywords. |
 | `docs/audits/mod_only_tech_modifier_baseline.md` | `scripts/analysis/tech_balance_audit.py --refresh-baseline` | manual run; row-level `target_typical_value` cells are then hand-edited |
 | `docs/data/tech_modifier_baseline.json`, `docs/data/tech_modifier_pattern_baseline.json` | `scripts/analysis/tech_modifier_baseline.py` | refreshed via `tech_balance_audit.py --refresh-baseline` |
 | `docs/data/balance_snapshot.json` | `scripts/snapshot_balance.py` | manual run; snapshot before vanilla bumps |
@@ -61,6 +60,7 @@ These are written by scripts that the team runs occasionally to *bootstrap* cont
 
 | File | Generator | Notes |
 |---|---|---|
+| `docs/engine/effect_trigger_valid_keys.txt` | `effect_trigger_validity_audit.py bootstrap` | Re-run on a vanilla bump (see `vanilla_patch_runbook.md` § 4). Frozen union of effect/trigger summary names + every LHS keyword vanilla uses in its effect corpus. NOT regenerated per reload, and NOT meant to be hand-edited — add valid-but-vanilla-unused keys to `_CURATED_VALID` in the audit instead. |
 | `common/buildings/company_buildings.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | |
 | `common/production_method_groups/unique_pm_groups.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | |
 | `common/production_methods/unique_pms.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | Note: was hand-edited during the 1.13 migration. If running the generator again, propagate hand edits via the script's templates first. |
