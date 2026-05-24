@@ -145,6 +145,31 @@ class ContextClassificationTests(unittest.TestCase):
             "diplomatic_actions",
         )
 
+    def test_diplomatic_action_notification_descs(self):
+        # Notification / proposal-notification / break-notification *descs*
+        # route to the stricter notifications context (issue #149).
+        action_keys = {"voluntary_union"}
+        for suffix in (
+            "_action_notification_desc",
+            "_proposal_notification_desc",
+            "_action_notification_break_desc",
+        ):
+            self.assertEqual(
+                classify_context(
+                    "voluntary_union" + suffix, diplo_action_keys=action_keys
+                ),
+                "diplomatic_action_notifications",
+                msg=suffix,
+            )
+        # …but the *name* variants stay in the general diplomatic context.
+        self.assertEqual(
+            classify_context(
+                "voluntary_union_action_notification_name",
+                diplo_action_keys=action_keys,
+            ),
+            "diplomatic_actions",
+        )
+
     def test_unclassified_falls_back_to_permissive(self):
         self.assertEqual(classify_context("some_random_key"), "permissive")
 
@@ -206,6 +231,48 @@ class ValidationTests(unittest.TestCase):
     def test_format_modifier_does_not_affect_validation(self):
         self.assertIsNone(
             self._validate("[ROOT.GetName|U]", "events")
+        )
+
+    # --- issue #149: diplomatic-action notification descs ---
+
+    def test_bare_country_denied_in_notification(self):
+        # Bare COUNTRY is unbound in notification descs even though the
+        # permissive fallback would otherwise admit it.
+        reason = self._validate(
+            "[COUNTRY.GetName]", "diplomatic_action_notifications"
+        )
+        self.assertIsNotNone(reason)
+        self.assertIn("COUNTRY", reason)
+        self.assertIn("INITIATOR_COUNTRY", reason)
+
+    def test_initiator_and_target_country_ok_in_notification(self):
+        self.assertIsNone(
+            self._validate(
+                "[INITIATOR_COUNTRY.GetName]", "diplomatic_action_notifications"
+            )
+        )
+        self.assertIsNone(
+            self._validate(
+                "[TARGET_COUNTRY.GetName]", "diplomatic_action_notifications"
+            )
+        )
+
+    def test_get_diplomatic_pact_denied_in_notification(self):
+        reason = self._validate(
+            "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
+            "diplomatic_action_notifications",
+        )
+        self.assertIsNotNone(reason)
+        self.assertIn("GetDiplomaticPact", reason)
+
+    def test_get_diplomatic_pact_ok_in_general_diplo_context(self):
+        # The same chain is valid in `_pact_desc` (diplomatic_actions context),
+        # where the pact is already formed.
+        self.assertIsNone(
+            self._validate(
+                "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
+                "diplomatic_actions",
+            )
         )
 
 

@@ -69,7 +69,7 @@ These produce a lot of triage entries that look like errors but are mechanical t
 
 The Clausewitz engine warns once per Paradox `.txt` that lacks the leading `\xef\xbb\xbf` byte sequence. Files still load (the warning literally says "will try to use it anyways"), but every missing-BOM file is one extra triage line forever.
 
-Fix in one pass:
+**This is now automatic.** `bom_normalizer.py` runs last in `POST_LOAD_REGENERATORS` and prepends the BOM to any in-scope (`common/`, `events/`, `gfx/`) `.txt` missing it on every full `POST /reload` — so the warning class stays at zero with no manual step. The file-writing generators (`pm_costs`, `resources`, `gen_fleet_entities`, `ig_feminism`, …) also write `utf-8-sig` so their outputs are correct at the source. The normalizer is gated like the other file-rewriting generators: `audits_only` / `mod_only` fast reloads skip it. The manual one-pass fallback below is only needed if you can't run a full reload:
 
 ```bash
 python3 <<'EOF'
