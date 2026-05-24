@@ -679,7 +679,7 @@ Both can store scope references, but they differ in persistence and loc access:
   - **Notification / proposal descs** (`<action>_action_notification_desc`, `_proposal_notification_desc`, `_action_notification_break_desc`): bare `[COUNTRY.…]` is **unbound** here — it promotes to `nullptr` at render and spams `Promote 'COUNTRY' returned nullptr, in 'COUNTRY.GetName'` (a per-frame UI-lag class). The actor is `[INITIATOR_COUNTRY.GetName]`; vanilla uses it uniformly in every `*_action_notification_desc`. Never bare `COUNTRY` in a notification desc.
   - **Pact descs** (`<action>_pact_desc`, fired while the pact is active): `[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName]` = initiator, `GetSecondCountry` = target. This chain is **null in any pre-pact or one-shot context** (proposal/notification before the pact exists, or actions like annexation that create no lasting pact) — same nullptr spam. Do not reuse a `_pact_desc` accessor in a notification desc; and don't use `GetSecondCountry` (the *target*) where you mean the actor.
   - NOT `[SCOPE.GetTargetCountry.GetName]` — that's a draft error that silently drops.
-  - **Audit gap:** `localization_accessor_audit` currently accepts bare `[COUNTRY.…]` in all diplomatic-action sub-contexts, so it does NOT flag the notification-desc nullptr case. Flagging bare `COUNTRY` / `GetDiplomaticPact` chains specifically in `*_notification_desc` / `*_proposal_notification_desc` keys would catch it statically (see open tooling issues).
+  - **Now audited (#149):** `localization_accessor_audit` routes `*_action_notification_desc` / `*_proposal_notification_desc` / `*_action_notification_break_desc` keys to a `diplomatic_action_notifications` context that affirmatively denies bare `[COUNTRY.…]` and `[*.GetDiplomaticPact.*]` (suggesting `INITIATOR_COUNTRY` / `TARGET_COUNTRY`). Name-variant suffixes still use the permissive diplomatic context.
 - **War goals** (`war_goal_<x>(_desc|_sway_desc)?`): `[WAR_GOAL_DRAFT.GetTarget.GetName]`, `[WAR_GOAL_DRAFT.GetHolder.GetName]`, `[WAR_GOAL_DRAFT.GetTargetState.GetName]`.
 - **Treaty articles**: `[FIRST_COUNTRY.…]`, `[SECOND_COUNTRY.…]`.
 - **Journal entries** (`je_<x>*`): `[JournalEntry.GetGoalProgressValue|D]`, etc.
@@ -688,6 +688,13 @@ Both can store scope references, but they differ in persistence and loc access:
 **Silent-drop symptom**: a tooltip with missing chunks ("Norway will annex without war.") usually means a chain failed and the renderer chopped at the failure point, eating intermediate text. The engine doesn't log it, so static analysis is the only signal.
 
 **Audit**: `localization_accessor_audit.py` (registered in `mod_state_server.py:POST_LOAD_GENERATORS`) catches this class statically. Catalog seeded from vanilla loc; report at `docs/engine/localization_accessor_report.md`. When extending the catalog (e.g. after a vanilla bump introduces new accessors), regenerate `localization_accessor_vanilla_extras.py` from a fresh vanilla pass — vanilla loc is the authoritative source for what the engine accepts.
+
+## Two more parse-time audits for runtime-only engine errors (#146, #147)
+
+Both registered in `POST_LOAD_AUDITS`; findings surface in the `/reload` warnings array and in `docs/engine/*_report.md`. Suppress intentional flags with an inline `# REVIEWED YYYY-MM-DD: rationale`.
+
+- **`effect_trigger_validity_audit.py`** — flags effect/trigger *names* the engine doesn't know (`Unknown effect/trigger` only fires at runtime game-load). E.g. `add_authority` (no such effect), `set_country_flag` (CK3/EU4-foreign; Vic3 has no flags), and `funcname(...)` unquoted call-syntax (`negate(...)`). Valid-name catalog is **frozen from vanilla** (`docs/engine/effect_trigger_valid_keys.txt` = effect/trigger summary names ∪ every LHS keyword vanilla uses in its effect corpus) — re-bootstrap on a vanilla bump (`effect_trigger_validity_audit.py bootstrap`; see `vanilla_patch_runbook.md` § 4). Validates *names*, not values (`has_role = general` is a valid name with a wrong value → out of scope). Add genuinely-valid-but-vanilla-unused keys to `_CURATED_VALID` with a reason.
+- **`orphaned_event_audit.py`** — flags events defined in `events/` with no `mean_time_to_happen` that nothing references via any dispatch form (`random_events` pools, `first_valid`/`events` lists, `trigger_event` bareword/`{ id = }`). The engine reports `Event X is orphaned` only at game start. Fully file-based.
 
 ## `relations:` Syntax: `scope:X.relations:root`, Not `relations:scope:X`
 

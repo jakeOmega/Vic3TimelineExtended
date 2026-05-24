@@ -7063,6 +7063,7 @@ POST_LOAD_AUDITS = [
     ("any_limit_audit",               "any_limit_audit"),
     ("pm_employment_audit",           "pm_employment_audit"),
     ("orphaned_event_audit",          "orphaned_event_audit"),
+    ("effect_trigger_validity_audit", "effect_trigger_validity_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

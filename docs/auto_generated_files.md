@@ -48,6 +48,9 @@ All generator-produced docs files live under `docs/engine/`. Manually-curated au
 | `docs/engine/kill_character_audit.md` | `kill_character_audit.py` | server start + `POST /reload` (post-load chain) |
 | `docs/engine/localization_accessor_report.md` | `localization_accessor_audit.py` | server start + `POST /reload` (post-load chain). Flags `[X.Y.Z]` accessor chains in loc YAML that the engine would silently drop (e.g. `[SCOPE.GetTargetCountry.GetName]` outside of contexts where it resolves). Catalog seeded from vanilla loc; supplement in `localization_accessor_vanilla_extras.py`. |
 | `docs/engine/event_image_inventory.md` | `gen_event_inventory.py` | server start + `POST /reload` (post-load chain). Inventory of all mod events used to drive custom event-image generation. |
+| `docs/engine/orphaned_event_report.md` | `orphaned_event_audit.py` | server start + `POST /reload` (post-load chain). Flags non-self-firing events defined but never referenced by any dispatch path. |
+| `docs/engine/effect_trigger_validity_report.md` | `effect_trigger_validity_audit.py` | server start + `POST /reload` (post-load chain). Flags effect/trigger keywords not in the engine catalog (and `funcname(...)` call-syntax). |
+| `docs/engine/effect_trigger_valid_keys.txt` | `effect_trigger_validity_audit.py bootstrap` | **one-shot**, re-run on a vanilla bump (see `vanilla_patch_runbook.md`). Frozen union of effect/trigger summary names + vanilla effect-corpus LHS keywords. |
 | `docs/audits/mod_only_tech_modifier_baseline.md` | `scripts/analysis/tech_balance_audit.py --refresh-baseline` | manual run; row-level `target_typical_value` cells are then hand-edited |
 | `docs/data/tech_modifier_baseline.json`, `docs/data/tech_modifier_pattern_baseline.json` | `scripts/analysis/tech_modifier_baseline.py` | refreshed via `tech_balance_audit.py --refresh-baseline` |
 | `docs/data/balance_snapshot.json` | `scripts/snapshot_balance.py` | manual run; snapshot before vanilla bumps |
