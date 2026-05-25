@@ -169,7 +169,7 @@ covert_operation_cost_mult = {
 	owner = {
 		add = covert_operations_active
 		add = 1 # base maintenance — you pay for defensive benefits even with no ops
-		# Scale by funding level (0-3); 0 means no cost
+		# Scale by funding level (0-5); 0 means no cost
 		multiply = {
 			value = 0
 			if = {
