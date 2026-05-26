@@ -137,8 +137,8 @@
       ]
     },
     "common/company_charter_types/extra_charters.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
+      "audit_count": 2,
+      "last_audited": "2026-05-25",
       "recent_findings": 0
     },
     "common/country_ranks/extra_country_ranks.txt": {
@@ -579,8 +579,8 @@
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "last_audited": "2026-05-23",
-      "audit_count": 3,
+      "last_audited": "2026-05-25",
+      "audit_count": 4,
       "recent_findings": 0
     },
     "common/scripted_triggers/covert_warfare_triggers.txt": {
@@ -1258,6 +1258,63 @@
     },
     "common/flag_definitions/te_formable_countries.txt": {
       "last_audited": "2026-05-24",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_update_effects.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/extra_effects.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/script_values/covert_warfare_script_values.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "common/scripted_effects/te_construction_market_build_effects.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_effects/te_map_modes_effects.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/colonial_empire_triggers.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_buttons/covert_warfare_scripted_buttons.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/production_method_groups/13_construction.txt": {
+      "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/strategic_regions/zzz_modified_strategic_regions.txt": {
+      "last_audited": "2026-05-25",
       "audit_count": 1,
       "recent_findings": 0
     }
