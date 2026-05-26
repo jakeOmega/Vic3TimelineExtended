@@ -157,8 +157,8 @@
       "recent_findings": 1
     },
     "common/defines/te_construction_market_defines.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/diplomatic_actions/nuke.txt": {
@@ -1315,6 +1315,52 @@
     },
     "common/strategic_regions/zzz_modified_strategic_regions.txt": {
       "last_audited": "2026-05-25",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/space_race_values.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/cultural_hegemony_script_values.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_guis/te_construction_market_scripted_gui.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/combined_arms_triggers.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "common/scripted_effects/st_res_effects.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/modified.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_current_values.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/building_groups/te_construction_market_groups.txt": {
+      "last_audited": "2026-05-26",
       "audit_count": 1,
       "recent_findings": 0
     }
