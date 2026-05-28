@@ -137,8 +137,8 @@
       ]
     },
     "common/company_charter_types/extra_charters.txt": {
-      "audit_count": 2,
-      "last_audited": "2026-05-25",
+      "last_audited": "2026-05-27",
+      "audit_count": 3,
       "recent_findings": 0
     },
     "common/country_ranks/extra_country_ranks.txt": {
@@ -177,8 +177,8 @@
       "recent_findings": 1
     },
     "common/discrimination_traits/extra_traits.txt": {
-      "last_audited": "2026-05-20",
-      "audit_count": 2,
+      "last_audited": "2026-05-27",
+      "audit_count": 3,
       "recent_findings": 0
     },
     "common/game_concepts/extra_concepts.txt": {
@@ -579,8 +579,8 @@
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 4,
+      "last_audited": "2026-05-27",
+      "audit_count": 5,
       "recent_findings": 0
     },
     "common/scripted_triggers/covert_warfare_triggers.txt": {
@@ -1294,8 +1294,8 @@
       ]
     },
     "common/scripted_effects/te_map_modes_effects.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
+      "last_audited": "2026-05-27",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "common/scripted_triggers/colonial_empire_triggers.txt": {
@@ -1314,7 +1314,116 @@
       "recent_findings": 0
     },
     "common/strategic_regions/zzz_modified_strategic_regions.txt": {
-      "last_audited": "2026-05-25",
+      "last_audited": "2026-05-27",
+      "audit_count": 2,
+      "recent_findings": 1
+    },
+    "common/script_values/space_race_values.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/cultural_hegemony_script_values.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/scripted_guis/te_construction_market_scripted_gui.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/combined_arms_triggers.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 2,
+      "recent_findings": 0
+    },
+    "common/scripted_effects/st_res_effects.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/modified.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_current_values.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/building_groups/te_construction_market_groups.txt": {
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "events/covert_warfare_events.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    "events/world_war_events.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "events/nuclear_weapon_events.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/ship_modifications/extra_ship_modifications.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 0,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "events/te_formable_formation_events.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/te_state_traits_l_english.yml": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "localization/english/te_political_movements_l_english.yml": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "events/te_formation_overrides.txt": {
+      "last_audited": "2026-05-27",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    "common/history/te_construction_market_global.txt": {
+      "last_audited": "2026-05-27",
       "audit_count": 1,
       "recent_findings": 0
     },
