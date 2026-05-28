@@ -1,0 +1,131 @@
+{
+  "date": "2026-05-26",
+  "run_label": "2026-05-26",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/script_values/space_race_values.txt",
+      "line_range": null,
+      "lines": 361,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/cultural_hegemony_script_values.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_guis/te_construction_market_scripted_gui.txt",
+      "line_range": null,
+      "lines": 283,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/combined_arms_triggers.txt",
+      "line_range": null,
+      "lines": 65,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/st_res_effects.txt",
+      "line_range": null,
+      "lines": 505,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/modified.txt",
+      "line_range": null,
+      "lines": 587,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/te_construction_market_current_values.txt",
+      "line_range": null,
+      "lines": 68,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/building_groups/te_construction_market_groups.txt",
+      "line_range": null,
+      "lines": 22,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/defines/te_construction_market_defines.txt",
+      "line_range": null,
+      "lines": 9,
+      "area": "scripted_effects_and_triggers",
+      "docs": [],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  ]
+}
