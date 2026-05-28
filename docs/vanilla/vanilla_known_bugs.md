@@ -501,6 +501,53 @@ Workshop mod 3190466673 ("GDP Growth Rate Improved" / GDPPP) registers GUI templ
 
 These entries are filtered via the `- source: \`<cpp_file:line>\`` registry mechanism. The parser indexes them by `entry.source` (the cpp emit point reported by the engine) instead of script-file basename, so messages that have no `entry.files` still get tagged. Each entry's signature substring narrows the filter to the specific message — different errors from the same cpp:line still surface.
 
+### `pdx_persistent_reader.cpp:268` — stale save-game key references on load
+- source: `pdx_persistent_reader.cpp:268`
+
+```
+Failed to read key reference
+```
+
+Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data references keys that don't resolve in the current entity state — observed for `headlines_all_minor_events` and `superpower`. Save-migration noise from older-version or cross-mod-state saves; the engine falls back gracefully. Not a current-content bug. (`headlines_*` is the vanilla headlines system; `superpower` is a stale serialized reference.)
+
+### `character_templates_utils.cpp:1812` — vanilla character missing last-name loc
+- source: `character_templates_utils.cpp:1812`
+
+```
+Missing localization key for character last name
+```
+
+A vanilla generated character (e.g. `Ricchieri`) has no last-name loc key, so the engine reverts to a random name. Vanilla character-template gap, not mod content. Cosmetic.
+
+### `pdx_localize.cpp:187` — benign loc-key hash collision
+- source: `pdx_localize.cpp:187`
+
+```
+Localization key hash collision
+```
+
+Two loc keys hash to the same value (observed: vanilla character name `Ricchieri` vs mod key `extra_law_events.42.f`). The engine warns but resolves by exact key, so both render correctly. Hash collisions are unavoidable across large loc sets and harmless. Not actionable.
+
+### `pdx_named_index_impl.h:257` — engine `PdxDebugConstants` named-index lookup miss
+- source: `pdx_named_index_impl.h:257`
+
+```
+NamedIndex 'PdxDebugConstants'
+```
+
+Engine-internal lookup for the `PdxDebugConstants` named index fails at startup (debug-build constants table). Not mod content — `PdxDebugConstants` appears in no vanilla or mod script file. Narrow signature (`NamedIndex 'PdxDebugConstants'`, not the bare `Could not find NamedIndex`) so a genuine mod-caused missing-index error still surfaces.
+
+### `synchronizationmanager.cpp:447` — MP sync frame markers at startup
+- source: `synchronizationmanager.cpp:447`
+- source: `synchronizationmanager.cpp:451`
+
+```
+OOSFrame: 0
+StartFrame: 0
+```
+
+Multiplayer synchronization manager logs frame markers at session init (frame 0). Benign startup instrumentation, not a desync. NOTE: a nonzero `OOSFrame` would be a real out-of-sync and must NOT be swept — these signatures match only the literal `: 0` startup lines.
+
 ### `building_manager.cpp:1792` — vanilla auto-charter duplicate building seeding
 - source: `building_manager.cpp:1792`
 
@@ -929,9 +976,11 @@ Vanilla GUI script calls `FindChild('interest_group_top').TriggerAnimation('show
 ```
 GetParticipantWithLowestLeaderRelations
 GetParticipantWithHighestLibertyDesire
+GetParticipantWithLowestEconomicDependence
+GetParticipantWithLowestEconomicDependenceOnLeader
 ```
 
-Vanilla power-bloc UI loc reads `GetPowerBloc.GetParticipantWith{LowestLeaderRelations,HighestLibertyDesire}.GetName`, but the participant promote returns null when the bloc has no qualifying member (e.g. a single-member bloc, or none meeting the relation/liberty-desire criterion). Same `pdx_data_callstack.cpp:52` source as the `interest_group_top` entry; the two `GetParticipant*` signatures disambiguate. Cosmetic.
+Vanilla power-bloc UI loc reads `GetPowerBloc.GetParticipantWith{LowestLeaderRelations,HighestLibertyDesire,LowestEconomicDependence,LowestEconomicDependenceOnLeader}.GetName` (the last two from vanilla `cohesion_levels_l_english.yml`), but the participant promote returns null when the bloc has no qualifying member (e.g. a single-member bloc, or none meeting the relation/liberty-desire/economic-dependence criterion). Same `pdx_data_callstack.cpp:52` source as the `interest_group_top` entry; the four `GetParticipant*` signatures disambiguate. Cosmetic.
 
 ### `pdx_data_factory.cpp:1466`/`:1092` — vanilla `relevant_ig` custom-loc `GetFullName`
 - source: `pdx_data_factory.cpp:1466`

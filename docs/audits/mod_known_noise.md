@@ -61,3 +61,23 @@ is set but is never used. Note that use in localization doesn't count
 ```
 
 Mod uses `set_global_variable` to expose values (cultural-hegemony per-rank breakdowns, nuclear stockpile per-rank) to tooltip text via `GetGlobalVariable('…')` in `localization/english/te_concepts_l_english.yml`. The engine explicitly notes loc reads don't count as uses, so each variable emits an "unused" warning at load. By-design; rearchitecting all loc tooltips to use script values instead would be a large refactor with no functional gain. Tracked at `docs/audits/open_issues.md#L10`.
+
+### `jomini_custom_text.h:91` — banking-cycle JE title custom-loc scope-validation burst
+- source: `jomini_custom_text.h:91`
+- tracked: `docs/audits/open_issues.md#l11-banking-cycle-je-title-custom-loc-scope-validation-burst`
+
+```
+not valid for 'te_banking_cycle_title'
+```
+
+The Banking Cycle JE name varies by economic law via `[GetPlayer.GetCustom('te_banking_cycle_title')]` (a `type = country` custom loc). The title renders correctly, but the engine emits `Object of type 'country' is not valid for 'te_banking_cycle_title'` in a ~83-write burst per panel render (error.log only). No visual or gameplay effect — only a brief synchronous-write hitch on panel open. User opted to keep the dynamic title; candidate fix (match the JE render context's scope chain instead of `GetPlayer`) deferred. Tracked at `docs/audits/open_issues.md#L11`.
+
+### `modifier_type_definition_database.cpp:43` — script-only mod modifier types have no engine-code consumer
+- source: `modifier_type_definition_database.cpp:43`
+- tracked: `docs/audits/open_issues.md#l12-script-only-modifier-types-emit-defined-in-script-but-not-in-code-by-design`
+
+```
+is defined in script but not in code
+```
+
+~120 mod-defined modifier types (covert_warfare, space_race, banking, strategic-reserve, ~50 `*_pb_principles_bool`, etc.) each emit this once at load. Verified benign (2026-05-24): same construct as vanilla's `03_modifier_types_script_only.txt`; recognized by `/modifier-search`, pass `modifier_visibility_audit`, applied via static_modifiers/techs, and read via `modifier:X` in script values. The warning only means no engine *code* reads them — correct for script-side custom modifiers. Unfixable without deleting the systems. Tracked at `docs/audits/open_issues.md#L12`.
