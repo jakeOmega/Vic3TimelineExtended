@@ -5550,6 +5550,8 @@ country|country_north_german_cultural_acceptance_add|A bonus or penalty to a spe
 country|country_north_italian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_norwegian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_nuba_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
+country|country_nuclear_disarmament_bool|
+country|country_nuclear_program_pause_bool|
 country|country_nuclear_program_progress_mult|
 country|country_nuclear_weapon_attack_success_add|
 country|country_nuclear_weapon_defense_chance_add|
@@ -5650,6 +5652,7 @@ country|country_radios_min_export_tariffs_level_add|
 country|country_radios_min_import_tariffs_level_add|
 country|country_rajput_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_rapid_deploy_pb_principles_bool|
+country|country_receiving_nuclear_program_aid_bool|
 country|country_reduced_liberty_desire_same_religion_bool|Subjects with the same state Religion will have reduced Liberty Desire over time
 country|country_resource_depletion_chance_mult|Increases the chance of depleting Resource Potentials
 country|country_resource_discovery_chance_mult|Increases the chance of discovering hidden Resource Potentials
@@ -5997,6 +6000,7 @@ country|country_udmurt_cultural_acceptance_add|A bonus or penalty to a specific 
 country|country_ugrian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_uighur_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ukrainian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
+country|country_un_membership_obligation_bool|
 country|country_unrecognized_become_recognized_bool|
 country|country_urbanization_pb_principles_bool|
 country|country_uruguayan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -6412,8 +6416,6 @@ military_formation|military_formation_mobilization_speed_add|How quickly a Forma
 military_formation|military_formation_mobilization_speed_mult|How quickly a Formation can Mobilize its units
 military_formation|military_formation_organization_gain_add|How much Organization the Formation gains each day.
 military_formation|military_formation_organization_gain_mult|How much Organization the Formation gains each day.
-country|nuclear_disarmament|
-country|nuclear_program_pause|
 political_movement|political_movement_activism_growth_mult|An increase or decrease to the rate at which Movement Activism grows for a Political Movement
 political_movement|political_movement_character_attraction_mult|political_movement_character_attraction_mult_desc
 political_movement|political_movement_pop_attraction_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
@@ -6479,7 +6481,6 @@ power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_mu
 power-bloc|power_bloc_principle_groups_max_add|
 power_bloc|power_bloc_target_sway_cost_mult|An increase or decrease to the Sway Maneuver cost for the Diplomatic Play Target
 power_bloc|power_bloc_trade_advantage_add|An increase or decrease in overall Trade Advantage with Countries in the same Power Bloc
-country|receiving_nuclear_program_aid|
 ship|ship_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_accuracy_mult|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_armor_add|An increase or decrease to the amount of armor a Ship is equipped with, decreasing damage dealt to its hull
@@ -7700,7 +7701,6 @@ tax|tax_heathen_add|The amount of Heathen Taxes collected from Pops each year fo
 tax|tax_income_add|The portion of their Wages that Pops must pay in taxes
 tax|tax_land_add|The amount of Land Taxes collected from peasants! Peasants
 tax|tax_per_capita_add|The amount of Per Capita Taxes collected from non-peasants! Peasants Pops
-country|un_membership_obligation|
 unit|unit_army_defense_add|A Military Unit’s Defense (Army only)
 unit|unit_army_defense_mult|A Military Unit’s Defense (Army only)
 unit|unit_army_experience_gain_add|How much Experience is gained by Armies each week so that they can increase their Veterancy Rank

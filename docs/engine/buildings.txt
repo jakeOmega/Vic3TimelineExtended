@@ -1742,6 +1742,11 @@ Panama Canal (bg_canals):
 	Canal:
 		Canal
 
+Kiel Canal (bg_canals):
+	Unlocking Technology: Ironclad
+	Canal:
+		Canal
+
 Port (bg_private_infrastructure):
 	Unlocking Technology: Navigation
 	$pm_base$:

@@ -30,7 +30,7 @@ _None._
 
 - loc files scanned: 30
 - concept references checked: 2824
-- registered concepts (vanilla + mod): 721
+- registered concepts (vanilla + mod): 726
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

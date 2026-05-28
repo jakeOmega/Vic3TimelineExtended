@@ -2118,6 +2118,8 @@ _Cannon Artillery Offense_
 - `country_ncw_pb_principles_bool` — **Enables [GetTechnology('network_centric_warfare').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_no_advantage_loss_from_lack_of_interest_bool` — **Ignores Trade Advantage penalty from Interests** — Whether our country ignores the Trade Advantage penalty applied against Markets where we lack an Interest
 - `country_non_state_religion_wages_mult` — **Wages for Non-State Religion Pops** — How much more or less Pops that do not follow the State Religion are paid.
+- `country_nuclear_disarmament_bool` — **Nuclear Disarmament**
+- `country_nuclear_program_pause_bool` — **Nuclear Program Freeze**
 - `country_nuclear_program_progress_mult` — **[concept_nuclear_program] Progress Multiplier**
 - `country_nuclear_weapon_attack_success_add` — **[concept_nuclear_strike] Success Chance**
 - `country_nuclear_weapon_defense_chance_add` — **[concept_nuclear_strike] Defense Chance**
@@ -2157,6 +2159,7 @@ _Cannon Artillery Offense_
 - `country_radicals_from_conquest_mult` — **Radicals from Conquest** — A bonus or penalty to the amount of Pops that will become Radical when we conquer States militarily
 - `country_radicals_from_legitimacy_mult` — **Radicals from low Legitimacy** — A change to the number of Radicals a Country gains from having low Legitimacy
 - `country_rapid_deploy_pb_principles_bool` — **Enables [GetTechnology('rapid_deployment_forces').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
+- `country_receiving_nuclear_program_aid_bool` — **Receiving [concept_nuclear_program] Aid**
 - `country_reduced_liberty_desire_same_religion_bool` — **Reduced Liberty Desire for Same Religion** — Subjects with the same state Religion will have reduced Liberty Desire over time
 - `country_resource_depletion_chance_mult` — **Resource Depletion Chance** — Increases the chance of depleting Resource Potentials
 - `country_resource_discovery_chance_mult` — **Resource Discovery Chance** — Increases the chance of discovering hidden Resource Potentials
@@ -2335,6 +2338,7 @@ _Cannon Artillery Offense_
 - `country_treaty_leverage_generation_mult` — **Leverage Generation from Treaty** — An increase or decrease to the amount of Leverage generated between two Countries with this Treaty when the dominant Country in the Treaty is a Power Bloc Le...
 - `country_two_spains_conservative_drift_add` — **The Two Spains Conservative Progress** — An increase or decrease to the amount of monthly progress towards Conservative in the The Two Spains Journal Entry
 - `country_two_spains_liberal_drift_add` — **The Two Spains Liberal Progress** — An increase or decrease to the amount of monthly progress towards Liberal in the The Two Spains Journal Entry
+- `country_un_membership_obligation_bool` — **UN Membership Obligation**
 - `country_unrecognized_become_recognized_bool` — **Become Recognized if Unrecognized**
 - `country_vaishyas_acceptance_max_add` — **Maximum Acceptance for the Vaishyas Social Class** — A threshold describing the Acceptance value that Pops in the Vaishyas Social Class won't be able to exceed
 - `country_vaishyas_acceptance_min_add` — **Minimum Acceptance for the Vaishyas Social Class** — A threshold describing the Acceptance value that Pops in the Vaishyas Social Class won't be able to fall below
@@ -2371,10 +2375,6 @@ _Cannon Artillery Offense_
 - `country_www_pb_principles_bool` — **Enables [GetTechnology('world_wide_web').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_yankee_and_dixie_cultures_obsessed_with_guns` — **Yankee and Dixie Cultures gain an Obsession with Small Arms** — Yankee and Dixie Cultures gain an Obsession with Small Arms
 - `country_yi_cultural_acceptance_add` — **Acceptance of Yi Culture** — A bonus or penalty to a specific culture's [concept_acceptance]
-- `nuclear_disarmament` — **Nuclear Disarmament**
-- `nuclear_program_pause` — **Nuclear Program Freeze**
-- `receiving_nuclear_program_aid` — **Receiving [concept_nuclear_program] Aid**
-- `un_membership_obligation` — **UN Membership Obligation**
 
 ### goods (12)
 

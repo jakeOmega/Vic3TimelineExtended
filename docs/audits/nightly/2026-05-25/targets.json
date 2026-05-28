@@ -1,0 +1,160 @@
+{
+  "date": "2026-05-25",
+  "run_label": "2026-05-25",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/scripted_effects/te_construction_market_update_effects.txt",
+      "line_range": null,
+      "lines": 128,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/extra_effects.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/covert_warfare_script_values.txt",
+      "line_range": null,
+      "lines": 521,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/te_construction_market_build_effects.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/te_map_modes_effects.txt",
+      "line_range": null,
+      "lines": 37,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/colonial_empire_triggers.txt",
+      "line_range": null,
+      "lines": 490,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_buttons/covert_warfare_scripted_buttons.txt",
+      "line_range": null,
+      "lines": 86,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_method_groups/13_construction.txt",
+      "line_range": null,
+      "lines": 23,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/strategic_regions/zzz_modified_strategic_regions.txt",
+      "line_range": null,
+      "lines": 13,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_states_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_charter_types/extra_charters.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": "2026-05-17",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_rules/extra_rules.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-23",
+      "audit_count": 3,
+      "recent_findings": 0
+    }
+  ]
+}

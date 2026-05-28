@@ -440,8 +440,9 @@
 	Ironclad - By cladding a ship in iron plating it is possible to make it much more durable and resistant to incendiary ammunition.
 		Unlocking Technologies:
 			Screw Frigate
+		Unlocks Buildings: Kiel Canal
 		Unlocks Ship Types: Early Ironclad, Iron Frigate, Monitor, Troopship
-		Unlocks Ship Modifications: 18-in Torpedos + 3-pdr QF
+		Unlocks Ship Modifications: $ship_mod_full_sail_rig_compound_engine$, $ship_mod_thin_steel_plate$, 18-in Torpedos + 3-pdr QF
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Jeune École - By having many smaller ships rather than a few big ones, it is possible to keep a certain level of maneuverability that would otherwise be impossible.
 		Unlocking Technologies:
@@ -624,6 +625,7 @@
 		Unlocking Technologies:
 			Ironclad
 		Unlocks Ship Types: Armored Cruiser, Pre-Dreadnought
+		Unlocks Ship Modifications: $ship_mod_light_armored_deck$, $ship_mod_triple_expansion_engine$
 	Dreadnought - By making a warship with only heavy caliber guns and steam propulsion, it is possible to overpower all other types of ship.
 		Unlocking Technologies:
 			$ship_type_pre_dreadnought$
