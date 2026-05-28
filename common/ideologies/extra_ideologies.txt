@@ -1154,7 +1154,6 @@ ideology_custom_religion_traditionalist_society = {
 		law_collectivized_agriculture = strongly_disapprove
 		law_serfdom = strongly_approve
 		law_tenant_farmers = approve
-		law_homesteading = disapprove
 		law_commercialized_agriculture = neutral
 	}
 
@@ -1250,7 +1249,6 @@ ideology_custom_religion_inclusive_society = {
 		law_collectivized_agriculture = disapprove
 		law_serfdom = strongly_disapprove
 		law_tenant_farmers = neutral
-		law_homesteading = strongly_approve
 		law_commercialized_agriculture = approve
 	}
 
@@ -1346,7 +1344,6 @@ ideology_custom_religion_totalitarian_society = {
 		law_collectivized_agriculture = disapprove
 		law_serfdom = approve
 		law_tenant_farmers = neutral
-		law_homesteading = strongly_disapprove
 		law_commercialized_agriculture = approve
 	}
 
@@ -1442,7 +1439,6 @@ ideology_custom_religion_meritocratic_society = {
 		law_collectivized_agriculture = disapprove
 		law_serfdom = disapprove
 		law_tenant_farmers = neutral
-		law_homesteading = approve
 		law_commercialized_agriculture = strongly_approve
 	}
 
@@ -1538,7 +1534,6 @@ ideology_custom_religion_imperial_cult_society = {
 		law_collectivized_agriculture = neutral
 		law_serfdom = strongly_disapprove
 		law_tenant_farmers = disapprove
-		law_homesteading = neutral
 		law_commercialized_agriculture = neutral
 	}
 
@@ -1634,7 +1629,6 @@ ideology_custom_religion_theocratic_society = {
 		law_collectivized_agriculture = approve
 		law_serfdom = strongly_disapprove
 		law_tenant_farmers = disapprove
-		law_homesteading = neutral
 		law_commercialized_agriculture = disapprove
 	}
 

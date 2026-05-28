@@ -127,6 +127,7 @@ ig_armed_forces = {
 					country_has_primary_culture = cu:mexican
 				}
 			}
+			add_modifier = age_of_caudillos_modifier
 			ig:ig_armed_forces ?= {
 				add_ideology = ideology_caudillismo
 			}

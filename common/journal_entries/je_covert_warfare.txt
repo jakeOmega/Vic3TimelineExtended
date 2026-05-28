@@ -425,7 +425,6 @@ je_covert_warfare = {
 				limit = { intelligence_capacity_total >= 1 }
 				order_by = intelligence_capacity_total
 				max = 1
-				position = 0
 				set_global_variable = { name = global_max_ic value = intelligence_capacity_total }
 			}
 

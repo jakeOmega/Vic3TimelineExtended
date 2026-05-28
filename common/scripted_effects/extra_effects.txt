@@ -1120,8 +1120,6 @@ remove_all_langreform_modifiers = {
 #   Penal Transportation:    ~150  (convict/undesirable deportation)
 # =================================================================
 resettlement_transfer_effect = {
-	debug_log = "RESETTLE_DEBUG: effect entered"
-
 	# Find a destination state (another state owned by the same country
 	# that has a resettlement colony)
 	owner = {

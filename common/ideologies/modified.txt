@@ -3719,6 +3719,7 @@ REPLACE:ideology_fascist = {
 					any_scope_state = {
 						is_incorporated = yes
 						any_scope_pop = {
+							pop_has_primary_culture = no
 							pop_acceptance < acceptance_status_4
 							total_size >= 1000
 						}
@@ -3945,6 +3946,7 @@ REPLACE:ideology_fascist = {
 					any_scope_state = {
 						is_incorporated = yes
 						any_scope_pop = {
+							pop_has_primary_culture = no
 							pop_acceptance < acceptance_status_4
 							total_size >= 1000
 						}

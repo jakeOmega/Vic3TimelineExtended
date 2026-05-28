@@ -28,8 +28,12 @@ INJECT:company_standard_oil = {
 		building_synthetics_plant_oil
 		building_highway
 	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals
+	}
 	prosperity_modifier = {
 		state_building_standard_oil_refinery_max_level_add = 1
+		goods_output_oil_mult = 0.10 # peer floor (Gazprom/Petrobras); held there because Standard Oil unlocks far earlier, when an oil-output mult is worth much more
 	}
 }
 

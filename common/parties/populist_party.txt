@@ -74,7 +74,7 @@ populist_party = {
 						country_has_primary_culture = cu:panjabi
 						country_has_primary_culture = cu:telegu
 						country_has_primary_culture = cu:tamil
-						country_has_primary_culture = cu:kannarese
+						country_has_primary_culture = cu:kannada
 					}
 				}
 			}
