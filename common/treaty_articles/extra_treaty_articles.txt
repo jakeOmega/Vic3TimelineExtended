@@ -1017,7 +1017,7 @@ nuclear_disarmament = {
 	# its program. War-goal enforcement applies article modifiers to the article's
 	# named party; using source_modifier here disarmed the *winner* of the war goal.
 	target_modifier = {
-		nuclear_disarmament = yes
+		country_nuclear_disarmament_bool = yes
 	}
 
 	flags = { can_be_enforced }
@@ -1030,9 +1030,9 @@ nuclear_disarmament = {
 
 	possible = {
 		scope:other_country = { has_technology_researched = nuclear_weapons }
-		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
+		NOT = { scope:other_country = { modifier:country_nuclear_disarmament_bool = yes } }
 		# Do not demand disarmament from a country that is receiving (or promised) nuclear aid
-		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
+		NOT = { scope:other_country = { modifier:country_receiving_nuclear_program_aid_bool = yes } }
 	}
 
 	can_ratify = {
@@ -1288,7 +1288,7 @@ nuclear_program_aid = {
 	cost = 500
 
 	target_modifier = {
-		receiving_nuclear_program_aid = yes
+		country_receiving_nuclear_program_aid_bool = yes
 		country_nuclear_program_progress_mult = 1.0
 	}
 
@@ -1844,7 +1844,7 @@ join_united_nations = {
 	cost = 200
 
 	target_modifier = {
-		un_membership_obligation = yes
+		country_un_membership_obligation_bool = yes
 	}
 
 	usage_limit = once_per_side
@@ -1984,7 +1984,7 @@ nuclear_program_pause = {
 	# The restricted party is the TARGET — same scoping bug as nuclear_disarmament:
 	# source_modifier would freeze the program of the *enforcing* country.
 	target_modifier = {
-		nuclear_program_pause = yes
+		country_nuclear_program_pause_bool = yes
 	}
 
 	flags = { can_be_enforced }
@@ -1997,10 +1997,10 @@ nuclear_program_pause = {
 
 	possible = {
 		scope:other_country = { has_technology_researched = nuclear_weapons }
-		NOT = { scope:other_country = { modifier:nuclear_disarmament = yes } }
-		NOT = { scope:other_country = { modifier:nuclear_program_pause = yes } }
+		NOT = { scope:other_country = { modifier:country_nuclear_disarmament_bool = yes } }
+		NOT = { scope:other_country = { modifier:country_nuclear_program_pause_bool = yes } }
 		# Also disallow freezing if the target is receiving (or promised) nuclear aid
-		NOT = { scope:other_country = { modifier:receiving_nuclear_program_aid = yes } }
+		NOT = { scope:other_country = { modifier:country_receiving_nuclear_program_aid_bool = yes } }
 		# Disallow if WE (root = proposing country) already have an in-force treaty
 		# article giving nuclear aid TO scope:other_country.
 		NOT = {

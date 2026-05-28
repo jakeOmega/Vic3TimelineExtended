@@ -11,7 +11,7 @@
 
     potential = {
         has_modifier = nuclear_power
-        NOT = { modifier:nuclear_disarmament = yes }
+        NOT = { modifier:country_nuclear_disarmament_bool = yes }
     }
 
 	possible = {
@@ -179,7 +179,7 @@ tactical_nuke_diplo_action = {
 
     potential = {
         has_modifier = nuclear_power
-        NOT = { modifier:nuclear_disarmament = yes }
+        NOT = { modifier:country_nuclear_disarmament_bool = yes }
     }
 
 	possible = {

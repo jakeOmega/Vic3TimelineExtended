@@ -5,7 +5,7 @@
 # Most are script_only booleans surfacing program state; progress_mult and
 # weapon attack/defense are read by the launch resolution effects.
 
-receiving_nuclear_program_aid = {
+country_receiving_nuclear_program_aid_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
@@ -14,7 +14,7 @@ receiving_nuclear_program_aid = {
 	script_only = yes
 }
 
-nuclear_disarmament = {
+country_nuclear_disarmament_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
@@ -23,7 +23,7 @@ nuclear_disarmament = {
 	script_only = yes
 }
 
-nuclear_program_pause = {
+country_nuclear_program_pause_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {

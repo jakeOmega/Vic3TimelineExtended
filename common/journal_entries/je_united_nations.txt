@@ -253,7 +253,7 @@
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					modifier:un_membership_obligation = yes
+					modifier:country_un_membership_obligation_bool = yes
 				}
 				je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 				if = {

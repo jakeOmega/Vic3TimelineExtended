@@ -3014,7 +3014,7 @@ un_nonmember_pariah_modifier = {
 # Represents NPT enforcement pressure: blocks nuclear program
 un_npt_disarmament_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	nuclear_disarmament = yes
+	country_nuclear_disarmament_bool = yes
 }
 
 # Applied to major/great powers that refuse humanitarian aid at authority >= 40

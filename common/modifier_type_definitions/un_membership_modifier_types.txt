@@ -2,7 +2,7 @@
 #
 # UN membership flag read by the UN journal entry and its scripted_buttons.
 
-un_membership_obligation = {
+country_un_membership_obligation_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {
