@@ -411,8 +411,8 @@
       "recent_findings": 0
     },
     "common/political_movements/modified_political_movements.txt": {
-      "last_audited": "2026-05-22",
-      "audit_count": 3,
+      "last_audited": "2026-05-29",
+      "audit_count": 4,
       "recent_findings": 0
     },
     "common/power_bloc_identities/_power_bloc_identities.info": {
@@ -849,8 +849,8 @@
       "recent_findings": 0
     },
     "localization/english/te_goods_and_needs_l_english.yml": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "audit_count": 2,
       "recent_findings": 0
     },
     "localization/english/te_ideologies_l_english.yml": {
@@ -1340,9 +1340,9 @@
       "recent_findings": 0
     },
     "common/scripted_triggers/combined_arms_triggers.txt": {
-      "last_audited": "2026-05-27",
-      "audit_count": 2,
-      "recent_findings": 0
+      "last_audited": "2026-05-26",
+      "audit_count": 1,
+      "recent_findings": 1
     },
     "common/scripted_effects/st_res_effects.txt": {
       "last_audited": "2026-05-26",
@@ -1427,13 +1427,24 @@
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/script_values/space_race_values.txt": {
-      "last_audited": "2026-05-26",
+    "common/dynamic_country_names/te_formable_countries.txt": {
+      "last_audited": "2026-05-29",
+      "audit_count": 1,
+      "recent_findings": 1,
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ]
+    },
+    "common/country_definitions/te_formable_countries.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/script_values/cultural_hegemony_script_values.txt": {
-      "last_audited": "2026-05-26",
+    "common/country_definitions/zz_te_extended_dynamic.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
       "recent_findings": 0,
       "partial_coverage": [
@@ -1443,33 +1454,28 @@
         ]
       ]
     },
-    "common/scripted_guis/te_construction_market_scripted_gui.txt": {
-      "last_audited": "2026-05-26",
+    "common/country_formation/te_formable_countries.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/scripted_triggers/combined_arms_triggers.txt": {
-      "last_audited": "2026-05-26",
+    "common/dynamic_treaty_names/te_dynamic_treaty_names.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
-      "recent_findings": 1
+      "recent_findings": 2
     },
-    "common/scripted_effects/st_res_effects.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/modified.txt": {
-      "last_audited": "2026-05-26",
+    "common/production_method_groups/strategic_reserve_pmgs.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/script_values/te_construction_market_current_values.txt": {
-      "last_audited": "2026-05-26",
+    "common/production_methods/te_construction_market_pms.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
       "recent_findings": 0
     },
-    "common/building_groups/te_construction_market_groups.txt": {
-      "last_audited": "2026-05-26",
+    "events/dp_escalation_events.txt": {
+      "last_audited": "2026-05-29",
       "audit_count": 1,
       "recent_findings": 0
     }
