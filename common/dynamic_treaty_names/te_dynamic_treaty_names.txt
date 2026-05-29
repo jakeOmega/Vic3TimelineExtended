@@ -152,7 +152,7 @@ treaty_name_city_declaration_on_minority_rights = {
 treaty_name_cultural_exchange_treaty = {
 	trigger = {
 		any_scope_article_option = {
-			has_type = cultural_exchange
+			has_type = cultural_exchange_program
 		}
 	}
 	weight = {
@@ -163,7 +163,7 @@ treaty_name_cultural_exchange_treaty = {
 treaty_name_country_adj_country_adj_cultural_accord = {
 	trigger = {
 		any_scope_article_option = {
-			has_type = cultural_exchange
+			has_type = cultural_exchange_program
 		}
 	}
 	weight = {
@@ -198,7 +198,10 @@ treaty_name_city_missionary_accord = {
 treaty_name_demilitarization_agreement = {
 	trigger = {
 		any_scope_article_option = {
-			has_type = dmz_and_disarmament
+			OR = {
+				has_type = demilitarized_zone
+				has_type = forced_disarmament
+			}
 		}
 	}
 	weight = {
@@ -209,7 +212,10 @@ treaty_name_demilitarization_agreement = {
 treaty_name_city_disarmament_protocol = {
 	trigger = {
 		any_scope_article_option = {
-			has_type = dmz_and_disarmament
+			OR = {
+				has_type = demilitarized_zone
+				has_type = forced_disarmament
+			}
 		}
 	}
 	weight = {
@@ -220,7 +226,10 @@ treaty_name_city_disarmament_protocol = {
 treaty_name_country_adj_country_adj_peace_and_disarmament_treaty = {
 	trigger = {
 		any_scope_article_option = {
-			has_type = dmz_and_disarmament
+			OR = {
+				has_type = demilitarized_zone
+				has_type = forced_disarmament
+			}
 		}
 	}
 	weight = {

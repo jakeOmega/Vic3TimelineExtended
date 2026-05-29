@@ -1,0 +1,150 @@
+{
+  "date": "2026-05-29",
+  "run_label": "2026-05-29",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/dynamic_country_names/te_formable_countries.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_formable_countries_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/country_definitions/te_formable_countries.txt",
+      "line_range": null,
+      "lines": 432,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_formable_countries_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/country_definitions/zz_te_extended_dynamic.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_formable_countries_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/country_formation/te_formable_countries.txt",
+      "line_range": null,
+      "lines": 465,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_formable_countries_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/dynamic_treaty_names/te_dynamic_treaty_names.txt",
+      "line_range": null,
+      "lines": 333,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_formable_countries_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_method_groups/strategic_reserve_pmgs.txt",
+      "line_range": null,
+      "lines": 18,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_methods/te_construction_market_pms.txt",
+      "line_range": null,
+      "lines": 24,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/dp_escalation_events.txt",
+      "line_range": null,
+      "lines": 20,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_goods_and_needs_l_english.yml",
+      "line_range": null,
+      "lines": 7,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": "2026-05-17",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/modified_political_movements.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-22",
+      "audit_count": 3,
+      "recent_findings": 0
+    }
+  ]
+}

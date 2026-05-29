@@ -618,7 +618,7 @@ ZHO = {
 # UNE is the global hegemony — every government variant gets a name. The
 # 2nd-axis flavors (priority 5) cover succession by major-power founder:
 #   - was_formed_from = USA → Pax Americana (republic)
-#   - was_formed_from = SOV / RUS communist → Cosmic Soviet Union
+#   - was_formed_from = RUS communist → Cosmic Soviet Union
 #   - was_formed_from = CHI communist → Celestial People's Federation
 #   - was_formed_from = GBR + monarchy → Imperial Federation of Earth
 #     (real Victorian-era Imperial Federation League proposal)
