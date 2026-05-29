@@ -171,13 +171,17 @@ covert_warfare.2 = {
 	duration = 3
 
 	trigger = {
-		# Only fire when someone has run an operation on us
+		# Only fire when someone has run an operation on us — covers all 9 op types (#158)
 		OR = {
 			has_modifier = covert_election_interference
 			has_modifier = covert_financial_subversion
 			has_modifier = covert_infrastructure_sabotage
 			has_modifier = covert_comms_disruption
 			has_modifier = covert_influence_campaign
+			has_modifier = covert_ideological_subversion_resist
+			has_modifier = covert_destabilization_resist
+			has_modifier = covert_industrial_espionage_detected
+			has_modifier = covert_military_espionage_detected
 		}
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}

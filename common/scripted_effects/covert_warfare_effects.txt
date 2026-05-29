@@ -418,9 +418,13 @@ covert_ops_apply_all_phase_effects = {
 	# Innovation is always applied; tech spread always applies since target must have tech advantage
 	covert_op_apply_self_effect = { ACTION = covert_industrial_espionage_action TYPE = industrial_espionage MODIFIER = covert_espionage_base }
 	covert_op_apply_self_effect = { ACTION = covert_industrial_espionage_action TYPE = industrial_espionage MODIFIER = covert_industrial_espionage }
+	# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
+	covert_op_apply_target_effect = { ACTION = covert_industrial_espionage_action TYPE = industrial_espionage MODIFIER = covert_industrial_espionage_detected }
 
 	# ---- Military Espionage: self modifiers (unit stats always, tech spread conditional) ----
 	covert_op_apply_self_effect = { ACTION = covert_military_espionage_action TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
+	# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
+	covert_op_apply_target_effect = { ACTION = covert_military_espionage_action TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
 	# Conditional tech spread: only if target has tech advantage (best phase of any slot)
 	if = {
 		limit = {

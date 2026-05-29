@@ -5865,6 +5865,20 @@ covert_destabilization_resist = {
 	country_colonial_stability_drift_add = -0.35
 }
 
+# Applied to TARGET when industrial espionage operation is detected against them.
+# Counter-intel investigation costs administrative focus while the leak is plugged.
+covert_industrial_espionage_detected = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_authority_add = -3
+}
+
+# Applied to TARGET when military espionage operation is detected against them.
+# Counter-intel sweep of military command consumes administrative focus.
+covert_military_espionage_detected = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_authority_add = -3
+}
+
 # ============================================================================
 # CULTURAL HEGEMONY EVENTS - Timed modifiers from cultural hegemony events
 # ============================================================================

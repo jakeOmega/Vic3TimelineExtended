@@ -467,7 +467,7 @@ nuclear_first_strike = { # Scope is target state
 					}
 					every_country = {
 						limit = {
-							NOT = { THIS = ROOT }
+							NOT = { THIS = scope:attacking_country }
 							NOT = { THIS = scope:target_country }
 						}
 						trigger_event = nuclear_weapon_events.15
@@ -519,8 +519,8 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					trigger_event = { id = nuclear_weapon_events.12 popup = yes }
 					every_country = {
 						limit = {
-							NOT = { THIS = PREV }
 							NOT = { THIS = scope:attacking_country }
+							NOT = { THIS = scope:target_country }
 						}
 						trigger_event = nuclear_weapon_events.16
 					}
@@ -563,7 +563,7 @@ nuclear_response_response_strike = {  # Scope is target state
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }
 					every_country = {
 						limit = {
-							NOT = { THIS = ROOT }
+							NOT = { THIS = scope:attacking_country }
 							NOT = { THIS = scope:target_country }
 						}
 						trigger_event = nuclear_weapon_events.15
@@ -580,7 +580,7 @@ nuclear_response_response_strike = {  # Scope is target state
 					trigger_event = { id = nuclear_weapon_events.4 popup = yes }
 					every_country = {
 						limit = {
-							NOT = { THIS = ROOT.owner }
+							NOT = { THIS = scope:attacking_country }
 							NOT = { THIS = scope:target_country }
 						}
 						trigger_event = nuclear_weapon_events.15

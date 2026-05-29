@@ -1,4 +1,4 @@
-# Auto-generated from modifiers.log @ 2026-05-20T22:04:03+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from modifiers.log @ 2026-05-29T02:49:10+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 battle|battle_casualties_mult|A bonus or penalty to the number of Casualties this side takes in Battle
 battle|battle_combat_width_mult|A bonus or penalty to the Terrain Combat Width for this side of the Battle

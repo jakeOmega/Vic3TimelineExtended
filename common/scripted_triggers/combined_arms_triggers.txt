@@ -14,6 +14,15 @@ combat_unit_is_infantry_group = {
 		has_unit_type = unit_type:combat_unit_type_robotic_soldiers
 		has_unit_type = unit_type:combat_unit_type_swarm_bots
 		has_unit_type = unit_type:combat_unit_type_grey_goo
+		# Marines fight as infantry in land battles — classify them with infantry
+		# so they contribute to the infantry group counter rather than only diluting ca_total.
+		has_unit_type = unit_type:combat_unit_type_low_tier_marines
+		has_unit_type = unit_type:combat_unit_type_mid_tier_marines
+		has_unit_type = unit_type:combat_unit_type_high_tier_marines
+		has_unit_type = unit_type:combat_unit_type_combined_arms_marines
+		has_unit_type = unit_type:combat_unit_type_stealth_marines
+		has_unit_type = unit_type:combat_unit_type_networked_marines
+		has_unit_type = unit_type:combat_unit_type_bioenhanced_marines
 	}
 }
 
