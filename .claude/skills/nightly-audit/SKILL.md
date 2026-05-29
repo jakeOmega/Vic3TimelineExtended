@@ -64,6 +64,10 @@ If the curl fails or status isn't `running`, start the server yourself per CLAUD
 
 If the selector fails, the server is unhealthy, or the audit can't complete (context exhaustion, unrecoverable tool failure): file a GitHub issue with labels `priority:critical` and `nightly-audit:failure`, leave the marker untouched, and exit. Do NOT update `docs/audits/.nightly_coverage.json` — the prompt's selector logic handles re-selection automatically when the state file hasn't moved.
 
+## State file updates
+
+Never hand-edit `docs/audits/.nightly_coverage.json` or append to it via `Edit` / stream writes — `json.load` silently keeps only the *last* of any duplicate key, so an append-shaped edit creates a second copy of an existing path and overwrites the older record's audit history (#166). Always update it via `scripts/nightly_audit_state_update.py`; the per-night prompt's wrap-up section shows the exact invocation.
+
 ## Plan mode
 
 If this skill is invoked while plan mode is active, the right plan is one line: "run the skill end-to-end." Don't write a multi-section plan — the skill itself owns the workflow and the generated prompt owns the per-night specifics. Do a brief read-only orientation (marker, server status, today's audit dir) if helpful, then call `ExitPlanMode` immediately to request approval.
