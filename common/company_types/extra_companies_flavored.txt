@@ -3376,14 +3376,12 @@ company_rekal = {
 # Five flavored companies spanning the synthetic-rubber industry, picked for
 # geographic and temporal diversity: USA / Germany / UK-NL / Japan / Russia,
 # era_6 (1930s) through era_8 (1980s). All grant building_synthetics_plant_rubber
-# alongside their thematic chemical / oil / dye buildings. Icons reused from
-# existing files as placeholders -- replace with historical company icons when
-# available.
+# alongside their thematic chemical / oil / dye buildings.
 # =============================================================================
 
 # DuPont (1802) - neoprene 1931, US synthetic-rubber pioneer + explosives
 company_dupont = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds" # placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_dupont.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3431,7 +3429,7 @@ company_dupont = {
 
 # IG Farben (1925-1952) - Buna synthetic rubber 1935; German chemical conglomerate
 company_ig_farben = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds" # placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_ig_farben.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3482,7 +3480,7 @@ company_ig_farben = {
 
 # Royal Dutch Shell (1907) - global petrochemicals + synthetic rubber
 company_shell = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_asml.dds" # placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_shell.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3532,7 +3530,7 @@ company_shell = {
 
 # Japan Synthetic Rubber / JSR (1957) - postwar Japanese chem giant
 company_jsr = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds" # placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_jsr.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3579,7 +3577,7 @@ company_jsr = {
 
 # Sibur (1995) - Russian / Soviet petrochemicals via West Siberia gas reserves
 company_sibur = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds" # placeholder
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_sibur.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
