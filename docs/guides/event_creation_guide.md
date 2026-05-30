@@ -167,11 +167,11 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 ## Event Design Guidelines
 
 ### Option Tradeoff Principles
-- **Every multi-option event must present a meaningful choice.** No option should be strictly better or strictly worse than all alternatives.
-- **A modifier can be all-upside or all-downside** — but if so, other options must be comparably attractive/unattractive. The audit isn't "force every option to have a tradeoff"; it's "no option is strictly dominated."
+- **The one rule is non-domination.** Across the options available in a given situation, no option may be *strictly dominated* by another. Equivalently: every option must be the best choice for *some* plausible player — some situation, goal, or resource state. If an option is never anyone's best choice (another option beats it on every axis a player could care about), it is not a real option; cut it or buff it into its own niche. This is NOT "force every option to have a tradeoff" and NOT "every passive option must have a benefit" — those are the two common misreadings.
+- **Domination is about the whole outcome vs. player goals — not "mixed vs. pure" or "upside vs. downside."** A pure-downside option can be correct; a mixed option can be dominated. Worked example: option A loses an *enormous* amount of money and grants a *tiny* amount of authority; option B loses a *tiny* amount of money and nothing else. B dominates A — nobody who can take B would prefer A — even though B is pure-downside and A is "mixed," because A's authority sliver is far too small to justify its cost. So "A has a benefit and B doesn't" is irrelevant; what matters is whether each option wins for *somebody*.
+- **A pure-upside or pure-downside option is fine** as long as it isn't dominated. To test a pair of options, ask whether there is a player state (high vs. low radicals, flush vs. broke treasury, particular laws/goals) under which *each* would be chosen. If both directions have a winner, neither dominates — keep both. Conditional options (gated by `trigger = { has_law/has_variable/... }`) are not "always available," so they neither dominate nor are dominated by the ungated default; only compare options actually offered together.
 - **Outcome direction must match the setup.** The pop direction (loyalists vs radicals) and modifier direction (beneficial vs costly) of an option should match the in-fiction reception of that choice given the event's premise. An option that nets loyalists in the strata most aggrieved by the event's premise is a *coherence* bug even if it's competitive on balance — e.g., during an unpopular war, "let the peace rally proceed" giving lower-strata loyalists implies the underlying anger was satisfied by being heard, when nothing about the war actually changed. Re-anchor the trigger (gate on `is_at_war = yes`?) or flip the offending pop direction.
-- **"Do nothing" / passive options** must have at least one tangible benefit (e.g., upper-strata loyalists, authority preserved).
-- **Ambitious / expensive options** must have at least one tangible cost (e.g., bureaucracy drain, IG disapproval, radicals).
+- **A passive "do nothing" option may be pure-downside** (e.g. a legitimacy hit with no offset) and still be legitimate — it is the "pay nothing else, accept this consequence" lane, chosen by players who cannot afford the alternatives' costs (radicalization, treasury drain, IG anger). It is a bug only when a strictly-better *always-available* option exists. Likewise, an ambitious option needs no explicit cost unless its absence would let it dominate the alternatives.
 - **Single-option events** (forced crises) are acceptable.
 - **Option text does NOT need to spell out the tradeoff.** Keep button text thematic and concise.
 
@@ -206,7 +206,9 @@ curl -s 'http://localhost:8950/event-balance?prefix=banking_cycle_events&format=
 
 ```bash
 # Strict — flag events where one option is pure-positive on modifiers
-# (≥1 positive, 0 negatives) and another is pure-negative (0 positives, ≥1 negative)
+# (≥1 positive, 0 negatives) and another is pure-negative (0 positives, ≥1 negative).
+# NOTE: pure-positive-vs-pure-negative is a domination *candidate*, not a defect —
+# a pure-downside option is fine if it wins for some player (see non-domination test above).
 curl -s 'http://localhost:8950/event-balance/issues?format=text' | …
 
 # Soft — flag events where one option has ≥ as many positive fields AND ≤ as many
