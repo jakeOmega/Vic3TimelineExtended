@@ -6,6 +6,7 @@
  rule_banking_system_rule:0 "Banking System"
  rule_covert_warfare_rule:0 "Covert Warfare"
  rule_cultural_hegemony_rule:0 "Cultural Hegemony"
+ rule_custom_religions_allowed_rule:0 "Custom Religion Allowed"
  rule_decolonization_rule:0 "Decolonization"
  rule_global_warming_rule:0 "Global Warming"
  rule_heir_education_rule:0 "Heir Education"

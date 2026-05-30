@@ -36,7 +36,7 @@ def find_technology_keys(project_directory):
     for root, _, files in os.walk(tech_path):
         for file in files:
             if file.endswith(".txt"):
-                with open(os.path.join(root, file), "r", encoding="utf-8") as f:
+                with open(os.path.join(root, file), "r", encoding="utf-8-sig") as f:
                     for line in f:
                         match = re.match(r"^\s*([\w\._-]+)\s*=\s*{", line)
                         if match:
@@ -55,7 +55,7 @@ def find_notification_keys(project_directory):
     for root, _, files in os.walk(messages_path):
         for file in files:
             if file.endswith(".txt"):
-                with open(os.path.join(root, file), "r", encoding="utf-8") as f:
+                with open(os.path.join(root, file), "r", encoding="utf-8-sig") as f:
                     for line in f:
                         match = re.match(r"^\s*([\w\._]+)\s*=\s*{", line)
                         if match:
@@ -74,7 +74,7 @@ def find_game_rule_keys(project_directory):
         return game_rule_keys
     for file in os.listdir(rules_path):
         if file.endswith(".txt"):
-            with open(os.path.join(rules_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(rules_path, file), "r", encoding="utf-8-sig") as f:
                 content = f.read()
                 top_level_matches = re.findall(
                     r"^([\w_]+)\s*=\s*{", content, re.MULTILINE
@@ -98,7 +98,7 @@ def find_company_keys(project_directory):
         return company_keys
     for file in os.listdir(company_path):
         if file.endswith(".txt"):
-            with open(os.path.join(company_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(company_path, file), "r", encoding="utf-8-sig") as f:
                 content = f.read()
                 blocks = re.findall(r"(\w+)\s*=\s*{(.*?)}", content, re.DOTALL)
                 for block_name, block_content in blocks:
@@ -118,7 +118,7 @@ def find_law_keys(project_directory):
         return law_keys
     for file in os.listdir(laws_path):
         if file.endswith(".txt"):
-            with open(os.path.join(laws_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(laws_path, file), "r", encoding="utf-8-sig") as f:
                 matches = re.findall(r"^\s*([\w\._-]+)\s*=\s*{", f.read(), re.MULTILINE)
                 for base_key in matches:
                     law_keys.add(base_key)
@@ -145,7 +145,7 @@ def find_diplo_action_keys(project_directory):
     ]
     for file in os.listdir(diplo_path):
         if file.endswith(".txt"):
-            with open(os.path.join(diplo_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(diplo_path, file), "r", encoding="utf-8-sig") as f:
                 matches = re.findall(r"^\s*([\w\._-]+)\s*=\s*{", f.read(), re.MULTILINE)
                 for base_key in matches:
                     for suffix in suffixes:
@@ -161,12 +161,34 @@ def find_political_movement_keys(project_directory):
         return movement_keys
     for file in os.listdir(movements_path):
         if file.endswith(".txt"):
-            with open(os.path.join(movements_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(movements_path, file), "r", encoding="utf-8-sig") as f:
                 matches = re.findall(r"^\s*([\w\._-]+)\s*=\s*{", f.read(), re.MULTILINE)
                 for base_key in matches:
                     movement_keys.add(base_key)
                     movement_keys.add(f"{base_key}_name")
     return movement_keys
+
+
+def find_progress_bar_keys(project_directory):
+    """Finds implicit name/desc keys for scripted progress bars.
+
+    A bar with no explicit `name = "..."` field is labelled by the engine via the
+    auto-keys `<bar>_name` / `<bar>_desc` (only 5 of the mod's bars set an explicit
+    name; the rest rely on the auto-key). Without this, those auto-keys are flagged
+    UNUSED — e.g. heir_education_progress_bar_name.
+    """
+    bar_keys = set()
+    pb_path = os.path.join(project_directory, "common", "scripted_progress_bars")
+    if not os.path.isdir(pb_path):
+        return bar_keys
+    for file in os.listdir(pb_path):
+        if file.endswith(".txt"):
+            with open(os.path.join(pb_path, file), "r", encoding="utf-8-sig") as f:
+                matches = re.findall(r"^\s*([\w\._-]+)\s*=\s*{", f.read(), re.MULTILINE)
+                for base_key in matches:
+                    bar_keys.add(f"{base_key}_name")
+                    bar_keys.add(f"{base_key}_desc")
+    return bar_keys
 
 
 def find_journal_entry_keys(project_directory):
@@ -177,7 +199,7 @@ def find_journal_entry_keys(project_directory):
         return je_keys
     for file in os.listdir(je_path):
         if file.endswith(".txt"):
-            with open(os.path.join(je_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(je_path, file), "r", encoding="utf-8-sig") as f:
                 matches = re.findall(r"^\s*([\w\._-]+)\s*=\s*{", f.read(), re.MULTILINE)
                 for base_key in matches:
                     je_keys.add(base_key)
@@ -377,14 +399,19 @@ def find_used_keys_explicitly(directory):
     """Recursively finds all tokens that appear in .txt / .yml / .gui files."""
     used_keys = set()
     for root, _, files in os.walk(directory):
-        if "localization" in root:
+        # Skip the localization YAML folder itself (every key would trivially
+        # reference itself). Match the path COMPONENT "localization", not the
+        # substring — otherwise common/customizable_localization/ is also skipped
+        # and every key referenced there (custom_loc localization_key = X) is
+        # wrongly flagged unused.
+        if "localization" in os.path.relpath(root, directory).split(os.sep):
             continue
         for file in files:
             if file.endswith((".txt", ".yml", ".gui")):
                 try:
                     with open(
                         os.path.join(root, file), "r",
-                        encoding="utf-8", errors="ignore",
+                        encoding="utf-8-sig", errors="ignore",
                     ) as f:
                         used_keys.update(re.findall(r"[\w\._-]+", f.read()))
                 except Exception:
@@ -420,6 +447,7 @@ def organize_all(project_directory, dry_run=False):
         find_diplo_action_keys,
         find_political_movement_keys,
         find_journal_entry_keys,
+        find_progress_bar_keys,
     ]
     for func in parser_functions:
         used_keys.update(func(project_directory))
