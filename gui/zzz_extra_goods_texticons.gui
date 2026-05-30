@@ -117,3 +117,24 @@ texticon = {
 		fontsize = 18
 	}
 }
+
+# Combat unit groups added by the mod (combat_unit_group_tanks / _aircraft).
+# Vanilla convention: 00_combat_unit_groups.txt requires a matching texticon entry.
+# Pattern mirrors vanilla gui/texticons.gui combat_unit_group entries (offset/fontsize differ from goods).
+texticon = {
+	icon = combat_unit_group_tanks   # same as database key
+	iconsize = {
+		offset = { 0 20 }
+		texture = "gfx/interface/icons/generic_icons/battalions.dds"
+		fontsize = 91
+	}
+}
+
+texticon = {
+	icon = combat_unit_group_aircraft   # same as database key
+	iconsize = {
+		offset = { 0 20 }
+		texture = "gfx/interface/icons/generic_icons/battalions.dds"
+		fontsize = 91
+	}
+}

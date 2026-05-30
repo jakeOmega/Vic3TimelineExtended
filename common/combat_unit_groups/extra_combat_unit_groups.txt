@@ -1,13 +1,16 @@
-﻿combat_unit_group_tanks = {
-    type = army
-    manpower_max = 1000
-    color = { 172 235 121 }
-    icon = "gfx/interface/icons/generic_icons/battalions.dds"
+# NOTE: When adding new Groups, add a corresponding entry to gui/zzz_extra_goods_texticons.gui
+# (vanilla convention from common/combat_unit_groups/00_combat_unit_groups.txt).
+# combat_unit_group entries carry only color + icon (and optionally default_group) —
+# type/manpower_max are not schema fields (manpower lives on combat_unit_type via max_manpower).
+# Colors must be distinct from the four vanilla groups: infantry {230 69 80},
+# artillery {230 182 69}, cavalry {172 235 121}, marines {95 210 230}.
+
+combat_unit_group_tanks = {
+	color = { 168 92 214 }
+	icon = "gfx/interface/icons/generic_icons/battalions.dds"
 }
 
 combat_unit_group_aircraft = {
-    type = army
-    manpower_max = 1000
-    color = { 172 235 121 }
-    icon = "gfx/interface/icons/generic_icons/battalions.dds"
+	color = { 64 130 240 }
+	icon = "gfx/interface/icons/generic_icons/battalions.dds"
 }
