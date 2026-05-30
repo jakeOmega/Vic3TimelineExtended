@@ -1,984 +1,37 @@
 {
-  "version": 1,
   "files": {
-    "common/named_colors/extra_goods_colors.txt": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/religions/custom_religion.txt": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "gui/treaty_panel.gui": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "gui/principle_selection_window.gui": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "gui/building_details_panel.gui": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "gui/states_panel.gui": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "gui/zzz_extra_goods_texticons.gui": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "gui/journal_entry_widgets/strategic_reserve_widget.gui": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/te_construction_market_pulse_effects.txt": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/extra_geography_triggers.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_triggers/te_map_modes_triggers.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/te_construction_market_pulse_values.txt": {
-      "last_audited": "2026-05-20",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/cultural_hegemony_events_on_actions.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
     "common/_meta/duplicate_image_allowlist.yml": {
-      "last_audited": "2026-05-16",
       "audit_count": 1,
-      "recent_findings": 0,
+      "last_audited": "2026-05-16",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
+      ],
+      "recent_findings": 0
     },
     "common/_meta/modifier_patterns.yml": {
-      "last_audited": "2026-05-16",
       "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 0
     },
     "common/ai_strategies/other.txt": {
-      "last_audited": "2026-05-19",
       "audit_count": 1,
+      "last_audited": "2026-05-19",
       "recent_findings": 0
     },
     "common/battle_conditions/extra_battle_conditions.txt": {
-      "last_audited": "2026-05-16",
       "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 1
     },
-    "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt": {
-      "last_audited": "2026-05-16",
+    "common/building_groups/te_construction_market_groups.txt": {
       "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt.bak": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/combat_unit_groups/extra_combat_unit_groups.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/combat_unit_types/extra_combat_units.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/company_charter_types/extra_charters.txt": {
-      "last_audited": "2026-05-27",
-      "audit_count": 3,
-      "recent_findings": 0
-    },
-    "common/country_ranks/extra_country_ranks.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/decisions/extra_decisions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/defines/extra_defines.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/defines/te_construction_market_defines.txt": {
       "last_audited": "2026-05-26",
-      "audit_count": 2,
       "recent_findings": 0
     },
-    "common/diplomatic_actions/nuke.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 2
-    },
-    "common/diplomatic_plays/_diplomatic_plays.info": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/diplomatic_plays/extra_diplomatic_plays.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/discrimination_traits/extra_traits.txt": {
-      "last_audited": "2026-05-27",
-      "audit_count": 3,
-      "recent_findings": 0
-    },
-    "common/game_concepts/extra_concepts.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/government_types/timeline_extended_governments.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/ideologies/manual_update_ideologies.txt": {
-      "last_audited": "2026-05-22",
-      "audit_count": 2,
-      "recent_findings": 0
-    },
-    "common/institutions/_institutions.info": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/institutions/extra_institutions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/journal_entries/je_colonial_empire.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/laws/modified.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/mobilization_option_groups/extra_mobilization_groups.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 2,
-      "recent_findings": 0
-    },
-    "common/mobilization_options/_mobilization_options.info": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/mobilization_options/extra_mobilization_options.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/modifier_type_definitions/banking_cycle_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/colonial_empire_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/cultural_hegemony_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/global_warming_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/homelands_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/nuclear_program_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/power_bloc_extra_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/sol_expectations_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/space_race_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/subjugation_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/tech_gate_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/modifier_type_definitions/un_membership_modifier_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/covert_warfare_on_actions.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/cultural_hegemony_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/extra_on_actions.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/on_actions/headlines.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/on_actions/langreform_events_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/legacy_modifier_cleanup.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/minor_events_on_actions.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/modern_election_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/repeatable_events_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/social_tensions_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/sol_expectations_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/space_race_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/on_actions/te_construction_market_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/trade_partner_on_actions.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/treaty_article_events_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/un_on_actions.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/on_actions/wonder_events_on_actions.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/political_movement_pop_support/political_movement_pop_support.md": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/political_movements/modified_political_movements.txt": {
-      "last_audited": "2026-05-29",
-      "audit_count": 4,
-      "recent_findings": 0
-    },
-    "common/power_bloc_identities/_power_bloc_identities.info": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/power_bloc_principle_groups/_power_bloc_principle_groups.info": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/power_bloc_principles/_power_bloc_principles.info": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/prestige_goods/extra_prestige_goods.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/civil_rights_values.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/dp_escalation_script_values.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/gui_chart_script_values.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/irredentism_values.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/script_values/te_construction_market_sector_placement_values.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/script_values/te_construction_market_target_values.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/te_map_mode_script_values.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/world_war_values.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_buttons/colonial_empire_buttons.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/banking_cycle_effects.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/colonial_collapse_effects.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_effects/combined_arms_effects.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/company_building_cleanup_effects.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/cultural_hegemony_effects.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/dp_escalation_effects.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_effects/ig_approval_effects.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/nuclear_weapon_effects.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/social_axis_effects.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/sol_expectations_effects.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/te_construction_market_sector_placement_effects.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/treaty_article_effects.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_progress_bars/heir_education_progress_bars.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "common/scripted_progress_bars/scripted_progress_bars.md": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_progress_bars/st_res_progress_bars.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_progress_bars/un_progress_bars.txt": {
-      "last_audited": "2026-05-23",
-      "audit_count": 2,
-      "recent_findings": 0
-    },
-    "common/scripted_rules/extra_rules.txt": {
-      "last_audited": "2026-05-27",
-      "audit_count": 5,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/covert_warfare_triggers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/formable_gating_triggers.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/irredentism_triggers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 3
-    },
-    "common/scripted_triggers/market_triggers.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/ministry_triggers.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/misc_triggers.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/resource_discovery_triggers.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 2,
-      "recent_findings": 1
-    },
-    "common/scripted_triggers/un_permanent_member_triggers.txt": {
-      "last_audited": "2026-05-19",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_triggers/wonder_triggers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/ship_modifications/extra_utility_modifications.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/ship_name_definitions/99_extra_ship_name_definitions_fallbacks.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/ship_types/extra_ship_types.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/state_traits/te_mining_traits.txt": {
-      "last_audited": "2026-05-18",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/static_modifiers/extra_modifiers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/static_modifiers/heir_education_modifiers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/static_modifiers/law_enactment_modifiers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/static_modifiers/ministry_law_enactment_modifiers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/static_modifiers/sol_expectations_modifiers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/static_modifiers/te_construction_market_modifiers.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/subject_types/modified.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/treaty_articles/106_religious_mission_rights.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/treaty_articles/extra_treaty_articles.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/war_goal_types/te_reunify_country.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "events/environmentalism_events.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "events/ministry_law_events.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "events/minor_events.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "events/modern_election_events.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 2,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "events/probe_result_events.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "events/social_tensions_events.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "events/te_construction_market_pulse_events.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "events/te_map_modes_events.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "events/un_vote_events.txt": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "gfx/interface/icons/company_icons/historical_company_icons/resize.bat": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "gfx/portraits/portrait_modifiers/te_clothes.txt": {
-      "last_audited": "2026-05-16",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "localization/english/te_combat_units_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "localization/english/te_companies_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "localization/english/te_decrees_l_english.yml": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "localization/english/te_events_l_english.yml": {
-      "last_audited": "2026-05-17",
-      "audit_count": 2,
-      "recent_findings": 3,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ],
-        [
-          601,
-          1200
-        ]
-      ]
-    },
-    "localization/english/te_game_rules_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "localization/english/te_goods_and_needs_l_english.yml": {
-      "last_audited": "2026-05-29",
-      "audit_count": 2,
-      "recent_findings": 0
-    },
-    "localization/english/te_ideologies_l_english.yml": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 2
-    },
-    "localization/english/te_institutions_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "localization/english/te_journal_entries_l_english.yml": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "localization/english/te_miscellaneous_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "localization/english/te_mobilization_options_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "localization/english/te_production_methods_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "localization/english/te_religion_l_english.yml": {
-      "last_audited": "2026-05-17",
-      "audit_count": 1,
-      "recent_findings": 5
-    },
-    "localization/english/te_ship_types_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 0
-    },
-    "localization/english/te_technologies_l_english.yml": {
-      "audit_count": 1,
-      "last_audited": "2026-05-17",
-      "recent_findings": 1
-    },
-    "common/scripted_effects/te_construction_market_ai_effects.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0
-    },
-    "common/script_values/tourism.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/script_values/un_script_values.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0
-    },
-    "common/on_actions/law_events_on_actions.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0
-    },
-    "common/scripted_buttons/banking_alt_economy_buttons.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/decolonization.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/civil_rights_effects.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/nuke_triggers.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0
-    },
-    "common/scripted_effects/headlines_effects.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0
-    },
-    "common/decrees/modified.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 1
-    },
-    "common/laws/movement_attraction_modifiers.txt": {
+    "common/character_interactions/extra_interactions.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
       "recent_findings": 0
@@ -988,61 +41,195 @@
       "last_audited": "2026-05-21",
       "recent_findings": 0
     },
-    "common/laws/extra_laws.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/parties/technocratic_party.txt": {
+    "common/character_traits/extra_character_traits.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
       "recent_findings": 0
-    },
-    "common/political_movement_pop_support/extra_political_movement_pop_support.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 1
     },
     "common/character_traits/ruler_aptitude_traits.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
-      "recent_findings": 1,
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
+      ],
+      "recent_findings": 1
     },
-    "common/laws/colonial_empire_law_injections.txt": {
+    "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt": {
       "audit_count": 1,
-      "last_audited": "2026-05-21",
+      "last_audited": "2026-05-16",
       "recent_findings": 0
     },
-    "common/laws/legislative_override_capacity.txt": {
+    "common/combat_unit_experience_levels/00_combat_unit_experience_levels.txt.bak": {
       "audit_count": 1,
-      "last_audited": "2026-05-21",
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/combat_unit_groups/extra_combat_unit_groups.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-30",
+      "recent_findings": 3
+    },
+    "common/combat_unit_types/extra_combat_units.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
       "recent_findings": 0
     },
-    "common/state_traits/te_harbor_traits.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
+    "common/company_charter_types/extra_charters.txt": {
+      "audit_count": 3,
+      "last_audited": "2026-05-27",
       "recent_findings": 0
     },
-    "common/laws/sol_expectations_vanilla_injections.txt": {
+    "common/country_definitions/te_formable_countries.txt": {
       "audit_count": 1,
-      "last_audited": "2026-05-21",
+      "last_audited": "2026-05-29",
       "recent_findings": 0
     },
-    "common/laws/construction_system_law_injections.txt": {
+    "common/country_definitions/zz_te_extended_dynamic.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/country_formation/te_formable_countries.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "common/country_ranks/extra_country_ranks.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/customizable_localization/zzz_extra_custom_loc.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/decisions/extra_decisions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/decrees/modified.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
+      "recent_findings": 1
+    },
+    "common/defines/extra_defines.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/defines/te_construction_market_defines.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/diplomatic_actions/covert_operations.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/diplomatic_actions/extra_diplo_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/diplomatic_actions/nuke.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 2
+    },
+    "common/diplomatic_plays/_diplomatic_plays.info": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/diplomatic_plays/extra_diplomatic_plays.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "common/discrimination_traits/extra_traits.txt": {
+      "audit_count": 3,
+      "last_audited": "2026-05-27",
+      "recent_findings": 0
+    },
+    "common/dynamic_country_names/te_formable_countries.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/dynamic_treaty_names/te_dynamic_treaty_names.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "recent_findings": 2
+    },
+    "common/flag_definitions/te_formable_countries.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/game_concepts/extra_concepts.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/government_types/timeline_extended_governments.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "common/history/te_construction_market_global.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-27",
+      "recent_findings": 0
+    },
+    "common/ideologies/manual_update_ideologies.txt": {
+      "audit_count": 3,
+      "last_audited": "2026-05-30",
+      "recent_findings": 0
+    },
+    "common/institutions/_institutions.info": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/institutions/extra_institutions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 0
     },
     "common/interest_group_traits/custom_religion_traits.txt": {
@@ -1055,9 +242,51 @@
       "last_audited": "2026-05-21",
       "recent_findings": 0
     },
-    "common/character_interactions/extra_interactions.txt": {
+    "common/journal_entries/je_colonial_empire.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/journal_entry_groups/timeline_extended_je_groups.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 0
+    },
+    "common/laws/colonial_empire_law_injections.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/laws/construction_system_law_injections.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/laws/extra_laws.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/laws/legislative_override_capacity.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/laws/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
       "recent_findings": 0
     },
     "common/laws/modified_health_system.txt": {
@@ -1065,83 +294,805 @@
       "last_audited": "2026-05-21",
       "recent_findings": 0
     },
-    "common/character_traits/extra_character_traits.txt": {
+    "common/laws/movement_attraction_modifiers.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
       "recent_findings": 0
     },
-    "localization/english/te_laws_l_english.yml": {
-      "last_audited": "2026-05-22",
+    "common/laws/sol_expectations_vanilla_injections.txt": {
       "audit_count": 1,
-      "recent_findings": 3
-    },
-    "localization/english/te_power_blocs_l_english.yml": {
-      "last_audited": "2026-05-22",
-      "audit_count": 1,
+      "last_audited": "2026-05-21",
       "recent_findings": 0
     },
-    "localization/english/te_buildings_l_english.yml": {
-      "last_audited": "2026-05-22",
+    "common/messages/extra_messages.txt": {
       "audit_count": 1,
-      "recent_findings": 2
-    },
-    "localization/english/te_ship_modifications_l_english.yml": {
-      "last_audited": "2026-05-22",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "localization/english/te_formable_countries_l_english.yml": {
-      "last_audited": "2026-05-22",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "localization/english/te_un_button_effects_l_english.yml": {
-      "last_audited": "2026-05-22",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "localization/english/te_concepts_l_english.yml": {
-      "last_audited": "2026-05-22",
-      "audit_count": 1,
-      "recent_findings": 1,
+      "last_audited": "2026-05-24",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
+      ],
+      "recent_findings": 0
     },
-    "localization/english/te_diplomacy_l_english.yml": {
-      "last_audited": "2026-05-22",
+    "common/mobilization_option_groups/extra_mobilization_groups.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/mobilization_options/_mobilization_options.info": {
       "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/mobilization_options/extra_mobilization_options.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/banking_cycle_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/colonial_empire_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/cultural_hegemony_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/global_warming_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/homelands_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/nuclear_program_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/power_bloc_extra_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/sol_expectations_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/space_race_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/subjugation_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/tech_gate_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/un_membership_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/named_colors/extra_goods_colors.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
       "recent_findings": 1
     },
-    "events/agricultural_diffusion_events.txt": {
-      "last_audited": "2026-05-22",
+    "common/on_actions/covert_warfare_on_actions.txt": {
       "audit_count": 1,
+      "last_audited": "2026-05-18",
       "recent_findings": 0
     },
-    "localization/english/replace/timeline_extended_override_l_english.yml": {
-      "last_audited": "2026-05-22",
+    "common/on_actions/cultural_hegemony_events_on_actions.txt": {
       "audit_count": 1,
+      "last_audited": "2026-05-19",
       "recent_findings": 0
     },
-    "localization/english/te_power_bloc_unlocks_l_english.yml": {
-      "last_audited": "2026-05-22",
+    "common/on_actions/cultural_hegemony_on_actions.txt": {
       "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 0
     },
-    "common/journal_entry_groups/timeline_extended_je_groups.txt": {
-      "last_audited": "2026-05-22",
+    "common/on_actions/extra_on_actions.txt": {
       "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/on_actions/headlines.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/on_actions/langreform_events_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 0
     },
-    "common/static_modifiers/te_map_mode_modifiers.txt": {
-      "last_audited": "2026-05-22",
+    "common/on_actions/law_events_on_actions.txt": {
       "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/on_actions/legacy_modifier_cleanup.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/minor_events_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/on_actions/modern_election_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/repeatable_events_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/social_tensions_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/sol_expectations_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/space_race_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/on_actions/te_construction_market_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/trade_partner_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/on_actions/treaty_article_events_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/on_actions/un_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/on_actions/wonder_events_on_actions.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/parties/technocratic_party.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/political_movement_pop_support/extra_political_movement_pop_support.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 1
+    },
+    "common/political_movement_pop_support/political_movement_pop_support.md": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/political_movements/modified_political_movements.txt": {
+      "audit_count": 4,
+      "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "common/power_bloc_identities/_power_bloc_identities.info": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
       "recent_findings": 0
     },
     "common/power_bloc_identities/extra_power_bloc_identities.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/power_bloc_principle_groups/_power_bloc_principle_groups.info": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/power_bloc_principles/_power_bloc_principles.info": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/power_bloc_principles/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/prestige_goods/extra_prestige_goods.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/production_method_groups/13_construction.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "recent_findings": 0
+    },
+    "common/production_method_groups/strategic_reserve_pmgs.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "common/production_methods/te_construction_market_pms.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "common/religions/custom_religion.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "recent_findings": 0
+    },
+    "common/script_values/civil_rights_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/script_values/covert_warfare_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "recent_findings": 1
+    },
+    "common/script_values/cultural_hegemony_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/script_values/dp_escalation_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/script_values/extra_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/script_values/gui_chart_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/script_values/irredentism_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 1
+    },
+    "common/script_values/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/script_values/space_race_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_ai_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_current_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_pulse_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "recent_findings": 0
+    },
+    "common/script_values/te_construction_market_sector_placement_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/script_values/te_construction_market_target_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/script_values/te_map_mode_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/script_values/tourism.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/script_values/un_script_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/script_values/world_war_values.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 1
+    },
+    "common/scripted_buttons/banking_alt_economy_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/scripted_buttons/colonial_empire_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/scripted_buttons/covert_warfare_scripted_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/banking_cycle_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/scripted_effects/civil_rights_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/colonial_collapse_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 1
+    },
+    "common/scripted_effects/combined_arms_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/company_building_cleanup_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/scripted_effects/cultural_hegemony_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/scripted_effects/decolonization.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/scripted_effects/dp_escalation_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/scripted_effects/extra_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/scripted_effects/headlines_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/ig_approval_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/nuclear_weapon_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/social_axis_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/sol_expectations_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/space_race_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/scripted_effects/st_res_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_ai_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_build_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_pulse_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_sector_placement_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_construction_market_setup_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-30",
+      "recent_findings": 1
+    },
+    "common/scripted_effects/te_construction_market_update_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_formable_claims_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/te_map_modes_effects.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-27",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/treaty_article_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/un_vote_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/scripted_guis/te_construction_market_scripted_gui.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/scripted_progress_bars/heir_education_progress_bars.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/scripted_progress_bars/scripted_progress_bars.md": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/scripted_progress_bars/st_res_progress_bars.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/scripted_progress_bars/un_progress_bars.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/scripted_rules/extra_rules.txt": {
+      "audit_count": 6,
+      "last_audited": "2026-05-30",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/civil_rights_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/colonial_empire_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-25",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/combined_arms_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-26",
+      "recent_findings": 1
+    },
+    "common/scripted_triggers/covert_warfare_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/extra_geography_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 1
+    },
+    "common/scripted_triggers/formable_gating_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/irredentism_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 3
+    },
+    "common/scripted_triggers/market_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/ministry_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/misc_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/nuke_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/resource_discovery_triggers.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-24",
+      "recent_findings": 1
+    },
+    "common/scripted_triggers/space_race_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-24",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/te_map_modes_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/un_permanent_member_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-19",
+      "recent_findings": 1
+    },
+    "common/scripted_triggers/wonder_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/scripted_triggers/world_war_triggers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-30",
+      "recent_findings": 1
+    },
+    "common/ship_modifications/extra_ship_modifications.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-27",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/ship_modifications/extra_utility_modifications.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/ship_name_definitions/99_extra_ship_name_definitions_fallbacks.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/ship_types/extra_ship_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/state_traits/te_harbor_traits.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/state_traits/te_mining_traits.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-18",
+      "recent_findings": 0
+    },
+    "common/static_modifiers/extra_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/static_modifiers/heir_education_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/static_modifiers/law_enactment_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 1
+    },
+    "common/static_modifiers/ministry_law_enactment_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/static_modifiers/sol_expectations_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/static_modifiers/te_construction_market_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/static_modifiers/te_map_mode_modifiers.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 0
+    },
+    "common/strategic_regions/zzz_modified_strategic_regions.txt": {
+      "audit_count": 2,
+      "last_audited": "2026-05-27",
+      "recent_findings": 1
+    },
+    "common/subject_types/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "common/treaty_articles/101_disband_company.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-23",
       "recent_findings": 0
@@ -1151,25 +1102,14 @@
       "last_audited": "2026-05-23",
       "recent_findings": 0
     },
-    "common/treaty_articles/101_disband_company.txt": {
+    "common/treaty_articles/104_corporate_concessions.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-23",
       "recent_findings": 0
     },
-    "common/diplomatic_actions/extra_diplo_actions.txt": {
+    "common/treaty_articles/106_religious_mission_rights.txt": {
       "audit_count": 1,
-      "last_audited": "2026-05-23",
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/power_bloc_principles/modified.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-23",
+      "last_audited": "2026-05-17",
       "recent_findings": 0
     },
     "common/treaty_articles/109_enforce_emissions_reduction.txt": {
@@ -1177,307 +1117,403 @@
       "last_audited": "2026-05-23",
       "recent_findings": 1
     },
-    "common/treaty_articles/104_corporate_concessions.txt": {
+    "common/treaty_articles/extra_treaty_articles.txt": {
       "audit_count": 1,
-      "last_audited": "2026-05-23",
-      "recent_findings": 0
-    },
-    "common/diplomatic_actions/covert_operations.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-23",
-      "recent_findings": 0,
+      "last_audited": "2026-05-17",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
-    },
-    "common/scripted_triggers/civil_rights_triggers.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-23",
+      ],
       "recent_findings": 0
     },
-    "common/scripted_effects/space_race_effects.txt": {
-      "last_audited": "2026-05-24",
+    "common/war_goal_types/te_reunify_country.txt": {
       "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/script_values/extra_script_values.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/script_values/te_construction_market_ai_values.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/messages/extra_messages.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/un_vote_effects.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/customizable_localization/zzz_extra_custom_loc.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/space_race_triggers.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/te_formable_claims_effects.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/flag_definitions/te_formable_countries.txt": {
-      "last_audited": "2026-05-24",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/te_construction_market_update_effects.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_effects/extra_effects.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
-      "recent_findings": 1,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/script_values/covert_warfare_script_values.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 1
     },
-    "common/scripted_effects/te_construction_market_build_effects.txt": {
-      "last_audited": "2026-05-25",
+    "events/agricultural_diffusion_events.txt": {
       "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_effects/te_map_modes_effects.txt": {
-      "last_audited": "2026-05-27",
-      "audit_count": 2,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/colonial_empire_triggers.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_buttons/covert_warfare_scripted_buttons.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/production_method_groups/13_construction.txt": {
-      "last_audited": "2026-05-25",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/strategic_regions/zzz_modified_strategic_regions.txt": {
-      "last_audited": "2026-05-27",
-      "audit_count": 2,
-      "recent_findings": 1
-    },
-    "common/script_values/space_race_values.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/cultural_hegemony_script_values.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0,
-      "partial_coverage": [
-        [
-          1,
-          600
-        ]
-      ]
-    },
-    "common/scripted_guis/te_construction_market_scripted_gui.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/scripted_triggers/combined_arms_triggers.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 1
-    },
-    "common/scripted_effects/st_res_effects.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/modified.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/script_values/te_construction_market_current_values.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "common/building_groups/te_construction_market_groups.txt": {
-      "last_audited": "2026-05-26",
-      "audit_count": 1,
+      "last_audited": "2026-05-22",
       "recent_findings": 0
     },
     "events/covert_warfare_events.txt": {
-      "last_audited": "2026-05-27",
       "audit_count": 1,
+      "last_audited": "2026-05-27",
       "recent_findings": 1
     },
-    "events/world_war_events.txt": {
-      "last_audited": "2026-05-27",
+    "events/dp_escalation_events.txt": {
       "audit_count": 1,
-      "recent_findings": 0,
+      "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "events/environmentalism_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
+      ],
+      "recent_findings": 1
+    },
+    "events/ministry_law_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "events/minor_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "events/modern_election_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 2
     },
     "events/nuclear_weapon_events.txt": {
-      "last_audited": "2026-05-27",
       "audit_count": 1,
-      "recent_findings": 1,
+      "last_audited": "2026-05-27",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
+      ],
+      "recent_findings": 1
     },
-    "common/ship_modifications/extra_ship_modifications.txt": {
-      "last_audited": "2026-05-27",
+    "events/probe_result_events.txt": {
       "audit_count": 1,
-      "recent_findings": 0,
+      "last_audited": "2026-05-17",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
+      ],
+      "recent_findings": 0
+    },
+    "events/repeatable_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-30",
+      "recent_findings": 2
+    },
+    "events/social_tensions_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "events/surveillance_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-30",
+      "recent_findings": 2
+    },
+    "events/te_construction_market_pulse_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
     },
     "events/te_formable_formation_events.txt": {
-      "last_audited": "2026-05-27",
       "audit_count": 1,
-      "recent_findings": 0
-    },
-    "localization/english/te_state_traits_l_english.yml": {
       "last_audited": "2026-05-27",
-      "audit_count": 1,
-      "recent_findings": 0
-    },
-    "localization/english/te_political_movements_l_english.yml": {
-      "last_audited": "2026-05-27",
-      "audit_count": 1,
       "recent_findings": 0
     },
     "events/te_formation_overrides.txt": {
-      "last_audited": "2026-05-27",
       "audit_count": 1,
+      "last_audited": "2026-05-27",
       "recent_findings": 0
     },
-    "common/history/te_construction_market_global.txt": {
-      "last_audited": "2026-05-27",
+    "events/te_map_modes_events.txt": {
       "audit_count": 1,
+      "last_audited": "2026-05-16",
       "recent_findings": 0
     },
-    "common/dynamic_country_names/te_formable_countries.txt": {
-      "last_audited": "2026-05-29",
+    "events/un_vote_events.txt": {
       "audit_count": 1,
-      "recent_findings": 1,
+      "last_audited": "2026-05-17",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
-    },
-    "common/country_definitions/te_formable_countries.txt": {
-      "last_audited": "2026-05-29",
-      "audit_count": 1,
+      ],
       "recent_findings": 0
     },
-    "common/country_definitions/zz_te_extended_dynamic.txt": {
-      "last_audited": "2026-05-29",
+    "events/world_war_events.txt": {
       "audit_count": 1,
-      "recent_findings": 0,
+      "last_audited": "2026-05-27",
       "partial_coverage": [
         [
           1,
           600
         ]
-      ]
-    },
-    "common/country_formation/te_formable_countries.txt": {
-      "last_audited": "2026-05-29",
-      "audit_count": 1,
+      ],
       "recent_findings": 0
     },
-    "common/dynamic_treaty_names/te_dynamic_treaty_names.txt": {
-      "last_audited": "2026-05-29",
+    "gfx/interface/icons/company_icons/historical_company_icons/resize.bat": {
       "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "gfx/portraits/portrait_modifiers/te_clothes.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "gui/building_details_panel.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "gui/journal_entry_widgets/strategic_reserve_widget.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "recent_findings": 0
+    },
+    "gui/principle_selection_window.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "recent_findings": 0
+    },
+    "gui/states_panel.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "gui/treaty_panel.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "gui/zzz_extra_goods_texticons.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-05-20",
+      "recent_findings": 1
+    },
+    "localization/english/replace/timeline_extended_override_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 0
+    },
+    "localization/english/te_buildings_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
       "recent_findings": 2
     },
-    "common/production_method_groups/strategic_reserve_pmgs.txt": {
-      "last_audited": "2026-05-29",
+    "localization/english/te_combat_units_l_english.yml": {
       "audit_count": 1,
+      "last_audited": "2026-05-17",
       "recent_findings": 0
     },
-    "common/production_methods/te_construction_market_pms.txt": {
-      "last_audited": "2026-05-29",
+    "localization/english/te_companies_l_english.yml": {
       "audit_count": 1,
+      "last_audited": "2026-05-17",
       "recent_findings": 0
     },
-    "events/dp_escalation_events.txt": {
-      "last_audited": "2026-05-29",
+    "localization/english/te_concepts_l_english.yml": {
       "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "localization/english/te_decrees_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "localization/english/te_diplomacy_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 1
+    },
+    "localization/english/te_events_l_english.yml": {
+      "audit_count": 2,
+      "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ],
+        [
+          601,
+          1200
+        ]
+      ],
+      "recent_findings": 3
+    },
+    "localization/english/te_formable_countries_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
       "recent_findings": 0
+    },
+    "localization/english/te_game_rules_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_goods_and_needs_l_english.yml": {
+      "audit_count": 2,
+      "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "localization/english/te_ideologies_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 2
+    },
+    "localization/english/te_institutions_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_journal_entries_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "localization/english/te_laws_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 3
+    },
+    "localization/english/te_miscellaneous_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "localization/english/te_mobilization_options_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_notifications_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-30",
+      "recent_findings": 3
+    },
+    "localization/english/te_political_movements_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-27",
+      "recent_findings": 0
+    },
+    "localization/english/te_power_bloc_unlocks_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 0
+    },
+    "localization/english/te_power_blocs_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 0
+    },
+    "localization/english/te_production_methods_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "localization/english/te_religion_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 5
+    },
+    "localization/english/te_ship_modifications_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 0
+    },
+    "localization/english/te_ship_types_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "localization/english/te_state_traits_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-27",
+      "recent_findings": 0
+    },
+    "localization/english/te_technologies_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "localization/english/te_un_button_effects_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-22",
+      "recent_findings": 1
+    },
+    "localization/english/te_unused_l_english.yml": {
+      "audit_count": 1,
+      "last_audited": "2026-05-30",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 2
     }
-  }
+  },
+  "version": 1
 }

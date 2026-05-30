@@ -1,0 +1,134 @@
+{
+  "date": "2026-05-30",
+  "run_label": "2026-05-30",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/surveillance_events.txt",
+      "line_range": null,
+      "lines": 500,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_unused_l_english.yml",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/repeatable_events.txt",
+      "line_range": null,
+      "lines": 583,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_notifications_l_english.yml",
+      "line_range": null,
+      "lines": 573,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_triggers/world_war_triggers.txt",
+      "line_range": null,
+      "lines": 156,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/te_construction_market_setup_effects.txt",
+      "line_range": null,
+      "lines": 73,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/combat_unit_groups/extra_combat_unit_groups.txt",
+      "line_range": null,
+      "lines": 13,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_rules/extra_rules.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-27",
+      "audit_count": 5,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-22",
+      "audit_count": 2,
+      "recent_findings": 0
+    }
+  ]
+}

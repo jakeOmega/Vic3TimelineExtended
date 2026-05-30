@@ -27,6 +27,8 @@ repeatable_events.10 = {
 
     trigger = {
         in_election_campaign = yes
+        NOT = { has_variable = election_event_cooldown }
+        NOT = { has_variable = mute_election_events }
         NOT = { has_law = law_type:law_single_party_state }
 
         OR = {

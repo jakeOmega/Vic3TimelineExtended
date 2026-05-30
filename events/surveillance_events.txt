@@ -269,11 +269,11 @@ surveillance_events.4 = {
 		has_technology_researched = automated_surveillance
 		has_technology_researched = cybersecurity
 		NOT = { has_law = law_type:law_strong_privacy_rights }
-		NOT = { has_global_variable = ai_predictive_policing_debate_happened }
+		NOT = { has_variable = ai_predictive_policing_debate_happened }
 	}
 
 	immediate = {
-		set_global_variable = ai_predictive_policing_debate_happened
+		set_variable = ai_predictive_policing_debate_happened
 	}
 
 	# Deploy predictive policing
@@ -427,7 +427,7 @@ surveillance_events.100 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = surveillance_events.100.t
-	desc = surveillance_events.100.desc
+	desc = surveillance_events.100.d
 	flavor = surveillance_events.100.f
 
 	duration = 3
