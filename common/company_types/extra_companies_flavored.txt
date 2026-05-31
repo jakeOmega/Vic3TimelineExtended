@@ -2973,7 +2973,7 @@ company_jsw_steel = {
 
 # Axiom Space (2016) — first commercial space station company
 company_axiom_space = {
-	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_axiom_space.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3030,7 +3030,7 @@ company_axiom_space = {
 
 # Neurovault Systems — sci-fi neurotech and consciousness corporation
 company_neurovault = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_neurovault.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3095,7 +3095,7 @@ company_neurovault = {
 # Oblique ref: 2001: A Space Odyssey (Tycho Magnetic Anomaly / TMA-1)
 # Theme: Space megastructure construction, orbital engineering
 company_tycho_manufacturing = {
-	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_tycho_manufacturing.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3153,7 +3153,7 @@ company_tycho_manufacturing = {
 # Oblique ref: Neuromancer by William Gibson
 # Theme: Orbital AI systems, neural interfaces, luxury space habitats
 company_tessier_ashpool = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_tessier_ashpool.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3207,7 +3207,7 @@ company_tessier_ashpool = {
 # Oblique ref: Ghost in the Shell (Hanka Robotics)
 # Theme: Cybernetic prosthetics, brain-machine interfaces, nanoassembly
 company_hanka_precision = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_hanka_precision.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3264,7 +3264,7 @@ company_hanka_precision = {
 # Oblique ref: Thomas Pynchon's The Crying of Lot 49 / Buckaroo Banzai
 # Theme: Exotic propulsion research, antimatter engineering, energy systems
 company_yoyodyne_propulsion = {
-	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_yoyodyne_propulsion.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -3318,7 +3318,7 @@ company_yoyodyne_propulsion = {
 # Oblique ref: Philip K. Dick's "We Can Remember It for You Wholesale" (Total Recall)
 # Theme: Memory technology, virtual experience, consciousness transfer
 company_rekal = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_rekal.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
