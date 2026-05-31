@@ -124,6 +124,10 @@ When opening dependent PRs (PR B builds on PR A's branch), `gh pr create --base 
 
 Symptom of the bug: parent PR merges to main, child PRs show `MERGED` in `gh pr view`, but `git log main` doesn't include their commits and the file content on main doesn't reflect the changes. Recovery: push the latest descendant branch as a new ref and open a fresh PR to main (e.g., #98 recovered this session's #96/#97).
 
+### A multi-issue PR needs one `Closes` keyword *per* issue
+
+`Closes #161, #167, #168` auto-closes **only #161** — GitHub binds the closing keyword to the first number; the rest are mere references and stay open after merge. Write `Closes #161. Closes #167. Closes #168.` (or `closes #161, closes #167, …`). Bit us on #174, which silently left #167-172 open (recovered by manual close + a follow-up PR). Verify post-merge with `gh issue list` rather than trusting the PR body.
+
 ## Deployment topology
 - This repo lives on the WSL/Linux side (`mod_path`, e.g. `~/src/Vic3TimelineExtended`).
 - The engine reads from the Windows-side mod folder (`mod_deploy_target`, e.g. `/mnt/c/Users/<winuser>/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended`).
