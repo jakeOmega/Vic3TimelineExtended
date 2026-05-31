@@ -557,17 +557,13 @@ ideology_corporate = {
 		}
 		if = {
 			limit = {
-				scope:interest_group = {
-					is_interest_group_type = ig_trade_unions 
-				}
+				is_interest_group_type = ig_trade_unions
 			}
 			add = -25
 		}
 		if = {
 			limit = {
-				scope:interest_group = {
-					is_interest_group_type = ig_industrialists 
-				}
+				is_interest_group_type = ig_industrialists
 			}
 			add = 25
 		}
