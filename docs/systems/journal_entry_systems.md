@@ -182,7 +182,7 @@ Persistent journal entry. Can be deactivated. Revolution inheritable.
 Allows monarchies to shape their heir's education through active focus choices. The heir gains attribute traits (admin/diplo/military), ideological leanings, and IG affiliation based on selected focuses over ~15 years.
 
 ### Key Mechanics
-- **Progress bar:** `heir_education_progress_bar` (goal = 15 total points)
+- **Progress bar:** `heir_education_progress_bar` (goal = 20 total points)
 - **Monthly pulse:** Each active focus has 5% chance to advance its attribute, increment `heir_ed_total`, apply 30-day cost modifier, and trigger IG reaction
 - **Random education events** (2% each, 365-day cooldown): `heir_education_events.1`, `.2`, `.3`
 - **Completion:** Heir reaches adulthood + 365-day grace period

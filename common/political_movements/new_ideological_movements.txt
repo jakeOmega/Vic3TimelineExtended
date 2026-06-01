@@ -366,6 +366,7 @@ movement_civil_rights = {
     character_support_trigger = {
         OR = {
             has_ideology = ideology:ideology_multicultural
+            has_ideology = ideology:ideology_multicultural_inclusive
             OR = {
                 is_interest_group_type = ig_intelligentsia
             }
@@ -375,7 +376,10 @@ movement_civil_rights = {
         value = 50
         if = {
             limit = {
-                has_ideology = ideology:ideology_multicultural
+                OR = {
+                    has_ideology = ideology:ideology_multicultural
+                    has_ideology = ideology:ideology_multicultural_inclusive
+                }
             }
             multiply = {
                 value = 5
@@ -535,16 +539,20 @@ movement_civil_rights = {
             limit = {
                 literacy_rate > 0.9
             }
-            add = 20
-            desc = "HIGH_LITERACY"			
+            add = {
+                value = 20
+                desc = "HIGH_LITERACY"
+            }
         }
 
         if = {
             limit = {
                 standard_of_living > state.average_expected_sol
             }
-            add = 10
-            desc = "HIGH_STANDARD_OF_LIVING"
+            add = {
+                value = 10
+                desc = "HIGH_STANDARD_OF_LIVING"
+            }
         }
 
         if = {
