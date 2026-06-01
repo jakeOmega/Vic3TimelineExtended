@@ -105,6 +105,13 @@ world_war_conditions_met = {
 	# Not already in a world war
 	NOT = { has_variable = ww_active_phase }
 	NOT = { has_variable = ww_peace_concluded }
+	# Global singleton guard: only one world war may run at a time. The ROOT-only
+	# checks above stop the *initiating* GP re-triggering, but ww_active_phase is set
+	# only on the two primary belligerents (world_war_events.5), so a non-belligerent
+	# third GP would otherwise pass and fire its own world_war_events.5, overwriting the
+	# singleton ww_main_aggressor/ww_main_defender scopes. Mirrors can_join_world_war's
+	# global form below.
+	NOT = { any_country = { has_variable = ww_active_phase } }
 	# Must have at least one great power rival with opposed ideology
 	any_rival_country = {
 		country_rank >= rank_value:great_power

@@ -18,5 +18,6 @@
  movement_crushed_segregation_enforced_modifier:0 "Segregation Enforced"
  movement_crushed_segregation_enforced_modifier_desc:0 "With dissent silenced, the regime has tightened racial and cultural segregation under the full force of law."
  movement_environmental:0 "Environmental Movement"
+ movement_environmental_name:0 "Environmental Movement"
  movement_transhumanist:0 "Transhumanist Movement"
  movement_transhumanist_name:0 "$movement_transhumanist$"

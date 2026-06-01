@@ -62,6 +62,8 @@
  ministry_fa_diplomacy_cautious_desc:0 "A smaller positive boost to ministry law enactment progress from a recent event."
  ministry_fa_diplomacy_stall:0 "Foreign Affairs Ministry: Diplomacy Stall"
  nuke_diplo_action:0 "Nuclear Weapon Industrial Strike"
+ nuke_diplo_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has launched a Nuclear Weapon Industrial Strike."
+ nuke_diplo_action_action_notification_name:0 "Nuclear Weapon Industrial Strike Launched"
  nuke_diplo_action_desc:0 "Launch a [concept_nuclear_strike] on an industrial center."
  pacific_rim_pact:0 "Pacific Rim Pact"
  peace_rally_diplomatic_leverage_modifier:0 "Peace Rally Diplomatic Leverage"
