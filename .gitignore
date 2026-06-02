@@ -17,6 +17,7 @@ docs/audits/.nightly_last_run
 *.pid
 generated_images/
 scripts/image_pipeline/preview_law_icons/
+scripts/image_pipeline/company_logos_generated/
 .venv/
 /tests/
 rules_found.txt
