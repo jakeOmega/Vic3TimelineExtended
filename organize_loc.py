@@ -57,7 +57,11 @@ def find_notification_keys(project_directory):
             if file.endswith(".txt"):
                 with open(os.path.join(root, file), "r", encoding="utf-8-sig") as f:
                     for line in f:
-                        match = re.match(r"^\s*([\w\._]+)\s*=\s*{", line)
+                        # Hyphen must be in the class: message base keys like
+                        # `headlines_tech_e-commerce` would otherwise truncate to
+                        # `headlines_tech_e`, stranding the real notification keys
+                        # (notification_headlines_tech_e-commerce_*) as "unused".
+                        match = re.match(r"^\s*([\w\.\-]+)\s*=\s*{", line)
                         if match:
                             base_key = match.group(1)
                             notification_keys.add(f"notification_{base_key}_name")
