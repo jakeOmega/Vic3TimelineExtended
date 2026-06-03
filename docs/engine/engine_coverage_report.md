@@ -2,6 +2,8 @@
 
 # Engine Coverage Report
 
+> ⚠️ Engine docs are 0 days older than the most recent mod edit; some unknowns may be entries added after the last in-game regeneration.
+
 ## Engine doc snapshot timestamps
 
 - `custom-localization`: 2026-05-29T02:49:10+00:00
@@ -11,7 +13,7 @@
 - `on-actions`: 2026-05-29T02:49:10+00:00
 - `triggers`: 2026-05-29T02:49:10+00:00
 
-Most recent mod file mtime: 2026-05-28T03:35:12+00:00
+Most recent mod file mtime: 2026-05-29T19:45:02+00:00
 
 ## Summary
 

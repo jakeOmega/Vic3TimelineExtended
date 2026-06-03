@@ -1,0 +1,118 @@
+{
+  "date": "2026-06-01",
+  "run_label": "2026-06-01",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/heir_education_events.txt",
+      "line_range": null,
+      "lines": 317,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/parties/populist_party.txt",
+      "line_range": null,
+      "lines": 339,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/irredentism_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/movement_events_te.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/new_ideological_movements.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_method_groups/resettlement_pmgs.txt",
+      "line_range": null,
+      "lines": 38,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_progress_bars/heir_education_progress_bars.txt",
+      "line_range": null,
+      "lines": 6,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-17",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  ]
+}
