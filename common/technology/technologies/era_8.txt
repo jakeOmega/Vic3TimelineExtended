@@ -69,7 +69,6 @@ modern_pharmaceuticals = {
 		country_institution_health_system_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_modern_pharma_pb_principles_bool = yes
-		country_modern_pharma_pb_principles_bool = yes
 	}
 
 	unlocking_technologies = {
@@ -93,7 +92,6 @@ containerization = {
 		state_market_access_price_impact = 0.01
 		country_loan_interest_rate_add = -0.02
 		country_institution_ministry_of_commerce_max_investment_add = 1
-		country_containerization_pb_principles_bool = yes
 		country_containerization_pb_principles_bool = yes
 	}
 
@@ -190,7 +188,6 @@ robotics = {
 	modifier = {
 		country_max_weekly_construction_progress_add = 15
 		country_robotics_pb_principles_bool = yes
-		country_robotics_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -252,7 +249,6 @@ environmental_movement = {
 		country_institution_ministry_of_the_environment_max_investment_add = 2
 		state_building_national_park_max_level_add = 1
 		country_voting_power_mult = 0.1
-		country_env_movement_pb_principles_bool = yes
 		country_env_movement_pb_principles_bool = yes
 	}
 
@@ -327,7 +323,6 @@ gene_splicing = {
 		state_arable_land_mult = 0.30
 		country_institution_ministry_of_science_max_investment_add = 1
 		country_gene_splicing_pb_principles_bool = yes
-		country_gene_splicing_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -367,7 +362,6 @@ cellular_networks = {
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_voting_power_mult = 0.1
-		country_cellular_pb_principles_bool = yes
 		country_cellular_pb_principles_bool = yes
 	}
 

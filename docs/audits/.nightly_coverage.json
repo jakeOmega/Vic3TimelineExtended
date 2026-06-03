@@ -105,8 +105,8 @@
       "recent_findings": 0
     },
     "common/company_charter_types/extra_charters.txt": {
-      "audit_count": 3,
-      "last_audited": "2026-05-27",
+      "audit_count": 4,
+      "last_audited": "2026-06-03",
       "recent_findings": 0
     },
     "common/country_definitions/te_formable_countries.txt": {
@@ -146,9 +146,9 @@
       "recent_findings": 0
     },
     "common/decrees/modified.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-21",
-      "recent_findings": 1
+      "audit_count": 2,
+      "last_audited": "2026-06-03",
+      "recent_findings": 0
     },
     "common/defines/extra_defines.txt": {
       "audit_count": 1,
@@ -241,6 +241,11 @@
     "common/harvest_condition_types/extra_harvest_condition_types.txt": {
       "audit_count": 1,
       "last_audited": "2026-06-02",
+      "recent_findings": 0
+    },
+    "common/history/extra_history.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
       "recent_findings": 0
     },
     "common/history/te_construction_market_global.txt": {
@@ -363,8 +368,8 @@
       "recent_findings": 0
     },
     "common/mobilization_option_groups/extra_mobilization_groups.txt": {
-      "audit_count": 2,
-      "last_audited": "2026-05-24",
+      "audit_count": 3,
+      "last_audited": "2026-06-03",
       "recent_findings": 0
     },
     "common/mobilization_options/_mobilization_options.info": {
@@ -604,6 +609,11 @@
     "common/power_bloc_identities/extra_power_bloc_identities.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-23",
+      "recent_findings": 0
+    },
+    "common/power_bloc_identities/te_subjugation_identity_overrides.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
       "recent_findings": 0
     },
     "common/power_bloc_principle_groups/_power_bloc_principle_groups.info": {
@@ -1185,6 +1195,42 @@
     "common/subject_types/modified.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-17",
+      "recent_findings": 1
+    },
+    "common/technology/eras/00_eras.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
+      "recent_findings": 0
+    },
+    "common/technology/technologies/era_10.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
+      "recent_findings": 0
+    },
+    "common/technology/technologies/era_11.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
+      "recent_findings": 0
+    },
+    "common/technology/technologies/era_6.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
+    },
+    "common/technology/technologies/era_8.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
+      "recent_findings": 1
+    },
+    "common/technology/technologies/modified.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-03",
       "recent_findings": 1
     },
     "common/technology/technologies/sol_expectations_vanilla_injections.txt": {
