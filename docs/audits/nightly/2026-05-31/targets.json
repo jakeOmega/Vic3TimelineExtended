@@ -1,0 +1,141 @@
+{
+  "date": "2026-05-31",
+  "run_label": "2026-05-31",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/post_scarcity_events.txt",
+      "line_range": null,
+      "lines": 428,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/extra_ideologies.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_modifiers_l_english.yml",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/irredentism_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/law_groups/extra_law_groups.txt",
+      "line_range": null,
+      "lines": 191,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/sol_expectations_vanilla_injections.txt",
+      "line_range": null,
+      "lines": 67,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movement_pop_support/extra_political_movement_pop_support.txt",
+      "line_range": null,
+      "lines": 7,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-21",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    {
+      "path": "common/scripted_progress_bars/heir_education_progress_bars.txt",
+      "line_range": null,
+      "lines": 6,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-17",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/modified_political_movements.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-29",
+      "audit_count": 4,
+      "recent_findings": 0
+    }
+  ]
+}
