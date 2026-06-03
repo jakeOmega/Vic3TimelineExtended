@@ -52,3 +52,44 @@ gui_tp_count = {
 		add = var:tp_count
 	}
 }
+
+# ============================================================================
+# DIRECTIONAL BILATERAL TRADE VOLUME (market scope, GUI-only)
+# Used by the Import/Export Partners charts in market_panel.gui. The chart
+# evaluates these via a GuiScope where root = the panel's market and
+# scope:base_market = the partner market (the iterated chart item):
+#   GuiScope.SetRoot( <panel market>.MakeScope )
+#           .AddScope('base_market', <partner market>.MakeScope)
+#           .ScriptValue('gui_imports_from_target')
+# market_imports/market_exports return total *units* of goods (not value).
+# ============================================================================
+
+# Units the root market imports from scope:base_market.
+gui_imports_from_target = {
+	value = "market_imports(scope:base_market)"
+}
+
+# Units the root market exports to scope:base_market.
+gui_exports_to_target = {
+	value = "market_exports(scope:base_market)"
+}
+
+# ----------------------------------------------------------------------------
+# Ordering helpers for the partner-market lists built in trade_partner_effects.txt.
+# Evaluated in an *iterated* market scope; scope:tp_current_market = the market
+# whose partner lists are being built (the panel's market).
+#   market_exports(scope:tp_current_market) in iterated scope
+#       = iterated exports to current = current's IMPORTS from iterated.
+#   market_imports(scope:tp_current_market) in iterated scope
+#       = iterated imports from current = current's EXPORTS to iterated.
+# ----------------------------------------------------------------------------
+
+# Volume the current market imports from the iterated market (import-partner sort).
+te_tp_exports_to_current = {
+	value = "market_exports(scope:tp_current_market)"
+}
+
+# Volume the current market exports to the iterated market (export-partner sort).
+te_tp_imports_from_current = {
+	value = "market_imports(scope:tp_current_market)"
+}
