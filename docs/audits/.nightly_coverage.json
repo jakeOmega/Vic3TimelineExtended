@@ -26,9 +26,30 @@
       "last_audited": "2026-05-16",
       "recent_findings": 1
     },
+    "common/building_groups/extra_building_groups.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "recent_findings": 0
+    },
     "common/building_groups/te_construction_market_groups.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/buildings/te_construction_market_site.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "recent_findings": 0
+    },
+    "common/buildings/wonders.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
       "recent_findings": 0
     },
     "common/character_interactions/extra_interactions.txt": {
@@ -177,8 +198,8 @@
       "recent_findings": 1
     },
     "common/discrimination_traits/extra_traits.txt": {
-      "audit_count": 3,
-      "last_audited": "2026-05-27",
+      "audit_count": 4,
+      "last_audited": "2026-06-02",
       "recent_findings": 0
     },
     "common/dynamic_country_names/te_formable_countries.txt": {
@@ -207,10 +228,20 @@
       "last_audited": "2026-05-16",
       "recent_findings": 0
     },
+    "common/goods/timeline_extended_extra_goods.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "recent_findings": 1
+    },
     "common/government_types/timeline_extended_governments.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-17",
       "recent_findings": 1
+    },
+    "common/harvest_condition_types/extra_harvest_condition_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "recent_findings": 0
     },
     "common/history/extra_history.txt": {
       "audit_count": 1,
@@ -611,13 +642,40 @@
       "recent_findings": 0
     },
     "common/production_method_groups/resettlement_pmgs.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-06-01",
+      "audit_count": 2,
+      "last_audited": "2026-06-02",
       "recent_findings": 0
     },
     "common/production_method_groups/strategic_reserve_pmgs.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-29",
+      "recent_findings": 0
+    },
+    "common/production_method_groups/unique_pm_groups.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/production_methods/extra_pms.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "common/production_methods/strategic_reserve_pms.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-02",
       "recent_findings": 0
     },
     "common/production_methods/te_construction_market_pms.txt": {
@@ -1176,9 +1234,9 @@
       "recent_findings": 1
     },
     "common/technology/technologies/sol_expectations_vanilla_injections.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-31",
-      "recent_findings": 2
+      "audit_count": 2,
+      "last_audited": "2026-06-02",
+      "recent_findings": 0
     },
     "common/treaty_articles/101_disband_company.txt": {
       "audit_count": 1,
