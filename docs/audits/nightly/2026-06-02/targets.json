@@ -1,0 +1,163 @@
+{
+  "date": "2026-06-02",
+  "run_label": "2026-06-02",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/production_method_groups/unique_pm_groups.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/buildings/te_construction_market_site.txt",
+      "line_range": null,
+      "lines": 87,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_method_groups/resettlement_pmgs.txt",
+      "line_range": null,
+      "lines": 38,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/goods/timeline_extended_extra_goods.txt",
+      "line_range": null,
+      "lines": 165,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/buildings/wonders.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_methods/strategic_reserve_pms.txt",
+      "line_range": null,
+      "lines": 85,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_methods/extra_pms.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/harvest_condition_types/extra_harvest_condition_types.txt",
+      "line_range": null,
+      "lines": 176,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/building_groups/extra_building_groups.txt",
+      "line_range": null,
+      "lines": 81,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/sol_expectations_vanilla_injections.txt",
+      "line_range": null,
+      "lines": 67,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/discrimination_traits/extra_traits.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_pops_reference.md"
+      ],
+      "last_audited": "2026-05-27",
+      "audit_count": 3,
+      "recent_findings": 0
+    }
+  ]
+}
