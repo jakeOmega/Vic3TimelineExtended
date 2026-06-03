@@ -1,0 +1,158 @@
+{
+  "date": "2026-06-03",
+  "run_label": "2026-06-03",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/technology/technologies/era_6.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/era_8.txt",
+      "line_range": null,
+      "lines": 471,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/modified.txt",
+      "line_range": null,
+      "lines": 207,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/era_10.txt",
+      "line_range": null,
+      "lines": 381,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/era_11.txt",
+      "line_range": null,
+      "lines": 459,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/eras/00_eras.txt",
+      "line_range": null,
+      "lines": 49,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/history/extra_history.txt",
+      "line_range": null,
+      "lines": 251,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_states_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/power_bloc_identities/te_subjugation_identity_overrides.txt",
+      "line_range": null,
+      "lines": 68,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/decrees/modified.txt",
+      "line_range": null,
+      "lines": 9,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_states_reference.md"
+      ],
+      "last_audited": "2026-05-21",
+      "audit_count": 1,
+      "recent_findings": 1
+    },
+    {
+      "path": "common/mobilization_option_groups/extra_mobilization_groups.txt",
+      "line_range": null,
+      "lines": 4,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_war_reference.md"
+      ],
+      "last_audited": "2026-05-24",
+      "audit_count": 2,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_charter_types/extra_charters.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": "2026-05-27",
+      "audit_count": 3,
+      "recent_findings": 0
+    }
+  ]
+}
