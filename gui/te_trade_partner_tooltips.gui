@@ -1,0 +1,106 @@
+﻿# Per-partner goods-breakdown tooltip for the "Top Trade Partners" table and the
+# Import/Export Partners charts in gui/market_panel.gui.
+#
+# The invoking widget supplies two data contexts (evaluated in-panel, where
+# MarketPanel is available):
+#   Market  -> the panel's market (set to "[MarketPanel.GetMarket]" on the
+#              tooltip instance; NOT GetPlayer.GetMarket, which is const and
+#              cannot be iterated, and NOT Scope.GetMarket, which market_panel
+#              does not expose).
+#   Country -> the partner country (table rows inherit it from the row datacontext;
+#              chart slices set "[Market.GetOwner]" on the tooltip instance).
+# The partner market is Country.GetMarket.
+#
+# Per-good per-pair amounts come from the vanilla GUI promotes
+# GetImportedAmountFromMarket / GetExportedAmountToMarket (cf. vanilla
+# gui/custom_tooltip.gui:3055,3119). Amounts are goods *units*; the parenthesised
+# value is units * per-unit market price. Lesson drawn from the
+# alcah/victoria3-tradepartners mod (per-good per-market data is reachable from the
+# GUI layer even though the script layer can't pass a goods parameter).
+
+types TooltipTypes {
+
+	type RegularTooltip_TE_TradePartnerGoods = RegularTooltip {
+		blockoverride "tooltip_content_after" {
+			# Market = panel market; Country = partner country; Country.GetMarket = partner market.
+			flowcontainer = {
+				direction = vertical
+				margin_top = 5
+
+				# Header: partner identity
+				textbox = {
+					autoresize = yes
+					align = nobaseline
+					maximumsize = { 360 -1 }
+					raw_text = "#tooltip_header [Country.GetFlagTextIcon] [Country.GetNameNoFormatting]#!"
+				}
+
+				# --- Imports: goods this market imports FROM the partner ---
+				textbox = {
+					autoresize = yes
+					align = nobaseline
+					margin_top = 6
+					raw_text = "#title @market_imports! Imported from them:#!"
+				}
+				flowcontainer = {
+					direction = vertical
+					margin_top = 2
+					datamodel = "[Market.GetImports]"
+
+					item = {
+						flowcontainer = {
+							visible = "[GreaterThanOrEqualTo_CFixedPoint(Market.GetImportedAmountFromMarket(Country.GetMarket.Self, Goods.Self), '(CFixedPoint)1')]"
+							spacing = 6
+							margin_left = 8
+							margin_bottom = 1
+
+							icon = {
+								size = { 20 20 }
+								texture = "[Goods.GetTexture]"
+								parentanchor = vcenter
+							}
+							textbox = {
+								autoresize = yes
+								align = vcenter|nobaseline
+								raw_text = "[Goods.GetNameNoFormatting]: [Market.GetImportedAmountFromMarket(Country.GetMarket.Self, Goods.Self)|v0]  (@money![Multiply_CFixedPoint(Goods.GetMarketPrice, Market.GetImportedAmountFromMarket(Country.GetMarket.Self, Goods.Self))|D])"
+							}
+						}
+					}
+				}
+
+				# --- Exports: goods this market exports TO the partner ---
+				textbox = {
+					autoresize = yes
+					align = nobaseline
+					margin_top = 6
+					raw_text = "#title @market_exports! Exported to them:#!"
+				}
+				flowcontainer = {
+					direction = vertical
+					margin_top = 2
+					datamodel = "[Market.GetExports]"
+
+					item = {
+						flowcontainer = {
+							visible = "[GreaterThanOrEqualTo_CFixedPoint(Market.GetExportedAmountToMarket(Country.GetMarket.Self, Goods.Self), '(CFixedPoint)1')]"
+							spacing = 6
+							margin_left = 8
+							margin_bottom = 1
+
+							icon = {
+								size = { 20 20 }
+								texture = "[Goods.GetTexture]"
+								parentanchor = vcenter
+							}
+							textbox = {
+								autoresize = yes
+								align = vcenter|nobaseline
+								raw_text = "[Goods.GetNameNoFormatting]: [Market.GetExportedAmountToMarket(Country.GetMarket.Self, Goods.Self)|v0]  (@money![Multiply_CFixedPoint(Goods.GetMarketPrice, Market.GetExportedAmountToMarket(Country.GetMarket.Self, Goods.Self))|D])"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

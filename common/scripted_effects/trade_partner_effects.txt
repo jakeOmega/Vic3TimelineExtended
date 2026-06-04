@@ -10,10 +10,14 @@
 #   tp_X_exp_rel = export reliance % on partner (0-100)
 #   tp_count     = number of trade partners found (1-5)
 #
-# NOTE: Per-good per-partner trade data is NOT available from the engine.
-# market_imports_reliance(target) in parenthesized form only passes the target
-# parameter, not the goods parameter. All goods evaluate to the same total
-# reliance, making ordered_market_goods sort by default order (not per-good).
+# NOTE: Per-good per-partner trade data is not reachable from the SCRIPT layer
+# here: market_imports_reliance(target) in parenthesized form only passes the
+# target parameter, not the goods parameter, so all goods evaluate to the same
+# total reliance (ordered_market_goods then sorts by default order, not per-good).
+# It IS reachable from the GUI layer, though: Market.GetImportedAmountFromMarket(
+# otherMarket, Goods) / Market.GetExportedAmountToMarket(otherMarket, Goods) give
+# per-good per-market-pair amounts. The Top Trade Partners rows use exactly that
+# for their goods-breakdown tooltip (see gui/te_trade_partner_tooltips.gui).
 
 # ============================================================================
 # HELPER: store data for one trade partner rank
@@ -135,6 +139,50 @@ update_market_trade_partners = {
 	scope:tp_market_owner = {
 		set_variable = { name = tp_count value = var:tp_idx }
 		remove_variable = tp_idx
+	}
+
+	# ------------------------------------------------------------------------
+	# Sorted, partner-only market lists for the Import/Export Partners charts
+	# (gui/market_panel.gui). compact_chart cannot hide zero-trade legend rows,
+	# so the datamodel must be pre-filtered here. Capped at 15 to bound the
+	# monthly every_market cost (chart shows top few + "show more").
+	# Mirrors alcah/victoria3-tradepartners' trade_partners_set_*_partners.
+	# ------------------------------------------------------------------------
+	scope:tp_market_owner = {
+		clear_variable_list = te_tp_import_markets
+		clear_variable_list = te_tp_export_markets
+	}
+
+	# Import partners: markets THIS market imports FROM (they export to us), desc.
+	ordered_market = {
+		limit = {
+			NOT = { this = scope:tp_current_market }
+			te_tp_exports_to_current > 0
+		}
+		order_by = te_tp_exports_to_current
+		max = 15
+		check_range_bounds = no
+
+		save_temporary_scope_as = tp_iter_mkt
+		scope:tp_market_owner = {
+			add_to_variable_list = { name = te_tp_import_markets target = scope:tp_iter_mkt }
+		}
+	}
+
+	# Export partners: markets THIS market exports TO (they import from us), desc.
+	ordered_market = {
+		limit = {
+			NOT = { this = scope:tp_current_market }
+			te_tp_imports_from_current > 0
+		}
+		order_by = te_tp_imports_from_current
+		max = 15
+		check_range_bounds = no
+
+		save_temporary_scope_as = tp_iter_mkt
+		scope:tp_market_owner = {
+			add_to_variable_list = { name = te_tp_export_markets target = scope:tp_iter_mkt }
+		}
 	}
 
 	# Clean up temp globals

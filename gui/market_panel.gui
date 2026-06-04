@@ -386,7 +386,7 @@ types market_panel
 					}
 				}
 
-				### TE: World Market Trade by Country chart + Top Trade Partners table
+				### TE: Import/Export Partners charts + Top Trade Partners table
 				flowcontainer = {
 					visible = "[And(InformationPanel.IsTabSelected('world_market_trade'), Not(GetVariableSystem.Exists( 'market_world_market_charts' )))]"
 
@@ -394,40 +394,123 @@ types market_panel
 					margin_bottom = 10
 					parentanchor = hcenter
 
-					compact_chart = {
-						blockoverride "datamodel" {
-							datamodel = "[Market.AccessParticipants]"
+					### TE: Import Partners + Export Partners charts (side by side).
+					### Drawn from the alcah/victoria3-tradepartners mod: directional
+					### bilateral volume per partner market, with a per-good breakdown
+					### tooltip (RegularTooltip_TE_TradePartnerGoods).
+					### Panel-correct: market_panel does not expose its market as an ambient
+					### script Scope (Scope.GetMarket errors "No context supplied"), and
+					### GetPlayer.GetMarket is const (cannot be iterated). We use
+					### MarketPanel.GetMarket (the panel's own market — non-const, available
+					### nested) as the viewing market. Datamodel items are partner markets
+					### from the pre-filtered/sorted lists built in trade_partner_effects.txt;
+					### per-pair volume = GuiScope.SetRoot(MarketPanel.GetMarket)
+					### .AddScope('base_market', <partner>).ScriptValue('gui_imports/exports_*').
+					flowcontainer = {
+						spacing = 10
+						margin_bottom = 10
+						parentanchor = hcenter
+
+						compact_chart = {
+							blockoverride "datamodel" {
+								datamodel = "[MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_import_markets')]"
+							}
+
+							blockoverride "show_more_button_visibility" {
+								visible = "[GreaterThan_int32(GetDataModelSize(MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_import_markets')), '(int32)3')]"
+							}
+
+							blockoverride "heading" {
+								raw_text = "#title @market_imports! Import Partners#!"
+							}
+
+							blockoverride "tooltip" {
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[Scope.GetMarket.GetOwner]"
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
+							}
+
+							blockoverride "pieslice" {
+								value = "[FixedPointToFloat(GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_imports_from_target'))]"
+							}
+
+							blockoverride "color" {
+								color = "[Scope.GetMarket.GetOwner.GetMapColor]"
+							}
+
+							blockoverride "pie_item_goto_button" {
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									onclick = "[InformationPanelBar.OpenMarketPanel(Scope.GetMarket.Self)]"
+								}
+							}
+
+							blockoverride "leftside_info" {
+								visible = no
+							}
+
+							blockoverride "rightside1_info" {
+								text = "[Scope.GetMarket.GetOwner.GetFlagTextIcon] [GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_imports_from_target')|v0]"
+							}
+
+							blockoverride "rightside2_info" {
+								visible = no
+							}
 						}
 
-						blockoverride "show_more_button_visibility" {
-							visible = no
-						}
+						compact_chart = {
+							blockoverride "datamodel" {
+								datamodel = "[MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_export_markets')]"
+							}
 
-						blockoverride "heading" {
-							raw_text = "#title Trade by Country#!"
-						}
+							blockoverride "show_more_button_visibility" {
+								visible = "[GreaterThan_int32(GetDataModelSize(MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_export_markets')), '(int32)3')]"
+							}
 
-						blockoverride "tooltip" {
-							raw_tooltip = "[Country.GetName]: @money![Country.MakeScope.ScriptValue('gui_country_total_trade_value')|D] world market trade"
-						}
+							blockoverride "heading" {
+								raw_text = "#title @market_exports! Export Partners#!"
+							}
 
-						blockoverride "pieslice" {
-							value = "[FixedPointToFloat(Country.MakeScope.ScriptValue('gui_country_total_trade_value'))]"
-						}
+							blockoverride "tooltip" {
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[Scope.GetMarket.GetOwner]"
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
+							}
 
-						blockoverride "color" {
-							color = "[Country.GetMapColor]"
-						}
+							blockoverride "pieslice" {
+								value = "[FixedPointToFloat(GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_exports_to_target'))]"
+							}
 
-						blockoverride "pie_item_goto_button" {}
+							blockoverride "color" {
+								color = "[Scope.GetMarket.GetOwner.GetMapColor]"
+							}
 
-						blockoverride "rightside1_info" {
-							text = "[Country.GetFlagTextIcon] @money![Country.MakeScope.ScriptValue('gui_country_total_trade_value')|D]"
-						}
+							blockoverride "pie_item_goto_button" {
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									onclick = "[InformationPanelBar.OpenMarketPanel(Scope.GetMarket.Self)]"
+								}
+							}
 
-						blockoverride "rightside2_info" {
-							visible = no
-							using = elide_fontsize_min
+							blockoverride "leftside_info" {
+								visible = no
+							}
+
+							blockoverride "rightside1_info" {
+								text = "[Scope.GetMarket.GetOwner.GetFlagTextIcon] [GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_exports_to_target')|v0]"
+							}
+
+							blockoverride "rightside2_info" {
+								visible = no
+							}
 						}
 					}
 
@@ -535,7 +618,11 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								tooltip = "TP_TRADE_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
 							}
 							textbox = {
 								raw_text = "[Market.GetOwner.MakeScope.Var('tp_1_imp_rel').GetValue|1]%"
@@ -589,7 +676,11 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								tooltip = "TP_TRADE_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
 							}
 							textbox = {
 								raw_text = "[Market.GetOwner.MakeScope.Var('tp_2_imp_rel').GetValue|1]%"
@@ -643,7 +734,11 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								tooltip = "TP_TRADE_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
 							}
 							textbox = {
 								raw_text = "[Market.GetOwner.MakeScope.Var('tp_3_imp_rel').GetValue|1]%"
@@ -697,7 +792,11 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								tooltip = "TP_TRADE_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
 							}
 							textbox = {
 								raw_text = "[Market.GetOwner.MakeScope.Var('tp_4_imp_rel').GetValue|1]%"
@@ -752,7 +851,11 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								tooltip = "TP_TRADE_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
 							}
 							textbox = {
 								raw_text = "[Market.GetOwner.MakeScope.Var('tp_5_imp_rel').GetValue|1]%"

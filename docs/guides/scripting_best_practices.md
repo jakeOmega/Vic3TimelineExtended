@@ -1667,6 +1667,46 @@ For country-scoped modifiers accessed from state context:
 ```
 This works in loc keys referenced by `text = "LOC_KEY"` or `tooltip = "LOC_KEY"` in the GUI file.
 
+### Per-good per-market trade data: GUI layer can, script layer cannot
+The **script** layer cannot get the trade of one specific good with one specific
+market: `market_imports_reliance(target)` / `market_exports_reliance(target)` in
+the parenthesised script-value form only accept the *target market*, not a goods
+parameter, so every good evaluates to the same total reliance. The **GUI** layer
+*can*, via two vanilla promotes (cf. vanilla `gui/custom_tooltip.gui:3055,3119`):
+```
+[Market.GetImportedAmountFromMarket( OtherMarket.Self, Goods.Self )]   # units of Goods that Market imports from OtherMarket
+[Market.GetExportedAmountToMarket(   OtherMarket.Self, Goods.Self )]   # units of Goods that Market exports to OtherMarket
+```
+Iterate `Market.GetImports` / `Market.GetExports` (the goods datamodels) and gate
+each item on `... >= '(CFixedPoint)1'`. Aggregate directional volume between two
+markets is `market_imports(scope:X)` / `market_exports(scope:X)` (units, *not*
+value) — wrap in a named script value and call from GUI via
+`GuiScope.SetRoot(A.MakeScope).AddScope('base_market', B.MakeScope).ScriptValue('...')`.
+
+Scope gotchas, all hit while building this feature (verified against `debug.log`):
+- **The panel's market in `market_panel` is `MarketPanel.GetMarket`.** It is *not*
+  exposed as an ambient script `Scope` — `Scope.GetMarket` in a plain expression
+  errors `No context supplied … type 'Scope'`. And `GetPlayer.GetMarket` is **const**
+  (can't be iterated: `Invalid promote 'GetMarket' … requires non const promote`),
+  so it can't drive `.GetImports`/`.GetExports`. Use `MarketPanel.GetMarket`
+  (non-const, available nested) — also keeps the feature correct on *foreign* panels.
+- **A `…MakeScope.GetList('var_list')` datamodel yields script scopes, so each item
+  is read via `Scope.GetMarket` — NOT the typed `Market`.** Inside such items the
+  typed `Market` stays the *ambient* (panel) market, so using `Market` for the item
+  silently shows every row as the panel itself trading with itself (= 0). This bit us:
+  charts rendered N rows all showing the player's own market and `0`.
+- A detached **tooltip** does not get the panel market for free; pass it on the
+  tooltip instance (`datacontext = "[MarketPanel.GetMarket]"`) and the partner via
+  the invoker's `Country` (rows inherit it; chart slices set
+  `datacontext = "[Scope.GetMarket.GetOwner]"`).
+
+There is no vanilla all-markets datamodel inside `market_panel` that can be filtered
+per item (compact_chart can't hide zero rows), so partner charts need pre-filtered/
+sorted variable lists built in script. Worked example: the Top Trade Partners goods
+tooltip + Import/Export Partners charts in `gui/market_panel.gui` /
+`gui/te_trade_partner_tooltips.gui` + `common/scripted_effects/trade_partner_effects.txt`
+(drawn from the `alcah/victoria3-tradepartners` mod).
+
 ## Game Concept Tooltips for Breakdowns
 
 ### Purpose
