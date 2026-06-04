@@ -93,7 +93,6 @@ green_revolution = {
 	modifier = {
 		state_arable_land_mult = 1.20
 		country_green_revolution_pb_principles_bool = yes
-		country_green_revolution_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -122,7 +121,6 @@ civil_rights_movement = {
 		country_acceptance_shared_heritage_trait_group_add = 5
 		country_acceptance_no_shared_heritage_trait_add = 10
 		state_building_resettlement_camp_max_level_add = 5
-		country_civil_rights_pb_principles_bool = yes
 		country_civil_rights_pb_principles_bool = yes
 	}
 
@@ -369,7 +367,6 @@ ICBMs = {
 		country_diplomatic_play_maneuvers_add = 10
 		country_nuclear_weapon_attack_success_add = 0.5
 		country_icbm_pb_principles_bool = yes
-		country_icbm_pb_principles_bool = yes
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
 
@@ -398,7 +395,6 @@ tactical_nuclear_weapons = {
 		country_prestige_mult = 0.1
 		country_weekly_innovation_max_add = 50
 		state_building_barrack_max_level_add = 50
-		country_tactical_nukes_pb_principles_bool = yes
 		country_tactical_nukes_pb_principles_bool = yes
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
@@ -558,7 +554,6 @@ anti_war_movement = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		state_building_barrack_max_level_add = 50
 		country_anti_war_pb_principles_bool = yes
-		country_anti_war_pb_principles_bool = yes
 	}
 
 	unlocking_technologies = {
@@ -588,7 +583,6 @@ modern_urban_planning = {
 		state_migration_crowding_density_mult = 0.2
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
 		country_modern_urban_planning_pb_principles_bool = yes
-		country_modern_urban_planning_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -613,7 +607,6 @@ satellite_communications = {
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 		country_satcom_pb_principles_bool = yes
 		country_space_race_max_funding_add = 1
-		country_satcom_pb_principles_bool = yes
 	}
 
 	ai_weight = {
