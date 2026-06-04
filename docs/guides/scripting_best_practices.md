@@ -519,6 +519,7 @@ The same family as the per-building `_mult` pitfall, but along a different axis:
 - **Invalid:** `[ROOT.GetName]` — engine logs `Could not find data system function 'GetName' in 'ROOT.GetName'` and the loc string fails to render (everything up to the broken token disappears).
 - **Valid:** `[ROOT.GetCountry.GetName]`, `[ROOT.GetCountry.GetAdjective]`.
 - For script values: vanilla uses `[GetPlayer.MakeScope.ScriptValue('...')]`, though `[ROOT.ScriptValue('...')]` appears to work in some contexts.
+- **The `scope:journal_entry` saved scope *propagates* into events `trigger_event`-fired from a JE context** (immediate / `on_monthly_pulse`). So a `type = country_event` fired from a JE can call JE-scoped effects on it directly: `scope:journal_entry = { set_bar_progress = { name = X value = root.var:Y } }`. Vanilla precedent: `lands_of_anarchy.1` (fired from `06_morocco_lands_of_anarchy.txt` immediate) reads `scope:journal_entry.scripted_bar_progress(...)` in its options without re-saving the scope. Use this for resyncing a `set_bar_progress`-driven bar after an event option mutates the bar's backing variable — **there is no `je:<je_key>` accessor** to fetch a JE instance from country scope (that token only appears as a comment, never valid script). This is why `heir_education_events.1/.2/.3` resync `heir_education_progress_bar` via `scope:journal_entry`, matching `je_heir_education`'s own `on_monthly_pulse`.
 
 ## `market_goods_pricier` Is a Delta, Not a Multiplier
 
