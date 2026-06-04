@@ -1,0 +1,124 @@
+{
+  "date": "2026-06-04",
+  "run_label": "2026-06-04",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/wonder_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_technology_reference.md",
+        "docs/vanilla/wonder_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/space_race_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_technology_reference.md",
+        "docs/vanilla/wonder_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/society_technology_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_technology_reference.md",
+        "docs/vanilla/wonder_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/technology/technologies/era_7.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "technologies",
+      "docs": [
+        "docs/vanilla/vanilla_technology_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/buildings/strategic_reserve.txt",
+      "line_range": null,
+      "lines": 98,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_rules/extra_rules.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-30",
+      "audit_count": 6,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-30",
+      "audit_count": 3,
+      "recent_findings": 0
+    }
+  ]
+}
