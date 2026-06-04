@@ -350,9 +350,25 @@ def get_all_modifiers_for_tech(tech_name):
     return modifiers
 
 
+def _modifier_already_present(block_body, modifier_name):
+    """True if modifier_name already appears as a key (`<name> = ...`) in block_body."""
+    return re.search(r'(?m)^\s*' + re.escape(modifier_name) + r'\s*=', block_body) is not None
+
+
+def _filter_new_modifiers(block_body, modifier_names):
+    """Return the modifier_names not already present in block_body, preserving order.
+
+    Idempotency guard (issue #191): the appenders below splice modifier lines into
+    an existing block unconditionally, so a second run would double every modifier
+    without this filter. The engine's `Duplicated key` warning only fires on
+    top-level entity collisions, never on duplicate keys inside a block.
+    """
+    return [m for m in modifier_names if not _modifier_already_present(block_body, m)]
+
+
 def add_modifiers_to_tech_file(filepath, tech_modifiers_map):
     """Add boolean modifiers to technology definitions in a file.
-    
+
     tech_modifiers_map: { tech_name: [modifier_name, ...] }
     """
     with open(filepath, 'r', encoding='utf-8-sig') as f:
@@ -375,10 +391,14 @@ def add_modifiers_to_tech_file(filepath, tech_modifiers_map):
 
         match = pattern_with_content.search(content)
         if match:
+            new_mods = _filter_new_modifiers(match.group(2), modifier_names)
+            if not new_mods:
+                continue  # all modifiers already present — idempotent no-op
+            new_lines = '\n'.join(f'\t\t{m} = yes' for m in new_mods)
             # Insert modifier lines before the closing } of modifier block
             content = (
                 content[:match.end(2)]
-                + '\n' + modifier_lines
+                + '\n' + new_lines
                 + content[match.start(3):]
             )
             continue
@@ -440,11 +460,14 @@ def add_inject_entries_to_modified(filepath, tech_modifiers_map):
             )
             match = pattern.search(content)
             if match:
-                content = (
-                    content[:match.end(2)]
-                    + '\n' + modifier_lines
-                    + content[match.start(3):]
-                )
+                new_mods = _filter_new_modifiers(match.group(2), modifier_names)
+                if new_mods:
+                    new_lines = '\n'.join(f'\t\t{m} = yes' for m in new_mods)
+                    content = (
+                        content[:match.end(2)]
+                        + '\n' + new_lines
+                        + content[match.start(3):]
+                    )
             else:
                 print(f"  WARNING: Found INJECT:{tech_name} but couldn't parse modifier block")
         else:
@@ -678,11 +701,24 @@ def main():
     with open(loc_path, 'r', encoding='utf-8-sig') as f:
         loc_content = f.read()
 
-    # Append new entries before the end of the file
-    loc_content = loc_content.rstrip() + '\n' + loc_entries
-    with open(loc_path, 'w', encoding='utf-8-sig') as f:
-        f.write(loc_content)
-    print(f"  Added localization entries to {os.path.basename(loc_path)}")
+    # Append new entries before the end of the file, skipping any loc key already
+    # present in this file (idempotency guard — issue #191). This dedups the
+    # within-file double-run case; organize_loc.py separately handles cross-file
+    # relocation of these keys (last-wins), so no lingering dupes survive a reload.
+    existing_loc_keys = set(re.findall(r'(?m)^\s*([\w.]+:\d+)\s', loc_content))
+    new_loc_lines = []
+    for line in loc_entries.splitlines():
+        key_match = re.match(r'\s*([\w.]+:\d+)\s', line)
+        if key_match and key_match.group(1) in existing_loc_keys:
+            continue
+        new_loc_lines.append(line)
+    if new_loc_lines:
+        loc_content = loc_content.rstrip() + '\n' + '\n'.join(new_loc_lines) + '\n'
+        with open(loc_path, 'w', encoding='utf-8-sig') as f:
+            f.write(loc_content)
+        print(f"  Added {len(new_loc_lines)} localization line(s) to {os.path.basename(loc_path)}")
+    else:
+        print(f"  No new localization entries for {os.path.basename(loc_path)} (all present)")
 
     print("\n" + "=" * 60)
     print("DONE! Remember to run: python organize_loc.py")
