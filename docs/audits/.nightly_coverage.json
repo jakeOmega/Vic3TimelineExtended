@@ -36,6 +36,11 @@
       "last_audited": "2026-05-26",
       "recent_findings": 0
     },
+    "common/buildings/strategic_reserve.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-04",
+      "recent_findings": 0
+    },
     "common/buildings/te_construction_market_site.txt": {
       "audit_count": 1,
       "last_audited": "2026-06-02",
@@ -265,8 +270,8 @@
       "recent_findings": 2
     },
     "common/ideologies/manual_update_ideologies.txt": {
-      "audit_count": 3,
-      "last_audited": "2026-05-30",
+      "audit_count": 4,
+      "last_audited": "2026-06-04",
       "recent_findings": 0
     },
     "common/institutions/_institutions.info": {
@@ -1015,8 +1020,8 @@
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "audit_count": 6,
-      "last_audited": "2026-05-30",
+      "audit_count": 7,
+      "last_audited": "2026-06-04",
       "recent_findings": 0
     },
     "common/scripted_triggers/civil_rights_triggers.txt": {
@@ -1223,6 +1228,17 @@
       ],
       "recent_findings": 1
     },
+    "common/technology/technologies/era_7.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-04",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 2
+    },
     "common/technology/technologies/era_8.txt": {
       "audit_count": 1,
       "last_audited": "2026-06-03",
@@ -1408,6 +1424,28 @@
       ],
       "recent_findings": 0
     },
+    "events/society_technology_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-04",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "events/space_race_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-04",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
     "events/surveillance_events.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-30",
@@ -1436,6 +1474,17 @@
     "events/un_vote_events.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-17",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "events/wonder_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-04",
       "partial_coverage": [
         [
           1,
