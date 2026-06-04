@@ -55,6 +55,11 @@ heir_education_events.1 = {
 			text = HEIR_ED_TOTAL_PLUS_1
 			change_variable = { name = heir_ed_total add = 1 }
 		}
+		# Resync the JE progress bar so the on-screen value reflects this award immediately
+		# (scope:journal_entry propagates from the JE on_monthly_pulse that fires this event).
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
 		ai_chance = { base = 10 }
 	}
 
@@ -77,6 +82,9 @@ heir_education_events.1 = {
 		custom_tooltip = {
 			text = HEIR_ED_TOTAL_PLUS_3
 			change_variable = { name = heir_ed_total add = 3 }
+		}
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 		}
 		add_modifier = { name = heir_education_innovation_cost days = 180 is_decaying = yes }
 		add_radicals = {
@@ -122,6 +130,9 @@ heir_education_events.2 = {
 			text = HEIR_ED_TOTAL_PLUS_1
 			change_variable = { name = heir_ed_total add = 1 }
 		}
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
 		if = {
 			limit = { has_variable = heir_ed_focus_military }
 			custom_tooltip = {
@@ -161,6 +172,9 @@ heir_education_events.2 = {
 				change_variable = { name = heir_ed_total add = -1 }
 			}
 		}
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -183,6 +197,9 @@ heir_education_events.2 = {
 		custom_tooltip = {
 			text = HEIR_ED_TOTAL_PLUS_1
 			change_variable = { name = heir_ed_total add = 1 }
+		}
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 		}
 		add_modifier = { name = heir_education_innovation_cost days = 60 is_decaying = yes }
 		ai_chance = { base = 3 }
@@ -237,6 +254,9 @@ heir_education_events.3 = {
 			text = HEIR_ED_TOTAL_PLUS_2
 			change_variable = { name = heir_ed_total add = 2 }
 		}
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
+		}
 		# Exposure to foreign ideas pushes slightly progressive
 		custom_tooltip = {
 			text = HEIR_ED_IDEOLOGY_PROGRESSIVE
@@ -277,6 +297,9 @@ heir_education_events.3 = {
 		custom_tooltip = {
 			text = HEIR_ED_TOTAL_PLUS_1
 			change_variable = { name = heir_ed_total add = 1 }
+		}
+		scope:journal_entry = {
+			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
 		}
 		custom_tooltip = {
 			text = HEIR_ED_IDEOLOGY_CONSERVATIVE
