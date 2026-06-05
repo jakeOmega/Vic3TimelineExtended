@@ -44,7 +44,7 @@ un_found_button = {
 			# 5-year founding window: any GP that joins during this window becomes
 			# a permanent member (until the 5 seats fill). After it expires, new
 			# permanent members can only be created via the expulsion-promotion vote.
-			set_global_variable = { name = un_founding_window_active days = long_modifier_time }
+			set_global_variable = { name = un_founding_window_active days = normal_modifier_time }
 			# Founder becomes first member, HQ host, and founding member
 			je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 			je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
