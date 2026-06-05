@@ -140,6 +140,11 @@
       "last_audited": "2026-05-16",
       "recent_findings": 0
     },
+    "common/customizable_localization/st_res_custom_loc.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
+      "recent_findings": 0
+    },
     "common/customizable_localization/zzz_extra_custom_loc.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-24",
@@ -501,8 +506,8 @@
       "recent_findings": 1
     },
     "common/on_actions/langreform_events_on_actions.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-16",
+      "audit_count": 2,
+      "last_audited": "2026-06-05",
       "recent_findings": 0
     },
     "common/on_actions/law_events_on_actions.txt": {
@@ -526,8 +531,8 @@
       "recent_findings": 0
     },
     "common/on_actions/repeatable_events_on_actions.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-16",
+      "audit_count": 2,
+      "last_audited": "2026-06-05",
       "recent_findings": 0
     },
     "common/on_actions/social_tensions_on_actions.txt": {
@@ -591,8 +596,8 @@
       "recent_findings": 0
     },
     "common/political_movements/modified_political_movements.txt": {
-      "audit_count": 5,
-      "last_audited": "2026-05-31",
+      "audit_count": 6,
+      "last_audited": "2026-06-05",
       "recent_findings": 0
     },
     "common/political_movements/new_ideological_movements.txt": {
@@ -812,6 +817,11 @@
       ],
       "recent_findings": 1
     },
+    "common/scripted_buttons/civil_rights_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
+      "recent_findings": 0
+    },
     "common/scripted_buttons/colonial_empire_buttons.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-18",
@@ -821,6 +831,17 @@
       "audit_count": 1,
       "last_audited": "2026-05-25",
       "recent_findings": 0
+    },
+    "common/scripted_buttons/un_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
     },
     "common/scripted_effects/banking_cycle_effects.txt": {
       "audit_count": 1,
@@ -900,6 +921,17 @@
     "common/scripted_effects/headlines_effects.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-21",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/heir_education_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
       "recent_findings": 0
     },
     "common/scripted_effects/ig_approval_effects.txt": {
@@ -984,6 +1016,11 @@
       "last_audited": "2026-05-27",
       "recent_findings": 0
     },
+    "common/scripted_effects/trade_partner_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
+      "recent_findings": 0
+    },
     "common/scripted_effects/treaty_article_effects.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-19",
@@ -997,6 +1034,11 @@
     "common/scripted_guis/te_construction_market_scripted_gui.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-26",
+      "recent_findings": 0
+    },
+    "common/scripted_progress_bars/extra_progress_bars.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
       "recent_findings": 0
     },
     "common/scripted_progress_bars/heir_education_progress_bars.txt": {
@@ -1020,8 +1062,8 @@
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "audit_count": 7,
-      "last_audited": "2026-06-04",
+      "audit_count": 8,
+      "last_audited": "2026-06-05",
       "recent_findings": 0
     },
     "common/scripted_triggers/civil_rights_triggers.txt": {
@@ -1544,6 +1586,11 @@
           600
         ]
       ],
+      "recent_findings": 0
+    },
+    "gui/te_trade_partner_tooltips.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-06-05",
       "recent_findings": 0
     },
     "gui/treaty_panel.gui": {
