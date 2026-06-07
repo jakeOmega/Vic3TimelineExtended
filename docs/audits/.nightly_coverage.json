@@ -16,6 +16,11 @@
       "last_audited": "2026-05-16",
       "recent_findings": 0
     },
+    "common/ai_strategies/edited_default_strategy.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-07",
+      "recent_findings": 0
+    },
     "common/ai_strategies/other.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-19",
@@ -141,8 +146,8 @@
       "recent_findings": 0
     },
     "common/customizable_localization/st_res_custom_loc.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-06-05",
+      "audit_count": 2,
+      "last_audited": "2026-06-07",
       "recent_findings": 0
     },
     "common/customizable_localization/zzz_extra_custom_loc.txt": {
@@ -511,8 +516,8 @@
       "recent_findings": 1
     },
     "common/on_actions/langreform_events_on_actions.txt": {
-      "audit_count": 2,
-      "last_audited": "2026-06-05",
+      "audit_count": 3,
+      "last_audited": "2026-06-07",
       "recent_findings": 0
     },
     "common/on_actions/law_events_on_actions.txt": {
@@ -839,8 +844,8 @@
       "recent_findings": 1
     },
     "common/scripted_buttons/civil_rights_buttons.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-06-05",
+      "audit_count": 2,
+      "last_audited": "2026-06-07",
       "recent_findings": 0
     },
     "common/scripted_buttons/colonial_empire_buttons.txt": {
@@ -851,6 +856,22 @@
     "common/scripted_buttons/covert_warfare_scripted_buttons.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-25",
+      "recent_findings": 0
+    },
+    "common/scripted_buttons/cultural_hegemony_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-07",
+      "recent_findings": 0
+    },
+    "common/scripted_buttons/space_race_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-07",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
       "recent_findings": 0
     },
     "common/scripted_buttons/st_res_buttons.txt": {
@@ -879,6 +900,11 @@
         ]
       ],
       "recent_findings": 1
+    },
+    "common/scripted_buttons/world_war_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-07",
+      "recent_findings": 0
     },
     "common/scripted_effects/agricultural_diffusion_effects.txt": {
       "audit_count": 1,
