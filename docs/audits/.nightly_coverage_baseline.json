@@ -1,4 +1,5 @@
 {
+  "as_of": "2026-06-07",
   "files": {
     "common/_meta/duplicate_image_allowlist.yml": {
       "audit_count": 1,
