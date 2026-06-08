@@ -217,7 +217,7 @@ company_hp = {
 		has_technology_researched = transistors
 	}
 	ai_construction_targets = {
-		building_electrics_industry = {
+		building_electrics_industry_appliances = {
 			level = 10
 		}
 	}
