@@ -1,0 +1,11 @@
+{
+  "common/discrimination_traits/extra_traits.txt": 0,
+  "common/game_rules/extra_game_rules.txt": 0,
+  "common/ideologies/manual_update_ideologies.txt": 0,
+  "common/production_methods/resettlement_pms.txt": 0,
+  "common/scripted_rules/extra_rules.txt": 0,
+  "events/te_construction_market_building_events.txt": 0,
+  "gui/construction_panel.gui": 1,
+  "gui/tooltip.gui": 1,
+  "gui/treaty_draft_panel.gui": 0
+}
