@@ -1,0 +1,141 @@
+{
+  "date": "2026-06-09",
+  "run_label": "2026-06-09",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/game_rules/extra_game_rules.txt",
+      "line_range": null,
+      "lines": 157,
+      "area": "journal_entries",
+      "docs": [
+        "README.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gui/tooltip.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gui/treaty_draft_panel.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gui/construction_panel.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/production_methods/resettlement_pms.txt",
+      "line_range": null,
+      "lines": 506,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/te_construction_market_building_events.txt",
+      "line_range": null,
+      "lines": 34,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_economy_reference.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/discrimination_traits/extra_traits.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_pops_reference.md"
+      ],
+      "last_audited": "2026-06-02",
+      "audit_count": 4,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_rules/extra_rules.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-06-06",
+      "audit_count": 9,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-06-08",
+      "audit_count": 5,
+      "recent_findings": 0
+    }
+  ]
+}
