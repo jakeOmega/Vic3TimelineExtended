@@ -1,0 +1,157 @@
+{
+  "date": "2026-06-13",
+  "run_label": "2026-06-13",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/treaty_article_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/diplomatic_actions/te_force_become_subject.txt",
+      "line_range": null,
+      "lines": 172,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/international_relations_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/power_bloc_principle_groups/extra_power_bloc_principle_groups.txt",
+      "line_range": null,
+      "lines": 340,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/treaty_articles/108_cultural_exchange.txt",
+      "line_range": null,
+      "lines": 215,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/power_bloc_names/extra_power_bloc_names.txt",
+      "line_range": null,
+      "lines": 211,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/treaty_articles/102_minority_protection.txt",
+      "line_range": null,
+      "lines": 359,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_diplomacy_reference.md",
+        "docs/vanilla/treaty_articles_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/modified_political_movements.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-31",
+      "audit_count": 5,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-06-04",
+      "audit_count": 4,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/discrimination_traits/extra_traits.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_pops_reference.md"
+      ],
+      "last_audited": "2026-06-02",
+      "audit_count": 4,
+      "recent_findings": 0
+    }
+  ]
+}

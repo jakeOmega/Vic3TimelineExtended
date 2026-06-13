@@ -192,6 +192,11 @@
       "last_audited": "2026-05-16",
       "recent_findings": 2
     },
+    "common/diplomatic_actions/te_force_become_subject.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
+      "recent_findings": 0
+    },
     "common/diplomatic_plays/_diplomatic_plays.info": {
       "audit_count": 1,
       "last_audited": "2026-05-17",
@@ -203,8 +208,8 @@
       "recent_findings": 1
     },
     "common/discrimination_traits/extra_traits.txt": {
-      "audit_count": 4,
-      "last_audited": "2026-06-02",
+      "audit_count": 5,
+      "last_audited": "2026-06-13",
       "recent_findings": 0
     },
     "common/dynamic_country_names/te_formable_countries.txt": {
@@ -270,8 +275,8 @@
       "recent_findings": 2
     },
     "common/ideologies/manual_update_ideologies.txt": {
-      "audit_count": 4,
-      "last_audited": "2026-06-04",
+      "audit_count": 5,
+      "last_audited": "2026-06-13",
       "recent_findings": 0
     },
     "common/institutions/_institutions.info": {
@@ -591,8 +596,8 @@
       "recent_findings": 0
     },
     "common/political_movements/modified_political_movements.txt": {
-      "audit_count": 5,
-      "last_audited": "2026-05-31",
+      "audit_count": 6,
+      "last_audited": "2026-06-13",
       "recent_findings": 0
     },
     "common/political_movements/new_ideological_movements.txt": {
@@ -621,9 +626,19 @@
       "last_audited": "2026-06-03",
       "recent_findings": 0
     },
+    "common/power_bloc_names/extra_power_bloc_names.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
+      "recent_findings": 0
+    },
     "common/power_bloc_principle_groups/_power_bloc_principle_groups.info": {
       "audit_count": 1,
       "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/power_bloc_principle_groups/extra_power_bloc_principle_groups.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
       "recent_findings": 0
     },
     "common/power_bloc_principles/_power_bloc_principles.info": {
@@ -1259,6 +1274,11 @@
       "last_audited": "2026-05-23",
       "recent_findings": 0
     },
+    "common/treaty_articles/102_minority_protection.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
+      "recent_findings": 0
+    },
     "common/treaty_articles/102_seize_company.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-23",
@@ -1272,6 +1292,11 @@
     "common/treaty_articles/106_religious_mission_rights.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-17",
+      "recent_findings": 0
+    },
+    "common/treaty_articles/108_cultural_exchange.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
       "recent_findings": 0
     },
     "common/treaty_articles/109_enforce_emissions_reduction.txt": {
@@ -1325,6 +1350,17 @@
       "audit_count": 1,
       "last_audited": "2026-06-01",
       "recent_findings": 3
+    },
+    "events/international_relations_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 1
     },
     "events/irredentism_events.txt": {
       "audit_count": 2,
@@ -1469,6 +1505,17 @@
     "events/te_map_modes_events.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "events/treaty_article_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-13",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
       "recent_findings": 0
     },
     "events/un_vote_events.txt": {
