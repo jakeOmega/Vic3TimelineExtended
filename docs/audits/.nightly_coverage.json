@@ -428,6 +428,11 @@
       "last_audited": "2026-05-16",
       "recent_findings": 0
     },
+    "common/modifier_type_definitions/movement_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "recent_findings": 0
+    },
     "common/modifier_type_definitions/nuclear_program_modifier_types.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-16",
@@ -837,6 +842,16 @@
       "last_audited": "2026-05-25",
       "recent_findings": 0
     },
+    "common/scripted_buttons/cultural_hegemony_buttons.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "recent_findings": 0
+    },
+    "common/scripted_effects/agricultural_diffusion_effects.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "recent_findings": 0
+    },
     "common/scripted_effects/banking_cycle_effects.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-19",
@@ -1035,8 +1050,8 @@
       "recent_findings": 0
     },
     "common/scripted_rules/extra_rules.txt": {
-      "audit_count": 7,
-      "last_audited": "2026-06-04",
+      "audit_count": 8,
+      "last_audited": "2026-06-14",
       "recent_findings": 0
     },
     "common/scripted_triggers/civil_rights_triggers.txt": {
@@ -1492,6 +1507,11 @@
       "last_audited": "2026-05-16",
       "recent_findings": 0
     },
+    "events/te_construction_market_recalc_events.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "recent_findings": 0
+    },
     "events/te_formable_formation_events.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-27",
@@ -1561,6 +1581,17 @@
       "last_audited": "2026-05-16",
       "recent_findings": 0
     },
+    "gui/building_browser_panel.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
     "gui/building_details_panel.gui": {
       "audit_count": 1,
       "last_audited": "2026-05-20",
@@ -1577,6 +1608,28 @@
       "last_audited": "2026-05-20",
       "recent_findings": 0
     },
+    "gui/military_formation_panel.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
+    "gui/power_bloc_panel.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
+      "partial_coverage": [
+        [
+          1,
+          600
+        ]
+      ],
+      "recent_findings": 0
+    },
     "gui/principle_selection_window.gui": {
       "audit_count": 1,
       "last_audited": "2026-05-20",
@@ -1591,6 +1644,11 @@
           600
         ]
       ],
+      "recent_findings": 0
+    },
+    "gui/te_trade_partner_tooltips.gui": {
+      "audit_count": 1,
+      "last_audited": "2026-06-14",
       "recent_findings": 0
     },
     "gui/treaty_panel.gui": {
