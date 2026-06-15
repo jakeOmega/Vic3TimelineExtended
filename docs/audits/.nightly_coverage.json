@@ -299,10 +299,55 @@
       "last_audited": "2026-05-21",
       "recent_findings": 0
     },
+    "common/journal_entries/je_banking.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
     "common/journal_entries/je_colonial_empire.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-16",
       "recent_findings": 1
+    },
+    "common/journal_entries/je_covert_warfare.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
+    "common/journal_entries/je_heir_education.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
+    "common/journal_entries/je_human_augmentation.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 1
+    },
+    "common/journal_entries/je_mental_health.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
+    "common/journal_entries/je_post_scarcity.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
+    "common/journal_entries/je_strategic_reserve.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
+    "common/journal_entries/je_united_nations.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
+    },
+    "common/journal_entries/world_war_je.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
+      "recent_findings": 0
     },
     "common/journal_entry_groups/timeline_extended_je_groups.txt": {
       "audit_count": 1,
@@ -406,6 +451,11 @@
     "common/modifier_type_definitions/colonial_empire_modifier_types.txt": {
       "audit_count": 1,
       "last_audited": "2026-05-16",
+      "recent_findings": 0
+    },
+    "common/modifier_type_definitions/covert_warfare_modifier_types.txt": {
+      "audit_count": 1,
+      "last_audited": "2026-06-15",
       "recent_findings": 0
     },
     "common/modifier_type_definitions/cultural_hegemony_modifier_types.txt": {
@@ -1213,8 +1263,8 @@
       "recent_findings": 0
     },
     "common/static_modifiers/te_construction_market_modifiers.txt": {
-      "audit_count": 1,
-      "last_audited": "2026-05-16",
+      "audit_count": 2,
+      "last_audited": "2026-06-15",
       "recent_findings": 0
     },
     "common/static_modifiers/te_map_mode_modifiers.txt": {
