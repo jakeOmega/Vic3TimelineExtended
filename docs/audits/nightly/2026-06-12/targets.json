@@ -1,0 +1,153 @@
+{
+  "date": "2026-06-12",
+  "run_label": "2026-06-12",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "events/augmentation_events.txt",
+      "line_range": null,
+      "lines": 519,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/religious_revival_events.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/mental_health_events.txt",
+      "line_range": null,
+      "lines": 509,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/amendments/extra_amendments.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/geographic_regions/te_formable_regions.txt",
+      "line_range": null,
+      "lines": 218,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_states_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/te_construction_market_recalc_events.txt",
+      "line_range": null,
+      "lines": 29,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_economy_reference.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "localization/english/te_institutions_l_english.yml",
+      "line_range": null,
+      "lines": 22,
+      "area": "localization",
+      "docs": [
+        "docs/guides/event_creation_guide.md"
+      ],
+      "last_audited": "2026-05-17",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/modified_political_movements.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-06-08",
+      "audit_count": 7,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-06-09",
+      "audit_count": 6,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_charter_types/extra_charters.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": "2026-06-08",
+      "audit_count": 5,
+      "recent_findings": 0
+    }
+  ]
+}
