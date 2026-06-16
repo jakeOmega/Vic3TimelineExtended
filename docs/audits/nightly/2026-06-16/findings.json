@@ -1,0 +1,12 @@
+{
+  "common/customizable_localization/st_res_custom_loc.txt": 0,
+  "common/journal_entries/je_civil_rights.txt": 0,
+  "common/journal_entries/je_cultural_hegemony.txt": 0,
+  "common/journal_entries/je_digital_rights.txt": 0,
+  "common/journal_entries/je_global_warming.txt": 0,
+  "common/journal_entries/je_space_race.txt": 1,
+  "common/journal_entries/timeline_extended_journal_entries.txt": 0,
+  "common/on_actions/langreform_events_on_actions.txt": 0,
+  "common/script_values/colonial_empire_values.txt": 0,
+  "events/te_construction_market_building_events.txt": 0
+}
