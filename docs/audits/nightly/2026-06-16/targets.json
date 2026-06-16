@@ -1,0 +1,153 @@
+{
+  "date": "2026-06-16",
+  "run_label": "2026-06-16",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/journal_entries/timeline_extended_journal_entries.txt",
+      "line_range": null,
+      "lines": 513,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_cultural_hegemony.txt",
+      "line_range": null,
+      "lines": 416,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_space_race.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_civil_rights.txt",
+      "line_range": null,
+      "lines": 367,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_digital_rights.txt",
+      "line_range": null,
+      "lines": 106,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_global_warming.txt",
+      "line_range": null,
+      "lines": 100,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/colonial_empire_values.txt",
+      "line_range": null,
+      "lines": 150,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/customizable_localization/st_res_custom_loc.txt",
+      "line_range": null,
+      "lines": 203,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "events/te_construction_market_building_events.txt",
+      "line_range": null,
+      "lines": 34,
+      "area": "events",
+      "docs": [
+        "docs/guides/event_creation_guide.md",
+        "docs/vanilla/vanilla_economy_reference.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/on_actions/langreform_events_on_actions.txt",
+      "line_range": null,
+      "lines": 11,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  ]
+}
