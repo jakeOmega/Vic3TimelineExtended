@@ -7800,21 +7800,20 @@ pm_twisted_pair_copper_cables = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_lead_add = 10                            # Price:   40, Total cost:   400.0 (11.76%)
-			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (11.76%)
-			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (23.53%)
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (11.76%)
-			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (17.65%)
-			goods_input_lead_add = 20                            # Price:   40, Total cost:   800.0 (23.53%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (13.33%)
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (26.67%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (13.33%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (20.00%)
+			goods_input_lead_add = 20                            # Price:   40, Total cost:   800.0 (26.67%)
 			# Output goods
 			goods_output_telephones_add = 70                     # Price:   70, Total cost:  4900.0 (100.00%)
-			# Total input cost: 3400.0
+			# Total input cost: 3000.0
 			# Total output cost: 4900.0
-			# Profit: 1500.0
-			# Profit margin: 44.12%
-			# Zero profit price multiplier: 0.69
+			# Profit: 1900.0
+			# Profit margin: 63.33%
+			# Zero profit price multiplier: 0.61
 			# Employment: 4500
-			# Wage breakeven: 0.33
+			# Wage breakeven: 0.42
 		}
 
 		level_scaled = {
@@ -8542,25 +8541,24 @@ pm_integrated_circuits = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_fertilizer_add = 40                      # Price:   30, Total cost:  1200.0 (13.79%)
-			goods_input_electricity_add = 60                     # Price:   30, Total cost:  1800.0 (20.69%)
-			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (5.75%)
-			goods_input_lead_add = 10                            # Price:   40, Total cost:   400.0 (4.60%)
-			goods_input_tech_metals_add = 10                     # Price:   80, Total cost:   800.0 (9.20%)
-			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (4.60%)
-			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (9.20%)
-			goods_input_lead_add = 20                            # Price:   40, Total cost:   800.0 (9.20%)
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (4.60%)
-			goods_input_consumer_appliances_add = 20             # Price:   80, Total cost:  1600.0 (18.39%)
+			goods_input_fertilizer_add = 40                      # Price:   30, Total cost:  1200.0 (14.46%)
+			goods_input_electricity_add = 60                     # Price:   30, Total cost:  1800.0 (21.69%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (6.02%)
+			goods_input_tech_metals_add = 10                     # Price:   80, Total cost:   800.0 (9.64%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (4.82%)
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (9.64%)
+			goods_input_lead_add = 20                            # Price:   40, Total cost:   800.0 (9.64%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (4.82%)
+			goods_input_consumer_appliances_add = 20             # Price:   80, Total cost:  1600.0 (19.28%)
 			# Output goods
 			goods_output_electronic_components_add = 150         # Price:   80, Total cost: 12000.0 (100.00%)
-			# Total input cost: 8700.0
+			# Total input cost: 8300.0
 			# Total output cost: 12000.0
-			# Profit: 3300.0
-			# Profit margin: 37.93%
-			# Zero profit price multiplier: 0.72
+			# Profit: 3700.0
+			# Profit margin: 44.58%
+			# Zero profit price multiplier: 0.69
 			# Employment: 4500
-			# Wage breakeven: 0.73
+			# Wage breakeven: 0.82
 		}
 
 		level_scaled = {
@@ -18962,7 +18960,6 @@ pm_orbital_battlestation = {
 			unit_offense_mult = 0.05
 			unit_defense_mult = 0.05
 			unit_morale_recovery_mult = 0.05
-			country_nuclear_weapon_defense_chance_add = 0.10
 			unit_morale_damage_mult = 0.05
 			country_nuclear_weapon_defense_chance_add = 0.05
 		}

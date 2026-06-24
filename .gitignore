@@ -7,8 +7,16 @@ paths.local.json
 # docs/ is tracked; only runtime-derived dumps from auto-run generators are
 # excluded (regenerated on every server /reload, so they'd churn constantly).
 docs/engine/error_log_digest.md
+# Embeds per-run validation timestamps, so it re-diffs on every /reload regardless of
+# content changes — same churn rationale as error_log_digest above.
+docs/engine/engine_coverage_report.md
 docs/engine/commented_vanilla_pms.txt
 docs/engine/commented_vanilla_military_units.txt
+# Large generated concept-usage inventory (rebuilt by scripts/analysis/concept_usage_inventory.py);
+# a derived 3MB analysis dump, never a source artifact.
+scripts/analysis/concept_usage_inventory.json
+# Local-only cheat file kept in the working tree for testing; intentionally never committed.
+common/state_traits/te_harbor_traits.txt
 # Per-machine catch-up marker for the nightly audit wrapper (Windows Task Scheduler
 # gate); committing would force-overwrite every other developer's clock.
 docs/audits/.nightly_last_run

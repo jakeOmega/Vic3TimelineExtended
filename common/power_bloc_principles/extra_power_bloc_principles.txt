@@ -3689,7 +3689,6 @@ principle_engineering_and_logistics_3 = {
 		character_battle_condition_dug_in_mult = 0.5
 
 		character_convoy_protection_mult = 0.5
-		character_convoy_protection_mult = 0.5
 	}
 
 	ai_weight = {
@@ -3714,7 +3713,6 @@ principle_engineering_and_logistics_4 = {
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
 		character_convoy_protection_mult = 1
-		character_convoy_protection_mult = 1
 		unit_morale_recovery_mult = 0.25
 	}
 
@@ -3738,7 +3736,6 @@ principle_engineering_and_logistics_5 = {
 		character_battle_condition_dug_in_mult = 0.5
 		state_building_airport_max_level_add = 2
 		state_building_highway_max_level_add = 2
-		character_convoy_protection_mult = 1
 		character_convoy_protection_mult = 1
 		unit_morale_recovery_mult = 0.25
 

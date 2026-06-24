@@ -99,7 +99,6 @@ world_wide_web = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		country_www_pb_principles_bool = yes
 		country_intelligence_capacity_add = 2
-		country_www_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -146,7 +145,6 @@ clean_energy_technologies = {
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		country_clean_energy_pb_principles_bool = yes
-		country_clean_energy_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -171,7 +169,6 @@ supply_chain_management = {
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_supply_chain_pb_principles_bool = yes
 		country_st_res_oil_decay_add = -0.001
-		country_supply_chain_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -288,7 +285,6 @@ network_centric_warfare = {
 		country_ncw_pb_principles_bool = yes
 		ship_accuracy_mult = 0.10
 		ship_readiness_gain_add = 5
-		country_ncw_pb_principles_bool = yes
 		character_advancement_speed_mult = 0.15
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.10
@@ -320,7 +316,6 @@ missile_defense_systems = {
 	modifier = {
 		country_weekly_innovation_max_add = 100
 		country_nuclear_weapon_defense_chance_add = 0.5
-		country_missile_defense_pb_principles_bool = yes
 		country_missile_defense_pb_principles_bool = yes
 	}
 
@@ -389,7 +384,6 @@ rapid_deployment_forces = {
 		ship_naval_invasion_efficiency_mult = 0.20
 		ship_marine_capacity_mult = 0.20
 		ship_supply_efficiency_mult = 0.10
-		country_rapid_deploy_pb_principles_bool = yes
 		character_battle_condition_rapid_advance_mult = 1.0
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.5
 		country_st_res_tanks_decay_add = 0.005
@@ -420,7 +414,6 @@ globalization = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
-		country_globalization_pb_principles_bool = yes
 		country_globalization_pb_principles_bool = yes
 
 		# Colonial empire (je_colonial_empire): globalization makes empire
@@ -454,7 +447,6 @@ social_media = {
 		country_sol_expectations_target_add = 0.5
 		country_cultural_pull_mult = 0.15
 		country_intelligence_capacity_add = 2
-		country_social_media_pb_principles_bool = yes
 	}
 
 	ai_weight = {
@@ -496,7 +488,6 @@ knowledge_economy = {
 		country_institution_national_bank_max_investment_add = 1
 		country_knowledge_economy_pb_principles_bool = yes
 		country_space_race_max_funding_add = 1
-		country_knowledge_economy_pb_principles_bool = yes
 		state_literacy_growth_add = 0.00005
 
 		# Colonial empire (je_colonial_empire): information era makes empire
@@ -545,7 +536,6 @@ digital_education = {
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		country_institution_schools_max_investment_add = 1
 		state_education_access_add = -0.1
-		country_digital_ed_pb_principles_bool = yes
 		country_digital_ed_pb_principles_bool = yes
 		state_literacy_growth_add = 0.0001
 	}
@@ -663,7 +653,6 @@ advanced_workflow_optimization = {
 		country_max_weekly_construction_progress_add = 15
 		country_workflow_opt_pb_principles_bool = yes
 		country_st_res_oil_decay_add = -0.001
-		country_workflow_opt_pb_principles_bool = yes
 	}
 
 	ai_weight = {

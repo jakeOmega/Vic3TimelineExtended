@@ -3896,7 +3896,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### surveillance_events.100
 - **Title:** The Security State
-- **Description:** (no localization)
+- **Description:** The surveillance apparatus has won. With intrusive monitoring and an intelligence ministry in full operation, the state sees all and knows all. Digital rights are a forgotten dream.
 - **Flavor:** The cameras covered every street corner, every public building, every transport hub. Citizens had stopped noticing them.\n\n\"A successful surveillance state is not one that watches everyone,\" the minister said at the conference. \"It is one whose citizens have forgotten they are being watched.\"\n\n\"And ours have forgotten?\"\n\n\"Ours have. The cameras are simply part of the architecture now. Like lampposts. The footage is reviewed by no one in particular and everyone in general, which amounts to the same thing.\"
 - **Current image:** gfx/event_pictures/surveillance_state_complete.dds
 
