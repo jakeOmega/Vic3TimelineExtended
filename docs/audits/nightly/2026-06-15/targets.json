@@ -1,0 +1,165 @@
+{
+  "date": "2026-06-15",
+  "run_label": "2026-06-15",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/journal_entries/je_united_nations.txt",
+      "line_range": null,
+      "lines": 532,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/world_war_je.txt",
+      "line_range": null,
+      "lines": 324,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_human_augmentation.txt",
+      "line_range": null,
+      "lines": 116,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_covert_warfare.txt",
+      "line_range": null,
+      "lines": 569,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_strategic_reserve.txt",
+      "line_range": null,
+      "lines": 146,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_heir_education.txt",
+      "line_range": null,
+      "lines": 337,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_post_scarcity.txt",
+      "line_range": null,
+      "lines": 102,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_mental_health.txt",
+      "line_range": null,
+      "lines": 94,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_banking.txt",
+      "line_range": null,
+      "lines": 215,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/modifier_type_definitions/covert_warfare_modifier_types.txt",
+      "line_range": null,
+      "lines": 47,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/static_modifiers/te_construction_market_modifiers.txt",
+      "line_range": null,
+      "lines": 18,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    }
+  ]
+}
