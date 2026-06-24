@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-10",
+  "run_label": "2026-06-10",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "gui/politics_panel_overview.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gui/production_methods.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gui/market_panel.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "gui/power_bloc_formation_panel.gui",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "gui",
+      "docs": [
+        "docs/guides/gui_modding_guide.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/journal_entries/je_global_warming.txt",
+      "line_range": null,
+      "lines": 100,
+      "area": "journal_entries",
+      "docs": [
+        "docs/systems/journal_entry_systems.md",
+        "docs/systems/mod_systems.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    }
+  ]
+}

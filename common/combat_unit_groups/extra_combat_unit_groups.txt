@@ -1,4 +1,4 @@
-# NOTE: When adding new Groups, add a corresponding entry to gui/zzz_extra_goods_texticons.gui
+﻿# NOTE: When adding new Groups, add a corresponding entry to gui/zzz_extra_goods_texticons.gui
 # (vanilla convention from common/combat_unit_groups/00_combat_unit_groups.txt).
 # combat_unit_group entries carry only color + icon (and optionally default_group) —
 # type/manpower_max are not schema fields (manpower lives on combat_unit_type via max_manpower).

@@ -158,7 +158,6 @@
  SUBJECTS:0 "Subjects"
  TP_EXP_TOOLTIP:0 "#tooltip_header Export Reliance#!\nFraction of your market's [concept_sell_orders] filled by exports to [Country.GetName].\n\nHigher values mean this partner absorbs more of your exports."
  TP_IMP_TOOLTIP:0 "#tooltip_header Import Reliance#!\nFraction of your market's [concept_buy_orders] filled by imports from [Country.GetName].\n\nHigher values mean greater dependency on this partner for your imports."
- TP_TRADE_TOOLTIP:0 "#tooltip_header Bilateral Trade#!\nTotal value of goods traded between your market and [Country.GetName]'s market.\n\n#bold Trade Policy:#! [Country.GetActiveLawFromGroup('lawgroup_trade_policy').GetNameNoFormatting]"
  UN_ARMS_CONTROL:0 "Join Arms Control Treaty"
  UN_CHAMPION_ORDER:0 "Champion International Order"
  UN_DEFUND_DEVELOPMENT:0 "Withdraw Development Funding"

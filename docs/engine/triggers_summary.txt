@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log @ 2026-05-29T02:49:10+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log @ 2026-06-04T13:51:08+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 none|active_lens|Checks if the specified lens is open
 none|active_lens_option|Checks if the specified lens option is activated

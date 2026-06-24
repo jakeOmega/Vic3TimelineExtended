@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-05-29T02:49:10+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-06-04T13:51:08+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 
@@ -58,43 +58,43 @@ Dynamic-modifier templates parameterized over canonical vocabularies (goods, bui
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1021; missing entries: 1021
+- Vocab size: 1041; missing entries: 1041
 
 ### `building_{building}_employees_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1021; missing entries: 1021
+- Vocab size: 1041; missing entries: 1041
 
 ### `building_{building}_max_level_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1021; missing entries: 1021
+- Vocab size: 1041; missing entries: 1041
 
 ### `building_{building}_mortality_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1021; missing entries: 1021
+- Vocab size: 1041; missing entries: 1041
 
 ### `building_{building}_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **148**
-- Vocab size: 1021; missing entries: 873
+- Vocab size: 1041; missing entries: 893
 
 ### `building_{building}_throughput_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1021; missing entries: 1021
+- Vocab size: 1041; missing entries: 1041
 
 ### `building_{building}_unincorporated_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1021; missing entries: 1021
+- Vocab size: 1041; missing entries: 1041
 
 ### `country_institution_impact_{institution}_mult`
 
@@ -195,8 +195,8 @@ _Multiplicative bonus to a specific good's output._
 _State-scoped cap on a specific building's level._
 
 - Placeholder: `building` (vocab: `building`)
-- Members in engine docs: **300**
-- Vocab size: 1021; missing entries: 721
+- Members in engine docs: **310**
+- Vocab size: 1041; missing entries: 731
 
 ### `state_pop_qualifications_{poptype}_mult`
 

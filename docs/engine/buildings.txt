@@ -3222,6 +3222,56 @@ Sibur Tobolsk Petrochemical Complex (bg_company_buildings):
 	Sibur Tobolsk Complex:
 		Sibur Tobolsk Complex
 
+Rolls-Royce Derby Works (bg_company_buildings):
+	Rolls-Royce's Derby works, where master craftsmen build the world's finest aero-engines and motorcars by hand.
+	Rolls-Royce Derby Works:
+		Rolls-Royce Derby Works
+
+BP Refinery Complex (bg_company_buildings):
+	A sprawling British Petroleum refinery turning crude into fertilizer feedstock and explosives precursors.
+	BP Refinery Complex:
+		BP Refinery Complex
+
+Bayer Leverkusen Plant (bg_company_buildings):
+	Bayer's Leverkusen works, marrying industrial chemistry with pharmaceutical research.
+	Bayer Leverkusen Plant:
+		Bayer Leverkusen Plant
+
+Thyssen Steelworks (bg_company_buildings):
+	August Thyssen's vast Ruhr steelworks, a pillar of German heavy industry.
+	Thyssen Steelworks:
+		Thyssen Steelworks
+
+Boeing Everett Factory (bg_company_buildings):
+	Boeing's Everett assembly hall, among the largest buildings on earth, where airframes take shape.
+	Boeing Everett Factory:
+		Boeing Everett Factory
+
+Renault Billancourt Plant (bg_company_buildings):
+	Renault's Boulogne-Billancourt works on the Seine, a cathedral of French mass-production.
+	Renault Billancourt Plant:
+		Renault Billancourt Plant
+
+Michelin Clermont-Ferrand Works (bg_company_buildings):
+	Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber.
+	Michelin Clermont-Ferrand Works:
+		Michelin Clermont-Ferrand Works
+
+Pirelli Bicocca Plant (bg_company_buildings):
+	Pirelli's Bicocca works in Milan, producing tyres and the insulated cables wiring the modern world.
+	Pirelli Bicocca Plant:
+		Pirelli Bicocca Plant
+
+Jardine Princeps House (bg_company_buildings):
+	Jardine, Matheson & Co.'s Hong Kong head office, nerve centre of a sprawling China-coast trading empire.
+	Jardine Princeps House:
+		Jardine Princeps House
+
+Sumitomo Besshi Mine (bg_company_buildings):
+	The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.
+	Sumitomo Besshi Mine:
+		Sumitomo Besshi Mine
+
 Synthetic Clothes Industries (bg_heavy_industry):
 	Unlocking Technology: Art Silk
 	Synthetic Silk:
