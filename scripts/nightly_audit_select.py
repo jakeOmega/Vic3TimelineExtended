@@ -23,7 +23,11 @@ from datetime import date as Date, datetime
 from pathlib import Path
 from typing import Iterable
 
+import nightly_audit_state_update as nas_state
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
+# Derived, git-ignored cache of the folded state. Refreshed for human/tool
+# inspection; load_state() reconstructs from the baseline + deltas, not from here.
 STATE_FILE = REPO_ROOT / "docs/audits/.nightly_coverage.json"
 OUT_DIR_BASE = REPO_ROOT / "docs/audits/nightly"
 AUTOGEN_REGISTRY = REPO_ROOT / "docs/auto_generated_files.md"
@@ -343,16 +347,14 @@ def apply_filters(
 # --------------------------------------------------------------------------- #
 
 def load_state() -> dict:
-    if not STATE_FILE.exists():
-        return {"version": 1, "files": {}}
-    try:
-        with open(STATE_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return {"version": 1, "files": {}}
-    data.setdefault("version", 1)
-    data.setdefault("files", {})
-    return data
+    """Reconstruct per-file audit state from the frozen baseline + committed
+    per-run delta files. STATE_FILE itself is now a derived, git-ignored cache —
+    it is NOT the source of truth and is never read here. See
+    nightly_audit_state_update.py for why the shared aggregate was removed."""
+    state = nas_state.fold_state()
+    state.setdefault("version", 1)
+    state.setdefault("files", {})
+    return state
 
 
 # --------------------------------------------------------------------------- #
@@ -708,8 +710,8 @@ def render_prompt(date_str: str, run_label: str, targets: list[dict],
         lines.append("## Targeted run")
         lines.append("")
         lines.append("This run was scoped via filters — only the matching slice was selected.")
-        lines.append("Per-file state in `docs/audits/.nightly_coverage.json` should be updated")
-        lines.append("as normal (audited files age their staleness clock), but **do NOT update")
+        lines.append("Record per-file results as normal (write this run's `findings.json` via the")
+        lines.append("helper so audited files age their staleness clock), but **do NOT update")
         lines.append("`docs/audits/.nightly_last_run`** on completion — a full nightly audit")
         lines.append("hasn't run today and tonight's scheduled or manual full audit should still fire.")
         lines.append("")
@@ -860,17 +862,19 @@ def render_prompt(date_str: str, run_label: str, targets: list[dict],
     lines.append("")
     lines.append("After all targets are audited:")
     lines.append("")
-    lines.append("1. Update `docs/audits/.nightly_coverage.json` **via the helper script** — never hand-edit it (#166):")
+    lines.append("1. Record this run's per-file results **via the helper script** — it writes")
+    lines.append(f"   `docs/audits/nightly/{run_label}/findings.json` (your committed delta); never hand-edit state (#166):")
     lines.append("   ```bash")
     lines.append(f"   echo '{{\"path/to/file_a.txt\": 2, \"path/to/file_b.txt\": 0}}' | \\")
     lines.append(f"     python3 scripts/nightly_audit_state_update.py \\")
     lines.append(f"       --targets-json docs/audits/nightly/{run_label}/targets.json \\")
     lines.append(f"       --findings-json - --date {date_str}")
     lines.append("   ```")
-    lines.append(f"   The helper bumps `audit_count`, stamps `last_audited = {date_str}`, sets `recent_findings` from the map you pass (omit a path → 0), appends slice bounds to `partial_coverage` for sliced targets, and decays other entries older than {DECAY_DAYS} days. Hand-edits / `Edit`-tool appends silently lose data the next time the file is loaded — always go through the helper.")
-    lines.append("2. **State bump rides in a PR. Never direct-push to `main`.**")
-    lines.append("   - If there are auto-fix PRs this night: include the `.nightly_coverage.json` diff in the **first** auto-fix PR (or a dedicated coordinating PR — one PR per night carries the state diff).")
-    lines.append(f"   - If there are no auto-fix PRs: open a state-bump-only PR titled `nightly-audit({run_label}): state bump` from branch `nightly-audit/{run_label}-state-bump`. Enable auto-merge if available; otherwise leave open for manual merge.")
+    lines.append(f"   The helper writes `findings.json` (a `{{path: finding_count}}` map covering every target — omit a path → 0) next to your `targets.json`, then refreshes the git-ignored `docs/audits/.nightly_coverage.json` cache. Per-file state (`audit_count`, `last_audited = {date_str}`, `recent_findings`, `partial_coverage`, {DECAY_DAYS}-day decay) is reconstructed on read by replaying every run's `findings.json` over the frozen baseline — so the *delta* is what you commit, not the aggregate.")
+    lines.append("2. **State rides in a PR. Never direct-push to `main`.**")
+    lines.append(f"   - Commit your run's dated dir — `docs/audits/nightly/{run_label}/` (`prompt.md`, `targets.json`, `findings.json`) — in your PR. That dir IS the state delta.")
+    lines.append("   - **Do NOT commit `docs/audits/.nightly_coverage.json`** (the derived cache) or `.nightly_coverage_baseline.json` (frozen). They're git-ignored / immutable; committing the cache reintroduces the merge-conflict surface this design removed.")
+    lines.append(f"   - If there are auto-fix PRs this night, the dated dir can ride in the first one; otherwise open a state-only PR titled `nightly-audit({run_label}): state bump` from branch `nightly-audit/{run_label}-state-bump`. Either way, because each PR touches only its own dated dir, concurrent nightly PRs no longer conflict — merge in any order.")
     if with_report:
         lines.append("3. Write `docs/audits/nightly/<date>/report.md` summarizing what was looked at, what was passed over, and counts by finding type. Include it in the PR.")
     lines.append("")
@@ -978,6 +982,10 @@ def main(argv: list[str] | None = None) -> int:
 
     rng = seeded_rng(date_str)
     state = load_state()
+    if not args.dry_run:
+        # Keep the git-ignored cache fresh for humans/tools browsing current
+        # coverage. Reflects committed deltas (tonight's findings land at wrap-up).
+        nas_state.write_cache(state, STATE_FILE)
     candidates = enumerate_candidates()
     if targeted:
         filtered = apply_filters(candidates, areas, includes, excludes)

@@ -12,15 +12,18 @@ Each run:
    - `docs/audits/nightly/<date>/targets.json` — machine-readable manifest.
 3. **Claude reads the prompt** and audits the targets against the per-area checklists under `docs/audits/nightly_checklists/`.
 4. **Findings**: each finding is either fixed via PR (if "no more effort than filing an issue") or filed as a GitHub issue. Cap: 5 files / 50 lines changed per night across all auto-fix PRs.
-5. **State**: `docs/audits/.nightly_coverage.json` is updated and committed via PR (never direct-pushed to `main`). On nights with auto-fix PRs the state bump rides in the first PR; on nights without it goes in a `nightly-audit(YYYY-MM-DD): state bump` PR set to auto-merge.
-6. **Failure**: if the audit can't complete (context exhaustion, tool failure), Claude opens a `priority:critical` `nightly-audit:failure` issue and leaves the state file untouched so the next run re-selects the same targets.
+5. **State**: the run's results are recorded as `docs/audits/nightly/<date>/findings.json` (a `{path: finding_count}` delta) via `scripts/nightly_audit_state_update.py`, committed in the run's PR alongside `targets.json`. Per-file coverage state is *reconstructed on read* (see [State model](#state-model)), not stored in one shared file — so each night's PR touches only its own dated dir and concurrent nightly PRs never conflict. Never direct-push to `main`.
+6. **Failure**: if the audit can't complete (context exhaustion, tool failure), Claude opens a `priority:critical` `nightly-audit:failure` issue and writes no `findings.json` for the run, so the next run re-selects the same targets.
 
 ## Components
 
 | Path | Purpose |
 |---|---|
 | `scripts/nightly_audit_select.py` | Target selector, prompt generator. Stdlib only. |
-| `docs/audits/.nightly_coverage.json` | Per-file audit state. Committed. |
+| `scripts/nightly_audit_state_update.py` | Records a run's `findings.json` delta; reconstructs effective state via `fold_state()` (baseline + replayed deltas). |
+| `docs/audits/.nightly_coverage_baseline.json` | Frozen, committed snapshot of per-file state as of its `as_of` date. The replay base. |
+| `docs/audits/nightly/<run-label>/findings.json` | Generated per run — `{path: finding_count}` delta. Committed; the per-run source of truth for state. |
+| `docs/audits/.nightly_coverage.json` | **Derived, git-ignored cache** of the folded aggregate. Rebuilt on demand; never committed. |
 | `docs/audits/nightly_checklists/*.md` | 8 per-area checklists (events, journal_entries, laws_and_politics, production_methods_and_buildings, technologies, localization, gui, scripted_effects_and_triggers). |
 | `docs/audits/nightly/<run-label>/prompt.md` | Generated per run — the audit prompt. `<run-label>` is `<date>` for the first/scheduled run of the day, `<date>-v2`, `-v3`, ... for manual skill re-runs. |
 | `docs/audits/nightly/<run-label>/targets.json` | Generated per run — machine-readable target list. Includes the `run_label` field. |
@@ -113,10 +116,28 @@ Targeted runs:
 - Write to `docs/audits/nightly/<date>-<filter-slug>/` (e.g. `2026-05-17-localization-event/`). Re-run versioning (`-v2`, `-v3`) layers on top.
 - Set `targeted: true` and `skip_nightly_marker: true` in `targets.json`.
 - Do **not** update `docs/audits/.nightly_last_run` on completion — the partial slice doesn't satisfy the day's full-audit promise, so tonight's scheduled wrapper still fires. The skill's step 4 reads `skip_nightly_marker` and branches accordingly.
-- Do update `docs/audits/.nightly_coverage.json` per audited file via the prompt's wrap-up — those files naturally age and are less likely to be picked again by the next full nightly.
+- Do record per-file results via the prompt's wrap-up (`findings.json` for the dated dir) — those files naturally age and are less likely to be picked again by the next full nightly.
 - Exit 2 with a clear error if filters yield zero candidates (typo'd glob, empty intersection). Don't fall back to the unfiltered pool — that silently defeats the user's intent.
 
 The `/nightly-audit` skill (`.claude/skills/nightly-audit/SKILL.md`) accepts targeted-run requests in natural language and translates them into selector flags — see the translation table there.
+
+## State model
+
+Per-file coverage state (`audit_count`, `last_audited`, `recent_findings`, `partial_coverage`) is **not** stored in one committed file. It's reconstructed on every read as:
+
+```
+effective state  =  frozen baseline  +  replay(per-run findings.json deltas, in date order)
+```
+
+- **Baseline** — `docs/audits/.nightly_coverage_baseline.json`: a committed, immutable snapshot with an `as_of` date. Replayed deltas dated on/before `as_of` are skipped (already baked in), so it can never double-count. Only re-frozen by an explicit maintenance step.
+- **Deltas** — `docs/audits/nightly/<run-label>/findings.json`: one `{path: finding_count}` map per run, written by `nightly_audit_state_update.py`. Paired with that run's `targets.json` (file list + slice bounds + date) it fully describes the run's effect. This is the committed source of truth for everything after the baseline.
+- **Cache** — `docs/audits/.nightly_coverage.json`: the folded aggregate, **git-ignored and derived**. Refreshed by the selector and the state-update helper for human/tool inspection. Reading it is never authoritative; `nightly_audit_select.load_state()` always rebuilds from baseline + deltas.
+
+The replay reuses `update_state` per run, so recency/decay scoring is identical to the old write-time path (verified by `test_nightly_audit_state_update.py`).
+
+**Why:** the old single committed aggregate was the only file every nightly PR edited, so two unmerged nightly PRs conflicted on GitHub the moment either merged (#202/#204). A custom git merge driver can't fix that — GitHub's mergeability check and merge button don't run merge drivers. Splitting state into disjoint per-run delta files removes the shared merge surface entirely: each PR touches only its own dated dir, so they merge in any order, conflict-free. **Never commit the `.nightly_coverage.json` cache** — doing so re-creates the conflict surface.
+
+When the delta list grows unwieldy (years of nights), re-freeze: fold to a fresh baseline, bump `as_of`, and the older `findings.json` files become inert history.
 
 ## Tuning knobs
 

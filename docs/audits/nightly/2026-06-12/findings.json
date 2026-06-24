@@ -1,0 +1,12 @@
+{
+  "common/amendments/extra_amendments.txt": 0,
+  "common/company_charter_types/extra_charters.txt": 0,
+  "common/geographic_regions/te_formable_regions.txt": 0,
+  "common/ideologies/manual_update_ideologies.txt": 0,
+  "common/political_movements/modified_political_movements.txt": 0,
+  "events/augmentation_events.txt": 0,
+  "events/mental_health_events.txt": 0,
+  "events/religious_revival_events.txt": 1,
+  "events/te_construction_market_recalc_events.txt": 0,
+  "localization/english/te_institutions_l_english.yml": 0
+}
