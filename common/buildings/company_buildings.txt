@@ -10779,3 +10779,373 @@ building_sibur_tobolsk_complex = {
         }
     }
 }
+
+building_rolls_royce_derby_works = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/british_rolls_royce.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_rolls_royce_derby_works
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_rolls_royce
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_rolls_royce_derby_works
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_rolls_royce_derby_works
+					}
+				}
+			}
+		}
+	}
+}
+
+building_bp_refinery_complex = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/british_bp.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_bp_refinery_complex
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_bp
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_bp_refinery_complex
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_bp_refinery_complex
+					}
+				}
+			}
+		}
+	}
+}
+
+building_bayer_leverkusen_plant = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_bayer.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_bayer_leverkusen_plant
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_bayer
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_bayer_leverkusen_plant
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_bayer_leverkusen_plant
+					}
+				}
+			}
+		}
+	}
+}
+
+building_thyssen_steelworks = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_thyssen.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_thyssen_steelworks
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_thyssen
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_thyssen_steelworks
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_thyssen_steelworks
+					}
+				}
+			}
+		}
+	}
+}
+
+building_boeing_everett_factory = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_boeing.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_boeing_everett_factory
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_boeing
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_boeing_everett_factory
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_boeing_everett_factory
+					}
+				}
+			}
+		}
+	}
+}
+
+building_renault_billancourt_plant = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_renault.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_renault_billancourt_plant
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_renault
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_renault_billancourt_plant
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_renault_billancourt_plant
+					}
+				}
+			}
+		}
+	}
+}
+
+building_michelin_clermont_ferrand = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_michelin.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_michelin_clermont_ferrand
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_michelin
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_michelin_clermont_ferrand
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_michelin_clermont_ferrand
+					}
+				}
+			}
+		}
+	}
+}
+
+building_pirelli_bicocca_plant = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_pirelli.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_pirelli_bicocca_plant
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_pirelli
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_pirelli_bicocca_plant
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_pirelli_bicocca_plant
+					}
+				}
+			}
+		}
+	}
+}
+
+building_jardine_princeps_house = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/british_jardine_matheson.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_jardine_princeps_house
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_jardine_matheson
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_jardine_princeps_house
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_jardine_princeps_house
+					}
+				}
+			}
+		}
+	}
+}
+
+building_sumitomo_besshi_mine = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_sumitomo_besshi.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_sumitomo_besshi_mine
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_sumitomo
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_sumitomo_besshi_mine
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_sumitomo_besshi_mine
+					}
+				}
+			}
+		}
+	}
+}

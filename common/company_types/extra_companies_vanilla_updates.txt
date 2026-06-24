@@ -3530,3 +3530,13 @@ INJECT:company_zastava = {
 		state_building_zastava_kragujevac_arsenal_max_level_add = 1
 	}
 }
+
+INJECT:company_sumitomo = {
+	building_types = {
+		building_sumitomo_besshi_mine
+	}
+	prosperity_modifier = {
+		building_lead_mine_throughput_add = 0.10
+		state_building_sumitomo_besshi_mine_max_level_add = 1
+	}
+}

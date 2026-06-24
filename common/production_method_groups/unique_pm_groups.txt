@@ -1848,3 +1848,63 @@ pmg_sibur_tobolsk_complex = {
 # (Previously these were INJECT directives, but INJECT into mod-only
 # entities silently fails -- the PMs never made it into the merged
 # definitions. Caught by mod_structure_audit; merged inline 2026-05-08.)
+
+pmg_rolls_royce_derby_works = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_rolls_royce_derby_works }
+}
+
+pmg_bp_refinery_complex = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_bp_refinery_complex }
+}
+
+pmg_bayer_leverkusen_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_bayer_leverkusen_plant }
+}
+
+pmg_thyssen_steelworks = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_thyssen_steelworks }
+}
+
+pmg_boeing_everett_factory = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_boeing_everett_factory }
+}
+
+pmg_renault_billancourt_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_renault_billancourt_plant }
+}
+
+pmg_michelin_clermont_ferrand = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_michelin_clermont_ferrand }
+}
+
+pmg_pirelli_bicocca_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_pirelli_bicocca_plant }
+}
+
+pmg_jardine_princeps_house = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_jardine_princeps_house }
+}
+
+pmg_sumitomo_besshi_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_sumitomo_besshi_mine }
+}
