@@ -1,0 +1,140 @@
+{
+  "date": "2026-06-06",
+  "run_label": "2026-06-06",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/script_values/st_res_script_values.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/agricultural_diffusion_effects.txt",
+      "line_range": null,
+      "lines": 141,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_buttons/st_res_buttons.txt",
+      "line_range": null,
+      "lines": 349,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_effects/build_effects.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_buttons/timeline_extended_scripted_buttons.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/colonial_empire_values.txt",
+      "line_range": null,
+      "lines": 150,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/modifier_type_definitions/movement_modifier_types.txt",
+      "line_range": null,
+      "lines": 39,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/script_values/civil_rights_values.txt",
+      "line_range": null,
+      "lines": 20,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-05-16",
+      "audit_count": 1,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/scripted_rules/extra_rules.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "scripted_effects_and_triggers",
+      "docs": [
+        "docs/audits/script_parameterization_audit.md"
+      ],
+      "last_audited": "2026-06-05",
+      "audit_count": 8,
+      "recent_findings": 0
+    }
+  ]
+}

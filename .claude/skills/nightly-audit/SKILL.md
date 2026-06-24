@@ -57,16 +57,16 @@ If the curl fails or status isn't `running`, start the server yourself per CLAUD
      || date +%Y-%m-%d > docs/audits/.nightly_last_run
    ```
    - **Full runs** (`skip_nightly_marker: false`): write today's date so the headless wrapper (`scripts/run_nightly_audit.sh`) won't double-run if Windows Task Scheduler fires next. Manual re-runs (v2+) still write today's bare date — the marker exists to gate the *scheduled* wrapper.
-   - **Targeted runs** (`skip_nightly_marker: true`): skip the marker write. The targeted slice doesn't satisfy the full nightly's coverage promise; per-file aging via `.nightly_coverage.json` still happens (handled in the prompt's wrap-up), which naturally deprioritizes those files in the next full run.
+   - **Targeted runs** (`skip_nightly_marker: true`): skip the marker write. The targeted slice doesn't satisfy the full nightly's coverage promise; per-file aging still happens (the wrap-up writes the run's `findings.json`), which naturally deprioritizes those files in the next full run.
    - Don't write the marker if the audit aborted mid-run — leaving it stale lets the next invocation retry.
 
 ## Failure handling
 
-If the selector fails, the server is unhealthy, or the audit can't complete (context exhaustion, unrecoverable tool failure): file a GitHub issue with labels `priority:critical` and `nightly-audit:failure`, leave the marker untouched, and exit. Do NOT update `docs/audits/.nightly_coverage.json` — the prompt's selector logic handles re-selection automatically when the state file hasn't moved.
+If the selector fails, the server is unhealthy, or the audit can't complete (context exhaustion, unrecoverable tool failure): file a GitHub issue with labels `priority:critical` and `nightly-audit:failure`, leave the marker untouched, and exit. Do NOT write the run's `findings.json` — with no delta recorded, the selector re-selects the same targets next run.
 
-## State file updates
+## State updates
 
-Never hand-edit `docs/audits/.nightly_coverage.json` or append to it via `Edit` / stream writes — `json.load` silently keeps only the *last* of any duplicate key, so an append-shaped edit creates a second copy of an existing path and overwrites the older record's audit history (#166). Always update it via `scripts/nightly_audit_state_update.py`; the per-night prompt's wrap-up section shows the exact invocation.
+State lives as a frozen baseline (`docs/audits/.nightly_coverage_baseline.json`) plus one committed `findings.json` delta per run; the aggregate `docs/audits/.nightly_coverage.json` is a **git-ignored derived cache**, rebuilt by replaying deltas. Record a run's results only via `scripts/nightly_audit_state_update.py` (it writes the dated `findings.json` and refreshes the cache); the per-night prompt's wrap-up shows the exact invocation. **Never** hand-edit state, and **never commit** the `.nightly_coverage.json` cache — committing it reintroduces the one-shared-file merge-conflict surface this design removed (#202/#204). Commit only your run's `docs/audits/nightly/<run-label>/` dir (`prompt.md`, `targets.json`, `findings.json`).
 
 ## Plan mode
 

@@ -12,6 +12,11 @@ docs/engine/commented_vanilla_military_units.txt
 # Per-machine catch-up marker for the nightly audit wrapper (Windows Task Scheduler
 # gate); committing would force-overwrite every other developer's clock.
 docs/audits/.nightly_last_run
+# Derived cache of the folded nightly-audit coverage state. Reconstructed from
+# .nightly_coverage_baseline.json + per-run findings.json by nightly_audit_state_update.fold_state().
+# It was the source of every nightly-PR merge conflict (#202/#204) while committed; it's now
+# git-ignored and rebuilt on demand. The committed source of truth is the baseline + dated deltas.
+docs/audits/.nightly_coverage.json
 *.log
 *.log.*
 *.pid

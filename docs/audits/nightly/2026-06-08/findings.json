@@ -1,0 +1,10 @@
+{
+  "common/buildings/company_buildings.txt": 0,
+  "common/company_charter_types/extra_charters.txt": 0,
+  "common/company_types/extra_companies_flavored.txt": 1,
+  "common/company_types/extra_companies_generic.txt": 1,
+  "common/company_types/extra_companies_vanilla_updates.txt": 0,
+  "common/ideologies/manual_update_ideologies.txt": 0,
+  "common/modifier_type_definitions/st_res_modifier_types.txt": 0,
+  "common/political_movements/modified_political_movements.txt": 0
+}

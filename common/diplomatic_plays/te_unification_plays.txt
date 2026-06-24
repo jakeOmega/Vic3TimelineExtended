@@ -62,7 +62,8 @@ REPLACE:dp_unify_india = {
 	}
 
 	possible = {
-		NOT = { exists = c:BHT }
+		NOT = { exists = c:BHT } # vanilla minor formable blocks the major path (see te_formable_countries.txt)
+		NOT = { exists = c:BHA } # self-guard once Bharat is formed, matching the other unify plays
 		NOT = { is_country_type = decentralized }
 		has_technology_researched = decolonization
 	}
@@ -107,7 +108,8 @@ REPLACE:dp_unify_indonesia = {
 	}
 
 	possible = {
-		NOT = { exists = c:IDN }
+		NOT = { exists = c:IDN } # vanilla minor formable blocks the major path (see te_formable_countries.txt)
+		NOT = { exists = c:NUS } # self-guard once Nusantara is formed, matching the other unify plays
 		NOT = { is_country_type = decentralized }
 		has_technology_researched = decolonization
 	}

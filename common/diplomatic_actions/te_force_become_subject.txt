@@ -20,8 +20,10 @@
 #
 # accept_effect, potential, and ai blocks were copied byte-identical from
 # vanilla 31_power_bloc_force_become_subject.txt — re-diff on every Vic3
-# patch. Vanilla version copied: 1.10 (Steam, 2026-05). The change_infamy
-# block is mod-only; everything else above it remains vanilla-shaped.
+# patch. Vanilla version copied: 1.10 (Steam, 2026-05). Last re-diffed:
+# 1.13.7 (2026-06-11) — still byte-identical apart from the documented
+# intentional changes. The change_infamy block is mod-only; everything
+# else above it remains vanilla-shaped.
 #
 # See common/script_values/extra_script_values.txt :: te_subjugation_strength
 # for the full scoring formula.
@@ -105,7 +107,7 @@ REPLACE:force_become_subject = {
 
 		# Population-scaled infamy. Mirrors the vanilla annex shape (base 5 + per-
 		# population multiplier; see vanilla 43_subjects_handle_states.txt:317),
-		# globally halved because subjugation leaves the target nominally
+		# globally scaled to 20% because subjugation leaves the target nominally
 		# sovereign, and capped at INFAMY_THRESHOLD_INFAMOUS (25) so it can never
 		# alone tip the leader into "Infamous" status. Sovereign Empire halves
 		# this further via the repurposed power_bloc_leader_can_make_subjects_bool

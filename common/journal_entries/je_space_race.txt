@@ -677,7 +677,7 @@ je_space_race_moon_base = {
 
 # ===========================================
 # 6. MARS LANDING
-# Prereq: reusable_rocketry tech + Orbital complete
+# Prereq: knowledge_economy tech + Moon Landing complete
 # Linear after the prior milestone chain
 # ===========================================
 je_space_race_mars_landing = {

@@ -164,7 +164,10 @@ company_basic_autarky = {
 	ai_will_do = {
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_art_academy
+				OR = {
+					is_building_type = building_synthetics_plant_oil
+					is_building_type = building_synthetics_plant_rubber
+				}
 				level >= 3
 			}
 		}

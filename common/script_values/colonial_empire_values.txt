@@ -14,14 +14,15 @@ colonial_state_count = {
 	}
 }
 
-# Count of overseas colonial states with very low acceptance pops (< 20)
+# Count of overseas colonial states with very low acceptance pops (< acceptance_status_2, i.e. 20)
 colonial_low_acceptance_count = {
 	value = 0
 	every_scope_state = {
 		limit = {
 			is_overseas_colonial_state = yes
 			any_scope_pop = {
-				pop_acceptance < 20
+				# acceptance_status_2 = 20 (vanilla); matches colonial_empire_buttons.txt's threshold
+				pop_acceptance < acceptance_status_2
 			}
 		}
 		add = 1
