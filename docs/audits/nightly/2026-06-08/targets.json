@@ -1,0 +1,131 @@
+{
+  "date": "2026-06-08",
+  "run_label": "2026-06-08",
+  "total_lines": 2500,
+  "line_budget": 2500,
+  "file_cap": 15,
+  "slice_cap": 600,
+  "report_requested": false,
+  "targeted": false,
+  "filters": {
+    "areas": [],
+    "include": [],
+    "exclude": []
+  },
+  "skip_nightly_marker": false,
+  "registry_drift": {
+    "in_registry_not_excluded": [],
+    "excluded_globs_not_in_registry": []
+  },
+  "targets": [
+    {
+      "path": "common/company_types/extra_companies_flavored.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_types/extra_companies_generic.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_types/extra_companies_vanilla_updates.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/buildings/company_buildings.txt",
+      "line_range": [
+        1,
+        600
+      ],
+      "lines": 600,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_economy_reference.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/modifier_type_definitions/st_res_modifier_types.txt",
+      "line_range": null,
+      "lines": 97,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/engine/vic3_modifier_type_definitions_reference.md",
+        "docs/engine/modifier_patterns.md"
+      ],
+      "last_audited": null,
+      "audit_count": 0,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/company_charter_types/extra_charters.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "production_methods_and_buildings",
+      "docs": [
+        "docs/vanilla/vanilla_company_buildings_reference.md"
+      ],
+      "last_audited": "2026-06-03",
+      "audit_count": 4,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/political_movements/modified_political_movements.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-05-31",
+      "audit_count": 5,
+      "recent_findings": 0
+    },
+    {
+      "path": "common/ideologies/manual_update_ideologies.txt",
+      "line_range": null,
+      "lines": 1,
+      "area": "laws_and_politics",
+      "docs": [
+        "docs/vanilla/vanilla_politics_reference.md"
+      ],
+      "last_audited": "2026-06-04",
+      "audit_count": 4,
+      "recent_findings": 0
+    }
+  ]
+}

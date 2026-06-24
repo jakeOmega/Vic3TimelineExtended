@@ -1978,6 +1978,10 @@ When moving a modifier to JE scope, update **every** reference across the codeba
 - Events (trigger conditions)
 - Political movements (support conditions)
 
+### JE Auto-Activation Requires BOTH `is_shown_when_inactive` AND `possible`
+
+Per vanilla `journal_entries.md`: a JE auto-activates "when both this and is_shown_when_inactive is true" (both are ignored for `add_journal_entry`-added JEs). So a game-rule or era gate placed only in `is_shown_when_inactive` DOES gate activation — the social-movement JE family (`je_mental_health`, `je_digital_rights`, `je_post_scarcity`, `je_human_augmentation`, `je_civil_rights`) deliberately keeps `has_game_rule = social_movements_enabled` there and only the tech/condition in `possible`. Don't flag that shape as a gating leak, and conversely don't assume `possible` alone is the activation trigger when auditing.
+
 ### JE Lifecycle: `invalid` + `on_invalid` Cleanup
 
 A JE with only an `invalid` trigger will disappear when the trigger fires, but **country-scoped state (variables, modifiers applied outside the JE scope) is not cleaned up**. Always pair `invalid` with `on_invalid` when the JE sets country variables or applies country-scoped modifiers that should be removed on invalidation.
@@ -2892,6 +2896,8 @@ The full forensic record of one domestic-lobby crash, including ruled-out hypoth
 Several plausible-sounding names turn up empty when you go to use them. Discovered the hard way during the colonial-empire redesign; recording so the next pass doesn't re-walk the same diff.
 
 **No `complete_journal_entry` effect.** The vanilla way to programmatically end a JE is the `complete` block + variable pattern: a decision sets `set_variable = my_je_done`, and the JE's `complete` block reads `OR = { <existing condition> ; has_variable = my_je_done }`. The `on_complete` block can branch on the variable to fire a path-specific event. Used in `je_colonial_empire` for the Imperial Federation Act capstone (decision sets `imperial_federation_taken` + `imperial_federation_iron_fist|civilizing` variables; JE routes to events 300/301 by variable).
+
+**No `friendly` / `hostile` attitudes.** The `has_attitude` key set is closed and engine-side: `conciliatory`/`cooperative`/`genial`/`protective` (positive), `wary`/`antagonistic`/`belligerent`/`domineering` (negative), `cautious`/`disinterested`/`human` (neutral), `loyal`/`aloof`/`defiant`/`rebellious` (subject-only). `attitude = friendly` / `attitude = hostile` silently never match — no parse error, no log line (2026-06-11 audit, 42 sites across treaty articles; see issue #211). Want "friendly" → `genial`; want "hostile" → `domineering` (or the antagonistic/belligerent/domineering OR-set).
 
 **Vic3 has no EU4/CK3-style flags.** `set_country_flag` / `has_country_flag` / `clr_country_flag` / `set_global_flag` / `has_global_flag` do not exist in Vic3 — they parse-error silently into "Unknown effect" / "Unknown trigger" cascades, and downstream effects in the same block get mis-attributed as unknown. Use `set_variable = NAME` (bare form sets to "yes") and `has_variable = NAME` (or `var:NAME`) instead. Vanilla pattern: `set_variable = brazil_spurned_heir` / `has_variable = brazil_spurned_heir`. Globals: `set_global_variable` / `has_global_variable` / `global_var:NAME`.
 

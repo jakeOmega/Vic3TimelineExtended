@@ -317,9 +317,12 @@ religious_revival_events.3 = {
 
 	title = {
 		first_valid = {
+			# atheism first, matching the desc/flavor ordering below — otherwise an
+			# atheist state with islamic/dharmic heritage gets a faith-positive title
+			# over the underground-atheism body, and t_atheism is unreachable for them.
+			triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.t_atheism }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_islamic } } desc = religious_revival_events.3.t_islamic }
 			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_dharmic } } desc = religious_revival_events.3.t_dharmic }
-			triggered_desc = { trigger = { has_law = law_type:law_state_atheism } desc = religious_revival_events.3.t_atheism }
 			triggered_desc = { trigger = { always = yes } desc = religious_revival_events.3.t }
 		}
 	}
