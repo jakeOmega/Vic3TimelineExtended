@@ -197,15 +197,13 @@ european_union = {
 	trigger = {
 		scope:selected_identity = identity:identity_diplomatic
 		OR = {
-			capital = {
-				region = sr:region_western_europe
-				region = sr:region_southern_europe
-				region = sr:region_central_europe
-				region = sr:region_northern_europe
-				region = sr:region_balkans
-				region = sr:region_eastern_europe
-				region = sr:region_russia
-			}
+			capital.region = sr:region_western_europe
+			capital.region = sr:region_southern_europe
+			capital.region = sr:region_central_europe
+			capital.region = sr:region_northern_europe
+			capital.region = sr:region_balkans
+			capital.region = sr:region_eastern_europe
+			capital.region = sr:region_russia
 		}
 	}
 }

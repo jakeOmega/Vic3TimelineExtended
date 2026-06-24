@@ -89,7 +89,7 @@ cultural_exchange_program = {
 			if = {
 				limit = {
 					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = friendly }
+					has_attitude = { who = scope:other_country attitude = genial }
 				}
 				add = 0.08
 			}
@@ -106,7 +106,7 @@ cultural_exchange_program = {
 					exists = scope:other_country
 					OR = {
 						has_attitude = { who = scope:other_country attitude = antagonistic }
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 					}
 				}
@@ -139,7 +139,7 @@ cultural_exchange_program = {
 				limit = {
 					OR = {
 						has_attitude = { who = scope:other_country attitude = antagonistic }
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 					}
 				}
@@ -190,10 +190,10 @@ cultural_exchange_program = {
 					value = 15
 				}
 			}
-			# Friendly attitude
+			# Genial attitude
 			if = {
 				limit = {
-					has_attitude = { who = scope:other_country attitude = friendly }
+					has_attitude = { who = scope:other_country attitude = genial }
 				}
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"

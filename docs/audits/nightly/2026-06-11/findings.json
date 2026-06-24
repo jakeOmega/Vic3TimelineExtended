@@ -1,0 +1,12 @@
+{
+  "common/diplomatic_actions/te_force_become_subject.txt": 1,
+  "common/diplomatic_plays/te_unification_plays.txt": 1,
+  "common/journal_entries/je_mental_health.txt": 0,
+  "common/mobilization_option_groups/extra_mobilization_groups.txt": 0,
+  "common/modifier_type_definitions/covert_warfare_modifier_types.txt": 0,
+  "common/power_bloc_names/extra_power_bloc_names.txt": 1,
+  "common/power_bloc_principle_groups/extra_power_bloc_principle_groups.txt": 0,
+  "common/power_bloc_principles/extra_power_bloc_principles.txt": 0,
+  "common/treaty_articles/102_minority_protection.txt": 1,
+  "common/treaty_articles/108_cultural_exchange.txt": 1
+}
