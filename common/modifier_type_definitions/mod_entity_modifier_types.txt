@@ -3552,3 +3552,53 @@ state_building_sibur_tobolsk_complex_max_level_add = {
 	color = good
 	percent = no
 }
+
+state_building_rolls_royce_derby_works_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_bp_refinery_complex_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_bayer_leverkusen_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_thyssen_steelworks_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_boeing_everett_factory_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_renault_billancourt_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_michelin_clermont_ferrand_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_pirelli_bicocca_plant_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_jardine_princeps_house_max_level_add = {
+	color = good
+	percent = no
+}
+
+state_building_sumitomo_besshi_mine_max_level_add = {
+	color = good
+	percent = no
+}

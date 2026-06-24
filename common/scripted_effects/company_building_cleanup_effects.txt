@@ -271,6 +271,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_bayer_leverkusen_plant
+			NOT = {
+				owner = {
+					has_company = company_bayer
+				}
+			}
+		}
+		remove_building = building_bayer_leverkusen_plant
+	}
+	if = {
+		limit = {
 			has_building = building_bengal_coal_raniganj_mine
 			NOT = {
 				owner = {
@@ -301,6 +312,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_blackberry_rim_campus
+	}
+	if = {
+		limit = {
+			has_building = building_boeing_everett_factory
+			NOT = {
+				owner = {
+					has_company = company_boeing
+				}
+			}
+		}
+		remove_building = building_boeing_everett_factory
 	}
 	if = {
 		limit = {
@@ -345,6 +367,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_boston_dynamics_ai_institute
+	}
+	if = {
+		limit = {
+			has_building = building_bp_refinery_complex
+			NOT = {
+				owner = {
+					has_company = company_bp
+				}
+			}
+		}
+		remove_building = building_bp_refinery_complex
 	}
 	if = {
 		limit = {
@@ -1635,6 +1668,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_jardine_princeps_house
+			NOT = {
+				owner = {
+					has_company = company_jardine_matheson
+				}
+			}
+		}
+		remove_building = building_jardine_princeps_house
+	}
+	if = {
+		limit = {
 			has_building = building_jiangnan_nanjing_brocade_hall
 			NOT = {
 				owner = {
@@ -1951,6 +1995,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_meissen_porcelain_manufactory
+	}
+	if = {
+		limit = {
+			has_building = building_michelin_clermont_ferrand
+			NOT = {
+				owner = {
+					has_company = company_michelin
+				}
+			}
+		}
+		remove_building = building_michelin_clermont_ferrand
 	}
 	if = {
 		limit = {
@@ -2361,6 +2416,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_pirelli_bicocca_plant
+			NOT = {
+				owner = {
+					has_company = company_pirelli
+				}
+			}
+		}
+		remove_building = building_pirelli_bicocca_plant
+	}
+	if = {
+		limit = {
 			has_building = building_portalis_lyon_silk_house
 			NOT = {
 				owner = {
@@ -2438,6 +2504,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_renault_billancourt_plant
+			NOT = {
+				owner = {
+					has_company = company_renault
+				}
+			}
+		}
+		remove_building = building_renault_billancourt_plant
+	}
+	if = {
+		limit = {
 			has_building = building_rheinmetall_unterluss_proving_ground
 			NOT = {
 				owner = {
@@ -2479,6 +2556,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_rodriguez_arguelles_havana_tobacco_house
+	}
+	if = {
+		limit = {
+			has_building = building_rolls_royce_derby_works
+			NOT = {
+				owner = {
+					has_company = company_rolls_royce
+				}
+			}
+		}
+		remove_building = building_rolls_royce_derby_works
 	}
 	if = {
 		limit = {
@@ -2834,6 +2922,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_sumitomo_besshi_mine
+			NOT = {
+				owner = {
+					has_company = company_sumitomo
+				}
+			}
+		}
+		remove_building = building_sumitomo_besshi_mine
+	}
+	if = {
+		limit = {
 			has_building = building_sunhwaguk_seoul_tobacco_factory
 			NOT = {
 				owner = {
@@ -2897,6 +2996,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_thonet_bystrice_bentwood_factory
+	}
+	if = {
+		limit = {
+			has_building = building_thyssen_steelworks
+			NOT = {
+				owner = {
+					has_company = company_thyssen
+				}
+			}
+		}
+		remove_building = building_thyssen_steelworks
 	}
 	if = {
 		limit = {

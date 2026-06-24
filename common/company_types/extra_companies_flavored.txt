@@ -3622,3 +3622,396 @@ company_sibur = {
 		building_chemical_plant = { level = 12 }
 	}
 }
+
+company_rolls_royce = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/british_rolls_royce.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_MIDLANDS }
+	building_types = {
+		building_automotive_industry
+		building_motor_industry
+		building_aerospace_industry
+		building_rolls_royce_derby_works
+	}
+	extension_building_types = {
+		building_steel_mill
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = combustion_engine
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_automotive_industry
+				level >= 5
+			}
+		}
+		gdp_per_capita_ranking <= 20
+	}
+	prosperity_modifier = {
+		building_automotive_industry_throughput_add = 0.10
+		building_aerospace_industry_throughput_add = 0.10
+		building_motor_industry_throughput_add = 0.05
+		state_building_rolls_royce_derby_works_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_luxury_automobiles
+		prestige_good_advanced_aircraft
+	}
+	ai_will_do = {
+		has_technology_researched = combustion_engine
+	}
+	ai_construction_targets = {
+		building_automotive_industry = { level = 5 }
+	}
+}
+
+company_bp = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/british_bp.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_HOME_COUNTIES }
+	building_types = {
+		building_oil_rig
+		building_synthetics_plant_oil
+		building_bp_refinery_complex
+	}
+	extension_building_types = {
+		building_chemical_plant
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = fractional_distillation
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_oil_rig
+				level >= 5
+			}
+		}
+		gdp_ranking <= 20
+	}
+	prosperity_modifier = {
+		building_oil_rig_throughput_add = 0.15
+		building_chemical_plant_throughput_add = 0.05
+		state_building_bp_refinery_complex_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_refined_petrochemicals
+	}
+	ai_will_do = {
+		has_technology_researched = fractional_distillation
+	}
+	ai_construction_targets = {
+		building_oil_rig = { level = 5 }
+	}
+}
+
+company_bayer = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_bayer.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_RHINELAND }
+	building_types = {
+		building_chemical_plant
+		building_synthetics_plant_biomass
+		building_bayer_leverkusen_plant
+	}
+	extension_building_types = {
+		building_explosives_factory
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = aniline
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_chemical_plant
+				level >= 5
+			}
+		}
+		gdp_per_capita_ranking <= 20
+	}
+	prosperity_modifier = {
+		building_chemical_plant_throughput_add = 0.10
+		country_weekly_innovation_mult = 0.05
+		country_society_tech_research_speed_mult = 0.05
+		state_building_bayer_leverkusen_plant_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_german_aniline
+	}
+	ai_will_do = {
+		has_technology_researched = aniline
+	}
+	ai_construction_targets = {
+		building_chemical_plant = { level = 5 }
+	}
+}
+
+company_thyssen = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_thyssen.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_RUHR }
+	building_types = {
+		building_steel_mill
+		building_iron_mine
+		building_thyssen_steelworks
+	}
+	extension_building_types = {
+		building_coal_mine
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = steelworking
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_steel_mill
+				level >= 5
+			}
+		}
+		gdp_ranking <= 20
+	}
+	prosperity_modifier = {
+		building_steel_mill_throughput_add = 0.10
+		building_iron_mine_throughput_add = 0.05
+		state_building_thyssen_steelworks_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_steel
+	}
+	ai_will_do = {
+		has_technology_researched = steelworking
+	}
+	ai_construction_targets = {
+		building_steel_mill = { level = 5 }
+	}
+}
+
+company_boeing = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_boeing.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_WASHINGTON }
+	building_types = {
+		building_aerospace_industry
+		building_motor_industry
+		building_boeing_everett_factory
+	}
+	extension_building_types = {
+		building_steel_mill
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = military_aviation
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_aerospace_industry
+				level >= 5
+			}
+		}
+		gdp_ranking <= 15
+	}
+	prosperity_modifier = {
+		building_aerospace_industry_throughput_add = 0.15
+		building_motor_industry_throughput_add = 0.05
+		state_building_boeing_everett_factory_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_advanced_aircraft
+	}
+	ai_will_do = {
+		has_technology_researched = military_aviation
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = { level = 5 }
+	}
+}
+
+company_renault = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_renault.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_ILE_DE_FRANCE }
+	building_types = {
+		building_automotive_industry
+		building_motor_industry
+		building_renault_billancourt_plant
+	}
+	extension_building_types = {
+		building_steel_mill
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = combustion_engine
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_automotive_industry
+				level >= 5
+			}
+		}
+		gdp_per_capita_ranking <= 20
+	}
+	prosperity_modifier = {
+		building_automotive_industry_throughput_add = 0.15
+		building_motor_industry_throughput_add = 0.05
+		state_building_renault_billancourt_plant_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_luxury_automobiles
+	}
+	ai_will_do = {
+		has_technology_researched = combustion_engine
+	}
+	ai_construction_targets = {
+		building_automotive_industry = { level = 5 }
+	}
+}
+
+company_michelin = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_michelin.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	building_types = {
+		building_rubber_plantation
+		building_synthetics_plant_rubber
+		building_michelin_clermont_ferrand
+	}
+	extension_building_types = {
+		building_automotive_industry
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = vulcanization
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_rubber_plantation
+				level >= 5
+			}
+		}
+		gdp_per_capita_ranking <= 25
+	}
+	prosperity_modifier = {
+		building_automotive_industry_throughput_add = 0.10
+		building_rubber_plantation_throughput_add = 0.05
+		state_building_michelin_clermont_ferrand_max_level_add = 1
+	}
+	ai_will_do = {
+		has_technology_researched = vulcanization
+	}
+	ai_construction_targets = {
+		building_rubber_plantation = { level = 5 }
+	}
+}
+
+company_pirelli = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_pirelli.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_LOMBARDY }
+	building_types = {
+		building_rubber_plantation
+		building_synthetics_plant_rubber
+		building_pirelli_bicocca_plant
+	}
+	extension_building_types = {
+		building_electrics_industry
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = vulcanization
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_rubber_plantation
+				level >= 5
+			}
+		}
+		gdp_per_capita_ranking <= 25
+	}
+	prosperity_modifier = {
+		building_rubber_plantation_throughput_add = 0.10
+		building_electrics_industry_throughput_add = 0.05
+		state_building_pirelli_bicocca_plant_max_level_add = 1
+	}
+	ai_will_do = {
+		has_technology_researched = vulcanization
+	}
+	ai_construction_targets = {
+		building_rubber_plantation = { level = 5 }
+	}
+}
+
+company_jardine_matheson = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/british_jardine_matheson.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = { STATE_GUANGDONG }
+	building_types = {
+		building_port
+		building_trade_center
+		building_jardine_princeps_house
+	}
+	extension_building_types = {
+		building_tooling_workshop
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = international_trade
+	}
+	possible = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_port
+				level >= 5
+			}
+		}
+		gdp_ranking <= 20
+	}
+	prosperity_modifier = {
+		building_port_throughput_add = 0.10
+		building_trade_center_throughput_add = 0.10
+		state_building_jardine_princeps_house_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_merchant_marine
+	}
+	ai_will_do = {
+		has_technology_researched = international_trade
+	}
+	ai_construction_targets = {
+		building_port = { level = 5 }
+	}
+}

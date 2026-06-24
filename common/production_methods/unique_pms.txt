@@ -10708,3 +10708,337 @@ pm_sibur_tobolsk_complex = {
 		}
 	}
 }
+
+pm_rolls_royce_derby_works = {
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_automotive_industry_throughput_add = 0.15
+			building_aerospace_industry_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (36.59%)
+			goods_input_engines_add = 15                         # Price:   60, Total cost:   900.0 (43.90%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (19.51%)
+			# Output goods
+			goods_output_automobiles_add = 20                    # Price:  100, Total cost:  2000.0 (55.56%)
+			goods_output_aeroplanes_add = 10                     # Price:  160, Total cost:  1600.0 (44.44%)
+			# Total input cost: 2050.0
+			# Total output cost: 3600.0
+			# Profit: 1550.0
+			# Profit margin: 75.61%
+			# Zero profit price multiplier: 0.57
+			# Employment: 2000
+			# Wage breakeven: 0.78
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_bp_refinery_complex = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_oil_rig_throughput_add = 0.15
+			goods_output_oil_mult = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_oil_add = 30                             # Price:   40, Total cost:  1200.0 (75.00%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (25.00%)
+			# Output goods
+			goods_output_fertilizer_add = 20                     # Price:   30, Total cost:   600.0 (44.44%)
+			goods_output_explosives_add = 15                     # Price:   50, Total cost:   750.0 (55.56%)
+			# Total input cost: 1600.0
+			# Total output cost: 1350.0
+			# Profit: -250.0
+			# Profit margin: -15.62%
+			# Zero profit price multiplier: 1.19
+			# Employment: 2000
+			# Wage breakeven: -0.12
+		}
+		level_scaled = {
+			building_employment_machinists_add = 700
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 500
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_bayer_leverkusen_plant = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_chemical_plant_throughput_add = 0.15
+			building_university_throughput_add = 0.10
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 80
+			country_society_tech_research_speed_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sulfur_add = 10                          # Price:   50, Total cost:   500.0 (45.45%)
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (54.55%)
+			# Output goods
+			goods_output_fertilizer_add = 25                     # Price:   30, Total cost:   750.0 (55.56%)
+			goods_output_dye_add = 15                            # Price:   40, Total cost:   600.0 (44.44%)
+			# Total input cost: 1100.0
+			# Total output cost: 1350.0
+			# Profit: 250.0
+			# Profit margin: 22.73%
+			# Zero profit price multiplier: 0.81
+			# Employment: 2000
+			# Wage breakeven: 0.12
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 700
+			building_employment_machinists_add = 500
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_thyssen_steelworks = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_steel_mill_throughput_add = 0.15
+			building_iron_mine_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 30                            # Price:   40, Total cost:  1200.0 (72.73%)
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (27.27%)
+			# Output goods
+			goods_output_steel_add = 40                          # Price:   50, Total cost:  2000.0 (100.00%)
+			# Total input cost: 1650.0
+			# Total output cost: 2000.0
+			# Profit: 350.0
+			# Profit margin: 21.21%
+			# Zero profit price multiplier: 0.82
+			# Employment: 2000
+			# Wage breakeven: 0.17
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_boeing_everett_factory = {
+	texture = "gfx/interface/icons/production_method_icons/cat_plane_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_aerospace_industry_throughput_add = 0.15
+			building_motor_industry_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (25.00%)
+			goods_input_engines_add = 15                         # Price:   60, Total cost:   900.0 (45.00%)
+			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (30.00%)
+			# Output goods
+			goods_output_aeroplanes_add = 25                     # Price:  160, Total cost:  4000.0 (100.00%)
+			# Total input cost: 2000.0
+			# Total output cost: 4000.0
+			# Profit: 2000.0
+			# Profit margin: 100.00%
+			# Zero profit price multiplier: 0.50
+			# Employment: 2000
+			# Wage breakeven: 1.00
+		}
+		level_scaled = {
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 200
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_renault_billancourt_plant = {
+	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_automotive_industry_throughput_add = 0.15
+			building_motor_industry_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (35.71%)
+			goods_input_engines_add = 15                         # Price:   60, Total cost:   900.0 (64.29%)
+			# Output goods
+			goods_output_automobiles_add = 25                    # Price:  100, Total cost:  2500.0 (100.00%)
+			# Total input cost: 1400.0
+			# Total output cost: 2500.0
+			# Profit: 1100.0
+			# Profit margin: 78.57%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.55
+		}
+		level_scaled = {
+			building_employment_machinists_add = 900
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_michelin_clermont_ferrand = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_rubber_plantation_throughput_add = 0.15
+			building_automotive_industry_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (61.54%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (38.46%)
+			# Output goods
+			goods_output_automobiles_add = 20                    # Price:  100, Total cost:  2000.0 (100.00%)
+			# Total input cost: 1300.0
+			# Total output cost: 2000.0
+			# Profit: 700.0
+			# Profit margin: 53.85%
+			# Zero profit price multiplier: 0.65
+			# Employment: 2000
+			# Wage breakeven: 0.35
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 700
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_pirelli_bicocca_plant = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_rubber_plantation_throughput_add = 0.10
+			building_electrics_industry_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_rubber_add = 20                          # Price:   40, Total cost:   800.0 (66.67%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (33.33%)
+			# Output goods
+			goods_output_telephones_add = 15                     # Price:   70, Total cost:  1050.0 (72.41%)
+			goods_output_rubber_add = 10                         # Price:   40, Total cost:   400.0 (27.59%)
+			# Total input cost: 1200.0
+			# Total output cost: 1450.0
+			# Profit: 250.0
+			# Profit margin: 20.83%
+			# Zero profit price multiplier: 0.83
+			# Employment: 2000
+			# Wage breakeven: 0.12
+		}
+		level_scaled = {
+			building_employment_laborers_add = 700
+			building_employment_machinists_add = 700
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+pm_jardine_princeps_house = {
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_port_throughput_add = 0.10
+			state_trade_capacity_add = 5
+			state_migration_pull_mult = 0.15
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tea_add = 10                             # Price:   50, Total cost:   500.0 (62.50%)
+			goods_input_clothes_add = 10                         # Price:   30, Total cost:   300.0 (37.50%)
+			# Output goods
+			goods_output_merchant_marine_add = 50                # Price:   50, Total cost:  2500.0 (100.00%)
+			# Total input cost: 800.0
+			# Total output cost: 2500.0
+			# Profit: 1700.0
+			# Profit margin: 212.50%
+			# Zero profit price multiplier: 0.32
+			# Employment: 2000
+			# Wage breakeven: 0.85
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_machinists_add = 200
+		}
+	}
+}
+
+pm_sumitomo_besshi_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_lead_mine_throughput_add = 0.15
+			building_steel_mill_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
+			# Output goods
+			goods_output_lead_add = 25                           # Price:   40, Total cost:  1000.0 (57.14%)
+			goods_output_steel_add = 15                          # Price:   50, Total cost:   750.0 (42.86%)
+			# Total input cost: 700.0
+			# Total output cost: 1750.0
+			# Profit: 1050.0
+			# Profit margin: 150.00%
+			# Zero profit price multiplier: 0.40
+			# Employment: 2000
+			# Wage breakeven: 0.53
+		}
+		level_scaled = {
+			building_employment_laborers_add = 900
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+}
