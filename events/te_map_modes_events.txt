@@ -67,4 +67,12 @@ te_map_modes.1 = {
 		}
 		te_clear_map_mode_overlays = yes
 	}
+
+	# Unconditional dismiss — every option above is trigger-gated, and the
+	# engine requires one always-valid default option per event
+	# ("No default option in event te_map_modes.1", event.cpp:358).
+	option = {
+		name = te_map_modes.1.f_dismiss
+		default_option = yes
+	}
 }

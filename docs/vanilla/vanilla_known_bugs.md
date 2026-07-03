@@ -159,14 +159,14 @@ Society Disbanded
 
 Examples seen in the wild: `Election Campaign Started`, `Election Campaign Ended`, `Conservative Party Created`, `Revolutionary Coalition Disbanded`, `Fascist Party Created`, `Patriotic Party Created/Disbanded`, `Faith Party Created`, `Anarchist Society Disbanded`, `Agrarian Party Created/Disbanded`, `Free Trade Party Created/Disbanded`, `Communist Party Created`, `Christian Party Disbanded`, `Clerical Party Created`. These are debug telemetry, not errors. Recognize and skip — they dominate `mod_only=true` triage during election cycles because the categorizer can't distinguish intentional `debug_log` from real errors.
 
-### `common/defines/00_defines.txt`, `common/defines/00_ai.txt` — define macro not specified warnings
+### `common/defines/00_defines.txt`, `common/defines/00_ai.txt`, `common/defines/00_graphics.txt` — define macro not specified warnings
 
 ```
-defined in 'common/defines/
+defined in 'common/defines/00_
 Maybe a define macro is missing
 ```
 
-Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `WORLD_MARKET_MONOPOLY_MIN_SHARE`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, plus others — vanilla emits one entry per macro per startup.
+Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, and (new in 1.13.9, `00_graphics.txt`) `FLAGSHIP_DECORATION_LOCATOR` — vanilla emits one entry per macro per startup. (Signature narrowed to `common/defines/00_` so a *mod* define warning from `extra_defines.txt` still surfaces in triage — an earlier revision wrongly listed the mod's own `WORLD_MARKET_MONOPOLY_MIN_SHARE` here; that define was dead config and has been removed from `extra_defines.txt`.)
 
 ### `common/laws/00_distribution_of_power.txt:1` — `set_only_legal_party_from_ig` + `remove_ruling_interest_group` on invalid IG
 
@@ -512,14 +512,15 @@ Failed to read key reference
 
 Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data references keys that don't resolve in the current entity state — observed for `headlines_all_minor_events` and `superpower`. Save-migration noise from older-version or cross-mod-state saves; the engine falls back gracefully. Not a current-content bug. (`headlines_*` is the vanilla headlines system; `superpower` is a stale serialized reference.)
 
-### `character_templates_utils.cpp:1812` — vanilla character missing last-name loc
+### `character_templates_utils.cpp:1814` — vanilla character missing last-name loc
+- source: `character_templates_utils.cpp:1814`
 - source: `character_templates_utils.cpp:1812`
 
 ```
 Missing localization key for character last name
 ```
 
-A vanilla generated character (e.g. `Ricchieri`) has no last-name loc key, so the engine reverts to a random name. Vanilla character-template gap, not mod content. Cosmetic.
+A vanilla generated character (e.g. `Ricchieri`, from `common/character_templates/country_arg.txt`) has no last-name loc key, so the engine reverts to a random name. Vanilla character-template gap, not mod content. Cosmetic. (Emit point drifted `:1812` → `:1814` in vanilla 1.13.9 — source-anchored entries need re-anchoring when engine patches shift cpp line numbers; both anchors kept.)
 
 ### `pdx_localize.cpp:187` — benign loc-key hash collision
 - source: `pdx_localize.cpp:187`
@@ -993,6 +994,47 @@ gsInterestGroup('relevant_ig').GetFullName
 ```
 
 Vanilla custom-loc reads `SCOPE.gsInterestGroup('relevant_ig').GetFullName` where the `relevant_ig` data-system function isn't registered in the rendering context, emitting "Could not find data system function 'GetFullName'" (`:1466`) and the companion "Failed converting statement" (`:1092`). Not a mod loc (`relevant_ig` is absent from the mod's `gui/`, `common/`, `events/`). One vanilla root cause, two cpp emit points. Cosmetic.
+
+### `pdx_data_statementparser.cpp:43` — sea-node ports tooltip breaks on apostrophes in state names
+- source: `pdx_data_statementparser.cpp:43`
+- source: `pdx_data_factory.cpp:1112`
+- source: `pdx_data_factory.cpp:1092`
+- source: `pdx_data_factory.cpp:1466`
+
+```
+Ports connected via this Sea Node
+data system function 'skie'
+```
+
+New in 1.13.9: the shipping-lane/sea-node tooltip (vanilla `interfaces_l_english.yml`, "Ports connected via this Sea Node") builds a `ConcatIfNeitherEmpty('title …', 'tooltippable_name …')` data-function call with localized state names inlined into the single-quoted argument. A name containing an apostrophe (observed: dynamic "Russo-American Kuril'skie Ostrova") terminates the string early — "Expected ','" (`:43`), plus companion "Failed to convert statement" (`:1112`/`:1092`) and "Could not find data system function 'skie'" (`:1466`). Vanilla tooltip code + vanilla dynamic name; fires only while that tooltip renders. Cosmetic (tooltip truncates).
+
+### `virtualfilesystem.cpp:420` — VFS pre-enumeration progress lines
+- source: `virtualfilesystem.cpp:420`
+
+```
+pre-enumerating '
+```
+
+Plain startup instrumentation ("Starting/Done pre-enumerating '<dir>'…") miscategorized as `missing_file` by the log reader (146 lines per launch). Never actionable.
+
+### `jomini_trigger.cpp:102` — trigger added after PostInitAndValidate
+- source: `jomini_trigger.cpp:102`
+
+```
+Adding trigger after PostInitAndValidate
+```
+
+Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect.
+
+### `power_bloc_statue_hero_type.cpp:141` / `power_bloc_statue_pedestal_type.cpp:62` — no default statue hero/pedestal for `identity_diplomatic`
+- source: `power_bloc_statue_hero_type.cpp:141`
+- source: `power_bloc_statue_pedestal_type.cpp:62`
+
+```
+Identity 'identity_diplomatic' is not default for any
+```
+
+Vanilla's power-bloc statue content declares default heroes/pedestals per identity but has no default for the vanilla `identity_diplomatic`. The mod defines no statue heroes or pedestals, so this is a vanilla content gap. Cosmetic — the statue falls back to a generic piece.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 

@@ -1,0 +1,80 @@
+﻿# Per-religion standard-of-living static modifiers for the mod's custom religions.
+#
+# The engine expects every religion in the database to have a pair of
+# `<religion>_standard_of_living_modifier_{positive,negative}` static modifiers
+# (see vanilla common/static_modifiers/08_religion_standard_of_living.txt).
+# Missing pairs log "Missing religion sol static modifier ..." (religion.cpp:92)
+# once per religion per launch. The underlying `state_<religion>_standard_of_living_add`
+# modifier types are auto-registered by the engine from the religion database —
+# only these static-modifier wrappers need to exist in script.
+# Values mirror vanilla's (both signs carry value 1; the engine applies direction).
+
+custom_religion_christian_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_christian_standard_of_living_add = 1
+}
+
+custom_religion_christian_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_christian_standard_of_living_add = 1
+}
+
+custom_religion_muslim_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_muslim_standard_of_living_add = 1
+}
+
+custom_religion_muslim_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_muslim_standard_of_living_add = 1
+}
+
+custom_religion_jewish_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_jewish_standard_of_living_add = 1
+}
+
+custom_religion_jewish_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_jewish_standard_of_living_add = 1
+}
+
+custom_religion_eastern_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_eastern_standard_of_living_add = 1
+}
+
+custom_religion_eastern_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_eastern_standard_of_living_add = 1
+}
+
+custom_religion_animist_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_animist_standard_of_living_add = 1
+}
+
+custom_religion_animist_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_animist_standard_of_living_add = 1
+}
+
+custom_religion_buddhist_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_buddhist_standard_of_living_add = 1
+}
+
+custom_religion_buddhist_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_buddhist_standard_of_living_add = 1
+}
+
+custom_religion_custom_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	state_custom_religion_custom_standard_of_living_add = 1
+}
+
+custom_religion_custom_standard_of_living_modifier_negative = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	state_custom_religion_custom_standard_of_living_add = 1
+}

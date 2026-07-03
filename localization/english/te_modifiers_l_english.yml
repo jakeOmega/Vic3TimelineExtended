@@ -81,8 +81,6 @@
  country_greenhouse_gas_emissions_mult_desc:0 "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions]."
  country_ideology_resistance_mult:0 "Ideology Resistance"
  country_ideology_resistance_mult_desc:0 "Resistance to foreign ideological influence from the [concept_cultural_hegemony_system]. Reduces the impact of [concept_foreign_cultural_benchmark] and ideological pressure from cultural hegemons."
- country_institution_cost_institution_home_affairs_mult:0 "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]"
- country_institution_cost_institution_home_affairs_mult_desc:0 "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_home_affairs').GetName] [concept_institution]"
  country_institution_cost_institution_migration_controls_mult:0 "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_migration_controls').GetName]"
  country_institution_cost_institution_migration_controls_mult_desc:0 "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_migration_controls').GetName] [concept_institution]"
  country_institution_cost_institution_ministry_of_commerce_mult:0 "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_ministry_of_commerce').GetName]"

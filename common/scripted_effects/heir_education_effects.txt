@@ -441,7 +441,7 @@ heir_education_resolve_effect = {
 			random_list = {
 				50 = { set_ideology = ideology:ideology_traditionalist }
 				30 = { set_ideology = ideology:ideology_patriarchal }
-				20 = { set_ideology = ideology:ideology_orthodox }
+				20 = { set_ideology = ideology:ideology_pious }
 			}
 		}
 	}

@@ -81,3 +81,65 @@ is defined in script but not in code
 ```
 
 ~120 mod-defined modifier types (covert_warfare, space_race, banking, strategic-reserve, ~50 `*_pb_principles_bool`, etc.) each emit this once at load. Verified benign (2026-05-24): same construct as vanilla's `03_modifier_types_script_only.txt`; recognized by `/modifier-search`, pass `modifier_visibility_audit`, applied via static_modifiers/techs, and read via `modifier:X` in script values. The warning only means no engine *code* reads them — correct for script-side custom modifiers. Unfixable without deleting the systems. Tracked at `docs/audits/open_issues.md#L12`.
+
+### `jomini_eventmanager.cpp:440` — intentional vanilla-event override duplicate-ID notice
+- source: `jomini_eventmanager.cpp:440`
+- tracked: `docs/audits/open_issues.md#l13-mod-event-override-duplicate-event-id-notices`
+
+```
+Duplicated event ID 'formation.17' found
+```
+
+`events/te_formation_overrides.txt` deliberately redefines vanilla `formation.17`. The engine keeps `Previous` (the mod file) and rejects `New` (vanilla), so the override works; the notice is by-design. Signature pinned to the specific event ID so a *different* duplicated-ID collision still surfaces in triage. Tracked at `docs/audits/open_issues.md#L13`.
+
+### `jomini_effect.cpp:1139` — GUI-injected `base_market` scope flagged never-set
+- source: `jomini_effect.cpp:1139`
+- tracked: `docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set`
+
+```
+Event target 'base_market' is used but is never set
+```
+
+The market-panel trade charts inject `base_market` from GUI via `AddScope('base_market', …)` (`gui/market_panel.gui`) and read it in `common/script_values/gui_chart_script_values.txt`. The parse-time validator cannot see GUI AddScope calls. Works in-game; documented in the script-value file's header. Tracked at `docs/audits/open_issues.md#L14`.
+
+### `power_bloc_principle.cpp:139` — vanilla principles orphaned by REPLACE:principle_group
+- source: `power_bloc_principle.cpp:139`
+- tracked: `docs/audits/open_issues.md#l15-vanilla-principles-orphaned-by-replace-principle-group-overrides`
+
+```
+Principle principle_sacred_civics_
+```
+
+`REPLACE:principle_group_sacred_civics` swaps the vanilla group's members for the mod's `principle_sacred_civics_N_mod` variants; the vanilla `principle_sacred_civics_N` entries stay in the database groupless and log once each per launch. Group-less principles are unpickable → harmless. Tracked at `docs/audits/open_issues.md#L15`.
+
+### `country_law_manager.cpp:464` — deliberate historical law seeds lacking unlock tech (1.13.9 validation)
+- source: `country_law_manager.cpp:464`
+- tracked: `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking-technologies-retention-warnings-1-13-9`
+
+```
+retain law Ministry of War Established
+retain law National Bank Established
+retain law Gold Standard
+retain law Free & Mutual Banking
+retain law Universal Banking (Light Prudence)
+retain law Civic Monolingualism
+retain law Multilingual Federalism
+retain law Traditional IP Protection
+retain law Colonial Slavery
+retain law Legal Limbo
+retain law Intrusive Surveillance System
+retain law Total War
+retain law State Secrets
+```
+
+Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#L16`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, …), and init-order transients for the three lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#L16`.
+
+### `guitexturehandler.h:155` — strategic-reserve silo missing UI texture (unresolved)
+- source: `guitexturehandler.h:155`
+- tracked: `docs/audits/open_issues.md#l17-strategic-reserve-silo-missing-texture-warning-unresolved`
+
+```
+building_strategic_reserve_silo has missing texture
+```
+
+One line per launch; the queried-but-missing texture slot hasn't been identified yet (the building's `icon` dds exists). Cosmetic fallback art. Signature pinned to the silo so other buildings' missing textures still surface. Tracked at `docs/audits/open_issues.md#L17`.

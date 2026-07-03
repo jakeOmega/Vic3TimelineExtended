@@ -20,10 +20,25 @@ extended_timeline_add_specified_building_level = {
 			SPEC_LEVEL = $ADD_LEVEL$
 			SPEC_OWNER = owner
 		}
-	}	
+	}
 }
 
 extended_timeline_build_specified_building_level = {
+	# Vanilla 1.13.9 made create_building validate the state owner's unlocking
+	# technology ("<country> must have invented Urbanization"), which silently
+	# no-opped the seed construction sector from extra_history.txt's every_state
+	# block for ~69 tech-less decentralized 1836 countries (Micronesia, Ewe, …).
+	# Grant the era-1 tech first — vanilla's own tier-6 starting package already
+	# hands urbanization to decentralized nations, and a state receiving a
+	# construction sector should know how to construct.
+	owner ?= {
+		if = {
+			limit = {
+				NOT = { has_technology_researched = urbanization }
+			}
+			add_technology_researched = urbanization
+		}
+	}
 	switch = {
 		trigger = $SPEC_LEVEL$
 		1 = {

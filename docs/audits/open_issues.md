@@ -114,6 +114,44 @@ Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` su
 
 **Fix:** None needed — unfixable without deleting the modifiers (which would break the systems that use them). Documented here only to satisfy the noise-registry cross-reference and so a future triage doesn't re-investigate. The signature `is defined in script but not in code` is specific to this benign case; a genuinely-invalid modifier is caught at parse time by `modifier_visibility_audit`, not this runtime warning.
 
+### L13. Mod event override duplicate-event-ID notices
+**Files:** `events/te_formation_overrides.txt:21` (vs vanilla `events/misc_unifications.txt:1042`)
+
+**Problem:** Overriding vanilla `formation.17` logs `Duplicated event ID 'formation.17' found. New Location: 'events/misc_unifications.txt:1042', Previous Location: 'events/te_formation_overrides.txt:21'` once per launch. Benign **because the mod file is `Previous`** — the engine keeps `Previous` and rejects `New`, so the mod's copy wins (see the 2026-05-24 log-triage lesson). Only investigate if a future entry shows the **mod** file as `New`.
+
+**Fix:** None needed while the override is intentional; delete this entry if `te_formation_overrides.txt` is ever retired.
+
+### L14. GUI-injected event targets flagged never-set
+**Files:** `common/script_values/gui_chart_script_values.txt`, `gui/market_panel.gui`
+
+**Problem:** The market-panel trade charts inject `base_market` via `GuiScope…AddScope('base_market', …)` and read it as `scope:base_market` inside script values. The parse-time validator can't see GUI `AddScope` calls, so it logs `Event target 'base_market' is used but is never set` once per launch. The chart works (documented at `gui_chart_script_values.txt:60-62`).
+
+**Fix:** None possible script-side — the scope genuinely is set only from GUI data context.
+
+### L15. Vanilla principles orphaned by REPLACE:principle_group overrides
+**Files:** `common/power_bloc_principle_groups/extra_power_bloc_principle_groups.txt:173`
+
+**Problem:** `REPLACE:principle_group_sacred_civics` swaps the group's member list to the mod's `principle_sacred_civics_N_mod` variants, leaving vanilla `principle_sacred_civics_1..N` in the database but in no group → `Principle principle_sacred_civics_1 is not part of any group` once per launch. Harmless: group-less principles are unpickable.
+
+**Fix:** None needed — inherent to the REPLACE-group pattern. Same applies to any future `REPLACE:principle_group_*` that drops vanilla members.
+
+### L16. Historical law seeding vs `unlocking_technologies` retention warnings (1.13.9+)
+**Files:** `common/history/extra_history.txt`, `common/laws/extra_laws.txt` (lawgroup file order)
+
+**Problem:** Vanilla 1.13.9 added a load-time validation that logs `Country <TAG> is not permitted to retain law <Name>` for every country holding a law whose `unlocking_technologies` it lacks. Two mod cases, both warning-only:
+
+1. **Init-order noise (158 countries × 3 laws):** the mod's lawgroups list laws in progressiveness/menu order, so the tech-gated late-era law sits first in `lawgroup_privacy_rights` / `lawgroup_rules_of_war` / `lawgroup_right_to_information`. At country init the engine auto-assigns the **first law in the group** to every unseeded country and the new validation logs it — then `extra_history.txt` GLOBAL (`every_country`, "executed last among all history") activates the intended tech-free baselines (`law_minimal_privacy_protection`, `law_traditional_rules_of_war`, `law_informal_government_secrecy`). Final game state is correct; the warnings describe a transient. Keeping file order is deliberate (menu ordering).
+2. **Deliberate historical seeds (~36 pairs):** GBR on Gold Standard since 1821, Prussian Kriegsministerium 1808, Statute of Anne 1710, north-German Civic Monolingualism, colonial-slavery seeds, … — history flavor trumps tech gates. Countries keep the law (they can never lose a tech requirement they never had).
+
+**Fix:** By design; keep. If a *new* law name appears in these warnings that matches neither class, investigate instead of assuming noise.
+
+### L17. Strategic-reserve silo missing-texture warning (unresolved)
+**Files:** `common/buildings/strategic_reserve.txt:61`
+
+**Problem:** `Database type building_strategic_reserve_silo has missing texture` (guitexturehandler.h:155) once per launch. The building's `icon` points at a vanilla dds that exists; the missing texture is some other UI slot (map/entity/background) not yet identified. Cosmetic — panels render with fallback art.
+
+**Fix:** Unresolved; next investigation step is comparing against a warning-free mod building's full gfx surface (icon + any `city_gfx`/entity/asset references) to find the queried-but-missing slot.
+
 ---
 
 ## Vanilla 1.13.7 patch impact (2026-05-27)
