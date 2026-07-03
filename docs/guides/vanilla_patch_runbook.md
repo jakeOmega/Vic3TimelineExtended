@@ -48,6 +48,18 @@ Manual-diff workflow when needed: compare `docs/modifiers.log`, `docs/effects.lo
 
 The shell helpers in `<vic3_modding_digests_path>/script/` (`diff-modifiers.sh`, `diff-documentation.sh`) are the same ones the upstream uses to generate the digests — handy when running against a vanilla version not yet covered.
 
+**Modifier-type-definitions name diff** — catches registrations added/removed even when no digest exists yet (vanilla `.txt` files there are BOM-prefixed and unindented, so plain `grep "^\w+ = {"` misses everything):
+
+```bash
+extract() { cat "$1"/*.txt | sed 's/^\xEF\xBB\xBF//' | grep -oE '^[a-z0-9_]+[ \t]*=[ \t]*\{' | sed 's/[ \t={]*$//' | sort -u; }
+extract ~/src/vic3/game/common/modifier_type_definitions            > /tmp/mt_old.txt   # at OLD_REF checkout
+extract "<base_game_path>/game/common/modifier_type_definitions"    > /tmp/mt_new.txt   # live install
+comm -13 /tmp/mt_old.txt /tmp/mt_new.txt   # added in new patch
+comm -23 /tmp/mt_old.txt /tmp/mt_new.txt   # removed → grep the mod for every one of these
+```
+
+This found both 1.13.9 breakage classes (the law-enactment rename and the harvest-condition deregistration) before the game was ever launched.
+
 You can use the mod-state server validator as a gating signal: after preliminary edits, `curl http://localhost:8950/validate/engine-coverage` returns the modifier names the mod uses that are no longer recognized.
 
 ### Known vanilla renames (cumulative across patches)
@@ -60,6 +72,9 @@ When `debug.log` shows `Unexpected token: <name>` or `inject/replace to a non-ex
 | `telecommunications` (tech) | `telephone` (tech) | `INJECT:` targets in `common/technology/technologies/modified.txt` | Vanilla split the old umbrella tech. The intelligence-capacity slot the mod wanted lives on `telephone`. |
 | `canning` (tech) | `canneries` (tech) | `INJECT:` targets in `common/technology/technologies/modified.txt` | `vacuum_canning` still exists; only the early-era `canning` was renamed. |
 | `has_role` (trigger) | `has_role_of_type` (trigger) | All character-role checks | Bulk-replaceable. |
+| `country_law_enactment_time_mult` | `country_law_enactment_speed_mult` | Static modifiers, law `modifier` blocks | 1.13.9 rework. **Semantics flip with the rename**: time-mult (negative = faster) → speed-mult (positive = faster). Vanilla's convention was sign-flip at the same magnitude. The six per-law variants renamed identically (`country_enactment_time_law_X_mult` → `country_enactment_speed_law_X_mult`). A `LAW_ENACTMENT_MIN_SPEED_FACTOR` define floors stacked maluses. |
+
+**Deregistration without removal** (same silent-no-op symptom, different fix): a patch can remove a `modifier_type_definitions` registration while keeping the underlying entity type. 1.13.9 deregistered `state_harvest_condition_{hailstorm,torrential_rains}_{impact,duration}_mult` although both harvest conditions still exist — any mod use silently no-ops. Fix by re-registering the type in the mod's `common/modifier_type_definitions/` (copy the last-known vanilla registration shape from `~/src/vic3` git history), not by deleting the mod's uses. Detect via the modifier-type-definitions name diff (BOM-aware extraction, see below), which catches what `debug.log` never reports.
 
 ### Symptoms-to-cause cheat sheet
 

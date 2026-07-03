@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** colonization system works — establishing colonies, frontier vs. overseas, colonial claims, malaria gating, colonial-state mechanics, tension and native uprisings, the Colonial Administration subject type, and company colonization. This is a niche but mechanic-rich corner of the game; the mechanics live across `common/laws/00_colonization.txt`, `common/state_traits/`, `common/decisions/`, `common/journal_entries/`, and the Civilizing-Mission JE in `common/journal_entries/`.
 
-> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). Wiki source dates this article 1.10–1.12; native-uprising mechanics, Colonial Administration JE, and company-colonization rights are all 1.10+ content. Verify specific conditions / cooldowns against `common/journal_entries/`, `common/decisions/`, `common/diplomatic_actions/`, and the relevant law file.
+> **Last verified against vanilla:** 1.13.9 ("Matcha"). Wiki source dates this article 1.10–1.12; native-uprising mechanics, Colonial Administration JE, and company-colonization rights are all 1.10+ content. Verify specific conditions / cooldowns against `common/journal_entries/`, `common/decisions/`, `common/diplomatic_actions/`, and the relevant law file.
 >
 > **This doc captures concepts, not balance values.** Per-state colonial-growth coefficients, malaria mortality numbers, exact tension thresholds, and per-region colonial-administration starting laws live in data files; reproducing them here would drift. Read this doc for the *shape* of colonization; the parameters belong with the per-region / per-decree definitions.
 
@@ -12,7 +12,7 @@ Colonization requires:
 
 1. The **`Colonial Affairs` institution** (any Colonization law except `No Colonial Affairs` enables it).
 2. The **`Colonization` technology** (Era 1 Society — researched at start by most recognized powers).
-3. **Sufficient Involvement** in the strategic region containing the target state — see `vanilla_diplomacy_reference.md` § 6 for the full Involvement-tier system. Colonizing requires reaching the **Engaged tier or higher** (per the diplomacy doc § 6.3, Engaged is the tier that unlocks colonization, play-starts, defensive pacts, and guarantee-independence).
+3. **Sufficient Involvement** in the strategic region containing the target state — see `vanilla_diplomacy_reference.md` § 6 for the full Involvement-tier system. Colonizing requires reaching the **Engaged tier or higher** (per the diplomacy doc § 6.3, Engaged is the tier that unlocks colonization, play-starts, defensive pacts, and guarantee-independence); since 1.13.9 the exact Involvement tier required is surfaced directly in the map tooltip.
 4. The target state to be **owned by a decentralized nation**.
 5. The target state to be **coastal**, OR adjacent to a state already owned by the colonizer.
 
@@ -111,7 +111,7 @@ The button "Establish Colony in [Region]" requires the country to own ≥ 2 inco
 - Cedes all owned states in the region to the new subject.
 - Adds a permanent country-wide modifier to the establisher: cuts non-contiguous incorporation speed substantially, doubles contiguous incorporation speed.
 
-The colonial administration starts at **principality tier** with a fixed law profile partially inherited from the establisher and partially fixed (`Colonial Administration` Governance Principles, `Subjecthood` Citizenship, `No Workers' Rights` Labor Rights, `Child Labor Allowed` Children's Rights, `No Health System`, `Migration Controls`). Other laws inherited from the establisher (Trade Policy, Taxation, etc.).
+The colonial administration starts at **principality tier** with a fixed law profile partially inherited from the establisher and partially fixed (`Colonial Administration` Governance Principles, `Subjecthood` Citizenship, `No Workers' Rights` Labor Rights, `Child Labor Allowed` Children's Rights, `No Health System`, `Migration Controls`). Other laws inherited from the establisher (Trade Policy, Taxation, etc.). Since 1.13.7, colonial countries formed this way receive **all** of the overlord's primary cultures.
 
 ### 6.2 The Nature of Administration event
 

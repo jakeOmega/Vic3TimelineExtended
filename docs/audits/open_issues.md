@@ -126,8 +126,8 @@ Verify+flag pass after vanilla released **1.13.7**. The patch is overwhelmingly 
 - **New modding hooks obsolete nothing here.** Mod has no `can_queue_building_levels` usage and no effect-based maneuver workaround, so `add_maneuvers` / script-value queue changes don't enable any cleanup.
 - **No tracked vanilla bugs to retire.** None of the 1.13.7 bugfixes (Sakhalin arable, Kuril/Alaska transfer, Feijó immortality, etc.) were tracked in `docs/vanilla/vanilla_known_bugs.md`.
 
-### Pending verification gate (not done this session)
-- **Engine-doc modifier surface is stale.** The breakage gate (`/validate/engine-coverage?filter=vanilla_breakages`) ran clean (0 unknown / 0 suspicious), **but** the engine-doc snapshot is dated 2026-05-20 — pre-1.13.7. A true 1.13.7 engine-surface check requires launching the 1.13.7 game (so it re-dumps `script_docs`), then `POST /reload?engine_only=true`, then re-running the gate. **`Last verified against vanilla:` banners deliberately left at 1.13.5 until this is done.**
+### Pending verification gate — RESOLVED 2026-07-03
+- ~~Engine-doc modifier surface is stale.~~ Resolved by the 1.13.9 migration (commit 2de1c4c): a fresh vanilla-pure `script_docs` dump from the live 1.13.9 game now lives at `~/src/vic3-docs-snapshots/1.13.9/` (`vanilla_snapshot_docs_path` in `paths.local.json`), and the breakage gate ran clean against it (0 unknown / 0 suspicious). Banners bumped to 1.13.9.
 
 ### Flagged for follow-up (GitHub issues — naval balance / design)
 - **#161** — re-tune mod ship accuracy/speed/visibility for the new hit-chance model (accuracy vs speed+visibility; torpedo craft now fastest).
@@ -136,6 +136,19 @@ Verify+flag pass after vanilla released **1.13.7**. The patch is overwhelmingly 
 - **#160** — add `fleet_compositions` so the new role-based AI actually fields the mod's 20+ modern ship types.
 - **#164** — verify `merchant_marine` good economy after port-connection / goods-transfer cost cuts (canal companies + late-era PMs).
 - **Minor (note only, no issue):** tolls halved + 6-month toll/strait cooldown make the mod's strait-control fortification PMs (`pm_naval_fortification_*` with `state_control_strait_bool`) marginally less rewarding; no balance dependency.
+
+---
+
+## Vanilla 1.13.9 "Matcha" migration (2026-07-03)
+
+Full correctness pass for the cumulative 1.13.6–1.13.9 bump (commit 2de1c4c), per the runbook. Two engine-silent breakage classes found by the modifier-type-definitions name diff and fixed:
+
+- **`country_law_enactment_time_mult` → `country_law_enactment_speed_mult`** with sign flip (4 sites; per-law variants also renamed, unused by mod).
+- **Harvest-condition modifier deregistration**: 1.13.9 removed the `state_harvest_condition_{hailstorm,torrential_rains}_*` modifier *types* while keeping the conditions; the mod's global-warming lines silently no-opped. Re-registered in `global_warming_modifier_types.txt`.
+
+Verified safe: all 55 mod define overrides exist in 1.13.9; no use of removed `days_obsolete` trigger or tobacco-export-tariff modifiers; all 66+6 vanilla loc keys the mod shadows are string-identical in 1.13.9; company INJECTs (append-only) preserve vanilla's 1.13.7/1.13.9 requirement changes (Rheinmetall, Fundição Ipanema, Witkowitzer); `migration_pull` engine docs unchanged → `te_map_mode_*` stays dormant. 13 GUI overrides re-merged (closes #208). #160's fleet_compositions verdict (ship_group-keyed, no change needed) re-verified against 1.13.9.
+
+Follow-ups filed as GitHub issues: naval rebalance for 1.13.9's capital-ship/gun-module/crit changes; capacity-cost modifier migration; new-primitive adoption (variable maps, movement defeat, `should_target_state_in_unification_play`).
 
 ---
 

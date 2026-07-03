@@ -2,9 +2,9 @@
 
 A condensed "must-know" cheat sheet for vanilla Victoria 3, surfacing the **non-obvious** mechanics that bite mod work. Each entry below has a deep-dive doc — read those for the *why*; this is the *what*.
 
-> **Last verified against vanilla:** 1.13.5 ("The Great Wave"). Numbers are absent on purpose — they drift each patch and live in `common/defines/`. The *mechanism shape* in this doc is durable.
+> **Last verified against vanilla:** 1.13.9 ("Matcha"). Numbers are absent on purpose — they drift each patch and live in `common/defines/`. The *mechanism shape* in this doc is durable.
 
-> **Companion source — what *changed* per patch:** [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) (cloned locally to `vic3_modding_digests_path`, auto-pulled on `mod_state_server` cold start). Per-version folders (1.8.7 … 1.13.4) hold `changes_breaking.md`, `changes_script_docs.md`, `changes_data_types.md`, and `changes_files.md`. **The docs in this directory describe what mechanics *are* in 1.13.4; the digests describe how each mechanic *got here*.** Hit the digests before manually diffing `~/src/vic3` between version commits.
+> **Companion source — what *changed* per patch:** [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) (cloned locally to `vic3_modding_digests_path`, auto-pulled on `mod_state_server` cold start). Per-version folders (1.8.7 … 1.13.8; 1.13.9 not yet published as of 2026-07-03) hold `changes_breaking.md`, `changes_script_docs.md`, `changes_data_types.md`, and `changes_files.md`. **The docs in this directory describe what mechanics *are* in 1.13.9; the digests describe how each mechanic *got here*.** Hit the digests before manually diffing `~/src/vic3` between version commits. For a version with no digest yet, the runbook's modifier-type-definitions name diff (`docs/guides/vanilla_patch_runbook.md` § 3) plus a fresh in-game `script_docs` dump cover the breakage surface.
 
 ---
 
@@ -49,6 +49,8 @@ A condensed "must-know" cheat sheet for vanilla Victoria 3, surfacing the **non-
 - **Party whip mechanic**: highest-clout IG in a party counts full ideological weight; secondaries count half. This is why parties exist — to halve the penalty.
 - **6-month free reform window after elections** — first reform within doesn't radicalize.
 - **Movements**: <25 passive / 25–49 active / 50+ obstinate / 75+ revolutionary. **While a law a movement has stance on is being enacted, its activism cannot drop below 25**. Re-mobilization on enactment is automatic.
+- **Movement defeat (1.13.9)**: losing a civil war slashes a movement's activism afterward; defeat status is stored **per identity** and survives disband/refound. Script surface: `set_movement_defeated`, `days_since_movement_defeated`, `days_since_movement_type_defeated`.
+- **Law enactment is a *speed* system (1.13.9)**: `country_law_enactment_speed_mult` (positive = faster) replaced the old time-mult, with a define-backed minimum so stacked maluses can't freeze enactment (nor stack to instant).
 - **Cultural / religious / pan-national movements at 50%+ activism contribute to state obstinance** — pops *don't need to be radical*, just supporters.
 - **Powerful IG**: trait magnitudes ×2 (positive AND negative). Marginalized IG: traits do NOT activate. In-government but sub-marginalization-clout: ×0.5.
 - **In-government IGs cannot be marginalized** even with low clout (safety net).

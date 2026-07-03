@@ -4,6 +4,8 @@ When triaging mod error-log entries, these vanilla 1.13 bugs surface even with t
 
 Each entry: error text, vanilla file path with line, root cause, frequency observed in our 1.13 testing.
 
+> **Re-verify pass due (2026-07-03, 1.13.9 migration):** vanilla 1.13.6–1.13.9 modified 24 of the files tracked below (notably `movement_events.txt`, `agitators_events/coup_events.txt`, `treaty_articles/31_ship_transfer.txt`, `journal_entries/07_hokkaido.txt`, `laws/00_distribution_of_power.txt`, `ideologies/01_character_ideologies.txt`, `scripted_effects/00_victoria_ip4_scripted_effects.txt`). Spot-diffs were inconclusive — line numbers have shifted and some flagged regions were rewritten. On the next `log-triage` run against a 1.13.9 session, retire any entry whose error no longer appears rather than trusting the stale line numbers here.
+
 ## Script errors observed
 
 ### `common/ai_strategies/00_default_strategy.txt:5065` — invalid `region` event target

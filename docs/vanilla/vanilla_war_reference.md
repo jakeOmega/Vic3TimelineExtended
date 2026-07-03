@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** war systems work, written for AI agents that need context before touching mod content that hooks the war/military layer (anti-war movement events, war-support modifiers, mobilization-side modifiers, treaty articles tied to war outcomes, etc.). Mod-specific systems (covert warfare, nuclear weapons, the world-war journal entry, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`.
 
-> **Last verified against vanilla:** 1.13 ("The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** The wiki source for this doc is roughly a week post-1.13 patch and may be slightly inaccurate in places — verify any specific name or number via the server before relying on it.
+> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** The wiki source for this doc is roughly a week post-1.13 patch and may be slightly inaccurate in places — verify any specific name or number via the server before relying on it.
 >
 > **Verify before relying on names.** Modifier names, unit type IDs, and trigger names cited below should be confirmed via the mod state server (`/modifier-search?q=`, `/engine-docs/modifiers`, `/raw/CombatUnitType/<id>`) before you reference them in code. Vanilla renames things across patches.
 >
@@ -149,6 +149,8 @@ Activating most options imposes an organization penalty while mobilized; deactiv
 
 Conscript battalions activate army-by-army during plays/wars. Once activated, they cannot return to civilian life until demobilization. They take time to reach full strength and disappear (with all experience) on demobilization.
 
+**Command-limit interaction (1.13.9 rework):** regulars and raised conscripts no longer *sum* against command limit — whichever of the two counts is **higher** is compared against it instead, removing the old need to mass-promote commanders every time conscripts were raised.
+
 ## 5. Commanders
 
 Commanders are characters with general/admiral roles, hired through formations. **As of 1.13 each formation has a single commander** (the old up-to-four-commanders model is gone). Commanders can be freely unassigned and reassigned between formations, but take some time to travel to their new posting; while in transit their trait benefits are suspended and they cannot advance on the front, though they still provide command limit. A single commander can participate in multiple battles simultaneously, capped by distance and rank. Orders apply to the whole formation, not per-commander as before. Male rulers of dictatorships and monarchies can also serve as Commander-in-Chief.
@@ -194,7 +196,7 @@ Send to Front requires a supply line from the army's home HQ to the front. Landl
   - Naval Fortifications at the target state set a **minimum strength** the invading fleet must beat before invasion can even be attempted, plus a defense bonus to the invasion battles that do happen (see § 9.9).
   - The older flotilla-count / `landing_craft`-tech penalties may have been replaced or restructured — verify against the live game's tooltip before relying on the specific numbers from older docs.
 
-The defender auto-creates a front at the targeted state, but defending armies parked in HQ are *not* auto-assigned to the new front — repeated naval invasions force defender micromanagement.
+The defender auto-creates a front at the targeted state, but defending armies parked in HQ are *not* auto-assigned to the new front — repeated naval invasions force defender micromanagement. As of 1.13.7, garrisoned armies can only defend against naval invasions targeting their own state or a neighboring one — a garrison no longer covers the whole country.
 
 ## 8. Battles
 
@@ -223,7 +225,7 @@ Combat ticks four times daily, exchanging manpower and morale damage. Combat wid
 
 ### Occupation
 
-Battle wins yield occupation score scaled by terrain and infrastructure. A state takes 2–4 consecutive wins to fully occupy. Occupation only matters for war-goal control during the war; buildings continue to function and supply their domestic market while occupied.
+Battle wins yield occupation score scaled by terrain and infrastructure. A state takes 2–4 consecutive wins to fully occupy. Occupation only matters for war-goal control during the war; buildings continue to function and supply their domestic market while occupied. Since 1.13.9, a state that is ≥50% occupied counts as occupied for war-goal control, and controlling half of the enemy's incorporated states contests their capital-based war goals.
 
 ### Battle conditions
 
@@ -251,7 +253,7 @@ Pre-1.13, navies were abstract pools of "flotilla units" recruited like battalio
 - Ships have **hull damage** and **crew damage** that accumulate over their lifetime. Enough damage sinks a ship; less than that forces it to **return to port to repair**, consuming goods at the shipyard.
 - Ships need a **crew** drawn from sailors produced at **Naval Administration** buildings (the sailor-producing role still exists; the building stayed). Without crew a ship sits idle.
 - Ship type cannot be changed once built — the old "convert flotilla to a different unit type" pattern is gone. New tech unlocks new ship types you build alongside the old ones.
-- Ship construction times are significantly longer than the old "recruit 1000 sailors" model.
+- Ship construction times are significantly longer than the old "recruit 1000 sailors" model. 1.13.9 further raised the construction time and cost of capital ships (especially dreadnoughts), with later dockyard-era technologies granting capital-ship construction-speed bonuses in compensation.
 - The two military goods **Man-o-War** and **Ironclad** were *removed* in 1.13 — they were the consumable goods the old shipyards required to recruit flotilla units of those types, and don't exist anymore now that ships are individual objects built from Ship Construction. If you find them referenced as goods in mod or older content (PMs, trade routes, buy packages, treaty articles), that reference is broken.
 
 ### 9.2 The Ship Designer
@@ -283,6 +285,8 @@ Marines are a new special **land unit** type. All-marine formations can be **per
 
 The combat model itself was rewritten. Each ship has an **Initiative** value driving turn order. On its turn a ship either attacks or attempts to retreat. Attacks deal **hull damage** or **crew damage** based on attack vs armor and the engaged ships' specific stats. The **wood-to-steel transition is intentionally very impactful** — a steel-hulled ironclad-class ship decisively outclasses a wooden capital ship in a way the old offense/defense flotilla model didn't capture.
 
+1.13.7 made **accuracy** compare against both the target's speed *and* visibility for hit chance — capital ships now genuinely struggle to hit torpedo craft, and torpedo craft were made the fastest ships of their era. 1.13.9 reworked ship **critical hits** to ignore the target's armor entirely (with reduced crit damage in compensation) and rebalanced gun modules to sit within a narrow band of the base module.
+
 Naval battles are visualized as **dioramas** showing the two clashing fleet compositions.
 
 ### 9.7 Sea nodes, presence, detection
@@ -308,6 +312,8 @@ The full mission list as of 1.13:
 - **Hunt Pirates** *(1.13 new)* — engages any fleet on Piracy/Privateering missions in the node.
 - **Privateering** *(1.13 new)* — recognized-nation version of Piracy, available during war or active naval hostilities.
 - **Piracy** *(1.13 new)* — unrecognized-nation only; captures trade through the node and sells it in the actor's market.
+
+**Blockade Efficiency (1.13.7):** now computed as total blockade *strength* ÷ total blockade *resistance* of the blockaded states (previously strength ÷ number of states), with strength/resistance rebalanced so blockades stay viable into the mid-late game.
 
 A new treaty article exists to **enforce abandonment of Piracy**. Gunboat diplomacy (offering treaty terms backed by **Naval Hostilities** if declined) is the stated 1.13 design intent — the "blurred line between peace and war" framing.
 

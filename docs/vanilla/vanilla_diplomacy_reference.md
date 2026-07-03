@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** diplomacy systems work, written for AI agents that need context before touching mod content that hooks the diplomatic layer (formables and unification plays, infamy/relations modifiers, power-bloc principles, treaty articles, subject mechanics). Mod-specific systems (Pan-X unification plays, formable candidacy, covert warfare, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`. Diplomatic *plays* themselves are covered in detail in `docs/vanilla/vanilla_war_reference.md` § 1; this doc focuses on everything that surrounds and feeds into a play.
 
-> **Last verified against vanilla:** 1.13 ("The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** Wiki sources for this doc are tagged at versions ranging from 1.9 to 1.13; verify any specific name or number via the server before relying on it.
+> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** Wiki sources for this doc are tagged at versions ranging from 1.9 to 1.13; verify any specific name or number via the server before relying on it.
 >
 > **Verify before relying on names.** Modifier names, war goal IDs, treaty article IDs, principle IDs, subject type IDs, and trigger names cited below should be confirmed via the mod state server (`/modifier-search?q=`, `/engine-docs/modifiers`, `/raw/SubjectType/<id>`, `/raw/PowerBlocPrinciple/<id>`, `/raw/DiplomaticPlay/<id>`) before referencing them in code. Vanilla renames things across patches.
 >
@@ -248,6 +248,7 @@ Treaties are bilateral binding agreements signed for a fixed period (5 / 10 / 15
 - **Renegotiation.** Either party can propose changes; if accepted, a new binding period starts (potentially shorter than the original).
 - **Counteroffers.** When receiving a treaty proposal, you can send a counter-offer instead of accepting/declining.
 - **Enforcement.** A treaty can be enforced via the *Enforce Treaty* war goal — the only formal way to make non-fulfillment costly beyond simple breach penalties.
+- **Reachability.** Since 1.13.7 treaties can be negotiated with countries you cannot "reach" — fixing deadlocks such as formation-JE requirements on unreachable partners. And since 1.13.9, treaties in effect at game start cannot be broken by the AI until their binding period ends.
 
 ### 8.2 Article shapes
 
@@ -307,7 +308,7 @@ A power bloc is an international organization with a leader and members. The lea
 | Religious Convocation | Leader can impose state religion; clergy IP contribution efficiency bonus for the leader; conversion / birth-rate / Devout-strength bonuses across all members |
 | Cultural Commonwealth | Leader can impose Citizenship law and *Spread Primary Culture* on members |
 
-Identity also conditions which **principles** are selectable as primary, and which laws the leader cannot enact (e.g. Military Treaty cannot enact Peasant Levies; Religious Convocation cannot enact Total Separation or State Atheism).
+Identity also conditions which **principles** are selectable as primary, and which laws the leader cannot enact (e.g. Military Treaty cannot enact Peasant Levies; Religious Convocation cannot enact Total Separation or State Atheism). Since 1.13.7, Social Monarchy is a valid governance law for Sovereign Empire blocs.
 
 ### 9.3 Principles and mandates
 
@@ -366,7 +367,7 @@ A bloc needs a meaningful leverage advantage over any other bloc *and* over the 
 - Diplomats expelled (penalty grows with target's rank).
 - Cultural status of any of target's primary cultures in the leader — discrimination tiers cut leverage, with violent hostility being the worst (worst-only is what counts).
 - State religion clash with no Freedom of Conscience in the target — extra penalty for Religious Convocation blocs.
-- Leader has no interest in target's *capital* region (vs the targeted region only).
+- Involvement tier in the target's *capital* region (reworked 1.13.9): no interest or Observant imposes a leverage penalty, while Pervasive/Hegemonic grants a bonus — leverage generation now scales with capital-region Involvement rather than being a flat has-interest check.
 - Leader at war with the target.
 - Leader infamy at Infamous / Notorious / Pariah levels — penalty stacks at higher infamy.
 - Leader unrecognized while target is recognized.
@@ -453,6 +454,8 @@ Recognition mismatch on transfer auto-converts the subject type per the table in
 The diplomatic-play system — phases, escalation, maneuvers, sways, war goals — is documented in detail in `docs/vanilla/vanilla_war_reference.md` § 1. **Read that section before adding a play-related event or modifier.** This section only adds the diplomacy-side framing not covered there.
 
 Plays are *the* mechanism by which infamy is generated. Almost every infamy-bearing action (annexation, conquest, dominion, regime change, humiliation) flows through a play and applies infamy when the wargoal is enforced — either at backdown / give-in (for primary demands) or at peace deal (for secondary demands). Wargoals dropped from the final peace deal refund their infamy partially or fully.
+
+Since 1.13.9, plays can be started directly over strait-related war goals. On the modding side, 1.13.7 added an `add_maneuvers` effect usable in the diplomatic-play scope.
 
 Plays interact with everything in this doc:
 

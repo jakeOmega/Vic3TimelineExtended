@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** political systems work, written for AI agents that need context before touching mod content. This doc covers vanilla mechanics only — mod-specific systems (banking-cycle politics, civil-rights JEs, decolonization rework, combined-arms IG traits, the dormant `te_map_mode_*` survey, etc.) live in `docs/systems/journal_entry_systems.md` and `docs/systems/mod_systems.md`.
 
-> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
+> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
 >
 > **Verify before relying on names.** Law IDs, IG IDs, ideology IDs, party IDs, movement IDs, character-trait IDs and modifier names cited below should be verified via the mod state server (`/laws`, `/raw/InterestGroup/<id>`, `/raw/Ideology/<id>`, `/modifier-search?q=`) before referencing them in code. Vanilla renames things across patches.
 >
@@ -53,9 +53,9 @@ A *quick reform* UI option suggests three highest-legitimacy government composit
 **Legitimacy** is a single 0–100 country-scope value, bucketed into five named tiers (low → high): **Illegitimate**, **Unacceptable**, **Contested**, **Legitimate**, **Righteous**. The bucket boundaries themselves matter much less than which mechanic each tier gates:
 
 - **Illegitimate** is the only bucket that *blocks* law enactment outright. Already-running enactments freeze (resume when legitimacy climbs); new enactments cannot start. The single exception is laws backed by a non-passive movement — pop pressure can override an illegitimate government.
-- **Unacceptable** allows enactment but with an enactment-time penalty.
+- **Unacceptable** allows enactment but with an enactment-speed penalty.
 - **Contested** is the neutral baseline.
-- **Legitimate** and **Righteous** add favorable enactment-time and scaling loyalist-generation modifiers.
+- **Legitimate** and **Righteous** add favorable enactment-speed and scaling loyalist-generation modifiers.
 - All five tiers also drive a per-tier opposition-IG approval delta and a per-tier pop loyalist/radical generation rate that compounds over time.
 
 The mod-relevant takeaway: the only *binary* gate is "Illegitimate vs. above". Everything else is a smooth modifier that mod content can additionally push on (event modifiers like `Enacted an Imposed Law` add direct legitimacy chunks).
@@ -114,7 +114,7 @@ The illegitimate-government rule from § 2.2 layers on top: even with a legal en
 
 ### 3.3 The three-phase enactment process
 
-Once enactment starts, the law walks **three phases** at a checkpoint cadence (default per-law-group, longer for foundational groups — Governance Principles, Distribution of Power, Economic System, and Slavery — than for everyday human-rights laws; read `base_enactment_days` from `common/law_groups/`). Surplus authority and high legitimacy shorten the cadence; deficit authority and low legitimacy lengthen it. Each checkpoint resolves to one of four outcomes:
+Once enactment starts, the law walks **three phases** at a checkpoint cadence (default per-law-group, longer for foundational groups — Governance Principles, Distribution of Power, Economic System, and Slavery — than for everyday human-rights laws; read `base_enactment_days` from `common/law_groups/`). Surplus authority and high legitimacy shorten the cadence; deficit authority and low legitimacy lengthen it. Since 1.13.9 these are **Law Enactment Speed** modifiers (`country_law_enactment_speed_mult`, positive = faster) rather than enactment-time reductions, with a define-backed minimum speed floor (`LAW_ENACTMENT_MIN_SPEED_FACTOR`) so stacked modifiers can never reach zero/instant enactment. Each checkpoint resolves to one of four outcomes:
 
 - **Success** — phase advances; on phase 3 success, the law passes.
 - **Advance** — fires a positive event with a usually-unconditional success-chance bump.
@@ -152,7 +152,7 @@ A Law Commitment from a higher-rank counterparty grants the committing country a
 
 Elections happen **only in countries whose Distribution of Power law enables voting**. Cycle length is fixed at 4 years with a 6-month campaigning runup; the **only way to call a non-scheduled election is by scripted effect** (an event or JE, not a player decision). Switching from a non-voting Distribution-of-Power law to a voting one immediately starts a campaign.
 
-During the campaign, each party is assigned a **momentum** value that fluctuates with random factors, events, and IG-leader popularity (high-popularity leaders nudge their party's momentum each tick). Final vote share is the integration of the per-week momentum into a vote tally on election day. The player's main lever is event choices that nudge momentum, plus the standing momentum effect of leader popularity.
+During the campaign, each party is assigned a **momentum** value that fluctuates with random factors, events, and IG-leader popularity (high-popularity leaders nudge their party's momentum each tick). Final vote share is the integration of the per-week momentum into a vote tally on election day. The player's main lever is event choices that nudge momentum, plus the standing momentum effect of leader popularity. Since 1.13.9, passive **Electoral Confidence** maluses no longer apply below a low confidence threshold — bottomed-out confidence stops compounding on itself.
 
 Elections **do not** automatically reform government. They reset clout-from-votes (which moves legitimacy) and they re-evaluate party affiliations (§ 6); any government composition change is still a separate manual action. The exception is the **Presidential Elective** transfer of power: in that government type, the leader of the highest-clout IG **automatically becomes ruler at each election**, even if their IG is in opposition — flipping ruler ideology on a 4-year tick.
 
@@ -402,6 +402,8 @@ State selection for the revolutionary country: the engine picks a fraction of st
 
 **Civil war end state**: half of all radicals neutralize on civil war start; further fractions normalize on victor identity at the end of the play (50% on the victor's pops, additional 25% on the loser's). Losing IGs eat a steep, multi-year political-strength penalty (the durable cost of having backed the wrong side).
 
+Since 1.13.9 the engine also tracks **movement defeat**: a movement defeated in a civil war gets substantially reduced activism afterward, and defeat status is stored per movement identity — it persists through disband and refound (script surface: `set_movement_defeated` effect; `days_since_movement_defeated` / `days_since_movement_type_defeated` triggers). Separately, 1.13.9 changed ideology-selection weighting: prominence and movement pressure now combine additively rather than multiplicatively.
+
 ### 8.6 Obstinance — the politics → state crossloop
 
 When a **cultural / religious / pan-national** movement reaches the obstinate (50+ activism) tier, it starts contributing per-state **obstinance** in states where its supporting pops live. Obstinance is a state-level modifier that accumulates from the workforce share supporting obstinate movements; it caps at a moderate ceiling.
@@ -552,6 +554,8 @@ Decrees, **bolster/suppress** of movements, **consumption taxes**, **monopolies*
 - **Few-state countries** (≤5 states) get high decree-per-state coverage; decrees are very efficient there.
 - **Many-state countries** find consumption taxes (revenue-positive) more efficient than decrees (revenue-neutral).
 - **Liberalizing legal regimes** (e.g. reducing Free Speech restrictions) cut Authority production — many decrees become unaffordable later in a campaign as laws modernize. Modeling decree-driven mod systems for late-game players means anticipating this Authority compression.
+
+Since 1.13.9, drains have a dedicated modifier shape: most vanilla flat *negative* authority/bureaucracy/influence modifiers were converted to capacity-cost modifiers (`country_authority_cost_add`, `country_bureaucracy_cost_add`, `country_influence_cost_add`) that render as costs in the capacity breakdown rather than as negative production.
 
 The ruler-trait reductions (*Ambitious* −% decree cost, *Imperious* −% decree cost) are durable but capped against a floor — decree cost cannot drop below 10% of base regardless of stacked modifiers.
 

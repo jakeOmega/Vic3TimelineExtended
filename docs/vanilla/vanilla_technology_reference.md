@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** technology system works — the three trees, the era-and-prerequisite gating, innovation generation and capacity, technology spread, and the strategic shape of "ahead-of-time" research. This doc covers vanilla mechanics; mod-specific technologies live in their own folders alongside vanilla in `common/technology/technologies/` (see `docs/auto_generated_files.md` for ownership).
 
-> **Last verified against vanilla:** 1.13.5 (Hotfix to "The Great Wave"). Wiki source for this article is dated 1.10; tree contents change every major patch (1.11–1.13 added several Era-V techs and reshuffled some prerequisites). **Verify specific technology IDs against the live game** via `/raw/Technology/<id>` or `docs/engine/technologies.txt` before quoting prerequisites in code.
+> **Last verified against vanilla:** 1.13.9 ("Matcha"). Wiki source for this article is dated 1.10; tree contents change every major patch (1.11–1.13 added several Era-V techs and reshuffled some prerequisites). **Verify specific technology IDs against the live game** via `/raw/Technology/<id>` or `docs/engine/technologies.txt` before quoting prerequisites in code.
 >
 > **This doc captures concepts, not the per-tech catalog.** The full enumerated list (eras, prerequisites, descriptions) is auto-generated to `docs/engine/technologies.txt` on every `/reload`; that file is the source of truth for "what techs exist in vanilla and what unlocks what". This doc explains the *system* the catalog runs on.
 >
@@ -16,7 +16,7 @@ There are three independent technology trees:
 - **Military** — weapons, doctrines, organizational schemes; ship types (most of the naval tree); civilian-port upgrades that touch supply.
 - **Society** — politics, finance, diplomacy, ideology unlocks, institution caps, decree unlocks, formable-country gates. The "soft-tech" tree.
 
-Each tree has two starter technologies (free to start). Every other technology has one or more prerequisite techs that must be researched first; clicking a tech with unresearched prereqs queues them in order.
+Each tree has two starter technologies (free to start). Every other technology has one or more prerequisite techs that must be researched first; clicking a tech with unresearched prereqs queues them in order. 1.13.9 adjusted prerequisites for Military Aviation and Seaplane Tenders so they're actually usable when unlocked (previously researchable before airplanes could exist in your market), gave Arc Welding / Concrete Dockyards bonuses to capital-ship max construction progress, and added a search bar to the tech-tree UI that finds techs by what they unlock.
 
 Many techs have no direct effect — they exist purely to **unlock** something: a building, a PM, a law, a unit type, a journal entry, a decree, a leader-ideology generation, a formable-country candidacy. Other techs (especially society / military) carry direct modifiers (army offense, loan-interest cuts, increased authority/influence, institution-level caps).
 
