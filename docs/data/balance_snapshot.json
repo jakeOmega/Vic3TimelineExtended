@@ -8,9 +8,9 @@
         "goods_input_radios_add": "2",
         "goods_input_small_arms_add": "4",
         "goods_input_tanks_add": "4",
-        "unit_defense_add": "100",
+        "unit_defense_add": "75",
         "unit_devastation_mult": "0.2",
-        "unit_offense_add": "60"
+        "unit_offense_add": "45"
       },
       "name": "combat_unit_type_armored_infantry"
     },
@@ -22,9 +22,9 @@
         "goods_input_robotics_add": "30",
         "goods_input_small_arms_add": "15",
         "goods_input_tanks_add": "12",
-        "unit_defense_add": "350",
+        "unit_defense_add": "585",
         "unit_devastation_mult": "1",
-        "unit_offense_add": "120"
+        "unit_offense_add": "240"
       },
       "name": "combat_unit_type_robotic_soldiers"
     },
@@ -36,9 +36,9 @@
         "goods_input_robotics_add": "60",
         "goods_input_small_arms_add": "30",
         "goods_input_tanks_add": "18",
-        "unit_defense_add": "700",
+        "unit_defense_add": "1675",
         "unit_devastation_mult": "2",
-        "unit_offense_add": "240"
+        "unit_offense_add": "540"
       },
       "name": "combat_unit_type_swarm_bots"
     },
@@ -51,9 +51,9 @@
         "goods_input_robotics_add": "60",
         "goods_input_small_arms_add": "30",
         "goods_input_tanks_add": "20",
-        "unit_defense_add": "1400",
+        "unit_defense_add": "4475",
         "unit_devastation_mult": "4",
-        "unit_offense_add": "480"
+        "unit_offense_add": "1500"
       },
       "name": "combat_unit_type_grey_goo"
     },
@@ -66,10 +66,10 @@
         "goods_input_oil_add": "4",
         "goods_input_radios_add": "2",
         "goods_input_tanks_add": "4",
-        "unit_defense_add": "80",
+        "unit_defense_add": "70",
         "unit_devastation_mult": "0.4",
         "unit_kill_rate_add": "0.3",
-        "unit_offense_add": "120"
+        "unit_offense_add": "100"
       },
       "name": "combat_unit_type_motorized_artillery"
     },
@@ -83,10 +83,10 @@
         "goods_input_oil_add": "4",
         "goods_input_radios_add": "4",
         "goods_input_tanks_add": "7",
-        "unit_defense_add": "120",
+        "unit_defense_add": "130",
         "unit_devastation_mult": "0.8",
         "unit_kill_rate_add": "0.4",
-        "unit_offense_add": "180"
+        "unit_offense_add": "195"
       },
       "name": "combat_unit_type_guided_artillery_projectiles"
     },
@@ -100,10 +100,10 @@
         "goods_input_oil_add": "5",
         "goods_input_radios_add": "10",
         "goods_input_tanks_add": "10",
-        "unit_defense_add": "260",
+        "unit_defense_add": "365",
         "unit_devastation_mult": "1.2",
         "unit_kill_rate_add": "0.4",
-        "unit_offense_add": "400"
+        "unit_offense_add": "545"
       },
       "name": "combat_unit_type_networked_guided_artillery_projectiles"
     },
@@ -115,10 +115,10 @@
         "goods_input_electronic_components_add": "60",
         "goods_input_launch_capacity_add": "40",
         "goods_input_radios_add": "10",
-        "unit_defense_add": "520",
+        "unit_defense_add": "800",
         "unit_devastation_mult": "3",
         "unit_kill_rate_add": "0.5",
-        "unit_offense_add": "800"
+        "unit_offense_add": "1200"
       },
       "name": "combat_unit_type_orbital_bombardment"
     },
@@ -131,10 +131,10 @@
         "goods_input_electronic_components_add": "66",
         "goods_input_launch_capacity_add": "54",
         "goods_input_radios_add": "14",
-        "unit_defense_add": "1040",
+        "unit_defense_add": "1300",
         "unit_devastation_mult": "6",
         "unit_kill_rate_add": "0.5",
-        "unit_offense_add": "1600"
+        "unit_offense_add": "1900"
       },
       "name": "combat_unit_type_orbital_precision_antimatter_strikes"
     },
@@ -246,10 +246,10 @@
         "goods_input_ammunition_add": "40",
         "goods_input_oil_add": "20",
         "goods_input_radios_add": "10",
-        "unit_defense_add": "200",
+        "unit_defense_add": "340",
         "unit_devastation_mult": "0.5",
         "unit_kill_rate_add": "0.25",
-        "unit_offense_add": "300"
+        "unit_offense_add": "500"
       },
       "name": "combat_unit_type_bomber_aircraft"
     },
@@ -261,10 +261,10 @@
         "goods_input_electronic_components_add": "10",
         "goods_input_oil_add": "20",
         "goods_input_radios_add": "20",
-        "unit_defense_add": "300",
+        "unit_defense_add": "590",
         "unit_devastation_mult": "1",
         "unit_kill_rate_add": "0.25",
-        "unit_offense_add": "450"
+        "unit_offense_add": "890"
       },
       "name": "combat_unit_type_jet_powered_fighters"
     },
@@ -276,10 +276,10 @@
         "goods_input_electronic_components_add": "40",
         "goods_input_oil_add": "20",
         "goods_input_radios_add": "50",
-        "unit_defense_add": "450",
+        "unit_defense_add": "1200",
         "unit_devastation_mult": "2",
         "unit_kill_rate_add": "0.25",
-        "unit_offense_add": "700"
+        "unit_offense_add": "1800"
       },
       "name": "combat_unit_type_stealth_aircraft"
     },
@@ -292,10 +292,10 @@
         "goods_input_launch_capacity_add": "100",
         "goods_input_radios_add": "80",
         "goods_input_robotics_add": "60",
-        "unit_defense_add": "900",
+        "unit_defense_add": "3170",
         "unit_devastation_mult": "4",
         "unit_kill_rate_add": "0.25",
-        "unit_offense_add": "1400"
+        "unit_offense_add": "4750"
       },
       "name": "combat_unit_type_orbital_tactical_vehicles"
     },
@@ -309,12 +309,88 @@
         "goods_input_launch_capacity_add": "300",
         "goods_input_radios_add": "80",
         "goods_input_robotics_add": "60",
-        "unit_defense_add": "1800",
+        "unit_defense_add": "4456",
         "unit_devastation_mult": "8",
         "unit_kill_rate_add": "0.25",
-        "unit_offense_add": "2800"
+        "unit_offense_add": "6680"
       },
       "name": "combat_unit_type_orbital_weapons_platforms"
+    },
+    {
+      "file": "common/combat_unit_types/extra_combat_units.txt",
+      "modifiers": {
+        "goods_input_aeroplanes_add": "4",
+        "goods_input_ammunition_add": "10",
+        "goods_input_artillery_add": "2",
+        "goods_input_oil_add": "6",
+        "goods_input_radios_add": "3",
+        "goods_input_small_arms_add": "3",
+        "goods_input_tanks_add": "4",
+        "unit_defense_add": "100",
+        "unit_devastation_mult": "0.25",
+        "unit_kill_rate_add": "0.08",
+        "unit_offense_add": "105"
+      },
+      "name": "combat_unit_type_combined_arms_marines"
+    },
+    {
+      "file": "common/combat_unit_types/extra_combat_units.txt",
+      "modifiers": {
+        "goods_input_aeroplanes_add": "16",
+        "goods_input_ammunition_add": "14",
+        "goods_input_artillery_add": "5",
+        "goods_input_electronic_components_add": "10",
+        "goods_input_oil_add": "7",
+        "goods_input_radios_add": "12",
+        "goods_input_small_arms_add": "3",
+        "goods_input_tanks_add": "13",
+        "unit_defense_add": "235",
+        "unit_devastation_mult": "0.5",
+        "unit_kill_rate_add": "0.1",
+        "unit_offense_add": "290"
+      },
+      "name": "combat_unit_type_stealth_marines"
+    },
+    {
+      "file": "common/combat_unit_types/extra_combat_units.txt",
+      "modifiers": {
+        "goods_input_aeroplanes_add": "31",
+        "goods_input_ammunition_add": "33",
+        "goods_input_artillery_add": "18",
+        "goods_input_electronic_components_add": "34",
+        "goods_input_launch_capacity_add": "18",
+        "goods_input_oil_add": "3",
+        "goods_input_radios_add": "30",
+        "goods_input_robotics_add": "38",
+        "goods_input_small_arms_add": "11",
+        "goods_input_tanks_add": "42",
+        "unit_defense_add": "970",
+        "unit_devastation_mult": "1.6",
+        "unit_kill_rate_add": "0.15",
+        "unit_offense_add": "960"
+      },
+      "name": "combat_unit_type_networked_marines"
+    },
+    {
+      "file": "common/combat_unit_types/extra_combat_units.txt",
+      "modifiers": {
+        "goods_input_advanced_materials_add": "4",
+        "goods_input_aeroplanes_add": "31",
+        "goods_input_ammunition_add": "56",
+        "goods_input_artillery_add": "25",
+        "goods_input_electronic_components_add": "44",
+        "goods_input_launch_capacity_add": "44",
+        "goods_input_oil_add": "2",
+        "goods_input_radios_add": "50",
+        "goods_input_robotics_add": "65",
+        "goods_input_small_arms_add": "22",
+        "goods_input_tanks_add": "64",
+        "unit_defense_add": "3835",
+        "unit_devastation_mult": "4.4",
+        "unit_kill_rate_add": "0.25",
+        "unit_offense_add": "2180"
+      },
+      "name": "combat_unit_type_bioenhanced_marines"
     }
   ],
   "production_methods": [
@@ -381,7 +457,7 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electricity_add": "10",
+        "goods_input_electricity_add": "5",
         "goods_input_engines_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
@@ -392,7 +468,7 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electricity_add": "10",
+        "goods_input_electricity_add": "5",
         "goods_input_engines_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
@@ -403,7 +479,7 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electricity_add": "10",
+        "goods_input_electricity_add": "5",
         "goods_input_engines_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
@@ -414,7 +490,7 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electricity_add": "10",
+        "goods_input_electricity_add": "5",
         "goods_input_engines_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
@@ -425,7 +501,7 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electricity_add": "10",
+        "goods_input_electricity_add": "5",
         "goods_input_engines_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
@@ -436,7 +512,7 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electricity_add": "10",
+        "goods_input_electricity_add": "5",
         "goods_input_engines_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
@@ -448,11 +524,11 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_engines_add": "3",
+        "goods_input_engines_add": "2",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
-        "goods_input_radios_add": "4",
+        "goods_input_radios_add": "3",
         "goods_input_tech_metals_add": "1",
         "goods_input_tools_add": "3"
       },
@@ -462,11 +538,11 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_engines_add": "3",
+        "goods_input_engines_add": "2",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
-        "goods_input_radios_add": "4",
+        "goods_input_radios_add": "3",
         "goods_input_tech_metals_add": "1",
         "goods_input_tools_add": "3"
       },
@@ -476,11 +552,11 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_engines_add": "3",
+        "goods_input_engines_add": "2",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
-        "goods_input_radios_add": "4",
+        "goods_input_radios_add": "3",
         "goods_input_tech_metals_add": "1",
         "goods_input_tools_add": "3"
       },
@@ -490,11 +566,11 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_engines_add": "3",
+        "goods_input_engines_add": "2",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
-        "goods_input_radios_add": "4",
+        "goods_input_radios_add": "3",
         "goods_input_tech_metals_add": "1",
         "goods_input_tools_add": "3"
       },
@@ -504,11 +580,11 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_engines_add": "3",
+        "goods_input_engines_add": "2",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
-        "goods_input_radios_add": "4",
+        "goods_input_radios_add": "3",
         "goods_input_tech_metals_add": "1",
         "goods_input_tools_add": "3"
       },
@@ -518,11 +594,11 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_engines_add": "3",
+        "goods_input_engines_add": "2",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
         "goods_input_oil_add": "1",
-        "goods_input_radios_add": "4",
+        "goods_input_radios_add": "3",
         "goods_input_tech_metals_add": "1",
         "goods_input_tools_add": "3"
       },
@@ -532,7 +608,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_electronic_components_add": "4",
+        "goods_input_electronic_components_add": "3",
         "goods_input_engines_add": "3",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
@@ -547,7 +623,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_electronic_components_add": "4",
+        "goods_input_electronic_components_add": "3",
         "goods_input_engines_add": "3",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
@@ -562,7 +638,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_electronic_components_add": "4",
+        "goods_input_electronic_components_add": "3",
         "goods_input_engines_add": "3",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
@@ -577,7 +653,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_electronic_components_add": "4",
+        "goods_input_electronic_components_add": "3",
         "goods_input_engines_add": "3",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
@@ -592,7 +668,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_electronic_components_add": "4",
+        "goods_input_electronic_components_add": "3",
         "goods_input_engines_add": "3",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
@@ -607,7 +683,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electricity_add": "10",
-        "goods_input_electronic_components_add": "4",
+        "goods_input_electronic_components_add": "3",
         "goods_input_engines_add": "3",
         "goods_input_fertilizer_add": "3",
         "goods_input_merchant_marine_add": "1",
@@ -1400,29 +1476,29 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_electronic_components_add": "10",
+        "goods_input_electronic_components_add": "7",
         "goods_input_paper_add": "20",
-        "goods_input_telephones_add": "20"
+        "goods_input_telephones_add": "14"
       },
       "name": "pm_teletype_communications"
     },
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_digital_access_add": "10",
-        "goods_input_electronic_components_add": "10",
+        "goods_input_digital_access_add": "6",
+        "goods_input_electronic_components_add": "6",
         "goods_input_paper_add": "20",
-        "goods_input_telephones_add": "20"
+        "goods_input_telephones_add": "12"
       },
       "name": "pm_internet_communications"
     },
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_digital_access_add": "40",
-        "goods_input_electronic_components_add": "10",
+        "goods_input_digital_access_add": "33",
+        "goods_input_electronic_components_add": "7",
         "goods_input_paper_add": "20",
-        "goods_input_telephones_add": "20"
+        "goods_input_telephones_add": "14"
       },
       "name": "pm_ai_governance"
     },
@@ -2135,6 +2211,35 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
+        "goods_input_digital_access_add": "10",
+        "goods_input_electricity_add": "10",
+        "goods_input_merchant_marine_add": "0.50",
+        "goods_input_robotics_add": "5"
+      },
+      "name": "pm_ai_managed_explosives_factory"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_electricity_add": "10",
+        "goods_input_merchant_marine_add": "0.50",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_advanced_process_control_explosives_factory"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_digital_access_add": "5",
+        "goods_input_electricity_add": "10",
+        "goods_input_merchant_marine_add": "0.50",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_distributed_control_systems_explosives_factory"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
         "goods_input_electricity_add": "20",
         "goods_input_glass_add": "10",
         "goods_input_lead_add": "20",
@@ -2561,6 +2666,34 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
+        "goods_input_engines_add": "6",
+        "goods_input_oil_add": "4"
+      },
+      "name": "pm_hydraulic_equipment_building_rice_farm"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_electronic_components_add": "4",
+        "goods_input_engines_add": "6",
+        "goods_input_oil_add": "4"
+      },
+      "name": "pm_automated_mechanical_harvesters_building_rice_farm"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_digital_assets_add": "2",
+        "goods_input_electricity_add": "2",
+        "goods_input_electronic_components_add": "4",
+        "goods_input_engines_add": "6",
+        "goods_input_oil_add": "4"
+      },
+      "name": "pm_automated_harvesters_and_planters_building_rice_farm"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
         "goods_input_electricity_add": "5",
         "goods_input_electronic_components_add": "10",
         "goods_input_tools_add": "10"
@@ -2898,17 +3031,6 @@
         "goods_input_telephones_add": "30"
       },
       "name": "pm_base_building_advanced_renewable_power"
-    },
-    {
-      "file": "common/production_methods/extra_pms.txt",
-      "modifiers": {
-        "goods_input_advanced_materials_add": "2.5",
-        "goods_input_electronic_components_add": "30",
-        "goods_input_launch_capacity_add": "100",
-        "goods_input_steel_add": "30",
-        "goods_input_telephones_add": "30"
-      },
-      "name": "pm_base_building_space_power"
     },
     {
       "file": "common/production_methods/extra_pms.txt",
@@ -3452,8 +3574,8 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
+        "goods_input_motor_ships_add": "5",
         "goods_input_oil_add": "10",
-        "goods_input_steamers_add": "5",
         "goods_input_telephones_add": "5"
       },
       "name": "pm_container_ports"
@@ -3462,8 +3584,8 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_electronic_components_add": "5",
+        "goods_input_motor_ships_add": "10",
         "goods_input_oil_add": "10",
-        "goods_input_steamers_add": "10",
         "goods_input_telephones_add": "5"
       },
       "name": "pm_global_ports"
@@ -3487,7 +3609,7 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_coal_add": "5",
-        "goods_input_steamers_add": "10"
+        "goods_input_motor_ships_add": "10"
       },
       "name": "pm_diesel_electric_ferries"
     },
@@ -3495,10 +3617,65 @@
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
         "goods_input_consumer_appliances_add": "5",
-        "goods_input_oil_add": "5",
-        "goods_input_steamers_add": "10"
+        "goods_input_motor_ships_add": "10",
+        "goods_input_oil_add": "5"
       },
       "name": "pm_modern_cruise_ships"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_motor_ships_add": "5",
+        "goods_input_oil_add": "10",
+        "goods_input_radios_add": "5"
+      },
+      "name": "pm_motor_trawlers"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_motor_ships_add": "5",
+        "goods_input_oil_add": "15"
+      },
+      "name": "pm_motor_whaling_ships"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_digital_assets_add": "5",
+        "goods_input_electronic_components_add": "10",
+        "goods_input_magnetic_drive_ships_add": "10",
+        "goods_input_oil_add": "10"
+      },
+      "name": "pm_magnetic_drive_ports"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_consumer_appliances_add": "5",
+        "goods_input_digital_assets_add": "5",
+        "goods_input_magnetic_drive_ships_add": "10",
+        "goods_input_oil_add": "5"
+      },
+      "name": "pm_magnetic_drive_cruise_ships"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_electronic_components_add": "5",
+        "goods_input_magnetic_drive_ships_add": "5",
+        "goods_input_oil_add": "10"
+      },
+      "name": "pm_magnetic_drive_trawlers"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_electronic_components_add": "5",
+        "goods_input_magnetic_drive_ships_add": "5",
+        "goods_input_oil_add": "15"
+      },
+      "name": "pm_magnetic_drive_whaling_ships"
     },
     {
       "file": "common/production_methods/extra_pms.txt",
@@ -3890,8 +4067,8 @@
         "goods_input_engines_add": "40",
         "goods_input_explosives_add": "20",
         "goods_input_fertilizer_add": "20",
-        "goods_input_radios_add": "80",
-        "goods_input_steamers_add": "40"
+        "goods_input_motor_ships_add": "40",
+        "goods_input_radios_add": "80"
       },
       "name": "pm_ocean_mine"
     },
@@ -3904,8 +4081,9 @@
         "goods_input_engines_add": "40",
         "goods_input_explosives_add": "20",
         "goods_input_fertilizer_add": "20",
-        "goods_input_radios_add": "80",
-        "goods_input_steamers_add": "40"
+        "goods_input_magnetic_drive_ships_add": "10",
+        "goods_input_motor_ships_add": "20",
+        "goods_input_radios_add": "80"
       },
       "name": "pm_advanced_ocean_mine"
     },
@@ -3918,8 +4096,9 @@
         "goods_input_engines_add": "40",
         "goods_input_explosives_add": "20",
         "goods_input_fertilizer_add": "20",
-        "goods_input_radios_add": "80",
-        "goods_input_steamers_add": "40"
+        "goods_input_magnetic_drive_ships_add": "10",
+        "goods_input_motor_ships_add": "20",
+        "goods_input_radios_add": "80"
       },
       "name": "pm_automated_ocean_mine"
     },
@@ -4021,6 +4200,16 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
+        "goods_input_electricity_add": "25",
+        "goods_input_engines_add": "15",
+        "goods_input_oil_add": "35",
+        "goods_input_steel_add": "30"
+      },
+      "name": "pm_diesel_shipbuilding"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
         "goods_input_electricity_add": "30",
         "goods_input_engines_add": "10",
         "goods_input_robotics_add": "20",
@@ -4038,26 +4227,6 @@
         "goods_input_steel_add": "30"
       },
       "name": "pm_advanced_metamaterials_shipbuilding"
-    },
-    {
-      "file": "common/production_methods/extra_pms.txt",
-      "modifiers": {
-        "goods_input_electricity_add": "50",
-        "goods_input_engines_add": "15",
-        "goods_input_oil_add": "30",
-        "goods_input_steel_add": "50"
-      },
-      "name": "pm_military_shipbuilding_modern"
-    },
-    {
-      "file": "common/production_methods/extra_pms.txt",
-      "modifiers": {
-        "goods_input_electricity_add": "50",
-        "goods_input_engines_add": "15",
-        "goods_input_robotics_add": "20",
-        "goods_input_steel_add": "50"
-      },
-      "name": "pm_military_shipbuilding_modern_2"
     },
     {
       "file": "common/production_methods/extra_pms.txt",
@@ -4770,11 +4939,30 @@
       "name": "pm_hardened_positions"
     },
     {
-      "file": "common/production_methods/fmc_construction.txt",
+      "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
-        "goods_input_construction_add": "1"
+        "goods_input_ammunition_add": "10",
+        "goods_input_engines_add": "10",
+        "goods_input_explosives_add": "15",
+        "goods_input_radios_add": "25",
+        "goods_input_small_arms_add": "10",
+        "goods_input_steel_add": "15"
       },
-      "name": "pm_base"
+      "name": "pm_naval_fortification_missile_battery"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_aeroplanes_add": "10",
+        "goods_input_ammunition_add": "10",
+        "goods_input_engines_add": "20",
+        "goods_input_explosives_add": "20",
+        "goods_input_radios_add": "35",
+        "goods_input_small_arms_add": "10",
+        "goods_input_steel_add": "20",
+        "goods_input_telephones_add": "35"
+      },
+      "name": "pm_naval_fortification_integrated_defense"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
@@ -4887,11 +5075,22 @@
     {
       "file": "common/production_methods/strategic_reserve_pms.txt",
       "modifiers": {
+        "goods_input_aeroplanes_add": "1",
         "goods_input_ammunition_add": "1",
+        "goods_input_artillery_add": "1",
         "goods_input_grain_add": "1",
-        "goods_input_oil_add": "1"
+        "goods_input_oil_add": "1",
+        "goods_input_small_arms_add": "1",
+        "goods_input_tanks_add": "1"
       },
-      "name": "pm_sr_hub_reserve"
+      "name": "pm_st_res_hub_reserve"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_construction_add": "1"
+      },
+      "name": "pm_te_construction_market_base"
     },
     {
       "file": "common/production_methods/unique_pms.txt",
@@ -5715,6 +5914,22 @@
         "goods_input_wine_add": "10"
       },
       "name": "pm_generic_vintner_hall"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_glass_add": "10",
+        "goods_input_wood_add": "30"
+      },
+      "name": "pm_generic_furniture_showroom"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_hardwood_add": "10",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_generic_lumber_yard"
     },
     {
       "file": "common/production_methods/unique_pms.txt",
@@ -7079,6 +7294,146 @@
         "goods_input_electronic_components_add": "10"
       },
       "name": "pm_rekal_hq"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_shipyard_throughput_add": "0.1",
+        "goods_input_electricity_add": "10",
+        "goods_input_engines_add": "10",
+        "goods_input_steel_add": "15"
+      },
+      "name": "pm_modern_company_shipbuilding"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_shipyard_throughput_add": "0.15",
+        "goods_input_electricity_add": "15",
+        "goods_input_electronic_components_add": "10",
+        "goods_input_engines_add": "10",
+        "goods_input_steel_add": "15"
+      },
+      "name": "pm_advanced_company_shipbuilding"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_tools_add": "20"
+      },
+      "name": "pm_dupont_experimental_station"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_oil_add": "10",
+        "goods_input_sulfur_add": "20"
+      },
+      "name": "pm_ig_farben_buna_werke"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_tools_add": "20"
+      },
+      "name": "pm_shell_pernis_refinery"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_oil_add": "20"
+      },
+      "name": "pm_jsr_yokkaichi_complex"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_oil_add": "25"
+      },
+      "name": "pm_sibur_tobolsk_complex"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_engines_add": "15",
+        "goods_input_steel_add": "15",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_rolls_royce_derby_works"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_oil_add": "30",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_bp_refinery_complex"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_sulfur_add": "10",
+        "goods_input_tools_add": "15"
+      },
+      "name": "pm_bayer_leverkusen_plant"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "15",
+        "goods_input_iron_add": "30"
+      },
+      "name": "pm_thyssen_steelworks"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_engines_add": "15",
+        "goods_input_steel_add": "10",
+        "goods_input_tools_add": "15"
+      },
+      "name": "pm_boeing_everett_factory"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_engines_add": "15",
+        "goods_input_steel_add": "10"
+      },
+      "name": "pm_renault_billancourt_plant"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_rubber_add": "20",
+        "goods_input_steel_add": "10"
+      },
+      "name": "pm_michelin_clermont_ferrand"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_rubber_add": "20",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_pirelli_bicocca_plant"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_port_throughput_add": "0.10",
+        "goods_input_clothes_add": "10",
+        "goods_input_tea_add": "10"
+      },
+      "name": "pm_jardine_princeps_house"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "10",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_sumitomo_besshi_mine"
     }
   ],
   "ship_types": [
@@ -7092,15 +7447,18 @@
         "goods_input_radios_add": "250",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "110",
-        "ship_accuracy_add": "30",
+        "ship_accuracy_add": "8",
         "ship_armor_add": "50",
+        "ship_battle_against_ship_type_nuclear_submarine_accuracy_mult": "1.0",
+        "ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult": "0.5",
         "ship_battle_against_ship_type_submarine_accuracy_mult": "1.0",
+        "ship_battle_against_ship_type_submarine_hull_damage_mult": "0.5",
         "ship_blockade_strength_add": "150",
         "ship_carrying_capacity_add": "0.15",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "30",
-        "ship_crew_max_add": "250",
-        "ship_critical_hit_chance_add": "0.25",
+        "ship_crew_max_add": "200",
+        "ship_critical_hit_chance_add": "0.13",
         "ship_critical_hit_multiplier_add": "2.5",
         "ship_detection_add": "100",
         "ship_hit_points_max_add": "4000",
@@ -7124,26 +7482,26 @@
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "140",
-        "ship_accuracy_add": "50",
+        "ship_accuracy_add": "10",
         "ship_armor_add": "35",
-        "ship_battle_against_ship_type_dreadnought_hull_damage_mult": "4.0",
-        "ship_battle_against_ship_type_modern_ironclad_hull_damage_mult": "4.0",
-        "ship_battle_against_ship_type_pre_dreadnought_hull_damage_mult": "4.0",
-        "ship_battle_against_ship_type_super_dreadnought_hull_damage_mult": "4.0",
+        "ship_battle_against_ship_type_arsenal_ship_hull_damage_mult": "4.0",
+        "ship_battle_against_ship_type_fleet_carrier_hull_damage_mult": "4.0",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult": "4.0",
+        "ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult": "4.0",
         "ship_blockade_strength_add": "100",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "60",
-        "ship_crew_max_add": "250",
-        "ship_critical_hit_chance_add": "0.5",
+        "ship_crew_max_add": "200",
+        "ship_critical_hit_chance_add": "0.25",
         "ship_critical_hit_multiplier_add": "3.5",
         "ship_detection_add": "80",
         "ship_hit_points_max_add": "4500",
         "ship_hull_damage_add": "180",
-        "ship_movement_speed_add": "7",
+        "ship_movement_speed_add": "9",
         "ship_readiness_gain_add": "12",
         "ship_screening_add": "5",
         "ship_supply_capacity_add": "120",
-        "ship_visibility_add": "1",
+        "ship_visibility_add": "3",
         "ship_vulnerability_add": "5"
       },
       "name": "ship_type_nuclear_submarine"
@@ -7159,20 +7517,23 @@
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "130",
-        "ship_accuracy_add": "75",
+        "ship_accuracy_add": "16",
         "ship_armor_add": "100",
+        "ship_battle_against_ship_type_fleet_carrier_hull_damage_mult": "0.3",
+        "ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult": "0.3",
+        "ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult": "-0.4",
         "ship_blockade_strength_add": "400",
         "ship_carrying_capacity_add": "0.15",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "75",
-        "ship_crew_max_add": "250",
-        "ship_critical_hit_chance_add": "0.35",
+        "ship_crew_max_add": "200",
+        "ship_critical_hit_chance_add": "0.18",
         "ship_critical_hit_multiplier_add": "2.5",
         "ship_detection_add": "100",
         "ship_hit_points_max_add": "5000",
         "ship_hull_damage_add": "200",
         "ship_marine_capacity_add": "0.075",
-        "ship_movement_speed_add": "5",
+        "ship_movement_speed_add": "8",
         "ship_readiness_gain_add": "12",
         "ship_screening_add": "250",
         "ship_supply_capacity_add": "70",
@@ -7194,18 +7555,20 @@
         "goods_input_radios_add": "0.5",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "240",
-        "ship_accuracy_add": "75",
-        "ship_armor_add": "360",
+        "ship_accuracy_add": "20",
+        "ship_armor_add": "200",
+        "ship_battle_against_ship_type_fleet_carrier_hull_damage_mult": "0.3",
+        "ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult": "0.3",
         "ship_blockade_strength_add": "1000",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "80",
         "ship_crew_max_add": "1500",
-        "ship_critical_hit_chance_add": "0.35",
+        "ship_critical_hit_chance_add": "0.18",
         "ship_critical_hit_multiplier_add": "2.5",
         "ship_detection_add": "600",
         "ship_hit_points_max_add": "7500",
         "ship_hull_damage_add": "250",
-        "ship_movement_speed_add": "6",
+        "ship_movement_speed_add": "8",
         "ship_readiness_gain_add": "12",
         "ship_screening_add": "30",
         "ship_supply_capacity_add": "250",
@@ -7217,30 +7580,33 @@
     {
       "file": "common/ship_types/extra_ship_types.txt",
       "modifiers": {
-        "combat_power_multiplier": "5.0",
-        "goods_input_ammunition_add": "600",
-        "goods_input_electronic_components_add": "1000",
+        "combat_power_multiplier": "6.0",
+        "goods_input_ammunition_add": "1000",
+        "goods_input_electronic_components_add": "1500",
         "goods_input_engines_add": "2000",
         "goods_input_groceries_add": "1",
-        "goods_input_iron_add": "2500",
+        "goods_input_iron_add": "2400",
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
-        "modification_construction_cost": "280",
-        "ship_accuracy_add": "125",
-        "ship_armor_add": "600",
-        "ship_blockade_strength_add": "3000",
+        "modification_construction_cost": "300",
+        "ship_accuracy_add": "22",
+        "ship_armor_add": "500",
+        "ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult": "0.4",
+        "ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult": "-0.3",
+        "ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult": "0.3",
+        "ship_blockade_strength_add": "4500",
         "ship_construction_progress_max_add": "25",
-        "ship_crew_damage_add": "250",
-        "ship_crew_max_add": "1100",
-        "ship_critical_hit_chance_add": "0.35",
-        "ship_critical_hit_multiplier_add": "2.5",
-        "ship_detection_add": "250",
-        "ship_hit_points_max_add": "11000",
-        "ship_hull_damage_add": "650",
-        "ship_movement_speed_add": "5",
-        "ship_readiness_gain_add": "12",
+        "ship_crew_damage_add": "300",
+        "ship_crew_max_add": "700",
+        "ship_critical_hit_chance_add": "0.2",
+        "ship_critical_hit_multiplier_add": "3.0",
+        "ship_detection_add": "300",
+        "ship_hit_points_max_add": "12000",
+        "ship_hull_damage_add": "1100",
+        "ship_movement_speed_add": "9",
+        "ship_readiness_gain_add": "13",
         "ship_screening_add": "10",
-        "ship_supply_capacity_add": "300",
+        "ship_supply_capacity_add": "350",
         "ship_visibility_add": "200",
         "ship_vulnerability_add": "200"
       },
@@ -7257,14 +7623,14 @@
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "220",
-        "ship_accuracy_add": "20",
+        "ship_accuracy_add": "6",
         "ship_armor_add": "150",
         "ship_blockade_strength_add": "800",
         "ship_carrying_capacity_add": "2.0",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "30",
         "ship_crew_max_add": "1000",
-        "ship_critical_hit_chance_add": "0.25",
+        "ship_critical_hit_chance_add": "0.13",
         "ship_critical_hit_multiplier_add": "2.0",
         "ship_detection_add": "150",
         "ship_hit_points_max_add": "6500",
@@ -7282,6 +7648,39 @@
     {
       "file": "common/ship_types/extra_ship_types.txt",
       "modifiers": {
+        "combat_power_multiplier": "0.7",
+        "goods_input_electronic_components_add": "200",
+        "goods_input_engines_add": "700",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "600",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "110",
+        "ship_accuracy_add": "5",
+        "ship_armor_add": "60",
+        "ship_blockade_strength_add": "200",
+        "ship_carrying_capacity_add": "0.5",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "10",
+        "ship_crew_max_add": "200",
+        "ship_critical_hit_chance_add": "0.1",
+        "ship_critical_hit_multiplier_add": "2.0",
+        "ship_detection_add": "80",
+        "ship_hit_points_max_add": "3500",
+        "ship_hull_damage_add": "30",
+        "ship_marine_capacity_add": "0.25",
+        "ship_movement_speed_add": "9",
+        "ship_readiness_gain_add": "12",
+        "ship_screening_add": "0",
+        "ship_supply_capacity_add": "100",
+        "ship_visibility_add": "80",
+        "ship_vulnerability_add": "250"
+      },
+      "name": "ship_type_expeditionary_fast_transport"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
         "combat_power_multiplier": "8.0",
         "goods_input_ammunition_add": "1200",
         "goods_input_electronic_components_add": "1800",
@@ -7291,18 +7690,21 @@
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "360",
-        "ship_accuracy_add": "200",
+        "ship_accuracy_add": "26",
         "ship_armor_add": "1100",
+        "ship_battle_against_ship_type_arsenal_ship_hull_damage_mult": "0.6",
+        "ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult": "-0.1",
+        "ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult": "0.6",
         "ship_blockade_strength_add": "6000",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "600",
         "ship_crew_max_add": "1100",
-        "ship_critical_hit_chance_add": "0.4",
+        "ship_critical_hit_chance_add": "0.2",
         "ship_critical_hit_multiplier_add": "3.5",
         "ship_detection_add": "350",
         "ship_hit_points_max_add": "18000",
         "ship_hull_damage_add": "1500",
-        "ship_movement_speed_add": "6",
+        "ship_movement_speed_add": "10",
         "ship_readiness_gain_add": "12",
         "ship_screening_add": "10",
         "ship_supply_capacity_add": "400",
@@ -7321,18 +7723,20 @@
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "280",
-        "ship_accuracy_add": "300",
+        "ship_accuracy_add": "26",
         "ship_armor_add": "600",
+        "ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult": "0.5",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult": "0.5",
         "ship_blockade_strength_add": "1500",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "250",
         "ship_crew_max_add": "400",
-        "ship_critical_hit_chance_add": "0.5",
+        "ship_critical_hit_chance_add": "0.25",
         "ship_critical_hit_multiplier_add": "3.5",
         "ship_detection_add": "300",
         "ship_hit_points_max_add": "8500",
         "ship_hull_damage_add": "850",
-        "ship_movement_speed_add": "7",
+        "ship_movement_speed_add": "12",
         "ship_readiness_gain_add": "14",
         "ship_screening_add": "600",
         "ship_supply_capacity_add": "120",
@@ -7352,18 +7756,20 @@
         "goods_input_oil_add": "1",
         "goods_input_steel_add": "0.1",
         "modification_construction_cost": "300",
-        "ship_accuracy_add": "300",
+        "ship_accuracy_add": "24",
         "ship_armor_add": "700",
+        "ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult": "0.4",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult": "0.4",
         "ship_blockade_strength_add": "2500",
         "ship_construction_progress_max_add": "25",
         "ship_crew_damage_add": "200",
         "ship_crew_max_add": "400",
-        "ship_critical_hit_chance_add": "0.5",
+        "ship_critical_hit_chance_add": "0.25",
         "ship_critical_hit_multiplier_add": "3.0",
         "ship_detection_add": "500",
         "ship_hit_points_max_add": "9000",
         "ship_hull_damage_add": "700",
-        "ship_movement_speed_add": "6",
+        "ship_movement_speed_add": "11",
         "ship_readiness_gain_add": "14",
         "ship_screening_add": "700",
         "ship_supply_capacity_add": "110",
@@ -7371,6 +7777,311 @@
         "ship_vulnerability_add": "100"
       },
       "name": "ship_type_swarm_coordination_vessel"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "combat_power_multiplier": "2.5",
+        "goods_input_aeroplanes_add": "0.5",
+        "goods_input_engines_add": "1100",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "1100",
+        "goods_input_oil_add": "1",
+        "goods_input_radios_add": "0.5",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "180",
+        "ship_accuracy_add": "18",
+        "ship_armor_add": "130",
+        "ship_battle_against_ship_type_dreadnought_hull_damage_mult": "0.5",
+        "ship_battle_against_ship_type_super_dreadnought_hull_damage_mult": "0.5",
+        "ship_blockade_strength_add": "600",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "45",
+        "ship_crew_max_add": "1100",
+        "ship_critical_hit_chance_add": "0.15",
+        "ship_critical_hit_multiplier_add": "2.5",
+        "ship_detection_add": "450",
+        "ship_hit_points_max_add": "5500",
+        "ship_hull_damage_add": "180",
+        "ship_movement_speed_add": "5",
+        "ship_readiness_gain_add": "11",
+        "ship_screening_add": "25",
+        "ship_supply_capacity_add": "150",
+        "ship_visibility_add": "100",
+        "ship_vulnerability_add": "100"
+      },
+      "name": "ship_type_fleet_carrier"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "combat_power_multiplier": "1.0",
+        "goods_input_engines_add": "700",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "700",
+        "goods_input_oil_add": "1",
+        "goods_input_radios_add": "150",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "130",
+        "ship_accuracy_add": "5",
+        "ship_armor_add": "100",
+        "ship_blockade_strength_add": "300",
+        "ship_carrying_capacity_add": "1.2",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "20",
+        "ship_crew_max_add": "600",
+        "ship_critical_hit_chance_add": "0.1",
+        "ship_critical_hit_multiplier_add": "2.0",
+        "ship_detection_add": "100",
+        "ship_hit_points_max_add": "4500",
+        "ship_hull_damage_add": "60",
+        "ship_marine_capacity_add": "0.5",
+        "ship_movement_speed_add": "6",
+        "ship_readiness_gain_add": "10",
+        "ship_screening_add": "0",
+        "ship_supply_capacity_add": "250",
+        "ship_visibility_add": "150",
+        "ship_vulnerability_add": "200"
+      },
+      "name": "ship_type_amphibious_assault_ship"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "combat_power_multiplier": "1.0",
+        "goods_input_engines_add": "900",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "900",
+        "goods_input_oil_add": "1",
+        "goods_input_radios_add": "200",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "170",
+        "ship_accuracy_add": "5",
+        "ship_armor_add": "130",
+        "ship_blockade_strength_add": "500",
+        "ship_carrying_capacity_add": "1.6",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "25",
+        "ship_crew_max_add": "700",
+        "ship_critical_hit_chance_add": "0.1",
+        "ship_critical_hit_multiplier_add": "2.0",
+        "ship_detection_add": "120",
+        "ship_hit_points_max_add": "5500",
+        "ship_hull_damage_add": "70",
+        "ship_marine_capacity_add": "0.7",
+        "ship_movement_speed_add": "7",
+        "ship_readiness_gain_add": "11",
+        "ship_screening_add": "0",
+        "ship_supply_capacity_add": "350",
+        "ship_visibility_add": "180",
+        "ship_vulnerability_add": "220"
+      },
+      "name": "ship_type_marine_assault_ship"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "combat_power_multiplier": "6.0",
+        "goods_input_ammunition_add": "700",
+        "goods_input_electronic_components_add": "1400",
+        "goods_input_engines_add": "2200",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "2800",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "320",
+        "ship_accuracy_add": "22",
+        "ship_armor_add": "800",
+        "ship_battle_against_ship_type_arsenal_ship_accuracy_mult": "0.4",
+        "ship_battle_against_ship_type_arsenal_ship_hull_damage_mult": "0.3",
+        "ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult": "0.4",
+        "ship_blockade_strength_add": "4000",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "350",
+        "ship_crew_max_add": "900",
+        "ship_critical_hit_chance_add": "0.2",
+        "ship_critical_hit_multiplier_add": "3.0",
+        "ship_detection_add": "350",
+        "ship_hit_points_max_add": "13000",
+        "ship_hull_damage_add": "950",
+        "ship_movement_speed_add": "9",
+        "ship_readiness_gain_add": "13",
+        "ship_screening_add": "30",
+        "ship_supply_capacity_add": "320",
+        "ship_visibility_add": "60",
+        "ship_vulnerability_add": "100"
+      },
+      "name": "ship_type_stealth_battlecruiser"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "goods_input_ammunition_add": "300",
+        "goods_input_electronic_components_add": "1000",
+        "goods_input_engines_add": "1100",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "1100",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "200",
+        "ship_accuracy_add": "24",
+        "ship_armor_add": "250",
+        "ship_battle_against_ship_type_arsenal_ship_accuracy_mult": "0.4",
+        "ship_battle_against_ship_type_guided_missile_ship_accuracy_mult": "0.6",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult": "0.2",
+        "ship_blockade_strength_add": "700",
+        "ship_carrying_capacity_add": "0.15",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "110",
+        "ship_crew_max_add": "300",
+        "ship_critical_hit_chance_add": "0.2",
+        "ship_critical_hit_multiplier_add": "2.5",
+        "ship_detection_add": "250",
+        "ship_hit_points_max_add": "6500",
+        "ship_hull_damage_add": "350",
+        "ship_marine_capacity_add": "0.075",
+        "ship_movement_speed_add": "9",
+        "ship_readiness_gain_add": "13",
+        "ship_screening_add": "500",
+        "ship_supply_capacity_add": "100",
+        "ship_visibility_add": "30",
+        "ship_vulnerability_add": "60"
+      },
+      "name": "ship_type_networked_air_defense_cruiser"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "goods_input_electronic_components_add": "600",
+        "goods_input_engines_add": "1100",
+        "goods_input_groceries_add": "1",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "180",
+        "ship_accuracy_add": "12",
+        "ship_armor_add": "50",
+        "ship_battle_against_ship_type_arsenal_ship_hull_damage_mult": "5.0",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult": "5.0",
+        "ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult": "5.0",
+        "ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult": "4.0",
+        "ship_blockade_strength_add": "200",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "110",
+        "ship_crew_max_add": "200",
+        "ship_critical_hit_chance_add": "0.28",
+        "ship_critical_hit_multiplier_add": "4.0",
+        "ship_detection_add": "120",
+        "ship_hit_points_max_add": "6000",
+        "ship_hull_damage_add": "320",
+        "ship_movement_speed_add": "10",
+        "ship_readiness_gain_add": "13",
+        "ship_screening_add": "5",
+        "ship_supply_capacity_add": "140",
+        "ship_visibility_add": "3",
+        "ship_vulnerability_add": "5"
+      },
+      "name": "ship_type_stealth_attack_submarine"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "goods_input_electronic_components_add": "1400",
+        "goods_input_engines_add": "1300",
+        "goods_input_groceries_add": "0.2",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "220",
+        "ship_accuracy_add": "14",
+        "ship_armor_add": "80",
+        "ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult": "5.0",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult": "6.0",
+        "ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult": "-0.4",
+        "ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult": "-0.3",
+        "ship_blockade_strength_add": "350",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "180",
+        "ship_crew_max_add": "100",
+        "ship_critical_hit_chance_add": "0.3",
+        "ship_critical_hit_multiplier_add": "4.5",
+        "ship_detection_add": "200",
+        "ship_hit_points_max_add": "7500",
+        "ship_hull_damage_add": "600",
+        "ship_movement_speed_add": "12",
+        "ship_readiness_gain_add": "14",
+        "ship_screening_add": "10",
+        "ship_supply_capacity_add": "150",
+        "ship_visibility_add": "3",
+        "ship_vulnerability_add": "5"
+      },
+      "name": "ship_type_autonomous_swarm_submarine"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "combat_power_multiplier": "12.0",
+        "goods_input_ammunition_add": "1800",
+        "goods_input_electronic_components_add": "2500",
+        "goods_input_engines_add": "3500",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "5000",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "480",
+        "ship_accuracy_add": "30",
+        "ship_armor_add": "2000",
+        "ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult": "0.7",
+        "ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult": "-0.1",
+        "ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult": "0.6",
+        "ship_blockade_strength_add": "10000",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "1100",
+        "ship_crew_max_add": "1400",
+        "ship_critical_hit_chance_add": "0.25",
+        "ship_critical_hit_multiplier_add": "4.0",
+        "ship_detection_add": "500",
+        "ship_hit_points_max_add": "28000",
+        "ship_hull_damage_add": "2800",
+        "ship_movement_speed_add": "12",
+        "ship_readiness_gain_add": "14",
+        "ship_screening_add": "30",
+        "ship_supply_capacity_add": "600",
+        "ship_visibility_add": "200",
+        "ship_vulnerability_add": "200"
+      },
+      "name": "ship_type_antimatter_battleship"
+    },
+    {
+      "file": "common/ship_types/extra_ship_types.txt",
+      "modifiers": {
+        "combat_power_multiplier": "1.0",
+        "goods_input_electronic_components_add": "1000",
+        "goods_input_engines_add": "1800",
+        "goods_input_groceries_add": "1",
+        "goods_input_iron_add": "2200",
+        "goods_input_oil_add": "1",
+        "goods_input_steel_add": "0.1",
+        "modification_construction_cost": "360",
+        "ship_accuracy_add": "6",
+        "ship_armor_add": "300",
+        "ship_blockade_strength_add": "1500",
+        "ship_carrying_capacity_add": "4.0",
+        "ship_construction_progress_max_add": "25",
+        "ship_crew_damage_add": "50",
+        "ship_crew_max_add": "1200",
+        "ship_critical_hit_chance_add": "0.15",
+        "ship_critical_hit_multiplier_add": "2.5",
+        "ship_detection_add": "250",
+        "ship_hit_points_max_add": "11000",
+        "ship_hull_damage_add": "150",
+        "ship_marine_capacity_add": "2.0",
+        "ship_movement_speed_add": "12",
+        "ship_readiness_gain_add": "12",
+        "ship_screening_add": "20",
+        "ship_supply_capacity_add": "1200",
+        "ship_visibility_add": "200",
+        "ship_vulnerability_add": "250"
+      },
+      "name": "ship_type_orbital_support_amphibious_mothership"
     }
   ],
   "static_modifiers": [
@@ -7566,6 +8277,34 @@
     {
       "file": "common/static_modifiers/extra_modifiers.txt",
       "modifiers": {
+        "character_loyalty_add": "1"
+      },
+      "name": "negotiated_withdrawal_modifier"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "character_loyalty_add": "-2"
+      },
+      "name": "bloody_decolonization_legacy_modifier"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "character_loyalty_add": "2"
+      },
+      "name": "commonwealth_legacy_modifier"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "character_loyalty_add": "1"
+      },
+      "name": "assimilation_legacy_modifier"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
         "goods_input_construction_mult": "0.1"
       },
       "name": "monopoly_tolerated_modifier"
@@ -7665,12 +8404,41 @@
         "goods_input_oil_mult": "1"
       },
       "name": "st_res_oil_store_flow"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "goods_input_small_arms_mult": "1"
+      },
+      "name": "st_res_small_arms_store_flow"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "goods_input_artillery_mult": "1"
+      },
+      "name": "st_res_artillery_store_flow"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "goods_input_aeroplanes_mult": "1"
+      },
+      "name": "st_res_aeroplanes_store_flow"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "goods_input_tanks_mult": "1"
+      },
+      "name": "st_res_tanks_store_flow"
     }
   ],
   "technologies": [
     {
       "file": "common/technology/technologies/era_10.txt",
       "modifiers": {
+        "character_max_offensive_battles_add": "1",
         "country_admiral_rank_impact_mult": "1.0",
         "country_general_rank_impact_mult": "1.0",
         "unit_defense_mult": "0.1",
@@ -7688,25 +8456,31 @@
     {
       "file": "common/technology/technologies/era_10.txt",
       "modifiers": {
-        "state_building_barrack_max_level_add": "50",
-        "state_building_naval_fortification_max_level_add": "20"
+        "character_naval_mission_area_add": "1",
+        "ship_battle_against_ship_type_arsenal_ship_accuracy_mult": "0.15",
+        "ship_battle_against_ship_type_guided_missile_ship_accuracy_mult": "0.20",
+        "ship_visibility_mult": "-0.10",
+        "state_building_barrack_max_level_add": "50"
       },
       "name": "electronic_warfare"
     },
     {
       "file": "common/technology/technologies/era_11.txt",
       "modifiers": {
-        "state_building_naval_fortification_max_level_add": "40"
+        "ship_accuracy_mult": "0.10",
+        "ship_screening_mult": "0.30"
       },
       "name": "directed_energy_weapons"
     },
     {
       "file": "common/technology/technologies/era_11.txt",
       "modifiers": {
+        "character_command_limit_mult": "0.10",
         "country_admiral_rank_impact_mult": "1.5",
         "country_general_rank_impact_mult": "1.5",
-        "state_building_barrack_max_level_add": "100",
-        "state_building_naval_fortification_max_level_add": "40"
+        "ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult": "0.20",
+        "ship_hull_damage_mult": "0.10",
+        "state_building_barrack_max_level_add": "100"
       },
       "name": "swarm_technology"
     },
@@ -7721,8 +8495,7 @@
       "file": "common/technology/technologies/era_11.txt",
       "modifiers": {
         "military_formation_army_movement_speed_mult": "1",
-        "military_formation_fleet_movement_speed_mult": "1",
-        "state_building_naval_fortification_max_level_add": "40"
+        "ship_movement_speed_mult": "0.05"
       },
       "name": "fusion_power"
     },
@@ -7730,9 +8503,8 @@
       "file": "common/technology/technologies/era_12.txt",
       "modifiers": {
         "military_formation_army_movement_speed_mult": "1",
-        "military_formation_fleet_movement_speed_mult": "1",
-        "state_building_barrack_max_level_add": "200",
-        "state_building_naval_fortification_max_level_add": "60"
+        "ship_movement_speed_mult": "0.05",
+        "state_building_barrack_max_level_add": "200"
       },
       "name": "compact_fusion_reactors"
     },
@@ -7740,8 +8512,7 @@
       "file": "common/technology/technologies/era_12.txt",
       "modifiers": {
         "military_formation_army_movement_speed_mult": "1",
-        "military_formation_fleet_movement_speed_mult": "1",
-        "state_building_naval_fortification_max_level_add": "60"
+        "ship_movement_speed_mult": "0.10"
       },
       "name": "fusion_batteries"
     },
@@ -7756,8 +8527,9 @@
       "file": "common/technology/technologies/era_12.txt",
       "modifiers": {
         "military_formation_army_movement_speed_mult": "1",
-        "military_formation_fleet_movement_speed_mult": "1",
-        "state_building_naval_fortification_max_level_add": "60"
+        "ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult": "0.30",
+        "ship_critical_hit_chance_add": "0.10",
+        "ship_hull_damage_mult": "0.20"
       },
       "name": "antimatter_production"
     },
@@ -7787,7 +8559,8 @@
     {
       "file": "common/technology/technologies/era_6.txt",
       "modifiers": {
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_accuracy_mult": "0.10",
+        "ship_critical_hit_chance_add": "0.05"
       },
       "name": "naval_fire_control_systems"
     },
@@ -7801,7 +8574,8 @@
     {
       "file": "common/technology/technologies/era_7.txt",
       "modifiers": {
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult": "0.20",
+        "ship_hull_damage_mult": "0.05"
       },
       "name": "guided_missiles"
     },
@@ -7810,7 +8584,8 @@
       "modifiers": {
         "country_admiral_rank_impact_mult": "0.5",
         "country_ship_type_destroyer_construction_efficiency_add": "0.5",
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_battle_against_ship_type_nuclear_submarine_accuracy_mult": "0.30",
+        "ship_battle_against_ship_type_submarine_accuracy_mult": "0.30"
       },
       "name": "anti_sub_warfare"
     },
@@ -7824,7 +8599,7 @@
     {
       "file": "common/technology/technologies/era_7.txt",
       "modifiers": {
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_movement_speed_mult": "0.05"
       },
       "name": "inertial_navigation_systems"
     },
@@ -7840,35 +8615,39 @@
       "modifiers": {
         "country_admiral_rank_impact_mult": "0.5",
         "country_general_rank_impact_mult": "0.5",
-        "military_formation_organization_gain_mult": "0.1"
+        "military_formation_organization_gain_mult": "0.10"
       },
       "name": "predictive_logistics"
     },
     {
       "file": "common/technology/technologies/era_8.txt",
       "modifiers": {
-        "state_building_barrack_max_level_add": "50",
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_accuracy_mult": "0.05",
+        "ship_hull_damage_mult": "0.10",
+        "state_building_barrack_max_level_add": "50"
       },
       "name": "precision_guided_munitions"
     },
     {
       "file": "common/technology/technologies/era_8.txt",
       "modifiers": {
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_detection_mult": "0.15",
+        "ship_visibility_mult": "-0.10"
       },
       "name": "infrared_night_vision"
     },
     {
       "file": "common/technology/technologies/era_9.txt",
       "modifiers": {
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_detection_mult": "0.20",
+        "ship_screening_add": "50"
       },
       "name": "unmanned_aerial_vehicles"
     },
     {
       "file": "common/technology/technologies/era_9.txt",
       "modifiers": {
+        "character_loyalty_add": "5",
         "country_admiral_rank_impact_mult": "0.5",
         "country_general_rank_impact_mult": "0.5"
       },
@@ -7877,16 +8656,17 @@
     {
       "file": "common/technology/technologies/era_9.txt",
       "modifiers": {
-        "state_building_barrack_max_level_add": "50",
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_accuracy_mult": "0.10",
+        "ship_readiness_gain_add": "5",
+        "state_building_barrack_max_level_add": "50"
       },
       "name": "network_centric_warfare"
     },
     {
       "file": "common/technology/technologies/era_9.txt",
       "modifiers": {
-        "state_building_barrack_max_level_add": "50",
-        "state_building_naval_fortification_max_level_add": "20"
+        "ship_marine_capacity_mult": "0.20",
+        "state_building_barrack_max_level_add": "50"
       },
       "name": "rapid_deployment_forces"
     },
