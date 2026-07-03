@@ -668,6 +668,10 @@ types treaty_panel_types
 						block "signed_seal_visibility" {
 							visible = no
 						}
+
+						blockoverride "signature_icon_position" {
+							position = { 10 5 }
+						}
 					}
 
 					#LEFT UNSIGNED SIGNATURE
@@ -684,10 +688,6 @@ types treaty_panel_types
 					#RIGHT SIGNATURE
 					seal_and_signature ={
 						datacontext = "[Treaty.GetRightCountry]"
-
-						blockoverride " signature_texture" {
-							texture = "gfx/interface/diplomatic_treaties/diplomatic_treaties_seal_and_signature_2.dds"
-						}
 
 						blockoverride "signature_icon_position" {
 							parentanchor = right
@@ -1196,9 +1196,9 @@ types treaty_panel_types
 	type goods_transfer_article = widget {
 		visible = "[Article.HasType('goods_transfer')]"
 		size = { 145 40 }
-		datacontext = "[Article.GetGoods]"
 
 		flowcontainer = {
+			datacontext = "[Article.GetGoods]"
 			parentanchor = vcenter
 			spacing = 2
 
@@ -1226,9 +1226,9 @@ types treaty_panel_types
 	type goods_input_article = widget {
 		visible = "[And(Article.RequiresInput('goods'), Not(Article.HasType('goods_transfer')))]"
 		size = { 145 40 }
-		datacontext = "[Article.GetGoods]"
 
 		flowcontainer = {
+			datacontext = "[Article.GetGoods]"
 			parentanchor = vcenter
 			spacing = 2
 

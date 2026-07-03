@@ -277,6 +277,39 @@ types building_panels
 							building_average_wage_label = {
 								margin_top = 10
 							}
+
+							flowcontainer = {
+								margin_top = 5
+								visible = "[Building.HasHoldingCharacter]"
+								datacontext = "[Building.AccessHoldingCharacter]"
+								spacing = 5
+
+								button = {
+									size = { 40 40 }
+									onclick = "[InformationPanelBar.OpenCharacterPanel(Character.AccessSelf)]"
+									onrightclick = "[RightClickMenuManager.ShowForCharacter(Character.AccessSelf)]"
+									tooltip = "GO_TO_BUTTON_CHARACTER"
+
+									character_portrait_small = {}
+								}
+
+								flowcontainer = {
+									direction = vertical
+									textbox = {
+										text = "HOLDING"
+										autoresize = yes
+										align = nobaseline
+										using = tooltip_font
+									}
+
+									textbox = {
+										text = "[Character.GetFullName]"
+										autoresize = yes
+										align = nobaseline
+										using = tooltip_font
+									}
+								}
+							}
 						}
 
 						building_productivity_mini_chart = {}
@@ -1094,6 +1127,7 @@ types building_panels
 						blockoverride "text_right" {
 							raw_text = "#variable @money![Building.GetSupplyShipMaintenanceRevenue|K]#!"
 						}
+						tooltip = "SUPPLY_SHIP_BUILDING_MAINTENANCE_EXPENSES_BREAKDOWN"
 					}
 
 					### Military ship maintenance revenue
@@ -1108,6 +1142,7 @@ types building_panels
 						blockoverride "text_right" {
 							raw_text = "#variable @money![Building.GetMilitaryShipMaintenanceRevenue|K]#!"
 						}
+						tooltip = "MILITARY_SHIP_BUILDING_MAINTENANCE_EXPENSES"
 					}
 
 					building_process_entry = {
@@ -1122,6 +1157,21 @@ types building_panels
 						}
 						blockoverride "text_right" {
 							raw_text = "#variable [Building.CalcUrbanizationProvided|+=]#!"
+						}
+					}
+
+					building_process_entry = {
+						tooltip = BUILDING_LOGISTICS_SUPPLY_TOOLTIP
+
+						blockoverride "visible" {
+							visible = "[Not(IsDataModelEmpty(Building.GetSuppliedFormations))]"
+						}
+
+						blockoverride "text" {
+							raw_text = "[concept_supply]"
+						}
+						blockoverride "text_right" {
+							text = "BUILDING_LOGISTICS_SUPPLY_VALUE"
 						}
 					}
 				}
@@ -3790,7 +3840,7 @@ types building_panels
 					using = plot_line
 					width = 2.5
 					color = { .9 .9 .9 1.0 }
-					plotpoints = "[GetTrendPlotPointsNormalized(Building.GetEarningsPerEmployeeTrend, '(CFixedPoint)0', GetMax(Building.GetEarningsPerEmployeeTrend) )]"
+					plotpoints = "[GetTrendPlotPointsNormalized(Building.GetEarningsPerEmployeeTrend, GetMinPadded(Building.GetEarningsPerEmployeeTrend), GetMaxPadded(Building.GetEarningsPerEmployeeTrend))]"
 				}
 
 				textbox = {

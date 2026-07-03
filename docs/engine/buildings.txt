@@ -1229,8 +1229,8 @@ Naval Logistics Center (bg_naval_logistics_center):
 	$building_naval_logistics_center$:
 		$pm_base$
 
-Land Logistics Center (bg_land_logistics_center):
-	$building_land_logistics_center$:
+Army Logistics Center (bg_army_logistics_center):
+	$building_army_logistics_center$:
 		$pm_base$
 
 Urban Center (bg_service):

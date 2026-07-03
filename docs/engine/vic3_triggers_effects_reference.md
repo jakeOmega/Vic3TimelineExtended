@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log @ 2026-06-04T13:51:08+00:00; effects.log @ 2026-06-04T13:51:08+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log @ 2026-07-03T21:30:36+00:00; effects.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 1764 trigger entries and 3059 effect entries.*
-*93 iterator families, 871 standalone triggers, 369 standalone effects.*
+*Auto-generated from 1808 trigger entries and 3139 effect entries.*
+*96 iterator families, 895 standalone triggers, 380 standalone effects.*
 
 ## Reading Guide
 
@@ -80,7 +80,7 @@
 - `any/every/ordered/random_subject_or_below` → country — Any country below current in hierarchy
 - `any/every/ordered/random_valid_mass_migration_culture` → culture — Lists for cultures in the scoped country that are valid for mass migration
 
-### Triggers (315)
+### Triggers (321)
 
 - `additional_war_exhaustion` — Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play
 - `aggressive_diplomatic_plays_permitted` — True if country is independent or permitted to start their own Diplomatic Plays
@@ -100,6 +100,7 @@
 - `bureaucracy_usage` — Compares the consumed bureaucracy of the scoped country
 - `can_afford_diplomatic_action` — Checks if the country in scope can afford the Influence for the specified diplomatic action (pact or ongoing) Where X = country and Y = diplomatic action type
 - `can_break_diplomatic_pact` — Checks if there is a diplomatic pact of the specified type with target country that can be broken by scope country
+- `can_close_straits` — Check if the scoped country is allowed to close the straits it controls
 - `can_create_diplomatic_pact` — Checks if a diplomatic pact is valid to create with another country
 - `can_decrease_autonomy` — Check if a subject country is able to become a less autonomous subject type
 - `can_establish_company` — Check if the country can establish a new company
@@ -113,8 +114,10 @@
 - `can_research` — True if a country can research an technology
 - `can_send_diplomatic_action` — Checks if a diplomatic action is valid to send by scope country to target country
 - `can_take_on_scaled_debt` — Checks if scoped country can take on a certain amount of scaled debt from another country Where X = country and Y = decimal value
+- `can_toll_straits` — Check if the scoped country is allowed to charge tolls on the straits it controls
 - `can_transfer_subject` — Check if the target country can be transferred as a subject to the scoped country scope:country → country
 - `can_trigger_event` — Check if country can trigger the specified event
+- `charges_strait_toll` — Check if the scoped country controls a strait with a toll rate of Low or higher
 - `check_area` — Compares areas of object to another object (scopes: country, market, province, state, state_region, strategic_region, theater)
 - `construction_queue_duration` — Compares the maximum of all the very roughly approximated weeks remaining to finish the constructions in any queue:
 - `construction_queue_government_duration` — Compares the very roughly approximated weeks remaining to finish the constructions in the government queue:
@@ -146,6 +149,7 @@
 - `cultural_acceptance_base` — Compares the acceptance from shared cultural traits of a culture in the scoped country against an acceptence value
 - `culture_percent_country` — Checks that a country's population has a certain percentage of a specific culture scope:example_country
 - `current_law_enactment_score` — Check what the scoped country's AI enactment score is for the currently enacting law
+- `days_since_movement_type_defeated` — Compares the number of days since a movement of a given identity was last defeated in civil war.
 - `discriminates_religion` — Checks if the scoped country discriminates the given religion (key)
 - `economic_dependence` — Compares the degree of dependence the country in scope has to the target country.
 - `electoral_confidence` — Compares the electoral confidence of scope country
@@ -209,6 +213,7 @@
 - `has_law_commitment` — Checks if a country has a commitment to enact a certain law → law_type
 - `has_law_imposition_rights` — Checks if the scoped country has the necessary permits to demand another country enacts a certain law
 - `has_law_or_variant` — Checks if a country has a certain law or one its variant laws active → law_type
+- `has_military_strait_access_through` — Check if the scoped country has military access through every strait owned by the target country → country
 - `has_modifier` — Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front (scopes: country, building, character, institution, interest_group, journal_entry, political_movement, power_bloc, state)
 - `has_objective` — Checks if the scoped country has a certain objective type
 - `has_overlapping_interests` — Checks if country in scope has an overlapping interest marker with any of target country's interests → country
@@ -224,6 +229,7 @@
 - `has_secret_goal` — Checks if scoped country has a particular secret goal towards another country Where X = country and Y = secret_goal type
 - `has_social_hierarchy` — Checks if the scoped country has adopted a specific social hierarchy
 - `has_state_in_state_region` — Check if country has a state in the state region
+- `has_strait_toll_exemption_from` — Check if the scoped country is exempt from the strait tolls charged by the target country → country
 - `has_strategic_adjacency` — Checks if country in scope has a strategic adjacency (direct/coastal/war goal adjacency) to target state/country
 - `has_strategic_land_adjacency` — Checks if country in scope has a strategic adjacency (direct land border or war goal adjacency only) to target state/country has_strategic_adjacency
 - `has_strategic_region_interest_tier` — Checks the scoped country's interest tier rank in a specific strategic region scope:country
@@ -990,8 +996,9 @@
 - `any/every/ordered/random_influenced_interest_group` → interest_group — Iterate through all interest groups influenced by a political movement
 - `any/every/ordered/random_supporting_character` → character — Iterate through all characters that support the scoped political movement
 
-### Triggers (14)
+### Triggers (15)
 
+- `days_since_movement_defeated` — Compares the number of days since a movement with this identity was last defeated in civil war.
 - `has_character_ideology` — Check if scoped political movement has character ideology
 - `has_core_ideology` — Check if scoped political movement has core ideology
 - `is_being_bolstered` — Check if scoped movement is being bolstered
@@ -1007,12 +1014,13 @@
 - `political_movement_support` — Compare support of political movement
 - `political_movement_wealth_support` — Compare wealth support of political movement
 
-### Effects (5)
+### Effects (6)
 
 - `add_character_ideology` — Adds a character ideology to the scoped political movement
 - `remove_character_ideology` — Removes a character ideology from the scoped political movement
 - `set_bolstering` — Starts/stops bolstering the political movement in scope
 - `set_core_ideology` — Sets the core ideology of a political movement
+- `set_movement_defeated` — Sets or clears the defeat date for the movement in scope
 - `set_suppression` — Starts/stops suppressing the political movement in scope
 
 ---
@@ -1162,11 +1170,12 @@
 - `is_war` — True if the diplomatic play has escalated into war
 - `target_is` — Checks who the target of a diplomatic play is → country
 
-### Effects (12)
+### Effects (13)
 
 - `add_diplomatic_play_war_support` — Adds war support to the target country in the scoped diplomatic play.
 - `add_escalation` — Add escalation to a diplomatic play
 - `add_initiator_backers` — Add a tag/scope country to the initiator side of a diplomatic play
+- `add_maneuvers` — Adds maneuvers to the target country's side in the scoped diplomatic play
 - `add_target_backers` — Add a tag/scope country to the target side of a diplomatic play
 - `add_war_goal` — Adds a war goal to a DP.
 - `end_play` — End a diplomatic play
@@ -1425,10 +1434,11 @@
 ---
 ## Treaty Article
 
-### Triggers (6)
+### Triggers (7)
 
 - `has_type` — Checks if the scoped object has the type identified by the given string scope:some_object (scopes: treaty_article, treaty_article_options)
 - `is_desired_by` — Check if the scoped article or article_options has positive inherent acceptance with the target country scope:treaty_article → country (scopes: treaty_article, treaty_article_options)
+- `is_directed` — Is the treaty article [option] directed, i.e. (scopes: treaty_article, treaty_article_options)
 - `is_giftable_to` — Check if the scoped article or article_options is giftable to target country scope:treaty_article → country (scopes: treaty_article, treaty_article_options)
 - `is_treaty_article_in_danger` — Checks if treaty article is in danger of breaking
 - `max_contraventions` — Check the maximum contraventions for the article type of the scoped article or article_options scope:treaty_article (scopes: treaty_article, treaty_article_options)
@@ -1544,7 +1554,7 @@
 ---
 ## None
 
-### Iterators (17)
+### Iterators (20)
 
 - `any/every/ordered/random_character` → character — Iterate through all characters globally
 - `any/every/ordered/random_character_in_exile_pool` → character — Iterate through characters in the exile pool
@@ -1555,6 +1565,9 @@
 - `every/ordered/random_in_global_list` →  — Iterate through all items in global list.
 - `every/ordered/random_in_list` →  — Iterate through all items in list.
 - `every/ordered/random_in_local_list` →  — Iterate through all items in local list.
+- `every/ordered/random_key_in_global_variable_map` →  — Iterate through all keys in a global variable map.
+- `every/ordered/random_key_in_local_variable_map` →  — Iterate through all keys in a local variable map.
+- `every/ordered/random_key_in_variable_map` →  — Iterate through all keys in a variable map.
 - `random_list` →  — Selects one effect from a weighted random list and executes it.
 - `random_log_scopes` →  — Log the current scope to the random log when this effect executes.
 - `any/every/ordered/random_market` → market — Iterate through all markets globally
@@ -1564,7 +1577,7 @@
 - `any/every/ordered/random_strategic_region` → strategic_region — Iterate through all strategic regions globally
 - `any/every/ordered/random_treaty` → treaty — Iterate through treaties (both in force and drafts)
 
-### Triggers (83)
+### Triggers (98)
 
 - `active_lens` — Checks if the specified lens is open
 - `active_lens_option` — Checks if the specified lens option is activated
@@ -1576,6 +1589,9 @@
 - `any_in_global_list` — Iterate through all items in global list.
 - `any_in_list` — Iterate through all items in list.
 - `any_in_local_list` — Iterate through all items in local list.
+- `any_key_in_global_variable_map` — Iterate through all keys in a global variable map.
+- `any_key_in_local_variable_map` — Iterate through all keys in a local variable map.
+- `any_key_in_variable_map` — Iterate through all keys in a variable map.
 - `assert_if` — Conditionally cause an assert during run time
 - `assert_read` — Conditionally cause an assert during read time
 - `calc_true_if` — Returns true if the specified number of sub-triggers return true
@@ -1592,6 +1608,7 @@
 - `game_date` — Compare to current game date
 - `global_population` — Compares the global population
 - `global_variable_list_size` — Checks the size of a variable list variable_list_size
+- `global_variable_map_size` — Checks the size of a variable map variable_map_size
 - `has_account_item` — Does the player have the item in the account
 - `has_cosmetic_dlc` — Does the client have this cosmetic DLC
 - `has_cosmetic_dlc_feature` — Does the client have DLC that enables this particular cosmetic feature
@@ -1601,19 +1618,25 @@
 - `has_gameplay_dlc` — Does the host have this gameplay DLC
 - `has_global_variable` — Checks whether the current scope has the specified variable set
 - `has_global_variable_list` — Checks whether the current scope has the specified variable list set
+- `has_global_variable_map` — Checks whether the current scope has the specified variable map
 - `has_local_variable` — Checks whether the current scope has the specified variable set
 - `has_local_variable_list` — Checks whether the current scope has the specified variable list set
+- `has_local_variable_map` — Checks whether the current scope has the specified variable map
 - `has_map_interaction` — Checks if the map interaction type is active
 - `has_map_interaction_diplomatic_action` — Checks if our current map interaction is a specific diplomatic action
 - `has_reached_end_date` — True if the end date (NDefines::NGame::END_DATE) has been reached
 - `has_unification_candidate` — Check if there is at least one unification candidate for country tag
 - `has_variable` — Checks whether the current scope has the specified variable set
 - `has_variable_list` — Checks whether the current scope has the specified variable list set
+- `has_variable_map` — Checks whether the current scope has the specified variable map
 - `hidden_trigger` — Enclosed triggers are not shown in tooltips
 - `is_building_type_expanded` — Checks if the CProductionMethodsPanelEntry for a particular CBuildingType is expanded
 - `is_game_paused` — Checks if the game is paused
 - `is_gamestate_tutorial_active` — Is the gamestate tutorial active? See save_progress_in_gamestate in tutorial_lesson_chains documentation.
 - `is_in_list` — Checks if a target in in a list
+- `is_key_in_global_variable_map` — Checks if a target is a key in a variable list is_key_in_variable_list
+- `is_key_in_local_variable_map` — Checks if a target is a key in a variable list is_key_in_variable_list
+- `is_key_in_variable_map` — Checks if a target is a key in a variable list is_key_in_variable_list
 - `is_lens_open` — Checks if a certain lens is open, specified as a lens key.
 - `is_objective_completed` — Is the objective completed for the country in scope?
 - `is_panel_open` — Checks if a certain infopanel is open, specified as an event target (target) or as a string (panel_name).
@@ -1630,8 +1653,12 @@
 - `is_tutorial_lesson_chain_completed` — Has the tutorial lesson chain with the specified key been finished?
 - `is_tutorial_lesson_completed` — has the tutorial lesson with the specified name been finished?
 - `is_tutorial_lesson_step_completed` — Has the tutorial lesson step been finished?
+- `is_value_in_global_variable_map` — Checks if a target is a value in a variable list is_key_in_variable_list
+- `is_value_in_local_variable_map` — Checks if a target is a value in a variable list is_key_in_variable_list
+- `is_value_in_variable_map` — Checks if a target is a value in a variable list is_key_in_variable_list
 - `list_size` — Checks the size of a list Where X is the name of the list Where Y is a script value
 - `local_variable_list_size` — Checks the size of a variable list variable_list_size
+- `local_variable_map_size` — Checks the size of a variable map variable_map_size
 - `month` — Compare to current game date month (Jan: 0, Dec: 11)
 - `nand` — a negated AND trigger
 - `night_value` — Night value
@@ -1647,18 +1674,22 @@
 - `trigger_else_if` — Evaluates the enclosed triggers if the display_triggers of the preceding `trigger_if` or `trigger_else_if` is not met and its own display_trigger of the limit is mettrigger_if
 - `trigger_if` — Evaluates the triggers if the display_triggers of the limit are met
 - `variable_list_size` — Checks the size of a variable list Where X is the name of the variable Where Y is a script value or number
+- `variable_map_size` — Checks the size of a variable map Where X is the name of the variable map Where Y is a script value or number
 - `weighted_calc_true_if` — Returns true if the sum of weights of fulfilled sub-triggers amount to the specified sum
 - `year` — Compares the current year of the game
 
-### Effects (66)
+### Effects (75)
 
 - `add_contextless_journal_entry` — Activates a contextless journal entry of the given type
 - `add_journal_entry` — Adds a journal entry to a scoped country's journal, with optional saved scope target
 - `add_to_global_variable_list` — Adds the event target to a variable list for the given duration add_to_variable_list
+- `add_to_global_variable_map` — Adds the event target to a variable map for the given duration add_to_variable_map
 - `add_to_list` — Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the (unbroken) event chain add_to_list
 - `add_to_local_variable_list` — Adds the event target to a variable list for the given duration add_to_variable_list
+- `add_to_local_variable_map` — Adds the event target to a variable map for the given duration add_to_variable_map
 - `add_to_temporary_list` — Adds the current scope to an arbitrarily-named list (or creates the list if not already present) to be referenced later in the same effect add_to_temporary_list
 - `add_to_variable_list` — Adds the event target to a variable list for the given duration Where X is the name of the variable Where Y is an event target An optional days where Z is the number of days or script value
+- `add_to_variable_map` — Adds the event target to a variable map for the given duration Where X is the name of the variable Where Y and Z are event targets An optional days where T is the number of days or script value
 - `assert_if` — Conditionally cause an assert during run time
 - `assert_read` — Conditionally cause an assert during read time
 - `cancel_imposition` — Cancels imposition of the law (not law type) in scope scope:country.imposed_law
@@ -1669,9 +1700,12 @@
 - `clamp_local_variable` — Clamps a variable the specified max and min clamp_variable
 - `clamp_variable` — Clamps a variable the specified max and min Where X is the name of the variable Where Y and Z are script values
 - `clear_global_variable_list` — Empties the list
+- `clear_global_variable_map` — Empties the map clear_variable_map = variable_name
 - `clear_local_variable_list` — Empties the list
+- `clear_local_variable_map` — Empties the map clear_variable_map = variable_name
 - `clear_saved_scope` — Clears a saved scope from the top scope
 - `clear_variable_list` — Empties the list
+- `clear_variable_map` — Empties the map
 - `create_country` — Creates a new country
 - `create_dynamic_country` — Creates a new country with a dynamic tag
 - `create_treaty` — Creates a treaty between countries
@@ -1693,7 +1727,10 @@
 - `post_notification` — Posts notification
 - `post_proposal` — Posts proposal
 - `random` — run an effect depending on a random chance, do nothing otherwise.
+- `remove_from_global_variable_map` — Removes the target from a variable map remove_from_variable_map
 - `remove_from_list` — Removes the current scope from a named list remove_from_list
+- `remove_from_local_variable_map` — Removes the target from a variable map remove_from_variable_map
+- `remove_from_variable_map` — Removes the target from a variable map Where X is the name of the variable Where Y is an event target
 - `remove_global_variable` — Removes a variable
 - `remove_list_global_variable` — Removes the target from a variable list remove_list_variable
 - `remove_list_local_variable` — Removes the target from a variable list remove_list_variable
@@ -1722,19 +1759,20 @@
 ---
 ## Ship
 
-### Triggers (13)
+### Triggers (14)
 
 - `ai_ship_value` — AI valuation of a ship in £, equal to the current template-version construction cost times NAI::SHIP_TRANSFER_BASE_VALUE_PER_CONSTRUCTION_POINT
 - `armor` — Compare a ship's armor
 - `crew` — Compare a ship's current crew
 - `crew_percent` — Compare a ship's current crew
-- `days_obsolete` — Compare the number of days since a ship was first marked obsolete by the AI.
 - `hit_points` — Compare a ship's current hit points
 - `hit_points_percent` — Compare a ship's current hit points
 - `is_damaged` — Checks if a ship is damaged
 - `is_flagship` — Checks if the scoped ship is assigned as the flagship
 - `is_in_port` — Checks if a ship is in port
+- `is_ship_obsolete_for` — Checks if the ship's type is obsolete for the target country. → country
 - `is_ship_type` — Checks if scoped ship is of the specified type → ship_type
+- `is_ship_very_obsolete_for` — Checks if the ship's type is very obsolete for the target country. → country
 - `power_projection_value` — Compare a ship's power projection
 - `speed` — Compare a ship's speed
 

@@ -3798,7 +3798,7 @@ law_algorithmic_governance = {
 
 	modifier = {
 		country_max_companies_add = 2
-		country_law_enactment_time_mult = -0.5
+		country_law_enactment_speed_mult = 0.5
 		country_law_enactment_stall_mult = -0.25
 
 		country_legitimacy_govt_leader_clout_add = 10

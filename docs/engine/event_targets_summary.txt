@@ -1,4 +1,4 @@
-# Auto-generated from event_targets.log @ 2026-06-04T13:51:08+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from event_targets.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
 country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
@@ -93,6 +93,7 @@ country|get_ruler_for|character|Scopes from country to a character that would be
 |global_gdp|value|Get the global yearly predicted GDP
 |global_productivity|value|Scope to global productivity values (example: global_productivity:high_threshold)
 |global_var||Reference a previous set global variable via its name eg: global_var:important_thing Global Link: yes
+|global_variable_map||Reference a previous set variable via its name eg: "global_variable_map(average_relation_map|c:FRA)" Global Link: yes
 journal_entry|goal_value|value|Scope to the journal entry's goal value
 market_goods,state_goods|goods|goods|Scope to the goods traded by a trade route
 country|government_size|value|Get the scoped country's current number of Parties & independent IGs in government
@@ -158,6 +159,7 @@ interest_group|lobby_join_weight|value|Scope to the join weight of an interest g
 country|lobby_war_opposition|value|Scope to the total clout of all lobbies that oppose the scoped war (lobby_war_opposition:root >= 0.2)
 country|lobby_war_support|value|Scope to the total clout of all lobbies that support the scoped war (lobby_war_support:root >= 0.2)
 |local_var||Reference a previous set local variable via its name eg: local_var:person_of_interest Global Link: yes
+|local_variable_map||Reference a previous set variable via its name eg: "local_variable_map(rewards_for_country|c:FRA)" Global Link: yes
 new_combat_unit|manpower|value|Returns the unit's manpower
 country,building,market,market_goods,province,state,state_goods,state_region|market|market|Scope to the market of the object
 country|market_capital|state|Scope to the market capital of a country
@@ -200,6 +202,7 @@ country|num_admirals|value|Scope to the country's number of admirals
 country|num_alliances|value|Get the total number of alliances of the scoped country (example: num_alliances:root >= 2)
 country|num_alliances_and_defensive_pacts_with_allies|value|Scope to the number of alliances target country has with allies of scope country (example: num_alliances_and_defensive_pacts_with_allies:root >= 2)
 country|num_alliances_and_defensive_pacts_with_rivals|value|Scope to the number of alliances & defensive pacts target country has with rivals of scope country (example: num_alliances_and_defensive_pacts_with...
+military_formation|num_assigned_supply_ships|value|Get the number of assigned supply ships for a military formation
 character|num_battalions|value|Returns the number of active battalions under a commander
 country|num_characters|value|Scope to the country's number of characters
 country|num_colony_projects|value|Get the scoped country's current number of incomplete / in progress colony projects
@@ -339,6 +342,7 @@ building,company,diplomatic_play,diplomatic_catalyst,political_lobby,institution
 |unit_type|combat_unit_type|Scope to a combat unit type from its name (unit_type:key) Global Link: yes
 |value|value|A numeric literal value eg: 1, 5.2, -6 Wild Card: yes Global Link: yes
 |var||Reference a previous set variable via its name eg: var:mortal_enemy
+|variable_map||Reference a variable set under a specified scope in a named container on this scope: "variable_map(our_relations_with|c:FRA)"
 military_formation|visibility|value|Links from a fleet scope to the total visibility of the ships in the fleet
 military_formation|vulnerability|value|Links from a fleet scope to the total vulnerability of the ships in the fleet
 diplomatic_play|war|war|Scope from a diplomatic play to its war

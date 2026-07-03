@@ -127,7 +127,7 @@ REPLACE:battle_unit_experience = {
 REPLACE:legislative_efficiency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_institution_size_change_speed_mult = 1
-	country_law_enactment_time_mult = -0.25
+	country_law_enactment_speed_mult = 0.25
 	country_law_enactment_success_add = 0.05
 }
 
@@ -196,7 +196,7 @@ forced_law_through_event_enactment_medium = {
 	country_law_enactment_success_add = 0.15
 	country_law_enactment_stall_mult = -0.50
 	country_law_enactment_max_setbacks_add = 1
-	country_law_enactment_time_mult = -0.20
+	country_law_enactment_speed_mult = 0.20
 }
 
 forced_law_through_event_enactment_large = {
@@ -205,7 +205,7 @@ forced_law_through_event_enactment_large = {
 	country_law_enactment_success_add = 0.25
 	country_law_enactment_stall_mult = -0.75
 	country_law_enactment_max_setbacks_add = 2
-	country_law_enactment_time_mult = -0.35
+	country_law_enactment_speed_mult = 0.35
 }
 
 forced_law_through_event_consequences_small = {

@@ -1,4 +1,4 @@
-# Auto-generated from on_actions.log @ 2026-06-04T13:51:08+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from on_actions.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 austrian_monarchy_yearly_events|country|from_code=no
 bp1_misc_yearly_events|country|from_code=no
@@ -50,6 +50,7 @@ on_character_spawned_in_pool||from_code=yes
 on_civil_war_won||from_code=yes
 on_claim_added||from_code=yes
 on_colony_created||from_code=yes
+on_commander_promoted||from_code=yes
 on_company_disbanded||from_code=yes
 on_company_established||from_code=yes
 on_country_broke_treaty||from_code=yes

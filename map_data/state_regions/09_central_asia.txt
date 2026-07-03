@@ -289,7 +289,7 @@ STATE_NORTHERN_BALUCHISTAN = {
     arable_land = 10
     arable_resources = { "building_livestock_ranch" }
     capped_resources = {
-        building_coal_mine = 2
+        building_coal_mine = 3
     }
 }
 

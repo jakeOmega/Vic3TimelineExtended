@@ -494,10 +494,6 @@ types treaty_draft_panel_types
 							visible = "[TreatyDraft.WillAIAccept(TreatyDraft.GetRightCountry.Self)]"
 							datacontext = "[TreatyDraft.GetRightCountry]"
 
-							blockoverride " signature_texture" {
-								texture = "gfx/interface/diplomatic_treaties/diplomatic_treaties_seal_and_signature_2.dds"
-							}
-
 							blockoverride "signature_icon_position" {
 								parentanchor = right
 								position = { -10 0 }
@@ -590,11 +586,10 @@ types treaty_draft_panel_types
 					### MAKE THIS WORK BUTTON
 					button_icon_round = {
 						size = { 45 45 }
-						visible = "[Not(TreatyDraft.GetRightCountry.IsPlayer)]"
-						enabled = "[TreatyDraft.CanMakeThisWork]"
-						onclick = "[TreatyDraft.MakeThisWork]"
+						enabled = "[TreatyDraft.CanMakeThisWork(AccessPlayer.Self)]"
+						onclick = "[TreatyDraft.MakeThisWork(AccessPlayer.Self)]"
 						using = tooltip_above
-						tooltip = "[TreatyDraft.GetCanMakeThisWorkDesc]"
+						tooltip = "[TreatyDraft.GetCanMakeThisWorkDesc(AccessPlayer.Self)]"
 
 						blockoverride "icon" {
 							texture = "gfx/interface/buttons/button_icons/make_this_work.dds"
@@ -1583,22 +1578,20 @@ types treaty_draft_panel_types
 
 	type seal_and_signature = widget {
 		layoutpolicy_horizontal = expanding
-		size = { 0 65 }
+		size = { 0 74 }
 
 		widget = {
-			size = { 130 65 }
+			size = { 130 74 }
 
 			block "signature_icon_position" {
-				position = { 10 0 }
+				position = { 10 -5 }
 			}
 
 			#SIGNATURE
 			icon = {
 				size = { 129 50 }
 
-				block " signature_texture" {
-					texture = "gfx/interface/diplomatic_treaties/diplomatic_treaties_seal_and_signature_1.dds"
-				}
+				texture = "[Country.GetSealAndSignatureTexture]"
 			}
 
 			textbox = {
@@ -1614,13 +1607,13 @@ types treaty_draft_panel_types
 
 	type seal_and_signature_unsigned = widget {
 		layoutpolicy_horizontal = expanding
-		size = { 0 65 }
+		size = { 0 74 }
 
 		widget = {
-			size = { 130 65 }
+			size = { 130 74 }
 
 			block "signature_icon_position" {
-				position = { 10 0 }
+				position = { 10 -5 }
 			}
 
 			#SIGNATURE

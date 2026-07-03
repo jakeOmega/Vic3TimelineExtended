@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log @ 2026-06-04T13:51:08+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_exhaustion: Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
@@ -69,6 +69,7 @@ bureaucracy: Compares the available bureaucracy of the scoped country
 bureaucracy_usage: Compares the consumed bureaucracy of the scoped country
 can_afford_diplomatic_action: Checks if the country in scope can afford the Influence for the specified diplomatic action (pact or ongoing) Where X = country and Y = diplomatic action type
 can_break_diplomatic_pact: Checks if there is a diplomatic pact of the specified type with target country that can be broken by scope country
+can_close_straits: Check if the scoped country is allowed to close the straits it controls
 can_create_diplomatic_pact: Checks if a diplomatic pact is valid to create with another country
 can_decrease_autonomy: Check if a subject country is able to become a less autonomous subject type
 can_establish_company: Check if the country can establish a new company
@@ -82,8 +83,10 @@ can_own_autonomy_be_decreased: Check if scoped country can have it's autonomy de
 can_research: True if a country can research an technology
 can_send_diplomatic_action: Checks if a diplomatic action is valid to send by scope country to target country
 can_take_on_scaled_debt: Checks if scoped country can take on a certain amount of scaled debt from another country Where X = country and Y = decimal value
+can_toll_straits: Check if the scoped country is allowed to charge tolls on the straits it controls
 can_transfer_subject: Check if the target country can be transferred as a subject to the scoped country scope:country
 can_trigger_event: Check if country can trigger the specified event
+charges_strait_toll: Check if the scoped country controls a strait with a toll rate of Low or higher
 check_area: Compares areas of object to another object
 construction_queue_duration: Compares the maximum of all the very roughly approximated weeks remaining to finish the constructions in any queue:
 construction_queue_government_duration: Compares the very roughly approximated weeks remaining to finish the constructions in the government queue:
@@ -115,6 +118,7 @@ country_turmoil: Compares the country's population weighted turmoil
 cultural_acceptance_base: Compares the acceptance from shared cultural traits of a culture in the scoped country against an acceptence value
 culture_percent_country: Checks that a country's population has a certain percentage of a specific culture scope:example_country
 current_law_enactment_score: Check what the scoped country's AI enactment score is for the currently enacting law
+days_since_movement_type_defeated: Compares the number of days since a movement of a given identity was last defeated in civil war.
 discriminates_religion: Checks if the scoped country discriminates the given religion (key)
 economic_dependence: Compares the degree of dependence the country in scope has to the target country.
 electoral_confidence: Compares the electoral confidence of scope country
@@ -178,6 +182,7 @@ has_law: Checks if a country has a certain law active
 has_law_commitment: Checks if a country has a commitment to enact a certain law
 has_law_imposition_rights: Checks if the scoped country has the necessary permits to demand another country enacts a certain law
 has_law_or_variant: Checks if a country has a certain law or one its variant laws active
+has_military_strait_access_through: Check if the scoped country has military access through every strait owned by the target country
 has_modifier: Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front
 has_objective: Checks if the scoped country has a certain objective type
 has_overlapping_interests: Checks if country in scope has an overlapping interest marker with any of target country's interests
@@ -193,6 +198,7 @@ has_ruling_interest_group_count: Does the country's government consist of the sp
 has_secret_goal: Checks if scoped country has a particular secret goal towards another country Where X = country and Y = secret_goal type
 has_social_hierarchy: Checks if the scoped country has adopted a specific social hierarchy
 has_state_in_state_region: Check if country has a state in the state region
+has_strait_toll_exemption_from: Check if the scoped country is exempt from the strait tolls charged by the target country
 has_strategic_adjacency: Checks if country in scope has a strategic adjacency (direct/coastal/war goal adjacency) to target state/country
 has_strategic_land_adjacency: Checks if country in scope has a strategic adjacency (direct land border or war goal adjacency only) to target state/country has_strategic_adjacency
 has_strategic_region_interest_tier: Checks the scoped country's interest tier rank in a specific strategic region scope:country

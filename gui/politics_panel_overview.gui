@@ -1275,7 +1275,7 @@ types politics_panel_types
 							}
 							blockoverride "line_plotpoints" {
 								visible = "[Not(IsEmpty(LoyaltyType.GetCountryTrend(Country.Self)))]"
-								plotpoints = "[GetTrendPlotPointsNormalized(LoyaltyType.GetCountryTrend(Country.Self), '(CFixedPoint)0', Max_CFixedPoint(GetMax(Country.GetRadicalsTrend), GetMax(Country.GetLoyalistsTrend)))]"
+								plotpoints = "[GetTrendPlotPointsNormalized(LoyaltyType.GetCountryTrend(Country.Self), Min_CFixedPoint(GetMinPadded(Country.GetRadicalsTrend), GetMinPadded(Country.GetLoyalistsTrend)), Max_CFixedPoint(GetMaxPadded(Country.GetRadicalsTrend), GetMaxPadded(Country.GetLoyalistsTrend)))]"
 							}
 							blockoverride "tooltip" {
 								tooltip = "[LoyaltyType.GetCountryTooltip(Country.Self)]"
@@ -1286,7 +1286,7 @@ types politics_panel_types
 								text = "[Max_CFixedPoint(GetMax(Country.GetRadicalsTrend), GetMax(Country.GetLoyalistsTrend))|K]"
 							}
 							blockoverride "minvalue" {
-								raw_text = "0"
+								text = "[Min_CFixedPoint(GetMin(Country.GetRadicalsTrend), GetMin(Country.GetLoyalistsTrend))|K]"
 							}
 
 							# we can use either the radicals or loyalists trend for general values

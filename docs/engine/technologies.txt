@@ -517,7 +517,7 @@
 	Identification Documents - By creating documents identifying citizens of a country, it is much easier to keep track of them.
 		Unlocking Technologies:
 			Central Archives
-4: 37 technologies
+4: 38 technologies
 	Mechanized Farming - By replacing various aspect of physical farm labor with machine power, it is possible to increase the efficiency of farming greatly.
 		Unlocking Technologies:
 			Threshing Machines
@@ -631,6 +631,7 @@
 			$ship_type_pre_dreadnought$
 			Sea Lane Strategies
 			Concrete Dockyards
+			Military Aviation
 		Unlocks Ship Types: Dreadnought, Light Cruiser, Seaplane Tender
 	Sea Lane Strategies - By focusing naval power on controlling the sea lanes, naval dominance is much easier to achieve.
 		Unlocking Technologies:
@@ -645,6 +646,12 @@
 	Concrete Dockyards - Sturdy and cheap, concrete allows for the construction of far larger piers that are able to support far heavier freight loads.
 		Unlocking Technologies:
 			Floating Harbor
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Military Aviation - By combining conventional aviation with military technology, it is possible to create aircraft that can fulfill a variety of military roles.
+		Unlocking Technologies:
+			Handcranked Machine Gun
+		Unlocks Buildings: Aerospace Industry
+		Unlocks Mobilization Options: Aerial Reconnaissance
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Elevators - Through a complex system of weights and pulleys, it possible to raise people and objects to desired heights at will.
 		Unlocking Technologies:
@@ -687,7 +694,7 @@
 	Multilateral Alliances - The industrial potential and global reach of modern states requires the formation of truly international alliances to ensure the safety of our interests.
 		Unlocking Technologies:
 			Pan-nationalism
-5: 24 technologies
+5: 23 technologies
 	Dough Rollers - To produce all the food demanded by a rapidly-growing population, traditional bakers won't suffice any longer.
 		Unlocking Technologies:
 			Conveyors
@@ -733,17 +740,10 @@
 		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Mobile Armor - By equipping a motorized vehicle with metal plating, it is possible to create an advanced weaponry platform.
 		Unlocking Technologies:
-			Military Aviation
 			Concrete Fortifications
 			NCO Training
 		Unlocks Combat Unit Types: Heavy Tanks, Light Tanks, Mechanized Infantry
 		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
-	Military Aviation - By combining conventional aviation with military technology, it is possible to create aircraft that can fulfill a variety of military roles.
-		Unlocking Technologies:
-			Defense in Depth
-		Unlocks Buildings: Aerospace Industry
-		Unlocks Mobilization Options: Aerial Reconnaissance
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Flamethrowers - A great way to drive entrenched soldiers out of their defensive positions is to light a fire under them.
 		Unlocking Technologies:
 			Trench Works
@@ -752,7 +752,6 @@
 	Aircraft Carrier - By designing large ships with a large flat deck and equipping them appropriately, it is possible to create a sea borne airfield.
 		Unlocking Technologies:
 			Dreadnought
-			Military Aviation
 		Unlocks Ship Types: Aircraft Carrier
 	$ship_type_super_dreadnought$ - By taking the dreadnought design and making all the guns high caliber, as well as some other changes, it is possible to make an even more devastating warship.
 		Unlocking Technologies:

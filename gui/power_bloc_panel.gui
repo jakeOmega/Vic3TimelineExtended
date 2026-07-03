@@ -830,11 +830,6 @@ types power_bloc_panel_types
 				blockoverride "icon" {
 					raw_text = "@cohesion!"
 				}
-
-				blockoverride "text_parentanchor" {
-					parentanchor = center
-					position = { 5 0 }
-				}
 			}
 
 			### TOTAL NUMBER OF SHIPS
@@ -1665,6 +1660,15 @@ types power_bloc_panel_types
 			}
 		}
 
+		### SEARCH
+		search_bar = {
+			parentanchor = hcenter
+			datacontext = "[PowerBlocPanel.GetMembersSearchBar]"
+			blockoverride "editbox_name" {
+				name = "member_search_edit"
+			}
+		}
+
 		flowcontainer = {
 			minimumsize = { @panel_width -1 }
 			parentanchor = hcenter
@@ -1677,14 +1681,14 @@ types power_bloc_panel_types
 			}
 
 			sort_button = {
-				size = { 250 30 }
+				size = { 200 30 }
 				text = "concept_prestige"
 				tooltip = "POWER_BLOC_MEMBER_PRESTIGE_HEADER_TOOLTIP"
 				onclick = "[PowerBloc.SortMembers('prestige')]"
 			}
 
 			sort_button = {
-				size = { 150 30 }
+				size = { 200 30 }
 				text = "concept_power_bloc_leverage_advantage"
 				tooltip = "POWER_BLOC_MEMBER_LEVERAGE_HEADER_TOOLTIP"
 				onclick = "[PowerBloc.SortMembers('leverage_advantage')]"
@@ -1706,10 +1710,11 @@ types power_bloc_panel_types
 			parentanchor = hcenter
 			datamodel = "[PowerBloc.GetMembers]"
 			spacing = 5
+			ignoreinvisible = yes # so search-hidden rows collapse instead of leaving gaps
 
 			item = {
 				flowcontainer = {
-					visible = "[Not(PowerBloc.IsLeader(Country.Self))]"
+					visible = "[And( Not(PowerBloc.IsLeader(Country.Self)), Country.MatchesSearchQuery( PowerBlocPanel.GetMembersSearchBar.GetQuery ) )]"
 					direction = vertical
 
 					power_bloc_member_item = {}

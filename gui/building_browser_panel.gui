@@ -173,6 +173,11 @@ types building_browser_panel_types
 						spacing = 10
 						visible = "[Not(GetVariableSystem.Exists('building_browser_filters'))]"
 
+						### SEARCH
+						search_bar = {
+							datacontext = "[BuildingBrowserPanel.GetSearchBar]"
+						}
+
 						hbox = {
 							layoutpolicy_horizontal = expanding
 
@@ -2345,6 +2350,12 @@ types building_browser_panel_types
 					margin = { 0 -2 }
 				}
 
+				### SEARCH
+				search_bar = {
+					parentanchor = hcenter
+					datacontext = "[BuildingBrowserPanel.GetSearchBar]"
+				}
+
 				section_header_button = {					
 					blockoverride "arrow_position" {
 						position = { 10 0 }
@@ -3476,7 +3487,7 @@ types building_browser_panel_types {
 								onclick = "[BuildingType.ActivateExpansionLens]"
 								using = select_button_sound
 								visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.GeneratesCombatUnits))]"
-								tooltip = "EXPAND"
+								tooltip = "EXPAND_TOOLTIP_BUILDING_TYPE"
 							}
 						}
 					}

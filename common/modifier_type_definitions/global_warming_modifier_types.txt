@@ -89,3 +89,34 @@ building_group_bg_coal_mining_throughput_add = {
 		ai_value = 0
 	}
 }
+
+# Vanilla 1.13.9 deregistered these three per-condition harvest modifier types
+# (the hailstorm/torrential_rains harvest conditions themselves still exist).
+# The mod's global-warming static modifiers use them, so re-register with the
+# vanilla 1.13.5 registration shape to keep them from silently no-opping.
+state_harvest_condition_torrential_rains_impact_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_torrential_rains_duration_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+state_harvest_condition_hailstorm_impact_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
