@@ -956,6 +956,8 @@
  equal_pay_suppressed_modifier_desc:0 "The suppression of equal pay strikes has created social unrest."
  espionage_agent_exposed_modifier_desc:0 "The capture of one of our operatives abroad has compromised our intelligence apparatus."
  espionage_prisoner_exchange_modifier_desc:0 "A quietly negotiated prisoner exchange resolved the espionage crisis pragmatically, though some see it as weakness."
+ espionage_scandal_modifier:0 "Espionage Scandal"
+ espionage_scandal_modifier_desc:0 "We denied the espionage allegations and expelled their diplomats. A patriotic show of defiance, but the severed diplomatic channels have cost us influence abroad."
  european_union:0 "European Union"
  extend_influence:0 "Extend Influence"
  extend_influence_desc:0 "Extend Influence is a [concept_diplomatic_action] that allows a country to increase its influence over another country."

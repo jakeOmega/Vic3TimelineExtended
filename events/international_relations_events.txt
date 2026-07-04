@@ -377,7 +377,7 @@ international_relations_events.3 = {
 		custom_tooltip = {
 			text = SUMMIT_BOYCOTT_RELATIONS_TT
 			every_country = {
-				limit = { 
+				limit = {
 					country_rank >= rank_value:great_power
 					NOT = { THIS = ROOT }
 				}
@@ -595,7 +595,7 @@ international_relations_events.6 = {
 
 	trigger = {
 		NOR = {
-			has_modifier = propaganda_campaign_modifier
+			has_modifier = espionage_scandal_modifier
 			has_modifier = espionage_prisoner_exchange_modifier
 		}
 		has_technology_researched = cryptography
@@ -629,7 +629,7 @@ international_relations_events.6 = {
 		add_loyalists = { value = small_radicals }
 		# Lose diplomatic access
 		add_modifier = {
-			name = propaganda_campaign_modifier
+			name = espionage_scandal_modifier
 			days = short_modifier_time
 			is_decaying = yes
 		}
