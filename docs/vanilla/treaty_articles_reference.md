@@ -100,7 +100,7 @@ The Canton System restricted foreign trade to a single port (Guangzhou). The Tre
 - `state_assimilation_mult = -0.25` — Cosmopolitan trading hub preserves cultural diversity
 
 **On the source country** (conceding tariff sovereignty):
-- `country_authority_add = -100` — Authority cost for ceding fiscal control over a state
+- `country_authority_cost_add  = 100` — Authority cost for ceding fiscal control over a state
 - No prestige/legitimacy penalty if `giftable` — sometimes countries voluntarily open ports
 
 **On the target country** (the one whose traders benefit):
@@ -489,7 +489,7 @@ Rather than actively converting, the article:
 - Remove the state variable and modifier
 
 **Source modifier** (government granting mission rights):
-- `country_authority_add = -100` — Political cost of allowing foreign religious influence
+- `country_authority_cost_add  = 100` — Political cost of allowing foreign religious influence
 - `country_legitimacy_base_add = -5` — Looks weak to domestic devout population
 - Consider adding `ig_approval_negative_modifier` on `ig_devout` via `on_entry_into_force` for IG reaction
 
@@ -572,7 +572,7 @@ Extraterritoriality in China and Japan (foreign citizens judged by foreign court
 **Source modifier** (humiliated nation granting extraterritoriality):
 - `country_prestige_mult = -0.1` — National humiliation
 - `country_legitimacy_base_add = -15` — Government looks weak
-- `country_authority_add = -200` — Can't enforce own laws on foreigners
+- `country_authority_cost_add  = 200` — Can't enforce own laws on foreigners
 
 **Target modifier** (nation whose citizens enjoy extraterritoriality):
 - `country_prestige_mult = 0.05` — Imperial prestige

@@ -372,7 +372,7 @@ Costs are applied as part of each button's `colonial_*_modifier` (already exists
 **Garrison — primary: Authority + Infamy. Secondary: IG anger, modest money.**
 
 Modifier `colonial_military_garrison_modifier`:
-- `country_authority_add = -300` (ongoing while modifier active; significant for non-GPs, manageable for GPs with regressive laws which generate Authority)
+- `country_authority_cost_add  = 300` (ongoing while modifier active; significant for non-GPs, manageable for GPs with regressive laws which generate Authority)
 - `interest_group_ig_intelligentsia_approval_add = -2` (the universities don't like brutality)
 - `interest_group_ig_trade_unions_approval_add = -1`
 - `country_loan_interest_rate_mult = 0.05` (small money cost — credit dries up when you're shooting people)
@@ -387,7 +387,7 @@ Iron-Fist profiles generate Authority through `law_outlawed_dissent`, `law_secre
 
 Modifier `colonial_cultural_assimilation_modifier`:
 - `country_bureaucracy_mult = -0.15` (replaces current -4%; bites big empires hardest, which is the whole point)
-- `country_authority_add = -100` (mild)
+- `country_authority_cost_add  = 100` (mild)
 - Apply state-side modifier `colonial_assimilation_disruption_modifier` to all overseas colonial states while active: `state_goods_output_mult = -0.05`, `state_pop_qualification_growth_mult = -0.1` (the local economy stalls when teachers are forced to teach the metropole's curriculum)
 
 State-side modifier wiring: in `on_monthly_pulse_country`, when the country has `colonial_cultural_assimilation_modifier`, iterate `every_scope_state = { limit = { is_overseas_colonial_state = yes } add_modifier = { name = colonial_assimilation_disruption_modifier months = 2 } }`. The 2-month duration auto-expires; constant reapplication keeps it on while the country-modifier is active.
