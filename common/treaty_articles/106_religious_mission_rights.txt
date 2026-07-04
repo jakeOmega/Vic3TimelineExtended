@@ -324,10 +324,35 @@ religious_mission_rights = {
 		execution_priority = 40
 		contestion_type = control_target_state
 
-		infamy = {
-			value = 5
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
 			scope:target_country = {
 				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+			scope:target_country = {
+				multiply = {
+					desc = "INFAMY_TARGET_COUNTRY_POPULATION_FACTOR"
 					value = total_population
 					divide = 20000000
 					add = 1

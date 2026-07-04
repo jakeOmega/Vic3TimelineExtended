@@ -91,7 +91,7 @@ request_influence = {
 				}
 			}
 			if = {
-				limit = { has_attitude = { who = scope:source_country attitude = friendly } }
+				limit = { has_attitude = { who = scope:source_country attitude = genial } }
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"
 					value = 10
@@ -177,7 +177,7 @@ crisis_resolution = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 					}
@@ -273,7 +273,7 @@ extend_influence = {
 				limit = {
 					root = {
 						OR = {
-							has_attitude = { who = scope:other_country attitude = hostile }
+							has_attitude = { who = scope:other_country attitude = domineering }
 							has_attitude = { who = scope:other_country attitude = belligerent }
 							has_attitude = { who = scope:other_country attitude = antagonistic }
 						}
@@ -299,10 +299,10 @@ extend_influence = {
 				}
 			}
 			if = {
-				limit = { root = { has_attitude = { who = scope:other_country attitude = friendly } } }
+				limit = { root = { has_attitude = { who = scope:other_country attitude = genial } } }
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"
-					value = 10
+					value = 20
 				}
 			}
 		}
@@ -383,7 +383,7 @@ education_aid = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 					}
@@ -495,7 +495,7 @@ healthcare_aid = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 					}
@@ -609,7 +609,7 @@ security_aid = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 					}
@@ -715,7 +715,7 @@ science_aid = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 					}
@@ -848,7 +848,7 @@ science_aid_2 = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 						has_attitude = { who = scope:other_country attitude = antagonistic }
 					}
@@ -1083,7 +1083,7 @@ nuclear_disarmament = {
 			if = {
 				limit = {
 					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = hostile }
+					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.1
 			}
@@ -1138,17 +1138,17 @@ nuclear_disarmament = {
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = hostile } }
+					limit = { has_attitude = { who = scope:target_country attitude = domineering } }
 					add = {
 						desc = "AI_HOSTILE_ATTITUDE"
-						value = 30
+						value = 40
 					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:target_country attitude = belligerent } }
 					add = {
 						desc = "AI_BELLIGERENT_ATTITUDE"
-						value = 40
+						value = 30
 					}
 				}
 				if = {
@@ -1246,8 +1246,32 @@ nuclear_disarmament = {
 		execution_priority = 85
 		contestion_type = control_target_country_capital
 
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
 		infamy = {
-			value = 20
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 20
+			}
 			scope:target_country = {
 				multiply = {
 					value = gdp
@@ -1379,7 +1403,7 @@ nuclear_program_aid = {
 			if = {
 				limit = {
 					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = friendly }
+					has_attitude = { who = scope:other_country attitude = genial }
 				}
 				add = 0.1
 			}
@@ -1403,7 +1427,7 @@ nuclear_program_aid = {
 				if = {
 					limit = {
 						OR = {
-							has_attitude = { who = scope:target_country attitude = hostile }
+							has_attitude = { who = scope:target_country attitude = domineering }
 							has_attitude = { who = scope:target_country attitude = belligerent }
 							has_attitude = { who = scope:target_country attitude = antagonistic }
 						}
@@ -1421,7 +1445,7 @@ nuclear_program_aid = {
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = friendly } }
+					limit = { has_attitude = { who = scope:target_country attitude = genial } }
 					add = {
 						desc = "AI_FRIENDLY_ATTITUDE"
 						value = 25
@@ -1621,7 +1645,7 @@ intelligence_sharing_pact = {
 			value = -15
 			# AI is more willing if they have good relations or a common threat.
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+				limit = { has_attitude = { who = scope:other_country attitude = genial } }
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"
 					value = 25
@@ -1651,7 +1675,7 @@ intelligence_sharing_pact = {
 				}
 			}
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = hostile } }
+				limit = { has_attitude = { who = scope:other_country attitude = domineering } }
 				add = {
 					desc = "AI_HOSTILE_ATTITUDE"
 					value = -1000
@@ -1761,7 +1785,7 @@ joint_military_exercises = {
 			value = 0
 			# AI is more willing if they have good relations or a common threat.
 			if = {
-				limit = { has_attitude = { who = scope:other_country attitude = friendly } }
+				limit = { has_attitude = { who = scope:other_country attitude = genial } }
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"
 					value = 30
@@ -1786,7 +1810,7 @@ joint_military_exercises = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
+						has_attitude = { who = scope:other_country attitude = domineering }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 					}
 				}
@@ -1894,7 +1918,7 @@ join_united_nations = {
 			if = {
 				limit = {
 					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = friendly }
+					has_attitude = { who = scope:other_country attitude = genial }
 				}
 				add = 0.1
 			}
@@ -1923,7 +1947,7 @@ join_united_nations = {
 				}
 				# More willing if friendly with source
 				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = friendly } }
+					limit = { has_attitude = { who = scope:source_country attitude = genial } }
 					add = {
 						desc = "AI_FRIENDLY_ATTITUDE"
 						value = 30
@@ -1957,7 +1981,7 @@ join_united_nations = {
 				if = {
 					limit = {
 						OR = {
-							has_attitude = { who = scope:source_country attitude = hostile }
+							has_attitude = { who = scope:source_country attitude = domineering }
 							has_attitude = { who = scope:source_country attitude = belligerent }
 						}
 					}
@@ -2058,7 +2082,7 @@ nuclear_program_pause = {
 			if = {
 				limit = {
 					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = hostile }
+					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.15
 			}
@@ -2120,17 +2144,17 @@ nuclear_program_pause = {
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = hostile } }
+					limit = { has_attitude = { who = scope:source_country attitude = domineering } }
 					add = {
 						desc = "AI_HOSTILE_ATTITUDE"
-						value = 25
+						value = 30
 					}
 				}
 				if = {
 					limit = { has_attitude = { who = scope:source_country attitude = belligerent } }
 					add = {
 						desc = "AI_BELLIGERENT_ATTITUDE"
-						value = 30
+						value = 25
 					}
 				}
 				if = {
@@ -2237,8 +2261,32 @@ nuclear_program_pause = {
 		execution_priority = 75
 		contestion_type = control_target_country_capital
 
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
 		infamy = {
-			value = 10
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 10
+			}
 			scope:target_country = {
 				multiply = {
 					value = gdp
@@ -2346,7 +2394,6 @@ population_transfer = {
 				limit = {
 					exists = scope:other_country
 					OR = {
-						has_attitude = { who = scope:other_country attitude = hostile }
 						has_attitude = { who = scope:other_country attitude = belligerent }
 					}
 				}
@@ -2378,7 +2425,6 @@ population_transfer = {
 				limit = {
 					exists = scope:other_country
 					OR = {
-						has_attitude = { who = scope:other_country attitude = friendly }
 						has_attitude = { who = scope:other_country attitude = cooperative }
 						has_attitude = { who = scope:other_country attitude = genial }
 						has_attitude = { who = scope:other_country attitude = loyal }
@@ -2554,8 +2600,32 @@ population_transfer = {
 		execution_priority = 70
 		contestion_type = control_target_country_capital
 
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
 		infamy = {
-			value = 15
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 15
+			}
 			scope:target_country = {
 				multiply = {
 					value = gdp
