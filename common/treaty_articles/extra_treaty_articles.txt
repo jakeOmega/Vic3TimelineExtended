@@ -121,7 +121,7 @@ crisis_resolution = {
 
 	source_modifier = {
 		# The leader (source) pays an authority cost.
-		country_authority_add = -100
+		country_authority_cost_add = 100
 	}
 	target_modifier = {
 		# The target country receives bonuses to handle their crisis.

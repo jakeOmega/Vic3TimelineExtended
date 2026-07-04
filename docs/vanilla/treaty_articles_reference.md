@@ -43,7 +43,7 @@ Russia's claims to protect Orthodox Christians in the Ottoman Empire; Austria's 
 
 **On the source country** (the conceding side, via `source_modifier`):
 - `country_legitimacy_base_add = -10` — Legitimacy hit: the government looks weak for ceding sovereignty over internal affairs
-- `country_authority_add = -200` — Authority drain: enforcing foreign-imposed protections is costly
+- `country_authority_cost_add = 200` — Authority cost: enforcing foreign-imposed protections is costly
 
 **On the target country** (the protector, via `target_modifier`):
 - `country_prestige_mult = 0.05` — Modest prestige for championing minority rights
@@ -217,7 +217,7 @@ The `company` input tells us which company is targeted; the company's `building_
 **Source modifier** (country granting concessions):
 - `building_throughput_mult = -0.1` — General throughput penalty (represents regulatory degradation)
 - `state_radicals_from_political_movements_mult = 0.25` — Workers radicalize against exploitative conditions
-- `country_authority_add = -200` — Governance cost of enforcing foreign corporate privileges
+- `country_authority_cost_add = 200` — Governance cost of enforcing foreign corporate privileges
 
 **On entry into force** (applied to source country based on the selected company's building types):
 - Building-specific throughput bonus (e.g., `building_textile_mills_throughput_add = 0.2`) via a modifier determined by the company type
@@ -281,7 +281,7 @@ The engine has a built-in `country_force_privatization_bool` modifier (used by `
 
 **Source modifier** (country being forced to privatize):
 - `country_force_privatization_bool = yes` — Forces all government-owned buildings to be privatized (vanilla mechanic)
-- `country_authority_add = -200` — Massive authority drain from losing control of state enterprises
+- `country_authority_cost_add = 200` — Massive authority cost from losing control of state enterprises
 
 **Target modifier** (the country demanding privatization):
 - `country_prestige_mult = 0.05` — Prestige from imposing economic ideology
@@ -611,7 +611,7 @@ The Rhineland DMZ after WWI; the Korean DMZ; the Sinai Peninsula after Camp Davi
 - `state_building_naval_base_max_level_add = -1000` — Prevents construction of naval bases
 
 **Source modifier** (country forced to demilitarize):
-- `country_authority_add = -25` — Sovereignty cost
+- `country_authority_cost_add = 25` — Sovereignty cost
 - `country_prestige_add = -5` — National humiliation
 
 **Note:** Existing barracks/naval bases in the state at the time of the treaty would need to be handled. The max level cap should prevent expansion and cause existing buildings to become over-capacity (the engine should auto-downsize them over time). If not, an `on_entry_into_force` effect could forcibly remove levels. The `non_fulfillment` block below provides a secondary enforcement mechanism.

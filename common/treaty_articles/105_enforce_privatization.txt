@@ -25,7 +25,7 @@ enforce_privatization = {
 
 	source_modifier = {
 		country_force_privatization_bool = yes
-		country_authority_add = -200
+		country_authority_cost_add = 200
 	}
 
 	target_modifier = {

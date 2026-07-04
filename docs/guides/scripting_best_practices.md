@@ -144,11 +144,15 @@ A `country_*_mult` or weekly modifier from `add_modifier { days = N ... }` compo
 
 When adding a new option that pairs `add_treasury` with `add_modifier`, sanity-check both magnitudes against the alternative option in the same event — the cash-vs-modifier tradeoff only feels like a real choice if the magnitudes are commensurate.
 
-## Authority Cost Compensation (Inverse `country_authority_mult`)
+## Authority/Bureaucracy/Influence Costs: prefer `country_*_cost_add` (1.13.9+)
 
-`country_authority_add` in a static modifier is multiplied by the country's `country_authority_mult` before being applied. So if a country has a +50% authority mult, a flat `country_authority_add = -250` becomes -375 effective. For *cost* modifiers (where the player intent is "spend exactly 250 authority"), this is wrong: high-mult countries pay more for the same option.
+For a **persistent cost** ("spend exactly N authority to run this policy"), use **`country_authority_cost_add = N`** (or `country_bureaucracy_cost_add` / `country_influence_cost_add`). Added in 1.13.9, these render on the *expense* side of the capacity breakdown and are a **flat expense — NOT scaled by `country_authority_mult`** — so the cost is exactly N regardless of the country's mult, and an affordability gate is just `produced_authority > N` (raw). The mod migrated its persistent negative capacity `_add` drains to this form in #224.
 
-**Compensation pattern** — apply the modifier with a script-value multiplier that inverts the country's authority mult:
+Contrast the legacy `country_authority_add = -N`, which **is** scaled by `country_authority_mult` (a flat `-250` → `-375` effective at +50% mult) — wrong for a fixed cost. Keep `_add` only for short-lived event penalties / "capacity destroyed" shocks (e.g. `te_authority_drain`), never for a persistent spend.
+
+### Legacy compensation pattern (pre-1.13.9 — obsolete, do not write new)
+
+Before `_cost_add` existed, a fixed `_add` cost was paired with a script-value multiplier inverting the authority mult:
 
 ```
 forced_law_through_event_authority_multiplier_small = {
@@ -167,7 +171,7 @@ forced_law_through_event_authority_multiplier_large = {
 }
 ```
 
-The same pattern works for any flat-cost-via-`_mult`-modifier interaction. **Don't apply this pattern to gameplay-effect modifiers** — only to ones that represent a fixed "cost" of an action.
+**Superseded by `country_authority_cost_add`** — prefer that for any new fixed-cost modifier (no compensation, renders as a visible expense). This legacy pattern is retained only to explain existing/removed code.
 
 ## Modifier Name Validation
 

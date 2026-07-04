@@ -16847,7 +16847,7 @@ pm_power_bloc_statue_diplomatic = {
 		workforce_scaled = {
 			country_prestige_add = 3
 			country_influence_add = 20
-			country_bureaucracy_add = -10
+			country_bureaucracy_cost_add = 10
 		}
 	}
 

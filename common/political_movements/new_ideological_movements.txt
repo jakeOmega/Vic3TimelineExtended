@@ -278,7 +278,7 @@
 			}
 			else_if = {
 				limit = {
-					adjusted_produced_authority > 250
+					produced_authority > 250
 					temperature_anomaly_display >= 0.5
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_CLIMATE_ADAPTATION" }
@@ -292,7 +292,7 @@
 				limit = {
 					temperature_anomaly_display >= 0.5
 					market_capital.owner = THIS
-					adjusted_produced_authority > 200
+					produced_authority > 200
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }
 			}
@@ -304,7 +304,7 @@
 			else_if = {
 				limit = {
 					temperature_anomaly_display >= 0.5
-					adjusted_produced_authority > 100
+					produced_authority > 100
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_REFORESTATION_SUBSIDIES" }
 			}
@@ -316,7 +316,7 @@
 			else_if = {
 				limit = {
 					temperature_anomaly_display >= 0.5
-					adjusted_produced_authority > 150
+					produced_authority > 150
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_PUBLIC_TRANSIT" }
 			}
@@ -328,7 +328,7 @@
 			else_if = {
 				limit = {
 					temperature_anomaly_display >= 1.0
-					adjusted_produced_authority > 200
+					produced_authority > 200
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_FOSSIL_FUEL_DIVESTMENT" }
 			}

@@ -31,7 +31,7 @@ pm_homesteading_program = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -5
+			country_bureaucracy_cost_add = 5
 		}
 	}
 
@@ -69,7 +69,7 @@ pm_organized_colonization = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -10
+			country_bureaucracy_cost_add = 10
 		}
 	}
 
@@ -114,7 +114,7 @@ pm_forced_resettlement = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -10
+			country_bureaucracy_cost_add = 10
 		}
 	}
 
@@ -162,7 +162,7 @@ pm_penal_transportation = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -5
+			country_bureaucracy_cost_add = 5
 		}
 	}
 
@@ -204,7 +204,7 @@ pm_incentivized_relocation = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -15
+			country_bureaucracy_cost_add = 15
 		}
 	}
 
@@ -259,7 +259,7 @@ pm_settler_homesteads = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -5
+			country_bureaucracy_cost_add = 5
 		}
 	}
 
@@ -293,7 +293,7 @@ pm_planned_settlement = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -10
+			country_bureaucracy_cost_add = 10
 		}
 	}
 
@@ -331,7 +331,7 @@ pm_administered_territory = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -15
+			country_bureaucracy_cost_add = 15
 		}
 	}
 
@@ -371,7 +371,7 @@ pm_development_zone = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_bureaucracy_add = -15
+			country_bureaucracy_cost_add = 15
 		}
 	}
 
