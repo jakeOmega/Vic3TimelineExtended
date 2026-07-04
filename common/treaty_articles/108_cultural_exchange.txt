@@ -84,14 +84,14 @@ cultural_exchange_program = {
 					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = cooperative }
 				}
-				add = 0.12
+				add = 0.08
 			}
 			if = {
 				limit = {
 					exists = scope:other_country
 					has_attitude = { who = scope:other_country attitude = genial }
 				}
-				add = 0.08
+				add = 0.12
 			}
 			if = {
 				limit = {
@@ -187,7 +187,7 @@ cultural_exchange_program = {
 				}
 				add = {
 					desc = "AI_COOPERATIVE_ATTITUDE"
-					value = 15
+					value = 10
 				}
 			}
 			# Genial attitude
@@ -197,7 +197,7 @@ cultural_exchange_program = {
 				}
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"
-					value = 10
+					value = 15
 				}
 			}
 			# Same power bloc

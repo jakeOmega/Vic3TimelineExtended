@@ -22,7 +22,7 @@ disband_company = {
 	required_inputs = {
 		company
 	}
-		
+
 	visible = {
 		always = yes
 	}
@@ -71,7 +71,7 @@ disband_company = {
 
 	company_valid_trigger = {
 		always = yes
-    }
+	}
 
 	# This section governs AI behavior regarding the treaty article.
 	ai = {
@@ -212,10 +212,34 @@ disband_company = {
 	wargoal = {
 		execution_priority = 70 # High priority, as it's a major concession.
 		contestion_type = control_target_country_capital
-		
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
 		# Infamy is calculated based on the economic power of the target country.
 		infamy = {
-			value = 10
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 10
+			}
 			scope:target_country = {
 				multiply = {
 					value = gdp

@@ -21,7 +21,7 @@ seize_company = {
 	required_inputs = {
 		company
 	}
-		
+
 	visible = {
 		always = yes
 	}
@@ -220,10 +220,34 @@ seize_company = {
 	wargoal = {
 		execution_priority = 75 # Higher than disband (70): more aggressive demand.
 		contestion_type = control_target_country_capital
-		
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
 		# Infamy is higher than disband since you're taking, not just destroying.
 		infamy = {
-			value = 15
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 15
+			}
 			scope:target_country = {
 				multiply = {
 					value = gdp
