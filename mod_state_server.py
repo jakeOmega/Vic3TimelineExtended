@@ -1321,18 +1321,63 @@ def _engine_docs_source() -> tuple[str, str]:
     return mod_loaded_docs_path, "mod_loaded"
 
 
+# Matches a dotted-numeric version token, e.g. `1.13.9` or `1.13`. Used to pull
+# a comparable version out of a git commit subject ("1.13.9 (Matcha)") or a docs
+# snapshot path (".../Modding-Digests/1.13.9/docs").
+_VERSION_RE = re.compile(r"\d+\.\d+(?:\.\d+)?")
+
+
+def _version_from_text(text: Optional[str]) -> Optional[str]:
+    """Extract the last dotted-numeric version token from a string, or None.
+
+    The *last* match is preferred so a path like `/home/.../vic3/1.13.9` yields
+    the trailing version dir rather than an incidental earlier match."""
+    if not text:
+        return None
+    matches = _VERSION_RE.findall(text)
+    return matches[-1] if matches else None
+
+
+def _read_live_game_version() -> Optional[str]:
+    """Read `rawVersion` from `<base_game_path>/launcher/launcher-settings.json`
+    — the ground truth for which vanilla build the engine will actually run.
+
+    Nothing else in the server reads this file. Returns None if it's missing or
+    unparseable (guarded so /status never crashes on a bad install)."""
+    path = os.path.join(base_game_path, "launcher", "launcher-settings.json")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    v = data.get("rawVersion")
+    return v if isinstance(v, str) and v else None
+
+
+def _versions_mismatch(*versions: Optional[str]) -> bool:
+    """True when the supplied version tokens (None entries ignored) disagree."""
+    present = {v for v in versions if v}
+    return len(present) > 1
+
+
 def _load_vanilla_repo_head_info() -> dict:
-    """Return {sha, sha_short, date_iso, date_unix} for the HEAD commit of the
-    vanilla source mirror, or {} if not a git repo / not available."""
+    """Return {sha, sha_short, date_iso, date_unix, subject, version} for the
+    HEAD commit of the vanilla source mirror, or {} if not a git repo / not
+    available. `version` is parsed from the commit subject (convention
+    "1.13.9 (Matcha)" -> "1.13.9")."""
     repo = vanilla_source_repo_path
     if not os.path.isdir(os.path.join(repo, ".git")):
         return {}
     try:
+        # Subject (%s) goes on its own line (%n) so the space-separated
+        # `%H %ct %ai` prefix parses cleanly — %ai itself contains spaces.
         result = subprocess.run(
-            ["git", "-C", repo, "log", "-1", "--format=%H %ct %ai"],
+            ["git", "-C", repo, "log", "-1", "--format=%H %ct %ai%n%s"],
             capture_output=True, text=True, timeout=5, check=True,
         )
-        parts = result.stdout.strip().split(maxsplit=2)
+        out = result.stdout.rstrip("\n")
+        head_line, _, subject = out.partition("\n")
+        parts = head_line.strip().split(maxsplit=2)
         if len(parts) >= 3:
             sha, ct, ai = parts
             return {
@@ -1340,10 +1385,34 @@ def _load_vanilla_repo_head_info() -> dict:
                 "sha_short": sha[:8],
                 "date_unix": int(ct),
                 "date_iso": ai,
+                "subject": subject,
+                "version": _version_from_text(subject),
             }
     except (subprocess.SubprocessError, OSError, ValueError) as e:
         logger.warning(f"Failed to read vanilla repo HEAD: {e}")
     return {}
+
+
+def _compute_version_status(repo_head: Optional[dict] = None) -> dict:
+    """Cross-check the three places a vanilla version shows up:
+      - `live_game`         — launcher-settings.json rawVersion (what runs)
+      - `vanilla_clone_head`— HEAD commit subject of the ~/src/vic3 mirror
+      - `engine_docs_source`— version encoded in the resolved engine-docs dir
+    `mismatch` is True when the parseable version tokens disagree — the signal
+    that you bumped one but forgot to refresh the others."""
+    if repo_head is None:
+        repo_head = _load_vanilla_repo_head_info()
+    live_version = _read_live_game_version()
+    clone_version = repo_head.get("version") if repo_head else None
+    docs_dir, docs_label = _engine_docs_source()
+    docs_version = _version_from_text(docs_dir)
+    return {
+        "live_game": live_version,
+        "vanilla_clone_head": clone_version,
+        "engine_docs_source": docs_version or (docs_label or None),
+        "engine_docs_source_label": docs_label,
+        "mismatch": _versions_mismatch(live_version, clone_version, docs_version),
+    }
 
 def _parse_effects_triggers_log(filepath: str) -> list[dict]:
     """Parse effects.log / triggers.log format:
@@ -3824,6 +3893,53 @@ class _ServiceNotReady(Exception):
         self.status = status
 
 
+class _EndpointError(Exception):
+    """Raised by an endpoint to return a rich error body at a chosen status
+    (default 404) — e.g. an unknown entity type with `did_you_mean` suggestions,
+    rather than the generic KeyError 404 hint. Caught in do_GET."""
+    def __init__(self, payload: dict, status: int = 404):
+        self.payload = payload
+        self.status = status
+
+
+# Entity-type name resolution. `get_data()` is exact-key, but /raw and /keys take
+# user-typed type names — resolve them case-insensitively and singular/plural-
+# insensitively so `/raw/law group`, `/raw/Technology`, `/keys/PMs` all work.
+
+def _singularize_word(word: str) -> str:
+    """Best-effort singular of a single word: `Groups`->`Group`, `Technologies`
+    ->`Technology`. Only the crude rules the entity-type keyspace needs."""
+    w = word.lower()
+    if w.endswith("ies") and len(w) > 3:
+        return w[:-3] + "y"
+    if w.endswith("s") and len(w) > 1:
+        return w[:-1]
+    return w
+
+
+def _normalize_entity_type(name: str) -> str:
+    """Lowercase a (possibly multi-word) type name and singularize its LAST word,
+    so `Law Groups` and `law group` both normalize to `law group`."""
+    words = name.split()
+    if words:
+        words[-1] = _singularize_word(words[-1])
+    return " ".join(w.lower() for w in words)
+
+
+def _resolve_entity_type(etype: str, known) -> Optional[str]:
+    """Resolve a user-supplied entity-type name to a canonical member of `known`.
+    Exact match wins, then case-insensitive, then singular/plural-insensitive.
+    Returns None on no match."""
+    known = list(known)
+    if etype in known:
+        return etype
+    lower_map = {k.lower(): k for k in known}
+    if etype.lower() in lower_map:
+        return lower_map[etype.lower()]
+    norm_map = {_normalize_entity_type(k): k for k in known}
+    return norm_map.get(_normalize_entity_type(etype))
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- routing ----------------------------------------------------------
@@ -3834,6 +3950,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
         try:
             data = self.route(parts, params)
             self._respond_json(data)
+        except _EndpointError as exc:
+            self._respond_json(exc.payload, exc.status)
         except KeyError as exc:
             self._respond_json(
                 {"error": f"Not found: {exc}", "hint": "GET /help for the endpoint inventory."},
@@ -3853,9 +3971,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
             engine_only = (params.get("engine_only") or ["false"])[0].lower() == "true"
             audits_only = (params.get("audits_only") or ["false"])[0].lower() == "true"
             mod_only = (params.get("mod_only") or ["false"])[0].lower() == "true"
+            flags = {"engine_only": engine_only, "audits_only": audits_only, "mod_only": mod_only}
             try:
                 if engine_only:
                     _reload_engine_only()
+                    _record_reload_warnings(flags, [])
                     self._respond_json({"status": "engine-only reload complete"})
                 else:
                     _load_mod_state(audits_only=audits_only, mod_only=mod_only)
@@ -3872,34 +3992,31 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # Surface any actionable findings from the post-load chain
                     # (e.g. modifier_visibility_audit's unreviewed sub-threshold
                     # values). Caller sees them in the same response, not buried
-                    # in the server log.
-                    warnings = list(_post_load_warnings)
-                    # Also surface vanilla_known_bugs.md parse-time warnings
-                    # (anchor-or-die rejections, missing tracked-issue cross-refs,
-                    # unresolved open_issues.md anchors). Validation runs as part
-                    # of load_vanilla_bug_registry; the reload here just forces
-                    # a re-read by busting the mtime cache before the next /logs
-                    # request, so we call it explicitly and pull the warnings.
-                    try:
-                        from game_log_reader import (
-                            load_vanilla_bug_registry as _load_vbr,
-                            load_mod_noise_registry as _load_mnr,
-                        )
-                        _vbr_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
-                        _mnr_doc = os.path.join(mod_path, "docs", "audits", "mod_known_noise.md")
-                        _, _, _, _vbr_warnings = _load_vbr(_vbr_doc)
-                        _, _, _, _mnr_warnings = _load_mnr(_mnr_doc)
-                        for w in _vbr_warnings:
-                            warnings.append({"label": "vanilla_bug_registry", "detail": w})
-                        for w in _mnr_warnings:
-                            warnings.append({"label": "mod_noise_registry", "detail": w})
-                    except Exception as _vbr_exc:  # noqa: BLE001
-                        logger.warning(f"known-noise registry warning collection failed: {_vbr_exc}")
+                    # in the server log. Also fold in the known-noise registry
+                    # parse-time warnings (anchor-or-die rejections, missing
+                    # tracked-issue cross-refs, unresolved open_issues.md anchors)
+                    # via the shared collector used by POST /validate/registries.
+                    warnings = list(_post_load_warnings) + _collect_registry_warnings()
+                    _record_reload_warnings(flags, warnings)
                     if warnings:
                         body["warnings"] = warnings
                     self._respond_json(body)
             except Exception as exc:
                 logger.error(f"Error during reload: {exc}\n{traceback.format_exc()}")
+                self._respond_json({"error": str(exc)}, 500)
+        elif parts == ["validate", "registries"]:
+            # Re-validate the known-noise registries WITHOUT a full reload —
+            # cheap way to check vanilla_known_bugs.md / mod_known_noise.md edits
+            # (anchor resolution, cross-references) in ~milliseconds.
+            try:
+                warnings = _collect_registry_warnings()
+                self._respond_json({
+                    "status": "validated",
+                    "warning_count": len(warnings),
+                    "warnings": warnings,
+                })
+            except Exception as exc:
+                logger.error(f"Error validating registries: {exc}\n{traceback.format_exc()}")
                 self._respond_json({"error": str(exc)}, 500)
         else:
             self._respond_json({"error": "Unknown POST endpoint"}, 404)
@@ -3911,7 +4028,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         rest = parts[1:]
         dispatch = {
             "help": lambda: self._help(),
-            "entity-types": lambda: list(ms.mod_parsers.keys()),
+            "entity-types": lambda: self._entity_types(params),
             "keys": lambda: self._keys(rest, params),
             "raw": lambda: self._raw(rest),
             "loc-keys": lambda: self._loc_keys(rest),
@@ -4213,15 +4330,38 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "engine_docs_timestamps": engine_mtimes,
             "engine_docs_age_days": age_days,
             "vanilla_snapshot": vanilla_block,
+            "versions": _compute_version_status(repo_head),
+            "last_reload": _last_reload_warnings or None,
             "pattern_catalog_size": len(pattern_catalog),
             "discovered_patterns": len(discovered_patterns),
         }
+
+    def _entity_types(self, params):
+        """GET /entity-types            — {"entity_types": [...]} (structured).
+        GET /entity-types?bare=true     — the old bare list, for compatibility."""
+        names = list(ms.mod_parsers.keys())
+        bare = (params.get("bare") or ["false"])[0].lower() == "true"
+        return names if bare else {"entity_types": names}
+
+    def _resolve_entity_type_or_404(self, etype):
+        """Resolve `etype` (case-/plural-insensitive) to a canonical mod_parsers
+        key, or raise _EndpointError(404) with `did_you_mean` suggestions."""
+        known = list(ms.mod_parsers.keys())
+        resolved = _resolve_entity_type(etype, known)
+        if resolved is None:
+            raise _EndpointError({
+                "error": f"Unknown entity type: {etype!r}",
+                "did_you_mean": difflib.get_close_matches(etype, known, n=5, cutoff=0.5),
+                "hint": "GET /entity-types for the full list. "
+                        "Matching is case- and singular/plural-insensitive.",
+            }, 404)
+        return resolved
 
     def _keys(self, parts, params):
         """GET /keys/<EntityType>  - list entity IDs with localized names."""
         if not parts:
             return list(ms.mod_parsers.keys())
-        etype = parts[0]
+        etype = self._resolve_entity_type_or_404(parts[0])
         data = ms.get_data(etype)
         if data is None:
             raise KeyError(etype)
@@ -4894,7 +5034,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /raw/<EntityType>[/<id>]  - raw parsed data."""
         if not parts:
             return list(ms.mod_parsers.keys())
-        etype = parts[0]
+        etype = self._resolve_entity_type_or_404(parts[0])
         data = ms.get_data(etype)
         if data is None:
             raise KeyError(etype)
@@ -7081,6 +7221,46 @@ _POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails")
 # without having to scrape the server log.
 _post_load_warnings: list[dict] = []
 
+# Most-recent POST /reload's full warning set (post-load audits + registry
+# validation), stamped with when it ran and the flags used. Surfaced as
+# `last_reload` in /status so an operator can see the previous reload's findings
+# without re-triggering a ~90s reload. Mirrors the _post_load_warnings pattern.
+_last_reload_warnings: dict = {}
+
+
+def _collect_registry_warnings() -> list[dict]:
+    """Load both known-noise registries and return their validation warnings as
+    [{label, detail}]. Shared by POST /reload and POST /validate/registries so
+    the two stay in lockstep. Best-effort: logs and returns [] on failure."""
+    warnings: list[dict] = []
+    try:
+        from game_log_reader import (
+            load_vanilla_bug_registry as _load_vbr,
+            load_mod_noise_registry as _load_mnr,
+        )
+        _vbr_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
+        _mnr_doc = os.path.join(mod_path, "docs", "audits", "mod_known_noise.md")
+        _, _, _, _vbr_warnings = _load_vbr(_vbr_doc)
+        _, _, _, _mnr_warnings = _load_mnr(_mnr_doc)
+        for w in _vbr_warnings:
+            warnings.append({"label": "vanilla_bug_registry", "detail": w})
+        for w in _mnr_warnings:
+            warnings.append({"label": "mod_noise_registry", "detail": w})
+    except Exception as _exc:  # noqa: BLE001
+        logger.warning(f"known-noise registry warning collection failed: {_exc}")
+    return warnings
+
+
+def _record_reload_warnings(flags: dict, warnings: list) -> None:
+    """Persist the most recent reload's warning set for /status `last_reload`."""
+    global _last_reload_warnings
+    _last_reload_warnings = {
+        "at": datetime.now(tz=timezone.utc).isoformat(timespec="seconds"),
+        "flags": flags,
+        "count": len(warnings),
+        "warnings": warnings,
+    }
+
 
 def _run_post_load_generators(mod_state, *, audits_only=False):
     global _post_load_warnings
@@ -7336,6 +7516,23 @@ def main():
 
     _server_start_time = time.time()
     logger.info(f"Mod-state server running on http://127.0.0.1:{PORT} (PID {os.getpid()})")
+
+    # Vanilla-version cross-check: loudly flag when the running game, the
+    # ~/src/vic3 mirror HEAD, and the engine-docs snapshot don't agree — that
+    # usually means a vanilla bump landed in one place but not the others, and
+    # every engine-doc-backed validation is then quietly wrong.
+    try:
+        _vstat = _compute_version_status()
+        if _vstat.get("mismatch"):
+            logger.warning(
+                "[VERSION MISMATCH] vanilla versions disagree — "
+                f"live_game={_vstat.get('live_game')} "
+                f"vanilla_clone_head={_vstat.get('vanilla_clone_head')} "
+                f"engine_docs_source={_vstat.get('engine_docs_source')}. "
+                "Refresh whichever is stale (see GET /status `versions`)."
+            )
+    except Exception as _vexc:  # noqa: BLE001
+        logger.warning(f"version cross-check failed at startup: {_vexc}")
     print(f"\nMod-state server running on http://127.0.0.1:{PORT} (PID {os.getpid()})")
     print("Endpoints: /status  /laws  /technologies  /buildings  /goods")
     print("           /combat-units  /ideologies  /keys/<type>  /raw/<type>")

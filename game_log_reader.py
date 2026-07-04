@@ -18,6 +18,7 @@ parsed results keyed on (path, mtime) so repeated requests don't re-parse.
 """
 from __future__ import annotations
 
+import difflib
 import fnmatch
 import os
 import pathlib
@@ -435,9 +436,18 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
         elif "#" in ref.tracked_issue and known_open_issue_anchors:
             frag = ref.tracked_issue.split("#", 1)[1]
             if frag and frag not in known_open_issue_anchors:
+                # Suggest the nearest real anchor(s), and spell out the slug rule
+                # so the fix is copy-paste — GitHub anchors are the `### ` heading
+                # lowercased with every non-alnum run collapsed to a single dash.
+                close = difflib.get_close_matches(
+                    frag, sorted(known_open_issue_anchors), n=3, cutoff=0.5
+                )
+                suggestion = f" Did you mean: {', '.join('#' + c for c in close)}." if close else ""
                 warnings.append(
                     f"vanilla_known_bugs.md: '{ref.title}' tracked-issue anchor "
-                    f"'#{frag}' does not resolve in docs/audits/open_issues.md"
+                    f"'#{frag}' does not resolve in docs/audits/open_issues.md."
+                    f"{suggestion} "
+                    "Anchor rule: re.sub(r'[^a-z0-9]+', '-', heading.lower()).strip('-')."
                 )
     return warnings
 

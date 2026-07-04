@@ -42,6 +42,27 @@ def _get(path: str):
         return json.loads(resp.read())
 
 
+def _post(path: str):
+    from urllib.request import Request
+    req = Request(f"{SERVER}{path}", method="POST", data=b"")
+    with urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read())
+
+
+def _server_has_new_code() -> bool:
+    """True only if the running server exposes the #227/#229 additions (the
+    `versions` block in /status). HTTP tests for the new endpoints skip cleanly
+    when the server is still on pre-restart code — the orchestrator restart then
+    activates them — so they never spuriously fail against stale code."""
+    if not _server_up():
+        return False
+    try:
+        st = _get("/status")
+        return isinstance(st, dict) and "versions" in st
+    except (URLError, OSError, ValueError):
+        return False
+
+
 # ---------------------------------------------------------------------------
 # #35 — Country Formation entity registration
 # ---------------------------------------------------------------------------
@@ -514,6 +535,149 @@ class DiffEndpointTests(unittest.TestCase):
         self.assertIn("added", d)
         self.assertIn("removed", d)
         self.assertIn("changed", d)
+
+
+# ---------------------------------------------------------------------------
+# #227 — version-aware /status (pure helpers; no server needed)
+# ---------------------------------------------------------------------------
+class VersionStatusHelperTests(unittest.TestCase):
+    def test_version_from_text_extracts_last(self):
+        self.assertEqual(mss._version_from_text("1.13.9 (Matcha)"), "1.13.9")
+        self.assertEqual(
+            mss._version_from_text("/home/x/Modding-Digests/1.13.9/docs"), "1.13.9")
+        self.assertEqual(mss._version_from_text("1.13"), "1.13")
+        self.assertIsNone(mss._version_from_text(""))
+        self.assertIsNone(mss._version_from_text(None))
+        self.assertIsNone(mss._version_from_text("mod_loaded"))
+
+    def test_versions_mismatch(self):
+        self.assertFalse(mss._versions_mismatch("1.13.9", "1.13.9", "1.13.9"))
+        self.assertTrue(mss._versions_mismatch("1.13.9", "1.13.8", "1.13.9"))
+        self.assertFalse(mss._versions_mismatch("1.13.9", None, None))
+        self.assertFalse(mss._versions_mismatch(None, None, None))
+
+    def test_read_live_game_version_type(self):
+        v = mss._read_live_game_version()
+        self.assertTrue(v is None or isinstance(v, str))
+
+    def test_repo_head_info_has_subject_and_preserves_date(self):
+        rh = mss._load_vanilla_repo_head_info()
+        if not rh:
+            self.skipTest("vanilla source mirror not present")
+        # Additive keys.
+        self.assertIn("subject", rh)
+        self.assertIn("version", rh)
+        # Pre-existing keys the staleness check depends on are intact and the
+        # subject didn't bleed into date_iso (the %ai%n%s parse trap).
+        self.assertIn("sha", rh)
+        self.assertIsInstance(rh["date_unix"], int)
+        self.assertNotIn(rh.get("subject") or "\0", rh["date_iso"])
+
+    def test_compute_version_status_shape(self):
+        vs = mss._compute_version_status()
+        for k in ("live_game", "vanilla_clone_head", "engine_docs_source", "mismatch"):
+            self.assertIn(k, vs)
+        self.assertIsInstance(vs["mismatch"], bool)
+
+
+# ---------------------------------------------------------------------------
+# #229 — entity-type resolver (pure; no server needed)
+# ---------------------------------------------------------------------------
+class EntityTypeResolverTests(unittest.TestCase):
+    KNOWN = ["Amendments", "Buildings", "Cultures", "Law Groups", "Laws",
+             "PMs", "PM Groups", "Technologies", "Country Formation",
+             "Ship Name Definitions", "Treaty Articles"]
+
+    def _r(self, s):
+        return mss._resolve_entity_type(s, self.KNOWN)
+
+    def test_exact_and_case_insensitive(self):
+        self.assertEqual(self._r("Laws"), "Laws")
+        self.assertEqual(self._r("laws"), "Laws")
+        self.assertEqual(self._r("LAWS"), "Laws")
+
+    def test_singular_plural_trailing_s(self):
+        self.assertEqual(self._r("Building"), "Buildings")
+        self.assertEqual(self._r("culture"), "Cultures")
+        self.assertEqual(self._r("PM"), "PMs")
+
+    def test_ies_to_y(self):
+        self.assertEqual(self._r("Technology"), "Technologies")
+        self.assertEqual(self._r("technologies"), "Technologies")
+
+    def test_multi_word(self):
+        self.assertEqual(self._r("Law Group"), "Law Groups")
+        self.assertEqual(self._r("law group"), "Law Groups")
+        self.assertEqual(self._r("pm group"), "PM Groups")
+        self.assertEqual(self._r("Ship Name Definition"), "Ship Name Definitions")
+
+    def test_singular_key_plural_query(self):
+        self.assertEqual(self._r("Country Formations"), "Country Formation")
+        self.assertEqual(self._r("country formation"), "Country Formation")
+
+    def test_miss_returns_none(self):
+        self.assertIsNone(self._r("Bogus Type"))
+        self.assertIsNone(self._r("xyz"))
+
+
+# ---------------------------------------------------------------------------
+# #227 / #229 — HTTP surfaces (skip until the server is restarted on new code)
+# ---------------------------------------------------------------------------
+class VersionAwareStatusHTTPTests(unittest.TestCase):
+    @unittest.skipUnless(_server_has_new_code(), "requires restarted server (#227/#229)")
+    def test_status_has_versions_block(self):
+        st = _get("/status")
+        v = st["versions"]
+        for k in ("live_game", "vanilla_clone_head", "engine_docs_source", "mismatch"):
+            self.assertIn(k, v)
+        self.assertIn("last_reload", st)
+
+
+class EntityTypesEndpointHTTPTests(unittest.TestCase):
+    @unittest.skipUnless(_server_has_new_code(), "requires restarted server (#227/#229)")
+    def test_wrapped_by_default(self):
+        d = _get("/entity-types")
+        self.assertIsInstance(d, dict)
+        self.assertIn("entity_types", d)
+        self.assertIn("Laws", d["entity_types"])
+
+    @unittest.skipUnless(_server_has_new_code(), "requires restarted server (#227/#229)")
+    def test_bare_flag_returns_list(self):
+        d = _get("/entity-types?bare=true")
+        self.assertIsInstance(d, list)
+        self.assertIn("Laws", d)
+
+
+class RawResolverHTTPTests(unittest.TestCase):
+    @unittest.skipUnless(_server_has_new_code(), "requires restarted server (#227/#229)")
+    def test_case_insensitive_type_resolves(self):
+        # `laws` (lowercase) and `Law` (singular) resolve to the canonical `Laws`
+        # and return the identical raw dict.
+        canonical = _get("/raw/Laws")
+        self.assertIsInstance(canonical, dict)
+        self.assertEqual(_get("/raw/laws"), canonical)
+        self.assertEqual(_get("/raw/Law"), canonical)
+
+    @unittest.skipUnless(_server_has_new_code(), "requires restarted server (#227/#229)")
+    def test_unknown_type_returns_did_you_mean(self):
+        from urllib.error import HTTPError
+        try:
+            d = _get("/raw/Bogus%20Type")
+        except HTTPError as e:
+            d = json.loads(e.read())
+        self.assertIn("did_you_mean", d)
+        self.assertIsInstance(d["did_you_mean"], list)
+
+
+class ValidateRegistriesHTTPTests(unittest.TestCase):
+    @unittest.skipUnless(_server_has_new_code(), "requires restarted server (#227/#229)")
+    def test_validate_registries_shape(self):
+        d = _post("/validate/registries")
+        self.assertEqual(d["status"], "validated")
+        self.assertIn("warning_count", d)
+        self.assertIsInstance(d["warnings"], list)
+        for w in d["warnings"]:
+            self.assertEqual(set(w.keys()), {"label", "detail"})
 
 
 if __name__ == "__main__":

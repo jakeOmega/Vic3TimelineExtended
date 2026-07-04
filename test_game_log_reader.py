@@ -481,6 +481,31 @@ Couldn't find any animation state for harvest condition type
             _, _, _, warnings = load_vanilla_bug_registry(doc)
             self.assertTrue(any("does not resolve" in w for w in warnings))
 
+    def test_unresolved_anchor_suggests_nearest_and_slug_rule(self):
+        """A near-miss anchor gets a `Did you mean:` suggestion for the closest
+        real anchor plus the copy-paste slug rule — while preserving the
+        `does not resolve` phrase the older assertion depends on."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self._write_open_issues(
+                tmp, "## LOW\n\n### L7. mod harvest condition sound entity states missing\n")
+            doc = self._write_doc(tmp, """
+## Mod-side cosmetic, tracked-not-fixed (source-anchored)
+
+### `harvest_condition_graphics.cpp:52` — missing sound states
+- source: `harvest_condition_graphics.cpp:52`
+- tracked: `docs/audits/open_issues.md#l7-mod-harvest-conditon-sound`
+
+```
+Couldn't find any animation state for harvest condition type
+```
+""")
+            _, _, _, warnings = load_vanilla_bug_registry(doc)
+            joined = "\n".join(warnings)
+            self.assertIn("does not resolve", joined)
+            self.assertIn("Did you mean", joined)
+            self.assertIn("#l7-mod-harvest-condition-sound-entity-states-missing", joined)
+            self.assertIn("Anchor rule", joined)
+
     def test_mod_low_priority_resolved_anchor_clean(self):
         """A `- tracked:` link whose #anchor resolves produces no warning."""
         with tempfile.TemporaryDirectory() as tmp:
