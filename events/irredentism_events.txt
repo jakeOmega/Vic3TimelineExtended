@@ -199,12 +199,6 @@ irredentism.1 = {
 				trigger = { irredentist_pressure_score >= 8 }
 				add = 3
 			}
-			modifier = {
-				trigger = {
-					is_diplomatic_play_committed_participant = yes
-				}
-				add = -100   # Don't pile a play on top of an existing one
-			}
 		}
 		trigger = {
 			# Can only demand a state if we have one to demand AND we're
@@ -239,12 +233,6 @@ irredentism.1 = {
 				}
 				add = 1
 			}
-		}
-		# Memory: future event firing slightly biased to escalation.
-		set_variable = {
-			name = irr_bided_against
-			value = scope:target_country
-			days = 3650   # 10 years
 		}
 	}
 }
