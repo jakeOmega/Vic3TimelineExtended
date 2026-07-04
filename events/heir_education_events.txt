@@ -26,6 +26,7 @@ heir_education_events.1 = {
 	immediate = {
 	}
 
+	# ai_chance weights in this event are intentional flat heir-roleplay flavor (no strategic AI axis).
 	# Option A: "Remarkable progress!"
 	# Grants a bonus point in whichever trait focus is active (or admin by default)
 	option = {
@@ -121,6 +122,7 @@ heir_education_events.2 = {
 	immediate = {
 	}
 
+	# ai_chance weights in this event are intentional flat heir-roleplay flavor (no strategic AI axis).
 	# Option A: "Discipline builds character."
 	# Persevere with current education: keeps progress but creates unrest
 	option = {
@@ -241,8 +243,9 @@ heir_education_events.3 = {
 		}
 	}
 
+	# ai_chance weights in this event are intentional flat heir-roleplay flavor (no strategic AI axis).
 	# Option A: "Send the heir abroad."
-	# Big diplo bonus + progressive shift, but costs relations and innovation
+	# Big diplo bonus + progressive shift, but costs innovation
 	option = {
 		name = heir_education_events.3.a
 		default_option = yes

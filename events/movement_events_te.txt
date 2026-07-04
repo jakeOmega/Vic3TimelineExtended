@@ -188,6 +188,7 @@ movement_events_te.2 = {
 	option = {
 		name = movement_events_te.2.b
 		ai_chance = {
+			# Intentional flat weight — moderate/hedging option, no strong strategic AI axis.
 			base = 1
 		}
 		# Make an exception - bureaucratic cost, minor acceptance gain
@@ -289,6 +290,7 @@ movement_events_te.3 = {
 	option = {
 		name = movement_events_te.3.b
 		ai_chance = {
+			# Intentional flat weight — moderate/passive option, no strong strategic AI axis.
 			base = 2
 		}
 		# Let it flourish on its own - no cost, small effect
@@ -448,6 +450,7 @@ movement_events_te.4 = {
 	option = {
 		name = movement_events_te.4.c
 		ai_chance = {
+			# Intentional flat weight — no clean strategic AI axis to tilt on.
 			base = 1
 		}
 		# Deflect with counter-accusations - risky diplomacy
@@ -535,6 +538,16 @@ movement_events_te.13 = {
 		name = movement_events_te.13.b
 		ai_chance = {
 			base = 2
+			# "Look the other way" is more tempting when the state can least afford a crackdown.
+			modifier = {
+				trigger = {
+					OR = {
+						gold_reserves <= 0.4
+						country_turmoil > 0.25
+					}
+				}
+				add = 2
+			}
 		}
 		# Turn a blind eye - some emigration, reduced tension
 		add_modifier = {
