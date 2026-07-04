@@ -347,5 +347,80 @@ class ResolveOutputDirTest(unittest.TestCase):
         self.assertEqual(label, f"{self.date}-v3")
 
 
+# --------------------------------------------------------------------------- #
+# Auditable line count (BOM-only / empty-stub gating)
+# --------------------------------------------------------------------------- #
+
+class AuditableLineCountTest(unittest.TestCase):
+    """`_auditable_line_count` gates enumerate_candidates so BOM-only /
+    comment-only / blank stubs never get selected (issue #206a). It counts only
+    non-blank, non-`#`-comment lines after stripping a leading UTF-8 BOM."""
+
+    def _write(self, content: str) -> Path:
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", delete=False, encoding="utf-8"
+        )
+        tmp.write(content)
+        tmp.close()
+        path = Path(tmp.name)
+        self.addCleanup(path.unlink)
+        return path
+
+    def test_bom_only_file_counts_zero(self):
+        """A 3-byte BOM-only file (the exact shape of the deleted stubs) has no
+        auditable content, so it must count as 0 and get skipped."""
+        path = self._write("﻿")
+        self.assertEqual(path.stat().st_size, 3)  # EF BB BF
+        self.assertEqual(nas._auditable_line_count(path), 0)
+
+    def test_bom_prefixed_content_is_counted(self):
+        """A leading BOM in front of a real content line still counts the
+        line — the BOM is stripped, not the content."""
+        path = self._write("﻿culture = { foo = yes }\n")
+        self.assertEqual(nas._auditable_line_count(path), 1)
+
+    def test_comment_and_blank_only_counts_zero(self):
+        path = self._write("# a comment\n\n   \n\t# indented comment\n")
+        self.assertEqual(nas._auditable_line_count(path), 0)
+
+    def test_real_content_counts_non_blank_non_comment(self):
+        path = self._write(
+            "# header comment\n"
+            "law_foo = {\n"
+            "\n"
+            "    icon = bar   # trailing note is not a pure comment\n"
+            "}\n"
+        )
+        # 3 auditable lines: `law_foo = {`, the `icon = bar` line, and `}`.
+        self.assertEqual(nas._auditable_line_count(path), 3)
+
+    def test_missing_file_counts_zero(self):
+        """OSError (unreadable / missing) resolves to 0 so the candidate is
+        skipped rather than crashing the walk."""
+        self.assertEqual(
+            nas._auditable_line_count(Path("/nonexistent/nope.txt")), 0
+        )
+
+    def test_bom_only_file_excluded_by_enumerate(self):
+        """Integration: point enumerate_candidates at a temp repo containing a
+        BOM-only stub next to a real file. Only the real file is returned — the
+        BOM-only stub (the bug in #206a) is skipped. Uses a patched REPO_ROOT so
+        nothing is written into the actual working tree."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "common").mkdir()
+            bom_path = root / "common" / "bom_only_stub.txt"
+            bom_path.write_bytes(b"\xef\xbb\xbf")  # exactly the deleted stubs
+            real_path = root / "common" / "real_content.txt"
+            real_path.write_text("law_x = { icon = y }\n", encoding="utf-8")
+
+            with patch.object(nas, "REPO_ROOT", root), \
+                    patch.object(nas, "SCAN_ROOTS", ["common"]):
+                rels = {rel for _, rel, _ in nas.enumerate_candidates()}
+
+            self.assertIn("common/real_content.txt", rels)
+            self.assertNotIn("common/bom_only_stub.txt", rels)
+
+
 if __name__ == "__main__":
     unittest.main()

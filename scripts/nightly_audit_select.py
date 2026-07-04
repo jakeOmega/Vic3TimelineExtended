@@ -281,6 +281,30 @@ def matches_any_glob(rel_path: str, globs: Iterable[str]) -> bool:
     return False
 
 
+def _auditable_line_count(path: Path) -> int:
+    """Count lines carrying auditable content: non-blank and not a pure `#`
+    comment, after stripping a leading UTF-8 BOM off the first line.
+
+    A BOM-only stub (3 bytes: EF BB BF) reads as a single line under plain
+    utf-8, so the old `sum(1 for _ in f) == 0` guard let it pass as 1 line and
+    it got selected on repeat, wasting audit slots (issue #206a). Stripping the
+    BOM makes that first line empty, so the file counts as 0 and is skipped.
+    Real content files have >0 auditable lines, so they're unaffected."""
+    count = 0
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            for i, line in enumerate(f):
+                if i == 0:
+                    line = line.lstrip("﻿")
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#"):
+                    continue
+                count += 1
+    except OSError:
+        return 0
+    return count
+
+
 def enumerate_candidates() -> list[tuple[Path, str, int]]:
     """Walk SCAN_ROOTS and return (abs_path, rel_path, line_count) for each
     candidate. Excludes binary files, autogen-marked files, and EXCLUDED_GLOBS."""
@@ -309,7 +333,12 @@ def enumerate_candidates() -> list[tuple[Path, str, int]]:
                     line_count = sum(1 for _ in f)
             except OSError:
                 continue
-            if line_count == 0:
+            # Skip files with no auditable content (empty, BOM-only, or wholly
+            # blank/comment). Subsumes the old `line_count == 0` empty-file
+            # guard while also catching BOM-only stubs (issue #206a).
+            # `line_count` (total lines) still feeds pick_slice/budget so real
+            # files behave exactly as before.
+            if _auditable_line_count(path) == 0:
                 continue
             candidates.append((path, rel, line_count))
     return candidates
