@@ -36,7 +36,7 @@ corporate_concessions = {
 	source_modifier = {
 		country_company_throughput_bonus_add = 0.25
 		state_radicals_from_political_movements_mult = 0.25
-		country_authority_add = -200
+		country_authority_cost_add = 200
 	}
 
 	target_modifier = {

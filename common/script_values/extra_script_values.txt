@@ -14,14 +14,6 @@ peaceful_annex_gdp_requirement = {
 
 peaceful_annex_gdp_requirement_multiplier = 10
 
-adjusted_produced_authority = {
-	value = produced_authority
-	divide = {
-		value = 1
-		add = modifier:country_authority_mult
-	}
-}
-
 forced_law_through_event_capacity_discount = {
 	# Authority-cost multiplier on forcing a law, scaled by override capacity. Two segments:
 	#   capacity 2–4 → modest relief  1 - 0.03*(cap-1)  (cap2=0.97, cap3=0.94, cap4=0.91) — the
@@ -52,13 +44,9 @@ forced_law_through_event_capacity_discount = {
 }
 
 forced_law_through_event_authority_multiplier_small = {
-	value = 1
-	divide = {
-		value = 1
-		add = modifier:country_authority_mult
-		min = 0.01
-	}
-	multiply = forced_law_through_event_capacity_discount
+	# country_authority_cost_add is a flat expense (NOT scaled by country_authority_mult),
+	# so no authority_mult compensation — just the capacity discount.
+	value = forced_law_through_event_capacity_discount
 }
 
 forced_law_through_event_authority_multiplier_medium = {
@@ -72,11 +60,11 @@ forced_law_through_event_authority_multiplier_large = {
 }
 
 # Actual authority cost each override tier imposes = the forced_law_through_event
-# modifier's base country_authority_add (250) times the tier multiplier above,
-# which already folds in the capacity discount + authority_mult compensation.
+# modifier's base country_authority_cost_add (250) times the tier multiplier above,
+# which folds in the capacity discount (no authority_mult compensation — cost_add is flat).
 # Used to gate the event options on the cost they'll *actually* pay rather than
 # the undiscounted base, so high override capacity relaxes the requirement.
-# NOTE: 250 must stay in sync with forced_law_through_event's country_authority_add.
+# NOTE: 250 must stay in sync with forced_law_through_event's country_authority_cost_add.
 forced_law_through_event_authority_cost_small = {
 	value = 250
 	multiply = forced_law_through_event_authority_multiplier_small

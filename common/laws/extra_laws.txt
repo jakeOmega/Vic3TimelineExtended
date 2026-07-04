@@ -970,7 +970,7 @@ law_freedom_of_information = {
 	progressiveness = 25
 
 	modifier = {
-		country_authority_add = -100
+		country_authority_cost_add = 100
 		country_authority_mult = -0.1
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = -1
@@ -993,7 +993,7 @@ law_open_government = {
 	progressiveness = 50
 
 	modifier = {
-		country_authority_add = -200
+		country_authority_cost_add = 200
 		country_authority_mult = -0.2
 		country_bureaucracy_investment_cost_factor_mult = -0.1
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = -2
@@ -2009,7 +2009,7 @@ law_feudal_contracts = {
 	modifier = {
 		country_aristocrats_pol_str_mult = 0.25
 		state_incorporation_speed_mult = -0.25
-		country_authority_add = -100
+		country_authority_cost_add = 100
 		country_legislative_override_capacity_add = -3
 	}
 }
@@ -2553,7 +2553,7 @@ law_local_vernacular = {
 		country_support_separatism_resistance_mult = -0.05
 		country_primary_culture_fervor_from_laws_add = -20
 		country_education_fervor_add = -5
-		country_authority_add = -50
+		country_authority_cost_add = 50
 	}
 }
 

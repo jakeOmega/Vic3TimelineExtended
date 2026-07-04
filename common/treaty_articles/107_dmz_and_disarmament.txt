@@ -32,7 +32,7 @@ demilitarized_zone = {
 	}
 
 	source_modifier = {
-		country_authority_add = -25
+		country_authority_cost_add = 25
 		country_prestige_add = -5
 	}
 
