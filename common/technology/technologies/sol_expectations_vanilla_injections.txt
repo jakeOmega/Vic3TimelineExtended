@@ -13,7 +13,10 @@ INJECT:egalitarianism = {
 	modifier = {
 		state_expected_sol_from_literacy = -1
 		country_sol_expectations_target_add = 0.5
-		country_sol_expectations_middle_offset_add = 0.5
+		# Egalitarian ethos compresses class-relative divergence — everyone compares to the whole
+		# population, not their class (mirrors the social-media offset pattern in era_9.txt). Negative
+		# nets against positive baseline offsets (wealth/census voting, elite/media modifiers).
+		country_sol_expectations_middle_offset_add = -0.5
 	}
 }
 
