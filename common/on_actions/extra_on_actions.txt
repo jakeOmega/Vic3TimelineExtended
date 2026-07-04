@@ -1415,7 +1415,7 @@ decolonization_events_on_action = {
 						any_scope_state = {
 							is_overseas_colonial_state = yes
 							any_scope_pop = {
-								pop_acceptance < 20
+								pop_acceptance < acceptance_status_2
 							}
 						}
 					}
@@ -1472,7 +1472,7 @@ decolonization_events_on_action = {
 						any_scope_state = {
 							is_overseas_colonial_state = yes
 							any_scope_pop = {
-								pop_acceptance < 20
+								pop_acceptance < acceptance_status_2
 							}
 						}
 					}

@@ -19,13 +19,13 @@ decree_political_patronage = {
 	modifier = {
 		state_pop_pol_str_mult = 1.0
 	}
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		mass_media
 	}
 	cost = 100
 
 	ai_weight = {
-		value = 0				
+		value = 0
 	}
 }
 
@@ -34,7 +34,7 @@ decree_bureaucracy_reform = {
 	modifier = {
 		building_government_administration_throughput_add = 0.25
 	}
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		intergovernmental_organizations
 	}
 	cost = 100
@@ -42,7 +42,7 @@ decree_bureaucracy_reform = {
 	ai_weight = {
 		value = 0
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_government_administration
 				}
@@ -50,7 +50,7 @@ decree_bureaucracy_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_government_administration
 					level > 5
@@ -59,7 +59,7 @@ decree_bureaucracy_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_government_administration
 					level > 10
@@ -68,7 +68,7 @@ decree_bureaucracy_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_government_administration
 					level > 20
@@ -77,7 +77,7 @@ decree_bureaucracy_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				owner = {
 					approaching_bureaucracy_shortage = yes
 				}
@@ -85,7 +85,7 @@ decree_bureaucracy_reform = {
 			multiply = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				owner = {
 					bureaucracy < 0
 				}
@@ -117,7 +117,7 @@ decree_greenest_grass_campaign = {
 	ai_weight = {
 		value = 0
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_subsistence_building = yes
 					occupancy < 0.75
@@ -126,7 +126,7 @@ decree_greenest_grass_campaign = {
 			add = 150
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_subsistence_building = yes
 					occupancy < 0.5
@@ -135,24 +135,24 @@ decree_greenest_grass_campaign = {
 			add = 150
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_subsistence_building = yes
 					occupancy < 0.25
 				}
 			}
 			add = 150
-		}		
+		}
 		if = {
-			limit = { 
+			limit = {
 				is_incorporated = no
 				scope:country = { NOT = { has_law = law_type:law_colonial_resettlement } } # Already gives a hefty migration bonus
 			}
 			multiply = 2.0
-		}		
+		}
 		if = {
-			limit = { 
-				state_unemployment_rate >= 0.1 
+			limit = {
+				state_unemployment_rate >= 0.1
 			}
 			multiply = 0
 		}
@@ -164,12 +164,12 @@ decree_cultural_emigration_initiative = {
 	modifier = {
 		state_violence_against_minorities_bool = yes
 	}
-	
+
 	cost = 100
 
 	state_trigger = {
 		any_scope_pop = {
-			pop_acceptance < 60
+			pop_acceptance < acceptance_status_4
 		}
 	}
 	country_trigger = {
@@ -179,7 +179,7 @@ decree_cultural_emigration_initiative = {
 				modifier:power_bloc_can_enact_decree_cultural_emigration_initiative_bool = yes
 			}
 		}
-	} 
+	}
 
 	ai_weight = {
 		value = 0
@@ -192,10 +192,10 @@ decree_pollution_control = {
 		state_pollution_generation_mult = -0.5
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		pollution_control
 	}
-	
+
 	cost = 100
 
 	state_trigger = {
@@ -216,10 +216,10 @@ decree_cultural_integration = {
 		state_yearly_cultural_acceptance_add = 5
 	}
 
-	unlocking_technologies = { 
-		
+	unlocking_technologies = {
+
 	}
-	
+
 	cost = 100
 
 	state_trigger = {
@@ -244,10 +244,10 @@ decree_natalism_initiative = {
 		state_birth_rate_mult = 0.5
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		mass_media
 	}
-	
+
 	cost = 250
 
 	ai_weight = {
@@ -264,10 +264,10 @@ decree_tax_breaks = {
 		state_migration_pull_mult = 0.25
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		keynesian_economics
 	}
-	
+
 	cost = 50
 
 	ai_weight = {
@@ -284,16 +284,16 @@ decree_trade_reform = {
 		state_tariff_export_add = -0.25
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		containerization
 	}
-	
+
 	cost = 100
 
 	ai_weight = {
 		value = 0
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_trade_center
 				}
@@ -301,7 +301,7 @@ decree_trade_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_trade_center
 					level > 5
@@ -310,7 +310,7 @@ decree_trade_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
+			limit = {
 				any_scope_building = {
 					is_building_type = building_trade_center
 					level > 10
@@ -319,11 +319,11 @@ decree_trade_reform = {
 			add = 10
 		}
 		if = {
-			limit = { 
-				scope:country = {  has_law = law_type:law_free_trade } 
+			limit = {
+				scope:country = {  has_law = law_type:law_free_trade }
 			}
 			multiply = 2.0
-		}		
+		}
 	}
 }
 
@@ -334,10 +334,10 @@ decree_antiterrorism_campaign = {
 		state_turmoil_effects_mult = -0.1
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		terrorism_and_anti_terrorism
 	}
-	
+
 	cost = 100
 
 	ai_weight = {
@@ -350,11 +350,11 @@ decree_promote_tourism = {
 	modifier = {
 		building_tourism_industry_throughput_add = 0.5
 	}
-	
+
 	cost = 100
 
 	ai_weight = {
-		value = 0		
+		value = 0
 	}
 }
 
@@ -364,7 +364,7 @@ decree_encourage_emigration = {
 		state_migration_pull_mult = -0.5
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		social_media
 	}
 
@@ -382,7 +382,7 @@ decree_subsidize_immigration = {
 		state_welfare_payments_add = 1
 	}
 
-	unlocking_technologies = { 
+	unlocking_technologies = {
 		public_works_programs
 	}
 
