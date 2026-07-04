@@ -498,7 +498,6 @@ ideology_corporate = {
 		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
 		law_social_monarchy = disapprove
-		law_corporate_state = approve
 	}
 
 	lawgroup_economic_system = {
