@@ -91,7 +91,7 @@ green_revolution = {
 	}
 
 	modifier = {
-		state_arable_land_mult = 1.20
+		state_arable_land_mult = 1.20 # REVIEWED 2026-07-03: Green Revolution deliberately the strongest arable bonus; state_arable_land_mult applies to base land only (extra_script_values.txt:1305), moderating effective impact
 		country_green_revolution_pb_principles_bool = yes
 	}
 

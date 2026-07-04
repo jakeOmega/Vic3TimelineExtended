@@ -72,8 +72,12 @@
 		OR = {
 			has_law = law_type:law_regulated_augmentation_market
 			has_law = law_type:law_mandatory_augmentation
+			has_law = law_type:law_unrestricted_augmentation
 		}
-		# Society has resolved the debate by integrating augmentation
+		# Society has resolved the debate by integrating augmentation.
+		# NOTE: law_no_augmentation and law_medical_augmentation_only deliberately do NOT
+		# resolve here -- they leave the debate unsettled and route to the on_timeout divide
+		# (see below). Only law_human_purity fails outright (see fail block).
 	}
 
 	on_complete = {
@@ -96,6 +100,9 @@
 	timeout = 7300
 
 	on_timeout = {
+		# Reached when the debate never resolves: law_no_augmentation or
+		# law_medical_augmentation_only held for the full timeout without integrating
+		# (complete) or rejecting outright (fail). The unresolved divide breeds radicals + turmoil.
 		add_radicals = {
 			value = small_radicals
 			strata = lower
