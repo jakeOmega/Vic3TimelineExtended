@@ -8,8 +8,15 @@
 
 	disband_trigger = {
 		# Conditions under which the movement disbands
-		# Mirrors movement_civil_rights: passing the target law resolves the movement's demand.
+		# Mirrors movement_civil_rights, but the demand is only resolved once the ministry is
+		# funded to its *current* tech-capped maximum, not merely enacted: the investment level
+		# must reach the max investment add (law +3, rising to 9 with era techs; MAX_INSTITUTION_INVESTMENT=9).
+		# has_law gates out the degenerate no-law case where both sides are 0.
 		has_law = law_type:law_ministry_of_the_environment
+		institution_investment_level = {
+			institution = institution_ministry_of_the_environment
+			value >= modifier:country_institution_ministry_of_the_environment_max_investment_add
+		}
 	}
 	on_disbanded = {
 		# Actions to perform when the movement disbands
