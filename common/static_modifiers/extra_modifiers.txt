@@ -1539,6 +1539,12 @@ trade_diplomacy_modifier = {
 	country_prestige_mult = -0.02
 }
 
+# Event 6a: Deny everything / expel their diplomats (patriotic, diplomatic cost)
+espionage_scandal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_add = -50
+}
+
 # Event 6b: Prisoner exchange (pragmatic, lose face)
 espionage_prisoner_exchange_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
