@@ -13,12 +13,14 @@ End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria
 ## 1. Snapshot the current mod (BEFORE applying patch)
 
 ```bash
-python3 scripts/snapshot_balance.py > docs/data/balance_snapshot.json
+python3 scripts/snapshot_balance.py            # writes docs/data/balance_snapshot.json via --out default
 git add docs/data/balance_snapshot.json
 git commit -m "snapshot mod balance before <vanilla-version> migration"
 ```
 
 Captures key gameplay values (combat units, ship types, late-era tech modifiers, law modifiers) so you can verify the *intent* survives any rebalancing later. Without this, post-patch rebalancing requires recall ("what were the pre-patch hypersonic platform stats again?").
+
+> **Footgun:** the script writes to `--out` (default `docs/data/balance_snapshot.json`) — it does **not** print JSON to stdout. `python3 scripts/snapshot_balance.py > somefile.json` silently writes the snapshot to the *default committed path* and leaves `somefile.json` empty, clobbering the pre-migration baseline. To diff current-vs-baseline after a rebalance, pass an explicit temp path: `python3 scripts/snapshot_balance.py --out /tmp/new.json` and diff against `git show HEAD:docs/data/balance_snapshot.json` (or `git checkout -- docs/data/balance_snapshot.json` to restore if you clobbered it). Note the snapshot's `ship_types` block tracks `modification_construction_cost`/crit/blockade/damage but **not** `goods_input_steel_add` and does not cover `ship_modifications` (gun mods) at all — cross-check those via `git diff`.
 
 ## 2. Identify the diff baselines
 
@@ -149,6 +151,8 @@ After each batch of edits: `curl -X POST http://localhost:8950/reload?engine_onl
 Patches sometimes add new entity TYPES (1.13 added `ship_types/`, replacing the old `combat_unit_types` naval section). The migration is not a rename — it's a system replacement. Strip the old entries first to make the mod load, then port the entries to the new framework as a follow-up.
 
 If the mod has late-era ships beyond vanilla's tier (the case here: nuclear submarine, hypersonic platform, etc.), preserve their progression curve from the snapshot in step 1. Pre-1.13 mod's progression was roughly 2-3× per era (battleship 100 → fleet carrier 300 → nuclear supercarrier 700 → arsenal ship 1800 → hypersonic 4000). Match this scaling against vanilla's new top-tier baseline (super_dreadnought).
+
+**1.13.9 naval anchoring (issue #223, the second wave after 1.13.7's #160–#164).** Established, for future migrations: (1) **Crit** — mod ships map to their vanilla *class analog*, not a mod-flavored band, because 1.13.9 made crits ignore 100% of armor (`NAVAL_BATTLE_CRIT_ARMOR_REDUCTION = 1.0`) and cut crit multipliers ~8× in compensation. Ship-base `ship_critical_hit_multiplier_add` sits at vanilla's 0.25 (capital/cruiser) / 0.50 (sub/destroyer/carrier) / 0.10 (troop); ship-base `ship_critical_hit_chance_add` at vanilla's 0.05/0.10/0.15/0.05. Gun-mod crit tiers (0.1/0.15/0.2) already match vanilla — leave them. (2) **Gun damage band** — vanilla symmetrized to ≈±45% about the *medium* base module (not the ±25% the wiki implied); mod gun tiers use light = med×0.55, high = med×1.45, medium unchanged. (3) **Capital cost** — vanilla doubled the dreadnought family selectively (cruisers/carriers scaled less), so scale only `ship_group = capital_ships` mod ships; top tier lands ~3× the new super_dreadnought. (4) **Construction speed** — the flat `ship_construction_progress_max_add = 25` matches vanilla's *unchanged* base; capital-group mod ships auto-inherit the new `country_ship_group_capital_ships_construction_progress_max_add` from `arc_welding`/`concrete_dockyards`, so no per-ship change is needed. (5) **Blockade** — #163's strength:resistance ratio anchor still holds; verify, don't transplant.
 
 ## 8. Triage runtime errors
 
