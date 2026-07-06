@@ -137,22 +137,25 @@ un_member_wars_count = {
 
 # ---- Per-Country Drift Component Script Values (for loc display) ----
 
+# un_authority is a single GLOBAL value, so the toward-50 drift reads the global.
 un_authority_drift_base = {
 	value = 0
 	if = {
-		limit = { var:un_authority > 55 }
+		limit = { global_var:un_authority > 55 }
 		add = -0.25
 	}
 	else_if = {
-		limit = { var:un_authority < 45 }
+		limit = { global_var:un_authority < 45 }
 		add = 0.25
 	}
 }
 
+# Only GP *members* lend the UN legitimacy (matches un_gp_with_humanitarian_regs).
 un_authority_drift_democracy = {
 	value = 0
 	every_country = {
 		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			country_rank >= rank_value:great_power
 			has_law = law_type:law_humanitarian_regulations
 		}
@@ -160,6 +163,7 @@ un_authority_drift_democracy = {
 	}
 	every_country = {
 		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			country_rank >= rank_value:great_power
 			has_law = law_type:law_limited_war
 		}
@@ -191,17 +195,44 @@ un_authority_drift_undermine = {
 	}
 }
 
+# -1 per member at war with another member. Mirrors un_member_wars_count (which
+# is membership-gated and uses has_war_with = PREV, correct in any scope) so the
+# drift is valid both in the global updater and the country-scoped loc display.
 un_authority_drift_wars = {
+	value = un_member_wars_count
+	multiply = -1
+}
+
+# Members of a bloc with the Multilateral Institutions principle lend the UN their
+# institutional weight. Each aligned member feeds the single global un_authority in
+# proportion to its principle level (country_un_institutional_alignment) AND its rank
+# -- a great power projects far more institutional heft than a micro-state, so a
+# swarm of tiny members cannot inflate the UN on its own.
+un_authority_drift_institutional = {
 	value = 0
 	every_country = {
 		limit = {
-			is_at_war = yes
-			any_country = {
-				has_war_with = ROOT
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			modifier:country_un_institutional_alignment > 0
+		}
+		add = {
+			value = modifier:country_un_institutional_alignment
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				multiply = 1.0
+			}
+			else_if = {
+				limit = { country_rank >= rank_value:major_power }
+				multiply = 0.5
+			}
+			else_if = {
+				limit = { country_rank >= rank_value:minor_power }
+				multiply = 0.25
+			}
+			else = {
+				multiply = 0.1
 			}
 		}
-		add = -1
 	}
 }
 
@@ -211,6 +242,7 @@ un_authority_drift_total = {
 	add = un_authority_drift_champion
 	add = un_authority_drift_undermine
 	add = un_authority_drift_wars
+	add = un_authority_drift_institutional
 }
 
 # ---- Program Participation ----

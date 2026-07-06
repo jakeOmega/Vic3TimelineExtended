@@ -740,7 +740,7 @@ un_vote.1 = {
 			modifier = {
 				trigger = {
 					has_global_variable = un_vote_topic_reform
-					var:un_authority < 40
+					global_var:un_authority < 40
 				}
 				add = 15
 			}
@@ -1431,6 +1431,13 @@ un_vote.1 = {
 
 		custom_tooltip = {
 			text = UN_VOTE_VETO_TT
+			# Authority drain applies ONCE per resolution: only the first veto this
+			# round dents the single global UN authority (not once per vetoing member).
+			# un_vote_veto_cast is the per-resolution flag, cleared in un_vote.2 cleanup.
+			if = {
+				limit = { NOT = { has_global_variable = un_vote_veto_cast } }
+				change_global_variable = { name = un_authority add = -5 }
+			}
 			# Veto kills the binding form regardless of GA tally
 			set_global_variable = un_vote_veto_cast
 			set_global_variable = { name = un_vote_vetoer_country value = ROOT }
@@ -1438,9 +1445,6 @@ un_vote.1 = {
 			change_global_variable = { name = un_vote_oppose add = 1 }
 			change_global_variable = { name = un_vote_net add = -1 }
 			set_variable = { name = un_vote_choice value = 2 }
-
-			# Authority drain: vetoing weakens our standing in the UN
-			change_variable = { name = un_authority add = -5 }
 			add_modifier = {
 				name = un_veto_authority_drain_modifier
 				days = long_modifier_time
@@ -1584,8 +1588,8 @@ un_vote.1 = {
 			# Our UN authority is already weak (cost is steep)
 			modifier = {
 				trigger = {
-					has_variable = un_authority
-					var:un_authority < 30
+					has_global_variable = un_authority
+					global_var:un_authority < 30
 				}
 				add = -25
 			}
@@ -1926,7 +1930,7 @@ un_vote.2 = {
 				un_vote_expulsion_passed >= 0
 			}
 			custom_tooltip = un_vote_expulsion_passed_tt
-			change_variable = { name = un_authority add = 5 }
+			change_global_variable = { name = un_authority add = 5 }
 			if = {
 				limit = { exists = scope:un_vote_target }
 				scope:un_vote_target = {
@@ -1955,7 +1959,7 @@ un_vote.2 = {
 		else_if = {
 			limit = { has_global_variable = un_vote_topic_expulsion }
 			custom_tooltip = un_vote_expulsion_failed_tt
-			change_variable = { name = un_authority add = -3 }
+			change_global_variable = { name = un_authority add = -3 }
 			if = {
 				limit = { exists = scope:un_vote_target }
 				change_relations = { country = scope:un_vote_target value = -15 }
@@ -1982,7 +1986,7 @@ un_vote.2 = {
 					NOT = { has_global_variable = un_vote_veto_cast }
 				}
 				custom_tooltip = un_vote_condemn_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -30 }
@@ -2007,7 +2011,7 @@ un_vote.2 = {
 				limit = { has_global_variable = un_vote_topic_condemn }
 				# Graduated condemn: SC veto downgrades to non-binding rebuke
 				custom_tooltip = un_vote_condemn_passed_vetoed_tt
-				change_variable = { name = un_authority add = 2 }
+				change_global_variable = { name = un_authority add = 2 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -10 }
@@ -2028,7 +2032,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_human_rights }
 				custom_tooltip = un_vote_human_rights_passed_tt
-				change_variable = { name = un_authority add = 10 }
+				change_global_variable = { name = un_authority add = 10 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unhrc } }
 					set_global_variable = un_agency_unhrc
@@ -2039,7 +2043,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_npt }
 				custom_tooltip = un_vote_npt_passed_tt
-				change_variable = { name = un_authority add = 10 }
+				change_global_variable = { name = un_authority add = 10 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_iaea } }
 					set_global_variable = un_agency_iaea
@@ -2050,7 +2054,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_climate }
 				custom_tooltip = un_vote_climate_passed_tt
-				change_variable = { name = un_authority add = 10 }
+				change_global_variable = { name = un_authority add = 10 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unep } }
 					set_global_variable = un_agency_unep
@@ -2068,7 +2072,7 @@ un_vote.2 = {
 					NOT = { has_global_variable = un_vote_veto_cast }
 				}
 				custom_tooltip = un_vote_reform_passed_tt
-				change_variable = { name = un_authority add = 10 }
+				change_global_variable = { name = un_authority add = 10 }
 			}
 			else_if = {
 				limit = { has_global_variable = un_vote_topic_reform }
@@ -2080,7 +2084,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_heritage }
 				custom_tooltip = un_vote_heritage_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unesco } }
 					set_global_variable = un_agency_unesco
@@ -2091,7 +2095,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_decolonization }
 				custom_tooltip = un_vote_decolonization_passed_tt
-				change_variable = { name = un_authority add = 10 }
+				change_global_variable = { name = un_authority add = 10 }
 				# Cash the loc promise of "Colonial powers face increased
 				# international pressure" — apply a one-shot decaying
 				# pressure modifier on every overseas-colonial owner.
@@ -2114,7 +2118,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_pandemic }
 				custom_tooltip = un_vote_pandemic_passed_tt
-				change_variable = { name = un_authority add = 10 }
+				change_global_variable = { name = un_authority add = 10 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_who } }
 					set_global_variable = un_agency_who
@@ -2125,7 +2129,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_refugee }
 				custom_tooltip = un_vote_refugee_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unhcr } }
 					set_global_variable = un_agency_unhcr
@@ -2136,7 +2140,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_space }
 				custom_tooltip = un_vote_space_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unoosa } }
 					set_global_variable = un_agency_unoosa
@@ -2152,7 +2156,7 @@ un_vote.2 = {
 					NOT = { has_global_variable = un_vote_veto_cast }
 				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				# Apply scaled peacekeeping benefit to the requesting country
 				if = {
 					limit = { exists = global_var:un_vote_proposer_country }
@@ -2188,7 +2192,7 @@ un_vote.2 = {
 			else_if = {
 				limit = { has_global_variable = un_vote_topic_peacekeeping_request }
 				custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
-				change_variable = { name = un_authority add = 2 }
+				change_global_variable = { name = un_authority add = 2 }
 				# Observer mission to the proposer only — no enforcement, no levies
 				if = {
 					limit = { exists = global_var:un_vote_proposer_country }
@@ -2216,7 +2220,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_aid_request }
 				custom_tooltip = un_vote_aid_request_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				# Apply scaled aid benefit to the requesting country
 				if = {
 					limit = { exists = global_var:un_vote_proposer_country }
@@ -2257,7 +2261,7 @@ un_vote.2 = {
 					NOT = { has_global_variable = un_vote_veto_cast }
 				}
 				custom_tooltip = un_vote_sanctions_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				# Proposer becomes sanctions enforcer
 				add_modifier = { name = un_sanctions_enforcer_modifier }
 				# Apply sanctions to target
@@ -2275,7 +2279,7 @@ un_vote.2 = {
 			else_if = {
 				limit = { has_global_variable = un_vote_topic_sanctions }
 				custom_tooltip = un_vote_sanctions_passed_vetoed_tt
-				change_variable = { name = un_authority add = 2 }
+				change_global_variable = { name = un_authority add = 2 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					scope:un_vote_target = {
@@ -2292,7 +2296,7 @@ un_vote.2 = {
 			if = {
 				limit = { has_global_variable = un_vote_topic_law_of_sea }
 				custom_tooltip = un_vote_law_of_sea_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				set_global_variable = un_agency_itlos
 			}
 
@@ -2305,13 +2309,13 @@ un_vote.2 = {
 					NOT = { has_global_variable = un_vote_veto_cast }
 				}
 				custom_tooltip = un_vote_icc_passed_tt
-				change_variable = { name = un_authority add = 5 }
+				change_global_variable = { name = un_authority add = 5 }
 				set_global_variable = un_agency_icc
 			}
 			else_if = {
 				limit = { has_global_variable = un_vote_topic_icc }
 				custom_tooltip = un_vote_icc_passed_vetoed_tt
-				change_variable = { name = un_authority add = 2 }
+				change_global_variable = { name = un_authority add = 2 }
 				add_modifier = {
 					name = un_court_contested_modifier
 					days = normal_modifier_time
@@ -2372,7 +2376,7 @@ un_vote.2 = {
 				NOT = { has_global_variable = un_vote_topic_expulsion }
 			}
 			custom_tooltip = un_vote_failed_tt
-			change_variable = { name = un_authority add = -3 }
+			change_global_variable = { name = un_authority add = -3 }
 			add_modifier = {
 				name = un_vote_failure_penalty
 				days = normal_modifier_time

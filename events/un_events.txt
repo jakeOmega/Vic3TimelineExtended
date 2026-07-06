@@ -219,8 +219,8 @@ un_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:condemned_country value = -5 }
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
@@ -251,8 +251,8 @@ un_events.2 = {
 				add = 5
 			}
 		}
-		custom_tooltip = un_authority_change_minus_2
-		change_variable = { name = un_authority add = -2 }
+		custom_tooltip = un_authority_change_minus_1
+		change_global_variable = { name = un_authority add = -1 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
@@ -289,7 +289,7 @@ un_events.3 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		has_technology_researched = human_rights
-		var:un_authority >= 40
+		global_var:un_authority >= 40
 		NOT = { has_global_variable = un_vote_active }
 	}
 
@@ -355,8 +355,8 @@ un_events.3 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -375,8 +375,8 @@ un_events.3 = {
 				add = 3
 			}
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		add_modifier = {
 			name = un_human_rights_refusal_modifier
 			days = normal_modifier_time
@@ -445,8 +445,8 @@ un_events.4 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
+		custom_tooltip = un_authority_change_plus_3
+		change_global_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:peacekeeping_target value = 20 }
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:peacekeeping_target }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -473,8 +473,8 @@ un_events.4 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:peacekeeping_target value = 5 }
 	}
 
@@ -488,8 +488,8 @@ un_events.4 = {
 				add = 5
 			}
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -538,7 +538,7 @@ un_events.5 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { var:un_authority >= 60 }
+				trigger = { global_var:un_authority >= 60 }
 				add = 3
 			}
 		}
@@ -547,8 +547,8 @@ un_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
+		custom_tooltip = un_authority_change_plus_3
+		change_global_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:sanctioned_country value = -20 }
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:sanctioned_country }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -566,7 +566,7 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_authority_change_plus_1
-		change_variable = { name = un_authority add = 1 }
+		change_global_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:sanctioned_country value = -5 }
 	}
 
@@ -585,8 +585,8 @@ un_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		change_relations = { country = scope:sanctioned_country value = 10 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -624,7 +624,7 @@ un_events.6 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		NOT = { has_modifier = un_reform_champion_modifier }
 		NOT = { has_modifier = un_reform_opponent_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -705,8 +705,8 @@ un_events.6 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
@@ -724,8 +724,8 @@ un_events.6 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -796,8 +796,8 @@ un_events.7 = {
 			name = un_humanitarian_aid_cost
 			multiplier = un_program_expense_value
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
+		custom_tooltip = un_authority_change_plus_3
+		change_global_variable = { name = un_authority add = 3 }
 		change_relations = { country = scope:crisis_country value = 30 }
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:crisis_country }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -840,7 +840,7 @@ un_events.7 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_authority_change_plus_1
-		change_variable = { name = un_authority add = 1 }
+		change_global_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:crisis_country value = 10 }
 		# GDP-scaled token benefit to crisis country
 		set_variable = { name = temp_giver_gdp value = gdp }
@@ -874,19 +874,19 @@ un_events.7 = {
 			}
 			# AI less likely to refuse at high authority (consequences are worse)
 			modifier = {
-				trigger = { var:un_authority >= 60 country_rank >= rank_value:great_power }
+				trigger = { global_var:un_authority >= 60 country_rank >= rank_value:great_power }
 				add = -3
 			}
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		change_relations = { country = scope:crisis_country value = -10 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# At moderate authority, GPs refusing aid face diplomatic consequences
 		if = {
 			limit = {
-				var:un_authority >= 40
+				global_var:un_authority >= 40
 				country_rank >= rank_value:major_power
 			}
 			custom_tooltip = un_refuse_aid_diplomatic_penalty_tt
@@ -899,11 +899,11 @@ un_events.7 = {
 		# At high authority, GPs refusing aid face severe diplomatic and domestic penalties
 		if = {
 			limit = {
-				var:un_authority >= 70
+				global_var:un_authority >= 70
 				country_rank >= rank_value:great_power
 			}
 			custom_tooltip = un_refuse_aid_severe_penalty_tt
-			change_variable = { name = un_authority add = -5 }
+			change_global_variable = { name = un_authority add = -3 }
 			ig_approval_effect = { IG = ig_trade_unions   MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 			ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		}
@@ -931,7 +931,7 @@ un_events.8 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		OR = {
 			is_at_war = yes
 			any_scope_state = {
@@ -967,8 +967,8 @@ un_events.8 = {
 			limit = { NOT = { has_global_variable = un_agency_icj } }
 			set_global_variable = un_agency_icj
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
+		custom_tooltip = un_authority_change_plus_3
+		change_global_variable = { name = un_authority add = 3 }
 		ig_approval_effect = { IG = ig_armed_forces  MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -984,8 +984,8 @@ un_events.8 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_2
-		change_variable = { name = un_authority add = -2 }
+		custom_tooltip = un_authority_change_minus_1
+		change_global_variable = { name = un_authority add = -1 }
 	}
 
 	# Option C: Defy the court openly
@@ -1003,8 +1003,8 @@ un_events.8 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_8
-		change_variable = { name = un_authority add = -8 }
+		custom_tooltip = un_authority_change_minus_5
+		change_global_variable = { name = un_authority add = -5 }
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -1031,7 +1031,7 @@ un_events.9 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 40
+		global_var:un_authority >= 40
 		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		NOT = { has_modifier = un_heritage_token_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -1090,7 +1090,7 @@ un_events.9 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_authority_change_plus_1
-		change_variable = { name = un_authority add = 1 }
+		change_global_variable = { name = un_authority add = 1 }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -1105,8 +1105,8 @@ un_events.9 = {
 				add = 3
 			}
 		}
-		custom_tooltip = un_authority_change_minus_2
-		change_variable = { name = un_authority add = -2 }
+		custom_tooltip = un_authority_change_minus_1
+		change_global_variable = { name = un_authority add = -1 }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -1144,7 +1144,7 @@ un_events.10 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		var:un_authority < 25
+		global_var:un_authority < 25
 		NOT = { has_modifier = un_authority_restored_modifier }
 		NOT = { has_modifier = un_authority_crisis_modifier }
 	}
@@ -1168,8 +1168,8 @@ un_events.10 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_15
-		change_variable = { name = un_authority add = 15 }
+		custom_tooltip = un_authority_change_plus_5
+		change_global_variable = { name = un_authority add = 5 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
@@ -1185,8 +1185,8 @@ un_events.10 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_5
-		change_variable = { name = un_authority add = 5 }
+		custom_tooltip = un_authority_change_plus_3
+		change_global_variable = { name = un_authority add = 3 }
 	}
 
 	# Option C: Let it collapse - the UN has failed
@@ -1199,8 +1199,8 @@ un_events.10 = {
 				add = 4
 			}
 		}
-		custom_tooltip = un_authority_change_minus_10
-		change_variable = { name = un_authority add = -10 }
+		custom_tooltip = un_authority_change_minus_5
+		change_global_variable = { name = un_authority add = -5 }
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -1242,7 +1242,7 @@ un_events.11 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		NOT = { has_modifier = un_veto_crisis_modifier }
 		NOT = { has_modifier = un_veto_abolition_modifier }
 		any_country = {
@@ -1279,8 +1279,8 @@ un_events.11 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		change_relations = { country = scope:veto_power value = -15 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -1292,7 +1292,7 @@ un_events.11 = {
 			base = 4
 		}
 		custom_tooltip = un_authority_change_minus_1
-		change_variable = { name = un_authority add = -1 }
+		change_global_variable = { name = un_authority add = -1 }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
@@ -1311,8 +1311,8 @@ un_events.11 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_3
-		change_variable = { name = un_authority add = 3 }
+		custom_tooltip = un_authority_change_plus_2
+		change_global_variable = { name = un_authority add = 2 }
 		change_relations = { country = scope:veto_power value = -10 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
@@ -1348,7 +1348,7 @@ un_events.12 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_technology_researched = decolonization
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		NOT = { has_modifier = un_decolonization_champion_modifier }
 		NOT = { has_modifier = un_colonial_defender_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -1422,8 +1422,8 @@ un_events.12 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
@@ -1436,7 +1436,7 @@ un_events.12 = {
 			base = 4
 		}
 		custom_tooltip = un_authority_change_plus_1
-		change_variable = { name = un_authority add = 1 }
+		change_global_variable = { name = un_authority add = 1 }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -1477,7 +1477,7 @@ un_events.13 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		var:un_authority >= 20
+		global_var:un_authority >= 20
 		NOT = { has_modifier = un_ideological_champion_modifier }
 		NOT = { has_modifier = un_coexistence_modifier }
 		any_country = {
@@ -1531,8 +1531,8 @@ un_events.13 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		change_relations = { country = scope:ideological_rival value = -20 }
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:ideological_rival }
 		add_loyalists = {
@@ -1557,8 +1557,8 @@ un_events.13 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_3
-		change_variable = { name = un_authority add = 3 }
+		custom_tooltip = un_authority_change_plus_2
+		change_global_variable = { name = un_authority add = 2 }
 		change_relations = { country = scope:ideological_rival value = 10 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -1573,8 +1573,8 @@ un_events.13 = {
 				add = 3
 			}
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		change_relations = { country = scope:ideological_rival value = -15 }
 		add_loyalists = {
 			value = small_radicals
@@ -1612,7 +1612,7 @@ un_events.14 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 40
+		global_var:un_authority >= 40
 		has_technology_researched = nuclear_weapons
 		NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
 		NOT = { has_modifier = un_nonproliferation_refusal_modifier }
@@ -1671,8 +1671,8 @@ un_events.14 = {
 				add = 4
 			}
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -1696,8 +1696,8 @@ un_events.14 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
@@ -1732,7 +1732,7 @@ un_events.15 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		NOT = { has_modifier = un_trade_arbitration_modifier }
 		NOT = { has_modifier = un_unilateral_tariffs_modifier }
 		any_country = {
@@ -1769,8 +1769,8 @@ un_events.15 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_3
-		change_variable = { name = un_authority add = 3 }
+		custom_tooltip = un_authority_change_plus_2
+		change_global_variable = { name = un_authority add = 2 }
 		change_relations = { country = scope:trade_rival value = 5 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
@@ -1782,7 +1782,7 @@ un_events.15 = {
 			base = 4
 		}
 		custom_tooltip = un_authority_change_plus_1
-		change_variable = { name = un_authority add = 1 }
+		change_global_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:trade_rival value = 15 }
 		scope:trade_rival = {
 			post_notification = un_trade_deal_received
@@ -1813,8 +1813,8 @@ un_events.15 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		change_relations = { country = scope:trade_rival value = -15 }
 		scope:trade_rival = {
 			post_notification = un_tariff_retaliation_received
@@ -1857,7 +1857,7 @@ un_events.16 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
-		var:un_authority >= 20
+		global_var:un_authority >= 20
 		has_technology_researched = antibiotics
 		NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
 		NOT = { has_modifier = un_pandemic_isolationist_modifier }
@@ -1911,8 +1911,8 @@ un_events.16 = {
 		ai_chance = {
 			base = 4
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		remove_global_variable = un_vote_active
 	}
 
@@ -1931,8 +1931,8 @@ un_events.16 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -1969,7 +1969,7 @@ un_events.17 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		has_technology_researched = environmental_movement
 		NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
 		NOT = { has_modifier = un_climate_refusal_modifier }
@@ -2024,8 +2024,8 @@ un_events.17 = {
 		ai_chance = {
 			base = 5
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
 	}
@@ -2045,8 +2045,8 @@ un_events.17 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Release the vote slot since we didn't start one
 		remove_global_variable = un_vote_active
@@ -2081,7 +2081,7 @@ un_events.18 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 20
+		global_var:un_authority >= 20
 		NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 		NOT = { has_modifier = un_refugee_closed_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -2163,8 +2163,8 @@ un_events.18 = {
 		ai_chance = {
 			base = 5
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		if = {
 			limit = { exists = scope:refugee_source }
 			change_relations = { country = scope:refugee_source value = 10 }
@@ -2187,8 +2187,8 @@ un_events.18 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		if = {
 			limit = { exists = scope:refugee_source }
 			change_relations = { country = scope:refugee_source value = -10 }
@@ -2226,7 +2226,7 @@ un_events.19 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 40
+		global_var:un_authority >= 40
 		has_technology_researched = space_exploration
 		country_rank >= rank_value:major_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
@@ -2280,8 +2280,8 @@ un_events.19 = {
 		ai_chance = {
 			base = 4
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		remove_global_variable = un_vote_active
 	}
 
@@ -2300,8 +2300,8 @@ un_events.19 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		remove_global_variable = un_vote_active
 	}
@@ -2341,7 +2341,7 @@ un_events.20 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		var:un_authority < 50
+		global_var:un_authority < 50
 		NOT = { has_modifier = un_walkout_condemn_modifier }
 		NOT = { has_modifier = un_walkout_join_modifier }
 		any_country = {
@@ -2386,7 +2386,7 @@ un_events.20 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { var:un_authority >= 30 }
+				trigger = { global_var:un_authority >= 30 }
 				add = 3
 			}
 		}
@@ -2395,8 +2395,8 @@ un_events.20 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_3
-		change_variable = { name = un_authority add = 3 }
+		custom_tooltip = un_authority_change_plus_2
+		change_global_variable = { name = un_authority add = 2 }
 		change_relations = { country = scope:walkout_leader value = -15 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -2413,7 +2413,7 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_authority_change_plus_1
-		change_variable = { name = un_authority add = 1 }
+		change_global_variable = { name = un_authority add = 1 }
 		change_relations = { country = scope:walkout_leader value = 5 }
 	}
 
@@ -2432,8 +2432,8 @@ un_events.20 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		change_relations = { country = scope:walkout_leader value = 15 }
 		add_loyalists = {
 			value = small_radicals
@@ -2682,7 +2682,7 @@ un_events.21 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 30
+		global_var:un_authority >= 30
 		has_technology_researched = international_trade
 		# Global ratification gate. The per-country modifier checks below don't
 		# cover new UN joiners or Option B/C takers (decaying modifiers), who
@@ -2753,8 +2753,8 @@ un_events.21 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		remove_global_variable = un_vote_active
 	}
 
@@ -2773,8 +2773,8 @@ un_events.21 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_3
-		change_variable = { name = un_authority add = -3 }
+		custom_tooltip = un_authority_change_minus_2
+		change_global_variable = { name = un_authority add = -2 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		remove_global_variable = un_vote_active
 	}
@@ -2808,7 +2808,7 @@ un_events.22 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		var:un_authority >= 40
+		global_var:un_authority >= 40
 		has_technology_researched = human_rights
 		country_rank >= rank_value:major_power
 		# Global ratification gate. The per-country modifier checks below don't
@@ -2877,8 +2877,8 @@ un_events.22 = {
 				add = 3
 			}
 		}
-		custom_tooltip = un_authority_change_plus_2
-		change_variable = { name = un_authority add = 2 }
+		custom_tooltip = un_authority_change_plus_1
+		change_global_variable = { name = un_authority add = 1 }
 		remove_global_variable = un_vote_active
 	}
 
@@ -2901,8 +2901,8 @@ un_events.22 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_authority_change_minus_5
-		change_variable = { name = un_authority add = -5 }
+		custom_tooltip = un_authority_change_minus_3
+		change_global_variable = { name = un_authority add = -3 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		remove_global_variable = un_vote_active
 	}
