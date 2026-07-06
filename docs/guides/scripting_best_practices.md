@@ -2323,6 +2323,14 @@ te_init_global_state = {
 
 **General principle:** if a script value, custom localization, or trigger reads a `global_var:` or `global_variable_list:`, ensure the variable is initialized in `on_game_started` (or earlier than any reader). Don't rely on `on_yearly_pulse_*` or `on_monthly_pulse_*` to be the first writer — JE `possible` clauses evaluate before either.
 
+### Semantically-global state belongs in a global var + one game-scope updater
+
+If a value represents a single world fact (a UN's authority, a global market condition), store it as a `global_var` and advance it **once per month from a global `on_monthly_pulse`** — not as a per-country `variable` mutated inside a per-country JE pulse. The per-country form runs the updater once *per member*, so a shared quantity gets moved N times per tick (and each member keeps a divergent copy). The mod does this correctly for `un_authority` (`common/on_actions/un_on_actions.txt` `un_global_authority_on_action`) and `greenhouse_gas_emissions` (`extra_on_actions.txt`). The engine unions same-name `on_monthly_pulse` blocks across files, so adding your own global pulse next to vanilla's is safe.
+
+Two traps when consolidating a per-country var into one global updater:
+- **Script values feeding a game-scope updater must be scope-clean.** A global `on_monthly_pulse` runs in the no-country game scope, so `ROOT` is not a country and `var:X` has no owner. Any script value you apply there (e.g. via `change_global_variable = { name = X add = <script_value> }`) must read `global_var:` (not `var:`) and use `PREV`/`THIS` inside `every_country`/`any_country` (not `ROOT`). We hit both in `un_authority_drift_*`: `_base` read `var:un_authority` and `_wars` used `has_war_with = ROOT` — both silently wrong once evaluated from game scope (and, it turned out, already wrong in the country-scoped loc display). Fixing them to `global_var:` / `PREV` corrected the updater *and* the display in one shot.
+- **Migrate old saves once, guarded.** Existing saves carry the stale per-country copies and no global. Seed the global under `if = { limit = { NOT = { has_global_variable = X } } ... }` at the top of the single updater (so it fires exactly once), then `remove_variable` the per-country copies in an `every_country` sweep.
+
 ## Event Targets vs Free-Form Names: Validate Before Use
 
 Like modifiers, **event-target names are looked up in a fixed engine vocabulary**. The engine logs `Unknown trigger type: <name>` and silently skips the entire surrounding block.

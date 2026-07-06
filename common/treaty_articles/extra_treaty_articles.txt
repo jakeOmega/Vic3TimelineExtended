@@ -1450,11 +1450,9 @@ nuclear_program_aid = {
 			NOT = {
 				AND = {
 					has_global_variable = un_agency_iaea
-					any_country = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						has_variable = un_authority
-						var:un_authority >= 60
-					}
+					# un_authority is a single global value; check it directly.
+					has_global_variable = un_authority
+					global_var:un_authority >= 60
 				}
 			}
 		}

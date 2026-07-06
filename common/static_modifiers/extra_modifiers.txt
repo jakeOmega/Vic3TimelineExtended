@@ -3340,9 +3340,9 @@ un_veto_isolation_modifier = {
 	country_prestige_mult = -0.03
 }
 
-# Applied to the vetoing country after using a veto. UN authority drain.
-# Repeated vetoes stack the modifier and erode the country's UN authority bar
-# via the un_authority country variable change in the veto effect.
+# Applied to the vetoing country after using a veto. Diplomatic-influence penalty.
+# The veto also drains the single global un_authority once per resolution (see the
+# un_vote_veto_cast-gated change_global_variable in un_vote.1's veto effect).
 un_veto_authority_drain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_influence_mult = -0.05

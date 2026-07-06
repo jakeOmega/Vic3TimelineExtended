@@ -41,6 +41,11 @@ un_found_button = {
 			}
 			# Establish the UN
 			set_global_variable = un_founded
+			# UN authority is a single GLOBAL value; born here at founding (neutral 50).
+			if = {
+				limit = { NOT = { has_global_variable = un_authority } }
+				set_global_variable = { name = un_authority value = 50 }
+			}
 			# 5-year founding window: any GP that joins during this window becomes
 			# a permanent member (until the 5 seats fill). After it expires, new
 			# permanent members can only be created via the expulsion-promotion vote.
@@ -313,7 +318,7 @@ un_propose_condemn_button = {
 	ai_chance = {
 		value = 0
 		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
-		if = { limit = { var:un_authority >= 40 } add = 10 }
+		if = { limit = { global_var:un_authority >= 40 } add = 10 }
 	}
 
 	effect = {
@@ -376,7 +381,7 @@ un_leave_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
 		if = { limit = { has_law = law_type:law_total_war } add = 15 }
-		if = { limit = { var:un_authority < 20 } add = 10 }
+		if = { limit = { global_var:un_authority < 20 } add = 10 }
 	}
 
 	effect = {
@@ -482,7 +487,7 @@ un_propose_expulsion_button = {
 			add = 25
 		}
 		# Less interesting when our own UN authority is weak
-		if = { limit = { has_variable = un_authority var:un_authority < 30 } add = -15 }
+		if = { limit = { has_global_variable = un_authority global_var:un_authority < 30 } add = -15 }
 	}
 
 	effect = {
@@ -559,7 +564,7 @@ un_propose_sanctions_button = {
 
 	ai_chance = {
 		value = 0
-		if = { limit = { var:un_authority >= 50 } add = 20 }
+		if = { limit = { global_var:un_authority >= 50 } add = 20 }
 		if = {
 			limit = {
 				any_country = {
@@ -629,7 +634,7 @@ un_lift_sanctions_button = {
 
 	ai_chance = {
 		value = 0
-		if = { limit = { var:un_authority < 30 } add = 20 }
+		if = { limit = { global_var:un_authority < 30 } add = 20 }
 	}
 
 	effect = {
@@ -640,7 +645,7 @@ un_lift_sanctions_button = {
 				limit = { has_modifier = un_sanctions_target_modifier }
 				remove_modifier = un_sanctions_target_modifier
 			}
-			change_variable = { name = un_authority add = -3 }
+			change_global_variable = { name = un_authority add = -3 }
 		}
 	}
 }
@@ -665,7 +670,7 @@ un_peacekeeping_mission_button = {
 
 	ai_chance = {
 		value = 0
-		if = { limit = { var:un_authority >= 40 } add = 15 }
+		if = { limit = { global_var:un_authority >= 40 } add = 15 }
 		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
 		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
 		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
@@ -680,7 +685,7 @@ un_peacekeeping_mission_button = {
 				days = long_modifier_time
 				is_decaying = yes
 			}
-			change_variable = { name = un_authority add = 3 }
+			change_global_variable = { name = un_authority add = 3 }
 		}
 		# Cache expense in country scope; JE scope can't read gdp directly
 		# (the modifier multiplier is re-evaluated continuously and would
@@ -711,7 +716,7 @@ un_end_peacekeeping_button = {
 
 	ai_chance = {
 		value = 0
-		if = { limit = { var:un_authority < 20 } add = 15 }
+		if = { limit = { global_var:un_authority < 20 } add = 15 }
 		if = { limit = { is_at_war = yes } add = 25 }
 	}
 
@@ -720,7 +725,7 @@ un_end_peacekeeping_button = {
 			text = "UN_END_PEACEKEEPING_DESC"
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-			change_variable = { name = un_authority add = -2 }
+			change_global_variable = { name = un_authority add = -2 }
 		}
 	}
 }
@@ -744,7 +749,7 @@ un_fund_development_button = {
 
 	ai_chance = {
 		value = 0
-		if = { limit = { var:un_authority >= 40 } add = 10 }
+		if = { limit = { global_var:un_authority >= 40 } add = 10 }
 		if = { limit = { country_rank >= rank_value:great_power } add = 15 }
 		if = {
 			limit = {
@@ -761,7 +766,7 @@ un_fund_development_button = {
 		custom_tooltip = {
 			text = "UN_FUND_DEVELOPMENT_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_development_contributor_modifier } }
-			change_variable = { name = un_authority add = 2 }
+			change_global_variable = { name = un_authority add = 2 }
 		}
 		# Cache expense in country scope; see un_peacekeeping_mission_button.
 		set_variable = { name = un_development_expense_cached value = un_program_expense_value }
@@ -787,7 +792,7 @@ un_defund_development_button = {
 	ai_chance = {
 		value = 0
 		if = { limit = { has_law = law_type:law_laissez_faire } add = 15 }
-		if = { limit = { var:un_authority < 25 } add = 10 }
+		if = { limit = { global_var:un_authority < 25 } add = 10 }
 	}
 
 	effect = {
@@ -795,7 +800,7 @@ un_defund_development_button = {
 			text = "UN_DEFUND_DEVELOPMENT_DESC"
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
-			change_variable = { name = un_authority add = -2 }
+			change_global_variable = { name = un_authority add = -2 }
 		}
 	}
 }
@@ -826,14 +831,14 @@ un_human_rights_resolution_button = {
 		if = { limit = { has_law = law_type:law_multicultural } add = 20 }
 		if = { limit = { has_law = law_type:law_universal_suffrage } add = 15 }
 		if = { limit = { has_law = law_type:law_protected_speech } add = 15 }
-		if = { limit = { var:un_authority >= 50 } add = 10 }
+		if = { limit = { global_var:un_authority >= 50 } add = 10 }
 	}
 
 	effect = {
 		custom_tooltip = {
 			text = "UN_HUMAN_RIGHTS_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
-			change_variable = { name = un_authority add = 3 }
+			change_global_variable = { name = un_authority add = 3 }
 		}
 	}
 }
@@ -860,7 +865,7 @@ un_withdraw_human_rights_button = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
 			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-			change_variable = { name = un_authority add = -3 }
+			change_global_variable = { name = un_authority add = -3 }
 		}
 	}
 }
@@ -890,7 +895,7 @@ un_arms_control_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_limited_war } add = 25 }
 		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
-		if = { limit = { var:un_authority >= 50 } add = 10 }
+		if = { limit = { global_var:un_authority >= 50 } add = 10 }
 		if = {
 			limit = {
 				any_country = {
@@ -906,7 +911,7 @@ un_arms_control_button = {
 		custom_tooltip = {
 			text = "UN_ARMS_CONTROL_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
-			change_variable = { name = un_authority add = 3 }
+			change_global_variable = { name = un_authority add = 3 }
 		}
 	}
 }
@@ -933,7 +938,7 @@ un_withdraw_arms_control_button = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_ARMS_CONTROL_DESC"
 			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-			change_variable = { name = un_authority add = -3 }
+			change_global_variable = { name = un_authority add = -3 }
 		}
 	}
 }
@@ -964,7 +969,7 @@ un_champion_order_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 30 }
 		if = { limit = { has_law = law_type:law_limited_war } add = 20 }
-		if = { limit = { var:un_authority < 30 } add = 20 }
+		if = { limit = { global_var:un_authority < 30 } add = 20 }
 	}
 
 	effect = {
@@ -991,7 +996,7 @@ un_stop_championing_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_total_war } add = 15 }
 		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
-		if = { limit = { var:un_authority >= 80 } add = 10 }
+		if = { limit = { global_var:un_authority >= 80 } add = 10 }
 	}
 
 	effect = {
@@ -1023,7 +1028,7 @@ un_undermine_order_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_total_war } add = 25 }
 		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
-		if = { limit = { var:un_authority >= 60 } add = 15 }
+		if = { limit = { global_var:un_authority >= 60 } add = 15 }
 	}
 
 	effect = {
@@ -1050,7 +1055,7 @@ un_stop_undermining_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
 		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
-		if = { limit = { var:un_authority < 20 } add = 10 }
+		if = { limit = { global_var:un_authority < 20 } add = 10 }
 	}
 
 	effect = {

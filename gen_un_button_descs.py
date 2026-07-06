@@ -2,7 +2,7 @@
 """Auto-generate localization for UN scripted button effect descriptions.
 
 For each in-scope UN scripted_button, walk its effect block to collect
-add_modifier / remove_modifier calls and change_variable un_authority deltas,
+add_modifier / remove_modifier calls and change_global_variable un_authority deltas,
 look up modifier values from common/static_modifiers/extra_modifiers.txt,
 and emit a `*_EFFECTS` loc key that summarizes the mechanical effects.
 
@@ -93,7 +93,7 @@ def _walk_for_effects(node, found):
     """Recursively walk an effect-block subtree and collect:
         added_modifiers   — names of modifiers added without a `multiplier =`
         removed_modifiers — names of modifiers removed
-        authority_delta   — net signed change applied to var:un_authority
+        authority_delta   — net signed change applied to global_var:un_authority
     Skips contents of `limit` / `trigger` (conditions, not effects)."""
     if isinstance(node, list):
         for item in node:
@@ -135,7 +135,9 @@ def _dispatch(key, val, found):
             if name:
                 found["removed_modifiers"].append(name)
         return
-    if key == "change_variable":
+    if key in ("change_variable", "change_global_variable"):
+        # un_authority is a single global value, written via change_global_variable
+        # (older per-country change_variable is still handled for safety).
         if isinstance(val, dict) and _value_of(val.get("name")) == "un_authority":
             delta = 0.0
             for op_key, sign in (("add", 1), ("subtract", -1)):
