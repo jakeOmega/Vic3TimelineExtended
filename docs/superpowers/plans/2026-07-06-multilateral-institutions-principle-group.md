@@ -1,9 +1,19 @@
 # Plan: "Multilateral Institutions" Diplomatic principle group (+ Foreign Service rename)
 
 **Branch:** `claude/diplomatic-principle-groups-4puwcu`
-**Status:** Ready to implement Phase 1. Phase 2 blocked on the `un_authority` global-variable fix
+**Status:** **Phase 1 implemented** (statically validated; live reload/audit + in-game smoke test
+still owed — the cloud container has no base-game install / mod state server). Phase 2 blocked on
+the `un_authority` global-variable fix
 (`docs/superpowers/plans/2026-07-06-un-authority-global-variable-fix.md`, in progress in a
 separate session).
+
+**Resolved open decisions:** (a) Tier II ships as an inert stub per request (restates Tier I only);
+(b) `power_bloc_disallow_war_bool` confirmed = "Cannot start or join wars amongst Power Bloc
+members" (member-vs-member — intended); (c) icon = `foreign_investment.dds` (reused).
+**Correction applied during build:** collective defense uses the country modifier
+`country_join_power_bloc_member_in_defensive_plays_bool` (in `member_modifier`), not the
+nonexistent `power_bloc_member_in_defensive_plays_bool` — the latter was a regex-substring
+artifact. `power_bloc_disallow_war_bool` stays in `power_bloc_modifier`.
 
 Adds a third primary principle group to `identity_diplomatic` (alongside Foreign Service and
 Global Security): the UN-integration / rules-based-order build. Also relocalizes the existing

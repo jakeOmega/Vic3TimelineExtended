@@ -284,6 +284,19 @@ principle_group_global_security = {
 	}
 }
 
+principle_group_multilateral_institutions = {
+	primary_for_identity = identity_diplomatic
+	unlocking_identity = identity_diplomatic
+
+	levels = {
+		principle_multilateral_institutions_1
+		principle_multilateral_institutions_2
+		principle_multilateral_institutions_3
+		principle_multilateral_institutions_4
+		principle_multilateral_institutions_5
+	}
+}
+
 principle_group_healthcare = {
 	levels = {
 		principle_healthcare_1

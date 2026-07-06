@@ -921,6 +921,8 @@
  eco_reform_env_movement_modifier_desc:0 "Eco-terrorist incidents have galvanized support for the environmental movement."
  eco_reform_justification_modifier_desc:0 "Eco-terrorist attacks have been used to justify accelerating environmental reforms."
  eco_terrorism_crackdown_modifier_desc:0 "A security crackdown following eco-terrorist attacks has reduced civil liberties but restored order."
+ development_assistance:0 "Development Assistance"
+ development_assistance_desc:0 "Development Assistance is a treaty article that allows a country to fund development in a poorer country, at the cost of [concept_authority], raising the [concept_sol] of its poorest, firming up its regime, and increasing its dependence on the donor."
  education_aid:0 "Education Aid"
  education_aid_desc:0 "Education Aid is a [concept_diplomatic_action] that allows a country to provide educational assistance to another country, at the cost of [concept_bureaucracy], increasing [concept_education_access] in the target country."
  education_breakthrough_modifier:0 "Education Initiative Success"

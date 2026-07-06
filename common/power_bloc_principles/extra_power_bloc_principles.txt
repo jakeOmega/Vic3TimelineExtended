@@ -3972,3 +3972,161 @@ principle_shared_canon_5 = {
 		value = 1000
 	}
 }
+
+### MULTILATERAL INSTITUTIONS (identity_diplomatic)
+# The UN-integration / rules-based-order build. Tiers cumulative (each restates prior).
+# Group gates on the intergovernmental_organizations tech (country_igo_pb_principles_bool).
+# Phase 2 (after un_authority becomes a global variable) adds the institutional-alignment
+# scaler to Tiers II-V: see docs/superpowers/plans/2026-07-06-*.md.
+
+principle_multilateral_institutions_1 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		modifier:country_igo_pb_principles_bool = yes
+	}
+
+	member_modifier = {
+		country_diplomatic_reputation_add = 5
+		country_influence_mult = 0.1
+	}
+
+	power_bloc_modifier = {
+		power_bloc_can_use_join_united_nations_bool = yes
+	}
+
+	ai_weight = {
+		value = 100
+	}
+}
+
+principle_multilateral_institutions_2 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		modifier:country_igo_pb_principles_bool = yes
+	}
+
+	# TODO(un-authority-fix): Standing Delegation gains its real body in Phase 2 --
+	# the country_un_institutional_alignment scaler (feeds the global un_authority and
+	# scales member UN benefits) plus the Ministry of Foreign Affairs delegation. Inert
+	# for now: restates Tier I only so enacting II does not drop its effects.
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_diplomatic_reputation_add = 5
+		country_influence_mult = 0.1
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_can_use_join_united_nations_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_multilateral_institutions_3 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		modifier:country_igo_pb_principles_bool = yes
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_diplomatic_reputation_add = 5
+		country_influence_mult = 0.1
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_can_use_join_united_nations_bool = yes
+
+		power_bloc_can_give_development_aid_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_multilateral_institutions_4 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		modifier:country_igo_pb_principles_bool = yes
+		modifier:country_decolonization_pb_principles_bool = yes
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_diplomatic_reputation_add = 5
+		country_influence_mult = 0.1
+
+		# Collective defense: call fellow members into defensive plays
+		country_join_power_bloc_member_in_defensive_plays_bool = yes
+		# Acting through the international body rather than unilaterally
+		country_infamy_generation_mult = -0.1
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_can_use_join_united_nations_bool = yes
+		power_bloc_can_give_development_aid_bool = yes
+
+		# Collective arbitration: members cannot war one another
+		power_bloc_disallow_war_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_multilateral_institutions_5 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		modifier:country_igo_pb_principles_bool = yes
+		modifier:country_anti_war_pb_principles_bool = yes
+	}
+
+	member_modifier = {
+		# Modifiers from previous level(s)
+		country_diplomatic_reputation_add = 5
+		country_influence_mult = 0.1
+		country_join_power_bloc_member_in_defensive_plays_bool = yes
+		country_infamy_generation_mult = -0.1
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_can_use_join_united_nations_bool = yes
+		power_bloc_can_give_development_aid_bool = yes
+		power_bloc_disallow_war_bool = yes
+
+		# Guarantor of the order: the institutions hold the sprawling bloc together
+		# (cancels identity_diplomatic's built-in -1 cohesion per member) and make
+		# it magnetic to join.
+		power_bloc_cohesion_per_member_add = 1
+		power_bloc_target_sway_cost_mult = -0.2
+		power_bloc_invite_acceptance_minor_power_add = 20
+		power_bloc_invite_acceptance_insignificant_power_add = 20
+		power_bloc_invite_acceptance_major_power_add = 10
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}

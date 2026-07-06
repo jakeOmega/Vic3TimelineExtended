@@ -133,6 +133,27 @@ power_bloc_can_give_science_aid_2_bool = {
 	script_only = yes
 }
 
+# Multilateral Institutions principle group (identity_diplomatic).
+# Tier I: gates the join_united_nations treaty article to bloc leaders with the principle.
+power_bloc_can_use_join_united_nations_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+# Tier III: gates the development_assistance treaty article.
+power_bloc_can_give_development_aid_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
 power_bloc_principle_groups_max_add = {
 	color = good
 	percent = no

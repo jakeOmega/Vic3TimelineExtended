@@ -648,6 +648,115 @@ security_aid = {
 }
 
 # ---------------------------------
+# TREATY ARTICLE: development_assistance
+# ---------------------------------
+# Unlocked by the Multilateral Institutions principle (Tier III). Development
+# patronage, not charity: the source funds the target's poorest pops -- raising the
+# lower strata's standard of living and firming up the target's regime -- and in
+# exchange gains leverage over, and the diplomatic dependence of, a client state.
+# Works for any government type; self-interest is baked into the leverage payout.
+development_assistance = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = directed
+	maintenance_paid_by = source_country
+	cost = 150
+	relations_progress_per_day = 3
+	relations_improvement_max = 30
+
+	# The source shoulders the administrative expense of the aid program.
+	source_modifier = {
+		country_authority_cost_add = 50
+	}
+
+	# The target's poor benefit, the regime is stabilised, and the source gains
+	# leverage from the client's growing dependence.
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200
+		state_lower_strata_standard_of_living_add = 2
+		country_liberty_desire_add = -0.1
+		country_colonial_stability_drift_add = 0.1
+	}
+
+	usage_limit = once_per_side
+
+	visible = {
+		power_bloc ?= {
+			modifier:power_bloc_can_give_development_aid_bool = yes
+		}
+	}
+
+	possible = {
+		country_rank > scope:other_country.country_rank
+		scope:other_country = {
+			average_sol_for_primary_cultures < 15
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			no_duplicate_treaty_article = { ARTICLE_TYPE = development_assistance }
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer }
+		evaluation_chance = {
+			value = 0.1
+			if = {
+				limit = { country_rank >= rank_value:major_power }
+				add = {
+					value = country_rank
+					multiply = 0.05
+				}
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			# Don't help hostile countries
+			if = {
+				limit = {
+					OR = {
+						has_attitude = { who = scope:other_country attitude = domineering }
+						has_attitude = { who = scope:other_country attitude = belligerent }
+						has_attitude = { who = scope:other_country attitude = antagonistic }
+					}
+				}
+				add = {
+					desc = "AI_HOSTILE_ATTITUDE"
+					value = -1000
+				}
+			}
+			# Same power bloc bonus
+			if = {
+				limit = {
+					is_in_same_power_bloc = scope:other_country
+				}
+				add = {
+					desc = "AI_SAME_POWER_BLOC"
+					value = 10
+				}
+			}
+			if = {
+				limit = { scope:target_country = { average_sol_for_primary_cultures < 10 } }
+				add = {
+					desc = "AI_LOW_STANDARD_OF_LIVING"
+					value = 20
+				}
+			}
+			if = {
+				limit = { scope:target_country = { any_scope_state = { turmoil > 25 } } }
+				add = {
+					desc = "AI_TARGET_TURMOIL"
+					value = 15
+				}
+			}
+		}
+	}
+}
+
+# ---------------------------------
 # TREATY ARTICLE: science_aid
 # ---------------------------------
 # This article allows a technologically advanced country to provide scientific support,
@@ -1858,9 +1967,13 @@ joint_military_exercises = {
 
 # TREATY ARTICLE: join_united_nations
 # ---------------------------------
-# A member country can include this article to require the target
-# to join the United Nations. While the treaty is in force, the target
-# has obligation status and will be auto-enrolled by the JE monthly pulse.
+# A power bloc leader with the Multilateral Institutions principle (Tier I+) can
+# include this article to require the target to join the United Nations. While the
+# treaty is in force, the target has obligation status and will be auto-enrolled by
+# the JE monthly pulse.
+# Gated behind principle_group_multilateral_institutions: forcing a sovereign state
+# into an IGO by treaty is a hegemon-with-machinery move, reserved for blocs that
+# have invested in the institution.
 join_united_nations = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
@@ -1876,6 +1989,8 @@ join_united_nations = {
 	visible = {
 		has_global_variable = un_founded
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		is_power_bloc_leader = yes
+		power_bloc ?= { modifier:power_bloc_can_use_join_united_nations_bool = yes }
 	}
 
 	possible = {
