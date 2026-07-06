@@ -4013,14 +4013,17 @@ principle_multilateral_institutions_2 = {
 		modifier:country_igo_pb_principles_bool = yes
 	}
 
-	# TODO(un-authority-fix): Standing Delegation gains its real body in Phase 2 --
-	# the country_un_institutional_alignment scaler (feeds the global un_authority and
-	# scales member UN benefits) plus the Ministry of Foreign Affairs delegation. Inert
-	# for now: restates Tier I only so enacting II does not drop its effects.
+	# Standing Delegation: the bloc keeps a permanent presence at the UN. Its members
+	# lend the institution their weight -- country_un_institutional_alignment feeds the
+	# global un_authority (rank-weighted, in un_script_values.txt) and, in return,
+	# scales each member's un_membership_benefits_modifier by (1 + alignment) in
+	# je_united_nations.txt. The bloc both feeds and feeds off UN authority.
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_diplomatic_reputation_add = 5
 		country_influence_mult = 0.1
+
+		country_un_institutional_alignment = 0.25
 	}
 
 	power_bloc_modifier = {
@@ -4045,6 +4048,7 @@ principle_multilateral_institutions_3 = {
 		# Modifiers from previous level(s)
 		country_diplomatic_reputation_add = 5
 		country_influence_mult = 0.1
+		country_un_institutional_alignment = 0.3
 	}
 
 	power_bloc_modifier = {
@@ -4072,6 +4076,8 @@ principle_multilateral_institutions_4 = {
 		# Modifiers from previous level(s)
 		country_diplomatic_reputation_add = 5
 		country_influence_mult = 0.1
+
+		country_un_institutional_alignment = 0.4
 
 		# Collective defense: call fellow members into defensive plays
 		country_join_power_bloc_member_in_defensive_plays_bool = yes
@@ -4106,6 +4112,7 @@ principle_multilateral_institutions_5 = {
 		# Modifiers from previous level(s)
 		country_diplomatic_reputation_add = 5
 		country_influence_mult = 0.1
+		country_un_institutional_alignment = 0.5
 		country_join_power_bloc_member_in_defensive_plays_bool = yes
 		country_infamy_generation_mult = -0.1
 	}

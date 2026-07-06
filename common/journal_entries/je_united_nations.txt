@@ -303,7 +303,9 @@
 
 				# ---- Apply scaled UN membership modifier ----
 				# Modifier stays applied per-member; the multiplier reads the shared
-				# global authority.
+				# global authority. Members of a bloc with the Multilateral Institutions
+				# principle scale the benefit further by (1 + country_un_institutional_alignment)
+				# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
 				if = {
 					limit = { global_var:un_authority >= 30 }
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
@@ -312,6 +314,10 @@
 						multiplier = {
 							value = global_var:un_authority
 							divide = 50
+							multiply = {
+								value = 1
+								add = modifier:country_un_institutional_alignment
+							}
 						} }
 					}
 				}

@@ -1,11 +1,15 @@
 # Plan: "Multilateral Institutions" Diplomatic principle group (+ Foreign Service rename)
 
 **Branch:** `claude/diplomatic-principle-groups-4puwcu`
-**Status:** **Phase 1 implemented** (statically validated; live reload/audit + in-game smoke test
-still owed — the cloud container has no base-game install / mod state server). Phase 2 blocked on
-the `un_authority` global-variable fix
-(`docs/superpowers/plans/2026-07-06-un-authority-global-variable-fix.md`, in progress in a
-separate session).
+**Status:** **Phase 1 + Phase 2 implemented** (statically validated; live reload/audit + in-game
+smoke test still owed — the cloud container has no base-game install / mod state server). Phase 2
+was built on top of the `un_authority` global-variable refactor from branch
+`claude/un-authority-global-refactor-7bw2dn`, merged into this branch. Phase 2 hooks:
+`country_un_institutional_alignment` (registered in `un_membership_modifier_types.txt`); the
+`un_authority_drift_institutional` rank-weighted feed added into `un_authority_drift_total`
+(`un_script_values.txt`); and the member-benefit multiplier in `je_united_nations.txt` scaled by
+`(1 + alignment)`. Alignment granted on Tiers II–V at 0.25 / 0.3 / 0.4 / 0.5; Tier II is no longer
+a stub.
 
 **Resolved open decisions:** (a) Tier II ships as an inert stub per request (restates Tier I only);
 (b) `power_bloc_disallow_war_bool` confirmed = "Cannot start or join wars amongst Power Bloc
