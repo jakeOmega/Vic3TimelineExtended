@@ -51,10 +51,20 @@
 	scripted_button = un_stop_undermining_button
 
 	immediate = {
-		# Set initial UN authority to 50 (moderate legitimacy)
-		set_variable = { name = un_authority value = 50 }
-		scope:journal_entry = {
-			set_bar_progress = { name = un_authority_bar value = 50 }
+		# un_authority is a single GLOBAL value, initialized once at UN founding
+		# (un_buttons.txt) with a legacy-save backstop in un_global_authority_on_action.
+		# The JE can be active before founding, so sync the bar to the global if it
+		# exists, else show the neutral 50.
+		if = {
+			limit = { has_global_variable = un_authority }
+			scope:journal_entry = {
+				set_bar_progress = { name = un_authority_bar value = global_var:un_authority }
+			}
+		}
+		else = {
+			scope:journal_entry = {
+				set_bar_progress = { name = un_authority_bar value = 50 }
+			}
 		}
 	}
 
@@ -78,27 +88,27 @@
 			}
 		}
 
-		# 2. Authority tier
+		# 2. Authority tier (only once the global exists, i.e. UN founded)
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_authority_collapsed
-				trigger = { var:un_authority < 10 }
+				trigger = { has_global_variable = un_authority global_var:un_authority < 10 }
 			}
 			triggered_desc = {
 				desc = je_un_authority_weak
-				trigger = { var:un_authority >= 10 var:un_authority < 30 }
+				trigger = { has_global_variable = un_authority global_var:un_authority >= 10 global_var:un_authority < 30 }
 			}
 			triggered_desc = {
 				desc = je_un_authority_moderate
-				trigger = { var:un_authority >= 30 var:un_authority < 60 }
+				trigger = { has_global_variable = un_authority global_var:un_authority >= 30 global_var:un_authority < 60 }
 			}
 			triggered_desc = {
 				desc = je_un_authority_strong
-				trigger = { var:un_authority >= 60 var:un_authority < 85 }
+				trigger = { has_global_variable = un_authority global_var:un_authority >= 60 global_var:un_authority < 85 }
 			}
 			triggered_desc = {
 				desc = je_un_authority_dominant
-				trigger = { var:un_authority >= 85 }
+				trigger = { has_global_variable = un_authority global_var:un_authority >= 85 }
 			}
 		}
 
@@ -273,73 +283,11 @@
 			if = {
 				limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 
-				# Base monthly drift: toward 50 (slow)
-				if = {
-					limit = { var:un_authority > 55 }
-					change_variable = { name = un_authority add = -0.25 }
-				}
-				else_if = {
-					limit = { var:un_authority < 45 }
-					change_variable = { name = un_authority add = 0.25 }
-				}
-
-				# Boost authority if country has strong diplomacy
-				if = {
-					limit = {
-						country_rank >= rank_value:great_power
-						has_law = law_type:law_limited_war
-					}
-					change_variable = { name = un_authority add = 0.2 }
-				}
-				if = {
-					limit = {
-						country_rank >= rank_value:great_power
-						has_law = law_type:law_humanitarian_regulations
-					}
-					change_variable = { name = un_authority add = 0.1 }
-				}
-
-				# Great Power toggle: championing adds authority monthly, scaled by rank
-				if = {
-					limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-					change_variable = { name = un_authority add = 0.3 }
-					if = {
-						limit = { global_country_ranking < 3 }
-						change_variable = { name = un_authority add = 0.2 }
-					}
-				}
-
-				# Great Power toggle: undermining reduces authority monthly, scaled by rank
-				if = {
-					limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-					change_variable = { name = un_authority add = -0.3 }
-					if = {
-						limit = { global_country_ranking < 3 }
-						change_variable = { name = un_authority add = -0.2 }
-					}
-				}
-
-				# Wars involving members hurt authority
-				if = {
-					limit = {
-						is_at_war = yes
-						any_country = {
-							has_war_with = ROOT
-							je:je_united_nations ?= { has_modifier = un_member_modifier }
-						}
-					}
-					change_variable = { name = un_authority add = -1 }
-				}
-
-				# Clamp 0-100
-				if = {
-					limit = { var:un_authority > 100 }
-					set_variable = { name = un_authority value = 100 }
-				}
-				else_if = {
-					limit = { var:un_authority < 0 }
-					set_variable = { name = un_authority value = 0 }
-				}
+				# Authority drift + the 0-100 clamp now run ONCE globally per month in
+				# un_global_authority_on_action (common/on_actions/un_on_actions.txt),
+				# driven by un_authority_drift_total (which already aggregates every
+				# member's base/democracy/champion/undermine/war contribution). Nothing
+				# per-member is applied here anymore.
 
 				# Refresh contributor-cost cached expense vars so the JE-scoped
 				# add_modifier multipliers track current GDP. JE scope can't read
@@ -353,19 +301,16 @@
 					set_variable = { name = un_development_expense_cached value = un_program_expense_value }
 				}
 
-				# Sync progress bar
-				scope:journal_entry = {
-					set_bar_progress = { name = un_authority_bar value = root.var:un_authority }
-				}
-
 				# ---- Apply scaled UN membership modifier ----
+				# Modifier stays applied per-member; the multiplier reads the shared
+				# global authority.
 				if = {
-					limit = { var:un_authority >= 30 }
+					limit = { global_var:un_authority >= 30 }
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 					je:je_united_nations ?= { add_modifier = {
 						name = un_membership_benefits_modifier
 						multiplier = {
-							value = var:un_authority
+							value = global_var:un_authority
 							divide = 50
 						} }
 					}
@@ -376,12 +321,12 @@
 
 				# ---- High authority: infamy generation scales for everyone ----
 				if = {
-					limit = { var:un_authority >= 50 }
+					limit = { global_var:un_authority >= 50 }
 					je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
 					je:je_united_nations ?= { add_modifier = {
 						name = un_high_authority_infamy_modifier
 						multiplier = {
-							value = var:un_authority
+							value = global_var:un_authority
 							subtract = 40
 							divide = 30
 						} }
@@ -396,7 +341,7 @@
 				if = {
 					limit = {
 						has_global_variable = un_agency_iaea
-						var:un_authority >= 80
+						global_var:un_authority >= 80
 						NOT = { has_modifier = nuclear_power }
 						NOT = { je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier } }
 					}
@@ -407,7 +352,7 @@
 					limit = {
 						je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier }
 						OR = {
-							var:un_authority < 75
+							global_var:un_authority < 75
 							has_modifier = nuclear_power
 							NOT = { has_global_variable = un_agency_iaea }
 						}
@@ -453,17 +398,25 @@
 				}
 			}
 
+			# Sync progress bar to the single global authority value for ALL JE holders
+			# (members and non-members alike — the bar is now a global fact). Needs
+			# scope:journal_entry, which only the per-country pulse has, so it stays
+			# here rather than in the global updater.
+			if = {
+				limit = { has_global_variable = un_authority }
+				scope:journal_entry = {
+					set_bar_progress = { name = un_authority_bar value = global_var:un_authority }
+				}
+			}
+
 			# ---- Non-member penalties at high authority (all countries with JE) ----
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					has_global_variable = un_founded
-					# Check authority from any member (use global estimate)
-					any_country = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						has_variable = un_authority
-						var:un_authority >= 60
-					}
+					# UN authority (single global value) is high enough to shun outsiders.
+					has_global_variable = un_authority
+					global_var:un_authority >= 60
 				}
 				# Apply pariah status: non-members face diplomatic pressure
 				if = {
@@ -479,10 +432,9 @@
 						je:je_united_nations ?= { has_modifier = un_member_modifier }
 						NOT = { has_global_variable = un_founded }
 						NOT = {
-							any_country = {
-								je:je_united_nations ?= { has_modifier = un_member_modifier }
-								has_variable = un_authority
-								var:un_authority >= 55
+							AND = {
+								has_global_variable = un_authority
+								global_var:un_authority >= 55
 							}
 						}
 					}

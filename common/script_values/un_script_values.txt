@@ -137,22 +137,25 @@ un_member_wars_count = {
 
 # ---- Per-Country Drift Component Script Values (for loc display) ----
 
+# un_authority is a single GLOBAL value, so the toward-50 drift reads the global.
 un_authority_drift_base = {
 	value = 0
 	if = {
-		limit = { var:un_authority > 55 }
+		limit = { global_var:un_authority > 55 }
 		add = -0.25
 	}
 	else_if = {
-		limit = { var:un_authority < 45 }
+		limit = { global_var:un_authority < 45 }
 		add = 0.25
 	}
 }
 
+# Only GP *members* lend the UN legitimacy (matches un_gp_with_humanitarian_regs).
 un_authority_drift_democracy = {
 	value = 0
 	every_country = {
 		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			country_rank >= rank_value:great_power
 			has_law = law_type:law_humanitarian_regulations
 		}
@@ -160,6 +163,7 @@ un_authority_drift_democracy = {
 	}
 	every_country = {
 		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			country_rank >= rank_value:great_power
 			has_law = law_type:law_limited_war
 		}
@@ -191,18 +195,12 @@ un_authority_drift_undermine = {
 	}
 }
 
+# -1 per member at war with another member. Mirrors un_member_wars_count (which
+# is membership-gated and uses has_war_with = PREV, correct in any scope) so the
+# drift is valid both in the global updater and the country-scoped loc display.
 un_authority_drift_wars = {
-	value = 0
-	every_country = {
-		limit = {
-			is_at_war = yes
-			any_country = {
-				has_war_with = ROOT
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-			}
-		}
-		add = -1
-	}
+	value = un_member_wars_count
+	multiply = -1
 }
 
 un_authority_drift_total = {
