@@ -4,16 +4,99 @@ A running log of known bugs, suspicious patterns, incomplete features, and tech-
 
 Last full review: 2026-04-24 (during Strategic Reserve System implementation).
 Last cleanup pass: 2026-05-04 (M4 verified clean and a regression audit added; M5 statistics-mod log filter landed).
+Last project-wide review: 2026-09-10 (static review without a game install: script-layer read, server/parser code review, docs-vs-tree drift, asset + test + lint sweeps). New items carry a 2026-09-10 stamp. Entries that review found already stale: M_NEW2 #4 (done by `orphaned_event_audit.py`), L2 (`je_decline_of_religion.txt` no longer exists), L5 (covered by `effect_trigger_validity_audit.py`), L1/L3 (scripts moved under `scripts/image_pipeline/` and `scripts/generators/`), L8 (`tooltip.gui:231` is now `:293`).
 
 ---
 
 ## HIGH
 
-_(no open HIGH items)_
+### H1. Overbuild trimming re-adds 0 levels: `te_construction_market_add_specified_level` reads `$ADD_LEVEL$` in owner scope (2026-09-10)
+**Files:** `common/scripted_effects/te_construction_market_build_effects.txt:62-83`; live callers `common/on_actions/extra_on_actions.txt:2390, 2430, 2450` (`overbuild_protection_on_action`).
+
+**Problem:** The helper hops to `owner = { … change_variable = { name = add_level add = $ADD_LEVEL$ } }`. Every live caller passes `ADD_LEVEL = var:lvl_tmp`, and `lvl_tmp` is only ever set on the **state** (inside `ordered_scope_state` / `random_scope_state`). Inside `owner = {}` the read resolves against the country, where the variable never exists, so `add_level` stays 0 (the `prev.has_building` branch is also false because `remove_building` already ran on the previous line). `te_construction_market_build_specified_level` is then called with `SPEC_LEVEL = 0` and the solar receiver / antimatter engine / antimatter warhead plant is never re-created: "remove one excess level per month" becomes "delete the building" once the 6-month grace elapses. The only caller shape that would work (`te_construction_market_replace_building`, country-scoped `building_level`) is dead code — its sole reference is commented out at `te_construction_market_setup_effects.txt:40`.
+
+**Fix:** Mirror the sibling helper `te_construction_market_remove_specified_level_amount` (line 104 uses `prev.$REMOVE_LEVEL$`): change line 82 to `add = prev.$ADD_LEVEL$`, then delete the dead `te_construction_market_replace_building`. Verify in-game by over-capping a solar receiver and checking the level after month 7.
+
+### H2. `remove_invalid_buildings` filters the state iterator before the company-building sweep runs (2026-09-10)
+**File:** `common/on_actions/extra_on_actions.txt:571-583`
+
+**Problem:** `every_scope_state = { remove_invalid_company_buildings_effect = yes  limit = { … has_building = building_space_program … }  remove_building = building_space_program }`. An iterator's `limit` is a property of the iterator, not a sequential statement, so it filters the states before *any* child effect runs regardless of where it sits. The 3,250-line generated company-building cleanup therefore only executes in non-capital states that hold a space program. The only other caller is `on_company_disbanded`, so orphaned company buildings left behind by a company *change* are never swept.
+
+**Fix:** Split into two `every_scope_state` blocks (one unfiltered for the company sweep, one with the space-program limit). Candidate parse-time audit: flag any iterator whose `limit` is not its first child.
+
+### H3. `update_intel_sharing_defense` removes the variable backing a permanent `add_modifier` multiplier (2026-09-10)
+**File:** `common/scripted_effects/treaty_article_effects.txt:117-129`
+
+**Problem:** `add_modifier = { name = intelligence_sharing_defense_shield_modifier multiplier = var:_best_boost }` has no duration and is followed by `remove_variable = _best_boost`. This is the exact pattern documented in `docs/guides/scripting_best_practices.md` under "Variables backing `add_modifier { multiplier = … }` must persist": on later re-evaluation the engine reads `none`, logs `Value of wrong type`, and the shield contributes nothing. The persisted copy already exists (`set_variable = { name = intel_shield_mult … }` at line 127).
+
+**Fix:** Move the `set_variable` above the `add_modifier` and use `multiplier = var:intel_shield_mult`. Candidate parse-time audit: `multiplier = var:X` followed by `remove_variable = X` in the same top-level block.
 
 ---
 
 ## MEDIUM
+
+### M6. Parser silently mis-parses `!=` / `?=`, rewrites operators on repeated keys, and collapses identical duplicates (2026-09-10)
+**File:** `paradox_file_parser.py:8, 26, 178-188, 196-198`; `mod_state.py:111-117`
+
+**Problem (verified by execution):** the operator token class is `[><=]+`, so `x != 0` parses as `x = 0` (the mod uses `!=` at `common/script_values/modified.txt:493` and `common/treaty_articles/extra_treaty_articles.txt:1472`, `?=` at `common/laws/extra_laws.txt:2896`). When a key repeats, list conversion rewrites every earlier sibling's operator with the current key's: `gdp > 1000 has_law = a has_law = b` → `gdp = 1000`. Identical duplicates are dropped: `add = 5 add = 5 add = 3` → `[5, 3]`. A vanilla file with two differing copies of a top-level key raises `AttributeError` in `merge_data` and the whole file is skipped with only a `print`. Every `/raw`, `/diff`, validation walker and audit sees the altered AST. None of these cases is covered by `test_paradox_file_parser.py`. Related: `mod_state.py:28-32` truncates loc values at an escaped `\"` (`augmentation_events.*` in `te_events_l_english.yml:59-80` read back as `\`).
+
+**Fix:** operator class `[!?<>=]+` and add `!=`/`?=`/`==` to `conditional_tokens`; keep the per-key operator during list conversion; append identical duplicates instead of overwriting; handle the list return in `parse_file(apply_directives=True)`; escape-aware loc value extraction; tests for each.
+
+### M7. A crashing post-load generator/audit never reaches the `/reload` `warnings` array (2026-09-10)
+**File:** `mod_state_server.py:7826-7827` (`_run_post_load_generators`), `:4445` (engine_only path), `:7932-8001`
+
+**Problem:** only a `regenerate()` that *returns* counts > 0 is recorded; an exception is `logger.exception`'d and dropped, so `POST /reload` answers `{"status":"reloaded"}` with no `warnings` key — the exact signal CLAUDE.md tells agents to trust before calling a change clean. File-rewriting generators also run *after* the parse, so `/raw` serves pre-generation data (and same-chain audits evaluate pre-generation loc) until a second reload, with no indication one is needed. `ModState.load_files_from_directory` parse failures go to stdout, not `/status`.
+
+**Fix:** append `{label, module, error, traceback_tail}` to `_post_load_warnings` in the `except`; expose `parse_failures` from `ModState` in `/status` and the reload body; report `generators_wrote_files` (or re-read mod + loc after the writers).
+
+### M8. Tooling only runs with every game path configured: `path_constants` resolves all five eagerly (2026-09-10)
+**File:** `path_constants.py:92-113`
+
+**Problem:** every audit CLI (`duplicate_key_audit`, `any_limit_audit`, `loc_render_audit`, `orphaned_event_audit`, `attitude_key_audit`, `kill_character_audit`, …) and 11 of 34 test files crash at import on a machine without Vic3 even though they only need `mod_path`. With dummy `VIC3_*` env vars they all run (575 tests in 0.7 s). This is also what blocks CI (M12).
+
+**Fix:** PEP 562 module-level `__getattr__` that resolves each constant on first access, keeping the current error message.
+
+### M9. Test suite is red: stale `test_pm_costs` assertion + hard `PIL` import (2026-09-10)
+**Files:** `test_pm_costs.py:119-121` vs `pm_costs.py:339`; `test_gen_prestige_icons.py:16`
+
+**Problem:** the test asserts the old `Cost at current market prices:` string while the code emits `Cost at current [Concept('concept_market_price', 'market prices')]:` — failing since the file was committed. `test_gen_prestige_icons` imports `PIL` at module scope, so `python3 -m unittest discover -p 'test_*.py'` (which otherwise works as the shared runner CLAUDE.md says doesn't exist) errors on any machine without pillow, which `requirements.txt` comments out.
+
+**Fix:** update the assertion; wrap the PIL import in `unittest.skipUnless`; document the discover command in CLAUDE.md.
+
+### M10. `scripts/format_paradox_tabs.py` is Python 3.12-only (2026-09-10)
+**File:** `scripts/format_paradox_tabs.py:59`
+
+**Problem:** `f"{'\t' * indent_depth}…"` puts a backslash inside an f-string expression, a `SyntaxError` before Python 3.12. The tool CLAUDE.md prescribes after every large edit simply crashes on 3.11. It is the only 3.12-only construct in the repo (`compileall` clean otherwise).
+
+**Fix:** hoist `tab = "\t"` out of the f-string, or declare Python ≥ 3.12 in `scripts/setup.py` / README.
+
+### M11. 724 MB of uncompressed textures, 318 MB of them unreferenced (2026-09-10)
+**Files:** `gfx/interface/icons/company_icons/historical_company_icons/backup_originals/` (53 files, 318 MB, up to 4096², referenced nowhere); `gfx/unit_illustrations/` (36 files, 147 MB); `gfx/interface/icons/building_icons/` (26, 104 MB); `production_method_icons/` (27, 61 MB); `goods_icons/` + `prestige/` (33, 76 MB); `lens_toolbar_icons/` (21, 9 MB)
+
+**Problem:** 210 of 1,062 DDS files are uncompressed RGBA (DDS header scan). `scripts/deploy.sh` rsyncs all of `gfx/`, so the backups ship to the game folder and would go to the Workshop. Working tree is 1.9 GB and the pack 1.1 GiB, so every clone pays for it. The pipeline already has a BC7 path (`scripts/image_pipeline/convert_company_icon.py`, `-f BC7_UNORM_SRGB`). (L9's four misaligned icons are confirmed still 250×256 / 256×213 / 256×134 / 256×255.)
+
+**Fix:** delete `backup_originals/` (or move it outside the deploy set); batch-convert the rest to BC7 (~4× smaller); consider `git filter-repo` or LFS for the history.
+
+### M12. No CI, and `.github/` is gitignored (2026-09-10)
+**File:** `.gitignore:5`
+
+**Problem:** the ignore line means no workflow can ever be committed. The game-independent checks — 575 unit tests (with dummy `VIC3_*` env vars), `ruff --select F`, `compileall`, `format_paradox_tabs.py --check`, loc BOM/UTF-8/duplicate-key check, the DDS header scan — all run without the game.
+
+**Fix:** drop the ignore line and add a workflow running those; depends on M8/M9/M10.
+
+### M13. Docs have drifted from the tree: paths, counts, generator rosters (2026-09-10)
+**Files:** `README.md`, `CLAUDE.md`, `docs/README.md`, `docs/guides/python_tools.md`, `docs/auto_generated_files.md`, `docs/guides/scripting_best_practices.md`, `.claude/skills/*/SKILL.md`
+
+**Problem:** `README.md` still uses the pre-reorganisation flat `docs/<file>` paths (10 refs) and names files that don't exist (`todos.md`, `wsl_migration_plan.md`, `wsl_cutover_checklist.md`, `tech_tree_balance_review.md`, `events/lgbtq_events.txt`, `events/feminist_events.txt`, `events/secular_events.txt`, `events/environmental_events.txt`, `common/political_lobbies/01_extended_lobbies.txt` — the lobbies feature was reverted per `docs/README.md:144` — `common/modifier_type_definitions/extra_modifier_types.txt`, `sim_heir_education.py`). `CLAUDE.md:9,57,134` and `scripts/deploy.sh:56-57` reference `descriptor.mod` / `thumbnail.png`; neither exists. CLAUDE.md lists 15 post-load generators and 5 audits vs 26 / 14 in `POST_LOAD_GENERATORS`; says "17+" test files (34). `docs/guides/python_tools.md` omits `/logs/*`, `/help`, `/vocabularies`, `/modifier-patterns`, `POST /validate/registries` and ten simple list routes, references `gen_ministry_events.py` / `gen_building_transfer.py` (neither exists), and quotes `audits_only` as slower than a full reload. `docs/README.md:83` counts (84/820/337) vs the file header (96/895/380), and it omits 10 tracked `docs/engine/*_report.md`. `docs/auto_generated_files.md` has no row for `gen_law_consistency` or `bom_normalizer`. `scripting_best_practices.md:57` claims `set_variable` has no `months` field, but the mod's 36 `months = election_event_cooldown_months` sites are the vanilla idiom (the script value is vanilla). Skills, `docs/guides/vanilla_patch_runbook.md:114` and `scripts/install_nightly_audit_task.ps1:25` hardcode `/home/jakef/…`.
+
+**Fix:** one doc sweep; regenerate the roster lists from `POST_LOAD_GENERATORS` rather than hand-maintaining them.
+
+### M14. `mod_known_noise.md` anchors are validated with a home-grown slug rule, not GitHub's (2026-09-10)
+**Files:** `game_log_reader.py:408, 520, 482-485`; `docs/audits/mod_known_noise.md:34, 107, 117`
+
+**Problem:** the validator slugs with `[^a-z0-9]+ → -`; GitHub keeps `_` and deletes `.` / `:` / backticks. Three `tracked:` anchors (`#l8-mod-tooltip-gui-…`, `#l15-…-replace-principle-group-…`, `#l16-…-1-13-9`) pass validation but don't resolve on GitHub. The registry cache key ignores this file's mtime, so fixing a heading here doesn't clear a stale warning until the noise file is touched.
+
+**Fix:** GitHub rule (`re.sub(r"[^\w\- ]", "", h.lower()).replace(" ", "-")`), include both files in the cache key, fix the three anchors.
 
 ### M_NEW2. Deferred event-tooling categories (#2-#4)
 **Tooling:** `event_magnitude_audit.py` covers category #1 of a four-part event-quality plan (work landed 2026-05-04, see `docs/engine/event_magnitude_report.md`). Three categories still TODO:
@@ -27,6 +110,21 @@ Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` su
 ---
 
 ## LOW
+
+### L18. Pulse-wiring leftovers (2026-09-10)
+`te_update_tourism_modifier` is refreshed from both `on_monthly_pulse_state` (`common/on_actions/extra_on_actions.txt:103` / `:1178`) and `on_yearly_pulse_state` (`:182` / `:192`); `te_modifier_update_on_technology_on_action` (`:2238`) and `te_modifier_update_on_law_on_action` (`:2249`) have empty bodies but are still dispatched from `on_acquired_technology` (`:264`) and `on_law_activated` (`:296`); `te_construction_market_replace_building` is dead (see H1). Harmless; delete for clarity.
+
+### L19. Stray tracked files from the 2026-05-30 import commit (2026-09-10)
+Empty `test_format.txt` at the root; `scripts/issue92_retrofit/` (one-off retrofit scripts for a closed issue, referenced nowhere); `docs/event_magnitude_report.md` and `docs/kill_character_audit.md` (stale copies of the `docs/engine/` reports — no script writes to the `docs/` root; `kill_character_audit.py:306` also prints the wrong `scripts/analysis/` path in the report header); `.claude/skills/add-formable-country-workspace/` (22 skill-eval artefacts: grading/timing JSON, delta outputs).
+
+### L20. Python lint findings, `ruff --select F` (104 total) (2026-09-10)
+7 × F821 `Image` undefined in `scripts/image_pipeline/convert_event_image.py:105` and `create_event_video.py:126-221` (string annotations under `from __future__ import annotations`, harmless at runtime; the `# noqa: local import` directives are malformed); F811 duplicate `get_event_image` in `scripts/image_pipeline/event_image_prompts.py:2165` / `:2248`; F601 duplicate dict key `"Battle"` in `localization_accessor_audit.py:260` / `:316`; F402 loop variables shadowing `import time` (`mod_state_server.py:2242`) and `dataclasses.field` (`event_magnitude_audit.py:250`); 14 unused locals; 33 unused imports; 46 placeholder-less f-strings. Add a `ruff.toml` with `select = ["F"]` and run it in CI (M12).
+
+### L21. Server hardening nits (2026-09-10)
+`POST /reload` has no Origin/Host check, so any web page can trigger a 90 s reload that rewrites tracked files; `/event-balance?file=` accepts absolute and `..` paths (`mod_state_server.py:3565-3568`); every `KeyError` becomes a 404 (`:4422-4426`) and several handlers return `{"error": …}` with HTTP 200, so `curl -f` readiness checks pass on failure; `mod_state_client.py:38-46` reports any 4xx/5xx as "server not running"; `game_log_reader.py:71` `virtualfilesystem_physfs.cpp:` prefix mapping is dead code.
+
+### L22. Packaging nits (2026-09-10)
+`thumbnail.png` missing though listed in the deploy set; `.metadata/metadata.json` has empty `supported_game_version` / `id`, no tags, `version` still 1.0.0; no `LICENSE`; `gui/construction_panel.gui`, `gui/production_methods.gui`, `gui/journal_entry_widgets/strategic_reserve_widget.gui` lack the BOM the other 355 script files carry; `localization/english/te_concepts_l_english.yml:114` (`GDPPERCAPITA`) opens `#bold` without a closing `#!`.
 
 ### L1. Bare `except Exception:` in Python generators
 **File:** [convert_event_image.py#L78](../convert_event_image.py#L78) (and L185, L190), [generate_event_images.py](../generate_event_images.py)
