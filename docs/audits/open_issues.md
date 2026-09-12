@@ -10,26 +10,7 @@ Last project-wide review: 2026-09-10 (static review without a game install: scri
 
 ## HIGH
 
-### H1. Overbuild trimming re-adds 0 levels: `te_construction_market_add_specified_level` reads `$ADD_LEVEL$` in owner scope (2026-09-10)
-**Files:** `common/scripted_effects/te_construction_market_build_effects.txt:62-83`; live callers `common/on_actions/extra_on_actions.txt:2390, 2430, 2450` (`overbuild_protection_on_action`).
-
-**Problem:** The helper hops to `owner = { … change_variable = { name = add_level add = $ADD_LEVEL$ } }`. Every live caller passes `ADD_LEVEL = var:lvl_tmp`, and `lvl_tmp` is only ever set on the **state** (inside `ordered_scope_state` / `random_scope_state`). Inside `owner = {}` the read resolves against the country, where the variable never exists, so `add_level` stays 0 (the `prev.has_building` branch is also false because `remove_building` already ran on the previous line). `te_construction_market_build_specified_level` is then called with `SPEC_LEVEL = 0` and the solar receiver / antimatter engine / antimatter warhead plant is never re-created: "remove one excess level per month" becomes "delete the building" once the 6-month grace elapses. The only caller shape that would work (`te_construction_market_replace_building`, country-scoped `building_level`) is dead code — its sole reference is commented out at `te_construction_market_setup_effects.txt:40`.
-
-**Fix:** Mirror the sibling helper `te_construction_market_remove_specified_level_amount` (line 104 uses `prev.$REMOVE_LEVEL$`): change line 82 to `add = prev.$ADD_LEVEL$`, then delete the dead `te_construction_market_replace_building`. Verify in-game by over-capping a solar receiver and checking the level after month 7.
-
-### H2. `remove_invalid_buildings` filters the state iterator before the company-building sweep runs (2026-09-10)
-**File:** `common/on_actions/extra_on_actions.txt:571-583`
-
-**Problem:** `every_scope_state = { remove_invalid_company_buildings_effect = yes  limit = { … has_building = building_space_program … }  remove_building = building_space_program }`. An iterator's `limit` is a property of the iterator, not a sequential statement, so it filters the states before *any* child effect runs regardless of where it sits. The 3,250-line generated company-building cleanup therefore only executes in non-capital states that hold a space program. The only other caller is `on_company_disbanded`, so orphaned company buildings left behind by a company *change* are never swept.
-
-**Fix:** Split into two `every_scope_state` blocks (one unfiltered for the company sweep, one with the space-program limit). Candidate parse-time audit: flag any iterator whose `limit` is not its first child.
-
-### H3. `update_intel_sharing_defense` removes the variable backing a permanent `add_modifier` multiplier (2026-09-10)
-**File:** `common/scripted_effects/treaty_article_effects.txt:117-129`
-
-**Problem:** `add_modifier = { name = intelligence_sharing_defense_shield_modifier multiplier = var:_best_boost }` has no duration and is followed by `remove_variable = _best_boost`. This is the exact pattern documented in `docs/guides/scripting_best_practices.md` under "Variables backing `add_modifier { multiplier = … }` must persist": on later re-evaluation the engine reads `none`, logs `Value of wrong type`, and the shield contributes nothing. The persisted copy already exists (`set_variable = { name = intel_shield_mult … }` at line 127).
-
-**Fix:** Move the `set_variable` above the `add_modifier` and use `multiplier = var:intel_shield_mult`. Candidate parse-time audit: `multiplier = var:X` followed by `remove_variable = X` in the same top-level block.
+_(no open HIGH items — H1–H3 from the 2026-09-10 review were fixed 2026-09-12)_
 
 ---
 

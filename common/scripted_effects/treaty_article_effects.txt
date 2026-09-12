@@ -114,16 +114,22 @@ update_intel_sharing_defense = {
 			limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
 			remove_modifier = intelligence_sharing_defense_shield_modifier
 		}
+
+		# Persist the multiplier BEFORE add_modifier and point the modifier at the
+		# persistent copy: the modifier has no duration, so the engine re-reads
+		# `multiplier` on later ticks and the backing variable must outlive this
+		# effect (scripting_best_practices.md, "Variables backing add_modifier
+		# multiplier must persist"). `_best_boost` is a scratch var removed below.
+		# intel_shield_mult is also what partners read next year to strip our
+		# shield out of our base defense.
+		set_variable = { name = intel_shield_mult value = var:_best_boost }
 		if = {
-			limit = { var:_best_boost > 0 }
+			limit = { var:intel_shield_mult > 0 }
 			add_modifier = {
 				name = intelligence_sharing_defense_shield_modifier
-				multiplier = var:_best_boost
+				multiplier = var:intel_shield_mult
 			}
 		}
-
-		# Store current shield multiplier for next year's base defense calculation
-		set_variable = { name = intel_shield_mult value = var:_best_boost }
 
 		remove_variable = _own_def
 		remove_variable = _best_boost

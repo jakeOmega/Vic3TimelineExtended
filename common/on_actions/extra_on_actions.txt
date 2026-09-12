@@ -570,8 +570,14 @@ ministry_of_thought_control_on_action = {
 
 remove_invalid_buildings = {
 	effect = {
+		# Two separate iterations on purpose: an iterator's `limit` filters the
+		# whole iteration no matter where it sits in the block, so a single
+		# every_scope_state with the space-program limit would gate the company
+		# sweep as well (it did, until 2026-09-12).
 		every_scope_state = {
 			remove_invalid_company_buildings_effect = yes
+		}
+		every_scope_state = {
 			limit = {
 				AND = {
 					NOT = { owner.market_capital = THIS }

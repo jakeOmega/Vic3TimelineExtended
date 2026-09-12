@@ -37,7 +37,7 @@
 # 				}
 # 			}
 # 		}
-# 		te_construction_market_replace_building = {
+# 		te_construction_market_replace_building = {  # helper deleted 2026-09-12 (dead); re-create with a state-scoped ADD_LEVEL if revived
 # 			OLD_TYPE = te_construction_market_site
 # 			NEW_TYPE = building_construction_sector
 # 		}
