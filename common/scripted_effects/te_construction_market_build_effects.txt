@@ -1,23 +1,4 @@
 ﻿
-te_construction_market_replace_building = {
-	every_scope_building = {
-		limit = { is_building_type = $OLD_TYPE$ }
-		owner = {
-			set_variable = {
-				name = building_level
-				value = prev.level
-			}
-		}
-		state = {
-			te_construction_market_add_specified_level = {
-				ADD_LEVEL = var:building_level
-				SPEC_TYPE = $NEW_TYPE$
-			}
-			remove_building = $OLD_TYPE$
-		}
-	}
-}
-
 # Set the building to exactly SPEC_LEVEL.
 # - If absent: create at SPEC_LEVEL.
 # - If present at the right level: do nothing (avoid destroy/recreate
@@ -59,6 +40,11 @@ te_construction_market_set_specified_level = {
 	}
 }
 
+# Add ADD_LEVEL levels of SPEC_TYPE on top of whatever the state already has.
+# Call from STATE scope. ADD_LEVEL is a state-relative value reference (the
+# live callers pass `var:lvl_tmp`, a state variable): the arithmetic below runs
+# inside `owner = { }`, so the helper prefixes `prev.` itself to hop back to the
+# state. Pass a bare `var:X`, never `prev.var:X` / `owner.var:X`.
 te_construction_market_add_specified_level = {
 	owner = {
 		set_variable = {
@@ -79,7 +65,7 @@ te_construction_market_add_specified_level = {
 		}
 		change_variable = {
 			name = add_level
-			add = $ADD_LEVEL$
+			add = prev.$ADD_LEVEL$
 		}
 	}
 	te_construction_market_build_specified_level = {

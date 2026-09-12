@@ -4,16 +4,38 @@ A running log of known bugs, suspicious patterns, incomplete features, and tech-
 
 Last full review: 2026-04-24 (during Strategic Reserve System implementation).
 Last cleanup pass: 2026-05-04 (M4 verified clean and a regression audit added; M5 statistics-mod log filter landed).
+Last project-wide review: 2026-09-10 (static review without a game install: script-layer read, server/parser code review, docs-vs-tree drift, asset + test + lint sweeps). New items carry a 2026-09-10 stamp. Entries that review found already stale: M_NEW2 #4 (done by `orphaned_event_audit.py`), L2 (`je_decline_of_religion.txt` no longer exists), L5 (covered by `effect_trigger_validity_audit.py`), L1/L3 (scripts moved under `scripts/image_pipeline/` and `scripts/generators/`), L8 (`tooltip.gui:231` is now `:293`).
 
 ---
 
 ## HIGH
 
-_(no open HIGH items)_
+_(no open HIGH items — H1–H3 from the 2026-09-10 review were fixed 2026-09-12)_
 
 ---
 
 ## MEDIUM
+
+### Ticketed 2026-09-12 — items M6–M14 / L18–L22 from the 2026-09-10 review moved to GitHub issues
+Detail lives on the issues; this tracker only keeps the pointer so the review header stays meaningful.
+
+| Review item | Issue |
+|---|---|
+| M6 parser: `!=`/`?=` dropped, operator overwrite on repeated keys, duplicate collapse, dup top-level key aborts file | #241 |
+| M7 `/reload`: crashing generator never reaches `warnings`; writers run after the parse | #242 |
+| M8 `path_constants` eager resolution blocks audits/tests without the game | #243 |
+| M9 red tests: stale `test_pm_costs` assertion, unconditional PIL import | #244 |
+| M10 `format_paradox_tabs.py` is Python 3.12-only | #245 |
+| M11 724 MB of uncompressed textures, 318 MB unreferenced `backup_originals/` | #246 |
+| M12 no CI, `.github/` gitignored | #247 |
+| M13 docs drift sweep | #248 |
+| M14 anchor slug rule / registry cache key | #249 |
+| Suggestion: iterator-`limit` and multiplier-variable parse-time audits | #250 |
+| L18 pulse-wiring leftovers | #251 |
+| L19 stray tracked files from the import commit | #252 |
+| L20 `ruff --select F` findings | #253 |
+| L21 server hardening nits | #254 |
+| L22 packaging nits | #255 |
 
 ### M_NEW2. Deferred event-tooling categories (#2-#4)
 **Tooling:** `event_magnitude_audit.py` covers category #1 of a four-part event-quality plan (work landed 2026-05-04, see `docs/engine/event_magnitude_report.md`). Three categories still TODO:
