@@ -36,7 +36,7 @@
 	}
 
 	mandate_progress = power_bloc_mandate_progress_diplomatic_identity
-	
+
 	on_created = {  }
 
 	cohesion = {
@@ -45,7 +45,7 @@
 			multiply = define:NPowerBlocs|COHESION_TARGET_MAX
 			desc = POWER_BLOC_COHESION_BASE
 		}
-	
+
 		add = {
 			add = legitimacy
 			divide = 100 # legitimacy max value
@@ -53,7 +53,7 @@
 			multiply = 0.7
 			desc = POWER_BLOC_COHESION_LEGITIMACY_DIPLOMATIC
 		}
-		
+
 		add = {
 			if = {
 				limit = { exists = scope:with_country }
@@ -89,30 +89,30 @@
 			desc = POWER_BLOC_COHESION_LEADER_INFAMY
 		}
 	}
-	
+
 	ai_weight = {
 		value = 100
-		
+
 		if = {
 			limit = {
 				ig:ig_intelligentsia ?= { is_in_government = yes }
 			}
 			add = 100
-		}		
+		}
 
 		if = { # The forces of reaction
-			limit = { 
-				has_law = law_type:law_monarchy 
+			limit = {
+				has_law = law_type:law_monarchy
 				OR = {
 					has_law = law_type:law_autocracy
 					has_law = law_type:law_oligarchy
 				}
 			}
 			multiply = 0.25
-		}		
-		
+		}
+
 		if = { # The forces of revolution
-			limit = { 
+			limit = {
 				has_radical_leftist_government = yes
 			}
 			add = 200
@@ -124,9 +124,9 @@
 					has_strategy = ai_strategy_maintain_power_balance
 					has_strategy = ai_strategy_world_revolution
 					has_strategy = ai_strategy_anti_imperialism
-				}			
-			}	
+				}
+			}
 			multiply = 2.0
-		}		
+		}
 	}
 }

@@ -3,16 +3,16 @@
 
 	group = je_group_foreign_affairs
 
-    is_shown_when_inactive = {
+	is_shown_when_inactive = {
 		has_game_rule = nuclear_weapons_enabled
 		has_technology_researched = nuclear_weapons
 	}
 
-    scripted_button = increase_funding_nuclear_program
-    scripted_button = decrease_funding_nuclear_program
+	scripted_button = increase_funding_nuclear_program
+	scripted_button = decrease_funding_nuclear_program
 
-    current_value = {
-        value = root.var:nuclear_weapon_program_progress
+	current_value = {
+		value = root.var:nuclear_weapon_program_progress
 	}
 
 	goal_add_value = {
@@ -21,55 +21,55 @@
 
 	progressbar = yes
 
-    possible = {
-        OR = {
-            country_rank >= rank_value:great_power
-            AND = {
-                country_rank = rank_value:major_power
-                has_technology_researched = ICBMs
-            }
-            modifier:country_receiving_nuclear_program_aid_bool = yes 
-        }
-        NOT = {
-            modifier:country_nuclear_disarmament_bool = yes
-        }
-    }
+	possible = {
+		OR = {
+			country_rank >= rank_value:great_power
+			AND = {
+				country_rank = rank_value:major_power
+				has_technology_researched = ICBMs
+			}
+			modifier:country_receiving_nuclear_program_aid_bool = yes
+		}
+		NOT = {
+			modifier:country_nuclear_disarmament_bool = yes
+		}
+	}
 
-    immediate = {
-        set_variable = {
-            name = nuclear_weapon_stockpile
-            value = 0
-        }
-        set_variable = {
-            name = nuclear_weapon_program_progress
-            value = 0
-        }
-        set_variable = {
-            name = nuclear_weapons_program_first_nuke_done
-            value = 0
-        }
-        set_variable = {
-            name = nuclear_weapons_program_funding
-            value = 0
-        }
-    }
+	immediate = {
+		set_variable = {
+			name = nuclear_weapon_stockpile
+			value = 0
+		}
+		set_variable = {
+			name = nuclear_weapon_program_progress
+			value = 0
+		}
+		set_variable = {
+			name = nuclear_weapons_program_first_nuke_done
+			value = 0
+		}
+		set_variable = {
+			name = nuclear_weapons_program_funding
+			value = 0
+		}
+	}
 
-    complete = {
+	complete = {
 		always = no
 	}
 
 	on_complete = {
-        if = {
-            limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
-            custom_tooltip = {
-                text = "ADDITIONAL_NUKE_CREATED"
-            }
-        }
-        else = {
-            custom_tooltip = {
-                text = "FIRST_NUKE_CREATED"
-            }
-        }
+		if = {
+			limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+			custom_tooltip = {
+				text = "ADDITIONAL_NUKE_CREATED"
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = "FIRST_NUKE_CREATED"
+			}
+		}
 	}
 
 	on_weekly_pulse = {
@@ -77,92 +77,92 @@
 			# Update global nuclear powers leaderboard
 			update_nuclear_powers_ranking = yes
 
-            if = {
-                limit = {
-                    modifier:country_nuclear_disarmament_bool = yes
-                }
-                set_variable = {
-                    name = nuclear_weapon_stockpile
-                    value = 0
-                }
-                set_variable = {
-                    name = nuclear_weapon_program_progress
-                    value = 0
-                }
-                remove_modifier = nuclear_power
-            }
-            # Self-heal: the first-nuke branch below only grants nuclear_power
-            # on the initial build (gated on first_nuke_done = 0), so a
-            # disarmed-and-rebuilt country would otherwise be nuclear-armed
-            # without the modifier.
-            if = {
-                limit = {
-                    NOT = { modifier:country_nuclear_disarmament_bool = yes }
-                    var:nuclear_weapon_stockpile >= 1
-                    NOT = { has_modifier = nuclear_power }
-                }
-                add_modifier = { name = nuclear_power }
-            }
-            if = {
-                limit = {
-                    modifier:country_nuclear_program_pause_bool = yes
-                }
-                set_variable = {
-                    name = nuclear_weapons_program_funding
-                    value = 0
-                }
-                if = {
-                    limit = { has_modifier = nuclear_weapon_program_funding }
-                    remove_modifier = nuclear_weapon_program_funding
-                }
-            }
+			if = {
+				limit = {
+					modifier:country_nuclear_disarmament_bool = yes
+				}
+				set_variable = {
+					name = nuclear_weapon_stockpile
+					value = 0
+				}
+				set_variable = {
+					name = nuclear_weapon_program_progress
+					value = 0
+				}
+				remove_modifier = nuclear_power
+			}
+			# Self-heal: the first-nuke branch below only grants nuclear_power
+			# on the initial build (gated on first_nuke_done = 0), so a
+			# disarmed-and-rebuilt country would otherwise be nuclear-armed
+			# without the modifier.
+			if = {
+				limit = {
+					NOT = { modifier:country_nuclear_disarmament_bool = yes }
+					var:nuclear_weapon_stockpile >= 1
+					NOT = { has_modifier = nuclear_power }
+				}
+				add_modifier = { name = nuclear_power }
+			}
+			if = {
+				limit = {
+					modifier:country_nuclear_program_pause_bool = yes
+				}
+				set_variable = {
+					name = nuclear_weapons_program_funding
+					value = 0
+				}
+				if = {
+					limit = { has_modifier = nuclear_weapon_program_funding }
+					remove_modifier = nuclear_weapon_program_funding
+				}
+			}
 			change_variable = {
 				name = nuclear_weapon_program_progress
-                add = {
-                    value = nuclear_weapon_program_monthly_progress
-                    divide = 4
-                    multiply = {
-                        value = 1
-                        add = modifier:country_nuclear_program_progress_mult
-                    }
-                }
+				add = {
+					value = nuclear_weapon_program_monthly_progress
+					divide = 4
+					multiply = {
+						value = 1
+						add = modifier:country_nuclear_program_progress_mult
+					}
+				}
 			}
-            while = {
-                limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
-                change_variable = {
-                    name = nuclear_weapon_program_progress
-                    subtract = nuclear_weapon_program_goal_value
-                }
-                change_variable = {
-                    name = nuclear_weapon_stockpile
-                    add = 1
-                }
-                if = {
-                    limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
-                    set_variable = {
-                        name = nuclear_weapons_program_first_nuke_done
-                        value = 1
-                    }
-                    change_variable = {
-                        name = nuclear_weapon_program_progress
-                        multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
-                    }
-                    # Track whether this is the first nuclear power in the world
-                    if = {
-                        limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
-                        set_variable = { name = is_world_first_nuclear_power value = yes }
-                    }
-                    set_global_variable = { name = world_first_nuclear_weapon value = yes }
-                    trigger_event = { id = nuclear_weapon_events.10 }
-                    save_scope_as = first_nuke_country
-                    every_country = {
-                        limit = {
-                            NOT = { THIS = scope:first_nuke_country }
-                        }
-                        trigger_event = { id = nuclear_weapon_events.9 days = 14 }
-                    }
-                }
-            }
+			while = {
+				limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
+				change_variable = {
+					name = nuclear_weapon_program_progress
+					subtract = nuclear_weapon_program_goal_value
+				}
+				change_variable = {
+					name = nuclear_weapon_stockpile
+					add = 1
+				}
+				if = {
+					limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+					set_variable = {
+						name = nuclear_weapons_program_first_nuke_done
+						value = 1
+					}
+					change_variable = {
+						name = nuclear_weapon_program_progress
+						multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+					}
+					# Track whether this is the first nuclear power in the world
+					if = {
+						limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
+						set_variable = { name = is_world_first_nuclear_power value = yes }
+					}
+					set_global_variable = { name = world_first_nuclear_weapon value = yes }
+					trigger_event = { id = nuclear_weapon_events.10 }
+					save_scope_as = first_nuke_country
+					every_country = {
+						limit = {
+							NOT = { THIS = scope:first_nuke_country }
+						}
+						trigger_event = { id = nuclear_weapon_events.9 days = 14 }
+					}
+				}
+			}
 
 			# ---- Development events (only during first nuke, with active funding) ----
 			if = {
@@ -252,262 +252,262 @@
 		}
 	}
 	should_be_pinned_by_default_uninvolved_or_context = yes
-    can_revolution_inherit = yes
-    can_deactivate = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
 }
 
 je_state_collapse = {
-    icon = "gfx/interface/icons/event_icons/event_skull.dds"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 
-    group = je_group_internal_affairs
+	group = je_group_internal_affairs
 
-    is_shown_when_inactive = {
-        average_sol < 5
-        NOT = { is_country_type = decentralized }
-    }
+	is_shown_when_inactive = {
+		average_sol < 5
+		NOT = { is_country_type = decentralized }
+	}
 
-    possible = {
-        average_sol < 4
-    }
+	possible = {
+		average_sol < 4
+	}
 
-    immediate = {
-        set_variable = {
-            name = state_collapse_progress
-            value = 0
-        }
-    }
+	immediate = {
+		set_variable = {
+			name = state_collapse_progress
+			value = 0
+		}
+	}
 
-    complete = {
-        ROOT.var:state_collapse_progress >= 52
-    }
+	complete = {
+		ROOT.var:state_collapse_progress >= 52
+	}
 
-    current_value = {
-        value = root.var:state_collapse_progress
-    }
+	current_value = {
+		value = root.var:state_collapse_progress
+	}
 
-    goal_add_value = {
+	goal_add_value = {
 		value = 52
 	}
 
-    on_weekly_pulse = {
-        effect = {
-            change_variable = {
-                name = state_collapse_progress
-                add = 1
-            }
-            if = {
-                limit = { var:state_collapse_progress >= 52 }
-                set_variable = {
-                    name = state_collapse_progress
-                    value = 0
-                }
-                add_modifier = {
-                    name = failed_state_modifier
-                    days = long_modifier_time
-                    is_decaying = yes
-                }
-                every_scope_state = {
-                    state_collapse_remove_infrastructure = yes
-                }
-                reset_all_institutions_and_ministries = yes
-            }
-        }
+	on_weekly_pulse = {
+		effect = {
+			change_variable = {
+				name = state_collapse_progress
+				add = 1
+			}
+			if = {
+				limit = { var:state_collapse_progress >= 52 }
+				set_variable = {
+					name = state_collapse_progress
+					value = 0
+				}
+				add_modifier = {
+					name = failed_state_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				every_scope_state = {
+					state_collapse_remove_infrastructure = yes
+				}
+				reset_all_institutions_and_ministries = yes
+			}
+		}
 	}
-    weight = 10
-    should_be_pinned_by_default_uninvolved_or_context = yes
+	weight = 10
+	should_be_pinned_by_default_uninvolved_or_context = yes
 
-    progressbar = yes
+	progressbar = yes
 
-    can_deactivate = yes
+	can_deactivate = yes
 }
 
 je_create_new_religion = {
-    icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
-    group = je_group_internal_affairs
+	group = je_group_internal_affairs
 
-    is_shown_when_inactive = {
-        NOT = { country_has_any_custom_religion = yes }
-        has_game_rule = custom_religions_allowed
-    }
+	is_shown_when_inactive = {
+		NOT = { country_has_any_custom_religion = yes }
+		has_game_rule = custom_religions_allowed
+	}
 
-    scripted_button = select_ideology_traditionalist_economy
-    scripted_button = deselect_ideology_traditionalist_economy
-    scripted_button = select_ideology_free_market_economy
-    scripted_button = deselect_ideology_free_market_economy
-    scripted_button = select_ideology_socialist_economy
-    scripted_button = deselect_ideology_socialist_economy
-    scripted_button = select_ideology_social_democratic_economy
-    scripted_button = deselect_ideology_social_democratic_economy
-    scripted_button = select_ideology_imperial_cult_economy
-    scripted_button = deselect_ideology_imperial_cult_economy
-    scripted_button = select_ideology_theocratic_economy
-    scripted_button = deselect_ideology_theocratic_economy
-    scripted_button = select_ideology_traditionalist_society
-    scripted_button = deselect_ideology_traditionalist_society
-    scripted_button = select_ideology_inclusive_society
-    scripted_button = deselect_ideology_inclusive_society
-    scripted_button = select_ideology_totalitarian_society
-    scripted_button = deselect_ideology_totalitarian_society
-    scripted_button = select_ideology_meritocratic_society
-    scripted_button = deselect_ideology_meritocratic_society
-    scripted_button = select_ideology_imperial_cult_society
-    scripted_button = deselect_ideology_imperial_cult_society
-    scripted_button = select_ideology_theocratic_society
-    scripted_button = deselect_ideology_theocratic_society
-    scripted_button = select_ideology_aristocratic_governance
-    scripted_button = deselect_ideology_aristocratic_governance
-    scripted_button = select_ideology_technocratic_governance
-    scripted_button = deselect_ideology_technocratic_governance
-    scripted_button = select_ideology_republican_governance
-    scripted_button = deselect_ideology_republican_governance
-    scripted_button = select_ideology_corporate_governance
-    scripted_button = deselect_ideology_corporate_governance
-    scripted_button = select_ideology_imperial_cult_governance
-    scripted_button = deselect_ideology_imperial_cult_governance
-    scripted_button = select_ideology_theocratic_governance
-    scripted_button = deselect_ideology_theocratic_governance 
-    scripted_button = select_ideology_pacifist_outlook
-    scripted_button = deselect_ideology_pacifist_outlook
-    scripted_button = select_ideology_militarist_outlook
-    scripted_button = deselect_ideology_militarist_outlook
-    scripted_button = select_ideology_isolationist_outlook
-    scripted_button = deselect_ideology_isolationist_outlook
-    scripted_button = select_ideology_exploitative_outlook
-    scripted_button = deselect_ideology_exploitative_outlook
-    scripted_button = select_ideology_imperialist_outlook
-    scripted_button = deselect_ideology_imperialist_outlook
-    scripted_button = select_ideology_theocratic_outlook
-    scripted_button = deselect_ideology_theocratic_outlook
-    scripted_button = select_trait_traditionalist_loyal
-    scripted_button = deselect_trait_traditionalist_loyal
-    scripted_button = select_trait_market_liberal_loyal
-    scripted_button = deselect_trait_market_liberal_loyal
-    scripted_button = select_trait_social_democrat_loyal
-    scripted_button = deselect_trait_social_democrat_loyal
-    scripted_button = select_trait_totalitarian_loyal
-    scripted_button = deselect_trait_totalitarian_loyal
-    scripted_button = select_trait_imperial_cult_loyal
-    scripted_button = deselect_trait_imperial_cult_loyal
-    scripted_button = select_trait_theocratic_loyal
-    scripted_button = deselect_trait_theocratic_loyal
-    scripted_button = select_trait_traditionalist_happy
-    scripted_button = deselect_trait_traditionalist_happy
-    scripted_button = select_trait_market_liberal_happy
-    scripted_button = deselect_trait_market_liberal_happy
-    scripted_button = select_trait_social_democrat_happy
-    scripted_button = deselect_trait_social_democrat_happy
-    scripted_button = select_trait_totalitarian_happy
-    scripted_button = deselect_trait_totalitarian_happy
-    scripted_button = select_trait_imperial_cult_happy
-    scripted_button = deselect_trait_imperial_cult_happy
-    scripted_button = select_trait_theocratic_happy
-    scripted_button = deselect_trait_theocratic_happy
-    scripted_button = select_trait_traditionalist_unhappy
-    scripted_button = deselect_trait_traditionalist_unhappy
-    scripted_button = select_trait_market_liberal_unhappy
-    scripted_button = deselect_trait_market_liberal_unhappy
-    scripted_button = select_trait_social_democrat_unhappy
-    scripted_button = deselect_trait_social_democrat_unhappy
-    scripted_button = select_trait_totalitarian_unhappy
-    scripted_button = deselect_trait_totalitarian_unhappy
-    scripted_button = select_trait_imperial_cult_unhappy
-    scripted_button = deselect_trait_imperial_cult_unhappy
-    scripted_button = select_trait_theocratic_unhappy
-    scripted_button = deselect_trait_theocratic_unhappy
-    scripted_button = select_name_a
-    scripted_button = deselect_name_a
-    scripted_button = select_name_b
-    scripted_button = deselect_name_b
-    scripted_button = select_name_c
-    scripted_button = deselect_name_c
-    scripted_button = select_name_d
-    scripted_button = deselect_name_d
-    scripted_button = select_name_e
-    scripted_button = deselect_name_e
-    scripted_button = select_name_f
-    scripted_button = deselect_name_f
-    scripted_button = select_name_g
-    scripted_button = deselect_name_g
-    scripted_button = select_name_h
-    scripted_button = deselect_name_h
-    scripted_button = select_name_i
-    scripted_button = deselect_name_i
-    scripted_button = select_name_j
-    scripted_button = deselect_name_j
-    scripted_button = select_name_k
-    scripted_button = deselect_name_k
-    scripted_button = select_name_l
-    scripted_button = deselect_name_l
-    scripted_button = select_name_m
-    scripted_button = deselect_name_m
-    scripted_button = select_name_n
-    scripted_button = deselect_name_n
-    scripted_button = select_name_o
-    scripted_button = deselect_name_o
-    scripted_button = select_name_p
-    scripted_button = deselect_name_p
-    scripted_button = select_name_q
-    scripted_button = deselect_name_q
-    scripted_button = select_name_r
-    scripted_button = deselect_name_r
-    scripted_button = select_name_s
-    scripted_button = deselect_name_s
-    scripted_button = select_name_t
-    scripted_button = deselect_name_t
-    scripted_button = select_christian
-    scripted_button = deselect_christian
-    scripted_button = select_muslim
-    scripted_button = deselect_muslim
-    scripted_button = select_judaism
-    scripted_button = deselect_judaism
-    scripted_button = select_eastern
-    scripted_button = deselect_eastern
-    scripted_button = select_animist
-    scripted_button = deselect_animist
-    scripted_button = select_buddhist
-    scripted_button = deselect_buddhist
-    scripted_button = select_custom
-    scripted_button = deselect_custom
-    scripted_button = custom_religion_back
-    scripted_button = custom_religion_next
-    scripted_button = create_new_religion
+	scripted_button = select_ideology_traditionalist_economy
+	scripted_button = deselect_ideology_traditionalist_economy
+	scripted_button = select_ideology_free_market_economy
+	scripted_button = deselect_ideology_free_market_economy
+	scripted_button = select_ideology_socialist_economy
+	scripted_button = deselect_ideology_socialist_economy
+	scripted_button = select_ideology_social_democratic_economy
+	scripted_button = deselect_ideology_social_democratic_economy
+	scripted_button = select_ideology_imperial_cult_economy
+	scripted_button = deselect_ideology_imperial_cult_economy
+	scripted_button = select_ideology_theocratic_economy
+	scripted_button = deselect_ideology_theocratic_economy
+	scripted_button = select_ideology_traditionalist_society
+	scripted_button = deselect_ideology_traditionalist_society
+	scripted_button = select_ideology_inclusive_society
+	scripted_button = deselect_ideology_inclusive_society
+	scripted_button = select_ideology_totalitarian_society
+	scripted_button = deselect_ideology_totalitarian_society
+	scripted_button = select_ideology_meritocratic_society
+	scripted_button = deselect_ideology_meritocratic_society
+	scripted_button = select_ideology_imperial_cult_society
+	scripted_button = deselect_ideology_imperial_cult_society
+	scripted_button = select_ideology_theocratic_society
+	scripted_button = deselect_ideology_theocratic_society
+	scripted_button = select_ideology_aristocratic_governance
+	scripted_button = deselect_ideology_aristocratic_governance
+	scripted_button = select_ideology_technocratic_governance
+	scripted_button = deselect_ideology_technocratic_governance
+	scripted_button = select_ideology_republican_governance
+	scripted_button = deselect_ideology_republican_governance
+	scripted_button = select_ideology_corporate_governance
+	scripted_button = deselect_ideology_corporate_governance
+	scripted_button = select_ideology_imperial_cult_governance
+	scripted_button = deselect_ideology_imperial_cult_governance
+	scripted_button = select_ideology_theocratic_governance
+	scripted_button = deselect_ideology_theocratic_governance
+	scripted_button = select_ideology_pacifist_outlook
+	scripted_button = deselect_ideology_pacifist_outlook
+	scripted_button = select_ideology_militarist_outlook
+	scripted_button = deselect_ideology_militarist_outlook
+	scripted_button = select_ideology_isolationist_outlook
+	scripted_button = deselect_ideology_isolationist_outlook
+	scripted_button = select_ideology_exploitative_outlook
+	scripted_button = deselect_ideology_exploitative_outlook
+	scripted_button = select_ideology_imperialist_outlook
+	scripted_button = deselect_ideology_imperialist_outlook
+	scripted_button = select_ideology_theocratic_outlook
+	scripted_button = deselect_ideology_theocratic_outlook
+	scripted_button = select_trait_traditionalist_loyal
+	scripted_button = deselect_trait_traditionalist_loyal
+	scripted_button = select_trait_market_liberal_loyal
+	scripted_button = deselect_trait_market_liberal_loyal
+	scripted_button = select_trait_social_democrat_loyal
+	scripted_button = deselect_trait_social_democrat_loyal
+	scripted_button = select_trait_totalitarian_loyal
+	scripted_button = deselect_trait_totalitarian_loyal
+	scripted_button = select_trait_imperial_cult_loyal
+	scripted_button = deselect_trait_imperial_cult_loyal
+	scripted_button = select_trait_theocratic_loyal
+	scripted_button = deselect_trait_theocratic_loyal
+	scripted_button = select_trait_traditionalist_happy
+	scripted_button = deselect_trait_traditionalist_happy
+	scripted_button = select_trait_market_liberal_happy
+	scripted_button = deselect_trait_market_liberal_happy
+	scripted_button = select_trait_social_democrat_happy
+	scripted_button = deselect_trait_social_democrat_happy
+	scripted_button = select_trait_totalitarian_happy
+	scripted_button = deselect_trait_totalitarian_happy
+	scripted_button = select_trait_imperial_cult_happy
+	scripted_button = deselect_trait_imperial_cult_happy
+	scripted_button = select_trait_theocratic_happy
+	scripted_button = deselect_trait_theocratic_happy
+	scripted_button = select_trait_traditionalist_unhappy
+	scripted_button = deselect_trait_traditionalist_unhappy
+	scripted_button = select_trait_market_liberal_unhappy
+	scripted_button = deselect_trait_market_liberal_unhappy
+	scripted_button = select_trait_social_democrat_unhappy
+	scripted_button = deselect_trait_social_democrat_unhappy
+	scripted_button = select_trait_totalitarian_unhappy
+	scripted_button = deselect_trait_totalitarian_unhappy
+	scripted_button = select_trait_imperial_cult_unhappy
+	scripted_button = deselect_trait_imperial_cult_unhappy
+	scripted_button = select_trait_theocratic_unhappy
+	scripted_button = deselect_trait_theocratic_unhappy
+	scripted_button = select_name_a
+	scripted_button = deselect_name_a
+	scripted_button = select_name_b
+	scripted_button = deselect_name_b
+	scripted_button = select_name_c
+	scripted_button = deselect_name_c
+	scripted_button = select_name_d
+	scripted_button = deselect_name_d
+	scripted_button = select_name_e
+	scripted_button = deselect_name_e
+	scripted_button = select_name_f
+	scripted_button = deselect_name_f
+	scripted_button = select_name_g
+	scripted_button = deselect_name_g
+	scripted_button = select_name_h
+	scripted_button = deselect_name_h
+	scripted_button = select_name_i
+	scripted_button = deselect_name_i
+	scripted_button = select_name_j
+	scripted_button = deselect_name_j
+	scripted_button = select_name_k
+	scripted_button = deselect_name_k
+	scripted_button = select_name_l
+	scripted_button = deselect_name_l
+	scripted_button = select_name_m
+	scripted_button = deselect_name_m
+	scripted_button = select_name_n
+	scripted_button = deselect_name_n
+	scripted_button = select_name_o
+	scripted_button = deselect_name_o
+	scripted_button = select_name_p
+	scripted_button = deselect_name_p
+	scripted_button = select_name_q
+	scripted_button = deselect_name_q
+	scripted_button = select_name_r
+	scripted_button = deselect_name_r
+	scripted_button = select_name_s
+	scripted_button = deselect_name_s
+	scripted_button = select_name_t
+	scripted_button = deselect_name_t
+	scripted_button = select_christian
+	scripted_button = deselect_christian
+	scripted_button = select_muslim
+	scripted_button = deselect_muslim
+	scripted_button = select_judaism
+	scripted_button = deselect_judaism
+	scripted_button = select_eastern
+	scripted_button = deselect_eastern
+	scripted_button = select_animist
+	scripted_button = deselect_animist
+	scripted_button = select_buddhist
+	scripted_button = deselect_buddhist
+	scripted_button = select_custom
+	scripted_button = deselect_custom
+	scripted_button = custom_religion_back
+	scripted_button = custom_religion_next
+	scripted_button = create_new_religion
 
-    possible = {
-        is_ai = no
-    }
+	possible = {
+		is_ai = no
+	}
 
-    immediate = {
-        set_variable = {
-            name = selected_idelogies
-            value = 0
-        }
-        set_variable = {
-            name = selected_traits
-            value = 0
-        }
-        set_variable = {
-            name = selected_name
-            value = 0
-        }
-        set_variable = {
-            name = selected_religion_group
-            value = 0
-        }
-        set_variable = {
-            name = current_stage
-            value = 1
-        }
-    }
+	immediate = {
+		set_variable = {
+			name = selected_idelogies
+			value = 0
+		}
+		set_variable = {
+			name = selected_traits
+			value = 0
+		}
+		set_variable = {
+			name = selected_name
+			value = 0
+		}
+		set_variable = {
+			name = selected_religion_group
+			value = 0
+		}
+		set_variable = {
+			name = current_stage
+			value = 1
+		}
+	}
 
-    complete = {
-        country_has_any_custom_religion = yes
-    }
+	complete = {
+		country_has_any_custom_religion = yes
+	}
 
-    on_weekly_pulse = {
-    }
+	on_weekly_pulse = {
+	}
 
-    weight = 10
-    should_be_pinned_by_default_uninvolved_or_context = yes
-    can_deactivate = yes
+	weight = 10
+	should_be_pinned_by_default_uninvolved_or_context = yes
+	can_deactivate = yes
 }

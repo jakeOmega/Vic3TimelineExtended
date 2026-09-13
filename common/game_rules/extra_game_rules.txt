@@ -1,157 +1,157 @@
 ﻿custom_religions_allowed_rule = {
-    default = custom_religions_not_allowed
+	default = custom_religions_not_allowed
 
-    custom_religions_not_allowed = {
-        flag = custom_religions_not_allowed
-    }
+	custom_religions_not_allowed = {
+		flag = custom_religions_not_allowed
+	}
 
-    custom_religions_allowed = {
-        flag = custom_religions_allowed
-    }
+	custom_religions_allowed = {
+		flag = custom_religions_allowed
+	}
 }
 
 banking_system_rule = {
-    default = banking_system_enabled
+	default = banking_system_enabled
 
-    banking_system_enabled = {
-        flag = banking_system_enabled
-    }
+	banking_system_enabled = {
+		flag = banking_system_enabled
+	}
 
-    banking_system_disabled = {
-        flag = banking_system_disabled
-    }
+	banking_system_disabled = {
+		flag = banking_system_disabled
+	}
 }
 
 global_warming_rule = {
-    default = global_warming_enabled
+	default = global_warming_enabled
 
-    global_warming_enabled = {
-        flag = global_warming_enabled
-    }
+	global_warming_enabled = {
+		flag = global_warming_enabled
+	}
 
-    global_warming_disabled = {
-        flag = global_warming_disabled
-    }
+	global_warming_disabled = {
+		flag = global_warming_disabled
+	}
 }
 
 world_war_rule = {
-    default = world_war_disabled
+	default = world_war_disabled
 
-    world_war_enabled = {
-        flag = world_war_enabled
-    }
+	world_war_enabled = {
+		flag = world_war_enabled
+	}
 
-    world_war_disabled = {
-        flag = world_war_disabled
-    }
+	world_war_disabled = {
+		flag = world_war_disabled
+	}
 }
 
 cultural_hegemony_rule = {
-    default = cultural_hegemony_enabled
+	default = cultural_hegemony_enabled
 
-    cultural_hegemony_enabled = {
-        flag = cultural_hegemony_enabled
-    }
+	cultural_hegemony_enabled = {
+		flag = cultural_hegemony_enabled
+	}
 
-    cultural_hegemony_disabled = {
-        flag = cultural_hegemony_disabled
-    }
+	cultural_hegemony_disabled = {
+		flag = cultural_hegemony_disabled
+	}
 }
 
 covert_warfare_rule = {
-    default = covert_warfare_enabled
+	default = covert_warfare_enabled
 
-    covert_warfare_enabled = {
-        flag = covert_warfare_enabled
-    }
+	covert_warfare_enabled = {
+		flag = covert_warfare_enabled
+	}
 
-    covert_warfare_disabled = {
-        flag = covert_warfare_disabled
-    }
+	covert_warfare_disabled = {
+		flag = covert_warfare_disabled
+	}
 }
 
 heir_education_rule = {
-    default = heir_education_disabled
+	default = heir_education_disabled
 
-    heir_education_enabled = {
-        flag = heir_education_enabled
-    }
+	heir_education_enabled = {
+		flag = heir_education_enabled
+	}
 
-    heir_education_disabled = {
-        flag = heir_education_disabled
-    }
+	heir_education_disabled = {
+		flag = heir_education_disabled
+	}
 }
 
 united_nations_rule = {
-    default = united_nations_enabled
+	default = united_nations_enabled
 
-    united_nations_enabled = {
-        flag = united_nations_enabled
-    }
+	united_nations_enabled = {
+		flag = united_nations_enabled
+	}
 
-    united_nations_disabled = {
-        flag = united_nations_disabled
-    }
+	united_nations_disabled = {
+		flag = united_nations_disabled
+	}
 }
 
 nuclear_weapons_rule = {
-    default = nuclear_weapons_enabled
+	default = nuclear_weapons_enabled
 
-    nuclear_weapons_enabled = {
-        flag = nuclear_weapons_enabled
-    }
+	nuclear_weapons_enabled = {
+		flag = nuclear_weapons_enabled
+	}
 
-    nuclear_weapons_disabled = {
-        flag = nuclear_weapons_disabled
-    }
+	nuclear_weapons_disabled = {
+		flag = nuclear_weapons_disabled
+	}
 }
 
 decolonization_rule = {
-    default = decolonization_enabled
+	default = decolonization_enabled
 
-    decolonization_enabled = {
-        flag = decolonization_enabled
-    }
+	decolonization_enabled = {
+		flag = decolonization_enabled
+	}
 
-    decolonization_disabled = {
-        flag = decolonization_disabled
-    }
+	decolonization_disabled = {
+		flag = decolonization_disabled
+	}
 }
 
 space_race_rule = {
-    default = space_race_enabled
+	default = space_race_enabled
 
-    space_race_enabled = {
-        flag = space_race_enabled
-    }
+	space_race_enabled = {
+		flag = space_race_enabled
+	}
 
-    space_race_disabled = {
-        flag = space_race_disabled
-    }
+	space_race_disabled = {
+		flag = space_race_disabled
+	}
 }
 
 social_movements_rule = {
-    default = social_movements_enabled
+	default = social_movements_enabled
 
-    social_movements_enabled = {
-        flag = social_movements_enabled
-    }
+	social_movements_enabled = {
+		flag = social_movements_enabled
+	}
 
-    social_movements_disabled = {
-        flag = social_movements_disabled
-    }
+	social_movements_disabled = {
+		flag = social_movements_disabled
+	}
 }
 
 # When enabled, aptitude traits (admin / diplo / military) are assigned to
 # ALL adult characters, not just rulers / politicians / agitators / generals / admirals.
 universal_aptitude_traits_rule = {
-    default = universal_aptitude_traits_disabled
+	default = universal_aptitude_traits_disabled
 
-    universal_aptitude_traits_enabled = {
-        flag = universal_aptitude_traits_enabled
-    }
+	universal_aptitude_traits_enabled = {
+		flag = universal_aptitude_traits_enabled
+	}
 
-    universal_aptitude_traits_disabled = {
-        flag = universal_aptitude_traits_disabled
-    }
+	universal_aptitude_traits_disabled = {
+		flag = universal_aptitude_traits_disabled
+	}
 }

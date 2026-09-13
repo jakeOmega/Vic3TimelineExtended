@@ -2789,7 +2789,7 @@ tourism_throughput_from_land_transport = {
 	# Highways
 	if = {
 		limit = { has_building = building_highway }
-		add = { 
+		add = {
 			value = b:building_highway.level
 			max = 100
 			multiply = 0.001
@@ -2811,7 +2811,7 @@ tourism_throughput_from_art = {
 	value = 0
 	if = {
 		limit = { has_building = building_art_academy }
-		add = { 
+		add = {
 			value = b:building_art_academy.level
 			max = 20
 			multiply = 0.01
