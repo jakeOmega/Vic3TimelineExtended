@@ -12,6 +12,7 @@ Logs:   mod_state_server.log (rotated each startup, previous kept as .log.1)
 """
 
 import difflib
+import hashlib
 import importlib
 import json
 import logging
@@ -80,6 +81,15 @@ _file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(messa
 
 logger.addHandler(_console_handler)
 logger.addHandler(_file_handler)
+
+# ModState logs its parse diagnostics (including per-file parse failures) to the
+# "mod_state" logger. Route it through the same handlers so those land in
+# mod_state_server.log instead of stderr-only. INFO keeps the per-file DEBUG
+# chatter out of the log file.
+_mod_state_logger = logging.getLogger("mod_state")
+_mod_state_logger.setLevel(logging.INFO)
+_mod_state_logger.addHandler(_console_handler)
+_mod_state_logger.addHandler(_file_handler)
 
 _server_start_time: float = 0.0  # set in main()
 
@@ -2623,10 +2633,20 @@ def _reload_engine_only():
     """§5: re-read engine logs + regenerate reference docs WITHOUT reparsing the
     mod (skips the slow ModState rebuild). Use after the engine regenerates the
     .log files in-game when no mod files have changed.
+
+    Returns the step failures as [{label, module, error, traceback_tail}] — the
+    same shape _run_post_load_generators uses — so POST /reload?engine_only=true
+    can put them in its `warnings` array instead of reporting a clean reload
+    while the log carries an exception (#242).
     """
     global _last_validation_report
     logger.info("Engine-only reload: re-reading engine logs + regenerating reference docs.")
-    _load_engine_docs()
+    errors: list[dict] = []
+    try:
+        _load_engine_docs()
+    except Exception as e:
+        logger.exception("Failed to reload engine docs")
+        errors.append(_failure_warning("engine_docs", "mod_state_server._load_engine_docs", e))
     # Re-run the validation pass against the existing mod state.
     try:
         _last_validation_report = _validate_engine_coverage()
@@ -2641,6 +2661,11 @@ def _reload_engine_only():
         )
     except Exception as e:
         logger.error(f"Failed to re-run validation: {e}\n{traceback.format_exc()}")
+        errors.append(
+            _failure_warning("engine_coverage_validation",
+                             "mod_state_server._validate_engine_coverage", e)
+        )
+    return errors
 
 
 def _refresh_pattern_state():
@@ -4441,9 +4466,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             flags = {"engine_only": engine_only, "audits_only": audits_only, "mod_only": mod_only}
             try:
                 if engine_only:
-                    _reload_engine_only()
-                    _record_reload_warnings(flags, [])
-                    self._respond_json({"status": "engine-only reload complete"})
+                    # A failed engine-docs load or validation pass used to be
+                    # logged and dropped; report it in the same `warnings`
+                    # array the full reload uses. (#242)
+                    warnings = _reload_engine_only()
+                    _record_reload_warnings(flags, warnings)
+                    body = {"status": "engine-only reload complete"}
+                    if warnings:
+                        body["warnings"] = warnings
+                    self._respond_json(body)
                 else:
                     _load_mod_state(audits_only=audits_only, mod_only=mod_only)
                     body = {
@@ -4464,9 +4495,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # tracked-issue cross-refs, unresolved open_issues.md anchors)
                     # via the shared collector used by POST /validate/registries.
                     warnings = list(_post_load_warnings) + _collect_registry_warnings()
-                    _record_reload_warnings(flags, warnings)
+                    _record_reload_warnings(
+                        flags, warnings,
+                        wrote_files=_post_load_wrote_files,
+                        reparsed=_post_load_reparsed,
+                    )
                     if warnings:
                         body["warnings"] = warnings
+                    # Which mod files the file-writing generators changed on
+                    # this run, and whether the mod side was re-parsed after
+                    # them (so the audits and /raw saw the new content). When
+                    # the re-parse failed, a second reload is needed. (#242)
+                    if _post_load_wrote_files:
+                        body["generators_wrote_files"] = list(_post_load_wrote_files)
+                        body["reparsed_after_generators"] = _post_load_reparsed
+                    parse_failures = list(getattr(ms, "parse_failures", []) or [])
+                    if parse_failures:
+                        body["parse_failures"] = parse_failures
                     self._respond_json(body)
             except Exception as exc:
                 logger.error(f"Error during reload: {exc}\n{traceback.format_exc()}")
@@ -4786,6 +4831,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "`script_docs` in pure-vanilla to refresh."
             )
 
+        # Files ModState skipped because they failed to parse. Empty is the
+        # expected state; anything here means that file's entities are missing
+        # from every endpoint. Capped so a mass breakage can't bloat /status.
+        parse_failures = list(getattr(ms, "parse_failures", []) or [])
+
         return {
             "status": "running",
             "ready": True,
@@ -4794,6 +4844,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "startup_seconds": round(startup_elapsed, 1),
             "entity_types": list(ms.mod_parsers.keys()),
             "localization_keys": len(ms.localization),
+            "parse_failure_count": len(parse_failures),
+            "parse_failures": parse_failures[:20],
             "engine_docs_timestamps": engine_mtimes,
             "engine_docs_age_days": age_days,
             "vanilla_snapshot": vanilla_block,
@@ -7752,6 +7804,119 @@ _post_load_warnings: list[dict] = []
 # without re-triggering a ~90s reload. Mirrors the _post_load_warnings pattern.
 _last_reload_warnings: dict = {}
 
+# Mod-relative paths the file-writing post-load regenerators changed on the most
+# recent run (content-compared, so an unconditional rewrite of identical bytes
+# doesn't count). Reset on every _run_post_load_generators call; surfaced as
+# `generators_wrote_files` in the POST /reload body. (#242)
+_post_load_wrote_files: list[str] = []
+
+# True when the mod side was re-parsed after those writes, so the audits in the
+# same chain (and /raw, /localize) saw the regenerated content.
+_post_load_reparsed: bool = False
+
+# How many trailing traceback lines a failure warning carries. Enough to name
+# the raising frame without dumping the whole stack into every reload response.
+_POST_LOAD_TRACEBACK_TAIL_LINES = 6
+
+# Subtrees and suffixes the file-writing generators can touch. Snapshotted
+# before/after the regenerator chain to detect writers that ran after the parse.
+# map_data/ is deliberately out: `resources` rewrites state_regions there, but
+# ModState registers no entity type for it, so a write can't stale the parse and
+# re-parsing wouldn't pick it up. docs/engine/ is audit output, not mod content.
+_WRITER_WATCH_DIRS = ("common", "events", "localization")
+_WRITER_WATCH_SUFFIXES = (".txt", ".yml")
+
+
+def _failure_warning(label: str, module_name: str, exc: BaseException) -> dict:
+    """Shape a crashed post-load step as a reload warning entry."""
+    tail = traceback.format_exc().rstrip().splitlines()[-_POST_LOAD_TRACEBACK_TAIL_LINES:]
+    return {
+        "label": label,
+        "module": module_name,
+        "error": f"{type(exc).__name__}: {exc}",
+        "traceback_tail": "\n".join(tail),
+    }
+
+
+def _snapshot_mod_text_files(root: Optional[str] = None) -> dict:
+    """Map mod-relative path -> content digest for every tracked text file the
+    post-load regenerators could rewrite.
+
+    Content-hashed rather than stat-compared on purpose: several generators
+    (apply_ideologies, pop_needs_curves, …) rewrite their output file
+    unconditionally, so mtime/size alone would report a write on every single
+    reload and trigger a pointless re-parse. ~350 files / ~10 MB, so both
+    snapshots together cost well under a second. Unreadable files are skipped.
+    """
+    root = root or mod_path
+    snapshot: dict = {}
+    for sub in _WRITER_WATCH_DIRS:
+        base = os.path.join(root, sub)
+        if not os.path.isdir(base):
+            continue
+        for dirpath, dirnames, filenames in os.walk(base):
+            dirnames[:] = [d for d in dirnames if d != ".git"]
+            for file_name in filenames:
+                if not file_name.endswith(_WRITER_WATCH_SUFFIXES):
+                    continue
+                file_path = os.path.join(dirpath, file_name)
+                try:
+                    with open(file_path, "rb") as fh:
+                        digest = hashlib.blake2b(fh.read(), digest_size=16).hexdigest()
+                except OSError:
+                    continue
+                rel = os.path.relpath(file_path, root).replace(os.sep, "/")
+                snapshot[rel] = digest
+    return snapshot
+
+
+def _changed_files(before: dict, after: dict) -> list:
+    """Mod-relative paths whose content differs between two snapshots."""
+    changed = {p for p, digest in after.items() if before.get(p) != digest}
+    changed |= {p for p in before if p not in after}
+    return sorted(changed)
+
+
+def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
+    """Re-parse the mod side ONCE after the file-writing generators wrote, so
+    the read-only audits in the same chain evaluate what was just generated
+    (rather than the pre-generation parse) and /raw + /localize serve it without
+    a second reload.
+
+    Called at most once per _run_post_load_generators — it never re-runs the
+    generators, so there is no loop. Returns a warning dict on failure, else
+    None.
+    """
+    global _tech_unlocks_index_cache, _call_index_cache, _last_validation_report
+    t0 = time.monotonic()
+    try:
+        mod_state.reload_mod(mod_paths)
+        # Rebuild loc the same way _load_mod_state's mod_only path does:
+        # cached vanilla snapshot, then the mod layers on top.
+        if _VANILLA_LOC_CACHE is not None:
+            mod_state.localization = dict(_VANILLA_LOC_CACHE)
+            mod_state._reverse_loc = None
+        for loc_dir in [
+            os.path.join(mod_path, "localization", "english"),
+            os.path.join(mod_path, "localization", "english", "replace"),
+        ]:
+            if os.path.isdir(loc_dir):
+                mod_state.add_localization(loc_dir)
+        _tech_unlocks_index_cache = None
+        _call_index_cache = None
+        _last_validation_report = None
+        _annotator_compute_cache.clear()
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("[post-load] re-parse after generator writes FAILED")
+        return _failure_warning(
+            "post_load_reparse", "mod_state_server._reparse_mod_after_writes", exc
+        )
+    logger.info(
+        f"[post-load] re-parsed mod state after generator writes "
+        f"({time.monotonic() - t0:.1f}s)"
+    )
+    return None
+
 
 def _collect_registry_warnings() -> list[dict]:
     """Load both known-noise registries and return their validation warnings as
@@ -7776,7 +7941,9 @@ def _collect_registry_warnings() -> list[dict]:
     return warnings
 
 
-def _record_reload_warnings(flags: dict, warnings: list) -> None:
+def _record_reload_warnings(flags: dict, warnings: list, *,
+                            wrote_files: Optional[list] = None,
+                            reparsed: bool = False) -> None:
     """Persist the most recent reload's warning set for /status `last_reload`."""
     global _last_reload_warnings
     _last_reload_warnings = {
@@ -7785,20 +7952,26 @@ def _record_reload_warnings(flags: dict, warnings: list) -> None:
         "count": len(warnings),
         "warnings": warnings,
     }
+    if wrote_files:
+        _last_reload_warnings["generators_wrote_files"] = list(wrote_files)
+        _last_reload_warnings["reparsed_after_generators"] = reparsed
 
 
-def _run_post_load_generators(mod_state, *, audits_only=False):
-    global _post_load_warnings
-    _post_load_warnings = []
-    if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
-        logger.info("[post-load] skipped via VIC3_SKIP_POST_LOAD_GENERATORS")
-        return
-    generators = POST_LOAD_AUDITS if audits_only else POST_LOAD_GENERATORS
+def _run_generator_chain(mod_state, generators) -> None:
+    """Import and run each (label, module) in order, appending both actionable
+    findings and hard failures to _post_load_warnings. One bad generator never
+    stops the chain."""
     for label, module_name in generators:
         t0 = time.monotonic()
         try:
             mod = importlib.import_module(module_name)
-            summary = mod.regenerate(mod_state)
+            regenerate = getattr(mod, "regenerate", None)
+            if not callable(regenerate):
+                raise AttributeError(
+                    f"module {module_name!r} has no callable `regenerate` "
+                    f"(POST_LOAD_GENERATORS contract)"
+                )
+            summary = regenerate(mod_state)
             elapsed = time.monotonic() - t0
             warn_counts = {}
             if isinstance(summary, dict):
@@ -7823,13 +7996,48 @@ def _run_post_load_generators(mod_state, *, audits_only=False):
                 })
             else:
                 logger.info(f"[post-load] {label} ok ({elapsed:.2f}s)")
-        except Exception:
+        except Exception as exc:  # noqa: BLE001
+            # An ImportError, a crash inside regenerate(), or a missing
+            # `regenerate` used to be logged and forgotten, so POST /reload
+            # still answered `{"status": "reloaded"}` with no warnings while a
+            # whole audit had silently not run. Record it as a warning. (#242)
             logger.exception(f"[post-load] {label} FAILED — continuing")
+            _post_load_warnings.append(_failure_warning(label, module_name, exc))
+
+
+def _run_post_load_generators(mod_state, *, audits_only=False):
+    global _post_load_warnings, _post_load_wrote_files, _post_load_reparsed
+    _post_load_warnings = []
+    _post_load_wrote_files = []
+    _post_load_reparsed = False
+    if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
+        logger.info("[post-load] skipped via VIC3_SKIP_POST_LOAD_GENERATORS")
+        return
+    if audits_only:
+        # No file-writing generators run, so nothing can invalidate the parse.
+        _run_generator_chain(mod_state, POST_LOAD_AUDITS)
+    else:
+        before = _snapshot_mod_text_files()
+        _run_generator_chain(mod_state, POST_LOAD_REGENERATORS)
+        _post_load_wrote_files = _changed_files(before, _snapshot_mod_text_files())
+        if _post_load_wrote_files:
+            logger.info(
+                f"[post-load] regenerators rewrote {len(_post_load_wrote_files)} "
+                f"file(s): {', '.join(_post_load_wrote_files[:5])}"
+                + (" …" if len(_post_load_wrote_files) > 5 else "")
+            )
+            failure = _reparse_mod_after_writes(mod_state)
+            if failure:
+                _post_load_warnings.append(failure)
+            else:
+                _post_load_reparsed = True
+        _run_generator_chain(mod_state, POST_LOAD_AUDITS)
     if _post_load_warnings:
         labels = ", ".join(w["label"] for w in _post_load_warnings)
+        failures = sum(1 for w in _post_load_warnings if "error" in w)
         logger.warning(
-            f"[post-load WARN] {len(_post_load_warnings)} audit(s) surfaced "
-            f"actionable issues: {labels}"
+            f"[post-load WARN] {len(_post_load_warnings)} post-load step(s) "
+            f"surfaced actionable issues ({failures} crashed): {labels}"
         )
 
 

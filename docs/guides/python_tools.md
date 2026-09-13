@@ -8,9 +8,13 @@ Reference for all Python utility scripts and the background data server.
 
 ## Auto-run on server reload
 
-`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 10 file-rewriting generators) and `POST_LOAD_AUDITS` (the 9 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED` and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
+`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 10 file-rewriting generators) and `POST_LOAD_AUDITS` (the 9 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED`, recorded in the reload response's `warnings` array, and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
 
 **Audit warnings**: when a generator's return dict contains `unreviewed > 0` or `hard_fails > 0`, the runner logs `[post-load WARN] <label> surfaced issues: <key>=<n>` at WARNING level and adds an entry to the `/reload` response's `warnings` array — caller sees regressions in the same response, no log-scraping required. Add new actionable counter names to `_POST_LOAD_WARN_KEYS` in `mod_state_server.py` if a new audit invents one.
+
+**Crash warnings**: a step that *fails* (ImportError, an exception inside `regenerate()`, no `regenerate` attribute) also lands in `warnings`, as `{label, module, error, traceback_tail}` — before, it was logged and dropped, so `POST /reload` answered `{"status": "reloaded"}` while a whole audit had silently not run. `POST /reload?engine_only=true` reports its two steps (`engine_docs`, `engine_coverage_validation`) the same way. So `warnings` entries come in two shapes: findings carry `counts`/`summary`, crashes carry `error`/`traceback_tail`.
+
+**Writers run after the parse**: the file-rewriting regenerators write to disk without updating the in-memory parse. The runner content-hashes the mod's tracked `.txt`/`.yml` under `common/`, `events/`, `localization/` before and after that half of the chain; if anything actually changed, it re-parses the mod side **once** (`ms.reload_mod` + loc re-layer) before running `POST_LOAD_AUDITS`, so the audits — and `/raw`, `/localize` — see the regenerated content in the same reload. Content hashing (not mtime) is deliberate: several generators rewrite their output unconditionally, and a stat-only check would re-parse on every reload. The response reports `generators_wrote_files: [<mod-relative paths>]` plus `reparsed_after_generators: <bool>`; if that bool is `false`, the re-parse failed (see the `post_load_reparse` warning) and a second `/reload` is needed.
 
 | Module | Output |
 |---|---|
@@ -240,7 +244,7 @@ Invoke-RestMethod http://localhost:8950/status
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/status` | GET | Server status, loaded entity types, loc key count |
+| `/status` | GET | Server status, loaded entity types, loc key count, `parse_failure_count` + `parse_failures` (files ModState skipped because they failed to parse — `{file, error, source}`, capped at 20; non-zero means those entities are missing from every endpoint), `last_reload` (previous reload's flags + `warnings`) |
 | `/entity-types` | GET | List of entity type names |
 | `/keys/<EntityType>` | GET | All entity IDs + localized names for a type |
 | `/raw/<EntityType>` | GET | Full raw parsed data for a type |
@@ -307,7 +311,7 @@ Invoke-RestMethod http://localhost:8950/status
 | `/on-actions/<id>` | GET | On-action raw data |
 | `/gui/render-sites/<loc_key>` | GET | Every GUI file:line (mod + vanilla) that references `<loc_key>` via a known loc attribute (`text` / `tooltip` / `raw_text` / ...). Mechanical scan; one curl replaces a multi-grep over both GUI trees. |
 | `/gui/render-paths/<EntityType>?field=<role>` | GET | Every GUI file:line that renders `<field>` of `<EntityType>` via `[<DataType>.GetX]`. Resolves EntityType → DataType via `ENTITY_TYPE_TO_DATATYPE`, field role → method names via `FIELD_TO_METHODS`. Fields: `name` / `desc` / `icon` / `tooltip`. |
-| `/reload` | POST | Re-parse all files from disk + run post-load chain (regenerators + audits). Flags compose; see table below. |
+| `/reload` | POST | Re-parse all files from disk + run post-load chain (regenerators + audits). Response: `status`, `startup_seconds`, `mode`, plus `warnings` / `generators_wrote_files` + `reparsed_after_generators` / `parse_failures` when non-empty — **always check them** before calling a change clean. Flags compose; see table below. |
 
 ##### `/reload` flag table
 
