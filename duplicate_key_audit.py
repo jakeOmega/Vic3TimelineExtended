@@ -337,6 +337,7 @@ def regenerate(mod_state=None) -> dict:
 
 if __name__ == "__main__":
     import json
+    import sys
     res = audit()
     print(render_report(res))
     print(json.dumps({
@@ -344,3 +345,6 @@ if __name__ == "__main__":
         "errors": sum(1 for f in res.flags if f.severity == "error" and not f.exemption),
         "warns": sum(1 for f in res.flags if f.severity == "warn" and not f.exemption),
     }))
+    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    if "--strict" in sys.argv:
+        raise SystemExit(1 if any(not f.exemption for f in res.flags) else 0)

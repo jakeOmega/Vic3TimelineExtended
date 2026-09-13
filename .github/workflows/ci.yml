@@ -1,0 +1,148 @@
+# Game-independent checks for the mod + its Python tooling (issue #247).
+#
+# Everything here runs without a Victoria 3 install: the dummy VIC3_* paths below
+# satisfy path_constants' lazy resolution, and no step builds a ModState or starts
+# mod_state_server. Audits that need the vanilla game stay out of CI — without the
+# base game they degrade to noise.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    env:
+      # path_constants resolves lazily, so these only need to be set, not real.
+      VIC3_BASE_GAME: /nonexistent/game
+      VIC3_MOD_DEPLOY_TARGET: /nonexistent/deploy
+      VIC3_VANILLA_REPO: /nonexistent/vic3
+      VIC3_VANILLA_DOCS_RUNTIME: /nonexistent/docs
+      VIC3_GAME_LOGS: /nonexistent/logs
+    steps:
+      - name: Check out (without gfx/)
+        uses: actions/checkout@v4
+        with:
+          # gfx/ is ~1.8 GB of textures that nothing in this job reads; the
+          # dds-dimensions job below checks it out on its own.
+          sparse-checkout: |
+            /*
+            !/gfx/
+          sparse-checkout-cone-mode: false
+          filter: blob:none
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt ruff
+
+      - name: Byte-compile every Python file
+        if: ${{ !cancelled() }}
+        run: python3 -m compileall -q .
+
+      - name: Unit tests
+        if: ${{ !cancelled() }}
+        run: python3 -m unittest discover -s . -p 'test_*.py'
+
+      # Expected to be RED until #253 lands (104 pre-existing F-findings).
+      - name: Lint (ruff, pyflakes rules)
+        if: ${{ !cancelled() }}
+        run: ruff check --select F .
+
+      - name: Paradox tab indentation
+        if: ${{ !cancelled() }}
+        # The three excluded paths are wholly rewritten by a POST /reload generator
+        # that emits the unformatted text verbatim (apply_ideologies.py,
+        # ig_feminism.py, gen_law_consistency.py), so normalizing them would be
+        # undone by the next reload. See PR #272 for the per-file rationale.
+        run: |
+          python3 scripts/format_paradox_tabs.py --check $(git ls-files \
+            'common/**/*.txt' 'events/*.txt' \
+            ':!:common/ideologies/modified.txt' \
+            ':!:common/interest_groups/00_*.txt' \
+            ':!:common/scripted_effects/extra_law_consistency_generated.txt')
+
+      - name: Localization file sanity (BOM, header, duplicate keys)
+        if: ${{ !cancelled() }}
+        run: python3 scripts/analysis/check_localization_files.py
+
+      - name: Audit — duplicate top-level keys
+        if: ${{ !cancelled() }}
+        run: python3 duplicate_key_audit.py --strict
+
+      - name: Audit — any_* with limit
+        if: ${{ !cancelled() }}
+        run: python3 any_limit_audit.py --strict
+
+      - name: Audit — localization rendering
+        if: ${{ !cancelled() }}
+        run: python3 loc_render_audit.py --strict
+
+      - name: Audit — orphaned events
+        if: ${{ !cancelled() }}
+        run: python3 orphaned_event_audit.py --strict
+
+      - name: Audit — attitude keys
+        if: ${{ !cancelled() }}
+        run: python3 attitude_key_audit.py
+
+      - name: Audit — kill_character guards
+        if: ${{ !cancelled() }}
+        run: python3 kill_character_audit.py --check
+
+      - name: Audit — iterator limit placement
+        if: ${{ !cancelled() }}
+        run: python3 iterator_limit_audit.py --strict
+
+      - name: Audit — modifier multiplier variables
+        if: ${{ !cancelled() }}
+        run: python3 modifier_multiplier_var_audit.py --strict
+
+      # Uncomment once PR #271 (docs drift sweep, issue #248) merges — it adds
+      # scripts/analysis/check_post_load_rosters.py, which fails when a
+      # POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module is missing from the docs.
+      # - name: Post-load roster / docs drift
+      #   if: ${{ !cancelled() }}
+      #   run: python3 scripts/analysis/check_post_load_rosters.py
+
+  dds-dimensions:
+    name: DDS texture dimensions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out gfx/ only
+        uses: actions/checkout@v4
+        with:
+          # scripts/analysis carries the checker and its allowlist.
+          sparse-checkout: |
+            gfx
+            scripts/analysis
+          filter: blob:none
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # No pip install: the checker is stdlib-only (it reads DDS headers directly).
+      - name: Block-compressed textures must be multiples of 4
+        run: python3 scripts/analysis/check_dds_dimensions.py

@@ -365,3 +365,6 @@ if __name__ == "__main__":
     from path_constants import mod_path
     result = audit(mod_path=mod_path)
     print(render_report(result))
+    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    if "--strict" in sys.argv:
+        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
