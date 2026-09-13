@@ -5,6 +5,11 @@ GLOBAL = {
 			id = te_construction_market_recalc_events.2
 		}
 	}
+	# Two `random_country` blocks are intentional, not a copy-paste duplicate:
+	# each one re-rolls the picker, so the pulse relay is seeded from two
+	# independently chosen countries in case one of them never runs the hook.
+	# pulse_events.1 is guarded by te_construction_market_days_since_last_pulse,
+	# so the redundant copies no-op instead of double-advancing the tick.
 	random_country = {
 		trigger_event = {
 			id = te_construction_market_pulse_events.2
