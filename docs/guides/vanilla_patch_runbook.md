@@ -111,8 +111,8 @@ If the vanilla map changed (states removed/renamed/split), edit `deposits_config
 **Enumerate the at-risk set deterministically.** Don't rely on agent inference or memory of "which files changed" — vanilla often touches GUIs that look incidental. Use:
 
 ```bash
-find /home/jakef/src/Vic3TimelineExtended/gui -name "*.gui" -type f | while read f; do
-  rel="${f#/home/jakef/src/Vic3TimelineExtended/}"
+# Run from the repo root (mod_path).
+find gui -name "*.gui" -type f | while read rel; do
   vfile="$HOME/src/vic3/game/$rel"
   if [ -f "$vfile" ]; then
     changed=$(git -C ~/src/vic3 log --oneline OLD_REF..NEW_REF -- "game/$rel" | head -1)

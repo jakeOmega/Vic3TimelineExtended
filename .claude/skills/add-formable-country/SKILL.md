@@ -15,20 +15,20 @@ This skill is a workflow, not a script — every formable involves judgment call
 
 Before touching any files, lock these decisions for each country. Use `AskUserQuestion` with 1–4 questions if any are ambiguous.
 
-1. **Tag** (3 letters). Verify it's unused: `grep -rE "^TAG = " "$(python3 -c 'from path_constants import base_game_path; print(base_game_path)')/game/common/country_definitions/" /home/jakef/src/Vic3TimelineExtended/common/country_definitions/`. Vanilla uses ISO-ish codes; pick something semantic (AFU = African Union, INM = Intermarium).
+1. **Tag** (3 letters). Verify it's unused: `grep -rE "^TAG = " "$(python3 -c 'from path_constants import base_game_path; print(base_game_path)')/game/common/country_definitions/" common/country_definitions/` (run from the repo root). Vanilla uses ISO-ish codes; pick something semantic (AFU = African Union, INM = Intermarium).
 2. **Minor or major formation.** Major = competing candidates among same-culture great powers, leadership/unification diplomatic plays (rich gameplay, lots of files). Minor = whoever directly controls enough required states forms it (lightweight). Default to major when there are realistically multiple cultural candidates (continental / pan-X formables); minor when one country is the obvious unifier.
 3. **Tier**: principality → kingdom → empire → hegemony. Match the scope.
 4. **Primary cultures.** Verify each exists: `grep -E "^<culture>\s*=" "$(python3 -c 'from path_constants import base_game_path; print(base_game_path)')/game/common/cultures/00_cultures.txt"`. Watch for vanilla quirks: `british` (not `english`), `berber` (not `amazigh`), `panjabi` (not `punjabi`), `oriya` (not `oria`), `telegu` (not `telugu`), `byelorussian` (not `belarusian`).
 5. **Capital state.** Pick the historical/cultural capital. Verify with `grep -nE "^STATE_X = \{" "$(python3 -c 'from path_constants import base_game_path; print(base_game_path)')/game/map_data/state_regions/"*.txt`.
 6. **Geographic anchor**: a vanilla `geographic_region_*` (preferred), an explicit state list, or a new mod-side region. Vanilla regions to know: `geographic_region_europe`, `geographic_region_africa`, `geographic_region_subsaharan_africa`, `geographic_region_north_america`, `geographic_region_india`, `geographic_region_south_east_asia`, `geographic_region_yugoslavia`, `geographic_region_greater_germany`, `geographic_region_scandinavia`. Full list: `grep -hE "^geographic_region_[a-z_]+ = \{" "$(python3 -c 'from path_constants import base_game_path; print(base_game_path)')/game/common/geographic_regions/"01_*.txt 02_*.txt 03_*.txt 04_*.txt | sort -u`.
-7. **Tech gate.** Era-6 mod tech `decolonization` (`era_6.txt:785`) for Cold-War / decolonization-era formables. Vanilla `pan-nationalism` / `nationalism` for earlier ones. Stack both for hegemony-tier modern formables.
+7. **Tech gate.** Era-6 mod tech `decolonization` (`common/technology/technologies/era_6.txt`, currently line 784) for Cold-War / decolonization-era formables. Vanilla `pan-nationalism` / `nationalism` for earlier ones. Stack both for hegemony-tier modern formables.
 8. **Dynamic-name flavor.** Per government type: republic default, communist, fascist, monarchy, theocracy, technocracy — and any 2nd-axis flavor (ruler culture, `was_formed_from = X`). The Intermarium "Promethean Empire" under fascism, AU "Solomonic African Empire" with Ethiopian-led monarchy, UNA "Empire of the Americas" with Mexican-led monarchy are good models. Keep names grounded in real history/political projects — never campy.
 
 If any decision is genuinely flexible, present 2–3 options to the user; don't silently pick.
 
 ## File layout
 
-All paths relative to `/home/jakef/src/Vic3TimelineExtended/`. The mod's existing convention is `te_*.txt` (sorts after vanilla `00_*.txt` so mod entries override on tag-key collision).
+All paths are repo-relative (`mod_path` in `path_constants`). The mod's existing convention is `te_*.txt` (sorts after vanilla `00_*.txt` so mod entries override on tag-key collision).
 
 | File | Required for | What goes in |
 |---|---|---|
@@ -39,7 +39,7 @@ All paths relative to `/home/jakef/src/Vic3TimelineExtended/`. The mod's existin
 | `common/geographic_regions/te_formable_regions.txt` | only if no vanilla region fits | new `geographic_region_*` definitions. |
 | `localization/english/te_formable_countries_l_english.yml` | every formable | tag display name + adjective + every `dyn_c_*` and `dp_*` key referenced. |
 
-This file is rebuilt by `python organize_loc.py` (which auto-runs on every `POST /reload`). Make sure `organize_loc.py`'s `categorize_key` routes your new tag's loc keys to `FORMABLE_COUNTRIES` — the mod already routes `dyn_c_*`, `dp_unify_*`, `dp_leadership_*`, and the registered tag/adjective set `{AFU, INM, EAF, EUN, UNA, *_ADJ}`. Add new tags to that set when you introduce them, otherwise their `TAG:` and `TAG_ADJ:` keys land in MISCELLANEOUS or CONCEPTS.
+This file is rebuilt by `python organize_loc.py` (which auto-runs on every `POST /reload`). Make sure `organize_loc.py`'s `categorize_key` routes your new tag's loc keys to `FORMABLE_COUNTRIES` — the mod already routes `dyn_c_*`, `dp_unify_*`, `dp_leadership_*`, and the registered tag/adjective set `{AFU, INM, EAF, EUN, UNA, UNE, ZHO, BHA, NUS, DAR, *_ADJ}` (see `organize_loc.py`'s `categorize_key`). Add new tags to that set when you introduce them, otherwise their `TAG:` and `TAG_ADJ:` keys land in MISCELLANEOUS or CONCEPTS.
 
 ## Country formation DSL (essentials)
 
