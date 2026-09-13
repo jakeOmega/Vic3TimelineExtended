@@ -25,5 +25,8 @@ numpy
 
 # Dev / CI:
 # ruff: lint gate for the Python tooling (config in ruff.toml, pyflakes "F"
-# rules only). Run `ruff check .` before pushing; CI enforces the same.
-ruff>=0.5
+# rules only). Run `ruff check .` before pushing — the "Lint (ruff, pyflakes
+# rules)" step in .github/workflows/ci.yml runs that exact command. The range is
+# loose here so a dev machine can track releases; CI installs one pinned version
+# (see that step's comment) so a ruff release can't redden an unrelated commit.
+ruff>=0.5,<1

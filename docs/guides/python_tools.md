@@ -59,6 +59,23 @@ Every row writes only its report under `docs/engine/`, so `?audits_only=true` le
 | `attitude_key_audit` | `docs/engine/attitude_key_report.md` — `attitude = <bareword>` values outside the engine's fixed 15-key catalog. An unknown key never matches, so the AI weight or refusal gate keyed on it is dead code, with no parse-time warning. |
 
 
+**Offline exit-code mode (what CI runs).** Eight of these audits are pure file scans — they never build a `ModState`, so they run with nothing but the dummy `VIC3_*` paths and are wired into `.github/workflows/ci.yml`. Each prints its report to stdout and signals findings through its exit status:
+
+| Command | Exits 1 when |
+|---|---|
+| `python3 duplicate_key_audit.py --strict` | an unexempted **`error`**-severity flag exists (a repeated key with a *differing* value). `warn`-severity identical repeats (`add = 5 add = 5`) are reported but do **not** fail: the engine runs both on purpose, and the ones in the tree come from non-idempotent generators re-emitting a line (#191). |
+| `python3 any_limit_audit.py --strict` | any unexempted flag exists |
+| `python3 loc_render_audit.py --strict` | any unexempted flag exists |
+| `python3 orphaned_event_audit.py --strict` | any unexempted flag exists |
+| `python3 iterator_limit_audit.py --strict` | any unexempted flag exists |
+| `python3 modifier_multiplier_var_audit.py --strict` | any unexempted flag exists |
+| `python3 kill_character_audit.py --check` | any unexempted flag exists (`--check`, not `--strict`) |
+| `python3 attitude_key_audit.py` | any unexempted flag exists — **no flag at all**; `main()` returns the exit code natively, so passing `--strict` does nothing |
+
+"Unexempted" always means "without an inline `# REVIEWED YYYY-MM-DD: rationale` comment in the suppression position that audit documents". The other eight audits need a live `ModState` (vanilla data, loc index) and stay out of CI.
+
+CI's other two game-independent checkers are `scripts/analysis/check_localization_files.py` (loc BOM / `l_english:` header / duplicate keys) and `scripts/analysis/check_dds_dimensions.py` (block-compressed textures need both dimensions divisible by 4; known offenders in `scripts/analysis/dds_dimension_allowlist.txt`). Note that the latter's **stale-allowlist check runs only on the default full-`gfx/` sweep** — pass a path and the scan narrows, so an allowlist entry outside it is unvisited rather than dead. `scan()` takes `check_stale`, and `main()` sets it from "were any positional roots given", so a clean partial scan can't exit 1 on entries it never looked at.
+
 **Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).
 
 **Watcher safety:** The deploy watcher (`scripts/watch_deploy_on_edit.sh`) only rsyncs to the Paradox mod folder; it does **not** call `/reload`. So a generator writing into `common/` or `map_data/` triggers exactly one extra rsync after the reload completes, never an infinite loop. **Do not wire `/reload` into the watcher.**
@@ -134,14 +151,26 @@ ruff check --unsafe-fixes .  # preview the rest; review each before applying
 ```
 
 Notes:
-- `ruff` is in `requirements.txt` under the "Dev / CI" block.
+- `ruff` is in `requirements.txt` under the "Dev / CI" block as `ruff>=0.5,<1`.
+  CI installs one **pinned** version instead (see the "Lint (ruff, pyflakes rules)"
+  step in `.github/workflows/ci.yml`) so a ruff release can't redden a commit that
+  changed nothing; bump the pin deliberately after running `ruff check .` locally
+  on the new version.
+- `ruff.toml` uses `extend-exclude`, not `exclude` — `exclude` *replaces* ruff's
+  built-in defaults (`.git`, `__pycache__`, `build/`, `dist/`, …), which is almost
+  never what you want.
 - Keep the tree clean: a new finding in a file you touch is a review blocker.
 - Suppress a deliberate unused import (side-effect import, re-export, availability
   probe) with `# noqa: F401` **plus** a reason comment — ruff rejects a malformed
-  directive like `# noqa: local import` and warns about it.
+  directive like `# noqa: local import` and warns about it. If there is no finding
+  to suppress (a function-local import for an optional dependency, say), drop the
+  `# noqa:` prefix and write a plain comment.
 - Names only referenced in string annotations under `from __future__ import
   annotations` still need a real binding: import them in an `if TYPE_CHECKING:`
-  block, or ruff flags F821 (and `typing.get_type_hints()` would raise).
+  block, which clears ruff's F821 and lets static checkers resolve the name. It
+  does **not** help `typing.get_type_hints()` — `TYPE_CHECKING` is `False` at
+  runtime, so the import never executes and `get_type_hints()` still raises
+  `NameError` on that annotation. Only a real runtime import fixes that.
 
 ## Localization & Code Generation
 

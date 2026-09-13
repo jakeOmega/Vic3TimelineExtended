@@ -307,7 +307,12 @@ def regenerate(mod_state=None) -> dict:
 
 
 if __name__ == "__main__":
+    import sys
+
     from path_constants import mod_path as _mp
 
     res = audit(_mp)
     print(render_report(res, _mp))
+    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    if "--strict" in sys.argv:
+        raise SystemExit(1 if any(not f.exemption for f in res.flags) else 0)
