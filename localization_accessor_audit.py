@@ -313,7 +313,6 @@ _GLOBAL_FUNCTIONS: dict[str, str] = {
     "Decree": "value",
     "Institution": "value",
     "Theater": "value",
-    "Battle": "value",
     "Skirmish": "value",
     "Frontline": "value",
     "Mobilization": "value",

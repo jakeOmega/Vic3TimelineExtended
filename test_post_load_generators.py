@@ -12,7 +12,6 @@ Run: python test_post_load_generators.py
 """
 
 import importlib
-import sys
 import unittest
 
 from mod_state_server import POST_LOAD_GENERATORS

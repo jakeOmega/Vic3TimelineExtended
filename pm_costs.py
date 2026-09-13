@@ -431,15 +431,15 @@ def emit_combat_unit_market_cost_svs(out_path, breakdown):
         lines.append(f"value_combat_unit_market_cost_{unit_name} = {{")
         for good, qty, price in rows:
             base_contrib = qty * price
-            lines.append(f"\tadd = {{")
+            lines.append("\tadd = {")
             lines.append(
                 f"\t\tvalue = this.market.mg:{good}.market_goods_pricier"
             )
-            lines.append(f"\t\tadd = 1")
+            lines.append("\t\tadd = 1")
             lines.append(
                 f"\t\tmultiply = {base_contrib} # base_price({price}) × quantity({qty})"
             )
-            lines.append(f"\t}}")
+            lines.append("\t}")
         lines.append("}")
         lines.append("")
     content = "\n".join(lines).rstrip() + "\n"
@@ -507,7 +507,7 @@ def _run(dry_run: bool, verbose: bool):
 
     if dry_run:
         if verbose:
-            print(f"[dry-run] Would annotate military files:")
+            print("[dry-run] Would annotate military files:")
             print(f"  {military_unit_file_path}")
             print(f"  {mobilization_file_path}")
             print(f"[dry-run] Would write commented vanilla military units to: {mil_output_path}")

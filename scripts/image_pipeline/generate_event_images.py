@@ -102,7 +102,7 @@ def phase_generate(images: dict, dry_run: bool = False) -> None:
             print(f"           FAILED (exit {e.returncode}): {name}")
         except KeyboardInterrupt:
             print(f"\n  Interrupted after {generated} generated, {skipped} skipped.")
-            print(f"  Re-run to continue from where you left off.")
+            print("  Re-run to continue from where you left off.")
             sys.exit(1)
 
     print(f"\n  Summary: {generated} generated, {skipped} skipped, {failed} failed")
@@ -161,7 +161,7 @@ def phase_convert(images: dict, dry_run: bool = False) -> None:
             print(f"           FAILED (exit {e.returncode}): {name}")
         except KeyboardInterrupt:
             print(f"\n  Interrupted after {converted} converted.")
-            print(f"  Re-run with --phase convert to continue.")
+            print("  Re-run with --phase convert to continue.")
             sys.exit(1)
 
     print(f"\n  Summary: {converted} converted, {skipped} skipped, "

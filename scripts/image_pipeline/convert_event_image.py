@@ -22,8 +22,6 @@ from __future__ import annotations
 
 import argparse
 import io
-import os
-import platform
 import shutil
 import subprocess
 import sys
@@ -31,7 +29,14 @@ import tempfile
 import zipfile
 from glob import glob
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.request import urlopen
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    # Pillow is an optional runtime dependency (imported lazily inside the
+    # functions that need it), but the annotations below reference it, so the
+    # name has to exist for type checkers / typing.get_type_hints().
+    from PIL import Image
 
 # ── constants ────────────────────────────────────────────────────────────
 EVENT_WIDTH = 1700
@@ -104,7 +109,7 @@ def ensure_texconv() -> Path:
 
 def resize_and_crop(img: "Image.Image") -> "Image.Image":
     """Resize & center-crop *img* to EVENT_WIDTH × EVENT_HEIGHT."""
-    from PIL import Image  # noqa: local import
+    from PIL import Image  # local import: Pillow is an optional dependency
 
     w, h = img.size
     src_aspect = w / h
@@ -138,7 +143,7 @@ def convert_image(
 
     Returns the path to the produced .dds.
     """
-    from PIL import Image  # noqa: local import
+    from PIL import Image  # local import: Pillow is an optional dependency
 
     img = Image.open(input_path).convert("RGBA")
 
@@ -156,7 +161,6 @@ def convert_image(
         if output_path is None:
             output_path = input_path.with_suffix(".dds")
         out_dir = output_path.parent
-        out_name = output_path.stem
 
         # Run texconv
         cmd = [

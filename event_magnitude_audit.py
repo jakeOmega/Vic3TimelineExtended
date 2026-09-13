@@ -247,14 +247,14 @@ def scan_named_modifiers(
         line_text = lines[anchor_line - 1] if 0 < anchor_line <= len(lines) else ""
         exemption = parse_reviewed_comment(line_text)
 
-        for field, field_value, meta in fast_fields:
-            shown = display_value if mult_m else f"{field}={field_value} (in {name})"
+        for field_name, field_value, meta in fast_fields:
+            shown = display_value if mult_m else f"{field_name}={field_value} (in {name})"
             flags.append(AuditFlag(
                 file=file_path,
                 line=anchor_line,
                 event_id=find_event_id_at_line(text, anchor_line),
                 kind=kind,
-                effect=field,
+                effect=field_name,
                 value=shown,
                 resource=meta.resource,
                 fix_hint=meta.fix_hint + extra_hint,

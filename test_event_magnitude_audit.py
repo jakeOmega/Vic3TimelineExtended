@@ -9,7 +9,6 @@ import unittest
 from event_magnitude_audit import (
     FAST_SCALING_MODIFIERS,
     DIRECT_EFFECTS,
-    ResourceMeta,
     find_event_id_at_line,
     parse_reviewed_comment,
     scan_direct_effects,

@@ -42,7 +42,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageFilter
+from PIL import Image
 
 # ── paths ────────────────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent

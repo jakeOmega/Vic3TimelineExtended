@@ -33,7 +33,6 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
-from urllib.error import URLError
 
 from mod_state import ModState, iter_loc_lines
 from paradox_file_parser import ParadoxFileParser
@@ -1917,7 +1916,6 @@ def _build_pattern_indexes(
                 continue
             # Reconstruct pattern with the placeholder substituted in
             start = re_match.start()
-            end = re_match.end()
             # The regex captured boundaries; we only want to replace the value itself.
             # Find exact char span of the value within the matched range:
             actual_start = name.find(value, start)
@@ -2257,10 +2255,10 @@ def _annotate_validation_with_error_log(report: dict) -> None:
             name = entry.get("name", "")
             if not name:
                 continue
-            for time, message in error_lines:
+            for entry_time, message in error_lines:
                 if name in message:
                     entry.setdefault("confirmed_by_engine_log", []).append(
-                        f"{error_log.label} [{time}] {message[:200]}"
+                        f"{error_log.label} [{entry_time}] {message[:200]}"
                     )
                     break  # one is enough — we just want to confirm the issue exists at runtime
 
@@ -7156,7 +7154,6 @@ class ModStateHandler(BaseHTTPRequestHandler):
             did = parts[0]
             if did not in decisions:
                 raise NotFound(did)
-            ed = get_entity_data(decisions[did])
             return {
                 "type": "Decisions", "id": did,
                 "name": ms.localize(did), "raw": serialize(decisions[did]),

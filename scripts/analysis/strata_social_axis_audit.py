@@ -190,7 +190,6 @@ def _scan_event_body(body: str, file: str, event_id: str, body_start_line: int) 
     """
     event = EventBlock(file=file, event_id=event_id, header_line=body_start_line)
     i = 0
-    lines_consumed = 0
     while i < len(body):
         # Find next `option = {` start.
         opt_match = re.search(r"(?<!\w)option\s*=\s*\{", body[i:])

@@ -244,9 +244,9 @@ def check_vanilla_snapshot(resolved: dict[str, str]) -> None:
     print("  or populate the snapshot by hand:")
     print("    1. Launch Victoria 3 with NO mods enabled.")
     print("    2. Open the in-game console (`` ` ``) and type:  script_docs")
-    print(f"    3. Copy the resulting *.log files from")
+    print("    3. Copy the resulting *.log files from")
     print(f"       {runtime}")
-    print(f"       to")
+    print("       to")
     print(f"       {snapshot}")
 
 

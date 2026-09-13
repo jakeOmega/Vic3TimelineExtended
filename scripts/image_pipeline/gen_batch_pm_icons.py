@@ -255,7 +255,6 @@ def draw_wheat() -> Image.Image:
     # Grain kernels (pairs of ellipses at angles)
     for j, y_pos in enumerate([140, 190, 240, 290]):
         for side in [-1, 1]:
-            angle = side * 0.5  # slight angle
             kw, kh = 30, 22
             kx = C + side * 40
             ky = y_pos
@@ -1432,10 +1431,10 @@ def main():
         pips = pm_pips[pm_name]
         pm_map[pm_name] = (source_file, placeholder_pms[pm_name][1], category, color, pips)
 
-    print(f"\nGroup type distribution:")
+    print("\nGroup type distribution:")
     for color, count in color_counts.most_common():
         print(f"  {color:8s}: {count}")
-    print(f"\nCategory distribution (top 10):")
+    print("\nCategory distribution (top 10):")
     for cat, count in category_counts.most_common(10):
         print(f"  {cat:12s}: {count}")
 
@@ -1451,14 +1450,14 @@ def main():
 
     # 7. Generate icons
     print("\nGenerating icons...")
-    icon_paths = generate_all_icons(pm_map, preview_only=args.preview, force=args.force)
+    generate_all_icons(pm_map, preview_only=args.preview, force=args.force)
 
     if args.preview:
-        print(f"\nPreview PNGs saved to preview_pm_icons/")
+        print("\nPreview PNGs saved to preview_pm_icons/")
         return
 
     if not args.update_files:
-        print(f"\nDDS icons generated. Use --update-files to also update PM texture references.")
+        print("\nDDS icons generated. Use --update-files to also update PM texture references.")
         return
 
     # 8. Update PM files

@@ -14,10 +14,6 @@ import tempfile
 import unittest
 
 from localization_accessor_audit import (
-    AuditFlag,
-    Chain,
-    _GLOBAL_FUNCTIONS,
-    _MAGIC_SCOPES_BY_CONTEXT,
     _load_engine_catalog,
     _split_chain,
     _strip_format_modifier,
@@ -25,8 +21,6 @@ from localization_accessor_audit import (
     classify_context,
     extract_chains,
     parse_reviewed_comment,
-    read_loc_file,
-    regenerate,
     render_report,
     validate_chain,
 )
