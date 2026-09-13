@@ -20,12 +20,11 @@ RuntimeError as before, with a clear pointer to `python3 scripts/setup.py`.
 `from path_constants import base_game_path` works unchanged (PEP 562 covers
 `from`-imports), and resolution happens at that import.
 
-Adding a new path constant: pick an env var name (VIC3_*), add it to
-DEFAULT_KEYS below, extend the autodetect logic in scripts/_path_detect.py
-if useful, and register it in `_LAZY_SPECS` further down. For external
-resources that not every contributor will have configured (e.g. optional
-reference checkouts), mark it optional so `_resolve` returns None on failure
-instead of raising.
+Adding a new path constant: pick an env var name (VIC3_*), register it in
+`_LAZY_SPECS` below, and extend the autodetect logic in scripts/_path_detect.py
+if useful. For external resources that not every contributor will have
+configured (e.g. optional reference checkouts), mark it optional so `_resolve`
+returns None on failure instead of raising.
 """
 from __future__ import annotations
 
@@ -210,6 +209,13 @@ def _derive_digest_docs_path() -> Optional[str]:
 _LAZY_DERIVED: dict[str, Callable[[], Optional[str]]] = {
     "vanilla_snapshot_docs_path_default": _derive_digest_docs_path,
 }
+
+
+# Exported names, derived from the tables above so they cannot drift. `__all__`
+# matters here: `from path_constants import *` bypasses `__getattr__` unless the
+# lazy constants are named, in which case CPython getattr()s each entry (and so
+# resolves every one of them).
+__all__ = ["mod_path", "doc_path", *_LAZY_SPECS, *_LAZY_ALIASES, *_LAZY_DERIVED]
 
 
 def __getattr__(name: str):

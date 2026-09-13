@@ -127,6 +127,33 @@ class LazyResolutionTest(unittest.TestCase):
         with self.assertRaises(AttributeError):
             pc.not_a_path_constant
 
+    def test_all_covers_the_eager_and_lazy_names(self):
+        self.assertEqual(set(pc.__all__), {"mod_path", "doc_path", *LAZY_NAMES})
+
+    def test_star_import_exports_lazy_constants(self):
+        """`import *` only sees the lazy names because __all__ names them."""
+        env = {k: v for k, v in os.environ.items() if not k.startswith("VIC3_")}
+        env.update(
+            VIC3_BASE_GAME="/tmp/base-game",
+            VIC3_MOD_DEPLOY_TARGET="/tmp/deploy",
+            VIC3_VANILLA_REPO="/tmp/vanilla",
+            VIC3_VANILLA_DOCS_RUNTIME="/tmp/docs",
+            VIC3_GAME_LOGS="/tmp/logs",
+        )
+        proc = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from path_constants import *; print(base_game_path)",
+            ],
+            cwd=str(REPO_ROOT),
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.stdout.strip(), "/tmp/base-game")
+
     def test_dir_lists_the_lazy_names(self):
         listed = dir(pc)
         for name in LAZY_NAMES:
