@@ -12,15 +12,20 @@ The values come from one of three sources, tried in order:
   3. Auto-detection helpers in scripts/_path_detect.py — only useful on
      WSL with a default Steam install.
 
-If none of the three resolve a required path, importing this module raises
-RuntimeError with a clear pointer to `python3 scripts/setup.py`.
+Only `mod_path` and `doc_path` are computed at import. Every per-machine
+path resolves lazily on first attribute access (PEP 562 module `__getattr__`)
+and is cached afterwards, so importing this module never needs a Victoria 3
+install; a tool that actually reads an unresolvable path gets the same
+RuntimeError as before, with a clear pointer to `python3 scripts/setup.py`.
+`from path_constants import base_game_path` works unchanged (PEP 562 covers
+`from`-imports), and resolution happens at that import.
 
 Adding a new path constant: pick an env var name (VIC3_*), add it to
 DEFAULT_KEYS below, extend the autodetect logic in scripts/_path_detect.py
-if useful, and assign the constant via `_resolve(...)` further down. For
-external resources that not every contributor will have configured (e.g.
-optional reference checkouts), pass `optional=True` so `_resolve` returns
-None on failure instead of raising at import time.
+if useful, and register it in `_LAZY_SPECS` further down. For external
+resources that not every contributor will have configured (e.g. optional
+reference checkouts), mark it optional so `_resolve` returns None on failure
+instead of raising.
 """
 from __future__ import annotations
 
@@ -28,7 +33,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import TYPE_CHECKING, Callable, Optional
 
 _REPO_ROOT = Path(__file__).resolve().parent
 _LOCAL = _REPO_ROOT / "paths.local.json"
@@ -88,10 +93,15 @@ def _resolve(key: str, env_var: Optional[str] = None, optional: bool = False) ->
 mod_path = str(_REPO_ROOT)
 doc_path = str(_REPO_ROOT / "docs")
 
-# Per-machine paths. Order matches the previous (hand-written) file's order.
-base_game_path = _resolve("base_game_path", "VIC3_BASE_GAME")
-mod_deploy_target = _resolve("mod_deploy_target", "VIC3_MOD_DEPLOY_TARGET")
-
+# Every other constant resolves lazily, on first attribute access (PEP 562
+# module `__getattr__` below), and is then cached in this module's globals.
+# That keeps `import path_constants` — and therefore every mod-only audit CLI
+# and most of the test suite — working on a machine with no Victoria 3 install:
+# only the tools that actually read a game path pay the RuntimeError.
+#
+# `_LAZY_SPECS[name] = (paths.local.json key, env var, optional)`; `optional`
+# constants return None instead of raising when unresolved.
+#
 # Engine docs (script_docs output): the runtime path is whatever the user last
 # wrote there by typing `script_docs` in the in-game console — it could be
 # vanilla-loaded OR mod-loaded depending on context. The repo-mirror snapshot
@@ -103,21 +113,62 @@ mod_deploy_target = _resolve("mod_deploy_target", "VIC3_MOD_DEPLOY_TARGET")
 # `vanilla_snapshot_docs_path` (if set and exists) → `vanilla_snapshot_docs_path_default`
 # → `mod_loaded_docs_path`. See docs/guides/python_tools.md and
 # docs/guides/vanilla_patch_runbook.md § 0.
-vanilla_snapshot_docs_path = _resolve(
-    "vanilla_snapshot_docs_path", "VIC3_VANILLA_DOCS_SNAPSHOT", optional=True
-)
-vanilla_source_repo_path = _resolve("vanilla_source_repo_path", "VIC3_VANILLA_REPO")
-vanilla_docs_path = _resolve("vanilla_docs_path", "VIC3_VANILLA_DOCS_RUNTIME")
-mod_loaded_docs_path = vanilla_docs_path  # alias; same path, clearer intent
+#
+# `vic3_modding_digests_path` is the optional per-vanilla-patch modder change
+# digest checkout (https://github.com/Victoria-3-Modding-Co-op/Modding-Digests).
+# Auto-pulled on cold start by mod_state_server.py when set; None when unconfigured.
+_LAZY_SPECS: dict[str, tuple[str, str, bool]] = {
+    "base_game_path": ("base_game_path", "VIC3_BASE_GAME", False),
+    "mod_deploy_target": ("mod_deploy_target", "VIC3_MOD_DEPLOY_TARGET", False),
+    "vanilla_snapshot_docs_path": (
+        "vanilla_snapshot_docs_path",
+        "VIC3_VANILLA_DOCS_SNAPSHOT",
+        True,
+    ),
+    "vanilla_source_repo_path": ("vanilla_source_repo_path", "VIC3_VANILLA_REPO", False),
+    "vanilla_docs_path": ("vanilla_docs_path", "VIC3_VANILLA_DOCS_RUNTIME", False),
+    "game_logs_path": ("game_logs_path", "VIC3_GAME_LOGS", False),
+    "vic3_modding_digests_path": (
+        "vic3_modding_digests_path",
+        "VIC3_MODDING_DIGESTS_REPO",
+        True,
+    ),
+}
 
-game_logs_path = _resolve("game_logs_path", "VIC3_GAME_LOGS")
+# Aliases: same value, clearer intent at the call site.
+_LAZY_ALIASES: dict[str, str] = {"mod_loaded_docs_path": "vanilla_docs_path"}
 
-# Optional: per-vanilla-patch modder change digests
-# (https://github.com/Victoria-3-Modding-Co-op/Modding-Digests). Auto-pulled
-# on cold start by mod_state_server.py when set. None when unconfigured.
-vic3_modding_digests_path: Optional[str] = _resolve(
-    "vic3_modding_digests_path", "VIC3_MODDING_DIGESTS_REPO", optional=True
-)
+if TYPE_CHECKING:  # pragma: no cover — declarations for type checkers/IDEs only.
+    base_game_path: str
+    mod_deploy_target: str
+    vanilla_snapshot_docs_path: Optional[str]
+    vanilla_source_repo_path: str
+    vanilla_docs_path: str
+    mod_loaded_docs_path: str
+    game_logs_path: str
+    vic3_modding_digests_path: Optional[str]
+    vanilla_snapshot_docs_path_default: Optional[str]
+
+
+def _lazy(name: str):
+    """Resolve `name` on first use and cache it in this module's globals.
+
+    Used by the module-level `__getattr__` and by module-internal code, which
+    cannot rely on `__getattr__` (PEP 562 only covers attribute access on the
+    module object, not bare global lookups inside functions)."""
+    if name in globals():
+        return globals()[name]
+    if name in _LAZY_SPECS:
+        key, env_var, optional = _LAZY_SPECS[name]
+        value = _resolve(key, env_var, optional=optional)
+    elif name in _LAZY_ALIASES:
+        value = _lazy(_LAZY_ALIASES[name])
+    elif name in _LAZY_DERIVED:
+        value = _LAZY_DERIVED[name]()
+    else:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    globals()[name] = value
+    return value
 
 
 def _semver_key(name: str) -> tuple:
@@ -134,9 +185,10 @@ def _semver_key(name: str) -> tuple:
 def _derive_digest_docs_path() -> Optional[str]:
     """Find <vic3_modding_digests_path>/<latest-version>/docs containing the
     expected engine-doc logs. Returns None if no usable directory exists."""
-    if not vic3_modding_digests_path:
+    digests_root = _lazy("vic3_modding_digests_path")
+    if not digests_root:
         return None
-    root = Path(vic3_modding_digests_path)
+    root = Path(digests_root)
     if not root.is_dir():
         return None
     candidates = []
@@ -155,4 +207,22 @@ def _derive_digest_docs_path() -> Optional[str]:
 
 # Derived: latest engine-doc snapshot from Modding-Digests. Consumers should
 # fall back to this when `vanilla_snapshot_docs_path` is unset or missing.
-vanilla_snapshot_docs_path_default: Optional[str] = _derive_digest_docs_path()
+_LAZY_DERIVED: dict[str, Callable[[], Optional[str]]] = {
+    "vanilla_snapshot_docs_path_default": _derive_digest_docs_path,
+}
+
+
+def __getattr__(name: str):
+    """PEP 562 hook: resolve per-machine paths on first access, then cache.
+
+    Keeps `from path_constants import base_game_path` working exactly as
+    before — including the RuntimeError + `python3 scripts/setup.py` hint when
+    the path cannot be resolved — while leaving the import itself cheap and
+    game-install-free."""
+    return _lazy(name)
+
+
+def __dir__() -> list:
+    return sorted(
+        set(globals()) | set(_LAZY_SPECS) | set(_LAZY_ALIASES) | set(_LAZY_DERIVED)
+    )
