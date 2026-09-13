@@ -111,11 +111,13 @@ If the vanilla map changed (states removed/renamed/split), edit `deposits_config
 **Enumerate the at-risk set deterministically.** Don't rely on agent inference or memory of "which files changed" — vanilla often touches GUIs that look incidental. Use:
 
 ```bash
-# Run from the repo root (mod_path).
+# Run from the repo root (mod_path). VAN is the vanilla git clone —
+# path_constants.vanilla_source_repo_path (VIC3_VANILLA_REPO), not a hardcoded path.
+VAN=$(python3 -c 'import path_constants; print(path_constants.vanilla_source_repo_path)')
 find gui -name "*.gui" -type f | while read rel; do
-  vfile="$HOME/src/vic3/game/$rel"
+  vfile="$VAN/game/$rel"
   if [ -f "$vfile" ]; then
-    changed=$(git -C ~/src/vic3 log --oneline OLD_REF..NEW_REF -- "game/$rel" | head -1)
+    changed=$(git -C "$VAN" log --oneline OLD_REF..NEW_REF -- "game/$rel" | head -1)
     if [ -n "$changed" ]; then
       echo "AT-RISK: $rel  [$changed]"
     fi

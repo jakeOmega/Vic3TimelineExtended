@@ -69,7 +69,7 @@ Every module retains its standalone CLI entrypoint (with `--dry-run` flags where
 
 Three rules — break any of them and the integration fails silently or deadlocks at startup:
 
-1. **The roster entry's second element is the import path.** `POST_LOAD_GENERATORS` calls `importlib.import_module(<path>)`, so a repo-root module is registered by its bare name (`("pm_costs", "pm_costs")`) and one under `scripts/generators/` by its dotted path (`("gen_company_building_cleanup", "scripts.generators.gen_company_building_cleanup")`) — the repo root is on `sys.path`, and `scripts/`, `scripts/generators/` both carry `__init__.py`. Prefer the repo root for new generators, but a `scripts/generators/` module does qualify; just register the dotted path, not the bare name.
+1. **The roster entry's second element is the import path.** `POST_LOAD_GENERATORS` calls `importlib.import_module(<path>)`, so a repo-root module is registered by its bare name (`("pm_costs", "pm_costs")`) and one under `scripts/generators/` by its dotted path (`("gen_company_building_cleanup", "scripts.generators.gen_company_building_cleanup")`) — the repo root is on `sys.path`, and `scripts/` / `scripts/generators/` resolve as **PEP 420 namespace packages** — neither carries an `__init__.py` (`find scripts -name __init__.py` is empty) and on Python 3 none is needed. Prefer the repo root for new generators, but a `scripts/generators/` module does qualify; just register the dotted path, not the bare name.
 2. **Expose `def regenerate(mod_state=None)`.** The post-load chain passes the live `ModState` instance. Read entity data via `mod_state.get_data("Events")` / `mod_state.localize(...)` / `mod_state.mod_parsers[...]` — never via HTTP loopback to `localhost:8950`. The server isn't accepting requests yet during startup, so a `urlopen('http://localhost:8950/...')` call inside post-load will block until timeout. (`gen_event_inventory.py` originally hit the HTTP endpoint and could not have been auto-run as-shipped — refactoring it to take `mod_state` was the unblocker.)
 3. **Standalone fallback uses `mod_state_script` for the path dicts.** When `mod_state is None`, instantiate `ModState(base_game_paths, mod_paths)` — those dicts are defined in `mod_state_script.py` and `mod_state_server.py`, **not** in `path_constants.py` (which only has `mod_path` / `base_game_path` scalars). Importing from `mod_state_script` keeps the standalone path cycle-free; importing from `mod_state_server` would re-enter the server module.
 
@@ -88,7 +88,7 @@ Defensive pattern: make the regex match BOTH the legacy untagged form and the ta
 | Script | Purpose | Run |
 |--------|---------|-----|
 | `paradox_file_parser.py` | Parses Paradox `.txt` files into Python dicts. Handles tokenization, brace nesting, `REPLACE:` / `INJECT:` merge directives, and diff detection. AST shape: `{key: (op, value)}`; a key repeated inside a block becomes `{key: [(op, value), ...]}` in source order, every entry keeping its own operator (`=`, `<`, `>`, `<=`, `>=`, `!=`, `?=`, `==`) and identical duplicates kept (`add = 5 add = 5` is two entries — the engine runs both). A file that repeats a *top-level* key folds the copies the way later files fold onto earlier ones: `INJECT:x` injects into the earlier copy, a plain or `REPLACE:` copy replaces it (last wins) and logs a warning on the `paradox_file_parser` logger. | Library (import) |
-| `test_paradox_file_parser.py` | 39 unit tests for the parser (tokenizer, operators, repeated keys, directives, duplicate top-level keys, loc-line parsing). | `python test_paradox_file_parser.py` |
+| `test_paradox_file_parser.py` | 40 unit tests for the parser (tokenizer, operators, repeated keys, directives, duplicate top-level keys, loc-line parsing). | `python test_paradox_file_parser.py` |
 | `test_event_balance.py` | 53 unit tests for the `/event-balance` helpers (polarity arithmetic, modifier color lookup, static-modifier resolution, option-body walker, `add_enactment_modifier` expansion, change_variable parsing, file id extraction, text rendering, strict and soft dominance helpers). | `python -m unittest test_event_balance` |
 | `mod_state.py` | `ModState` class wrapping the parser. Loads all entity types and localization. Provides `localize()`, `unlocalize()`, `search_localization()`, `build_reverse_localization()`. Module-level `parse_loc_line()` / `iter_loc_lines()` are the single loc-line rule (escape-aware — a value containing `\"` reads back whole, backslashes kept verbatim; the `l_english:` header, comment lines and unquoted lines are skipped) shared with the server's `_parse_loc_lines`. | Library (import) |
 | `mod_state_server.py` | Persistent HTTP server (port 8950) serving parsed mod data as JSON. See **Mod State Server** section. | `.venv/bin/python mod_state_server.py` |
@@ -261,6 +261,36 @@ Invoke-RestMethod http://localhost:8950/status
 
 > **AI agent rule:** ALWAYS check if the server is running at the START of any session that involves looking up game data.
 
+### HTTP status codes and access (#254 / PR #270)
+
+Two behaviours changed in PR #270 that any script or agent talking to this server needs to know.
+
+**1. Local-origin gate — every route, every method, 403 on failure.** `do_GET` / `do_POST` run the gate *before* any routing or reload work, so a rejected request costs nothing. A request is refused with **403** when:
+
+- there is no `Host` header, or its hostname isn't `127.0.0.1` / `localhost` / `[::1]` (bracketed or bare; the port-less spelling is accepted);
+- the `Host` port doesn't match the **actual bound port** (read from the live socket, not the hardcoded `8950`); or
+- it carries an `Origin` that isn't `http://127.0.0.1:<port>` / `http://localhost:<port>` / `http://[::1]:<port>` — `Origin: null` (sandboxed iframe, `file://` page) is refused too.
+
+This blocks a page in the user's browser from driving the server (CSRF / DNS rebinding). **Normal use is unaffected**: `curl`, `curl -f`, `urllib`, `requests` and PowerShell's `Invoke-RestMethod` all send a conforming `Host` and no `Origin`. Every rejection logs at WARNING with the offending header. The predicate is `_local_request_rejection(host, origin, port)` — a pure function, unit-tested without a server.
+
+**2. Error bodies now carry honest statuses.** Endpoints used to answer `{"error": …}` at HTTP **200**, so `curl -f` readiness probes passed on failure and a client couldn't branch on the status. 49 such returns were converted. The exception classes in `mod_state_server.py` are `NotFound` (404), `BadRequest` (400), `DataNotLoaded` (503, a `_ServiceNotReady`); a bare `KeyError` escaping a handler is now a genuine **500** (a server bug) rather than a 404.
+
+| Old → new | Routes / condition |
+|---|---|
+| **200 → 403** | Every route, any method, when the `Host`/`Origin` gate rejects the request. |
+| **200 → 503** | `"<X> data not loaded"` on `/laws`, `/principles`, `/amendments`, `/technologies`, `/buildings`, `/goods`, `/combat-units`, `/ideologies`, `/events`, `/institutions`, `/journal-entries`, `/diplomatic-actions`, `/treaty-articles`, `/decisions`, `/script-values`, `/decrees`, `/on-actions`, `/production-methods`, `/scripted-effects`, `/scripted-triggers`, `/tech-tree/<id>`, `/technology-effects/<id>`, `/event-balance`, `/event-balance/issues`. Also `/production-methods?building=<id>` (`"Required data not loaded"`), `/validate/engine-coverage` (`"Mod state or engine docs not loaded"`), and `/engine-docs/usage/<name>` when the vanilla `common/` dir is missing. Body is unchanged apart from an added `hint` — but **`curl -f` now fails on these**, which is the point. |
+| **200 → 400** | Missing or malformed input: `/localize` (no key) · `/unlocalize` (no text) · `/search`, `/modifier-search` (no `?q`) · `/references` (no key) · `/tech-tree`, `/unlocked-by`, `/technology-effects` (no id) · `/diff` (missing type/id) · `/filter` (no type, or no `?field`) · `/loc-keys` (fewer than 2 segments) · `/gui` (no sub-endpoint) · `/gui/render-sites` (no key) · `/gui/render-paths` (no type, or unknown `?field`) · `/modifier-grants` (no name, or malformed) · `/modifier-patterns?expand=` (pattern without a placeholder, or missing the placeholder value) · `/event-balance` (no id / `?ids` / `?prefix` / `?file`). |
+| **404 → 400** | `/engine-docs/origin` and `/engine-docs/usage` called with no `<name>` — the usage hint used to ride on a `KeyError`. |
+| **200 → 404** | `/logs/<family>/diff` when the `?against=` generation doesn't exist · `/loc-keys/<UnknownType>/<id>` · `/gui/render-paths/<UnmappedEntityType>`. |
+| **404 → 500** | A genuine `KeyError` inside a handler (a server bug, not a missing entity). All 500 bodies are now `{"error": "<ExceptionType>: <msg>"}`. |
+| **200 → 500** | `/engine-docs/usage/<name>` when the vanilla scan itself fails (timeout / scan error). |
+
+**`/event-balance?file=` is contained to the mod tree.** `_resolve_mod_relative_path()` rejects absolute paths, `\` / `X:` prefixes, `..` escapes and symlinks pointing outside `mod_path` with **400** (a `..` that stays inside is fine); a path that resolves inside the tree but names a missing file is **404**, and an unparseable file is **400**. The other path-shaped params are pure dict lookups against pre-indexed data and were audited as safe: `/dev-docs/<path>`, `/engine-docs/<type>`, `/logs/<family>`, `/raw/<Type>/<id>`.
+
+**`/unlocalize` takes both forms.** `/unlocalize/<text>` (path segment) and `/unlocalize?q=<text>` both work — use the query form for text containing slashes or awkward spacing. `/help` now advertises the path form and mentions `?q=`, and carries an `access` line describing the 403 gate.
+
+**`mod_state_client.py` prints error bodies.** `query()` catches `HTTPError` *before* `URLError` (HTTPError subclasses it, so order matters), prints `HTTP <code> <reason>` plus the pretty-printed JSON body to stderr, and exits 1. A real connection failure still gives the "server is not running" message.
+
 ### API Endpoints
 
 | Endpoint | Method | Description |
@@ -273,7 +303,7 @@ Invoke-RestMethod http://localhost:8950/status
 | `/raw/<EntityType>/<id>` | GET | Raw parsed data for one entity |
 | `/loc-keys/<EntityType>/<id>` | GET | Resolve the stable family of loc keys an entity exposes (name/desc/...). Seeded set in `LOC_KEY_FAMILIES` (treaty articles, decisions, JEs, decrees, diplo actions/plays, laws, country formations, modifiers, institutions). |
 | `/localize/<key>` | GET | Game key → display text |
-| `/unlocalize/<text>` | GET | Display text → matching game key(s) |
+| `/unlocalize/<text>` | GET | Display text → matching game key(s). `?q=<text>` works too — prefer it when the text contains slashes. |
 | `/search?q=<query>` | GET | Search entity IDs, names, and localization |
 | `/laws` | GET | All laws grouped by law group |
 | `/laws/<law_id>` | GET | Detailed law data — includes resolved `name` and `description` (the `<law_id>_desc` loc; the field intent / ethnocentrism ordering lives in the description, not the `progressiveness` number). `/decrees/<id>` and `/institutions/<id>` likewise expose `description`. |
