@@ -35,7 +35,9 @@ NPolitics = {
 NWar = {
 	DEVASTATION_INCREASE_RATE = -0.01 # Per day, scales with level of occupation
 	DEVASTATION_DECAY_RATE = -0.03 # Per day, when there are no occupations
-	DEVASTATION_FROM_BATTLES = 3 # For each battle
+	# DEVASTATION_FROM_BATTLES: was 3 (30x vanilla) through 1.13.9. Reverted to vanilla for 1.14,
+	# where average devastation also drains war support (WAR_SUPPORT_CHANGE_DEVASTATION_FACTOR);
+	# re-tune after playtesting the new war support system.
 }
 
 NPops = {
