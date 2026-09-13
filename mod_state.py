@@ -5,6 +5,52 @@ from collections import defaultdict
 from paradox_file_parser import ParadoxFileParser
 
 
+def parse_loc_line(line):
+    r"""Return (key, value) for one Paradox localization line, or None.
+
+    Accepts ` key:0 "value"`, ` key: "value"` and unindented forms. Returns
+    None for blank lines, comment lines (first non-blank character `#`,
+    indented or not), the `l_english:` header and any other line without a
+    quoted value, and lines whose key contains whitespace. The value is the
+    source text between the opening quote and the first closing quote that
+    is not escaped — a backslash escapes the character after it — stripped
+    and otherwise verbatim (`\"` and `\n` are kept as written). The old rule
+    cut at the second `"` on the line, so `"He said \"go\""` read back as a
+    lone backslash. A line whose quoted value never closes is malformed and
+    skipped, matching the standalone loc audits' parsers.
+    """
+    stripped = line.lstrip()
+    if not stripped or stripped.startswith("#") or ":" not in stripped:
+        return None
+    key, rest = stripped.split(":", 1)
+    key = key.strip()
+    if not key or any(c.isspace() for c in key):
+        return None
+    start = rest.find('"')
+    if start == -1:
+        return None
+    i = start + 1
+    n = len(rest)
+    while i < n:
+        c = rest[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == '"':
+            return key, rest[start + 1 : i].strip()
+        i += 1
+    return None
+
+
+def iter_loc_lines(text):
+    """Yield (key, value) for every parseable line of a loc file's text,
+    using the same rule as ModState.add_localization (parse_loc_line)."""
+    for line in text.splitlines():
+        parsed = parse_loc_line(line)
+        if parsed is not None:
+            yield parsed
+
+
 class ModState:
     def __init__(self, base_game_dir, mod_dir, diff=False):
         self.base_parsers = {}
@@ -21,15 +67,10 @@ class ModState:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     for line in f:
-                        if line.startswith("#") or (":" not in line):
+                        parsed = parse_loc_line(line)
+                        if parsed is None:
                             continue
-                        key, value = line.split(":", 1)
-                        key = key.strip()
-                        quote_locations = [i for i, c in enumerate(value) if c == '"']
-                        if len(quote_locations) >= 2:
-                            value = value[
-                                quote_locations[0] + 1 : quote_locations[1]
-                            ].strip()
+                        key, value = parsed
                         self.localization[key] = value
             except Exception as e:
                 print(f"WARNING: Failed to read localization file {file_path}: {e}")
