@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** political systems work, written for AI agents that need context before touching mod content. This doc covers vanilla mechanics only — mod-specific systems (banking-cycle politics, civil-rights JEs, decolonization rework, combined-arms IG traits, the dormant `te_map_mode_*` survey, etc.) live in `docs/systems/journal_entry_systems.md` and `docs/systems/mod_systems.md`.
 
-> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
+> **Last verified against vanilla:** 1.14.2 (open beta). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
 >
 > **Verify before relying on names.** Law IDs, IG IDs, ideology IDs, party IDs, movement IDs, character-trait IDs and modifier names cited below should be verified via the mod state server (`/laws`, `/raw/InterestGroup/<id>`, `/raw/Ideology/<id>`, `/modifier-search?q=`) before referencing them in code. Vanilla renames things across patches.
 >
@@ -576,7 +576,7 @@ When a balance question turns on "what *is* the cost / threshold / coefficient",
 
 - **Authority production / Bureaucracy / Influence**: `vanilla_economy_reference.md` § 11. Decrees, suppress, consumption taxes, and monopolies all draw on the production side.
 - **Power blocs, leverage, lobby clout in leverage math, subjects, Support Regime pact**: `vanilla_diplomacy_reference.md` § 9, § 10.
-- **War support exhaustion (radicals → exhaustion; lobby clout → exhaustion)**: `vanilla_war_reference.md` § 13.
+- **War support change (turmoil, loyalists, lobby clout → war support; 1.14 rework)**: `vanilla_war_reference.md` § 13.
 - **Treaty Law Commitment article**: `vanilla/treaty_articles_reference.md`.
 - **Auto-generated full law list**: `docs/engine/laws.txt`.
 - **Engine triggers and effects relevant to politics**: `docs/engine/vic3_triggers_effects_reference.md`, `docs/engine/triggers_summary.txt`, `docs/engine/effects_summary.txt`.

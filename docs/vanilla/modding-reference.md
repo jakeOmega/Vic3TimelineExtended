@@ -75,7 +75,8 @@ New modifier fields must be registered in `common/modifier_type_definitions/` wi
 | `country_revolution_progress` | `_add`, `_mult` | Revolution progress |
 | `country_mass_migration_attraction` | `_mult` | Mass migration pull |
 | `country_resource_discovery_chance` | `_mult` | Resource discovery |
-| `country_war_exhaustion_casualties` | `_mult` | War exhaustion |
+| `country_war_support_casualties` | `_mult` | War support lost to casualties (1.14; was `country_war_exhaustion_casualties`) |
+| `country_war_support_battles_increase` / `_decrease` | `_mult` | War support from won / lost battles (1.14) |
 | `country_radicals_from_conquest` | `_mult` | Radicals from conquest |
 | `country_institution_size_change_speed` | `_mult` | Institution change speed |
 | `country_liberty_desire` | `_add` | Base liberty desire |

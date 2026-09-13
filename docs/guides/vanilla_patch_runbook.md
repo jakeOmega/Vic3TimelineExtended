@@ -4,7 +4,7 @@ End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria
 
 ## 0. Prerequisites
 
-- Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history).
+- Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history). Set `vanilla_source_repo_path` in `paths.local.json` to it (`setup.py` accepts any existing directory there, so double-check it isn't pointing at a digest folder). **On a fresh machine without the clone, get it before starting** — the engine-surface diff works from digests alone (§ 3), but GUI merges (§ 5), `REPLACE:` re-bases and the `/validate/*?old_ref=` endpoints all need the exact prior-version files, and Steam's rollback branch is usually the *latest* prior hotfix, not the version the mod was last migrated on.
 - [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) clone at `vic3_modding_digests_path` (`~/src/Modding-Digests` by default). The mod state server auto-pulls this on cold start; if absent, run `.venv/bin/python mod_state_server.py` once and it'll clone. The digests short-circuit much of § 3.
 - Mod state server runnable: `python3 mod_state_server.py` (use `python3`, not `python`, on this system).
 - The mod loads cleanly on the prior vanilla (i.e. before starting the migration, the mod is in a known-good state).
@@ -48,6 +48,19 @@ Manual-diff workflow when needed: compare `docs/modifiers.log`, `docs/effects.lo
 - **Semantics changed**: same name, different meaning. Watch for `relative_*` triggers and similar.
 - **Added**: useful new modifiers/effects/triggers the mod might want to leverage.
 
+**Diff the cumulative span, not just the newest digest.** The baseline is the mod's last migrated version (`.metadata/metadata.json` → `supported_game_version`), which may sit several hotfixes back — 1.13.9 → 1.14.2 crossed 1.13.10 and 1.13.11, and 1.13.10 alone touched 10 of the mod's GUI overrides. Concatenate every intervening digest's `changes_files.md` when enumerating at-risk files.
+
+**No vanilla clone needed for the engine surface.** Every digest ships the full `docs/*.log` dump, so diff the two endpoints directly (run under `bash`):
+
+```bash
+cd <vic3_modding_digests_path>
+hdr() { grep -oE '^##+ [A-Za-z0-9_:|{}\\]+' "$1" | sed -E 's/^#+ //' | sort -u; }
+for k in effects triggers event_targets; do echo "== $k"; comm -3 <(hdr OLD/docs/$k.log) <(hdr NEW/docs/$k.log); done
+echo "== modifiers"; comm -3 <(grep -oE '^[A-Za-z0-9_]+:$' OLD/docs/modifiers.log | sort -u) <(grep -oE '^[A-Za-z0-9_]+:$' NEW/docs/modifiers.log | sort -u)
+```
+
+Then grep **all** of `common/ events/ gui/ localization/` for every removed name — `effect_trigger_validity_audit` only scans events, scripted effects/triggers and on_actions, so e.g. a removed trigger inside `common/diplomatic_actions/` is invisible to it (1.14: `has_war_exhaustion` in `nuke.txt`). After re-bootstrapping the catalog (§ 4), `git diff docs/engine/effect_trigger_valid_keys.txt | grep '^-'` also lists removed *vanilla script values* — grep the mod for those too. GUI 3-way merges, `REPLACE:` re-bases and loc-drift checks still need the vanilla clone (§ 5).
+
 The shell helpers in `<vic3_modding_digests_path>/script/` (`diff-modifiers.sh`, `diff-documentation.sh`) are the same ones the upstream uses to generate the digests — handy when running against a vanilla version not yet covered.
 
 **Modifier-type-definitions name diff** — catches registrations added/removed even when no digest exists yet (vanilla `.txt` files there are BOM-prefixed and unindented, so plain `grep "^\w+ = {"` misses everything):
@@ -75,6 +88,10 @@ When `debug.log` shows `Unexpected token: <name>` or `inject/replace to a non-ex
 | `canning` (tech) | `canneries` (tech) | `INJECT:` targets in `common/technology/technologies/modified.txt` | `vacuum_canning` still exists; only the early-era `canning` was renamed. |
 | `has_role` (trigger) | `has_role_of_type` (trigger) | All character-role checks | Bulk-replaceable. |
 | `country_law_enactment_time_mult` | `country_law_enactment_speed_mult` | Static modifiers, law `modifier` blocks | 1.13.9 rework. **Semantics flip with the rename**: time-mult (negative = faster) → speed-mult (positive = faster). Vanilla's convention was sign-flip at the same magnitude. The six per-law variants renamed identically (`country_enactment_time_law_X_mult` → `country_enactment_speed_law_X_mult`). A `LAW_ENACTMENT_MIN_SPEED_FACTOR` define floors stacked maluses. |
+| `country_war_exhaustion_casualties_mult` | `country_war_support_casualties_mult` | Laws, principles, traits, amendments, static modifiers | 1.14 war support rework. **Same sign** (both `color=bad`; vanilla multiplies the casualty loss by `1 + mult`, floored at 0). 1.14 also added `country_war_support_battles_{increase,decrease}_mult`. |
+| `has_war_exhaustion` (trigger) | `has_war_support` (level) — **not** `has_war_support_change` | "War is going badly" AI/event checks | 1.14. War support is now 0–100 (low = bad), so `exhaustion > X` becomes `has_war_support value < Y`; prefer `define:NDiplomacy\|WAR_SUPPORT_RADICALIZATION_THRESHOLD` / `WAR_SUPPORT_DRIFT_TARGET` over literals. `has_war_support_change` is the signed per-beat delta (vanilla uses `< -5`). |
+| `add_war_exhaustion` / `additional_war_exhaustion` / `war_exhaustion_from_acceptance_of_dead` | `add_war_support_change` / `additional_war_support_change` / `war_support_from_acceptance_of_dead` | Events, script values | 1.14. **Sign flips**: positive exhaustion was bad, positive war support change is good. `enemy_contested_wargoals` has no direct successor (see `has_stalled_wargoal_against` / `enemy_side_occupation`). |
+| `concept_war_exhaustion` (loc concept) | `concept_war_support` | `[concept_war_exhaustion]` in loc strings | 1.14. A dead concept link renders broken with no log line — `concept_reference_audit` / grep. |
 
 **Deregistration without removal** (same silent-no-op symptom, different fix): a patch can remove a `modifier_type_definitions` registration while keeping the underlying entity type. 1.13.9 deregistered `state_harvest_condition_{hailstorm,torrential_rains}_{impact,duration}_mult` although both harvest conditions still exist — any mod use silently no-ops. Fix by re-registering the type in the mod's `common/modifier_type_definitions/` (copy the last-known vanilla registration shape from `~/src/vic3` git history), not by deleting the mod's uses. Detect via the modifier-type-definitions name diff (BOM-aware extraction, see below), which catches what `debug.log` never reports.
 
@@ -98,6 +115,7 @@ python3 pop_needs_curves.py                          # common/buy_packages/00_bu
 python3 resources.py                                 # map_data/state_regions/*.txt
 python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
+python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors)
 ```
 
 Re-bootstrap the effect/trigger catalog **after** the engine-doc summaries (`effects_summary.txt` / `triggers_summary.txt`) are refreshed in step 3, since it unions those names with vanilla's effect-corpus keywords. A stale catalog produces false positives (new vanilla effects flagged as unknown).

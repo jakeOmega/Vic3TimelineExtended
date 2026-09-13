@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** state-level mechanics work — incorporation, infrastructure, market access, capital, turmoil, obstinance, devastation, food security, pollution, harvest conditions, hubs and split states. States are the unit buildings attach to, where pops live, and where most modifiers terminate. This doc covers the per-state state machine; the country-scope economy that aggregates all states lives in `vanilla_economy_reference.md`.
 
-> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
+> **Last verified against vanilla:** 1.14.2 (open beta). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. The patch runbook (`docs/guides/vanilla_patch_runbook.md`) directs whoever performs a vanilla bump to revisit this file.
 >
 > **This doc captures concepts, not exhaustive lists.** State trait catalogs, per-state-region resource limits, per-decree per-state effect lists drift each patch and live in `common/state_traits/`, `map_data/state_regions/`, `common/decrees/`, `common/static_modifiers/`. Read this doc for the *shape*; query the data files for values.
 >
@@ -203,6 +203,8 @@ States occupied during war or damaged by events accumulate **devastation**. The 
   - **`state_devastation_decay_mult` is a registered modifier** (added in 1.13 — see `common/modifier_type_definitions/00_modifier_types.txt`). External modifiers can speed or slow decay: e.g. the *Brutal Anti-Bandit Campaigns* event modifier sets it to −1 (stops decay outright). Mod content can grant decay-speedup as a reward, or decay-penalty as a flavor cost.
 
 Each point of devastation linearly cuts: infrastructure, construction efficiency, migration attraction, building throughput, and *adds* to pop mortality. Heavy occupation can compound to multi-points-per-week throughput loss + significant mortality.
+
+**Since 1.14 devastation also drains war support**: the country's population-weighted `average_devastation` (a new trigger) is a war support change source (`NWar|WAR_SUPPORT_CHANGE_DEVASTATION_FACTOR`), so devastation-tuning defines now shift war length too.
 
 Devastation applies to the **entire state region**, regardless of which split-state owner caused it. If two split-state owners are at war and one occupies, both feel the devastation.
 
