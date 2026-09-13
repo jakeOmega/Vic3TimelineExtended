@@ -303,11 +303,15 @@ banking_law_cascade_on_law_activated = {
 	}
 }
 
-# NOTE: Building and investment hooks for te_update_state_modifiers were removed.
-# The add_modifier = { multiplier = script_value } evaluates the script value
-# through the parent scope chain. Building and institution scopes don't support
-# variables/modifiers, causing cascading errors. The yearly state pulse and
-# law/technology hooks are sufficient for these slow-changing modifiers.
+# NOTE: the building and investment hooks that used to refresh the state
+# modifiers here were removed, and so were the law/technology ones (see the
+# STATE MODIFIER UPDATES ARE PULSE-ONLY block further down).
+# add_modifier = { multiplier = script_value } evaluates the script value
+# through the parent scope chain, and building / institution / law scopes
+# don't support the variables and modifiers those values read, which caused
+# cascading errors. The periodic state pulses are the only refresh sites now:
+# pollution and tourism monthly, migration crowding and free-port tariffs
+# yearly.
 
 # ============================================================================
 # BUILDING BUILT (Root = Building)
@@ -1185,8 +1189,8 @@ te_fix_inconsistent_laws_from_law_scope = {
 # on_monthly_pulse_state is genuine state scope, so it satisfies the same
 # requirement the old yearly comment cited: the tourism script values use
 # state_region = s:STATE_X comparisons that only resolve in state scope
-# (which is why tourism stays out of te_update_state_modifiers and off the
-# law / technology / building hooks).
+# (which is why tourism is refreshed here and never from a law / technology /
+# building hook).
 tourism_on_action = {
 	effect = {
 		te_update_tourism_modifier = yes
@@ -2252,9 +2256,11 @@ free_port_tariff_update_on_action = {
 #   supports neither variables nor modifiers).
 #
 # All of these are instead refreshed from the periodic state pulses:
-# te_update_state_modifiers from on_yearly_pulse_state (within 1 year) and
-# tourism from on_monthly_pulse_state. Do not re-add an immediate hook for
-# them - add the work to a state pulse instead.
+# pollution_on_action on on_monthly_pulse_state, migration_crowding_on_action
+# and free_port_tariff_update_on_action on on_yearly_pulse_state (within
+# 1 year), and tourism from tourism_on_action on on_monthly_pulse_state.
+# Do not re-add an immediate hook for them - add the work to a state pulse
+# instead.
 
 # ============================================================================
 # WORLD WAR EVENTS - DEPRECATED: All events now fire from je_world_war
