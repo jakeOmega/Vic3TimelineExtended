@@ -570,7 +570,7 @@ Couldn't find any animation state for harvest condition type
                 source="harvest_condition_graphics.cpp:52",
                 message="Couldn't find any animation state for harvest condition type 'bull_market'",
             )
-            tag_vanilla_bugs(entry_list := [entry], by_basename, by_source)
+            tag_vanilla_bugs([entry], by_basename, by_source)
             self.assertIsNotNone(entry.vanilla_bug_ref)
             self.assertEqual(entry.vanilla_bug_ref["kind"], "mod_low_priority")
             self.assertIn("tracked_issue", entry.vanilla_bug_ref)

@@ -15,7 +15,6 @@ import argparse
 import fnmatch
 import hashlib
 import json
-import os
 import random
 import re
 import sys
@@ -894,8 +893,8 @@ def render_prompt(date_str: str, run_label: str, targets: list[dict],
     lines.append("1. Record this run's per-file results **via the helper script** — it writes")
     lines.append(f"   `docs/audits/nightly/{run_label}/findings.json` (your committed delta); never hand-edit state (#166):")
     lines.append("   ```bash")
-    lines.append(f"   echo '{{\"path/to/file_a.txt\": 2, \"path/to/file_b.txt\": 0}}' | \\")
-    lines.append(f"     python3 scripts/nightly_audit_state_update.py \\")
+    lines.append("   echo '{\"path/to/file_a.txt\": 2, \"path/to/file_b.txt\": 0}' | \\")
+    lines.append("     python3 scripts/nightly_audit_state_update.py \\")
     lines.append(f"       --targets-json docs/audits/nightly/{run_label}/targets.json \\")
     lines.append(f"       --findings-json - --date {date_str}")
     lines.append("   ```")

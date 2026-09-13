@@ -359,7 +359,6 @@ def main():
     mod_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     out_path = os.path.join(mod_root, "common", "company_types", "extra_companies_vanilla_updates.txt")
 
-    import codecs
     with open(out_path, "w", encoding="utf-8-sig") as f:
         f.write(content)
 

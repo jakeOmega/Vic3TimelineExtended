@@ -101,6 +101,30 @@ Notes:
 - It ignores braces inside quoted strings and ignores trailing `#` comments while computing indentation.
 - Do not use it on YAML, JSON, or Python files.
 
+### Python lint gate (`ruff`)
+
+`ruff.toml` at the repo root enables the pyflakes (`F`) rules only — undefined
+names, duplicate defs / dict keys, imports shadowed by loop variables, unused
+imports and locals, f-strings with no placeholders. Style and import-order rules
+(`E` / `I` / `UP` / …) are deliberately **not** selected; turning them on would
+rewrite every file for no correctness gain.
+
+```bash
+ruff check .                 # must print "All checks passed!"
+ruff check --fix .           # apply the safe fixes (unused imports, f-strings)
+ruff check --unsafe-fixes .  # preview the rest; review each before applying
+```
+
+Notes:
+- `ruff` is in `requirements.txt` under the "Dev / CI" block.
+- Keep the tree clean: a new finding in a file you touch is a review blocker.
+- Suppress a deliberate unused import (side-effect import, re-export, availability
+  probe) with `# noqa: F401` **plus** a reason comment — ruff rejects a malformed
+  directive like `# noqa: local import` and warns about it.
+- Names only referenced in string annotations under `from __future__ import
+  annotations` still need a real binding: import them in an `if TYPE_CHECKING:`
+  block, or ruff flags F821 (and `typing.get_type_hints()` would raise).
+
 ## Localization & Code Generation
 
 | Script | Purpose | Run |

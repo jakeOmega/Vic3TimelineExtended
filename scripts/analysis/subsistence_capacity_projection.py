@@ -26,8 +26,7 @@ issue; precise targets require an in-game run.
 
 import argparse
 import sys
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 # Reuse the existing pop_growth model
 sys.path.insert(0, sys.path[0] or ".")

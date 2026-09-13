@@ -18,7 +18,6 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from mod_state import ModState  # noqa: E402
 from path_constants import base_game_path, mod_path  # noqa: E402
 
 # Companies that already have unique buildings
@@ -660,7 +659,7 @@ def generate_pm(building_suffix, display_name, sector, description):
     lines.append(f"# --- {display_name} ---")
     lines.append(f"# Theme: {description}")
     lines.append(f"{pm_name} = {{")
-    lines.append(f'\ttexture = "gfx/interface/icons/production_method_icons/base1.dds"')
+    lines.append('\ttexture = "gfx/interface/icons/production_method_icons/base1.dds"')
 
     # State modifiers
     if template['state_mods']:
@@ -716,7 +715,7 @@ def generate_pm(building_suffix, display_name, sector, description):
     lines.append(f"\t\t\t# Profit: {profit:.1f}")
     lines.append(f"\t\t\t# Profit margin: {margin:.2f}%")
     lines.append(f"\t\t\t# Zero profit price multiplier: {zp_mult:.2f}")
-    lines.append(f"\t\t\t# Employment: 2000")
+    lines.append("\t\t\t# Employment: 2000")
     wage_be = profit / 2000 if profit > 0 else 0
     lines.append(f"\t\t\t# Wage breakeven: {wage_be:.2f}")
 

@@ -2,7 +2,6 @@ import argparse
 import os
 import torch
 from diffusers import FluxPipeline
-from PIL import Image
 
 def generate_image(prompt, style, output, model_id, steps, width, height, token):
     device = "cuda" if torch.cuda.is_available() else "cpu"
