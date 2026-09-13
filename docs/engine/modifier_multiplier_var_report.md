@@ -20,9 +20,7 @@ Suppress a deliberate case with a trailing comment on the
 
 ## Unreviewed Flags
 
-### `common/scripted_effects/te_construction_market_update_effects.txt`
-
-- `te_construction_market_apply_per_site_modifier` (line 49): `te_construction_market_capacity_modifier` applied at line 91 with `multiplier = owner.var:te_cm_capacity_mult`, but `te_cm_capacity_mult` is removed at line 96
+_None._
 
 ## Reviewed Exemptions
 
@@ -31,7 +29,7 @@ _None._
 ## Coverage
 
 - files audited: 117
-- total flags: 1
-- unreviewed: 1
+- total flags: 0
+- unreviewed: 0
 - exempted: 0
 
