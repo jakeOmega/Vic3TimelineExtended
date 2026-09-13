@@ -3992,16 +3992,24 @@ def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
     value = (raw or "").strip()
     if not value:
         raise BadRequest(f"Provide ?{param}=<path relative to the mod root>")
+    if "\x00" in value:
+        # `?file=x%00y` makes os.path.realpath raise ValueError; that's
+        # malformed input, so answer 400 instead of letting it reach the
+        # generic 500 handler. (#254)
+        raise BadRequest(f"?{param}= contains an embedded NUL byte")
     if value.startswith(("/", "\\")) or os.path.isabs(value) or re.match(r"^[A-Za-z]:", value):
         raise BadRequest(
             f"?{param}= must be relative to the mod root (absolute paths are rejected)",
             got=value,
         )
     root = os.path.realpath(mod_path)
-    resolved = os.path.realpath(os.path.join(root, value))
+    resolved = ""
     try:
+        resolved = os.path.realpath(os.path.join(root, value))
         inside = resolved == root or os.path.commonpath([root, resolved]) == root
-    except ValueError:  # different drives on Windows
+    except ValueError:
+        # Different drives on Windows, or any other un-resolvable spelling:
+        # treat as outside rather than letting it become a 500.
         inside = False
     if not inside:
         raise BadRequest(
@@ -7295,9 +7303,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         except ValueError:
             limit = 200
         result = _find_modifier_grants(parts[0], scope=scope, limit=limit)
-        # The finder rejects a malformed name / scope in-band; that's a 400. (#254)
+        # The finder rejects a malformed name / scope in-band; that's a 400.
+        # Pass the whole payload through so the body keeps `name` and the empty
+        # `grants` list callers already parse. (#254)
         if isinstance(result, dict) and "error" in result:
-            raise BadRequest(result["error"], name=result.get("name"))
+            raise _EndpointError(result, 400)
         return result
 
     # ---- structured: on-actions -------------------------------------------
@@ -7591,7 +7601,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             if isinstance(usage, dict) and "error" in usage:
                 err = usage["error"]
                 if err.startswith("Invalid target name"):
-                    raise BadRequest(err, name=usage.get("name"))
+                    # Whole payload, so the body keeps `name` / `uses`. (#254)
+                    raise _EndpointError(usage, 400)
                 if err.startswith("Vanilla common dir not found"):
                     raise _ServiceNotReady(usage, 503)
                 raise _EndpointError(usage, 500)

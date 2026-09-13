@@ -970,6 +970,23 @@ class EventBalanceFileParamTests(unittest.TestCase):
         with self.assertRaises(mss.BadRequest):
             mss._resolve_mod_relative_path("escape/secret.txt")
 
+    def test_embedded_nul_byte_is_400_not_500(self):
+        # `?file=x%00y` reaches the handler as a real NUL; os.path.realpath
+        # raises ValueError on it, which used to escape as a 500 + traceback.
+        with self.assertRaises(mss.BadRequest) as ctx:
+            mss._resolve_mod_relative_path("events/foo\x00.txt")
+        self.assertEqual(ctx.exception.status, 400)
+        self.assertIn("NUL", ctx.exception.payload["error"])
+
+    def test_nul_byte_through_the_handler_is_400(self):
+        handler = _CapturingHandler("/event-balance?file=events/foo%00.txt")
+        stub = _StubModState({"Events": {"sample.1": ("=", {})}})
+        with mock.patch.object(mss, "ms", stub):
+            with self.assertRaises(mss.BadRequest) as ctx:
+                mss.ModStateHandler._event_balance(
+                    handler, [], {"file": ["events/foo\x00.txt"]})
+        self.assertEqual(ctx.exception.status, 400)
+
     def test_missing_but_contained_file_is_404(self):
         with self.assertRaises(mss._EndpointError) as ctx:
             mss._event_ids_from_mod_file("events/no_such_file.txt")
@@ -1139,9 +1156,13 @@ class ErrorBodyStatusTests(unittest.TestCase):
             mss.ModStateHandler._modifier_grants(self.handler, [], {})
 
     def test_modifier_grants_with_a_malformed_name_is_400(self):
-        with self.assertRaises(mss.BadRequest) as ctx:
+        with self.assertRaises(mss._EndpointError) as ctx:
             mss.ModStateHandler._modifier_grants(self.handler, ["Not A Modifier!"], {})
+        self.assertEqual(ctx.exception.status, 400)
         self.assertIn("Invalid target name", ctx.exception.payload["error"])
+        # The finder's body shape survives the status change.
+        self.assertEqual(ctx.exception.payload["grants"], [])
+        self.assertEqual(ctx.exception.payload["name"], "Not A Modifier!")
 
 
 class UnlocalizeFormTests(unittest.TestCase):
