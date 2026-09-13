@@ -22,6 +22,8 @@ from game_log_reader import (
     load_vanilla_bug_registry,
     load_mod_noise_registry,
     tag_vanilla_bugs,
+    _github_slug,
+    _open_issues_anchors,
     _vanilla_bug_cache,
 )
 
@@ -628,6 +630,103 @@ shared signature substring here
             tag_vanilla_bugs([entry], by_basename, by_source)
             self.assertIsNotNone(entry.vanilla_bug_ref)
             self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla")  # path-anchored, default kind
+
+
+class GitHubHeadingSlugTests(unittest.TestCase):
+    """`_github_slug` must reproduce GitHub's heading-anchor rule exactly —
+    a self-consistent but wrong rule made broken `- tracked:` links validate."""
+
+    def test_punctuation_is_deleted_not_collapsed(self):
+        """`_` survives; `.`, `:`, backticks and parens vanish outright (they are
+        NOT turned into dashes, which is what the old rule did)."""
+        self.assertEqual(
+            _github_slug("L16. Historical law seeding vs `unlocking_technologies` "
+                         "retention warnings (1.13.9+)"),
+            "l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139",
+        )
+        self.assertEqual(
+            _github_slug("L8. Mod tooltip.gui vertical scrollbar template warning"),
+            "l8-mod-tooltipgui-vertical-scrollbar-template-warning",
+        )
+        self.assertEqual(
+            _github_slug("L15. Vanilla principles orphaned by REPLACE:principle_group overrides"),
+            "l15-vanilla-principles-orphaned-by-replaceprinciple_group-overrides",
+        )
+
+    def test_spaces_around_removed_chars_leave_double_dashes(self):
+        """An em dash between spaces is deleted, leaving both spaces -> `--`."""
+        self.assertEqual(_github_slug("Pending verification gate — RESOLVED 2026-07-03"),
+                         "pending-verification-gate--resolved-2026-07-03")
+
+    def test_duplicate_headings_get_numeric_suffix(self):
+        """GitHub suffixes repeats: `#notes`, `#notes-1`, `#notes-2`."""
+        seen: dict = {}
+        self.assertEqual(_github_slug("Notes", seen), "notes")
+        self.assertEqual(_github_slug("Notes", seen), "notes-1")
+        self.assertEqual(_github_slug("Notes.", seen), "notes-2")
+        # Without a `seen` dict there is no dedupe state at all.
+        self.assertEqual(_github_slug("Notes"), "notes")
+
+    def test_open_issues_anchor_set_uses_github_rule_and_dedupes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "open_issues.md")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("## LOW\n\n"
+                        "### L16. Seeding vs `unlocking_technologies` warnings (1.13.9+)\n\n"
+                        "### Notes\n\n"
+                        "### Notes\n")
+            anchors = _open_issues_anchors(path)
+            self.assertIn("l16-seeding-vs-unlocking_technologies-warnings-1139", anchors)
+            self.assertIn("notes", anchors)
+            self.assertIn("notes-1", anchors)
+            # The pre-fix rule collapsed the underscore run to a dash — must be gone.
+            self.assertNotIn("l16-seeding-vs-unlocking-technologies-warnings-1-13-9", anchors)
+
+
+class RegistryCacheInvalidationTests(unittest.TestCase):
+    """The registry cache reads open_issues.md inside the memoized computation, so
+    its mtime has to take part in the cache key — otherwise fixing a heading never
+    clears the stale `does not resolve` warning."""
+
+    def test_cache_invalidates_when_open_issues_changes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            audits = os.path.join(tmp, "audits")
+            vanilla = os.path.join(tmp, "vanilla")
+            os.makedirs(audits, exist_ok=True)
+            os.makedirs(vanilla, exist_ok=True)
+            open_issues = os.path.join(audits, "open_issues.md")
+            doc = os.path.join(vanilla, "vanilla_known_bugs.md")
+            with open(doc, "w", encoding="utf-8") as f:
+                f.write("""
+## Mod-side cosmetic, tracked-not-fixed (source-anchored)
+
+### `some.cpp:1` — placeholder
+- source: `some.cpp:1`
+- tracked: `docs/audits/open_issues.md#l20-renamed-heading`
+
+```
+signature
+```
+""")
+            _vanilla_bug_cache.clear()
+
+            # Heading doesn't exist yet -> warning, and the result is memoized.
+            with open(open_issues, "w", encoding="utf-8") as f:
+                f.write("## LOW\n\n### L20. old heading\n")
+            _, _, _, warnings = load_vanilla_bug_registry(doc)
+            self.assertTrue(any("does not resolve" in w for w in warnings))
+
+            # Fix ONLY open_issues.md (registry file untouched, cache not cleared).
+            doc_mtime_before = os.path.getmtime(doc)
+            with open(open_issues, "w", encoding="utf-8") as f:
+                f.write("## LOW\n\n### L20. renamed heading\n")
+            # Force a distinct mtime so the test can't pass/fail on filesystem
+            # timestamp granularity.
+            os.utime(open_issues, (time.time() + 10, time.time() + 10))
+
+            _, _, _, warnings2 = load_vanilla_bug_registry(doc)
+            self.assertEqual(warnings2, [], "stale cached warning survived an open_issues.md edit")
+            self.assertEqual(os.path.getmtime(doc), doc_mtime_before)
 
 
 if __name__ == "__main__":
