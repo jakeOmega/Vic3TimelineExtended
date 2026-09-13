@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from mod_state import ModState, parse_loc_line
+from mod_state import ModState, parse_loc_line, split_loc_line
 from paradox_file_parser import ParadoxFileParser
 
 
@@ -515,6 +515,17 @@ class ParserSemanticsTests(unittest.TestCase):
             r' unterminated:0 "never closes \"',
         ):
             self.assertIsNone(parse_loc_line(line), repr(line))
+
+    def test_split_loc_line_returns_raw_value_and_trailing_comment(self):
+        """concept_reference_audit reads `# REVIEWED` suppressions from the
+        text after the closing quote; an escaped quote must not end it early."""
+        line = r' k:0 "He said \"go\"" # REVIEWED 2026-05-09: rationale' + "\n"
+        self.assertEqual(
+            split_loc_line(line),
+            ("k", r'He said \"go\"', " # REVIEWED 2026-05-09: rationale"),
+        )
+        self.assertEqual(split_loc_line(' k:0 " padded "'), ("k", " padded ", ""))
+        self.assertIsNone(split_loc_line("l_english:"))
 
     def test_add_localization_end_to_end(self):
         text = (

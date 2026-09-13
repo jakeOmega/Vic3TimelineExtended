@@ -91,6 +91,14 @@ _mod_state_logger.setLevel(logging.INFO)
 _mod_state_logger.addHandler(_console_handler)
 _mod_state_logger.addHandler(_file_handler)
 
+# The parser warns on the "paradox_file_parser" logger when a file defines a
+# top-level key more than once (last definition kept). Same routing so it
+# reaches mod_state_server.log; INFO drops its DEBUG note on folded INJECT: keys.
+_parser_logger = logging.getLogger("paradox_file_parser")
+_parser_logger.setLevel(logging.INFO)
+_parser_logger.addHandler(_console_handler)
+_parser_logger.addHandler(_file_handler)
+
 _server_start_time: float = 0.0  # set in main()
 
 # ---------------------------------------------------------------------------

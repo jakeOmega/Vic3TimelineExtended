@@ -12,19 +12,20 @@ from paradox_file_parser import ParadoxFileParser
 logger = logging.getLogger(__name__)
 
 
-def parse_loc_line(line):
-    r"""Return (key, value) for one Paradox localization line, or None.
+def split_loc_line(line):
+    r"""Return (key, value, trailing) for one Paradox localization line, or None.
 
     Accepts ` key:0 "value"`, ` key: "value"` and unindented forms. Returns
     None for blank lines, comment lines (first non-blank character `#`,
     indented or not), the `l_english:` header and any other line without a
-    quoted value, and lines whose key contains whitespace. The value is the
-    source text between the opening quote and the first closing quote that
-    is not escaped — a backslash escapes the character after it — stripped
-    and otherwise verbatim (`\"` and `\n` are kept as written). The old rule
-    cut at the second `"` on the line, so `"He said \"go\""` read back as a
-    lone backslash. A line whose quoted value never closes is malformed and
-    skipped, matching the standalone loc audits' parsers.
+    quoted value, lines whose key contains whitespace, and a quoted value
+    that never closes (malformed). `value` is the exact source text between
+    the opening quote and the first closing quote that is not escaped — a
+    backslash escapes the character after it, so `\"` and `\n` are kept as
+    written. `trailing` is everything after that closing quote (where
+    `# REVIEWED ...` suppression comments live), without the line break. The
+    old rule cut at the second `"` on the line, so `"He said \"go\""` read
+    back as a lone backslash.
     """
     stripped = line.lstrip()
     if not stripped or stripped.startswith("#") or ":" not in stripped:
@@ -44,9 +45,20 @@ def parse_loc_line(line):
             i += 2
             continue
         if c == '"':
-            return key, rest[start + 1 : i].strip()
+            return key, rest[start + 1 : i], rest[i + 1 :].rstrip("\r\n")
         i += 1
     return None
+
+
+def parse_loc_line(line):
+    """Return (key, stripped value) for one localization line, or None — the
+    rule ModState.add_localization and the server's loc parsers use. See
+    split_loc_line for the line grammar."""
+    parsed = split_loc_line(line)
+    if parsed is None:
+        return None
+    key, value, _trailing = parsed
+    return key, value.strip()
 
 
 def iter_loc_lines(text):

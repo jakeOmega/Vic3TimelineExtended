@@ -61,7 +61,7 @@ def _parse_reviewed(comment: str | None) -> dict | None:
 # The Paradox parser wraps every assignment as `('=', value)`. Strip that
 # wrapping recursively before reading nested fields.
 def _unwrap(value):
-    if isinstance(value, tuple) and len(value) == 2 and value[0] in ("=", "?=", ">=", "<=", ">", "<", "!="):
+    if isinstance(value, tuple) and len(value) == 2 and value[0] in ("=", "?=", ">=", "<=", ">", "<", "!=", "=="):
         return _unwrap(value[1])
     return value
 
