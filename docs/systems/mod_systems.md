@@ -432,7 +432,9 @@ investment — roughly a 65-year payback at base tourism price.
 - **Scaling split.** `state_*` and `building_*_throughput_add` are `level_scaled` (genuinely
   local); `interest_group_*` and `country_*` are `unscaled` (flat per monument) because the
   building is repeatable in every state and country-wide effects would otherwise stack without
-  bound. Employment is `unscaled` too — a monument needs a caretaker staff, not a workforce that
+  bound. **Every dedication carries a level_scaled state-local modifier**, so growing a monument
+  always pays off whichever dedication it has — the unscaled national effects sit on top of
+  that, never instead of it. Employment is `unscaled` too — a monument needs a caretaker staff, not a workforce that
   grows with its height.
 
 ## On-Actions Reference

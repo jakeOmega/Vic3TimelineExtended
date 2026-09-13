@@ -37,6 +37,11 @@
 #   interest_group_* and country_*         -> unscaled     (flat per monument, bounded
 #                                              by how many states you own)
 #
+# EVERY dedication carries a level_scaled, state-local flavour modifier, so growing a
+# monument always means something whichever dedication it has. The unscaled national
+# effects sit on top of that, never instead of it -- otherwise a Grand Shrine or a War
+# Memorial would gain nothing from its second level while a Civic Monument did.
+#
 # Economics, identical across every dedication so the choice is about flavour only:
 #   goods_output_tourism_add = 1   level_scaled  (100/mo per level at base price)
 #   maintenance comes from pmg_maintenance       (50/mo per level)
@@ -123,6 +128,7 @@ pm_monument_religious = {
 
 	state_modifiers = {
 		level_scaled = {
+			state_conversion_mult = 0.02
 			building_tourism_industry_throughput_add = 0.01
 		}
 	}
@@ -162,6 +168,7 @@ pm_monument_war_memorial = {
 
 	state_modifiers = {
 		level_scaled = {
+			state_conscription_rate_add = 0.01
 			building_tourism_industry_throughput_add = 0.01
 		}
 	}
@@ -286,6 +293,7 @@ pm_monument_scientific = {
 
 	state_modifiers = {
 		level_scaled = {
+			state_literacy_growth_add = 0.00005
 			building_tourism_industry_throughput_add = 0.01
 		}
 	}

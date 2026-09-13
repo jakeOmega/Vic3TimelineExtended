@@ -1086,6 +1086,10 @@ Rule of thumb for a repeatable building:
 
 See `common/production_methods/grand_monument_pms.txt` for the split applied in practice.
 
+**Design corollary:** if a variant's only effect is country-scope, it ends up `unscaled` and the
+building gains *nothing* from levels 2+ while its siblings keep growing. Give every variant a
+`level_scaled` state-local modifier as well, and let the national one ride on top.
+
 ## Production Method Modifier Scaling Blocks
 
 PMs can define modifiers under three scaling blocks, each with different behavior:
