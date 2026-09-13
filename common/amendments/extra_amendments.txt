@@ -912,7 +912,7 @@ amendment_langreform_revived_norse = {
 		country_prestige_mult = 0.1
 		state_homeland_creation_threshold_add = -0.1
 		state_homeland_removal_threshold_add = 0.1
-		country_war_exhaustion_casualties_mult = -0.1
+		country_war_support_casualties_mult = -0.1
 	}
 	possible = { always = yes }
 	would_sponsor = { always = no }

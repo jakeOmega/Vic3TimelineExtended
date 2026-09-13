@@ -38,7 +38,11 @@
                     has_war_goal = make_protectorate
                     has_war_goal = make_dominion
                     has_war_goal = make_tributary
+                    has_war_goal = make_personal_union
+                    has_war_goal = make_crown_land
+                    has_war_goal = make_chartered_company
                     has_war_goal = annex_country
+                    has_war_goal = te_reunify_country
                 }
             }
         }
@@ -122,8 +126,10 @@
                         is_target_of_wargoal = scope:country
                         is_incorporated = yes
                     }
+                    # 1.14: war exhaustion became a 0-100 war support scale; the red band
+                    # (radicalization + combat malus) is vanilla's own "going badly" line
                     any_scope_war = {
-                        has_war_exhaustion = { target = ROOT value > 40 }
+                        has_war_support = { target = ROOT value <= define:NDiplomacy|WAR_SUPPORT_RADICALIZATION_THRESHOLD }
                     }
                 }
                 # Retaliation: this specific enemy nuked us
@@ -205,7 +211,11 @@ tactical_nuke_diplo_action = {
                     has_war_goal = make_protectorate
                     has_war_goal = make_dominion
                     has_war_goal = make_tributary
+                    has_war_goal = make_personal_union
+                    has_war_goal = make_crown_land
+                    has_war_goal = make_chartered_company
                     has_war_goal = annex_country
+                    has_war_goal = te_reunify_country
                 }
             }
         }
@@ -323,8 +333,10 @@ tactical_nuke_diplo_action = {
                         is_target_of_wargoal = scope:country
                         is_incorporated = yes
                     }
+                    # 1.14: tactical use tolerates a milder slide than strategic -- war
+                    # support below the level it drifts toward rather than in the red band
                     any_scope_war = {
-                        has_war_exhaustion = { target = ROOT value > 25 }
+                        has_war_support = { target = ROOT value < define:NDiplomacy|WAR_SUPPORT_DRIFT_TARGET }
                     }
                 }
                 # Retaliation: this specific enemy nuked us

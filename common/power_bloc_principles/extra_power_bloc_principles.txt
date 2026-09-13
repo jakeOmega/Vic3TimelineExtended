@@ -485,7 +485,7 @@ principle_aggressive_coordination_4 = {
 
 	member_modifier = {
 		country_initiator_war_goal_maneuver_cost_mult = -0.3
-		country_war_exhaustion_casualties_mult = -0.15
+		country_war_support_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
@@ -525,7 +525,7 @@ principle_aggressive_coordination_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_initiator_war_goal_maneuver_cost_mult = -0.3
-		country_war_exhaustion_casualties_mult = -0.15
+		country_war_support_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
@@ -2957,7 +2957,7 @@ principle_global_security_3 = {
 	}
 
 	member_modifier = {
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_support_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -2998,7 +2998,7 @@ principle_global_security_4 = {
 	}
 
 	member_modifier = {
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_support_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -3040,7 +3040,7 @@ principle_global_security_5 = {
 	}
 
 	member_modifier = {
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_support_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war

@@ -4,7 +4,7 @@
 # ============================================================================
 
 # Country scope: True if scope:country has existential war goals against ROOT
-# (subjugation via protectorate/dominion/tributary, or outright annexation)
+# (any subjugation war goal, or outright annexation incl. the mod's te_reunify_country)
 # Requires scope:country to be set (the enemy)
 enemy_has_existential_war_goal = {
 	scope:country = {
@@ -12,19 +12,28 @@ enemy_has_existential_war_goal = {
 			war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
 			war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
 			war_side_has_war_goal_of_type_against = { type = make_tributary target = ROOT }
+			# 1.14 subjugation goals
+			war_side_has_war_goal_of_type_against = { type = make_personal_union target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_crown_land target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_chartered_company target = ROOT }
 			war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = te_reunify_country target = ROOT }
 		}
 	}
 }
 
 # Country scope: True if scope:country wants to annex or subjugate ROOT
-# (excludes tributary - only the most threatening goals)
+# (excludes tributary and personal union - only the most threatening goals)
 enemy_has_subjugation_war_goal = {
 	scope:country = {
 		OR = {
 			war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = te_reunify_country target = ROOT }
 			war_side_has_war_goal_of_type_against = { type = make_protectorate target = ROOT }
 			war_side_has_war_goal_of_type_against = { type = make_dominion target = ROOT }
+			# 1.14 subjugation goals
+			war_side_has_war_goal_of_type_against = { type = make_crown_land target = ROOT }
+			war_side_has_war_goal_of_type_against = { type = make_chartered_company target = ROOT }
 		}
 	}
 }
