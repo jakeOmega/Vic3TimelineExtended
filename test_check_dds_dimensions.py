@@ -134,6 +134,29 @@ class ScanTests(unittest.TestCase):
         with _TempTree({"gfx/ok.dds": make_dds(64, 64)}) as d:
             self.assertEqual(main([f"--repo-root={d}", f"--allowlist={d}/none.txt", d]), 0)
 
+    def test_stale_allowlist_is_reported_when_checked(self):
+        with _TempTree({"gfx/ok.dds": make_dds(64, 64)}) as d:
+            result = scan([d], repo_root=d, allowlist={"gfx/gone.dds"})
+        self.assertEqual(result["stale_allowlist"], ["gfx/gone.dds"])
+
+    def test_stale_allowlist_is_suppressed_on_a_partial_scan(self):
+        # A narrowed scan never visits the other allowlisted paths, so calling
+        # them stale would fail a clean partial run.
+        with _TempTree({"gfx/ok.dds": make_dds(64, 64)}) as d:
+            result = scan([d], repo_root=d, allowlist={"gfx/gone.dds"},
+                          check_stale=False)
+        self.assertEqual(result["stale_allowlist"], [])
+
+    def test_main_does_not_fail_a_clean_partial_scan_with_an_unvisited_allowlist(self):
+        with _TempTree({"gfx/ok.dds": make_dds(64, 64),
+                        "allow.txt": b"gfx/elsewhere.dds\n"}) as d:
+            # A positional path means a partial scan, so the stale check is off.
+            self.assertEqual(
+                main([f"--repo-root={d}", f"--allowlist={d}/allow.txt",
+                      os.path.join(d, "gfx")]),
+                0,
+            )
+
 
 class AllowlistTests(unittest.TestCase):
     def test_shipped_allowlist_holds_the_four_known_offenders(self):

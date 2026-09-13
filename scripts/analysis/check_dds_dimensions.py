@@ -19,6 +19,11 @@ With no positional argument it scans `gfx/` under the repo root. Known offenders
 listed in `scripts/analysis/dds_dimension_allowlist.txt` are reported but do not
 fail the run; that file is expected to empty out as #246 lands. Exits 1 when an
 unlisted violation is found.
+
+The stale-allowlist check ("listed but no longer violates — drop the line") only
+runs on that default full-tree sweep. Passing a path narrows the scan, and an
+allowlist entry outside the narrowed scope is merely unvisited, not dead — so
+reporting it would fail a clean partial run. See `scan(..., check_stale=...)`.
 """
 
 from __future__ import annotations
@@ -141,8 +146,15 @@ def load_allowlist(path: str = ALLOWLIST_PATH) -> set[str]:
 
 
 def scan(roots: list[str], repo_root: str = REPO_ROOT,
-         allowlist: set[str] | None = None) -> dict:
-    """Scan `roots`, returning violations / allowed / unreadable / counts."""
+         allowlist: set[str] | None = None, check_stale: bool = True) -> dict:
+    """Scan `roots`, returning violations / allowed / unreadable / counts.
+
+    `check_stale` gates the stale-allowlist report. An allowlist entry looks
+    "stale" whenever the scan simply didn't visit it, so on a partial scan
+    (one file, one subdirectory) every *other* allowlisted path would be
+    reported and `main()` would exit 1 on a clean tree. Only a full-tree scan
+    can conclude an entry is dead, so callers scanning a subset pass False.
+    """
     violations: list[dict] = []
     allowed: list[dict] = []
     unreadable: list[tuple[str, str]] = []
@@ -172,7 +184,7 @@ def scan(roots: list[str], repo_root: str = REPO_ROOT,
         "block_compressed_scanned": compressed,
         "stale_allowlist": sorted(
             allowlist - {r["path"] for r in allowed} - {r["path"] for r in violations}
-        ),
+        ) if check_stale else [],
     }
 
 
@@ -192,6 +204,10 @@ def main(argv: list[str] | None = None) -> int:
         elif arg.startswith("--allowlist="):
             allowlist_path = arg.split("=", 1)[1]
             args.remove(arg)
+    # No positional argument = the default whole-`gfx/` sweep, the only mode in
+    # which "this allowlist line matched nothing" means the line is dead rather
+    # than out of scope.
+    full_tree_scan = not args
     roots = args or [os.path.join(repo_root, "gfx")]
 
     if list_all:
@@ -206,7 +222,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     result = scan(roots, repo_root=repo_root,
-                  allowlist=load_allowlist(allowlist_path))
+                  allowlist=load_allowlist(allowlist_path),
+                  check_stale=full_tree_scan)
 
     for rel, reason in result["unreadable"]:
         print(f"{rel}: unreadable DDS header ({reason})", file=sys.stderr)

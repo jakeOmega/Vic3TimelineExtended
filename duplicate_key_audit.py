@@ -345,6 +345,15 @@ if __name__ == "__main__":
         "errors": sum(1 for f in res.flags if f.severity == "error" and not f.exemption),
         "warns": sum(1 for f in res.flags if f.severity == "warn" and not f.exemption),
     }))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    # --strict: CI mode. Exit 1 only on unexempted **error**-severity flags (a
+    # key repeated inside one block with a *differing* value — the engine silently
+    # last-wins, so one of the two was meant to do something and doesn't).
+    # "warn"-severity flags are identical repeats (`add = 5 add = 5`), which the
+    # engine runs twice on purpose; the ones in the tree today come from
+    # non-idempotent generators re-emitting a line (#191) and would redden CI on
+    # a file nobody hand-edits. They still appear in the report and still feed
+    # the reload `warnings` array via `unreviewed`. (#247)
     if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in res.flags) else 0)
+        raise SystemExit(
+            1 if any(not f.exemption and f.severity == "error" for f in res.flags) else 0
+        )
