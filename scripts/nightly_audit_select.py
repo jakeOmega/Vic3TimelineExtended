@@ -56,12 +56,16 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/buy_packages/00_buy_packages.txt",
     "common/script_values/auto_combat_unit_market_costs.txt",
     "common/scripted_effects/company_building_cleanup_effects.txt",
+    "common/scripted_effects/extra_law_consistency_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
 ]
 
 # Repo scaffolding — never registry-tracked, never audited. Not in drift diff.
+# `descriptor.mod` and `thumbnail.png` do not exist in this repo (Vic3 reads
+# `.metadata/metadata.json`; no thumbnail art yet). The globs are kept so the
+# exclusion is already in place if either is ever added.
 ALWAYS_EXCLUDED_GLOBS = [
     "descriptor.mod",
     ".metadata/*",
