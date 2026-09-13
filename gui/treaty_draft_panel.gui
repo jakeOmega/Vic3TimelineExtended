@@ -1106,8 +1106,18 @@ types treaty_draft_panel_types
 					visible = "[ArticleDraft.RequiresInput('ship')]"
 					size = { 140 90 }
 					using = default_button
-					using = tooltip_se
-					tooltip = "ARTICLE_DRAFT_CLICK_TO_CHANGE"
+					using = tooltip_es
+					tooltipwidget = {
+						FancyTooltip_Ship = {
+							blockoverride "click_text" {
+								custom_tooltip_newline = {}
+
+								custom_tooltip_textbox = {
+									text = "ARTICLE_DRAFT_CLICK_TO_CHANGE"
+								}
+							}
+						}
+					}
 					enabled = "[ArticleDraft.CanBeModified]"
 					datacontext = "[ArticleDraft.GetShip]"
 
@@ -1119,7 +1129,7 @@ types treaty_draft_panel_types
 					flowcontainer = {
 						direction = vertical
 						parentanchor = center
-						margin = { 10 5 }
+						margin = { 5 5 }
 						spacing = 5
 
 						textbox = {
@@ -1158,12 +1168,28 @@ types treaty_draft_panel_types
 							datacontext = "[Ship.GetTemplate]"
 							spacing = 2
 							parentanchor = hcenter
-							datamodel = "[ShipTemplate.GetModifications]"
 
-							item = {
-								icon = {
-									size = { 20 20 }
-									texture = "[ShipModificationType.GetIcon]"
+							flowcontainer = {
+								spacing = 2
+								datamodel = "[ShipTemplate.GetModifications]"
+
+								item = {
+									icon = {
+										size = { 20 20 }
+										texture = "[ShipModificationType.GetIcon]"
+									}
+								}
+							}
+
+							flowcontainer = {
+								spacing = 2
+								datamodel = "[ShipTemplate.GetUtilityModifications]"
+
+								item = {
+									icon = {
+										size = { 20 20 }
+										texture = "[ShipModificationType.GetIcon]"
+									}
 								}
 							}
 						}
