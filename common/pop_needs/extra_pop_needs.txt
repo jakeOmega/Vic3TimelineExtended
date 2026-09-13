@@ -12,14 +12,14 @@ popneed_convenience = {
 		max_supply_share = 0.55
 		min_supply_share = 0.0
 	}
-	
+
 	entry = {
 		goods = consumer_appliances
 		weight = 1.0
 		max_supply_share = 0.45
 		min_supply_share = 0.0
 	}
-	
+
 	entry = {
 		goods = digital_access
 		weight = 0.2
@@ -44,7 +44,7 @@ popneed_art = {
 		max_supply_share = 1
 		min_supply_share = 0.0
 	}
-	
+
 	entry = {
 		goods = services
 		weight = 0.05
@@ -58,15 +58,15 @@ REPLACE:popneed_free_movement = {
 
 	entry = {
 		goods = transportation
-		
+
 		weight = 1
 		max_supply_share = 0.75
 		min_supply_share = 0.0
 	}
-	
+
 	entry = {
 		goods = automobiles
-		
+
 		weight = 1.25
 		max_supply_share = 1.0
 		min_supply_share = 0.0
@@ -75,18 +75,18 @@ REPLACE:popneed_free_movement = {
 
 REPLACE:popneed_communication = {
 	default = transportation
-	
+
 	entry = {
 		goods = transportation
-		
+
 		weight = 1
 		max_supply_share = 0.75
 		min_supply_share = 0.0
 	}
-	
+
 	entry = {
 		goods = telephones
-		
+
 		weight = 2
 		max_supply_share = 1.0
 		min_supply_share = 0.0
@@ -102,7 +102,7 @@ popneed_tourism = {
 		max_supply_share = 1.0
 		min_supply_share = 0.0
 	}
-	
+
 	entry = {
 		goods = transportation
 		weight = 0.05

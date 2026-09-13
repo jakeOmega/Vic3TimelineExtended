@@ -267,10 +267,10 @@ world_war_events.2 = {
 			value = 40
 		}
 		je:je_world_war = { add_modifier = {
-			name = ww_rearmament_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		} }
+				name = ww_rearmament_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 	}
 }
 
@@ -599,10 +599,10 @@ world_war_events.11 = {
 			}
 		}
 		je:je_world_war = { add_modifier = {
-			name = ww_home_front_strain_modifier
-			days = short_modifier_time
-			is_decaying = yes
-		} }
+				name = ww_home_front_strain_modifier
+				days = short_modifier_time
+				is_decaying = yes
+			} }
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -866,10 +866,10 @@ world_war_events.20 = {
 			}
 		}
 		je:je_world_war = { add_modifier = {
-			name = ww_lend_lease_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		} }
+				name = ww_lend_lease_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_modifier = {
 			name = ww_late_entry_cooldown

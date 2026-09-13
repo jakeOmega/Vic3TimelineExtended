@@ -185,11 +185,11 @@ pacific_rim_pact = {
 
 REPLACE:amazon_pact = {
 	trigger = {
-	    OR = {
-	    	capital = { state_region = s:STATE_PARA }
-	    	capital = { state_region = s:STATE_AMAZONAS }
-	    	capital = { state_region = s:STATE_GUAYANA }
-	    }
+		OR = {
+			capital = { state_region = s:STATE_PARA }
+			capital = { state_region = s:STATE_AMAZONAS }
+			capital = { state_region = s:STATE_GUAYANA }
+		}
 	}
 }
 

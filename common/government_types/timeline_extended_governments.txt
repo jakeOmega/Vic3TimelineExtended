@@ -4,11 +4,11 @@
 
 	male_ruler = "RULER_TITLE_CHANCELLOR"
 	female_ruler = "RULER_TITLE_CHANCELLOR"
-	
+
 	possible = {
 		has_law = law_type:law_direct_democracy
 		country_has_voting_franchise = yes
-		NOT = { 
+		NOT = {
 			has_law = law_type:law_single_party_state
 		}
 	}
@@ -27,7 +27,7 @@ gov_direct_democracy_single_party_state = {
 
 	male_ruler = "RULER_TITLE_CHANCELLOR"
 	female_ruler = "RULER_TITLE_CHANCELLOR"
-	
+
 	possible = {
 		has_law = law_type:law_direct_democracy
 		has_law = law_type:law_single_party_state
@@ -45,7 +45,7 @@ gov_direct_democracy_autocracy = {
 	transfer_of_power = dictatorial
 	male_ruler = "RULER_TITLE_LORD_PROTECTOR"
 	female_ruler = "RULER_TITLE_LADY_PROTECTOR"
-	
+
 	possible = {
 		has_law = law_type:law_direct_democracy
 		country_has_voting_franchise = no
@@ -65,11 +65,11 @@ gov_corporate_state_democracy = {
 
 	male_ruler = "RULER_TITLE_DIRECTOR"
 	female_ruler = "RULER_TITLE_DIRECTOR"
-	
+
 	possible = {
 		has_law = law_type:law_neocameralism
 		country_has_voting_franchise = yes
-		NOT = { 
+		NOT = {
 			has_law = law_type:law_single_party_state
 		}
 	}
@@ -106,7 +106,7 @@ gov_corporate_state_autocracy = {
 	transfer_of_power = dictatorial
 	male_ruler = "RULER_TITLE_DIRECTOR"
 	female_ruler = "RULER_TITLE_DIRECTOR"
-	
+
 	possible = {
 		has_law = law_type:law_neocameralism
 		country_has_voting_franchise = no
@@ -126,7 +126,7 @@ gov_algorithmic_directorate = {
 
 	male_ruler = "RULER_TITLE_DIRECTOR"
 	female_ruler = "RULER_TITLE_DIRECTOR"
-	
+
 	possible = {
 		has_law = law_type:law_algorithmic_governance
 	}

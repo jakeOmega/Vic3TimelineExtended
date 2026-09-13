@@ -34,7 +34,7 @@ from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 
-from mod_state import ModState
+from mod_state import ModState, iter_loc_lines
 from paradox_file_parser import ParadoxFileParser
 from path_constants import (
     base_game_path,
@@ -89,6 +89,14 @@ _mod_state_logger = logging.getLogger("mod_state")
 _mod_state_logger.setLevel(logging.INFO)
 _mod_state_logger.addHandler(_console_handler)
 _mod_state_logger.addHandler(_file_handler)
+
+# The parser warns on the "paradox_file_parser" logger when a file defines a
+# top-level key more than once (last definition kept). Same routing so it
+# reaches mod_state_server.log; INFO drops its DEBUG note on folded INJECT: keys.
+_parser_logger = logging.getLogger("paradox_file_parser")
+_parser_logger.setLevel(logging.INFO)
+_parser_logger.addHandler(_console_handler)
+_parser_logger.addHandler(_file_handler)
 
 _server_start_time: float = 0.0  # set in main()
 
@@ -4258,22 +4266,12 @@ def _extract_surface_keys(kind: str, text: Optional[str]) -> set:
 
 
 def _parse_loc_lines(text: str):
-    """Yield (key, value) from Paradox loc text, mirroring
-    ModState.add_localization's quote rule (between the first two quotes) so the
-    OLD-ref parse and the `_VANILLA_LOC_CACHE` NEW side extract identically —
-    otherwise multi-quote values would false-drift. Skips the `l_english:`
-    header (no quotes) and comment lines."""
-    for line in text.splitlines():
-        if line.lstrip().startswith("#") or (":" not in line):
-            continue
-        key, value = line.split(":", 1)
-        key = key.strip()
-        if not key or " " in key:
-            continue
-        quotes = [i for i, c in enumerate(value) if c == '"']
-        if len(quotes) < 2:
-            continue
-        yield key, value[quotes[0] + 1:quotes[1]].strip()
+    """Yield (key, value) from Paradox loc text via the shared
+    `mod_state.parse_loc_line` rule — the one ModState.add_localization uses
+    to build `_VANILLA_LOC_CACHE` — so the OLD-ref parse and the NEW side
+    extract identically and escaped-quote / multi-quote values never
+    false-drift. Skips the `l_english:` header and comment lines."""
+    yield from iter_loc_lines(text)
 
 
 def _iter_loc_at_ref(ref: str, reldir: str = "game/localization/english"):

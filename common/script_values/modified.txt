@@ -5,13 +5,13 @@
 # No randomness is allowed in this script value
 power_bloc_leverage_gain = {
 
-##### Add factors: #####
+	##### Add factors: #####
 	add = {
 		value = 100
 		desc = POWER_BLOC_LEVERAGE_GAIN_FROM_INTEREST
 	}
 
-	if = { 
+	if = {
 		limit = {
 			power_bloc ?= {
 				any_power_bloc_member = {
@@ -24,11 +24,11 @@ power_bloc_leverage_gain = {
 			desc = POWER_BLOC_LEVERAGE_GAIN_FROM_MEMBERSHIP
 		}
 	}
-	
+
 	add = {
 		value = 200
 		multiply = "scope:target.economic_dependence(ROOT)"
-			
+
 		multiply = {
 			value = 1
 			add = modifier:country_economic_dependence_leverage_gain_mult
@@ -60,7 +60,7 @@ power_bloc_leverage_gain = {
 			desc = POWER_BLOC_LEVERAGE_GAIN_FROM_SHARED_RELIGION
 		}
 	}
-	
+
 	if = {
 		limit = {
 			has_treaty_port_in_market = scope:target.market
@@ -131,19 +131,19 @@ power_bloc_leverage_gain = {
 				}
 				add = 50
 			}
-            if = {
-                limit = {
-                    root.power_bloc = {
-                        has_identity = identity:identity_cultural
-                    }
-                }
-                multiply = 2
-            }
+			if = {
+				limit = {
+					root.power_bloc = {
+						has_identity = identity:identity_cultural
+					}
+				}
+				multiply = 2
+			}
 			desc = POWER_BLOC_LEVERAGE_GAIN_FROM_CULTURAL_PROXIMITY
 		}
 	}
 
-##### Mult factors: #####
+	##### Mult factors: #####
 
 	if = {
 		limit = {
@@ -174,7 +174,7 @@ power_bloc_leverage_gain = {
 			desc = POWER_BLOC_LEVERAGE_PENALTY_FROM_EXPELLED_DIPLOMATS
 		}
 	}
-	
+
 	if = {
 		limit = {
 			scope:target = {
@@ -235,7 +235,7 @@ power_bloc_leverage_gain = {
 			desc = POWER_BLOC_LEVERAGE_PENALTY_FROM_DISCRIMINATED_PRIMARY_CULTURE
 		}
 	}
-	
+
 	if = {
 		limit = {
 			capital = {
@@ -266,7 +266,7 @@ power_bloc_leverage_gain = {
 			desc = POWER_BLOC_LEVERAGE_PENALTY_FROM_DISCRIMINATED_RELIGION
 		}
 	}
-	
+
 	if = {
 		limit = {
 			scope:has_capital_interest = no
@@ -315,12 +315,12 @@ power_bloc_leverage_gain = {
 			desc = POWER_BLOC_LEVERAGE_PENALTY_INFAMY
 		}
 	}
-	
+
 	if = {
 		limit = {
 			is_country_type = unrecognized
 			scope:target = {
-				NOT = { 
+				NOT = {
 					is_country_type = unrecognized
 				}
 			}
@@ -582,6 +582,6 @@ INJECT:ai_power_bloc_identity_score = {
 		}
 		value = 10 # Base value
 		add = scope:target_country.relations:root
-        desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
+		desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
 	}
 }
