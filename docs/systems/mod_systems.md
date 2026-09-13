@@ -430,7 +430,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `pollution_on_action` — state pollution modifier update
 - `war_propaganda_on_action` — wartime propaganda effects
 - `state_yearly_cultural_acceptance_add_on_action` — cultural acceptance
-- `tourism_on_action` — tourism income/throughput
+- `tourism_on_action` — tourism output/throughput modifier refresh (sole owner; the multipliers read monthly-varying `city_size_rank` and live building levels)
 - `resettlement_transfer_on_action` — population transfer
 
 **`on_monthly_pulse`** (Root = global):
@@ -443,7 +443,6 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `cheaty_on_action` — debug modifier (disabled)
 - `combined_arms_update_on_action` — military doctrine bonuses
 - `investment_pool_setup_on_action` — investment pool management
-- `character_update_on_action` — character trait updates
 - `international_relations_events_on_action` — diplo events
 - `decolonization_events_on_action` — decolonization narrative
 - `movement_events_te_on_action` — political movement events
@@ -456,7 +455,6 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `remove_or_create_homelands_on_action` — dynamic homeland changes
 - `violent_hostility_on_action` — cultural violence
 - `migration_crowding_on_action` — migration pull reduction
-- `tourism_update_on_action` — tourism modifier refresh
 - `religious_mission_conversion_on_action` — treaty-based conversion
 
 **`on_yearly_pulse_country`** (Root = Country):
@@ -491,14 +489,15 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 **`on_acquired_technology`** (Root = Country):
 - `add_arable_land_effect_on_action` — arable land from agricultural techs
 - `fix_incompatible_laws` — law compatibility check
-- `character_update_on_action` — trait updates for new tech
-- `te_modifier_update_on_technology_on_action` — state modifier refresh
+- `cultural_hegemony_tech_first_on_action` — world-first tech prestige (`cultural_hegemony_on_actions.txt`)
+- `agricultural_diffusion_on_action` — broadcasts the first researcher of each diffusion-eligible tech
 
 **`on_law_activated`** (Root = Law scope):
 - `fix_incompatible_laws_from_law_scope` — law compatibility
+- `te_fix_inconsistent_laws_from_law_scope` — generated per-lawgroup consistency cleanup
 - `language_reform_law_on_action` — language reform init/cleanup
-- `te_modifier_update_on_law_on_action` — state modifier refresh
 - `radical_law_backlash_on_action` — backlash events for radical laws
+- `banking_law_cascade_on_law_activated` — command economy force-enacts state-owned banking
 
 **`on_law_enactment_started`** (Root = Law scope):
 - Fires `minor_events_timelineextended.2` (law enactment notification)
@@ -520,7 +519,7 @@ The FMC system hooks many engine events to keep the map up to date:
 
 ### Scope Chain Limitation (Important)
 
-Building and institution scopes **do not support variables or modifiers**. Calling `te_update_state_modifiers` (which uses `add_modifier = { multiplier = script_value }` that evaluates through the parent scope chain) from building-scope hooks like `on_building_built` or `on_production_method_changed` causes cascading errors. The yearly state pulse and law/technology hooks handle these slow-changing modifiers instead.
+Building, institution and law scopes **do not support variables or modifiers**. The state modifier refresh effects in `extra_effects.txt` use `add_modifier = { multiplier = script_value }`, which evaluates the script value through the parent scope chain, so calling them from building-scope hooks like `on_building_built` / `on_production_method_changed`, from `on_law_activated`, or from `on_acquired_technology` causes cascading errors. Those hooks have all been removed — the **periodic state pulses are the only refresh sites**: `pollution_on_action` and `tourism_on_action` on `on_monthly_pulse_state`, `migration_crowding_on_action` and `free_port_tariff_update_on_action` on `on_yearly_pulse_state`. Pick the pulse whose cadence matches how fast the multiplier's inputs move, and give each modifier exactly one refresh site.
 
 ## AI Weights Guidelines
 

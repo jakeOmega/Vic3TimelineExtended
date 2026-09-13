@@ -1,4 +1,4 @@
-"""Tests for bom_normalizer (issue #148)."""
+"""Tests for bom_normalizer (issues #148, #255)."""
 
 import os
 import tempfile
@@ -46,12 +46,41 @@ class NormalizeBomTests(unittest.TestCase):
             result = normalize_bom(td)
             self.assertEqual(result["files_normalized"], 1)
 
+    def test_covers_gui_files(self):
+        # issue #255: `gui/` was out of scope, so three overrides shipped w/o BOM.
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "gui/construction_panel.gui", b"widget = {}")
+            nested = self._write(
+                td, "gui/journal_entry_widgets/sr_widget.gui", b"widget = {}"
+            )
+            result = normalize_bom(td)
+            self.assertEqual(result["files_normalized"], 2)
+            self.assertIn("gui/construction_panel.gui", result["normalized_paths"])
+            for path in (p, nested):
+                with open(path, "rb") as fh:
+                    self.assertTrue(fh.read().startswith(BOM))
+
+    def test_gui_scope_is_limited_to_gui_extension(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "gui/notes.txt", b"not script")
+            result = normalize_bom(td)
+            self.assertEqual(result["files_normalized"], 0)
+
+    def test_missing_scoped_root_is_skipped(self):
+        # Sparse checkouts (e.g. no gfx/) must not raise or abort the walk.
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "gui/x.gui", b"widget = {}")
+            result = normalize_bom(td)  # no common/, events/, gfx/ on disk
+            self.assertEqual(result["files_scanned"], 1)
+            self.assertEqual(result["files_normalized"], 1)
+
     def test_skips_out_of_scope_roots_and_non_txt(self):
         with tempfile.TemporaryDirectory() as td:
             # Out-of-scope root, plus in-scope non-.txt — neither touched.
             self._write(td, "localization/english/x_l_english.yml", b"l_english:")
             self._write(td, "common/foo/data.json", b"{}")
             self._write(td, "common/foo/note.md", b"# note")
+            self._write(td, "common/foo/panel.gui", b"widget = {}")
             result = normalize_bom(td)
             self.assertEqual(result["files_normalized"], 0)
 

@@ -2908,6 +2908,11 @@ decolonization_events.201 = {
 				}
 				set_variable = decolonization_marker
 			}
+			# Three independent picks are intentional, not a copy-paste duplicate:
+			# each form_decolonized_country releases one culture-connected region
+			# (capital + flood-filled homeland neighbours) and cedes it away from
+			# ROOT, so the next random_scope_state draws from the marked states that
+			# are still owned here. Up to three successor nations per collapse.
 			random_scope_state = {
 				limit = { has_variable = decolonization_marker }
 				form_decolonized_country = yes
@@ -3062,6 +3067,11 @@ decolonization_events.204 = {
 				}
 				set_variable = decolonization_marker
 			}
+			# Three independent picks are intentional, not a copy-paste duplicate:
+			# each form_decolonized_country releases one culture-connected region
+			# (capital + flood-filled homeland neighbours) and cedes it away from
+			# ROOT, so the next random_scope_state draws from the marked states that
+			# are still owned here. Up to three successor nations per collapse.
 			random_scope_state = {
 				limit = { has_variable = decolonization_marker }
 				form_decolonized_country = yes

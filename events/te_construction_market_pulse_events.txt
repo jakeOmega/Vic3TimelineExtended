@@ -44,6 +44,11 @@ te_construction_market_pulse_events.1 = {
 			name = te_construction_market_last_pulse_date
 			value = game_date
 		}
+		# Two `random_country` blocks are intentional, not a copy-paste duplicate:
+		# each re-rolls the picker, so the relay is seeded from two independently
+		# chosen countries. The `trigger` on this event gates on
+		# te_construction_market_days_since_last_pulse, so whichever relay lands
+		# second that day no-ops instead of advancing the tick twice.
 		random_country = {
 			trigger_event = {
 				id = te_construction_market_pulse_events.2

@@ -1,8 +1,15 @@
 import copy
+import logging
 import os
 from collections import defaultdict
 
 from paradox_file_parser import ParadoxFileParser
+
+# Parse/load diagnostics go through the logger rather than print() so the
+# mod_state_server can route them into its console+file handlers (it attaches
+# them to the "mod_state" logger at import time). CLI callers that want the
+# per-file progress chatter can enable DEBUG on this logger.
+logger = logging.getLogger(__name__)
 
 
 def parse_loc_line(line):
@@ -57,6 +64,11 @@ class ModState:
         self.mod_parsers = {}
         self.localization = {}
         self._reverse_loc = None
+        # Files that failed to parse during the most recent load, as
+        # [{"file", "error", "source"}] with source in {"vanilla", "mod"}.
+        # Surfaced by mod_state_server in /status and the POST /reload body so
+        # a broken file can't hide behind an otherwise-successful reload (#242).
+        self.parse_failures = []
         self.load_directory_files(base_game_dir, mod_dir, diff)
 
     def add_localization(self, loc_path):
@@ -73,7 +85,7 @@ class ModState:
                         key, value = parsed
                         self.localization[key] = value
             except Exception as e:
-                print(f"WARNING: Failed to read localization file {file_path}: {e}")
+                logger.warning(f"Failed to read localization file {file_path}: {e}")
         # Invalidate reverse localization cache when new loc is added
         self._reverse_loc = None
 
@@ -82,7 +94,7 @@ class ModState:
             self.base_parsers[entity_type] = ParadoxFileParser()
             self.mod_parsers[entity_type] = ParadoxFileParser()
             if not os.path.isdir(dir_path):
-                print(f"WARNING: Base game directory not found: {dir_path}")
+                logger.warning(f"Base game directory not found: {dir_path}")
                 continue
             self.load_files_from_directory(entity_type, dir_path, base_game=True)
 
@@ -114,12 +126,18 @@ class ModState:
                             entity_type, dir_path, base_game=False
                         )
                     else:
-                        print(f"WARNING: Mod-only directory not found: {dir_path}")
+                        logger.warning(f"Mod-only directory not found: {dir_path}")
 
     def reload_mod(self, mod_dir):
         # Re-parse mod files in place, reusing the cached vanilla parse in
         # self.base_parsers. Caller is responsible for resetting/repopulating
         # self.localization (vanilla loc is cached at the server layer).
+        # Drop the previous run's mod-side parse failures; every mod file is
+        # about to be re-read. Vanilla entries stay — reload_mod reuses the
+        # cached vanilla parse and never revisits those files.
+        self.parse_failures = [
+            f for f in self.parse_failures if f.get("source") != "mod"
+        ]
         for entity_type, parser in self.base_parsers.items():
             fresh = ParadoxFileParser()
             fresh.data = copy.deepcopy(parser.data)
@@ -139,14 +157,14 @@ class ModState:
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
         for file_name in os.listdir(dir_path):
             if file_name.startswith("_") or (file_name[-3:] == ".md"):
-                print("skipping file:", file_name)
+                logger.debug("skipping file: %s", file_name)
                 continue
             file_path = os.path.join(dir_path, file_name)
             if os.path.isdir(file_path):
                 # Recurse into subdirectories (e.g. events/)
                 self.load_files_from_directory(entity_type, file_path, base_game)
             elif os.path.isfile(file_path) and file_name.endswith(".txt"):
-                print("reading file:", file_path)
+                logger.debug("reading file: %s", file_path)
                 try:
                     if base_game:
                         self.base_parsers[entity_type].parse_file(file_path)
@@ -155,7 +173,15 @@ class ModState:
                         mod_data = self.parse_mod_file(file_path)
                         self.mod_parsers[entity_type].merge_data(mod_data)
                 except Exception as e:
-                    print(f"WARNING: skipping file due to parse error: {file_path}: {e}")
+                    logger.warning(
+                        f"skipping file due to parse error: {file_path}: "
+                        f"{type(e).__name__}: {e}"
+                    )
+                    self.parse_failures.append({
+                        "file": file_path,
+                        "error": f"{type(e).__name__}: {e}",
+                        "source": "vanilla" if base_game else "mod",
+                    })
 
     def parse_mod_file(self, file_path):
         parser = ParadoxFileParser()

@@ -61,6 +61,10 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
 # ---------------------------------------------------------------------------
 # Categorization (source-file → coarse error category)
 # ---------------------------------------------------------------------------
+# Keys here are matched EXACTLY against an entry's `file:line` source. A rule
+# that should cover every line of a file belongs in SOURCE_CATEGORY_FILE below —
+# a `"<file>:"` key here never matches anything (that's how the physfs rule sat
+# dead until #254).
 SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     "gamedatabase.h:378": "duplicated_key",
     "gamedatabase.h:395": "inject_to_missing",
@@ -68,7 +72,6 @@ SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     "jomini_trigger.cpp:721": "inconsistent_trigger_scope",
     "jomini_effect.cpp:752": "inconsistent_effect_scope",
     "virtualfilesystem.cpp:569": "missing_file",
-    "virtualfilesystem_physfs.cpp:": "vfs_mount",
     "guitexturehandler.h:155": "missing_texture_for_entity",
     "gfx_dds_loader.cpp:442": "dds_dimensions",
 }
@@ -82,6 +85,9 @@ SOURCE_CATEGORY_FILE: dict[str, str] = {
     "jomini_trigger.cpp": "inconsistent_trigger_scope",
     "jomini_effect.cpp": "inconsistent_effect_scope",
     "virtualfilesystem.cpp": "missing_file",
+    # Every line of the physfs VFS layer is a mount/filesystem complaint,
+    # regardless of line number.
+    "virtualfilesystem_physfs.cpp": "vfs_mount",
     "guitexturehandler.h": "missing_texture_for_entity",
     "gfx_dds_loader.cpp": "dds_dimensions",
     "ai_strategy.cpp": "ai",
@@ -388,11 +394,38 @@ def _section_kind(section_header: str) -> str | None:
     return None
 
 
+# Characters GitHub keeps in a heading anchor: word chars (so `_` survives),
+# hyphen and space. Everything else — `.`, `:`, backticks, parens, `/`, em dashes —
+# is DELETED, not collapsed to a dash; spaces then become dashes. That is why
+# `L8. Mod tooltip.gui vertical scrollbar…` slugs to `l8-mod-tooltipgui-…`.
+_SLUG_STRIP_RE = re.compile(r"[^\w\- ]")
+
+
+def _github_slug(heading: str, seen: dict[str, int] | None = None) -> str:
+    """Slug a markdown heading the way GitHub does.
+
+    Rule: lowercase, remove every character that is not a word char, hyphen or
+    space, then replace each space with `-`. No trimming and no run-collapsing —
+    `Foo — Bar` really does anchor as `foo--bar`.
+
+    Pass a shared `seen` dict (slug -> times emitted) to reproduce GitHub's
+    duplicate-heading suffixes: the first `## Notes` is `#notes`, the second
+    `#notes-1`, the third `#notes-2`.
+    """
+    slug = _SLUG_STRIP_RE.sub("", heading.lower()).replace(" ", "-")
+    if seen is None:
+        return slug
+    n = seen.get(slug, 0)
+    seen[slug] = n + 1
+    return slug if n == 0 else f"{slug}-{n}"
+
+
 def _open_issues_anchors(open_issues_path: str) -> set[str]:
     """Return the set of GitHub-style anchors for `### ` headings in open_issues.md.
 
     Used to verify `- tracked:` cross-references in the bug registry resolve. Best
-    effort — returns empty set if the file is missing or unreadable.
+    effort — returns empty set if the file is missing or unreadable. Duplicate
+    headings get GitHub's `-N` suffix (counted over the `### ` headings scanned).
     """
     try:
         with open(open_issues_path, "r", encoding="utf-8") as f:
@@ -400,12 +433,12 @@ def _open_issues_anchors(open_issues_path: str) -> set[str]:
     except OSError:
         return set()
     anchors: set[str] = set()
+    seen: dict[str, int] = {}
     for ln in lines:
         m = _HEADING_RE.match(ln.rstrip("\n"))
         if not m:
             continue
-        heading = m.group(1)
-        slug = re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
+        slug = _github_slug(m.group(1), seen)
         if slug:
             anchors.add(slug)
     return anchors
@@ -438,7 +471,9 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
             if frag and frag not in known_open_issue_anchors:
                 # Suggest the nearest real anchor(s), and spell out the slug rule
                 # so the fix is copy-paste — GitHub anchors are the `### ` heading
-                # lowercased with every non-alnum run collapsed to a single dash.
+                # lowercased with every non-word/hyphen/space character deleted
+                # (`_` survives; `.`, `:` and backticks vanish) and spaces turned
+                # into dashes.
                 close = difflib.get_close_matches(
                     frag, sorted(known_open_issue_anchors), n=3, cutoff=0.5
                 )
@@ -447,12 +482,15 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
                     f"vanilla_known_bugs.md: '{ref.title}' tracked-issue anchor "
                     f"'#{frag}' does not resolve in docs/audits/open_issues.md."
                     f"{suggestion} "
-                    "Anchor rule: re.sub(r'[^a-z0-9]+', '-', heading.lower()).strip('-')."
+                    "Anchor rule (GitHub): heading.lower(), delete every char that is "
+                    "not a word char/hyphen/space, then space -> '-'; repeats get a '-N' suffix."
                 )
     return warnings
 
 
-_vanilla_bug_cache: dict = {}  # {doc_path: (mtime, refs, by_basename, by_source, warnings)}
+# {(doc_path, default_kind): ((doc_mtime, open_issues_mtime), refs, by_basename,
+#                              by_source, warnings)}
+_vanilla_bug_cache: dict = {}
 
 
 def load_vanilla_bug_registry(
@@ -472,16 +510,29 @@ def load_vanilla_bug_registry(
     passes default_kind="mod_low_priority" so entries there are flagged for the
     cross-reference-required validation.
 
-    Memoized on (doc_path, default_kind, mtime) so repeated requests don't re-parse.
+    Memoized on (doc_path, default_kind) and invalidated by the mtime of BOTH this
+    doc and docs/audits/open_issues.md — anchor resolution reads the latter inside
+    the cached computation, so fixing a heading there must clear a stale
+    "does not resolve" warning without anyone touching the registry file.
     Returns ([], {}, {}, []) if the doc is missing or unreadable.
     """
     try:
         mtime = os.path.getmtime(doc_path)
     except OSError:
         return [], {}, {}, []
+    # open_issues.md lives in docs/audits/ regardless of which registry
+    # (vanilla/ or audits/) is being parsed. Resolved before the cache probe so
+    # its mtime can take part in the cache key.
+    docs_root = os.path.dirname(os.path.dirname(doc_path))
+    open_issues_path = os.path.join(docs_root, "audits", "open_issues.md")
+    try:
+        open_issues_mtime = os.path.getmtime(open_issues_path)
+    except OSError:
+        open_issues_mtime = None
+    stamp = (mtime, open_issues_mtime)
     cache_key = (doc_path, default_kind)
     cached = _vanilla_bug_cache.get(cache_key)
-    if cached and cached[0] == mtime:
+    if cached and cached[0] == stamp:
         return cached[1], cached[2], cached[3], cached[4]
     try:
         with open(doc_path, "r", encoding="utf-8") as f:
@@ -489,15 +540,14 @@ def load_vanilla_bug_registry(
     except OSError:
         return [], {}, {}, []
 
-    # Pre-load open_issues.md anchors for cross-reference validation. Lives in
-    # docs/audits/ regardless of which registry (vanilla/ or audits/) is being parsed.
-    docs_root = os.path.dirname(os.path.dirname(doc_path))
-    open_issues_path = os.path.join(docs_root, "audits", "open_issues.md")
+    # Pre-load open_issues.md anchors for cross-reference validation.
     known_anchors = _open_issues_anchors(open_issues_path)
 
     refs: list[VanillaBugRef] = []
     warnings: list[str] = []
     current_section_kind = default_kind
+    # Shared across the whole document so repeated headings get GitHub's `-N` suffix.
+    anchor_seen: dict[str, int] = {}
     i = 0
     while i < len(lines):
         line = lines[i].rstrip("\n")
@@ -516,8 +566,8 @@ def load_vanilla_bug_registry(
         paths = _PATH_REF_RE.findall(heading)
         title_match = _TITLE_AFTER_DASH_RE.search(heading)
         title = title_match.group(1).strip() if title_match else heading.strip()
-        # Anchor: GitHub-style — lowercase, replace non-alnum runs with `-`
-        anchor_text = re.sub(r"[^a-z0-9]+", "-", heading.lower()).strip("-")
+        # Anchor: GitHub's heading-slug rule (see _github_slug).
+        anchor_text = _github_slug(heading, anchor_seen)
         # Derive the docs/<subdir>/<file> prefix from the registry path so the
         # anchor reflects the actual source (vanilla/vanilla_known_bugs.md or
         # audits/mod_known_noise.md).
@@ -596,7 +646,7 @@ def load_vanilla_bug_registry(
         for src in r.source_anchors:
             by_source[src].append(r)
     by_basename_d, by_source_d = dict(by_basename), dict(by_source)
-    _vanilla_bug_cache[cache_key] = (mtime, refs, by_basename_d, by_source_d, warnings)
+    _vanilla_bug_cache[cache_key] = (stamp, refs, by_basename_d, by_source_d, warnings)
     return refs, by_basename_d, by_source_d, warnings
 
 

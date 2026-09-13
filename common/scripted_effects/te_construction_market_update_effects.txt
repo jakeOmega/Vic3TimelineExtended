@@ -70,8 +70,27 @@ te_construction_market_apply_per_site_modifier = {
 	# country-scope variable lookup works even from add_modifier's
 	# outer-scope evaluation context.
 	#
+	# The variable MUST persist past this effect. The engine stores the
+	# `multiplier` EXPRESSION with the modifier and re-evaluates it on
+	# later ticks (decay / tooltip / recalculation), not just at add time.
+	# A `remove_variable` at the end of this effect therefore makes every
+	# later re-evaluation read `'none'` (`jomini_scriptvalue.cpp` spam,
+	# per-site scaling silently lost) until the next weekly pulse
+	# re-applies it. Nothing needs cleaning up: the next call simply
+	# overwrites the variable. See the "Variables backing
+	# `add_modifier { multiplier = ... }` must persist beyond the call
+	# site" bullet in docs/guides/scripting_best_practices.md.
+	#
+	# Multi-site caveat: one country variable is shared across all of the
+	# country's sites, so between pulses every site's modifier re-evaluates
+	# against the LAST site's value. That is pre-existing and unchanged by
+	# the persistence fix (before it, those re-evaluations returned
+	# `'none'`, which is strictly worse). A per-site redesign is separate
+	# work and is deliberately not attempted here.
+	#
 	# Clear at start each call so a stale value never leaks across ticks
-	# or partial iterations.
+	# or partial iterations. Harmless for the persistence rule above: it is
+	# re-set before `add_modifier` in the same block.
 	remove_variable = te_cm_capacity_mult
 	every_scope_building = {
 		limit = {
@@ -91,9 +110,6 @@ te_construction_market_apply_per_site_modifier = {
 			multiplier = owner.var:te_cm_capacity_mult
 		}
 	}
-	# Clear the temp variable so it doesn't appear in the country's
-	# variable inspector and doesn't get picked up by anything else.
-	remove_variable = te_cm_capacity_mult
 }
 
 

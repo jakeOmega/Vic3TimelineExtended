@@ -12,12 +12,27 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import numpy as np
-from PIL import Image
+# numpy/pillow are optional (requirements.txt comments them out under the
+# image-generation block) and gen_prestige_icons imports both at module scope;
+# it also resolves base_game_path at import, which raises RuntimeError on a
+# machine with no Victoria 3 install configured. Either way, skip these tests
+# instead of breaking `python3 -m unittest discover`.
+try:
+    import numpy as np
+    from PIL import Image
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / "scripts" / "image_pipeline"))
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "scripts" / "image_pipeline"))
 
-import gen_prestige_icons as gen
+    import gen_prestige_icons as gen
+except (ImportError, RuntimeError) as exc:  # pragma: no cover — env-dependent
+    np = Image = gen = None
+    _SKIP_REASON = (
+        f"image-pipeline prerequisites unavailable ({type(exc).__name__}: {exc})"
+    )
+else:
+    _SKIP_REASON = ""
+
+requires_image_pipeline = unittest.skipUnless(gen is not None, _SKIP_REASON)
 
 
 SAMPLE_PRESTIGE_FILE = '''\
@@ -52,6 +67,7 @@ def _write_test_dds(path: Path, w: int = 64, h: int = 64) -> None:
     gen.write_dds_rgba(img, path)
 
 
+@requires_image_pipeline
 class DdsHeaderTests(unittest.TestCase):
     def test_header_round_trips_via_pillow(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -84,6 +100,7 @@ class DdsHeaderTests(unittest.TestCase):
                              (0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000))
 
 
+@requires_image_pipeline
 class TextureRewriteTests(unittest.TestCase):
     def test_strips_prestige_prefix_from_prior_runs(self) -> None:
         text = (
@@ -111,6 +128,7 @@ class TextureRewriteTests(unittest.TestCase):
         self.assertEqual(out, text)
 
 
+@requires_image_pipeline
 class RunPipelineTests(unittest.TestCase):
     def test_full_pipeline_generates_outputs_and_rewrites_file(self) -> None:
         with tempfile.TemporaryDirectory() as td:

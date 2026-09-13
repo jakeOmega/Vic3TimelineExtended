@@ -15,8 +15,6 @@ import argparse
 import os
 import re
 
-from path_constants import base_game_path, mod_path
-
 
 def parse_goods(file_paths):
     """
@@ -450,6 +448,10 @@ def emit_combat_unit_market_cost_svs(out_path, breakdown):
 
 
 def _run(dry_run: bool, verbose: bool):
+    # Imported here rather than at module scope so the helpers above stay
+    # importable (and unit-testable) without a Victoria 3 install configured.
+    from path_constants import base_game_path, mod_path
+
     goods_file_paths = [
         os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
         os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
