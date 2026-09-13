@@ -9,20 +9,20 @@ banking_cycle_is_frenzy = { var:finance_cycle_value >= 88 }
 
 # ----- Heat & risk signals -----
 banking_cycle_bubble_risk_high = {
-    OR = {
-        var:finance_cycle_value >= 90
-        AND = { var:finance_cycle_value >= 75 var:finance_cycle_momentum >= 3 }
-    }
+	OR = {
+		var:finance_cycle_value >= 90
+		AND = { var:finance_cycle_value >= 75 var:finance_cycle_momentum >= 3 }
+	}
 }
 banking_cycle_bubble_risk_rising = { var:finance_cycle_momentum >= 3 }
 banking_cycle_risk_falling = { var:finance_cycle_momentum <= -3 }
 
 # ----- Recession signal -----
 banking_cycle_is_recession = {
-    OR = {
-        banking_cycle_is_panic = yes
-        banking_cycle_is_downturn = yes
-    }
+	OR = {
+		banking_cycle_is_panic = yes
+		banking_cycle_is_downturn = yes
+	}
 }
 
 # ----- Points remaining (reads the summed modifier) -----

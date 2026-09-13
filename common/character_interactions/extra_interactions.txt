@@ -48,7 +48,7 @@ assassinate_domestic = {
 	}
 
 	ai_chance = {
-		value = 0		
+		value = 0
 	}
 
 	cooldown = { days = short_modifier_time }
@@ -85,7 +85,7 @@ assassinate_foreign = { # doesn't work D:
 	}
 
 	ai_chance = {
-		value = 0		
+		value = 0
 	}
 
 	cooldown = { days = short_modifier_time }

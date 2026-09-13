@@ -124,9 +124,15 @@ class PureExtractorTests(unittest.TestCase):
             "# comment\n"
             ' key_b:1 "second"\n'
             " not_a_loc_line_without_quotes:0 bare\n"
+            " # indented: comment\n"
+            ' key_c:0 "with \\"escaped\\" quotes"  # trailing\n'
         )
         got = dict(mss._parse_loc_lines(text))
-        self.assertEqual(got, {"key_a": "hello world", "key_b": "second"})
+        self.assertEqual(got, {
+            "key_a": "hello world",
+            "key_b": "second",
+            "key_c": 'with \\"escaped\\" quotes',
+        })
 
 
 class MigrationWorkerTests(unittest.TestCase):

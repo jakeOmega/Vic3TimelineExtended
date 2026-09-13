@@ -63,7 +63,7 @@ company_toyota = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_TOKAI # Aichi prefecture, Toyota's home region (was STATE_CHUBU before 1.13)
+		STATE_TOKAI # Aichi prefecture, Toyota's home region (was STATE_CHUBU before 1.13)
 	}
 	building_types = {
 		building_automotive_industry
@@ -100,7 +100,7 @@ company_toyota = {
 	}
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
-		prestige_good_precision_robotics 
+		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = modern_automotive_technology
@@ -118,7 +118,7 @@ company_samsung = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_SEOUL # Capital of South Korea, Samsung's home base
+		STATE_SEOUL # Capital of South Korea, Samsung's home base
 	}
 	building_types = {
 		building_electrics_industry_appliances
@@ -174,8 +174,8 @@ company_hp = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_hp.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
-        STATE_CALIFORNIA # Silicon Valley, HP's birthplace
+	preferred_headquarters = {
+		STATE_CALIFORNIA # Silicon Valley, HP's birthplace
 	}
 	building_types = {
 		building_electrics_industry_appliances # Representing early calculators and later computers
@@ -229,7 +229,7 @@ company_sony = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_KANTO # Tokyo region, Sony's home base
+		STATE_KANTO # Tokyo region, Sony's home base
 	}
 	building_types = {
 		building_electrics_industry_appliances # Consumer Appliances
@@ -283,7 +283,7 @@ company_ikea = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_GOTALAND
+		STATE_GOTALAND
 	}
 	building_types = {
 		building_furniture_manufactory
@@ -337,7 +337,7 @@ company_intel = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA
+		STATE_CALIFORNIA
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -390,7 +390,7 @@ company_microsoft = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_WASHINGTON # Seattle area, Microsoft's home base
+		STATE_WASHINGTON # Seattle area, Microsoft's home base
 	}
 	building_types = {
 		building_software_industry
@@ -441,7 +441,7 @@ company_apple = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA # Silicon Valley, Apple's home base
+		STATE_CALIFORNIA # Silicon Valley, Apple's home base
 	}
 	building_types = {
 		building_electrics_industry_appliances # Consumer Appliances
@@ -479,7 +479,7 @@ company_apple = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
-		prestige_good_advanced_telecom 
+		prestige_good_advanced_telecom
 	}
 	ai_will_do = {
 		has_technology_researched = personal_computers
@@ -497,7 +497,7 @@ company_tsmc = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_FORMOSA
+		STATE_FORMOSA
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -535,7 +535,7 @@ company_tsmc = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_electronic_components
-		prestige_good_generic_advanced_materials 
+		prestige_good_generic_advanced_materials
 	}
 	ai_will_do = {
 		has_technology_researched = integrated_circuits
@@ -553,7 +553,7 @@ company_huawei = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_GUANGDONG # Southern China, Huawei's home base
+		STATE_GUANGDONG # Southern China, Huawei's home base
 	}
 	building_types = {
 		building_network_infrastructure # Digital Access
@@ -590,7 +590,7 @@ company_huawei = {
 		state_building_huawei_ox_horn_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_advanced_telecom 
+		prestige_good_advanced_telecom
 	}
 	ai_will_do = {
 		has_technology_researched = computer_networks
@@ -611,7 +611,7 @@ company_amazon = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_WASHINGTON # Seattle area, Amazon's home base
+		STATE_WASHINGTON # Seattle area, Amazon's home base
 	}
 	building_types = {
 		building_network_infrastructure # Digital Access (for AWS)
@@ -646,7 +646,7 @@ company_amazon = {
 		state_building_amazon_fulfillment_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_integrated_logistics 
+		prestige_good_integrated_logistics
 	}
 	ai_will_do = {
 		has_technology_researched = e-commerce
@@ -664,7 +664,7 @@ company_nvidia = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA # Silicon Valley, Nvidia's home base
+		STATE_CALIFORNIA # Silicon Valley, Nvidia's home base
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
@@ -719,7 +719,7 @@ company_google = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA # Silicon Valley, Google's home base
+		STATE_CALIFORNIA # Silicon Valley, Google's home base
 	}
 	building_types = {
 		building_network_infrastructure # Digital Access
@@ -777,7 +777,7 @@ company_netflix = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA # Silicon Valley, Netflix's home base
+		STATE_CALIFORNIA # Silicon Valley, Netflix's home base
 	}
 	building_types = {
 		building_art_academy # Fine Art and Entertainment
@@ -828,8 +828,8 @@ company_spacex = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA # Southern California, SpaceX's home base
-        STATE_TEXAS # For Starbase in Boca Chica
+		STATE_CALIFORNIA # Southern California, SpaceX's home base
+		STATE_TEXAS # For Starbase in Boca Chica
 	}
 	building_types = {
 		building_aerospace_industry # Launch Capacity
@@ -889,7 +889,7 @@ company_bytedance = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_BEIJING # Capital of China, ByteDance's home base
+		STATE_BEIJING # Capital of China, ByteDance's home base
 	}
 	building_types = {
 		building_art_academy # Art and Entertainment
@@ -940,7 +940,7 @@ company_openai = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_CALIFORNIA # Silicon Valley, OpenAI's home base
+		STATE_CALIFORNIA # Silicon Valley, OpenAI's home base
 	}
 	building_types = {
 		building_software_industry
@@ -1002,7 +1002,7 @@ company_catl = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_FUJIAN # Southern China, CATL's home base
+		STATE_FUJIAN # Southern China, CATL's home base
 	}
 	building_types = {
 		building_advanced_material_fabricator # For batteries
@@ -1058,7 +1058,7 @@ company_boston_dynamics = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_MASSACHUSETTS # Boston area, robotics hub
+		STATE_MASSACHUSETTS # Boston area, robotics hub
 	}
 	building_types = {
 		building_robotics_industry
@@ -1095,7 +1095,7 @@ company_boston_dynamics = {
 		state_building_boston_dynamics_ai_institute_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_precision_robotics 
+		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = machine_learning
@@ -1113,7 +1113,7 @@ company_asml = {
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
-        STATE_GELRE # North Brabant, ASML's home base
+		STATE_GELRE # North Brabant, ASML's home base
 	}
 	building_types = {
 		building_tooling_workshop # Representing their photolithography machines
@@ -1169,10 +1169,10 @@ company_asml = {
 
 # Lockheed Martin (1995)
 company_lockheed_martin = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_lockheed_martin.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_lockheed_martin.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_MARYLAND
 	}
 	building_types = {
@@ -1218,22 +1218,22 @@ company_lockheed_martin = {
 		prestige_good_heavy_lift_launch
 
 	}
-    ai_will_do = {
-        has_technology_researched = stealth_technology
-    }
-    ai_construction_targets = {
-        building_aerospace_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = stealth_technology
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = {
+			level = 10
+		}
+	}
 }
 
 # BAE Systems (1999)
 company_bae_systems = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/gb_bae_systems.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/gb_bae_systems.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_HOME_COUNTIES
 	}
 	building_types = {
@@ -1246,7 +1246,7 @@ company_bae_systems = {
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
 		building_space_elevator
-        building_space_mine
+		building_space_mine
 	}
 	potential = {
 		always = yes
@@ -1275,22 +1275,22 @@ company_bae_systems = {
 	possible_prestige_goods = {
 		prestige_good_advanced_aircraft
 	}
-    ai_will_do = {
-        has_technology_researched = supersonic_aircraft
-    }
-    ai_construction_targets = {
-        building_aerospace_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = supersonic_aircraft
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = {
+			level = 10
+		}
+	}
 }
 
 # Roscosmos (2015)
 company_roscosmos = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_roscosmos.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_roscosmos.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_MOSCOW
 	}
 	building_types = {
@@ -1300,7 +1300,7 @@ company_roscosmos = {
 	extension_building_types = {
 		building_advanced_material_fabricator
 		building_space_elevator
-        building_space_mine
+		building_space_mine
 		building_fusion_plant
 	}
 	potential = {
@@ -1329,22 +1329,22 @@ company_roscosmos = {
 	possible_prestige_goods = {
 		prestige_good_heavy_lift_launch
 	}
-    ai_will_do = {
-        has_technology_researched = reusable_rocketry
-    }
-    ai_construction_targets = {
-        building_aerospace_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = reusable_rocketry
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = {
+			level = 10
+		}
+	}
 }
 
 # Airbus (1970)
 company_airbus = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_airbus.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_airbus.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_LANGUEDOC
 		STATE_BAVARIA
 	}
@@ -1357,7 +1357,7 @@ company_airbus = {
 		building_aerospace_industry
 		building_software_industry
 		building_space_elevator
-        building_space_mine
+		building_space_mine
 	}
 	potential = {
 		always = yes
@@ -1394,22 +1394,22 @@ company_airbus = {
 		prestige_good_advanced_aircraft
 		prestige_good_brunn_type_engines
 	}
-    ai_will_do = {
-        has_technology_researched = supersonic_aircraft
-    }
-    ai_construction_targets = {
-        building_aerospace_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = supersonic_aircraft
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = {
+			level = 10
+		}
+	}
 }
 
 # Dassault Aviation (1929)
 company_dassault_aviation = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_dassault.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/french_dassault.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_ILE_DE_FRANCE
 	}
 	building_types = {
@@ -1421,7 +1421,7 @@ company_dassault_aviation = {
 	extension_building_types = {
 		building_software_industry
 		building_space_elevator
-        building_space_mine
+		building_space_mine
 	}
 	potential = {
 		always = yes
@@ -1448,25 +1448,25 @@ company_dassault_aviation = {
 		state_building_dassault_merignac_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_advanced_aircraft 
+		prestige_good_advanced_aircraft
 		prestige_good_generic_artillery
 	}
-    ai_will_do = {
-        has_technology_researched = jet_engine_technology
-    }
-    ai_construction_targets = {
-        building_aerospace_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = jet_engine_technology
+	}
+	ai_construction_targets = {
+		building_aerospace_industry = {
+			level = 10
+		}
+	}
 }
 
 # Hyundai (1947)
 company_hyundai = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/korean_hyundai.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/korean_hyundai.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_SEOUL
 	}
 	building_types = {
@@ -1506,22 +1506,22 @@ company_hyundai = {
 		prestige_good_luxury_automobiles
 		prestige_good_brunn_type_engines
 	}
-    ai_will_do = {
-        has_technology_researched = modern_automotive_technology
-    }
-    ai_construction_targets = {
-        building_automotive_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_automotive_technology
+	}
+	ai_construction_targets = {
+		building_automotive_industry = {
+			level = 10
+		}
+	}
 }
 
 # SAP (1972)
 company_sap = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_BADEN
 	}
 	building_types = {
@@ -1560,24 +1560,24 @@ company_sap = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
-		prestige_good_integrated_logistics 
+		prestige_good_integrated_logistics
 	}
-    ai_will_do = {
-        has_technology_researched = computer_networks
-    }
-    ai_construction_targets = {
-        building_software_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = computer_networks
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+		}
+	}
 }
 
 # Tencent (1998)
 company_tencent = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_tencent.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_tencent.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_GUANGDONG
 	}
 	building_types = {
@@ -1613,24 +1613,24 @@ company_tencent = {
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
-		prestige_good_generic_software 
+		prestige_good_generic_software
 	}
-    ai_will_do = {
-        has_technology_researched = social_media
-    }
-    ai_construction_targets = {
-        building_software_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = social_media
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+		}
+	}
 }
 
 # Alibaba (1999)
 company_alibaba = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_alibaba.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_alibaba.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_ZHEJIANG
 	}
 	building_types = {
@@ -1666,22 +1666,22 @@ company_alibaba = {
 	possible_prestige_goods = {
 		prestige_good_generic_software
 	}
-    ai_will_do = {
-        has_technology_researched = e-commerce
-    }
-    ai_construction_targets = {
-        building_network_infrastructure = {
-            level = 5
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = e-commerce
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 5
+		}
+	}
 }
 
 # Nintendo (1889)
 company_nintendo = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_nintendo.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_nintendo.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_KANSAI
 	}
 	building_types = {
@@ -1724,24 +1724,24 @@ company_nintendo = {
 	}
 	possible_prestige_goods = {
 		prestige_good_entertainment
-		prestige_good_generic_consumer_appliances 
+		prestige_good_generic_consumer_appliances
 	}
-    ai_will_do = {
-        has_technology_researched = video_games
-    }
-    ai_construction_targets = {
-        building_electrics_industry_appliances = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = video_games
+	}
+	ai_construction_targets = {
+		building_electrics_industry_appliances = {
+			level = 10
+		}
+	}
 }
 
 # Gazprom (1989)
 company_gazprom = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_INGRIA
 	}
 	building_types = {
@@ -1775,14 +1775,14 @@ company_gazprom = {
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
 	}
-    ai_will_do = {
-        has_technology_researched = containerization
-    }
-    ai_construction_targets = {
-        building_oil_rig = {
-            level = 15
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = containerization
+	}
+	ai_construction_targets = {
+		building_oil_rig = {
+			level = 15
+		}
+	}
 }
 
 # Saudi Aramco (1933)
@@ -1790,7 +1790,7 @@ company_saudi_aramco = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/saudi_aramco.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_NEJD
 	}
 	building_types = {
@@ -1823,24 +1823,24 @@ company_saudi_aramco = {
 		state_building_saudi_aramco_abqaiq_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_refined_petrochemicals 
+		prestige_good_refined_petrochemicals
 	}
-    ai_will_do = {
-        has_technology_researched = transistors
-    }
-    ai_construction_targets = {
-        building_oil_rig = {
-            level = 20
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = transistors
+	}
+	ai_construction_targets = {
+		building_oil_rig = {
+			level = 20
+		}
+	}
 }
 
 # Petrobras (1953)
 company_petrobras = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_petrobras.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_petrobras.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_RIO_DE_JANEIRO
 	}
 	building_types = {
@@ -1876,22 +1876,22 @@ company_petrobras = {
 	possible_prestige_goods = {
 		prestige_good_refined_petrochemicals
 	}
-    ai_will_do = {
-        has_technology_researched = transistors
-    }
-    ai_construction_targets = {
-        building_oil_rig = {
-            level = 15
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = transistors
+	}
+	ai_construction_targets = {
+		building_oil_rig = {
+			level = 15
+		}
+	}
 }
 
 # Rosatom (2007)
 company_rosatom = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_MOSCOW
 	}
 	building_types = {
@@ -1928,24 +1928,24 @@ company_rosatom = {
 		state_building_rosatom_mayak_association_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_generic_advanced_materials 
+		prestige_good_generic_advanced_materials
 	}
-    ai_will_do = {
-        has_technology_researched = nuclear_energy
-    }
-    ai_construction_targets = {
-        building_nuclear_plant = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = nuclear_energy
+	}
+	ai_construction_targets = {
+		building_nuclear_plant = {
+			level = 10
+		}
+	}
 }
 
 # Oracle (1977)
 company_oracle = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_oracle.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_oracle.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_TEXAS
 	}
 	building_types = {
@@ -1975,29 +1975,29 @@ company_oracle = {
 	}
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.05
-        country_weekly_innovation_mult = 0.05
-        country_bureaucracy_mult = 0.05
+		country_weekly_innovation_mult = 0.05
+		country_bureaucracy_mult = 0.05
 		state_building_oracle_cloud_data_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
 	}
-    ai_will_do = {
-        has_technology_researched = knowledge_economy
-    }
-    ai_construction_targets = {
-        building_software_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = knowledge_economy
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+		}
+	}
 }
 
 # SoftBank (1981)
 company_softbank = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_softbank.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_softbank.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_KANTO
 	}
 	building_types = {
@@ -2034,27 +2034,27 @@ company_softbank = {
 		goods_output_digital_assets_mult = 0.1
 		state_building_softbank_vision_fund_hq_max_level_add = 1
 	}
-    ai_will_do = {
-        has_technology_researched = knowledge_economy
-    }
-    ai_construction_targets = {
-        building_network_infrastructure = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = knowledge_economy
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 10
+		}
+	}
 }
 
 # Roche (1896)
 company_roche = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/swiss_roche.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/swiss_roche.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_EAST_SWITZERLAND # Basel area, Roche's home base
 	}
 	building_types = {
 		building_chemical_plant
-        building_synthetics_plant_opium
+		building_synthetics_plant_opium
 		building_roche_tower
 	}
 	potential = {
@@ -2087,27 +2087,27 @@ company_roche = {
 		# prestige good is the bigger lever for these companies.
 		prestige_good_generic_fertilizer
 	}
-    ai_will_do = {
-        has_technology_researched = modern_pharmaceuticals
-    }
-    ai_construction_targets = {
-        building_chemical_plant = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_pharmaceuticals
+	}
+	ai_construction_targets = {
+		building_chemical_plant = {
+			level = 10
+		}
+	}
 }
 
 # Pfizer (1849)
 company_pfizer = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_NEW_YORK
 	}
 	building_types = {
 		building_chemical_plant
-        building_synthetics_plant_opium
+		building_synthetics_plant_opium
 		building_pfizer_rd_campus
 	}
 	potential = {
@@ -2137,22 +2137,22 @@ company_pfizer = {
 		prestige_good_generic_opium
 		prestige_good_generic_fertilizer
 	}
-    ai_will_do = {
-        has_technology_researched = modern_pharmaceuticals
-    }
-    ai_construction_targets = {
-        building_chemical_plant = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_pharmaceuticals
+	}
+	ai_construction_targets = {
+		building_chemical_plant = {
+			level = 10
+		}
+	}
 }
 
 # Vale (1942)
 company_vale = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_vale.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/brazilian_vale.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_mining.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_RIO_DE_JANEIRO
 	}
 	building_types = {
@@ -2208,22 +2208,22 @@ company_vale = {
 	possible_prestige_goods = {
 		prestige_good_generic_steel
 	}
-    ai_will_do = {
-        has_technology_researched = modern_tools
-    }
-    ai_construction_targets = {
-        building_iron_mine = {
-            level = 15
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_tools
+	}
+	ai_construction_targets = {
+		building_iron_mine = {
+			level = 15
+		}
+	}
 }
 
 # The Walt Disney Company (1923)
 company_disney = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_disney.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_disney.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_CALIFORNIA
 	}
 	building_types = {
@@ -2266,22 +2266,22 @@ company_disney = {
 		prestige_good_entertainment
 		prestige_good_resort_travel
 	}
-    ai_will_do = {
-        has_technology_researched = mass_media
-    }
-    ai_construction_targets = {
-        building_art_academy = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = mass_media
+	}
+	ai_construction_targets = {
+		building_art_academy = {
+			level = 10
+		}
+	}
 }
 
 # Universal (1934)
 company_universal = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_universal_music.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/eu_universal_music.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_ILE_DE_FRANCE
 		STATE_HOLLAND
 	}
@@ -2319,22 +2319,22 @@ company_universal = {
 	possible_prestige_goods = {
 		prestige_good_entertainment
 	}
-    ai_will_do = {
-        has_technology_researched = mass_media
-    }
-    ai_construction_targets = {
-        building_art_academy = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = mass_media
+	}
+	ai_construction_targets = {
+		building_art_academy = {
+			level = 10
+		}
+	}
 }
 
 # Verizon (1983)
 company_verizon = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_verizon.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_verizon.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_NEW_YORK
 	}
 	building_types = {
@@ -2373,24 +2373,24 @@ company_verizon = {
 		state_building_verizon_building_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_advanced_telecom 
+		prestige_good_advanced_telecom
 	}
-    ai_will_do = {
-        has_technology_researched = cellular_networks
-    }
-    ai_construction_targets = {
-        building_network_infrastructure = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = cellular_networks
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 10
+		}
+	}
 }
 
 # Reliance Industries (1973)
 company_reliance = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_reliance.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_reliance.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
+	preferred_headquarters = {
 		STATE_BOMBAY
 	}
 	building_types = {
@@ -2430,19 +2430,19 @@ company_reliance = {
 		prestige_good_refined_petrochemicals
 		prestige_good_generic_fertilizer
 	}
-    ai_will_do = {
-        has_technology_researched = containerization
-    }
-    ai_construction_targets = {
-        building_chemical_plant = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = containerization
+	}
+	ai_construction_targets = {
+		building_chemical_plant = {
+			level = 10
+		}
+	}
 }
 
 # FANUC (1956)
 company_fanuc = {
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds" 
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds"
 	flavored_company = yes
 	preferred_headquarters = {
@@ -2485,16 +2485,16 @@ company_fanuc = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_tools
-		prestige_good_precision_robotics 
+		prestige_good_precision_robotics
 	}
-    ai_will_do = {
-        has_technology_researched = robotics
-    }
-    ai_construction_targets = {
-        building_robotics_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = robotics
+	}
+	ai_construction_targets = {
+		building_robotics_industry = {
+			level = 10
+		}
+	}
 }
 
 # --- Italy ---
@@ -2504,8 +2504,8 @@ company_eni = {
 	icon = "gfx/interface/icons/company_icons/historical_company_icons/italian_eni.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_oil_drills.dds"
 	flavored_company = yes
-	preferred_headquarters = { 
-		STATE_LAZIO 
+	preferred_headquarters = {
+		STATE_LAZIO
 	}
 	building_types = {
 		building_oil_rig
@@ -2545,16 +2545,16 @@ company_eni = {
 		state_building_eni_palazzo_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_refined_petrochemicals 
+		prestige_good_refined_petrochemicals
 	}
-    ai_will_do = {
-        has_technology_researched = modern_chemical_processes
-    }
-    ai_construction_targets = {
-        building_oil_rig = {
-            level = 15
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_chemical_processes
+	}
+	ai_construction_targets = {
+		building_oil_rig = {
+			level = 15
+		}
+	}
 }
 
 # Ferrari (1947)
@@ -2601,14 +2601,14 @@ company_ferrari = {
 		prestige_good_luxury_automobiles
 		prestige_good_brunn_type_engines
 	}
-    ai_will_do = {
-        has_technology_researched = modern_automotive_technology
-    }
-    ai_construction_targets = {
-        building_automotive_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_automotive_technology
+	}
+	ai_construction_targets = {
+		building_automotive_industry = {
+			level = 10
+		}
+	}
 }
 
 # --- Canada ---
@@ -2657,16 +2657,16 @@ company_blackberry = {
 		state_building_blackberry_rim_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_advanced_telecom 
-    }
-    ai_will_do = {
-        has_technology_researched = cellular_networks
-    }
-    ai_construction_targets = {
-        building_network_infrastructure = {
-            level = 10
-        }
-    }
+		prestige_good_advanced_telecom
+	}
+	ai_will_do = {
+		has_technology_researched = cellular_networks
+	}
+	ai_construction_targets = {
+		building_network_infrastructure = {
+			level = 10
+		}
+	}
 }
 
 # Shopify (2006)
@@ -2713,15 +2713,15 @@ company_shopify = {
 	possible_prestige_goods = {
 		prestige_good_generic_software
 		prestige_good_integrated_logistics
-    }
-    ai_will_do = {
-        has_technology_researched = e-commerce
-    }
-    ai_construction_targets = {
-        building_software_industry = {
-            level = 10
-        }
-    }
+	}
+	ai_will_do = {
+		has_technology_researched = e-commerce
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+		}
+	}
 }
 
 
@@ -2797,14 +2797,14 @@ company_bhp_group = {
 	possible_prestige_goods = {
 		prestige_good_generic_lead
 	}
-    ai_will_do = {
-        has_technology_researched = modern_tools
-    }
-    ai_construction_targets = {
-        building_iron_mine = {
-            level = 20
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_tools
+	}
+	ai_construction_targets = {
+		building_iron_mine = {
+			level = 20
+		}
+	}
 }
 
 # Cochlear (1981)
@@ -2851,16 +2851,16 @@ company_cochlear = {
 		state_building_cochlear_global_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
-		prestige_good_generic_consumer_appliances 
+		prestige_good_generic_consumer_appliances
 	}
-    ai_will_do = {
-        has_technology_researched = modern_pharmaceuticals
-    }
-    ai_construction_targets = {
-        building_chemical_plant = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = modern_pharmaceuticals
+	}
+	ai_construction_targets = {
+		building_chemical_plant = {
+			level = 10
+		}
+	}
 }
 
 # --- India ---
@@ -2906,14 +2906,14 @@ company_infosys = {
 	possible_prestige_goods = {
 		prestige_good_generic_software
 	}
-    ai_will_do = {
-        has_technology_researched = knowledge_economy
-    }
-    ai_construction_targets = {
-        building_software_industry = {
-            level = 10
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = knowledge_economy
+	}
+	ai_construction_targets = {
+		building_software_industry = {
+			level = 10
+		}
+	}
 }
 
 # JSW Steel (1982)
@@ -2958,14 +2958,14 @@ company_jsw_steel = {
 	possible_prestige_goods = {
 		prestige_good_generic_steel
 	}
-    ai_will_do = {
-        has_technology_researched = aluminum_mass_production
-    }
-    ai_construction_targets = {
-        building_steel_mill = {
-            level = 15
-        }
-    }
+	ai_will_do = {
+		has_technology_researched = aluminum_mass_production
+	}
+	ai_construction_targets = {
+		building_steel_mill = {
+			level = 15
+		}
+	}
 }
 
 # --- Near-Future Era (2020s-2050s) ---
