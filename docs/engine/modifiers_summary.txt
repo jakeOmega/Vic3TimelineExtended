@@ -1,4 +1,4 @@
-# Auto-generated from modifiers.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from modifiers.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 battle|battle_casualties_mult|A bonus or penalty to the number of Casualties this side takes in Battle
 battle|battle_combat_width_mult|A bonus or penalty to the Terrain Combat Width for this side of the Battle
@@ -6005,6 +6005,7 @@ country|country_udmurt_cultural_acceptance_add|A bonus or penalty to a specific 
 country|country_ugrian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_uighur_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ukrainian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
+country|country_un_institutional_alignment|
 country|country_un_membership_obligation_bool|
 country|country_unrecognized_become_recognized_bool|
 country|country_urbanization_pb_principles_bool|
@@ -6038,7 +6039,9 @@ country|country_wage_open_prejudice_mult|A bonus or penalty to the Wage for the 
 country|country_wage_second_rate_citizen_mult|A bonus or penalty to the Wage for the acceptance_status_4! Second-class Citizen Status.
 country|country_wage_violent_hostility_mult|A bonus or penalty to the Wage for the acceptance_status_1! Violent Hostility Status.
 country|country_wallonian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_war_exhaustion_casualties_mult|An increase or decrease to the amount of War Exhaustion a Country suffers in War due to Casualties inflicted on them
+country|country_war_support_battles_decrease_mult|An increase or decrease to the amount of War Support a Country loses in War from losing Battle
+country|country_war_support_battles_increase_mult|An increase or decrease to the amount of War Support a Country gains in War from winning Battle
+country|country_war_support_casualties_mult|An increase or decrease to the amount of War Support a Country suffers in War due to Casualties inflicted on them
 country|country_war_support_monthly_add_religion|
 country|country_weekly_innovation_add|The amount of innovation! Innovation gained or lost each week
 country|country_weekly_innovation_max_add|The maximum amount of innovation! Innovation that can be invested into a Technology each week
@@ -6432,6 +6435,7 @@ power_bloc|power_bloc_allow_port_access_bool|Gives Power Bloc members access to 
 power_bloc|power_bloc_allow_wider_migration_area_bool|Allows Migration to potentially also happen between members of a Power Bloc that don't share a Market, rather than only within a Country’s Market
 power-bloc|power_bloc_can_enact_decree_cultural_emigration_initiative_bool|
 power-bloc|power_bloc_can_enact_greenest_grass_campaign_bool|
+power-bloc|power_bloc_can_give_development_aid_bool|
 power-bloc|power_bloc_can_give_education_aid_bool|
 power-bloc|power_bloc_can_give_healthcare_aid_bool|
 power-bloc|power_bloc_can_give_humanitarian_aid_bool|
@@ -6441,6 +6445,7 @@ power-bloc|power_bloc_can_give_security_aid_bool|
 power-bloc|power_bloc_can_use_crisis_resolution_bool|
 power-bloc|power_bloc_can_use_diplomatic_alignment_bool|
 power-bloc|power_bloc_can_use_extend_influence_bool|
+power-bloc|power_bloc_can_use_join_united_nations_bool|
 power_bloc|power_bloc_cohesion_add|An increase or decrease to the Cohesion of a Power Bloc
 power_bloc|power_bloc_cohesion_mult|An increase or decrease to the Cohesion of a Power Bloc
 power_bloc|power_bloc_cohesion_per_member_add|An increase or decrease to the Cohesion of a Power Bloc for every Power Bloc Member it has other than the Power Bloc Leader

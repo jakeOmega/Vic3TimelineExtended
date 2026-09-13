@@ -22,15 +22,15 @@ _None._
 
 ## Reviewed Exemptions
 
-- `common/static_modifiers/extra_modifiers.txt:336` — `state_construction_mult = -0.0001` (displays as +0%) — **2026-05-06**: Multiplied by a potentially big number, intentionally tiny
-- `common/static_modifiers/extra_modifiers.txt:5718` — `country_mass_migration_attraction_mult = 0.0025` (displays as +0%) — **2026-05-06**: Multiplied by cultural hegemony score - need 4% of global cultural influence to get +1% migration attraction
-- `common/static_modifiers/extra_modifiers.txt:5723` — `country_diplomatic_reputation_add = 0.1` (displays as +0) — **2026-05-06**: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
+- `common/static_modifiers/extra_modifiers.txt:338` — `state_construction_mult = -0.0001` (displays as +0%) — **2026-05-06**: Multiplied by a potentially big number, intentionally tiny
+- `common/static_modifiers/extra_modifiers.txt:5726` — `country_mass_migration_attraction_mult = 0.0025` (displays as +0%) — **2026-05-06**: Multiplied by cultural hegemony score - need 4% of global cultural influence to get +1% migration attraction
+- `common/static_modifiers/extra_modifiers.txt:5731` — `country_diplomatic_reputation_add = 0.1` (displays as +0) — **2026-05-06**: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
 
 ## Coverage
 
-- files_audited: 258
-- modifiers_in_registry_with_decimals: 2723
-- registry_hits: 7332
+- files_audited: 254
+- modifiers_in_registry_with_decimals: 2725
+- registry_hits: 7353
 - total flags: 3
 - unreviewed: 0
 - exempted: 3

@@ -29,6 +29,7 @@ ig_armed_forces = {
 	}
 
 	on_enable = {
+		# ONLY HANDLE IG TRAITS IN THIS BLOCK
 		ig:ig_armed_forces ?= {
 			if = {
 				limit = {
@@ -116,8 +117,9 @@ ig_armed_forces = {
 				set_ig_trait = ig_trait:ig_trait_patriotic_fervor
 			}
 		}
-		# Caudillo Ideology
-		if = {
+
+		# FLAVOUR AND IDEOLOGIES GO HERE
+		if = { # Caudillo Ideology
 			limit = {
 				is_in_geographic_region = geographic_region_latin_america
 				OR = {
@@ -133,8 +135,7 @@ ig_armed_forces = {
 				add_ideology = ideology_caudillismo
 			}
 		}
-		# Samurai
-		else_if = {
+		else_if = { # Samurai
 			limit = {
 				country_has_primary_culture = cu:japanese
 				NOT = { has_global_variable = fall_of_the_samurai_global_var }
@@ -144,8 +145,7 @@ ig_armed_forces = {
 				set_interest_group_name = ig_samurai
 			}
 		}
-		# India
-		else_if = {
+		else_if = { # British India
 			limit = {
 				c:BIC ?= this
 			}
@@ -153,8 +153,7 @@ ig_armed_forces = {
 				set_interest_group_name = ig_presidency_armies
 			}
 		}
-		# Sikh Empire
-		else_if = {
+		else_if = { # Sikh Empire
 			limit = {
 				c:PAN ?= this
 			}
@@ -569,10 +568,10 @@ ig_armed_forces = {
 	commander_weight = {
 		value = 5.0
 	}
-	
+
 	magnate_weight = {
 		value = 1.0
-	}	
+	}
 
 	executive_weight = {
 		value = 0.2
@@ -913,7 +912,7 @@ ig_armed_forces = {
 	commander_leader_weight = {
 		value = 3.0
 	}
-	
+
 	# Multiplier applied to the weight for an appropriate magnate will be selected from the character pool to lead the IG
 	# root = interest group
 	magnate_leader_weight = {

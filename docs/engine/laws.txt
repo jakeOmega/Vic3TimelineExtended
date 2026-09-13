@@ -36,13 +36,6 @@ Edo Status System:
 		Legal and sumptuary laws have been relaxed, and commoners are afforded increasing influence and status in society. Wealthy townsmen or peasants may become gokenin—a low-ranking samurai—through purchase.
 	Lax Status Order [progressiveness=-25]
 		Positions and roles previously exclusive to samurai are opened up for commoners, and enforcement of remaining sumptuary and professional limitations is only enforced selectively, usually limited to the most serious offenses alone.
-Children's Rights:
-	Child Labor Allowed [progressiveness=-50]
-		No legal restrictions are placed on where children may work.
-	Restricted Child Labor - Unlocking Technology: Labor Movement
-		No child is permitted on the factory floor.
-	Compulsory Primary School [progressiveness=50] - Unlocking Technology: Human Rights
-		All children must attend several years of primary school during which they're prohibited from working.
 Church and State:
 	State Religion [progressiveness=-50]
 		The church is an official organ of the state. All minority religions are discriminated against.
@@ -69,17 +62,6 @@ Citizenship:
 		The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.
 	Universal Citizenship [progressiveness=75] - Unlocking Technology: Human Rights
 		Citizenship is a matter of residency and the 'Right of Soil.' Every resident born within the borders is a full member of the nation, regardless of heritage or creed.
-Colonization:
-	No Colonial Affairs
-		The country does not engage in any formal type of colonization and cannot establish colonies.
-	Frontier Colonization - Unlocking Technology: Colonization
-		The wild frontiers on our borders are ripe for settlement if they can first be pacified and tamed.
-	Colonial Resettlement - Unlocking Technology: Colonization
-		Colonies are established to provide land to settlers from the country's incorporated states.
-	Colonial Exploitation [progressiveness=-25] - Unlocking Technology: Colonization
-		Colonies are established to exploit the area for their natural resources and cheap labor.
-	Neocolonialism [progressiveness=-10] - Unlocking Technology: Decolonization
-		A [concept_decolonization_system]-era form of indirect control and exploitation where powerful nations or corporations exert influence over less developed countries, often through economic, political, or cultural means.
 Distribution of Power:
 	Autocracy [progressiveness=-100]
 		The Head of State's power is absolute and they are held accountable to no earthly power.
@@ -109,6 +91,64 @@ Distribution of Power:
 		The state is governed by a single legal political party, which has a monopoly on all political activity within the nation.
 	Algorithmic Governance - Unlocking Technology: Machine Learning
 		A system of government where decisions are made by algorithms or artificial intelligence, based on data analysis and predictive modeling.
+Governance Principles:
+	Chiefdom [progressiveness=-100]
+		A hierarchical pre-industrial political system based on kinship, with a warlord or elder of a prominent family at the head. It is incapable of efficient centralized control over entire states.
+	Monarchy
+		A form of governance where an aristocratic dynasty represents the country's national identity and yields executive powers to the royal head of the dynasty.
+	Colonial Administration (Variant of Monarchy)
+		The state is legally an administrative sub-division of a foreign power, possessing no sovereignty of its own. It is delegated powers with which to administer a given territory on the behalf of the metropole.
+	Presidential Republic [progressiveness=100] - Unlocking Technology: Democracy
+		A political system where power is held by the people and their elected representatives. Republics have an elected or nominated $RULER_TITLE_PRESIDENT$ as Head of State.
+	Parliamentary Republic [progressiveness=100] - Unlocking Technology: Democracy
+		A political system where power is held by the people and their elected representatives. The leader of the legislature acts as the Head of State and is referred to as $RULER_TITLE_CHANCELLOR$.
+	Theocracy [progressiveness=-25]
+		The government is ruled by a clergy and their interpretation of holy scripture. The Head of State is nominally the person of worship, though in practice a worldly representative selected by merit, status, or birth.
+	Council Republic [progressiveness=200] - Unlocking Technology: Socialism
+		A political system where workers elect delegates to local councils. Extends concepts of workplace organization to general governance.
+	Corporate State [progressiveness=50] - Unlocking Technology: Corporatism
+		A political system based around institutionalized collaboration between officially recognized corporate groups. The state serves as a forum for negotiation between different social classes.
+	Social Monarchy [progressiveness=25] - Unlocking Technology: Corporatism
+		A political system in which the state positions itself as the ultimate mediator between the nation's corporate groups. The monarchy is held to be a symbol of the country's national identity.
+	Neocameralism - Unlocking Technology: Marketing Research
+		A political system where the state is organized as a joint-stock corporation, with shareholders having control over government functions and policies.
+	Direct Democracy [progressiveness=50] - Unlocking Technology: Mass Media
+		A system of government where eligible citizens participate directly in decision-making processes, rather than through elected representatives.
+Internal Security:
+	No Home Affairs [progressiveness=-25]
+		The state relies upon conventional military and police forces to suppress unrest and uprisings.
+	National Guard [progressiveness=25] - Unlocking Technology: Law Enforcement
+		The state maintains an independent volunteer force of citizen-soldiers charged with upholding public order.
+	Secret Police - Unlocking Technology: Central Archives
+		The state possesses a secret police bureau tasked with monitoring dissidents and investigating political crimes.
+	Shinsengumi [progressiveness=-5] (Variant of Secret Police) - Unlocking Technology: Law Enforcement
+		The state commissions an elite organization of swordsmen to protect government officials and police the capital.
+	Guaranteed Liberties [progressiveness=75]
+		The state's home affairs bureau is solely focused on addressing the grievances of the citizens, and is forbidden from investigating or arresting them without due cause.
+Navy Model:
+	Merchant Navy [progressiveness=-50]
+		The fleet is focused on the propagation and protection of overseas trade and supply.
+	Jeune École [progressiveness=-50] - Unlocking Technology: Jeune École
+		A naval model prioritizing the use of smaller, heavily armed ships to combat a larger enemy.
+	Capital Fleet - Unlocking Technology: Military Drill
+		Focused on the construction and maintenance of a mighty battlefleet in order to impress and deter rivals.
+	Diplomatic Fleet - Unlocking Technology: Military Drill
+		Prioritizing long-range cruising in order to build and maintain a global diplomatic presence.
+	Littoral Defense [progressiveness=-25] - Unlocking Technology: Naval Convoy Defense
+		The fleet exists to defend the home coast, not to project power abroad. Dense flotillas of small craft and reinforced coastal [concept_fortification_system] make landings costly for any aggressor, but the navy cannot operate far from port and capital ships are deliberately neglected.
+	Auxiliary Fleet [progressiveness=25] - Unlocking Technology: Predictive Logistics
+		The fleet's purpose is to sustain the army at extreme distance — sealift, [concept_naval_invasion], and forward logistics. Operational reach and amphibious capability are unmatched, but the surface combat fleet is hollowed out in favor of [Concept('concept_supply_ship', 'supply ships')] and transports.
+Colonization:
+	No Colonial Affairs
+		The country does not engage in any formal type of colonization and cannot establish colonies.
+	Frontier Colonization - Unlocking Technology: Colonization
+		The wild frontiers on our borders are ripe for settlement if they can first be pacified and tamed.
+	Colonial Resettlement - Unlocking Technology: Colonization
+		Colonies are established to provide land to settlers from the country's incorporated states.
+	Colonial Exploitation [progressiveness=-25] - Unlocking Technology: Colonization
+		Colonies are established to exploit the area for their natural resources and cheap labor.
+	Neocolonialism [progressiveness=-10] - Unlocking Technology: Decolonization
+		A [concept_decolonization_system]-era form of indirect control and exploitation where powerful nations or corporations exert influence over less developed countries, often through economic, political, or cultural means.
 Economic System:
 	Traditionalism [progressiveness=-50]
 		Pre-industrial subsistence economy with little central control.
@@ -137,38 +177,6 @@ Education System:
 		The education of commoners is left to a decentralized system of privately-owned Terakoya, or temple schools.
 	Public Schools [progressiveness=50] - Unlocking Technology: Empiricism
 		Schooling is the responsibility of the state, and should be standardized and equally accessible to all.
-Free Speech:
-	Outlawed Dissent [progressiveness=-50] - Unlocking Technology: Political Agitation
-		Criticizing the government is considered treasonous and illegal.
-	Censorship - Unlocking Technology: Law Enforcement
-		There is active censorship of the press and no guaranteed right of assembly.
-	Right of Assembly [progressiveness=50]
-		Citizens enjoy the right to public assembly.
-	Protected Speech [progressiveness=100] - Unlocking Technology: Human Rights
-		The protection of free speech is enshrined in law.
-Governance Principles:
-	Chiefdom [progressiveness=-100]
-		A hierarchical pre-industrial political system based on kinship, with a warlord or elder of a prominent family at the head. It is incapable of efficient centralized control over entire states.
-	Monarchy
-		A form of governance where an aristocratic dynasty represents the country's national identity and yields executive powers to the royal head of the dynasty.
-	Colonial Administration (Variant of Monarchy)
-		The state is legally an administrative sub-division of a foreign power, possessing no sovereignty of its own. It is delegated powers with which to administer a given territory on the behalf of the metropole.
-	Presidential Republic [progressiveness=100] - Unlocking Technology: Democracy
-		A political system where power is held by the people and their elected representatives. Republics have an elected or nominated $RULER_TITLE_PRESIDENT$ as Head of State.
-	Parliamentary Republic [progressiveness=100] - Unlocking Technology: Democracy
-		A political system where power is held by the people and their elected representatives. The leader of the legislature acts as the Head of State and is referred to as $RULER_TITLE_CHANCELLOR$.
-	Theocracy [progressiveness=-25]
-		The government is ruled by a clergy and their interpretation of holy scripture. The Head of State is nominally the person of worship, though in practice a worldly representative selected by merit, status, or birth.
-	Council Republic [progressiveness=200] - Unlocking Technology: Socialism
-		A political system where workers elect delegates to local councils. Extends concepts of workplace organization to general governance.
-	Corporate State [progressiveness=50] - Unlocking Technology: Corporatism
-		A political system based around institutionalized collaboration between officially recognized corporate groups. The state serves as a forum for negotiation between different social classes.
-	Social Monarchy [progressiveness=25] - Unlocking Technology: Corporatism
-		A political system in which the state positions itself as the ultimate mediator between the nation's corporate groups. The monarchy is held to be a symbol of the country's national identity.
-	Neocameralism - Unlocking Technology: Marketing Research
-		A political system where the state is organized as a joint-stock corporation, with shareholders having control over government functions and policies.
-	Direct Democracy [progressiveness=50] - Unlocking Technology: Mass Media
-		A system of government where eligible citizens participate directly in decision-making processes, rather than through elected representatives.
 Health System:
 	No Health System [progressiveness=-25]
 		The government does not fund any system of healthcare.
@@ -178,37 +186,6 @@ Health System:
 		Population health is managed through a system of privately owned hospitals paid through private health insurance programs, ensuring the well-being of those who can afford it with minimal impact on the government treasury.
 	Public Health Insurance [progressiveness=100] - Unlocking Technology: Pharmaceuticals
 		The government provides a publicly funded health insurance program ensuring equal access to care for all.
-Internal Security:
-	No Home Affairs [progressiveness=-25]
-		The state relies upon conventional military and police forces to suppress unrest and uprisings.
-	National Guard [progressiveness=25] - Unlocking Technology: Law Enforcement
-		The state maintains an independent volunteer force of citizen-soldiers charged with upholding public order.
-	Secret Police - Unlocking Technology: Central Archives
-		The state possesses a secret police bureau tasked with monitoring dissidents and investigating political crimes.
-	Shinsengumi [progressiveness=-5] (Variant of Secret Police) - Unlocking Technology: Law Enforcement
-		The state commissions an elite organization of swordsmen to protect government officials and police the capital.
-	Guaranteed Liberties [progressiveness=75]
-		The state's home affairs bureau is solely focused on addressing the grievances of the citizens, and is forbidden from investigating or arresting them without due cause.
-Labor Rights:
-	No Workers' Rights
-		Workers have no particular labor rights guaranteed by the state.
-	Regulatory Bodies [progressiveness=50] - Unlocking Technology: Labor Movement
-		Government institutions have been created to regulate the excesses of employers.
-	Workers' Protections [progressiveness=100] - Unlocking Technology: Human Rights
-		Workers enjoy extensive protections that are enshrined in law.
-Labor Associations:
-	Guild System [progressiveness=-50]
-		A system in which eligibility for employment within certain fields is dependent upon membership of a formalized craft or merchant guild.
-	Combination Acts
-		The formation of labor associations of any kind is prohibited by law.
-	Anti-Strike Laws [progressiveness=25]
-		Whilst the formation of labor associations is permitted, strikes and certain forms of collective bargaining are prohibited.
-	Right to Associate [progressiveness=50]
-		No especial restrictions are placed upon the formation and activity of labor associations.
-	Corporatized Unions - Unlocking Technology: Corporatism
-		Labor associations have been brought under the direct or indirect control of the state, serving foremostly as a means to facilitate collaboration between classes.
-	Factory Councils [progressiveness=100] - Unlocking Technology: Socialism
-		Workers have been radicalized by revolutionary conditions, seizing control of their workplaces and supplanting previous management structures.
 Land Reform:
 	Serfdom [progressiveness=-50]
 		Peasants are tied to their land and must perform labor for their feudal masters.
@@ -228,26 +205,6 @@ Land Reform:
 		Farmers lay claim to plots of land which they work alongside their hired laborers.
 	Collectivized Agriculture [progressiveness=100] - Unlocking Technology: Socialism
 		Agricultural land is organized into plots worked by groups of farmers as a joint enterprise.
-Migration:
-	No Migration Controls [progressiveness=50]
-		The country makes no attempt to control movement across its borders.
-	Migration Controls
-		Only people of cultures and religions not discriminated against may migrate in or out of the country.
-	Closed Borders [progressiveness=-50]
-		No migration in or out of the country is permitted.
-Navy Model:
-	Merchant Navy [progressiveness=-50]
-		The fleet is focused on the propagation and protection of overseas trade and supply.
-	Jeune École [progressiveness=-50] - Unlocking Technology: Jeune École
-		A naval model prioritizing the use of smaller, heavily armed ships to combat a larger enemy.
-	Capital Fleet - Unlocking Technology: Military Drill
-		Focused on the construction and maintenance of a mighty battlefleet in order to impress and deter rivals.
-	Diplomatic Fleet - Unlocking Technology: Military Drill
-		Prioritizing long-range cruising in order to build and maintain a global diplomatic presence.
-	Littoral Defense [progressiveness=-25] - Unlocking Technology: Naval Convoy Defense
-		The fleet exists to defend the home coast, not to project power abroad. Dense flotillas of small craft and reinforced coastal [concept_fortification_system] make landings costly for any aggressor, but the navy cannot operate far from port and capital ships are deliberately neglected.
-	Auxiliary Fleet [progressiveness=25] - Unlocking Technology: Predictive Logistics
-		The fleet's purpose is to sustain the army at extreme distance — sealift, [concept_naval_invasion], and forward logistics. Operational reach and amphibious capability are unmatched, but the surface combat fleet is hollowed out in favor of [Concept('concept_supply_ship', 'supply ships')] and transports.
 Policing:
 	No Police
 		Any sort of structured police force does not exist in this country.
@@ -257,30 +214,6 @@ Policing:
 		This country has a dedicated police force with standardized training.
 	Militarized Police Force [progressiveness=-100] - Unlocking Technology: Mass Surveillance
 		By giving your police force military equipment and military training, their effectiveness at carrying out your will increases.
-Rights of Women:
-	Legal Guardianship [progressiveness=-100]
-		Women are legally under the guardianship of men and enjoy very few rights.
-	Women in the Fields [progressiveness=-100] (Variant of Legal Guardianship)
-		A rare arrangement of gender roles where women are responsible for most labor and agriculture, leaving more men available for war and raiding.
-	Propertied Women [progressiveness=-50]
-		Whether inherited or otherwise earned, even women have the right and duty to own and cherish their possessions.
-	Women in the Workplace - Unlocking Technology: Feminism
-		How will we be able to keep the furnaces of progress aflame with only half the potential workforce?
-	Women’s Suffrage [progressiveness=50] - Unlocking Technology: Feminism
-		In the adjustment of the new order of things, we women demand an equal voice; we shall accept nothing less.
-	Protected Class [progressiveness=60] - Unlocking Technology: Sexual Revolution
-		[concept_discrimination] on the basis of gender is prohibited by law, and individuals are protected from unfair treatment or bias based on gender.
-Slavery:
-	Slavery Banned [progressiveness=100]
-		No human being may be owned by another.
-	Colonial Slavery [progressiveness=50]
-		The institution of slavery is legal in this country's colonies. Any slave that sets foot upon the mainland is made free.
-	Debt Slavery [progressiveness=-50]
-		Those who cannot clear their debts instead forfeits their person as their creditor's property.
-	Slave Trade [progressiveness=-50]
-		Demand for cheap labor is fulfilled through a dehumanizing trade in foreign bodies.
-	Legacy Slavery
-		As a compromise between abolitionists and slaveholders, the institution of slavery may continue as long as it does not expand.
 Taxation:
 	Consumption-Based Taxation [progressiveness=-100]
 		A tax system where there are no direct income or per-capita taxes and instead revenue is raised through taxing the consumption of goods.
@@ -305,6 +238,73 @@ Trade Policy:
 		A variant of $law_isolationism$ where trade is only permitted in a single coastal state.
 	Sakoku [progressiveness=-50] (Variant of Isolationism)
 		A variant of $law_isolationism$ where contact with other nations is heavily restricted and trade is limited to only a handful of designated ports.
+Children's Rights:
+	Child Labor Allowed [progressiveness=-50]
+		No legal restrictions are placed on where children may work.
+	Restricted Child Labor - Unlocking Technology: Labor Movement
+		No child is permitted on the factory floor.
+	Compulsory Primary School [progressiveness=50] - Unlocking Technology: Human Rights
+		All children must attend several years of primary school during which they're prohibited from working.
+Free Speech:
+	Outlawed Dissent [progressiveness=-50] - Unlocking Technology: Political Agitation
+		Criticizing the government is considered treasonous and illegal.
+	Censorship - Unlocking Technology: Law Enforcement
+		There is active censorship of the press and no guaranteed right of assembly.
+	Right of Assembly [progressiveness=50]
+		Citizens enjoy the right to public assembly.
+	Protected Speech [progressiveness=100] - Unlocking Technology: Human Rights
+		The protection of free speech is enshrined in law.
+Labor Rights:
+	No Workers' Rights
+		Workers have no particular labor rights guaranteed by the state.
+	Regulatory Bodies [progressiveness=50] - Unlocking Technology: Labor Movement
+		Government institutions have been created to regulate the excesses of employers.
+	Workers' Protections [progressiveness=100] - Unlocking Technology: Human Rights
+		Workers enjoy extensive protections that are enshrined in law.
+Labor Associations:
+	Guild System [progressiveness=-50]
+		A system in which eligibility for employment within certain fields is dependent upon membership of a formalized craft or merchant guild.
+	Combination Acts
+		The formation of labor associations of any kind is prohibited by law.
+	Anti-Strike Laws [progressiveness=25]
+		Whilst the formation of labor associations is permitted, strikes and certain forms of collective bargaining are prohibited.
+	Right to Associate [progressiveness=50]
+		No especial restrictions are placed upon the formation and activity of labor associations.
+	Corporatized Unions - Unlocking Technology: Corporatism
+		Labor associations have been brought under the direct or indirect control of the state, serving foremostly as a means to facilitate collaboration between classes.
+	Factory Councils [progressiveness=100] - Unlocking Technology: Socialism
+		Workers have been radicalized by revolutionary conditions, seizing control of their workplaces and supplanting previous management structures.
+Migration:
+	No Migration Controls [progressiveness=50]
+		The country makes no attempt to control movement across its borders.
+	Migration Controls
+		Only people of cultures and religions not discriminated against may migrate in or out of the country.
+	Closed Borders [progressiveness=-50]
+		No migration in or out of the country is permitted.
+Rights of Women:
+	Legal Guardianship [progressiveness=-100]
+		Women are legally under the guardianship of men and enjoy very few rights.
+	Women in the Fields [progressiveness=-100] (Variant of Legal Guardianship)
+		A rare arrangement of gender roles where women are responsible for most labor and agriculture, leaving more men available for war and raiding.
+	Propertied Women [progressiveness=-50]
+		Whether inherited or otherwise earned, even women have the right and duty to own and cherish their possessions.
+	Women in the Workplace - Unlocking Technology: Feminism
+		How will we be able to keep the furnaces of progress aflame with only half the potential workforce?
+	Women’s Suffrage [progressiveness=50] - Unlocking Technology: Feminism
+		In the adjustment of the new order of things, we women demand an equal voice; we shall accept nothing less.
+	Protected Class [progressiveness=60] - Unlocking Technology: Sexual Revolution
+		[concept_discrimination] on the basis of gender is prohibited by law, and individuals are protected from unfair treatment or bias based on gender.
+Slavery:
+	Slavery Banned [progressiveness=100]
+		No human being may be owned by another.
+	Colonial Slavery [progressiveness=50]
+		The institution of slavery is legal in this country's colonies. Any slave that sets foot upon the mainland is made free.
+	Debt Slavery [progressiveness=-50]
+		Those who cannot clear their debts instead forfeits their person as their creditor's property.
+	Slave Trade [progressiveness=-50]
+		Demand for cheap labor is fulfilled through a dehumanizing trade in foreign bodies.
+	Legacy Slavery
+		As a compromise between abolitionists and slaveholders, the institution of slavery may continue as long as it does not expand.
 Welfare:
 	No Social Security
 		It is not the state's role to provide for those who cannot provide for themselves.

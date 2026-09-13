@@ -844,7 +844,7 @@ ig_devout = {
 	commander_weight = {
 		value = 1.0
 	}
-	
+
 	magnate_weight = {
 		value = 1.0
 	}

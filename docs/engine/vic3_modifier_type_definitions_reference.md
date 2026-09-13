@@ -1,8 +1,8 @@
-<!-- Auto-generated from modifiers.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7783 modifier entries.*
+*Auto-generated from 7788 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1851,7 +1851,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (527)
+### country (530)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -2343,6 +2343,7 @@ _Cannon Artillery Offense_
 - `country_treaty_leverage_generation_mult` — **Leverage Generation from Treaty** — An increase or decrease to the amount of Leverage generated between two Countries with this Treaty when the dominant Country in the Treaty is a Power Bloc Le...
 - `country_two_spains_conservative_drift_add` — **The Two Spains Conservative Progress** — An increase or decrease to the amount of monthly progress towards Conservative in the The Two Spains Journal Entry
 - `country_two_spains_liberal_drift_add` — **The Two Spains Liberal Progress** — An increase or decrease to the amount of monthly progress towards Liberal in the The Two Spains Journal Entry
+- `country_un_institutional_alignment`
 - `country_un_membership_obligation_bool` — **UN Membership Obligation**
 - `country_unrecognized_become_recognized_bool` — **Become Recognized if Unrecognized**
 - `country_vaishyas_acceptance_max_add` — **Maximum Acceptance for the Vaishyas Social Class** — A threshold describing the Acceptance value that Pops in the Vaishyas Social Class won't be able to exceed
@@ -2369,7 +2370,9 @@ _Cannon Artillery Offense_
 - `country_wage_open_prejudice_mult` — **Wage for the acceptance_status_3! Open Prejudice Status** — A bonus or penalty to the Wage for the acceptance_status_3! Open Prejudice Status.
 - `country_wage_second_rate_citizen_mult` — **Wage for the acceptance_status_4! Second-class Citizen Status** — A bonus or penalty to the Wage for the acceptance_status_4! Second-class Citizen Status.
 - `country_wage_violent_hostility_mult` — **Wage for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to the Wage for the acceptance_status_1! Violent Hostility Status.
-- `country_war_exhaustion_casualties_mult` — **War Exhaustion from Casualties** — An increase or decrease to the amount of War Exhaustion a Country suffers in War due to Casualties inflicted on them
+- `country_war_support_battles_decrease_mult` — **War Support from Lost Battle** — An increase or decrease to the amount of War Support a Country loses in War from losing Battle
+- `country_war_support_battles_increase_mult` — **War Support from Won Battle** — An increase or decrease to the amount of War Support a Country gains in War from winning Battle
+- `country_war_support_casualties_mult` — **War Support from Casualties** — An increase or decrease to the amount of War Support a Country suffers in War due to Casualties inflicted on them
 - `country_war_support_monthly_add_religion` — **Fervor Monthly Add**
 - `country_weekly_innovation_add` — **Innovation** — The amount of innovation! Innovation gained or lost each week
 - `country_weekly_innovation_max_add` — **Maximum Innovation Investment** — The maximum amount of innovation! Innovation that can be invested into a Technology each week
@@ -2434,10 +2437,11 @@ _Cannon Artillery Offense_
 - `political_movement_radicalism_from_enactment_approval_mult` — **Political Movement Activism Reduction from Approved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements approve of
 - `political_movement_radicalism_from_enactment_disapproval_mult` — **Political Movement Activism Increase from Disapproved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements disapprove of
 
-### power-bloc (15)
+### power-bloc (17)
 
 - `power_bloc_can_enact_decree_cultural_emigration_initiative_bool` — **Can Enact Cultural Emigration Initiative and Forced Migration [Concept('concept_decree', 'Decrees')]**
 - `power_bloc_can_enact_greenest_grass_campaign_bool` — **Can Enact Greenest Grass Campaign**
+- `power_bloc_can_give_development_aid_bool` — **Members Can Give Development Assistance**
 - `power_bloc_can_give_education_aid_bool` — **Members Can Give Education Aid**
 - `power_bloc_can_give_healthcare_aid_bool` — **Members Can Give Healthcare Aid**
 - `power_bloc_can_give_humanitarian_aid_bool` — **Members Can Give Humanitarian Aid**
@@ -2447,6 +2451,7 @@ _Cannon Artillery Offense_
 - `power_bloc_can_use_crisis_resolution_bool` — **Leader Can Use Crisis Resolution [concept_diplomatic_action]**
 - `power_bloc_can_use_diplomatic_alignment_bool` — **Leader Can Use Diplomatic Alignment [concept_diplomatic_action]**
 - `power_bloc_can_use_extend_influence_bool` — **Can Use Extend Influence [concept_diplomatic_action]**
+- `power_bloc_can_use_join_united_nations_bool` — **Leader Can Require UN Membership**
 - `power_bloc_leader_can_force_cultural_acceptance_bool` — **Leader Can Force Cultural Acceptance**
 - `power_bloc_leader_can_force_cultural_adoption_bool` — **Leader Can Force Cultural Adoption**
 - `power_bloc_leader_can_peacefully_annex_bool` — **Leader Can Peacefully Annex Subjects**

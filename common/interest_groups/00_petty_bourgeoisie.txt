@@ -33,6 +33,7 @@ ig_petty_bourgeoisie = {
 	}
 
 	on_enable = {
+		# ONLY HANDLE IG TRAITS IN THIS BLOCK
 		ig:ig_petty_bourgeoisie ?= {
 			if = {
 				limit = {
@@ -77,46 +78,14 @@ ig_petty_bourgeoisie = {
 			}
 			else_if = {
 				limit = {
-					c:POR ?= owner
-				}
-				remove_ideology = ideology_meritocratic
-				add_ideology = ideology_cartist
-
-				set_ig_trait = ig_trait:ig_trait_xenophobia
-				set_ig_trait = ig_trait:ig_trait_middle_managers
-				set_ig_trait = ig_trait:ig_trait_treasury_bonds
-			}
-			else_if = {
-				limit = {
-					owner = {
-						country_has_primary_culture = cu:japanese
-					}
-				}
-				set_interest_group_name = ig_chonin
-				set_ig_trait = ig_trait:ig_trait_xenophobia
-				set_ig_trait = ig_trait:ig_trait_middle_managers
-				set_ig_trait = ig_trait:ig_trait_treasury_bonds
-			}
-			else_if = {
-				limit = {
 					owner = {
 						c:BIC ?= this
 					}
 				}
-				set_interest_group_name = ig_bhadralok
-
-				# Ideologies
-				remove_ideology = ideology_patriotic
-				add_ideology = ideology_sovereignist
-				remove_ideology = ideology_reactionary
-				add_ideology = ideology_modernizer
-
-				# Traits
 				set_ig_trait = ig_trait:ig_trait_swadesh
 				set_ig_trait = ig_trait:ig_trait_lines_of_credit
 				set_ig_trait = ig_trait:ig_trait_cooperative_agencies
 			}
-			# Kleinbürger
 			else_if = {
 				limit = {
 					has_dlc_feature = ip3_content
@@ -126,7 +95,6 @@ ig_petty_bourgeoisie = {
 						}
 					}
 				}
-				set_interest_group_name = ig_kleinburger
 				set_ig_trait = ig_trait:ig_trait_xenophobia
 				set_ig_trait = ig_trait:ig_trait_middle_managers
 				set_ig_trait = ig_trait:ig_trait_biedermanner
@@ -136,18 +104,61 @@ ig_petty_bourgeoisie = {
 				set_ig_trait = ig_trait:ig_trait_middle_managers
 				set_ig_trait = ig_trait:ig_trait_treasury_bonds
 			}
+		}
 
-			if = { # For newly-released countries. For game-start, initialisation is handled in global history
-				limit = {
-					owner = {
-						OR = {
-							has_law_or_variant = law_type:law_traditionalism
-							has_law_or_variant = law_type:law_isolationism
-						}
+		# FLAVOUR AND IDEOLOGIES GO HERE
+		if = {
+			limit = {
+				c:POR ?= this
+			}
+			ig:ig_petty_bourgeoisie ?= {
+				remove_ideology = ideology_meritocratic
+				add_ideology = ideology_cartist
+			}
+		}
+		else_if = { # British India
+			limit = {
+				c:BIC ?= this
+			}
+			ig:ig_petty_bourgeoisie ?= {
+				set_interest_group_name = ig_bhadralok
+				remove_ideology = ideology_patriotic
+				add_ideology = ideology_sovereignist
+				remove_ideology = ideology_reactionary
+				add_ideology = ideology_modernizer
+			}
+		}
+		else_if = { # Chonin
+			limit = {
+				owner = {
+					country_has_primary_culture = cu:japanese
+				}
+			}
+			ig:ig_petty_bourgeoisie ?= {
+				set_interest_group_name = ig_chonin
+			}
+		}
+		else_if = { # Kleinbürger
+			limit = {
+				any_primary_culture = {
+					has_discrimination_trait = language_germanophone
+				}
+			}
+			ig:ig_petty_bourgeoisie ?= {
+				set_interest_group_name = ig_kleinburger
+			}
+		}
+
+		if = { # For newly-released countries. For game-start, initialisation is handled in global history
+			limit = {
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_traditionalism
+						has_law_or_variant = law_type:law_isolationism
 					}
 				}
-				add_ideology = ideology_mercantile
 			}
+			ig:ig_petty_bourgeoisie ?= { add_ideology = ideology_mercantile }
 		}
 	}
 
@@ -560,14 +571,14 @@ ig_petty_bourgeoisie = {
 	commander_weight = {
 		value = 1.0
 	}
-	
+
 	magnate_weight = {
 		value = 0.25
-	}	
+	}
 
 	executive_weight = {
 		value = 1.5
-		
+
 		# The company owning BIC should not get non-industrialist executives
 		if = {
 			limit = {
@@ -904,7 +915,7 @@ ig_petty_bourgeoisie = {
 	commander_leader_weight = {
 		value = 1.0
 	}
-	
+
 	# Multiplier applied to the weight for an appropriate magnate will be selected from the character pool to lead the IG
 	# root = interest group
 	magnate_leader_weight = {

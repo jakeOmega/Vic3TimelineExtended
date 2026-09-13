@@ -1694,7 +1694,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### irredentism.4
 - **Title:** A Sister Nation Asks Us to Join
-- **Description:** A formal proposal has arrived. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. There are voices in our parliament for it; there are voices against.
+- **Description:** A formal proposal has arrived. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. The prosperity would be real and immediate; the name on the flag would not be ours.
 - **Flavor:** \"The formal offer arrived this morning. They are offering union — full citizenship, shared institutions, no border.\"\n\n\"And we are to dissolve ourselves into them?\"\n\n\"That is what union means in the smaller country. The benefits will be real. The flag will be theirs. The question is what is more precious — the prosperity that follows the union, or the name that does not.\"
 - **Current image:** africa_diplomats_negotiating
 

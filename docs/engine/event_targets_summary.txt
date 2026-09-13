@@ -1,4 +1,4 @@
-# Auto-generated from event_targets.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from event_targets.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
 country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
@@ -60,6 +60,7 @@ country|company|company|Scope to the scoped country's company of the named compa
 |company_type|company_type|Scope to a company type from its name (company_type:company_rheinmetall) Global Link: yes
 |compare_complex_value|value|A comparison trigger that needs a parsable string parameter that will return its value in the context it is used eg: scope:root.number_of(armies) W...
 |compare_value|value|A comparison trigger that will return its value in the context it is used eg: root.gold Wild Card: yes
+|container|container|Scope to a named script container (example: container:my_container) Global Link: yes
 province,state|controller|country|Scope to the controller of the object
 military_formation,ship|country|country|Scope to the country of a military formation or ship
 country|country_definition|country_definition|Scope to country's definition
@@ -178,6 +179,7 @@ new_combat_unit|morale|value|Returns the unit's morale
 political_movement|most_desired_law|law_type|Scope to the law type that political movement most desires to be enacted (if any).
 |movement_type|political_movement_type|Scope to a political movement type from its name (movement_type:movement_religious_majority) Global Link: yes
 country|mutual_trade_value_with_country|value|Scope to the total base value of goods traded in trade routes between the two markets (example: mutual_trade_value_with_country:root >= 1000)
+container|name|flag|Scope to the name (as a flag) of a script container
 |named_script_value|value,color|A script value that will calculate and returns its value in the context it is used Wild Card: yes
 culture|national_awakening_state_region|state_region|Links from a culture scope to the state region with an active national awakening for that culture
 country|naval_combat_power|value|Scope to the country's navy combat power (example:
@@ -246,7 +248,7 @@ province|num_ships_not_in_battle|value|Get the number of ships not in battle for
 country,character,military_formation|num_ships_not_in_battle|value|Get the number of ships not in battle for a country, commander or military formation
 country,military_formation|num_ships_of_group|value|Number of ships of the provided ship group in the scoped country or military formation "num_ships_of_group(ship_group:ship_group_capital_ships)"
 country|num_states|value|Get the scoped country's current number of states
-front|num_total_battalions|value|Returns the total number of units on Front on the same side as Country   --------------------  Event Targets Saved from Code:  context amendment ar...
+front|num_total_battalions|value|Returns the total number of units on Front on the same side as Country
 country|num_unincorporated_states|value|Get the scoped country's current number of unincorporated states
 province|num_units|value|Get the number of active units for military formations in the province that are allied to the specified country
 character,military_formation|num_units|value|Get the number of active units for a commander or military formation
@@ -263,6 +265,7 @@ country|overlord|country|Scope to the direct overlord of the country in scope
 country,building,character,new_combat_unit,company,decree,institution,interest_marker,interest_group,journal_entry,law,market,market_goods,military_formation,political_movement,pop,province,ship,state|owner|country|Scope to the owner country of object
 country|owning_company|company|Scope to the company owning the scoped country
 |p|province|Scope to province specified by hex key Global Link: yes
+container|parent||Scope to the parent of a script container
 amendment|parent_law_type|law_type|Links from an amendment scope to the law type that is considered the amendment's parent
 market|participants|value|Get the total number of participating countries in the scoped market
 interest_group|party|party|Scope to the party that an IG is supporting
@@ -312,7 +315,7 @@ ship|ship_group|ship_group|Scope from a ship to its group
 treaty_article|shipping_lane|shipping_lanes|Scope to the shipping lane for the military formation, or treaty article (goods transfer)
 building_type|slaves_role|pop_type|Scope from building type to it's slaves role pop type
 treaty_article,treaty_article_options|source_country|country|Scope to the source_country of any of: 1.
-amendment|sponsor|interest_group|Links from an amendment scope to the interest group that sponsored the amendment
+amendment|sponsor|interest_group|Links from an amendment scope to the interest group that sponsored the amendment   --------------------  Event Targets Saved from Code:  context am...
 |sr|strategic_region|Scope to the strategic region of specified key Global Link: yes
 building,market,pop,province|state|state|Scope to the state of the object
 state|state_region|state_region|Scope to the state region of a state
