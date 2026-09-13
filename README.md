@@ -351,7 +351,7 @@ The deploy target is autodetected by `scripts/setup.py` (typically `/mnt/c/Users
 
 ### Continuous integration
 
-Every push and pull request runs `.github/workflows/ci.yml` on GitHub Actions against Python 3.11 and 3.12: byte-compilation, the full unittest suite, `ruff check --select F .`, the Paradox tab-indentation check, a localization sanity pass (UTF-8 BOM, `l_english:` header, no duplicate keys within a file), a DDS header scan that rejects block-compressed textures whose dimensions are not multiples of 4, and the eight offline audits. None of it needs a Victoria 3 install, so any failing step reproduces locally with the same command; audits that require the vanilla game deliberately stay out of CI.
+Every pull request — and every push to `main` — runs `.github/workflows/ci.yml` on GitHub Actions against Python 3.11 and 3.12: byte-compilation, the full unittest suite, `ruff check .`, the Paradox tab-indentation check, a localization sanity pass (UTF-8 BOM, `l_english:` header, no duplicate keys within a file), a post-load roster / docs-drift check, a DDS header scan that rejects block-compressed textures whose dimensions are not multiples of 4, and the eight offline audits. (The `push` trigger is scoped to `main` on purpose: `pull_request` already covers branches, so an unscoped `push` would run the whole matrix twice per commit.) None of it needs a Victoria 3 install, so any failing step reproduces locally with the same command; audits that require the vanilla game deliberately stay out of CI.
 
 ### Dependencies
 
