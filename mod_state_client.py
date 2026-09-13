@@ -24,11 +24,26 @@ Alternatively, query the server directly from PowerShell:
 
 import json
 import sys
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import urlopen
 
 SERVER = "http://127.0.0.1:8950"
+
+
+def _read_error_body(exc: HTTPError) -> str:
+    """Best-effort decode of an error response body. The server answers with
+    JSON (`{"error": ..., "hint": ...}`); pretty-print it when it parses."""
+    try:
+        raw = exc.read().decode("utf-8", "replace").strip()
+    except Exception:
+        return ""
+    if not raw:
+        return ""
+    try:
+        return json.dumps(json.loads(raw), indent=2, ensure_ascii=False)
+    except ValueError:
+        return raw
 
 
 def query(endpoint: str):
@@ -37,6 +52,15 @@ def query(endpoint: str):
     try:
         with urlopen(url) as resp:
             return json.loads(resp.read().decode("utf-8"))
+    except HTTPError as exc:
+        # HTTPError subclasses URLError, so this clause MUST come first:
+        # without it every 4xx/5xx printed "server is not running" and threw
+        # the response body away. (#254)
+        print(f"ERROR: {url} -> HTTP {exc.code} {exc.reason}", file=sys.stderr)
+        body = _read_error_body(exc)
+        if body:
+            print(body, file=sys.stderr)
+        sys.exit(1)
     except URLError:
         print(
             "ERROR: Mod-state server is not running.\n"
