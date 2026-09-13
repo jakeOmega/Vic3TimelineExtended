@@ -7777,6 +7777,8 @@ POST_LOAD_AUDITS = [
     ("mod_structure_audit",           "mod_structure_audit"),
     ("loc_render_audit",              "loc_render_audit"),
     ("any_limit_audit",               "any_limit_audit"),
+    ("iterator_limit_audit",          "iterator_limit_audit"),
+    ("modifier_multiplier_var_audit", "modifier_multiplier_var_audit"),
     ("pm_employment_audit",           "pm_employment_audit"),
     ("orphaned_event_audit",          "orphaned_event_audit"),
     ("effect_trigger_validity_audit", "effect_trigger_validity_audit"),
