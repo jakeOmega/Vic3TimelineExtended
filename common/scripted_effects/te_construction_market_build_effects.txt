@@ -75,30 +75,6 @@ te_construction_market_add_specified_level = {
 
 }
 
-te_construction_market_remove_specified_level_amount = {
-	if = {
-		limit = {
-			has_building = $SPEC_TYPE$
-		}
-		owner = {
-			set_variable = {
-				name = add_level
-				value = prev.b:$SPEC_TYPE$.level
-			}
-			change_variable = {
-				name = add_level
-				subtract = prev.$REMOVE_LEVEL$
-			}
-		}
-		te_construction_market_set_specified_level = {
-			SPEC_TYPE = $SPEC_TYPE$
-			SPEC_LEVEL = owner.var:add_level
-		}
-
-	}
-}
-
-
 te_construction_market_build_specified_level = {
 
 	switch = {

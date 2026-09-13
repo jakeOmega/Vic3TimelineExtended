@@ -869,10 +869,17 @@ fix_incompatible_laws = {
 
 # ============================================================================
 # STATE MODIFIER REFRESH (state scope)
-# Individual scripted effects hold the actual modifier logic so they can be
-# called from both on_actions (periodic pulses) and te_update_state_modifiers
-# (immediate trigger hooks).  Adding a new state modifier only requires a
-# one-line change in te_update_state_modifiers.
+# One scripted effect per modifier, each called by exactly one on_action on a
+# periodic state pulse - see extra_on_actions.txt:
+#   te_update_pollution_modifier         <- pollution_on_action (monthly)
+#   te_update_tourism_modifier           <- tourism_on_action (monthly)
+#   te_update_migration_crowding_modifier <- migration_crowding_on_action (yearly)
+#   te_update_free_port_tariff           <- free_port_tariff_update_on_action (yearly)
+# There is deliberately no combined "refresh everything" wrapper and no
+# immediate law/technology/building hook: those root scopes don't support the
+# has_variable / state_region reads these script values make. A new state
+# modifier gets its own effect here plus its own on_action on the state pulse
+# whose cadence matches how fast its inputs actually move.
 # ============================================================================
 
 # Refreshes the pollution_generation_mult_effect modifier.
@@ -942,23 +949,6 @@ te_update_free_port_tariff = {
 		remove_variable = prior_free_port_import_cap
 		remove_variable = prior_free_port_export_cap
 	}
-}
-
-# Combined refresh: delegates to each individual effect above.
-# Every immediate trigger hook calls this so a new modifier only needs
-# to be added in one place.
-# NOTE: Tourism is NOT included here because its script values use
-# state_region comparisons that only work in genuine state scope.
-# The on_law / on_technology / on_investment hooks pass through
-# owner = { every_scope_state { } } but the engine still traces the
-# parent scope for script-value validation, producing hundreds of
-# "state_region did not get a matching scope type" errors.
-# Tourism is instead refreshed on the yearly state pulse, which is
-# always in state scope.  See extra_on_actions.txt.
-te_update_state_modifiers = {
-	te_update_pollution_modifier = yes
-	te_update_migration_crowding_modifier = yes
-	te_update_free_port_tariff = yes
 }
 
 # Remove infrastructure buildings from a state (state scope).

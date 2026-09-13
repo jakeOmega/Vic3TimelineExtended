@@ -51,7 +51,7 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 7. **Events** in `events/<system>_events.txt` plus localization YAML.
 8. **Modifier type definitions** in `common/modifier_type_definitions/` registering any dynamic-pattern modifiers.
 
-**Dynamic-modifier scaling pattern**: define a static modifier with unit values, then in an `on_yearly_pulse_*` re-apply it as `add_modifier = { name = X multiplier = <script_value> }`. The engine multiplies every field by the multiplier each tick. State-scoped scaling **must** run from `on_yearly_pulse_state` — law/treaty/building hooks have unreliable scope chains for state-targeted script values. See `docs/systems/mod_systems.md` and `docs/guides/scripting_best_practices.md`.
+**Dynamic-modifier scaling pattern**: define a static modifier with unit values, then in an `on_yearly_pulse_*` re-apply it as `add_modifier = { name = X multiplier = <script_value> }`. The engine multiplies every field by the multiplier each tick. State-scoped scaling **must** run from a *state* pulse — `on_yearly_pulse_state`, or `on_monthly_pulse_state` when the multiplier's inputs move monthly (e.g. `tourism_on_action`) — because law/treaty/building hooks have unreliable scope chains for state-targeted script values. Give each modifier exactly one refresh site. See `docs/systems/mod_systems.md` and `docs/guides/scripting_best_practices.md`.
 
 ### Game rules
 `common/game_rules/` and `descriptor.mod` expose toggles for the major systems. When disabled, the journal entry doesn't appear but related laws/events still provide their non-system effects. See `README.md`.
