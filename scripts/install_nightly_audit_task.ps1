@@ -44,6 +44,10 @@ if (-not $WslDistro) {
 # Defensive: if -WslDistro was passed but somehow contains NULs, scrub them.
 $WslDistro = ($WslDistro -replace "`0", "").Trim()
 
+if (-not $PSScriptRoot) {
+    throw "Run this script with -File, not dot-sourced."
+}
+
 if (-not $RepoPathInWsl) {
     # Derive from this script's own location instead of hard-coding a
     # per-machine home directory: this file lives at <repo>\scripts\, so
@@ -54,10 +58,21 @@ if (-not $RepoPathInWsl) {
     # break if a future WSL version changes its path scheme. wsl.exe's text
     # output has the same UTF-16/NUL truncation quirk documented above for
     # $WslDistro, so apply the same scrub-and-trim defense to its result.
-    $repoRootWindows = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+    #
+    # Use Convert-Path, not Resolve-Path: Resolve-Path returns a
+    # provider-qualified string (e.g.
+    # "Microsoft.PowerShell.Core\FileSystem::\\wsl$\Ubuntu\home\...") when
+    # the script lives on a UNC path like \\wsl$\<distro>\... — which is
+    # the normal way to run this script per the header above. wslpath then
+    # emits non-empty garbage instead of failing on that prefix, so a bare
+    # empty-string check wouldn't catch it. Convert-Path never carries the
+    # provider prefix (and is identical to Resolve-Path for drive-letter
+    # paths), and the '^/' match below guards against a non-empty-but-wrong
+    # derivation.
+    $repoRootWindows = Convert-Path (Join-Path $PSScriptRoot "..")
     $RepoPathInWsl = ((wsl.exe -d $WslDistro -- wslpath -u $repoRootWindows) -replace "`0", "").Trim()
-    if (-not $RepoPathInWsl) {
-        throw "Could not derive the WSL repo path from '$repoRootWindows'. Pass -RepoPathInWsl explicitly."
+    if ($RepoPathInWsl -notmatch '^/') {
+        throw "Could not derive the WSL repo path from '$repoRootWindows' (got '$RepoPathInWsl'). Pass -RepoPathInWsl explicitly."
     }
 }
 
