@@ -1,19 +1,19 @@
 ﻿REPLACE_OR_CREATE:bg_parks = {
-    category = development
+	category = development
 
-    land_usage = rural
+	land_usage = rural
 
 	always_possible = yes
-	
+
 	is_government_funded = yes
-	
+
 	economy_of_scale = no
-	
+
 	lens = development
-	
+
 	urbanization = 20
 	infrastructure_usage_per_level = 1
-	
+
 	economy_of_scale_ai_factor = 2.0
 }
 

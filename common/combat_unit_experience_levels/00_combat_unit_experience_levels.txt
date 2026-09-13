@@ -8,8 +8,8 @@ veterancy0 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy0.dds"
 	needed_experience = 100
 	unit_modifier = {
-        unit_offense_mult = 0.05
-        unit_defense_mult = 0.05
+		unit_offense_mult = 0.05
+		unit_defense_mult = 0.05
 	}
 }
 
@@ -18,8 +18,8 @@ veterancy1 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy1.dds"
 	needed_experience = 200
 	unit_modifier = {
-        unit_offense_mult = 0.1
-        unit_defense_mult = 0.1
+		unit_offense_mult = 0.1
+		unit_defense_mult = 0.1
 	}
 }
 
@@ -28,8 +28,8 @@ veterancy2 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy2.dds"
 	needed_experience = 300
 	unit_modifier = {
-        unit_offense_mult = 0.15
-        unit_defense_mult = 0.15
+		unit_offense_mult = 0.15
+		unit_defense_mult = 0.15
 		unit_morale_damage_mult = 0.25
 	}
 }
@@ -39,8 +39,8 @@ veterancy3 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy3.dds"
 	needed_experience = 400
 	unit_modifier = {
-        unit_offense_mult = 0.25
-        unit_defense_mult = 0.25
+		unit_offense_mult = 0.25
+		unit_defense_mult = 0.25
 		unit_experience_gain_add = -1
 	}
 }
@@ -50,8 +50,8 @@ veterancy4 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy4.dds"
 	needed_experience = 600
 	unit_modifier = {
-        unit_offense_mult = 0.35
-        unit_defense_mult = 0.35
+		unit_offense_mult = 0.35
+		unit_defense_mult = 0.35
 		unit_morale_damage_mult = 0.1
 		unit_experience_gain_add = -1
 	}
@@ -62,9 +62,9 @@ veterancy5 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy5.dds"
 	needed_experience = 800
 	unit_modifier = {
-        unit_offense_mult = 0.5
-        unit_defense_mult = 0.5
-        
+		unit_offense_mult = 0.5
+		unit_defense_mult = 0.5
+
 		unit_morale_damage_mult = 0.25
 		unit_experience_gain_add = -1
 	}
@@ -75,8 +75,8 @@ veterancy6 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy6.dds"
 	needed_experience = 1000
 	unit_modifier = {
-        unit_offense_mult = 0.75
-        unit_defense_mult = 0.75
+		unit_offense_mult = 0.75
+		unit_defense_mult = 0.75
 		unit_morale_damage_mult = 0.5
 		unit_morale_loss_mult = -0.25
 		unit_experience_gain_add = -1.5
@@ -88,8 +88,8 @@ veterancy7 = {
 	icon = "gfx/interface/icons/military_icons/unit_veterancy/veterancy7.dds"
 	needed_experience = 2000
 	unit_modifier = {
-        unit_offense_mult = 1.0
-        unit_defense_mult = 1.0
+		unit_offense_mult = 1.0
+		unit_defense_mult = 1.0
 		unit_morale_damage_mult = 1.0
 		unit_morale_loss_mult = -0.5
 		unit_experience_gain_add = -2

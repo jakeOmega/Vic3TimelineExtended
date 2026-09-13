@@ -14,9 +14,9 @@
 	maintenance_paid_by = target_country
 	usage_limit = once_per_treaty
 
-    required_inputs = {
+	required_inputs = {
 		quantity
-    }
+	}
 
 	unlocked_by_technologies = {
 		central_banking
@@ -41,15 +41,15 @@
 		}
 	}
 
-    non_fulfillment = {
-        consequences = freeze
+	non_fulfillment = {
+		consequences = freeze
 
-        conditions = {
-            weekly = {
+		conditions = {
+			weekly = {
 				scope:article = { source_country = { in_default = yes } }
-            }
-        }
-    }
+			}
+		}
+	}
 
 	can_ratify = {
 		NOT = {
@@ -91,13 +91,13 @@
 	}
 
 	quantity_min_value = {
-        value = 100
+		value = 100
 		max = fixed_income
 		min = 0
-    }
+	}
 
-    quantity_max_value = {
-        value = fixed_income
+	quantity_max_value = {
+		value = fixed_income
 		divide = 4
 
 		if = {
@@ -106,7 +106,7 @@
 			}
 			max = 100
 		}
-    }
+	}
 
 	ai = {
 
@@ -114,8 +114,8 @@
 			none
 		}
 
-        quantity_input_value = {
-            value = 0
+		quantity_input_value = {
+			value = 0
 
 			add = {
 				value = country_rank
@@ -128,7 +128,7 @@
 				multiply = 0.25
 			}
 			min = 1000
-        }
+		}
 
 		evaluation_chance = {
 			value = 0.0
@@ -143,8 +143,8 @@
 		}
 
 		article_ai_usage = {
-            request
-        }
+			request
+		}
 
 		inherent_accept_score = {
 			value = 0

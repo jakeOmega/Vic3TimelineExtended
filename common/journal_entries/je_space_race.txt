@@ -1180,65 +1180,65 @@ je_space_race_solar_colonization = {
 					has_variable = sr_active_solar_colonization
 					modifier:country_sr_solar_colonization_program_bool = yes
 				}
-			if = {
-				limit = { sr_ai_should_participate = yes }
-			if = {
-				limit = {
-					OR = {
-						has_variable = sr_safe_solar_colonization
-						has_variable = sr_ambitious_solar_colonization
-					}
-				}
-				change_variable = { name = sr_progress_solar_colonization add = sr_progress }
 				if = {
-					limit = { NOT = { sr_has_failure_cooldown = yes } }
-					set_variable = { name = sr_base_risk value = 10 }
-					random = {
-						chance = sr_failure_weight
-						set_variable = { name = sr_failed_solar_colonization value = yes }
+					limit = { sr_ai_should_participate = yes }
+					if = {
+						limit = {
+							OR = {
+								has_variable = sr_safe_solar_colonization
+								has_variable = sr_ambitious_solar_colonization
+							}
+						}
+						change_variable = { name = sr_progress_solar_colonization add = sr_progress }
 						if = {
-							limit = { has_variable = sr_ambitious_solar_colonization }
-							sr_fire_ambitious_failure_event = yes
+							limit = { NOT = { sr_has_failure_cooldown = yes } }
+							set_variable = { name = sr_base_risk value = 10 }
+							random = {
+								chance = sr_failure_weight
+								set_variable = { name = sr_failed_solar_colonization value = yes }
+								if = {
+									limit = { has_variable = sr_ambitious_solar_colonization }
+									sr_fire_ambitious_failure_event = yes
+								}
+								else = {
+									sr_fire_safe_setback_event = yes
+								}
+							}
 						}
-						else = {
-							sr_fire_safe_setback_event = yes
+					}
+					else = {
+						change_variable = {
+							name = sr_progress_solar_colonization
+							add = 0.5
+						}
+					}
+					# Bar-fill detection: when progress reaches goal, establish a colony and reset
+					if = {
+						limit = {
+							has_variable = sr_progress_solar_colonization
+							var:sr_progress_solar_colonization >= sr_solar_colonization_goal
+						}
+						# Save pre-stage-change goal before colony effect (which may advance the stage and raise the goal)
+						set_variable = { name = sr_goal_before_colony value = sr_solar_colonization_goal }
+						# Establish a colony at a random unclaimed location in the current stage
+						sr_establish_colony_effect = yes
+						# Reset progress (preserve overflow using the pre-advancement goal)
+						change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
+						remove_variable = sr_goal_before_colony
+						# If all stages exhausted, mark complete but keep JE alive for modifiers
+						if = {
+							limit = { has_global_variable = sr_all_colonies_complete }
+							set_variable = { name = sr_completed_solar_colonization value = yes }
+							je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
+							remove_variable = sr_active_solar_colonization
+							if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
+							if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
+							if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+							if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
+							sr_complete_milestone_effect = yes
 						}
 					}
 				}
-			}
-			else = {
-				change_variable = {
-					name = sr_progress_solar_colonization
-					add = 0.5
-				}
-			}
-			# Bar-fill detection: when progress reaches goal, establish a colony and reset
-			if = {
-				limit = {
-					has_variable = sr_progress_solar_colonization
-					var:sr_progress_solar_colonization >= sr_solar_colonization_goal
-				}
-				# Save pre-stage-change goal before colony effect (which may advance the stage and raise the goal)
-				set_variable = { name = sr_goal_before_colony value = sr_solar_colonization_goal }
-				# Establish a colony at a random unclaimed location in the current stage
-				sr_establish_colony_effect = yes
-				# Reset progress (preserve overflow using the pre-advancement goal)
-				change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
-				remove_variable = sr_goal_before_colony
-				# If all stages exhausted, mark complete but keep JE alive for modifiers
-				if = {
-					limit = { has_global_variable = sr_all_colonies_complete }
-					set_variable = { name = sr_completed_solar_colonization value = yes }
-					je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-					remove_variable = sr_active_solar_colonization
-					if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
-					if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
-					if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-					if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
-					sr_complete_milestone_effect = yes
-				}
-			}
-			}
 			}
 		}
 	}

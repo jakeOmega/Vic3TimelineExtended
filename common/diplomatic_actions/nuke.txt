@@ -1,413 +1,413 @@
 ﻿nuke_diplo_action = {
-    groups= {
+	groups= {
 		general
 	}
 	requires_approval = no
 
 	state_selection = second_required
-    second_state_list = second_country
-	
+	second_state_list = second_country
+
 	show_confirmation_box = yes
 
-    potential = {
-        has_modifier = nuclear_power
-        NOT = { modifier:country_nuclear_disarmament_bool = yes }
-    }
+	potential = {
+		has_modifier = nuclear_power
+		NOT = { modifier:country_nuclear_disarmament_bool = yes }
+	}
 
 	possible = {
-        var:nuclear_weapon_stockpile > 0
-        OR = {
-            # Normal: can use if no humanitarian/limited war laws
-            NOT = {
-                OR = {
-                    has_law = law_type:law_humanitarian_regulations
-                    has_law = law_type:law_limited_war
-                }
-            }
-            # Retaliation: already been nuked overrides war laws
-            any_scope_state = {
-                OR = {
-                    has_modifier = nuclear_strike_aftermath
-                    has_modifier = tactical_nuke_aftermath
-                }
-            }
-            # Existential threat overrides war laws
-            any_scope_war = {
-                is_target_of_wargoal_in_war = ROOT
-                OR = {
-                    has_war_goal = make_protectorate
-                    has_war_goal = make_dominion
-                    has_war_goal = make_tributary
-                    has_war_goal = annex_country
-                }
-            }
-        }
-    }
+		var:nuclear_weapon_stockpile > 0
+		OR = {
+			# Normal: can use if no humanitarian/limited war laws
+			NOT = {
+				OR = {
+					has_law = law_type:law_humanitarian_regulations
+					has_law = law_type:law_limited_war
+				}
+			}
+			# Retaliation: already been nuked overrides war laws
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+			# Existential threat overrides war laws
+			any_scope_war = {
+				is_target_of_wargoal_in_war = ROOT
+				OR = {
+					has_war_goal = make_protectorate
+					has_war_goal = make_dominion
+					has_war_goal = make_tributary
+					has_war_goal = annex_country
+				}
+			}
+		}
+	}
 
 	second_state_trigger = {
-        exists = scope:country
-        owner = {
-            has_war_with = scope:country
-        }
-    }
-    
+		exists = scope:country
+		owner = {
+			has_war_with = scope:country
+		}
+	}
+
 	accept_effect = {
-        save_scope_as = attacking_country
-        if = {
-            limit = { exists = scope:second_state }
-            scope:second_state = {
-                save_scope_as = target_state
-                nuclear_first_strike = yes
-            }
-        }
-    }
+		save_scope_as = attacking_country
+		if = {
+			limit = { exists = scope:second_state }
+			scope:second_state = {
+				save_scope_as = target_state
+				nuclear_first_strike = yes
+			}
+		}
+	}
 
 	is_hostile = yes
 
-    ai = {
+	ai = {
 		evaluation_chance = {
-            value = 0.1 # base 10% chance to evaluate
-            # Existential threats dramatically increase evaluation
-            if = {
-                limit = {
-                    exists = scope:country
-                    enemy_has_existential_war_goal = yes
-                }
-                multiply = 7 # 70% - existential threats make the AI seriously consider nuclear use
-            }
-            if = {
-                limit = {
-                    ruler_is_aggressive = yes
-                }
-                multiply = 3
-            }
-            if = {
-                limit = {
-                    exists = ruler
-                    ruler = { has_trait = ruthless }
-                    NOT = { ruler = { has_trait = cautious } }
-                }
-                multiply = 2
-            }
-            if = {
-                limit = {
-                    ruler_is_cautious = yes
-                }
-                multiply = 0.25 # very reluctant but not impossible in existential situations
-            }
-            # Retaliation: only if THIS specific enemy nuked us
-            if = {
-                limit = {
-                    was_nuked_by_enemy = yes
-                }
-                multiply = 5 # retaliation after being nuked by this enemy is strongly favored
-            }
-        }
+			value = 0.1 # base 10% chance to evaluate
+			# Existential threats dramatically increase evaluation
+			if = {
+				limit = {
+					exists = scope:country
+					enemy_has_existential_war_goal = yes
+				}
+				multiply = 7 # 70% - existential threats make the AI seriously consider nuclear use
+			}
+			if = {
+				limit = {
+					ruler_is_aggressive = yes
+				}
+				multiply = 3
+			}
+			if = {
+				limit = {
+					exists = ruler
+					ruler = { has_trait = ruthless }
+					NOT = { ruler = { has_trait = cautious } }
+				}
+				multiply = 2
+			}
+			if = {
+				limit = {
+					ruler_is_cautious = yes
+				}
+				multiply = 0.25 # very reluctant but not impossible in existential situations
+			}
+			# Retaliation: only if THIS specific enemy nuked us
+			if = {
+				limit = {
+					was_nuked_by_enemy = yes
+				}
+				multiply = 5 # retaliation after being nuked by this enemy is strongly favored
+			}
+		}
 
 		will_select_as_second_state = {
-            always = yes
-        }
-	
+			always = yes
+		}
+
 		will_propose = {
-            # Must be at war with the target
-            has_war_with = scope:country
+			# Must be at war with the target
+			has_war_with = scope:country
 
-            # Must face a sufficiently severe threat - no nuking over minor disputes
-            OR = {
-                # Existential threat: enemy wants to subjugate or annex us
-                enemy_has_existential_war_goal = yes
-                # Losing core incorporated territory AND the war is going badly
-                AND = {
-                    any_scope_state = {
-                        is_target_of_wargoal = scope:country
-                        is_incorporated = yes
-                    }
-                    any_scope_war = {
-                        has_war_exhaustion = { target = ROOT value > 40 }
-                    }
-                }
-                # Retaliation: this specific enemy nuked us
-                was_nuked_by_enemy = yes
-            }
+			# Must face a sufficiently severe threat - no nuking over minor disputes
+			OR = {
+				# Existential threat: enemy wants to subjugate or annex us
+				enemy_has_existential_war_goal = yes
+				# Losing core incorporated territory AND the war is going badly
+				AND = {
+					any_scope_state = {
+						is_target_of_wargoal = scope:country
+						is_incorporated = yes
+					}
+					any_scope_war = {
+						has_war_exhaustion = { target = ROOT value > 40 }
+					}
+				}
+				# Retaliation: this specific enemy nuked us
+				was_nuked_by_enemy = yes
+			}
 
-            # Cautious or honorable leaders require extreme circumstances
-            OR = {
-                NOT = { ruler_is_cautious = yes }
-                # Retaliation against the country that nuked us overrides personality
-                was_nuked_by_enemy = yes
-                # Facing complete annexation overrides personality
-                scope:country = {
-                    war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                }
-            }
+			# Cautious or honorable leaders require extreme circumstances
+			OR = {
+				NOT = { ruler_is_cautious = yes }
+				# Retaliation against the country that nuked us overrides personality
+				was_nuked_by_enemy = yes
+				# Facing complete annexation overrides personality
+				scope:country = {
+					war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
+				}
+			}
 
-            # If target is nuclear-armed, require more desperate circumstances
-            OR = {
-                NOT = { scope:country = { has_modifier = nuclear_power } }
-                # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
-                was_nuked_by_enemy = yes
-                enemy_has_subjugation_war_goal = yes
-                ruler_is_aggressive = yes
-            }
-        }
+			# If target is nuclear-armed, require more desperate circumstances
+			OR = {
+				NOT = { scope:country = { has_modifier = nuclear_power } }
+				# Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
+				was_nuked_by_enemy = yes
+				enemy_has_subjugation_war_goal = yes
+				ruler_is_aggressive = yes
+			}
+		}
 
 		propose_score = {
-            value = 0
-            if = {
-                limit = { exists = scope:second_state }
-                add = {
-                    scope:second_state = {
-                        value = nuclear_industrial_strike_target_score
-                    }
-                }
-            }
-        }
+			value = 0
+			if = {
+				limit = { exists = scope:second_state }
+				add = {
+					scope:second_state = {
+						value = nuclear_industrial_strike_target_score
+					}
+				}
+			}
+		}
 	}
 }
 
 
 tactical_nuke_diplo_action = {
-    groups= {
+	groups= {
 		general
 	}
 	requires_approval = no
 
 	state_selection = second_required
-    second_state_list = second_country
-	
+	second_state_list = second_country
+
 	show_confirmation_box = yes
 
-    potential = {
-        has_modifier = nuclear_power
-        NOT = { modifier:country_nuclear_disarmament_bool = yes }
-    }
+	potential = {
+		has_modifier = nuclear_power
+		NOT = { modifier:country_nuclear_disarmament_bool = yes }
+	}
 
 	possible = {
-        has_technology_researched = tactical_nuclear_weapons
-        has_variable = nuclear_weapon_stockpile
-        var:nuclear_weapon_stockpile > 0
-        OR = {
-            # Normal: can use if no limited war law
-            NOT = {
-                has_law = law_type:law_limited_war
-            }
-            # Retaliation: already been nuked overrides war laws
-            any_scope_state = {
-                OR = {
-                    has_modifier = nuclear_strike_aftermath
-                    has_modifier = tactical_nuke_aftermath
-                }
-            }
-            # Existential threat overrides limited war law
-            any_scope_war = {
-                is_target_of_wargoal_in_war = ROOT
-                OR = {
-                    has_war_goal = make_protectorate
-                    has_war_goal = make_dominion
-                    has_war_goal = make_tributary
-                    has_war_goal = annex_country
-                }
-            }
-        }
-    }
+		has_technology_researched = tactical_nuclear_weapons
+		has_variable = nuclear_weapon_stockpile
+		var:nuclear_weapon_stockpile > 0
+		OR = {
+			# Normal: can use if no limited war law
+			NOT = {
+				has_law = law_type:law_limited_war
+			}
+			# Retaliation: already been nuked overrides war laws
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+			# Existential threat overrides limited war law
+			any_scope_war = {
+				is_target_of_wargoal_in_war = ROOT
+				OR = {
+					has_war_goal = make_protectorate
+					has_war_goal = make_dominion
+					has_war_goal = make_tributary
+					has_war_goal = annex_country
+				}
+			}
+		}
+	}
 
 	second_state_trigger = {
-        exists = scope:country
-        owner = {
-            has_war_with = scope:country
-        }
-        OR = {
-            has_building = building_barrack
-            has_building = building_naval_administration
-            has_building = building_naval_fortification
-            has_building = building_naval_logistics_center
-            has_building = building_conscription_center
-        }
-    }
-    
+		exists = scope:country
+		owner = {
+			has_war_with = scope:country
+		}
+		OR = {
+			has_building = building_barrack
+			has_building = building_naval_administration
+			has_building = building_naval_fortification
+			has_building = building_naval_logistics_center
+			has_building = building_conscription_center
+		}
+	}
+
 	accept_effect = {
-        save_scope_as = attacking_country
-        if = {
-            limit = { exists = scope:second_state }
-            change_variable = {
-                name = nuclear_weapon_stockpile
-                subtract = 1
-            }
-            scope:second_state = {
-                save_scope_as = target_state
-            }
-            random_list = {
-                0 = {
-                    modifier = nuclear_strike_success_chance
-                    change_infamy = 10
-                    scope:second_state = {
-                        nuclear_tactical_strike = yes
-                    }
-                }
-                0 = {
-                    modifier = nuclear_strike_fail_chance
-                    scope:country = {
-                        trigger_event = {id = nuclear_weapon_events.7 popup = yes }
-                        change_relations = {
-                            country = ROOT
-                            value = -5
-                        }
-                    }
-                    trigger_event = {id = nuclear_weapon_events.8 popup = yes }
-                }
-            }
-        }
-    }
+		save_scope_as = attacking_country
+		if = {
+			limit = { exists = scope:second_state }
+			change_variable = {
+				name = nuclear_weapon_stockpile
+				subtract = 1
+			}
+			scope:second_state = {
+				save_scope_as = target_state
+			}
+			random_list = {
+				0 = {
+					modifier = nuclear_strike_success_chance
+					change_infamy = 10
+					scope:second_state = {
+						nuclear_tactical_strike = yes
+					}
+				}
+				0 = {
+					modifier = nuclear_strike_fail_chance
+					scope:country = {
+						trigger_event = {id = nuclear_weapon_events.7 popup = yes }
+						change_relations = {
+							country = ROOT
+							value = -5
+						}
+					}
+					trigger_event = {id = nuclear_weapon_events.8 popup = yes }
+				}
+			}
+		}
+	}
 
 	is_hostile = yes
 
-    ai = {
+	ai = {
 		evaluation_chance = {
-            value = 0.25 # tactical nukes considered more readily than strategic
-            # Existential threats increase evaluation
-            if = {
-                limit = {
-                    exists = scope:country
-                    enemy_has_existential_war_goal = yes
-                }
-                multiply = 3 # 75% evaluation when facing subjugation/annexation
-            }
-            if = {
-                limit = {
-                    ruler_is_aggressive = yes
-                }
-                multiply = 2
-            }
-            if = {
-                limit = {
-                    ruler_is_cautious = yes
-                }
-                multiply = 0.25 # reluctant but not impossible
-            }
-            if = {
-                limit = {
-                    any_scope_state = {
-                        OR = {
-                            has_modifier = nuclear_strike_aftermath
-                            has_modifier = tactical_nuke_aftermath
-                        }
-                    }
-                    has_variable = nuked_by_country
-                    var:nuked_by_country = scope:country
-                }
-                multiply = 3 # retaliation after being nuked by this enemy
-            }
-        }
+			value = 0.25 # tactical nukes considered more readily than strategic
+			# Existential threats increase evaluation
+			if = {
+				limit = {
+					exists = scope:country
+					enemy_has_existential_war_goal = yes
+				}
+				multiply = 3 # 75% evaluation when facing subjugation/annexation
+			}
+			if = {
+				limit = {
+					ruler_is_aggressive = yes
+				}
+				multiply = 2
+			}
+			if = {
+				limit = {
+					ruler_is_cautious = yes
+				}
+				multiply = 0.25 # reluctant but not impossible
+			}
+			if = {
+				limit = {
+					any_scope_state = {
+						OR = {
+							has_modifier = nuclear_strike_aftermath
+							has_modifier = tactical_nuke_aftermath
+						}
+					}
+					has_variable = nuked_by_country
+					var:nuked_by_country = scope:country
+				}
+				multiply = 3 # retaliation after being nuked by this enemy
+			}
+		}
 
 		will_select_as_second_state = {
-            OR = {
-                has_building = building_barrack
-                has_building = building_naval_administration
-                has_building = building_naval_fortification
-                has_building = building_naval_logistics_center
-                has_building = building_conscription_center
-            }
-        }
+			OR = {
+				has_building = building_barrack
+				has_building = building_naval_administration
+				has_building = building_naval_fortification
+				has_building = building_naval_logistics_center
+				has_building = building_conscription_center
+			}
+		}
 
-        will_propose = {
-            # Must be at war with the target
-            has_war_with = scope:country
+		will_propose = {
+			# Must be at war with the target
+			has_war_with = scope:country
 
-            # Must face a sufficiently severe threat - no tactical nukes over minor disputes
-            OR = {
-                # Existential threat: enemy wants to subjugate or annex us
-                enemy_has_existential_war_goal = yes
-                # Losing core incorporated territory AND the war is going badly
-                AND = {
-                    any_scope_state = {
-                        is_target_of_wargoal = scope:country
-                        is_incorporated = yes
-                    }
-                    any_scope_war = {
-                        has_war_exhaustion = { target = ROOT value > 25 }
-                    }
-                }
-                # Retaliation: this specific enemy nuked us
-                was_nuked_by_enemy = yes
-            }
+			# Must face a sufficiently severe threat - no tactical nukes over minor disputes
+			OR = {
+				# Existential threat: enemy wants to subjugate or annex us
+				enemy_has_existential_war_goal = yes
+				# Losing core incorporated territory AND the war is going badly
+				AND = {
+					any_scope_state = {
+						is_target_of_wargoal = scope:country
+						is_incorporated = yes
+					}
+					any_scope_war = {
+						has_war_exhaustion = { target = ROOT value > 25 }
+					}
+				}
+				# Retaliation: this specific enemy nuked us
+				was_nuked_by_enemy = yes
+			}
 
-            # Cautious or honorable leaders require extreme circumstances
-            OR = {
-                NOT = { ruler_is_cautious = yes }
-                # Retaliation against the country that nuked us overrides personality
-                was_nuked_by_enemy = yes
-                # Facing annexation overrides personality
-                scope:country = {
-                    war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-                }
-            }
+			# Cautious or honorable leaders require extreme circumstances
+			OR = {
+				NOT = { ruler_is_cautious = yes }
+				# Retaliation against the country that nuked us overrides personality
+				was_nuked_by_enemy = yes
+				# Facing annexation overrides personality
+				scope:country = {
+					war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
+				}
+			}
 
-            # If target is nuclear-armed, require more desperate circumstances
-            OR = {
-                NOT = { scope:country = { has_modifier = nuclear_power } }
-                # Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
-                was_nuked_by_enemy = yes
-                enemy_has_subjugation_war_goal = yes
-                ruler_is_aggressive = yes
-            }
-        }
-	
+			# If target is nuclear-armed, require more desperate circumstances
+			OR = {
+				NOT = { scope:country = { has_modifier = nuclear_power } }
+				# Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
+				was_nuked_by_enemy = yes
+				enemy_has_subjugation_war_goal = yes
+				ruler_is_aggressive = yes
+			}
+		}
+
 		propose_score = {
-            value = 0
-            if = {
-                limit = { exists = scope:second_state }
-                scope:second_state = {
-                    if = {
-                        limit = {
-                            has_building = building_barrack
-                        }
-                        add = {
-                            value = b:building_barrack.level
-                            divide = 100
-                        }
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_naval_administration
-                        }
-                        add = {
-                            value = b:building_naval_administration.level
-                            divide = 100
-                        }
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_naval_fortification
-                        }
-                        add = {
-                            value = b:building_naval_fortification.level
-                            divide = 100
-                        }
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_naval_logistics_center
-                        }
-                        add = {
-                            value = b:building_naval_logistics_center.level
-                            divide = 100
-                        }
-                    }
-                    if = {
-                        limit = {
-                            has_building = building_conscription_center
-                        }
-                        add = {
-                            value = b:building_conscription_center.level
-                            divide = 100
-                        }
-                    }
-                    if = {
-                        limit = { owner = { has_modifier = nuclear_power }}
-                        divide = 1000 # near-zero priority against nuclear-armed targets
-                    }
-                }
-            }
-        }
+			value = 0
+			if = {
+				limit = { exists = scope:second_state }
+				scope:second_state = {
+					if = {
+						limit = {
+							has_building = building_barrack
+						}
+						add = {
+							value = b:building_barrack.level
+							divide = 100
+						}
+					}
+					if = {
+						limit = {
+							has_building = building_naval_administration
+						}
+						add = {
+							value = b:building_naval_administration.level
+							divide = 100
+						}
+					}
+					if = {
+						limit = {
+							has_building = building_naval_fortification
+						}
+						add = {
+							value = b:building_naval_fortification.level
+							divide = 100
+						}
+					}
+					if = {
+						limit = {
+							has_building = building_naval_logistics_center
+						}
+						add = {
+							value = b:building_naval_logistics_center.level
+							divide = 100
+						}
+					}
+					if = {
+						limit = {
+							has_building = building_conscription_center
+						}
+						add = {
+							value = b:building_conscription_center.level
+							divide = 100
+						}
+					}
+					if = {
+						limit = { owner = { has_modifier = nuclear_power }}
+						divide = 1000 # near-zero priority against nuclear-armed targets
+					}
+				}
+			}
+		}
 	}
 }

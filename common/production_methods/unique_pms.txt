@@ -1703,13 +1703,13 @@ pm_jsw_vijayanagar_works = {
 #==================================================
 
 pm_generic_rd_complex = {
-    texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			state_education_access_add = 0.1
 			building_university_throughput_add = 0.25
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1732,14 +1732,14 @@ pm_generic_rd_complex = {
 	}
 }
 pm_generic_logistics_hub = {
-    texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			state_infrastructure_mult = 0.1
 			building_port_throughput_add = 0.1
 			building_railway_throughput_add = 0.1
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1762,9 +1762,9 @@ pm_generic_logistics_hub = {
 	}
 }
 pm_generic_hq_skyscraper = {
-    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 
-    state_modifiers = {
+	state_modifiers = {
 		workforce_scaled = {
 			state_trade_capacity_mult = 0.1
 			state_migration_pull_mult = 0.1
@@ -1792,12 +1792,12 @@ pm_generic_hq_skyscraper = {
 	}
 }
 pm_generic_industrial_zone = {
-    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_group_bg_heavy_industry_throughput_add = 0.2
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1820,12 +1820,12 @@ pm_generic_industrial_zone = {
 	}
 }
 pm_generic_mega_factory = {
-    texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_group_bg_manufacturing_throughput_add = 0.1
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1848,13 +1848,13 @@ pm_generic_mega_factory = {
 	}
 }
 pm_generic_exhibition_centre = {
-    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			state_trade_advantage_mult = 0.25
 			state_migration_pull_mult = 0.1
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1877,13 +1877,13 @@ pm_generic_exhibition_centre = {
 	}
 }
 pm_generic_shipping_terminal = {
-    texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_port_throughput_add = 0.3
 			state_building_airport_max_level_add = 2
 		}
-    }
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -1907,8 +1907,8 @@ pm_generic_shipping_terminal = {
 	}
 }
 pm_generic_materials_lab = {
-    texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
-    state_modifiers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
+	state_modifiers = {
 		workforce_scaled = {
 			state_education_access_add = 0.1
 			building_university_throughput_add = 0.25
@@ -1937,12 +1937,12 @@ pm_generic_materials_lab = {
 	}
 }
 pm_generic_robotics_institute = {
-    texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_robotics_industry_throughput_add = 0.5
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -1965,9 +1965,9 @@ pm_generic_robotics_institute = {
 	}
 }
 pm_generic_corporate_university = {
-    texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			state_education_access_add = 0.25
 		}
 	}
@@ -1993,8 +1993,8 @@ pm_generic_corporate_university = {
 	}
 }
 pm_generic_data_fortress = {
-    texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
-    state_modifiers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
+	state_modifiers = {
 		workforce_scaled = {
 			goods_output_digital_assets_mult = 0.1
 		}
@@ -2021,12 +2021,12 @@ pm_generic_data_fortress = {
 	}
 }
 pm_generic_industrial_city = {
-    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_urban_center_throughput_add = 0.2
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -2050,8 +2050,8 @@ pm_generic_industrial_city = {
 	}
 }
 pm_generic_media_hq = {
-    texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
-    state_modifiers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p0.dds"
+	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
 			building_art_academy_throughput_add = 0.25
@@ -2078,12 +2078,12 @@ pm_generic_media_hq = {
 	}
 }
 pm_generic_power_hub = {
-    texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			goods_output_electricity_mult = 0.1
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -2106,13 +2106,13 @@ pm_generic_power_hub = {
 	}
 }
 pm_generic_pipeline_terminus = {
-    texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_oil_rig_throughput_add = 0.2
 			state_infrastructure_mult = 0.1
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -2135,13 +2135,13 @@ pm_generic_pipeline_terminus = {
 	}
 }
 pm_generic_rail_nexus = {
-    texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_railway_throughput_add = 0.25
 			state_infrastructure_mult = 0.1
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -2164,8 +2164,8 @@ pm_generic_rail_nexus = {
 	}
 }
 pm_generic_proving_grounds = {
-    texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
-    state_modifiers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	state_modifiers = {
 		workforce_scaled = {
 			state_building_barrack_max_level_add = 100
 		}
@@ -2192,12 +2192,12 @@ pm_generic_proving_grounds = {
 	}
 }
 pm_generic_resource_depository = {
-    texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
-    state_modifiers = {
-        workforce_scaled = {
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
 			building_group_bg_mining_throughput_add = 0.2
 		}
-    }
+	}
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -2220,8 +2220,8 @@ pm_generic_resource_depository = {
 	}
 }
 pm_generic_financial_center = {
-    texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
-    state_modifiers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
+	state_modifiers = {
 		workforce_scaled = {
 			building_urban_center_throughput_add = 0.1
 			state_trade_capacity_mult = 0.1
@@ -2247,8 +2247,8 @@ pm_generic_financial_center = {
 	}
 }
 pm_generic_monument_to_industry = {
-    texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
-    state_modifiers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
+	state_modifiers = {
 		workforce_scaled = {
 			state_migration_pull_mult = 0.1
 			building_urban_center_throughput_add = 0.1
@@ -2313,18 +2313,18 @@ pm_un_headquarters = {
 	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-            building_government_administration_throughput_add = 0.25
-            state_migration_pull_mult = 0.1
-        }
+			building_government_administration_throughput_add = 0.25
+			state_migration_pull_mult = 0.1
+		}
 	}
-    country_modifiers = {
-        workforce_scaled = {
-            country_influence_mult = 0.25
+	country_modifiers = {
+		workforce_scaled = {
+			country_influence_mult = 0.25
 			country_prestige_mult = 0.1
 			country_society_tech_research_speed_mult = 0.1
-            country_infamy_generation_mult = 0.1
-        }
-    }
+			country_infamy_generation_mult = 0.1
+		}
+	}
 	building_modifiers = {
 		level_scaled = {
 			building_employment_bureaucrats_add = 8000
@@ -2346,10 +2346,10 @@ pm_hq_sovereign_empire = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-            state_turmoil_effects_mult = -0.25
+			state_turmoil_effects_mult = -0.25
 			state_decree_cost_mult = -0.5
 			building_government_administration_throughput_add = 0.5
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2363,18 +2363,18 @@ pm_hq_sovereign_empire = {
 
 pm_hq_military_treaty = {
 	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p2.dds"
-	
+
 	unlocking_identity = identity_military_treaty_organization
 	is_hidden_when_unavailable = yes
 
 	state_modifiers = {
 		workforce_scaled = {
-            building_training_rate_mult = 1.0
+			building_training_rate_mult = 1.0
 			building_arms_industry_throughput_add = 0.25
 			building_artillery_foundry_throughput_add = 0.25
 			building_shipyard_throughput_add = 0.25
 			building_munition_plant_throughput_add = 0.25
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2393,11 +2393,11 @@ pm_hq_trade_league = {
 
 	state_modifiers = {
 		workforce_scaled = {
-            state_trade_advantage_mult = 0.2
+			state_trade_advantage_mult = 0.2
 			state_trade_capacity_mult = 0.2
-            building_economy_of_scale_level_cap_add = 20
+			building_economy_of_scale_level_cap_add = 20
 			building_urban_center_throughput_add = 0.2
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2420,11 +2420,11 @@ pm_hq_religious_convocation = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-            interest_group_ig_devout_pop_attraction_mult = 1
+			interest_group_ig_devout_pop_attraction_mult = 1
 			state_conversion_mult = 1
 			state_migration_pull_add = 25
 			state_migration_pull_mult = 0.25
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2448,8 +2448,8 @@ pm_hq_ideological_union = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-            interest_group_in_government_attraction_mult = 1
-        }
+			interest_group_in_government_attraction_mult = 1
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2466,12 +2466,12 @@ pm_hq_cultural_coalition = {
 	is_hidden_when_unavailable = yes
 	state_modifiers = {
 		workforce_scaled = {
-            state_assimilation_mult = 1.0
+			state_assimilation_mult = 1.0
 			building_art_academy_throughput_add = 0.25
 			building_university_throughput_add = 0.25
 			building_government_administration_throughput_add = 0.25
 			building_urban_center_throughput_add = 0.1
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2487,7 +2487,7 @@ pm_hq_diplomatic_framework = {
 
 	unlocking_identity = identity_diplomatic
 	is_hidden_when_unavailable = yes
-	
+
 	country_modifiers = {
 		workforce_scaled = {
 			country_infamy_generation_mult = -0.1
@@ -2498,10 +2498,10 @@ pm_hq_diplomatic_framework = {
 	}
 	state_modifiers = {
 		workforce_scaled = {
-            state_migration_pull_add = 10
+			state_migration_pull_add = 10
 			state_migration_pull_mult = 0.1
 			state_trade_advantage_mult = 0.1
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2523,9 +2523,9 @@ pm_wonder_golden_gate_bridge = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-            state_infrastructure_add = 50
-            state_trade_advantage_mult = 0.15
-        }
+			state_infrastructure_add = 50
+			state_trade_advantage_mult = 0.15
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2540,8 +2540,8 @@ pm_wonder_empire_state_building = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-            building_urban_center_throughput_add = 0.1
-        }
+			building_urban_center_throughput_add = 0.1
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2555,8 +2555,8 @@ pm_wonder_sydney_opera_house = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-            building_art_academy_throughput_add = 0.25
-        }
+			building_art_academy_throughput_add = 0.25
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2572,7 +2572,7 @@ pm_wonder_cn_tower = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_trade_advantage_mult = 0.2
-        }
+		}
 	}
 	building_modifiers = {
 		level_scaled = {
@@ -2587,8 +2587,8 @@ pm_wonder_burj_khalifa = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-            building_economy_of_scale_level_cap_add = 5
-        }
+			building_economy_of_scale_level_cap_add = 5
+		}
 	}
 	building_modifiers = {
 		level_scaled = {

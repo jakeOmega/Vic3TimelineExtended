@@ -11,11 +11,11 @@
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		cellular_networks
 	}
-	
+
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
@@ -27,7 +27,7 @@
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_radios_add = 0.5                          # Price:   80, Total cost:    40.0 (36.36%)
 		goods_input_telephones_add = 1                        # Price:   70, Total cost:    70.0 (63.64%)
@@ -53,11 +53,11 @@ mobilization_option_robotic_assistance = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		network_centric_warfare
 	}
-	
+
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
@@ -69,7 +69,7 @@ mobilization_option_robotic_assistance = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_robotics_add = 10                         # Price:   80, Total cost:   800.0 (100.00%)
 		# Total cost: 800.0
@@ -93,11 +93,11 @@ mobilization_option_logistical_support = {
 	possible = {
 		always = yes
 	}
-	
+
 	unlocking_technologies = {
 		military_statistics
 	}
-	
+
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
@@ -109,7 +109,7 @@ mobilization_option_logistical_support = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_engines_add = 5                           # Price:   60, Total cost:   300.0 (60.00%)
 		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (40.00%)
@@ -134,11 +134,11 @@ mobilization_option_extensive_logistical_support = {
 			NOT = { has_mobilization_option = mobilization_option:mobilization_option_balloon_recon }
 		}
 	}
-	
+
 	unlocking_technologies = {
 		central_planning
 	}
-	
+
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
@@ -150,7 +150,7 @@ mobilization_option_extensive_logistical_support = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_engines_add = 5                           # Price:   60, Total cost:   300.0 (22.22%)
 		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (14.81%)
@@ -177,11 +177,11 @@ mobilization_option_modern_logistical_support = {
 			has_mobilization_option = mobilization_option:mobilization_option_extensive_logistical_support
 		}
 	}
-	
+
 	unlocking_technologies = {
 		recon_satellites
 	}
-	
+
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
@@ -193,7 +193,7 @@ mobilization_option_modern_logistical_support = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_radios_add = 10                           # Price:   80, Total cost:   800.0 (33.61%)
 		goods_input_telephones_add = 10                       # Price:   70, Total cost:   700.0 (29.41%)
@@ -222,11 +222,11 @@ mobilization_option_advanced_logistical_support = {
 			has_mobilization_option = mobilization_option:mobilization_option_modern_logistical_support
 		}
 	}
-	
+
 	unlocking_technologies = {
 		rapid_deployment_forces
 	}
-	
+
 	on_deactivate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_remove_supplies_while_in_combat_tt
@@ -238,7 +238,7 @@ mobilization_option_advanced_logistical_support = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_launch_capacity_add = 10                  # Price:  200, Total cost:  2000.0 (30.40%)
 		goods_input_aeroplanes_add = 5                        # Price:  160, Total cost:   800.0 (12.16%)
@@ -310,7 +310,7 @@ mobilization_option_appliances = {
 
 REPLACE:mobilization_option_forced_march = {
 	texture = "gfx/interface/icons/mobilization_options/forced_march.dds"
-	
+
 	possible = {
 		scope:military_formation = {
 			NOR = {
@@ -321,7 +321,7 @@ REPLACE:mobilization_option_forced_march = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_when_you_force_people_to_march_faster_while_in_combat_tt
@@ -333,7 +333,7 @@ REPLACE:mobilization_option_forced_march = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_gold_add = 0.5                            # Price:  100, Total cost:    50.0 (100.00%)
 		# Total cost: 50.0
@@ -345,7 +345,7 @@ REPLACE:mobilization_option_forced_march = {
 	}
 	ai_weight = {
 		value = 0
-		
+
 		if = {
 			limit = {
 				scope:military_formation = {
@@ -367,7 +367,7 @@ REPLACE:mobilization_option_forced_march = {
 
 REPLACE:mobilization_option_truck_transport = {
 	texture = "gfx/interface/icons/mobilization_options/truck_transport.dds"
-	
+
 	possible = {
 		scope:military_formation = {
 			NOR = {
@@ -383,7 +383,7 @@ REPLACE:mobilization_option_truck_transport = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -393,7 +393,7 @@ REPLACE:mobilization_option_truck_transport = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -403,7 +403,7 @@ REPLACE:mobilization_option_truck_transport = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		combustion_engine
 	}
@@ -419,12 +419,12 @@ REPLACE:mobilization_option_truck_transport = {
 		value = 1
 	}
 
-    group = transport
+	group = transport
 }
 
 REPLACE:mobilization_option_rail_transport = {
 	texture = "gfx/interface/icons/mobilization_options/rail_transport.dds"
-	
+
 	possible = {
 		scope:military_formation = {
 			NOR = {
@@ -440,7 +440,7 @@ REPLACE:mobilization_option_rail_transport = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -450,7 +450,7 @@ REPLACE:mobilization_option_rail_transport = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -460,7 +460,7 @@ REPLACE:mobilization_option_rail_transport = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		railways
 	}
@@ -475,12 +475,12 @@ REPLACE:mobilization_option_rail_transport = {
 		value = 1
 	}
 
-    group = transport
+	group = transport
 }
 
 mobilization_option_air_transport = {
 	texture = "gfx/interface/icons/mobilization_options/aerial_reconaissance.dds"
-	
+
 	possible = {
 		scope:military_formation = {
 			NOR = {
@@ -496,7 +496,7 @@ mobilization_option_air_transport = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -506,7 +506,7 @@ mobilization_option_air_transport = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -516,7 +516,7 @@ mobilization_option_air_transport = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		commercial_aviation
 	}
@@ -532,12 +532,12 @@ mobilization_option_air_transport = {
 		value = 1
 	}
 
-    group = transport
+	group = transport
 }
 
 mobilization_option_space_transport = {
 	texture = "gfx/interface/icons/mobilization_options/aerial_reconaissance.dds"
-	
+
 	possible = {
 		scope:military_formation = {
 			NOR = {
@@ -553,7 +553,7 @@ mobilization_option_space_transport = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -563,7 +563,7 @@ mobilization_option_space_transport = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -573,7 +573,7 @@ mobilization_option_space_transport = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		rapid_deployment_forces
 	}
@@ -590,7 +590,7 @@ mobilization_option_space_transport = {
 		value = 1
 	}
 
-    group = transport
+	group = transport
 }
 
 mobilization_option_entrenchment = {
@@ -605,7 +605,7 @@ mobilization_option_entrenchment = {
 	possible = {
 		always = yes
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -615,7 +615,7 @@ mobilization_option_entrenchment = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -625,7 +625,7 @@ mobilization_option_entrenchment = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (44.44%)
 		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (55.56%)
@@ -655,7 +655,7 @@ mobilization_option_space_recon = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -665,7 +665,7 @@ mobilization_option_space_recon = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -675,7 +675,7 @@ mobilization_option_space_recon = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		recon_satellites
 	}
@@ -692,7 +692,7 @@ mobilization_option_space_recon = {
 		value = 1
 	}
 
-    group = reconnaissance
+	group = reconnaissance
 }
 
 mobilization_option_molecular_scanners = {
@@ -705,7 +705,7 @@ mobilization_option_molecular_scanners = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -715,7 +715,7 @@ mobilization_option_molecular_scanners = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -725,7 +725,7 @@ mobilization_option_molecular_scanners = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		molecular_assemblers
 	}
@@ -756,7 +756,7 @@ mobilization_option_radar = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -766,7 +766,7 @@ mobilization_option_radar = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -776,7 +776,7 @@ mobilization_option_radar = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		radar
 	}
@@ -794,7 +794,7 @@ mobilization_option_radar = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 mobilization_option_night_vision_gear = {
@@ -807,7 +807,7 @@ mobilization_option_night_vision_gear = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -817,7 +817,7 @@ mobilization_option_night_vision_gear = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -827,7 +827,7 @@ mobilization_option_night_vision_gear = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		infrared_night_vision
 	}
@@ -847,7 +847,7 @@ mobilization_option_night_vision_gear = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 mobilization_option_missile_defense_system = {
@@ -863,7 +863,7 @@ mobilization_option_missile_defense_system = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -873,7 +873,7 @@ mobilization_option_missile_defense_system = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -883,7 +883,7 @@ mobilization_option_missile_defense_system = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		missile_defense_systems
 	}
@@ -903,7 +903,7 @@ mobilization_option_missile_defense_system = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 mobilization_option_directed_energy_defenses = {
@@ -916,7 +916,7 @@ mobilization_option_directed_energy_defenses = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -926,7 +926,7 @@ mobilization_option_directed_energy_defenses = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -936,7 +936,7 @@ mobilization_option_directed_energy_defenses = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		directed_energy_defenses
 	}
@@ -954,7 +954,7 @@ mobilization_option_directed_energy_defenses = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 mobilization_option_cyberwarfare_team = {
@@ -970,7 +970,7 @@ mobilization_option_cyberwarfare_team = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -980,7 +980,7 @@ mobilization_option_cyberwarfare_team = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -990,7 +990,7 @@ mobilization_option_cyberwarfare_team = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		cyber_warfare
 	}
@@ -1011,7 +1011,7 @@ mobilization_option_cyberwarfare_team = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 mobilization_option_electronic_warfare = {
@@ -1027,7 +1027,7 @@ mobilization_option_electronic_warfare = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1037,7 +1037,7 @@ mobilization_option_electronic_warfare = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1047,7 +1047,7 @@ mobilization_option_electronic_warfare = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		electronic_warfare
 	}
@@ -1066,7 +1066,7 @@ mobilization_option_electronic_warfare = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 mobilization_option_exoskeleton_suits = {
@@ -1079,7 +1079,7 @@ mobilization_option_exoskeleton_suits = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1089,7 +1089,7 @@ mobilization_option_exoskeleton_suits = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1099,7 +1099,7 @@ mobilization_option_exoskeleton_suits = {
 			}
 		}
 	}
-	
+
 	unlocking_technologies = {
 		advanced_body_armor
 	}
@@ -1118,7 +1118,7 @@ mobilization_option_exoskeleton_suits = {
 		value = 1
 	}
 
-    group = special_weapons
+	group = special_weapons
 }
 
 REPLACE:mobilization_option_first_aid = {
@@ -1143,7 +1143,7 @@ REPLACE:mobilization_option_first_aid = {
 		}
 	}
 	texture = "gfx/interface/icons/mobilization_options/basic_medical_aid.dds"
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_to_add_medic_support_tt
@@ -1153,7 +1153,7 @@ REPLACE:mobilization_option_first_aid = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_and_organization_when_you_remove_medic_support_tt
@@ -1169,7 +1169,7 @@ REPLACE:mobilization_option_first_aid = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_fabric_add = 1                            # Price:   20, Total cost:    20.0 (25.00%)
 		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (75.00%)
@@ -1219,7 +1219,7 @@ REPLACE:mobilization_option_field_hospitals = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_and_organization_when_you_remove_medic_support_tt
@@ -1242,13 +1242,13 @@ REPLACE:mobilization_option_field_hospitals = {
 		# Total cost: 120.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.40	
+		unit_recovery_rate_add = 0.40
 	}
 	ai_weight = {
 		value = 1
 	}
 
-    group = medic_support
+	group = medic_support
 }
 
 mobilization_option_medevac_helicopters = {
@@ -1288,7 +1288,7 @@ mobilization_option_medevac_helicopters = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_morale_and_organization_when_you_remove_medic_support_tt
@@ -1312,13 +1312,13 @@ mobilization_option_medevac_helicopters = {
 		# Total cost: 820.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.80	
+		unit_recovery_rate_add = 0.80
 	}
 	ai_weight = {
 		value = 1
 	}
 
-    group = medic_support
+	group = medic_support
 }
 
 mobilization_option_voluntary_enhancement = {
@@ -1330,7 +1330,7 @@ mobilization_option_voluntary_enhancement = {
 			has_law = law_type:law_unrestricted_augmentation
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1340,7 +1340,7 @@ mobilization_option_voluntary_enhancement = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1363,7 +1363,7 @@ mobilization_option_voluntary_enhancement = {
 		value = 1
 	}
 
-    group = training
+	group = training
 }
 
 mobilization_option_mandatory_enhancement = {
@@ -1374,7 +1374,7 @@ mobilization_option_mandatory_enhancement = {
 			has_law = law_type:law_mandatory_augmentation
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1384,7 +1384,7 @@ mobilization_option_mandatory_enhancement = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1394,7 +1394,7 @@ mobilization_option_mandatory_enhancement = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_robotics_add = 20                         # Price:   80, Total cost:  1600.0 (33.33%)
 		goods_input_electronic_components_add = 40            # Price:   80, Total cost:  3200.0 (66.67%)
@@ -1408,7 +1408,7 @@ mobilization_option_mandatory_enhancement = {
 		value = 1
 	}
 
-    group = training
+	group = training
 }
 
 mobilization_option_jungle_combat_training = {
@@ -1423,7 +1423,7 @@ mobilization_option_jungle_combat_training = {
 	possible = {
 		always = yes
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1433,7 +1433,7 @@ mobilization_option_jungle_combat_training = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1443,7 +1443,7 @@ mobilization_option_jungle_combat_training = {
 			}
 		}
 	}
-		
+
 	upkeep_modifier = {
 		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (36.36%)
 		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (45.45%)
@@ -1475,7 +1475,7 @@ mobilization_option_mountain_combat_training = {
 	possible = {
 		always = yes
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1485,7 +1485,7 @@ mobilization_option_mountain_combat_training = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1495,7 +1495,7 @@ mobilization_option_mountain_combat_training = {
 			}
 		}
 	}
-		
+
 	upkeep_modifier = {
 		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (36.36%)
 		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (45.45%)
@@ -1531,7 +1531,7 @@ mobilization_option_flight_simulators = {
 			}
 		}
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1541,7 +1541,7 @@ mobilization_option_flight_simulators = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1551,7 +1551,7 @@ mobilization_option_flight_simulators = {
 			}
 		}
 	}
-	
+
 	upkeep_modifier = {
 		goods_input_electronic_components_add = 25            # Price:   80, Total cost:  2000.0 (50.00%)
 		goods_input_consumer_appliances_add = 25              # Price:   80, Total cost:  2000.0 (50.00%)
@@ -1571,7 +1571,7 @@ mobilization_option_flight_simulators = {
 		value = 1
 	}
 
-    group = training
+	group = training
 }
 
 mobilization_option_amphibious_warfare = {
@@ -1586,7 +1586,7 @@ mobilization_option_amphibious_warfare = {
 	possible = {
 		always = yes
 	}
-	
+
 	on_activate_while_mobilized = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1596,7 +1596,7 @@ mobilization_option_amphibious_warfare = {
 			}
 		}
 	}
-	
+
 	on_deactivate = {
 		custom_tooltip = {
 			text = mobilization_option_it_hurts_organization_when_you_adjust_equipment_tt
@@ -1606,7 +1606,7 @@ mobilization_option_amphibious_warfare = {
 			}
 		}
 	}
-			
+
 	upkeep_modifier = {
 		goods_input_tools_add = 5                             # Price:   40, Total cost:   200.0 (36.36%)
 		goods_input_ammunition_add = 5                        # Price:   50, Total cost:   250.0 (45.45%)
