@@ -1,0 +1,65 @@
+﻿#==================================================
+# Grand Monuments
+#==================================================
+# A permanent construction sink. Expensive to build, cheap to run, and infinitely
+# repeatable -- so a country that has finished building everything worthwhile still
+# has somewhere to put its construction sector. Deliberately a poor investment by
+# factory standards; the payoff is a trickle of tourism plus a dedication bonus.
+#
+# Scaling note: tourism is a luxury good whose pop demand is steeply convex in wealth
+# (see popneed_tourism in common/buy_packages/00_buy_packages.txt, ramping 1 -> 622
+# across wealth tiers). A flat per-level tourism output is therefore near-worthless in
+# 1836 and meaningful late-game, with no extra script needed.
+#
+# Group is bg_grand_monuments, NOT bg_monuments -- see common/building_groups/
+# extra_building_groups.txt for why that separation is load-bearing.
+
+building_grand_monument = {
+	building_group = bg_grand_monuments
+	icon = "gfx/interface/icons/building_icons/building_government_administration.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	expandable = yes
+	downsizeable = yes
+	unique = no
+	ai_nationalization_desire = 0
+
+	production_method_groups = {
+		pmg_monument_dedication
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_grand_monument
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	# Evaluated in STATE scope: ROOT is the state, owner reaches the country.
+	# Kept low on purpose -- the AI should only reach for these once it is genuinely
+	# rich and has run out of better places to put construction.
+	ai_value = {
+		value = 0
+
+		# Only interesting to countries with money to burn.
+		if = {
+			limit = {
+				owner = { is_great_or_major_power = yes }
+			}
+			add = 25
+		}
+
+		# The throughput bonus only pays off where a tourism industry exists to receive it.
+		if = {
+			limit = { has_building = building_tourism_industry }
+			add = 50
+		}
+
+		# Never at the expense of the war effort.
+		if = {
+			limit = {
+				owner = { is_at_war = yes }
+			}
+			add = -100
+		}
+	}
+}

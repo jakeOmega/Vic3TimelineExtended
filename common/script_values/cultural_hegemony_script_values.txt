@@ -323,6 +323,8 @@ cultural_pull_from_tech_leadership = {
 }
 
 # Monument / wonder bonus: counts monument-group wonders, excluding power bloc statues
+# Also folds in the capped Grand Monument contribution below, so the "Monuments" line
+# in the Cultural Hegemony JE breakdown stays a complete account of monument pull.
 cultural_pull_from_monuments = {
 	value = 0
 	every_scope_state = {
@@ -335,6 +337,33 @@ cultural_pull_from_monuments = {
 			add = cultural_pull_monument_bonus
 		}
 	}
+	add = cultural_pull_from_grand_monuments
+}
+
+# Total Grand Monument levels in this state, across all dedications.
+# State scope. See common/buildings/grand_monuments.txt.
+grand_monument_levels_in_state = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			is_building_group = bg_grand_monuments
+			level >= 1
+		}
+		add = level
+	}
+}
+
+# Grand Monument pull. HARD CAPPED, unlike the one-off wonders above: Grand Monuments
+# are infinitely repeatable, so an uncapped per-building bonus would let a rich country
+# farm cultural hegemony without limit. 20 monument levels nationwide = +1 pull, to a
+# ceiling of +5 (reached at 100 levels).
+cultural_pull_from_grand_monuments = {
+	value = 0
+	every_scope_state = {
+		add = grand_monument_levels_in_state
+	}
+	divide = 20
+	max = 5
 }
 
 # Megaproject bonus: +1 per completed megaproject (not in bg_monuments)

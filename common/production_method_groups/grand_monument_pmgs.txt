@@ -1,0 +1,22 @@
+﻿#==================================================
+# Grand Monument dedication PM group
+#==================================================
+# See common/production_methods/grand_monument_pms.txt for the one-way "ratchet"
+# that makes a dedication permanent once chosen.
+
+pmg_monument_dedication = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_monument_undedicated
+		pm_monument_civic
+		pm_monument_religious
+		pm_monument_war_memorial
+		pm_monument_artistic
+		pm_monument_naturalist
+		pm_monument_scientific
+		pm_monument_industrial
+		pm_monument_athletic
+	}
+}

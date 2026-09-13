@@ -1015,6 +1015,77 @@ The building's operational PM then grants `state_building_X_max_level_add = 1` p
 
 **Megastructure buildings** (`building_space_elevator`, `building_solar_collector`, `building_orbital_battlestation`, `building_mind_upload_nexus`, `building_antimatter_facility`, `building_nanofabrication_center`, `building_consciousness_network`) use `has_max_level` because they were deliberately converted to allow company ownership while retaining on_action level gating.
 
+## There Is No Engine PM Lock — Use the Self-Reference Ratchet
+
+There is **no** way to gate a production method on game state. PM gating is limited to
+`unlocking_technologies`, `unlocking_production_methods`, `unlocking_laws`,
+`unlocking_principles`, `unlocking_company_categories`, `unlocking_identity`,
+`disallowing_laws` and `is_hidden_when_unavailable`. PMs have **no** `possible` / `potential` /
+`available` trigger block, and there is no `unlocking_global_variables` (zero hits repo-wide) —
+so a scripted effect cannot mark a PM as chosen. Country-level gates (law / principle /
+identity) force every building of that type in the country onto one PM, so they cannot express
+a *per-building* choice.
+
+To make a per-building PM choice **permanent**, exploit the fact that
+`unlocking_production_methods` is an **OR** over its list and can reference the PM itself:
+
+```
+pm_foo_undedicated = {          # the entry point
+    is_default = yes
+    is_hidden_when_unavailable = yes
+    unlocking_production_methods = { pm_foo_undedicated }
+}
+
+pm_foo_variant_a = {
+    is_hidden_when_unavailable = yes
+    unlocking_production_methods = { pm_foo_undedicated pm_foo_variant_a }
+}
+```
+
+Fresh build: the default is active, so every variant is available. After picking one, only that
+variant's own self-reference is satisfied — the default and every sibling become unreachable, and
+changing the choice means demolishing the building. `is_hidden_when_unavailable` keeps the group
+showing exactly one row instead of a column of dead ends. Never put `replacement_if_valid` on a
+ratcheted PM; it auto-swaps and defeats the lock.
+
+Live example: `common/production_methods/grand_monument_pms.txt` (`pmg_monument_dedication`).
+
+**Caveat:** every *other* use of `unlocking_production_methods` in this repo is cross-group, so
+the self-reference is unusual. Verify in-game that (a) the default really is selectable at build
+time and (b) siblings really do disappear after a pick. Secondary deterrent if it ever loosens:
+this mod's `pm_retooling` override applies `goods_input_construction_mult = 10`
+(`common/static_modifiers/extra_modifiers.txt`), which taxes any PM change in proportion to the
+building's construction-goods input.
+
+To set such a PM from script, use `activate_production_method` (country/state scope):
+
+```
+scope:some_state = {
+    activate_production_method = {
+        building_type = building_foo
+        production_method = pm_foo_variant_a
+    }
+}
+```
+
+At state scope this targets the buildings of that type in that state, which is per-building
+control for any building that can only exist once per state.
+
+## Country-Scope Modifiers on Repeatable Per-State Buildings Stack Nationally
+
+A building that can be built in **every** state applies its `country_modifiers` once per
+building, and `level_scaled` multiplies that by each building's level. 20 buildings × 20 levels
+× `-0.01` is `-4.0`, which slams into the engine's `-1.0` clamp and makes the effect free.
+
+Rule of thumb for a repeatable building:
+
+| Modifier family | Block | Why |
+|---|---|---|
+| `state_*`, `building_*_throughput_add` | `level_scaled` | genuinely local to the state it sits in |
+| `country_*`, `interest_group_*` | `unscaled` | country-wide; flat per building, bounded by state count |
+
+See `common/production_methods/grand_monument_pms.txt` for the split applied in practice.
+
 ## Production Method Modifier Scaling Blocks
 
 PMs can define modifiers under three scaling blocks, each with different behavior:
