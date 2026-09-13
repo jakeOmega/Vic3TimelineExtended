@@ -3862,7 +3862,7 @@ law_private_military_contractors = {
 		country_radicals_from_conquest_mult = -0.3
 
 		# Long wars are politically tolerable (PMC bodies aren't drafted citizens)…
-		state_war_support_monthly_add = 0.5
+		state_war_support_monthly_add = 0.25 # 1.14: halved with the 0-100 war support rescale
 		# …but heavy losses raise an uncomfortable question for the public
 		country_war_support_casualties_mult = 0.3
 

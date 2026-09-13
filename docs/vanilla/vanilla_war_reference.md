@@ -405,6 +405,7 @@ Aside from capitulation, peace deals require unanimous agreement from all **nego
 
 ### Triggers for script
 
+- **Porting pre-1.14 numbers**: vanilla halved every war support delta (`add_war_war_support`, `add_diplomatic_play_war_support`) when the range shrank from 200 to 100 points; map old levels `v` to `(v+100)/2`.
 - `has_war_support = { target = X value < N }` (war scope): the 0–100 level. Use this for "the war is going badly" checks, ideally against the band defines above.
 - `has_war_support_change = { target = X value < N }` (war scope): the signed **per-beat delta**, not a level. Vanilla uses `value < -5` for "support is collapsing".
 - Newer war-state reads: `war_duration_months`, `num_significant_battles`, `size_weighted_won_battles_fraction`, `enemy_side_occupation`, `is_at_war_with_rival`, `has_stalled_wargoal_against` / `_held_by`, `war_goal_time_ramp`, `average_devastation`, `weeks_until_bankruptcy`.

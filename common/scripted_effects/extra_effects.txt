@@ -418,11 +418,13 @@ nuclear_industrial_strike = {
 		}
 		every_scope_war = {
 			limit = {
-				has_war_support = { target = PREV value > -65 } # cannot drop below -90
+				# 1.14 war support is 0-100 (was -100..100): levels map to (v+100)/2 and deltas
+				# halve, as vanilla did. Was: > -65, -25 (floor -90).
+				has_war_support = { target = PREV value > 17.5 } # cannot drop below 5
 			}
 			add_war_war_support = {
 				target = PREV
-				value = -25
+				value = -12.5
 			}
 		}
 	}
