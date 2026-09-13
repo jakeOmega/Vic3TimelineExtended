@@ -10,7 +10,7 @@ Only `mod_path` and `doc_path` are computed at import; every per-machine path (`
 
 ## Auto-run on server reload
 
-`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 10 file-rewriting generators) and `POST_LOAD_AUDITS` (the 9 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED`, recorded in the reload response's `warnings` array, and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
+`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 12 file-rewriting generators) and `POST_LOAD_AUDITS` (the 16 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED`, recorded in the reload response's `warnings` array, and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
 
 **Audit warnings**: when a generator's return dict contains `unreviewed > 0` or `hard_fails > 0`, the runner logs `[post-load WARN] <label> surfaced issues: <key>=<n>` at WARNING level and adds an entry to the `/reload` response's `warnings` array — caller sees regressions in the same response, no log-scraping required. Add new actionable counter names to `_POST_LOAD_WARN_KEYS` in `mod_state_server.py` if a new audit invents one.
 
@@ -18,28 +18,46 @@ Only `mod_path` and `doc_path` are computed at import; every per-machine path (`
 
 **Writers run after the parse**: the file-rewriting regenerators write to disk without updating the in-memory parse. The runner content-hashes the mod's tracked `.txt`/`.yml` under `common/`, `events/`, `localization/` before and after that half of the chain; if anything actually changed, it re-parses the mod side **once** (`ms.reload_mod` + loc re-layer) before running `POST_LOAD_AUDITS`, so the audits — and `/raw`, `/localize` — see the regenerated content in the same reload. Content hashing (not mtime) is deliberate: several generators rewrite their output unconditionally, and a stat-only check would re-parse on every reload. The response reports `generators_wrote_files: [<mod-relative paths>]` plus `reparsed_after_generators: <bool>`; if that bool is `false`, the re-parse failed (see the `post_load_reparse` warning) and a second `/reload` is needed.
 
+#### `POST_LOAD_REGENERATORS` — file-rewriting generators (in run order)
+
 | Module | Output |
 |---|---|
 | `pop_needs_curves` | `common/buy_packages/00_buy_packages.txt` |
 | `apply_ideologies` | `common/ideologies/modified.txt` |
 | `ig_feminism` | `common/interest_groups/00_*.txt` |
-| `pm_costs` | cost-comment headers in `common/production_methods/extra_pms.txt` & `unique_pms.txt`; `docs/engine/commented_vanilla_pms.txt`; `docs/engine/commented_vanilla_military_units.txt` |
+| `pm_costs` | cost-comment headers in `common/production_methods/extra_pms.txt` & `unique_pms.txt` and in the `upkeep_modifier` blocks of `common/combat_unit_types/extra_combat_units.txt` & `common/mobilization_options/extra_mobilization_options.txt`; `common/script_values/auto_combat_unit_market_costs.txt`; the `Cost at …` suffixes in `localization/english/te_combat_units_l_english.yml`; `docs/engine/commented_vanilla_pms.txt`; `docs/engine/commented_vanilla_military_units.txt` |
 | `resources` | `map_data/state_regions/*.txt` |
 | `gen_pb_principle_unlock_descs` | `*_pb_principles_bool_desc` keys in `localization/english/te_power_bloc_unlocks_l_english.yml` |
 | `gen_un_button_descs` | `localization/english/te_un_button_effects_l_english.yml` |
 | `gen_law_consistency` | `common/scripted_effects/extra_law_consistency_generated.txt` |
-| `organize_loc` | `localization/english/te_*_l_english.yml` (~26 category files) |
-| `event_magnitude_audit` | `docs/engine/event_magnitude_report.md` |
-| `modifier_visibility_audit` | `docs/engine/modifier_visibility_report.md` |
-| `kill_character_audit` | `docs/engine/kill_character_audit.md` |
-| `loc_coverage_audit` | `docs/engine/loc_coverage_report.md` |
+| `gen_company_building_cleanup` | `common/scripted_effects/company_building_cleanup_effects.txt` — one `remove_building` guard per company building plus `remove_disbanded_company_buildings_effect`. The only roster entry that lives under `scripts/generators/`; it is imported by dotted path (`scripts.generators.gen_company_building_cleanup`), see § "Adding a new post-load generator". |
+| `organize_loc` | `localization/english/te_*_l_english.yml` (29 category files) |
+| `gen_event_inventory` | `docs/engine/event_image_inventory.md` |
+| `bom_normalizer` | **Runs last.** Prepends the UTF-8 BOM to any mod `.txt` under `common/`, `events/`, `gfx/` and any `.gui` under `gui/` that lacks one, so the engine stops warning `should be in utf8-bom encoding`. Writes no new files; only rewrites files missing the BOM, so a clean tree stays clean. |
+
+#### `POST_LOAD_AUDITS` — read-only audits (in run order)
+
+Every row writes only its report under `docs/engine/`, so `?audits_only=true` leaves the rest of the working tree untouched.
+
+| Module | Output |
+|---|---|
+| `event_magnitude_audit` | `docs/engine/event_magnitude_report.md` — hardcoded fast-scaling resource deltas in event effects. Also exposed live at `/event-magnitude-audit`. |
+| `modifier_visibility_audit` | `docs/engine/modifier_visibility_report.md` — modifier values too small to display given the type's `decimals = N` / `percent` precision. Also exposed live at `/validate/modifier-visibility`. |
+| `kill_character_audit` | `docs/engine/kill_character_audit.md` — `kill_character` call sites audited for void6 / `exists` guards. |
+| `loc_coverage_audit` | `docs/engine/loc_coverage_report.md` — mod-introduced entities (modifiers, JEs, scripted buttons, …) with no `*_l_english.yml` key, which the engine renders as the raw key with no warning. Suppress on the entity-opening `<name> = {` line. |
+| `concept_reference_audit` | `docs/engine/concept_reference_report.md` — `[concept_X]` / `[Concept('concept_X', …)]` loc references to concepts not declared in `common/game_concepts/`. Each unresolved ref logs three error lines *per render* and stalls the panel showing it. Suppress trailing on the loc value line. |
+| `localization_accessor_audit` | `docs/engine/localization_accessor_report.md` — `[X.Y.Z]` accessor chains in loc YAML the engine would silently resolve to the empty string. Catalog seeded from vanilla loc; supplement in `localization_accessor_vanilla_extras.py`. |
 | `mod_structure_audit` | `docs/engine/mod_structure_report.md` — flags brace-balance failures, silent-INJECT failures (INJECTs targeting mod-only or REPLACEd entities), and within-namespace top-level collisions. Subdirs that merge by design (`on_actions/`, `defines/`, `history/`) are excluded from collision detection. |
 | `loc_render_audit` | `docs/engine/loc_render_report.md` — flags bracket-style formatting tags (`[b]`, `[/i]`, …) in loc values. Vic3 has no such tags; the engine treats `[b]` as a failing data-system-function and floods the log, causing in-game lag. (An `#…#!` balance check was scoped out — 2341 vanilla false positives; Vic3 splits formatting across concatenated loc fragments.) |
 | `any_limit_audit` | `docs/engine/any_limit_report.md` — flags `limit = { }` placed as an immediate child of an `any_*` counting trigger (silently ignored by the engine → meaning flip). Discriminates correctly: a `limit` inside a nested `every_*`/`trigger_if` within the `any_*` is legitimate and not flagged. |
 | `iterator_limit_audit` | `docs/engine/iterator_limit_report.md` — flags an `every_*`/`random_*`/`ordered_*`/`any_*` block whose `limit = { }` is written after an effect sibling. An iterator's `limit` filters the whole iteration regardless of position, so the earlier effect is silently gated too (issue #250). Raw-text scan: the parser folds repeated keys to the first occurrence and drops line numbers, so source order is not recoverable from it. |
 | `modifier_multiplier_var_audit` | `docs/engine/modifier_multiplier_var_report.md` — flags a permanent `add_modifier = { … multiplier = var:X }` (no `days`/`months`/`years`) followed later in the same top-level block by `remove_variable = X`. The engine re-evaluates the stored multiplier on later ticks, so the removed variable reads `'none'` (issue #250). Quiet for the clean-up shape where an exclusive branch drops the modifier first. |
 | `pm_employment_audit` | `docs/engine/pm_employment_report.md` — for each building, enumerates the *valid* PM combinations (one per group, honoring `unlocking_production_methods`) and flags any profession whose employment total goes negative in some combination. Catches automation/refinement PMs whose negative `building_employment_*_add` exceeds the lowest base PM's employment (e.g. a 0-employment base + a strong automation reduction). Buckets by scaling context; ignores tech/principle gating (late-game reachable). Mod-relevant flags warn; all-vanilla combos are informational only. |
-| `gen_event_inventory` | `docs/engine/event_image_inventory.md` |
+| `orphaned_event_audit` | `docs/engine/orphaned_event_report.md` — `is_triggered_only = yes` events that no `trigger_event` or dispatch list ever references. The engine only reports `Event X is orphaned` at runtime game-start (issue #147). |
+| `effect_trigger_validity_audit` | `docs/engine/effect_trigger_validity_report.md` — effect/trigger keywords absent from the frozen catalog at `docs/engine/effect_trigger_valid_keys.txt` (and `funcname(...)` call-syntax). The engine only reports `Unknown effect X` at game-load (issue #146). The catalog itself is a one-shot bootstrap, **not** regenerated per reload — refresh it on a vanilla bump with `effect_trigger_validity_audit.py bootstrap`. |
+| `duplicate_key_audit` | `docs/engine/duplicate_key_report.md` — repeated scalar keys *inside* one block (e.g. a modifier bag). Vic3's own `Duplicated key X will not be created` warning only fires for top-level entity collisions; a duplicate inside a block silently last-wins (issues #190, #191). |
+| `attitude_key_audit` | `docs/engine/attitude_key_report.md` — `attitude = <bareword>` values outside the engine's fixed 15-key catalog. An unknown key never matches, so the AI weight or refusal gate keyed on it is dead code, with no parse-time warning. |
+
 
 **Opt-out:** Set `VIC3_SKIP_POST_LOAD_GENERATORS=1` in the server's environment to skip the entire post-load batch (useful while iterating on one of these scripts).
 
@@ -51,7 +69,7 @@ Every module retains its standalone CLI entrypoint (with `--dry-run` flags where
 
 Three rules — break any of them and the integration fails silently or deadlocks at startup:
 
-1. **Module lives at the repo root.** `POST_LOAD_GENERATORS` calls `importlib.import_module(<bare_name>)`, which only resolves modules on `sys.path`. Generators in `scripts/generators/` don't qualify. If you have one there and want it auto-run, move it (`git mv`) to the repo root.
+1. **The roster entry's second element is the import path.** `POST_LOAD_GENERATORS` calls `importlib.import_module(<path>)`, so a repo-root module is registered by its bare name (`("pm_costs", "pm_costs")`) and one under `scripts/generators/` by its dotted path (`("gen_company_building_cleanup", "scripts.generators.gen_company_building_cleanup")`) — the repo root is on `sys.path`, and `scripts/` / `scripts/generators/` resolve as **PEP 420 namespace packages** — neither carries an `__init__.py` (`find scripts -name __init__.py` is empty) and on Python 3 none is needed. Prefer the repo root for new generators, but a `scripts/generators/` module does qualify; just register the dotted path, not the bare name.
 2. **Expose `def regenerate(mod_state=None)`.** The post-load chain passes the live `ModState` instance. Read entity data via `mod_state.get_data("Events")` / `mod_state.localize(...)` / `mod_state.mod_parsers[...]` — never via HTTP loopback to `localhost:8950`. The server isn't accepting requests yet during startup, so a `urlopen('http://localhost:8950/...')` call inside post-load will block until timeout. (`gen_event_inventory.py` originally hit the HTTP endpoint and could not have been auto-run as-shipped — refactoring it to take `mod_state` was the unblocker.)
 3. **Standalone fallback uses `mod_state_script` for the path dicts.** When `mod_state is None`, instantiate `ModState(base_game_paths, mod_paths)` — those dicts are defined in `mod_state_script.py` and `mod_state_server.py`, **not** in `path_constants.py` (which only has `mod_path` / `base_game_path` scalars). Importing from `mod_state_script` keeps the standalone path cycle-free; importing from `mod_state_server` would re-enter the server module.
 
@@ -69,10 +87,10 @@ Defensive pattern: make the regex match BOTH the legacy untagged form and the ta
 
 | Script | Purpose | Run |
 |--------|---------|-----|
-| `paradox_file_parser.py` | Parses Paradox `.txt` files into Python dicts. Handles tokenization, brace nesting, `REPLACE:` / `INJECT:` merge directives, and diff detection. | Library (import) |
-| `test_paradox_file_parser.py` | 12 unit tests for the parser. | `python test_paradox_file_parser.py` |
+| `paradox_file_parser.py` | Parses Paradox `.txt` files into Python dicts. Handles tokenization, brace nesting, `REPLACE:` / `INJECT:` merge directives, and diff detection. AST shape: `{key: (op, value)}`; a key repeated inside a block becomes `{key: [(op, value), ...]}` in source order, every entry keeping its own operator (`=`, `<`, `>`, `<=`, `>=`, `!=`, `?=`, `==`) and identical duplicates kept (`add = 5 add = 5` is two entries — the engine runs both). A file that repeats a *top-level* key folds the copies the way later files fold onto earlier ones: `INJECT:x` injects into the earlier copy, a plain or `REPLACE:` copy replaces it (last wins) and logs a warning on the `paradox_file_parser` logger. | Library (import) |
+| `test_paradox_file_parser.py` | 40 unit tests for the parser (tokenizer, operators, repeated keys, directives, duplicate top-level keys, loc-line parsing). | `python test_paradox_file_parser.py` |
 | `test_event_balance.py` | 53 unit tests for the `/event-balance` helpers (polarity arithmetic, modifier color lookup, static-modifier resolution, option-body walker, `add_enactment_modifier` expansion, change_variable parsing, file id extraction, text rendering, strict and soft dominance helpers). | `python -m unittest test_event_balance` |
-| `mod_state.py` | `ModState` class wrapping the parser. Loads all entity types and localization. Provides `localize()`, `unlocalize()`, `search_localization()`, `build_reverse_localization()`. | Library (import) |
+| `mod_state.py` | `ModState` class wrapping the parser. Loads all entity types and localization. Provides `localize()`, `unlocalize()`, `search_localization()`, `build_reverse_localization()`. Module-level `parse_loc_line()` / `iter_loc_lines()` are the single loc-line rule (escape-aware — a value containing `\"` reads back whole, backslashes kept verbatim; the `l_english:` header, comment lines and unquoted lines are skipped) shared with the server's `_parse_loc_lines`. | Library (import) |
 | `mod_state_server.py` | Persistent HTTP server (port 8950) serving parsed mod data as JSON. See **Mod State Server** section. | `.venv/bin/python mod_state_server.py` |
 | `mod_state_client.py` | CLI client for the mod state server. | `python mod_state_client.py <command> [args]` |
 | `mod_state_script.py` | Generates text reference docs (`docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt`) from parsed mod state. This is also called automatically when the mod state server starts or reloads. | `python mod_state_script.py` |
@@ -101,13 +119,36 @@ Notes:
 - It ignores braces inside quoted strings and ignores trailing `#` comments while computing indentation.
 - Do not use it on YAML, JSON, or Python files.
 
+### Python lint gate (`ruff`)
+
+`ruff.toml` at the repo root enables the pyflakes (`F`) rules only — undefined
+names, duplicate defs / dict keys, imports shadowed by loop variables, unused
+imports and locals, f-strings with no placeholders. Style and import-order rules
+(`E` / `I` / `UP` / …) are deliberately **not** selected; turning them on would
+rewrite every file for no correctness gain.
+
+```bash
+ruff check .                 # must print "All checks passed!"
+ruff check --fix .           # apply the safe fixes (unused imports, f-strings)
+ruff check --unsafe-fixes .  # preview the rest; review each before applying
+```
+
+Notes:
+- `ruff` is in `requirements.txt` under the "Dev / CI" block.
+- Keep the tree clean: a new finding in a file you touch is a review blocker.
+- Suppress a deliberate unused import (side-effect import, re-export, availability
+  probe) with `# noqa: F401` **plus** a reason comment — ruff rejects a malformed
+  directive like `# noqa: local import` and warns about it.
+- Names only referenced in string annotations under `from __future__ import
+  annotations` still need a real binding: import them in an `if TYPE_CHECKING:`
+  block, or ruff flags F821 (and `typing.get_type_hints()` would raise).
+
 ## Localization & Code Generation
 
 | Script | Purpose | Run |
 |--------|---------|-----|
 | `organize_loc.py` | Sorts localization keys alphabetically, detects unused keys, finds implicit keys. **Auto-runs on every server reload.** When introducing a new content family, add its prefix to `categorize_key` (e.g. `ship_type_*` → `SHIP_TYPES`) so its keys don't fall into MISCELLANEOUS. **4+ token gotcha:** the fallback rule is `re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4 → CONCEPTS, else MISCELLANEOUS`. A bare `state_trait_bushveld_complex` (4 tokens) lands in MISCELLANEOUS while its `_desc` lands in CONCEPTS — splitting the family across two files. Any new prefix whose base key has 4+ tokens needs an explicit `startswith` rule even if you're "fine with MISCELLANEOUS." | `python organize_loc.py` |
-| `gen_ministry_events.py` | Generates `events/ministry_law_events.txt` (ministry law events). | `python gen_ministry_events.py` |
-| `scripts/generators/gen_loc_files.py` | Generates localization YAML for `extra_law_events` and `ministry_law_events`. | `python scripts/generators/gen_loc_files.py` |
+| `scripts/generators/gen_loc_files.py` | One-shot bootstrap: dumps localization YAML for `extra_law_events` and `ministry_law_events` from literals in the script. Its two output files no longer exist as such — `organize_loc.py` has since folded their keys into the `te_*_l_english.yml` category files, so re-running it would resurrect two stale duplicates. Treat as historical. | `python3 scripts/generators/gen_loc_files.py` |
 | `scripts/generators/gen_event.py` | Event scaffolding tool. Generates boilerplate event definitions + loc entries from compact JSON specs or CLI args. Handles ID allocation, BOM encoding, and triggered_desc chains. Three subcommands: `next-id`, `batch`, `scaffold`. | See **Event Scaffolding** section below. |
 
 ## Production Method Tools
@@ -134,7 +175,7 @@ Notes:
 | `scripts/image_pipeline/event_image_prompts.py` | Maps all mod events to image/video assets. Defines AI image generation prompts. Used by `generate_event_images.py`. | Library (import) |
 | `scripts/image_pipeline/generate_event_images.py` | 3-phase pipeline: generate AI images (FLUX.1-schnell), convert to DDS, create event videos. | `python scripts/image_pipeline/generate_event_images.py --phase generate` |
 
-## Event Scaffolding (`gen_event.py`)
+## Event Scaffolding (`scripts/generators/gen_event.py`)
 
 Generates boilerplate-free Paradox event definitions and localization entries from compact JSON specs. Handles auto-ID allocation (scans existing event files), UTF-8 BOM encoding, triggered_desc chains, default option inheritance, and section headers.
 
@@ -142,14 +183,14 @@ Generates boilerplate-free Paradox event definitions and localization entries fr
 
 ```bash
 # Find next available IDs in a namespace
-python gen_event.py next-id space_race_events --after 600 --count 5
+python3 scripts/generators/gen_event.py next-id space_race_events --after 600 --count 5
 
 # Generate events from a JSON spec (preview first)
-python gen_event.py batch my_spec.json --dry-run
-python gen_event.py batch my_spec.json
+python3 scripts/generators/gen_event.py batch my_spec.json --dry-run
+python3 scripts/generators/gen_event.py batch my_spec.json
 
 # Quick single-event scaffold
-python gen_event.py scaffold --namespace my_events --title "Title" --desc "Desc" --options "Opt A" "Opt B" --dry-run
+python3 scripts/generators/gen_event.py scaffold --namespace my_events --title "Title" --desc "Desc" --options "Opt A" "Opt B" --dry-run
 ```
 
 ### JSON Spec Format
@@ -201,8 +242,8 @@ Hidden events: set `"hidden": true` — generates minimal structure (type + hidd
 ### Workflow
 
 1. Write a compact JSON spec (10-15 lines per event vs 60+ lines of Paradox script)
-2. `python gen_event.py batch spec.json --dry-run` to preview
-3. `python gen_event.py batch spec.json` to write files
+2. `python3 scripts/generators/gen_event.py batch spec.json --dry-run` to preview
+3. `python3 scripts/generators/gen_event.py batch spec.json` to write files
 4. `python organize_loc.py` to sort the appended loc keys
 5. Edit the generated `.txt` to add event-specific effects to options
 
@@ -218,12 +259,12 @@ The mod-state server (`mod_state_server.py`) parses **all vanilla AND mod data**
 
 ### Auto-Generated Documentation
 
-On startup and on `/reload`, the server automatically generates the following documentation files in `docs/`:
-- `laws.txt` — All law groups and laws with unlock technologies
-- `technologies.txt` — All technologies by era with prerequisites and descriptions
-- `buildings.txt` — All buildings with PM groups, PMs, and pollution data
-- `goods.txt` — All tradeable goods
-- `combat_units.txt` — All combat unit types with unlocking technologies
+On startup and on `/reload`, the server automatically generates the following documentation files in `docs/engine/` (via `mod_state_script.py`):
+- `docs/engine/laws.txt` — All law groups and laws with unlock technologies
+- `docs/engine/technologies.txt` — All technologies by era with prerequisites and descriptions
+- `docs/engine/buildings.txt` — All buildings with PM groups, PMs, and pollution data
+- `docs/engine/goods.txt` — All tradeable goods
+- `docs/engine/combat_units.txt` — All combat unit types with unlocking technologies
 
 These files should NOT be manually edited — they are regenerated from parsed game data.
 
@@ -244,18 +285,49 @@ Invoke-RestMethod http://localhost:8950/status
 
 > **AI agent rule:** ALWAYS check if the server is running at the START of any session that involves looking up game data.
 
+### HTTP status codes and access (#254 / PR #270)
+
+Two behaviours changed in PR #270 that any script or agent talking to this server needs to know.
+
+**1. Local-origin gate — every route, every method, 403 on failure.** `do_GET` / `do_POST` run the gate *before* any routing or reload work, so a rejected request costs nothing. A request is refused with **403** when:
+
+- there is no `Host` header, or its hostname isn't `127.0.0.1` / `localhost` / `[::1]` (bracketed or bare; the port-less spelling is accepted);
+- the `Host` port doesn't match the **actual bound port** (read from the live socket, not the hardcoded `8950`); or
+- it carries an `Origin` that isn't `http://127.0.0.1:<port>` / `http://localhost:<port>` / `http://[::1]:<port>` — `Origin: null` (sandboxed iframe, `file://` page) is refused too.
+
+This blocks a page in the user's browser from driving the server (CSRF / DNS rebinding). **Normal use is unaffected**: `curl`, `curl -f`, `urllib`, `requests` and PowerShell's `Invoke-RestMethod` all send a conforming `Host` and no `Origin`. Every rejection logs at WARNING with the offending header. The predicate is `_local_request_rejection(host, origin, port)` — a pure function, unit-tested without a server.
+
+**2. Error bodies now carry honest statuses.** Endpoints used to answer `{"error": …}` at HTTP **200**, so `curl -f` readiness probes passed on failure and a client couldn't branch on the status. 49 such returns were converted. The exception classes in `mod_state_server.py` are `NotFound` (404), `BadRequest` (400), `DataNotLoaded` (503, a `_ServiceNotReady`); a bare `KeyError` escaping a handler is now a genuine **500** (a server bug) rather than a 404.
+
+| Old → new | Routes / condition |
+|---|---|
+| **200 → 403** | Every route, any method, when the `Host`/`Origin` gate rejects the request. |
+| **200 → 503** | `"<X> data not loaded"` on `/laws`, `/principles`, `/amendments`, `/technologies`, `/buildings`, `/goods`, `/combat-units`, `/ideologies`, `/events`, `/institutions`, `/journal-entries`, `/diplomatic-actions`, `/treaty-articles`, `/decisions`, `/script-values`, `/decrees`, `/on-actions`, `/production-methods`, `/scripted-effects`, `/scripted-triggers`, `/tech-tree/<id>`, `/technology-effects/<id>`, `/event-balance`, `/event-balance/issues`. Also `/production-methods?building=<id>` (`"Required data not loaded"`), `/validate/engine-coverage` (`"Mod state or engine docs not loaded"`), and `/engine-docs/usage/<name>` when the vanilla `common/` dir is missing. Body is unchanged apart from an added `hint` — but **`curl -f` now fails on these**, which is the point. |
+| **200 → 400** | Missing or malformed input: `/localize` (no key) · `/unlocalize` (no text) · `/search`, `/modifier-search` (no `?q`) · `/references` (no key) · `/tech-tree`, `/unlocked-by`, `/technology-effects` (no id) · `/diff` (missing type/id) · `/filter` (no type, or no `?field`) · `/loc-keys` (fewer than 2 segments) · `/gui` (no sub-endpoint) · `/gui/render-sites` (no key) · `/gui/render-paths` (no type, or unknown `?field`) · `/modifier-grants` (no name, or malformed) · `/modifier-patterns?expand=` (pattern without a placeholder, or missing the placeholder value) · `/event-balance` (no id / `?ids` / `?prefix` / `?file`). |
+| **404 → 400** | `/engine-docs/origin` and `/engine-docs/usage` called with no `<name>` — the usage hint used to ride on a `KeyError`. |
+| **200 → 404** | `/logs/<family>/diff` when the `?against=` generation doesn't exist · `/loc-keys/<UnknownType>/<id>` · `/gui/render-paths/<UnmappedEntityType>`. |
+| **404 → 500** | A genuine `KeyError` inside a handler (a server bug, not a missing entity). All 500 bodies are now `{"error": "<ExceptionType>: <msg>"}`. |
+| **200 → 500** | `/engine-docs/usage/<name>` when the vanilla scan itself fails (timeout / scan error). |
+
+**`/event-balance?file=` is contained to the mod tree.** `_resolve_mod_relative_path()` rejects absolute paths, `\` / `X:` prefixes, `..` escapes and symlinks pointing outside `mod_path` with **400** (a `..` that stays inside is fine); a path that resolves inside the tree but names a missing file is **404**, and an unparseable file is **400**. The other path-shaped params are pure dict lookups against pre-indexed data and were audited as safe: `/dev-docs/<path>`, `/engine-docs/<type>`, `/logs/<family>`, `/raw/<Type>/<id>`.
+
+**`/unlocalize` takes both forms.** `/unlocalize/<text>` (path segment) and `/unlocalize?q=<text>` both work — use the query form for text containing slashes or awkward spacing. `/help` now advertises the path form and mentions `?q=`, and carries an `access` line describing the 403 gate.
+
+**`mod_state_client.py` prints error bodies.** `query()` catches `HTTPError` *before* `URLError` (HTTPError subclasses it, so order matters), prints `HTTP <code> <reason>` plus the pretty-printed JSON body to stderr, and exits 1. A real connection failure still gives the "server is not running" message.
+
 ### API Endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/status` | GET | Server status, loaded entity types, loc key count, `parse_failure_count` + `parse_failures` (files ModState skipped because they failed to parse — `{file, error, source}`, capped at 20; non-zero means those entities are missing from every endpoint), `last_reload` (previous reload's flags + `warnings`) |
+| `/status` | GET | Server status, loaded entity types, loc key count, `parse_failure_count` + `parse_failures` (files ModState skipped because they failed to parse — `{file, error, source}`, capped at 20; non-zero means those entities are missing from every endpoint), `last_reload` (previous reload's flags + `warnings`, and — when that reload's regenerators rewrote anything — `generators_wrote_files` + `reparsed_after_generators`) |
 | `/entity-types` | GET | List of entity type names |
+| `/help` | GET | Self-describing index of the server's GET and POST endpoints, emitted from the handler itself. Use it as the live cross-check when this table looks stale. |
 | `/keys/<EntityType>` | GET | All entity IDs + localized names for a type |
 | `/raw/<EntityType>` | GET | Full raw parsed data for a type |
 | `/raw/<EntityType>/<id>` | GET | Raw parsed data for one entity |
 | `/loc-keys/<EntityType>/<id>` | GET | Resolve the stable family of loc keys an entity exposes (name/desc/...). Seeded set in `LOC_KEY_FAMILIES` (treaty articles, decisions, JEs, decrees, diplo actions/plays, laws, country formations, modifiers, institutions). |
 | `/localize/<key>` | GET | Game key → display text |
-| `/unlocalize/<text>` | GET | Display text → matching game key(s) |
+| `/unlocalize/<text>` | GET | Display text → matching game key(s). `?q=<text>` works too — prefer it when the text contains slashes. |
 | `/search?q=<query>` | GET | Search entity IDs, names, and localization |
 | `/laws` | GET | All laws grouped by law group |
 | `/laws/<law_id>` | GET | Detailed law data — includes resolved `name` and `description` (the `<law_id>_desc` loc; the field intent / ethnocentrism ordering lives in the description, not the `progressiveness` number). `/decrees/<id>` and `/institutions/<id>` likewise expose `description`. |
@@ -319,11 +391,13 @@ Invoke-RestMethod http://localhost:8950/status
 
 ##### `/reload` flag table
 
+Timings are order-of-magnitude on a WSL+NTFS checkout and move with the machine; the ordering is the part that matters. The **parse dominates every mode**, so no flag combination is ever slower than an unflagged reload — `audits_only` only drops the regenerators, `mod_only` also drops the vanilla re-read.
+
 | Query | Cost | Working-tree side effects | What it skips | When to use |
 |---|---|---|---|---|
-| (none) | ~30–60 s | regenerator output under `common/`, `localization/english/`, `events/` + audit reports under `docs/engine/` | nothing | Normal "I edited mod files, re-run everything" reload. |
+| (none) | ~60–90 s | regenerator output under `common/`, `localization/english/`, `events/` + audit reports under `docs/engine/` | nothing | Normal "I edited mod files, re-run everything" reload. |
 | `?engine_only=true` | <1 s | none | the entire ModState rebuild (only re-reads engine-doc snapshots) | After re-launching the game with no mod-file edits, when you only want freshly-typed `script_docs` output to be picked up. |
-| `?audits_only=true` | ~80 s | audit reports under `docs/engine/*_report.md` only | the 10 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
+| `?audits_only=true` | ~60–90 s | audit reports under `docs/engine/*_report.md` only | the 12 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
 | `?mod_only=true` | ~25 s | regenerator output (as above) | the vanilla parse + vanilla loc re-read (uses cached snapshot from the previous full load) + the engine-docs / dev-refs reload | When you've only edited mod files and want a quick reload. Vanilla cache is opt-in — if you bump vanilla, run an unflagged `/reload` to refresh it. |
 | `?mod_only=true&audits_only=true` | ~25 s | audit reports under `docs/engine/*_report.md` only | both regenerators *and* the vanilla re-read | **The fast-verify path used by the nightly audit.** Safe to call after every batch of fixes. |
 
@@ -421,6 +495,40 @@ from the auto-generated cost-comment block in PM bodies via
 | `/validate/loc-override-drift?old_ref=<git-ref>` | GET | Patch-migration helper (#228). Report which of the ~72 vanilla loc keys the mod shadows had their *vanilla* string change `old_ref`→live. Returns `{shadowed_key_count, drifted:[{key, old, new}], summary}`. Cheap to know (last migration: 0 drifted), expensive by hand. |
 | `/duplicate-images` | GET | Flag images reused across entities of types where vanilla holds "one image per entity": Buildings (`icon`), Goods (`texture`), Decrees (`texture`), Technologies (`texture`), Interest Groups (`texture`), Laws (`icon`). Permissive types (Events, Journal Entries, Production Methods, Ideologies, Combat Units) are intentionally not scanned — vanilla shares images across many of those by design. Groups by **content hash** (md5 of the resolved `.dds` file, mod overlay first then vanilla), so two entities pointing at different filenames whose files have identical bytes still cluster — catches the case where a placeholder file was duplicated under N names. Each cluster carries `kind: "path"` (single shared filename) or `kind: "content"` (multiple distinct filenames, identical bytes). Defaults to mod-only mode: clusters with no mod-side entities are suppressed. Allowlist at `common/_meta/duplicate_image_allowlist.yml`, keyed by lowercase entity-type slug. Each entry uses either `image: <path>` (single, for path dupes) or `images: [<path>, …]` (multiple, for content dupes) plus the exact `entities:` list that may share — adding a new entity or a new identical-content file re-flags the cluster, forcing a fresh review. Query params: `?include_vanilla=true`, `?include_allowlisted=true`, `?type=Buildings` (repeatable / comma-separated), `?format=text`. Tests: `test_duplicate_images.py` (unit, fake ModState; injects a fake hasher so content-dup tests don't need real .dds files) plus an env-gated `VanillaSanityTest` (set `VIC3_RUN_VANILLA_TESTS=1`) that asserts each strict type stays under 10 vanilla-only flags. |
 | `/auto-generated` | GET | Return the file → generator-script ownership map. Helps tools and devs answer "is this file safe to hand-edit?" Mirrors `docs/auto_generated_files.md` in machine-readable form. |
+| `/event-magnitude-audit` | GET | Live run of the `event_magnitude_audit` post-load audit: hardcoded fast-scaling resource deltas in event effects. Returns `{flags: [{file, line, event_id, kind, effect, value, resource, fix_hint, exemption}], coverage}`. Filters: `?resource=<substring>`, `?event_id=<id>`, `?show_reviewed=true` (include `# REVIEWED` exemptions), `?format=text` (the markdown report instead of JSON). Report mirror: `docs/engine/event_magnitude_report.md`. |
+| `POST /validate/registries` | POST | Re-validate `docs/vanilla/vanilla_known_bugs.md` + `docs/audits/mod_known_noise.md` (anchor resolution, tracked-issue cross-references) **without** a reload — milliseconds. Returns `{status, warning_count, warnings}`, the same warning shapes `/reload` folds into its own `warnings`. Use after editing either registry. |
+
+#### Vocabulary & Modifier-Pattern Endpoints
+
+A *vocabulary* is the set of values a `{placeholder}` in a dynamic modifier pattern can take (e.g. `{good}` → every Goods id). The pattern catalog and `/validate/engine-coverage` both read these; the endpoints below expose them directly, which is the fastest way to answer "what are the legal values of X?" without `/keys/<EntityType>` + manual prefix-stripping.
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/vocabularies` | GET | Every placeholder → `{entity_type, count, values}`. Placeholders: `good`, `building`, `bg`, `ig`, `poptype`, `culture`, `religion`, `law`, `law_group`, `tech`, `combat_unit`, `combat_unit_group`, `institution`, `terrain`, `country_rank`, `ideology`, `discrimination_trait`. |
+| `/vocabularies/<placeholder>` | GET | One placeholder: `{placeholder, entity_type, count, values}`. Values are the *pattern-facing* forms — redundant entity prefixes (`building_`, `ig_`, `law_`, …) are stripped, so they slot straight into a modifier name. Unknown placeholder → 404. |
+| `/building-groups`, `/country-ranks`, `/cultures`, `/discrimination-traits`, `/interest-groups`, `/law-groups`, `/pop-types`, `/religions`, `/terrain` | GET | Convenience wrappers over the matching vocabulary: `{placeholder, entity_type, count, entries: [{id, name}]}`. Same values as `/vocabularies/<placeholder>`, plus the localized display name per entry. |
+| `/modifier-patterns` | GET | The dynamic-modifier pattern catalog: `{count, patterns: [{pattern, source, placeholder, vocab, members, vocab_size, missing_count}]}`. `source` is `catalog` (hand-registered) or `discovered` (inferred from the engine docs). `missing_count` = vocabulary values with no engine-doc member — the registration gap that makes a modifier silently no-op. |
+| `/modifier-patterns?source=catalog\|discovered\|all` | GET | Filter by `source` (default `all`). |
+| `/modifier-patterns/<pattern>` | GET | One pattern (URL-encode the braces): `{pattern, source, placeholder, vocab, notes, members: [{value, name, display_name, mask}], missing, missing_count}`. |
+| `/modifier-patterns?expand=<pattern>&<placeholder>=<value>` | GET | Instantiate a pattern for one value: `{pattern, placeholder, value, concrete_name, exists_in_engine_docs, engine_doc_entry}`. **The one-curl answer to "is `building_<X>_throughput_add` a real modifier for this building?"** |
+
+#### Game-Log Endpoints
+
+Read Victoria 3's own logs (`game_logs_path`) through the server instead of opening them by hand — the reader clusters launch sessions, tags known vanilla bugs and registered mod noise, and filters to mod-authored script paths. The `log-triage` skill (`.claude/skills/log-triage/SKILL.md`) is the canonical workflow; this table is the route reference.
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/logs` | GET | Index of available log families (`debug`, `error`, `game`, …) with their backup generations and mtimes. |
+| `/logs/sessions` | GET | Cluster the log files into game-launch sessions, newest first. |
+| `/logs/<family>` | GET | Parsed entries for the newest generation of that family. `?gen=N` reads backup generation N. |
+| `/logs/<family>?summary=true` | GET | Category histogram + top repeated entries instead of the entry list. |
+| `/logs/<family>/diff[?against=N]` | GET | Entries present in the current generation but not in generation `N` — "what's new since the last launch". |
+| `/logs/<family>?q=&file=&source=&category=&since=` | GET | Filter entries by message substring, referenced script file, emitting source, category, or timestamp. |
+| `/logs/<family>?dedupe=&dedupe_key=&limit=&offset=&raw=` | GET | Collapse repeats, page the result, or return unparsed lines. |
+| `/logs/<family>?mod_only=true\|false\|unknown` | GET | `true` (default for `debug`/`error`) keeps only entries naming a mod script path; `false` keeps everything; `unknown` keeps everything not registered as a vanilla bug or vanilla noise — the mode that surfaces engine errors emitted from vanilla C++ with no mod path attached but caused by mod content. |
+| `/logs/<family>?vanilla_bugs=show\|hide\|only` | GET | Tag (default) / drop / keep-only entries matching `docs/vanilla/vanilla_known_bugs.md`. Tagged entries carry `vanilla_bug_ref: {title, section, kind}`. |
+| `/logs/<family>?mod_noise=show\|hide\|only` | GET | Same, against `docs/audits/mod_known_noise.md` (mod-side cosmetic entries, cross-linked to `docs/audits/open_issues.md`). `?vanilla_bugs=hide&mod_noise=hide` is the fully-clean triage view. |
+| `/logs/<family>?include_external=true` | GET | Keep entries whose script paths belong to *other* installed mods (dropped by default). |
 
 ### Query Examples (PowerShell)
 ```powershell
@@ -554,7 +662,7 @@ def get_field(data, key, default=None):
     return val
 ```
 
-These helpers are defined in `mod_state_server.py` but are simple enough to copy into generator scripts. See `gen_building_transfer.py` for a complete example.
+These helpers are defined in `mod_state_server.py` but are simple enough to copy into generator scripts. `scripts/generators/gen_vanilla_company_buildings.py` is a worked example of the direct-`ModState` pattern.
 
 > **Rule of thumb:** Use HTTP for quick interactive lookups (1–10 queries). Use direct `ModState` import for batch operations (iterating entire entity types).
 

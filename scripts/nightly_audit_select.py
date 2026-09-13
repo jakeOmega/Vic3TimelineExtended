@@ -15,7 +15,6 @@ import argparse
 import fnmatch
 import hashlib
 import json
-import os
 import random
 import re
 import sys
@@ -56,12 +55,16 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/buy_packages/00_buy_packages.txt",
     "common/script_values/auto_combat_unit_market_costs.txt",
     "common/scripted_effects/company_building_cleanup_effects.txt",
+    "common/scripted_effects/extra_law_consistency_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
 ]
 
 # Repo scaffolding — never registry-tracked, never audited. Not in drift diff.
+# `descriptor.mod` and `thumbnail.png` do not exist in this repo (Vic3 reads
+# `.metadata/metadata.json`; no thumbnail art yet). The globs are kept so the
+# exclusion is already in place if either is ever added.
 ALWAYS_EXCLUDED_GLOBS = [
     "descriptor.mod",
     ".metadata/*",
@@ -894,8 +897,8 @@ def render_prompt(date_str: str, run_label: str, targets: list[dict],
     lines.append("1. Record this run's per-file results **via the helper script** — it writes")
     lines.append(f"   `docs/audits/nightly/{run_label}/findings.json` (your committed delta); never hand-edit state (#166):")
     lines.append("   ```bash")
-    lines.append(f"   echo '{{\"path/to/file_a.txt\": 2, \"path/to/file_b.txt\": 0}}' | \\")
-    lines.append(f"     python3 scripts/nightly_audit_state_update.py \\")
+    lines.append("   echo '{\"path/to/file_a.txt\": 2, \"path/to/file_b.txt\": 0}' | \\")
+    lines.append("     python3 scripts/nightly_audit_state_update.py \\")
     lines.append(f"       --targets-json docs/audits/nightly/{run_label}/targets.json \\")
     lines.append(f"       --findings-json - --date {date_str}")
     lines.append("   ```")

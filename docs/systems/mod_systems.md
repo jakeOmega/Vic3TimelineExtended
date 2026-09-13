@@ -738,7 +738,7 @@ At JE start, heirs older than newborn receive pre-initialized investments:
 
 ## Social Movement Journal Entries (history)
 
-This section originally documented eight social-movement JEs that all shared a passive-timer-plus-random-events shape. Four have since been deleted (LGBTQ+ Rights, Second-Wave Feminism, Decline of Religion, Environmental Crisis) — their events now fire via `social_movement_orphans_on_action` in `extra_on_actions.txt` with the original tech/law gates. Civil Rights was redesigned around a progress bar + buttons + path-dependent outcomes; see the Civil Rights section in `docs/systems/journal_entry_systems.md`.
+This section originally documented eight social-movement JEs that all shared a passive-timer-plus-random-events shape. Four have since been deleted (LGBTQ+ Rights, Second-Wave Feminism, Decline of Religion, Environmental Crisis), **along with their dedicated event files** — the surviving content was folded into general-purpose event files with their own dispatch (see *Where the ex-JE content lives now* below). There is no `social_movement_orphans_on_action`; that on_action never shipped. Civil Rights was redesigned around a progress bar + buttons + path-dependent outcomes; see the Civil Rights section in `docs/systems/journal_entry_systems.md`.
 
 ### Currently active JEs of this family
 - `je_civil_rights` — progress bar, 6 button toggle pairs, path-dependent victory/failure (see `docs/systems/journal_entry_systems.md`)
@@ -747,11 +747,16 @@ This section originally documented eight social-movement JEs that all shared a p
 - `je_post_scarcity` — passive timer (legacy shape)
 - `je_mental_health` — passive timer (legacy shape)
 
-### Orphan event pools (ex-JE)
-- LGBTQ+ — `events/lgbtq_events.txt` events 1-5, gated on `LGBTQ_rights_movement` tech and not `law_full_equality_and_protection`
-- Second-wave feminism — `events/feminist_events.txt` events 1-5, gated on `second_wave_feminism` tech and not `law_protected_class`
-- Decline of religion — `events/secular_events.txt` events 1-5, gated on `decline_of_organized_religion` tech
-- Environmental crisis — `events/environmental_events.txt` events 1-5, gated on `environmental_movement` / `pollution_control` and not `law_ministry_of_the_environment`
+### Where the ex-JE content lives now
+
+`events/lgbtq_events.txt`, `events/feminist_events.txt`, `events/secular_events.txt` and `events/environmental_events.txt` **no longer exist**. What survived moved into shared event files, each with a real dispatch site:
+
+| Movement | Tech gate | Events today | Dispatched from |
+|---|---|---|---|
+| LGBTQ+ rights | `LGBTQ_rights_movement` | `society_technology_events.7`–`.8` (§ 5 of that file) | `society_technology_events_on_action` in `common/on_actions/extra_on_actions.txt` |
+| Second-wave feminism | `second_wave_feminism` | `society_technology_events.1`–`.2` (§ 1) | same on_action |
+| Decline of religion | `decline_of_organized_religion` (OR `sexual_revolution` / `social_media`) | `social_tensions_events.13` (§ Category 7 — Religious Revivals), plus the 7-event `events/religious_revival_events.txt` counterbalance | `common/on_actions/social_tensions_on_actions.txt` random list |
+| Environmental crisis | `environmental_movement` / `pollution_control` | `environmentalism_events.*` — warming thresholds `.1`–`.4`, cooling recoveries `.17`+ | `gw_fire_warming_threshold_event` / `gw_fire_cooling_threshold_event` in `extra_on_actions.txt`, under `je_global_warming` |
 
 The `.100` (failure) and `.200` (victory) capstone events for these four have been removed along with their JE-shape modifiers (`*_struggle_active`, `*_stagnation`, `*_triumph`, `*_crushed`, `*_paralysis`, `*_revivalism`, `feminism_emancipated_character_modifier`, `feminism_backlash_character_modifier`, `env_crisis_reform_window`).
 
@@ -759,14 +764,14 @@ The `.100` (failure) and `.200` (victory) capstone events for these four have be
 
 | JE | Trigger Tech | Law Group | Complete | Fail |
 |---|---|---|---|---|
-| Human Augmentation | `biohacking_and_human_augmentation` / `brain_computer_interfaces` | `lawgroup_human_augmentation` | `law_regulated_augmentation_market` / `law_mandatory_augmentation` | `law_human_purity` |
+| Human Augmentation | `biohacking_and_human_augmentation` OR `brain_computer_interfaces` (via `has_augmentation_tech`) | `lawgroup_human_augmentation` | any of `law_regulated_augmentation_market` / `law_mandatory_augmentation` / `law_unrestricted_augmentation` | `law_human_purity` |
 | Digital Rights | `automated_surveillance` / `cybersecurity` | `lawgroup_privacy_rights` | `law_strong_privacy_rights` | `law_intrusive_surveillance` + ministry of intel |
-| Post-Scarcity | `universal_basic_income` | `lawgroup_welfare` | `law_post-scarcity` | (timeout only) |
+| Post-Scarcity | `universal_basic_income` | `lawgroup_welfare` | `law_post-scarcity` | `fail = { always = no }` — timeout only |
 | Mental Health | `mental_health_awareness` | `lawgroup_criminal_justice` | `law_rehabilitation_focused_criminal_justice` + social_security ≥ 4 | `law_punishment_focused` + `decline_of_organized_religion` |
 
 ### Event Design Patterns
 
-Each JE has **5 monthly events + 1 fail-state event** (except Post-Scarcity which has 5 monthly + no fail). Events follow these design principles:
+Each surviving JE has monthly pulse events plus a fail-state event (except Post-Scarcity, whose `fail` block is `always = no`). Events follow these design principles:
 
 - **Three-option structure:** Option A (progressive/reformist), Option B (moderate/compromise), Option C (regressive/oppressive). Most options have meaningful tradeoffs — treasury costs for spending decisions, opposition radicals for partisan choices.
 - **Fire-once events:** Policy-debate events that represent one-time historical moments use `has_global_variable` gates so they only fire once per game. Currently: `lgbtq_military_debate_happened`, `women_military_debate_happened`, `ai_predictive_policing_debate_happened`, `ai_bureaucracy_debate_happened`, `state_religion_debate_happened`.
@@ -778,14 +783,14 @@ Each JE has **5 monthly events + 1 fail-state event** (except Post-Scarcity whic
 
 | System | JE Definition | Events | Modifiers |
 |---|---|---|---|
-| LGBTQ+ Rights | (deleted; events run via `social_movement_orphans_on_action`) | `events/lgbtq_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
-| Second-Wave Feminism | (deleted; events run via `social_movement_orphans_on_action`) | `events/feminist_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
-| Human Augmentation | `common/journal_entries/je_augmentation_debate.txt` | `events/augmentation_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
-| Environmental Crisis | (deleted; events run via `social_movement_orphans_on_action`) | `events/environmental_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
+| LGBTQ+ Rights | (JE deleted) | `society_technology_events.7`–`.8` | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
+| Second-Wave Feminism | (JE deleted) | `society_technology_events.1`–`.2` | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
+| Human Augmentation | `common/journal_entries/je_human_augmentation.txt` | `events/augmentation_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
+| Environmental Crisis | (JE deleted; folded into `je_global_warming`) | `events/environmentalism_events.txt` | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Digital Rights | `common/journal_entries/je_digital_rights.txt` | `events/surveillance_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Post-Scarcity | `common/journal_entries/je_post_scarcity.txt` | `events/post_scarcity_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Mental Health | `common/journal_entries/je_mental_health.txt` | `events/mental_health_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
-| Decline of Religion | (deleted; events run via `social_movement_orphans_on_action`) | `events/secular_events.txt` events 1-5 | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
+| Decline of Religion | (JE deleted) | `social_tensions_events.13`; `events/religious_revival_events.txt` | `common/static_modifiers/extra_modifiers.txt` (`rre_*`) |
 | Religious Revivals | — (no JE, event-driven) | `events/religious_revival_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 
 ## Religious Revival Events

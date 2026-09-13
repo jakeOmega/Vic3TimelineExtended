@@ -33,9 +33,8 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
-from urllib.error import URLError
 
-from mod_state import ModState
+from mod_state import ModState, iter_loc_lines
 from paradox_file_parser import ParadoxFileParser
 from path_constants import (
     base_game_path,
@@ -90,6 +89,14 @@ _mod_state_logger = logging.getLogger("mod_state")
 _mod_state_logger.setLevel(logging.INFO)
 _mod_state_logger.addHandler(_console_handler)
 _mod_state_logger.addHandler(_file_handler)
+
+# The parser warns on the "paradox_file_parser" logger when a file defines a
+# top-level key more than once (last definition kept). Same routing so it
+# reaches mod_state_server.log; INFO drops its DEBUG note on folded INJECT: keys.
+_parser_logger = logging.getLogger("paradox_file_parser")
+_parser_logger.setLevel(logging.INFO)
+_parser_logger.addHandler(_console_handler)
+_parser_logger.addHandler(_file_handler)
 
 _server_start_time: float = 0.0  # set in main()
 
@@ -1909,7 +1916,6 @@ def _build_pattern_indexes(
                 continue
             # Reconstruct pattern with the placeholder substituted in
             start = re_match.start()
-            end = re_match.end()
             # The regex captured boundaries; we only want to replace the value itself.
             # Find exact char span of the value within the matched range:
             actual_start = name.find(value, start)
@@ -2249,10 +2255,10 @@ def _annotate_validation_with_error_log(report: dict) -> None:
             name = entry.get("name", "")
             if not name:
                 continue
-            for time, message in error_lines:
+            for entry_time, message in error_lines:
                 if name in message:
                     entry.setdefault("confirmed_by_engine_log", []).append(
-                        f"{error_log.label} [{time}] {message[:200]}"
+                        f"{error_log.label} [{entry_time}] {message[:200]}"
                     )
                     break  # one is enough — we just want to confirm the issue exists at runtime
 
@@ -3588,7 +3594,10 @@ def _summarize_polarity(effects):
 
 
 def _extract_event_ids_from_file(file_path):
-    """Parse a .txt event file and return the list of event IDs declared at top level."""
+    """Parse a .txt event file and return the list of event IDs declared at top level.
+
+    Request-supplied paths must come through `_event_ids_from_mod_file`, which
+    contains them inside the mod tree first (#254)."""
     if not os.path.isabs(file_path):
         file_path = os.path.join(mod_path, file_path)
     if not os.path.isfile(file_path):
@@ -3600,6 +3609,17 @@ def _extract_event_ids_from_file(file_path):
         return None, f"Failed to parse {file_path}: {exc}"
     ids = [k for k in parser.data.keys() if k != "namespace"]
     return ids, None
+
+
+def _event_ids_from_mod_file(file_param):
+    """Request-facing wrapper around _extract_event_ids_from_file: contains the
+    caller-supplied path inside the mod tree (400 on an escape) and maps the
+    helper's in-band error to a status — missing file 404, unparseable 400. (#254)"""
+    resolved = _resolve_mod_relative_path(file_param)
+    ids, err = _extract_event_ids_from_file(resolved)
+    if err:
+        raise _EndpointError({"error": err}, 404 if err.startswith("File not found") else 400)
+    return ids
 
 
 _POLARITY_GLYPHS = {"positive": "+", "negative": "-", "neutral": "·", "unknown": "?"}
@@ -3927,6 +3947,83 @@ class _EndpointError(Exception):
         self.status = status
 
 
+class NotFound(_EndpointError):
+    """404 — the requested route/entity genuinely doesn't exist.
+
+    Endpoints used to signal this with `raise KeyError(<id>)`, and do_GET mapped
+    EVERY KeyError to 404, so an internal bug (a parsed record missing a field)
+    was indistinguishable from a missing entity. Raise this instead; a bare
+    KeyError now surfaces as a 500. (#254)
+    """
+    def __init__(self, what, **extra):
+        payload = {
+            # `{what!r}` keeps the pre-#254 body byte-for-byte: the old handler
+            # rendered `str(KeyError(x))`, which is `repr(x)`.
+            "error": f"Not found: {what!r}" if isinstance(what, str) else f"Not found: {what}",
+            "hint": "GET /help for the endpoint inventory.",
+        }
+        payload.update(extra)
+        super().__init__(payload, 404)
+
+
+class BadRequest(_EndpointError):
+    """400 — the caller's input is wrong (missing/malformed query param, a
+    usage error, a path that escapes the mod tree)."""
+    def __init__(self, message: str, **extra):
+        payload = {"error": message}
+        payload.update(extra)
+        super().__init__(payload, 400)
+
+
+class DataNotLoaded(_ServiceNotReady):
+    """503 — the server is up but the requested collection isn't in memory.
+    Previously returned HTTP 200 with an `{"error": ...}` body, so `curl -f`
+    readiness probes passed on failure. (#254)"""
+    def __init__(self, what: str):
+        super().__init__({
+            "error": f"{what} data not loaded",
+            "hint": "POST /reload, then check /status (parse_failures) if it persists.",
+        }, 503)
+
+
+def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
+    """Resolve a caller-supplied path param to an absolute path guaranteed to
+    live under `mod_path`. Raises BadRequest (400) otherwise.
+
+    Before #254 `/event-balance?file=` passed absolute paths straight through
+    and joined `..` segments onto mod_path, so any Paradox-parsable file on the
+    machine was readable through the (localhost-only, GET-only) server. Every
+    request-supplied filesystem path must go through this gate.
+    """
+    value = (raw or "").strip()
+    if not value:
+        raise BadRequest(f"Provide ?{param}=<path relative to the mod root>")
+    if "\x00" in value:
+        # `?file=x%00y` makes os.path.realpath raise ValueError; that's
+        # malformed input, so answer 400 instead of letting it reach the
+        # generic 500 handler. (#254)
+        raise BadRequest(f"?{param}= contains an embedded NUL byte")
+    if value.startswith(("/", "\\")) or os.path.isabs(value) or re.match(r"^[A-Za-z]:", value):
+        raise BadRequest(
+            f"?{param}= must be relative to the mod root (absolute paths are rejected)",
+            got=value,
+        )
+    root = os.path.realpath(mod_path)
+    resolved = ""
+    try:
+        resolved = os.path.realpath(os.path.join(root, value))
+        inside = resolved == root or os.path.commonpath([root, resolved]) == root
+    except ValueError:
+        # Different drives on Windows, or any other un-resolvable spelling:
+        # treat as outside rather than letting it become a 500.
+        inside = False
+    if not inside:
+        raise BadRequest(
+            f"?{param}= must stay inside the mod tree", got=value, resolved_outside=True,
+        )
+    return resolved
+
+
 # ---------------------------------------------------------------------------
 # Patch-migration toolkit (issue #228)
 #
@@ -4169,22 +4266,12 @@ def _extract_surface_keys(kind: str, text: Optional[str]) -> set:
 
 
 def _parse_loc_lines(text: str):
-    """Yield (key, value) from Paradox loc text, mirroring
-    ModState.add_localization's quote rule (between the first two quotes) so the
-    OLD-ref parse and the `_VANILLA_LOC_CACHE` NEW side extract identically —
-    otherwise multi-quote values would false-drift. Skips the `l_english:`
-    header (no quotes) and comment lines."""
-    for line in text.splitlines():
-        if line.lstrip().startswith("#") or (":" not in line):
-            continue
-        key, value = line.split(":", 1)
-        key = key.strip()
-        if not key or " " in key:
-            continue
-        quotes = [i for i, c in enumerate(value) if c == '"']
-        if len(quotes) < 2:
-            continue
-        yield key, value[quotes[0] + 1:quotes[1]].strip()
+    """Yield (key, value) from Paradox loc text via the shared
+    `mod_state.parse_loc_line` rule — the one ModState.add_localization uses
+    to build `_VANILLA_LOC_CACHE` — so the OLD-ref parse and the NEW side
+    extract identically and escaped-quote / multi-quote values never
+    false-drift. Skips the `l_english:` header and comment lines."""
+    yield from iter_loc_lines(text)
 
 
 def _iter_loc_at_ref(ref: str, reldir: str = "game/localization/english"):
@@ -4432,10 +4519,89 @@ def _resolve_entity_type(etype: str, known) -> Optional[str]:
     return norm_map.get(_normalize_entity_type(etype))
 
 
+# Hostnames that can only mean "this machine". A DNS-rebinding page reaches the
+# server with the attacker's hostname in `Host`, so anything else is refused.
+_LOCAL_HOSTNAMES = frozenset({"127.0.0.1", "localhost", "[::1]", "::1"})
+
+
+def _local_request_rejection(host, origin, port: int):
+    """Return a human-readable rejection reason, or None if the request may
+    proceed. Pure function so it can be unit-tested without a live server.
+
+    `Host` must name this loopback server. Every mainstream client sends one —
+    curl/urllib/requests/PowerShell all send `Host: <host>:<port>` — and the
+    port-less spelling is accepted too in case a client omits it. Any `Origin`
+    header at all means a browser context: only this server's own origin passes,
+    and `null` (sandboxed iframe, file:// page) is refused. (#254)
+    """
+    host_value = (host or "").strip()
+    if not host_value:
+        return "missing Host header"
+    if host_value.startswith("["):  # IPv6 literal: [::1] or [::1]:8950
+        close = host_value.find("]")
+        if close == -1:
+            return f"non-local Host header {host_value!r}"
+        hostname, rest = host_value[:close + 1], host_value[close + 1:]
+        if rest and not rest.startswith(":"):
+            return f"non-local Host header {host_value!r}"
+        port_str = rest[1:] if rest else ""
+    elif host_value.count(":") == 1:
+        hostname, _, port_str = host_value.rpartition(":")
+    else:
+        # No colon (port omitted) or a bare IPv6 literal like `::1`.
+        hostname, port_str = host_value, ""
+    if hostname.lower() not in _LOCAL_HOSTNAMES:
+        return f"non-local Host header {host_value!r}"
+    if port_str and port_str != str(port):
+        return f"Host header {host_value!r} does not match the bind port {port}"
+
+    origin_value = (origin or "").strip()
+    if origin_value:
+        allowed_origins = {
+            f"http://127.0.0.1:{port}",
+            f"http://localhost:{port}",
+            f"http://[::1]:{port}",
+        }
+        if origin_value.lower() not in allowed_origins:
+            return f"cross-site Origin header {origin_value!r}"
+    return None
+
+
 class ModStateHandler(BaseHTTPRequestHandler):
+
+    # ---- local-origin gate ------------------------------------------------
+    def _bind_port(self) -> int:
+        """The port this server actually bound to (falls back to PORT when the
+        handler isn't attached to a live HTTPServer, e.g. in unit tests)."""
+        return int(getattr(getattr(self, "server", None), "server_port", None) or PORT)
+
+    def _local_request_ok(self, method: str) -> bool:
+        """Gate every request on Host/Origin so a page in the user's browser
+        can't drive this server (CSRF / DNS rebinding). Rejections are 403 and
+        logged at WARNING with the offending header. (#254)"""
+        headers = getattr(self, "headers", None)
+        host = headers.get("Host") if headers is not None else None
+        origin = headers.get("Origin") if headers is not None else None
+        reason = _local_request_rejection(host, origin, self._bind_port())
+        if reason is None:
+            return True
+        logger.warning(
+            f"Rejected {method} {getattr(self, 'path', '?')} — {reason} "
+            f"(Host={host!r} Origin={origin!r})"
+        )
+        self._respond_json({
+            "error": f"Forbidden: {reason}",
+            "hint": (
+                "The mod-state server only answers requests addressed to "
+                f"localhost:{self._bind_port()} with no cross-site Origin."
+            ),
+        }, 403)
+        return False
 
     # ---- routing ----------------------------------------------------------
     def do_GET(self):
+        if not self._local_request_ok("GET"):
+            return
         parsed = urlparse(self.path)
         parts = [unquote(p) for p in parsed.path.strip("/").split("/") if p]
         params = parse_qs(parsed.query)
@@ -4443,19 +4609,20 @@ class ModStateHandler(BaseHTTPRequestHandler):
             data = self.route(parts, params)
             self._respond_json(data)
         except _EndpointError as exc:
+            # NotFound (404) / BadRequest (400) and the richer payload variants.
             self._respond_json(exc.payload, exc.status)
-        except KeyError as exc:
-            self._respond_json(
-                {"error": f"Not found: {exc}", "hint": "GET /help for the endpoint inventory."},
-                404,
-            )
         except _ServiceNotReady as exc:
             self._respond_json(exc.payload, exc.status)
         except Exception as exc:
+            # A bare KeyError lands here on purpose since #254: it means a
+            # parsed record was missing a field, which is a server bug, not a
+            # missing entity. Endpoints signal the latter with NotFound.
             logger.error(f"Error handling GET {self.path}: {exc}\n{traceback.format_exc()}")
-            self._respond_json({"error": str(exc)}, 500)
+            self._respond_json({"error": f"{type(exc).__name__}: {exc}"}, 500)
 
     def do_POST(self):
+        if not self._local_request_ok("POST"):
+            return
         parsed = urlparse(self.path)
         parts = [unquote(p) for p in parsed.path.strip("/").split("/") if p]
         params = parse_qs(parsed.query)
@@ -4545,7 +4712,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "raw": lambda: self._raw(rest),
             "loc-keys": lambda: self._loc_keys(rest),
             "localize": lambda: self._localize(rest),
-            "unlocalize": lambda: self._unlocalize(rest),
+            "unlocalize": lambda: self._unlocalize(rest, params),
             "search": lambda: self._search(params),
             "laws": lambda: self._laws(rest),
             "technologies": lambda: self._technologies(rest, params),
@@ -4616,7 +4783,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         }
         handler = dispatch.get(ep)
         if handler is None:
-            raise KeyError(ep)
+            raise NotFound(ep)
         result = handler()
         # Optional post-process: ?annotate=<name>[,<name>...] enriches every
         # entity entry shaped like {type, id, ...} in the response. When the
@@ -4635,6 +4802,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _help(self):
         return {
             "see_also": "docs/guides/python_tools.md for full workflow examples.",
+            "access": (
+                "Loopback only: a request whose Host header doesn't name this "
+                f"server (127.0.0.1/localhost/[::1], port {self._bind_port()}), or "
+                "that carries a cross-site Origin, is refused with 403. (#254)"
+            ),
             "post": {
                 "/reload": (
                     "Re-parse mod + vanilla; runs post-load generators and audits. "
@@ -4653,7 +4825,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/raw/<EntityType>/<id>", "desc": "Raw parsed AST for one entity."},
                 {"path": "/loc-keys/<EntityType>/<id>", "desc": "Resolve the stable family of loc keys an entity exposes (name/desc/...) — see LOC_KEY_FAMILIES."},
                 {"path": "/localize/<key>", "desc": "Resolve a localization key to its English string."},
-                {"path": "/unlocalize?q=<text>", "desc": "Reverse-lookup loc keys whose value matches a substring."},
+                {"path": "/unlocalize/<text>", "desc": "Reverse-lookup loc keys whose value matches a substring. Also accepts ?q=<text> (use it when the text contains a slash)."},
                 {"path": "/search?q=<text>", "desc": "Full-text search across mod + vanilla parsed entities."},
                 {"path": "/laws/<id?>", "desc": "Laws and law groups; omit id for the index."},
                 {"path": "/technologies/<id?>", "desc": "Tech entries and tree relationships."},
@@ -4883,7 +5055,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         etype = self._resolve_entity_type_or_404(parts[0])
         data = ms.get_data(etype)
         if data is None:
-            raise KeyError(etype)
+            raise NotFound(etype)
         return [
             {"type": etype, "id": eid, "name": ms.localize(eid)}
             for eid in data.keys()
@@ -4904,7 +5076,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             }
         placeholder = parts[0]
         if placeholder not in VOCABULARY_TYPES:
-            raise KeyError(placeholder)
+            raise NotFound(placeholder)
         values = _vocabulary_values(placeholder)
         return {
             "placeholder": placeholder,
@@ -4971,7 +5143,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     def _modifier_pattern_detail(self, pattern, catalog_meta, discovered_meta, vocabularies):
         if pattern not in pattern_index:
-            raise KeyError(pattern)
+            raise NotFound(pattern)
         members = pattern_index[pattern]
         meta = catalog_meta.get(pattern) or discovered_meta.get(pattern) or {}
         placeholder = meta.get("placeholder", "?")
@@ -5140,7 +5312,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 match = info
                 break
         if match is None:
-            raise KeyError(f"{family} (gen={gen})")
+            raise NotFound(f"{family} (gen={gen})")
 
         # Diff endpoint
         if action == "diff":
@@ -5150,7 +5322,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 None,
             )
             if against_match is None:
-                return {"error": f"No {family}.{against}.log to diff against"}
+                raise _EndpointError({"error": f"No {family}.{against}.log to diff against"}, 404)
             mod_only_mode = (params.get("mod_only") or ["true"])[0].lower()
             default_external = "false" if family in ("error", "debug") else "true"
             include_external = (params.get("include_external") or [default_external])[0].lower() == "true"
@@ -5413,12 +5585,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if check == "loc-override-drift":
             return self._validate_loc_override_drift(params)
         if check != "engine-coverage":
-            raise KeyError(check)
+            raise NotFound(check)
         global _last_validation_report
         force = (params.get("refresh") or ["false"])[0].lower() == "true"
         if force or _last_validation_report is None:
             _last_validation_report = _validate_engine_coverage()
         report = _last_validation_report
+        # The validator reports a cold/degraded server in-band; over HTTP that
+        # is a 503, not a 200 with an error body. (#254)
+        if isinstance(report, dict) and "error" in report and "summary" not in report:
+            raise _ServiceNotReady(report, 503)
 
         filt = (params.get("filter") or [""])[0]
         summary_only = (params.get("summary") or ["false"])[0].lower() == "true"
@@ -5589,11 +5765,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """Instantiate a pattern with a given placeholder value."""
         compiled = _compile_pattern(pattern)
         if not compiled:
-            return {"error": f"Pattern lacks a {{placeholder}} token: {pattern}"}
+            raise BadRequest(f"Pattern lacks a {{placeholder}} token: {pattern}")
         prefix, placeholder, suffix = compiled
         value = (params.get(placeholder) or [None])[0]
         if not value:
-            return {"error": f"Provide ?{placeholder}=<value>"}
+            raise BadRequest(f"Provide ?{placeholder}=<value>")
         concrete = pattern.replace("{" + placeholder + "}", value)
         members = pattern_index.get(pattern, {})
         existing = members.get(value)
@@ -5613,11 +5789,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         etype = self._resolve_entity_type_or_404(parts[0])
         data = ms.get_data(etype)
         if data is None:
-            raise KeyError(etype)
+            raise NotFound(etype)
         if len(parts) > 1:
             eid = parts[1]
             if eid not in data:
-                raise KeyError(eid)
+                raise NotFound(eid)
             return serialize(data[eid])
         return serialize(data)
 
@@ -5632,16 +5808,21 @@ class ModStateHandler(BaseHTTPRequestHandler):
         (real and common — e.g. money_transfer_desc).
         """
         if len(parts) < 2:
-            return {
-                "error": "Usage: /loc-keys/<EntityType>/<id>",
-                "known_types": sorted(LOC_KEY_FAMILIES.keys()),
-            }
-        return _loc_keys_for(parts[0], parts[1], ms.localization)
+            raise BadRequest(
+                "Usage: /loc-keys/<EntityType>/<id>",
+                known_types=sorted(LOC_KEY_FAMILIES.keys()),
+            )
+        result = _loc_keys_for(parts[0], parts[1], ms.localization)
+        # The helper reports an unseeded entity type in-band (its own callers
+        # rely on that shape); surface it as a 404 over HTTP. (#254)
+        if isinstance(result, dict) and "error" in result:
+            raise _EndpointError(result, 404)
+        return result
 
     def _localize(self, parts):
         """GET /localize/<key>  - localize a game key to display text."""
         if not parts:
-            return {"error": "Provide a key, e.g. /localize/law_monarchy"}
+            raise BadRequest("Provide a key, e.g. /localize/law_monarchy")
         key = parts[0]
         result = {"key": key, "name": ms.localize(key)}
         desc = ms.get_description(key)
@@ -5649,11 +5830,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
             result["description"] = desc
         return result
 
-    def _unlocalize(self, parts):
-        """GET /unlocalize/<text>  - reverse-localize display text to keys."""
-        if not parts:
-            return {"error": "Provide display text, e.g. /unlocalize/Monarchy"}
-        text = parts[0]
+    def _unlocalize(self, parts, params=None):
+        """GET /unlocalize/<text>  - reverse-localize display text to keys.
+        GET /unlocalize?q=<text>   - same, for text with slashes/spaces. (#254)"""
+        text = ((params or {}).get("q") or [""])[0]
+        if not text and parts:
+            text = parts[0]
+        if not text:
+            raise BadRequest(
+                "Provide display text, e.g. /unlocalize/Monarchy or /unlocalize?q=Monarchy"
+            )
         keys = ms.unlocalize(text)
         return {"text": text, "keys": keys}
 
@@ -5661,7 +5847,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /search?q=<query>[&type=<EntityType>][&limit=<n>]"""
         query = params.get("q", [""])[0].lower()
         if not query:
-            return {"error": "Provide ?q=search_term"}
+            raise BadRequest("Provide ?q=search_term")
         etype_filter = params.get("type", [None])[0]
         limit = int(params.get("limit", ["50"])[0])
 
@@ -5685,12 +5871,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /laws[/<law_id>]"""
         laws = ms.get_data("Laws")
         if not laws:
-            return {"error": "Laws data not loaded"}
+            raise DataNotLoaded("Laws")
 
         if parts:
             law_id = parts[0]
             if law_id not in laws:
-                raise KeyError(law_id)
+                raise NotFound(law_id)
             return self._format_law_detail(law_id, laws[law_id])
 
         groups: dict = {}
@@ -5745,11 +5931,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /principles[/<principle_id>]"""
         principles = ms.get_data("Principles")
         if not principles:
-            return {"error": "Principles data not loaded"}
+            raise DataNotLoaded("Principles")
         if parts:
             pid = parts[0]
             if pid not in principles:
-                raise KeyError(pid)
+                raise NotFound(pid)
             return self._format_principle_detail(pid, principles[pid])
         return [
             {"type": "Principles", "id": pid, "name": ms.localize(pid)}
@@ -5798,11 +5984,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /amendments[/<amendment_id>]"""
         amendments = ms.get_data("Amendments")
         if not amendments:
-            return {"error": "Amendments data not loaded"}
+            raise DataNotLoaded("Amendments")
         if parts:
             aid = parts[0]
             if aid not in amendments:
-                raise KeyError(aid)
+                raise NotFound(aid)
             return self._format_amendment_detail(aid, amendments[aid])
         return [
             {"type": "Amendments", "id": aid, "name": ms.localize(aid)}
@@ -5834,12 +6020,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /technologies[/<tech_id>][?era=<n>]"""
         techs = ms.get_data("Technologies")
         if not techs:
-            return {"error": "Technologies data not loaded"}
+            raise DataNotLoaded("Technologies")
 
         if parts:
             tid = parts[0]
             if tid not in techs:
-                raise KeyError(tid)
+                raise NotFound(tid)
             return self._format_tech_detail(tid, techs[tid])
 
         era_filter = params.get("era", [None])[0]
@@ -5889,14 +6075,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         buildings = ms.get_data("Buildings")
         if not buildings:
-            return {"error": "Buildings data not loaded"}
+            raise DataNotLoaded("Buildings")
 
         if parts:
             if parts[0] == "pm-map":
                 return self._buildings_pm_map(buildings)
             bid = parts[0]
             if bid not in buildings:
-                raise KeyError(bid)
+                raise NotFound(bid)
             return self._format_building_detail(bid, buildings[bid])
 
         params = params or {}
@@ -5982,7 +6168,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /goods"""
         goods = ms.get_data("Goods")
         if not goods:
-            return {"error": "Goods data not loaded"}
+            raise DataNotLoaded("Goods")
         return [{"type": "Goods", "id": gid, "name": ms.localize(gid)} for gid in goods]
 
     # ---- structured: combat units -----------------------------------------
@@ -5991,7 +6177,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         groups = ms.get_data("Combat Unit Groups")
         types = ms.get_data("Combat Unit Types")
         if not groups or not types:
-            return {"error": "Combat unit data not loaded"}
+            raise DataNotLoaded("Combat unit")
 
         by_group: dict = defaultdict(list)
         for tid, raw in types.items():
@@ -6015,11 +6201,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /ideologies[/<ideology_id>]"""
         ideologies = ms.get_data("Ideologies")
         if not ideologies:
-            return {"error": "Ideologies data not loaded"}
+            raise DataNotLoaded("Ideologies")
         if parts:
             iid = parts[0]
             if iid not in ideologies:
-                raise KeyError(iid)
+                raise NotFound(iid)
             return {
                 "type": "Ideologies", "id": iid,
                 "name": ms.localize(iid), "raw": serialize(ideologies[iid]),
@@ -6033,7 +6219,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _references(self, parts):
         """GET /references/<key>  - find all entities that reference a given key."""
         if not parts:
-            return {"error": "Provide a key, e.g. /references/nuclear_fission"}
+            raise BadRequest("Provide a key, e.g. /references/nuclear_fission")
         key = parts[0]
         results = defaultdict(list)
         for etype in ms.mod_parsers:
@@ -6051,13 +6237,13 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _tech_tree(self, parts):
         """GET /tech-tree/<tech_id>  - prerequisite chain + everything unlocked."""
         if not parts:
-            return {"error": "Provide a tech ID, e.g. /tech-tree/nuclear_fission"}
+            raise BadRequest("Provide a tech ID, e.g. /tech-tree/nuclear_fission")
         tid = parts[0]
         techs = ms.get_data("Technologies")
         if not techs:
-            return {"error": "Technologies data not loaded"}
+            raise DataNotLoaded("Technologies")
         if tid not in techs:
-            raise KeyError(tid)
+            raise NotFound(tid)
 
         # Recursive prerequisites
         prereqs = []
@@ -6131,7 +6317,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /modifier-search?q=<pattern>  - find modifier field names across entities."""
         query = params.get("q", [""])[0].lower()
         if not query:
-            return {"error": "Provide ?q=search_pattern"}
+            raise BadRequest("Provide ?q=search_pattern")
         limit = int(params.get("limit", ["100"])[0])
 
         results = []
@@ -6166,11 +6352,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _unlocked_by(self, parts):
         """GET /unlocked-by/<tech_id>  - all entities unlocked by a technology."""
         if not parts:
-            return {"error": "Provide a tech ID, e.g. /unlocked-by/nuclear_fission"}
+            raise BadRequest("Provide a tech ID, e.g. /unlocked-by/nuclear_fission")
         tid = parts[0]
         techs = ms.get_data("Technologies")
         if techs and tid not in techs:
-            raise KeyError(tid)
+            raise NotFound(tid)
         return self._find_unlocked_by_tech(tid)
 
     # ---- analytical: tech-unlocks (bulk inverted index) -------------------
@@ -6329,18 +6515,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
           field=has:<name>            check field existence
         """
         if not parts:
-            return {"error": "Provide entity type, e.g. /filter/Technologies?field=era&value=era_5"}
+            raise BadRequest("Provide entity type, e.g. /filter/Technologies?field=era&value=era_5")
         etype = parts[0]
         data = ms.get_data(etype)
         if data is None:
-            raise KeyError(etype)
+            raise NotFound(etype)
 
         field = params.get("field", [""])[0]
         value = params.get("value", [""])[0].lower()
         limit = int(params.get("limit", ["200"])[0])
 
         if not field:
-            return {"error": "Provide ?field=<name> (and optionally &value=<val>)"}
+            raise BadRequest("Provide ?field=<name> (and optionally &value=<val>)")
 
         # has:<field> - existence check
         check_exists = field.startswith("has:")
@@ -6375,12 +6561,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         events = ms.get_data("Events")
         if not events:
-            return {"error": "Events data not loaded"}
+            raise DataNotLoaded("Events")
 
         if parts:
             eid = parts[0]
             if eid not in events:
-                raise KeyError(eid)
+                raise NotFound(eid)
             return self._format_event_detail(eid, events[eid])
 
         image_filter = params.get("image", [None])[0]
@@ -6482,7 +6668,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         events = ms.get_data("Events")
         if not events:
-            return {"error": "Events data not loaded"}
+            raise DataNotLoaded("Events")
 
         fmt = params.get("format", ["json"])[0]
 
@@ -6492,7 +6678,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if parts:
             eid = parts[0]
             if eid not in events:
-                raise KeyError(eid)
+                raise NotFound(eid)
             built = self._build_event_balance(eid, events[eid])
             if fmt == "text":
                 return {"text": _render_event_balance_text([built])}
@@ -6507,15 +6693,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         elif prefix:
             ids = [eid for eid in events if eid != "namespace" and eid.startswith(prefix)]
         elif file_param:
-            extracted, err = _extract_event_ids_from_file(file_param)
-            if err:
-                return {"error": err}
-            ids = extracted
+            ids = _event_ids_from_mod_file(file_param)
         else:
-            return {
-                "error": "Provide an event id (e.g. /event-balance/banking_cycle_events.10), "
-                         "or ?ids=, ?prefix=, ?file=",
-            }
+            raise BadRequest(
+                "Provide an event id (e.g. /event-balance/banking_cycle_events.10), "
+                "or ?ids=, ?prefix=, ?file="
+            )
 
         results = []
         missing = []
@@ -6588,7 +6771,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         events = ms.get_data("Events")
         if not events:
-            return {"error": "Events data not loaded"}
+            raise DataNotLoaded("Events")
 
         mode = params.get("mode", ["strict"])[0]
         try:
@@ -6600,10 +6783,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         file_param = params.get("file", [None])[0]
 
         if file_param:
-            extracted, err = _extract_event_ids_from_file(file_param)
-            if err:
-                return {"error": err}
-            ids = [e for e in extracted if e in events]
+            ids = [e for e in _event_ids_from_mod_file(file_param) if e in events]
         elif prefix:
             ids = [eid for eid in events if eid != "namespace" and eid.startswith(prefix)]
         else:
@@ -6690,12 +6870,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /institutions[/<institution_id>]  - institution data with modifiers per level."""
         institutions = ms.get_data("Institutions")
         if not institutions:
-            return {"error": "Institutions data not loaded"}
+            raise DataNotLoaded("Institutions")
 
         if parts:
             iid = parts[0]
             if iid not in institutions:
-                raise KeyError(iid)
+                raise NotFound(iid)
             return self._format_institution_detail(iid, institutions[iid])
 
         return [
@@ -6737,12 +6917,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         pms = ms.get_data("PMs")
         if not pms:
-            return {"error": "PMs data not loaded"}
+            raise DataNotLoaded("PMs")
 
         if parts:
             pid = parts[0]
             if pid not in pms:
-                raise KeyError(pid)
+                raise NotFound(pid)
             return self._format_pm_detail(pid, pms[pid])
 
         building_filter = params.get("building", [None])[0]
@@ -6790,9 +6970,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
         pmg_data = ms.get_data("PM Groups")
         pm_data = ms.get_data("PMs")
         if not buildings or not pmg_data or not pm_data:
-            return {"error": "Required data not loaded"}
+            raise DataNotLoaded("Required")
         if building_id not in buildings:
-            raise KeyError(building_id)
+            raise NotFound(building_id)
 
         bd = get_entity_data(buildings[building_id])
         pmg_ids = get_field(bd, "production_method_groups")
@@ -6827,12 +7007,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /journal-entries[/<je_id>]  - journal entry listing or detail."""
         jes = ms.get_data("Journal Entries")
         if not jes:
-            return {"error": "Journal Entries data not loaded"}
+            raise DataNotLoaded("Journal Entries")
 
         if parts:
             jeid = parts[0]
             if jeid not in jes:
-                raise KeyError(jeid)
+                raise NotFound(jeid)
             return self._format_je_detail(jeid, jes[jeid])
 
         return [
@@ -6870,7 +7050,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """
         actions = ms.get_data("Diplomatic Actions")
         if not actions:
-            return {"error": "Diplomatic Actions data not loaded"}
+            raise DataNotLoaded("Diplomatic Actions")
 
         def _summary(aid):
             ed = get_entity_data(actions[aid])
@@ -6923,7 +7103,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if parts:
             aid = parts[0]
             if aid not in actions:
-                raise KeyError(aid)
+                raise NotFound(aid)
             info = _summary(aid)
             ed = get_entity_data(actions[aid])
             ed_dict = ed if isinstance(ed, dict) else {}
@@ -6940,7 +7120,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
            GET /treaty-articles/<id>/loc-keys         - loc-key family"""
         arts = ms.get_data("Treaty Articles")
         if not arts:
-            return {"error": "Treaty Articles data not loaded"}
+            raise DataNotLoaded("Treaty Articles")
 
         if not parts:
             return [
@@ -6950,12 +7130,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         aid = parts[0]
         if aid not in arts:
-            raise KeyError(aid)
+            raise NotFound(aid)
 
         if len(parts) >= 2:
             if parts[1] == "loc-keys":
                 return self._loc_keys(["Treaty Articles", aid])
-            raise KeyError(parts[1])
+            raise NotFound(parts[1])
 
         return {
             "type": "Treaty Articles", "id": aid,
@@ -6968,13 +7148,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /decisions[/<decision_id>]"""
         decisions = ms.get_data("Decisions")
         if not decisions:
-            return {"error": "Decisions data not loaded"}
+            raise DataNotLoaded("Decisions")
 
         if parts:
             did = parts[0]
             if did not in decisions:
-                raise KeyError(did)
-            ed = get_entity_data(decisions[did])
+                raise NotFound(did)
             return {
                 "type": "Decisions", "id": did,
                 "name": ms.localize(did), "raw": serialize(decisions[did]),
@@ -6990,12 +7169,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /script-values[/<sv_id>]"""
         svs = ms.get_data("Script Values")
         if not svs:
-            return {"error": "Script Values data not loaded"}
+            raise DataNotLoaded("Script Values")
 
         if parts:
             svid = parts[0]
             if svid not in svs:
-                raise KeyError(svid)
+                raise NotFound(svid)
             return {"type": "Script Values", "id": svid, "raw": serialize(svs[svid])}
 
         return [{"type": "Script Values", "id": svid} for svid in svs]
@@ -7004,13 +7183,13 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _diff(self, parts, params):
         """GET /diff/<EntityType>/<id>[?format=text]"""
         if len(parts) < 2:
-            return {"error": "Provide /diff/<EntityType>/<id>"}
+            raise BadRequest("Provide /diff/<EntityType>/<id>")
         etype, eid = parts[0], parts[1]
         if etype not in ms.mod_parsers:
-            raise KeyError(etype)
+            raise NotFound(etype)
         mod_data = ms.get_data(etype) or {}
         if eid not in mod_data:
-            raise KeyError(eid)
+            raise NotFound(eid)
         base_parser = ms.base_parsers.get(etype)
         base_data = base_parser.data if base_parser is not None else {}
         in_vanilla = eid in base_data
@@ -7049,11 +7228,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
     def _scripted_helper(self, etype, parts):
         data = ms.get_data(etype)
         if not data:
-            return {"error": f"{etype} data not loaded"}
+            raise DataNotLoaded(etype)
         if parts:
             hid = parts[0]
             if hid not in data:
-                raise KeyError(hid)
+                raise NotFound(hid)
             return {
                 "type": etype,
                 "id": hid,
@@ -7071,12 +7250,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /decrees[/<decree_id>]"""
         decrees = ms.get_data("Decrees")
         if not decrees:
-            return {"error": "Decrees data not loaded"}
+            raise DataNotLoaded("Decrees")
 
         if parts:
             did = parts[0]
             if did not in decrees:
-                raise KeyError(did)
+                raise NotFound(did)
             ed = get_entity_data(decrees[did])
             info = {"type": "Decrees", "id": did, "name": ms.localize(did)}
             desc = ms.get_description(did)
@@ -7111,26 +7290,32 @@ class ModStateHandler(BaseHTTPRequestHandler):
         same entity_id; `origin` disambiguates. Use scope=mod for the mod's
         effective additions only."""
         if not parts:
-            return {"error": "Provide a modifier name, e.g. "
-                    "/modifier-grants/state_homeland_creation_threshold_add"}
+            raise BadRequest("Provide a modifier name, e.g. "
+                             "/modifier-grants/state_homeland_creation_threshold_add")
         scope = params.get("scope", ["both"])[0]
         try:
             limit = int(params.get("limit", ["200"])[0])
         except ValueError:
             limit = 200
-        return _find_modifier_grants(parts[0], scope=scope, limit=limit)
+        result = _find_modifier_grants(parts[0], scope=scope, limit=limit)
+        # The finder rejects a malformed name / scope in-band; that's a 400.
+        # Pass the whole payload through so the body keeps `name` and the empty
+        # `grants` list callers already parse. (#254)
+        if isinstance(result, dict) and "error" in result:
+            raise _EndpointError(result, 400)
+        return result
 
     # ---- structured: on-actions -------------------------------------------
     def _on_actions(self, parts):
         """GET /on-actions[/<on_action_id>]"""
         oas = ms.get_data("On Actions")
         if not oas:
-            return {"error": "On Actions data not loaded"}
+            raise DataNotLoaded("On Actions")
 
         if parts:
             oaid = parts[0]
             if oaid not in oas:
-                raise KeyError(oaid)
+                raise NotFound(oaid)
             return {"type": "On Actions", "id": oaid, "raw": serialize(oas[oaid])}
 
         return [{"type": "On Actions", "id": oaid} for oaid in oas]
@@ -7142,13 +7327,13 @@ class ModStateHandler(BaseHTTPRequestHandler):
         buildings, combat units, laws, institutions, etc.
         """
         if not parts:
-            return {"error": "Provide a tech ID, e.g. /technology-effects/nuclear_fission"}
+            raise BadRequest("Provide a tech ID, e.g. /technology-effects/nuclear_fission")
         tid = parts[0]
         techs = ms.get_data("Technologies")
         if not techs:
-            return {"error": "Technologies data not loaded"}
+            raise DataNotLoaded("Technologies")
         if tid not in techs:
-            raise KeyError(tid)
+            raise NotFound(tid)
 
         td = get_entity_data(techs[tid])
         era_str = get_field(td, "era", "era_0")
@@ -7300,7 +7485,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         # /engine-docs/origin/<name> — disambiguation lookup with full schema
         if parts[0] == "origin":
             if len(parts) < 2:
-                raise KeyError("Usage: /engine-docs/origin/<name>")
+                raise BadRequest("Usage: /engine-docs/origin/<name>")
             target = parts[1]
             hits = []
             # Fields surfaced per match. Common to all entry types: name, origin.
@@ -7393,23 +7578,34 @@ class ModStateHandler(BaseHTTPRequestHandler):
         # column 0).
         if parts[0] == "usage":
             if len(parts) < 2:
-                raise KeyError("Usage: /engine-docs/usage/<name>?limit=N&include_defs=true")
+                raise BadRequest("Usage: /engine-docs/usage/<name>?limit=N&include_defs=true")
             target = parts[1]
             limit = int(params.get("limit", ["5"])[0])
             include_defs = params.get("include_defs", ["false"])[0].lower() in ("true", "1", "yes")
             context_before = int(params.get("before", ["1"])[0])
             context_after = int(params.get("after", ["3"])[0])
-            return _engine_docs_find_usage(
+            usage = _engine_docs_find_usage(
                 target,
                 limit=limit,
                 include_defs=include_defs,
                 context_before=context_before,
                 context_after=context_after,
             )
+            # The scanner reports failures in-band; over HTTP they are a
+            # status, not a 200 body. (#254)
+            if isinstance(usage, dict) and "error" in usage:
+                err = usage["error"]
+                if err.startswith("Invalid target name"):
+                    # Whole payload, so the body keeps `name` / `uses`. (#254)
+                    raise _EndpointError(usage, 400)
+                if err.startswith("Vanilla common dir not found"):
+                    raise _ServiceNotReady(usage, 503)
+                raise _EndpointError(usage, 500)
+            return usage
 
         doc_type = parts[0]
         if doc_type not in engine_docs:
-            raise KeyError(f"Unknown engine doc type: {doc_type}. Available: {list(engine_docs.keys())}")
+            raise NotFound(f"Unknown engine doc type: {doc_type}. Available: {list(engine_docs.keys())}")
 
         entries = engine_docs[doc_type]
         query = params.get("q", [""])[0].lower()
@@ -7526,7 +7722,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 return {"path": single["path"], "directory": single["directory"], "content": single["content"]}
             return {"directory": req_path, "count": len(docs), "docs": docs}
 
-        raise KeyError(f"No dev doc found for: {req_path}")
+        raise NotFound(f"No dev doc found for: {req_path}")
 
     # ---- unlocalized entity detection -------------------------------------
 
@@ -7576,43 +7772,43 @@ class ModStateHandler(BaseHTTPRequestHandler):
         Both share a single lazily-built GUI index covering mod + vanilla.
         """
         if not parts:
-            return {
-                "error": "Usage: /gui/render-sites/<loc_key> or /gui/render-paths/<EntityType>?field=<role>",
-                "supported_fields": sorted(FIELD_TO_METHODS.keys()),
-                "supported_entity_types": sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
-            }
+            raise BadRequest(
+                "Usage: /gui/render-sites/<loc_key> or /gui/render-paths/<EntityType>?field=<role>",
+                supported_fields=sorted(FIELD_TO_METHODS.keys()),
+                supported_entity_types=sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
+            )
         sub = parts[0]
         index = _get_gui_render_index()
 
         if sub == "render-sites":
             if len(parts) < 2:
-                return {"error": "Usage: /gui/render-sites/<loc_key>"}
+                raise BadRequest("Usage: /gui/render-sites/<loc_key>")
             key = parts[1]
             sites = index["by_key"].get(key, [])
             return {"key": key, "sites": sites, "count": len(sites)}
 
         if sub == "render-paths":
             if len(parts) < 2:
-                return {
-                    "error": "Usage: /gui/render-paths/<EntityType>?field=<role>",
-                    "supported_entity_types": sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
-                    "supported_fields": sorted(FIELD_TO_METHODS.keys()),
-                }
+                raise BadRequest(
+                    "Usage: /gui/render-paths/<EntityType>?field=<role>",
+                    supported_entity_types=sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
+                    supported_fields=sorted(FIELD_TO_METHODS.keys()),
+                )
             etype = parts[1]
             field = (params.get("field") or ["name"])[0]
             datatype = ENTITY_TYPE_TO_DATATYPE.get(etype)
             if datatype is None:
-                return {
+                raise _EndpointError({
                     "error": f"No GUI datatype mapped for entity type {etype!r}",
                     "supported_entity_types": sorted(ENTITY_TYPE_TO_DATATYPE.keys()),
                     "hint": "Add an entry to ENTITY_TYPE_TO_DATATYPE in mod_state_server.py to extend.",
-                }
+                }, 404)
             methods = FIELD_TO_METHODS.get(field)
             if methods is None:
-                return {
-                    "error": f"Unknown field {field!r}",
-                    "supported_fields": sorted(FIELD_TO_METHODS.keys()),
-                }
+                raise BadRequest(
+                    f"Unknown field {field!r}",
+                    supported_fields=sorted(FIELD_TO_METHODS.keys()),
+                )
             sites: list[dict] = []
             matched: set[str] = set()
             for method in methods:
@@ -7631,7 +7827,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "count": len(sites),
             }
 
-        raise KeyError(sub)
+        raise NotFound(sub)
 
     def _unlocalized(self, params):
         """GET /unlocalized?type=<EntityType>&mod_only=true

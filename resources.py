@@ -15,7 +15,6 @@ import argparse
 import json
 import re
 import sys
-from collections import defaultdict
 from pathlib import Path
 
 from path_constants import base_game_path, mod_path
@@ -253,7 +252,6 @@ def process_state_block(
     existing = extract_existing_resource_types(block_text)
     insert_at = compute_insert_position(block_text)
 
-    changed = False
     for subgood, score in mapping.get(state_name, {}).items():
         building_type = SUBGOOD_TO_BGTYPE.get(subgood)
         if not building_type:
@@ -271,7 +269,6 @@ def process_state_block(
             # Recompute existing and insertion point to remain safe for subsequent inserts
             existing = extract_existing_resource_types(block_text)
             insert_at = compute_insert_position(block_text)
-            changed = True
 
     #prefix_re = re.compile(rf"(?m)^(\s*){re.escape(state_name)}(\s*=\s*\{{)")
     #block_text = prefix_re.sub(r"\1REPLACE:" + state_name + r"\2", block_text, count=1)

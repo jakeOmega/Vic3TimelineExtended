@@ -220,16 +220,16 @@ class SelectTargetsTest(unittest.TestCase):
         seed alone exceeds it — the huge-file fallback)."""
         # 10 files at 400 lines each = 4000, well over the 2500 budget.
         cands = _candidates([
-            (f"events/social_tensions_events.txt", 400),
-            (f"events/movement_events.txt", 400),
-            (f"events/economic_events.txt", 400),
-            (f"events/un_overview_events.txt", 400),
-            (f"events/space_events.txt", 400),
-            (f"events/nuclear_events.txt", 400),
-            (f"events/decolonization_events.txt", 400),
-            (f"events/repeatable_events.txt", 400),
-            (f"common/laws/00_laws.txt", 400),
-            (f"common/technology/foo.txt", 400),
+            ("events/social_tensions_events.txt", 400),
+            ("events/movement_events.txt", 400),
+            ("events/economic_events.txt", 400),
+            ("events/un_overview_events.txt", 400),
+            ("events/space_events.txt", 400),
+            ("events/nuclear_events.txt", 400),
+            ("events/decolonization_events.txt", 400),
+            ("events/repeatable_events.txt", 400),
+            ("common/laws/00_laws.txt", 400),
+            ("common/technology/foo.txt", 400),
         ])
         state = _state({})
         targets = select_targets(cands, state, self.today, random.Random(0))
@@ -242,7 +242,7 @@ class SelectTargetsTest(unittest.TestCase):
         """No more than FILE_CAP targets, regardless of remaining budget."""
         # 20 small files — line budget would allow all of them.
         cands = _candidates([
-            (f"events/social_tensions_events.txt", 50),
+            ("events/social_tensions_events.txt", 50),
         ] + [(f"events/movement_events_{i}.txt", 50) for i in range(25)])
         state = _state({})
         targets = select_targets(cands, state, self.today, random.Random(0))

@@ -251,8 +251,6 @@ def _existing_keys_match(descriptions, preserved):
     """Return True iff the on-disk file already has identical content
     (ignoring whitespace/header differences imposed by organize_loc)."""
     on_disk = _read_existing_loc_lines()
-    expected = {f' {k}:0 "{descriptions[k].replace(chr(34), chr(92)+chr(34))}"'.split(":", 1)[1]: None
-                for k in descriptions}
     for k, text in descriptions.items():
         rendered = f'0 "{text.replace(chr(34), chr(92)+chr(34))}"'
         if on_disk.get(k) != rendered:

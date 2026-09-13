@@ -2,10 +2,16 @@ import re
 import codecs
 import json
 import copy
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 INDENT_SIZE = 4
-conditional_tokens = ["=", "<", ">", "<=", ">="]
+# Every operator the engine accepts between a key and its value. `!=`
+# (not equal), `?=` (scope exists and ...) and `==` all occur in vanilla and
+# mod script; an operator missing here makes parse_object reject the key.
+conditional_tokens = ["=", "<", ">", "<=", ">=", "!=", "?=", "=="]
 directive_prefixes = ("INJECT:", "REPLACE:", "REPLACE_OR_CREATE:")
 
 
@@ -20,20 +26,39 @@ class ParadoxFileParser:
         # @[ident] is a script-time substitution expression (occupation_values.txt).
         # Allowing optional whitespace between the keyword and `{` matches
         # `hsv360 \t{ ... }` forms seen in some flag definitions.
+        # Operator class covers !=, ?= and == as well as = < > <= >= — `!` and
+        # `?` belong to no other token class, so before they were listed here
+        # they were silently dropped and `x != 0` tokenized as `x = 0`.
         token_pattern = (
             r'(?:rgb|hsv360|hsv|hex)\s*\{[^}]*\}'
             r'|@\[[^\]]+\]'
-            r'|\{|\}|\s*[><=]+\s*|"[^"]*"|[\w\-\.:\|/$@]+'
+            r'|\{|\}|\s*[!?><=]+\s*|"[^"]*"|[\w\-\.:\|/$@]+'
         )
-        text = "\n".join(
-            [
-                line.split("#")[0]
-                for line in text.split("\n")
-                if not line.startswith("#")
-            ]
-        )
+        text = "\n".join(self._strip_comment(line) for line in text.split("\n"))
         tokens = re.findall(token_pattern, text.strip())
         return [t.strip() for t in tokens]
+
+    @staticmethod
+    def _strip_comment(line):
+        """Drop a `# ...` comment from one line, but not a `#` that sits
+        inside a quoted string (`desc = "Cost: #N 5 #!"`). Fast path when no
+        quote precedes the first `#`. A line whose quote is never closed
+        falls back to cutting at the first `#`, which is the old split() rule.
+        """
+        hash_pos = line.find("#")
+        if hash_pos == -1:
+            return line
+        if '"' not in line[:hash_pos]:
+            return line[:hash_pos]
+        in_string = False
+        for i, ch in enumerate(line):
+            if ch == '"':
+                in_string = not in_string
+            elif ch == "#" and not in_string:
+                return line[:i]
+        if in_string:
+            return line[:hash_pos]
+        return line
 
     def calculate_depths(self, tokens):
         """
@@ -140,52 +165,43 @@ class ParadoxFileParser:
     def parse_simple_value(self, tokens):
         return tokens[0], tokens[1:]
 
-    def _listify(self, obj):
-        obj_list = []
-        for key, value in obj.items():
-            operator = value[0]
-            if isinstance(value[1], list):
-                for item in value[1]:
-                    obj_list.append({key: (operator, item)})
-            else:
-                obj_list.append({key: (operator, value[1])})
-        return obj_list
-
     def parse_object(self, tokens):
+        """Parse `{ key op value ... }` starting at the opening brace.
+
+        Returns `{key: (op, value)}` when every key is unique. When any key
+        repeats — `add_modifier = ...` chains, script-value `add`/`multiply`
+        steps, `random_list` branches, a trigger listing several `has_law` —
+        returns a list of single-key dicts, one per entry in source order, so
+        each entry keeps its OWN operator (`gdp > 1000` next to two
+        `has_law = ...` stays `>`) and identical duplicates survive
+        (`add = 5 add = 5 add = 3` is three entries). `_normalize_data`
+        later folds that list into `{key: [(op, v), ...]}`.
+        """
         first_token, tokens = self.next_token(tokens)
         if first_token != "{":
             raise ValueError(
                 f"Expected '{first_token}' to be '{{' when parsing object, got '{first_token}'"
             )
-        obj = {}
-        list_flag = False
+        entries = []
+        seen = set()
+        has_repeat = False
         while True:
             token, tokens = self.next_token(tokens)
             if token is None or token == "}":
-                if list_flag:
-                    obj = self._listify(obj)
-                return obj, tokens
-            else:
-                key = token
-                symbol, tokens = self.next_token(tokens)
-                if (
-                    symbol not in conditional_tokens
-                ):  # Extend this list to support more symbols
-                    raise ValueError(
-                        f"Expected a valid symbol after key in object, got: '{symbol}' after '{key}'"
-                    )
-                value, tokens = self.parse_value(tokens)
-                if key in obj.keys() and obj[key] != (symbol, value):
-                    if not list_flag:
-                        for all_key in obj.keys():
-                            obj[all_key] = (symbol, [obj[all_key][1]])
-                        list_flag = True
-                    obj[key][1].append(value)
-                else:
-                    if list_flag:
-                        obj[key] = (symbol, [value])
-                    else:
-                        obj[key] = (symbol, value)
+                if has_repeat:
+                    return [{key: (op, value)} for key, op, value in entries], tokens
+                return {key: (op, value) for key, op, value in entries}, tokens
+            key = token
+            symbol, tokens = self.next_token(tokens)
+            if symbol not in conditional_tokens:
+                raise ValueError(
+                    f"Expected a valid symbol after key in object, got: '{symbol}' after '{key}'"
+                )
+            value, tokens = self.parse_value(tokens)
+            if key in seen:
+                has_repeat = True
+            seen.add(key)
+            entries.append((key, symbol, value))
 
     def parse_file(self, file_path, apply_directives=True):
         # Update self.data with the parsed content
@@ -194,20 +210,65 @@ class ParadoxFileParser:
         tokens = self.tokenize("{" + text + "}")
         try:
             parsed = self.parse_object(tokens)[0]
+            parsed = self._collapse_top_level_duplicates(parsed, file_path)
             if apply_directives:
                 self.merge_data(parsed)
             else:
-                # parsed may be a list of single-key dicts when the file has
-                # duplicate top-level keys (valid in Paradox script, last wins).
-                if isinstance(parsed, list):
-                    for item in parsed:
-                        self.data.update(item)
-                else:
-                    self.data.update(parsed)
+                self.data.update(parsed)
                 self.data = self._normalize_data(self.data)
         except Exception as e:
             print(f"Error parsing file: {file_path}")
             raise e
+
+    def _collapse_top_level_duplicates(self, parsed, file_path):
+        """Fold the list of single-key dicts that parse_object returns for a
+        file whose top level repeats a key back into a plain dict.
+
+        Duplicates fold in file order with the rules merge_data applies when
+        a later FILE repeats a key: an `INJECT:x` duplicate injects into the
+        earlier copy (lossless — how the engine applies successive INJECT
+        blocks, e.g. the phase-1/phase-2 blocks per company in
+        common/company_types/extra_companies_vanilla_updates.txt), while a
+        plain or `REPLACE:` duplicate replaces the earlier copy — last wins,
+        which is what the apply_directives=False branch always did through
+        sequential dict.update. Replaced keys are logged as a warning because
+        a definition was discarded (the engine logs `Duplicated key X will
+        not be created` for such a file and may keep the first copy instead;
+        either way the file should be fixed); folded INJECT keys at debug
+        level. Previously the apply_directives=True branch passed the list to
+        merge_data and the resulting AttributeError dropped the whole file.
+        """
+        if not isinstance(parsed, list):
+            return parsed
+        merged = {}
+        replaced = []
+        injected = []
+        for item in parsed:
+            for raw_key, value in item.items():
+                if raw_key in merged:
+                    directive, _ = self._split_directive(raw_key)
+                    if directive == "INJECT":
+                        merged[raw_key] = self._inject_value(merged[raw_key], value)
+                        if raw_key not in injected:
+                            injected.append(raw_key)
+                        continue
+                    if raw_key not in replaced:
+                        replaced.append(raw_key)
+                merged[raw_key] = value
+        if injected:
+            logger.debug(
+                "%s: repeated INJECT: key(s) folded in file order: %s",
+                file_path,
+                ", ".join(injected),
+            )
+        if replaced:
+            logger.warning(
+                "%s: top-level key(s) defined more than once: %s "
+                "(keeping the last definition of each)",
+                file_path,
+                ", ".join(replaced),
+            )
+        return merged
 
     def merge_data(self, new_data):
         # Merge new data into existing self.data, with new_data taking precedence

@@ -218,4 +218,4 @@ dp_leadership_germany = {
 
 ## Existing mod content (this mod, pre-existing convention)
 
-`/home/jakef/src/Vic3TimelineExtended/common/on_actions/fmc_on_actions.txt:143-158` — example of how the mod extends a vanilla `on_xxx` action. Vic3 merges these across files, so adding a new `on_country_formed = { on_actions = { … } events = { … } }` block in any mod file runs alongside vanilla's giant if/else chain.
+`common/on_actions/te_construction_market_on_actions.txt` (its `on_country_formed` block, around line 160) — example of how the mod extends a vanilla `on_xxx` action. Vic3 merges these across files, so adding a new `on_country_formed = { on_actions = { … } events = { … } }` block in any mod file runs alongside vanilla's giant if/else chain.

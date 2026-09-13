@@ -316,9 +316,9 @@ def generate_modifier_type_definitions():
     lines.append('# Power bloc principle technology requirements\n')
     for tech, (mod_name, loc_name, loc_desc) in sorted(PRINCIPLE_TECH_MODIFIERS.items()):
         lines.append(f'{mod_name} = {{\n')
-        lines.append(f'\tcolor = good\n')
-        lines.append(f'\tboolean = yes\n')
-        lines.append(f'}}\n\n')
+        lines.append('\tcolor = good\n')
+        lines.append('\tboolean = yes\n')
+        lines.append('}\n\n')
 
     # Button modifiers
     lines.append('# Scripted button technology requirements\n')
@@ -328,9 +328,9 @@ def generate_modifier_type_definitions():
             if mod_name not in all_button_mods:
                 all_button_mods.add(mod_name)
                 lines.append(f'{mod_name} = {{\n')
-                lines.append(f'\tcolor = good\n')
-                lines.append(f'\tboolean = yes\n')
-                lines.append(f'}}\n\n')
+                lines.append('\tcolor = good\n')
+                lines.append('\tboolean = yes\n')
+                lines.append('}\n\n')
 
     return ''.join(lines)
 

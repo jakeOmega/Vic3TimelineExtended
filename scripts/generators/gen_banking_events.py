@@ -6,7 +6,7 @@ Writes patches/appends to existing mod files.
 Run: python gen_banking_events.py
 """
 
-import os, sys
+import os
 
 # Path constants — repo root is two levels above this script (scripts/generators/)
 MOD = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -2836,7 +2836,6 @@ MODIFIER_LOC = r""" banking_event_bailout_cost:0 "International Bailout"
 
 def write_bom(path, content):
     """Write content with UTF-8 BOM encoding."""
-    import codecs
     with open(path, 'w', encoding='utf-8-sig') as f:
         f.write(content)
 

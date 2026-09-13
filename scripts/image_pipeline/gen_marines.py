@@ -13,7 +13,7 @@ Tiers and their thematic anchors (from common/combat_unit_types/extra_combat_uni
 - bioenhanced_marines (era 11): far-future gene-augmented operators, energy weapons,
   exotic atmosphere
 """
-import os, sys, argparse, gc
+import os, argparse, gc
 import torch
 from diffusers import FluxPipeline
 

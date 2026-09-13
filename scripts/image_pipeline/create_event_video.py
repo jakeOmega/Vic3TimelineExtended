@@ -48,6 +48,13 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    # Pillow is an optional runtime dependency (imported lazily inside the
+    # functions that need it), but the annotations below reference it, so the
+    # name has to exist for type checkers / typing.get_type_hints().
+    from PIL import Image
 
 # ── constants ────────────────────────────────────────────────────────────
 EVENT_WIDTH = 1700
@@ -291,12 +298,12 @@ def convert_to_bk2(avi_path: Path, bk2_path: Path) -> bool:
 
     print()
     if gui:
-        print(f"  Opening RAD Video Tools GUI ...")
-        print(f"  In the GUI:")
+        print("  Opening RAD Video Tools GUI ...")
+        print("  In the GUI:")
         print(f"    1. Navigate to: {avi_path.parent}")
         print(f"    2. Select: {avi_path.name}")
-        print(f"    3. Click 'Bink it!'")
-        print(f"    4. In the Bink compression dialog, click 'Bink' to compress.")
+        print("    3. Click 'Bink it!'")
+        print("    4. In the Bink compression dialog, click 'Bink' to compress.")
         print(f"    5. Output will be: {bk2_path}")
         print()
 
@@ -307,7 +314,7 @@ def convert_to_bk2(avi_path: Path, bk2_path: Path) -> bool:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
-            print(f"  ✓ RAD Video Tools launched.")
+            print("  ✓ RAD Video Tools launched.")
         except OSError as e:
             print(f"  ⚠ Could not launch GUI: {e}")
             print(f"    Open manually: {gui}")
@@ -315,12 +322,12 @@ def convert_to_bk2(avi_path: Path, bk2_path: Path) -> bool:
         print("  ⚠ RAD Video Tools not found.")
         print("    Download (free): https://www.radgametools.com/bnkdown.htm")
         print()
-        print(f"  After installing, to convert to BK2:")
-        print(f"    1. Open RAD Video Tools (radvideo64.exe)")
+        print("  After installing, to convert to BK2:")
+        print("    1. Open RAD Video Tools (radvideo64.exe)")
         print(f"    2. Navigate to: {avi_path.parent}")
         print(f"    3. Select: {avi_path.name}")
-        print(f"    4. Click 'Bink it!'")
-        print(f"    5. In the Bink compression dialog, click 'Bink' to compress.")
+        print("    4. Click 'Bink it!'")
+        print("    5. In the Bink compression dialog, click 'Bink' to compress.")
 
     return False
 
@@ -406,7 +413,7 @@ def main() -> None:
 
     # ── usage hint ───────────────────────────────────────────────────
     print()
-    print(f"Place the .bk2 in gfx/event_pictures/ and reference as:")
+    print("Place the .bk2 in gfx/event_pictures/ and reference as:")
     print(f'  event_image = {{ video = "{stem}" }}')
 
 

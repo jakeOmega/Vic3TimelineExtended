@@ -22,3 +22,8 @@ numpy
 # sentencepiece
 # pillow
 # huggingface_hub
+
+# Dev / CI:
+# ruff: lint gate for the Python tooling (config in ruff.toml, pyflakes "F"
+# rules only). Run `ruff check .` before pushing; CI enforces the same.
+ruff>=0.5

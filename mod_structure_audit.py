@@ -384,7 +384,19 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from mod_state import ModState
-    from path_constants import base_game_paths, mod_paths, mod_path
+    # base_game_paths / mod_paths live in mod_state_script, not path_constants
+    # (path_constants only exports the root paths). Importing them from
+    # path_constants raised ImportError, so this CLI never ran.
+    from mod_state_script import base_game_paths, mod_paths
+    from path_constants import mod_path
     ms = ModState(base_game_paths, mod_paths)
+    if not any(getattr(p, "data", None) for p in ms.base_parsers.values()):
+        print(
+            "WARNING: no vanilla data parsed (is base_game_path configured?). "
+            "The silent-INJECT check needs the vanilla name index; without it "
+            "every INJECT into a vanilla entity that the mod also declares "
+            "bare will be misreported as mod-only.",
+            file=sys.stderr,
+        )
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))
