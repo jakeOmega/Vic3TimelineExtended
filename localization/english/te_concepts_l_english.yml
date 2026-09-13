@@ -111,7 +111,7 @@
  DESELECT_MUSLIM_DESC:0 "Remove Islamic beliefs and traditions from our new religion."
  DESELECT_NAME_DESC:0 "Deselect this name for your custom religion."
  FIRST_NUKE_CREATED:0 "First Nuclear Weapon Created and Stockpiled. Future weapons will be created more quickly."
- GDPPERCAPITA:0 "$GDP_SHORT$ per Capita:\n     Local/National\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]"
+ GDPPERCAPITA:0 "$GDP_SHORT$ per Capita:\n     Local/National\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!"
  GDP_per_capita:0 "[State.MakeScope.ScriptValue('gdp_per_capita')|2*]"
  GOVERNMENT_CONSTRUCTION_BOUGHT:0 "Construction Services @construction! purchased by the government:"
  GW_CARBON_TAX:0 "Implement Carbon Tax"
