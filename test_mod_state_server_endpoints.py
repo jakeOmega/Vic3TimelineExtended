@@ -680,5 +680,539 @@ class ValidateRegistriesHTTPTests(unittest.TestCase):
             self.assertEqual(set(w.keys()), {"label", "detail"})
 
 
+
+# ---------------------------------------------------------------------------
+# #254 — server hardening: local-origin gate, path containment, honest statuses
+#
+# All pure-Python: the handler is driven directly (no live server) except the
+# LocalOriginGateHTTPTests class, which binds an ephemeral loopback port so the
+# gate is exercised against what urllib really puts on the wire.
+# ---------------------------------------------------------------------------
+import io
+import logging
+import threading
+import types
+from http.server import ThreadingHTTPServer
+from unittest import mock
+from urllib.error import HTTPError
+from urllib.request import Request
+
+import mod_state_client
+
+
+class _StubModState:
+    """Minimal ModState stand-in for handler-level tests."""
+
+    def __init__(self, data=None, localization=None):
+        self._data = data or {}
+        self.localization = localization or {}
+        self.mod_parsers = {}
+        self.base_parsers = {}
+        self.parse_failures = []
+
+    def get_data(self, etype):
+        return self._data.get(etype)
+
+    def localize(self, key):
+        return self.localization.get(key, key)
+
+    def get_description(self, key):
+        return None
+
+    def unlocalize(self, text):
+        return [k for k, v in self.localization.items() if text.lower() in str(v).lower()]
+
+    def search_localization(self, query, limit=50):
+        return []
+
+
+class _CapturingHandler(mss.ModStateHandler):
+    """A ModStateHandler that never touches a socket: __init__ is bypassed and
+    `_respond_json` records instead of writing."""
+
+    def __init__(self, path="/status", headers=None, port=8950, body=None):
+        self.path = path
+        self.headers = headers if headers is not None else {"Host": f"127.0.0.1:{port}"}
+        self.server = types.SimpleNamespace(server_port=port)
+        self.responses = []
+        self.routed = []
+
+    def _respond_json(self, data, status=200):
+        self.responses.append((status, data))
+
+    @property
+    def last(self):
+        return self.responses[-1]
+
+
+class LocalRequestRejectionTests(unittest.TestCase):
+    """The pure Host/Origin predicate (#254 §1)."""
+
+    def test_accepts_what_curl_urllib_and_requests_send(self):
+        for host in ("127.0.0.1:8950", "localhost:8950", "[::1]:8950",
+                     "LOCALHOST:8950", "127.0.0.1", "localhost", "[::1]", "::1"):
+            with self.subTest(host=host):
+                self.assertIsNone(mss._local_request_rejection(host, None, 8950))
+
+    def test_accepts_own_origin(self):
+        for origin in ("http://127.0.0.1:8950", "http://localhost:8950",
+                       "http://[::1]:8950"):
+            with self.subTest(origin=origin):
+                self.assertIsNone(
+                    mss._local_request_rejection("localhost:8950", origin, 8950))
+
+    def test_rejects_foreign_host_dns_rebinding(self):
+        reason = mss._local_request_rejection("evil.example.com:8950", None, 8950)
+        self.assertIsNotNone(reason)
+        self.assertIn("evil.example.com", reason)
+
+    def test_rejects_host_for_a_different_port(self):
+        reason = mss._local_request_rejection("localhost:9999", None, 8950)
+        self.assertIn("bind port", reason)
+
+    def test_rejects_missing_host(self):
+        self.assertEqual(mss._local_request_rejection(None, None, 8950),
+                         "missing Host header")
+
+    def test_rejects_cross_site_origin(self):
+        reason = mss._local_request_rejection(
+            "localhost:8950", "https://evil.example.com", 8950)
+        self.assertIn("Origin", reason)
+
+    def test_rejects_null_origin(self):
+        reason = mss._local_request_rejection("localhost:8950", "null", 8950)
+        self.assertIn("Origin", reason)
+
+    def test_rejects_origin_on_another_port(self):
+        self.assertIsNotNone(
+            mss._local_request_rejection("localhost:8950", "http://localhost:3000", 8950))
+
+    def test_port_is_read_from_the_bound_server(self):
+        # Same header, different bind port: allowed on 9001, refused on 8950.
+        self.assertIsNone(mss._local_request_rejection("localhost:9001", None, 9001))
+        self.assertIsNotNone(mss._local_request_rejection("localhost:9001", None, 8950))
+
+
+class LocalOriginGateHandlerTests(unittest.TestCase):
+    """do_GET / do_POST refuse before doing any work (#254 §1)."""
+
+    def test_do_get_rejects_foreign_host_without_routing(self):
+        h = _CapturingHandler("/status", headers={"Host": "evil.example.com"})
+        with mock.patch.object(mss.ModStateHandler, "route",
+                               side_effect=AssertionError("route must not run")):
+            with self.assertLogs(mss.logger, level="WARNING") as cap:
+                h.do_GET()
+        status, body = h.last
+        self.assertEqual(status, 403)
+        self.assertIn("Forbidden", body["error"])
+        self.assertTrue(any("evil.example.com" in line for line in cap.output))
+
+    def test_do_get_allows_loopback_host(self):
+        h = _CapturingHandler("/status", headers={"Host": "localhost:8950"})
+        with mock.patch.object(mss.ModStateHandler, "route", return_value={"ok": True}):
+            h.do_GET()
+        self.assertEqual(h.last, (200, {"ok": True}))
+
+    def test_do_post_reload_rejects_cross_site_origin_without_reloading(self):
+        h = _CapturingHandler(
+            "/reload",
+            headers={"Host": "localhost:8950", "Origin": "http://evil.example.com"},
+        )
+        with mock.patch.object(mss, "_load_mod_state",
+                               side_effect=AssertionError("reload must not run")):
+            with self.assertLogs(mss.logger, level="WARNING") as cap:
+                h.do_POST()
+        status, body = h.last
+        self.assertEqual(status, 403)
+        self.assertIn("Origin", body["error"])
+        self.assertTrue(any("evil.example.com" in line for line in cap.output))
+
+    def test_do_post_rejects_foreign_host(self):
+        h = _CapturingHandler("/reload", headers={"Host": "attacker.test:8950"})
+        with mock.patch.object(mss, "_load_mod_state",
+                               side_effect=AssertionError("reload must not run")):
+            with self.assertLogs(mss.logger, level="WARNING"):
+                h.do_POST()
+        self.assertEqual(h.last[0], 403)
+
+
+def _can_bind_loopback() -> bool:
+    import socket
+    try:
+        s = socket.socket()
+        s.bind(("127.0.0.1", 0))
+        s.close()
+        return True
+    except OSError:
+        return False
+
+
+class _GateTestHandler(mss.ModStateHandler):
+    """Real handler over a real socket, with the data-dependent routing stubbed."""
+
+    def route(self, parts, params):
+        return {"ok": True, "parts": parts}
+
+    def log_message(self, *args, **kwargs):
+        pass
+
+
+@unittest.skipUnless(_can_bind_loopback(), "cannot bind a loopback socket here")
+class LocalOriginGateHTTPTests(unittest.TestCase):
+    """End-to-end on an ephemeral port — proves the gate reads the real bind
+    port (never the hardcoded 8950) and that a plain urllib/curl request passes."""
+
+    def setUp(self):
+        # The gate logs every rejection at WARNING; keep the deliberate ones
+        # out of the test run's console output.
+        previous = mss.logger.level
+        mss.logger.setLevel(logging.CRITICAL + 1)
+        self.addCleanup(mss.logger.setLevel, previous)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.httpd = ThreadingHTTPServer(("127.0.0.1", 0), _GateTestHandler)
+        cls.port = cls.httpd.server_port
+        cls.thread = threading.Thread(target=cls.httpd.serve_forever, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.httpd.shutdown()
+        cls.httpd.server_close()
+        cls.thread.join(timeout=5)
+
+    def _url(self, path="/status"):
+        return f"http://127.0.0.1:{self.port}{path}"
+
+    def test_default_urllib_request_passes(self):
+        with urlopen(self._url(), timeout=5) as resp:
+            self.assertEqual(resp.status, 200)
+            self.assertTrue(json.loads(resp.read())["ok"])
+
+    def test_curl_style_localhost_host_passes(self):
+        req = Request(self._url(), headers={"Host": f"localhost:{self.port}"})
+        with urlopen(req, timeout=5) as resp:
+            self.assertEqual(resp.status, 200)
+
+    def test_rebound_host_header_is_rejected(self):
+        req = Request(self._url(), headers={"Host": "evil.example.com"})
+        with self.assertRaises(HTTPError) as ctx:
+            urlopen(req, timeout=5)
+        self.assertEqual(ctx.exception.code, 403)
+
+    def test_browser_origin_is_rejected(self):
+        req = Request(self._url(), headers={"Origin": "https://evil.example.com"})
+        with self.assertRaises(HTTPError) as ctx:
+            urlopen(req, timeout=5)
+        self.assertEqual(ctx.exception.code, 403)
+        self.assertIn("error", json.loads(ctx.exception.read()))
+
+    def test_post_reload_from_a_page_is_rejected_before_reloading(self):
+        req = Request(
+            self._url("/reload"), method="POST", data=b"",
+            headers={"Origin": "https://evil.example.com"},
+        )
+        with mock.patch.object(mss, "_load_mod_state",
+                               side_effect=AssertionError("reload must not run")):
+            with self.assertRaises(HTTPError) as ctx:
+                urlopen(req, timeout=5)
+        self.assertEqual(ctx.exception.code, 403)
+
+
+class EventBalanceFileParamTests(unittest.TestCase):
+    """?file= must stay inside the mod tree (#254 §2)."""
+
+    def setUp(self):
+        self.root = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.root, "events"))
+        self.rel = "events/sample_events.txt"
+        with open(os.path.join(self.root, self.rel), "w", encoding="utf-8") as f:
+            f.write(
+                "namespace = sample\n"
+                "sample.1 = { type = country_event option = { name = sample.1.a } }\n"
+            )
+        patcher = mock.patch.object(mss, "mod_path", self.root)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_relative_path_inside_the_mod_resolves(self):
+        resolved = mss._resolve_mod_relative_path(self.rel)
+        self.assertEqual(resolved, os.path.join(os.path.realpath(self.root), self.rel))
+        self.assertEqual(mss._event_ids_from_mod_file(self.rel), ["sample.1"])
+
+    def test_absolute_path_is_rejected(self):
+        with self.assertRaises(mss.BadRequest) as ctx:
+            mss._resolve_mod_relative_path("/etc/passwd")
+        self.assertEqual(ctx.exception.status, 400)
+        self.assertIn("absolute", ctx.exception.payload["error"])
+
+    def test_dotdot_escape_is_rejected(self):
+        for attempt in ("../../etc/passwd", "events/../../../etc/passwd", ".."):
+            with self.subTest(attempt=attempt):
+                with self.assertRaises(mss.BadRequest) as ctx:
+                    mss._resolve_mod_relative_path(attempt)
+                self.assertEqual(ctx.exception.status, 400)
+
+    def test_dotdot_that_stays_inside_is_allowed(self):
+        self.assertEqual(
+            mss._resolve_mod_relative_path("events/../" + self.rel),
+            os.path.join(os.path.realpath(self.root), self.rel),
+        )
+
+    def test_symlink_out_of_the_mod_tree_is_rejected(self):
+        target = tempfile.mkdtemp()
+        link = os.path.join(self.root, "escape")
+        try:
+            os.symlink(target, link)
+        except (OSError, NotImplementedError):
+            self.skipTest("symlinks unavailable")
+        with self.assertRaises(mss.BadRequest):
+            mss._resolve_mod_relative_path("escape/secret.txt")
+
+    def test_missing_but_contained_file_is_404(self):
+        with self.assertRaises(mss._EndpointError) as ctx:
+            mss._event_ids_from_mod_file("events/no_such_file.txt")
+        self.assertEqual(ctx.exception.status, 404)
+
+    def test_handler_rejects_traversal_with_400(self):
+        handler = _CapturingHandler()
+        stub = _StubModState({"Events": {"sample.1": ("=", {})}})
+        with mock.patch.object(mss, "ms", stub):
+            with self.assertRaises(mss.BadRequest) as ctx:
+                mss.ModStateHandler._event_balance(
+                    handler, [], {"file": ["../../../etc/passwd"]})
+        self.assertEqual(ctx.exception.status, 400)
+
+    def test_issues_handler_rejects_traversal_with_400(self):
+        handler = _CapturingHandler()
+        stub = _StubModState({"Events": {"sample.1": ("=", {})}})
+        with mock.patch.object(mss, "ms", stub):
+            with self.assertRaises(mss.BadRequest) as ctx:
+                mss.ModStateHandler._event_balance_issues(
+                    handler, {"file": ["/etc/passwd"]}, "json")
+        self.assertEqual(ctx.exception.status, 400)
+
+
+class NotFoundVsKeyErrorTests(unittest.TestCase):
+    """Only deliberate misses are 404; a real KeyError is a 500 (#254 §3)."""
+
+    def test_notfound_payload_matches_the_pre_change_body(self):
+        exc = mss.NotFound("law_nope")
+        self.assertEqual(exc.status, 404)
+        self.assertEqual(exc.payload["error"], "Not found: 'law_nope'")
+        self.assertIn("hint", exc.payload)
+
+    def test_do_get_maps_notfound_to_404(self):
+        h = _CapturingHandler("/laws/law_nope")
+        with mock.patch.object(mss.ModStateHandler, "route",
+                               side_effect=mss.NotFound("law_nope")):
+            h.do_GET()
+        status, body = h.last
+        self.assertEqual(status, 404)
+        self.assertEqual(body["error"], "Not found: 'law_nope'")
+
+    def test_do_get_maps_a_genuine_keyerror_to_500(self):
+        h = _CapturingHandler("/tech-unlocks/x")
+        with mock.patch.object(mss.ModStateHandler, "route",
+                               side_effect=KeyError("by_type")):
+            with self.assertLogs(mss.logger, level="ERROR"):
+                h.do_GET()
+        status, body = h.last
+        self.assertEqual(status, 500)
+        self.assertEqual(body["error"], "KeyError: 'by_type'")
+
+    def test_unknown_endpoint_is_still_404(self):
+        h = _CapturingHandler("/no-such-endpoint")
+        h.do_GET()
+        self.assertEqual(h.last[0], 404)
+
+    def test_missing_entity_lookups_raise_notfound(self):
+        stub = _StubModState({
+            "Laws": {"law_monarchy": ("=", {})},
+            "Events": {"ev.1": ("=", {})},
+            "Technologies": {"tech_a": ("=", {})},
+            "On Actions": {"oa_a": ("=", {})},
+        })
+        handler = _CapturingHandler()
+        with mock.patch.object(mss, "ms", stub):
+            for method, args in (
+                (mss.ModStateHandler._laws, (["law_nope"],)),
+                (mss.ModStateHandler._events, (["ev.nope"], {})),
+                (mss.ModStateHandler._tech_tree, (["tech_nope"],)),
+                (mss.ModStateHandler._on_actions, (["oa_nope"],)),
+            ):
+                with self.subTest(method=method.__name__):
+                    with self.assertRaises(mss.NotFound):
+                        method(handler, *args)
+
+    def test_engine_docs_usage_hint_is_400_not_404(self):
+        handler = _CapturingHandler()
+        with mock.patch.object(mss, "engine_docs", {"effects": []}):
+            with self.assertRaises(mss.BadRequest) as ctx:
+                mss.ModStateHandler._engine_docs(handler, ["origin"], {})
+            self.assertIn("Usage:", ctx.exception.payload["error"])
+            with self.assertRaises(mss.BadRequest):
+                mss.ModStateHandler._engine_docs(handler, ["usage"], {})
+
+    def test_unknown_engine_doc_type_is_404(self):
+        handler = _CapturingHandler()
+        with mock.patch.object(mss, "engine_docs", {"effects": []}):
+            with self.assertRaises(mss.NotFound):
+                mss.ModStateHandler._engine_docs(handler, ["bogus"], {})
+
+
+class ErrorBodyStatusTests(unittest.TestCase):
+    """`{"error": ...}` bodies no longer come back with HTTP 200 (#254 §4)."""
+
+    def setUp(self):
+        self.handler = _CapturingHandler()
+
+    def test_missing_query_param_is_400_and_keeps_the_body_shape(self):
+        with mock.patch.object(mss, "ms", _StubModState()):
+            with self.assertRaises(mss.BadRequest) as ctx:
+                mss.ModStateHandler._search(self.handler, {})
+        self.assertEqual(ctx.exception.status, 400)
+        self.assertIn("error", ctx.exception.payload)
+        self.assertEqual(ctx.exception.payload["error"], "Provide ?q=search_term")
+
+    def test_unloaded_collection_is_503(self):
+        with mock.patch.object(mss, "ms", _StubModState()):
+            for method, args in (
+                (mss.ModStateHandler._laws, ([],)),
+                (mss.ModStateHandler._events, ([], {})),
+                (mss.ModStateHandler._decrees, ([],)),
+            ):
+                with self.subTest(method=method.__name__):
+                    with self.assertRaises(mss._ServiceNotReady) as ctx:
+                        method(self.handler, *args)
+                    self.assertEqual(ctx.exception.status, 503)
+                    self.assertIn("data not loaded", ctx.exception.payload["error"])
+
+    def test_service_not_ready_reaches_the_wire_as_503(self):
+        h = _CapturingHandler("/laws")
+        with mock.patch.object(mss, "ms", _StubModState()):
+            h.do_GET()
+        status, body = h.last
+        self.assertEqual(status, 503)
+        self.assertEqual(body["error"], "Laws data not loaded")
+
+    def test_bad_request_reaches_the_wire_as_400(self):
+        h = _CapturingHandler("/search")
+        with mock.patch.object(mss, "ms", _StubModState()):
+            h.do_GET()
+        self.assertEqual(h.last[0], 400)
+        self.assertIn("error", h.last[1])
+
+    def test_event_balance_without_a_selector_is_400(self):
+        stub = _StubModState({"Events": {"ev.1": ("=", {})}})
+        with mock.patch.object(mss, "ms", stub):
+            with self.assertRaises(mss.BadRequest):
+                mss.ModStateHandler._event_balance(self.handler, [], {})
+
+    def test_logs_diff_without_a_backup_generation_is_404(self):
+        info = types.SimpleNamespace(
+            family="debug", generation=0, path="/nonexistent/debug.log",
+            to_dict=lambda: {"family": "debug"},
+        )
+        with mock.patch("game_log_reader.list_logs", return_value=[info]):
+            with self.assertRaises(mss._EndpointError) as ctx:
+                mss.ModStateHandler._logs(self.handler, ["debug", "diff"], {})
+        self.assertEqual(ctx.exception.status, 404)
+        self.assertIn("to diff against", ctx.exception.payload["error"])
+
+    def test_loc_keys_usage_is_400_and_unknown_type_is_404(self):
+        with mock.patch.object(mss, "ms", _StubModState()):
+            with self.assertRaises(mss.BadRequest):
+                mss.ModStateHandler._loc_keys(self.handler, ["Laws"])
+            with self.assertRaises(mss._EndpointError) as ctx:
+                mss.ModStateHandler._loc_keys(self.handler, ["Bogus Type", "x"])
+        self.assertEqual(ctx.exception.status, 404)
+        self.assertIn("known_types", ctx.exception.payload)
+
+    def test_gui_usage_errors_are_400(self):
+        with self.assertRaises(mss.BadRequest):
+            mss.ModStateHandler._gui(self.handler, [], {})
+
+    def test_modifier_grants_without_a_name_is_400(self):
+        with self.assertRaises(mss.BadRequest):
+            mss.ModStateHandler._modifier_grants(self.handler, [], {})
+
+    def test_modifier_grants_with_a_malformed_name_is_400(self):
+        with self.assertRaises(mss.BadRequest) as ctx:
+            mss.ModStateHandler._modifier_grants(self.handler, ["Not A Modifier!"], {})
+        self.assertIn("Invalid target name", ctx.exception.payload["error"])
+
+
+class UnlocalizeFormTests(unittest.TestCase):
+    """/help must describe the form the handler implements (#254 §7)."""
+
+    def test_help_documents_the_path_form_and_mentions_q(self):
+        entries = mss.ModStateHandler._help(_CapturingHandler())["get"]
+        row = next(e for e in entries if e["path"].startswith("/unlocalize/"))
+        self.assertEqual(row["path"], "/unlocalize/<text>")
+        self.assertIn("?q=", row["desc"])
+
+    def test_help_documents_the_local_only_gate(self):
+        help_body = mss.ModStateHandler._help(_CapturingHandler())
+        self.assertIn("403", help_body["access"])
+
+    def test_handler_accepts_both_forms(self):
+        stub = _StubModState(localization={"law_monarchy": "Monarchy"})
+        handler = _CapturingHandler()
+        with mock.patch.object(mss, "ms", stub):
+            by_path = mss.ModStateHandler._unlocalize(handler, ["Monarchy"], {})
+            by_query = mss.ModStateHandler._unlocalize(handler, [], {"q": ["Monarchy"]})
+        self.assertEqual(by_path, by_query)
+        self.assertEqual(by_path["keys"], ["law_monarchy"])
+
+    def test_no_text_is_400(self):
+        handler = _CapturingHandler()
+        with mock.patch.object(mss, "ms", _StubModState()):
+            with self.assertRaises(mss.BadRequest):
+                mss.ModStateHandler._unlocalize(handler, [], {})
+
+
+class ClientErrorReportingTests(unittest.TestCase):
+    """mod_state_client prints the status + body instead of "not running" (#254 §5)."""
+
+    def _http_error(self, code, body):
+        return HTTPError(
+            "http://127.0.0.1:8950/laws", code, "Service Unavailable",
+            {}, io.BytesIO(body),
+        )
+
+    def test_http_error_prints_status_and_body(self):
+        err = self._http_error(503, b'{"error": "Laws data not loaded"}')
+        stderr = io.StringIO()
+        with mock.patch.object(mod_state_client, "urlopen", side_effect=err),                 mock.patch("sys.stderr", stderr):
+            with self.assertRaises(SystemExit) as ctx:
+                mod_state_client.query("laws")
+        self.assertEqual(ctx.exception.code, 1)
+        out = stderr.getvalue()
+        self.assertIn("HTTP 503", out)
+        self.assertIn("Laws data not loaded", out)
+        self.assertNotIn("not running", out)
+
+    def test_connection_error_keeps_the_not_running_message(self):
+        from urllib.error import URLError as _URLError
+        stderr = io.StringIO()
+        with mock.patch.object(mod_state_client, "urlopen",
+                               side_effect=_URLError("Connection refused")),                 mock.patch("sys.stderr", stderr):
+            with self.assertRaises(SystemExit) as ctx:
+                mod_state_client.query("laws")
+        self.assertEqual(ctx.exception.code, 1)
+        self.assertIn("not running", stderr.getvalue())
+
+    def test_non_json_error_body_is_still_printed(self):
+        err = self._http_error(403, b"Forbidden: non-local Host header")
+        stderr = io.StringIO()
+        with mock.patch.object(mod_state_client, "urlopen", side_effect=err),                 mock.patch("sys.stderr", stderr):
+            with self.assertRaises(SystemExit):
+                mod_state_client.query("status")
+        self.assertIn("non-local Host header", stderr.getvalue())
+
+
+
 if __name__ == "__main__":
     unittest.main()
