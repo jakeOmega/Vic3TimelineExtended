@@ -30,7 +30,26 @@ In `~/src/vic3`:
 git -C ~/src/vic3 log --oneline | head -20
 ```
 
-Find the commit that bumped to the new version (e.g. "v1.13"). Its parent is the prior version baseline. Save these as `OLD_REF` and `NEW_REF`.
+Find the commit that bumped to the new version (e.g. "v1.13"). Its parent is the prior version baseline. Save these as `OLD_REF` and `NEW_REF`. (The clone lives wherever `vanilla_source_repo_path` points — `~/vic3` on some machines.)
+
+**If the clone doesn't have the new version yet**, commit it from the live install. The clone `.gitignore`s large binaries, so mirror those excludes and let `--delete` capture vanilla's removals:
+
+```bash
+rsync -r --delete --exclude='*.mp3' --exclude='*.dds' --exclude='*.bank' --exclude='*.bk2' --exclude='*.flac' \
+      --exclude='*.mehs' --exclude='*.otf' --exclude='*.tga' --exclude='*.png' \
+      "<base_game_path>/game/" <clone>/game/
+git -C <clone> add -A game && git -C <clone> diff --cached -M --shortstat   # expect many R100 renames, not churn
+git -C <clone> commit -m "<version> (<codename>)"                          # local only; restart mod_state_server
+```
+
+Check `git diff --cached --ignore-cr-at-eol --shortstat` matches the plain one (no line-ending churn) before committing.
+
+**Vanilla renames files, not just identifiers.** 1.14 renamed 224 files (laws `00_*` → `01_`/`02_*`, per-language loc). That silently breaks two things: a mod file overriding vanilla *by same path* stops overriding and starts duplicating keys, and any at-risk list built from the new patch's file names misses targets whose old file had a different name. Check both against the real rename list:
+
+```bash
+git -C <clone> diff -M --name-status OLD_REF NEW_REF | awk '$1 ~ /^(R|D)/ {print $2}' | sed 's#^game/##' \
+  | while read p; do [ -e "$p" ] && echo "same-path override of renamed/deleted vanilla file: $p"; done
+```
 
 ## 3. Engine-doc diff
 
@@ -145,6 +164,10 @@ In the 1.13.5 migration, an exploration agent reported 2 at-risk GUI files; the 
 
 For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch versions. See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.
 
+**Prove each merge preserved the mod's delta.** Strip BOM/CR from all three inputs, merge, then compare the set of non-blank changed lines of `diff(OLD, mod)` against `diff(NEW, merged)` — they must be identical (0 lost, 0 extra). This catches both a mod edit the merge dropped and a stale pre-patch vanilla line the merge kept. In 1.14 all 11 merges passed; the only 2 conflicts were mod-side trailing whitespace. Restore each file's BOM when copying back.
+
+**Sweep every `REPLACE:`/`INJECT:` target, not just the ones in changed files.** Locate each target key in the full `OLD_REF` and `NEW_REF` trees of its `common/` subfolder (rename-proof) and diff the block. A changed `REPLACE:` target needs vanilla's delta ported; a changed `INJECT:` target is usually fine (the mod appends sibling `modifier` blocks and vanilla's additions stack with them), but read the diff. 1.14: 898 targets, 0 removed, 6 changed — `ideology_pacifist` (generator-owned) plus war-support lines added inside 5 injected laws/techs.
+
 **A conflict-free merge is not a clean merge.** `git merge-file` happily produces a 0-conflict result when vanilla's edits don't textually overlap the mod's edits — but vanilla may have renamed a function the mod's untouched code-path still calls. After every merge, grep the merged file for any identifier vanilla deleted/renamed during this patch (use the engine-surface delta from step 3). The engine doesn't log GUI script errors, so a broken onclick handler manifests as a silently unresponsive button, not a `debug.log` entry — there's no runtime safety net.
 
 If vanilla deleted a mod-overridden GUI file (vanilla 1.13 deleted `commander_panel.gui`), delete the mod's override too — keep an issue open to re-apply mod customizations elsewhere if the panel content moved.
@@ -207,6 +230,10 @@ curl -s "http://localhost:8950/validate/engine-coverage?filter=vanilla_breakages
 (See `docs/guides/python_tools.md` for the filter; in absence of the filter, manually classify the 29-or-so unknown entries against `common/modifier_type_definitions/`.)
 
 The bar is **0 vanilla breakages**. Mod-defined custom modifier types (`country_sr_*`, `country_covert_*`, `cultural_hegemony_*`, etc.) reported as "unknown" by the validator are pre-existing limitations of the validator, not real breakages.
+
+## 9b. Deploying for the in-game check
+
+`./scripts/deploy.sh` dry-runs first — read its summary before `--apply`. The deploy target lives in (OneDrive-synced) Documents and may have been deployed from another machine or an older checkout; a large dry-run delta or `deleting` lines for files the repo dropped long ago means you'd be overwriting state you haven't looked at.
 
 ## 10. Verify in-game
 
