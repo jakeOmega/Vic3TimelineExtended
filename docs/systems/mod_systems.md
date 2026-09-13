@@ -430,7 +430,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `pollution_on_action` — state pollution modifier update
 - `war_propaganda_on_action` — wartime propaganda effects
 - `state_yearly_cultural_acceptance_add_on_action` — cultural acceptance
-- `tourism_on_action` — tourism income/throughput
+- `tourism_on_action` — tourism output/throughput modifier refresh (sole owner; the multipliers read monthly-varying `city_size_rank` and live building levels)
 - `resettlement_transfer_on_action` — population transfer
 
 **`on_monthly_pulse`** (Root = global):
@@ -456,7 +456,6 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `remove_or_create_homelands_on_action` — dynamic homeland changes
 - `violent_hostility_on_action` — cultural violence
 - `migration_crowding_on_action` — migration pull reduction
-- `tourism_update_on_action` — tourism modifier refresh
 - `religious_mission_conversion_on_action` — treaty-based conversion
 
 **`on_yearly_pulse_country`** (Root = Country):
@@ -492,12 +491,10 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `add_arable_land_effect_on_action` — arable land from agricultural techs
 - `fix_incompatible_laws` — law compatibility check
 - `character_update_on_action` — trait updates for new tech
-- `te_modifier_update_on_technology_on_action` — state modifier refresh
 
 **`on_law_activated`** (Root = Law scope):
 - `fix_incompatible_laws_from_law_scope` — law compatibility
 - `language_reform_law_on_action` — language reform init/cleanup
-- `te_modifier_update_on_law_on_action` — state modifier refresh
 - `radical_law_backlash_on_action` — backlash events for radical laws
 
 **`on_law_enactment_started`** (Root = Law scope):

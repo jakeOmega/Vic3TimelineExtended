@@ -953,8 +953,10 @@ te_update_free_port_tariff = {
 # owner = { every_scope_state { } } but the engine still traces the
 # parent scope for script-value validation, producing hundreds of
 # "state_region did not get a matching scope type" errors.
-# Tourism is instead refreshed on the yearly state pulse, which is
-# always in state scope.  See extra_on_actions.txt.
+# Tourism is instead refreshed from tourism_on_action on the MONTHLY state
+# pulse, which is likewise always in state scope (and monthly because its
+# multipliers track city_size_rank and live building levels).
+# See extra_on_actions.txt.
 te_update_state_modifiers = {
 	te_update_pollution_modifier = yes
 	te_update_migration_crowding_modifier = yes

@@ -179,19 +179,8 @@ on_yearly_pulse_state = {
 		remove_or_create_homelands_on_action
 		violent_hostility_on_action
 		migration_crowding_on_action
-		tourism_update_on_action
 		religious_mission_conversion_on_action
 		free_port_tariff_update_on_action
-	}
-}
-
-# TOURISM UPDATE - refreshes tourism output/throughput modifiers.
-# Runs on the yearly state pulse (guaranteed state scope) rather than
-# inside te_update_state_modifiers, because tourism script values use
-# state_region comparisons that fail in non-state scopes.
-tourism_update_on_action = {
-	effect = {
-		te_update_tourism_modifier = yes
 	}
 }
 
@@ -260,7 +249,6 @@ on_acquired_technology = {
 	on_actions = {
 		add_arable_land_effect_on_action
 		fix_incompatible_laws
-		te_modifier_update_on_technology_on_action
 		cultural_hegemony_tech_first_on_action
 		agricultural_diffusion_on_action
 	}
@@ -292,7 +280,6 @@ on_law_activated = {
 		fix_incompatible_laws_from_law_scope
 		te_fix_inconsistent_laws_from_law_scope
 		language_reform_law_on_action
-		te_modifier_update_on_law_on_action
 		radical_law_backlash_on_action
 		banking_law_cascade_on_law_activated
 	}
@@ -1181,6 +1168,25 @@ te_fix_inconsistent_laws_from_law_scope = {
 	}
 }
 
+# TOURISM - refreshes the tourism_output / tourism_throughput modifiers.
+# SOLE owner of that refresh. A duplicate yearly wrapper
+# (tourism_update_on_action on on_yearly_pulse_state) was removed 2026-09-13:
+# it was harmless while both sites called the same idempotent
+# remove-then-re-add effect, but two owners hide which pulse actually sets
+# the value, and any later divergence between them (different multiplier,
+# an added guard) would silently fight. One modifier, one refresh site.
+# Monthly (not yearly) because the multipliers genuinely change month to
+# month: total_tourism_output_bonus_percent reads city_size_rank, i.e.
+# var:state_city_size_rank, which city_rank_on_action recomputes on every
+# on_monthly_pulse, and total_tourism_throughput_bonus_percent reads live
+# port / railway / highway / art-academy / national-park levels that move
+# with construction. A yearly refresh would leave the modifier up to 11
+# months stale.
+# on_monthly_pulse_state is genuine state scope, so it satisfies the same
+# requirement the old yearly comment cited: the tourism script values use
+# state_region = s:STATE_X comparisons that only resolve in state scope
+# (which is why tourism stays out of te_update_state_modifiers and off the
+# law / technology / building hooks).
 tourism_on_action = {
 	effect = {
 		te_update_tourism_modifier = yes
@@ -2224,42 +2230,31 @@ free_port_tariff_update_on_action = {
 }
 
 # ============================================================================
-# INTELLIGENT MODIFIER UPDATE ON_ACTIONS
-# These fire immediately when technologies or laws change, so that
-# migration crowding modifiers respond quickly rather than waiting for
-# the next periodic pulse.
-# NOTE: All state modifier updates (migration crowding, pollution,
-# free-port tariffs) use has_variable in their script values. The engine
-# traces the parent scope chain through these root scopes, which don't
-# support variables or produce type mismatches. All state modifier updates
-# are handled by the periodic state pulses instead (within 1 year).
+# STATE MODIFIER UPDATES ARE PULSE-ONLY - no immediate tech/law/building hook
 # ============================================================================
-
-# Country scope. Fires when a technology is researched.
-# NOTE: Migration crowding, pollution, and free-port tariff modifiers all
-# use has_variable in their script values. The engine traces the parent
-# scope chain through the on_acquired_technology root scope, causing
-# "Value of wrong type: none" errors for has_variable checks. All state
-# modifier updates are handled by the periodic state pulses instead.
-te_modifier_update_on_technology_on_action = {
-	effect = {
-	}
-}
-
-# Law scope (ROOT = law type, owner = enacting country).
-# NOTE: All state modifier updates (migration crowding, pollution,
-# free-port tariffs) use has_variable in their script values. The engine
-# traces the parent scope chain through the law root scope, which doesn't
-# support variables — causing "has_variable trigger" errors. All of these
-# modifiers are caught by the periodic state pulses instead (within 1 year).
-te_modifier_update_on_law_on_action = {
-	effect = {
-	}
-}
-
-# NOTE: Investment on_action hook was removed (same scope chain issue
-# as buildings: institution scope doesn't support variables/modifiers).
-# Institution changes are picked up by the yearly state pulse.
+# There used to be te_modifier_update_on_technology_on_action and
+# te_modifier_update_on_law_on_action here, dispatched from
+# on_acquired_technology / on_law_activated so that migration crowding and
+# friends responded the same tick a tech or law landed. Both had been
+# emptied to `effect = { }` and were removed (2026-09-13) along with their
+# dispatch entries; the reasons they were emptied still apply:
+#
+# - All state modifier updates (migration crowding, pollution, free-port
+#   tariffs) use has_variable in their script values. On on_acquired_technology
+#   (ROOT = country) the engine traces the parent scope chain through that root
+#   and emits "Value of wrong type: none" for the has_variable checks; on
+#   on_law_activated (ROOT = law type, owner = enacting country) the law scope
+#   doesn't support variables at all, producing "has_variable trigger" errors.
+# - Tourism additionally uses state_region = s:STATE_X comparisons, which only
+#   resolve in genuine state scope - even wrapped in every_scope_state, the
+#   engine still validates against the parent scope.
+# - The investment hook was removed for the same reason (institution scope
+#   supports neither variables nor modifiers).
+#
+# All of these are instead refreshed from the periodic state pulses:
+# te_update_state_modifiers from on_yearly_pulse_state (within 1 year) and
+# tourism from on_monthly_pulse_state. Do not re-add an immediate hook for
+# them - add the work to a state pulse instead.
 
 # ============================================================================
 # WORLD WAR EVENTS - DEPRECATED: All events now fire from je_world_war
