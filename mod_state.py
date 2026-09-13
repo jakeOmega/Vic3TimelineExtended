@@ -12,6 +12,64 @@ from paradox_file_parser import ParadoxFileParser
 logger = logging.getLogger(__name__)
 
 
+def split_loc_line(line):
+    r"""Return (key, value, trailing) for one Paradox localization line, or None.
+
+    Accepts ` key:0 "value"`, ` key: "value"` and unindented forms. Returns
+    None for blank lines, comment lines (first non-blank character `#`,
+    indented or not), the `l_english:` header and any other line without a
+    quoted value, lines whose key contains whitespace, and a quoted value
+    that never closes (malformed). `value` is the exact source text between
+    the opening quote and the first closing quote that is not escaped — a
+    backslash escapes the character after it, so `\"` and `\n` are kept as
+    written. `trailing` is everything after that closing quote (where
+    `# REVIEWED ...` suppression comments live), without the line break. The
+    old rule cut at the second `"` on the line, so `"He said \"go\""` read
+    back as a lone backslash.
+    """
+    stripped = line.lstrip()
+    if not stripped or stripped.startswith("#") or ":" not in stripped:
+        return None
+    key, rest = stripped.split(":", 1)
+    key = key.strip()
+    if not key or any(c.isspace() for c in key):
+        return None
+    start = rest.find('"')
+    if start == -1:
+        return None
+    i = start + 1
+    n = len(rest)
+    while i < n:
+        c = rest[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == '"':
+            return key, rest[start + 1 : i], rest[i + 1 :].rstrip("\r\n")
+        i += 1
+    return None
+
+
+def parse_loc_line(line):
+    """Return (key, stripped value) for one localization line, or None — the
+    rule ModState.add_localization and the server's loc parsers use. See
+    split_loc_line for the line grammar."""
+    parsed = split_loc_line(line)
+    if parsed is None:
+        return None
+    key, value, _trailing = parsed
+    return key, value.strip()
+
+
+def iter_loc_lines(text):
+    """Yield (key, value) for every parseable line of a loc file's text,
+    using the same rule as ModState.add_localization (parse_loc_line)."""
+    for line in text.splitlines():
+        parsed = parse_loc_line(line)
+        if parsed is not None:
+            yield parsed
+
+
 class ModState:
     def __init__(self, base_game_dir, mod_dir, diff=False):
         self.base_parsers = {}
@@ -33,15 +91,10 @@ class ModState:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     for line in f:
-                        if line.startswith("#") or (":" not in line):
+                        parsed = parse_loc_line(line)
+                        if parsed is None:
                             continue
-                        key, value = line.split(":", 1)
-                        key = key.strip()
-                        quote_locations = [i for i, c in enumerate(value) if c == '"']
-                        if len(quote_locations) >= 2:
-                            value = value[
-                                quote_locations[0] + 1 : quote_locations[1]
-                            ].strip()
+                        key, value = parsed
                         self.localization[key] = value
             except Exception as e:
                 logger.warning(f"Failed to read localization file {file_path}: {e}")

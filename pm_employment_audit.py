@@ -104,7 +104,7 @@ def _unwrap(value):
     if (
         isinstance(value, tuple)
         and len(value) == 2
-        and value[0] in ("=", "?=", ">=", "<=", ">", "<", "!=")
+        and value[0] in ("=", "?=", ">=", "<=", ">", "<", "!=", "==")
     ):
         return _unwrap(value[1])
     return value

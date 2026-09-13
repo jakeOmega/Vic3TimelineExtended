@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from mod_state import ModState
+from mod_state import ModState, parse_loc_line, split_loc_line
 from paradox_file_parser import ParadoxFileParser
 
 
@@ -276,6 +276,276 @@ class ParadoxFileParserTests(unittest.TestCase):
         d2 = {"key1": ("=", "value1")}
         comparison = d1 == d2
         assert comparison
+
+
+def _collect_operators(node, found=None):
+    """Every operator token in a parsed tree (tuples are (op, value))."""
+    if found is None:
+        found = set()
+    if isinstance(node, tuple) and len(node) >= 2:
+        found.add(node[0])
+        _collect_operators(node[1], found)
+    elif isinstance(node, dict):
+        for value in node.values():
+            _collect_operators(value, found)
+    elif isinstance(node, list):
+        for item in node:
+            _collect_operators(item, found)
+    return found
+
+
+class ParserSemanticsTests(unittest.TestCase):
+    """Issue #241: comparison operators, repeated keys, duplicate top-level
+    keys, `#` inside strings, and escape-aware localization values."""
+
+    REPO = os.path.dirname(os.path.abspath(__file__))
+
+    def setUp(self):
+        self.parser = ParadoxFileParser()
+
+    def _parse_block(self, text):
+        return self.parser.parse_object(self.parser.tokenize("{" + text + "}"))[0]
+
+    def _normalized_block(self, text):
+        return self.parser._normalize_data(self._parse_block(text))
+
+    # -- operators ----------------------------------------------------------
+    def test_tokenize_keeps_not_equal_exists_and_double_equal_operators(self):
+        """`!` and `?` used to belong to no token class and were dropped, so
+        `x != 0` tokenized as `x = 0`."""
+        tokens = self.parser.tokenize("x != 0\npower_bloc ?= { a = b }\ny == z\nw<=1")
+        self.assertEqual(tokens, [
+            "x", "!=", "0",
+            "power_bloc", "?=", "{", "a", "=", "b", "}",
+            "y", "==", "z",
+            "w", "<=", "1",
+        ])
+
+    def test_parse_object_preserves_comparison_operators(self):
+        obj = self._parse_block("x != 0 power_bloc ?= { a = b } y == z gdp >= 5")
+        self.assertEqual(obj, {
+            "x": ("!=", "0"),
+            "power_bloc": ("?=", {"a": ("=", "b")}),
+            "y": ("==", "z"),
+            "gdp": (">=", "5"),
+        })
+
+    def test_real_mod_files_keep_comparison_operators(self):
+        """The mod sites named in #241: `!= 0` in script_values/modified.txt,
+        `!= this` in treaty_articles, `power_bloc ?= {` in extra_laws."""
+        cases = {
+            "common/script_values/modified.txt": "!=",
+            "common/treaty_articles/extra_treaty_articles.txt": "!=",
+            "common/laws/extra_laws.txt": "?=",
+        }
+        for rel, op in cases.items():
+            path = os.path.join(self.REPO, rel)
+            if not os.path.isfile(path):
+                self.skipTest(f"{rel} not present")
+            parser = ParadoxFileParser()
+            parser.parse_file(path, apply_directives=False)
+            self.assertIn(op, _collect_operators(parser.data), rel)
+
+    # -- repeated keys --------------------------------------------------------
+    def test_repeated_keys_keep_each_siblings_operator(self):
+        """List conversion used to rewrite every earlier sibling's operator
+        with the current key's: `gdp > 1000` became `gdp = 1000`."""
+        obj = self._parse_block("gdp > 1000 has_law = law_type:a has_law = law_type:b")
+        self.assertEqual(obj, [
+            {"gdp": (">", "1000")},
+            {"has_law": ("=", "law_type:a")},
+            {"has_law": ("=", "law_type:b")},
+        ])
+        self.assertEqual(self.parser._normalize_data(obj), {
+            "gdp": (">", "1000"),
+            "has_law": [("=", "law_type:a"), ("=", "law_type:b")],
+        })
+
+    def test_repeated_key_with_mixed_operators_keeps_each_entry_operator(self):
+        self.assertEqual(
+            self._normalized_block("x > 1 x < 5 x != 3"),
+            {"x": [(">", "1"), ("<", "5"), ("!=", "3")]},
+        )
+
+    def test_identical_duplicates_are_appended_not_collapsed(self):
+        """`add = 5 add = 5 add = 3` is three script-value steps, not two."""
+        obj = self._parse_block("add = 5 add = 5 add = 3")
+        self.assertEqual(obj, [
+            {"add": ("=", "5")}, {"add": ("=", "5")}, {"add": ("=", "3")},
+        ])
+        self.assertEqual(
+            self.parser._normalize_data(obj),
+            {"add": [("=", "5"), ("=", "5"), ("=", "3")]},
+        )
+
+    def test_identical_duplicate_blocks_and_late_duplicates_are_kept(self):
+        self.assertEqual(
+            self._normalized_block("add_modifier = { name = a } add_modifier = { name = a }"),
+            {"add_modifier": [("=", {"name": ("=", "a")}), ("=", {"name": ("=", "a")})]},
+        )
+        # A duplicate that only appears after another key already repeated.
+        self.assertEqual(
+            self._normalized_block("a = 1 a = 2 b = 3 b = 3"),
+            {"a": [("=", "1"), ("=", "2")], "b": [("=", "3"), ("=", "3")]},
+        )
+
+    def test_unique_keys_still_parse_to_a_dict(self):
+        self.assertEqual(self._parse_block("a = 1 b > 2"), {"a": ("=", "1"), "b": (">", "2")})
+
+    # -- comments -------------------------------------------------------------
+    def test_tokenize_hash_inside_string_is_not_a_comment(self):
+        tokens = self.parser.tokenize('desc = "Cost: #N 5 #!" # a real comment\nnext = 1')
+        self.assertEqual(tokens, ["desc", "=", '"Cost: #N 5 #!"', "next", "=", "1"])
+
+    def test_tokenize_unterminated_quote_still_cuts_at_hash(self):
+        """Fallback for a line whose quote never closes: the old split() rule."""
+        self.assertEqual(self.parser._strip_comment('x = "oops # not'), 'x = "oops ')
+        self.assertEqual(self.parser._strip_comment("x = 1 # c"), "x = 1 ")
+        self.assertEqual(self.parser._strip_comment("# whole line"), "")
+
+    # -- files ----------------------------------------------------------------
+    def _write(self, tmp, name, text):
+        path = os.path.join(tmp, name)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        return path
+
+    def test_parse_file_duplicate_top_level_key_last_wins_and_warns(self):
+        """parse_file(apply_directives=True) used to hand the list to
+        merge_data and drop the whole file with AttributeError."""
+        text = "a = { x = 1 }\nb = { y = 1 }\na = { x = 2 }\n"
+        for apply_directives in (True, False):
+            with self.subTest(apply_directives=apply_directives):
+                with tempfile.TemporaryDirectory() as tmp:
+                    path = self._write(tmp, "dup.txt", text)
+                    parser = ParadoxFileParser()
+                    with self.assertLogs("paradox_file_parser", level="WARNING") as logs:
+                        parser.parse_file(path, apply_directives=apply_directives)
+                    self.assertEqual(parser.data, {
+                        "a": ("=", {"x": ("=", "2")}),
+                        "b": ("=", {"y": ("=", "1")}),
+                    })
+                    self.assertEqual(len(logs.output), 1)
+                    self.assertIn("dup.txt", logs.output[0])
+                    self.assertIn("more than once: a (", logs.output[0])
+
+    def test_parse_file_without_duplicates_does_not_warn(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write(tmp, "ok.txt", "a = { x = 1 }\nb = { y = 1 }\n")
+            with self.assertNoLogs("paradox_file_parser", level="WARNING"):
+                ParadoxFileParser().parse_file(path)
+
+    def test_parse_file_repeated_inject_blocks_fold_in_order(self):
+        """extra_companies_vanilla_updates.txt injects each company twice
+        (phase 1 / phase 2). Both blocks must survive, as if in two files."""
+        mod_text = (
+            "INJECT:c = { building_types = { a } }\n"
+            "INJECT:c = { building_types = { b } bonus = { x = 1 } }\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            mod_path = self._write(tmp, "mod.txt", mod_text)
+            base_path = self._write(tmp, "base.txt", "c = { building_types = { v } }\n")
+            # Mod path (ModState.parse_mod_file): directives kept, value folded.
+            mod = ParadoxFileParser()
+            with self.assertNoLogs("paradox_file_parser", level="WARNING"):
+                mod.parse_file(mod_path, apply_directives=False)
+            self.assertEqual(mod.data, {"INJECT:c": ("=", {
+                "building_types": ("=", ["a", "b"]),
+                "bonus": ("=", {"x": ("=", "1")}),
+            })})
+            # Directive path: folded block injects into the earlier definition.
+            full = ParadoxFileParser()
+            full.parse_file(base_path)
+            full.parse_file(mod_path)
+            self.assertEqual(full.data, {"c": ("=", {
+                "building_types": ("=", ["v", "a", "b"]),
+                "bonus": ("=", {"x": ("=", "1")}),
+            })})
+
+    def test_merge_data_applies_directives_from_a_mod_file(self):
+        """ModState flow: vanilla via parse_file(), mod via parse_mod_file
+        (apply_directives=False) then merge_data() with INJECT:/REPLACE:."""
+        vanilla = "law_a = { x = 1 tags = { p } }\nlaw_b = { y = 1 }\n"
+        mod = (
+            "INJECT:law_a = { z = 3 tags = { q } }\n"
+            "REPLACE:law_b = { y = 2 }\n"
+            "law_c = { w > 1 w < 9 }\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            parser = ParadoxFileParser()
+            parser.parse_file(self._write(tmp, "vanilla.txt", vanilla))
+            mod_parser = ParadoxFileParser()
+            mod_parser.parse_file(self._write(tmp, "mod.txt", mod), apply_directives=False)
+            parser.merge_data(mod_parser.data)
+        self.assertEqual(parser.data, {
+            "law_a": ("=", {"x": ("=", "1"), "tags": ("=", ["p", "q"]), "z": ("=", "3")}),
+            "law_b": ("=", {"y": ("=", "2")}),
+            "law_c": ("=", {"w": [(">", "1"), ("<", "9")]}),
+        })
+
+    # -- localization ---------------------------------------------------------
+    def test_parse_loc_line_reads_escaped_quotes_whole(self):
+        """The old rule cut at the second `"`, so a value with `\"` read back
+        as a lone backslash (augmentation_events.* in te_events_l_english.yml)."""
+        line = r' augmentation_events.4.d:0 "Leaders say humanity is \"playing God\" and demand limits."'
+        self.assertEqual(
+            parse_loc_line(line),
+            ("augmentation_events.4.d", r'Leaders say humanity is \"playing God\" and demand limits.'),
+        )
+        self.assertEqual(parse_loc_line(r' k:1 "\"a,\" b said.\n\n\"c\"" # "not this"'),
+                         ("k", r'\"a,\" b said.\n\n\"c\"'))
+
+    def test_parse_loc_line_plain_and_versioned_keys(self):
+        self.assertEqual(parse_loc_line(' key:0 "value"  # trailing'), ("key", "value"))
+        self.assertEqual(parse_loc_line('key: "value"'), ("key", "value"))
+        self.assertEqual(parse_loc_line(' key:0 "  padded  "'), ("key", "padded"))
+        self.assertEqual(parse_loc_line(' key:0 ""'), ("key", ""))
+
+    def test_parse_loc_line_skips_header_comments_and_unquoted_lines(self):
+        for line in (
+            "l_english:",
+            "﻿l_english:",
+            " # section: notes",
+            "# plain: comment",
+            "",
+            "   ",
+            " key_without_value:0",
+            " key_without_value:0 bare",
+            ' two words: "x"',
+            r' unterminated:0 "never closes \"',
+        ):
+            self.assertIsNone(parse_loc_line(line), repr(line))
+
+    def test_split_loc_line_returns_raw_value_and_trailing_comment(self):
+        """concept_reference_audit reads `# REVIEWED` suppressions from the
+        text after the closing quote; an escaped quote must not end it early."""
+        line = r' k:0 "He said \"go\"" # REVIEWED 2026-05-09: rationale' + "\n"
+        self.assertEqual(
+            split_loc_line(line),
+            ("k", r'He said \"go\"', " # REVIEWED 2026-05-09: rationale"),
+        )
+        self.assertEqual(split_loc_line(' k:0 " padded "'), ("k", " padded ", ""))
+        self.assertIsNone(split_loc_line("l_english:"))
+
+    def test_add_localization_end_to_end(self):
+        text = (
+            "﻿l_english:\n"
+            " # SECTION: one\n"
+            ' plain:0 "Hello"\n'
+            r' quoted:0 "She said \"go.\""' "\n"
+            "# comment line\n"
+            ' spaced: "  trimmed "\n"'
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "x_l_english.yml"), "w", encoding="utf-8") as f:
+                f.write(text)
+            ms = ModState({}, {})
+            ms.add_localization(tmp)
+        self.assertEqual(ms.localization, {
+            "plain": "Hello",
+            "quoted": r'She said \"go.\"',
+            "spaced": "trimmed",
+        })
 
 
 if __name__ == "__main__":
