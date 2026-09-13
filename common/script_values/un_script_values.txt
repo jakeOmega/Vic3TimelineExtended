@@ -102,6 +102,8 @@ un_vote_eligible_member_count = {
 un_vote_expulsion_passed = {
 	value = global_var:un_vote_support
 	multiply = 3
+	# Subtracted twice on purpose — that is the `- count * 2` of the 2/3 test,
+	# written as two steps rather than a nested `subtract = { multiply = 2 }`.
 	subtract = un_vote_eligible_member_count
 	subtract = un_vote_eligible_member_count
 }
