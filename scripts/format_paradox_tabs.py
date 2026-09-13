@@ -47,6 +47,7 @@ def format_text(text: str) -> str:
     lines = text.splitlines()
     formatted_lines: list[str] = []
     depth = 0
+    tab = "\t"  # hoisted: a backslash inside an f-string expression needs 3.12+
 
     for line in lines:
         stripped = line.strip()
@@ -56,7 +57,7 @@ def format_text(text: str) -> str:
 
         code = _code_portion(stripped)
         indent_depth = max(depth - _leading_closers(code.lstrip()), 0)
-        formatted_lines.append(f"{'\t' * indent_depth}{stripped}")
+        formatted_lines.append(f"{tab * indent_depth}{stripped}")
 
         open_count = code.count("{")
         close_count = code.count("}")

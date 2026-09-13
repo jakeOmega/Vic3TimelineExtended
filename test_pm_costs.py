@@ -115,9 +115,11 @@ class UpdateCombatUnitLocTest(unittest.TestCase):
         self.assertEqual(warnings, [])
         # Base-price integer corrected to 4*120 + 10*70 + 4*40 = 1340.
         self.assertIn("Cost at base prices: #N @money!1340 #!", text)
-        # Market-price line appended with the right SV reference.
+        # Market-price line appended with the right SV reference, using the
+        # tagged game-concept label pm_costs._build_market_cost_line emits.
         self.assertIn(
-            "Cost at current market prices: #N @money!"
+            "Cost at current [Concept('concept_market_price', 'market prices')]: "
+            "#N @money!"
             "[GetPlayer.MakeScope.ScriptValue("
             "'value_combat_unit_market_cost_armored_infantry')|0] #!",
             text,

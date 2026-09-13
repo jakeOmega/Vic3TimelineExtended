@@ -369,9 +369,13 @@ def regenerate(mod_state=None) -> dict:
 
 if __name__ == "__main__":
     import sys
-    from path_constants import base_game_path, mod_path as _mp
+    from path_constants import mod_path as _mp
 
     if len(sys.argv) > 1 and sys.argv[1] == "bootstrap":
+        # Only the bootstrap subcommand reads vanilla; keep the default audit
+        # runnable on a machine with no Victoria 3 install.
+        from path_constants import base_game_path
+
         print(bootstrap_catalog(base_game_path, _mp))
     else:
         print(render_report(audit(_mp), _mp))
