@@ -391,7 +391,7 @@ The weekly change is the sum of the named script values in vanilla `common/scrip
 - **Relations**: fighting a declared rival (positive); for AI subjects fighting beside their overlord, their attitude toward it.
 - **Scripted**: `add_war_support_change` accumulates event-driven change, readable via `additional_war_support_change`.
 
-**Mod-relevant consequence.** Defines the mod overrides can now move war support indirectly. The mod's `NWar|DEVASTATION_*` overrides feed straight into the devastation source; `DEVASTATION_FROM_BATTLES` (formerly 30× vanilla) was reverted to vanilla for 1.14 pending war support playtesting.
+**Mod-relevant consequence.** Defines the mod already overrides can now move war support indirectly. In particular the mod's `NWar|DEVASTATION_*` overrides (much higher devastation per battle than vanilla) feed straight into the devastation source.
 
 ### Capitulation and war-goal self-enforcement
 
