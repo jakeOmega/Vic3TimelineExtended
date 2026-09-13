@@ -118,6 +118,9 @@ Be concrete in the issue: the exact query/validation you needed, the endpoint sh
 - Localization keys: prefer adding to existing `*_l_english.yml` files, then run `python organize_loc.py`.
 - **Never hand-edit auto-generated files.** Always edit the generator's input and re-run. Full ownership map: `docs/auto_generated_files.md`. Quick check while exploring: `git grep -l "AUTO-GENERATED\|do not edit manually" common/ map_data/ localization/`.
 - Use `python3` on this system (no `python` alias). README/CLAUDE.md `python <script>.py` invocations all work as `python3`.
+- **`docs/systems/journal_entry_systems.md` is the repo's one CRLF file.** A Python rewrite (`open(...).write`) silently flips it to LF and turns a two-line edit into a 1,100-line diff; preserve its line endings (`newline=""` on read/write) or edit it with `sed`/`Edit`.
+- **Parallel checkouts: sparse-exclude `gfx/`.** `git worktree add --no-checkout -b <branch> <dir> origin/main && cd <dir> && git sparse-checkout set --no-cone '/*' '!/gfx/' && git checkout <branch>` skips the 1.8 GB texture tree (a full worktree is ~1.9 GB). Only tasks that touch textures need a full checkout. The game-independent checks (`python3 -m unittest discover -s . -p 'test_*.py'`, `ruff check .`, the `--strict` audits, `scripts/analysis/check_post_load_rosters.py`) all run in a sparse worktree with the dummy `VIC3_*` env vars from CI.
+- **Git pathspecs: `**` is not recursive across `/` unless you use `:(glob)`.** `git ls-files 'events/**/*.txt'` matches nothing; `git ls-files ':(glob)events/**/*.txt'` (or the plain `'events/*.txt'`, which already crosses directories) does. `.github/workflows/ci.yml` uses the `:(glob)` form.
 
 ### Stacked PRs must target `main`, not the parent feature branch
 
