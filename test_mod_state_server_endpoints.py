@@ -621,6 +621,22 @@ class EntityTypeResolverTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
+# /tech-unlocks record copy must isolate the cached index from ?annotate=
+# ---------------------------------------------------------------------------
+class TechUnlocksRecordCopyTests(unittest.TestCase):
+    def test_annotating_copy_leaves_cached_entries_untouched(self):
+        cached = {
+            "by_type": {"PMs": [{"type": "PMs", "id": "pm_x"}]},
+            "summary": {"PMs": 1},
+            "n_total": 1,
+        }
+        copied = mss.ModStateHandler._copy_unlocks_record(cached)
+        # Stand-in for annotators.annotate_entries, which does e.update(extra).
+        copied["by_type"]["PMs"][0]["flag"] = "OK"
+        self.assertNotIn("flag", cached["by_type"]["PMs"][0])
+
+
+# ---------------------------------------------------------------------------
 # #227 / #229 — HTTP surfaces (skip until the server is restarted on new code)
 # ---------------------------------------------------------------------------
 class VersionAwareStatusHTTPTests(unittest.TestCase):

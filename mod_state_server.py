@@ -6444,8 +6444,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     @staticmethod
     def _copy_unlocks_record(rec: dict) -> dict:
+        # Copy the entry dicts too, not just the lists: `?annotate=` mutates
+        # entries in place, and a shallow copy would stamp annotator fields
+        # onto `_tech_unlocks_index_cache` for every later request.
         return {
-            "by_type": {k: list(v) for k, v in rec["by_type"].items()},
+            "by_type": {k: [dict(e) for e in v] for k, v in rec["by_type"].items()},
             "summary": dict(rec["summary"]),
             "n_total": rec["n_total"],
         }
