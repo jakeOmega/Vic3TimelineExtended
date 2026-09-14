@@ -3944,3 +3944,175 @@ ministry_law_events.57 = {
 		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
 	}
 }
+
+# ======================================================================
+#  58 – The Grandfather Clause  (Environment – Amendment, temporary)
+#  Offers amendment_env_grandfather_clause as a TEMPORARY phase-in
+#  (timeout = 120 months, counted from law activation). Expiry fires
+#  on_amendment_timeout -> ministry_law_events.59
+#  (common/on_actions/amendment_on_actions.txt). Issue #278.
+# ======================================================================
+ministry_law_events.58 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.58.t
+	desc = ministry_law_events.58.d
+	flavor = ministry_law_events.58.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/bureaucratic_turf_war.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_ministry_of_the_environment
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_env_grandfather_clause
+			}
+		}
+		ig:ig_industrialists ?= {
+			ig_counts_as_marginal = no
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Grant existing works a ten-year phase-in (temporary amendment)
+		name = ministry_law_events.58.a
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_env_grandfather_clause
+				sponsor = scope:industrialists_ig
+				cooldown = 48
+				timeout = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # No exemptions
+		name = ministry_law_events.58.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+}
+
+# ======================================================================
+#  59 – The Phase-In Ends  (Environment – Amendment expiry)
+#  Fired by te_amendment_timeout_on_action when the temporary
+#  amendment_env_grandfather_clause expires. The engine has already
+#  removed the amendment; "keep" re-adds it permanently (no timeout —
+#  a re-timeout on an already-active law is unverified and could expire
+#  immediately, re-firing this event). Not pooled; no cooldown.
+# ======================================================================
+ministry_law_events.59 = {
+	type = country_event
+	placement = root
+
+	title = ministry_law_events.59.t
+	desc = ministry_law_events.59.d
+	flavor = ministry_law_events.59.f
+
+	event_image = { texture = "gfx/event_pictures/bureaucratic_turf_war.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	trigger = {
+	}
+
+	immediate = {
+		# Re-derive scopes locally rather than relying on the on-action's saves
+		active_law:lawgroup_ministry_of_the_environment ?= {
+			save_scope_as = sunset_law
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	option = { # Make the grandfather clause permanent
+		name = ministry_law_events.59.a
+		trigger = {
+			exists = scope:sunset_law
+			exists = scope:industrialists_ig
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:industrialists_ig ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		scope:sunset_law = {
+			add_amendment = {
+				type = amendment_env_grandfather_clause
+				sponsor = scope:industrialists_ig
+				cooldown = 120
+			}
+		}
+		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time is_decaying = yes }
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # Let it lapse
+		name = ministry_law_events.59.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		scope:industrialists_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}

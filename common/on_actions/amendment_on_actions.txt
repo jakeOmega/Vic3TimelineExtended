@@ -1,0 +1,48 @@
+﻿# ======================================================================
+#  TEMPORARY AMENDMENT EXPIRY – ON ACTIONS  (issue #278)
+#
+#  on_amendment_timeout (vanilla 1.13.10+):
+#    Root            = country that owns the law
+#    scope:amendment = the amendment that just expired (already removed
+#                      from the law by the engine)
+#    scope:law       = the law it was attached to
+#
+#  Vanilla's handler is a bare effect = { } that saves
+#  timed_out_amendment_type and posts the amendment_timed_out toast.
+#  We add a named sub-action via on_actions = { } (additive) — adding
+#  effect = { } here would overwrite vanilla's block and kill the toast.
+#
+#  Temporary attachments are only ever made by mod events (IG-negotiated
+#  amendments are always permanent), so matching on the amendment type is
+#  unambiguous. Each follow-up event re-derives its own scopes in
+#  immediate = { }; the saves below are belt-and-braces.
+# ======================================================================
+
+on_amendment_timeout = {
+	on_actions = {
+		te_amendment_timeout_on_action
+	}
+}
+
+te_amendment_timeout_on_action = {
+	effect = {
+		scope:law = {
+			save_scope_as = sunset_law
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+		if = {
+			limit = { scope:amendment.type = amendment_type:amendment_national_champion_exemption }
+			trigger_event = { id = extra_law_events.85 }	# The Champion's Decade Ends
+		}
+		else_if = {
+			limit = { scope:amendment.type = amendment_type:amendment_corporate_data_exemption }
+			trigger_event = { id = extra_law_events.86 }	# The Grace Period Closes
+		}
+		else_if = {
+			limit = { scope:amendment.type = amendment_type:amendment_env_grandfather_clause }
+			trigger_event = { id = ministry_law_events.59 }	# The Phase-In Ends
+		}
+	}
+}

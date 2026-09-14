@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 734
-**Event files:** 38
+**Total events:** 748
+**Event files:** 39
 
 ## agricultural_diffusion_events.txt
 
@@ -1053,109 +1053,109 @@ Each event is listed with its title, description, and flavor text (where availab
 ### extra_law_events.1
 - **Title:** The Bankers' Lobby
 - **Description:** Our proposed financial reforms have drawn the attention of powerful banking interests. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have dispatched a delegation to the halls of government, armed with dire predictions about the consequences of [SCOPE.sLaw('current_law_scope').GetName].
-- **Flavor:** "You must understand, gentlemen, that if you proceed with this legislation, you will be sawing through the very branch upon which the prosperity of this nation sits. We are not here to threaten - merely to illuminate the consequences of haste."
+- **Flavor:** \"You must understand, gentlemen, that if you proceed with this legislation, you will be sawing through the very branch upon which the prosperity of this nation sits. We are not here to threaten - merely to illuminate the consequences of haste.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.2
 - **Title:** A Run on the Banks
 - **Description:** A wave of panic has swept through the financial houses as depositors, alarmed by rumors about the coming regulatory changes, have begun withdrawing their savings. Queues stretch around the block at several major institutions.
-- **Flavor:** "I asked the teller for my money and he had the audacity to tell me to come back next week! Next week! By then these new laws will have turned my savings into wallpaper!"
+- **Flavor:** \"I asked the teller for my money and he had the audacity to tell me to come back next week! Next week! By then these new laws will have turned my savings into wallpaper!\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.3
 - **Title:** The Gold Question
 - **Description:** A heated debate has erupted over our proposed monetary reforms. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have rallied behind the old monetary order, arguing that abandoning it will bring ruin upon the nation's finances.
-- **Flavor:** "You shall not press down upon the brow of labor this crown of gold! You shall not crucify mankind upon a cross of metal! The wealth of a nation is measured in its industry, not in bars locked away in a vault."
+- **Flavor:** \"You shall not press down upon the brow of labor this crown of gold! You shall not crucify mankind upon a cross of metal! The wealth of a nation is measured in its industry, not in bars locked away in a vault.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.4
 - **Title:** The Printing Press of Money
 - **Description:** Advocates of the new fiat currency system have made a compelling case before the legislature: the ability to control the money supply will allow the government to smooth out the devastating boom-and-bust cycles that have plagued the nation.
-- **Flavor:** "The gold bugs would have us chained to a lump of metal dug from the earth, when the true wealth of a nation flows from the creativity and labor of its people. Give me a printing press and I shall give you full employment!"
+- **Flavor:** \"The gold bugs would have us chained to a lump of metal dug from the earth, when the true wealth of a nation flows from the creativity and labor of its people. Give me a printing press and I shall give you full employment!\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.5
 - **Title:** The Wiretapping Scandal
 - **Description:** A journalist has published a damning exposé revealing that government agents have been intercepting the private correspondence of ordinary citizens. The revelations have ignited a fierce public debate about the proper limits of state surveillance.
-- **Flavor:** "They read my letters to my mother. My mother! And for what? Because I once attended a lecture by a man who attended a lecture by a man the police found suspicious? This is not security - this is tyranny dressed in a clerk's coat."
+- **Flavor:** \"They read my letters to my mother. My mother! And for what? Because I once attended a lecture by a man who attended a lecture by a man the police found suspicious? This is not security - this is tyranny dressed in a clerk's coat.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.6
 - **Title:** The Viral Campaign
 - **Description:** A grassroots campaign organized by the [SCOPE.gsInterestGroup('supporting_ig').GetName] has gone viral across the nation's digital networks, generating enormous public interest in our proposed [SCOPE.sLaw('current_law_scope').GetName] legislation.
-- **Flavor:** "It started as a single post on a message board. Within forty-eight hours it had been shared by millions. The censors blocked the original site on Thursday. By Friday there were twelve mirrors."
+- **Flavor:** \"It started as a single post on a message board. Within forty-eight hours it had been shared by millions. The censors blocked the original site on Thursday. By Friday there were twelve mirrors.\"
 - **Current image:** gfx/event_pictures/surveillance_cameras_cityscape.dds
 
 ### extra_law_events.7
 - **Title:** The Ethics of the Gene
 - **Description:** The proposed changes to our genetic legislation have sparked a furious moral debate. The [SCOPE.gsInterestGroup('devout_ig').GetName] have organized public sermons denouncing the 'arrogance of man,' while scientists plead for the freedom to pursue breakthroughs that could end hereditary disease.
-- **Flavor:** "To rewrite the very code of life written by the Almighty is to commit the sin of Prometheus. But then, Prometheus did bring us fire, and we have yet to return it."
+- **Flavor:** \"To rewrite the very code of life written by the Almighty is to commit the sin of Prometheus. But then, Prometheus did bring us fire, and we have yet to return it.\"
 - **Current image:** gfx/event_pictures/surveillance_cameras_cityscape.dds
 
 ### extra_law_events.8
 - **Title:** The Robber Barons
 - **Description:** Public anger has been building against the great industrial combines. Pamphlets circulate depicting the [SCOPE.gsInterestGroup('industrialists_ig').GetName] as bloated spiders sitting at the center of a web of monopoly, choking fair competition and gouging the common consumer.
-- **Flavor:** "The great trusts have turned the marketplace into a private fiefdom. Where once a hundred firms competed, now one baron sits upon a throne of steel and oil, and dares to call his extortion 'efficiency.'"
+- **Flavor:** \"The great trusts have turned the marketplace into a private fiefdom. Where once a hundred firms competed, now one baron sits upon a throne of steel and oil, and dares to call his extortion 'efficiency.'\"
 - **Current image:** gfx/event_pictures/genetics_laboratory.dds
 
 ### extra_law_events.9
 - **Title:** The Pirate's Dilemma
 - **Description:** Our proposed changes to intellectual property law have split the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName]. Some argue passionately that ideas are the common heritage of mankind, while others insist that without the protection of patents, the wellspring of invention will dry up.
-- **Flavor:** "If I plant an apple tree, the apples are mine. But if I sing a song, does it not belong to everyone who hears it? The question of who owns an idea is, I suspect, the question that will define this century."
+- **Flavor:** \"If I plant an apple tree, the apples are mine. But if I sing a song, does it not belong to everyone who hears it? The question of who owns an idea is, I suspect, the question that will define this century.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.10
 - **Title:** Reports from the Front
 - **Description:** Harrowing accounts of battlefield atrocities have reached the newspapers, shocking the public conscience. Photographs of civilian suffering and descriptions of indiscriminate bombardment have galvanized support for the proposed [SCOPE.sLaw('current_law_scope').GetName] legislation.
-- **Flavor:** "I have seen things in the field that I shall carry to my grave. If the purpose of war is to defend civilization, then we must not abandon civilization in its prosecution. There must be lines that even the victorious dare not cross."
+- **Flavor:** \"I have seen things in the field that I shall carry to my grave. If the purpose of war is to defend civilization, then we must not abandon civilization in its prosecution. There must be lines that even the victorious dare not cross.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.11
 - **Title:** The Generals Object
 - **Description:** Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a memorandum to the government protesting the proposed [SCOPE.sLaw('current_law_scope').GetName]. They argue that binding the hands of commanders in wartime will cost more lives than it saves.
-- **Flavor:** "With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers - not yours - who will pay the price."
+- **Flavor:** \"With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers - not yours - who will pay the price.\"
 - **Current image:** gfx/event_pictures/automation_robots_factory.dds
 
 ### extra_law_events.12
 - **Title:** A Question of Punishment
 - **Description:** A prominent member of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] has published a treatise arguing that the purpose of the justice system should not be vengeance, but the restoration of the offender to productive membership in society.
-- **Flavor:** "The man who emerges from our prisons today is harder, angrier, and less capable of honest work than the day he entered. We have built factories of recidivism and called them houses of justice. There must be a better way."
+- **Flavor:** \"The man who emerges from our prisons today is harder, angrier, and less capable of honest work than the day he entered. We have built factories of recidivism and called them houses of justice. There must be a better way.\"
 - **Current image:** gfx/event_pictures/automation_robots_factory.dds
 
 ### extra_law_events.13
 - **Title:** Tongues of the Nation
 - **Description:** Our proposed language reforms have met fierce resistance from the [SCOPE.gsInterestGroup('opposing_ig').GetName], who see the legislation as an assault on the cultural identity of communities across the nation.
-- **Flavor:** "A language is not merely a tool for commerce. It is the vessel of a people's history, their songs, their prayers. The schoolmaster told me last week that his pupils no longer know the words to the harvest hymn. He has been teaching it for thirty years."
+- **Flavor:** \"A language is not merely a tool for commerce. It is the vessel of a people's history, their songs, their prayers. The schoolmaster told me last week that his pupils no longer know the words to the harvest hymn. He has been teaching it for thirty years.\"
 - **Current image:** gfx/event_pictures/language_reform_classroom.dds
 
 ### extra_law_events.14
 - **Title:** A Donor Scandal
 - **Description:** An investigation has revealed that several prominent politicians received lavish gifts and secret payments from wealthy donors in exchange for favorable legislation. The public is outraged, and reformers are seizing the moment to push for [SCOPE.sLaw('current_law_scope').GetName].
-- **Flavor:** "The honorable member's vote, it seems, was not so much cast as it was purchased. One wonders if the legislature might save time by simply auctioning off its seats to the highest bidder."
+- **Flavor:** \"The honorable member's vote, it seems, was not so much cast as it was purchased. One wonders if the legislature might save time by simply auctioning off its seats to the highest bidder.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.15
 - **Title:** The Question of Autonomy
 - **Description:** A petition signed by regional leaders and local dignitaries has arrived at the capital, either demanding greater autonomy for the provinces or insisting on stronger central authority. The debate over [SCOPE.sLaw('current_law_scope').GetName] has become a lightning rod for longstanding tensions.
-- **Flavor:** "The question is not merely one of administration, but of identity. Does a citizen owe loyalty first to the province that raised him, or to the nation that protects him? The answer to this question will shape our republic for generations."
+- **Flavor:** \"The question is not merely one of administration, but of identity. Does a citizen owe loyalty first to the province that raised him, or to the nation that protects him? The answer to this question will shape our republic for generations.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.16
 - **Title:** The Augmentation Hearing
 - **Description:** A parliamentary committee has convened to hear testimony on the proposed [SCOPE.sLaw('current_law_scope').GetName] legislation. Scientists from the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] present dazzling demonstrations, while members of the [SCOPE.gsInterestGroup('devout_ig').GetName] warn of a society divided between the enhanced and the natural.
-- **Flavor:** "The witness removed his glove to reveal a hand of articulated steel, each finger moving with uncanny precision. 'I lost the original in a factory press,' he said. 'The replacement is better. The question before you today is simple: should the rest of me be allowed to catch up?'"
+- **Flavor:** \"The witness removed his glove to reveal a hand of articulated steel, each finger moving with uncanny precision. 'I lost the original in a factory press,' he said. 'The replacement is better. The question before you today is simple: should the rest of me be allowed to catch up?'\"
 - **Current image:** gfx/event_pictures/digital_privacy_screen.dds
 
 ### extra_law_events.17
 - **Title:** The Eldest Son's Complaint
 - **Description:** The proposed changes to inheritance law have provoked outrage among the [SCOPE.gsInterestGroup('landowners_ig').GetName]. The eldest sons of several prominent families have petitioned the government, warning that dividing their estates will destroy the great houses that form the backbone of rural society.
-- **Flavor:** "My father built this estate with his own hands, and his father before him. Now you tell me I must share it equally with my younger brothers, one of whom has not visited in five years and the other of whom is a notorious gambler? This is not justice - this is vandalism."
+- **Flavor:** \"My father built this estate with his own hands, and his father before him. Now you tell me I must share it equally with my younger brothers, one of whom has not visited in five years and the other of whom is a notorious gambler? This is not justice - this is vandalism.\"
 - **Current image:** gfx/event_pictures/digital_privacy_screen.dds
 
 ### extra_law_events.18
 - **Title:** Petitions of the Heart
 - **Description:** A group of citizens has delivered a moving petition to the legislature, sharing personal stories of [concept_discrimination] and asking for the protections promised by [SCOPE.sLaw('current_law_scope').GetName]. The petition has generated significant public sympathy, though the [SCOPE.gsInterestGroup('devout_ig').GetName] have denounced it.
-- **Flavor:** "We do not ask for special treatment. We ask only to walk the same streets, hold the same jobs, and love the same as any other citizen of this nation, without fear of the magistrate's knock upon the door."
+- **Flavor:** \"We do not ask for special treatment. We ask only to walk the same streets, hold the same jobs, and love the same as any other citizen of this nation, without fear of the magistrate's knock upon the door.\"
 - **Current image:** gfx/event_pictures/immigration_checkpoint.dds
 
 ### extra_law_events.19
@@ -1167,31 +1167,31 @@ Each event is listed with its title, description, and flavor text (where availab
 ### extra_law_events.20
 - **Title:** The Whistleblower
 - **Description:** A mid-ranking government clerk has leaked a trove of classified documents to the press, revealing years of hidden malfeasance and waste. The timing could not be better for our push toward [SCOPE.sLaw('current_law_scope').GetName], though the establishment is furious.
-- **Flavor:** "I knew what I was risking when I walked into that newspaper office. But I also know what it costs a nation when its government operates in the dark. Sunlight, they say, is the best disinfectant."
+- **Flavor:** \"I knew what I was risking when I walked into that newspaper office. But I also know what it costs a nation when its government operates in the dark. Sunlight, they say, is the best disinfectant.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.21
 - **Title:** A March for Dignity
 - **Description:** Thousands of citizens have taken to the streets in a peaceful march demanding equal rights and protections under [SCOPE.sLaw('current_law_scope').GetName]. The procession stretches through the heart of the capital, drawing international attention.
-- **Flavor:** "They marched in silence for the first mile. Then someone began to sing, and by the time they reached the steps of the legislature, ten thousand voices carried the melody. It was, by any measure, the most powerful argument ever made without a single word of debate."
+- **Flavor:** \"They marched in silence for the first mile. Then someone began to sing, and by the time they reached the steps of the legislature, ten thousand voices carried the melody. It was, by any measure, the most powerful argument ever made without a single word of debate.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.22
 - **Title:** The Automation Question
 - **Description:** The relentless march of automation has left thousands without work, and the [SCOPE.gsInterestGroup('trade_unions_ig').GetName] are demanding radical action. Proponents of [SCOPE.sLaw('current_law_scope').GetName] argue that when machines do the work, the bounty must be shared with all.
-- **Flavor:** "The loom does not eat. The steam-hammer does not sleep. The calculating engine does not demand a pension. And yet the men they replaced must still feed their families. If the machines have taken the work, then the machines must pay the wages."
+- **Flavor:** \"The loom does not eat. The steam-hammer does not sleep. The calculating engine does not demand a pension. And yet the men they replaced must still feed their families. If the machines have taken the work, then the machines must pay the wages.\"
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
 ### extra_law_events.23
 - **Title:** The Algorithmic Showcase
 - **Description:** Proponents of algorithmic governance have organized a dramatic public demonstration, allowing a prototype system to allocate a city's budget in real time. The results are impressive - eliminating waste, optimizing services, and doing it all in minutes rather than months.
-- **Flavor:** "The machine does not accept bribes. It does not favor one district over another because of a cousin's connections. It simply calculates the optimal outcome and executes it. Whether this is liberation or damnation, I confess, I cannot yet tell."
+- **Flavor:** \"The machine does not accept bribes. It does not favor one district over another because of a cousin's connections. It simply calculates the optimal outcome and executes it. Whether this is liberation or damnation, I confess, I cannot yet tell.\"
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
 ### extra_law_events.24
 - **Title:** The People's Assembly
 - **Description:** A mass gathering of citizens has spontaneously organized in the capital's central square, debating policy and passing informal resolutions by show of hands. The [SCOPE.gsInterestGroup('opposing_ig').GetName] view this spectacle with alarm, but supporters of [SCOPE.sLaw('current_law_scope').GetName] see it as proof that the people are ready to govern themselves.
-- **Flavor:** "For a single afternoon, the square was not a marketplace but a parliament. Fishmongers debated with professors, and the vote of a seamstress carried the same weight as that of a factory owner. It was, depending upon one's disposition, either the dawn of a new age or the beginning of the end."
+- **Flavor:** \"For a single afternoon, the square was not a marketplace but a parliament. Fishmongers debated with professors, and the vote of a seamstress carried the same weight as that of a factory owner. It was, depending upon one's disposition, either the dawn of a new age or the beginning of the end.\"
 - **Current image:** gfx/event_pictures/media_press_freedom.dds
 
 ### extra_law_events.25
@@ -1203,13 +1203,13 @@ Each event is listed with its title, description, and flavor text (where availab
 ### extra_law_events.26
 - **Title:** The Language Academy
 - **Description:** The language reform has advanced far enough that the question of institutional authority can no longer be deferred. Who shall govern the evolving standard - settling disputes over grammar, coining new technical terms, and policing loan-word policy? Proponents of a powerful regulatory academy argue that only binding rulings can ensure nationwide consistency. Others prefer a lighter consultative panel of scholars whose recommendations carry moral weight but no force of law.
-- **Flavor:** "Give me twelve grammarians with the power of decree and I shall give you a language fit for science, commerce, and diplomacy within a generation. Give me twelve grammarians without it, and I shall give you twelve conflicting style guides."
+- **Flavor:** \"Give me twelve grammarians with the power of decree and I shall give you a language fit for science, commerce, and diplomacy within a generation. Give me twelve grammarians without it, and I shall give you twelve conflicting style guides.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.27
 - **Title:** Voices From the Margin
 - **Description:** As the state-led language reform reshapes the linguistic landscape, delegations from minority communities have arrived in the capital with a plea: do not let the national language project become a weapon against their mother tongues. They ask for funding for regional-language schools, bilingual signage, and official recognition of minority literary traditions. Nationalists counter that the entire purpose of the reform is unity - and that dividing resources among dozens of regional tongues will only slow progress.
-- **Flavor:** "We do not ask you to stop building bridges - only to remember that some of us live on both sides of the river. Our children can learn the national tongue without being forced to forget the lullabies their grandmothers sang."
+- **Flavor:** \"We do not ask you to stop building bridges - only to remember that some of us live on both sides of the river. Our children can learn the national tongue without being forced to forget the lullabies their grandmothers sang.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.28
@@ -1220,7 +1220,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.29
 - **Title:** The Trust Question
-- **Description:** As the [SCOPE.sLaw('current_law_scope').GetName] legislation works its way through the halls of power, two competing visions have emerged. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] propose exempting the nation's largest enterprise from breakup - a 'national champion' clause that would preserve our ability to compete on the world stage. Meanwhile, the [SCOPE.gsInterestGroup('unions_ig').GetName] counter with a cooperative preference [concept_amendment], arguing that worker-owned enterprises should receive favorable treatment under the new rules.
+- **Description:** Grant a ten-year transition period instead.
 - **Flavor:** 'You want to break up our largest company,' the industrialist said. 'The one that employs more people than any other. The one that keeps us competitive abroad.'\n\n'We want to break up a monopoly that fixes prices and crushes competitors.'\n\n'Same thing, from different angles.' He leaned back. 'I'll offer you this: exempt the national champion, and I'll deliver the votes you need for everything else.'\n\nThe reformer stared at the ceiling. It was, she reflected, a very ugly ceiling. 'Let me think about it.'
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
@@ -1232,20 +1232,20 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.31
 - **Title:** The Privacy Bargain
-- **Description:** The privacy bill has attracted strange bedfellows. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] want a carve-out allowing businesses to collect personal data for commercial purposes - claiming that innovation requires information. Meanwhile, the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] push for whistleblower protections, arguing that no privacy law is complete without shields for those who expose government wrongdoing.
+- **Description:** Allow a three-year compliance grace period.
 - **Flavor:** 'The industrialists want a clause permitting commercial data collection,' the aide said. 'The intelligentsia want whistleblower protections written in.'\n\n'And if I give one side what they want?'\n\n'The other side kills the bill.'\n\nThe legislator rubbed her eyes and looked at the stack of [Concept('concept_amendment', 'amendments')] on her desk. There were forty-seven of them. She had read eleven.\n\n'What does the current draft do?'\n\n'Nothing that anyone particularly wants, ma'am.'
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.32
 - **Title:** Laws of the New Battlefield
 - **Description:** The debate over the rules of war has reached a critical juncture. The [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] urge us to adopt a no-first-strike pledge for our most terrible weapons - a gesture they say would enhance our diplomatic standing enormously. The [SCOPE.gsInterestGroup('military_ig').GetName], however, demand a 'military necessity' clause that would preserve the flexibility of our commanders in the field.
-- **Flavor:** "The laws of war are written by those who have never heard a shell burst overhead. But it is those who have who must enforce them - and they know, as the legislators do not, that war refuses to obey legislation."
+- **Flavor:** \"The laws of war are written by those who have never heard a shell burst overhead. But it is those who have who must enforce them - and they know, as the legislators do not, that war refuses to obey legislation.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ### extra_law_events.33
 - **Title:** Small Donors, Big Voices
 - **Description:** The [SCOPE.gsInterestGroup('unions_ig').GetName] have proposed a popular [concept_amendment] to the campaign finance bill: a small donor matching programme in which the government matches modest individual contributions, multiplying the political voice of ordinary citizens. The measure would strengthen grassroots participation but add to the bureaucratic cost of elections.
-- **Flavor:** "A farmer's penny, matched by the state, becomes worth as much as a factory owner's guinea. The Treasury has calculated the cost. The Chancellor has not yet shared the figure with Parliament."
+- **Flavor:** \"A farmer's penny, matched by the state, becomes worth as much as a factory owner's guinea. The Treasury has calculated the cost. The Chancellor has not yet shared the figure with Parliament.\"
 - **Current image:** gfx/event_pictures/drug_policy_hearing.dds
 
 ### extra_law_events.34
@@ -1552,6 +1552,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** Direct Voting or Deliberative Chambers?
 - **Description:** The direct-democracy bill [SCOPE.sLaw('current_law_scope').GetName] reaches its instrument question. Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here.
 - **Flavor:** \"A vote of all the people takes a day. A deliberation by a hundred chosen by lot takes a week and produces a better answer. The state must decide which it values more.\"\n\n\"Better by whose standard?\"\n\n\"By every standard except the speed of the answer. Which is, of course, the standard that wins most arguments in politics. Hence the difficulty of getting the deliberative model adopted.\"
+- **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
+
+### extra_law_events.85
+- **Title:** The Champion's Decade Ends
+- **Description:** Ten years ago, the [SCOPE.gsInterestGroup('industrialists_ig').GetName] secured a temporary exemption from [SCOPE.sLaw('sunset_law').GetName] for the nation's largest enterprise, on the understanding that a decade would be time enough to adjust. That decade is now over and the exemption has lapsed. The industrialists insist the 'national champion' is as vital as ever and press for the clause to be written permanently into law; small proprietors and reformers reply that a transition which never ends is no transition at all.
+- **Flavor:** \"Ten years,\" the reformer said, sliding the old agreement across the table. \"Your own signature. 'Time enough to adjust.'\"\n\n\"Circumstances change,\" the industrialist replied. \"The foreign competition has only grown.\"\n\n\"So has your company.\"\n\n\"Precisely my point.\"
+- **Current image:** gfx/event_pictures/labor_strike_picket.dds
+
+### extra_law_events.86
+- **Title:** The Grace Period Closes
+- **Description:** When [SCOPE.sLaw('sunset_law').GetName] was enacted, businesses were granted a temporary exemption from its data provisions so they could bring their practices into compliance. That grace period has now expired and the exemption has lapsed. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] argue that compliance has proven far costlier than anyone anticipated and ask that the exemption be made permanent; privacy advocates counter that three years was already generous, and that every extension is another year in which citizens' records are traded like any other commodity.
+- **Flavor:** \"We asked for time to comply,\" the company's counsel said. \"Not for a deadline.\"\n\n\"You asked for three years. You were given three years.\"\n\n\"And in those three years we discovered how much of our business depends on the very records the law forbids us to keep.\"\n\n\"Then you have discovered,\" the commissioner said, \"exactly what the law was written to change.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
 ## heir_education_events.txt
@@ -2110,6 +2122,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"Foreign aid is policy by other means. The question is which means — 'help our friends,' or 'help those who need it most.' These are different ministries dressed up alike.\"\n\n\"And the public's view?\"\n\n\"The public alternates. In peacetime the public prefers humanitarian. In tense moments the public prefers strategic. The bill must pick one. The bill's first minister will spend the next four years apologizing for the unchosen one.\"
 - **Current image:** gfx/event_pictures/ministry_establishment.dds
 
+### ministry_law_events.58
+- **Title:** The Grandfather Clause
+- **Description:** As [SCOPE.sLaw('current_law_scope').GetName] moves through the legislature, the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have arrived with a proposal rather than a protest. They accept that a Ministry of the Environment is coming; what they ask is that existing works be given a decade to adapt before the new standards bite in full. A temporary grandfather clause, they argue, would let industry modernize on its own schedule and spare the treasury a wave of closures. Conservationists warn that a ten-year exemption is ten more years of poisoned rivers.
+- **Flavor:** \"We are not asking you to abandon the ministry,\" the manufacturer said. \"We are asking you not to bankrupt every foundry built before its inspectors were born.\"\n\n\"And in ten years?\"\n\n\"In ten years the old foundries will be gone or rebuilt, and your inspectors will find nothing to object to.\"\n\nThe minister-designate made a note. She had heard the phrase 'in ten years' before, and it had always meant 'not yet.'
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+
+### ministry_law_events.59
+- **Title:** The Phase-In Ends
+- **Description:** The ten-year grandfather clause attached to [SCOPE.sLaw('sunset_law').GetName] has run its course. Older works that were spared the ministry's full standards must now meet them, and the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have returned to argue that the transition was never long enough. Making the exemption permanent would keep industry's goodwill, at the cost of admitting that the phase-in was a fiction; letting it lapse honors the bargain as written and delivers the cleaner air that was promised a decade ago.
+- **Flavor:** \"The clause expired at midnight,\" the inspector said, laying the citation on the desk. \"Your furnaces are now subject to the standard.\"\n\n\"We were promised a transition.\"\n\n\"You were given one. It lasted ten years. This,\" he tapped the paper, \"is what comes after a transition.\"
+- **Current image:** gfx/event_pictures/bureaucratic_turf_war.dds
+
 ## minor_events.txt
 
 ### minor_events_timelineextended.1
@@ -2365,6 +2389,68 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** Autonomous systems — from self-driving vehicles to AI-managed factories — have displaced millions of workers across [ROOT.GetCountry.GetNameNoFlag]. The campaign has become a battle over the future of human labor itself. Do we accelerate into a post-work paradise, or fight to preserve the dignity of human employment? The displaced workers filling rally halls want answers, not platitudes.
 - **Flavor:** \"The factory's output is up forty percent this year.\"\n\n\"And the staff?\"\n\n\"Down sixty. The car park used to be full at shift change. Now it has three cars in it, all belonging to security. The candidate who promises retraining is polling well. The candidate who promises to slow the automation is polling better.\"
 - **Current image:** gfx/event_pictures/automation_factory.dds
+
+## monument_events.txt
+
+### monument_events.1
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### monument_events.2
+- **Title:** The Scaffolding Comes Down
+- **Description:** The work is finished. Stone, glass and iron stand where there was nothing, paid for out of a treasury that could think of no better use for the money. What remains is to say what it is for.
+- **Flavor:** “It wants a name,” the architect says, not looking up from drawings she no longer needs.\n\n“It wants a purpose. The name will follow.”\n\nOutside, the crowd has already begun to gather, as crowds do around anything large enough to cast a shadow. They will decide what it means whatever we carve on it. But it is better to carve something.
+- **Current image:** unspecific_world_fair
+
+### monument_events.3
+- **Title:** A Wreath at the Column
+- **Description:** The anniversary brings the usual crowd to the monument: officials who must attend, and a surprising number who need not. The speeches are poor. The turnout is not.
+- **Flavor:** “It is the same speech every year,” one of the ministry clerks mutters.\n\n“It is the same country every year,” says the older man beside him, and removes his hat.
+- **Current image:** (unknown)
+
+### monument_events.4
+- **Title:** Pilgrims at the Shrine
+- **Description:** Word has spread further than anyone planned. They arrive on foot, from provinces whose names the clergy here have to look up, and they do not much care that the building is new.
+- **Flavor:** “We did not build it for them,” the bishop says, watching the line stretch past the gate.\n\n“No. But look who came.” his secretary agrees.
+- **Current image:** (unknown)
+
+### monument_events.5
+- **Title:** The Names Are Read
+- **Description:** Once a year the names are read aloud, in order, until there are no more. It takes most of a morning. Nobody has yet suggested shortening it.
+- **Flavor:** “They should not be read to an empty square,” the woman says, when someone offers her a chair.\n\n“Her son’s name comes early in the alphabet. She stays to the end regardless.”
+- **Current image:** (unknown)
+
+### monument_events.6
+- **Title:** A Season of Some Note
+- **Description:** The hall opens its season to a full house and a hostile press, which between them constitute success. Two of the works are said to be scandalous; the box office has noticed.
+- **Flavor:** “They are calling it decadent,” the director says, delighted.\n\n“They are calling it,” says the patron, which is the point.
+- **Current image:** (unknown)
+
+### monument_events.7
+- **Title:** The Gardens in Flower
+- **Description:** The planting has matured. What was a rectangle of mud behind hoardings is now the one place in the city where a clerk can eat lunch without tasting the foundries.
+- **Flavor:** “The rhododendrons are wrong for this climate,” the head gardener admits.\n\n“The whole park is wrong for this climate. Look at it anyway.” says his assistant.
+- **Current image:** (unknown)
+
+### monument_events.8
+- **Title:** A Night at the Glass
+- **Description:** The public nights have become oversubscribed. The observatory was built for astronomers; it is being colonised, cheerfully, by everyone else.
+- **Flavor:** “They queue two hours to look at a planet for thirty seconds,” the astronomer says.\n\n“And then they ask questions for an hour. I have stopped complaining.” says his colleague.
+- **Current image:** (unknown)
+
+### monument_events.9
+- **Title:** The Halls Are Full
+- **Description:** The exhibition changes its displays and the crowds come back to see them. Manufacturers now petition for space rather than having to be asked.
+- **Flavor:** “Every machine in there is obsolete within five years,” the curator says.\n\n“Then we shall have something to put in the cases. Five years at a time, forever.” says the director.
+- **Current image:** (unknown)
+
+### monument_events.10
+- **Title:** The Crowd Roars
+- **Description:** The fixture fills the stands and empties the streets. For three hours the city argues about something that costs it nothing.
+- **Flavor:** “There were men in that crowd who would not share a tram,” the constable says.\n\n“They shared a bench for three hours. I shall take it.” says the sergeant.
+- **Current image:** (unknown)
 
 ## movement_events_te.txt
 

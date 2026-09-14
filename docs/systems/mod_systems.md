@@ -437,9 +437,21 @@ investment — roughly a 65-year payback at base tourism price.
   that, never instead of it. Employment is `unscaled` too — a monument needs a caretaker staff, not a workforce that
   grows with its height.
 
+## Temporary Amendments (Sunset Clauses)
+
+Three amendments can be attached **temporarily** (`add_amendment = { … timeout = <months> }`) as enactment concessions. The engine removes them when the timeout (counted from law activation) elapses and fires `on_amendment_timeout`, which `common/on_actions/amendment_on_actions.txt` routes to a follow-up event offering to make the clause permanent (re-add without `timeout`; `te_legitimacy_drain` + radicals) or let it lapse (Industrialist disapproval + a few capitalist radicals). Engine semantics and authoring rules: `docs/guides/scripting_best_practices.md` § Temporary amendments.
+
+| Amendment | Delivery (DEBATE checkpoint) | cooldown / timeout (months) | Expiry event |
+|-----------|------------------------------|-----------------------------|--------------|
+| `amendment_env_grandfather_clause` (new; +5% pollution, +5% emissions, +2 Industrialist approval on `law_ministry_of_the_environment`; cancels one institution level) | `ministry_law_events.58` option a | 48 / 120 | `ministry_law_events.59` |
+| `amendment_national_champion_exemption` | `extra_law_events.29` option d (option a remains the permanent variant) | 48 / 120 | `extra_law_events.85` |
+| `amendment_corporate_data_exemption` | `extra_law_events.31` option d (option a remains the permanent variant) | 12 / 36 | `extra_law_events.86` |
+
+The `has_amendment` guards on events 29/31/58 make the permanent and temporary variants mutually exclusive within one enactment. The expiry events re-derive `sunset_law` from `active_law:<lawgroup>` and `industrialists_ig` in `immediate`, and are not in any checkpoint pool. Deferred from issue #278: a financial-regulation phase-in (the three laws' penalties are structurally different — numeric, none, boolean lock) and a wartime rules-of-war clause (no per-country war-start on-action; would need a timeout on an already-active law).
+
 ## On-Actions Reference
 
-The mod uses 11 on-action files under `common/on_actions/`. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
+The mod uses 21 on-action files under `common/on_actions/`. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
 
 ### File Index
 
@@ -449,6 +461,7 @@ The mod uses 11 on-action files under `common/on_actions/`. These wire mod logic
 | `fmc_on_actions.txt` | FMC map update triggers on diplomatic/territorial changes | Immediate |
 | `headlines.txt` | "World first" tech notifications (`on_acquired_technology`) | Immediate |
 | `law_events_on_actions.txt` | Law enactment checkpoint events (advance/debate/stall) | Immediate |
+| `amendment_on_actions.txt` | Temporary-amendment expiry follow-up events (`on_amendment_timeout`) | Immediate |
 | `langreform_events_on_actions.txt` | Language reform yearly random events | Pulse |
 | `minor_events_on_actions.txt` | Miscellaneous yearly random events | Pulse |
 | `repeatable_events_on_actions.txt` | Generic repeatable yearly events | Pulse |
@@ -541,6 +554,9 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 
 **`on_law_enactment_started`** (Root = Law scope):
 - Fires `minor_events_timelineextended.2` (law enactment notification)
+
+**`on_amendment_timeout`** (Root = Country, scope:amendment = expired amendment, scope:law = its law):
+- `te_amendment_timeout_on_action` — routes to the sunset-clause expiry events (`amendment_on_actions.txt`; see § Temporary Amendments)
 
 **`on_merge_markets`** (Root = dissolving market, scope:market = absorbing market):
 - `gw_market_join_on_action` — copies market leader's GW policy modifiers to new member

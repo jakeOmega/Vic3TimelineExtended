@@ -27,7 +27,7 @@ _None._
 
 ## Coverage
 
-- script files scanned: 319
+- script files scanned: 326
 - attitude references checked: 186
 - valid catalog keys: 15
 - total flags: 0

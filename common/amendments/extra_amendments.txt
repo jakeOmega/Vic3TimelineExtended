@@ -640,6 +640,60 @@ amendment_religious_exemption = {
 	amendment_activism_multiplier = 0.5
 }
 
+# ----------------------------------------------------------------------
+#  Environmental grandfather clause (issue #278)
+#  Attached TEMPORARILY (timeout = 120 months from law activation) by
+#  ministry_law_events.58 during enactment of law_ministry_of_the_environment.
+#  Expiry -> on_amendment_timeout -> ministry_law_events.59
+#  (common/on_actions/amendment_on_actions.txt). IGs may also negotiate it
+#  permanently through the normal would_sponsor path.
+#  +5% pollution / +5% emissions cancels one investment level of the
+#  ministry's institution (-5% per level).
+# ----------------------------------------------------------------------
+amendment_env_grandfather_clause = {
+	parent = law_no_ministry_of_the_environment
+
+	allowed_laws = {
+		law_ministry_of_the_environment
+	}
+
+	modifier = {
+		state_pollution_generation_mult = 0.05
+		country_greenhouse_gas_emissions_mult = 0.05
+		interest_group_ig_industrialists_approval_add = 2
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_no_ministry_of_the_environment
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
 # ======================================================================
 #  LANGUAGE REFORM EVENT AMENDMENTS
 #

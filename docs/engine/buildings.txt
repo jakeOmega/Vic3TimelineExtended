@@ -4860,3 +4860,18 @@ Sumitomo Besshi Mine (bg_company_buildings):
 	Sumitomo Besshi Mine:
 		Sumitomo Besshi Mine
 
+Grand Monument (bg_grand_monuments):
+	A monument raised for its own sake — a tower, an arch, a hall of marble. Ruinously expensive to build and almost free to keep, it draws visitors and lends the state a little of whatever it was raised to honour. Its [concept_tourism_throughput] bonus only pays off where a Tourism Industry exists to receive it.
+	Dedication:
+		Undedicated
+		Civic Monument
+		Grand Shrine
+		War Memorial
+		Grand Opera House
+		Botanical Gardens
+		Grand Observatory
+		Great Exhibition Hall
+		Grand Stadium
+	Maintenance:
+		Maintenance
+

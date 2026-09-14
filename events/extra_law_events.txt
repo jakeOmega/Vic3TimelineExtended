@@ -2821,6 +2821,29 @@ extra_law_events.29 = {
 		}
 	}
 
+	option = { # Temporary national champion exemption — ten-year sunset clause (issue #278)
+		name = extra_law_events.29.d
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_national_champion_exemption
+				sponsor = scope:industrialists_ig
+				cooldown = 48
+				timeout = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = shopkeepers
+		}
+	}
+
 	option = { # No amendment
 		name = extra_law_events.29.c
 		default_option = yes
@@ -3042,6 +3065,29 @@ extra_law_events.31 = {
 		add_radicals = {
 			value = very_small_radicals
 			strata = upper
+		}
+	}
+
+	option = { # Temporary corporate data exemption — three-year compliance grace period (issue #278)
+		name = extra_law_events.31.d
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_corporate_data_exemption
+				sponsor = scope:industrialists_ig
+				cooldown = 12
+				timeout = 36
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
 		}
 	}
 
@@ -7361,5 +7407,173 @@ extra_law_events.84 = {
 		add_enactment_modifier = { name = govprin_deliberative_chambers }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+	}
+}
+
+# ======================================================================
+#  AMENDMENT EXPIRY EVENTS (85–86)  — issue #278
+#  Fired by te_amendment_timeout_on_action
+#  (common/on_actions/amendment_on_actions.txt) when a TEMPORARY amendment
+#  attached by extra_law_events.29.d / .31.d expires. The engine has
+#  already removed the amendment; "keep" re-adds it permanently (no
+#  timeout — a re-timeout on an already-active law is unverified and could
+#  expire immediately, re-firing the event). Not pooled; no cooldown.
+# ======================================================================
+
+# ======================================================================
+#  85 – The Champion's Decade Ends  (Antitrust – Amendment expiry)
+# ======================================================================
+extra_law_events.85 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.85.t
+	desc = extra_law_events.85.d
+	flavor = extra_law_events.85.f
+
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	trigger = {
+	}
+
+	immediate = {
+		# Re-derive scopes locally rather than relying on the on-action's saves
+		active_law:lawgroup_antitrust ?= {
+			save_scope_as = sunset_law
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	option = { # Make the exemption permanent
+		name = extra_law_events.85.a
+		trigger = {
+			exists = scope:sunset_law
+			exists = scope:industrialists_ig
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:industrialists_ig ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		scope:sunset_law = {
+			add_amendment = {
+				type = amendment_national_champion_exemption
+				sponsor = scope:industrialists_ig
+				cooldown = 120
+			}
+		}
+		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time is_decaying = yes }
+		add_radicals = {
+			value = small_radicals
+			pop_type = shopkeepers
+		}
+	}
+
+	option = { # Let it lapse
+		name = extra_law_events.85.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		scope:industrialists_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = shopkeepers
+		}
+	}
+}
+
+# ======================================================================
+#  86 – The Grace Period Closes  (Privacy Rights – Amendment expiry)
+# ======================================================================
+extra_law_events.86 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.86.t
+	desc = extra_law_events.86.d
+	flavor = extra_law_events.86.f
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	trigger = {
+	}
+
+	immediate = {
+		# Re-derive scopes locally rather than relying on the on-action's saves
+		active_law:lawgroup_privacy_rights ?= {
+			save_scope_as = sunset_law
+		}
+		ig:ig_industrialists ?= {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	option = { # Make the exemption permanent
+		name = extra_law_events.86.a
+		trigger = {
+			exists = scope:sunset_law
+			exists = scope:industrialists_ig
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:industrialists_ig ?= { is_in_government = yes }
+				}
+				add = 3
+			}
+		}
+		scope:sunset_law = {
+			add_amendment = {
+				type = amendment_corporate_data_exemption
+				sponsor = scope:industrialists_ig
+				cooldown = 120
+			}
+		}
+		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time is_decaying = yes }
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+
+	option = { # Let it lapse
+		name = extra_law_events.86.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		scope:industrialists_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
 	}
 }
