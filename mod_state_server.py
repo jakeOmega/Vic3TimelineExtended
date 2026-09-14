@@ -1097,9 +1097,19 @@ def _find_modifier_grants(target: str, *, scope: str = "both",
 # _call_index_cache; invalidated on /reload (see _load_mod_state). One pass
 # populates the index for *all* helpers, so any subsequent lookup is a dict hit.
 _call_index_cache: dict | None = None
+# The vanilla half of that scan is the bulk of the cost and cannot change while
+# the process lives (vanilla files are read-only; a vanilla bump means
+# restarting the server), so it is built once per process and reused across
+# reloads — only the mod tree is rescanned per reload (#296). Without this the
+# background warm re-walked all of vanilla after every reload, including the
+# fast `?mod_only=true&audits_only=true` iteration path.
+_vanilla_call_index_cache: dict | None = None
 # Bumped by _invalidate_call_index on every reload. A build that started before
 # an invalidation must not write its now-stale result into the cache.
 _call_index_generation = 0
+# Serializes index builds so a request racing the background warm waits for the
+# in-flight scan instead of running a second copy of it (#296).
+_call_index_build_lock = threading.Lock()
 
 # Superset of every LHS name the three call regexes below can match. One
 # pass over a whole file answers "could this file call any mod helper at
@@ -1225,8 +1235,47 @@ def _scan_file_for_calls(abs_path: str, rel: str, origin: str,
             call_stack = []
 
 
+def _scan_tree_for_calls(origin: str, base: str, repo_root: str,
+                         callables: frozenset, index: dict) -> None:
+    """Scan one tree's `events/` + `common/` for call sites into *index*."""
+    for sub in ("events", "common"):
+        scan_dir = os.path.join(base, sub)
+        if not os.path.isdir(scan_dir):
+            continue
+        for dirpath, _dirs, files in os.walk(scan_dir):
+            for fname in files:
+                if not fname.endswith(".txt"):
+                    continue
+                abs_path = os.path.join(dirpath, fname)
+                rel = os.path.relpath(abs_path, repo_root)
+                _scan_file_for_calls(abs_path, rel, origin, callables, index)
+
+
+def _get_vanilla_call_index(callables: frozenset) -> dict:
+    """{helper: [vanilla caller, ...]}, built once per process (#296).
+
+    Safe to reuse across reloads even as `callables` changes: vanilla script is
+    immutable here, and a mod-defined helper appearing in `callables` can't add
+    vanilla call sites — vanilla only ever calls helpers vanilla itself defines.
+    """
+    global _vanilla_call_index_cache
+    if _vanilla_call_index_cache is None:
+        index: dict = defaultdict(list)
+        _vanilla_game = os.path.join(base_game_path, "game")
+        if os.path.isdir(_vanilla_game):
+            t0 = time.monotonic()
+            _scan_tree_for_calls("vanilla", _vanilla_game, _vanilla_game,
+                                 callables, index)
+            logger.info(
+                f"[call-index] vanilla scan built in {time.monotonic() - t0:.1f}s "
+                f"({len(index)} helpers with callers) — reused for this process"
+            )
+        _vanilla_call_index_cache = dict(index)
+    return _vanilla_call_index_cache
+
+
 def _build_call_index() -> dict:
-    """Scan mod + vanilla script-bearing trees once, returning
+    """Scan mod + vanilla script-bearing trees, returning
     {helper_name: [caller, ...]} for every scripted effect/trigger."""
     callables: frozenset = frozenset(
         set((ms.get_data("Scripted Effects") or {}).keys())
@@ -1235,23 +1284,9 @@ def _build_call_index() -> dict:
     index: dict = defaultdict(list)
     if not callables:
         return index
-    # (origin, base-dir-holding events/+common/, repo-root-for-relpath)
-    roots = [("mod", mod_path, mod_path)]
-    _vanilla_game = os.path.join(base_game_path, "game")
-    if os.path.isdir(_vanilla_game):
-        roots.append(("vanilla", _vanilla_game, _vanilla_game))
-    for origin, base, repo_root in roots:
-        for sub in ("events", "common"):
-            scan_dir = os.path.join(base, sub)
-            if not os.path.isdir(scan_dir):
-                continue
-            for dirpath, _dirs, files in os.walk(scan_dir):
-                for fname in files:
-                    if not fname.endswith(".txt"):
-                        continue
-                    abs_path = os.path.join(dirpath, fname)
-                    rel = os.path.relpath(abs_path, repo_root)
-                    _scan_file_for_calls(abs_path, rel, origin, callables, index)
+    for helper, callers in _get_vanilla_call_index(callables).items():
+        index[helper].extend(callers)
+    _scan_tree_for_calls("mod", mod_path, mod_path, callables, index)
     return dict(index)
 
 
@@ -1267,13 +1302,22 @@ def _get_call_index() -> dict:
     cached = _call_index_cache
     if cached is not None:
         return cached
-    gen = _call_index_generation
-    index = _build_call_index()
-    # A reload landed while we were scanning: serve this result to the caller
-    # who asked before it, but don't cache data that no longer matches ModState.
-    if gen == _call_index_generation:
-        _call_index_cache = index
-    return index
+    # Build under a lock so a request that races the background warm waits for
+    # that scan rather than duplicating it (#296) — two concurrent full scans
+    # contend on the GIL and make both slower. Re-check inside: the warm we
+    # queued behind may have just filled the cache.
+    with _call_index_build_lock:
+        cached = _call_index_cache
+        if cached is not None:
+            return cached
+        gen = _call_index_generation
+        index = _build_call_index()
+        # A reload landed while we were scanning: serve this result to the
+        # caller who asked before it, but don't cache data that no longer
+        # matches ModState.
+        if gen == _call_index_generation:
+            _call_index_cache = index
+        return index
 
 
 _call_index_warm_thread: Optional[threading.Thread] = None
@@ -1286,9 +1330,11 @@ def _warm_call_index_async() -> None:
     whole cold cost (a walk of mod + vanilla `events/` and `common/`) landed on
     whoever asked for `/scripted-effects/<id>` first, which is long enough to
     blow a client's 10 s timeout (#293). A daemon thread absorbs it instead,
-    without delaying `ready`. A request that arrives mid-warm just builds its
-    own copy; whichever finishes first fills the cache, and a build started
-    before a reload is discarded by the generation check in _get_call_index."""
+    without delaying `ready`. A request that arrives mid-warm blocks on the
+    in-flight scan rather than starting a second one (#296), and a build
+    started before a reload is discarded by the generation check in
+    _get_call_index. After the first build only the mod tree is rescanned, so
+    the warm that follows a reload costs a fraction of the cold one."""
     global _call_index_warm_thread
 
     def _warm() -> None:
