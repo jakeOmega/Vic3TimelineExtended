@@ -34,7 +34,7 @@ _None._
 
 ## Coverage
 
-- buildings audited: 521
+- buildings audited: 522
 - buildings enumerated (had a negative-employment PM): 86
 - buildings skipped (combo count > 200000): 0
 - total negative combinations: 0

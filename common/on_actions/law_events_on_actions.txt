@@ -133,6 +133,9 @@ on_law_checkpoint_debate = {
 		10 = ministry_law_events.55	# Density or Sprawl (Urban Planning)
 		10 = ministry_law_events.56	# Established Faith or Pluralist (Religion)
 		10 = ministry_law_events.57	# Strategic or Humanitarian Aid (International Aid)
+
+		# --- Ministry Law Events — amendment events (issue #278) ---
+		10 = ministry_law_events.58	# The Grandfather Clause (Environment – Amendment, temporary)
 	}
 }
 

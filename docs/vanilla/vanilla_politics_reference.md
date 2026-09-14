@@ -146,6 +146,15 @@ Power-bloc identities and principles add additional impose-paths: Ideological Un
 
 A Law Commitment from a higher-rank counterparty grants the committing country a per-rank-difference bonus to the committed law's success chance during enactment. This is a meaningful design surface: a great-power-to-minor-power Law Commitment is a substantial enactment accelerator and shows up frequently in diplomacy-driven reform play.
 
+### 3.7 Amendments
+
+Amendments are riders attached to a law instance (`common/amendments/`). Schema fields: `parent` (law whose IG/movement stances the amendment inherits), `allowed_laws`, `modifier` (added to the host law's modifiers), `tax_modifier_<level>`, `institution` + `institution_modifier` (documented, but no live vanilla amendment uses them), `possible`, `would_sponsor` (root = IG; `scope:approval` = IG approval of the parent law, unset without a parent), `amendment_activism_multiplier`, `on_activate` / `on_deactivate`. Three fields vanilla uses on every amendment are **missing from `amendments.md`**: `can_repeal` (canonically `legitimacy >= legitimacy_to_repeal_amendment`), `ai_will_revoke`, and `sponsor_modifier` (applied to the sponsoring IG).
+
+- **Attachment.** IGs sponsor amendments during enactment negotiation (always permanent), or script calls `add_amendment = { type sponsor cooldown timeout }` on a law scope (`currently_enacting_law` or `active_law:<group>`). `cooldown` = months before repeal is allowed; `timeout` = months until automatic expiry, counted from when the law takes effect (optional; `0`/omitted = permanent). Vanilla uses timeouts of 30, 60 and 600 months, always ≥ 2.5× the cooldown.
+- **Repeal.** The Repeal button is gated in code (an IG in government must oppose the parent law, opposers must out-clout supporters, no cooldown active); `can_repeal` can only narrow it. `remove_amendment = yes` on an amendment scope bypasses all of that.
+- **Triggers / links.** `has_amendment = amendment_type:X` and `amendment_count` (law scope); `any_scope_amendment` / `every_scope_amendment` iterators; amendment scope links `.type`, `.sponsor`, `.attached_law`, `.parent_law_type`; `amendment_stance` on IG/character/movement scopes.
+- **On-actions.** `on_amendment_repealed` (Root = country, `scope:amendment`) and `on_amendment_timeout` (added 1.13.10; Root = country, `scope:amendment`, `scope:law`; vanilla's effect block posts the `amendment_timed_out` toast, so extend it with a sub-action). Mod usage: `docs/systems/mod_systems.md` § Temporary Amendments.
+
 ## 4. Elections and voting laws
 
 ### 4.1 The election cycle

@@ -18,7 +18,7 @@ scripted buttons, buildings, production methods, production method groups,
 goods, government types,
 company types, combat unit types, ship types, ideologies, interest groups,
 institutions, subject types, mobilization options, diplomatic actions, pop
-needs, decisions, events. Skips scripted_effects/triggers, on_actions, modifier
+needs, decisions, amendments, events. Skips scripted_effects/triggers, on_actions, modifier
 type definitions, script values (most are arithmetic helpers — only those
 referenced in `custom_tooltip` need loc, deferred until reports show gaps).
 """
@@ -142,6 +142,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Diplomatic Actions":     _simple_name,
     "Pop Needs":              _simple_name,
     "Decisions":              _name_and_desc,
+    "Amendments":             _name_and_desc,
 }
 
 
@@ -172,6 +173,7 @@ _DIR_MAP: dict[str, str] = {
     "Diplomatic Actions":     "common/diplomatic_actions",
     "Pop Needs":              "common/pop_needs",
     "Decisions":              "common/decisions",
+    "Amendments":             "common/amendments",
     "Events":                 "events",
 }
 

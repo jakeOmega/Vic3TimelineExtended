@@ -212,6 +212,7 @@
  amendment_cooperative_preference:0 "Worker Cooperative Preference"
  amendment_cooperative_preference_desc:0 "An [concept_amendment] giving worker-owned cooperatives preferential treatment in antitrust enforcement, encouraging democratic ownership of industry."
  amendment_corporate_data_exemption_desc:0 "An [concept_amendment] carving out an exception that allows businesses to collect and use personal data for commercial purposes under privacy law."
+ amendment_env_grandfather_clause_desc:0 "An [concept_amendment] exempting existing industrial works from part of the Ministry of the Environment's standards, softening its pollution and emissions reductions while industry adapts."
  amendment_langreform_advisory_panel_desc:0 "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law."
  amendment_langreform_constructed:0 "Constructed Language"
  amendment_langreform_constructed_desc:0 "The state has adopted an entirely new constructed language designed for logical grammar and universal accessibility, accelerating technological exchange at the cost of traditional cultural bonds."

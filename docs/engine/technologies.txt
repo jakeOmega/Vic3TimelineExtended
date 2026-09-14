@@ -112,6 +112,7 @@
 		Unlocks Buildings: Creative Industries, Tourism Industry
 		Unlocks Laws: Agrarianism, Industry Banned, Legal Limbo
 		Unlocks Decrees: Greener Grass Campaign
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	International Trade - The ability to trade not just within your country, or even within your continent, but across the entire world has revolutionized the global economy.
 		Unlocking Technologies:
 			Bureaucracy
@@ -160,6 +161,7 @@
 			Academia
 		Unlocks Laws: Public Schools, State Atheism, Total Separation
 		Unlocks Parties: liberal_party
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 2: 38 technologies
 	Crystal Glass - By adding lead to glass it is possible to create glass with the appearance of crystal, which is sought after due to its value.
 		Unlocking Technologies:
@@ -887,7 +889,7 @@
 			Behaviorism
 		Unlocks Buildings: Golden Gate Bridge
 		Unlocks Laws: Neocameralism, Pro-Capital Ministry of Labor Established
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Motorized Artillery - By putting our artillery on wheels, we've made it much more mobile and effective. Now our big guns can keep up with the rest of our ground forces.
 		Unlocking Technologies:
 			Mobile Armor
@@ -1088,7 +1090,7 @@
 			Animation
 			Rural Electrification
 		Unlocks Buildings: Tokyo Tower
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Antibiotic Mass Production - Now that we can produce antibiotics in large quantities, bacterial infections are no longer a death sentence. This has done wonders for public health and makes surgery a bit less of a gamble.
 		Unlocking Technologies:
 			Antibiotics

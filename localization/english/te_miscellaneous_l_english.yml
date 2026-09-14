@@ -940,6 +940,7 @@
  ai_assisted_governance_modifier:0 "AI-Assisted Governance"
  ai_policing_banned_modifier:0 "AI Policing Banned"
  amendment_corporate_data_exemption:0 "Corporate Data Access Exemption"
+ amendment_env_grandfather_clause:0 "Environmental Grandfather Clause"
  amendment_langreform_advisory_panel:0 "Language Advisory Panel"
  amendment_langreform_minority_protection:0 "Minority Language Protection"
  amendment_langreform_national_focus:0 "National Language Priority"

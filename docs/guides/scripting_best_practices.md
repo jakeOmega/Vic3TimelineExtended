@@ -1956,6 +1956,7 @@ The `events` and `on_actions` lists are **additive** and safe to extend; `effect
 
 **Known vanilla `effect` blocks that would be overwritten:**
 - `on_election_campaign_end`: Sets `brz_election_done` variable, removes `modifier_government_recently_couped`.
+- `on_amendment_timeout`: saves `scope:amendment.type` as `timed_out_amendment_type` and posts the `amendment_timed_out` toast (the mod hooks it via a sub-action in `common/on_actions/amendment_on_actions.txt`).
 - Many `on_yearly_pulse_*` and `on_monthly_pulse_*` actions have vanilla effects.
 
 ## Comparing State References Across Scopes
@@ -1967,19 +1968,32 @@ When comparing a stored state reference (e.g. a variable holding a capital state
 
 ## `add_amendment` Requirements
 
-The `add_amendment` effect has **two required parameters** beyond `type`:
+The `add_amendment` effect takes `sponsor` and `cooldown` beyond `type` (vanilla passes both at every event call site; one decision omits `cooldown`), plus an optional `timeout`:
 
 ```
 add_amendment = {
     type = amendment_example
     sponsor = interest_group   # REQUIRED — the IG sponsoring the amendment
-    cooldown = 120             # REQUIRED — months before it can be revoked/replaced (0 = no cooldown)
+    cooldown = 120             # always passed by convention — months before it can be revoked/replaced (0 = no cooldown)
+    timeout = 120              # OPTIONAL — months until the amendment expires, counted from when the law takes effect (0/omitted = permanent)
 }
 ```
 
 **Sponsor scoping:** In history files using `active_law:lawgroup_X ?= { }`, the scope is the law and PREV is the country, so use `sponsor = PREV.ig:ig_X`. In events using `every_scope_law = { }`, ROOT is the country, so use `sponsor = ROOT.ig:ig_X`.
 
 **`possible = { always = no }` blocks `add_amendment`.** The engine checks the amendment's `possible` trigger when `add_amendment` is called. If it evaluates to false, the amendment silently fails to apply (no error, no PostValidate — just doesn't show up). For event-only amendments that shouldn't be proposed through IG activism, use `possible = { always = yes }` combined with `amendment_activism_multiplier = 0`. The `amendment_activism_multiplier` controls IG proposal behavior independently.
+
+### Temporary amendments (`timeout`) and `on_amendment_timeout`
+
+- `timeout = N` is **months, counted from when the law takes effect** (vanilla `AMENDMENT_TIMEOUT_ENACTING`: "Expires N months after the law takes effect"). All five vanilla call sites attach inside `currently_enacting_law = { }`; adding a timeout to an **already-active** law is unverified in-game — the mod avoids it.
+- Vanilla sizes `timeout` at 2.5–5× `cooldown` (12:30, 24:60, 120:600). Keep `timeout ≥ 2.5 × cooldown` so the amendment is never unrepealable right up to its own expiry.
+- The effect tooltip switches automatically to "temporarily added … expiring N months after the law takes effect" when `timeout` is passed — no custom tooltip needed.
+- On expiry the engine removes the amendment, posts the `amendment_timed_out` toast, and fires `on_amendment_timeout` (1.13.10+; Root = country, `scope:amendment` = the expired amendment, `scope:law` = the law). Vanilla's handler is a bare `effect = { }` that saves `timed_out_amendment_type` for the toast — hook it with a named sub-action (`common/on_actions/amendment_on_actions.txt`), never with `effect = { }`.
+- Inside the sub-action branch on `scope:amendment.type = amendment_type:<key>` (scope equality). `has_amendment` is useless there — the amendment is already gone. IG-negotiated attachments are always permanent, so a timeout of a given type can only come from your own event.
+- Follow-up events should **re-derive** their scopes in `immediate` (`active_law:<lawgroup> ?= { save_scope_as = … }`) rather than relying on the on-action's saved scopes propagating through `trigger_event`, guard the re-add option with `exists = scope:…`, and use plain `add_modifier` (no enactment is in progress, so `add_enactment_modifier` is invalid).
+- "Extend" is implemented as a **permanent re-add** (`add_amendment` without `timeout` on the active law). Re-adding with a new `timeout` on an active law could expire immediately if the countdown is anchored to law activation, re-firing the expiry event in a loop.
+- `remove_amendment = yes` (amendment scope, e.g. via `every_scope_amendment` on a law) removes an amendment immediately, bypassing the cooldown.
+- Mod usage (three sunset clauses, their events and timeouts): `docs/systems/mod_systems.md` § Temporary Amendments (Sunset Clauses).
 
 ## Journal Entry Modifier Scoping
 

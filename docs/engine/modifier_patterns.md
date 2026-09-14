@@ -10,91 +10,91 @@ Dynamic-modifier templates parameterized over canonical vocabularies (goods, bui
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **69**
-- Vocab size: 155; missing entries: 86
+- Vocab size: 157; missing entries: 88
 
 ### `building_group_bg_{bg}_expected_sol_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 155; missing entries: 155
+- Vocab size: 157; missing entries: 157
 
 ### `building_group_bg_{bg}_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **69**
-- Vocab size: 155; missing entries: 86
+- Vocab size: 157; missing entries: 88
 
 ### `building_group_bg_{bg}_tax_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **69**
-- Vocab size: 155; missing entries: 86
+- Vocab size: 157; missing entries: 88
 
 ### `building_group_bg_{bg}_throughput_add`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **70**
-- Vocab size: 155; missing entries: 85
+- Vocab size: 157; missing entries: 87
 
 ### `building_group_bg_{bg}_throughput_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 155; missing entries: 155
+- Vocab size: 157; missing entries: 157
 
 ### `building_group_bg_{bg}_urbanization_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 155; missing entries: 155
+- Vocab size: 157; missing entries: 157
 
 ### `building_group_bg_{bg}_wages_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 155; missing entries: 155
+- Vocab size: 157; missing entries: 157
 
 ### `building_{building}_employees_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1041; missing entries: 1041
+- Vocab size: 1043; missing entries: 1043
 
 ### `building_{building}_employees_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1041; missing entries: 1041
+- Vocab size: 1043; missing entries: 1043
 
 ### `building_{building}_max_level_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1041; missing entries: 1041
+- Vocab size: 1043; missing entries: 1043
 
 ### `building_{building}_mortality_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1041; missing entries: 1041
+- Vocab size: 1043; missing entries: 1043
 
 ### `building_{building}_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **149**
-- Vocab size: 1041; missing entries: 892
+- Vocab size: 1043; missing entries: 894
 
 ### `building_{building}_throughput_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1041; missing entries: 1041
+- Vocab size: 1043; missing entries: 1043
 
 ### `building_{building}_unincorporated_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1041; missing entries: 1041
+- Vocab size: 1043; missing entries: 1043
 
 ### `country_institution_impact_{institution}_mult`
 
@@ -196,7 +196,7 @@ _State-scoped cap on a specific building's level._
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **310**
-- Vocab size: 1041; missing entries: 731
+- Vocab size: 1043; missing entries: 733
 
 ### `state_pop_qualifications_{poptype}_mult`
 
