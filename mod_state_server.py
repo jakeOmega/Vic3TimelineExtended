@@ -24,6 +24,7 @@ import signal
 import socket
 import subprocess
 import sys
+import threading
 import time
 import traceback
 from collections import defaultdict
@@ -56,6 +57,10 @@ from path_constants import (
 import annotators
 import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
 import tech_unlocks_lib
+
+# Also loaded by name in POST_LOAD_AUDITS; imported here so
+# /scripted-helpers/unresolved can call it directly (#288).
+import effect_trigger_validity_audit
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -1092,7 +1097,15 @@ def _find_modifier_grants(target: str, *, scope: str = "both",
 # _call_index_cache; invalidated on /reload (see _load_mod_state). One pass
 # populates the index for *all* helpers, so any subsequent lookup is a dict hit.
 _call_index_cache: dict | None = None
+# Bumped by _invalidate_call_index on every reload. A build that started before
+# an invalidation must not write its now-stale result into the cache.
+_call_index_generation = 0
 
+# Superset of every LHS name the three call regexes below can match. One
+# pass over a whole file answers "could this file call any mod helper at
+# all?" — most vanilla files can't, and skipping their line-by-line scan is
+# what keeps the cold index build off a request's critical path (#293).
+_ANY_LHS_RE = re.compile(r"([a-z_]\w*)\s*=")
 _CALL_FLAG_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*(yes|no)\s*$")
 _CALL_INLINE_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*\{(.*)\}\s*$")
 _CALL_OPENER_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*\{")
@@ -1148,9 +1161,15 @@ def _scan_file_for_calls(abs_path: str, rel: str, origin: str,
     scalar args passed to multi-line and inline `helper = { ARG = v }` calls."""
     try:
         with open(abs_path, encoding="utf-8-sig", errors="replace") as fh:
-            lines = fh.readlines()
+            text = fh.read()
     except OSError:
         return
+    # Cheap reject: a file that never writes `<known helper> =` has no call site
+    # for the brace-aware pass to find. Behaviour-preserving — every form the
+    # scan detects is `name` + `=`, which _ANY_LHS_RE also matches.
+    if callables.isdisjoint(_ANY_LHS_RE.findall(text)):
+        return
+    lines = text.splitlines(keepends=True)
     ctype = _caller_type(rel)
     depth = 0
     current_entity = None
@@ -1236,11 +1255,59 @@ def _build_call_index() -> dict:
     return dict(index)
 
 
+def _invalidate_call_index() -> None:
+    """Drop the cached callers index and invalidate any build in flight."""
+    global _call_index_cache, _call_index_generation
+    _call_index_cache = None
+    _call_index_generation += 1
+
+
 def _get_call_index() -> dict:
     global _call_index_cache
-    if _call_index_cache is None:
-        _call_index_cache = _build_call_index()
-    return _call_index_cache
+    cached = _call_index_cache
+    if cached is not None:
+        return cached
+    gen = _call_index_generation
+    index = _build_call_index()
+    # A reload landed while we were scanning: serve this result to the caller
+    # who asked before it, but don't cache data that no longer matches ModState.
+    if gen == _call_index_generation:
+        _call_index_cache = index
+    return index
+
+
+_call_index_warm_thread: Optional[threading.Thread] = None
+
+
+def _warm_call_index_async() -> None:
+    """Build the callers index off the request path after a (re)load.
+
+    The index is already cached per reload, but it is built lazily — so the
+    whole cold cost (a walk of mod + vanilla `events/` and `common/`) landed on
+    whoever asked for `/scripted-effects/<id>` first, which is long enough to
+    blow a client's 10 s timeout (#293). A daemon thread absorbs it instead,
+    without delaying `ready`. A request that arrives mid-warm just builds its
+    own copy; whichever finishes first fills the cache, and a build started
+    before a reload is discarded by the generation check in _get_call_index."""
+    global _call_index_warm_thread
+
+    def _warm() -> None:
+        try:
+            t0 = time.monotonic()
+            _get_call_index()
+            logger.info(
+                f"[warm] scripted-helper callers index ready "
+                f"({time.monotonic() - t0:.1f}s)"
+            )
+        except Exception:  # noqa: BLE001 — a warm failure must never kill the server
+            logger.exception("[warm] callers index build failed; will build on demand")
+
+    if _call_index_warm_thread is not None and _call_index_warm_thread.is_alive():
+        return
+    _call_index_warm_thread = threading.Thread(
+        target=_warm, name="warm-call-index", daemon=True
+    )
+    _call_index_warm_thread.start()
 
 
 # ---------------------------------------------------------------------------
@@ -4744,6 +4811,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "script-values": lambda: self._script_values(rest),
             "scripted-effects": lambda: self._scripted_effects(rest),
             "scripted-triggers": lambda: self._scripted_triggers(rest),
+            # Inverse of the callers index: call sites whose callee is gone
+            "scripted-helpers": lambda: self._scripted_helpers(rest, params),
             "decrees": lambda: self._decrees(rest),
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
@@ -5025,6 +5094,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "last_reload": _last_reload_warnings or None,
             "pattern_catalog_size": len(pattern_catalog),
             "discovered_patterns": len(discovered_patterns),
+            # False means /scripted-effects/<id> and /scripted-helpers/unresolved
+            # will pay the cold index build on this request (#293).
+            "call_index_ready": _call_index_cache is not None,
         }
 
     def _entity_types(self, params):
@@ -7228,6 +7300,32 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /scripted-triggers[/<id>]"""
         return self._scripted_helper("Scripted Triggers", parts)
 
+    def _scripted_helpers(self, parts, params):
+        """GET /scripted-helpers/unresolved — dangling scripted-helper calls.
+
+        The inverse of the callers index `/scripted-effects/<id>` builds: every
+        `name = yes` / `name = { ... }` call site in the mod whose callee is
+        defined by neither vanilla nor the mod, so the engine silently ignores
+        the line (#288). Backed by `effect_trigger_validity_audit`, which reads
+        the files rather than the parse, so it sees call sites in every
+        script-bearing directory — including the ones no endpoint indexes.
+
+        `?include_reviewed=true` also returns sites suppressed with an inline
+        `# REVIEWED YYYY-MM-DD: rationale` comment."""
+        if not parts or parts[0] != "unresolved":
+            raise BadRequest("Use /scripted-helpers/unresolved")
+        include_reviewed = (
+            (params.get("include_reviewed") or ["false"])[0].lower() == "true"
+        )
+        rows = effect_trigger_validity_audit.unresolved_helper_calls(mod_path)
+        if not include_reviewed:
+            rows = [r for r in rows if not r.get("reviewed")]
+        return {
+            "count": len(rows),
+            "include_reviewed": include_reviewed,
+            "unresolved_helper_calls": rows,
+        }
+
     def _scripted_helper(self, etype, parts):
         data = ms.get_data(etype)
         if not data:
@@ -8088,7 +8186,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     generators, so there is no loop. Returns a warning dict on failure, else
     None.
     """
-    global _tech_unlocks_index_cache, _call_index_cache, _last_validation_report
+    global _tech_unlocks_index_cache, _last_validation_report
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -8104,7 +8202,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
             if os.path.isdir(loc_dir):
                 mod_state.add_localization(loc_dir)
         _tech_unlocks_index_cache = None
-        _call_index_cache = None
+        _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
     except Exception as exc:  # noqa: BLE001
@@ -8315,7 +8413,7 @@ _VANILLA_LOC_CACHE: Optional[dict] = None
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _VANILLA_LOC_CACHE, _call_index_cache
+    global _VANILLA_LOC_CACHE
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
         # mod_only is a fast incremental path; without cached state it has
@@ -8347,7 +8445,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     # entries don't leak across reloads.
     _last_validation_report = None
     _tech_unlocks_index_cache = None
-    _call_index_cache = None
+    _invalidate_call_index()
     _annotator_compute_cache.clear()
 
     # Localization: cache vanilla once, then layer mod (+ replace) on top
@@ -8408,6 +8506,10 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     # + vanilla data (e.g. pop_needs_curves, apply_ideologies). See
     # POST_LOAD_GENERATORS above and docs/guides/python_tools.md for details.
     _run_post_load_generators(ms, audits_only=audits_only)
+
+    # Last: the post-load chain's re-parse clears the callers index, so warm it
+    # after that, not before (#293).
+    _warm_call_index_async()
 
 
 def main():
