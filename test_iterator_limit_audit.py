@@ -81,6 +81,42 @@ class DetectionTests(unittest.TestCase):
         )
         self.assertEqual(flags, [])
 
+    def test_no_flag_for_list_and_container_selectors_before_limit(self):
+        # `variable`/`list` name the list a list iterator walks and
+        # `tag`/`tags`/`parent = scope:x` filter a container iterator; none of
+        # them is an effect the limit could gate.
+        flags = _scan(
+            "every_in_list = {\n"
+            "\tvariable = iw_ops\n"
+            "\tlimit = { has_tag = iw_op }\n"
+            "\tdestroy_container = yes\n"
+            "}\n"
+            "every_in_list = {\n"
+            "\tlist = ended_ops\n"
+            "\tlimit = { has_tag = iw_op }\n"
+            "\tdestroy_container = yes\n"
+            "}\n"
+            "every_container = {\n"
+            "\ttags = { iw_op iw_op_x }\n"
+            "\tparent = root\n"
+            "\tlimit = { has_variable = x }\n"
+            "\tdestroy_container = yes\n"
+            "}\n"
+        )
+        self.assertEqual(flags, [])
+
+    def test_flags_parent_scope_change_before_limit(self):
+        # A block-valued `parent = { }` is a scope change, not a filter.
+        flags = _scan(
+            "every_in_list = {\n"
+            "\tvariable = iw_ops\n"
+            "\tparent = { set_variable = x }\n"
+            "\tlimit = { has_tag = iw_op }\n"
+            "}\n"
+        )
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].preceding_key, "parent")
+
     def test_flags_every_random_ordered_and_any(self):
         for name in ("every_scope_state", "random_scope_state",
                      "ordered_scope_state", "any_scope_state"):

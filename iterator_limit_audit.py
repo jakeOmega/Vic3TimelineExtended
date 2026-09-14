@@ -36,8 +36,9 @@ What is and isn't flagged
 -------------------------
 Only a **direct** `limit` child of an iterator block counts, and only when some
 earlier sibling is an effect. Keys that configure the iteration itself
-(`order_by`, `position`, `max`, `weight`, `count`, `percent`, …) are
-order-independent and may legally precede `limit`. `random_list` is not an
+(`order_by`, `position`, `max`, `weight`, `count`, `percent`, a list
+iterator's `variable`/`list`, a container iterator's `tag`/`tags`/scalar
+`parent`, …) are order-independent and may legally precede `limit`. `random_list` is not an
 iterator (its children are weights) and is excluded.
 
 Note the overlap with `any_limit_audit`: `any_*` counting triggers ignore
@@ -72,7 +73,17 @@ ITERATOR_PROPERTY_KEYS = {
     "weight",
     "count",
     "percent",
+    # List iterators (`every_in_list` and kin) name the list they walk.
+    "variable",
+    "list",
+    # Container iterators (1.13.10+) filter by tag.
+    "tag",
+    "tags",
 }
+
+# Iterator properties only in scalar form. `parent = scope:x` filters a
+# container iterator; `parent = { ... }` is a scope change, i.e. an effect.
+SCALAR_ITERATOR_PROPERTY_KEYS = {"parent"}
 
 # Directories scanned, relative to the mod root (issue #250).
 AUDIT_DIRS = (
@@ -192,7 +203,8 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
     flags: list[Flag] = []
     clean, comments = blank_comments_and_strings(text)
     starts = _line_starts(clean)
-    # Frames: {"name": str|None, "line": int, "children": [(key, line), ...]}
+    # Frames: {"name": str|None, "line": int,
+    #          "children": [(key, line, opens_block), ...]}
     stack: list[dict] = []
 
     for m in _TOKEN_RE.finditer(clean):
@@ -213,7 +225,9 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
             if key == "limit" and _is_iterator(parent["name"]):
                 prior = next(
                     (c for c in parent["children"]
-                     if c[0] not in ITERATOR_PROPERTY_KEYS),
+                     if c[0] not in ITERATOR_PROPERTY_KEYS
+                     and not (c[0] in SCALAR_ITERATOR_PROPERTY_KEYS
+                              and not c[2])),
                     None,
                 )
                 if prior is not None:
@@ -230,7 +244,7 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
                         preceding_line=prior[1],
                         exemption=exemption,
                     ))
-            parent["children"].append((key, line))
+            parent["children"].append((key, line, bool(m.group("open"))))
 
         if m.group("open"):
             stack.append({"name": key, "line": line, "children": []})
