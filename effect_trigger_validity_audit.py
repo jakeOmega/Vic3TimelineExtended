@@ -13,16 +13,34 @@ Approach (strict-then-permissive, per the catalog-audit playbook):
 - A frozen **valid-key catalog** (`docs/engine/effect_trigger_valid_keys.txt`)
   is bootstrapped once from vanilla: the union of (a) every effect/trigger name
   in `effects_summary.txt` / `triggers_summary.txt` and (b) every LHS keyword
-  vanilla actually uses in its `events/` + `scripted_effects` +
-  `scripted_triggers` + `on_actions` corpus. (b) is essential — control-flow and
-  scope keywords like `limit`, `if`, `every_scope_country` are NOT in the
-  effect/trigger docs. Regenerate on a vanilla bump via `bootstrap_catalog()`.
-- The audit scans the same four mod dirs and flags any lowercase LHS keyword not
-  in the catalog and not a mod-defined name (scripted effect/trigger/on_action).
-  Uppercase tokens (scripted-effect `$PARAM$` call args) and `var:`-style refs
-  are never LHS-matched, so they don't false-flag.
+  vanilla actually uses in the script regions of `_SCAN_ROOTS` (same entry-key
+  scoping the audit applies, so vanilla's entity schema and modifier names stay
+  out). (b) is essential — control-flow and scope keywords like `limit`, `if`,
+  `every_scope_country` are NOT in the effect/trigger docs. Regenerate on a
+  vanilla bump via `bootstrap_catalog()`.
+- Event-target scopes (`trade_center`, ...) come from
+  `docs/engine/event_targets_summary.txt`, read at audit time rather than
+  frozen — the engine regenerates that file on every reload.
+- The audit scans the mod's script-bearing dirs (`_SCAN_ROOTS`) and flags any
+  lowercase LHS keyword not in the catalog and not a mod-defined name (scripted
+  effect/trigger/on_action/script value). Uppercase tokens (scripted-effect
+  `$PARAM$` call args) and `var:`-style refs are never LHS-matched, so they
+  don't false-flag.
 - It also flags `funcname(...)` call-syntax, which Paradox script never uses
   (catches `negate(...)`).
+
+Entry-key scoping (issue #295): dirs like `common/laws` or `common/journal_entries`
+mix script with per-entity *schema* (`progressiveness`, `icon`, `unlocking_laws`)
+and with *modifier* blocks (`modifier = { country_prestige_mult = 0.1 }`) — two
+namespaces this audit has no business validating (`modifier_visibility_audit`
+owns the latter). So each such root declares the keys whose block bodies ARE
+trigger/effect script (`possible`, `on_enact`, `will_propose`, ...); everything
+outside those blocks is skipped, and everything nested inside them is scanned.
+A root with `entry_keys=None` (events, scripted effects/triggers, on_actions,
+script values) is script top to bottom and is scanned whole, as before.
+Conservative by construction: a trigger block under a key nobody listed goes
+unscanned rather than emitting schema-keyword noise — so extend the table when a
+new entity type lands.
 
 Scope note: this validates effect/trigger *names*. Value-level errors (e.g.
 `has_role = general`, where `has_role` is a valid trigger but the value should be
@@ -36,12 +54,122 @@ import os
 import re
 from dataclasses import dataclass, field
 
+
+@dataclass(frozen=True)
+class ScanRoot:
+    """One directory of script, and how much of each file is script.
+
+    `entry_keys=None` — the whole file is trigger/effect/script-value body.
+    `entry_keys={...}` — only the bodies of `<key> = { ... }` blocks are, so
+    the surrounding entity schema and its modifier blocks stay unscanned.
+    `extra_valid` — keys valid as an LHS *inside* this root's script only (a
+    schema keyword of a scanned block, e.g. the `header` of a JE's
+    `event_outcome_*_effect_desc`). Root-scoped on purpose: unlike
+    `_CURATED_VALID` these must not become globally valid.
+    """
+
+    rel: str
+    entry_keys: frozenset[str] | None = None
+    extra_valid: frozenset[str] = frozenset()
+
+
+def _r(*parts: str) -> str:
+    return os.path.join(*parts)
+
+
 # Mod dirs scanned (relative to a root); also the vanilla corpus for bootstrap.
-_SCAN_DIRS = (
-    "events",
-    os.path.join("common", "scripted_effects"),
-    os.path.join("common", "scripted_triggers"),
-    os.path.join("common", "on_actions"),
+_SCAN_ROOTS: tuple[ScanRoot, ...] = (
+    # --- script top to bottom ---
+    ScanRoot("events"),
+    ScanRoot(_r("common", "scripted_effects")),
+    ScanRoot(_r("common", "scripted_triggers")),
+    ScanRoot(_r("common", "on_actions")),
+    # Script-value bodies are math + `if/limit` triggers all the way down.
+    ScanRoot(_r("common", "script_values")),
+    # --- entity dirs: only the trigger/effect blocks (issue #295) ---
+    ScanRoot(
+        _r("common", "diplomatic_actions"),
+        entry_keys=frozenset({
+            "potential", "possible", "selectable", "accept_effect",
+            "second_state_trigger", "will_select_as_second_state",
+            # `ai = { ... }` children, and the `pact = { ... }` script blocks —
+            # matched at any depth, so neither wrapper needs to be an entry key
+            # (`pact` also holds schema scalars and `second_modifier`).
+            "evaluation_chance", "will_propose", "propose_score", "accept_score",
+            "junior_accept_score", "will_break", "requirement_to_maintain",
+            "manual_break_effect", "auto_break_effect", "monthly_effect",
+            "show_about_to_break_warning",
+        }),
+        # Trigger block inside `requirement_to_maintain`, so it is itself seen
+        # as an LHS from within scanned script.
+        extra_valid=frozenset({"show_about_to_break_warning"}),
+    ),
+    ScanRoot(
+        _r("common", "journal_entries"),
+        entry_keys=frozenset({
+            "possible", "is_shown_when_inactive", "immediate", "complete",
+            "fail", "invalid", "on_complete", "on_fail", "on_invalid",
+            "on_timeout", "on_monthly_pulse", "on_weekly_pulse",
+            "on_yearly_pulse", "can_deactivate", "can_revolution_inherit",
+            "should_be_pinned_by_default_uninvolved_or_context",
+            # script values
+            "current_value", "goal_add_value", "weight",
+            # `desc`-style blocks — `first_valid`/`triggered_desc`/`trigger`
+            "status_desc", "progress_desc", "custom_completion_header",
+            "custom_failure_header", "custom_on_completion_header",
+            "custom_on_failure_header", "event_outcome_activated_effect_desc",
+            "event_outcome_completed_effect_desc",
+            "event_outcome_failed_effect_desc",
+        }),
+        # `event_outcome_*_effect_desc = { header = X effect = { ... } }`
+        extra_valid=frozenset({"header"}),
+    ),
+    ScanRoot(
+        _r("common", "scripted_buttons"),
+        entry_keys=frozenset({"visible", "possible", "effect", "ai_chance"}),
+    ),
+    ScanRoot(
+        _r("common", "decisions"),
+        entry_keys=frozenset({"is_shown", "possible", "when_taken", "ai_chance"}),
+    ),
+    ScanRoot(
+        _r("common", "laws"),
+        entry_keys=frozenset({
+            "is_visible", "can_enact", "can_impose", "on_enact", "on_activate",
+            "on_deactivate", "ai_will_do", "ai_enact_weight_modifier",
+            "ai_impose_chance",
+        }),
+    ),
+    ScanRoot(
+        _r("common", "diplomatic_plays"),
+        entry_keys=frozenset({
+            "possible", "selectable_in_lens", "on_weekly_pulse",
+            "on_war_begins", "on_war_end",
+        }),
+    ),
+    ScanRoot(
+        _r("common", "treaty_articles"),
+        entry_keys=frozenset({
+            "visible", "possible", "can_ratify", "state_valid_trigger",
+            "company_valid_trigger", "on_entry_into_force", "on_break",
+            "on_withdrawal", "requirement_to_maintain",
+            "conditions",  # non_fulfillment = { conditions = { weekly = {...} } }
+            # `ai = { ... }` script children (`article_ai_usage` /
+            # `treaty_categories` next to them are schema, so `ai` itself is not
+            # an entry key).
+            "evaluation_chance", "inherent_accept_score", "quantity_input_value",
+            "quantity_min_value", "quantity_max_value", "cost",
+            "infamy", "maneuvers",  # wargoal = { ... } script values
+        }),
+        extra_valid=frozenset({
+            "monthly", "weekly",   # non-fulfillment evaluation cadence wrappers
+            "input_state", "input_company",  # treaty-article input scopes
+        }),
+    ),
+    ScanRoot(
+        _r("common", "power_bloc_principles"),
+        entry_keys=frozenset({"possible", "visible", "ai_weight"}),
+    ),
 )
 
 _CATALOG_REL = os.path.join("docs", "engine", "effect_trigger_valid_keys.txt")
@@ -65,17 +193,23 @@ _CURATED_VALID: frozenset[str] = frozenset({
     "side",     # join_war = { side = scope:X } (vanilla uses it, just not in scope dirs)
     "parent",   # create_container = { parent = ... } / container iterator filter (1.13.10+; unused by vanilla script)
     "tags",     # create_container = { tags = { ... } } / container iterator filter (1.13.10+; unused by vanilla script)
+    # Both were masked until #295 tightened `_top_level_names` to depth 0 — the
+    # old any-indentation harvest picked them up out of the mod's own nesting
+    # and called them "mod-defined names".
+    "add_ownership",  # add_ownership = { country = { country = X levels = N } } (see `levels` above)
+    "color",    # create_dynamic_country = { color = { R G B } } — colour literal, same family as `hue`
 })
-# Mod dirs whose top-level names are valid call/comparison targets but which we
-# don't scan for effects (script values are compared as triggers by name).
-_NAME_ONLY_DIRS = (os.path.join("common", "script_values"),)
 _REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
-# Top-level entity definition: `name = {` (optionally merge-prefixed).
+# Top-level entity definition: `name =` at brace depth 0 (optionally
+# merge-prefixed). Deliberately not requiring `{`: a constant script value
+# (`covert_ops_detection_base = 10`) defines a name just as much as a block does.
 _TOP_DEF_RE = re.compile(
-    r"^[ \t]*(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([a-z_][a-z0-9_]*)[ \t]*=[ \t]*\{"
+    r"^[ \t]*(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([a-z_][a-z0-9_]*)[ \t]*=(?!=)"
 )
+# A `<key> = {` block opener, used to spot a root's script entry points.
+_BLOCK_OPEN_RE = re.compile(r"(?<![\w.:$])([a-z_][a-z0-9_]*)[ \t]*=[ \t]*\{")
 
 
 @dataclass
@@ -142,20 +276,80 @@ def extract_lhs_keys(text: str) -> set[str]:
 
 def _top_level_names(root: str) -> set[str]:
     """Top-level entity names defined under `root` (so a mod's own scripted
-    effect / trigger / on_action names — and their definition LHS — never flag)."""
+    effect / trigger / on_action / script-value names — and their definition
+    LHS — never flag).
+
+    Brace depth is tracked so only genuine depth-0 definitions count: matching
+    at any indentation would harvest nested keys as if they were entity names
+    and quietly widen `allowed`.
+    """
     names: set[str] = set()
     if not os.path.isdir(root):
         return names
     for path in _iter_txt(root):
         try:
             with open(path, encoding="utf-8-sig", errors="replace") as fh:
+                depth = 0
                 for line in fh:
-                    m = _TOP_DEF_RE.match(line)
-                    if m:
-                        names.add(m.group(1))
+                    code, _ = _strip_comment(line)
+                    code = _strip_quotes(code)
+                    if depth == 0:
+                        m = _TOP_DEF_RE.match(code)
+                        if m:
+                            names.add(m.group(1))
+                    depth = max(0, depth + code.count("{") - code.count("}"))
         except OSError:
             continue
     return names
+
+
+def _iter_script_lines(path: str, entry_keys: frozenset[str] | None):
+    """Yield `(lineno, raw, code, comment)` for the parts of `path` that are
+    trigger/effect script, per the root's entry-key scoping.
+
+    `code` is comment- and quote-stripped and, on the line where an entry block
+    opens, truncated to what follows the opening brace — so `possible = {` never
+    offers `possible` itself as a key to validate.
+    """
+    try:
+        with open(path, encoding="utf-8-sig", errors="replace") as fh:
+            lines = fh.readlines()
+    except OSError:
+        return
+    depth = 0
+    entry_depth: int | None = None
+    for n, raw in enumerate(lines, 1):
+        code, comment = _strip_comment(raw)
+        code = _strip_quotes(code)
+        start: int | None = None
+        if entry_keys is None or entry_depth is not None:
+            start = 0
+        else:
+            for m in _BLOCK_OPEN_RE.finditer(code):
+                if m.group(1) in entry_keys:
+                    head = code[: m.end()]
+                    entry_depth = depth + head.count("{") - head.count("}")
+                    start = m.end()
+                    break
+        if start is not None:
+            yield n, raw, code[start:], comment
+        depth += code.count("{") - code.count("}")
+        if entry_depth is not None and depth < entry_depth:
+            entry_depth = None
+
+
+_EVENT_TARGETS_REL = os.path.join("docs", "engine", "event_targets_summary.txt")
+
+
+def load_event_targets(mod_path: str) -> set[str]:
+    """Event-target names from `docs/engine/event_targets_summary.txt`.
+
+    Scope transitions (`trade_center = { ... }`) and value targets
+    (`ai_army_comparison = 1`) are legitimate LHS keys, but only the handful
+    vanilla happens to use in the bootstrap corpus reach the frozen catalog.
+    This file is regenerated from the engine on every reload, so read it live.
+    """
+    return _summary_names(os.path.join(mod_path, _EVENT_TARGETS_REL))
 
 
 # --- catalog bootstrap (run once per vanilla version) ----------------------
@@ -184,18 +378,18 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
     keys: set[str] = set()
     keys |= _summary_names(os.path.join(engine_docs, "effects_summary.txt"))
     keys |= _summary_names(os.path.join(engine_docs, "triggers_summary.txt"))
-    # script_values is harvested here (vanilla SV names + their math keywords)
-    # but NOT scanned for bugs in the mod.
-    for rel in _SCAN_DIRS + _NAME_ONLY_DIRS:
-        base = os.path.join(game, rel)
+    # Harvested through the *same* entry-key scoping the audit uses, so the
+    # catalog stays a catalog of script keywords: vanilla's law `modifier = { }`
+    # bodies and entity schema must not leak in and silently widen what counts
+    # as a valid effect/trigger everywhere else.
+    for root in _SCAN_ROOTS:
+        base = os.path.join(game, root.rel)
         if not os.path.isdir(base):
             continue
         for path in _iter_txt(base):
-            try:
-                with open(path, encoding="utf-8-sig", errors="replace") as fh:
-                    keys |= extract_lhs_keys(fh.read())
-            except OSError:
-                continue
+            for _n, _raw, code, _comment in _iter_script_lines(path, root.entry_keys):
+                for m in _LHS_RE.finditer(code):
+                    keys.add(m.group(1))
 
     out_path = os.path.join(mod_path, _CATALOG_REL)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -203,8 +397,8 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
         f.write(
             "# AUTO-GENERATED valid effect/trigger/scope/control-flow keyword "
             "catalog.\n# Union of effects_summary.txt + triggers_summary.txt "
-            "names and every LHS keyword\n# vanilla uses in events/ + "
-            "scripted_effects + scripted_triggers + on_actions.\n"
+            "names and every LHS keyword\n# vanilla uses in the script "
+            "regions of effect_trigger_validity_audit._SCAN_ROOTS.\n"
             "# Regenerate on a vanilla bump: "
             "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
         )
@@ -231,36 +425,31 @@ def load_catalog(mod_path: str) -> set[str]:
 def audit(mod_path: str, valid_keys: set[str] | None = None) -> AuditResult:
     if valid_keys is None:
         valid_keys = load_catalog(mod_path)
-    # A mod's own top-level names (scripted effects/triggers/on-actions, plus
-    # script values — which can be compared by name in a trigger) are valid call
-    # targets and definition LHS.
+    # A mod's own top-level names (scripted effects/triggers/on-actions, script
+    # values — which can be compared by name in a trigger — and every entity
+    # name in the scanned roots) are valid call targets and definition LHS.
     mod_names: set[str] = set()
-    for rel in _SCAN_DIRS + _NAME_ONLY_DIRS:
-        mod_names |= _top_level_names(os.path.join(mod_path, rel))
-    allowed = valid_keys | mod_names | _CURATED_VALID
+    for root in _SCAN_ROOTS:
+        mod_names |= _top_level_names(os.path.join(mod_path, root.rel))
+    event_targets = load_event_targets(mod_path)
+    allowed = valid_keys | mod_names | event_targets | _CURATED_VALID
 
     flags: list[Flag] = []
     keys_checked = 0
     files_scanned = 0
-    for rel in _SCAN_DIRS:
-        base = os.path.join(mod_path, rel)
+    for root in _SCAN_ROOTS:
+        base = os.path.join(mod_path, root.rel)
         if not os.path.isdir(base):
             continue
+        root_allowed = allowed | root.extra_valid
         for path in _iter_txt(base):
             files_scanned += 1
-            try:
-                with open(path, encoding="utf-8-sig", errors="replace") as fh:
-                    lines = fh.readlines()
-            except OSError:
-                continue
-            for n, raw in enumerate(lines, 1):
-                code, comment = _strip_comment(raw)
-                code = _strip_quotes(code)
+            for n, raw, code, comment in _iter_script_lines(path, root.entry_keys):
                 exemption = parse_reviewed_comment(comment)
                 for m in _LHS_RE.finditer(code):
                     kw = m.group(1)
                     keys_checked += 1
-                    if kw in allowed:
+                    if kw in root_allowed:
                         continue
                     flags.append(
                         Flag(path, n, kw, "unknown-name", raw.strip(), exemption)
@@ -281,6 +470,8 @@ def audit(mod_path: str, valid_keys: set[str] | None = None) -> AuditResult:
             "keys_checked": keys_checked,
             "catalog_size": len(valid_keys),
             "mod_defined_names": len(mod_names),
+            "event_targets": len(event_targets),
+            "roots_scanned": len(_SCAN_ROOTS),
             "flags": len(flags),
         },
     )
@@ -299,13 +490,22 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     out.append("# Effect / Trigger Name Validity Report")
     out.append("")
     out.append(
-        "Lowercase LHS keywords in `events/`, `common/scripted_effects`, "
-        "`common/scripted_triggers`, `common/on_actions` that are neither a "
-        "known engine effect/trigger/scope/control-flow keyword (per the frozen "
+        "Lowercase LHS keywords in the mod's script that are neither a known "
+        "engine effect/trigger/scope/control-flow keyword (per the frozen "
         "vanilla catalog) nor a mod-defined name — plus `funcname(...)` "
         "call-syntax, which Paradox script never uses. The engine silently "
         "ignores these until a runtime game-load `Unknown effect/trigger` error."
     )
+    out.append("")
+    out.append("Roots scanned:")
+    out.append("")
+    for root in _SCAN_ROOTS:
+        rel = root.rel.replace(os.sep, "/")
+        if root.entry_keys is None:
+            out.append(f"- `{rel}/` — whole file")
+        else:
+            keys = ", ".join(f"`{k}`" for k in sorted(root.entry_keys))
+            out.append(f"- `{rel}/` — script blocks only: {keys}")
     out.append("")
     out.append(
         f"- Files scanned: **{cov.get('files_scanned', 0)}**, keys checked: "
@@ -313,7 +513,8 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     )
     out.append(
         f"- Catalog size: **{cov.get('catalog_size', 0)}** + mod-defined names: "
-        f"**{cov.get('mod_defined_names', 0)}**"
+        f"**{cov.get('mod_defined_names', 0)}** + event targets: "
+        f"**{cov.get('event_targets', 0)}**"
     )
     out.append(f"- Flags (unreviewed): **{len(unreviewed)}**")
     out.append(f"- Flags (REVIEWED-suppressed): **{len(exempted)}**")

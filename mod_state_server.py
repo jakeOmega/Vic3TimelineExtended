@@ -1088,10 +1088,20 @@ def _find_modifier_grants(target: str, *, scope: str = "both",
 # ---------------------------------------------------------------------------
 # The parser discards file/line, so call sites come from a raw, brace-aware scan
 # of every script-bearing .txt in the mod and vanilla — the same reason
-# _scan_file_for_grants exists. Built lazily on first request and cached in
-# _call_index_cache; invalidated on /reload (see _load_mod_state). One pass
-# populates the index for *all* helpers, so any subsequent lookup is a dict hit.
+# _scan_file_for_grants exists. Cached in _call_index_cache and invalidated on
+# /reload (see _load_mod_state). One pass populates the index for *all* helpers,
+# so any subsequent lookup is a dict hit.
+#
+# Two caches, because the two halves have very different lifetimes (#296):
+# walking vanilla's events/ + common/ is the bulk of the cost and its result
+# can't change while the process lives (vanilla files are read-only, and a
+# vanilla bump means restarting the server), so it is built once per process;
+# only the mod half is rebuilt per reload. `_load_mod_state` then warms the
+# merged index at the end of every load, so no client request ever pays for
+# the build — it used to land on whoever asked for a scripted-effect detail
+# first after a reload, blowing past a 10 s client timeout.
 _call_index_cache: dict | None = None
+_vanilla_call_index_cache: dict | None = None
 
 _CALL_FLAG_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*(yes|no)\s*$")
 _CALL_INLINE_RE = re.compile(r"^\s*([a-z_]\w*)\s*=\s*\{(.*)\}\s*$")
@@ -1206,8 +1216,47 @@ def _scan_file_for_calls(abs_path: str, rel: str, origin: str,
             call_stack = []
 
 
+def _scan_tree_for_calls(origin: str, base: str, repo_root: str,
+                         callables: frozenset, index: dict) -> None:
+    """Scan one tree's `events/` + `common/` into *index*."""
+    for sub in ("events", "common"):
+        scan_dir = os.path.join(base, sub)
+        if not os.path.isdir(scan_dir):
+            continue
+        for dirpath, _dirs, files in os.walk(scan_dir):
+            for fname in files:
+                if not fname.endswith(".txt"):
+                    continue
+                abs_path = os.path.join(dirpath, fname)
+                rel = os.path.relpath(abs_path, repo_root)
+                _scan_file_for_calls(abs_path, rel, origin, callables, index)
+
+
+def _get_vanilla_call_index(callables: frozenset) -> dict:
+    """{helper: [vanilla caller, ...]}, built once per process.
+
+    Vanilla script is immutable for the process's lifetime, so this survives
+    reloads. `callables` growing by a mod-defined helper can't change the
+    result either: vanilla files only ever call helpers vanilla itself defines.
+    """
+    global _vanilla_call_index_cache
+    if _vanilla_call_index_cache is None:
+        index: dict = defaultdict(list)
+        _vanilla_game = os.path.join(base_game_path, "game")
+        if os.path.isdir(_vanilla_game):
+            t0 = time.monotonic()
+            _scan_tree_for_calls("vanilla", _vanilla_game, _vanilla_game,
+                                 callables, index)
+            logger.info(
+                f"[call-index] vanilla scan built in {time.monotonic() - t0:.1f}s "
+                f"({len(index)} helpers with callers)"
+            )
+        _vanilla_call_index_cache = dict(index)
+    return _vanilla_call_index_cache
+
+
 def _build_call_index() -> dict:
-    """Scan mod + vanilla script-bearing trees once, returning
+    """Scan mod + vanilla script-bearing trees, returning
     {helper_name: [caller, ...]} for every scripted effect/trigger."""
     callables: frozenset = frozenset(
         set((ms.get_data("Scripted Effects") or {}).keys())
@@ -1216,23 +1265,9 @@ def _build_call_index() -> dict:
     index: dict = defaultdict(list)
     if not callables:
         return index
-    # (origin, base-dir-holding events/+common/, repo-root-for-relpath)
-    roots = [("mod", mod_path, mod_path)]
-    _vanilla_game = os.path.join(base_game_path, "game")
-    if os.path.isdir(_vanilla_game):
-        roots.append(("vanilla", _vanilla_game, _vanilla_game))
-    for origin, base, repo_root in roots:
-        for sub in ("events", "common"):
-            scan_dir = os.path.join(base, sub)
-            if not os.path.isdir(scan_dir):
-                continue
-            for dirpath, _dirs, files in os.walk(scan_dir):
-                for fname in files:
-                    if not fname.endswith(".txt"):
-                        continue
-                    abs_path = os.path.join(dirpath, fname)
-                    rel = os.path.relpath(abs_path, repo_root)
-                    _scan_file_for_calls(abs_path, rel, origin, callables, index)
+    for helper, callers in _get_vanilla_call_index(callables).items():
+        index[helper].extend(callers)
+    _scan_tree_for_calls("mod", mod_path, mod_path, callables, index)
     return dict(index)
 
 
@@ -1241,6 +1276,19 @@ def _get_call_index() -> dict:
     if _call_index_cache is None:
         _call_index_cache = _build_call_index()
     return _call_index_cache
+
+
+def _warm_call_index() -> None:
+    """Build the caller index now, so no client request has to (#296)."""
+    t0 = time.monotonic()
+    try:
+        n = len(_get_call_index())
+    except Exception:  # noqa: BLE001
+        logger.exception("[call-index] warm failed; will build lazily on first request")
+        return
+    logger.info(
+        f"[call-index] warmed in {time.monotonic() - t0:.1f}s ({n} helpers with callers)"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -8408,6 +8456,11 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     # + vanilla data (e.g. pop_needs_curves, apply_ideologies). See
     # POST_LOAD_GENERATORS above and docs/guides/python_tools.md for details.
     _run_post_load_generators(ms, audits_only=audits_only)
+
+    # Last: the post-load chain can re-parse and null the cache, so warm after
+    # it. Ordering matters — at server start this runs before HTTPServer binds,
+    # so the very first request already finds the index built.
+    _warm_call_index()
 
 
 def main():

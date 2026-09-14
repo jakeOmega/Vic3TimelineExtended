@@ -487,6 +487,59 @@ class ScriptedHelperEndpointTests(unittest.TestCase):
             self.assertEqual(len(index["some_trigger"]), 1)
             self.assertEqual(index["some_trigger"][0]["args"], {})
 
+    def test_scan_tree_for_calls_covers_events_and_common(self):
+        from collections import defaultdict
+        with tempfile.TemporaryDirectory() as td:
+            for rel in ("events/e.txt", "common/scripted_effects/s.txt"):
+                p = os.path.join(td, rel)
+                os.makedirs(os.path.dirname(p), exist_ok=True)
+                with open(p, "w", encoding="utf-8") as fh:
+                    fh.write("ent.1 = {\n\timmediate = {\n\t\tte_helper = yes\n\t}\n}\n")
+            index: dict = defaultdict(list)
+            mss._scan_tree_for_calls("mod", td, td, frozenset({"te_helper"}), index)
+            self.assertEqual(len(index["te_helper"]), 2)
+            self.assertEqual(
+                {r["file"].replace(os.sep, "/") for r in index["te_helper"]},
+                {"events/e.txt", "common/scripted_effects/s.txt"},
+            )
+            self.assertEqual({r["origin"] for r in index["te_helper"]}, {"mod"})
+
+    def test_vanilla_call_index_built_once_per_process(self):
+        # #296: the vanilla half is the bulk of the scan and can't change while
+        # the process lives, so a reload must not pay for it again.
+        with tempfile.TemporaryDirectory() as td:
+            ev = os.path.join(td, "game", "events")
+            os.makedirs(ev)
+            with open(os.path.join(ev, "e.txt"), "w", encoding="utf-8") as fh:
+                fh.write("v.1 = {\n\timmediate = {\n\t\tvanilla_helper = yes\n\t}\n}\n")
+            prev_cache, prev_base = mss._vanilla_call_index_cache, mss.base_game_path
+            try:
+                mss._vanilla_call_index_cache = None
+                mss.base_game_path = td
+                callables = frozenset({"vanilla_helper"})
+                first = mss._get_vanilla_call_index(callables)
+                self.assertEqual(len(first["vanilla_helper"]), 1)
+                self.assertEqual(first["vanilla_helper"][0]["origin"], "vanilla")
+                # Adding a file and asking again returns the same cached object.
+                with open(os.path.join(ev, "e2.txt"), "w", encoding="utf-8") as fh:
+                    fh.write("v.2 = {\n\timmediate = {\n\t\tvanilla_helper = yes\n\t}\n}\n")
+                second = mss._get_vanilla_call_index(callables)
+                self.assertIs(second, first)
+                self.assertEqual(len(second["vanilla_helper"]), 1)
+            finally:
+                mss._vanilla_call_index_cache = prev_cache
+                mss.base_game_path = prev_base
+
+    def test_vanilla_call_index_empty_without_install(self):
+        prev_cache, prev_base = mss._vanilla_call_index_cache, mss.base_game_path
+        try:
+            mss._vanilla_call_index_cache = None
+            mss.base_game_path = os.path.join(tempfile.gettempdir(), "no_such_vic3_install")
+            self.assertEqual(mss._get_vanilla_call_index(frozenset({"x"})), {})
+        finally:
+            mss._vanilla_call_index_cache = prev_cache
+            mss.base_game_path = prev_base
+
     @unittest.skipUnless(_server_up(), "mod_state_server not running")
     def test_scripted_effect_detail_has_callers(self):
         listing = _get("/scripted-effects")
