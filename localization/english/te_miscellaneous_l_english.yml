@@ -2215,7 +2215,7 @@
  un_vote_human_rights_passed_tt:0 "The Universal Declaration was adopted. #G +10 [concept_un_authority].#! The UN Human Rights Council (UNHRC) is established."
  un_vote_icc_passed_tt:0 "The Rome Statute was adopted. #G +5 [concept_un_authority].#! The International Criminal Court (ICC) is established."
  un_vote_icc_passed_vetoed_tt:0 "The ICC referral passed the GA but was vetoed in the Security Council. #G +2 [concept_un_authority].#! The proposer issues a symbolic censure — no court jurisdiction is established."
- un_vote_initiated_tt:0 "#bold A General Assembly vote has been called.#! All UN member states will vote on this resolution over the next 90 days. Results will depend on the balance of support and opposition."
+ un_vote_initiated_tt:0 "#bold A General Assembly vote has been called.#! All UN member states will vote on this resolution over the next year. Results will depend on the balance of support and opposition."
  un_vote_law_of_sea_passed_tt:0 "The Convention on the Law of the Sea was adopted. #G +5 [concept_un_authority].#! The International Tribunal for the Law of the Sea (ITLOS) is established."
  un_vote_npt_passed_tt:0 "The Non-Proliferation Treaty was adopted. #G +10 [concept_un_authority].#! The International Atomic Energy Agency (IAEA) is established."
  un_vote_pandemic_passed_tt:0 "The Pandemic Cooperation Resolution was adopted. #G +10 [concept_un_authority].#! The World Health Organization (WHO) is established."

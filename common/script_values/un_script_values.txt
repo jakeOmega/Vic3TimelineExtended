@@ -88,7 +88,7 @@ un_permanent_seat_count = {
 }
 
 # 2/3 supermajority threshold of currently-eligible voting members.
-# Used for expulsion votes: vote passes when un_vote_support * 3 >= count * 2.
+# Used for expulsion votes: vote passes when un_res_support * 3 >= count * 2.
 un_vote_eligible_member_count = {
 	value = 0
 	every_country = {
@@ -97,15 +97,35 @@ un_vote_eligible_member_count = {
 	}
 }
 
-# Expulsion-vote pass check: positive when un_vote_support * 3 >= count * 2,
+# Expulsion-vote pass check: positive when un_res_support * 3 >= count * 2,
 # i.e., 2/3 supermajority achieved. Trigger with: un_vote_expulsion_passed >= 0.
+# Scope: resolution container (read by un_resolution_decide)
 un_vote_expulsion_passed = {
-	value = global_var:un_vote_support
+	value = var:un_res_support
 	multiply = 3
 	# Subtracted twice on purpose — that is the `- count * 2` of the 2/3 test,
 	# written as two steps rather than a nested `subtract = { multiply = 2 }`.
 	subtract = un_vote_eligible_member_count
 	subtract = un_vote_eligible_member_count
+}
+
+# Vote margin of a resolution: yes votes minus no votes. A simple-majority
+# resolution passes at >= 1.
+# Scope: resolution container
+un_res_margin = {
+	value = var:un_res_support
+	subtract = var:un_res_oppose
+}
+
+# Closed resolutions kept in un_resolution_history. Past this, the oldest
+# entry whose topic cooldown has run out is destroyed.
+un_resolution_history_cap = 25
+
+# Eviction order for un_resolution_history: highest for the oldest resolution.
+# Scope: resolution container
+un_resolution_age_order = {
+	value = 0
+	subtract = var:un_res_seq
 }
 
 # ---- Authority Drift Factors ----

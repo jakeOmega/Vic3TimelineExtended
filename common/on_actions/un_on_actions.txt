@@ -12,7 +12,7 @@ un_events_on_action = {
 				3 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_condemn }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
 						any_country = {
 							has_diplomatic_pact = { who = ROOT type = rivalry }
 							is_at_war = yes
@@ -24,7 +24,7 @@ un_events_on_action = {
 				3 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_human_rights }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = human_rights } }
 						has_technology_researched = human_rights
 						global_var:un_authority >= 40
 						NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
@@ -53,7 +53,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_reform }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
 						country_rank >= rank_value:great_power
 						global_var:un_authority >= 30
 						NOT = { has_modifier = un_reform_champion_modifier }
@@ -90,7 +90,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_heritage }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = heritage } }
 						global_var:un_authority >= 40
 						NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 						NOT = { has_modifier = un_heritage_token_modifier }
@@ -124,7 +124,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_decolonization }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = decolonization } }
 						global_var:un_authority >= 30
 						NOT = { has_modifier = un_decolonization_champion_modifier }
 						NOT = { has_modifier = un_colonial_defender_modifier }
@@ -152,7 +152,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_npt }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = npt } }
 						global_var:un_authority >= 40
 						has_technology_researched = nuclear_weapons
 						NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
@@ -176,7 +176,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_pandemic }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = pandemic } }
 						country_rank >= rank_value:major_power
 						global_var:un_authority >= 20
 						has_technology_researched = antibiotics
@@ -188,7 +188,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_climate }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = climate } }
 						global_var:un_authority >= 30
 						has_technology_researched = environmental_movement
 						NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
@@ -199,7 +199,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_refugee }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = refugee } }
 						global_var:un_authority >= 20
 						NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 						NOT = { has_modifier = un_refugee_closed_modifier }
@@ -216,7 +216,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_space }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = space } }
 						global_var:un_authority >= 40
 						has_technology_researched = space_exploration
 						country_rank >= rank_value:major_power
@@ -243,7 +243,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_law_of_sea }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = law_of_sea } }
 						global_var:un_authority >= 30
 						has_technology_researched = international_trade
 						NOT = { has_modifier = un_law_of_sea_modifier }
@@ -254,7 +254,7 @@ un_events_on_action = {
 				2 = {
 					trigger = {
 						NOT = { has_global_variable = un_vote_active }
-						NOT = { has_global_variable = un_vote_cooldown_icc }
+						NOT = { un_resolution_topic_on_cooldown = { TOPIC = icc } }
 						global_var:un_authority >= 40
 						has_technology_researched = human_rights
 						country_rank >= rank_value:major_power
@@ -317,6 +317,10 @@ un_global_authority_on_action = {
 				limit = { global_var:un_authority < 0 }
 				set_global_variable = { name = un_authority value = 0 }
 			}
+
+			# General Assembly upkeep: lapse a resolution whose results event never
+			# fired, and free an orphaned vote lock (un_vote_effects.txt).
+			un_resolutions_monthly_update = yes
 		}
 	}
 }

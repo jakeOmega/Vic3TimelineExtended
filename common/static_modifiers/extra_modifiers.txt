@@ -3344,7 +3344,7 @@ un_veto_isolation_modifier = {
 
 # Applied to the vetoing country after using a veto. Diplomatic-influence penalty.
 # The veto also drains the single global un_authority once per resolution (see the
-# un_vote_veto_cast-gated change_global_variable in un_vote.1's veto effect).
+# un_res_vetoed-gated change_global_variable in un_resolution_record_veto).
 un_veto_authority_drain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_influence_mult = -0.05

@@ -1,26 +1,254 @@
-﻿# Cleanup variables set in un_vote.3 notification event
-un_vote_notification_cleanup = {
-	remove_variable = un_display_support
-	remove_variable = un_display_oppose
-	if = { limit = { has_variable = un_notif_vote_passed } remove_variable = un_notif_vote_passed }
-	if = { limit = { has_variable = un_vote_choice } remove_variable = un_vote_choice }
-	if = { limit = { has_variable = un_vote_was_vetoed } remove_variable = un_vote_was_vetoed }
-	if = { limit = { has_variable = un_topic_condemn } remove_variable = un_topic_condemn }
-	if = { limit = { has_variable = un_topic_human_rights } remove_variable = un_topic_human_rights }
-	if = { limit = { has_variable = un_topic_npt } remove_variable = un_topic_npt }
-	if = { limit = { has_variable = un_topic_climate } remove_variable = un_topic_climate }
-	if = { limit = { has_variable = un_topic_reform } remove_variable = un_topic_reform }
-	if = { limit = { has_variable = un_topic_heritage } remove_variable = un_topic_heritage }
-	if = { limit = { has_variable = un_topic_decolonization } remove_variable = un_topic_decolonization }
-	if = { limit = { has_variable = un_topic_pandemic } remove_variable = un_topic_pandemic }
-	if = { limit = { has_variable = un_topic_refugee } remove_variable = un_topic_refugee }
-	if = { limit = { has_variable = un_topic_space } remove_variable = un_topic_space }
-	if = { limit = { has_variable = un_topic_peacekeeping_request } remove_variable = un_topic_peacekeeping_request }
-	if = { limit = { has_variable = un_topic_aid_request } remove_variable = un_topic_aid_request }
-	if = { limit = { has_variable = un_topic_sanctions } remove_variable = un_topic_sanctions }
-	if = { limit = { has_variable = un_topic_law_of_sea } remove_variable = un_topic_law_of_sea }
-	if = { limit = { has_variable = un_topic_icc } remove_variable = un_topic_icc }
-	if = { limit = { has_variable = un_topic_expulsion } remove_variable = un_topic_expulsion }
+﻿# ============================================================================
+# UN RESOLUTIONS — script containers (1.13.10+)
+# ============================================================================
+# Every General Assembly resolution is a script container:
+#
+#   tags    un_resolution, un_topic_<topic>
+#           un_res_voting           while the vote is open; replaced on close by
+#           un_res_passed / un_res_failed / un_res_lapsed (lapsed = un_vote.2
+#                                   never fired, e.g. the proposer left the UN)
+#           un_res_vetoed           a permanent member vetoed (binding topics)
+#           un_res_target_accepted  the target voted in favor of its own censure
+#   parent  none — a resolution must outlive a proposer annexed mid-vote
+#   vars    un_res_seq        creation order (global counter un_resolution_seq)
+#           un_res_proposer   proposing country
+#           un_res_target     target country, when the topic names one
+#           un_res_vetoer     the last permanent member to veto
+#           un_res_promoted   expulsion only: country promoted into the vacated seat
+#           un_res_support    yes votes (starts at 1: the proposer)
+#           un_res_oppose     no votes (a veto also counts as no)
+#           un_res_months     months open (lapse watchdog)
+#           un_res_cooldown   timed, set on close: the topic can't be proposed
+#                             again while any closed resolution of it carries it
+#   lists   un_res_yes, un_res_no  voters (the proposer is in un_res_yes)
+#
+# Globals:
+#   un_vote_active         the vote lock: one resolution (or reservation) at a time
+#   un_vote_reservation    a proposer event holds the lock before choosing to propose
+#   un_active_resolution   the open resolution
+#   un_resolution_history  closed resolutions, capped at un_resolution_history_cap
+#   un_resolution_seq      counter behind un_res_seq
+#
+# The vote events receive the resolution as scope:un_resolution through
+# trigger_event (saved scopes survive delayed events; vanilla red_scare.12
+# fires red_scare.13 three years later and reads its saved culture). They never
+# read un_active_resolution, so a resolution stays readable after a newer one
+# opens — the lock is the only thing that keeps votes one at a time.
+#
+# Old saves: a vote in progress when the mod updated is dropped. Its queued
+# un_vote.1/.2 events carry no scope:un_resolution and fail their triggers,
+# and un_resolutions_monthly_update frees the orphaned lock. The legacy
+# un_vote_* globals are left inert (removing them would log "used but never
+# set" on every load).
+# ============================================================================
+
+# Open a General Assembly vote on $TOPIC$. Stores scope:un_vote_target as the
+# resolution's target when it is saved, takes the vote lock, fires un_vote.1
+# to every other member in 30 days and schedules un_vote.2 for the proposer
+# in 365 days. Leaves scope:un_resolution pointing at the new container.
+# Parameters: $TOPIC$ = topic key (condemn, human_rights, sanctions, ...)
+# Scope: proposing country
+un_resolution_open = {
+	save_scope_as = un_res_proposer_scope
+	if = {
+		limit = { NOT = { has_global_variable = un_resolution_seq } }
+		set_global_variable = { name = un_resolution_seq value = 0 }
+	}
+	change_global_variable = { name = un_resolution_seq add = 1 }
+	create_container = {
+		tags = { un_resolution un_topic_$TOPIC$ un_res_voting }
+		on_created = {
+			set_variable = { name = un_res_seq value = global_var:un_resolution_seq }
+			set_variable = { name = un_res_proposer value = scope:un_res_proposer_scope }
+			if = {
+				limit = { exists = scope:un_vote_target }
+				set_variable = { name = un_res_target value = scope:un_vote_target }
+			}
+			set_variable = { name = un_res_support value = 1 }
+			set_variable = { name = un_res_oppose value = 0 }
+			set_variable = { name = un_res_months value = 0 }
+			add_to_variable_list = { name = un_res_yes target = scope:un_res_proposer_scope }
+			save_scope_as = un_resolution
+		}
+	}
+	set_global_variable = un_vote_active
+	set_global_variable = { name = un_active_resolution value = scope:un_resolution }
+	if = {
+		limit = { has_global_variable = un_vote_reservation }
+		remove_global_variable = un_vote_reservation
+	}
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			NOT = { this = scope:un_res_proposer_scope }
+		}
+		trigger_event = { id = un_vote.1 days = 30 }
+	}
+	trigger_event = { id = un_vote.2 days = 365 }
+}
+
+# Hold the vote lock while a proposer event decides whether to propose.
+# Option A then calls un_resolution_open; the other options call un_vote_release.
+un_vote_reserve = {
+	set_global_variable = un_vote_active
+	set_global_variable = un_vote_reservation
+}
+
+# Give back a reservation taken by un_vote_reserve. Leaves the lock alone if a
+# resolution holds it.
+un_vote_release = {
+	if = {
+		limit = { has_global_variable = un_vote_reservation }
+		remove_global_variable = un_vote_reservation
+	}
+	if = {
+		limit = {
+			has_global_variable = un_vote_active
+			NOT = { has_global_variable = un_active_resolution }
+		}
+		remove_global_variable = un_vote_active
+	}
+}
+
+# Record the scoped country's vote on scope:un_resolution. A vote cast after
+# the resolution closed (a popup answered late) changes nothing.
+# Parameters: $LIST$ = un_res_yes | un_res_no
+#             $COUNT$ = un_res_support | un_res_oppose
+# Scope: voting country
+un_resolution_record_vote = {
+	save_scope_as = un_res_voter
+	scope:un_resolution ?= {
+		if = {
+			limit = { has_tag = un_res_voting }
+			add_to_variable_list = { name = $LIST$ target = scope:un_res_voter }
+			change_variable = { name = $COUNT$ add = 1 }
+		}
+	}
+}
+
+# Record a permanent member's veto on scope:un_resolution: a no vote plus the
+# un_res_vetoed tag. Only the first veto dents the global UN authority.
+# Scope: vetoing country
+un_resolution_record_veto = {
+	save_scope_as = un_res_voter
+	scope:un_resolution ?= {
+		if = {
+			limit = { has_tag = un_res_voting }
+			if = {
+				limit = { NOT = { has_tag = un_res_vetoed } }
+				change_global_variable = { name = un_authority add = -5 }
+				add_tag = un_res_vetoed
+			}
+			set_variable = { name = un_res_vetoer value = scope:un_res_voter }
+			add_to_variable_list = { name = un_res_no target = scope:un_res_voter }
+			change_variable = { name = un_res_oppose add = 1 }
+		}
+	}
+}
+
+# Settle the vote: swap un_res_voting for un_res_passed or un_res_failed.
+# Expulsion needs a 2/3 supermajority of current members; every other topic a
+# simple majority (more yes than no votes).
+# Scope: resolution container
+un_resolution_decide = {
+	remove_tag = un_res_voting
+	if = {
+		limit = { has_tag = un_topic_expulsion }
+		if = {
+			limit = { un_vote_expulsion_passed >= 0 }
+			add_tag = un_res_passed
+		}
+		else = {
+			add_tag = un_res_failed
+		}
+	}
+	else_if = {
+		limit = { un_res_margin >= 1 }
+		add_tag = un_res_passed
+	}
+	else = {
+		add_tag = un_res_failed
+	}
+}
+
+# File a closed resolution: start its topic cooldown, append it to
+# un_resolution_history, and release the vote lock if it held it. Past the
+# history cap, destroy the oldest entry whose cooldown has run out; entries
+# still on cooldown are kept because the proposal gates read them.
+# Scope: resolution container (already tagged passed, failed or lapsed)
+un_resolution_archive = {
+	save_scope_as = un_res_archived
+	if = {
+		limit = { has_tag = un_topic_expulsion }
+		set_variable = { name = un_res_cooldown days = long_modifier_time }
+	}
+	else = {
+		set_variable = { name = un_res_cooldown days = normal_modifier_time }
+	}
+	add_to_global_variable_list = { name = un_resolution_history target = scope:un_res_archived }
+	if = {
+		limit = { global_var:un_active_resolution ?= scope:un_res_archived }
+		remove_global_variable = un_active_resolution
+		if = {
+			limit = { has_global_variable = un_vote_active }
+			remove_global_variable = un_vote_active
+		}
+	}
+	if = {
+		limit = {
+			global_variable_list_size = { name = un_resolution_history target > un_resolution_history_cap }
+			any_in_global_list = {
+				variable = un_resolution_history
+				NOT = { has_variable = un_res_cooldown }
+			}
+		}
+		ordered_in_global_list = {
+			variable = un_resolution_history
+			position = 0
+			limit = { NOT = { has_variable = un_res_cooldown } }
+			order_by = un_resolution_age_order
+			save_scope_as = un_res_evicted
+		}
+		remove_list_global_variable = { name = un_resolution_history target = scope:un_res_evicted }
+		scope:un_res_evicted = { destroy_container = yes }
+	}
+}
+
+# Global monthly upkeep (no-country scope; from un_global_authority_on_action).
+#   1. Age the open resolution. If it is still voting after 14 months its
+#      un_vote.2 never fired (the proposer stopped existing or left the UN,
+#      which fails the event's trigger), so it lapses and frees the lock.
+#      Before containers that case locked the General Assembly for good.
+#   2. Free a lock that neither a resolution nor a reservation holds: saves
+#      from before containers, or a resolution reference that stopped resolving.
+un_resolutions_monthly_update = {
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			NOT = { exists = global_var:un_active_resolution }
+		}
+		remove_global_variable = un_active_resolution
+	}
+	global_var:un_active_resolution ?= {
+		change_variable = { name = un_res_months add = 1 }
+		if = {
+			limit = {
+				has_tag = un_res_voting
+				var:un_res_months >= 14
+			}
+			remove_tag = un_res_voting
+			add_tag = un_res_lapsed
+			un_resolution_archive = yes
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = un_vote_active
+			NOT = { has_global_variable = un_active_resolution }
+			NOT = { has_global_variable = un_vote_reservation }
+		}
+		remove_global_variable = un_vote_active
+	}
 }
 
 # Apply the persistent treaty/declaration modifier for a passed UN resolution.
@@ -31,32 +259,32 @@ un_vote_notification_cleanup = {
 # buried the modifier name and fields, so players couldn't see what they
 # were ratifying.
 # Called from un_vote.3 options A and B alongside un_vote_apply_resolution_compliance.
-# Expects: ROOT = country, local vars: un_topic_X set for the active vote topic.
+# Expects: ROOT = country, scope:un_resolution = the passed resolution.
 un_vote_apply_treaty_modifier = {
 	if = {
 		limit = {
-			has_variable = un_topic_human_rights
+			scope:un_resolution ?= { has_tag = un_topic_human_rights }
 			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_npt
+			scope:un_resolution ?= { has_tag = un_topic_npt }
 			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_climate
+			scope:un_resolution ?= { has_tag = un_topic_climate }
 			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_reform
+			scope:un_resolution ?= { has_tag = un_topic_reform }
 			NOT = { has_modifier = un_reform_champion_modifier }
 		}
 		add_modifier = {
@@ -67,14 +295,14 @@ un_vote_apply_treaty_modifier = {
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_heritage
+			scope:un_resolution ?= { has_tag = un_topic_heritage }
 			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_decolonization
+			scope:un_resolution ?= { has_tag = un_topic_decolonization }
 			NOT = { has_modifier = un_decolonization_champion_modifier }
 		}
 		add_modifier = {
@@ -90,7 +318,7 @@ un_vote_apply_treaty_modifier = {
 	# afterward and letting the player re-deliberate the same stance.
 	if = {
 		limit = {
-			has_variable = un_topic_decolonization
+			scope:un_resolution ?= { has_tag = un_topic_decolonization }
 			country_rank >= rank_value:great_power
 		}
 		set_variable = gp_anti_colonial_stance
@@ -110,28 +338,28 @@ un_vote_apply_treaty_modifier = {
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_pandemic
+			scope:un_resolution ?= { has_tag = un_topic_pandemic }
 			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_refugee
+			scope:un_resolution ?= { has_tag = un_topic_refugee }
 			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_space
+			scope:un_resolution ?= { has_tag = un_topic_space }
 			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_law_of_sea
+			scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 			NOT = { has_modifier = un_law_of_sea_modifier }
 		}
 		add_modifier = { name = un_law_of_sea_modifier }
@@ -140,8 +368,8 @@ un_vote_apply_treaty_modifier = {
 	# is symbolic censure only — no court jurisdiction is established).
 	if = {
 		limit = {
-			has_variable = un_topic_icc
-			NOT = { has_variable = un_vote_was_vetoed }
+			scope:un_resolution ?= { has_tag = un_topic_icc }
+			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 			NOT = { has_modifier = un_icc_member_modifier }
 		}
 		add_modifier = { name = un_icc_member_modifier }
@@ -240,17 +468,17 @@ un_apply_ratified_conventions = {
 # live in un_vote_apply_treaty_modifier (split out so they render visibly in
 # option tooltips); call both effects together from un_vote.3 options A and B.
 # Expects: ROOT = country, scope:un_vote_proposer = proposer country (if exists),
-# local vars: un_topic_X set for the active vote topic.
+# scope:un_resolution = the passed resolution.
 un_vote_apply_resolution_compliance = {
 	# Infamy reduction for supporting humanitarian/aid/peacekeeping votes
 	if = {
 		limit = {
 			OR = {
-				has_variable = un_topic_aid_request
-				has_variable = un_topic_peacekeeping_request
-				has_variable = un_topic_human_rights
-				has_variable = un_topic_refugee
-				has_variable = un_topic_pandemic
+				scope:un_resolution ?= { has_tag = un_topic_aid_request }
+				scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+				scope:un_resolution ?= { has_tag = un_topic_human_rights }
+				scope:un_resolution ?= { has_tag = un_topic_refugee }
+				scope:un_resolution ?= { has_tag = un_topic_pandemic }
 			}
 			infamy > 0
 		}
@@ -276,8 +504,8 @@ un_vote_apply_resolution_compliance = {
 	# the graduated form is observer-mission-only and doesn't levy contributors.
 	if = {
 		limit = {
-			has_variable = un_topic_peacekeeping_request
-			NOT = { has_variable = un_vote_was_vetoed }
+			scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 			country_rank >= rank_value:major_power
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
@@ -289,7 +517,7 @@ un_vote_apply_resolution_compliance = {
 	}
 	if = {
 		limit = {
-			has_variable = un_topic_aid_request
+			scope:un_resolution ?= { has_tag = un_topic_aid_request }
 			country_rank >= rank_value:major_power
 		}
 		add_modifier = {
@@ -308,8 +536,8 @@ un_vote_apply_resolution_compliance = {
 	if = {
 		limit = {
 			OR = {
-				has_variable = un_topic_aid_request
-				has_variable = un_topic_peacekeeping_request
+				scope:un_resolution ?= { has_tag = un_topic_aid_request }
+				scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 			}
 			is_power_bloc_leader = yes
 			exists = scope:un_vote_proposer

@@ -2,36 +2,36 @@
 
 # ============================================================================
 # UN GENERAL ASSEMBLY VOTING EVENTS
-# Generic two-phase vote system for UN resolutions.
+# Three-phase vote on a UN resolution.
 #
-# Phase 1: Proposer event (existing un_events) triggers un_vote.1 for all
-#          UN members via every_country. Global variables track votes.
-# Phase 2: After 90 days, un_vote.2 fires for the proposer with results.
+# Each resolution is a script container (tags, variables and lifecycle in
+# common/scripted_effects/un_vote_effects.txt). un_resolution_open creates it
+# from a proposer event (un_events) or a JE button, and every event here gets
+# it as scope:un_resolution.
 #
-# Vote topics (identified by global flag variables):
-#   un_vote_topic_condemn                - Condemn aggressor (event 2)
-#   un_vote_topic_human_rights           - Human Rights Declaration (event 3)
-#   un_vote_topic_reform                 - UN Institutional Reform (event 6)
-#   un_vote_topic_heritage               - Cultural Heritage Program (event 9)
-#   un_vote_topic_decolonization         - Decolonization Resolution (event 12)
-#   un_vote_topic_npt                    - Non-Proliferation Treaty (event 14)
-#   un_vote_topic_pandemic               - Global Pandemic Response (event 16)
-#   un_vote_topic_climate                - Climate Accord (event 17)
-#   un_vote_topic_refugee                - International Refugee Crisis (event 18)
-#   un_vote_topic_space                  - International Space Cooperation (event 19)
-#   un_vote_topic_peacekeeping_request   - Peacekeeping deployment (request button)
-#   un_vote_topic_aid_request            - Humanitarian aid (request button)
-#   un_vote_topic_sanctions              - International sanctions (sanctions button)
-#   un_vote_topic_law_of_sea             - Convention on the Law of the Sea (event 21)
-#   un_vote_topic_icc                    - International Criminal Court (event 22)
+# Phase 1: un_vote.1 fires to every other UN member 30 days later. Votes go
+#          into the resolution's un_res_yes / un_res_no lists.
+# Phase 2: un_vote.2 fires to the proposer 365 days after opening. Its
+#          immediate closes the vote; its option applies the outcome.
+# Phase 3: un_vote.3 notifies every other member, who comply or refuse.
 #
-# Vote tracking global variables:
-#   un_vote_active              - flag: vote in progress
-#   un_vote_support             - count of yes votes
-#   un_vote_oppose              - count of no votes
-#   un_vote_net                 - net votes (support - oppose), starts at 1
-#   un_vote_proposer_country    - scope: country that proposed
-#   un_vote_target_country      - scope: target country (if applicable)
+# Vote topics (tag un_topic_<topic> on the resolution):
+#   condemn               - Condemn aggressor (event 2 / button)
+#   human_rights          - Human Rights Declaration (event 3)
+#   reform                - UN Institutional Reform (event 6)
+#   heritage              - Cultural Heritage Program (event 9)
+#   decolonization        - Decolonization Resolution (event 12)
+#   npt                   - Non-Proliferation Treaty (event 14)
+#   pandemic              - Global Pandemic Response (event 16)
+#   climate               - Climate Accord (event 17)
+#   refugee               - International Refugee Crisis (event 18)
+#   space                 - International Space Cooperation (event 19)
+#   law_of_sea            - Convention on the Law of the Sea (event 21)
+#   icc                   - International Criminal Court (event 22)
+#   peacekeeping_request  - Peacekeeping deployment (request button)
+#   aid_request           - Humanitarian aid (request button)
+#   sanctions             - International sanctions (sanctions button)
+#   expulsion             - Strip a permanent member's seat (expulsion button)
 # ============================================================================
 
 # ---- Phase 1: All UN members vote on the proposed resolution ----
@@ -49,67 +49,67 @@ un_vote.1 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_vote.1.t_condemn
-				trigger = { has_global_variable = un_vote_topic_condemn }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_human_rights
-				trigger = { has_global_variable = un_vote_topic_human_rights }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_npt
-				trigger = { has_global_variable = un_vote_topic_npt }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_npt } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_climate
-				trigger = { has_global_variable = un_vote_topic_climate }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_climate } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_reform
-				trigger = { has_global_variable = un_vote_topic_reform }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_reform } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_heritage
-				trigger = { has_global_variable = un_vote_topic_heritage }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_decolonization
-				trigger = { has_global_variable = un_vote_topic_decolonization }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_pandemic
-				trigger = { has_global_variable = un_vote_topic_pandemic }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_refugee
-				trigger = { has_global_variable = un_vote_topic_refugee }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_space
-				trigger = { has_global_variable = un_vote_topic_space }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_space } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_peacekeeping_request
-				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_aid_request
-				trigger = { has_global_variable = un_vote_topic_aid_request }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_sanctions
-				trigger = { has_global_variable = un_vote_topic_sanctions }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_sanctions } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_law_of_sea
-				trigger = { has_global_variable = un_vote_topic_law_of_sea }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_icc
-				trigger = { has_global_variable = un_vote_topic_icc }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_expulsion
-				trigger = { has_global_variable = un_vote_topic_expulsion }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 			}
 			desc = un_vote.1.t
 		}
@@ -122,88 +122,88 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_condemn_target
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					scope:un_vote_target ?= this
 				}
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_sanctions_target
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					scope:un_vote_target ?= this
 				}
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_condemn
-				trigger = { has_global_variable = un_vote_topic_condemn }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_human_rights
-				trigger = { has_global_variable = un_vote_topic_human_rights }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_npt
-				trigger = { has_global_variable = un_vote_topic_npt }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_npt } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_climate
-				trigger = { has_global_variable = un_vote_topic_climate }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_climate } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_reform
-				trigger = { has_global_variable = un_vote_topic_reform }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_reform } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_heritage
-				trigger = { has_global_variable = un_vote_topic_heritage }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_decolonization
-				trigger = { has_global_variable = un_vote_topic_decolonization }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_pandemic
-				trigger = { has_global_variable = un_vote_topic_pandemic }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_refugee
-				trigger = { has_global_variable = un_vote_topic_refugee }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_space
-				trigger = { has_global_variable = un_vote_topic_space }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_space } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_peacekeeping_request
-				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_aid_request
-				trigger = { has_global_variable = un_vote_topic_aid_request }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_sanctions
-				trigger = { has_global_variable = un_vote_topic_sanctions }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_sanctions } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_law_of_sea
-				trigger = { has_global_variable = un_vote_topic_law_of_sea }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_icc
-				trigger = { has_global_variable = un_vote_topic_icc }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 			}
 			# Target-perspective: voting member is the country being expelled
 			triggered_desc = {
 				desc = un_vote.1.d_expulsion_target
 				trigger = {
-					has_global_variable = un_vote_topic_expulsion
+					scope:un_resolution ?= { has_tag = un_topic_expulsion }
 					scope:un_vote_target ?= this
 				}
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_expulsion
-				trigger = { has_global_variable = un_vote_topic_expulsion }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 			}
 			desc = un_vote.1.d
 		}
@@ -212,28 +212,21 @@ un_vote.1 = {
 
 	duration = 3
 
+	# scope:un_resolution comes from un_resolution_open. Queued events from
+	# before containers have none and fail here.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { has_variable = un_voted_this_round }
+		scope:un_resolution ?= {
+			has_tag = un_res_voting
+			NOT = { un_resolution_has_vote = { LIST = un_res_yes } }
+			NOT = { un_resolution_has_vote = { LIST = un_res_no } }
+		}
 	}
 
 	immediate = {
-		set_variable = un_voted_this_round
-		# Resolve proposer/target from global vars if not already in scope chain
-		# (needed when vote is triggered from scripted buttons rather than events)
-		if = {
-			limit = {
-				NOT = { exists = scope:un_vote_proposer }
-				exists = global_var:un_vote_proposer_country
-			}
-			global_var:un_vote_proposer_country = { save_scope_as = un_vote_proposer }
-		}
-		if = {
-			limit = {
-				NOT = { exists = scope:un_vote_target }
-				exists = global_var:un_vote_target_country
-			}
-			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
+		scope:un_resolution = {
+			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
+			var:un_res_target ?= { save_scope_as = un_vote_target }
 		}
 	}
 
@@ -259,19 +252,19 @@ un_vote.1 = {
 		# un_vote.3 option A via un_vote_apply_treaty_modifier.
 		show_as_tooltip = {
 			if = {
-				limit = { has_global_variable = un_vote_topic_human_rights }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
 				je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_npt }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }
 				je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_climate }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
 				je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_reform }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
 				add_modifier = {
 					name = un_reform_champion_modifier
 					days = normal_modifier_time
@@ -279,11 +272,11 @@ un_vote.1 = {
 				}
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_heritage }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 				je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_decolonization }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 				add_modifier = {
 					name = un_decolonization_champion_modifier
 					days = normal_modifier_time
@@ -291,25 +284,25 @@ un_vote.1 = {
 				}
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_pandemic }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
 				je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_refugee }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
 				je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_space }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
 				je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
 			}
 			if = {
-				limit = { has_global_variable = un_vote_topic_law_of_sea }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 				add_modifier = { name = un_law_of_sea_modifier }
 			}
 			if = {
 				limit = {
-					has_global_variable = un_vote_topic_icc
-					NOT = { has_global_variable = un_vote_veto_cast }
+					scope:un_resolution ?= { has_tag = un_topic_icc }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				add_modifier = { name = un_icc_member_modifier }
 			}
@@ -317,26 +310,26 @@ un_vote.1 = {
 
 		custom_tooltip = {
 			text = UN_VOTE_IN_FAVOR_TT
-			change_global_variable = { name = un_vote_support add = 1 }
-			change_global_variable = { name = un_vote_net add = 1 }
-			set_variable = { name = un_vote_choice value = 1 }
+			un_resolution_record_vote = { LIST = un_res_yes COUNT = un_res_support }
 		}
 
 		# Target-perspective acceptance: voting in favor of a resolution
 		# targeting yourself is "performative contrition." Pre-applies the
-		# un_self_corrected_modifier (which un_vote.2 reads to skip the standard
-		# un_condemned / un_sanctions_target modifier on resolution pass), sets
-		# a global flag that nudges other AI voters toward yes ("permission"),
-		# and produces an asymmetric IG reaction set instead of the standard
+		# un_self_corrected_modifier, tags the resolution un_res_target_accepted
+		# (un_vote.2 then skips the standard un_condemned / un_sanctions_target
+		# modifier on pass, and other AI voters lean yes: "permission"), and
+		# produces an asymmetric IG reaction set instead of the standard
 		# topic-conditional one.
 		if = {
 			limit = { scope:un_vote_target ?= this }
 			custom_tooltip = UN_VOTE_ACCEPT_TARGET_TT
 			hidden_effect = {
-				# Skips un_condemned / un_sanctions_target in un_vote.2
-				set_variable = un_target_self_corrected
-				# Other AI voters' Option A reads this to lean yes (target gave permission)
-				set_global_variable = un_target_accepted
+				scope:un_resolution ?= {
+					if = {
+						limit = { has_tag = un_res_voting }
+						add_tag = un_res_target_accepted
+					}
+				}
 			}
 
 			add_modifier = {
@@ -390,10 +383,10 @@ un_vote.1 = {
 					exists = scope:un_vote_target
 					NOT = { scope:un_vote_target ?= this }
 					OR = {
-						has_global_variable = un_vote_topic_condemn
-						has_global_variable = un_vote_topic_sanctions
-						has_global_variable = un_vote_topic_icc
-						has_global_variable = un_vote_topic_expulsion
+						scope:un_resolution ?= { has_tag = un_topic_condemn }
+						scope:un_resolution ?= { has_tag = un_topic_sanctions }
+						scope:un_resolution ?= { has_tag = un_topic_icc }
+						scope:un_resolution ?= { has_tag = un_topic_expulsion }
 					}
 				}
 				change_relations = { country = scope:un_vote_target value = -15 }
@@ -412,9 +405,9 @@ un_vote.1 = {
 			if = {
 				limit = {
 					OR = {
-						has_global_variable = un_vote_topic_npt
-						has_global_variable = un_vote_topic_peacekeeping_request
-						has_global_variable = un_vote_topic_icc
+						scope:un_resolution ?= { has_tag = un_topic_npt }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+						scope:un_resolution ?= { has_tag = un_topic_icc }
 					}
 					ig:ig_armed_forces ?= { is_marginal = no }
 				}
@@ -424,8 +417,8 @@ un_vote.1 = {
 			if = {
 				limit = {
 					OR = {
-						has_global_variable = un_vote_topic_climate
-						has_global_variable = un_vote_topic_pandemic
+						scope:un_resolution ?= { has_tag = un_topic_climate }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					}
 					ig:ig_industrialists ?= { is_marginal = no }
 				}
@@ -484,10 +477,10 @@ un_vote.1 = {
 			# voters to support it ("permission" effect). Gated on NOT-target so
 			# the target's own ai_chance doesn't double-dip its own gesture.
 			# Note: vote events fire concurrently; only AI evaluated AFTER the
-			# target's tick will see the flag — partial coverage by design.
+			# target's tick will see the tag — partial coverage by design.
 			modifier = {
 				trigger = {
-					has_global_variable = un_target_accepted
+					scope:un_resolution ?= { has_tag = un_res_target_accepted }
 					NOT = { scope:un_vote_target ?= this }
 				}
 				add = 15
@@ -501,11 +494,11 @@ un_vote.1 = {
 				trigger = {
 					infamy >= 25
 					OR = {
-						has_global_variable = un_vote_topic_aid_request
-						has_global_variable = un_vote_topic_peacekeeping_request
-						has_global_variable = un_vote_topic_human_rights
-						has_global_variable = un_vote_topic_refugee
-						has_global_variable = un_vote_topic_pandemic
+						scope:un_resolution ?= { has_tag = un_topic_aid_request }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+						scope:un_resolution ?= { has_tag = un_topic_human_rights }
+						scope:un_resolution ?= { has_tag = un_topic_refugee }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					}
 				}
 				add = 25
@@ -514,11 +507,11 @@ un_vote.1 = {
 				trigger = {
 					infamy >= 50
 					OR = {
-						has_global_variable = un_vote_topic_aid_request
-						has_global_variable = un_vote_topic_peacekeeping_request
-						has_global_variable = un_vote_topic_human_rights
-						has_global_variable = un_vote_topic_refugee
-						has_global_variable = un_vote_topic_pandemic
+						scope:un_resolution ?= { has_tag = un_topic_aid_request }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+						scope:un_resolution ?= { has_tag = un_topic_human_rights }
+						scope:un_resolution ?= { has_tag = un_topic_refugee }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					}
 				}
 				add = 15
@@ -530,7 +523,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_variable = un_aid_contribution_count
 					var:un_aid_contribution_count >= 1
 				}
@@ -538,7 +531,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_variable = un_aid_contribution_count
 					var:un_aid_contribution_count >= 2
 				}
@@ -546,7 +539,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_variable = un_aid_contribution_count
 					var:un_aid_contribution_count >= 3
 				}
@@ -554,7 +547,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_variable = un_peacekeeping_contribution_count
 					var:un_peacekeeping_contribution_count >= 1
 				}
@@ -562,7 +555,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_variable = un_peacekeeping_contribution_count
 					var:un_peacekeeping_contribution_count >= 2
 				}
@@ -570,7 +563,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_variable = un_peacekeeping_contribution_count
 					var:un_peacekeeping_contribution_count >= 3
 				}
@@ -581,8 +574,8 @@ un_vote.1 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_global_variable = un_vote_topic_aid_request
-						has_global_variable = un_vote_topic_peacekeeping_request
+						scope:un_resolution ?= { has_tag = un_topic_aid_request }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					}
 					is_power_bloc_leader = yes
 				}
@@ -595,7 +588,7 @@ un_vote.1 = {
 			# Support if target is our rival
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					exists = scope:un_vote_target
 					has_diplomatic_pact = {
 						who = scope:un_vote_target
@@ -607,7 +600,7 @@ un_vote.1 = {
 			# Oppose if target is our ally
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					exists = scope:un_vote_target
 					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
 				}
@@ -616,7 +609,7 @@ un_vote.1 = {
 			# Same power bloc as target: protect bloc member
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					exists = scope:un_vote_target
 					is_in_same_power_bloc = scope:un_vote_target
 				}
@@ -625,7 +618,7 @@ un_vote.1 = {
 			# Peaceful nations support condemnation
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					has_law = law_type:law_humanitarian_regulations
 				}
 				add = 15
@@ -636,35 +629,35 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_multicultural
 				}
 				add = 20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_universal_suffrage
 				}
 				add = 15
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_ethnostate
 				}
 				add = -40
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_outlawed_dissent
 				}
 				add = -30
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_guaranteed_liberties
 				}
 				add = 15
@@ -676,7 +669,7 @@ un_vote.1 = {
 			# Nations without nukes support disarmament
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_npt
+					scope:un_resolution ?= { has_tag = un_topic_npt }
 					NOT = {
 						has_variable = nuclear_weapon_stockpile
 					}
@@ -686,7 +679,7 @@ un_vote.1 = {
 			# Nuclear powers resist
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_npt
+					scope:un_resolution ?= { has_tag = un_topic_npt }
 					has_variable = nuclear_weapon_stockpile
 					var:nuclear_weapon_stockpile >= 1
 				}
@@ -695,7 +688,7 @@ un_vote.1 = {
 			# Those developing nukes strongly oppose
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_npt
+					scope:un_resolution ?= { has_tag = un_topic_npt }
 					has_journal_entry = je_nuclear_program
 				}
 				add = -25
@@ -706,28 +699,28 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					has_technology_researched = green_revolution
 				}
 				add = 20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					has_technology_researched = environmental_movement
 				}
 				add = 10
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					has_law = law_type:law_laissez_faire
 				}
 				add = -20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					has_law = law_type:law_command_economy
 				}
 				add = -10
@@ -739,7 +732,7 @@ un_vote.1 = {
 			# Countries frustrated with the current order support reform
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_reform
+					scope:un_resolution ?= { has_tag = un_topic_reform }
 					global_var:un_authority < 40
 				}
 				add = 15
@@ -747,7 +740,7 @@ un_vote.1 = {
 			# SC members resist losing their privilege
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_reform
+					scope:un_resolution ?= { has_tag = un_topic_reform }
 					country_rank >= rank_value:great_power
 					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 				}
@@ -759,14 +752,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_heritage
+					scope:un_resolution ?= { has_tag = un_topic_heritage }
 					has_law = law_type:law_multicultural
 				}
 				add = 15
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_heritage
+					scope:un_resolution ?= { has_tag = un_topic_heritage }
 					country_rank >= rank_value:major_power
 				}
 				add = 10
@@ -778,7 +771,7 @@ un_vote.1 = {
 			# Colonial powers strongly oppose
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_decolonization
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
 					any_subject_or_below = {
 						is_direct_subject_of = ROOT
 					}
@@ -788,7 +781,7 @@ un_vote.1 = {
 			# Anti-imperialist nations support
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_decolonization
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
 					has_law = law_type:law_council_republic
 				}
 				add = 20
@@ -796,7 +789,7 @@ un_vote.1 = {
 			# Non-colonial nations lean in favor
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_decolonization
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
 					NOT = {
 						any_subject_or_below = {
 							count >= 1
@@ -811,14 +804,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_pandemic
+					scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					has_law = law_type:law_worker_protections
 				}
 				add = 15
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_pandemic
+					scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					has_law = law_type:law_isolationism
 				}
 				add = -20
@@ -829,14 +822,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_refugee
+					scope:un_resolution ?= { has_tag = un_topic_refugee }
 					has_law = law_type:law_no_migration_controls
 				}
 				add = 20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_refugee
+					scope:un_resolution ?= { has_tag = un_topic_refugee }
 					has_law = law_type:law_closed_borders
 				}
 				add = -30
@@ -847,14 +840,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_space
+					scope:un_resolution ?= { has_tag = un_topic_space }
 					has_technology_researched = space_exploration
 				}
 				add = 20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_space
+					scope:un_resolution ?= { has_tag = un_topic_space }
 					has_law = law_type:law_single_party_state
 				}
 				add = -15
@@ -866,7 +859,7 @@ un_vote.1 = {
 			# Humanitarian nations support
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_law = law_type:law_humanitarian_regulations
 				}
 				add = 25
@@ -874,7 +867,7 @@ un_vote.1 = {
 			# GPs want to project power
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					country_rank >= rank_value:great_power
 				}
 				add = 15
@@ -882,7 +875,7 @@ un_vote.1 = {
 			# Isolationists resist
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_law = law_type:law_isolationism
 				}
 				add = -20
@@ -894,7 +887,7 @@ un_vote.1 = {
 			# Wealthy nations more likely to support
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					country_rank >= rank_value:great_power
 				}
 				add = 20
@@ -902,14 +895,14 @@ un_vote.1 = {
 			# Interventionist/humanitarian support
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_law = law_type:law_humanitarian_regulations
 				}
 				add = 20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_law = law_type:law_isolationism
 				}
 				add = -25
@@ -921,7 +914,7 @@ un_vote.1 = {
 			# Rivals of the target support sanctions
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					exists = scope:un_vote_target
 					has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
 				}
@@ -930,7 +923,7 @@ un_vote.1 = {
 			# Same power bloc as target: protect bloc member
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					exists = scope:un_vote_target
 					is_in_same_power_bloc = scope:un_vote_target
 				}
@@ -939,7 +932,7 @@ un_vote.1 = {
 			# Great powers want to project authority
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					country_rank >= rank_value:great_power
 				}
 				add = 15
@@ -947,7 +940,7 @@ un_vote.1 = {
 			# Humanitarian nations support sanctions against aggressors
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					OR = {
 						has_law = law_type:law_humanitarian_regulations
 						has_law = law_type:law_limited_war
@@ -958,7 +951,7 @@ un_vote.1 = {
 			# Isolationists resist involvement
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					has_law = law_type:law_isolationism
 				}
 				add = -20
@@ -970,7 +963,7 @@ un_vote.1 = {
 			# Free traders support maritime regulation
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_law_of_sea
+					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 					has_law = law_type:law_free_trade
 				}
 				add = 20
@@ -978,7 +971,7 @@ un_vote.1 = {
 			# Great powers benefit from codified maritime rules
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_law_of_sea
+					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 					country_rank >= rank_value:great_power
 				}
 				add = 10
@@ -986,7 +979,7 @@ un_vote.1 = {
 			# Isolationists oppose
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_law_of_sea
+					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 					has_law = law_type:law_isolationism
 				}
 				add = -15
@@ -998,7 +991,7 @@ un_vote.1 = {
 			# Democracies support accountability
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					has_law = law_type:law_universal_suffrage
 				}
 				add = 15
@@ -1006,7 +999,7 @@ un_vote.1 = {
 			# Human rights-conscious nations support
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					has_law = law_type:law_multicultural
 				}
 				add = 10
@@ -1014,7 +1007,7 @@ un_vote.1 = {
 			# Great powers wary of sovereignty loss
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					country_rank >= rank_value:great_power
 				}
 				add = -20
@@ -1022,7 +1015,7 @@ un_vote.1 = {
 			# Warring nations strongly oppose
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					is_at_war = yes
 				}
 				add = -30
@@ -1030,7 +1023,7 @@ un_vote.1 = {
 			# Authoritarian governments oppose accountability
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					has_law = law_type:law_single_party_state
 				}
 				add = -25
@@ -1053,9 +1046,7 @@ un_vote.1 = {
 
 		custom_tooltip = {
 			text = UN_VOTE_AGAINST_TT
-			change_global_variable = { name = un_vote_oppose add = 1 }
-			change_global_variable = { name = un_vote_net add = -1 }
-			set_variable = { name = un_vote_choice value = 2 }
+			un_resolution_record_vote = { LIST = un_res_no COUNT = un_res_oppose }
 		}
 
 		# Relations damage with proposer + negative diplomatic catalyst
@@ -1072,8 +1063,8 @@ un_vote.1 = {
 				exists = scope:un_vote_target
 				NOT = { scope:un_vote_target ?= this }
 				OR = {
-					has_global_variable = un_vote_topic_condemn
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 				}
 			}
 			change_relations = { country = scope:un_vote_target value = 15 }
@@ -1085,9 +1076,9 @@ un_vote.1 = {
 		if = {
 			limit = {
 				OR = {
-					has_global_variable = un_vote_topic_npt
-					has_global_variable = un_vote_topic_peacekeeping_request
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_npt }
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 				}
 				ig:ig_armed_forces ?= { is_marginal = no }
 			}
@@ -1097,8 +1088,8 @@ un_vote.1 = {
 		if = {
 			limit = {
 				OR = {
-					has_global_variable = un_vote_topic_climate
-					has_global_variable = un_vote_topic_pandemic
+					scope:un_resolution ?= { has_tag = un_topic_climate }
+					scope:un_resolution ?= { has_tag = un_topic_pandemic }
 				}
 				ig:ig_industrialists ?= { is_marginal = no }
 			}
@@ -1160,9 +1151,9 @@ un_vote.1 = {
 				trigger = {
 					infamy >= 25
 					OR = {
-						has_global_variable = un_vote_topic_human_rights
-						has_global_variable = un_vote_topic_refugee
-						has_global_variable = un_vote_topic_pandemic
+						scope:un_resolution ?= { has_tag = un_topic_human_rights }
+						scope:un_resolution ?= { has_tag = un_topic_refugee }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					}
 				}
 				add = -20
@@ -1173,7 +1164,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					exists = scope:un_vote_target
 					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
 				}
@@ -1182,7 +1173,7 @@ un_vote.1 = {
 			# Same power bloc as target: protect bloc member
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
 					exists = scope:un_vote_target
 					is_in_same_power_bloc = scope:un_vote_target
 				}
@@ -1194,14 +1185,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_ethnostate
 				}
 				add = 30
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_human_rights
+					scope:un_resolution ?= { has_tag = un_topic_human_rights }
 					has_law = law_type:law_outlawed_dissent
 				}
 				add = 25
@@ -1212,7 +1203,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_npt
+					scope:un_resolution ?= { has_tag = un_topic_npt }
 					has_variable = nuclear_weapon_stockpile
 					var:nuclear_weapon_stockpile >= 1
 				}
@@ -1220,7 +1211,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_npt
+					scope:un_resolution ?= { has_tag = un_topic_npt }
 					has_journal_entry = je_nuclear_program
 				}
 				add = 25
@@ -1231,14 +1222,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					has_law = law_type:law_laissez_faire
 				}
 				add = 25
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					has_law = law_type:law_command_economy
 				}
 				add = 15
@@ -1249,7 +1240,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_reform
+					scope:un_resolution ?= { has_tag = un_topic_reform }
 					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 				}
 				add = 25
@@ -1260,7 +1251,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_decolonization
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
 					any_subject_or_below = {
 						is_direct_subject_of = ROOT
 					}
@@ -1273,7 +1264,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_pandemic
+					scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					has_law = law_type:law_isolationism
 				}
 				add = 25
@@ -1284,7 +1275,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_refugee
+					scope:un_resolution ?= { has_tag = un_topic_refugee }
 					has_law = law_type:law_closed_borders
 				}
 				add = 30
@@ -1295,7 +1286,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_space
+					scope:un_resolution ?= { has_tag = un_topic_space }
 					has_law = law_type:law_single_party_state
 				}
 				add = 20
@@ -1306,14 +1297,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_law = law_type:law_isolationism
 				}
 				add = 25
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					has_law = law_type:law_total_war
 				}
 				add = 15
@@ -1324,14 +1315,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_law = law_type:law_isolationism
 				}
 				add = 25
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_aid_request
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
 					has_law = law_type:law_laissez_faire
 				}
 				add = 15
@@ -1342,7 +1333,7 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					exists = scope:un_vote_target
 					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
 				}
@@ -1351,7 +1342,7 @@ un_vote.1 = {
 			# Same power bloc as target: protect bloc member
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					exists = scope:un_vote_target
 					is_in_same_power_bloc = scope:un_vote_target
 				}
@@ -1359,7 +1350,7 @@ un_vote.1 = {
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					has_law = law_type:law_isolationism
 				}
 				add = 20
@@ -1370,14 +1361,14 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_law_of_sea
+					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 					has_law = law_type:law_protectionism
 				}
 				add = 20
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_law_of_sea
+					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 					has_law = law_type:law_isolationism
 				}
 				add = 25
@@ -1388,21 +1379,21 @@ un_vote.1 = {
 			# ================================================================
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					country_rank >= rank_value:great_power
 				}
 				add = 30
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					is_at_war = yes
 				}
 				add = 40
 			}
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					has_law = law_type:law_single_party_state
 				}
 				add = 30
@@ -1426,25 +1417,16 @@ un_vote.1 = {
 		}
 		trigger = {
 			is_un_permanent_member = yes
-			un_vote_topic_is_binding = yes
+			scope:un_resolution ?= { un_resolution_is_binding = yes }
 		}
 
 		custom_tooltip = {
 			text = UN_VOTE_VETO_TT
-			# Authority drain applies ONCE per resolution: only the first veto this
-			# round dents the single global UN authority (not once per vetoing member).
-			# un_vote_veto_cast is the per-resolution flag, cleared in un_vote.2 cleanup.
-			if = {
-				limit = { NOT = { has_global_variable = un_vote_veto_cast } }
-				change_global_variable = { name = un_authority add = -5 }
-			}
-			# Veto kills the binding form regardless of GA tally
-			set_global_variable = un_vote_veto_cast
-			set_global_variable = { name = un_vote_vetoer_country value = ROOT }
-			# Vetoer's no still counts toward the GA tally (graduated form needs majority)
-			change_global_variable = { name = un_vote_oppose add = 1 }
-			change_global_variable = { name = un_vote_net add = -1 }
-			set_variable = { name = un_vote_choice value = 2 }
+			# Tags the resolution un_res_vetoed, which kills the binding form
+			# regardless of the GA tally. The vetoer's no still counts toward the
+			# tally (the graduated form needs a majority). Only the first veto on
+			# a resolution dents the single global UN authority.
+			un_resolution_record_veto = yes
 			add_modifier = {
 				name = un_veto_authority_drain_modifier
 				days = long_modifier_time
@@ -1464,9 +1446,9 @@ un_vote.1 = {
 		if = {
 			limit = {
 				OR = {
-					has_global_variable = un_vote_topic_icc
-					has_global_variable = un_vote_topic_condemn
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_icc }
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 				}
 			}
 			change_infamy = 3
@@ -1485,8 +1467,8 @@ un_vote.1 = {
 				exists = scope:un_vote_target
 				NOT = { scope:un_vote_target ?= this }
 				OR = {
-					has_global_variable = un_vote_topic_condemn
-					has_global_variable = un_vote_topic_sanctions
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 				}
 			}
 			change_relations = { country = scope:un_vote_target value = 20 }
@@ -1507,8 +1489,8 @@ un_vote.1 = {
 			base = 0
 
 			# Only consider vetoing when the resolution would otherwise pass.
-			# (un_veto_would_change_outcome checks net >= 2, meaning even our "no"
-			# alone wouldn't sink it — so a veto is needed to actually block.)
+			# (un_veto_would_change_outcome checks a margin >= 2, meaning even our
+			# "no" alone wouldn't sink it — so a veto is needed to actually block.)
 			modifier = {
 				trigger = { un_veto_would_change_outcome = yes }
 				add = 30
@@ -1527,8 +1509,8 @@ un_vote.1 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_global_variable = un_vote_topic_sanctions
-						has_global_variable = un_vote_topic_condemn
+						scope:un_resolution ?= { has_tag = un_topic_sanctions }
+						scope:un_resolution ?= { has_tag = un_topic_condemn }
 					}
 					exists = scope:un_vote_target
 					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
@@ -1538,8 +1520,8 @@ un_vote.1 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_global_variable = un_vote_topic_sanctions
-						has_global_variable = un_vote_topic_condemn
+						scope:un_resolution ?= { has_tag = un_topic_sanctions }
+						scope:un_resolution ?= { has_tag = un_topic_condemn }
 					}
 					exists = scope:un_vote_target
 					is_in_same_power_bloc = scope:un_vote_target
@@ -1550,7 +1532,7 @@ un_vote.1 = {
 			# ICC referrals targeting US or our allies are existential — strongly veto
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
+					scope:un_resolution ?= { has_tag = un_topic_icc }
 					OR = {
 						scope:un_vote_target ?= this
 						AND = {
@@ -1565,7 +1547,7 @@ un_vote.1 = {
 			# Reform that would weaken SC privileges (i.e., proposer is non-permanent)
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_reform
+					scope:un_resolution ?= { has_tag = un_topic_reform }
 					exists = scope:un_vote_proposer
 					NOT = { scope:un_vote_proposer = { is_un_permanent_member = yes } }
 				}
@@ -1576,7 +1558,7 @@ un_vote.1 = {
 			# (we want our friends helped); but veto when requested by a rival's bloc
 			modifier = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					exists = scope:un_vote_proposer
 					NOT = { is_in_same_power_bloc = scope:un_vote_proposer }
 					NOT = { has_treaty_alliance_with = { TARGET = scope:un_vote_proposer } }
@@ -1603,9 +1585,9 @@ un_vote.1 = {
 				trigger = {
 					infamy >= 25
 					OR = {
-						has_global_variable = un_vote_topic_icc
-						has_global_variable = un_vote_topic_condemn
-						has_global_variable = un_vote_topic_peacekeeping_request
+						scope:un_resolution ?= { has_tag = un_topic_icc }
+						scope:un_resolution ?= { has_tag = un_topic_condemn }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					}
 				}
 				add = -15
@@ -1614,7 +1596,7 @@ un_vote.1 = {
 	}
 }
 
-# ---- Phase 2: Vote results - fires for the proposer after 90 days ----
+# ---- Phase 2: Vote results - fires for the proposer 365 days after opening ----
 un_vote.2 = {
 	type = country_event
 	placement = ROOT
@@ -1632,223 +1614,229 @@ un_vote.2 = {
 			# Condemn - Passed (vetoed: non-binding rebuke)
 			triggered_desc = {
 				trigger = {
-					has_global_variable = un_vote_topic_condemn
-					global_var:un_vote_net >= 1
-					has_global_variable = un_vote_veto_cast
+					scope:un_resolution ?= {
+						has_tag = un_topic_condemn
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
 				}
 				desc = un_vote.2.d_condemn_passed_vetoed
 			}
 			# Condemn - Passed (full binding condemnation)
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_condemn global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn has_tag = un_res_passed } }
 				desc = un_vote.2.d_condemn_passed
 			}
 			# Condemn - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_condemn }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
 				desc = un_vote.2.d_condemn_failed
 			}
 			# Human Rights - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_human_rights global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_human_rights has_tag = un_res_passed } }
 				desc = un_vote.2.d_human_rights_passed
 			}
 			# Human Rights - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_human_rights }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
 				desc = un_vote.2.d_human_rights_failed
 			}
 			# NPT - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_npt global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_npt has_tag = un_res_passed } }
 				desc = un_vote.2.d_npt_passed
 			}
 			# NPT - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_npt }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_npt } }
 				desc = un_vote.2.d_npt_failed
 			}
 			# Climate - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_climate global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_climate has_tag = un_res_passed } }
 				desc = un_vote.2.d_climate_passed
 			}
 			# Climate - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_climate }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_climate } }
 				desc = un_vote.2.d_climate_failed
 			}
 			# Reform - Passed (vetoed: flat block)
 			triggered_desc = {
 				trigger = {
-					has_global_variable = un_vote_topic_reform
-					global_var:un_vote_net >= 1
-					has_global_variable = un_vote_veto_cast
+					scope:un_resolution ?= {
+						has_tag = un_topic_reform
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
 				}
 				desc = un_vote.2.d_reform_passed_vetoed
 			}
 			# Reform - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_reform global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_reform has_tag = un_res_passed } }
 				desc = un_vote.2.d_reform_passed
 			}
 			# Reform - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_reform }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_reform } }
 				desc = un_vote.2.d_reform_failed
 			}
 			# Heritage - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_heritage global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_heritage has_tag = un_res_passed } }
 				desc = un_vote.2.d_heritage_passed
 			}
 			# Heritage - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_heritage }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 				desc = un_vote.2.d_heritage_failed
 			}
 			# Decolonization - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_decolonization global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_decolonization has_tag = un_res_passed } }
 				desc = un_vote.2.d_decolonization_passed
 			}
 			# Decolonization - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_decolonization }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 				desc = un_vote.2.d_decolonization_failed
 			}
 			# Pandemic - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_pandemic global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_pandemic has_tag = un_res_passed } }
 				desc = un_vote.2.d_pandemic_passed
 			}
 			# Pandemic - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_pandemic }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
 				desc = un_vote.2.d_pandemic_failed
 			}
 			# Refugee - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_refugee global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_refugee has_tag = un_res_passed } }
 				desc = un_vote.2.d_refugee_passed
 			}
 			# Refugee - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_refugee }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
 				desc = un_vote.2.d_refugee_failed
 			}
 			# Space - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_space global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_space has_tag = un_res_passed } }
 				desc = un_vote.2.d_space_passed
 			}
 			# Space - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_space }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_space } }
 				desc = un_vote.2.d_space_failed
 			}
 			# Peacekeeping Request - Passed (vetoed: observer mission only)
 			triggered_desc = {
 				trigger = {
-					has_global_variable = un_vote_topic_peacekeeping_request
-					global_var:un_vote_net >= 1
-					has_global_variable = un_vote_veto_cast
+					scope:un_resolution ?= {
+						has_tag = un_topic_peacekeeping_request
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
 				}
 				desc = un_vote.2.d_peacekeeping_request_passed_vetoed
 			}
 			# Peacekeeping Request - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_peacekeeping_request global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request has_tag = un_res_passed } }
 				desc = un_vote.2.d_peacekeeping_request_passed
 			}
 			# Peacekeeping Request - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_peacekeeping_request }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 				desc = un_vote.2.d_peacekeeping_request_failed
 			}
 			# Aid Request - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_aid_request global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_aid_request has_tag = un_res_passed } }
 				desc = un_vote.2.d_aid_request_passed
 			}
 			# Aid Request - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_aid_request }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 				desc = un_vote.2.d_aid_request_failed
 			}
 			# Sanctions - Passed (vetoed: voluntary partial sanctions)
 			triggered_desc = {
 				trigger = {
-					has_global_variable = un_vote_topic_sanctions
-					global_var:un_vote_net >= 1
-					has_global_variable = un_vote_veto_cast
+					scope:un_resolution ?= {
+						has_tag = un_topic_sanctions
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
 				}
 				desc = un_vote.2.d_sanctions_passed_vetoed
 			}
 			# Sanctions - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_sanctions global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_sanctions has_tag = un_res_passed } }
 				desc = un_vote.2.d_sanctions_passed
 			}
 			# Sanctions - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_sanctions }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_sanctions } }
 				desc = un_vote.2.d_sanctions_failed
 			}
 			# Law of the Sea - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_law_of_sea global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea has_tag = un_res_passed } }
 				desc = un_vote.2.d_law_of_sea_passed
 			}
 			# Law of the Sea - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_law_of_sea }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 				desc = un_vote.2.d_law_of_sea_failed
 			}
 			# International Criminal Court - Passed (vetoed: symbolic censure only)
 			triggered_desc = {
 				trigger = {
-					has_global_variable = un_vote_topic_icc
-					global_var:un_vote_net >= 1
-					has_global_variable = un_vote_veto_cast
+					scope:un_resolution ?= {
+						has_tag = un_topic_icc
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
 				}
 				desc = un_vote.2.d_icc_passed_vetoed
 			}
 			# International Criminal Court - Passed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_icc global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc has_tag = un_res_passed } }
 				desc = un_vote.2.d_icc_passed
 			}
 			# International Criminal Court - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_icc }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 				desc = un_vote.2.d_icc_failed
 			}
 			# Expulsion - Passed with promotion (2/3 supermajority; vacated seat filled)
 			triggered_desc = {
 				trigger = {
-					has_global_variable = un_vote_topic_expulsion
-					un_vote_expulsion_passed >= 0
+					scope:un_resolution ?= { has_tag = un_topic_expulsion has_tag = un_res_passed }
 					exists = scope:un_vote_promoted
 				}
 				desc = un_vote.2.d_expulsion_passed_promoted
 			}
 			# Expulsion - Passed but no eligible challenger (seat left vacant)
 			triggered_desc = {
-				trigger = {
-					has_global_variable = un_vote_topic_expulsion
-					un_vote_expulsion_passed >= 0
-				}
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion has_tag = un_res_passed } }
 				desc = un_vote.2.d_expulsion_passed
 			}
 			# Expulsion - Failed
 			triggered_desc = {
-				trigger = { has_global_variable = un_vote_topic_expulsion }
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 				desc = un_vote.2.d_expulsion_failed
 			}
 			# Generic fallback
 			triggered_desc = {
-				trigger = { global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_res_passed } }
 				desc = un_vote.2.d_passed
 			}
 			desc = un_vote.2.d_failed
@@ -1858,7 +1846,7 @@ un_vote.2 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_vote.2.f_passed
-				trigger = { global_var:un_vote_net >= 1 }
+				trigger = { scope:un_resolution ?= { has_tag = un_res_passed } }
 			}
 			desc = un_vote.2.f_failed
 		}
@@ -1866,28 +1854,31 @@ un_vote.2 = {
 
 	duration = 3
 
+	# scope:un_resolution comes from un_resolution_open. A resolution the
+	# watchdog already lapsed, or a queued event from before containers, fails here.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		scope:un_resolution ?= { has_tag = un_res_voting }
 	}
 
 	immediate = {
-		# Save vote counts as country vars for loc display
+		# Close the vote: tag passed/failed, start the topic cooldown, file it in
+		# un_resolution_history and free the vote lock. The option below applies
+		# the outcome; everything it reads is on the resolution, not the lock.
+		scope:un_resolution = {
+			un_resolution_decide = yes
+			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
+			var:un_res_target ?= { save_scope_as = un_vote_target }
+		}
+		# Vote counts as country vars for loc display (loc has no accessor
+		# for a script container held in a saved scope)
 		set_variable = {
 			name = un_display_support
-			value = global_var:un_vote_support
+			value = scope:un_resolution.var:un_res_support
 		}
 		set_variable = {
 			name = un_display_oppose
-			value = global_var:un_vote_oppose
-		}
-		# Resolve proposer/target scopes from global vars
-		if = {
-			limit = { exists = global_var:un_vote_proposer_country }
-			global_var:un_vote_proposer_country = { save_scope_as = un_vote_proposer }
-		}
-		if = {
-			limit = { exists = global_var:un_vote_target_country }
-			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
+			value = scope:un_resolution.var:un_res_oppose
 		}
 		# Successful-expulsion promotion: pick the highest-ranking eligible
 		# non-permanent UN member to fill the vacated seat. Saved as scope so
@@ -1897,22 +1888,25 @@ un_vote.2 = {
 		# unset and the seat goes vacant (description falls back accordingly).
 		if = {
 			limit = {
-				has_global_variable = un_vote_topic_expulsion
-				un_vote_expulsion_passed >= 0
+				scope:un_resolution ?= {
+					has_tag = un_topic_expulsion
+					has_tag = un_res_passed
+				}
 			}
 			ordered_country = {
 				limit = {
 					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					country_rank >= rank_value:great_power
 					NOT = { is_un_permanent_member = yes }
-					NOT = { this = scope:un_vote_target }
+					NOT = { this ?= scope:un_vote_target }
 				}
 				order_by = country_rank
 				max = 1
 				save_scope_as = un_vote_promoted
-				set_global_variable = { name = un_vote_promoted_country value = THIS }
+				scope:un_resolution = { set_variable = { name = un_res_promoted value = scope:un_vote_promoted } }
 			}
 		}
+		scope:un_resolution = { un_resolution_archive = yes }
 	}
 
 	# Single option: acknowledge the results
@@ -1926,8 +1920,10 @@ un_vote.2 = {
 		# skip when the topic is expulsion.
 		if = {
 			limit = {
-				has_global_variable = un_vote_topic_expulsion
-				un_vote_expulsion_passed >= 0
+				scope:un_resolution ?= {
+					has_tag = un_topic_expulsion
+					has_tag = un_res_passed
+				}
 			}
 			custom_tooltip = un_vote_expulsion_passed_tt
 			change_global_variable = { name = un_authority add = 5 }
@@ -1957,7 +1953,7 @@ un_vote.2 = {
 			}
 		}
 		else_if = {
-			limit = { has_global_variable = un_vote_topic_expulsion }
+			limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 			custom_tooltip = un_vote_expulsion_failed_tt
 			change_global_variable = { name = un_authority add = -3 }
 			if = {
@@ -1969,8 +1965,10 @@ un_vote.2 = {
 		# ---- RESOLUTION PASSED ----
 		if = {
 			limit = {
-				global_var:un_vote_net >= 1
-				NOT = { has_global_variable = un_vote_topic_expulsion }
+				scope:un_resolution ?= {
+					has_tag = un_res_passed
+					NOT = { has_tag = un_topic_expulsion }
+				}
 			}
 
 			# ---- Condemn: target gets condemnation, proposer gets prestige ----
@@ -1982,8 +1980,8 @@ un_vote.2 = {
 			# SC weight).
 			if = {
 				limit = {
-					has_global_variable = un_vote_topic_condemn
-					NOT = { has_global_variable = un_vote_veto_cast }
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_condemn_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
@@ -1992,7 +1990,7 @@ un_vote.2 = {
 					change_relations = { country = scope:un_vote_target value = -30 }
 					scope:un_vote_target = {
 						if = {
-							limit = { NOT = { has_variable = un_target_self_corrected } }
+							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = {
 								name = un_condemned_modifier
 								days = long_modifier_time
@@ -2008,7 +2006,7 @@ un_vote.2 = {
 				}
 			}
 			else_if = {
-				limit = { has_global_variable = un_vote_topic_condemn }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
 				# Graduated condemn: SC veto downgrades to non-binding rebuke
 				custom_tooltip = un_vote_condemn_passed_vetoed_tt
 				change_global_variable = { name = un_authority add = 2 }
@@ -2017,7 +2015,7 @@ un_vote.2 = {
 					change_relations = { country = scope:un_vote_target value = -10 }
 					scope:un_vote_target = {
 						if = {
-							limit = { NOT = { has_variable = un_target_self_corrected } }
+							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = {
 								name = un_non_binding_rebuke_modifier
 								days = normal_modifier_time
@@ -2030,7 +2028,7 @@ un_vote.2 = {
 
 			# ---- Human Rights: UNHRC established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_human_rights }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
 				custom_tooltip = un_vote_human_rights_passed_tt
 				change_global_variable = { name = un_authority add = 10 }
 				if = {
@@ -2041,7 +2039,7 @@ un_vote.2 = {
 
 			# ---- NPT: IAEA established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_npt }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }
 				custom_tooltip = un_vote_npt_passed_tt
 				change_global_variable = { name = un_authority add = 10 }
 				if = {
@@ -2052,7 +2050,7 @@ un_vote.2 = {
 
 			# ---- Climate: UNEP established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_climate }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
 				custom_tooltip = un_vote_climate_passed_tt
 				change_global_variable = { name = un_authority add = 10 }
 				if = {
@@ -2068,21 +2066,21 @@ un_vote.2 = {
 			# fires so members know it was attempted, but no effect applies.
 			if = {
 				limit = {
-					has_global_variable = un_vote_topic_reform
-					NOT = { has_global_variable = un_vote_veto_cast }
+					scope:un_resolution ?= { has_tag = un_topic_reform }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_reform_passed_tt
 				change_global_variable = { name = un_authority add = 10 }
 			}
 			else_if = {
-				limit = { has_global_variable = un_vote_topic_reform }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
 				custom_tooltip = un_vote_reform_passed_vetoed_tt
 				# No effect — flat block
 			}
 
 			# ---- Heritage: UNESCO established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_heritage }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 				custom_tooltip = un_vote_heritage_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				if = {
@@ -2093,7 +2091,7 @@ un_vote.2 = {
 
 			# ---- Decolonization: Anti-colonial declaration ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_decolonization }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 				custom_tooltip = un_vote_decolonization_passed_tt
 				change_global_variable = { name = un_authority add = 10 }
 				# Cash the loc promise of "Colonial powers face increased
@@ -2116,7 +2114,7 @@ un_vote.2 = {
 
 			# ---- Pandemic: WHO established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_pandemic }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
 				custom_tooltip = un_vote_pandemic_passed_tt
 				change_global_variable = { name = un_authority add = 10 }
 				if = {
@@ -2127,7 +2125,7 @@ un_vote.2 = {
 
 			# ---- Refugee: UNHCR established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_refugee }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
 				custom_tooltip = un_vote_refugee_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				if = {
@@ -2138,7 +2136,7 @@ un_vote.2 = {
 
 			# ---- Space: UNOOSA established ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_space }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
 				custom_tooltip = un_vote_space_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				if = {
@@ -2152,15 +2150,15 @@ un_vote.2 = {
 			# proposer gets a small benefit but no contributors are levied.
 			if = {
 				limit = {
-					has_global_variable = un_vote_topic_peacekeeping_request
-					NOT = { has_global_variable = un_vote_veto_cast }
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				# Apply scaled peacekeeping benefit to the requesting country
 				if = {
-					limit = { exists = global_var:un_vote_proposer_country }
-					global_var:un_vote_proposer_country = {
+					limit = { exists = scope:un_vote_proposer }
+					scope:un_vote_proposer = {
 						add_modifier = {
 							name = un_peacekeeping_received_modifier
 							multiplier = un_peacekeeping_benefit_scale
@@ -2190,13 +2188,13 @@ un_vote.2 = {
 				}
 			}
 			else_if = {
-				limit = { has_global_variable = un_vote_topic_peacekeeping_request }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 				custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
 				change_global_variable = { name = un_authority add = 2 }
 				# Observer mission to the proposer only — no enforcement, no levies
 				if = {
-					limit = { exists = global_var:un_vote_proposer_country }
-					global_var:un_vote_proposer_country = {
+					limit = { exists = scope:un_vote_proposer }
+					scope:un_vote_proposer = {
 						add_modifier = {
 							name = un_observer_mission_modifier
 							days = normal_modifier_time
@@ -2218,13 +2216,13 @@ un_vote.2 = {
 
 			# ---- Aid Request: Deliver humanitarian aid to requesting country ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_aid_request }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 				custom_tooltip = un_vote_aid_request_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				# Apply scaled aid benefit to the requesting country
 				if = {
-					limit = { exists = global_var:un_vote_proposer_country }
-					global_var:un_vote_proposer_country = {
+					limit = { exists = scope:un_vote_proposer }
+					scope:un_vote_proposer = {
 						add_modifier = {
 							name = un_aid_received_modifier
 							multiplier = un_aid_benefit_scale
@@ -2257,8 +2255,8 @@ un_vote.2 = {
 			# to the target instead of the full sanctions package.
 			if = {
 				limit = {
-					has_global_variable = un_vote_topic_sanctions
-					NOT = { has_global_variable = un_vote_veto_cast }
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_sanctions_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
@@ -2269,7 +2267,7 @@ un_vote.2 = {
 					limit = { exists = scope:un_vote_target }
 					scope:un_vote_target = {
 						if = {
-							limit = { NOT = { has_variable = un_target_self_corrected } }
+							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = { name = un_sanctions_target_modifier }
 						}
 					}
@@ -2277,14 +2275,14 @@ un_vote.2 = {
 				}
 			}
 			else_if = {
-				limit = { has_global_variable = un_vote_topic_sanctions }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_sanctions } }
 				custom_tooltip = un_vote_sanctions_passed_vetoed_tt
 				change_global_variable = { name = un_authority add = 2 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					scope:un_vote_target = {
 						if = {
-							limit = { NOT = { has_variable = un_target_self_corrected } }
+							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = { name = un_sanctions_partial_modifier }
 						}
 					}
@@ -2294,7 +2292,7 @@ un_vote.2 = {
 
 			# ---- Law of the Sea: Maritime cooperation framework ----
 			if = {
-				limit = { has_global_variable = un_vote_topic_law_of_sea }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 				custom_tooltip = un_vote_law_of_sea_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				set_global_variable = un_agency_itlos
@@ -2305,15 +2303,15 @@ un_vote.2 = {
 			# gets un_court_contested_modifier as a small accountability gesture).
 			if = {
 				limit = {
-					has_global_variable = un_vote_topic_icc
-					NOT = { has_global_variable = un_vote_veto_cast }
+					scope:un_resolution ?= { has_tag = un_topic_icc }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_icc_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				set_global_variable = un_agency_icc
 			}
 			else_if = {
-				limit = { has_global_variable = un_vote_topic_icc }
+				limit = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 				custom_tooltip = un_vote_icc_passed_vetoed_tt
 				change_global_variable = { name = un_authority add = 2 }
 				add_modifier = {
@@ -2327,7 +2325,7 @@ un_vote.2 = {
 			# Skipped for vetoed binding resolutions — only the graduated form
 			# went through, so the proposer didn't fully succeed.
 			if = {
-				limit = { NOT = { has_global_variable = un_vote_veto_cast } }
+				limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } } }
 				add_modifier = {
 					name = un_vote_success_reward
 					days = normal_modifier_time
@@ -2339,11 +2337,11 @@ un_vote.2 = {
 			if = {
 				limit = {
 					OR = {
-						has_global_variable = un_vote_topic_human_rights
-						has_global_variable = un_vote_topic_refugee
-						has_global_variable = un_vote_topic_pandemic
-						has_global_variable = un_vote_topic_aid_request
-						has_global_variable = un_vote_topic_peacekeeping_request
+						scope:un_resolution ?= { has_tag = un_topic_human_rights }
+						scope:un_resolution ?= { has_tag = un_topic_refugee }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
+						scope:un_resolution ?= { has_tag = un_topic_aid_request }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 					}
 					infamy > 0
 				}
@@ -2372,8 +2370,10 @@ un_vote.2 = {
 		# ---- RESOLUTION FAILED ----
 		if = {
 			limit = {
-				NOT = { global_var:un_vote_net >= 1 }
-				NOT = { has_global_variable = un_vote_topic_expulsion }
+				scope:un_resolution ?= {
+					has_tag = un_res_failed
+					NOT = { has_tag = un_topic_expulsion }
+				}
 			}
 			custom_tooltip = un_vote_failed_tt
 			change_global_variable = { name = un_authority add = -3 }
@@ -2386,9 +2386,9 @@ un_vote.2 = {
 			if = {
 				limit = {
 					OR = {
-						has_global_variable = un_vote_topic_human_rights
-						has_global_variable = un_vote_topic_refugee
-						has_global_variable = un_vote_topic_pandemic
+						scope:un_resolution ?= { has_tag = un_topic_human_rights }
+						scope:un_resolution ?= { has_tag = un_topic_refugee }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
 					}
 				}
 				change_infamy = 2
@@ -2413,7 +2413,7 @@ un_vote.2 = {
 			# Revoke unfulfilled pledges from voters
 			hidden_effect = {
 				if = {
-					limit = { has_global_variable = un_vote_topic_peacekeeping_request }
+					limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 					every_country = {
 						limit = {
 							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
@@ -2423,7 +2423,7 @@ un_vote.2 = {
 					}
 				}
 				if = {
-					limit = { has_global_variable = un_vote_topic_aid_request }
+					limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 					every_country = {
 						limit = {
 							has_modifier = un_humanitarian_aid_modifier
@@ -2446,70 +2446,6 @@ un_vote.2 = {
 			}
 		}
 
-		# ---- Set per-topic 5-year cooldown before clearing vote state ----
-		hidden_effect = {
-			if = { limit = { has_global_variable = un_vote_topic_condemn } set_global_variable = { name = un_vote_cooldown_condemn days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_human_rights } set_global_variable = { name = un_vote_cooldown_human_rights days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_npt } set_global_variable = { name = un_vote_cooldown_npt days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_climate } set_global_variable = { name = un_vote_cooldown_climate days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_reform } set_global_variable = { name = un_vote_cooldown_reform days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_heritage } set_global_variable = { name = un_vote_cooldown_heritage days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_decolonization } set_global_variable = { name = un_vote_cooldown_decolonization days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_pandemic } set_global_variable = { name = un_vote_cooldown_pandemic days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_refugee } set_global_variable = { name = un_vote_cooldown_refugee days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_space } set_global_variable = { name = un_vote_cooldown_space days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } set_global_variable = { name = un_vote_cooldown_peacekeeping_request days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_aid_request } set_global_variable = { name = un_vote_cooldown_aid_request days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_sanctions } set_global_variable = { name = un_vote_cooldown_sanctions days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_law_of_sea } set_global_variable = { name = un_vote_cooldown_law_of_sea days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_icc } set_global_variable = { name = un_vote_cooldown_icc days = normal_modifier_time } }
-			if = { limit = { has_global_variable = un_vote_topic_expulsion } set_global_variable = { name = un_vote_cooldown_expulsion days = long_modifier_time } }
-		}
-
-		# ---- Cleanup: clear all vote state ----
-		hidden_effect = {
-			remove_global_variable = un_vote_active
-			if = { limit = { has_global_variable = un_vote_topic_condemn } remove_global_variable = un_vote_topic_condemn }
-			if = { limit = { has_global_variable = un_vote_topic_human_rights } remove_global_variable = un_vote_topic_human_rights }
-			if = { limit = { has_global_variable = un_vote_topic_npt } remove_global_variable = un_vote_topic_npt }
-			if = { limit = { has_global_variable = un_vote_topic_climate } remove_global_variable = un_vote_topic_climate }
-			if = { limit = { has_global_variable = un_vote_topic_reform } remove_global_variable = un_vote_topic_reform }
-			if = { limit = { has_global_variable = un_vote_topic_heritage } remove_global_variable = un_vote_topic_heritage }
-			if = { limit = { has_global_variable = un_vote_topic_decolonization } remove_global_variable = un_vote_topic_decolonization }
-			if = { limit = { has_global_variable = un_vote_topic_pandemic } remove_global_variable = un_vote_topic_pandemic }
-			if = { limit = { has_global_variable = un_vote_topic_refugee } remove_global_variable = un_vote_topic_refugee }
-			if = { limit = { has_global_variable = un_vote_topic_space } remove_global_variable = un_vote_topic_space }
-			if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } remove_global_variable = un_vote_topic_peacekeeping_request }
-			if = { limit = { has_global_variable = un_vote_topic_aid_request } remove_global_variable = un_vote_topic_aid_request }
-			if = { limit = { has_global_variable = un_vote_topic_sanctions } remove_global_variable = un_vote_topic_sanctions }
-			if = { limit = { has_global_variable = un_vote_topic_law_of_sea } remove_global_variable = un_vote_topic_law_of_sea }
-			if = { limit = { has_global_variable = un_vote_topic_icc } remove_global_variable = un_vote_topic_icc }
-			if = { limit = { has_global_variable = un_vote_topic_expulsion } remove_global_variable = un_vote_topic_expulsion }
-			if = { limit = { has_global_variable = un_vote_proposer_country } remove_global_variable = un_vote_proposer_country }
-			if = { limit = { has_global_variable = un_vote_target_country } remove_global_variable = un_vote_target_country }
-			if = { limit = { has_global_variable = un_vote_promoted_country } remove_global_variable = un_vote_promoted_country }
-			if = { limit = { has_global_variable = un_target_accepted } remove_global_variable = un_target_accepted }
-			if = { limit = { has_global_variable = un_vote_veto_cast } remove_global_variable = un_vote_veto_cast }
-			if = { limit = { has_global_variable = un_vote_vetoer_country } remove_global_variable = un_vote_vetoer_country }
-			# Clear the target's self-correction flag (consumed by the pass branches above)
-			if = {
-				limit = { exists = scope:un_vote_target }
-				scope:un_vote_target = {
-					if = { limit = { has_variable = un_target_self_corrected } remove_variable = un_target_self_corrected }
-				}
-			}
-			if = { limit = { has_global_variable = un_vote_net } remove_global_variable = un_vote_net }
-			if = { limit = { has_global_variable = un_vote_support } remove_global_variable = un_vote_support }
-			if = { limit = { has_global_variable = un_vote_oppose } remove_global_variable = un_vote_oppose }
-			# Clear per-country voting flags
-			every_country = {
-				limit = { has_variable = un_voted_this_round }
-				remove_variable = un_voted_this_round
-			}
-			# Clear proposer's own vote choice (non-proposers cleaned in un_vote.3)
-			if = { limit = { has_variable = un_vote_choice } remove_variable = un_vote_choice }
-		}
-
 		ai_chance = { base = 100 }
 	}
 }
@@ -2530,7 +2466,7 @@ un_vote.3 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { has_variable = un_notif_vote_passed }
+				trigger = { scope:un_resolution ?= { has_tag = un_res_passed } }
 				desc = un_vote.3.d_passed
 			}
 			desc = un_vote.3.d_failed
@@ -2539,82 +2475,40 @@ un_vote.3 = {
 
 	duration = 3
 
+	# scope:un_resolution is the closed resolution, passed on from un_vote.2.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		exists = scope:un_resolution
 	}
 
 	immediate = {
-		# Save vote results as country variables (globals may be cleaned up before desc evaluates)
+		# Vote counts as country vars for loc display (loc has no accessor
+		# for a script container held in a saved scope)
 		set_variable = {
 			name = un_display_support
-			value = global_var:un_vote_support
+			value = scope:un_resolution.var:un_res_support
 		}
 		set_variable = {
 			name = un_display_oppose
-			value = global_var:un_vote_oppose
+			value = scope:un_resolution.var:un_res_oppose
 		}
-		# Expulsion uses 2/3 supermajority; other topics use simple majority
-		if = {
-			limit = {
-				has_global_variable = un_vote_topic_expulsion
-				un_vote_expulsion_passed >= 0
-			}
-			set_variable = un_notif_vote_passed
+		scope:un_resolution = {
+			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
+			var:un_res_target ?= { save_scope_as = un_vote_target }
 		}
-		else_if = {
-			limit = {
-				NOT = { has_global_variable = un_vote_topic_expulsion }
-				global_var:un_vote_net >= 1
-			}
-			set_variable = un_notif_vote_passed
-		}
-		# Resolve proposer/target scopes from global vars
-		if = {
-			limit = { exists = global_var:un_vote_proposer_country }
-			global_var:un_vote_proposer_country = { save_scope_as = un_vote_proposer }
-		}
-		if = {
-			limit = { exists = global_var:un_vote_target_country }
-			global_var:un_vote_target_country = { save_scope_as = un_vote_target }
-		}
-
-		# Save veto status locally so we don't depend on globals surviving
-		if = { limit = { has_global_variable = un_vote_veto_cast } set_variable = un_vote_was_vetoed }
-
-		# Save vote topics locally so we don't depend on globals surviving
-		if = { limit = { has_global_variable = un_vote_topic_condemn } set_variable = un_topic_condemn }
-		if = { limit = { has_global_variable = un_vote_topic_human_rights } set_variable = un_topic_human_rights }
-		if = { limit = { has_global_variable = un_vote_topic_npt } set_variable = un_topic_npt }
-		if = { limit = { has_global_variable = un_vote_topic_climate } set_variable = un_topic_climate }
-		if = { limit = { has_global_variable = un_vote_topic_reform } set_variable = un_topic_reform }
-		if = { limit = { has_global_variable = un_vote_topic_heritage } set_variable = un_topic_heritage }
-		if = { limit = { has_global_variable = un_vote_topic_decolonization } set_variable = un_topic_decolonization }
-		if = { limit = { has_global_variable = un_vote_topic_pandemic } set_variable = un_topic_pandemic }
-		if = { limit = { has_global_variable = un_vote_topic_refugee } set_variable = un_topic_refugee }
-		if = { limit = { has_global_variable = un_vote_topic_space } set_variable = un_topic_space }
-		if = { limit = { has_global_variable = un_vote_topic_peacekeeping_request } set_variable = un_topic_peacekeeping_request }
-		if = { limit = { has_global_variable = un_vote_topic_aid_request } set_variable = un_topic_aid_request }
-		if = { limit = { has_global_variable = un_vote_topic_sanctions } set_variable = un_topic_sanctions }
-		if = { limit = { has_global_variable = un_vote_topic_law_of_sea } set_variable = un_topic_law_of_sea }
-		if = { limit = { has_global_variable = un_vote_topic_icc } set_variable = un_topic_icc }
-		if = { limit = { has_global_variable = un_vote_topic_expulsion } set_variable = un_topic_expulsion }
 	}
 
 	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, or you
 	# joined the UN after vote.1 fired and never had a chance to vote. In the
 	# last case the country still gets bound by the passed resolution (default
-	# acceptance) since the apply blocks below already gate on the passed flag.
+	# acceptance) since the apply blocks below already gate on the passed tag.
 	option = {
 		name = un_vote.3.a
 		default_option = yes
 		trigger = {
 			OR = {
-				NOT = { has_variable = un_notif_vote_passed }
-				NOT = { has_variable = un_vote_choice }
-				AND = {
-					has_variable = un_vote_choice
-					var:un_vote_choice = 1
-				}
+				NOT = { scope:un_resolution ?= { has_tag = un_res_passed } }
+				NOT = { scope:un_resolution ?= { un_resolution_has_vote = { LIST = un_res_no } } }
 			}
 		}
 
@@ -2625,14 +2519,9 @@ un_vote.3 = {
 		# un_vote_apply_resolution_compliance, where the tooltip nesting
 		# made the modifier name and fields easy to miss.)
 		if = {
-			limit = { has_variable = un_notif_vote_passed }
+			limit = { scope:un_resolution ?= { has_tag = un_res_passed } }
 			un_vote_apply_treaty_modifier = yes
 			un_vote_apply_resolution_compliance = yes
-		}
-
-		# Clean up notification variables
-		hidden_effect = {
-			un_vote_notification_cleanup = yes
 		}
 		ai_chance = { base = 100 }
 	}
@@ -2641,19 +2530,15 @@ un_vote.3 = {
 	option = {
 		name = un_vote.3.b
 		trigger = {
-			has_variable = un_notif_vote_passed
-			has_variable = un_vote_choice
-			var:un_vote_choice = 2
+			scope:un_resolution ?= {
+				has_tag = un_res_passed
+				un_resolution_has_vote = { LIST = un_res_no }
+			}
 		}
 
 		# Same effects as yes voters - you accept the majority decision
 		un_vote_apply_treaty_modifier = yes
 		un_vote_apply_resolution_compliance = yes
-
-		# Clean up notification variables
-		hidden_effect = {
-			un_vote_notification_cleanup = yes
-		}
 		ai_chance = { base = 50 }
 	}
 
@@ -2661,9 +2546,10 @@ un_vote.3 = {
 	option = {
 		name = un_vote.3.c
 		trigger = {
-			has_variable = un_notif_vote_passed
-			has_variable = un_vote_choice
-			var:un_vote_choice = 2
+			scope:un_resolution ?= {
+				has_tag = un_res_passed
+				un_resolution_has_vote = { LIST = un_res_no }
+			}
 		}
 
 		# Diplomatic penalties for defying the international community
@@ -2688,10 +2574,6 @@ un_vote.3 = {
 			}
 		}
 
-		# Clean up notification variables
-		hidden_effect = {
-			un_vote_notification_cleanup = yes
-		}
 		ai_chance = {
 			base = 20
 			# Countries that are rivals of proposer more likely to refuse
@@ -2713,7 +2595,7 @@ un_vote.3 = {
 			# NPT: nuclear powers refuse rather than disarm
 			modifier = {
 				trigger = {
-					has_variable = un_topic_npt
+					scope:un_resolution ?= { has_tag = un_topic_npt }
 					has_variable = nuclear_weapon_stockpile
 					var:nuclear_weapon_stockpile >= 1
 				}
@@ -2722,7 +2604,7 @@ un_vote.3 = {
 			# Climate: heavy industry nations refuse binding targets
 			modifier = {
 				trigger = {
-					has_variable = un_topic_climate
+					scope:un_resolution ?= { has_tag = un_topic_climate }
 					ig:ig_industrialists ?= {
 						is_powerful = yes
 					}
