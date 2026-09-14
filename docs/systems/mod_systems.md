@@ -397,6 +397,46 @@ Two-phase construction pattern: buildable construction site → completed buildi
 - **Construction progress:** Monthly based on `(occupancy / 12) * speed_multiplier`. Speed PMs: paused=0, slow=0.25, medium=0.5, fast=1.0.
 - **Custom modifier types:** `building_weekly_*_progress` and `building_total_*_progress` (percent, script_only) in `megastructure_progress_modifier_types.txt`.
 
+## Grand Monuments (Repeatable Construction Sink)
+
+`building_grand_monument` exists so construction never becomes worthless: a rich country that
+has finished building everything profitable can always raise another monument. Expensive to
+build (`construction_cost_grand_monument = 10000`), nearly free to run (only `pmg_maintenance`),
+infinitely repeatable (`expandable = yes`, no `has_max_level`), and deliberately a bad
+investment — roughly a 65-year payback at base tourism price.
+
+- **Files:** `common/buildings/grand_monuments.txt`, `common/production_methods/grand_monument_pms.txt`,
+  `common/production_method_groups/grand_monument_pmgs.txt`, `events/monument_events.txt`,
+  `common/on_actions/monument_events_on_actions.txt`, `bg_grand_monuments` in
+  `common/building_groups/extra_building_groups.txt`.
+- **Self-scaling by design.** Output is a flat `goods_output_tourism_add = 1`/level. Because
+  `tourism` is a luxury good with steeply convex pop demand (`popneed_tourism` ramps 1 → 622
+  across wealth tiers in `common/buy_packages/00_buy_packages.txt`), that flat output is nearly
+  worthless in 1836 and meaningful late-game with no extra script.
+- **NOT in `bg_monuments`, and that is load-bearing.** `tourism_throughput_from_monuments`
+  (`common/script_values/tourism.txt`) and `cultural_pull_from_monuments`
+  (`common/script_values/cultural_hegemony_script_values.txt`) both iterate `bg_monuments` and
+  assume its members are unique one-off wonders. A repeatable member would grant a flat +25%
+  tourism throughput and unlimited cultural pull. `bg_grand_monuments` is a **top-level group
+  with no `parent_group`**, so `is_building_group = bg_monuments` does not match it. Grand
+  Monument cultural pull is added back separately and hard-capped at +5
+  (`cultural_pull_from_grand_monuments`).
+- **The dedication ratchet.** Eight flavour PMs (civic / religious / war memorial / artistic /
+  naturalist / scientific / industrial / athletic) plus `pm_monument_undedicated`, all in one
+  `pmg_monument_dedication` group. The choice is **one-way** — see the header comment in
+  `grand_monument_pms.txt` and the scripting-best-practices note on locking a PM choice.
+- **Dedication ceremony.** `on_building_built` → `monument_events.1` (hidden `building_event`,
+  saves the state, hops to `owner`) → `monument_events.2`, whose options call
+  `activate_production_method` on the saved state scope. Recurring flavour events 3–10 are
+  dispatched from `monument_events_on_action` on `on_monthly_pulse_country`.
+- **Scaling split.** `state_*` and `building_*_throughput_add` are `level_scaled` (genuinely
+  local); `interest_group_*` and `country_*` are `unscaled` (flat per monument) because the
+  building is repeatable in every state and country-wide effects would otherwise stack without
+  bound. **Every dedication carries a level_scaled state-local modifier**, so growing a monument
+  always pays off whichever dedication it has — the unscaled national effects sit on top of
+  that, never instead of it. Employment is `unscaled` too — a monument needs a caretaker staff, not a workforce that
+  grows with its height.
+
 ## On-Actions Reference
 
 The mod uses 11 on-action files under `common/on_actions/`. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).

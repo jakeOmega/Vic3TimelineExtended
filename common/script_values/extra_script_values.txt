@@ -91,6 +91,14 @@ construction_cost_mega_high = 5000
 construction_cost_extreme = 10000
 construction_cost_space_mine = 20000
 
+# Repeatable Grand Monuments (common/buildings/grand_monuments.txt). Sits between
+# mega_high and extreme. At 1 tourism/level output (100/mo at base price) against
+# 50/mo of construction-goods maintenance, that is roughly a 65-year payback at base
+# tourism price -- shortening as late-game luxury demand lifts it. Intentionally an
+# order of magnitude worse than any real factory: the point is a construction sink
+# that is always available, not a good investment.
+construction_cost_grand_monument = 10000
+
 war_support_training_decrease = {
 	value = 0
 	every_combat_unit = {

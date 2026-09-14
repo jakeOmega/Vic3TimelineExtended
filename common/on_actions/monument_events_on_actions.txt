@@ -1,0 +1,120 @@
+﻿# ============================================================================
+# GRAND MONUMENT ON-ACTIONS
+# ============================================================================
+# on_building_built is a vanilla on-action, extended here via the additive
+# `events` list. NEVER add `effect = { }` to a vanilla on-action -- `events` and
+# `on_actions` lists are additive and safe, `effect` is not.
+# See docs/guides/scripting_best_practices.md.
+
+on_building_built = {
+	events = {
+		monument_events.1
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		monument_events_on_action
+	}
+}
+
+# Recurring monument flavour. Mirrors wonder_events_on_actions.txt: a large
+# do-nothing weight with each entry gated on actually owning a monument of that
+# dedication. Each event re-checks its own trigger, so the gates here are just
+# to keep the roll cheap.
+monument_events_on_action = {
+	effect = {
+		random_list = {
+			800 = { } # overwhelmingly nothing
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_civic
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.3 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_religious
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.4 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_war_memorial
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.5 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_artistic
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.6 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_naturalist
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.7 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_scientific
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.8 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_industrial
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.9 }
+			}
+
+			3 = {
+				trigger = {
+					any_scope_building = {
+						is_building_type = building_grand_monument
+						has_active_production_method = pm_monument_athletic
+						level >= 3
+					}
+				}
+				trigger_event = { id = monument_events.10 }
+			}
+
+		}
+	}
+}
