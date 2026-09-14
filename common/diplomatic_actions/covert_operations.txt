@@ -449,7 +449,16 @@ covert_infrastructure_sabotage_action = {
 		propose_score = {
 			value = 15
 			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 10
+			}
+			if = {
 				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+			# Desperation: the war is being lost on the battlefield (nuke_triggers.txt)
+			if = {
+				limit = { is_losing_war_against = { ENEMY = scope:target_country } }
 				add = 5
 			}
 		}
@@ -576,7 +585,16 @@ covert_comms_disruption_action = {
 		propose_score = {
 			value = 15
 			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 10
+			}
+			if = {
 				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+			# Desperation: the war is being lost on the battlefield (nuke_triggers.txt)
+			if = {
+				limit = { is_losing_war_against = { ENEMY = scope:target_country } }
 				add = 5
 			}
 		}

@@ -2345,6 +2345,17 @@ The loc-string token `[ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('cou
 
 Vanilla precedents: `concept_economy_of_scale_desc_ingame_added` in `concepts_l_english.yml`; `POWER_BLOC_MANDATE_PROGRESS_FROM_GREAT_POWER_MEMBERS_TOOLTIP` in `interfaces_l_english.yml`. Mod precedents: `je_ch_breakdown_*` in `te_journal_entries_l_english.yml`, `je_iw_defense_header`, and the colonial-stability bar / button preview tooltips.
 
+## War Support Hook (1.14): INJECT into a Vanilla Script Value, and Five War-Scope Gotchas
+
+Mod systems feed the weekly war support change through `common/script_values/zz_te_war_support_injections.txt` (`INJECT:war_support_from_journal_entries`, the one term of vanilla `war_support_change` that takes a per-line `desc`). Lessons from wiring it (#285):
+
+- **A mod file that INJECTs into a vanilla script value should sort after the vanilla file.** `INJECT` errors when the target entry does not exist yet (1.12 `inject_types` digest, which lists `common/script_values` as INJECT-capable), and alphabetical load order across the merged tree is *assumed* rather than documented — hence the `zz_` prefix as a free hedge. Every other mod INJECT file (`modified.txt`, `extra_modifiers.txt`, `extra_laws.txt`, …) already happens to sort after its target.
+- **Modifiers applied to a journal entry are invisible to country-scope `has_modifier`.** `je_world_war` applies its phase modifiers as `je:je_world_war = { add_modifier = … }`, so read them the same way: `je:je_world_war ?= { has_modifier = ww_home_front_strain_modifier }` (`?=` because the JE may not exist). A bare `has_modifier` silently never fires.
+- **`enemy_side_occupation` is not a "we are losing" read.** It is the weighted share of the *enemy side's* territory we hold (high = winning). "Our land is occupied" is `enemy_occupation` (country scope, 0–1, plain compare). The battlefield read is `size_weighted_won_battles_fraction = { target = <war> value < X }` (country scope) gated on `num_significant_battles` (war scope) — with no battles fought the fraction is 0 and reads as "losing". Packaged as `is_losing_war_against = { ENEMY = … }` in `common/scripted_triggers/nuke_triggers.txt`.
+- **`add_war_support_change` (war scope, `{ target = <country> value = X }`) accumulates for the war.** The trigger that reads it back, `additional_war_support_change`, is documented as "accumulated from scripted events", and vanilla's only use is the 1.13 `add_war_exhaustion = 10` event ported to `-5` on a scale where most per-beat factors are ±0.25–2. Not yet verified in game; until it is, events use one-off `add_war_war_support` level changes and per-beat lines go through the hook.
+- **The trigger is `has_war_with = X`, not `is_at_war_with`.** Enemy-side checks in the hook are `scope:war = { any_war_participant = { has_war_with = ROOT … } }` — cross-war (a co-belligerent here could be an enemy elsewhere), negligible and cheaper than a side comparison.
+- **`effect_trigger_validity_audit` does not scan `common/diplomatic_actions/` or `common/script_values/`.** The removed `has_war_exhaustion` survived the 1.14 migration inside `nuke.txt` for that reason. On a vanilla bump, grep the digest's removed-trigger list against those directories by hand until the audit covers them.
+
 ## Country-formation `potential` vs `possible`
 
 Country formation entries support both triggers, with distinct UI semantics:

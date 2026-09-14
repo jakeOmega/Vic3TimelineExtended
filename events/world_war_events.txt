@@ -982,6 +982,124 @@ world_war_events.30 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 	}
 }
+# Stalemate on the front: the war is old, the front is frozen and our own war
+# goals have stalled (1.14 war reads). Fires from the je_world_war monthly pulse.
+world_war_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/border_skirmish_troops.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = world_war_events.31.t
+	desc = world_war_events.31.d
+	flavor = world_war_events.31.f
+
+	duration = 3
+
+	trigger = {
+		country_is_ww_belligerent = yes
+		is_at_war = yes
+		has_variable = ww_years_elapsed
+		var:ww_years_elapsed >= 2
+		# ww_years_elapsed counts the whole world war; the per-war duration and
+		# battle count are a second gate on the war that is actually stuck.
+		any_scope_war = {
+			war_duration_months >= 24
+			num_significant_battles >= 10
+			has_stalled_wargoal_held_by = ROOT
+		}
+	}
+
+	cooldown = { days = long_modifier_time }
+
+	immediate = {
+		random_scope_war = {
+			limit = {
+				war_duration_months >= 24
+				num_significant_battles >= 10
+				has_stalled_wargoal_held_by = ROOT
+			}
+			save_scope_as = ww_stalemate_war
+		}
+	}
+
+	# Option A: Hold the line - endure the stalemate
+	option = {
+		name = world_war_events.31.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					scope:ww_stalemate_war = {
+						has_war_support = { target = ROOT value >= define:NDiplomacy|WAR_SUPPORT_DRIFT_TARGET }
+					}
+				}
+				add = 2
+			}
+		}
+		# One-off level change (add_war_war_support); the ongoing weekly change is
+		# fed through common/script_values/zz_te_war_support_injections.txt.
+		scope:ww_stalemate_war = {
+			add_war_war_support = {
+				target = ROOT
+				value = 5
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Option B: Open armistice talks
+	option = {
+		name = world_war_events.31.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					scope:ww_stalemate_war = {
+						has_war_support = { target = ROOT value < define:NDiplomacy|WAR_SUPPORT_DRIFT_TARGET }
+					}
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = ww_years_elapsed
+					var:ww_years_elapsed >= 4
+				}
+				add = 2
+			}
+		}
+		scope:ww_stalemate_war = {
+			add_war_war_support = {
+				target = ROOT
+				value = -10
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+	}
+}
+
 
 # ============================================================================
 # PEACE CONFERENCE EVENTS (100-105)

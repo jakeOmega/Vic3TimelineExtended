@@ -562,6 +562,9 @@ law_total_war = {
 		state_pop_support_movement_anti_war_mult = 0.2
 		country_aggressor_diplomatic_play_escalation_weekly_mult = 0.25
 		country_defender_diplomatic_play_escalation_weekly_mult = 0.25
+		# 1.14 battle war support: the whole society is invested, so battles move opinion more
+		country_war_support_battles_increase_mult = 0.25
+		country_war_support_battles_decrease_mult = 0.25
 	}
 }
 
@@ -643,6 +646,9 @@ law_limited_war = {
 		state_pop_support_movement_anti_war_mult = -0.2
 		country_aggressor_diplomatic_play_escalation_weekly_mult = -0.30
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.30
+		# 1.14 battle war support: a professional war the public watches from a distance
+		country_war_support_battles_increase_mult = -0.1
+		country_war_support_battles_decrease_mult = -0.1
 	}
 }
 
@@ -941,6 +947,8 @@ law_state_secrets = {
 		country_amenability_add = -10
 		country_legislative_override_capacity_add = 1
 		country_cultural_pull_mult = -0.08
+		country_war_support_battles_increase_mult = -0.05
+		country_war_support_battles_decrease_mult = -0.05
 	}
 }
 
@@ -978,6 +986,8 @@ law_freedom_of_information = {
 		country_intelligence_capacity_add = -2
 		country_legislative_override_capacity_add = -1
 		country_cultural_pull_mult = 0.03
+		country_war_support_battles_increase_mult = 0.05
+		country_war_support_battles_decrease_mult = 0.05
 	}
 }
 
@@ -1001,6 +1011,8 @@ law_open_government = {
 		country_intelligence_capacity_add = -3
 		country_legislative_override_capacity_add = -2
 		country_cultural_pull_mult = 0.05
+		country_war_support_battles_increase_mult = 0.1
+		country_war_support_battles_decrease_mult = 0.1
 	}
 }
 
@@ -2420,6 +2432,9 @@ law_unregulated_internet = {
 		political_movement_radicalism_add = 0.1
 		country_covert_defense_economic_add = -1
 		country_covert_defense_ideological_add = -1
+		# 1.14 battle war support: rumour-driven, swings both ways
+		country_war_support_battles_increase_mult = 0.2
+		country_war_support_battles_decrease_mult = 0.2
 	}
 }
 
@@ -2441,6 +2456,9 @@ law_state_controlled_internet = {
 		country_covert_defense_economic_add = 1
 		country_covert_defense_ideological_add = 1
 		country_covert_operation_efficiency_mult = 0.10
+		# 1.14 battle war support: mirrors vanilla law_censorship
+		country_war_support_battles_increase_mult = -0.1
+		country_war_support_battles_decrease_mult = -0.2
 	}
 }
 
@@ -2456,6 +2474,8 @@ law_net_neutrality = {
 		goods_output_digital_access_mult = 0.10
 		goods_trade_advantage_digital_assets_mult = 0.5
 		country_intelligence_capacity_add = 1
+		country_war_support_battles_increase_mult = 0.15
+		country_war_support_battles_decrease_mult = 0.15
 	}
 }
 
@@ -3241,6 +3261,9 @@ law_ministry_of_propaganda = {
 	modifier = {
 		country_institution_ministry_of_propaganda_max_investment_add = 2
 		country_legislative_override_capacity_add = 1
+		# 1.14 battle war support: spin machine, wins amplified and losses spun; always stacks on law_outlawed_dissent (unlocking law)
+		country_war_support_battles_increase_mult = 0.15
+		country_war_support_battles_decrease_mult = -0.15
 	}
 
 	ai_enact_weight_modifier = {

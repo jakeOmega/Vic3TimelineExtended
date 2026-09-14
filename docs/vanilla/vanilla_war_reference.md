@@ -416,6 +416,7 @@ Aside from capitulation, peace deals require unanimous agreement from all **nego
 
 - `country_war_support_casualties_mult` (vanilla, 1.14 rename of `country_war_exhaustion_casualties_mult`, same sign) — scales war support lost to casualties. Negative values shrink the loss (a wartime upside); the factor floors at 0.
 - `country_war_support_battles_increase_mult` / `country_war_support_battles_decrease_mult` (vanilla, 1.14) — scale support gained from won battles / lost to lost battles.
+  - Mod grants: nine laws in `common/laws/extra_laws.txt` (propaganda ministry, internet governance, right-to-information and rules-of-war groups) and the `television_broadcasting` / `satellite_communications` / `social_media` techs. Mod systems (World War, UN, covert, nuclear) feed the per-beat change itself through `common/script_values/zz_te_war_support_injections.txt` (`INJECT:war_support_from_journal_entries`). Tables in `docs/systems/mod_systems.md` § War Support Feeds.
 - `state_war_support_monthly_add` (mod-added) — direct per-state war-support gain.
 - `state_loyalists_from_political_movements_mult`, `state_radicals_from_political_movements_mult` (vanilla) — gate how movement activism translates to pop loyalty/radicalization (and therefore into turmoil and loyalist-fraction war support).
 - `political_movement_pop_attraction_mult`, `political_movement_radicalism_add` (vanilla) — applied **to a movement scope** to shrink/grow its size and activism. Used by mod modifiers like `anti_war_movement_suppressed`.

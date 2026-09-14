@@ -156,7 +156,7 @@ pm_monument_religious = {
 }
 
 # A memorial to the fallen. Grief made bearable is grief that costs less war
-# support -- hence war_exhaustion_casualties rather than a flat morale bonus.
+# support -- hence war_support_casualties rather than a flat morale bonus.
 pm_monument_war_memorial = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -177,7 +177,7 @@ pm_monument_war_memorial = {
 	# SCALING note at the top of this file.
 	country_modifiers = {
 		unscaled = {
-			country_war_exhaustion_casualties_mult = -0.01
+			country_war_support_casualties_mult = -0.01
 		}
 	}
 
