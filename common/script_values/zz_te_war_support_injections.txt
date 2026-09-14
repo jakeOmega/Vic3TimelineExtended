@@ -13,8 +13,10 @@
 #
 # The file is zz_-prefixed so it sorts after vanilla war_support_values.txt.
 # INJECT errors when its target entry does not exist yet (1.12 inject_types
-# digest), and every other mod INJECT file already sorts after its vanilla
-# target; a te_ prefix would sort before w.
+# digest, which lists common/script_values as INJECT-capable). Alphabetical
+# load order across the merged tree is assumed, not documented; every other
+# mod INJECT file already sorts after its vanilla target, and a te_ prefix
+# would sort before w, so the prefix is a free hedge.
 #
 # Scale: vanilla per-beat factors run from -5 (fully occupied) to about +2;
 # the rival boost, taking loans and a loyal subject are +-0.25. War support is
