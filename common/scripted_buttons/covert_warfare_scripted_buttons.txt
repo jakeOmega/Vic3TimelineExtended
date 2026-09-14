@@ -43,8 +43,8 @@ iw_increase_funding_button = {
 				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
 				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
-			# Refresh detection display for all active ops
-			covert_op_refresh_all_targets = yes
+			# Refresh each operation's detection display (funding changes the odds)
+			covert_ops_sync_all = yes
 		}
 	}
 }
@@ -79,8 +79,8 @@ iw_decrease_funding_button = {
 				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
 				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
 			}
-			# Refresh detection display for all active ops
-			covert_op_refresh_all_targets = yes
+			# Refresh each operation's detection display (funding changes the odds)
+			covert_ops_sync_all = yes
 		}
 	}
 }

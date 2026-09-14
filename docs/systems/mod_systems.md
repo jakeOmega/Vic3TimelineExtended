@@ -1104,16 +1104,22 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | File | Purpose |
 |---|---|
 | `common/diplomatic_actions/covert_operations.txt` | 9 diplomatic actions (7 peacetime, 2 wartime) |
-| `common/journal_entries/je_covert_warfare.txt` | Command center JE: IC display, slots, funding, detection, active ops |
+| `common/journal_entries/je_covert_warfare.txt` | Command center JE: IC display, slots, funding, detection; wires the operations widget |
+| `gui/journal_entry_widgets/covert_operations_widget.gui` | JE widget listing each running operation (type, target, phase, detection) from the `iw_ops` list |
 | `common/script_values/covert_warfare_script_values.txt` | All script values: IC, slots, costs, detection, display |
 | `common/static_modifiers/extra_modifiers.txt` | `covert_operation_funding_cost`, `intelligence_capacity_defense`, `iw_domestic_defense`, operation effect modifiers |
-| `common/scripted_effects/covert_warfare_effects.txt` | Duration tracking, phase-based effects, election confidence |
+| `common/scripted_effects/covert_warfare_effects.txt` | Operation containers (create/destroy/monthly sync), duration aging, phase-based effects, election confidence |
+| `common/scripted_triggers/covert_warfare_triggers.txt` | Pact-type check, target validity, per-type cap, phase triggers |
 | `common/scripted_buttons/covert_warfare_scripted_buttons.txt` | `iw_increase_funding_button`, `iw_decrease_funding_button` (player-only) |
 | `common/on_actions/covert_warfare_on_actions.txt` | Election confidence on `on_election_campaign_end` |
 | `events/covert_warfare_events.txt` | Detection event, diplomatic incidents |
 
 ### System Architecture
 - **Operations as Pacts:** Each operation type is a togglable diplomatic action (like `increase_relations`). Effects applied monthly via JE `on_monthly_pulse`.
+- **Operation state as script containers (1.13.10+):** Each running operation is one container tagged `iw_op` + `iw_op_<TYPE>`, parented to the operator country, holding `iw_target` (country), `iw_duration` (months), and JE display values (`iw_target_capital`, `iw_detect`, `iw_tgt_ic`, `iw_tgt_td`). The operator lists them in its `iw_ops` variable list, and every loop walks that list instead of `every_container`. Pacts remain the source of truth: `accept_effect` calls `covert_op_start`, `manual_break_effect`/`auto_break_effect` call `covert_op_end`, the detection event's `covert_op_burn` removes the pact and container together, and `covert_ops_sync_all` runs at the top of the monthly pulse to create containers for pacts that lack one (month 0) and destroy containers whose pact is gone. Saves made before containers keep their pacts, which restart at month 0; their old `iw_*_<type>_<n>` slot variables are left inert (clearing them would log "used but never set" warnings on every load).
+- **Per-type cap:** `covert_ops_type_below_cap` compares the live pact count against `covert_ops_max_per_type` (1, +1 `mainframe_computers`, +1 `cyber_warfare`). That script value is the only place the cap lives; storage has no per-type limit.
+- **Phases:** `covert_op_is_established` (`iw_duration >= 6`) and `covert_op_is_fully_operational` (`>= 12`), evaluated on the container. Target-side effects use each operation's own phase; self-side effects use the best phase among that type's operations.
+- **JE display:** `status_desc` keeps the capacity/funding/defense summary. Per-operation rows come from `widget_je_covert_operations` in `custom_widget_container_2`, whose datamodel is `JournalEntry.GetCountry.MakeScope.GetList('iw_ops')`.
 - **Intelligence Capacity (IC):** Base 5 (from `INJECT:base_values`) + rank bonus (GP +10, Major +5 from `INJECT:country_ranks`) + literacy component (`literacy_rate × 50`) + GDP component (`ln(gdp) × 3`, capped at 25) + modifiers (`country_intelligence_capacity_add`).
 - **Operation Slots:** Single modifier-driven value: `modifier:country_covert_operation_slot_add`. Base 1 (`INJECT:base_values`) + rank bonus (GP +2, Major +1) + tech/law modifiers. Capped at 10.
 - **Funding:** 4 levels (0=Dormant, 1=Operational, 2=Professional Tradecraft, 3=Black Budget). At level 0, operations remain in slots but have no effects, no cost, and no detection risk. Level 2: -3% detection, +5 counterintelligence IC. Level 3: -8% detection, +10 counterintelligence IC. Applies `iw_funding_defense` static modifier scaled by `covert_ops_funding_ci_mult`.
@@ -1126,7 +1132,7 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
   - **Preparatory phase** (<6 months): No effect.
   - **Establishing phase** (6–11 months): `-0.05` electoral confidence.
   - **Fully Operational** (12+ months): `-0.1` electoral confidence.
-- **Slot matching:** Uses `iw_target_election_interference_<slot>` (stores target's capital state) to find the correct slot, then checks `iw_duration_election_interference_<slot>` for phase determination.
+- **Operation matching:** For each attacker with an election-interference pact against ROOT, reads the attacker's `iw_ops` container tagged `iw_op_election_interference` whose `iw_target` is ROOT, and takes its phase.
 - **On-action:** `covert_warfare_on_actions.txt` → `on_election_campaign_end` → `on_actions = { covert_warfare_election_end }` → calls `covert_op_election_confidence_effect` scripted effect.
 - **Notification:** `iw_election_interference_confidence` message sent to the affected country.
 

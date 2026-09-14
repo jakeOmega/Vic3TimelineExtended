@@ -8,7 +8,7 @@ The repo already uses parameterized helpers in several systems:
 
 | File | Symbol | Parameters | Notes |
 |---|---|---|---|
-| [common/scripted_effects/covert_warfare_effects.txt](../common/scripted_effects/covert_warfare_effects.txt) | `covert_op_track_targets` | `$TYPE$`, `$ACTION$`, `$DEFENSE_MOD$` | Main reference pattern: one shared helper called repeatedly with named args |
+| [common/scripted_effects/covert_warfare_effects.txt](../common/scripted_effects/covert_warfare_effects.txt) | `covert_op_sync` | `$TYPE$`, `$ACTION$`, `$DEFENSE_MOD$` | Main reference pattern: one shared helper called repeatedly with named args |
 | [common/scripted_effects/st_res_effects.txt](../common/scripted_effects/st_res_effects.txt) | `st_res_rebuild_good_flow_modifiers_effect` | `$GOOD$` | Building-scoped helper behind explicit grain/ammunition/oil wrappers |
 | [common/scripted_triggers/covert_warfare_triggers.txt](../common/scripted_triggers/covert_warfare_triggers.txt) | `covert_ops_type_below_cap` | `$TYPE$` | Same placeholder style in trigger form |
 | [common/scripted_effects/cultural_hegemony_effects.txt](../common/scripted_effects/cultural_hegemony_effects.txt) | `ch_apply_primary_or_fallback_movement_pressure` | `$PRIMARY$`, `$FALLBACK_1$`, `$FALLBACK_2$`, `$MODIFIER$`, `$FALLBACK_MODIFIER$`, `$MONTHS$`, `$DECAYING$` | Example of a more complex multi-parameter helper |
