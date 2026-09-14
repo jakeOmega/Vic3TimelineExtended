@@ -250,23 +250,21 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
   - **≥70:** Great powers refusing humanitarian aid face severe domestic penalties (radicals, IG disapproval, extra authority loss)
   - **≥80:** Non-nuclear member powers face NPT disarmament pressure (`un_npt_disarmament_modifier`: `nuclear_disarmament = yes`) (requires IAEA)
 - **Security Council & Permanent Members:** 5 permanent seats. Granted to the founder + the next 4 Great Powers that join during a 5-year founding window (`un_founding_window_active` global variable, set on `un_found_button`). After the window closes, no new permanent members are auto-created — the only path to a new seat is via the expulsion-vote mechanism (a 2/3 supermajority can strip a permanent member, opening a slot, but the slot is not auto-refilled). Permanent membership is held until: (a) the country leaves the UN, (b) the country has been below Great Power rank for 10+ continuous years (`un_permanent_subgp_months` country variable counts months sub-GP and resets on regaining GP), or (c) a 2/3 supermajority expulsion vote passes against them.
-- **Veto Power (binding resolutions only):** Permanent members can cast a veto on the 5 *binding* topics — sanctions, peacekeeping_request, icc, condemn, reform — via a third option in `un_vote.1`. The veto kills the full binding form and sets `un_vote_veto_cast` global. The GA simple majority can still pass a graduated/weak form (vetoed sanctions → voluntary partial; vetoed peacekeeping → observer mission only; vetoed ICC → symbolic censure; vetoed condemn → non-binding rebuke; vetoed reform → flat block, no graduated fallback). Vetoing costs the country 5 UN authority, applies `un_veto_isolation_modifier` (short-term diplomatic isolation) and `un_veto_authority_drain_modifier` (long-term influence hit), and adds 3 infamy when used to block punitive resolutions (ICC, condemn, peacekeeping_request).
-- **Expulsion Vote (`un_propose_expulsion_button`):** Any UN member can call a 2/3 supermajority vote to strip a permanent member that has recently vetoed (`un_veto_isolation_modifier` is the visibility trigger). The vote uses `un_vote_topic_expulsion`; the special pass condition is `un_vote_expulsion_passed >= 0` (i.e., `un_vote_support * 3 >= un_vote_eligible_member_count * 2`). On pass, target loses both `un_permanent_member_modifier` and `un_security_council_modifier`. Non-vetoable.
+- **Veto Power (binding resolutions only):** Permanent members can cast a veto on the 5 *binding* topics — sanctions, peacekeeping_request, icc, condemn, reform — via a third option in `un_vote.1`. The veto kills the full binding form and tags the resolution `un_res_vetoed`. The GA simple majority can still pass a graduated/weak form (vetoed sanctions → voluntary partial; vetoed peacekeeping → observer mission only; vetoed ICC → symbolic censure; vetoed condemn → non-binding rebuke; vetoed reform → flat block, no graduated fallback). Vetoing costs the country 5 UN authority, applies `un_veto_isolation_modifier` (short-term diplomatic isolation) and `un_veto_authority_drain_modifier` (long-term influence hit), and adds 3 infamy when used to block punitive resolutions (ICC, condemn, peacekeeping_request).
+- **Expulsion Vote (`un_propose_expulsion_button`):** Any UN member can call a 2/3 supermajority vote to strip a permanent member that has recently vetoed (`un_veto_isolation_modifier` is the visibility trigger). The resolution is tagged `un_topic_expulsion`; the special pass condition is `un_vote_expulsion_passed >= 0` (i.e., `un_res_support * 3 >= un_vote_eligible_member_count * 2`). On pass, target loses both `un_permanent_member_modifier` and `un_security_council_modifier`. Non-vetoable.
 - **Treaty obligation:** `join_united_nations` treaty article auto-enrolls target via JE monthly pulse when `un_membership_obligation` modifier is active.
 
 ### Variables
 | Variable | Scope | Description |
 |----------|-------|-------------|
-| `un_authority` | country | 0-100 legitimacy/strength |
+| `un_authority` | global | 0-100 legitimacy/strength |
 | `un_founded` | global | Flag: UN has been established |
 | `un_hq_country` | global | HQ host country |
-| `un_vote_active` | global | Flag: vote in progress |
-| `un_vote_support` | global | Count of yes votes |
-| `un_vote_oppose` | global | Count of no votes |
-| `un_vote_net` | global | Net votes (support - oppose), starts at 1 |
-| `un_vote_proposer_country` | global | Scope: proposing country |
-| `un_vote_target_country` | global | Scope: target country (if applicable) |
-| `un_vote_topic_*` | global | Topic flag for current vote |
+| `un_vote_active` | global | Vote lock: a resolution (or a proposer event's reservation) holds the General Assembly |
+| `un_vote_reservation` | global | Flag: a proposer event holds the lock before choosing whether to propose |
+| `un_active_resolution` | global | Scope: the open resolution container |
+| `un_resolution_history` | global list | Closed resolution containers, capped at `un_resolution_history_cap` (25) |
+| `un_resolution_seq` | global | Counter behind each resolution's `un_res_seq` |
 | `un_agency_*` | global | Specialized agency flags (who, unesco, icj, unhrc, iaea, unep, unhcr, unoosa) |
 
 ### Buttons (17+)
@@ -280,26 +278,44 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 The 5 binding topics — sanctions, peacekeeping_request, icc, condemn, reform — can be vetoed by [concept_un_permanent_member]s via the third option in `un_vote.1`. Vetoed binding resolutions that still have GA simple-majority pass in graduated/weak form (except reform, which is flat-blocked). All other 10 topics are recommendatory (non-vetoable). The 16th topic, `expulsion`, is recommendatory but uses a 2/3 supermajority threshold instead of simple majority.
 
 
-| Topic Variable | Triggered By | Description |
+| Resolution Tag | Triggered By | Description |
 |---|---|---|
-| `un_vote_topic_condemn` | Event 2 / Propose Condemn button | Condemn military aggressor |
-| `un_vote_topic_human_rights` | Event 3 | Universal Declaration of Human Rights |
-| `un_vote_topic_reform` | Event 6 | UN institutional reform |
-| `un_vote_topic_heritage` | Event 9 | Cultural heritage program (UNESCO) |
-| `un_vote_topic_decolonization` | Event 12 | Anti-colonial declaration |
-| `un_vote_topic_npt` | Event 14 | Nuclear Non-Proliferation Treaty (IAEA) |
-| `un_vote_topic_pandemic` | Event 16 | Global pandemic response (WHO) |
-| `un_vote_topic_climate` | Event 17 | Climate accord (UNEP) |
-| `un_vote_topic_refugee` | Event 18 | International refugee resolution (UNHCR) |
-| `un_vote_topic_space` | Event 19 | Space cooperation (UNOOSA) |
-| `un_vote_topic_peacekeeping_request` | Request Peacekeepers button | Deploy peacekeepers to requesting country |
-| `un_vote_topic_aid_request` | Request Aid button | Humanitarian aid to requesting country |
-| `un_vote_topic_sanctions` | Propose Sanctions button | Economic sanctions against target country |
+| `un_topic_condemn` | Event 2 / Propose Condemn button | Condemn military aggressor |
+| `un_topic_human_rights` | Event 3 | Universal Declaration of Human Rights |
+| `un_topic_reform` | Event 6 | UN institutional reform |
+| `un_topic_heritage` | Event 9 | Cultural heritage program (UNESCO) |
+| `un_topic_decolonization` | Event 12 | Anti-colonial declaration |
+| `un_topic_npt` | Event 14 | Nuclear Non-Proliferation Treaty (IAEA) |
+| `un_topic_pandemic` | Event 16 | Global pandemic response (WHO) |
+| `un_topic_climate` | Event 17 | Climate accord (UNEP) |
+| `un_topic_refugee` | Event 18 | International refugee resolution (UNHCR) |
+| `un_topic_space` | Event 19 | Space cooperation (UNOOSA) |
+| `un_topic_law_of_sea` | Event 21 | Convention on the Law of the Sea (ITLOS) |
+| `un_topic_icc` | Event 22 | International Criminal Court |
+| `un_topic_peacekeeping_request` | Request Peacekeepers button | Deploy peacekeepers to requesting country |
+| `un_topic_aid_request` | Request Aid button | Humanitarian aid to requesting country |
+| `un_topic_sanctions` | Propose Sanctions button | Economic sanctions against target country |
+| `un_topic_expulsion` | Propose Expulsion button | Strip a permanent member's seat (2/3 supermajority) |
+
+### Resolutions (script containers, 1.13.10+)
+Every General Assembly resolution is a script container. Tags, variables and the lifecycle effects are documented in the header of `common/scripted_effects/un_vote_effects.txt`; checks live in `common/scripted_triggers/un_resolution_triggers.txt`.
+
+- **Tags:** `un_resolution`, `un_topic_<topic>`, and a status: `un_res_voting` while open, then `un_res_passed` / `un_res_failed` / `un_res_lapsed`. `un_res_vetoed` marks a permanent-member veto; `un_res_target_accepted` marks a target that voted for its own censure.
+- **Variables:** `un_res_proposer`, `un_res_target`, `un_res_support` (starts at 1, the proposer), `un_res_oppose`, `un_res_seq`, `un_res_months`, `un_res_vetoer`, `un_res_promoted` (expulsion). Voters are in the `un_res_yes` / `un_res_no` lists.
+- **Lifecycle:** `un_resolution_open = { TOPIC = x }` creates the container, takes the lock, fires `un_vote.1` and schedules `un_vote.2`. `un_vote.2`'s immediate runs `un_resolution_decide` and `un_resolution_archive` (topic cooldown, history, lock release). Proposer events hold the lock with `un_vote_reserve` in their immediate and give it back with `un_vote_release` if they don't propose.
+- **Scope passing:** the vote events get the resolution as `scope:un_resolution` through `trigger_event` and never read `un_active_resolution`, so a resolution stays readable after a newer one opens.
+- **Cooldowns:** a closed resolution carries the timed `un_res_cooldown` variable (5 years, 10 for expulsion); `un_resolution_topic_on_cooldown = { TOPIC = x }` checks `un_resolution_history` for it. History eviction skips entries still on cooldown.
+- **Watchdog:** `un_resolutions_monthly_update` (global monthly pulse) lapses a resolution still voting after 14 months (its `un_vote.2` never fired: the proposer stopped existing or left the UN, which used to lock the General Assembly for good), and frees a lock that neither a resolution nor a reservation holds.
+
+**Decisions (#275):**
+- **One vote at a time: kept.** The `un_vote_active` lock is unchanged, so proposal frequency and balance are unchanged. The vote events already take the resolution as a scope, so lifting the lock later means replacing the lock gates (on-actions, buttons, proposer-event triggers) with a per-topic or capacity check; the watchdog would then need to walk a list of open resolutions instead of `un_active_resolution`.
+- **History: the last 25 closed resolutions** (`un_resolution_history_cap`), no parent. A resolution must outlive a proposer annexed mid-vote, so the history cap is what destroys containers. Nothing displays the history yet.
+- **Old saves: documented break.** A vote in progress when the mod updates is dropped: its queued `un_vote.1`/`.2` events carry no `scope:un_resolution` and fail their triggers, and the watchdog frees the lock on the next monthly pulse. Topic cooldowns from before the update are forgotten (they were global timed variables), and the legacy `un_vote_*` globals are left inert. Migrating would have meant reading ~25 variable names the code no longer sets, which logs "used but never set" on every load.
 
 ### Vote System (3-phase)
-1. **un_vote.1** (Phase 1): Fires to all UN members. Each country votes yes/no/abstain with topic-adaptive titles, descriptions, and AI logic. Effects applied on vote (e.g., pledging contributions).
-2. **un_vote.2** (Phase 2): Fires to the proposer after 90 days. Shows vote counts, applies resolution effects (agency creation, received benefits, authority changes). Cleans up all vote state.
-3. **un_vote.3** (Phase 3): Notification fired to all other members showing the vote result (pass/fail with vote counts).
+1. **un_vote.1** (Phase 1): Fires to all other UN members 30 days after opening. Each country votes yes/no (permanent members may veto binding topics) with topic-adaptive titles, descriptions, and AI logic. Votes are recorded on the resolution; a vote cast after it closed is ignored.
+2. **un_vote.2** (Phase 2): Fires to the proposer 365 days after opening. The immediate closes the vote; the option shows vote counts and applies resolution effects (agency creation, received benefits, authority changes), then notifies the other members.
+3. **un_vote.3** (Phase 3): Notification fired to all other members showing the vote result (pass/fail with vote counts). Members who voted no on a passed resolution choose to comply or refuse.
 
 ### Cost Architecture
 - **Contributor programs** (peacekeeping, development, humanitarian aid) apply TWO modifiers:

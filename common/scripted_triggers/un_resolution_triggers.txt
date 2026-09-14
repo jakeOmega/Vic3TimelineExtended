@@ -1,0 +1,52 @@
+﻿# ============================================================================
+# UN RESOLUTION TRIGGERS
+# Checks on General Assembly resolutions. Each resolution is a script
+# container; see common/scripted_effects/un_vote_effects.txt for its tags,
+# variables and lifecycle.
+# ============================================================================
+
+# Whether $TOPIC$ can't be proposed yet because a resolution on it closed
+# recently. A closed resolution carries the timed un_res_cooldown variable
+# for 5 years (10 for expulsion) and stays in un_resolution_history at least
+# that long.
+# Parameters: $TOPIC$ = topic key (condemn, human_rights, sanctions, ...)
+# Scope: any
+un_resolution_topic_on_cooldown = {
+	has_global_variable_list = un_resolution_history
+	any_in_global_list = {
+		variable = un_resolution_history
+		has_tag = un_topic_$TOPIC$
+		has_variable = un_res_cooldown
+	}
+}
+
+# Whether the resolution is *binding* (vetoable). The 5 binding topics are
+# sanctions, peacekeeping_request, icc, condemn and reform; all others are
+# recommendatory and cannot be vetoed.
+# Scope: resolution container
+un_resolution_is_binding = {
+	OR = {
+		has_tag = un_topic_sanctions
+		has_tag = un_topic_peacekeeping_request
+		has_tag = un_topic_icc
+		has_tag = un_topic_condemn
+		has_tag = un_topic_reform
+	}
+}
+
+# Whether ROOT is on the resolution's $LIST$ of voters.
+# Parameters: $LIST$ = un_res_yes | un_res_no
+# Scope: resolution container; ROOT = the country asked about
+un_resolution_has_vote = {
+	has_variable_list = $LIST$
+	is_target_in_variable_list = { name = $LIST$ target = ROOT }
+}
+
+# Whether the AI should consider vetoing scope:un_resolution. Used by the
+# un_vote.1 veto option's ai_chance: only veto a resolution that would pass
+# even with our "no". Our vote isn't cast yet when this is evaluated, so that
+# means a margin of at least 2 (support - oppose - 1 >= 1).
+# Scope: voting country
+un_veto_would_change_outcome = {
+	scope:un_resolution ?= { un_res_margin >= 2 }
+}
