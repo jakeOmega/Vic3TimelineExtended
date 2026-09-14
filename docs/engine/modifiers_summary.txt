@@ -7092,6 +7092,13 @@ state|state_conversion_mult|A bonus or penalty to Conversion
 state|state_corsican_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_cree_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_croat_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
+state|state_custom_religion_animist_standard_of_living_add|
+state|state_custom_religion_buddhist_standard_of_living_add|
+state|state_custom_religion_christian_standard_of_living_add|
+state|state_custom_religion_custom_standard_of_living_add|
+state|state_custom_religion_eastern_standard_of_living_add|
+state|state_custom_religion_jewish_standard_of_living_add|
+state|state_custom_religion_muslim_standard_of_living_add|
 state|state_czech_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_dakota_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_danish_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]

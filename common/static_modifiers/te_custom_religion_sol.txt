@@ -5,8 +5,9 @@
 # (see vanilla common/static_modifiers/08_religion_standard_of_living.txt).
 # Missing pairs log "Missing religion sol static modifier ..." (religion.cpp:92)
 # once per religion per launch. The underlying `state_<religion>_standard_of_living_add`
-# modifier types are auto-registered by the engine from the religion database —
-# only these static-modifier wrappers need to exist in script.
+# modifier types are code-generated only for VANILLA religions; the mod's custom
+# religions need them registered explicitly, in
+# common/modifier_type_definitions/mod_entity_modifier_types.txt (Religions section).
 # Values mirror vanilla's (both signs carry value 1; the engine applies direction).
 
 custom_religion_christian_standard_of_living_modifier_positive = { # REVIEWED 2026-07-03: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers

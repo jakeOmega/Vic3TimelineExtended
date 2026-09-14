@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7788 modifier entries.*
+*Auto-generated from 7795 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1696,13 +1696,14 @@ _An increase or decrease in the Mortality of academics! Academics_
 - `state_engineers_mortality_mult`, `state_farmers_mortality_mult`, `state_laborers_mortality_mult`, `state_machinists_mortality_mult`, `state_officers_mortality_mult`, `state_peasants_mortality_mult`
 - `state_shopkeepers_mortality_mult`, `state_slaves_mortality_mult`, `state_soldiers_mortality_mult`
 
-### `state_{religion}_standard_of_living_add` (17 members)
+### `state_{religion}_standard_of_living_add` (24 members)
 
 _A bonus or penalty to a specific religion's [concept_sol]_
 
-- `state_animist_standard_of_living_add`, `state_atheist_standard_of_living_add`, `state_catholic_standard_of_living_add`, `state_confucian_standard_of_living_add`, `state_gelugpa_standard_of_living_add`, `state_hindu_standard_of_living_add`
-- `state_ibadi_standard_of_living_add`, `state_jewish_standard_of_living_add`, `state_mahayana_standard_of_living_add`, `state_oriental_orthodox_standard_of_living_add`, `state_orthodox_standard_of_living_add`, `state_protestant_standard_of_living_add`
-- `state_shiite_standard_of_living_add`, `state_shinto_standard_of_living_add`, `state_sikh_standard_of_living_add`, `state_sunni_standard_of_living_add`, `state_theravada_standard_of_living_add`
+- `state_animist_standard_of_living_add`, `state_atheist_standard_of_living_add`, `state_catholic_standard_of_living_add`, `state_confucian_standard_of_living_add`, `state_custom_religion_animist_standard_of_living_add`, `state_custom_religion_buddhist_standard_of_living_add`
+- `state_custom_religion_christian_standard_of_living_add`, `state_custom_religion_custom_standard_of_living_add`, `state_custom_religion_eastern_standard_of_living_add`, `state_custom_religion_jewish_standard_of_living_add`, `state_custom_religion_muslim_standard_of_living_add`, `state_gelugpa_standard_of_living_add`
+- `state_hindu_standard_of_living_add`, `state_ibadi_standard_of_living_add`, `state_jewish_standard_of_living_add`, `state_mahayana_standard_of_living_add`, `state_oriental_orthodox_standard_of_living_add`, `state_orthodox_standard_of_living_add`
+- `state_protestant_standard_of_living_add`, `state_shiite_standard_of_living_add`, `state_shinto_standard_of_living_add`, `state_sikh_standard_of_living_add`, `state_sunni_standard_of_living_add`, `state_theravada_standard_of_living_add`
 
 ### `unit_{combat_unit}_defense_mult` (4 members)
 

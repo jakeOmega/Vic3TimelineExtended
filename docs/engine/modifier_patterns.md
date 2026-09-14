@@ -1059,8 +1059,8 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_{religion}_standard_of_living_add`
 
 - Placeholder: `religion` (vocab: `religion`)
-- Members: **17**
-  - Examples: `animist`, `atheist`, `catholic`, `confucian`, `gelugpa`, `hindu`
+- Members: **24**
+  - Examples: `animist`, `atheist`, `catholic`, `confucian`, `custom_religion_animist`, `custom_religion_buddhist`
 
 ### `unit_{combat_unit}_defense_mult`
 

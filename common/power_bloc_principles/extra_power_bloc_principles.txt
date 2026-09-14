@@ -4129,7 +4129,8 @@ principle_multilateral_institutions_5 = {
 		power_bloc_cohesion_per_member_add = 1
 		power_bloc_target_sway_cost_mult = -0.2
 		power_bloc_invite_acceptance_minor_power_add = 20
-		power_bloc_invite_acceptance_insignificant_power_add = 20
+		# No insignificant-power variant: vanilla's invite acceptance (28_invite_to_power_bloc.txt)
+		# only applies rank affinity above insignificant_power, and the type is not script-registered.
 		power_bloc_invite_acceptance_major_power_add = 10
 	}
 

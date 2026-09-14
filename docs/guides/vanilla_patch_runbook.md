@@ -230,7 +230,7 @@ curl -s "http://localhost:8950/validate/engine-coverage?filter=vanilla_breakages
 
 (See `docs/guides/python_tools.md` for the filter; in absence of the filter, manually classify the 29-or-so unknown entries against `common/modifier_type_definitions/`.)
 
-The bar is **0 vanilla breakages**. Mod-defined custom modifier types (`country_sr_*`, `country_covert_*`, `cultural_hegemony_*`, etc.) reported as "unknown" by the validator are pre-existing limitations of the validator, not real breakages.
+The bar is **0 vanilla breakages**. Mod-defined custom modifier types (`country_sr_*`, `country_covert_*`, `cultural_hegemony_*`, etc.) reported as "unknown" by the validator are pre-existing limitations of the validator, not real breakages. **But don't extend that to unregistered per-entity dynamic types**: the 7 `state_custom_religion_*_standard_of_living_add` unknowns in the 1.14 migration were dismissed as a validator limitation and were real no-ops (the engine generates those types only for vanilla religions). Confirm any unknown that is *not* a mod-registered custom type against debug.log's `Unknown modifier type` before waving it through.
 
 ## 9b. Deploying for the in-game check
 
