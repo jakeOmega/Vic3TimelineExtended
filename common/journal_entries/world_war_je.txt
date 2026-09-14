@@ -310,6 +310,7 @@ je_world_war = {
 			10 = world_war_events.20  # opportunity to join
 			# War weariness (prolonged war)
 			5 = world_war_events.30   # war weariness grows
+			5 = world_war_events.31   # stalemate on the front / armistice talks
 			# Post-war events
 			5 = world_war_events.103  # war crimes tribunal
 			5 = world_war_events.104  # post-war order

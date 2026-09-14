@@ -126,11 +126,9 @@
 						is_target_of_wargoal = scope:country
 						is_incorporated = yes
 					}
-					# 1.14: war exhaustion became a 0-100 war support scale; the red band
-					# (radicalization + combat malus) is vanilla's own "going badly" line
-					any_scope_war = {
-						has_war_support = { target = ROOT value <= define:NDiplomacy|WAR_SUPPORT_RADICALIZATION_THRESHOLD }
-					}
+					# Battlefield read (1.14 triggers), not war support: low support can
+					# mean an unpopular war rather than a lost one. See nuke_triggers.txt.
+					is_losing_war_against = { ENEMY = scope:country }
 				}
 				# Retaliation: this specific enemy nuked us
 				was_nuked_by_enemy = yes
@@ -166,6 +164,16 @@
 						value = nuclear_industrial_strike_target_score
 					}
 				}
+			}
+			# A war against a declared rival is one the AI is readier to escalate
+			if = {
+				limit = {
+					any_scope_war = {
+						is_war_participant = scope:country
+						is_at_war_with_rival = ROOT
+					}
+				}
+				multiply = 1.5
 			}
 		}
 	}
@@ -333,29 +341,9 @@ tactical_nuke_diplo_action = {
 						is_target_of_wargoal = scope:country
 						is_incorporated = yes
 					}
-					any_scope_war = {
-						has_war_exhaustion = { target = ROOT value > 25 }
-					}
-				}
-				# Retaliation: this specific enemy nuked us
-				was_nuked_by_enemy = yes
-			}
-
-			# Must face a sufficiently severe threat - no tactical nukes over minor disputes
-			OR = {
-				# Existential threat: enemy wants to subjugate or annex us
-				enemy_has_existential_war_goal = yes
-				# Losing core incorporated territory AND the war is going badly
-				AND = {
-					any_scope_state = {
-						is_target_of_wargoal = scope:country
-						is_incorporated = yes
-					}
-					# 1.14: tactical use tolerates a milder slide than strategic -- war
-					# support below the level it drifts toward rather than in the red band
-					any_scope_war = {
-						has_war_support = { target = ROOT value < define:NDiplomacy|WAR_SUPPORT_DRIFT_TARGET }
-					}
+					# Battlefield read (1.14 triggers), not war support: low support can
+					# mean an unpopular war rather than a lost one. See nuke_triggers.txt.
+					is_losing_war_against = { ENEMY = scope:country }
 				}
 				# Retaliation: this specific enemy nuked us
 				was_nuked_by_enemy = yes
@@ -437,6 +425,16 @@ tactical_nuke_diplo_action = {
 						divide = 1000 # near-zero priority against nuclear-armed targets
 					}
 				}
+			}
+			# A war against a declared rival is one the AI is readier to escalate
+			if = {
+				limit = {
+					any_scope_war = {
+						is_war_participant = scope:country
+						is_at_war_with_rival = ROOT
+					}
+				}
+				multiply = 1.5
 			}
 		}
 	}

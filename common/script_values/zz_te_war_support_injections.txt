@@ -1,0 +1,119 @@
+﻿# War support feeds from mod systems (issue #285).
+#
+# Vanilla 1.14 computes each country's weekly war support change in
+# common/script_values/war_support_values.txt. Its last term,
+# war_support_from_journal_entries, is the one slot that accepts a per-line
+# desc key, so every add = { value desc } below shows as its own row in the
+# war support breakdown. We INJECT into it rather than redeclare it.
+#
+# root = country, scope:war = the war being evaluated (a country in two wars
+# is evaluated once per war). No randomness is allowed in this script value.
+# It runs for every country in every war each beat: keep conditions to
+# has_modifier / variable / pact / war-participant checks -- no every_country.
+#
+# The file is zz_-prefixed so it sorts after vanilla war_support_values.txt.
+# INJECT errors when its target entry does not exist yet (1.12 inject_types
+# digest), and every other mod INJECT file already sorts after its vanilla
+# target; a te_ prefix would sort before w.
+#
+# Scale: vanilla per-beat factors run from -5 (fully occupied) to about +2;
+# the rival boost, taking loans and a loyal subject are +-0.25. War support is
+# 0-100 and drifts toward 50, red band at <= 25.
+#
+# desc keys live in localization/english/te_miscellaneous_l_english.yml.
+
+INJECT:war_support_from_journal_entries = {
+	# ---- World War (je_world_war) ----
+	# The phase modifiers are applied to the journal entry, not the country
+	# (world_war_je.txt), so a country-scope has_modifier never sees them.
+	# ?= because the JE may not exist. Also catches the short decaying copy
+	# world_war_events.11 applies.
+	if = {
+		limit = { je:je_world_war ?= { has_modifier = ww_home_front_strain_modifier } }
+		add = {
+			value = -0.5
+			desc = "WAR_SUPPORT_TE_WW_HOME_FRONT_STRAIN"
+		}
+	}
+	if = {
+		limit = { je:je_world_war ?= { has_modifier = ww_prolonged_war_exhaustion_modifier } }
+		add = {
+			value = -0.5
+			desc = "WAR_SUPPORT_TE_WW_PROLONGED_WAR"
+		}
+	}
+
+	# ---- United Nations ----
+	# Both are decaying timed modifiers on the country (events/un_vote_events.txt);
+	# a condemnation outranks a rebuke.
+	if = {
+		limit = { has_modifier = un_condemned_modifier }
+		add = {
+			value = -0.5
+			desc = "WAR_SUPPORT_TE_UN_CONDEMNED"
+		}
+	}
+	else_if = {
+		limit = { has_modifier = un_non_binding_rebuke_modifier }
+		add = {
+			value = -0.25
+			desc = "WAR_SUPPORT_TE_UN_REBUKED"
+		}
+	}
+	# "The world is with us": an enemy in this war is UN-condemned.
+	# has_war_with is cross-war (a co-belligerent here could be an enemy in
+	# another war); negligible, and cheaper than a side comparison.
+	if = {
+		limit = {
+			scope:war = {
+				any_war_participant = {
+					has_war_with = ROOT
+					has_modifier = un_condemned_modifier
+				}
+			}
+		}
+		add = {
+			value = 0.25
+			desc = "WAR_SUPPORT_TE_UN_ENEMY_CONDEMNED"
+		}
+	}
+
+	# ---- Covert warfare: an enemy comms-disruption operation runs against us ----
+	# Same "am I the target" idiom as covert_warfare_on_actions.txt, narrowed to
+	# an attacker fighting in this war. Operation phase lives on the attacker's
+	# script containers and is not readable here, so the line is flat for the
+	# life of the pact.
+	if = {
+		limit = {
+			any_scope_diplomatic_pact = {
+				is_diplomatic_action_type = covert_comms_disruption_action
+				second_country = { this = ROOT }
+				first_country = { scope:war = { is_war_participant = PREV } }
+			}
+		}
+		add = {
+			value = -0.25
+			desc = "WAR_SUPPORT_TE_COVERT_COMMS_DISRUPTED"
+		}
+	}
+
+	# ---- Nuclear asymmetry: an enemy has the bomb and we do not ----
+	# Actual strikes already drain war support through devastation
+	# (WAR_SUPPORT_CHANGE_DEVASTATION_FACTOR) and the one-off hit in
+	# nuclear_industrial_strike; this is only the shadow of the arsenal.
+	if = {
+		limit = {
+			NOT = { has_modifier = nuclear_power }
+			scope:war = {
+				any_war_participant = {
+					has_war_with = ROOT
+					has_modifier = nuclear_power
+				}
+			}
+		}
+		add = {
+			value = -0.25
+			desc = "WAR_SUPPORT_TE_NUCLEAR_SHADOW"
+		}
+	}
+}

@@ -461,6 +461,9 @@ television_broadcasting = {
 		state_homeland_creation_threshold_add = -0.05
 		state_homeland_removal_threshold_add = 0.05
 		state_literacy_growth_add = 0.00005
+		# 1.14 battle war support: the living-room war, defeats are seen at home
+		country_war_support_battles_increase_mult = 0.1
+		country_war_support_battles_decrease_mult = 0.15
 	}
 
 	unlocking_technologies = {
@@ -607,6 +610,9 @@ satellite_communications = {
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 1
 		country_satcom_pb_principles_bool = yes
 		country_space_race_max_funding_add = 1
+		# 1.14 battle war support: live global news
+		country_war_support_battles_increase_mult = 0.05
+		country_war_support_battles_decrease_mult = 0.1
 	}
 
 	ai_weight = {

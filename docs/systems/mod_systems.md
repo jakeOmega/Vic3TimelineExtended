@@ -1202,9 +1202,43 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 - **Will propose guards:** `in_default = no`, `country_rank >= rank_value:major_power` (peacetime ops), rivalry/antagonistic/domineering attitude required, IC advantage check for some ops.
 - **Propose score:** Scales with rivalry (+10), great power rank (+5–7), aggressive ruler (+5–8).
 - **AI Funding Management:** Monthly pulse auto-sets funding: 0 if in default/bankrupt, 2 for GPs with rivals, 1 for major powers, 0 otherwise. Player uses buttons.
-- **Wartime ops:** Higher eval chance (0.05), no rank requirement, `in_default = no` guard only.
+- **Wartime ops:** Higher eval chance (0.05), no rank requirement, `in_default = no` guard only. `propose_score` 15, +10 rivalry pact with the target, +5 GP, +5 when `is_losing_war_against = { ENEMY = scope:target_country }` (battlefield read from `common/scripted_triggers/nuke_triggers.txt`; see § War Support Feeds).
 
 ### Cancellation Conditions
 - **All 7 peacetime ops** (election interference, financial subversion, industrial espionage, military espionage, influence campaign, ideological subversion, destabilization) have war and truce checks in both `possible` and `requirement_to_maintain`. Operations auto-cancel if war or truce with the target begins.
 - **Wartime ops** (infrastructure sabotage, communications disruption) require active war with the target; they auto-cancel if peace is achieved.
 - **Script value scope:** All covert warfare SVs use `owner = {}` wrapping to access country-scope data from JE scope (the `on_monthly_pulse` context). This is required because the JE monthly pulse runs in journal entry scope, not country scope.
+
+## War Support Feeds (1.14 hook)
+
+Vanilla 1.14 computes each country's weekly war support change in `common/script_values/war_support_values.txt`; its last term, `war_support_from_journal_entries`, is the only slot that accepts a per-line `desc` key. The mod injects into it from **`common/script_values/zz_te_war_support_injections.txt`** (`INJECT:war_support_from_journal_entries`; `zz_` so the file sorts after the vanilla target — INJECT errors if the target does not exist yet). `root` = country, `scope:war` = the war being evaluated; no randomness; it runs per country per war per beat, so conditions are `has_modifier` / pact / war-participant checks only. Labels live in `te_miscellaneous_l_english.yml` (`WAR_SUPPORT_TE_*`).
+
+| System | Condition (root = country) | Per beat |
+|---|---|---|
+| World War | `je:je_world_war ?= { has_modifier = ww_home_front_strain_modifier }` (2+ years) — the phase modifiers sit on the **journal entry**, not the country | −0.5 |
+| World War | same for `ww_prolonged_war_exhaustion_modifier` (4+ years; stacks with the line above) | −0.5 |
+| United Nations | `un_condemned_modifier` on root (`else_if` `un_non_binding_rebuke_modifier`, −0.25) | −0.5 |
+| United Nations | an enemy in `scope:war` carries `un_condemned_modifier` ("the world is with us") | +0.25 |
+| Covert Warfare | root is `second_country` of a `covert_comms_disruption_action` pact whose attacker fights in `scope:war` (flat — operation phase lives on the attacker's containers) | −0.25 |
+| Nuclear | root lacks `nuclear_power` and an enemy in `scope:war` has it (strikes themselves already drain through devastation and the one-off in `nuclear_industrial_strike`) | −0.25 |
+
+Scale: vanilla's per-beat factors run from −5 (fully occupied) to about +2; the rival boost / taking loans are ±0.25. War support is 0–100, drifts toward 50, red band ≤ 25.
+
+**Battle war-support modifiers** (`country_war_support_battles_increase_mult` / `_decrease_mult`, vanilla 1.14; every grant sums into `1 + Σ`, floored at 0, no upper clamp). Mod grants — laws in `common/laws/extra_laws.txt`, techs in `common/technology/technologies/era_7.txt` / `era_9.txt`:
+
+| Entity | increase | decrease |
+|---|---|---|
+| `law_ministry_of_propaganda` (spin machine; always stacks on `law_outlawed_dissent`) | +0.15 | −0.15 |
+| `law_state_controlled_internet` (mirrors `law_censorship`) | −0.10 | −0.20 |
+| `law_unregulated_internet` / `law_net_neutrality` | +0.20 / +0.15 | same |
+| `law_state_secrets` / `law_freedom_of_information` / `law_open_government` | −0.05 / +0.05 / +0.10 | same |
+| `law_total_war` / `law_limited_war` (how much of society is invested) | +0.25 / −0.10 | same |
+| `television_broadcasting` / `satellite_communications` / `social_media` (the living-room war) | +0.10 / +0.05 / +0.15 | +0.15 / +0.10 / +0.20 |
+
+The worst-case mod-added negative `decrease` sum is −0.50 (`/modifier-grants/country_war_support_battles_decrease_mult?scope=mod`), so with vanilla `law_outlawed_dissent` (−0.4) it stays above the floor; vanilla's `war_propaganda` + `mass_propaganda` techs (−0.2 each) can then floor it, which is intentional — a fully censored state never hears about its defeats. `decrease_mult` is `color=bad`, so a beneficial negative renders red (vanilla's propaganda techs share the quirk). The casualties axis (`country_war_support_casualties_mult`) is deliberately untouched: the mod already saturates it (`law_total_war` −0.75 alone is 3× vanilla's largest law value).
+
+**Battlefield "losing" reads** — `is_losing_war_against = { ENEMY = scope:x }` in `common/scripted_triggers/nuke_triggers.txt`: most size-weighted battles in the shared war lost (`size_weighted_won_battles_fraction < 0.35` after `num_significant_battles >= 5`) or `enemy_occupation >= 0.25`. Used by the nuke AI `will_propose` (strategic and tactical; the previous war-support proxy also fired for merely unpopular wars) and as the +5 desperation term in the wartime covert ops. The nuke `propose_score` is ×1.5 in a war where `is_at_war_with_rival = ROOT`. `enemy_side_occupation` is the share of the *enemy* we hold (high = winning) and is not a losing read.
+
+**World War stalemate event** `world_war_events.31` (weight 5 in the `je_world_war` monthly pulse): `ww_years_elapsed >= 2` (world-war-wide counter) **and** a war with `war_duration_months >= 24`, `num_significant_battles >= 10`, `has_stalled_wargoal_held_by = ROOT`. Options use one-off `add_war_war_support` (+5 hold the line / −10 armistice talks); `add_war_support_change` is avoided because it accumulates for the war (see `docs/guides/scripting_best_practices.md`).
+
+**Not moved into the hook:** `war_propaganda_on_action` (`extra_on_actions.txt`, monthly per-state `add_war_war_support` driven by the state-scoped `state_war_support_monthly_add`, which does not cascade to a country-scope read) stays a one-off level change; a phase-scaled covert line would need a country variable written by the covert JE pulse.

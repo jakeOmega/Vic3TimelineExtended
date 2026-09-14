@@ -30,7 +30,7 @@ _None._
 
 - files_audited: 260
 - modifiers_in_registry_with_decimals: 2732
-- registry_hits: 7390
+- registry_hits: 7415
 - total flags: 3
 - unreviewed: 0
 - exempted: 3

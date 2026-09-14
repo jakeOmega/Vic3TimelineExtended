@@ -67,3 +67,25 @@ was_nuked_by_enemy = {
 	has_variable = nuked_by_country
 	var:nuked_by_country = scope:country
 }
+
+# Country scope, ENEMY = the enemy country (scope:country in nuke.txt,
+# scope:target_country in covert_operations.txt). True if ROOT is losing the
+# war it shares with $ENEMY$ on the battlefield: most size-weighted battles in
+# that war lost (gated on enough significant battles -- with none fought the
+# fraction reads 0, i.e. "losing"), or a quarter of ROOT's own territory under
+# enemy occupation. Replaces the 1.14 war-support proxy, which also fires for
+# a merely unpopular war.
+# NOTE: enemy_side_occupation is how much of the ENEMY's land we hold (high =
+# winning); enemy_occupation is our own occupied share.
+is_losing_war_against = {
+	OR = {
+		enemy_occupation >= 0.25
+		any_scope_war = {
+			is_war_participant = $ENEMY$
+			num_significant_battles >= 5
+			ROOT = {
+				size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+			}
+		}
+	}
+}

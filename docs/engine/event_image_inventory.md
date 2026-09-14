@@ -3,7 +3,7 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 748
+**Total events:** 749
 **Event files:** 39
 
 ## agricultural_diffusion_events.txt
@@ -4535,6 +4535,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** The war has dragged on far longer than anyone expected. Casualty lists grow longer by the day, food is scarce, and the civilian population is exhausted. Voices demanding peace grow louder - but our enemies show no sign of surrender.
 - **Flavor:** The postman no longer knocked. He simply left the telegrams on the step, because the sound of knocking had become something the women on this street could not bear to hear.\n\n'Another one,' the neighbor said, watching from her window. 'The Hendersons.'\n\n'That's their third son.'\n\nSilence. Somewhere, a church bell rang. It had been ringing for so many funerals that no one could remember the last time it rang for joy.
 - **Current image:** gfx/event_pictures/war_weariness_homefront.dds
+
+### world_war_events.31
+- **Title:** Stalemate on the Front
+- **Description:** Two years on, the front has not moved. Every offensive has bled out in the same few miles of churned earth, and the war aims we set out with are no closer than the day the guns first spoke. The general staff insists the next push will break them. The public, reading the same casualty lists as last month and the month before, is no longer sure what 'breaking them' would even mean.
+- **Flavor:** The staff car had been stuck behind a supply column for forty minutes, which gave the minister time to study the map on his knees.\n\nThe line on it was the same line as in the spring. The same line as the autumn before that. Someone had drawn a fresh arrow over the old ones in a different colour of ink, and the arrows underneath showed through like bruises.\n\n'How far did we get this time?' he asked.\n\nThe colonel did not look up. 'Far enough to see their wire,' he said. 'Same as always.'
+- **Current image:** gfx/event_pictures/border_skirmish_troops.dds
 
 ### world_war_events.100
 - **Title:** The Peace Conference

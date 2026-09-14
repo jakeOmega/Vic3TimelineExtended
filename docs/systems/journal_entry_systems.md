@@ -331,6 +331,7 @@ Every General Assembly resolution is a script container. Tags, variables and the
 - Contributor costs: `un_peacekeeping_contributor_cost`, `un_development_contributor_cost`, `un_humanitarian_aid_cost`
 - Received benefits: `un_peacekeeping_received_modifier`, `un_aid_received_modifier`
 - GP influence: `un_champion_order_cost`, `un_undermine_order_cost`
+- War support (1.14): `un_condemned_modifier` −0.5 / `un_non_binding_rebuke_modifier` −0.25 per beat on the holder, +0.25 for fighting a condemned enemy — `common/script_values/zz_te_war_support_injections.txt` (see `mod_systems.md` § War Support Feeds)
 - Vote results: `un_vote_success_reward`, `un_vote_failure_penalty`
 - Sanctions: `un_sanctions_enforcer_modifier`, `un_sanctions_target_modifier`
 - Authority threshold: `un_high_authority_infamy_modifier` (auth≥50), `un_nonmember_pariah_modifier` (auth≥60), `un_npt_disarmament_modifier` (auth≥80)
@@ -396,6 +397,7 @@ Tracks nuclear weapon development and stockpile. Requires Great Power status (or
 ### Modifiers
 - `nuclear_power` — applied when stockpile > 0
 - `nuclear_disarmament` — blocks program growth
+- War support (1.14): an enemy with `nuclear_power` costs a non-nuclear country −0.25 per beat — `common/script_values/zz_te_war_support_injections.txt` (see `mod_systems.md` § War Support Feeds)
 
 ### Events
 - `nuclear_weapon_events.10` — fired for creating country
@@ -511,12 +513,13 @@ Models a World War lifecycle from rising tensions through active total war to po
 - **War:** `ww_total_war_economy_modifier`, `ww_war_propaganda_modifier`, `ww_wartime_rationing_modifier`
 - **Strain:** `ww_home_front_strain_modifier` (2+ years), `ww_prolonged_war_exhaustion_modifier` (4+ years)
 - **Positive:** `ww_fresh_forces_modifier`, `ww_arsenal_of_democracy_modifier`
+- **War support (1.14):** the two strain modifiers are read from the JE (`je:je_world_war ?= { has_modifier = … }`) by `common/script_values/zz_te_war_support_injections.txt` for −0.5 per beat each (see `mod_systems.md` § War Support Feeds)
 
 ### Events
 - **Leadup:** `world_war_events.1` (confrontation), `.2` (border incident), `.3` (crisis)
 - **Outbreak:** `world_war_events.5` (war breaks out)
 - **Active war:** `.10` (rally), `.11` (bombing), `.12` (resistance), `.20` (join opportunity)
-- **Prolonged:** `.30` (weariness)
+- **Prolonged:** `.30` (weariness), `.31` (stalemate on the front — 1.14 war reads `war_duration_months`, `num_significant_battles`, `has_stalled_wargoal_held_by`; one-off `add_war_war_support` ±)
 - **Post-war:** `.100` (peace conference), `.103` (war crimes), `.104` (new order), `.105` (new rivalry)
 
 ### Related Triggers/Values
