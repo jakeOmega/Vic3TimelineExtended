@@ -476,6 +476,12 @@ me everything that applies" idiom.
   `/references/<key>`, `/tech-tree/<id>`, `/unlocked-by/<id>`,
   `/tech-unlocks`, `/keys/<EntityType>`, etc. Future entity-list
   endpoints just need to set `type=<EntityType>` on their entries.
+- The post-processor **mutates entry dicts in place**. A handler that
+  serves entries out of a module-level cache must return copies of the
+  entry dicts, not just of the lists holding them — otherwise one
+  annotated request stamps its fields onto every later response
+  (`/tech-unlocks` leaked `flag` this way until `_copy_unlocks_record`
+  started copying entries).
 - Adding a new annotator is import-time only: write a
   `<thing>_balance_lib.py` that calls `annotators.register(...)`, import
   it once in `mod_state_server.py`, and `?annotate=<name>` works

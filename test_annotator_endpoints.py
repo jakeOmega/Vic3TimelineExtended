@@ -18,6 +18,12 @@ import urllib.request
 
 SERVER = "http://127.0.0.1:8950"
 
+# Documented `flag` values emitted by the PMs `balance` annotator.
+BALANCE_FLAGS = (
+    "OK", "HIGH-PROFIT", "DEEP-LOSS", "HIGH-WAGE", "LOW-WAGE",
+    "THROUGHPUT", "NO-COSTS",
+)
+
 
 def _server_running() -> bool:
     try:
@@ -83,10 +89,7 @@ class AnnotatorEndpointTests(unittest.TestCase):
         for e in pm_entries:
             self.assertIn("flag", e)
             # Flags belong to the documented set.
-            self.assertIn(e["flag"], (
-                "OK", "HIGH-PROFIT", "DEEP-LOSS", "HIGH-WAGE", "LOW-WAGE",
-                "THROUGHPUT", "NO-COSTS",
-            ))
+            self.assertIn(e["flag"], BALANCE_FLAGS)
 
     def test_tech_unlocks_unknown_annotator_silently_skips(self) -> None:
         rec = _get("/tech-unlocks/modern_tools?annotate=does-not-exist")
@@ -119,14 +122,15 @@ class AnnotatorEndpointTests(unittest.TestCase):
         data = _get("/production-methods?annotate=balance")
         # Entries are a list at the top level for /production-methods.
         self.assertIsInstance(data, list)
-        # Find a PM that has cost comments — pm_dragline_excavators_coal_mine
-        # should have a flag. Sample the first 50 to keep the test cheap.
-        sampled = [e for e in data[:50] if e.get("type") == "PMs"]
-        self.assertGreater(len(sampled), 0)
-        annotated = [e for e in sampled if "flag" in e]
-        # At least *some* of the first 50 PMs should be annotated. Allowing
-        # for NO-COSTS PMs which still get a `flag` field.
-        self.assertGreater(len(annotated), 0)
+        # The list is vanilla-first and the balance annotator only covers
+        # the mod's PM files, so a prefix sample can be entirely unannotated
+        # (#280). Look up a known mod PM by id instead.
+        by_id = {e.get("id"): e for e in data}
+        pm = by_id.get("pm_dragline_excavators_coal_mine")
+        self.assertIsNotNone(pm)
+        self.assertEqual(pm.get("type"), "PMs")
+        self.assertIn("flag", pm)
+        self.assertIn(pm["flag"], BALANCE_FLAGS)
 
     def test_universal_wireup_no_op_on_unrelated_endpoint(self) -> None:
         # /laws has no `balance` annotator registered for the Laws type, so
