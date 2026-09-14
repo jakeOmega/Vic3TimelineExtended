@@ -63,6 +63,8 @@ _CURATED_VALID: frozenset[str] = frozenset({
     "hue",      # colour field
     "ceiling",  # script-value rounding (ceiling = yes)
     "side",     # join_war = { side = scope:X } (vanilla uses it, just not in scope dirs)
+    "parent",   # create_container = { parent = ... } / container iterator filter (1.13.10+; unused by vanilla script)
+    "tags",     # create_container = { tags = { ... } } / container iterator filter (1.13.10+; unused by vanilla script)
 })
 # Mod dirs whose top-level names are valid call/comparison targets but which we
 # don't scan for effects (script values are compared as triggers by name).

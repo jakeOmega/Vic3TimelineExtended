@@ -983,7 +983,10 @@
 						align = nobaseline
 						using = elide_fontsize_min
 						autoresize = yes
-						text = "[MilitaryFormation.GetNameNoIcon]"
+
+						block "name_text" {
+							text = "[MilitaryFormation.GetNameNoIcon]"
+						}
 
 						block "name_max_width" {
 							max_width = 165
@@ -2182,6 +2185,29 @@ right_click_menu = {
 
 				blockoverride = "text" {
 					text = "MILITARY_FORMATION_INVADE_LABEL"
+				}
+
+				blockoverride "size" {
+					size = { 260 44 }
+				}
+			}
+
+			right_click_menu_item = {		# CANCEL INVASION
+				visible = "[And(MilitaryFormation.HasInvasion, MilitaryFormation.GetCountry.IsLocalPlayer)]"
+				datacontext = "[MilitaryFormation.GetInvasion]"
+
+				blockoverride "properties" {
+					enabled = "[IsValid(Invasion.Cancel)]"
+					onclick = "[PopupManager.AskConfirmationWithSound(Invasion.Cancel, Select_CString(Invasion.IsNavalInvasion, 'event:/SFX/UI/Military/formation_actions_naval_invasion_cancel', 'event:/SFX/UI/Military/formation_actions_land_invasion_cancel'))]"
+					tooltip = "CANCEL_INVASION_TOOLTIP"
+				}
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+				}
+
+				blockoverride "text" {
+					text = "CANCEL_INVASION"
 				}
 
 				blockoverride "size" {
@@ -6293,6 +6319,7 @@ right_click_menu = {
 		right_click_menu_item = {
 			blockoverride "properties" {
 				visible = "[And( IsPotential( State.GetStationSelectedFormationsCommand ), State.RequiresNavalTransportForSelectedFormations )]"
+				enabled = "[IsValid( State.GetStationSelectedFormationsCommand )]"
 				onclick = "[State.ShowTransportPlannerForSelectedFormation]"
 				onclick = "[RightClickMenuManager.Close]"
 				tooltip = "HQ_MOVEMENT_MARKER_TRANSPORT_DESC"
@@ -7331,6 +7358,48 @@ types country_right_click_menu {
 						onclick = "[StrategicRegion.TogglePinInOutliner]"
 					}
 				}
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "state_value_click_menu"
+
+	blockoverride "title_text" {
+		text = "STATE_VALUE_CLICK_MENU_TITLE"
+	}
+
+	blockoverride "items" {
+		right_click_menu_item = {
+			blockoverride "properties" {
+				tooltip = "STATE_VALUE_CLICK_MENU_OPEN_STATE_TOOLTIP"
+				onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+			}
+
+			blockoverride "texture" {
+				texture = "gfx/interface/buttons/button_icons/goto.dds"
+			}
+
+			blockoverride "text" {
+				text = "STATE_VALUE_CLICK_MENU_OPEN_STATE"
+			}
+		}
+
+		right_click_menu_item = {
+			datacontext = "[State.AccessOwner]"
+
+			blockoverride "properties" {
+				tooltip = "STATE_VALUE_CLICK_MENU_SET_PERSPECTIVE_TOOLTIP"
+				onclick = "[Country.SetAsStateValuePerspective]"
+			}
+
+			blockoverride "icon" {
+				tiny_flag_no_interact = {}
+			}
+
+			blockoverride "text" {
+				text = "STATE_VALUE_CLICK_MENU_SET_PERSPECTIVE"
 			}
 		}
 	}
@@ -9616,26 +9685,26 @@ types article_input_types
 								flowcontainer = {
 									visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.GetRightCountry.IsAI)]"
 									spacing = 5
-									tooltip = "[TreatyDraft.GetArticleTypeAcceptanceBreakdownWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self)]"
+									tooltip = "[TreatyDraft.GetArticleTypeAcceptanceBreakdownWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self)]"
 
 									treaty_draft_input_acceptance_icon = {
 										blockoverride "approval_visibility" {
-											visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self), '(int32)0')]"
+											visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
 										}
 
 										blockoverride "disapproval_visibility" {
-											visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self), '(int32)0')]"
+											visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
 										}
 
 										blockoverride "undecided_visibility" {
-											visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self), '(int32)0')]"
+											visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
 										}
 									}
 
 									custom_tooltip_textbox = {
 										parentanchor = vcenter
 										max_width = 500
-										text = "TREATY_DRAFT_ACCEPTANCE_WITH_LABEL_COUNTRY"
+										text = "TREATY_DRAFT_ACCEPTANCE_WITH_LABEL_SHIP"
 									}
 								}
 							}
@@ -9846,15 +9915,15 @@ types article_input_types
 				visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.GetRightCountry.IsAI)]"
 
 				blockoverride "approval_visibility" {
-					visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self), '(int32)0')]"
+					visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
 				}
 
 				blockoverride "disapproval_visibility" {
-					visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self), '(int32)0')]"
+					visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
 				}
 
 				blockoverride "undecided_visibility" {
-					visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, TreatyDraft.GetRightCountry.Self, Ship.Self), '(int32)0')]"
+					visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
 				}
 			}
 		}
@@ -13593,11 +13662,52 @@ right_click_menu = {
 				}
 
 				blockoverride "texture" {
-					texture = "gfx/interface/icons/commander_order_icons/admiral_repairing.dds"
+					texture = "gfx/interface/icons/generic_icons/repairing_no_bg.dds"
 				}
 
 				blockoverride "text" {
 					text = "RECALL_FLEET_FOR_REPAIRS_LABEL"
+				}
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "enemy_fleets_on_mission_in_sea_region"
+	parentanchor = right
+
+	blockoverride "title_text" {
+		text = "ENEMY_FLEETS_ON_NAVAL_MISSION_IN_REGION_HEADER"
+	}
+
+	blockoverride "items" {
+		flowcontainer = {
+			spacing = 10
+
+			flowcontainer = {
+				direction = vertical
+
+				dynamicgridbox = {
+					datamodel = "[NavalMissionMarker.AccessEnemyFleetsOnMissionType(NavalMissionType.Self)]"
+
+					item = {
+						widget = {
+							using = standard_formation_item_size
+
+							military_formation_right_click_item = {
+
+								blockoverride "onclick" {
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanelTab( MilitaryFormation.Self, 'default' )]"
+									onclick = "[RightClickMenuManager.Close]"
+								}
+
+								blockoverride "name_text" {
+									raw_text = "[MilitaryFormation.GetCountry.GetFlagTextIcon] [MilitaryFormation.GetNameNoIcon]"
+								}
+							}
+						}
+					}
 				}
 			}
 		}

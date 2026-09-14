@@ -150,36 +150,83 @@ types panel_military {
 
 		vbox = {
 			margin = { 20 20 }
+			max_update_rate = 8
 
 			hbox = {
 				tooltip = "SUPPLY_NETWORK_STRENGTH_TOOLTIP"
 				layoutpolicy_horizontal = expanding
-				layoutpolicy_vertical = expanding
 
 				textbox = {
 					layoutpolicy_horizontal = expanding
-					layoutpolicy_vertical = expanding
+					size = { 0 32 }
 					text = "SUPPLY_NETWORK_STRENGTH_TEXT"
-					align = left|nobaseline
+					align = nobaseline
 				}
+
 				textbox = {
 					layoutpolicy_horizontal = expanding
-					layoutpolicy_vertical = expanding
+					size = { 0 32 }
 					text = "SUPPLY_NETWORK_STRENGTH_VALUE"
 					align = right|nobaseline
 				}
 			}
 
-			hbox = {
-				layoutpolicy_horizontal = expanding
-				layoutpolicy_vertical = expanding
+			widget = {
+				size = { 290 26 }
+				max_update_rate = 8
+				tooltip = "COUNTRY_SAILORS_TOOLTIP"
 
-				textbox = {
-					layoutpolicy_horizontal = expanding
-					layoutpolicy_vertical = expanding
-					text = "COUNTRY_SAILORS_VALUE"
-					align = left|nobaseline
-					multiline = yes
+				changed_value_increased_progressbar_horizontal = {
+					visible = "[And(Country.HasSailorDeficit, Country.IsGainingSailors)]"
+					size = { 100% 100% }
+
+					blockoverride "values" {
+						value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
+						min = 0
+						max = 1
+					}
+				}
+
+				bad_progressbar_horizontal = {
+					visible = "[And(Country.HasSailorDeficit, Not(Country.IsGainingSailors))]"
+					size = { 100% 100% }
+
+					blockoverride "values" {
+						value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
+						min = 0
+						max = 1
+					}
+				}
+
+				default_progressbar_horizontal = {
+					visible = "[Not(Country.HasSailorDeficit)]"
+					size = { 100% 100% }
+
+					blockoverride "values" {
+						value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
+						min = 0
+						max = 1
+					}
+				}
+
+				flowcontainer = {
+					parentanchor = vcenter
+					spacing = 7
+
+					textbox = {
+						parentanchor = vcenter
+						margin_left = 10
+						autoresize = yes
+						align = nobaseline
+						text = "COUNTRY_SAILORS_LABEL"
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						align = nobaseline
+						text = "COUNTRY_SAILORS_VALUE"
+					}
 				}
 			}
 		}

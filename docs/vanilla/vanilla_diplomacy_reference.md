@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** diplomacy systems work, written for AI agents that need context before touching mod content that hooks the diplomatic layer (formables and unification plays, infamy/relations modifiers, power-bloc principles, treaty articles, subject mechanics). Mod-specific systems (Pan-X unification plays, formable candidacy, covert warfare, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`. Diplomatic *plays* themselves are covered in detail in `docs/vanilla/vanilla_war_reference.md` § 1; this doc focuses on everything that surrounds and feeds into a play.
 
-> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** Wiki sources for this doc are tagged at versions ranging from 1.9 to 1.13; verify any specific name or number via the server before relying on it.
+> **Last verified against vanilla:** 1.14.2 (open beta). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** Wiki sources for this doc are tagged at versions ranging from 1.9 to 1.13; verify any specific name or number via the server before relying on it.
 >
 > **Verify before relying on names.** Modifier names, war goal IDs, treaty article IDs, principle IDs, subject type IDs, and trigger names cited below should be confirmed via the mod state server (`/modifier-search?q=`, `/engine-docs/modifiers`, `/raw/SubjectType/<id>`, `/raw/PowerBlocPrinciple/<id>`, `/raw/DiplomaticPlay/<id>`) before referencing them in code. Vanilla renames things across patches.
 >
@@ -409,6 +409,8 @@ The two big functional axes are:
 
 Personal unions and chartered companies are special: PUs require Nationalism tech to change autonomy and end if either side leaves Monarchy; chartered companies require Civilizing Mission tech and have unique throughput / construction bonuses applied to government-owned buildings via the overlord's company.
 
+**1.14 subjugation war goals.** War goals of `kind = make_subject` take a `subject_type` and cover protectorates, tributaries, dominions and — new in 1.14 — personal unions, crown land and chartered companies (`34_`–`36_` in `common/war_goal_types/`). `release_as_subject` restores a released country's prior relationship, `break_enforced_treaties` is the mirror goal for treaty-imposing demands, and `subject_types` gained `re_establish_war_goal`. Script hooks: `attitude_towards_overlord` (trigger) and `on_diplo_play_subject_backstab_overlord` (on_action).
+
 **Colonial Administration** subjects (six pre-set African regions: Abyssinia, Congo, East Africa, Niger, Senegal, South Africa) are a Colony-typed subject created via the *Establish Colonial Administration* JE; they ship with a fixed law profile and four flavor variants (Colonial Company / Religious Mission / Colonial Settlement / Colonial Extraction). See `vanilla_colonization_reference.md` § 6 for the JE mechanics and the path-dependent law/modifier set.
 
 ### 10.2 Liberty desire
@@ -499,7 +501,7 @@ Verify the current set with `/modifier-search?q=<term>` before referencing. Comm
 
 - **Influence and pacts**: `country_influence_add`, `country_influence_mult`, `country_diplomatic_pact_cost_mult`, `country_<pact>_cost_mult`.
 - **Infamy**: `country_infamy_generation_mult`, `country_infamy_decay_mult`, `country_infamy_generation_against_unrecognized_mult`. The mod-side script-only modifier `country_banking_intervention_max_add` and similar are *not* infamy modifiers — they're cross-system gates; see `docs/guides/scripting_best_practices.md`.
-- **Plays**: `country_diplomatic_play_maneuvers_add`, `country_diplomatic_play_maneuvers_mult`. `country_war_exhaustion_casualties_mult` is the war-support side (see `vanilla_war_reference.md` § 13).
+- **Plays**: `country_diplomatic_play_maneuvers_add`, `country_diplomatic_play_maneuvers_mult`. `country_war_support_casualties_mult` (1.14 rename of `country_war_exhaustion_casualties_mult`) is the war-support side (see `vanilla_war_reference.md` § 13).
 - **Power bloc**: `country_leverage_generation_mult`, `country_leverage_generation_add` (against named target), `country_leverage_resistance_add`, `country_leverage_resistance_mult`, `country_mandate_progress_mult`, `country_cohesion_*` (verify exact suffix).
 - **Subject**: `country_subject_income_transfer_mult`, `country_liberty_desire_*`, `country_subject_liberty_desire_*` (subject-scope vs overlord-scope — verify which variant the engine reads in your scope).
 - **Interests / involvement**: the names in this family churn between patches and the binary declared-interest model is obsolete (see § 6). Search via `/modifier-search?q=involvement` and `/modifier-search?q=interest` to find the current set; expect generation/tier modifiers rather than pool-size ones.

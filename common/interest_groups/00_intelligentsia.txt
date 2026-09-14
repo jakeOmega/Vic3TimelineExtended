@@ -36,6 +36,7 @@ ig_intelligentsia = {
 	}
 
 	on_enable = {
+		# ONLY HANDLE IG TRAITS IN THIS BLOCK
 		ig:ig_intelligentsia ?= {
 			### Specific IG traits
 			if = {
@@ -83,6 +84,8 @@ ig_intelligentsia = {
 				set_ig_trait = ig_trait:ig_trait_propagandists
 			}
 		}
+
+		# FLAVOUR AND IDEOLOGIES GO HERE
 		# Papal Intellegentsia
 		if = {
 			limit = {
@@ -551,10 +554,10 @@ ig_intelligentsia = {
 	commander_weight = {
 		value = 1.0
 	}
-	
+
 	magnate_weight = {
 		value = 1.0
-	}	
+	}
 
 	executive_weight = {
 		value = 2.0
@@ -866,7 +869,7 @@ ig_intelligentsia = {
 	commander_leader_weight = {
 		value = 0.5
 	}
-	
+
 	# Multiplier applied to the weight for an appropriate magnate will be selected from the character pool to lead the IG
 	# root = interest group
 	magnate_leader_weight = {
@@ -880,7 +883,7 @@ ig_intelligentsia = {
 			}
 			add = 5
 		}
-	}	
+	}
 
 	# Multiplier applied to the weight for an appropriate executive will be selected from the character pool to lead the IG
 	# root = interest group

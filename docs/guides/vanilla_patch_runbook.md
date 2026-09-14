@@ -4,7 +4,7 @@ End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria
 
 ## 0. Prerequisites
 
-- Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history).
+- Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history). Set `vanilla_source_repo_path` in `paths.local.json` to it (`setup.py` accepts any existing directory there, so double-check it isn't pointing at a digest folder). **On a fresh machine without the clone, get it before starting** — the engine-surface diff works from digests alone (§ 3), but GUI merges (§ 5), `REPLACE:` re-bases and the `/validate/*?old_ref=` endpoints all need the exact prior-version files, and Steam's rollback branch is usually the *latest* prior hotfix, not the version the mod was last migrated on.
 - [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) clone at `vic3_modding_digests_path` (`~/src/Modding-Digests` by default). The mod state server auto-pulls this on cold start; if absent, run `.venv/bin/python mod_state_server.py` once and it'll clone. The digests short-circuit much of § 3.
 - Mod state server runnable: `python3 mod_state_server.py` (use `python3`, not `python`, on this system).
 - The mod loads cleanly on the prior vanilla (i.e. before starting the migration, the mod is in a known-good state).
@@ -30,7 +30,26 @@ In `~/src/vic3`:
 git -C ~/src/vic3 log --oneline | head -20
 ```
 
-Find the commit that bumped to the new version (e.g. "v1.13"). Its parent is the prior version baseline. Save these as `OLD_REF` and `NEW_REF`.
+Find the commit that bumped to the new version (e.g. "v1.13"). Its parent is the prior version baseline. Save these as `OLD_REF` and `NEW_REF`. (The clone lives wherever `vanilla_source_repo_path` points — `~/vic3` on some machines.)
+
+**If the clone doesn't have the new version yet**, commit it from the live install. The clone `.gitignore`s large binaries, so mirror those excludes and let `--delete` capture vanilla's removals:
+
+```bash
+rsync -r --delete --exclude='*.mp3' --exclude='*.dds' --exclude='*.bank' --exclude='*.bk2' --exclude='*.flac' \
+      --exclude='*.mehs' --exclude='*.otf' --exclude='*.tga' --exclude='*.png' \
+      "<base_game_path>/game/" <clone>/game/
+git -C <clone> add -A game && git -C <clone> diff --cached -M --shortstat   # expect many R100 renames, not churn
+git -C <clone> commit -m "<version> (<codename>)"                          # local only; restart mod_state_server
+```
+
+Check `git diff --cached --ignore-cr-at-eol --shortstat` matches the plain one (no line-ending churn) before committing.
+
+**Vanilla renames files, not just identifiers.** 1.14 renamed 224 files (laws `00_*` → `01_`/`02_*`, per-language loc). That silently breaks two things: a mod file overriding vanilla *by same path* stops overriding and starts duplicating keys, and any at-risk list built from the new patch's file names misses targets whose old file had a different name. Check both against the real rename list:
+
+```bash
+git -C <clone> diff -M --name-status OLD_REF NEW_REF | awk '$1 ~ /^(R|D)/ {print $2}' | sed 's#^game/##' \
+  | while read p; do [ -e "$p" ] && echo "same-path override of renamed/deleted vanilla file: $p"; done
+```
 
 ## 3. Engine-doc diff
 
@@ -47,6 +66,19 @@ Manual-diff workflow when needed: compare `docs/modifiers.log`, `docs/effects.lo
 - **Renamed**: re-named pairs (e.g. `has_role` → `has_role_of_type`). Identify by name similarity.
 - **Semantics changed**: same name, different meaning. Watch for `relative_*` triggers and similar.
 - **Added**: useful new modifiers/effects/triggers the mod might want to leverage.
+
+**Diff the cumulative span, not just the newest digest.** The baseline is the mod's last migrated version (`.metadata/metadata.json` → `supported_game_version`), which may sit several hotfixes back — 1.13.9 → 1.14.2 crossed 1.13.10 and 1.13.11, and 1.13.10 alone touched 10 of the mod's GUI overrides. Concatenate every intervening digest's `changes_files.md` when enumerating at-risk files.
+
+**No vanilla clone needed for the engine surface.** Every digest ships the full `docs/*.log` dump, so diff the two endpoints directly (run under `bash`):
+
+```bash
+cd <vic3_modding_digests_path>
+hdr() { grep -oE '^##+ [A-Za-z0-9_:|{}\\]+' "$1" | sed -E 's/^#+ //' | sort -u; }
+for k in effects triggers event_targets; do echo "== $k"; comm -3 <(hdr OLD/docs/$k.log) <(hdr NEW/docs/$k.log); done
+echo "== modifiers"; comm -3 <(grep -oE '^[A-Za-z0-9_]+:$' OLD/docs/modifiers.log | sort -u) <(grep -oE '^[A-Za-z0-9_]+:$' NEW/docs/modifiers.log | sort -u)
+```
+
+Then grep **all** of `common/ events/ gui/ localization/` for every removed name — `effect_trigger_validity_audit` only scans events, scripted effects/triggers and on_actions, so e.g. a removed trigger inside `common/diplomatic_actions/` is invisible to it (1.14: `has_war_exhaustion` in `nuke.txt`). After re-bootstrapping the catalog (§ 4), `git diff docs/engine/effect_trigger_valid_keys.txt | grep '^-'` also lists removed *vanilla script values* — grep the mod for those too. GUI 3-way merges, `REPLACE:` re-bases and loc-drift checks still need the vanilla clone (§ 5).
 
 The shell helpers in `<vic3_modding_digests_path>/script/` (`diff-modifiers.sh`, `diff-documentation.sh`) are the same ones the upstream uses to generate the digests — handy when running against a vanilla version not yet covered.
 
@@ -75,6 +107,11 @@ When `debug.log` shows `Unexpected token: <name>` or `inject/replace to a non-ex
 | `canning` (tech) | `canneries` (tech) | `INJECT:` targets in `common/technology/technologies/modified.txt` | `vacuum_canning` still exists; only the early-era `canning` was renamed. |
 | `has_role` (trigger) | `has_role_of_type` (trigger) | All character-role checks | Bulk-replaceable. |
 | `country_law_enactment_time_mult` | `country_law_enactment_speed_mult` | Static modifiers, law `modifier` blocks | 1.13.9 rework. **Semantics flip with the rename**: time-mult (negative = faster) → speed-mult (positive = faster). Vanilla's convention was sign-flip at the same magnitude. The six per-law variants renamed identically (`country_enactment_time_law_X_mult` → `country_enactment_speed_law_X_mult`). A `LAW_ENACTMENT_MIN_SPEED_FACTOR` define floors stacked maluses. |
+| `country_war_exhaustion_casualties_mult` | `country_war_support_casualties_mult` | Laws, principles, traits, amendments, static modifiers | 1.14 war support rework. **Same sign** (both `color=bad`; vanilla multiplies the casualty loss by `1 + mult`, floored at 0). 1.14 also added `country_war_support_battles_{increase,decrease}_mult`. |
+| `has_war_exhaustion` (trigger) | `has_war_support` (level) — **not** `has_war_support_change` | "War is going badly" AI/event checks | 1.14. War support is now 0–100 (low = bad), so `exhaustion > X` becomes `has_war_support value < Y`; prefer `define:NDiplomacy\|WAR_SUPPORT_RADICALIZATION_THRESHOLD` / `WAR_SUPPORT_DRIFT_TARGET` over literals. `has_war_support_change` is the signed per-beat delta (vanilla uses `< -5`). |
+| `add_war_exhaustion` / `additional_war_exhaustion` / `war_exhaustion_from_acceptance_of_dead` | `add_war_support_change` / `additional_war_support_change` / `war_support_from_acceptance_of_dead` | Events, script values | 1.14. **Sign flips**: positive exhaustion was bad, positive war support change is good. `enemy_contested_wargoals` has no direct successor (see `has_stalled_wargoal_against` / `enemy_side_occupation`). |
+| `has_war_support` / `add_war_war_support` / `add_diplomatic_play_war_support` (**same names, new scale**) | — | Hand-written war support checks and deltas | 1.14 moved war support from −100..100 to 0..100 without renaming anything, so nothing errors. Vanilla halved all its deltas (100→50, 10→5, −10→−5); map levels as `(v+100)/2`. 1.14 migration: nuke aftermath guard `> -65` → `> 17.5`, −25 → −12.5; `state_war_support_monthly_add` and `country_war_support_monthly_add_religion` sources halved. Grep for literals: `git grep -nE "has_war_support\|add_war_war_support\|add_diplomatic_play_war_support" -- common events`. |
+| `concept_war_exhaustion` (loc concept) | `concept_war_support` | `[concept_war_exhaustion]` in loc strings | 1.14. A dead concept link renders broken with no log line — `concept_reference_audit` / grep. |
 
 **Deregistration without removal** (same silent-no-op symptom, different fix): a patch can remove a `modifier_type_definitions` registration while keeping the underlying entity type. 1.13.9 deregistered `state_harvest_condition_{hailstorm,torrential_rains}_{impact,duration}_mult` although both harvest conditions still exist — any mod use silently no-ops. Fix by re-registering the type in the mod's `common/modifier_type_definitions/` (copy the last-known vanilla registration shape from `~/src/vic3` git history), not by deleting the mod's uses. Detect via the modifier-type-definitions name diff (BOM-aware extraction, see below), which catches what `debug.log` never reports.
 
@@ -98,6 +135,7 @@ python3 pop_needs_curves.py                          # common/buy_packages/00_bu
 python3 resources.py                                 # map_data/state_regions/*.txt
 python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
+python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors)
 ```
 
 Re-bootstrap the effect/trigger catalog **after** the engine-doc summaries (`effects_summary.txt` / `triggers_summary.txt`) are refreshed in step 3, since it unions those names with vanilla's effect-corpus keywords. A stale catalog produces false positives (new vanilla effects flagged as unknown).
@@ -128,6 +166,10 @@ done
 In the 1.13.5 migration, an exploration agent reported 2 at-risk GUI files; the shell loop above found 5. The missed three included `military_formation_panel.gui`, whose unrebased override silently broke the move-formation button because vanilla renamed `ToggleArmyMovement` → `ToggleArmyAdditionalActions` and `MOVE_MILITARY_FORMATION` → `ADDITIONAL_ACTIONS_MILITARY_FORMATION` in the onclick handler.
 
 For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch versions. See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.
+
+**Prove each merge preserved the mod's delta.** Strip BOM/CR from all three inputs, merge, then compare the set of non-blank changed lines of `diff(OLD, mod)` against `diff(NEW, merged)` — they must be identical (0 lost, 0 extra). This catches both a mod edit the merge dropped and a stale pre-patch vanilla line the merge kept. In 1.14 all 11 merges passed; the only 2 conflicts were mod-side trailing whitespace. Restore each file's BOM when copying back.
+
+**Sweep every `REPLACE:`/`INJECT:` target, not just the ones in changed files.** Locate each target key in the full `OLD_REF` and `NEW_REF` trees of its `common/` subfolder (rename-proof) and diff the block. A changed `REPLACE:` target needs vanilla's delta ported; a changed `INJECT:` target is usually fine (the mod appends sibling `modifier` blocks and vanilla's additions stack with them), but read the diff. 1.14: 898 targets, 0 removed, 6 changed — `ideology_pacifist` (generator-owned) plus war-support lines added inside 5 injected laws/techs.
 
 **A conflict-free merge is not a clean merge.** `git merge-file` happily produces a 0-conflict result when vanilla's edits don't textually overlap the mod's edits — but vanilla may have renamed a function the mod's untouched code-path still calls. After every merge, grep the merged file for any identifier vanilla deleted/renamed during this patch (use the engine-surface delta from step 3). The engine doesn't log GUI script errors, so a broken onclick handler manifests as a silently unresponsive button, not a `debug.log` entry — there's no runtime safety net.
 
@@ -190,7 +232,11 @@ curl -s "http://localhost:8950/validate/engine-coverage?filter=vanilla_breakages
 
 (See `docs/guides/python_tools.md` for the filter; in absence of the filter, manually classify the 29-or-so unknown entries against `common/modifier_type_definitions/`.)
 
-The bar is **0 vanilla breakages**. Mod-defined custom modifier types (`country_sr_*`, `country_covert_*`, `cultural_hegemony_*`, etc.) reported as "unknown" by the validator are pre-existing limitations of the validator, not real breakages.
+The bar is **0 vanilla breakages**. Mod-defined custom modifier types (`country_sr_*`, `country_covert_*`, `cultural_hegemony_*`, etc.) reported as "unknown" by the validator are pre-existing limitations of the validator, not real breakages. **But don't extend that to unregistered per-entity dynamic types**: the 7 `state_custom_religion_*_standard_of_living_add` unknowns in the 1.14 migration were dismissed as a validator limitation and were real no-ops (the engine generates those types only for vanilla religions). Confirm any unknown that is *not* a mod-registered custom type against debug.log's `Unknown modifier type` before waving it through.
+
+## 9b. Deploying for the in-game check
+
+`./scripts/deploy.sh` dry-runs first — read its summary before `--apply`. The deploy target lives in (OneDrive-synced) Documents and may have been deployed from another machine or an older checkout; a large dry-run delta or `deleting` lines for files the repo dropped long ago means you'd be overwriting state you haven't looked at.
 
 ## 10. Verify in-game
 

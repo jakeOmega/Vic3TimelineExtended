@@ -825,9 +825,10 @@ Engine shutdown trace fired when the user exits the game via the in-game menu. N
 
 ```
 Transition Game->Empty took:
+Transition Empty->Game took:
 ```
 
-Engine shutdown trace logging how long the game→empty-state transition took. Not an error.
+Engine trace logging how long the game↔empty-state transition took (shutdown and load). Not an error; a very long Empty→Game time just reflects a slow load (first launch after a patch or a large deploy).
 
 ### `pdx_assert.cpp:637` — "Trying to reposition an invalid formation"
 - source: `pdx_assert.cpp:637`
@@ -1035,6 +1036,59 @@ Identity 'identity_diplomatic' is not default for any
 ```
 
 Vanilla's power-bloc statue content declares default heroes/pedestals per identity but has no default for the vanilla `identity_diplomatic`. The mod defines no statue heroes or pedestals, so this is a vanilla content gap. Cosmetic — the statue falls back to a generic piece.
+
+### `savegamehelper.cpp:183` — save browser scanning uncompressed saves
+- source: `savegamehelper.cpp:183`
+
+```
+is missing valid file magix, defaulting to TEXT
+```
+
+Logged once per `.v3` in `save games/` while the load-game browser scans the folder (observed for plain-text/debug saves). The engine reads them as text. Not an error.
+
+### `pdx_account.cpp:461` — Paradox account online-service status lines
+- source: `pdx_account.cpp:461`
+- source: `pdx_account.cpp:1076`
+- source: `pdx_social_profile.cpp:90`
+- source: `pdx_social_profile.cpp:129`
+- source: `pdx_legal_documents.cpp:110`
+
+```
+Login succeeded
+GetAccountInfo succeeded
+Getting social profile
+legal docs to download
+```
+
+Launcher/account handshake status on startup. Informational only.
+
+### `portraitmanager.cpp:1056` — portrait palette init trace
+- source: `portraitmanager.cpp:1056`
+
+```
+Initializing portrait color palettes
+```
+
+Startup trace. Not an error.
+
+### `gui_search_bar.cpp:78` — vanilla search bar without a named edit box
+- source: `gui_search_bar.cpp:78`
+
+```
+Search bar could not find edit box
+```
+
+Fires from a vanilla panel's `search_bar` widget (1.14.2). Verified 2026-09-13 that every `search_bar` block in the mod's overrides (`building_browser_panel`, `market_panel`, `power_bloc_panel`) is identical to vanilla 1.14.2, so it is not mod-caused. Search still works.
+
+### `lexer.cpp:285` — engine user-data custom files without BOM
+- source: `lexer.cpp:285`
+
+```
+File 'messagetypes_custom.txt' should be in utf8-bom
+File 'alerttypes_custom.txt' should be in utf8-bom
+```
+
+These files exist in neither the mod, vanilla, nor the Workshop folder — they are the engine's per-user message/alert settings. The signatures name the two files exactly so BOM warnings for mod `.txt` files still surface.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 

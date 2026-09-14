@@ -8,7 +8,7 @@ When several scripted effects, triggers, or script values are structurally ident
 
 ### Repo examples
 
-- `covert_op_track_targets` in `common/scripted_effects/covert_warfare_effects.txt` uses `$TYPE$`, `$ACTION$`, and `$DEFENSE_MOD$`.
+- `covert_op_sync` in `common/scripted_effects/covert_warfare_effects.txt` uses `$TYPE$`, `$ACTION$`, and `$DEFENSE_MOD$`.
 - `st_res_rebuild_good_flow_modifiers_effect` in `common/scripted_effects/st_res_effects.txt` uses `$GOOD$` behind explicit grain/ammunition/oil wrapper effects while keeping the hub scope bridge in the outer orchestrator.
 - `covert_ops_type_below_cap` in `common/scripted_triggers/covert_warfare_triggers.txt` uses `$TYPE$`.
 - `ch_apply_primary_or_fallback_movement_pressure` in `common/scripted_effects/cultural_hegemony_effects.txt` uses `$PRIMARY$`, `$FALLBACK_1$`, `$FALLBACK_2$`, `$MODIFIER$`, and related parameters.
@@ -190,7 +190,7 @@ Known invalid names:
 - `country_construction_mult` — does NOT exist (despite `country_construction_add` existing). Construction *throughput* lives on the goods-output axis: use **`goods_output_construction_mult`** to scale construction proportionally. The `_add`/`_mult` asymmetry is real — country-level construction sectors can be added as a flat count, but multiplying them must go through the construction-good output. Same shape applies to other modifier families where the country-level resource is also a good (services, etc.) — check both axes when an obvious `country_<X>_mult` doesn't validate.
 - `is_owned_by_company` — does NOT exist as a trigger. Use `exists = owning_company` (building scope).
 - `company` — does NOT exist as a trigger to match a specific company. Use `owning_company = <company_scope>`.
-- `country_war_support_mult` — does NOT exist. The country-wide war-support pool isn't a directly-modifiable axis. Use `country_war_exhaustion_casualties_mult` (vanilla, scales casualty-driven exhaustion — negative values reduce wartime drain) or `state_war_support_monthly_add` (mod-added, direct per-state gain). See `docs/vanilla/vanilla_war_reference.md` § 13 for the full war-support exhaustion table and the lobby-clout lever.
+- `country_war_support_mult` — does NOT exist. The country-wide war-support pool isn't a directly-modifiable axis. Use `country_war_support_casualties_mult` / `country_war_support_battles_{increase,decrease}_mult` (vanilla 1.14; the casualties one replaced `country_war_exhaustion_casualties_mult` with the same sign — negative values shrink wartime drain), `add_war_support_change` (effect, per war) or `state_war_support_monthly_add` (mod-added, direct per-state gain). See `docs/vanilla/vanilla_war_reference.md` § 13 for the 1.14 war support change sources and the lobby-clout lever.
 - `political_movement_support_mult` — does NOT exist. The real name is `political_movement_pop_attraction_mult`. Used to shrink/grow movement reach into pops.
 - `political_movement_radicalism_mult` — does NOT exist. Activism is additive, not multiplicative; use `political_movement_radicalism_add` (negative values cool a movement's activism, positive values heat it). Vanilla precedent: ww_war_propaganda_modifier uses −0.30; civil_rights_martyrdom_modifier uses +0.25.
 
@@ -237,6 +237,11 @@ If you reference a dynamic modifier (e.g. `building_robotics_industry_throughput
 | `ship_battle_against_ship_type_{ship}_{accuracy\|hull_damage}_{add\|mult}` | `ship_battle_against_ship_type_nuclear_submarine_accuracy_mult` | country (applied to ships) | Combat-axis bonus when attacking a specific ship type. **Partial vanilla coverage:** vanilla only registers the axis combos it uses — e.g. `submarine`/`torpedo_boat`/`destroyer` get `_accuracy_*` but NOT `_hull_damage_mult`; `dreadnought`/`super_dreadnought`/`modern_ironclad`/`pre_dreadnought` get `_hull_damage_mult` but NOT `_accuracy_mult`. Always cross-check against `/mnt/c/Program Files (x86)/Steam/.../game/common/modifier_type_definitions/00_modifier_types.txt`; register any missing combo in the mod even when targeting a vanilla ship type. |
 | `country_ship_type_{ship}_construction_efficiency_add` | `country_ship_type_destroyer_construction_efficiency_add` | country (applied to ship construction) | Reduces shipyard build time for a specific ship type. **Partial vanilla coverage:** vanilla registers it only for `troop_ship`/`protected_cruiser`/`armored_cruiser`/`light_cruiser`. `destroyer` and most modern types are NOT pre-registered; mod must register them in `mod_entity_modifier_types.txt` even though they target vanilla ship types. |
 | `goods_input_{good}_add` / `goods_output_{good}_add` | `goods_input_motor_ships_add` | building (in PM) | Flat input/output amount for a modded good. **Mod-defined goods need BOTH `_input_*_add` and `_output_*_add` registered explicitly** — vanilla auto-generates these only for vanilla goods. The `_mult` variants follow the same rule, and **vanilla coverage is partial even for vanilla goods**: e.g. `goods_output_aeroplanes_mult` is registered but `goods_input_aeroplanes_mult` is NOT (vanilla never consumes aeroplanes via a mult source); `grain` lacks both mult axes. Always cross-check `/mnt/c/Program Files (x86)/Steam/.../game/common/modifier_type_definitions/01_building_modifier_types.txt` before applying a mult-axis flow modifier to a vanilla good. Symptom of missing registration: `Unknown modifier type` in debug.log and the modifier silently no-ops. |
+
+| `state_{religion}_standard_of_living_add` | `state_custom_religion_christian_standard_of_living_add` | state | Per-religion SoL (the engine's `<religion>_standard_of_living_modifier_{positive,negative}` wrappers). **Code-generated only for vanilla religions** — they appear in vanilla's `modifiers.log` but in no `modifier_type_definitions` file, so grepping vanilla definitions finds nothing and a mod religion looks "just like vanilla". Mod religions must register them (`mod_entity_modifier_types.txt` § Religions); otherwise debug.log shows `Unknown modifier type ... potential dynamic modifier type definition missing` and the wrapper no-ops. |
+| `power_bloc_invite_acceptance_{rank}_add` | `power_bloc_invite_acceptance_minor_power_add` | power bloc | Rank-affinity invite acceptance. **Only 5 of 8 ranks are registered** (great/major/minor/unrecognized_major/unrecognized_regional). The `insignificant_power`, `decentralized_power`, `unrecognized_power` variants are listed in `modifiers.log` but unregistered, and vanilla's `28_invite_to_power_bloc.txt` only applies rank affinity to ranks above `insignificant_power` — registering them would still do nothing without replacing that diplomatic action. |
+
+**`modifiers.log` listing ≠ script-usable.** The script_docs dump includes code-generated per-entity modifier types. A name being in the dump (or in `/validate/engine-coverage`'s known set) does not guarantee the parser accepts it in a mod file; debug.log's `Unknown modifier type` at game load is the ground truth.
 
 ### Goods I/O modifiers: PM-applied vs runtime-applied (the `_add` trap)
 
@@ -635,7 +640,7 @@ Common undocumented-but-real triggers worth knowing: `has_treaty_defensive_pact_
   - `.GetLaw.GetName` — law stored in variable (PROVEN in vanilla)
   - `.GetBuildingType.GetName` — building type in variable (PROVEN in vanilla)
   - `.GetValue|0` — numeric value (PROVEN in vanilla)
-  - `.GetCountry.GetName` — **UNVERIFIED; did not work in testing.** Use the capital workaround below.
+  - `.GetCountry.GetName` — **UNVERIFIED in this mod; did not work in testing.** Vanilla 1.14 does use `[ROOT.Var('current_expedition_location_var').GetCountry.GetName]` (`ep2_04_l_english.yml`) with a country stored via `prev`, so it may work — but until verified in-game here, use the capital workaround below (covert operation containers do: `iw_target_capital`).
 - **`.GetName` directly on `Var()` does NOT work** — you must chain the type accessor first (e.g., `.GetState.GetName`, not just `.GetName`).
 - **Error symptom:** `Could not find data system function 'GetName' in '....MakeScope.Var('my_var').GetName'` — means you forgot the type accessor (`.GetCountry`, `.GetState`, etc.).
 
@@ -1215,52 +1220,34 @@ For events that don't know which milestone they're associated with (generic fail
 - Per-JE boolean flags (`sr_failed_<m>`): Set in pulse, checked by effects in events
 - Multi-milestone events: Expand single `change_variable` into per-JE `if` blocks checking `has_variable = sr_active_<m>`
 
-## Idempotent Slot-State Sync: All Parallel Vars in One Pass
+## Per-Entity State: Script Containers, Not Slot-Numbered Variables (1.13.10+)
 
-If a system stores per-slot state across **parallel variable families** — e.g. `iw_target_<TYPE>_1/2/3` + `iw_duration_<TYPE>_1/2/3` + `iw_detect_<TYPE>_1/2/3` — the helper that rewrites slot assignments must rewrite **all** correlated families in a single call, or split paths will silently desync.
-
-Symptom: state stays correct so long as updates only happen on the monthly pulse (which conventionally runs a "remap durations by target identity" + "rewrite slot vars" pair). But every cancel / break / start / button path that touches slots OUTSIDE that pulse — `manual_break_effect`, `auto_break_effect`, detection-event `after`, `accept_effect`, funding-toggle buttons — runs the slot-rewrite alone and leaves the duration vars pointing at the previous occupant of each slot index. A player who cancels Country A's op and immediately starts on Country B sees B inherit A's months and detonate Phase 3 effects on month 1.
-
-Fix: fold the "duration carry-over by target identity" logic INTO the slot-rewrite helper, so calling it any number of times keeps every family consistent. Then the monthly pulse only needs a pure age-by-1 helper. Concretely (from `common/scripted_effects/covert_warfare_effects.txt`):
+When a system tracks several instances of something the engine has no object for (running covert operations, expeditions, contracts), give each instance its own **script container** instead of numbered parallel variables (`x_target_1/2/3` + `x_duration_1/2/3` + …). Slot storage caps the instance count, triplicates every branch, and needs identity-matching carry-over whenever slots shift; the covert warfare system had exactly that until #274 (a 4th same-type op was silently dropped, #235). Reference: `<vic3_modding_digests_path>/1.13.10/script_containers.md`. Worked example: `common/scripted_effects/covert_warfare_effects.txt`.
 
 ```paradox
-covert_op_track_targets = {
-    # Save (target, duration) pairs before clearing.
-    if = { limit = { has_variable = iw_target_$TYPE$_1 }
-        set_variable = { name = iw_old_t_1 value = var:iw_target_$TYPE$_1 }
-        if = { limit = { has_variable = iw_duration_$TYPE$_1 }
-            set_variable = { name = iw_old_d_1 value = var:iw_duration_$TYPE$_1 } }
-        else = { set_variable = { name = iw_old_d_1 value = 0 } }
-    }
-    # ...slots 2, 3...
-
-    # Clear ALL families (target, detect, IC, TD, duration).
-    remove_variable = iw_target_$TYPE$_1   # + every other family at every slot index
-    # ...
-
-    # Reassign slots by iterating current pacts; for each slot fill,
-    # match by target identity against any old slot and carry duration.
-    every_scope_diplomatic_pact = { ...
-        if = { limit = { var:iw_slot_counter = 1 }
-            set_variable = { name = iw_target_$TYPE$_1 value = PREV }
-            # ...detect / IC / TD...
-            if      = { limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_1 } }
-            else_if = { limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_2 } }
-            else_if = { limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV } set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_3 } }
-            # else: new entry — the start path (e.g. covert_op_register_new_target) sets duration = 0.
-        }
-        # ...slots 2, 3...
+create_container = {
+    tags = { iw_op iw_op_$TYPE$ }         # tag every container with a mod prefix
+    parent = scope:iw_operator            # culled (lazily, ≤1 tick) if the owner stops existing
+    on_created = {                        # scope here = the new container
+        set_variable = { name = iw_target value = scope:target_country }  # pass scope: refs, not PREV
+        save_scope_as = iw_new_op         # resolves after create_container returns
     }
 }
+add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 ```
 
-Three properties to enforce:
+Rules that bite:
 
-1. **All families are wiped and re-emitted in the same helper.** Don't leave any family to "the monthly pulse will fix it next tick" — state can be read between pulses (player UI, detection rolls, displayed slot phases).
-2. **Carry-over matches by stable target identity**, not slot index, since iteration order can shift on cancel. Capital state IDs are stable; pact iteration order is per-tick.
-3. **The "start" path explicitly sets duration = 0 for new entries.** The new pact doesn't exist when `accept_effect` fires, so the track-targets helper can't see it; the register helper must initialise the slot's duration so the next pulse's age helper increments it to 1 (matching prior convention).
+1. **Keep your own reference list and iterate it.** `every_container = { parent = X }` still scans every container in the game; the parent has no child list.
+2. **`remove_list_variable` before `destroy_container`**, so the list never holds a dead reference.
+3. **Don't edit a variable list while iterating it.** Collect doomed entries with `add_to_temporary_list` (name it per `$TYPE$` if the helper runs several times in one effect — temporary lists live for the whole top-level effect), then walk `every_in_list = { list = … }` to remove and destroy.
+4. **Guard list iteration with `has_variable_list`** (vanilla's pattern) when the list may never have been created.
+5. **Reconcile against the real source of truth.** If instances mirror something the engine owns (diplomatic pacts here), hooks alone miss paths — target annexed, pact removed by script, pre-refactor saves. Mark containers backed by a live pact, create missing ones, destroy the unmarked, once per pulse. Note that in a diplomatic action's `accept_effect` the pact does not exist yet, so create directly there rather than reconciling.
+6. **Container trigger tooltips are debug-only.** Wrap player-facing gates in `custom_tooltip`, and container effects in `accept_effect` (with `show_effect_in_tooltip = yes`) in `hidden_effect`.
+7. **Display needs a GUI widget, not `status_desc`.** Loc can't loop. A JE `widget = { gui = … container = "custom_widget_container_2" }` with `datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_ops')]"` and `datacontext = "[Scope.GetScriptContainer]"` per item exposes `ScriptContainer.HasTag(…)` / `GetVariableValue(…)` (vanilla precedent for list widgets: `gui/journal_entry_widgets/ep2_japan_widgets.gui`).
+8. **Dropping legacy slot variables:** a `remove_variable` sweep for names the live code no longer sets logs "used but never set" on every load (see below). If nothing reads the old variables, leave them inert in old saves.
 
-Rule of thumb: if you have N parallel variable families indexed by slot, the slot-rewrite helper either touches **all N families together** (idempotent) or **none of them** — never a strict subset. Anything in between is silent desync waiting on a player cancel.
+If you do keep parallel variable families for some reason, the helper that rewrites them must rewrite **all** families in one idempotent call — never a subset — or cancel/break/start paths outside the monthly pulse will desync them (the old covert bug: a new op inheriting a cancelled op's months).
 
 ## Event Architecture
 
@@ -1969,7 +1956,7 @@ The `events` and `on_actions` lists are **additive** and safe to extend; `effect
 
 ## Comparing State References Across Scopes
 
-When comparing stored state references (e.g. `iw_target_election_interference_<slot>` stores a capital state) against another entity's capital:
+When comparing a stored state reference (e.g. a variable holding a capital state) against another entity's capital:
 1. Save the reference state as a scope: `capital = { save_scope_as = my_capital }`
 2. Inside nested scopes, compare using `scope:my_capital = { this = PREV.var:stored_state_var }`
 3. Be careful with PREV chains — `PREV` inside a `scope:X = { }` trigger block refers to the scope **before entering** the block, not the pact scope.

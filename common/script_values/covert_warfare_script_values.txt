@@ -232,7 +232,7 @@ covert_operation_detection_chance = {
 
 # Target counterintelligence: penalty based on target's total defense vs yours.
 # Total defense = target IC + target type-specific defense modifier.
-# var:target_max_ic and var:target_type_defense are set per-slot by covert_op_track_targets.
+# var:target_max_ic and var:target_type_defense are staged per operation by covert_op_refresh_detection.
 target_counterintelligence_penalty = {
 	value = 0
 	if = {

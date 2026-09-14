@@ -1377,6 +1377,7 @@ types building_panels
 					}
 					blockoverride "right" {
 						textbox = {
+							tooltip = "FILLED_SHIP_ASSIGNMENTS_TOOLTIP"
 							text = "FILLED_SHIP_ASSIGNMENTS"
 							autoresize = yes
 							multiline = yes
@@ -4592,14 +4593,17 @@ types building_panels
 			color = "[Select_CVector4f( BuildingOwnership.GetOwnedBuilding.IsValid, BuildingOwnership.GetOwnedBuilding.GetState.GetOwner.GetMapColor, Building.GetOwner.GetMapColor )]"
 		}
 
+		blockoverride "barchart_item_margins" {
+			margin = { 0 0 }
+		}
+
 		blockoverride "barchart_item_icon_properties" {
+			visible = "[BuildingOwnership.GetOwnedBuilding.IsValid]"
+			texture = "[BuildingOwnership.GetOwnedBuilding.GetIcon]"
+
 			block "barchart_item_icon_size" {
 				size = { 30 30 }
 			}
-
-			visible = "[BuildingOwnership.GetOwnedBuilding.IsValid]"
-
-			texture = "[BuildingOwnership.GetOwnedBuilding.GetIcon]"
 
 			textbox = {
 				autoresize = yes
@@ -4607,7 +4611,7 @@ types building_panels
 				using = fontsize_small
 				margin_left = 2
 				margin_top = 1
-				align = left|nobaseline
+				align = nobaseline
 			}
 		}
 	}
@@ -4624,23 +4628,13 @@ types building_panels
 
 		blockoverride "barchart_plus_others_info" {
 			visible = "[DataModelHasItems( Building.GetCappedOwnersLongRest )]"
-			raw_text = "[GetDataModelSize( Building.GetCappedOwnersLongRest )|=]"
 			autoresize = yes
-
 			tooltip = "OWNERSHIP_SHARE_CHART_REMAINDER_TOOLTIP_LONG"
+			raw_text = "[GetDataModelSize( Building.GetCappedOwnersLongRest )|=]"
 		}
 
 		blockoverride "barchart_item_margins" {
 			margin = { 0 0 }
-		}
-
-		blockoverride "barchart_item_background" {
-			background = {
-				texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
-				color = "[BuildingOwnership.GetOwnershipTypeColor]"
-				spriteType = Corneredstretched
-				spriteborder = { 3 3 }
-			}
 		}
 	}
 
@@ -4657,10 +4651,9 @@ types building_panels
 
 		blockoverride "barchart_plus_others_info" {
 			visible = "[DataModelHasItems( Building.GetCappedOwnersShortRest )]"
-			raw_text = "[GetDataModelSize( Building.GetCappedOwnersShortRest )|=]"
 			autoresize = yes
-
 			tooltip = "OWNERSHIP_SHARE_CHART_REMAINDER_TOOLTIP_SHORT"
+			raw_text = "[GetDataModelSize( Building.GetCappedOwnersShortRest )|=]"
 		}
 
 		blockoverride "building_owner_icon_size" {
@@ -4669,15 +4662,6 @@ types building_panels
 
 		blockoverride "barchart_item_margins" {
 			margin = { 0 0 }
-		}
-
-		blockoverride "barchart_item_background" {
-			background = {
-				texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
-				color = "[BuildingOwnership.GetOwnershipTypeColor]"
-				spriteType = Corneredstretched
-				spriteborder = { 3 3 }
-			}
 		}
 	}
 
@@ -4699,6 +4683,16 @@ types building_panels
 		blockoverride "barchart_item_icon" {
 			building_owner_icon = {
 				block "building_owner_icon_size" {}
+			}
+		}
+
+		blockoverride "barchart_item_background" {
+			background = {
+				texture = "gfx/interface/tooltip/stacked_barchart_small_item.dds"
+				color = "[BuildingOwnership.GetOwnershipTypeColor]"
+				spriteborder = { 3 3 }
+				using = simple_frame_mask
+				using = progressbar_texture_properties
 			}
 		}
 	}

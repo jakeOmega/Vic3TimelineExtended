@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log @ 2026-07-03T21:30:36+00:00; effects.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log @ 2026-09-13T19:29:55+00:00; effects.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 1808 trigger entries and 3139 effect entries.*
-*96 iterator families, 895 standalone triggers, 380 standalone effects.*
+*Auto-generated from 1828 trigger entries and 3152 effect entries.*
+*97 iterator families, 914 standalone triggers, 390 standalone effects.*
 
 ## Reading Guide
 
@@ -80,17 +80,19 @@
 - `any/every/ordered/random_subject_or_below` → country — Any country below current in hierarchy
 - `any/every/ordered/random_valid_mass_migration_culture` → culture — Lists for cultures in the scoped country that are valid for mass migration
 
-### Triggers (321)
+### Triggers (328)
 
-- `additional_war_exhaustion` — Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play
+- `additional_war_support_change` — Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 - `aggressive_diplomatic_plays_permitted` — True if country is independent or permitted to start their own Diplomatic Plays
 - `approaching_bureaucracy_shortage` — Check if Institutions in the country will incur a Bureaucracy shortage eventually
 - `arable_land_country` — Compare arable land in *all* states
 - `army_mobilization_option_fraction` — Checks that a countries army has a certain percentage of units with a specific monbilization option scope:country
 - `army_power_projection` — Compare to a country's total army power projection  scope:example_country
+- `attitude_towards_overlord` — Checks a subject's AI attitude toward its overlord
 - `authority` — Compares the available authority of the scoped country
 - `authority_usage` — Compares the consumed authority of the scoped country
 - `average_country_infrastructure` — Check average infrastructure in all states owned by scope country
+- `average_devastation` — Compares the population-weighted average devastation of a country's states (0-1)
 - `average_incorporated_country_infrastructure` — Check average infrastructure in incorporated states owned by the scope country
 - `average_sol_for_culture` — Compares the average standard of living for the target culture in the country
 - `average_sol_for_primary_cultures` — Compare average standard of living for primary cultures
@@ -161,8 +163,8 @@
 - `enactment_chance_without_enactment_modifier` — Compares the current enactment success chance in scope country but excludes values from enactment modifier
 - `enactment_phase` — Compares the current law enactment phase in scope country.
 - `enactment_setback_count` — Compares the current enactment setback count in scope country.
-- `enemy_contested_wargoals` — Determines the fraction of war goals that enemies in the war are currently contesting
 - `enemy_occupation` — Determines the (weighted) enemy occupation score of a country
+- `enemy_side_occupation` — Average weighted occupation of the countries on the enemy side of the scoped war, from the scoped country's perspective (0-1)
 - `expanding_institution` — Checks if the institution is expanding
 - `fixed_expenses` — Does the country have this amount of weekly fixed expenses
 - `fixed_income` — Does the country have this amount of weekly fixed income
@@ -236,10 +238,12 @@
 - `has_strategy` — Checks if country in scope has a particular AI strategy
 - `has_subject_relation_with` — Checks if country in scope is subject or overlord of event target → country
 - `has_sufficient_construction_capacity_for_investment` — Check if country has enough construction capacity to be spending all of its incoming investment pool funds.
+- `has_sufficient_sailors` — Check if the Naval Administrations can deliver enough sailors for every ship the country already has
 - `has_technology_progress` — Does the country have the required progress for an technology Where X is an technology and Y is a fixed point
 - `has_technology_researched` — True if a country has researched an technology
 - `has_treaty_port_in_market` — Checks if the scoped country has a treaty port in target market c:POR → market
 - `has_truce_with` — Check if a country has a truce with a different target country → country
+- `has_unreachable_ship_construction_fleet` — Checks if a country is building a ship with a target fleet it will not be able to reach once built
 - `has_war_with` — Checks if country in scope is at war with event target → country
 - `has_wasted_construction` — Check if country is wasting any of its produced construction.
 - `highest_overlapping_interest_tier` — Compares the highest interest tier rank (scope country) among strategic regions where both countries have an interest.
@@ -374,6 +378,7 @@
 - `should_set_wargoal`
 - `shrinking_institution` — Checks if the institution is shrinking expanding_institution
 - `size_weighted_lost_battles_fraction` — Determines the fraction of battles the target country has lost in the target war, weighted by manpower size of all battles in the war
+- `size_weighted_won_battles_fraction` — Determines the fraction of battles the target country has won in the target war, weighted by manpower size of all battles in the war
 - `sol_ranking` — Compares a Country's Standard of Living Ranking (position)
 - `stall_chance` — Compares the current enactment stall chance in scope country (including values from enactment modifier)
 - `stall_chance_for_law` — Compares the enactment stall chance in scope country for given law (including values from enactment modifier)
@@ -400,11 +405,13 @@
 - `transfer_money_net_income` — Does the country have this amount of net income (income after expenses) from money transfer treaties
 - `war_participant_has_war_goal_of_type_against` — Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 - `war_side_has_war_goal_of_type_against` — Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
+- `war_support_from_war_goals` — Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier
 - `was_formed_from` — Check if a formed country previously had a specific definition
 - `wealth_share` — Checks the wealth political strength share of a pop type, religion or culture in a country or state. (scopes: country, state)
+- `weeks_until_bankruptcy` — Compares how many weeks the country can sustain its current deficit before its debt reaches its credit limit
 - `would_accept_diplomatic_action` — Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score, to allow for checking if they would accept with a...
 
-### Effects (117)
+### Effects (118)
 
 - `activate_law` — Activates a law for a country → law_type
 - `activate_production_method` — Activates the named production method for buildings of a certain type in country/state (scopes: country, state)
@@ -488,6 +495,7 @@
 - `remove_monopoly` — removes a monopoly in a country scope for a specific building: → building_type
 - `remove_primary_culture` — Removes a culture from the primary cultures of a country Where X is a culture scope → culture
 - `remove_taxed_goods` — Removes consumption taxes on a good from a country → goods
+- `renege_treaty_ports_with` — Void all treaty-port treaties scoped country hosts for the target foreign power, returning the ports to the host → country
 - `seize_investment_pool` — Seize investment pool for the treasury and transfer all private construction queue elements to the government
 - `set_capital` — Set capital state in a country scope Where X is a state region
 - `set_country_type` — Sets the type of country for a country, for history
@@ -1128,11 +1136,14 @@
 - `any/every/ordered/random_scope_front` → front — Iterate through all Fronts related to the scoped War
 - `any/every/ordered/random_war_participant` → country — Iterate through all participants in a war
 
-### Triggers (15)
+### Triggers (21)
 
-- `has_war_exhaustion` — Checks the war exhaustion of the target country in the scoped war
+- `has_stalled_wargoal_against` — Checks if any enemy war goal in the scoped war targets the specified country without being contested or advanced on → country
+- `has_stalled_wargoal_held_by` — Checks if the specified country holds a war goal in the scoped war that is neither being contested nor advanced on → country
 - `has_war_goal` — Checks if war has a certain war goal type
 - `has_war_support` — Checks the war support of the target country in the scoped war
+- `has_war_support_change` — Checks the war support change of the target country in the scoped war
+- `is_at_war_with_rival` — Checks if the specified country is at war against a declared rival in the scoped war → country
 - `is_holder_of_wargoal_in_war` — Checks if the specified country is the holder of any war goal in the scoped war → country
 - `is_target_of_wargoal_in_war` — Checks if the specified country is the target of any war goal in the scoped war → country
 - `is_war_participant` — Check if the target country is participant in a war → country
@@ -1142,13 +1153,16 @@
 - `num_country_dead` — Checks the number of dead for the target country in the scoped war
 - `num_country_wounded` — Checks the number of wounded for the target country in the scoped war
 - `num_dead` — Checks the number of total dead in the scoped war
+- `num_significant_battles` — Number of ended battles in the scoped war that had power projection on both sides scope:war
 - `num_wounded` — Checks the number of total wounded in the scoped war
-- `war_exhaustion_from_acceptance_of_dead` — Determines the war exhaustion a country gets from their degree of cultural acceptance of manpower killed in the war, regardless of what side they were on
+- `war_duration_months` — Number of months the scoped war has lasted scope:war
+- `war_goal_time_ramp` — How much of their full weight war-goal-driven war support factors currently carry, from zero early in the war to one once it is old
 - `war_has_active_peace_deal` — True if the war has a proposed peace deal
+- `war_support_from_acceptance_of_dead` — Determines the war support change a country gets from their degree of cultural acceptance of manpower killed in the war, regardless of what side they were on
 
 ### Effects (3)
 
-- `add_war_exhaustion` — Adds war exhaustion to the target country in the scoped war.
+- `add_war_support_change` — Adds war support change to the target country in the scoped war.
 - `add_war_war_support` — Adds war support to the target country in the scoped war.
 - `join_war` — Makes target join a scoped war in a specific side.
 
@@ -1552,13 +1566,36 @@
 - `spawns_characters_to_pool` — Checks if the character role spawns characters to the pool
 
 ---
+## Container
+
+### Triggers (5)
+
+- `has_any_tags` — True if the script container in scope has any tags
+- `has_name` — True if the script container in scope has a name
+- `has_parent` — True if the script container in scope has a parent
+- `has_tag` — True if the script container in scope has the given tag
+- `has_tags` — True if the script container in scope has all of the given tags
+
+### Effects (8)
+
+- `add_tag` — Adds a tag to the script container in scope.
+- `clear_name` — Clears the name of the script container in scope.
+- `clear_parent` — Clears the parent of the script container in scope, making it freestanding.
+- `clear_tags` — Removes all tags from the script container in scope.
+- `destroy_container` — Destroys the script container in scope.
+- `remove_tag` — Removes a tag from the script container in scope.
+- `set_name` — Sets (or changes) the name of the script container in scope; accepts a literal or a flag reference (var:/scope:/flag:); reachable later via container:my_name.
+- `set_parent` — Sets the parent of the script container in scope; the container is destroyed when the parent becomes invalid.
+
+---
 ## None
 
-### Iterators (20)
+### Iterators (21)
 
 - `any/every/ordered/random_character` → character — Iterate through all characters globally
 - `any/every/ordered/random_character_in_exile_pool` → character — Iterate through characters in the exile pool
 - `any/every/ordered/random_character_in_void` → character — Iterate through characters in the void
+- `any/every/ordered/random_container` → container — Iterate through all script containers globally.
 - `any/every/ordered/random_country` → country — Iterate through all countries globally
 - `any/every/ordered/random_decentralized_country` → country — Iterate through all countries that are decentralized
 - `any/every/ordered/random_diplomatic_play` → diplomatic_play — Iterate through all diplomatic plays globally
@@ -1577,7 +1614,7 @@
 - `any/every/ordered/random_strategic_region` → strategic_region — Iterate through all strategic regions globally
 - `any/every/ordered/random_treaty` → treaty — Iterate through treaties (both in force and drafts)
 
-### Triggers (98)
+### Triggers (99)
 
 - `active_lens` — Checks if the specified lens is open
 - `active_lens_option` — Checks if the specified lens option is activated
@@ -1597,6 +1634,7 @@
 - `calc_true_if` — Returns true if the specified number of sub-triggers return true
 - `can_create_treaty` — Checks if a treaty between countries can be created
 - `can_start_tutorial_lesson` — Can the specified tutorial lesson be started?
+- `container_exists` — True if a named script container exists
 - `current_tooltip_depth` — Returns the number of tooltips currently open on screen
 - `custom_description` — Wraps triggers that get a custom description instead of the auto-generated one
 - `custom_tooltip` — Replaces the tooltips for the enclosed triggers with a custom text 	text
@@ -1678,7 +1716,7 @@
 - `weighted_calc_true_if` — Returns true if the sum of weights of fulfilled sub-triggers amount to the specified sum
 - `year` — Compares the current year of the game
 
-### Effects (75)
+### Effects (76)
 
 - `add_contextless_journal_entry` — Activates a contextless journal entry of the given type
 - `add_journal_entry` — Adds a journal entry to a scoped country's journal, with optional saved scope target
@@ -1706,6 +1744,7 @@
 - `clear_saved_scope` — Clears a saved scope from the top scope
 - `clear_variable_list` — Empties the list
 - `clear_variable_map` — Empties the map
+- `create_container` — Creates a script container: a standalone scope that can hold variables, lists and maps.
 - `create_country` — Creates a new country
 - `create_dynamic_country` — Creates a new country with a dynamic tag
 - `create_treaty` — Creates a treaty between countries

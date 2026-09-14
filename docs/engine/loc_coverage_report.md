@@ -20,32 +20,35 @@ entity's opening line:
 
 ## Unreviewed Flags
 
-_None._
+### Modifier Types (1)
+
+- `common/modifier_type_definitions/un_membership_modifier_types.txt:22` — `country_un_institutional_alignment` — missing: `country_un_institutional_alignment`
 
 ## Reviewed Exemptions
 
-- `common/static_modifiers/te_custom_religion_sol.txt:57` — `custom_religion_animist_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_animist_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:52` — `custom_religion_animist_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_animist_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:67` — `custom_religion_buddhist_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_buddhist_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:62` — `custom_religion_buddhist_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_buddhist_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:17` — `custom_religion_christian_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_christian_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:12` — `custom_religion_christian_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_christian_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:77` — `custom_religion_custom_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_custom_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:72` — `custom_religion_custom_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_custom_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:47` — `custom_religion_eastern_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_eastern_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:42` — `custom_religion_eastern_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_eastern_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:37` — `custom_religion_jewish_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_jewish_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:32` — `custom_religion_jewish_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_jewish_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:27` — `custom_religion_muslim_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_muslim_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
-- `common/static_modifiers/te_custom_religion_sol.txt:22` — `custom_religion_muslim_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_muslim_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:58` — `custom_religion_animist_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_animist_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:53` — `custom_religion_animist_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_animist_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:68` — `custom_religion_buddhist_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_buddhist_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:63` — `custom_religion_buddhist_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_buddhist_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:18` — `custom_religion_christian_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_christian_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:13` — `custom_religion_christian_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_christian_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:78` — `custom_religion_custom_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_custom_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:73` — `custom_religion_custom_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_custom_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:48` — `custom_religion_eastern_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_eastern_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:43` — `custom_religion_eastern_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_eastern_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:38` — `custom_religion_jewish_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_jewish_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:33` — `custom_religion_jewish_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_jewish_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:28` — `custom_religion_muslim_standard_of_living_modifier_negative` (Modifiers) — missing: `custom_religion_muslim_standard_of_living_modifier_negative` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
+- `common/static_modifiers/te_custom_religion_sol.txt:23` — `custom_religion_muslim_standard_of_living_modifier_positive` (Modifiers) — missing: `custom_religion_muslim_standard_of_living_modifier_positive` — **2026-07-03**: mirrors vanilla 08_religion_standard_of_living.txt — vanilla ships these loc-less; engine-internal SoL wrappers
 
 ## Coverage
 
 - files audited: 128
 - flags by category:
+  - Modifier Types: 1
   - Modifiers: 14
-- total flags: 14
-- unreviewed: 0
+- total flags: 15
+- unreviewed: 1
 - exempted: 14
 
 ## Scope notes

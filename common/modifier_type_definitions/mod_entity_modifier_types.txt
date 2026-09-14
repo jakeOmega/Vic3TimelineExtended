@@ -3281,6 +3281,54 @@ country_enactment_success_chance_law_ministry_of_culture_add = {
 }
 
 
+# === Religions (per-religion SoL for mod custom religions) ===
+# The engine code-generates state_<religion>_standard_of_living_add only for vanilla
+# religions (listed in vanilla modifiers.log, absent from every modifier_type_definitions
+# file). The custom religions in common/religions/custom_religion.txt need explicit
+# registration, or the wrappers in te_custom_religion_sol.txt log `Unknown modifier type`
+# and no-op. Shape mirrors vanilla state_standard_of_living_add.
+
+state_custom_religion_christian_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
+
+state_custom_religion_muslim_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
+
+state_custom_religion_jewish_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
+
+state_custom_religion_eastern_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
+
+state_custom_religion_animist_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
+
+state_custom_religion_buddhist_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
+
+state_custom_religion_custom_standard_of_living_add = {
+	decimals = 1
+	color = good
+	percent = no
+}
 # === Harvest conditions ===
 
 state_harvest_condition_financial_panic_duration_mult = {

@@ -73,6 +73,7 @@ These are written by scripts that the team runs occasionally to *bootstrap* cont
 | File | Generator | Notes |
 |---|---|---|
 | `docs/engine/effect_trigger_valid_keys.txt` | `effect_trigger_validity_audit.py bootstrap` | Re-run on a vanilla bump (see `vanilla_patch_runbook.md` § 4). Frozen union of effect/trigger summary names + every LHS keyword vanilla uses in its effect corpus. NOT regenerated per reload, and NOT meant to be hand-edited — add valid-but-vanilla-unused keys to `_CURATED_VALID` in the audit instead. |
+| `localization_accessor_vanilla_extras.py` | `scripts/generators/fold_vanilla_loc_accessors.py` | live vanilla `game/localization/english/` | Re-run on a vanilla bump (see `vanilla_patch_runbook.md` § 4). Folds every accessor the loc accessor audit flags on vanilla loc back in as value-returning; `test_vanilla_loc_has_minimal_unreviewed_flags` fails when stale. Type-changing accessors belong in `_BUILTIN_ACCESSORS_BY_TYPE` in `localization_accessor_audit.py` instead. |
 | `common/buildings/company_buildings.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | |
 | `common/production_method_groups/unique_pm_groups.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | |
 | `common/production_methods/unique_pms.txt` | `scripts/generators/gen_vanilla_company_buildings.py` | Note: was hand-edited during the 1.13 migration. If running the generator again, propagate hand edits via the script's templates first. |

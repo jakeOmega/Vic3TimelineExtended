@@ -513,6 +513,43 @@ types military_formation_change_name
 
 types military_formation_panel_types
 {
+	type military_formation_cancel_invasion_button = button {
+		using = default_button_action
+		size = { @panel_width_minus_20 50 }
+		parentanchor = hcenter
+		using = fontsize_large
+		using = default_content_fade
+
+		datacontext = "[MilitaryFormation.GetInvasion]"
+
+		onclick = "[PopupManager.AskConfirmationWithSound(Invasion.Cancel, Select_CString(Invasion.IsNavalInvasion, 'event:/SFX/UI/Military/formation_actions_naval_invasion_cancel', 'event:/SFX/UI/Military/formation_actions_land_invasion_cancel'))]"
+		enabled = "[IsValid(Invasion.Cancel)]"
+		tooltip = "CANCEL_INVASION_TOOLTIP"
+
+		block "visible" {}
+
+		flowcontainer = {
+			parentanchor = center
+			spacing = 10
+
+			icon = {
+				parentanchor = vcenter
+				texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+
+				block "icon_size" {
+					size = { 30 30 }
+				}
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = center|nobaseline
+				text = "CANCEL_INVASION"
+			}
+		}
+	}
+
 	type organization_bar = white_progressbar_vertical {
 		size = { 6 24 }
 
@@ -1522,6 +1559,20 @@ types military_formation_panel_types
 								blockoverride "formation_onclick" {
 									onclick = "[FormationPanel.SelectFormation(MilitaryFormation.Self)]"
 								}
+
+								blockoverride "extra_action" {
+									military_formation_cancel_invasion_button = {
+										size = { @panel_width_minus_20 38 }
+
+										blockoverride "visible" {
+											visible = "[And(MilitaryFormation.HasInvasion, MilitaryFormation.GetCountry.IsLocalPlayer)]"
+										}
+
+										blockoverride "icon_size" {
+											size = { 24 24 }
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1757,64 +1808,396 @@ types military_formation_panel_types
 		}
 
 		### SUPPLY RAID
-		default_header = {
+		default_header_2texts = {
 			visible = "[MilitaryFormation.IsOnRaidSupplyMission]"
 			using = default_fade_in_out
 
-			blockoverride "text" {
+			blockoverride "text1" {
 				text = "FLEET_SUPPLY_RAID_HEADER"
 			}
-		}
 
-		textbox = {
-			visible = "[And( MilitaryFormation.IsOnRaidSupplyMission, MilitaryFormation.HasSupplyRaidTargets )]"
-			parentanchor = hcenter
-			align = hcenter|nobaseline
-			autoresize = yes
-			multiline = yes
-			max_width = @panel_width_minus_10
-			using = elide_fontsize_min
-			margin = { 0 5 }
-			text = "FLEET_SUPPLY_RAID_SUMMARY"
+			blockoverride "right" {
+				flowcontainer = {
+					parentanchor = right|vcenter
+					spacing = 2
+					position = { -12 0 }
+
+					icon = {
+						size = { 24 24 }
+						texture = "gfx/interface/icons/military_icons/navy_icons/detection_navy.dds"
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						using = elide_fontsize_min
+						text = "FLEET_SUPPLY_RAID_CHANCE"
+						tooltip = "FLEET_SUPPLY_RAID_CHANCE_TOOLTIP"
+					}
+				}
+			}
 		}
 
 		empty_state = {
 			blockoverride "visible" {
-				visible = "[And( MilitaryFormation.IsOnRaidSupplyMission, Not( MilitaryFormation.HasSupplyRaidTargets ) )]"
+				visible = "[And( MilitaryFormation.IsOnRaidSupplyMission, Not( MilitaryFormation.HasRaidSupplyActivity ) )]"
 			}
 			blockoverride "text" {
 				text = "FLEET_NO_SUPPLY_RAID_TARGETS"
 			}
 		}
 
-		### PROTECT SUPPLY
-		default_header = {
-			visible = "[MilitaryFormation.IsOnProtectSupplyMission]"
-			using = default_fade_in_out
+		flowcontainer = {
+			visible = "[And( MilitaryFormation.IsOnRaidSupplyMission, MilitaryFormation.HasRaidSupplyActivity )]"
+			parentanchor = hcenter
+			direction = vertical
+			max_update_rate = 8
 
-			blockoverride "text" {
-				text = "FLEET_SUPPLY_PROTECT_HEADER"
+			flowcontainer = {
+				direction = vertical
+				spacing = 5
+				ignoreinvisible = yes
+				datamodel = "[MilitaryFormation.GetRaidSupplyRegions]"
+
+				item = {
+					flowcontainer = {
+						visible = "[Or( Not( IsDataModelEmpty( MilitaryFormation.GetRaidableFormationsInRegion( StateRegion.Self ) ) ), Not( IsDataModelEmpty( MilitaryFormation.GetSupplyProtectorsInRegion( StateRegion.Self ) ) ) )]"
+						direction = vertical
+						spacing = 2
+
+						flowcontainer = {
+							margin_left = 10
+
+							textbox = {
+								size = { 530 20 }
+								align = nobaseline
+								using = elide_fontsize_min
+								text = "NAVAL_MISSION_SEA_REGION_ENTRY"
+							}
+						}
+
+						textbox = {
+							visible = "[Not( IsDataModelEmpty( MilitaryFormation.GetRaidableFormationsInRegion( StateRegion.Self ) ) )]"
+							size = { 510 20 }
+							margin_left = 20
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "FLEET_SUPPLY_RAID_FORMATIONS_HEADER"
+						}
+
+						flowcontainer = {
+							direction = vertical
+							spacing = 2
+							datamodel = "[MilitaryFormation.GetRaidableFormationsInRegion( StateRegion.Self )]"
+
+							item = {
+								button = {
+									size = { 540 40 }
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanel(MilitaryFormation.Self)]"
+									onmousehierarchyenter = "[AccessHighlightManager.HighlightMilitaryFormation( MilitaryFormation.Self )]"
+									onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+									using = default_button
+
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {}
+									}
+
+									background = {
+										using = entry_bg_simple
+									}
+
+									hbox = {
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										margin = { 10 0 }
+										spacing = 5
+
+										tiny_flag = {
+											datacontext = "[MilitaryFormation.GetCountry]"
+										}
+
+										textbox = {
+											layoutpolicy_horizontal = expanding
+											size = { 0 20 }
+											align = nobaseline
+											using = elide_fontsize_min
+											text = "[MilitaryFormation.GetNameNoFormatting]"
+										}
+
+										expand = {}
+
+										textbox = {
+											autoresize = yes
+											align = right|nobaseline
+											using = elide_fontsize_min
+											text = "FLEET_SUPPLY_PROTECT_CONVOY_SHIPS"
+										}
+									}
+								}
+							}
+						}
+
+						textbox = {
+							visible = "[Not( IsDataModelEmpty( MilitaryFormation.GetSupplyProtectorsInRegion( StateRegion.Self ) ) )]"
+							size = { 510 20 }
+							margin_left = 20
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "FLEET_SUPPLY_RAID_PROTECTORS_HEADER"
+						}
+
+						flowcontainer = {
+							direction = vertical
+							spacing = 2
+							datamodel = "[MilitaryFormation.GetSupplyProtectorsInRegion( StateRegion.Self )]"
+
+							item = {
+								button = {
+									size = { 540 40 }
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanel(MilitaryFormation.Self)]"
+									onmousehierarchyenter = "[AccessHighlightManager.HighlightMilitaryFormation( MilitaryFormation.Self )]"
+									onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+									using = default_button
+
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {}
+									}
+
+									background = {
+										using = entry_bg_simple
+									}
+
+									hbox = {
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										margin = { 10 0 }
+										spacing = 5
+
+										tiny_flag = {
+											datacontext = "[MilitaryFormation.GetCountry]"
+										}
+
+										textbox = {
+											layoutpolicy_horizontal = expanding
+											size = { 0 20 }
+											align = nobaseline
+											using = elide_fontsize_min
+											text = "[MilitaryFormation.GetNameNoFormatting]"
+										}
+
+										expand = {}
+
+										textbox = {
+											autoresize = yes
+											align = right|nobaseline
+											using = elide_fontsize_min
+											text = "FLEET_SUPPLY_RAID_PROTECTOR_SHIPS"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
-		textbox = {
-			visible = "[And( MilitaryFormation.IsOnProtectSupplyMission, MilitaryFormation.HasOwnSupplyShipsPassingThrough )]"
-			parentanchor = hcenter
-			align = hcenter|nobaseline
-			autoresize = yes
-			multiline = yes
-			max_width = @panel_width_minus_10
-			using = elide_fontsize_min
-			margin = { 0 5 }
-			text = "FLEET_SUPPLY_PROTECT_SUMMARY"
+		### PROTECT SUPPLY
+		default_header_2texts = {
+			visible = "[MilitaryFormation.IsOnProtectSupplyMission]"
+			using = default_fade_in_out
+
+			blockoverride "text1" {
+				text = "FLEET_SUPPLY_PROTECT_HEADER"
+			}
+
+			blockoverride "right" {
+				flowcontainer = {
+					parentanchor = right|vcenter
+					spacing = 2
+					position = { -12 0 }
+
+					icon = {
+						size = { 24 24 }
+						texture = "gfx/interface/icons/generic_icons/convoys.dds"
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						max_width = @panel_width_minus_10
+						using = elide_fontsize_min
+						tooltip = "FLEET_SUPPLY_PROTECT_COUNT_TOOLTIP"
+						text = "FLEET_SUPPLY_PROTECT_COUNT"
+					}
+				}
+			}
 		}
 
 		empty_state = {
 			blockoverride "visible" {
-				visible = "[And( MilitaryFormation.IsOnProtectSupplyMission, Not( MilitaryFormation.HasOwnSupplyShipsPassingThrough ) )]"
+				visible = "[And( MilitaryFormation.IsOnProtectSupplyMission, Not( MilitaryFormation.HasProtectSupplyActivity ) )]"
 			}
 			blockoverride "text" {
 				text = "FLEET_NO_OWN_SUPPLY_SHIPS"
+			}
+		}
+
+		flowcontainer = {
+			visible = "[And( MilitaryFormation.IsOnProtectSupplyMission, MilitaryFormation.HasProtectSupplyActivity )]"
+			parentanchor = hcenter
+			direction = vertical
+			max_update_rate = 8
+
+			flowcontainer = {
+				direction = vertical
+				spacing = 5
+				ignoreinvisible = yes
+				datamodel = "[MilitaryFormation.GetProtectSupplyRegions]"
+
+				item = {
+					flowcontainer = {
+						visible = "[Or( Not( IsDataModelEmpty( MilitaryFormation.GetProtectedFormationsInRegion( StateRegion.Self ) ) ), Not( IsDataModelEmpty( MilitaryFormation.GetSupplyRaidersInRegion( StateRegion.Self ) ) ) )]"
+						direction = vertical
+						spacing = 2
+
+						flowcontainer = {
+							margin_left = 10
+
+							textbox = {
+								size = { 530 20 }
+								align = nobaseline
+								using = elide_fontsize_min
+								text = "NAVAL_MISSION_SEA_REGION_ENTRY"
+							}
+						}
+
+						textbox = {
+							visible = "[Not( IsDataModelEmpty( MilitaryFormation.GetProtectedFormationsInRegion( StateRegion.Self ) ) )]"
+							size = { 510 20 }
+							margin_left = 20
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "FLEET_SUPPLY_PROTECT_FORMATIONS_HEADER"
+						}
+
+						flowcontainer = {
+							direction = vertical
+							spacing = 2
+							datamodel = "[MilitaryFormation.GetProtectedFormationsInRegion( StateRegion.Self )]"
+
+							item = {
+								button = {
+									size = { 540 40 }
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanel(MilitaryFormation.Self)]"
+									onmousehierarchyenter = "[AccessHighlightManager.HighlightMilitaryFormation( MilitaryFormation.Self )]"
+									onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+									using = default_button
+
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {}
+									}
+
+									background = {
+										using = entry_bg_simple
+									}
+
+									hbox = {
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										margin = { 10 0 }
+										spacing = 5
+
+										tiny_flag = {
+											datacontext = "[MilitaryFormation.GetCountry]"
+										}
+
+										textbox = {
+											layoutpolicy_horizontal = expanding
+											size = { 0 20 }
+											align = nobaseline
+											using = elide_fontsize_min
+											text = "[MilitaryFormation.GetNameNoFormatting]"
+										}
+
+										expand = {}
+
+										textbox = {
+											autoresize = yes
+											align = right|nobaseline
+											using = elide_fontsize_min
+											text = "FLEET_SUPPLY_PROTECT_CONVOY_SHIPS"
+										}
+									}
+								}
+							}
+						}
+
+						textbox = {
+							visible = "[Not( IsDataModelEmpty( MilitaryFormation.GetSupplyRaidersInRegion( StateRegion.Self ) ) )]"
+							size = { 510 20 }
+							margin_left = 20
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "FLEET_SUPPLY_PROTECT_RAIDERS_HEADER"
+						}
+
+						flowcontainer = {
+							direction = vertical
+							spacing = 2
+							datamodel = "[MilitaryFormation.GetSupplyRaidersInRegion( StateRegion.Self )]"
+
+							item = {
+								button = {
+									size = { 540 40 }
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanel(MilitaryFormation.Self)]"
+									onmousehierarchyenter = "[AccessHighlightManager.HighlightMilitaryFormation( MilitaryFormation.Self )]"
+									onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+									using = default_button
+
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {}
+									}
+
+									background = {
+										using = entry_bg_simple
+									}
+
+									hbox = {
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										margin = { 10 0 }
+										spacing = 5
+
+										tiny_flag = {
+											datacontext = "[MilitaryFormation.GetCountry]"
+										}
+
+										textbox = {
+											layoutpolicy_horizontal = expanding
+											size = { 0 20 }
+											align = nobaseline
+											using = elide_fontsize_min
+											text = "[MilitaryFormation.GetNameNoFormatting]"
+										}
+
+										expand = {}
+
+										textbox = {
+											autoresize = yes
+											align = right|nobaseline
+											using = elide_fontsize_min
+											text = "FLEET_SUPPLY_PROTECT_RAIDER_POWER"
+										}
+									}
+								}
+							}
+						}
+
+					}
+				}
 			}
 		}
 
@@ -1847,6 +2230,15 @@ types military_formation_panel_types
 						using = elide_fontsize_min
 						text = "FLEET_PORT_BOMBARDMENT_DEVASTATION"
 					}
+
+					textbox = {
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						using = elide_fontsize_min
+						text = "FLEET_PORT_BOMBARDMENT_EFFICIENCY"
+						tooltip = "FLEET_PORT_BOMBARDMENT_EFFICIENCY_TOOLTIP"
+					}
 				}
 			}
 		}
@@ -1861,10 +2253,12 @@ types military_formation_panel_types
 			item = {
 				button = {
 					size = { 540 40 }
-					using = default_button
 					onclick = "[InformationPanelBar.OpenStatePanel(State.AccessSelf)]"
 					onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
-					tooltip = "TOOLTIP_STATE_DEVASTATION"
+					onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
+					onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+					using = default_button
+					tooltip = "FLEET_PORT_BOMBARDMENT_STATE_TOOLTIP"
 
 					background = {
 						using = entry_bg_simple
@@ -1889,6 +2283,12 @@ types military_formation_panel_types
 						}
 
 						expand = {}
+
+						icon = {
+							visible = "[State.HasAtRiskCoastalBuildings]"
+							size = { 24 24 }
+							texture = "gfx/interface/icons/coastal_building_icons/coastal_building_icon.dds"
+						}
 
 						icon = {
 							size = { 24 24 }
@@ -1919,6 +2319,307 @@ types military_formation_panel_types
 			}
 			blockoverride "text" {
 				text = "FLEET_NO_PORT_BOMBARDMENT_TARGETS"
+			}
+		}
+
+		### BLOCKADE
+		default_header_2texts = {
+			visible = "[MilitaryFormation.HasBlockadeMission]"
+			using = default_fade_in_out
+
+			blockoverride "text1" {
+				text = "FLEET_BLOCKADE_HEADER"
+			}
+
+			blockoverride "right" {
+				flowcontainer = {
+					parentanchor = right|vcenter
+					spacing = 2
+					position = { -12 0 }
+
+					icon = {
+						size = { 30 30 }
+						texture = "gfx/interface/icons/generic_icons/state.dds"
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						max_width = @panel_width_minus_10
+						using = elide_fontsize_min
+						tooltip = "FLEET_BLOCKADE_LEVEL_TOOLTIP"
+						text = "FLEET_BLOCKADE_LEVEL"
+					}
+				}
+			}
+		}
+
+		flowcontainer = {
+			visible = "[And( MilitaryFormation.HasBlockadeMission, Not( IsDataModelEmpty( MilitaryFormation.GetBlockadedStates ) ) )]"
+			parentanchor = hcenter
+			direction = vertical
+			spacing = 2
+			datamodel = "[MilitaryFormation.GetBlockadedStates]"
+
+			item = {
+				button = {
+					size = { 540 40 }
+					onclick = "[InformationPanelBar.OpenStatePanel(State.AccessSelf)]"
+					onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
+					onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
+					onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+					using = default_button
+					tooltip = "FLEET_BLOCKADE_STATE_TOOLTIP"
+
+					background = {
+						using = entry_bg_simple
+					}
+
+					hbox = {
+						margin = { 10 0 }
+						spacing = 5
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+
+						tiny_flag = {
+							datacontext = "[State.GetController]"
+						}
+
+						textbox = {
+							layoutpolicy_horizontal = expanding
+							size = { 0 20 }
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "[State.GetNameNoFormatting]"
+						}
+
+						expand = {}
+
+						icon = {
+							size = { 24 24 }
+							texture = "gfx/interface/icons/military_icons/navy_icons/blockade_strength_navy.dds"
+						}
+
+						textbox = {
+							autoresize = yes
+							align = right|nobaseline
+							using = elide_fontsize_min
+							raw_text = "#v [State.GetBlockadeLevel|%0]#!"
+						}
+					}
+				}
+			}
+		}
+
+		empty_state = {
+			blockoverride "visible" {
+				visible = "[And( MilitaryFormation.HasBlockadeMission, IsDataModelEmpty( MilitaryFormation.GetBlockadedStates ) )]"
+			}
+			blockoverride "text" {
+				text = "FLEET_NO_BLOCKADE_TARGETS"
+			}
+		}
+
+		### INTERCEPTION
+		default_header_2texts = {
+			visible = "[MilitaryFormation.IsOnInterceptMission]"
+			using = default_fade_in_out
+
+			blockoverride "text1" {
+				text = "FLEET_INTERCEPT_HEADER"
+			}
+
+			blockoverride "right" {
+				flowcontainer = {
+					parentanchor = right|vcenter
+					spacing = 2
+					position = { -12 0 }
+
+					icon = {
+						size = { 24 24 }
+						texture = "gfx/interface/icons/military_icons/navy_icons/detection_navy.dds"
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						using = elide_fontsize_min
+						text = "FLEET_INTERCEPT_CHANCE"
+						tooltip = "FLEET_INTERCEPT_CHANCE_TOOLTIP"
+					}
+				}
+			}
+		}
+
+		flowcontainer = {
+			visible = "[And( MilitaryFormation.IsOnInterceptMission, MilitaryFormation.HasInterceptActivity )]"
+			parentanchor = hcenter
+			direction = vertical
+			max_update_rate = 8
+
+			flowcontainer = {
+				direction = vertical
+				spacing = 5
+				ignoreinvisible = yes
+				datamodel = "[MilitaryFormation.GetInterceptRegions]"
+
+				item = {
+					flowcontainer = {
+						visible = "[Or( Not( IsDataModelEmpty( MilitaryFormation.GetInterceptTargetsInRegion( StateRegion.Self ) ) ), Not( IsDataModelEmpty( MilitaryFormation.GetInterceptBlockedFleetsInRegion( StateRegion.Self ) ) ) )]"
+						direction = vertical
+						spacing = 2
+
+						flowcontainer = {
+							margin_left = 10
+
+							textbox = {
+								size = { 530 20 }
+								align = nobaseline
+								using = elide_fontsize_min
+								text = "NAVAL_MISSION_SEA_REGION_ENTRY"
+							}
+						}
+
+						textbox = {
+							visible = "[Not( IsDataModelEmpty( MilitaryFormation.GetInterceptTargetsInRegion( StateRegion.Self ) ) )]"
+							size = { 510 20 }
+							margin_left = 20
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "FLEET_INTERCEPT_TARGETS_HEADER"
+						}
+
+						flowcontainer = {
+							direction = vertical
+							spacing = 2
+							datamodel = "[MilitaryFormation.GetInterceptTargetsInRegion( StateRegion.Self )]"
+
+							item = {
+								button = {
+									size = { 540 40 }
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanel(MilitaryFormation.Self)]"
+									onmousehierarchyenter = "[AccessHighlightManager.HighlightMilitaryFormation( MilitaryFormation.Self )]"
+									onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+									using = default_button
+
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {}
+									}
+
+									background = {
+										using = entry_bg_simple
+									}
+
+									hbox = {
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										margin = { 10 0 }
+										spacing = 5
+
+										tiny_flag = {
+											datacontext = "[MilitaryFormation.GetCountry]"
+										}
+
+										textbox = {
+											layoutpolicy_horizontal = expanding
+											size = { 0 20 }
+											align = nobaseline
+											using = elide_fontsize_min
+											text = "[MilitaryFormation.GetNameNoFormatting]"
+										}
+
+										expand = {}
+
+										icon = {
+											size = { 24 24 }
+											texture = "gfx/interface/icons/military_icons/navy_icons/visibility.dds"
+										}
+
+										textbox = {
+											autoresize = yes
+											align = right|nobaseline
+											using = elide_fontsize_min
+											text = "FLEET_INTERCEPT_TARGET_VISIBILITY"
+										}
+									}
+								}
+							}
+						}
+
+						textbox = {
+							visible = "[Not( IsDataModelEmpty( MilitaryFormation.GetInterceptBlockedFleetsInRegion( StateRegion.Self ) ) )]"
+							size = { 510 20 }
+							margin_left = 20
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "FLEET_INTERCEPT_BLOCKED_HEADER"
+						}
+
+						flowcontainer = {
+							direction = vertical
+							spacing = 2
+							datamodel = "[MilitaryFormation.GetInterceptBlockedFleetsInRegion( StateRegion.Self )]"
+
+							item = {
+								button = {
+									size = { 540 40 }
+									onclick = "[InformationPanelBar.OpenMilitaryFormationPanel(MilitaryFormation.Self)]"
+									onmousehierarchyenter = "[AccessHighlightManager.HighlightMilitaryFormation( MilitaryFormation.Self )]"
+									onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+									using = default_button
+
+									tooltipwidget = {
+										FancyTooltip_MilitaryFormation = {}
+									}
+
+									background = {
+										using = entry_bg_simple
+									}
+
+									hbox = {
+										layoutpolicy_horizontal = expanding
+										layoutpolicy_vertical = expanding
+										margin = { 10 0 }
+										spacing = 5
+
+										tiny_flag = {
+											datacontext = "[MilitaryFormation.GetCountry]"
+										}
+
+										textbox = {
+											layoutpolicy_horizontal = expanding
+											size = { 0 20 }
+											align = nobaseline
+											using = elide_fontsize_min
+											text = "[MilitaryFormation.GetNameNoFormatting]"
+										}
+
+										expand = {}
+
+										textbox = {
+											autoresize = yes
+											align = right|nobaseline
+											using = elide_fontsize_min
+											text = "FLEET_INTERCEPT_BLOCKED_ENTRY"
+										}
+									}
+								}
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+		empty_state = {
+			blockoverride "visible" {
+				visible = "[And( MilitaryFormation.IsOnInterceptMission, Not( MilitaryFormation.HasInterceptActivity ) )]"
+			}
+			blockoverride "text" {
+				text = "FLEET_NO_INTERCEPT_TARGETS"
 			}
 		}
 
@@ -5529,6 +6230,7 @@ types military_formation_panel_types
 			direction = vertical
 			parentanchor = vcenter
 			spacing = 5
+			max_update_rate = 8
 
 			flowcontainer = {
 				parentanchor = hcenter
@@ -5701,6 +6403,8 @@ types military_formation_panel_types
 	}
 
 	type military_formation_icon_and_bars = widget {
+		max_update_rate = 8
+
 		block "military_formation_icon_and_bars_size" {
 			size = { 220 80 }
 		}
@@ -5795,7 +6499,7 @@ types military_formation_panel_types
 					}
 
 					block "second_bar_text" {
-						raw_text = "@crew! #b [MilitaryFormation.GetShipList.GetCrew|D]#! / [ShipList.GetCrewMax|D]"
+						text = "MILITARY_FORMATION_CREW_BAR_VALUE"
 					}
 				}
 
@@ -6193,6 +6897,12 @@ types military_formation_panel_types
 			}
 		}
 
+		military_formation_cancel_invasion_button = {
+			blockoverride "visible" {
+				visible = "[And3(MilitaryFormation.IsArmy, MilitaryFormation.HasInvasion, MilitaryFormation.GetCountry.IsLocalPlayer)]"
+			}
+		}
+
 		flowcontainer = {
 			visible = "[And(MilitaryFormation.IsFleet, MilitaryFormation.GetCountry.IsLocalPlayer)]"
 			spacing = 2
@@ -6268,6 +6978,12 @@ types military_formation_panel_types
 				blockoverride "icon" {
 					texture = "gfx/interface/icons/commander_order_icons/move.dds"
 				}
+			}
+		}
+
+		military_formation_cancel_invasion_button = {
+			blockoverride "visible" {
+				visible = "[And3(MilitaryFormation.IsFleet, MilitaryFormation.HasInvasion, MilitaryFormation.GetCountry.IsLocalPlayer)]"
 			}
 		}
 
@@ -7181,7 +7897,7 @@ types formation_header {
 			align = hcenter|nobaseline
 			using = elide_fontsize_min
 			autoresize = yes
-			
+
 			block "text_default_format" {
 				default_format = "#v"
 			}

@@ -2484,7 +2484,7 @@ veteran_advisory_modifier = {
 
 discredit_pacifists_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_war_exhaustion_casualties_mult = -0.05
+	country_war_support_casualties_mult = -0.05
 	state_turmoil_effects_mult = 0.05
 }
 
@@ -2765,7 +2765,7 @@ war_crime_reform_modifier = {
 
 enemy_war_crime_rage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
-	country_war_exhaustion_casualties_mult = -0.1
+	country_war_support_casualties_mult = -0.1
 	unit_morale_loss_mult = -0.1
 	country_sol_expectations_shift_add = 0.03
 }
@@ -3616,7 +3616,7 @@ un_icc_member_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_generation_mult = -0.05
 	country_improve_relations_speed_mult = 0.05
-	country_war_exhaustion_casualties_mult = 0.1
+	country_war_support_casualties_mult = 0.1
 }
 
 # Decaying penalty for refusing international justice
@@ -3703,7 +3703,7 @@ ww_fresh_forces_modifier = {
 	unit_army_offense_mult = 0.2
 	unit_morale_recovery_mult = 0.2
 	unit_army_defense_mult = 0.1
-	country_war_exhaustion_casualties_mult = -0.25
+	country_war_support_casualties_mult = -0.25
 }
 
 # Arsenal of democracy - late-joining democratic power supplies allies
@@ -3726,7 +3726,7 @@ ww_lend_lease_modifier = {
 # War exhaustion from prolonged world war
 ww_prolonged_war_exhaustion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_war_exhaustion_casualties_mult = 0.25
+	country_war_support_casualties_mult = 0.25
 	state_mortality_mult = 0.03
 	state_standard_of_living_add = -4
 	state_radicals_from_political_movements_mult = 1.0
@@ -3815,7 +3815,7 @@ ww_ground_offensive_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	unit_army_offense_mult = 0.15
 	unit_army_defense_mult = 0.05
-	country_war_exhaustion_casualties_mult = -0.1
+	country_war_support_casualties_mult = -0.1
 	state_mortality_mult = 0.02
 	state_standard_of_living_add = -1
 	state_radicals_from_political_movements_mult = 0.25
@@ -4025,7 +4025,7 @@ langreform_revived_norse = {
 	country_prestige_mult = 0.1
 	state_homeland_creation_threshold_add = -0.1
 	state_homeland_removal_threshold_add = 0.1
-	country_war_exhaustion_casualties_mult = -0.1
+	country_war_support_casualties_mult = -0.1
 }
 langreform_revived_gothic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds

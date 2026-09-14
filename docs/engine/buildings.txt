@@ -1990,6 +1990,231 @@ Regional Company Headquarter (bg_company_regional_headquarter):
 		$pm_worker_cooperative$
 		$pm_worker_cooperative$
 
+Resettlement Camp (bg_resettlement):
+	Unlocking Technology: Nationalism
+	Resettlement Method:
+		Homesteading Program
+		Organized Colonization
+		Forced Resettlement
+		Penal Transportation
+		Incentivized Relocation
+
+Resettlement Colony (bg_resettlement):
+	Unlocking Technology: Nationalism
+	Settlement Type:
+		Settler Homesteads
+		Planned Settlement
+		Administered Territory
+		Development Zone
+	Transportation:
+		Overland Transport
+		Railway Transport
+		Steamship Passage
+		Airlift
+
+United Nations Headquarters (bg_bureaucracy):
+	International Diplomacy:
+		Host Nation
+
+Power Bloc Headquarters (bg_bureaucracy):
+	Unlocking Technology: Intergovernmental Organizations
+	[concept_power_bloc] Headquarters:
+		Seat of the Empire
+		Alliance Command
+		Global Trade Center
+		Seat of the Faith
+		Central Committee Headquarters
+		World Cultural Center
+		Palace of Nations
+
+Golden Gate Bridge (bg_monuments):
+	Unlocking Technology: Marketing Research
+	Golden Gate Bridge:
+		Golden Gate Bridge
+
+Empire State Building (bg_monuments):
+	Unlocking Technology: Modern Skyscrapers
+	Empire State Building:
+		Empire State Building
+
+Sydney Opera House (bg_monuments):
+	Unlocking Technology: Art Deco Architecture
+	Sydney Opera House:
+		Sydney Opera House
+
+CN Tower (bg_monuments):
+	Unlocking Technology: Modern Skyscrapers
+	CN Tower:
+		CN Tower
+
+Hoover Dam (bg_monuments):
+	Unlocking Technology: Public Works Programs
+	Hoover Dam:
+		Hoover Dam
+
+The Pentagon (bg_monuments):
+	Unlocking Technology: Combined Arms
+	The Pentagon:
+		The Pentagon
+
+Kennedy Space Center (bg_monuments):
+	Unlocking Technology: Space Exploration
+	Kennedy Space Center:
+		Kennedy Space Center
+
+Aswan High Dam (bg_monuments):
+	Unlocking Technology: Nuclear Energy
+	Aswan High Dam:
+		Aswan High Dam
+
+Tokyo Tower (bg_monuments):
+	Unlocking Technology: Television Broadcasting
+	Tokyo Tower:
+		Tokyo Tower
+
+Moscow State University (bg_monuments):
+	Unlocking Technology: Mainframe Computers
+	Moscow State University:
+		Moscow State University
+
+Berlin TV Tower (bg_monuments):
+	Unlocking Technology: Transistor Technology
+	Berlin TV Tower:
+		Berlin TV Tower
+
+Azadi Tower (bg_monuments):
+	Unlocking Technology: Decolonization
+	Azadi Tower:
+		Azadi Tower
+
+Kenyatta International Convention Centre (bg_monuments):
+	Unlocking Technology: Decolonization
+	Kenyatta ICC:
+		Kenyatta ICC
+
+Burj Khalifa (bg_monuments):
+	Unlocking Technology: Computer-Aided Design
+	Burj Khalifa:
+		Burj Khalifa
+
+World Trade Center (bg_monuments):
+	Unlocking Technology: Containerization
+	World Trade Center:
+		World Trade Center
+
+Lotus Temple (bg_monuments):
+	Unlocking Technology: Pop Culture
+	Lotus Temple:
+		Lotus Temple
+
+Itaipu Dam (bg_monuments):
+	Unlocking Technology: Industrial Robotics
+	Itaipu Dam:
+		Itaipu Dam
+
+Petronas Towers (bg_monuments):
+	Unlocking Technology: Cellular Networks
+	Petronas Towers:
+		Petronas Towers
+
+Basilica of Our Lady of Peace (bg_monuments):
+	Unlocking Technology: Pop Culture
+	Basilica of Our Lady of Peace:
+		Basilica of Our Lady of Peace
+
+Three Gorges Dam (bg_monuments):
+	Unlocking Technology: Clean Energy Technologies
+	Three Gorges Dam:
+		Three Gorges Dam
+
+Channel Tunnel (bg_monuments):
+	Unlocking Technology: Globalization
+	Channel Tunnel:
+		Channel Tunnel
+
+Taipei 101 (bg_monuments):
+	Unlocking Technology: Digital Telecommunications
+	Taipei 101:
+		Taipei 101
+
+Lotte World Tower (bg_monuments):
+	Unlocking Technology: World Wide Web
+	Lotte World Tower:
+		Lotte World Tower
+
+Gardens by the Bay (bg_monuments):
+	Unlocking Technology: Clean Energy Technologies
+	Gardens by the Bay:
+		Gardens by the Bay
+
+Abraj Al-Bait Clock Tower (bg_monuments):
+	Unlocking Technology: Globalization
+	Abraj Al-Bait Clock Tower:
+		Abraj Al-Bait Clock Tower
+
+Shanghai Tower (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Shanghai Tower:
+		Shanghai Tower
+
+FAST Telescope (bg_monuments):
+	Unlocking Technology: Machine Learning
+	FAST Telescope:
+		FAST Telescope
+
+Statue of Unity (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Statue of Unity:
+		Statue of Unity
+
+Golden Bridge (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Golden Bridge:
+		Golden Bridge
+
+Large Hadron Collider (bg_monuments):
+	Unlocking Technology: World Wide Web
+	Large Hadron Collider:
+		Large Hadron Collider
+
+International Space Station (bg_monuments):
+	Unlocking Technology: Satellite Communications
+	International Space Station:
+		International Space Station
+
+ITER Fusion Reactor (bg_monuments):
+	Unlocking Technology: Fusion Power
+	ITER Fusion Reactor:
+		ITER Fusion Reactor
+
+Svalbard Global Seed Vault (bg_monuments):
+	Unlocking Technology: Biotechnology
+	Svalbard Global Seed Vault:
+		Svalbard Global Seed Vault
+
+LIGO Observatory (bg_monuments):
+	Unlocking Technology: Fiber Optics
+	LIGO Observatory:
+		LIGO Observatory
+
+Continental Union Headquarters (bg_monuments):
+	Unlocking Technology: Globalization
+	Continental Union Headquarters:
+		Continental Union Headquarters
+
+Peace Palace (bg_monuments):
+	Unlocking Technology: Intergovernmental Organizations
+	Peace Palace:
+		Peace Palace
+
+Palais des Nations (bg_monuments):
+	Palais des Nations:
+		Palais des Nations
+
+Construction Site (te_construction_market_bg):
+	Construction Site:
+		Basic Construction Market
+
 Strategic Reserve Hub (bg_public_infrastructure):
 	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, and tanks. Each level provides +5000 capacity per reserve good and up to 10 goods per level each week of reserve flow, which can be fine-tuned separately for each good in the Strategic Reserve [concept_journal_entry].
 	Unlocking Technology: Logistics
@@ -2001,1276 +2226,6 @@ Strategic Reserve Silo (bg_public_infrastructure):
 	Unlocking Technology: Logistics
 	Silo Storage:
 		Silo Storage
-
-Volkswagen Autostadt (bg_company_buildings):
-	Volkswagen Autostadt:
-		Volkswagen Autostadt
-
-Toyota Kaikan Museum & Plant (bg_company_buildings):
-	Toyota Kaikan Museum & Plant:
-		Toyota Kaikan Museum & Plant
-
-Samsung Digital City (bg_company_buildings):
-	Samsung Digital City:
-		Samsung Digital City
-
-HP Labs (bg_company_buildings):
-	HP Labs:
-		HP Labs
-
-Sony Pictures Studios (bg_company_buildings):
-	Sony Pictures Studios:
-		Sony Pictures Studios
-
-IKEA Älmhult Campus (bg_company_buildings):
-	IKEA Älmhult Campus:
-		IKEA Älmhult Campus
-
-Intel Ronler Acres Campus (bg_company_buildings):
-	Intel Ronler Acres Campus:
-		Intel Ronler Acres Campus
-
-Microsoft Redmond Campus (bg_company_buildings):
-	Microsoft Redmond Campus:
-		Microsoft Redmond Campus
-
-Apple Park (bg_company_buildings):
-	Apple Park:
-		Apple Park
-
-TSMC Fab 18 (bg_company_buildings):
-	TSMC Fab 18:
-		TSMC Fab 18
-
-Huawei Ox Horn Campus (bg_company_buildings):
-	Huawei Ox Horn Campus:
-		Huawei Ox Horn Campus
-
-Automated Fulfillment Center (bg_company_buildings):
-	Automated Fulfillment Center:
-		Automated Fulfillment Center
-
-Nvidia Endeavor Campus (bg_company_buildings):
-	Nvidia Endeavor Campus:
-		Nvidia Endeavor Campus
-
-The Googleplex (bg_company_buildings):
-	The Googleplex:
-		The Googleplex
-
-Netflix Animation Studios (bg_company_buildings):
-	Netflix Animation Studios:
-		Netflix Animation Studios
-
-Starbase (bg_company_buildings):
-	Starbase:
-		Starbase
-
-TikTok Data Fortress (bg_company_buildings):
-	TikTok Data Fortress:
-		TikTok Data Fortress
-
-OpenAI Research Laboratory (bg_company_buildings):
-	OpenAI Research Laboratory:
-		OpenAI Research Laboratory
-
-CATL Gigafactory (bg_company_buildings):
-	CATL Gigafactory:
-		CATL Gigafactory
-
-Boston Dynamics AI Institute (bg_company_buildings):
-	Boston Dynamics AI Institute:
-		Boston Dynamics AI Institute
-
-ASML Veldhoven Campus (bg_company_buildings):
-	ASML Veldhoven Campus:
-		ASML Veldhoven Campus
-
-Skunk Works (bg_company_buildings):
-	Skunk Works:
-		Skunk Works
-
-BAE Systems Samlesbury Aerodrome (bg_company_buildings):
-	BAE Systems Samlesbury Aerodrome:
-		BAE Systems Samlesbury Aerodrome
-
-Vostochny Cosmodrome (bg_company_buildings):
-	Vostochny Cosmodrome:
-		Vostochny Cosmodrome
-
-Jean-Luc Lagardère Plant (bg_company_buildings):
-	Jean-Luc Lagardère Plant:
-		Jean-Luc Lagardère Plant
-
-Dassault Merignac Plant (bg_company_buildings):
-	Dassault Merignac Plant:
-		Dassault Merignac Plant
-
-Hyundai Ulsan Factory (bg_company_buildings):
-	Hyundai Ulsan Factory:
-		Hyundai Ulsan Factory
-
-SAP SE Headquarters (bg_company_buildings):
-	SAP SE Headquarters:
-		SAP SE Headquarters
-
-Tencent Seafront Towers (bg_company_buildings):
-	Tencent Seafront Towers:
-		Tencent Seafront Towers
-
-Cainiao Logistics Park (bg_company_buildings):
-	Cainiao Logistics Park:
-		Cainiao Logistics Park
-
-Nintendo Development Center (bg_company_buildings):
-	Nintendo Development Center:
-		Nintendo Development Center
-
-The Lakhta Center (bg_company_buildings):
-	The Lakhta Center:
-		The Lakhta Center
-
-Abqaiq Plant (bg_company_buildings):
-	Abqaiq Plant:
-		Abqaiq Plant
-
-Cenpes Research Center (bg_company_buildings):
-	Cenpes Research Center:
-		Cenpes Research Center
-
-Mayak Production Association (bg_company_buildings):
-	Mayak Production Association:
-		Mayak Production Association
-
-Oracle Cloud Data Center (bg_company_buildings):
-	Oracle Cloud Data Center:
-		Oracle Cloud Data Center
-
-The Vision Fund Headquarters (bg_company_buildings):
-	The Vision Fund Headquarters:
-		The Vision Fund Headquarters
-
-The Roche Tower (bg_company_buildings):
-	The Roche Tower:
-		The Roche Tower
-
-Pfizer Global R&D Campus (bg_company_buildings):
-	Pfizer Global R&D Campus:
-		Pfizer Global R&D Campus
-
-Carajás Mine (bg_company_buildings):
-	Carajás Mine:
-		Carajás Mine
-
-Disney World (bg_company_buildings):
-	Disney World:
-		Disney World
-
-Universal Studios Hollywood (bg_company_buildings):
-	Universal Studios Hollywood:
-		Universal Studios Hollywood
-
-The Verizon Building (bg_company_buildings):
-	The Verizon Building:
-		The Verizon Building
-
-Jamnagar Refinery (bg_company_buildings):
-	Jamnagar Refinery:
-		Jamnagar Refinery
-
-The FANUC Forest (bg_company_buildings):
-	The FANUC Forest:
-		The FANUC Forest
-
-Palazzo ENI (bg_company_buildings):
-	Palazzo ENI:
-		Palazzo ENI
-
-Ferrari Maranello Factory (bg_company_buildings):
-	Ferrari Maranello Factory:
-		Ferrari Maranello Factory
-
-RIM Campus (bg_company_buildings):
-	RIM Campus:
-		RIM Campus
-
-Shopify Fulfillment Network Hub (bg_company_buildings):
-	Shopify Fulfillment Network Hub:
-		Shopify Fulfillment Network Hub
-
-Mount Whaleback Mine (bg_company_buildings):
-	Mount Whaleback Mine:
-		Mount Whaleback Mine
-
-Cochlear Global Headquarters (bg_company_buildings):
-	Cochlear Global Headquarters:
-		Cochlear Global Headquarters
-
-Infosys Mysore Campus (bg_company_buildings):
-	Infosys Mysore Campus:
-		Infosys Mysore Campus
-
-JSW Vijayanagar Works (bg_company_buildings):
-	JSW Vijayanagar Works:
-		JSW Vijayanagar Works
-
-Central R&D Complex (bg_company_buildings):
-	Central R&D Complex:
-		Central R&D Complex
-
-National Logistics Hub (bg_company_buildings):
-	National Logistics Hub:
-		National Logistics Hub
-
-Corporate Headquarters Skyscraper (bg_company_buildings):
-	Corporate Headquarters Skyscraper:
-		Corporate Headquarters Skyscraper
-
-Specialized Industrial Zone (bg_company_buildings):
-	Specialized Industrial Zone:
-		Specialized Industrial Zone
-
-Mega-Factory Complex (bg_company_buildings):
-	Mega-Factory Complex:
-		Mega-Factory Complex
-
-National Exhibition Centre (bg_company_buildings):
-	National Exhibition Centre:
-		National Exhibition Centre
-
-Global Shipping Terminal (bg_company_buildings):
-	Global Shipping Terminal:
-		Global Shipping Terminal
-
-Advanced Materials Laboratory (bg_company_buildings):
-	Advanced Materials Laboratory:
-		Advanced Materials Laboratory
-
-Automation & Robotics Institute (bg_company_buildings):
-	Automation & Robotics Institute:
-		Automation & Robotics Institute
-
-Corporate University (bg_company_buildings):
-	Corporate University:
-		Corporate University
-
-National Data Fortress (bg_company_buildings):
-	National Data Fortress:
-		National Data Fortress
-
-Private Industrial City (bg_company_buildings):
-	Private Industrial City:
-		Private Industrial City
-
-Global Media Headquarters (bg_company_buildings):
-	Global Media Headquarters:
-		Global Media Headquarters
-
-High-Efficiency Power Hub (bg_company_buildings):
-	High-Efficiency Power Hub:
-		High-Efficiency Power Hub
-
-Cross-Continental Pipeline Terminus (bg_company_buildings):
-	Cross-Continental Pipeline Terminus:
-		Cross-Continental Pipeline Terminus
-
-Intercontinental Rail Nexus (bg_company_buildings):
-	Intercontinental Rail Nexus:
-		Intercontinental Rail Nexus
-
-Strategic Proving Grounds (bg_company_buildings):
-	Strategic Proving Grounds:
-		Strategic Proving Grounds
-
-National Resource Depository (bg_company_buildings):
-	National Resource Depository:
-		National Resource Depository
-
-International Financial Center (bg_company_buildings):
-	International Financial Center:
-		International Financial Center
-
-Monument to Industry (bg_company_buildings):
-	Monument to Industry:
-		Monument to Industry
-
-Spaceport (bg_company_buildings):
-	Spaceport:
-		Spaceport
-
-Krupp Essen Works (bg_company_buildings):
-	The legendary Krupp steelworks in Essen, producing the finest steel and armaments in the world.
-	Krupp Essen Works:
-		Krupp Essen Works
-
-Standard Oil Refinery (bg_company_buildings):
-	A sprawling refinery complex that dominates the petroleum industry, refining crude oil into fuel and chemicals.
-	Standard Oil Refinery:
-		Standard Oil Refinery
-
-Carnegie Homestead Mill (bg_company_buildings):
-	The massive Homestead steelworks on the Monongahela River, forging the steel that built America's railways and skyscrapers.
-	Carnegie Homestead Mill:
-		Carnegie Homestead Mill
-
-Ford Rouge Plant (bg_company_buildings):
-	The River Rouge Complex: the world's largest integrated factory, where raw materials enter one end and finished automobiles emerge from the other.
-	Ford Rouge Plant:
-		Ford Rouge Plant
-
-East India Company Trading House (bg_company_buildings):
-	A grand trading house coordinating the vast commercial empire of the East India Company across the subcontinent and beyond.
-	East India Company Trading House:
-		East India Company Trading House
-
-Schneider Le Creusot Works (bg_company_buildings):
-	The great Schneider-Creusot industrial complex, France's premier producer of steel, artillery, and armaments since the Napoleonic era.
-	Schneider Le Creusot Works:
-		Schneider Le Creusot Works
-
-Putilov Works (bg_company_buildings):
-	The Putilov iron and steel works in Saint Petersburg, producing heavy machinery, railway equipment, and artillery for the Russian Empire.
-	Putilov Works:
-		Putilov Works
-
-Mitsubishi Nagasaki Shipyard (bg_company_buildings):
-	Mitsubishi's massive Nagasaki shipyard, constructing warships and merchant vessels that project Japan's industrial might across the Pacific.
-	Mitsubishi Nagasaki Shipyard:
-		Mitsubishi Nagasaki Shipyard
-
-Tata Jamshedpur Works (bg_company_buildings):
-	The Tata Iron and Steel Company works at Jamshedpur, India's first integrated steel plant and symbol of indigenous industrialization.
-	Tata Jamshedpur Works:
-		Tata Jamshedpur Works
-
-Siemens Erlangen Campus (bg_company_buildings):
-	The Siemens research and manufacturing campus, pioneering telegraph systems, electrical generators, and communications technology.
-	Siemens Erlangen Campus:
-		Siemens Erlangen Campus
-
-De Beers Sorting Office (bg_company_buildings):
-	The De Beers diamond sorting and valuation office, controlling the global flow of rough diamonds from South African mines to world markets.
-	De Beers Sorting Office:
-		De Beers Sorting Office
-
-Nobel Baku Refinery (bg_company_buildings):
-	The Nobel Brothers' pioneering petroleum refinery in Baku, processing Caspian crude oil into kerosene, explosives, and industrial chemicals.
-	Nobel Baku Refinery:
-		Nobel Baku Refinery
-
-GE Schenectady Works (bg_company_buildings):
-	General Electric's sprawling Schenectady complex, where Thomas Edison's vision became an empire of electrical innovation and manufacturing.
-	GE Schenectady Works:
-		GE Schenectady Works
-
-Mitsui Trading House (bg_company_buildings):
-	The Mitsui [concept_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.
-	Mitsui Trading House:
-		Mitsui Trading House
-
-FIAT Lingotto Factory (bg_company_buildings):
-	The iconic FIAT Lingotto factory in Turin, with its revolutionary rooftop test track: a cathedral of Italian automobile manufacturing.
-	FIAT Lingotto Factory:
-		FIAT Lingotto Factory
-
-Granary Complex (bg_company_buildings):
-	A large-scale grain storage and distribution hub that ensures reliable food supply across the region.
-	Granary Complex:
-		Granary Complex
-
-Textile Depot (bg_company_buildings):
-	A centralized fabric warehousing and dyeing facility that streamlines textile production and distribution.
-	Textile Depot:
-		Textile Depot
-
-Cold Storage Facility (bg_company_buildings):
-	An industrial cold storage and food preservation center that reduces spoilage and extends the reach of perishable goods.
-	Cold Storage:
-		Cold Storage
-
-Paper Mill Complex (bg_company_buildings):
-	An integrated pulp and paper complex that turns timber into paper stock and the clerical backbone of modern commerce.
-	Paper Mill Complex:
-		Paper Mill Complex
-
-Foundry Complex (bg_company_buildings):
-	A sprawling steel and iron smelting campus that feeds the insatiable demand for construction materials.
-	Foundry Complex:
-		Foundry Complex
-
-Machine Shop (bg_company_buildings):
-	A precision engineering workshop producing tools, machine parts, and specialized equipment for heavy industry.
-	Machine Shop:
-		Machine Shop
-
-Chemical Works (bg_company_buildings):
-	A chemical processing campus producing fertilizers, explosives, and industrial chemicals from raw materials.
-	Chemical Works:
-		Chemical Works
-
-Tank Farm (bg_company_buildings):
-	An oil storage and refining depot with rows of massive tanks feeding petroleum products to industry and transport.
-	Tank Farm:
-		Tank Farm
-
-Ordnance Depot (bg_company_buildings):
-	A munitions storage and testing facility that keeps the nation's military well-supplied with ammunition.
-	Ordnance Depot:
-		Ordnance Depot
-
-Motor Works (bg_company_buildings):
-	An engine and vehicle assembly plant producing motors, machinery, and transport equipment.
-	Motor Works:
-		Motor Works
-
-Dry Dock (bg_company_buildings):
-	A large ship repair and construction facility that keeps the merchant and military fleet in fighting condition.
-	Dry Dock:
-		Dry Dock
-
-Arsenal (bg_company_buildings):
-	An arms depot and proving ground where weapons are manufactured, tested, and stored for military use.
-	Arsenal:
-		Arsenal
-
-Fish Market (bg_company_buildings):
-	A wholesale fish market and distribution center that brings fresh seafood from the docks to the population.
-	Fish Market:
-		Fish Market
-
-Colonial Depot (bg_company_buildings):
-	A central depot for consolidating and distributing colonial commodities such as tea and opium.
-	Colonial Depot Operations:
-		Colonial Commodity Trade
-
-Export Warehouse (bg_company_buildings):
-	A bonded warehouse for sorting, grading, and re-exporting colonial cash crops.
-	Export Warehouse Operations:
-		Cash Crop Export
-
-Electronics Laboratory (bg_company_buildings):
-	A research and testing laboratory for electrical components and consumer electronics.
-	Electronics Lab Operations:
-		Electronics Research
-
-Assay Office (bg_company_buildings):
-	A facility for testing precious metal purity and facilitating bullion trade.
-	Assay Office Operations:
-		Precious Metal Assaying
-
-Ore Processing Plant (bg_company_buildings):
-	A central facility for crushing, smelting, and refining metallic ores.
-	Ore Processing Operations:
-		Ore Smelting
-
-Mineral Refinery (bg_company_buildings):
-	A refinery converting raw minerals into industrial chemicals and fertilizers.
-	Mineral Refinery Operations:
-		Mineral Refining
-
-Silk Exchange (bg_company_buildings):
-	A trading house for sorting, grading, and auctioning raw silk and dyed textiles.
-	Silk Exchange Operations:
-		Silk and Dye Trade
-
-Vintner's Hall (bg_company_buildings):
-	A facility for aging, blending, and bottling wine and processing fruit into preserves.
-	Vintner's Hall Operations:
-		Wine and Fruit Processing
-
-Furniture Showroom (bg_company_buildings):
-	A flagship homewares emporium fronting a fabrication workshop, where carpenters, glaziers, and shopkeepers turn timber and glass into the furnishings of the modern home.
-	Furniture Showroom Operations:
-		Furniture Showroom
-
-Lumber Yard (bg_company_buildings):
-	An industrial sawmill and timber yard where harvested logs are cut, dried, and graded into framing wood and pulpwood for paper.
-	Lumber Yard Operations:
-		Lumber Yard
-
-Aker Oslo Shipyard (bg_company_buildings):
-	Aker Oslo Shipyard:
-		Aker Oslo Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Allatini Thessaloniki Flour Mill (bg_company_buildings):
-	Allatini Thessaloniki Flour Mill:
-		Allatini Thessaloniki Flour Mill
-
-Altos Hornos Baracaldo Furnaces (bg_company_buildings):
-	Altos Hornos de Baracaldo Furnaces:
-		Altos Hornos de Baracaldo Furnaces
-
-Anglo-Persian Abadan Refinery (bg_company_buildings):
-	Anglo-Persian Abadan Refinery:
-		Anglo-Persian Abadan Refinery
-
-Anglo-Sicilian Licata Wharf (bg_company_buildings):
-	Anglo-Sicilian Licata Wharf:
-		Anglo-Sicilian Licata Wharf
-
-Ansaldo Sestri Ponente Works (bg_company_buildings):
-	Ansaldo Sestri Ponente Works:
-		Ansaldo Sestri Ponente Works
-
-A.P. Møller Copenhagen Wharf (bg_company_buildings):
-	A.P. Møller Copenhagen Wharf:
-		A.P. Møller Copenhagen Wharf
-
-Argentine Wine Mendoza Bodega (bg_company_buildings):
-	Argentine Wine Mendoza Bodega:
-		Argentine Wine Mendoza Bodega
-
-Armstrong Elswick Works (bg_company_buildings):
-	Armstrong Elswick Works:
-		Armstrong Elswick Works
-
-Assam Company Nazira Tea Estate (bg_company_buildings):
-	Assam Company Nazira Tea Estate:
-		Assam Company Nazira Tea Estate
-
-B. Grimm Bangkok Warehouse (bg_company_buildings):
-	B. Grimm Bangkok Warehouse:
-		B. Grimm Bangkok Warehouse
-
-Bacardí Santiago Distillery (bg_company_buildings):
-	Bacardí Santiago Distillery:
-		Bacardí Santiago Distillery
-
-BASF Ludwigshafen Works (bg_company_buildings):
-	BASF Ludwigshafen Plant:
-		BASF Ludwigshafen Plant
-
-Basileiades Piraeus Works (bg_company_buildings):
-	Basileiades Piraeus Works:
-		Basileiades Piraeus Works
-
-Bengal Coal Raniganj Mine (bg_company_buildings):
-	Bengal Coal Raniganj Mine:
-		Bengal Coal Raniganj Mine
-
-Bolckow Vaughan Eston Ironworks (bg_company_buildings):
-	Bolckow Eston Ironworks:
-		Bolckow Eston Ironworks
-
-Bombay Burmah Rangoon Timber Depot (bg_company_buildings):
-	Bombay Burmah Rangoon Timber Depot:
-		Bombay Burmah Rangoon Timber Depot
-
-Bombay Dyeing Spring Mills (bg_company_buildings):
-	Bombay Dyeing Spring Mills:
-		Bombay Dyeing Spring Mills
-
-Bunge & Born Buenos Aires Grain Silo (bg_company_buildings):
-	Bunge & Born Buenos Aires Grain Silo:
-		Bunge & Born Buenos Aires Grain Silo
-
-Calcutta Electric Victoria House (bg_company_buildings):
-	Calcutta Electric Victoria House:
-		Calcutta Electric Victoria House
-
-Caribbean Petroleum Maracaibo Depot (bg_company_buildings):
-	Caribbean Petroleum Maracaibo Depot:
-		Caribbean Petroleum Maracaibo Depot
-
-CCCI Léopoldville Rubber Depot (bg_company_buildings):
-	CCCI Léopoldville Depot:
-		CCCI Léopoldville Depot
-
-CFR Bucharest Railway Works (bg_company_buildings):
-	CFR Bucharest Railway Works:
-		CFR Bucharest Railway Works
-
-CGV Haut-Brion Estate (bg_company_buildings):
-	CGV Haut-Brion Estate:
-		CGV Haut-Brion Estate
-
-Chr. Hansen Copenhagen Laboratory (bg_company_buildings):
-	Chr. Hansen Copenhagen Laboratory:
-		Chr. Hansen Copenhagen Laboratory
-
-Colt Hartford Armory (bg_company_buildings):
-	Colt Hartford Armory:
-		Colt Hartford Armory
-
-Sansinena Avellaneda Frigorífico (bg_company_buildings):
-	Sansinena Avellaneda Frigorífico:
-		Sansinena Avellaneda Frigorífico
-
-Córdoba Railway Alta Gracia Works (bg_company_buildings):
-	Córdoba Railway Alta Gracia Works:
-		Córdoba Railway Alta Gracia Works
-
-CSFA Sicilian Sulfur Depot (bg_company_buildings):
-	CSFA Sicilian Sulfur Depot:
-		CSFA Sicilian Sulfur Depot
-
-Afghan Nassaji Kabul Mills (bg_company_buildings):
-	Afghan Nassaji Kabul Mills:
-		Afghan Nassaji Kabul Mills
-
-Sassoon Bombay Docks (bg_company_buildings):
-	Sassoon Bombay Docks:
-		Sassoon Bombay Docks
-
-DMC Mulhouse Thread Mills (bg_company_buildings):
-	DMC Mulhouse Mills:
-		DMC Mulhouse Mills
-
-Douro Wine Lodge (bg_company_buildings):
-	Douro Wine Lodge:
-		Douro Wine Lodge
-
-Duro La Felguera Steelworks (bg_company_buildings):
-	Duro La Felguera Steelworks:
-		Duro La Felguera Steelworks
-
-EEA Dock Sud Power Station (bg_company_buildings):
-	EEA Dock Sud Power Station:
-		EEA Dock Sud Power Station
-
-Egyptian Railway Cairo Central Station (bg_company_buildings):
-	Egyptian Rail Cairo Central:
-		Egyptian Rail Cairo Central
-
-El Águila Tampico Refinery (bg_company_buildings):
-	El Águila Tampico Refinery:
-		El Águila Tampico Refinery
-
-Electricidad de Caracas Power House (bg_company_buildings):
-	Electricidad de Caracas Power House:
-		Electricidad de Caracas Power House
-
-Első Budapesti Steam Mill (bg_company_buildings):
-	Első Budapesti Steam Mill:
-		Első Budapesti Steam Mill
-
-Ericsson Telefonplan (bg_company_buildings):
-	Ericsson Telefonplan:
-		Ericsson Telefonplan
-
-Erste Brünner Maschinenwerk (bg_company_buildings):
-	Erste Brünner Maschinenwerk:
-		Erste Brünner Maschinenwerk
-
-España Industrial Sants Mills (bg_company_buildings):
-	España Industrial Sants Mills:
-		España Industrial Sants Mills
-
-Estaleiro Mauá Niterói Dockyard (bg_company_buildings):
-	Estaleiro Mauá Niterói Dockyard:
-		Estaleiro Mauá Niterói Dockyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Estannífera Llallagua Tin Concentrator (bg_company_buildings):
-	Estañífera Llallagua Tin Concentrator:
-		Estañífera Llallagua Tin Concentrator
-
-FAMAE Santiago Arsenal (bg_company_buildings):
-	FAMAE Santiago Arsenal:
-		FAMAE Santiago Arsenal
-
-FCM La Seyne Shipyard (bg_company_buildings):
-	FCM La Seyne Shipyard:
-		FCM La Seyne Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Foochow Mawei Dockyard (bg_company_buildings):
-	Foochow Mawei Dockyard:
-		Foochow Mawei Dockyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Franco-Belge Raismes Works (bg_company_buildings):
-	Franco-Belge Raismes Works:
-		Franco-Belge Raismes Works
-
-Fundição Ipanema Sorocaba Foundry (bg_company_buildings):
-	Fundição Ipanema Sorocaba Foundry:
-		Fundição Ipanema Sorocaba Foundry
-
-Fundidora Monterrey Blast Furnace (bg_company_buildings):
-	Fundidora Monterrey Blast Furnace:
-		Fundidora Monterrey Blast Furnace
-
-Galician Borysław Oil Field (bg_company_buildings):
-	Galician Borysław Oil Field:
-		Galician Borysław Oil Field
-
-Thonet Bystřice Bentwood Factory (bg_company_buildings):
-	Thonet Bystřice Bentwood Factory:
-		Thonet Bystřice Bentwood Factory
-
-Getzner Bludenz Textile Works (bg_company_buildings):
-	Getzner Bludenz Textile Works:
-		Getzner Bludenz Textile Works
-
-Götaverken Gothenburg Shipyard (bg_company_buildings):
-	Götaverken Gothenburg Shipyard:
-		Götaverken Gothenburg Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Gran Azucarera Aranjuez Refinery (bg_company_buildings):
-	Gran Azucarera Aranjuez Refinery:
-		Gran Azucarera Aranjuez Refinery
-
-Great Indian Railway Jamalpur Works (bg_company_buildings):
-	Great Indian Railway Jamalpur Works:
-		Great Indian Railway Jamalpur Works
-
-Guinness St. James's Gate Brewery (bg_company_buildings):
-	Guinness St. James's Gate Brewery:
-		Guinness St. James's Gate Brewery
-
-GWR Swindon Works (bg_company_buildings):
-	GWR Swindon Works:
-		GWR Swindon Works
-
-Hanseong Electric Gwanghwamun Station (bg_company_buildings):
-	Hanseong Jeongi Gwanghwamun Station:
-		Hanseong Jeongi Gwanghwamun Station
-
-Hanyang Arsenal Iron Works (bg_company_buildings):
-	Hanyang Arsenal Iron Works:
-		Hanyang Arsenal Iron Works
-
-Hudson's Bay York Factory (bg_company_buildings):
-	HBC York Factory:
-		HBC York Factory
-
-Hispano-Suiza Barcelona Factory (bg_company_buildings):
-	Hispano-Suiza Barcelona Factory:
-		Hispano-Suiza Barcelona Factory
-
-ILVA Bagnoli Steelworks (bg_company_buildings):
-	ILVA Bagnoli Steelworks:
-		ILVA Bagnoli Steelworks
-
-Imperial Arsenal Golden Horn (bg_company_buildings):
-	Imperial Arsenal Golden Horn:
-		Imperial Arsenal Golden Horn
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Ethiopian Railway Dire Dawa Depot (bg_company_buildings):
-	Ethiopian Railway Dire Dawa Depot:
-		Ethiopian Railway Dire Dawa Depot
-
-Imperial Tobacco Wills Factory (bg_company_buildings):
-	Imperial Tobacco Wills' Factory:
-		Imperial Tobacco Wills' Factory
-
-Ingolstadt Power Station (bg_company_buildings):
-	Ingolstadt Power Station:
-		Ingolstadt Power Station
-
-Iranian State Railway Veresk Station (bg_company_buildings):
-	Iranian State Railway Veresk Station:
-		Iranian State Railway Veresk Station
-
-Izhevsk Arms Factory (bg_company_buildings):
-	Izhevsk Arms Factory:
-		Izhevsk Arms Factory
-
-J&P Coats Ferguslie Thread Mills (bg_company_buildings):
-	Coats Ferguslie Mills:
-		Coats Ferguslie Mills
-
-Klein Galician Paper Mill (bg_company_buildings):
-	Klein Galician Paper Mill:
-		Klein Galician Paper Mill
-
-Jiangnan Nanjing Brocade Hall (bg_company_buildings):
-	Jiangnan Nanjing Brocade Hall:
-		Jiangnan Nanjing Brocade Hall
-
-Jingdezhen Imperial Kiln (bg_company_buildings):
-	Jingdezhen Imperial Kiln:
-		Jingdezhen Imperial Kiln
-
-John Brown Clydebank Shipyard (bg_company_buildings):
-	John Brown Clydebank Yard:
-		John Brown Clydebank Yard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Cockerill Seraing Works (bg_company_buildings):
-	Cockerill Seraing Works:
-		Cockerill Seraing Works
-
-John Holt Lagos Trading House (bg_company_buildings):
-	John Holt Lagos Trading House:
-		John Holt Lagos Trading House
-
-Hughes Yuzovka Steelworks (bg_company_buildings):
-	Hughes Yuzovka Steelworks:
-		Hughes Yuzovka Steelworks
-
-Kablín Zárate Paper Mill (bg_company_buildings):
-	Kablín Zárate Paper Mill:
-		Kablín Zárate Paper Mill
-
-Kaiping Tangshan Colliery (bg_company_buildings):
-	Kaiping Tangshan Colliery:
-		Kaiping Tangshan Colliery
-
-Kinkozan Kiyomizu Kiln (bg_company_buildings):
-	Kinkozan Kiyomizu Kiln:
-		Kinkozan Kiyomizu Kiln
-
-Kirgizian Copper Smelter (bg_company_buildings):
-	Kirgizian Copper Smelter:
-		Kirgizian Copper Smelter
-
-Klanično Belgrade Slaughterhouse (bg_company_buildings):
-	Klaničko Belgrade Slaughterhouse:
-		Klaničko Belgrade Slaughterhouse
-
-Meissen Porcelain Manufactory (bg_company_buildings):
-	Meissen Porcelain Manufactory:
-		Meissen Porcelain Manufactory
-
-Kouppas Piraeus Foundry (bg_company_buildings):
-	Kouppas Piraeus Foundry:
-		Kouppas Piraeus Foundry
-
-La Rosada Buenos Aires Arsenal (bg_company_buildings):
-	La Rosada Buenos Aires Arsenal:
-		La Rosada Buenos Aires Arsenal
-
-Lanfang Pontianak Kongsi House (bg_company_buildings):
-	Lanfang Pontianak Kongsi House:
-		Lanfang Pontianak Kongsi House
-
-Lee Wilson Plantation Depot (bg_company_buildings):
-	Lee Wilson Plantation Depot:
-		Lee Wilson Plantation Depot
-
-Lilpop Warsaw Metalworks (bg_company_buildings):
-	Lilpop Warsaw Metalworks:
-		Lilpop Warsaw Metalworks
-
-LKAB Kiruna Iron Mine (bg_company_buildings):
-	LKAB Kiruna Mine:
-		LKAB Kiruna Mine
-
-Moser Karlsbad Glass Works (bg_company_buildings):
-	Moser Karlsbad Glass Works:
-		Moser Karlsbad Glass Works
-
-Madura Mills Madurai Complex (bg_company_buildings):
-	Madura Mills Madurai Complex:
-		Madura Mills Madurai Complex
-
-Worth Rue de la Paix Atelier (bg_company_buildings):
-	Worth Rue de la Paix Atelier:
-		Worth Rue de la Paix Atelier
-
-Manfred Weiss Csepel Works (bg_company_buildings):
-	Manfred Weiss Csepel Works:
-		Manfred Weiss Csepel Works
-
-Mantero Como Silk Mill (bg_company_buildings):
-	Mantero Como Silk Mill:
-		Mantero Como Silk Mill
-
-Mantetsu Dalian Railway Hub (bg_company_buildings):
-	Mantetsu Dalian Railway Hub:
-		Mantetsu Dalian Railway Hub
-
-Maple & Co Tottenham Court Road (bg_company_buildings):
-	Maple Tottenham Court Showroom:
-		Maple Tottenham Court Showroom
-
-Massey-Harris Toronto Implement Works (bg_company_buildings):
-	Massey-Harris Toronto Implement Works:
-		Massey-Harris Toronto Implement Works
-
-Gavrilović Petrinja Meatworks (bg_company_buildings):
-	Gavrilović Petrinja Meatworks:
-		Gavrilović Petrinja Meatworks
-
-MÁV Budapest Locomotive Works (bg_company_buildings):
-	MÁV Budapest Locomotive Works:
-		MÁV Budapest Locomotive Works
-
-Mines d'Anzin Colliery (bg_company_buildings):
-	Anzin Colliery:
-		Anzin Colliery
-
-Misr Mahalla Textile Complex (bg_company_buildings):
-	Misr Mahalla Textile Complex:
-		Misr Mahalla Textile Complex
-
-Moscow Irrigation Cotton Depot (bg_company_buildings):
-	Moscow Irrigation Cotton Depot:
-		Moscow Irrigation Cotton Depot
-
-Mozambique Company Beira Concession (bg_company_buildings):
-	Mozambique Company Beira Concession:
-		Mozambique Company Beira Concession
-
-Nam Định Textile Plant (bg_company_buildings):
-	Nam Định Textile Plant:
-		Nam Định Textile Plant
-
-NIOC Masjed Soleyman Oil Field (bg_company_buildings):
-	NIOC Masjed Soleyman Field:
-		NIOC Masjed Soleyman Field
-
-NedPetroleum Pangkalan Brandan Depot (bg_company_buildings):
-	Nederlandse Petroleum Pangkalan Depot:
-		Nederlandse Petroleum Pangkalan Depot
-
-Portalis Lyon Silk House (bg_company_buildings):
-	Portalis Lyon Silk House:
-		Portalis Lyon Silk House
-
-Nokia Cable Works (bg_company_buildings):
-	Nokia Cable Works:
-		Nokia Cable Works
-
-Norsk Hydro Rjukan Plant (bg_company_buildings):
-	Norsk Hydro Rjukan Plant:
-		Norsk Hydro Rjukan Plant
-
-Alpine Donawitz Steelworks (bg_company_buildings):
-	Alpine Donawitz Steelworks:
-		Alpine Donawitz Steelworks
-
-OEVG Steyr Arms Works (bg_company_buildings):
-	OEWG Steyr Arms Works:
-		OEWG Steyr Arms Works
-
-OCP Khouribga Phosphate Mine (bg_company_buildings):
-	OCP Khouribga Mine:
-		OCP Khouribga Mine
-
-Ong Lung Sheng Tea Warehouse (bg_company_buildings):
-	Ong Lung Sheng Tea Warehouse:
-		Ong Lung Sheng Tea Warehouse
-
-Opium Ghazipur Factory (bg_company_buildings):
-	Opium Ghazipur Factory:
-		Opium Ghazipur Factory
-
-Orient Express Sirkeci Terminal (bg_company_buildings):
-	Orient Express Sirkeci Terminal:
-		Orient Express Sirkeci Terminal
-
-Oriental Development Kunsan Granary (bg_company_buildings):
-	Oriental Development Kunsan Granary:
-		Oriental Development Kunsan Granary
-
-Tobacco Régie Cibali Factory (bg_company_buildings):
-	Tobacco Régie Cibali Factory:
-		Tobacco Régie Cibali Factory
-
-Panama Company Culebra Cut (bg_company_buildings):
-	Panama Company Culebra Cut:
-		Panama Company Culebra Cut
-
-Paradox Kvarnholmen Studio (bg_company_buildings):
-	Paradox Kvarnholmen Studio:
-		Paradox Kvarnholmen Studio
-
-Pedro Domecq Jerez Bodega (bg_company_buildings):
-	Pedro Domecq Jerez Bodega:
-		Pedro Domecq Jerez Bodega
-
-Pernambuco Recife Cotton Mill (bg_company_buildings):
-	Pernambuco Recife Cotton Mill:
-		Pernambuco Recife Cotton Mill
-
-Perskhlopok Cotton Combines (bg_company_buildings):
-	Perskhlopok Cotton Combines:
-		Perskhlopok Cotton Combines
-
-Persshelk Silk Reeling House (bg_company_buildings):
-	Persshëlk Silk Reeling House:
-		Persshëlk Silk Reeling House
-
-Peruvian Amazon Iquitos Rubber Depot (bg_company_buildings):
-	Peruvian Amazon Iquitos Depot:
-		Peruvian Amazon Iquitos Depot
-
-Philips Eindhoven NatLab (bg_company_buildings):
-	Philips Eindhoven NatLab:
-		Philips Eindhoven NatLab
-
-Prussian Railway Directorate (bg_company_buildings):
-	Prussian Railway Directorate:
-		Prussian Railway Directorate
-
-Ralli Odessa Grain Elevator (bg_company_buildings):
-	Ralli Odessa Grain Elevator:
-		Ralli Odessa Grain Elevator
-
-Rheinmetall Unterlüss Proving Ground (bg_company_buildings):
-	Rheinmetall Unterlüß Proving Ground:
-		Rheinmetall Unterlüß Proving Ground
-
-Ricordi Galleria Publishing House (bg_company_buildings):
-	Ricordi Galleria Vittorio Emanuele:
-		Ricordi Galleria Vittorio Emanuele
-
-Rodríguez Argüelles Havana Tobacco House (bg_company_buildings):
-	Rodríguez Argüelles Havana Tobacco House:
-		Rodríguez Argüelles Havana Tobacco House
-
-Romanian Star Ploiești Refinery (bg_company_buildings):
-	Romanian Star Ploiești Refinery:
-		Romanian Star Ploiești Refinery
-
-Rossi São Leopoldo Arms Factory (bg_company_buildings):
-	Rossi São Leopoldo Arms Factory:
-		Rossi São Leopoldo Arms Factory
-
-Russian-American Company Sitka Trading Post (bg_company_buildings):
-	RAC Sitka Trading Post:
-		RAC Sitka Trading Post
-
-Saint-Étienne Arms Manufactory (bg_company_buildings):
-	Saint-Étienne Arms Manufactory:
-		Saint-Étienne Arms Manufactory
-
-San Miguel Manila Brewery (bg_company_buildings):
-	San Miguel Manila Brewery:
-		San Miguel Manila Brewery
-
-São Paulo Railway Paranapiacaba Workshop (bg_company_buildings):
-	São Paulo Railway Paranapiacaba Workshop:
-		São Paulo Railway Paranapiacaba Workshop
-
-Morozov Orekhovo-Zuevo Mills (bg_company_buildings):
-	Morozov Orekhovo-Zuevo Mills:
-		Morozov Orekhovo-Zuevo Mills
-
-Schichau-Werke Elbing (bg_company_buildings):
-	Schichau Elbing Shipyard:
-		Schichau Elbing Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-SECN Ferrol Shipyard (bg_company_buildings):
-	SECN Ferrol Shipyard:
-		SECN Ferrol Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Sherkat-e Shemali Cotton Gin (bg_company_buildings):
-	Sherkat-e Shemali Cotton Gin:
-		Sherkat-e Shemali Cotton Gin
-
-Sherkat-e Eslāmiyyeh Isfahan Mill (bg_company_buildings):
-	Sherkat-e Eslamiya Isfahan Mill:
-		Sherkat-e Eslamiya Isfahan Mill
-
-Škoda Pilsen Works (bg_company_buildings):
-	Škoda Pilsen Works:
-		Škoda Pilsen Works
-
-Mokta el Hadid Beni Saf Mine (bg_company_buildings):
-	Mokta el Hadid Beni Saf Mine:
-		Mokta el Hadid Beni Saf Mine
-
-STF Fiume Torpedo Works (bg_company_buildings):
-	STF Fiume Torpedo Works:
-		STF Fiume Torpedo Works
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Steel Brothers Syriam Depot (bg_company_buildings):
-	Steel Brothers Syriam Depot:
-		Steel Brothers Syriam Depot
-
-STT Hasköy Shipyard (bg_company_buildings):
-	STT Hasköy Shipyard:
-		STT Hasköy Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Sudamericana Valparaíso Pier (bg_company_buildings):
-	Sudamericana Valparaíso Pier:
-		Sudamericana Valparaíso Pier
-
-Suez Company Ismailia Headquarters (bg_company_buildings):
-	Suez Company Ismailia [concept_hq]:
-		Suez Company Ismailia [concept_hq]
-
-Sunhwaguk Seoul Tobacco Factory (bg_company_buildings):
-	Sunhwaguk Seoul Tobacco Factory:
-		Sunhwaguk Seoul Tobacco Factory
-
-Tashkent Railroad Workshops (bg_company_buildings):
-	Tashkent Railroad Workshops:
-		Tashkent Railroad Workshops
-
-Trubia Cannon Foundry (bg_company_buildings):
-	Trubia Cannon Foundry:
-		Trubia Cannon Foundry
-
-Turkish Petroleum Kirkuk Depot (bg_company_buildings):
-	Turkish Petroleum Kirkuk Depot:
-		Turkish Petroleum Kirkuk Depot
-
-União Fabril Barreiro Plant (bg_company_buildings):
-	União Fabril Barreiro Plant:
-		União Fabril Barreiro Plant
-
-United Fruit Terminal (bg_company_buildings):
-	United Fruit Great White Fleet Terminal:
-		United Fruit Great White Fleet Terminal
-
-United Tobacco Moscow Plant (bg_company_buildings):
-	United Tobacco Moscow Plant:
-		United Tobacco Moscow Plant
-
-Ursus Warsaw Tractor Plant (bg_company_buildings):
-	Ursus Warsaw Tractor Plant:
-		Ursus Warsaw Tractor Plant
-
-State Vodka Monopoly Warehouse (bg_company_buildings):
-	Vodka Monopoly Warehouse:
-		Vodka Monopoly Warehouse
-
-Wadia Bombay Dockyard (bg_company_buildings):
-	Wadia Bombay Dockyard:
-		Wadia Bombay Dockyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-West Ural Oil Depot (bg_company_buildings):
-	West Ural Oil Depot:
-		West Ural Oil Depot
-
-Cramp Philadelphia Shipyard (bg_company_buildings):
-	Cramp Philadelphia Shipyard:
-		Cramp Philadelphia Shipyard
-		Modern Shipbuilding
-		Advanced Shipbuilding
-
-Sandford Newcastle-Natal Ironworks (bg_company_buildings):
-	Sandford Newcastle Natal Ironworks:
-		Sandford Newcastle Natal Ironworks
-
-Witkowitzer Ostrava Ironworks (bg_company_buildings):
-	Witkowitzer Ostrava Ironworks:
-		Witkowitzer Ostrava Ironworks
-
-Ynchausti Manila Trading House (bg_company_buildings):
-	Ynchausti Manila Trading House:
-		Ynchausti Manila Trading House
-
-Zastava Kragujevac Arsenal (bg_company_buildings):
-	Zastava Kragujevac Arsenal:
-		Zastava Kragujevac Arsenal
-
-Megastructure Consortium HQ (bg_company_buildings):
-	Megastructure Operations:
-		Megastructure Operations
-
-Axiom Space Station (bg_company_buildings):
-	Axiom Station Operations:
-		Axiom Station Operations
-
-Neurovault Research Complex (bg_company_buildings):
-	Neurovault Research:
-		Neurovault Research
-
-Tycho Orbital Works (bg_company_buildings):
-	Tycho Orbital Construction:
-		Tycho Orbital Construction
-
-Tessier-Ashpool Orbital (bg_company_buildings):
-	Tessier-Ashpool Operations:
-		Tessier-Ashpool Operations
-
-Hanka Precision Laboratory (bg_company_buildings):
-	Hanka Cybernetics Division:
-		Hanka Cybernetics Division
-
-Yoyodyne Propulsion Lab (bg_company_buildings):
-	Yoyodyne Propulsion Research:
-		Yoyodyne Propulsion Research
-
-Rekal Memory Center (bg_company_buildings):
-	Rekal Memory Services:
-		Rekal Memory Services
-
-DuPont Experimental Station (bg_company_buildings):
-	DuPont Experimental Station:
-		DuPont Experimental Station
-
-IG Farben Buna-Werke (bg_company_buildings):
-	IG Farben Buna-Werke:
-		IG Farben Buna-Werke
-
-Shell Pernis Refinery (bg_company_buildings):
-	Shell Pernis Refinery:
-		Shell Pernis Refinery
-
-JSR Yokkaichi Complex (bg_company_buildings):
-	JSR Yokkaichi Complex:
-		JSR Yokkaichi Complex
-
-Sibur Tobolsk Petrochemical Complex (bg_company_buildings):
-	Sibur Tobolsk Complex:
-		Sibur Tobolsk Complex
-
-Rolls-Royce Derby Works (bg_company_buildings):
-	Rolls-Royce's Derby works, where master craftsmen build the world's finest aero-engines and motorcars by hand.
-	Rolls-Royce Derby Works:
-		Rolls-Royce Derby Works
-
-BP Refinery Complex (bg_company_buildings):
-	A sprawling British Petroleum refinery turning crude into fertilizer feedstock and explosives precursors.
-	BP Refinery Complex:
-		BP Refinery Complex
-
-Bayer Leverkusen Plant (bg_company_buildings):
-	Bayer's Leverkusen works, marrying industrial chemistry with pharmaceutical research.
-	Bayer Leverkusen Plant:
-		Bayer Leverkusen Plant
-
-Thyssen Steelworks (bg_company_buildings):
-	August Thyssen's vast Ruhr steelworks, a pillar of German heavy industry.
-	Thyssen Steelworks:
-		Thyssen Steelworks
-
-Boeing Everett Factory (bg_company_buildings):
-	Boeing's Everett assembly hall, among the largest buildings on earth, where airframes take shape.
-	Boeing Everett Factory:
-		Boeing Everett Factory
-
-Renault Billancourt Plant (bg_company_buildings):
-	Renault's Boulogne-Billancourt works on the Seine, a cathedral of French mass-production.
-	Renault Billancourt Plant:
-		Renault Billancourt Plant
-
-Michelin Clermont-Ferrand Works (bg_company_buildings):
-	Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber.
-	Michelin Clermont-Ferrand Works:
-		Michelin Clermont-Ferrand Works
-
-Pirelli Bicocca Plant (bg_company_buildings):
-	Pirelli's Bicocca works in Milan, producing tyres and the insulated cables wiring the modern world.
-	Pirelli Bicocca Plant:
-		Pirelli Bicocca Plant
-
-Jardine Princeps House (bg_company_buildings):
-	Jardine, Matheson & Co.'s Hong Kong head office, nerve centre of a sprawling China-coast trading empire.
-	Jardine Princeps House:
-		Jardine Princeps House
-
-Sumitomo Besshi Mine (bg_company_buildings):
-	The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.
-	Sumitomo Besshi Mine:
-		Sumitomo Besshi Mine
 
 Synthetic Clothes Industries (bg_heavy_industry):
 	Unlocking Technology: Art Silk
@@ -4635,228 +3590,1273 @@ Military Base (bg_government):
 		Territorial Defense
 		Logistics Hub
 
-Construction Site (te_construction_market_bg):
-	Construction Site:
-		Basic Construction Market
+Volkswagen Autostadt (bg_company_buildings):
+	Volkswagen Autostadt:
+		Volkswagen Autostadt
 
-United Nations Headquarters (bg_bureaucracy):
-	International Diplomacy:
-		Host Nation
+Toyota Kaikan Museum & Plant (bg_company_buildings):
+	Toyota Kaikan Museum & Plant:
+		Toyota Kaikan Museum & Plant
 
-Power Bloc Headquarters (bg_bureaucracy):
-	Unlocking Technology: Intergovernmental Organizations
-	[concept_power_bloc] Headquarters:
-		Seat of the Empire
-		Alliance Command
-		Global Trade Center
-		Seat of the Faith
-		Central Committee Headquarters
-		World Cultural Center
-		Palace of Nations
+Samsung Digital City (bg_company_buildings):
+	Samsung Digital City:
+		Samsung Digital City
 
-Golden Gate Bridge (bg_monuments):
-	Unlocking Technology: Marketing Research
-	Golden Gate Bridge:
-		Golden Gate Bridge
+HP Labs (bg_company_buildings):
+	HP Labs:
+		HP Labs
 
-Empire State Building (bg_monuments):
-	Unlocking Technology: Modern Skyscrapers
-	Empire State Building:
-		Empire State Building
+Sony Pictures Studios (bg_company_buildings):
+	Sony Pictures Studios:
+		Sony Pictures Studios
 
-Sydney Opera House (bg_monuments):
-	Unlocking Technology: Art Deco Architecture
-	Sydney Opera House:
-		Sydney Opera House
+IKEA Älmhult Campus (bg_company_buildings):
+	IKEA Älmhult Campus:
+		IKEA Älmhult Campus
 
-CN Tower (bg_monuments):
-	Unlocking Technology: Modern Skyscrapers
-	CN Tower:
-		CN Tower
+Intel Ronler Acres Campus (bg_company_buildings):
+	Intel Ronler Acres Campus:
+		Intel Ronler Acres Campus
 
-Hoover Dam (bg_monuments):
-	Unlocking Technology: Public Works Programs
-	Hoover Dam:
-		Hoover Dam
+Microsoft Redmond Campus (bg_company_buildings):
+	Microsoft Redmond Campus:
+		Microsoft Redmond Campus
 
-The Pentagon (bg_monuments):
-	Unlocking Technology: Combined Arms
-	The Pentagon:
-		The Pentagon
+Apple Park (bg_company_buildings):
+	Apple Park:
+		Apple Park
 
-Kennedy Space Center (bg_monuments):
-	Unlocking Technology: Space Exploration
-	Kennedy Space Center:
-		Kennedy Space Center
+TSMC Fab 18 (bg_company_buildings):
+	TSMC Fab 18:
+		TSMC Fab 18
 
-Aswan High Dam (bg_monuments):
-	Unlocking Technology: Nuclear Energy
-	Aswan High Dam:
-		Aswan High Dam
+Huawei Ox Horn Campus (bg_company_buildings):
+	Huawei Ox Horn Campus:
+		Huawei Ox Horn Campus
 
-Tokyo Tower (bg_monuments):
-	Unlocking Technology: Television Broadcasting
-	Tokyo Tower:
-		Tokyo Tower
+Automated Fulfillment Center (bg_company_buildings):
+	Automated Fulfillment Center:
+		Automated Fulfillment Center
 
-Moscow State University (bg_monuments):
-	Unlocking Technology: Mainframe Computers
-	Moscow State University:
-		Moscow State University
+Nvidia Endeavor Campus (bg_company_buildings):
+	Nvidia Endeavor Campus:
+		Nvidia Endeavor Campus
 
-Berlin TV Tower (bg_monuments):
-	Unlocking Technology: Transistor Technology
-	Berlin TV Tower:
-		Berlin TV Tower
+The Googleplex (bg_company_buildings):
+	The Googleplex:
+		The Googleplex
 
-Azadi Tower (bg_monuments):
-	Unlocking Technology: Decolonization
-	Azadi Tower:
-		Azadi Tower
+Netflix Animation Studios (bg_company_buildings):
+	Netflix Animation Studios:
+		Netflix Animation Studios
 
-Kenyatta International Convention Centre (bg_monuments):
-	Unlocking Technology: Decolonization
-	Kenyatta ICC:
-		Kenyatta ICC
+Starbase (bg_company_buildings):
+	Starbase:
+		Starbase
 
-Burj Khalifa (bg_monuments):
-	Unlocking Technology: Computer-Aided Design
-	Burj Khalifa:
-		Burj Khalifa
+TikTok Data Fortress (bg_company_buildings):
+	TikTok Data Fortress:
+		TikTok Data Fortress
 
-World Trade Center (bg_monuments):
-	Unlocking Technology: Containerization
-	World Trade Center:
-		World Trade Center
+OpenAI Research Laboratory (bg_company_buildings):
+	OpenAI Research Laboratory:
+		OpenAI Research Laboratory
 
-Lotus Temple (bg_monuments):
-	Unlocking Technology: Pop Culture
-	Lotus Temple:
-		Lotus Temple
+CATL Gigafactory (bg_company_buildings):
+	CATL Gigafactory:
+		CATL Gigafactory
 
-Itaipu Dam (bg_monuments):
-	Unlocking Technology: Industrial Robotics
-	Itaipu Dam:
-		Itaipu Dam
+Boston Dynamics AI Institute (bg_company_buildings):
+	Boston Dynamics AI Institute:
+		Boston Dynamics AI Institute
 
-Petronas Towers (bg_monuments):
-	Unlocking Technology: Cellular Networks
-	Petronas Towers:
-		Petronas Towers
+ASML Veldhoven Campus (bg_company_buildings):
+	ASML Veldhoven Campus:
+		ASML Veldhoven Campus
 
-Basilica of Our Lady of Peace (bg_monuments):
-	Unlocking Technology: Pop Culture
-	Basilica of Our Lady of Peace:
-		Basilica of Our Lady of Peace
+Skunk Works (bg_company_buildings):
+	Skunk Works:
+		Skunk Works
 
-Three Gorges Dam (bg_monuments):
-	Unlocking Technology: Clean Energy Technologies
-	Three Gorges Dam:
-		Three Gorges Dam
+BAE Systems Samlesbury Aerodrome (bg_company_buildings):
+	BAE Systems Samlesbury Aerodrome:
+		BAE Systems Samlesbury Aerodrome
 
-Channel Tunnel (bg_monuments):
-	Unlocking Technology: Globalization
-	Channel Tunnel:
-		Channel Tunnel
+Vostochny Cosmodrome (bg_company_buildings):
+	Vostochny Cosmodrome:
+		Vostochny Cosmodrome
 
-Taipei 101 (bg_monuments):
-	Unlocking Technology: Digital Telecommunications
-	Taipei 101:
-		Taipei 101
+Jean-Luc Lagardère Plant (bg_company_buildings):
+	Jean-Luc Lagardère Plant:
+		Jean-Luc Lagardère Plant
 
-Lotte World Tower (bg_monuments):
-	Unlocking Technology: World Wide Web
-	Lotte World Tower:
-		Lotte World Tower
+Dassault Merignac Plant (bg_company_buildings):
+	Dassault Merignac Plant:
+		Dassault Merignac Plant
 
-Gardens by the Bay (bg_monuments):
-	Unlocking Technology: Clean Energy Technologies
-	Gardens by the Bay:
-		Gardens by the Bay
+Hyundai Ulsan Factory (bg_company_buildings):
+	Hyundai Ulsan Factory:
+		Hyundai Ulsan Factory
 
-Abraj Al-Bait Clock Tower (bg_monuments):
-	Unlocking Technology: Globalization
-	Abraj Al-Bait Clock Tower:
-		Abraj Al-Bait Clock Tower
+SAP SE Headquarters (bg_company_buildings):
+	SAP SE Headquarters:
+		SAP SE Headquarters
 
-Shanghai Tower (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Shanghai Tower:
-		Shanghai Tower
+Tencent Seafront Towers (bg_company_buildings):
+	Tencent Seafront Towers:
+		Tencent Seafront Towers
 
-FAST Telescope (bg_monuments):
-	Unlocking Technology: Machine Learning
-	FAST Telescope:
-		FAST Telescope
+Cainiao Logistics Park (bg_company_buildings):
+	Cainiao Logistics Park:
+		Cainiao Logistics Park
 
-Statue of Unity (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Statue of Unity:
-		Statue of Unity
+Nintendo Development Center (bg_company_buildings):
+	Nintendo Development Center:
+		Nintendo Development Center
 
-Golden Bridge (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Golden Bridge:
-		Golden Bridge
+The Lakhta Center (bg_company_buildings):
+	The Lakhta Center:
+		The Lakhta Center
 
-Large Hadron Collider (bg_monuments):
-	Unlocking Technology: World Wide Web
-	Large Hadron Collider:
-		Large Hadron Collider
+Abqaiq Plant (bg_company_buildings):
+	Abqaiq Plant:
+		Abqaiq Plant
 
-International Space Station (bg_monuments):
-	Unlocking Technology: Satellite Communications
-	International Space Station:
-		International Space Station
+Cenpes Research Center (bg_company_buildings):
+	Cenpes Research Center:
+		Cenpes Research Center
 
-ITER Fusion Reactor (bg_monuments):
-	Unlocking Technology: Fusion Power
-	ITER Fusion Reactor:
-		ITER Fusion Reactor
+Mayak Production Association (bg_company_buildings):
+	Mayak Production Association:
+		Mayak Production Association
 
-Svalbard Global Seed Vault (bg_monuments):
-	Unlocking Technology: Biotechnology
-	Svalbard Global Seed Vault:
-		Svalbard Global Seed Vault
+Oracle Cloud Data Center (bg_company_buildings):
+	Oracle Cloud Data Center:
+		Oracle Cloud Data Center
 
-LIGO Observatory (bg_monuments):
-	Unlocking Technology: Fiber Optics
-	LIGO Observatory:
-		LIGO Observatory
+The Vision Fund Headquarters (bg_company_buildings):
+	The Vision Fund Headquarters:
+		The Vision Fund Headquarters
 
-Continental Union Headquarters (bg_monuments):
-	Unlocking Technology: Globalization
-	Continental Union Headquarters:
-		Continental Union Headquarters
+The Roche Tower (bg_company_buildings):
+	The Roche Tower:
+		The Roche Tower
 
-Peace Palace (bg_monuments):
-	Unlocking Technology: Intergovernmental Organizations
-	Peace Palace:
-		Peace Palace
+Pfizer Global R&D Campus (bg_company_buildings):
+	Pfizer Global R&D Campus:
+		Pfizer Global R&D Campus
 
-Palais des Nations (bg_monuments):
-	Palais des Nations:
-		Palais des Nations
+Carajás Mine (bg_company_buildings):
+	Carajás Mine:
+		Carajás Mine
 
-Resettlement Camp (bg_resettlement):
-	Unlocking Technology: Nationalism
-	Resettlement Method:
-		Homesteading Program
-		Organized Colonization
-		Forced Resettlement
-		Penal Transportation
-		Incentivized Relocation
+Disney World (bg_company_buildings):
+	Disney World:
+		Disney World
 
-Resettlement Colony (bg_resettlement):
-	Unlocking Technology: Nationalism
-	Settlement Type:
-		Settler Homesteads
-		Planned Settlement
-		Administered Territory
-		Development Zone
-	Transportation:
-		Overland Transport
-		Railway Transport
-		Steamship Passage
-		Airlift
+Universal Studios Hollywood (bg_company_buildings):
+	Universal Studios Hollywood:
+		Universal Studios Hollywood
+
+The Verizon Building (bg_company_buildings):
+	The Verizon Building:
+		The Verizon Building
+
+Jamnagar Refinery (bg_company_buildings):
+	Jamnagar Refinery:
+		Jamnagar Refinery
+
+The FANUC Forest (bg_company_buildings):
+	The FANUC Forest:
+		The FANUC Forest
+
+Palazzo ENI (bg_company_buildings):
+	Palazzo ENI:
+		Palazzo ENI
+
+Ferrari Maranello Factory (bg_company_buildings):
+	Ferrari Maranello Factory:
+		Ferrari Maranello Factory
+
+RIM Campus (bg_company_buildings):
+	RIM Campus:
+		RIM Campus
+
+Shopify Fulfillment Network Hub (bg_company_buildings):
+	Shopify Fulfillment Network Hub:
+		Shopify Fulfillment Network Hub
+
+Mount Whaleback Mine (bg_company_buildings):
+	Mount Whaleback Mine:
+		Mount Whaleback Mine
+
+Cochlear Global Headquarters (bg_company_buildings):
+	Cochlear Global Headquarters:
+		Cochlear Global Headquarters
+
+Infosys Mysore Campus (bg_company_buildings):
+	Infosys Mysore Campus:
+		Infosys Mysore Campus
+
+JSW Vijayanagar Works (bg_company_buildings):
+	JSW Vijayanagar Works:
+		JSW Vijayanagar Works
+
+Central R&D Complex (bg_company_buildings):
+	Central R&D Complex:
+		Central R&D Complex
+
+National Logistics Hub (bg_company_buildings):
+	National Logistics Hub:
+		National Logistics Hub
+
+Corporate Headquarters Skyscraper (bg_company_buildings):
+	Corporate Headquarters Skyscraper:
+		Corporate Headquarters Skyscraper
+
+Specialized Industrial Zone (bg_company_buildings):
+	Specialized Industrial Zone:
+		Specialized Industrial Zone
+
+Mega-Factory Complex (bg_company_buildings):
+	Mega-Factory Complex:
+		Mega-Factory Complex
+
+National Exhibition Centre (bg_company_buildings):
+	National Exhibition Centre:
+		National Exhibition Centre
+
+Global Shipping Terminal (bg_company_buildings):
+	Global Shipping Terminal:
+		Global Shipping Terminal
+
+Advanced Materials Laboratory (bg_company_buildings):
+	Advanced Materials Laboratory:
+		Advanced Materials Laboratory
+
+Automation & Robotics Institute (bg_company_buildings):
+	Automation & Robotics Institute:
+		Automation & Robotics Institute
+
+Corporate University (bg_company_buildings):
+	Corporate University:
+		Corporate University
+
+National Data Fortress (bg_company_buildings):
+	National Data Fortress:
+		National Data Fortress
+
+Private Industrial City (bg_company_buildings):
+	Private Industrial City:
+		Private Industrial City
+
+Global Media Headquarters (bg_company_buildings):
+	Global Media Headquarters:
+		Global Media Headquarters
+
+High-Efficiency Power Hub (bg_company_buildings):
+	High-Efficiency Power Hub:
+		High-Efficiency Power Hub
+
+Cross-Continental Pipeline Terminus (bg_company_buildings):
+	Cross-Continental Pipeline Terminus:
+		Cross-Continental Pipeline Terminus
+
+Intercontinental Rail Nexus (bg_company_buildings):
+	Intercontinental Rail Nexus:
+		Intercontinental Rail Nexus
+
+Strategic Proving Grounds (bg_company_buildings):
+	Strategic Proving Grounds:
+		Strategic Proving Grounds
+
+National Resource Depository (bg_company_buildings):
+	National Resource Depository:
+		National Resource Depository
+
+International Financial Center (bg_company_buildings):
+	International Financial Center:
+		International Financial Center
+
+Monument to Industry (bg_company_buildings):
+	Monument to Industry:
+		Monument to Industry
+
+Spaceport (bg_company_buildings):
+	Spaceport:
+		Spaceport
+
+Krupp Essen Works (bg_company_buildings):
+	The legendary Krupp steelworks in Essen, producing the finest steel and armaments in the world.
+	Krupp Essen Works:
+		Krupp Essen Works
+
+Standard Oil Refinery (bg_company_buildings):
+	A sprawling refinery complex that dominates the petroleum industry, refining crude oil into fuel and chemicals.
+	Standard Oil Refinery:
+		Standard Oil Refinery
+
+Carnegie Homestead Mill (bg_company_buildings):
+	The massive Homestead steelworks on the Monongahela River, forging the steel that built America's railways and skyscrapers.
+	Carnegie Homestead Mill:
+		Carnegie Homestead Mill
+
+Ford Rouge Plant (bg_company_buildings):
+	The River Rouge Complex: the world's largest integrated factory, where raw materials enter one end and finished automobiles emerge from the other.
+	Ford Rouge Plant:
+		Ford Rouge Plant
+
+East India Company Trading House (bg_company_buildings):
+	A grand trading house coordinating the vast commercial empire of the East India Company across the subcontinent and beyond.
+	East India Company Trading House:
+		East India Company Trading House
+
+Schneider Le Creusot Works (bg_company_buildings):
+	The great Schneider-Creusot industrial complex, France's premier producer of steel, artillery, and armaments since the Napoleonic era.
+	Schneider Le Creusot Works:
+		Schneider Le Creusot Works
+
+Putilov Works (bg_company_buildings):
+	The Putilov iron and steel works in Saint Petersburg, producing heavy machinery, railway equipment, and artillery for the Russian Empire.
+	Putilov Works:
+		Putilov Works
+
+Mitsubishi Nagasaki Shipyard (bg_company_buildings):
+	Mitsubishi's massive Nagasaki shipyard, constructing warships and merchant vessels that project Japan's industrial might across the Pacific.
+	Mitsubishi Nagasaki Shipyard:
+		Mitsubishi Nagasaki Shipyard
+
+Tata Jamshedpur Works (bg_company_buildings):
+	The Tata Iron and Steel Company works at Jamshedpur, India's first integrated steel plant and symbol of indigenous industrialization.
+	Tata Jamshedpur Works:
+		Tata Jamshedpur Works
+
+Siemens Erlangen Campus (bg_company_buildings):
+	The Siemens research and manufacturing campus, pioneering telegraph systems, electrical generators, and communications technology.
+	Siemens Erlangen Campus:
+		Siemens Erlangen Campus
+
+De Beers Sorting Office (bg_company_buildings):
+	The De Beers diamond sorting and valuation office, controlling the global flow of rough diamonds from South African mines to world markets.
+	De Beers Sorting Office:
+		De Beers Sorting Office
+
+Nobel Baku Refinery (bg_company_buildings):
+	The Nobel Brothers' pioneering petroleum refinery in Baku, processing Caspian crude oil into kerosene, explosives, and industrial chemicals.
+	Nobel Baku Refinery:
+		Nobel Baku Refinery
+
+GE Schenectady Works (bg_company_buildings):
+	General Electric's sprawling Schenectady complex, where Thomas Edison's vision became an empire of electrical innovation and manufacturing.
+	GE Schenectady Works:
+		GE Schenectady Works
+
+Mitsui Trading House (bg_company_buildings):
+	The Mitsui [concept_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.
+	Mitsui Trading House:
+		Mitsui Trading House
+
+FIAT Lingotto Factory (bg_company_buildings):
+	The iconic FIAT Lingotto factory in Turin, with its revolutionary rooftop test track: a cathedral of Italian automobile manufacturing.
+	FIAT Lingotto Factory:
+		FIAT Lingotto Factory
+
+Granary Complex (bg_company_buildings):
+	A large-scale grain storage and distribution hub that ensures reliable food supply across the region.
+	Granary Complex:
+		Granary Complex
+
+Textile Depot (bg_company_buildings):
+	A centralized fabric warehousing and dyeing facility that streamlines textile production and distribution.
+	Textile Depot:
+		Textile Depot
+
+Cold Storage Facility (bg_company_buildings):
+	An industrial cold storage and food preservation center that reduces spoilage and extends the reach of perishable goods.
+	Cold Storage:
+		Cold Storage
+
+Paper Mill Complex (bg_company_buildings):
+	An integrated pulp and paper complex that turns timber into paper stock and the clerical backbone of modern commerce.
+	Paper Mill Complex:
+		Paper Mill Complex
+
+Foundry Complex (bg_company_buildings):
+	A sprawling steel and iron smelting campus that feeds the insatiable demand for construction materials.
+	Foundry Complex:
+		Foundry Complex
+
+Machine Shop (bg_company_buildings):
+	A precision engineering workshop producing tools, machine parts, and specialized equipment for heavy industry.
+	Machine Shop:
+		Machine Shop
+
+Chemical Works (bg_company_buildings):
+	A chemical processing campus producing fertilizers, explosives, and industrial chemicals from raw materials.
+	Chemical Works:
+		Chemical Works
+
+Tank Farm (bg_company_buildings):
+	An oil storage and refining depot with rows of massive tanks feeding petroleum products to industry and transport.
+	Tank Farm:
+		Tank Farm
+
+Ordnance Depot (bg_company_buildings):
+	A munitions storage and testing facility that keeps the nation's military well-supplied with ammunition.
+	Ordnance Depot:
+		Ordnance Depot
+
+Motor Works (bg_company_buildings):
+	An engine and vehicle assembly plant producing motors, machinery, and transport equipment.
+	Motor Works:
+		Motor Works
+
+Dry Dock (bg_company_buildings):
+	A large ship repair and construction facility that keeps the merchant and military fleet in fighting condition.
+	Dry Dock:
+		Dry Dock
+
+Arsenal (bg_company_buildings):
+	An arms depot and proving ground where weapons are manufactured, tested, and stored for military use.
+	Arsenal:
+		Arsenal
+
+Fish Market (bg_company_buildings):
+	A wholesale fish market and distribution center that brings fresh seafood from the docks to the population.
+	Fish Market:
+		Fish Market
+
+Colonial Depot (bg_company_buildings):
+	A central depot for consolidating and distributing colonial commodities such as tea and opium.
+	Colonial Depot Operations:
+		Colonial Commodity Trade
+
+Export Warehouse (bg_company_buildings):
+	A bonded warehouse for sorting, grading, and re-exporting colonial cash crops.
+	Export Warehouse Operations:
+		Cash Crop Export
+
+Electronics Laboratory (bg_company_buildings):
+	A research and testing laboratory for electrical components and consumer electronics.
+	Electronics Lab Operations:
+		Electronics Research
+
+Assay Office (bg_company_buildings):
+	A facility for testing precious metal purity and facilitating bullion trade.
+	Assay Office Operations:
+		Precious Metal Assaying
+
+Ore Processing Plant (bg_company_buildings):
+	A central facility for crushing, smelting, and refining metallic ores.
+	Ore Processing Operations:
+		Ore Smelting
+
+Mineral Refinery (bg_company_buildings):
+	A refinery converting raw minerals into industrial chemicals and fertilizers.
+	Mineral Refinery Operations:
+		Mineral Refining
+
+Silk Exchange (bg_company_buildings):
+	A trading house for sorting, grading, and auctioning raw silk and dyed textiles.
+	Silk Exchange Operations:
+		Silk and Dye Trade
+
+Vintner's Hall (bg_company_buildings):
+	A facility for aging, blending, and bottling wine and processing fruit into preserves.
+	Vintner's Hall Operations:
+		Wine and Fruit Processing
+
+Furniture Showroom (bg_company_buildings):
+	A flagship homewares emporium fronting a fabrication workshop, where carpenters, glaziers, and shopkeepers turn timber and glass into the furnishings of the modern home.
+	Furniture Showroom Operations:
+		Furniture Showroom
+
+Lumber Yard (bg_company_buildings):
+	An industrial sawmill and timber yard where harvested logs are cut, dried, and graded into framing wood and pulpwood for paper.
+	Lumber Yard Operations:
+		Lumber Yard
+
+Aker Oslo Shipyard (bg_company_buildings):
+	Aker Oslo Shipyard:
+		Aker Oslo Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Allatini Thessaloniki Flour Mill (bg_company_buildings):
+	Allatini Thessaloniki Flour Mill:
+		Allatini Thessaloniki Flour Mill
+
+Altos Hornos Baracaldo Furnaces (bg_company_buildings):
+	Altos Hornos de Baracaldo Furnaces:
+		Altos Hornos de Baracaldo Furnaces
+
+Anglo-Persian Abadan Refinery (bg_company_buildings):
+	Anglo-Persian Abadan Refinery:
+		Anglo-Persian Abadan Refinery
+
+Anglo-Sicilian Licata Wharf (bg_company_buildings):
+	Anglo-Sicilian Licata Wharf:
+		Anglo-Sicilian Licata Wharf
+
+Ansaldo Sestri Ponente Works (bg_company_buildings):
+	Ansaldo Sestri Ponente Works:
+		Ansaldo Sestri Ponente Works
+
+A.P. Møller Copenhagen Wharf (bg_company_buildings):
+	A.P. Møller Copenhagen Wharf:
+		A.P. Møller Copenhagen Wharf
+
+Argentine Wine Mendoza Bodega (bg_company_buildings):
+	Argentine Wine Mendoza Bodega:
+		Argentine Wine Mendoza Bodega
+
+Armstrong Elswick Works (bg_company_buildings):
+	Armstrong Elswick Works:
+		Armstrong Elswick Works
+
+Assam Company Nazira Tea Estate (bg_company_buildings):
+	Assam Company Nazira Tea Estate:
+		Assam Company Nazira Tea Estate
+
+B. Grimm Bangkok Warehouse (bg_company_buildings):
+	B. Grimm Bangkok Warehouse:
+		B. Grimm Bangkok Warehouse
+
+Bacardí Santiago Distillery (bg_company_buildings):
+	Bacardí Santiago Distillery:
+		Bacardí Santiago Distillery
+
+BASF Ludwigshafen Works (bg_company_buildings):
+	BASF Ludwigshafen Plant:
+		BASF Ludwigshafen Plant
+
+Basileiades Piraeus Works (bg_company_buildings):
+	Basileiades Piraeus Works:
+		Basileiades Piraeus Works
+
+Bengal Coal Raniganj Mine (bg_company_buildings):
+	Bengal Coal Raniganj Mine:
+		Bengal Coal Raniganj Mine
+
+Bolckow Vaughan Eston Ironworks (bg_company_buildings):
+	Bolckow Eston Ironworks:
+		Bolckow Eston Ironworks
+
+Bombay Burmah Rangoon Timber Depot (bg_company_buildings):
+	Bombay Burmah Rangoon Timber Depot:
+		Bombay Burmah Rangoon Timber Depot
+
+Bombay Dyeing Spring Mills (bg_company_buildings):
+	Bombay Dyeing Spring Mills:
+		Bombay Dyeing Spring Mills
+
+Bunge & Born Buenos Aires Grain Silo (bg_company_buildings):
+	Bunge & Born Buenos Aires Grain Silo:
+		Bunge & Born Buenos Aires Grain Silo
+
+Calcutta Electric Victoria House (bg_company_buildings):
+	Calcutta Electric Victoria House:
+		Calcutta Electric Victoria House
+
+Caribbean Petroleum Maracaibo Depot (bg_company_buildings):
+	Caribbean Petroleum Maracaibo Depot:
+		Caribbean Petroleum Maracaibo Depot
+
+CCCI Léopoldville Rubber Depot (bg_company_buildings):
+	CCCI Léopoldville Depot:
+		CCCI Léopoldville Depot
+
+CFR Bucharest Railway Works (bg_company_buildings):
+	CFR Bucharest Railway Works:
+		CFR Bucharest Railway Works
+
+CGV Haut-Brion Estate (bg_company_buildings):
+	CGV Haut-Brion Estate:
+		CGV Haut-Brion Estate
+
+Chr. Hansen Copenhagen Laboratory (bg_company_buildings):
+	Chr. Hansen Copenhagen Laboratory:
+		Chr. Hansen Copenhagen Laboratory
+
+Colt Hartford Armory (bg_company_buildings):
+	Colt Hartford Armory:
+		Colt Hartford Armory
+
+Sansinena Avellaneda Frigorífico (bg_company_buildings):
+	Sansinena Avellaneda Frigorífico:
+		Sansinena Avellaneda Frigorífico
+
+Córdoba Railway Alta Gracia Works (bg_company_buildings):
+	Córdoba Railway Alta Gracia Works:
+		Córdoba Railway Alta Gracia Works
+
+CSFA Sicilian Sulfur Depot (bg_company_buildings):
+	CSFA Sicilian Sulfur Depot:
+		CSFA Sicilian Sulfur Depot
+
+Afghan Nassaji Kabul Mills (bg_company_buildings):
+	Afghan Nassaji Kabul Mills:
+		Afghan Nassaji Kabul Mills
+
+Sassoon Bombay Docks (bg_company_buildings):
+	Sassoon Bombay Docks:
+		Sassoon Bombay Docks
+
+DMC Mulhouse Thread Mills (bg_company_buildings):
+	DMC Mulhouse Mills:
+		DMC Mulhouse Mills
+
+Douro Wine Lodge (bg_company_buildings):
+	Douro Wine Lodge:
+		Douro Wine Lodge
+
+Duro La Felguera Steelworks (bg_company_buildings):
+	Duro La Felguera Steelworks:
+		Duro La Felguera Steelworks
+
+EEA Dock Sud Power Station (bg_company_buildings):
+	EEA Dock Sud Power Station:
+		EEA Dock Sud Power Station
+
+Egyptian Railway Cairo Central Station (bg_company_buildings):
+	Egyptian Rail Cairo Central:
+		Egyptian Rail Cairo Central
+
+El Águila Tampico Refinery (bg_company_buildings):
+	El Águila Tampico Refinery:
+		El Águila Tampico Refinery
+
+Electricidad de Caracas Power House (bg_company_buildings):
+	Electricidad de Caracas Power House:
+		Electricidad de Caracas Power House
+
+Első Budapesti Steam Mill (bg_company_buildings):
+	Első Budapesti Steam Mill:
+		Első Budapesti Steam Mill
+
+Ericsson Telefonplan (bg_company_buildings):
+	Ericsson Telefonplan:
+		Ericsson Telefonplan
+
+Erste Brünner Maschinenwerk (bg_company_buildings):
+	Erste Brünner Maschinenwerk:
+		Erste Brünner Maschinenwerk
+
+España Industrial Sants Mills (bg_company_buildings):
+	España Industrial Sants Mills:
+		España Industrial Sants Mills
+
+Estaleiro Mauá Niterói Dockyard (bg_company_buildings):
+	Estaleiro Mauá Niterói Dockyard:
+		Estaleiro Mauá Niterói Dockyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Estannífera Llallagua Tin Concentrator (bg_company_buildings):
+	Estañífera Llallagua Tin Concentrator:
+		Estañífera Llallagua Tin Concentrator
+
+FAMAE Santiago Arsenal (bg_company_buildings):
+	FAMAE Santiago Arsenal:
+		FAMAE Santiago Arsenal
+
+FCM La Seyne Shipyard (bg_company_buildings):
+	FCM La Seyne Shipyard:
+		FCM La Seyne Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Foochow Mawei Dockyard (bg_company_buildings):
+	Foochow Mawei Dockyard:
+		Foochow Mawei Dockyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Franco-Belge Raismes Works (bg_company_buildings):
+	Franco-Belge Raismes Works:
+		Franco-Belge Raismes Works
+
+Fundição Ipanema Sorocaba Foundry (bg_company_buildings):
+	Fundição Ipanema Sorocaba Foundry:
+		Fundição Ipanema Sorocaba Foundry
+
+Fundidora Monterrey Blast Furnace (bg_company_buildings):
+	Fundidora Monterrey Blast Furnace:
+		Fundidora Monterrey Blast Furnace
+
+Galician Borysław Oil Field (bg_company_buildings):
+	Galician Borysław Oil Field:
+		Galician Borysław Oil Field
+
+Thonet Bystřice Bentwood Factory (bg_company_buildings):
+	Thonet Bystřice Bentwood Factory:
+		Thonet Bystřice Bentwood Factory
+
+Getzner Bludenz Textile Works (bg_company_buildings):
+	Getzner Bludenz Textile Works:
+		Getzner Bludenz Textile Works
+
+Götaverken Gothenburg Shipyard (bg_company_buildings):
+	Götaverken Gothenburg Shipyard:
+		Götaverken Gothenburg Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Gran Azucarera Aranjuez Refinery (bg_company_buildings):
+	Gran Azucarera Aranjuez Refinery:
+		Gran Azucarera Aranjuez Refinery
+
+Great Indian Railway Jamalpur Works (bg_company_buildings):
+	Great Indian Railway Jamalpur Works:
+		Great Indian Railway Jamalpur Works
+
+Guinness St. James's Gate Brewery (bg_company_buildings):
+	Guinness St. James's Gate Brewery:
+		Guinness St. James's Gate Brewery
+
+GWR Swindon Works (bg_company_buildings):
+	GWR Swindon Works:
+		GWR Swindon Works
+
+Hanseong Electric Gwanghwamun Station (bg_company_buildings):
+	Hanseong Jeongi Gwanghwamun Station:
+		Hanseong Jeongi Gwanghwamun Station
+
+Hanyang Arsenal Iron Works (bg_company_buildings):
+	Hanyang Arsenal Iron Works:
+		Hanyang Arsenal Iron Works
+
+Hudson's Bay York Factory (bg_company_buildings):
+	HBC York Factory:
+		HBC York Factory
+
+Hispano-Suiza Barcelona Factory (bg_company_buildings):
+	Hispano-Suiza Barcelona Factory:
+		Hispano-Suiza Barcelona Factory
+
+ILVA Bagnoli Steelworks (bg_company_buildings):
+	ILVA Bagnoli Steelworks:
+		ILVA Bagnoli Steelworks
+
+Imperial Arsenal Golden Horn (bg_company_buildings):
+	Imperial Arsenal Golden Horn:
+		Imperial Arsenal Golden Horn
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Ethiopian Railway Dire Dawa Depot (bg_company_buildings):
+	Ethiopian Railway Dire Dawa Depot:
+		Ethiopian Railway Dire Dawa Depot
+
+Imperial Tobacco Wills Factory (bg_company_buildings):
+	Imperial Tobacco Wills' Factory:
+		Imperial Tobacco Wills' Factory
+
+Ingolstadt Power Station (bg_company_buildings):
+	Ingolstadt Power Station:
+		Ingolstadt Power Station
+
+Iranian State Railway Veresk Station (bg_company_buildings):
+	Iranian State Railway Veresk Station:
+		Iranian State Railway Veresk Station
+
+Izhevsk Arms Factory (bg_company_buildings):
+	Izhevsk Arms Factory:
+		Izhevsk Arms Factory
+
+J&P Coats Ferguslie Thread Mills (bg_company_buildings):
+	Coats Ferguslie Mills:
+		Coats Ferguslie Mills
+
+Klein Galician Paper Mill (bg_company_buildings):
+	Klein Galician Paper Mill:
+		Klein Galician Paper Mill
+
+Jiangnan Nanjing Brocade Hall (bg_company_buildings):
+	Jiangnan Nanjing Brocade Hall:
+		Jiangnan Nanjing Brocade Hall
+
+Jingdezhen Imperial Kiln (bg_company_buildings):
+	Jingdezhen Imperial Kiln:
+		Jingdezhen Imperial Kiln
+
+John Brown Clydebank Shipyard (bg_company_buildings):
+	John Brown Clydebank Yard:
+		John Brown Clydebank Yard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Cockerill Seraing Works (bg_company_buildings):
+	Cockerill Seraing Works:
+		Cockerill Seraing Works
+
+John Holt Lagos Trading House (bg_company_buildings):
+	John Holt Lagos Trading House:
+		John Holt Lagos Trading House
+
+Hughes Yuzovka Steelworks (bg_company_buildings):
+	Hughes Yuzovka Steelworks:
+		Hughes Yuzovka Steelworks
+
+Kablín Zárate Paper Mill (bg_company_buildings):
+	Kablín Zárate Paper Mill:
+		Kablín Zárate Paper Mill
+
+Kaiping Tangshan Colliery (bg_company_buildings):
+	Kaiping Tangshan Colliery:
+		Kaiping Tangshan Colliery
+
+Kinkozan Kiyomizu Kiln (bg_company_buildings):
+	Kinkozan Kiyomizu Kiln:
+		Kinkozan Kiyomizu Kiln
+
+Kirgizian Copper Smelter (bg_company_buildings):
+	Kirgizian Copper Smelter:
+		Kirgizian Copper Smelter
+
+Klanično Belgrade Slaughterhouse (bg_company_buildings):
+	Klaničko Belgrade Slaughterhouse:
+		Klaničko Belgrade Slaughterhouse
+
+Meissen Porcelain Manufactory (bg_company_buildings):
+	Meissen Porcelain Manufactory:
+		Meissen Porcelain Manufactory
+
+Kouppas Piraeus Foundry (bg_company_buildings):
+	Kouppas Piraeus Foundry:
+		Kouppas Piraeus Foundry
+
+La Rosada Buenos Aires Arsenal (bg_company_buildings):
+	La Rosada Buenos Aires Arsenal:
+		La Rosada Buenos Aires Arsenal
+
+Lanfang Pontianak Kongsi House (bg_company_buildings):
+	Lanfang Pontianak Kongsi House:
+		Lanfang Pontianak Kongsi House
+
+Lee Wilson Plantation Depot (bg_company_buildings):
+	Lee Wilson Plantation Depot:
+		Lee Wilson Plantation Depot
+
+Lilpop Warsaw Metalworks (bg_company_buildings):
+	Lilpop Warsaw Metalworks:
+		Lilpop Warsaw Metalworks
+
+LKAB Kiruna Iron Mine (bg_company_buildings):
+	LKAB Kiruna Mine:
+		LKAB Kiruna Mine
+
+Moser Karlsbad Glass Works (bg_company_buildings):
+	Moser Karlsbad Glass Works:
+		Moser Karlsbad Glass Works
+
+Madura Mills Madurai Complex (bg_company_buildings):
+	Madura Mills Madurai Complex:
+		Madura Mills Madurai Complex
+
+Worth Rue de la Paix Atelier (bg_company_buildings):
+	Worth Rue de la Paix Atelier:
+		Worth Rue de la Paix Atelier
+
+Manfred Weiss Csepel Works (bg_company_buildings):
+	Manfred Weiss Csepel Works:
+		Manfred Weiss Csepel Works
+
+Mantero Como Silk Mill (bg_company_buildings):
+	Mantero Como Silk Mill:
+		Mantero Como Silk Mill
+
+Mantetsu Dalian Railway Hub (bg_company_buildings):
+	Mantetsu Dalian Railway Hub:
+		Mantetsu Dalian Railway Hub
+
+Maple & Co Tottenham Court Road (bg_company_buildings):
+	Maple Tottenham Court Showroom:
+		Maple Tottenham Court Showroom
+
+Massey-Harris Toronto Implement Works (bg_company_buildings):
+	Massey-Harris Toronto Implement Works:
+		Massey-Harris Toronto Implement Works
+
+Gavrilović Petrinja Meatworks (bg_company_buildings):
+	Gavrilović Petrinja Meatworks:
+		Gavrilović Petrinja Meatworks
+
+MÁV Budapest Locomotive Works (bg_company_buildings):
+	MÁV Budapest Locomotive Works:
+		MÁV Budapest Locomotive Works
+
+Mines d'Anzin Colliery (bg_company_buildings):
+	Anzin Colliery:
+		Anzin Colliery
+
+Misr Mahalla Textile Complex (bg_company_buildings):
+	Misr Mahalla Textile Complex:
+		Misr Mahalla Textile Complex
+
+Moscow Irrigation Cotton Depot (bg_company_buildings):
+	Moscow Irrigation Cotton Depot:
+		Moscow Irrigation Cotton Depot
+
+Mozambique Company Beira Concession (bg_company_buildings):
+	Mozambique Company Beira Concession:
+		Mozambique Company Beira Concession
+
+Nam Định Textile Plant (bg_company_buildings):
+	Nam Định Textile Plant:
+		Nam Định Textile Plant
+
+NIOC Masjed Soleyman Oil Field (bg_company_buildings):
+	NIOC Masjed Soleyman Field:
+		NIOC Masjed Soleyman Field
+
+NedPetroleum Pangkalan Brandan Depot (bg_company_buildings):
+	Nederlandse Petroleum Pangkalan Depot:
+		Nederlandse Petroleum Pangkalan Depot
+
+Portalis Lyon Silk House (bg_company_buildings):
+	Portalis Lyon Silk House:
+		Portalis Lyon Silk House
+
+Nokia Cable Works (bg_company_buildings):
+	Nokia Cable Works:
+		Nokia Cable Works
+
+Norsk Hydro Rjukan Plant (bg_company_buildings):
+	Norsk Hydro Rjukan Plant:
+		Norsk Hydro Rjukan Plant
+
+Alpine Donawitz Steelworks (bg_company_buildings):
+	Alpine Donawitz Steelworks:
+		Alpine Donawitz Steelworks
+
+OEVG Steyr Arms Works (bg_company_buildings):
+	OEWG Steyr Arms Works:
+		OEWG Steyr Arms Works
+
+OCP Khouribga Phosphate Mine (bg_company_buildings):
+	OCP Khouribga Mine:
+		OCP Khouribga Mine
+
+Ong Lung Sheng Tea Warehouse (bg_company_buildings):
+	Ong Lung Sheng Tea Warehouse:
+		Ong Lung Sheng Tea Warehouse
+
+Opium Ghazipur Factory (bg_company_buildings):
+	Opium Ghazipur Factory:
+		Opium Ghazipur Factory
+
+Orient Express Sirkeci Terminal (bg_company_buildings):
+	Orient Express Sirkeci Terminal:
+		Orient Express Sirkeci Terminal
+
+Oriental Development Kunsan Granary (bg_company_buildings):
+	Oriental Development Kunsan Granary:
+		Oriental Development Kunsan Granary
+
+Tobacco Régie Cibali Factory (bg_company_buildings):
+	Tobacco Régie Cibali Factory:
+		Tobacco Régie Cibali Factory
+
+Panama Company Culebra Cut (bg_company_buildings):
+	Panama Company Culebra Cut:
+		Panama Company Culebra Cut
+
+Paradox Kvarnholmen Studio (bg_company_buildings):
+	Paradox Kvarnholmen Studio:
+		Paradox Kvarnholmen Studio
+
+Pedro Domecq Jerez Bodega (bg_company_buildings):
+	Pedro Domecq Jerez Bodega:
+		Pedro Domecq Jerez Bodega
+
+Pernambuco Recife Cotton Mill (bg_company_buildings):
+	Pernambuco Recife Cotton Mill:
+		Pernambuco Recife Cotton Mill
+
+Perskhlopok Cotton Combines (bg_company_buildings):
+	Perskhlopok Cotton Combines:
+		Perskhlopok Cotton Combines
+
+Persshelk Silk Reeling House (bg_company_buildings):
+	Persshëlk Silk Reeling House:
+		Persshëlk Silk Reeling House
+
+Peruvian Amazon Iquitos Rubber Depot (bg_company_buildings):
+	Peruvian Amazon Iquitos Depot:
+		Peruvian Amazon Iquitos Depot
+
+Philips Eindhoven NatLab (bg_company_buildings):
+	Philips Eindhoven NatLab:
+		Philips Eindhoven NatLab
+
+Prussian Railway Directorate (bg_company_buildings):
+	Prussian Railway Directorate:
+		Prussian Railway Directorate
+
+Ralli Odessa Grain Elevator (bg_company_buildings):
+	Ralli Odessa Grain Elevator:
+		Ralli Odessa Grain Elevator
+
+Rheinmetall Unterlüss Proving Ground (bg_company_buildings):
+	Rheinmetall Unterlüß Proving Ground:
+		Rheinmetall Unterlüß Proving Ground
+
+Ricordi Galleria Publishing House (bg_company_buildings):
+	Ricordi Galleria Vittorio Emanuele:
+		Ricordi Galleria Vittorio Emanuele
+
+Rodríguez Argüelles Havana Tobacco House (bg_company_buildings):
+	Rodríguez Argüelles Havana Tobacco House:
+		Rodríguez Argüelles Havana Tobacco House
+
+Romanian Star Ploiești Refinery (bg_company_buildings):
+	Romanian Star Ploiești Refinery:
+		Romanian Star Ploiești Refinery
+
+Rossi São Leopoldo Arms Factory (bg_company_buildings):
+	Rossi São Leopoldo Arms Factory:
+		Rossi São Leopoldo Arms Factory
+
+Russian-American Company Sitka Trading Post (bg_company_buildings):
+	RAC Sitka Trading Post:
+		RAC Sitka Trading Post
+
+Saint-Étienne Arms Manufactory (bg_company_buildings):
+	Saint-Étienne Arms Manufactory:
+		Saint-Étienne Arms Manufactory
+
+San Miguel Manila Brewery (bg_company_buildings):
+	San Miguel Manila Brewery:
+		San Miguel Manila Brewery
+
+São Paulo Railway Paranapiacaba Workshop (bg_company_buildings):
+	São Paulo Railway Paranapiacaba Workshop:
+		São Paulo Railway Paranapiacaba Workshop
+
+Morozov Orekhovo-Zuevo Mills (bg_company_buildings):
+	Morozov Orekhovo-Zuevo Mills:
+		Morozov Orekhovo-Zuevo Mills
+
+Schichau-Werke Elbing (bg_company_buildings):
+	Schichau Elbing Shipyard:
+		Schichau Elbing Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+SECN Ferrol Shipyard (bg_company_buildings):
+	SECN Ferrol Shipyard:
+		SECN Ferrol Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Sherkat-e Shemali Cotton Gin (bg_company_buildings):
+	Sherkat-e Shemali Cotton Gin:
+		Sherkat-e Shemali Cotton Gin
+
+Sherkat-e Eslāmiyyeh Isfahan Mill (bg_company_buildings):
+	Sherkat-e Eslamiya Isfahan Mill:
+		Sherkat-e Eslamiya Isfahan Mill
+
+Škoda Pilsen Works (bg_company_buildings):
+	Škoda Pilsen Works:
+		Škoda Pilsen Works
+
+Mokta el Hadid Beni Saf Mine (bg_company_buildings):
+	Mokta el Hadid Beni Saf Mine:
+		Mokta el Hadid Beni Saf Mine
+
+STF Fiume Torpedo Works (bg_company_buildings):
+	STF Fiume Torpedo Works:
+		STF Fiume Torpedo Works
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Steel Brothers Syriam Depot (bg_company_buildings):
+	Steel Brothers Syriam Depot:
+		Steel Brothers Syriam Depot
+
+STT Hasköy Shipyard (bg_company_buildings):
+	STT Hasköy Shipyard:
+		STT Hasköy Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Sudamericana Valparaíso Pier (bg_company_buildings):
+	Sudamericana Valparaíso Pier:
+		Sudamericana Valparaíso Pier
+
+Suez Company Ismailia Headquarters (bg_company_buildings):
+	Suez Company Ismailia [concept_hq]:
+		Suez Company Ismailia [concept_hq]
+
+Sunhwaguk Seoul Tobacco Factory (bg_company_buildings):
+	Sunhwaguk Seoul Tobacco Factory:
+		Sunhwaguk Seoul Tobacco Factory
+
+Tashkent Railroad Workshops (bg_company_buildings):
+	Tashkent Railroad Workshops:
+		Tashkent Railroad Workshops
+
+Trubia Cannon Foundry (bg_company_buildings):
+	Trubia Cannon Foundry:
+		Trubia Cannon Foundry
+
+Turkish Petroleum Kirkuk Depot (bg_company_buildings):
+	Turkish Petroleum Kirkuk Depot:
+		Turkish Petroleum Kirkuk Depot
+
+União Fabril Barreiro Plant (bg_company_buildings):
+	União Fabril Barreiro Plant:
+		União Fabril Barreiro Plant
+
+United Fruit Terminal (bg_company_buildings):
+	United Fruit Great White Fleet Terminal:
+		United Fruit Great White Fleet Terminal
+
+United Tobacco Moscow Plant (bg_company_buildings):
+	United Tobacco Moscow Plant:
+		United Tobacco Moscow Plant
+
+Ursus Warsaw Tractor Plant (bg_company_buildings):
+	Ursus Warsaw Tractor Plant:
+		Ursus Warsaw Tractor Plant
+
+State Vodka Monopoly Warehouse (bg_company_buildings):
+	Vodka Monopoly Warehouse:
+		Vodka Monopoly Warehouse
+
+Wadia Bombay Dockyard (bg_company_buildings):
+	Wadia Bombay Dockyard:
+		Wadia Bombay Dockyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+West Ural Oil Depot (bg_company_buildings):
+	West Ural Oil Depot:
+		West Ural Oil Depot
+
+Cramp Philadelphia Shipyard (bg_company_buildings):
+	Cramp Philadelphia Shipyard:
+		Cramp Philadelphia Shipyard
+		Modern Shipbuilding
+		Advanced Shipbuilding
+
+Sandford Newcastle-Natal Ironworks (bg_company_buildings):
+	Sandford Newcastle Natal Ironworks:
+		Sandford Newcastle Natal Ironworks
+
+Witkowitzer Ostrava Ironworks (bg_company_buildings):
+	Witkowitzer Ostrava Ironworks:
+		Witkowitzer Ostrava Ironworks
+
+Ynchausti Manila Trading House (bg_company_buildings):
+	Ynchausti Manila Trading House:
+		Ynchausti Manila Trading House
+
+Zastava Kragujevac Arsenal (bg_company_buildings):
+	Zastava Kragujevac Arsenal:
+		Zastava Kragujevac Arsenal
+
+Megastructure Consortium HQ (bg_company_buildings):
+	Megastructure Operations:
+		Megastructure Operations
+
+Axiom Space Station (bg_company_buildings):
+	Axiom Station Operations:
+		Axiom Station Operations
+
+Neurovault Research Complex (bg_company_buildings):
+	Neurovault Research:
+		Neurovault Research
+
+Tycho Orbital Works (bg_company_buildings):
+	Tycho Orbital Construction:
+		Tycho Orbital Construction
+
+Tessier-Ashpool Orbital (bg_company_buildings):
+	Tessier-Ashpool Operations:
+		Tessier-Ashpool Operations
+
+Hanka Precision Laboratory (bg_company_buildings):
+	Hanka Cybernetics Division:
+		Hanka Cybernetics Division
+
+Yoyodyne Propulsion Lab (bg_company_buildings):
+	Yoyodyne Propulsion Research:
+		Yoyodyne Propulsion Research
+
+Rekal Memory Center (bg_company_buildings):
+	Rekal Memory Services:
+		Rekal Memory Services
+
+DuPont Experimental Station (bg_company_buildings):
+	DuPont Experimental Station:
+		DuPont Experimental Station
+
+IG Farben Buna-Werke (bg_company_buildings):
+	IG Farben Buna-Werke:
+		IG Farben Buna-Werke
+
+Shell Pernis Refinery (bg_company_buildings):
+	Shell Pernis Refinery:
+		Shell Pernis Refinery
+
+JSR Yokkaichi Complex (bg_company_buildings):
+	JSR Yokkaichi Complex:
+		JSR Yokkaichi Complex
+
+Sibur Tobolsk Petrochemical Complex (bg_company_buildings):
+	Sibur Tobolsk Complex:
+		Sibur Tobolsk Complex
+
+Rolls-Royce Derby Works (bg_company_buildings):
+	Rolls-Royce's Derby works, where master craftsmen build the world's finest aero-engines and motorcars by hand.
+	Rolls-Royce Derby Works:
+		Rolls-Royce Derby Works
+
+BP Refinery Complex (bg_company_buildings):
+	A sprawling British Petroleum refinery turning crude into fertilizer feedstock and explosives precursors.
+	BP Refinery Complex:
+		BP Refinery Complex
+
+Bayer Leverkusen Plant (bg_company_buildings):
+	Bayer's Leverkusen works, marrying industrial chemistry with pharmaceutical research.
+	Bayer Leverkusen Plant:
+		Bayer Leverkusen Plant
+
+Thyssen Steelworks (bg_company_buildings):
+	August Thyssen's vast Ruhr steelworks, a pillar of German heavy industry.
+	Thyssen Steelworks:
+		Thyssen Steelworks
+
+Boeing Everett Factory (bg_company_buildings):
+	Boeing's Everett assembly hall, among the largest buildings on earth, where airframes take shape.
+	Boeing Everett Factory:
+		Boeing Everett Factory
+
+Renault Billancourt Plant (bg_company_buildings):
+	Renault's Boulogne-Billancourt works on the Seine, a cathedral of French mass-production.
+	Renault Billancourt Plant:
+		Renault Billancourt Plant
+
+Michelin Clermont-Ferrand Works (bg_company_buildings):
+	Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber.
+	Michelin Clermont-Ferrand Works:
+		Michelin Clermont-Ferrand Works
+
+Pirelli Bicocca Plant (bg_company_buildings):
+	Pirelli's Bicocca works in Milan, producing tyres and the insulated cables wiring the modern world.
+	Pirelli Bicocca Plant:
+		Pirelli Bicocca Plant
+
+Jardine Princeps House (bg_company_buildings):
+	Jardine, Matheson & Co.'s Hong Kong head office, nerve centre of a sprawling China-coast trading empire.
+	Jardine Princeps House:
+		Jardine Princeps House
+
+Sumitomo Besshi Mine (bg_company_buildings):
+	The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.
+	Sumitomo Besshi Mine:
+		Sumitomo Besshi Mine
 

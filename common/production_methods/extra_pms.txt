@@ -19945,7 +19945,7 @@ pm_garrison_duty = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_turmoil_effects_mult = -0.15
-			state_war_support_monthly_add = 0.5
+			state_war_support_monthly_add = 0.25 # 1.14: halved with the 0-100 war support rescale
 		}
 	}
 }
@@ -19956,7 +19956,7 @@ pm_territorial_defense = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_fortification_level_add = 1
-			state_war_support_monthly_add = 0.25
+			state_war_support_monthly_add = 0.125 # 1.14: halved with the 0-100 war support rescale
 		}
 	}
 }

@@ -485,7 +485,7 @@ principle_aggressive_coordination_4 = {
 
 	member_modifier = {
 		country_initiator_war_goal_maneuver_cost_mult = -0.3
-		country_war_exhaustion_casualties_mult = -0.15
+		country_war_support_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
@@ -525,7 +525,7 @@ principle_aggressive_coordination_5 = {
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_initiator_war_goal_maneuver_cost_mult = -0.3
-		country_war_exhaustion_casualties_mult = -0.15
+		country_war_support_casualties_mult = -0.15
 		country_join_power_bloc_member_in_plays_bool = yes
 		country_infamy_generation_mult = 0.15
 		country_enactment_success_chance_law_ministry_of_war_add = 0.1
@@ -1404,7 +1404,7 @@ principle_sacred_civics_2_mod = {
 		interest_group_ig_devout_approval_add = 5
 		interest_group_ig_devout_pop_attraction_mult = 0.1
 
-		country_war_support_monthly_add_religion = 10
+		country_war_support_monthly_add_religion = 5 # 1.14: halved with the 0-100 war support rescale
 		state_conscription_rate_mult = 0.25
 	}
 
@@ -1421,7 +1421,7 @@ principle_sacred_civics_3_mod = {
 		# Modifiers from previous level(s)
 		interest_group_ig_devout_approval_add = 5
 		interest_group_ig_devout_pop_attraction_mult = 0.1
-		country_war_support_monthly_add_religion = 10
+		country_war_support_monthly_add_religion = 5 # 1.14: halved with the 0-100 war support rescale
 		state_conscription_rate_mult = 0.25
 	}
 
@@ -1447,7 +1447,7 @@ principle_sacred_civics_4_mod = {
 		# Modifiers from previous level(s)
 		interest_group_ig_devout_approval_add = 5
 		interest_group_ig_devout_pop_attraction_mult = 0.1
-		country_war_support_monthly_add_religion = 10
+		country_war_support_monthly_add_religion = 5 # 1.14: halved with the 0-100 war support rescale
 		state_conscription_rate_mult = 0.25
 
 		country_enactment_success_chance_law_ministry_of_religion_add = 0.1
@@ -1484,7 +1484,7 @@ principle_sacred_civics_5_mod = {
 		# Modifiers from previous level(s)
 		interest_group_ig_devout_approval_add = 5
 		interest_group_ig_devout_pop_attraction_mult = 0.1
-		country_war_support_monthly_add_religion = 10
+		country_war_support_monthly_add_religion = 5 # 1.14: halved with the 0-100 war support rescale
 		state_conscription_rate_mult = 0.25
 		country_enactment_success_chance_law_ministry_of_religion_add = 0.2
 		country_institution_cost_institution_ministry_of_religion_mult = -0.5
@@ -1501,7 +1501,7 @@ principle_sacred_civics_5_mod = {
 		country_authority_add = 100
 		country_clergymen_pol_str_mult = 0.2
 		country_influence_add = 100
-		country_war_support_monthly_add_religion = 2
+		country_war_support_monthly_add_religion = 1 # 1.14: halved with the 0-100 war support rescale
 	}
 
 	ai_weight = {
@@ -2957,7 +2957,7 @@ principle_global_security_3 = {
 	}
 
 	member_modifier = {
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_support_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -2998,7 +2998,7 @@ principle_global_security_4 = {
 	}
 
 	member_modifier = {
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_support_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -3040,7 +3040,7 @@ principle_global_security_5 = {
 	}
 
 	member_modifier = {
-		country_war_exhaustion_casualties_mult = -0.2
+		country_war_support_casualties_mult = -0.2
 	}
 
 	institution = institution_ministry_of_war
@@ -4129,7 +4129,8 @@ principle_multilateral_institutions_5 = {
 		power_bloc_cohesion_per_member_add = 1
 		power_bloc_target_sway_cost_mult = -0.2
 		power_bloc_invite_acceptance_minor_power_add = 20
-		power_bloc_invite_acceptance_insignificant_power_add = 20
+		# No insignificant-power variant: vanilla's invite acceptance (28_invite_to_power_bloc.txt)
+		# only applies rank affinity above insignificant_power, and the type is not script-registered.
 		power_bloc_invite_acceptance_major_power_add = 10
 	}
 

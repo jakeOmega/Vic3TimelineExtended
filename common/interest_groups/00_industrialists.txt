@@ -30,14 +30,12 @@ ig_industrialists = {
 	}
 
 	on_enable = {
+		# ONLY HANDLE IG TRAITS IN THIS BLOCK
 		ig:ig_industrialists ?= {
 			if = {
 				limit = {
 					owner = { c:JAP ?= this }
 				}
-				set_interest_group_name = ig_gosho
-				remove_ideology = ideology_laissez_faire
-				add_ideology = ideology_interventionist
 				set_ig_trait = ig_trait:ig_trait_zaibatsu_withdrawal
 				set_ig_trait = ig_trait:ig_trait_engines_of_progress
 				set_ig_trait = ig_trait:ig_trait_zaibatsu_cooperation
@@ -87,6 +85,35 @@ ig_industrialists = {
 						c:BIC ?= this
 					}
 				}
+				set_ig_trait = ig_trait:ig_trait_wounded_honor
+				set_ig_trait = ig_trait:ig_trait_stamped_and_signed
+				set_ig_trait = ig_trait:ig_trait_responsible_government
+			}
+			else = {
+				set_ig_trait = ig_trait:ig_trait_tax_avoidance
+				set_ig_trait = ig_trait:ig_trait_engines_of_progress
+				set_ig_trait = ig_trait:ig_trait_job_creators
+			}
+		}
+
+		# FLAVOUR AND IDEOLOGIES GO HERE
+		if = { # Japan
+			limit = {
+				owner = { c:JAP ?= this }
+			}
+			ig:ig_industrialists ?= {
+				set_interest_group_name = ig_gosho
+				remove_ideology = ideology_laissez_faire
+				add_ideology = ideology_interventionist
+			}
+		}
+		else_if = { # British India
+			limit = {
+				owner = {
+					c:BIC ?= this
+				}
+			}
+			ig:ig_industrialists ?= {
 				set_interest_group_name = ig_east_india_company
 				remove_ideology = ideology_laissez_faire
 				add_ideology = ideology_colonialist
@@ -94,33 +121,22 @@ ig_industrialists = {
 				add_ideology = ideology_enclavist
 				remove_ideology = ideology_individualist
 				add_ideology = ideology_malthusian
-
-				set_ig_trait = ig_trait:ig_trait_wounded_honor
-				set_ig_trait = ig_trait:ig_trait_stamped_and_signed
-				set_ig_trait = ig_trait:ig_trait_responsible_government
 			}
-			else_if = {
-				limit = {
-					owner = {
-						OR = {
-							c:DEI ?= this
-							c:ALK ?= this
-							c:HBC ?= this
-							is_country_type = company
-						}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					OR = {
+						c:DEI ?= this
+						c:ALK ?= this
+						c:HBC ?= this
+						is_country_type = company
 					}
 				}
+			}
+			ig:ig_industrialists ?= {
 				remove_ideology = ideology_laissez_faire
 				add_ideology = ideology_colonialist
-
-				set_ig_trait = ig_trait:ig_trait_tax_avoidance
-				set_ig_trait = ig_trait:ig_trait_engines_of_progress
-				set_ig_trait = ig_trait:ig_trait_job_creators
-			}
-			else = {
-				set_ig_trait = ig_trait:ig_trait_tax_avoidance
-				set_ig_trait = ig_trait:ig_trait_engines_of_progress
-				set_ig_trait = ig_trait:ig_trait_job_creators
 			}
 		}
 	}
@@ -497,10 +513,10 @@ ig_industrialists = {
 	commander_weight = {
 		value = 0.5
 	}
-	
+
 	magnate_weight = {
 		value = 2.0
-	}	
+	}
 
 	executive_weight = {
 		value = 5.0
@@ -823,7 +839,7 @@ ig_industrialists = {
 	commander_leader_weight = {
 		value = 0.5
 	}
-	
+
 	# Multiplier applied to the weight for an appropriate magnate will be selected from the character pool to lead the IG
 	# root = interest group
 	magnate_leader_weight = {

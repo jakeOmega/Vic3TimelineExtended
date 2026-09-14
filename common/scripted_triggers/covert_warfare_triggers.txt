@@ -25,26 +25,30 @@ covert_action_valid_target = {
 	NOT = { is_country_type = decentralized }
 }
 
-# Check if the country has not reached the per-type cap for a given op type.
+# True while the country runs fewer operations of this type than
+# covert_ops_max_per_type. That script value is the only place the cap lives:
+# each operation is its own script container, so raising the cap needs no
+# storage change. (`count >= <script value>` is vanilla's form, e.g.
+# je_zaibatsu_min_company_count.)
 # Parameters: $TYPE$ = diplomatic_action_type key (e.g. covert_election_interference_action)
 # Scope: country
 covert_ops_type_below_cap = {
-	OR = {
-		# With cyber_warfare (era 10): cap is 3
-		AND = {
-			has_technology_researched = cyber_warfare
-			NOT = { any_scope_diplomatic_pact = { count >= 3 is_diplomatic_action_type = $TYPE$ first_country = prev } }
-		}
-		# With mainframe_computers (era 7): cap is 2
-		AND = {
-			has_technology_researched = mainframe_computers
-			NOT = { has_technology_researched = cyber_warfare }
-			NOT = { any_scope_diplomatic_pact = { count >= 2 is_diplomatic_action_type = $TYPE$ first_country = prev } }
-		}
-		# Base (no slot tech yet): cap is 1
-		AND = {
-			NOT = { has_technology_researched = mainframe_computers }
-			NOT = { any_scope_diplomatic_pact = { is_diplomatic_action_type = $TYPE$ first_country = prev } }
+	NOT = {
+		any_scope_diplomatic_pact = {
+			count >= covert_ops_max_per_type
+			is_diplomatic_action_type = $TYPE$
+			first_country = prev
 		}
 	}
+}
+
+# Operation phase checks. Phase 2 (establishing) starts at month 6, phase 3
+# (fully operational) at month 12; see covert_warfare_effects.txt.
+# Scope: covert operation container
+covert_op_is_established = {
+	var:iw_duration >= 6
+}
+
+covert_op_is_fully_operational = {
+	var:iw_duration >= 12
 }

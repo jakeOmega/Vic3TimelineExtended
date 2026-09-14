@@ -6078,7 +6078,7 @@ REPLACE:ideology_pacifist = {
 						attacker_warleader ?= { this = ROOT.owner }
 						has_war_support = {
 							target = root.owner
-							value < 0
+							value < 50
 						}
 					}
 				}
@@ -6198,7 +6198,7 @@ REPLACE:ideology_pacifist = {
 						attacker_warleader ?= { this = ROOT.owner }
 						has_war_support = {
 							target = root.owner
-							value < 0
+							value < 50
 						}
 					}
 				}

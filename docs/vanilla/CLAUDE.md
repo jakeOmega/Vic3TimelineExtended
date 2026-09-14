@@ -2,7 +2,7 @@
 
 A condensed "must-know" cheat sheet for vanilla Victoria 3, surfacing the **non-obvious** mechanics that bite mod work. Each entry below has a deep-dive doc — read those for the *why*; this is the *what*.
 
-> **Last verified against vanilla:** 1.13.9 ("Matcha"). Numbers are absent on purpose — they drift each patch and live in `common/defines/`. The *mechanism shape* in this doc is durable.
+> **Last verified against vanilla:** 1.14.2 (open beta). Numbers are absent on purpose — they drift each patch and live in `common/defines/`. The *mechanism shape* in this doc is durable.
 
 > **Companion source — what *changed* per patch:** [Modding-Digests](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) (cloned locally to `vic3_modding_digests_path`, auto-pulled on `mod_state_server` cold start). Per-version folders (1.8.7 … 1.13.8; 1.13.9 not yet published as of 2026-07-03) hold `changes_breaking.md`, `changes_script_docs.md`, `changes_data_types.md`, and `changes_files.md`. **The docs in this directory describe what mechanics *are* in 1.13.9; the digests describe how each mechanic *got here*.** Hit the digests before manually diffing `~/src/vic3` between version commits. For a version with no digest yet, the runbook's modifier-type-definitions name diff (`docs/guides/vanilla_patch_runbook.md` § 3) plus a fresh in-game `script_docs` dump cover the breakage surface.
 
@@ -63,8 +63,8 @@ A condensed "must-know" cheat sheet for vanilla Victoria 3, surfacing the **non-
 ## War → `vanilla_war_reference.md`
 
 - **Combat width is per-state, set by `(5 + infrastructure/2) × terrain_multiplier`**. Mountain provinces cap battle size hard, neutralizing numerical advantage.
-- **War support drains from**: base trickle, war-goal control, **radicals (per-pop %)**, casualties, cultural casualties, **lobby clout**, occupation tiers. Capital/war-goal occupation produces large escalating bumps.
-- **A country cannot fall below 0 war support unless an enemy occupies all its war goals or its capital state.** Subjects don't capitulate independently.
+- **War support (1.14 rework)** is 0–100, drifts toward 50, red band ≤ `WAR_SUPPORT_RADICALIZATION_THRESHOLD`. The weekly change is a script value (`war_support_values.txt`): casualties, battles, war duration, war-goal progress, enemy occupation, turmoil, **average devastation**, loyalists, fervor, **lobby clout**, GDP change, land lost, loans/bankruptcy, rivalry. The old war-exhaustion triggers/effects/modifier are gone (see the runbook rename table).
+- **War goals can self-enforce mid-war (1.14)** when they carry a `mirrored_wargoal` block; the loser gets an infamy-free mirror goal. Subjects don't capitulate independently.
 - **Naval rework (1.13)**: ships are objects, not abstractions. Convoys removed; Merchant Marine + Naval Construction + Ship Construction are separate market goods now.
 - **Battle conditions** roll per side at battle start; rerolled with rising probability after 10 days. Terrain multiplies condition weights; commander traits multiply per-condition.
 - **Mobilization tiers**: standing army active immediately, mobilized formations train up over weeks, conscripts ramp via Conscription Centers slowly. Mass-conscription doctrines have hard caps on conscript pool.

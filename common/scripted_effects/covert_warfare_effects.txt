@@ -1,249 +1,248 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Scripted Effects
 # ============================================================================
-
-# Track targets for a specific operation type, assigning up to 3 slots.
-# Sets iw_target_<TYPE>_1/2/3 (capital state), iw_detect_<TYPE>_1/2/3 (detection %),
-# iw_tgt_ic_<TYPE>_1/2/3 (target's IC), iw_tgt_td_<TYPE>_1/2/3 (target's type defense),
-# and preserves iw_duration_<TYPE>_1/2/3 by target identity across slot reassignment.
-# After calling, iw_slot_counter holds the count of instances for this type.
+# Every running operation is a script container (1.13.10+):
 #
-# Idempotent: safe to call any number of times. Cancel/break/funding-change paths
-# rely on this to keep duration vars in sync with the new slot order without waiting
-# for the next monthly pulse — duration follows the TARGET, not the slot index.
+#   tags    iw_op, iw_op_<TYPE>
+#   parent  operator country — the engine culls the container if it stops existing
+#   vars    iw_target          target country
+#           iw_duration        months running (phase: 0-5 prep, 6-11 establishing, 12+ full)
+#           iw_target_capital  target's capital state (JE display: the loc chain
+#                              Var().GetState.GetCountry.GetName is the proven way to
+#                              show a country name; see scripting_best_practices.md)
+#           iw_detect          monthly detection % (JE display)
+#           iw_tgt_ic          target's intelligence capacity (JE display)
+#           iw_tgt_td          target's type-specific covert defense (JE display)
 #
-# Parameters: $TYPE$        = short name (e.g. election_interference)
-#             $ACTION$      = diplomatic_action_type key (e.g. covert_election_interference_action)
-#             $DEFENSE_MOD$ = type-specific defense modifier (e.g. country_covert_defense_ideological_add)
-# Scope: country (ROOT = country owning the JE)
-covert_op_track_targets = {
-	# Save current (target, duration) pairs so duration can carry across slot
-	# reassignment by target-identity match.
-	if = {
-		limit = { has_variable = iw_target_$TYPE$_1 }
-		set_variable = { name = iw_old_t_1 value = var:iw_target_$TYPE$_1 }
-		if = {
-			limit = { has_variable = iw_duration_$TYPE$_1 }
-			set_variable = { name = iw_old_d_1 value = var:iw_duration_$TYPE$_1 }
-		}
-		else = { set_variable = { name = iw_old_d_1 value = 0 } }
-	}
-	if = {
-		limit = { has_variable = iw_target_$TYPE$_2 }
-		set_variable = { name = iw_old_t_2 value = var:iw_target_$TYPE$_2 }
-		if = {
-			limit = { has_variable = iw_duration_$TYPE$_2 }
-			set_variable = { name = iw_old_d_2 value = var:iw_duration_$TYPE$_2 }
-		}
-		else = { set_variable = { name = iw_old_d_2 value = 0 } }
-	}
-	if = {
-		limit = { has_variable = iw_target_$TYPE$_3 }
-		set_variable = { name = iw_old_t_3 value = var:iw_target_$TYPE$_3 }
-		if = {
-			limit = { has_variable = iw_duration_$TYPE$_3 }
-			set_variable = { name = iw_old_d_3 value = var:iw_duration_$TYPE$_3 }
-		}
-		else = { set_variable = { name = iw_old_d_3 value = 0 } }
-	}
+# The operator keeps references in its `iw_ops` variable list. Iterate that
+# list, never every_container: the global iterator scans every container in
+# the game, parent filter or not.
+#
+# Pacts stay the source of truth for whether an operation exists. The
+# accept/break hooks create and destroy containers immediately;
+# covert_ops_sync_all reconciles monthly for any path that skips them (target
+# annexed, pact removed by script). It also adopts pacts from saves made
+# before containers, starting them at month 0; the old slot-numbered
+# variables in such saves are inert.
+#
+# Always remove_list_variable before destroy_container, so iw_ops never holds
+# a dead reference. Storage has no per-type limit: the cap lives only in
+# covert_ops_type_below_cap.
+# ============================================================================
 
-	# Clear ALL slot vars including durations. Duration vars are repopulated below
-	# via target-identity match (or left unset for genuinely-new targets, in which
-	# case covert_op_register_new_target sets them to 0).
-	remove_variable = iw_target_$TYPE$_1
-	remove_variable = iw_target_$TYPE$_2
-	remove_variable = iw_target_$TYPE$_3
-	remove_variable = iw_detect_$TYPE$_1
-	remove_variable = iw_detect_$TYPE$_2
-	remove_variable = iw_detect_$TYPE$_3
-	remove_variable = iw_tgt_ic_$TYPE$_1
-	remove_variable = iw_tgt_ic_$TYPE$_2
-	remove_variable = iw_tgt_ic_$TYPE$_3
-	remove_variable = iw_tgt_td_$TYPE$_1
-	remove_variable = iw_tgt_td_$TYPE$_2
-	remove_variable = iw_tgt_td_$TYPE$_3
-	remove_variable = iw_duration_$TYPE$_1
-	remove_variable = iw_duration_$TYPE$_2
-	remove_variable = iw_duration_$TYPE$_3
-	set_variable = { name = iw_slot_counter value = 0 }
-
-	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
-		every_participant = {
-			limit = { NOT = { this = ROOT } }
-			# Set target IC + type defense for detection calculation (PREV = target country)
-			ROOT = {
-				change_variable = { name = iw_slot_counter add = 1 }
-				set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
-				set_variable = { name = target_type_defense value = PREV.modifier:$DEFENSE_MOD$ }
-			}
-			# Store capital state, detection %, IC, TD per slot; carry duration by
-			# target-identity match across any old slot.
-			capital = {
-				ROOT = {
-					if = {
-						limit = { var:iw_slot_counter = 1 }
-						set_variable = { name = iw_target_$TYPE$_1 value = PREV }
-						set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
-						set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
-						set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
-						if = {
-							limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_1 }
-						}
-						else_if = {
-							limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_2 }
-						}
-						else_if = {
-							limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_1 value = var:iw_old_d_3 }
-						}
-						# else: new target. covert_op_register_new_target sets duration=0
-						# when accept_effect fires; the next monthly age helper increments to 1.
-					}
-					else_if = {
-						limit = { var:iw_slot_counter = 2 }
-						set_variable = { name = iw_target_$TYPE$_2 value = PREV }
-						set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
-						set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
-						set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
-						if = {
-							limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_1 }
-						}
-						else_if = {
-							limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_2 }
-						}
-						else_if = {
-							limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_2 value = var:iw_old_d_3 }
-						}
-					}
-					else_if = {
-						limit = { var:iw_slot_counter = 3 }
-						set_variable = { name = iw_target_$TYPE$_3 value = PREV }
-						set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
-						set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
-						set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
-						if = {
-							limit = { has_variable = iw_old_t_1 var:iw_old_t_1 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_1 }
-						}
-						else_if = {
-							limit = { has_variable = iw_old_t_2 var:iw_old_t_2 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_2 }
-						}
-						else_if = {
-							limit = { has_variable = iw_old_t_3 var:iw_old_t_3 = PREV }
-							set_variable = { name = iw_duration_$TYPE$_3 value = var:iw_old_d_3 }
-						}
-					}
-				}
-			}
+# Create an operation container and add it to the operator's iw_ops list.
+# Leaves scope:iw_new_op pointing at the new container.
+# Parameters: $TYPE$ = short name (e.g. election_interference)
+#             $TARGET$ = target country (a scope: reference — it is read inside on_created)
+# Scope: operator country
+covert_op_create = {
+	save_scope_as = iw_operator
+	create_container = {
+		tags = { iw_op iw_op_$TYPE$ }
+		parent = scope:iw_operator
+		on_created = {
+			set_variable = { name = iw_target value = $TARGET$ }
+			set_variable = { name = iw_duration value = 0 }
+			save_scope_as = iw_new_op
 		}
 	}
-
-	# Cleanup temp old-slot vars
-	remove_variable = iw_old_t_1
-	remove_variable = iw_old_d_1
-	remove_variable = iw_old_t_2
-	remove_variable = iw_old_d_2
-	remove_variable = iw_old_t_3
-	remove_variable = iw_old_d_3
+	add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 }
 
-# Refresh all 9 operation type slots. Call after pact creation/destruction
-# to update JE display immediately.
-# Scope: country
-covert_op_refresh_all_targets = {
-	covert_op_track_targets = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_track_targets = { TYPE = financial_subversion ACTION = covert_financial_subversion_action DEFENSE_MOD = country_covert_defense_economic_add }
-	covert_op_track_targets = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_track_targets = { TYPE = comms_disruption ACTION = covert_comms_disruption_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_track_targets = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action DEFENSE_MOD = country_covert_defense_economic_add }
-	covert_op_track_targets = { TYPE = military_espionage ACTION = covert_military_espionage_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_track_targets = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_track_targets = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_track_targets = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
+# Destroy the $TYPE$ operation against $TARGET$, if there is one. The
+# no-duplicate gate on every covert action keeps (type, target) unique.
+# Parameters: $TYPE$ = short name, $TARGET$ = target country
+# Scope: operator country
+covert_op_destroy = {
+	if = {
+		limit = {
+			has_variable_list = iw_ops
+			any_in_list = {
+				variable = iw_ops
+				has_tag = iw_op_$TYPE$
+				var:iw_target ?= $TARGET$
+			}
+		}
+		random_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_$TYPE$
+				var:iw_target ?= $TARGET$
+			}
+			save_scope_as = iw_ended_op
+		}
+		remove_list_variable = { name = iw_ops target = scope:iw_ended_op }
+		scope:iw_ended_op = { destroy_container = yes }
+	}
 }
 
-# Register a newly started operation's target into the next empty slot.
-# Called from accept_effect AFTER covert_op_refresh_all_targets, because the
-# new pact doesn't exist yet when accept_effect fires, so the iterator can't
-# find it. This directly fills the next available slot using scope:target_country.
-# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
-# Scope: country (ROOT = initiator), scope:target_country must be set
-covert_op_register_new_target = {
-	# Compute target defense data
-	set_variable = { name = target_max_ic value = scope:target_country.intelligence_capacity_total }
-	set_variable = { name = target_type_defense value = scope:target_country.modifier:$DEFENSE_MOD$ }
-	# Find next empty slot and fill it. iw_duration_$TYPE$_N is explicitly
-	# initialised to 0 here so the next monthly pulse's age helper increments
-	# it to 1 — matches the prior convention that the first month reads as 1.
-	# This also closes the cancel + immediate-restart bug: without the explicit
-	# reset, the new op would inherit a stale duration left behind by the
-	# previously-cancelled occupant of this slot index.
-	scope:target_country = {
+# Recompute the target and detection data the JE shows for one operation.
+# covert_operation_detection_chance reads target_max_ic / target_type_defense
+# off the operator, so they are staged there first.
+# Parameters: $DEFENSE_MOD$ = type-specific defense modifier
+# Scope: operation container; scope:iw_operator = operator country
+covert_op_refresh_detection = {
+	save_scope_as = iw_op
+	var:iw_target = {
 		capital = {
-			ROOT = {
+			scope:iw_op = { set_variable = { name = iw_target_capital value = PREV } }
+		}
+		scope:iw_operator = {
+			set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
+			set_variable = { name = target_type_defense value = PREV.modifier:$DEFENSE_MOD$ }
+			set_variable = { name = iw_detect_staging value = covert_operation_detection_chance }
+		}
+	}
+	set_variable = { name = iw_detect value = scope:iw_operator.var:iw_detect_staging }
+	set_variable = { name = iw_tgt_ic value = scope:iw_operator.var:target_max_ic }
+	set_variable = { name = iw_tgt_td value = scope:iw_operator.var:target_type_defense }
+	scope:iw_operator = { remove_variable = iw_detect_staging }
+}
+
+# Start an operation. Called from the covert action's accept_effect, where
+# the pact doesn't exist yet — so this creates the container directly
+# instead of reconciling against pacts.
+# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
+# Scope: operator country; scope:target_country must be set
+covert_op_start = {
+	hidden_effect = {
+		# A live duplicate is impossible (iw_no_duplicate_target_tt), but a
+		# container whose pact ended through a path with no break hook may still
+		# be waiting for the monthly sync. Clear it so the new op starts at month 0.
+		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:target_country }
+		covert_op_create = { TYPE = $TYPE$ TARGET = scope:target_country }
+		scope:iw_new_op = { covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ } }
+	}
+}
+
+# End an operation. Called from the pact's manual_break_effect / auto_break_effect.
+# If scope:target_country no longer resolves (target annexed), the monthly
+# sync collects the container instead.
+# Parameters: $TYPE$ = short name
+# Scope: operator country; scope:target_country must be set
+covert_op_end = {
+	hidden_effect = {
+		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:target_country }
+	}
+}
+
+# Burn a detected operation: remove its pact and destroy its container.
+# Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
+#             $TARGET$ = target country
+# Scope: operator country
+covert_op_burn = {
+	remove_diplomatic_pact = { country = $TARGET$ type = $ACTION$ }
+	covert_op_destroy = { TYPE = $TYPE$ TARGET = $TARGET$ }
+}
+
+# ============================================================================
+# MONTHLY RECONCILIATION
+# ============================================================================
+
+# Reconcile this type's containers with the operator's pacts, then refresh
+# their detection data. Idempotent.
+#   1. Mark every container backed by a live pact; a pact with no container
+#      gets one at month 0.
+#   2. Collect unmarked containers into a temporary list, then remove and
+#      destroy them, so iw_ops is never edited while it is being iterated.
+# Parameters: $TYPE$ = short name
+#             $ACTION$ = diplomatic_action_type key (e.g. covert_election_interference_action)
+#             $DEFENSE_MOD$ = type-specific defense modifier
+# Scope: operator country
+covert_op_sync = {
+	save_scope_as = iw_operator
+	every_scope_diplomatic_pact = {
+		limit = { is_diplomatic_action_type = $ACTION$ first_country = scope:iw_operator }
+		every_participant = {
+			limit = { NOT = { this = scope:iw_operator } }
+			save_scope_as = iw_pact_target
+			scope:iw_operator = {
 				if = {
-					limit = { NOT = { has_variable = iw_target_$TYPE$_1 } }
-					set_variable = { name = iw_target_$TYPE$_1 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_1 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_1 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_1 value = var:target_type_defense }
-					set_variable = { name = iw_duration_$TYPE$_1 value = 0 }
+					limit = {
+						NOT = {
+							AND = {
+								has_variable_list = iw_ops
+								any_in_list = {
+									variable = iw_ops
+									has_tag = iw_op_$TYPE$
+									var:iw_target ?= scope:iw_pact_target
+								}
+							}
+						}
+					}
+					covert_op_create = { TYPE = $TYPE$ TARGET = scope:iw_pact_target }
 				}
-				else_if = {
-					limit = { NOT = { has_variable = iw_target_$TYPE$_2 } }
-					set_variable = { name = iw_target_$TYPE$_2 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_2 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_2 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_2 value = var:target_type_defense }
-					set_variable = { name = iw_duration_$TYPE$_2 value = 0 }
-				}
-				else_if = {
-					limit = { NOT = { has_variable = iw_target_$TYPE$_3 } }
-					set_variable = { name = iw_target_$TYPE$_3 value = PREV }
-					set_variable = { name = iw_detect_$TYPE$_3 value = covert_operation_detection_chance }
-					set_variable = { name = iw_tgt_ic_$TYPE$_3 value = var:target_max_ic }
-					set_variable = { name = iw_tgt_td_$TYPE$_3 value = var:target_type_defense }
-					set_variable = { name = iw_duration_$TYPE$_3 value = 0 }
+				every_in_list = {
+					variable = iw_ops
+					limit = {
+						has_tag = iw_op_$TYPE$
+						var:iw_target ?= scope:iw_pact_target
+					}
+					set_variable = { name = iw_seen value = yes }
 				}
 			}
 		}
 	}
+	if = {
+		limit = {
+			has_variable_list = iw_ops
+			any_in_list = {
+				variable = iw_ops
+				has_tag = iw_op_$TYPE$
+				NOT = { has_variable = iw_seen }
+			}
+		}
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_$TYPE$
+				NOT = { has_variable = iw_seen }
+			}
+			add_to_temporary_list = iw_ended_ops_$TYPE$
+		}
+		every_in_list = {
+			list = iw_ended_ops_$TYPE$
+			scope:iw_operator = { remove_list_variable = { name = iw_ops target = PREV } }
+			destroy_container = yes
+		}
+	}
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			limit = { has_tag = iw_op_$TYPE$ }
+			remove_variable = iw_seen
+			covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ }
+		}
+	}
 }
 
-# ============================================================================
-# PHASE DURATION TRACKING (PER-SLOT)
-# ============================================================================
-# Duration is per-slot (iw_duration_<TYPE>_1/2/3). When slots shift (pact
-# cancelled, started, or detected), covert_op_track_targets carries duration
-# from the old slot to the new slot by matching target identity. So this
-# helper only needs to age (increment) the durations each month.
-#
-# Parameters: $TYPE$ = short name
+# Reconcile all 9 operation types. Called monthly from the JE pulse, before
+# durations age and phase effects apply.
 # Scope: country
-covert_op_age_duration = {
-	if = { limit = { has_variable = iw_duration_$TYPE$_1 } change_variable = { name = iw_duration_$TYPE$_1 add = 1 } }
-	if = { limit = { has_variable = iw_duration_$TYPE$_2 } change_variable = { name = iw_duration_$TYPE$_2 add = 1 } }
-	if = { limit = { has_variable = iw_duration_$TYPE$_3 } change_variable = { name = iw_duration_$TYPE$_3 add = 1 } }
+covert_ops_sync_all = {
+	covert_op_sync = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_sync = { TYPE = financial_subversion ACTION = covert_financial_subversion_action DEFENSE_MOD = country_covert_defense_economic_add }
+	covert_op_sync = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action DEFENSE_MOD = country_covert_defense_military_add }
+	covert_op_sync = { TYPE = comms_disruption ACTION = covert_comms_disruption_action DEFENSE_MOD = country_covert_defense_military_add }
+	covert_op_sync = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action DEFENSE_MOD = country_covert_defense_economic_add }
+	covert_op_sync = { TYPE = military_espionage ACTION = covert_military_espionage_action DEFENSE_MOD = country_covert_defense_military_add }
+	covert_op_sync = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_sync = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
 }
 
-# Age durations for all 9 operation types. Called monthly from JE pulse.
+# Age every running operation by one month. A new operation starts at 0, so
+# its first pulse reads as month 1.
+# Scope: country
 covert_ops_age_all_durations = {
-	covert_op_age_duration = { TYPE = election_interference }
-	covert_op_age_duration = { TYPE = financial_subversion }
-	covert_op_age_duration = { TYPE = infrastructure_sabotage }
-	covert_op_age_duration = { TYPE = comms_disruption }
-	covert_op_age_duration = { TYPE = industrial_espionage }
-	covert_op_age_duration = { TYPE = military_espionage }
-	covert_op_age_duration = { TYPE = influence_campaign }
-	covert_op_age_duration = { TYPE = ideological_subversion }
-	covert_op_age_duration = { TYPE = destabilization }
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			change_variable = { name = iw_duration add = 1 }
+		}
+	}
 }
 
 # ============================================================================
@@ -252,77 +251,55 @@ covert_ops_age_all_durations = {
 # Phase 1 (months 0-5): Preparatory — no effect
 # Phase 2 (months 6-11): Establishing — base multiplier (1x)
 # Phase 3 (months 12+): Fully Operational — doubled multiplier (2x)
+# Phase triggers (container scope): covert_op_is_established, covert_op_is_fully_operational
 
-# Apply a country-scoped modifier to all pact TARGETS of a given type.
-# Per-slot phase: each target checked against its own slot's duration.
-# Parameters: $ACTION$, $TYPE$, $MODIFIER$
-# Scope: country (ROOT = JE owner / operation initiator)
+# Apply a country-scoped modifier to the TARGET of each $TYPE$ operation,
+# at that operation's own phase.
+# Parameters: $TYPE$, $MODIFIER$
+# Scope: country (ROOT = JE owner / operator)
 covert_op_apply_target_effect = {
-	set_variable = { name = iw_effect_slot value = 0 }
-	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = $ACTION$ first_country = ROOT }
-		every_participant = {
-			limit = { NOT = { this = ROOT } }
-			ROOT = { change_variable = { name = iw_effect_slot add = 1 } }
+	every_in_list = {
+		variable = iw_ops
+		limit = { has_tag = iw_op_$TYPE$ }
+		save_scope_as = iw_op
+		var:iw_target = {
 			remove_modifier = $MODIFIER$
-			# Phase 3: Fully operational (12+ months)
 			if = {
-				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_$TYPE$_1 var:iw_duration_$TYPE$_1 >= 12 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_$TYPE$_2 var:iw_duration_$TYPE$_2 >= 12 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_$TYPE$_3 var:iw_duration_$TYPE$_3 >= 12 }
-						}
-					}
-				}
+				limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 				add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
 			}
-			# Phase 2: Establishing (6-11 months)
 			else_if = {
-				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_$TYPE$_1 var:iw_duration_$TYPE$_1 >= 6 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_$TYPE$_2 var:iw_duration_$TYPE$_2 >= 6 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_$TYPE$_3 var:iw_duration_$TYPE$_3 >= 6 }
-						}
-					}
-				}
+				limit = { scope:iw_op = { covert_op_is_established = yes } }
 				add_modifier = { name = $MODIFIER$ months = 3 }
 			}
-			# Phase 1: Preparatory (0-5 months) — no modifier
 		}
 	}
-	remove_variable = iw_effect_slot
 }
 
-# Apply a country-scoped modifier to SELF for a given operation type.
-# Uses the BEST phase of any slot (highest duration determines modifier strength).
-# Parameters: $ACTION$, $TYPE$, $MODIFIER$
-# Scope: country (ROOT = JE owner / operation initiator)
+# Apply a country-scoped modifier to SELF for a given operation type, at the
+# BEST phase among that type's operations.
+# Parameters: $TYPE$, $MODIFIER$
+# Scope: country (ROOT = JE owner / operator)
 covert_op_apply_self_effect = {
 	if = {
-		limit = { any_scope_diplomatic_pact = { is_diplomatic_action_type = $ACTION$ first_country = prev } }
+		limit = { any_in_list = { variable = iw_ops has_tag = iw_op_$TYPE$ } }
 		remove_modifier = $MODIFIER$
-		# Phase 3: any slot at 12+ months
 		if = {
 			limit = {
-				OR = {
-					AND = { has_variable = iw_duration_$TYPE$_1 var:iw_duration_$TYPE$_1 >= 12 }
-					AND = { has_variable = iw_duration_$TYPE$_2 var:iw_duration_$TYPE$_2 >= 12 }
-					AND = { has_variable = iw_duration_$TYPE$_3 var:iw_duration_$TYPE$_3 >= 12 }
+				any_in_list = {
+					variable = iw_ops
+					has_tag = iw_op_$TYPE$
+					covert_op_is_fully_operational = yes
 				}
 			}
 			add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
 		}
-		# Phase 2: any slot at 6+ months
 		else_if = {
 			limit = {
-				OR = {
-					AND = { has_variable = iw_duration_$TYPE$_1 var:iw_duration_$TYPE$_1 >= 6 }
-					AND = { has_variable = iw_duration_$TYPE$_2 var:iw_duration_$TYPE$_2 >= 6 }
-					AND = { has_variable = iw_duration_$TYPE$_3 var:iw_duration_$TYPE$_3 >= 6 }
+				any_in_list = {
+					variable = iw_ops
+					has_tag = iw_op_$TYPE$
+					covert_op_is_established = yes
 				}
 			}
 			add_modifier = { name = $MODIFIER$ months = 3 }
@@ -332,74 +309,33 @@ covert_op_apply_self_effect = {
 }
 
 # Master effect: apply ALL 9 operation types' phase-based effects.
-# Only runs if funding > 0. Called monthly from JE pulse.
-# Per-slot phase: each target gets modifiers based on ITS slot's duration.
+# Only runs if funding > 0, after covert_ops_sync_all. Called monthly from JE pulse.
+# The helpers it calls iterate iw_ops unguarded; the has_variable_list check here covers them.
 # Scope: country (ROOT = JE owner)
 covert_ops_apply_all_phase_effects = {
-	# ---- Election Interference: country modifier on TARGET ----
-	covert_op_apply_target_effect = { ACTION = covert_election_interference_action TYPE = election_interference MODIFIER = covert_election_interference }
+	if = {
+		limit = { has_variable_list = iw_ops }
+		# ---- Election Interference: country modifier on TARGET ----
+		covert_op_apply_target_effect = { TYPE = election_interference MODIFIER = covert_election_interference }
 
-	# ---- Financial Subversion: country modifier on TARGET ----
-	covert_op_apply_target_effect = { ACTION = covert_financial_subversion_action TYPE = financial_subversion MODIFIER = covert_financial_subversion }
+		# ---- Financial Subversion: country modifier on TARGET ----
+		covert_op_apply_target_effect = { TYPE = financial_subversion MODIFIER = covert_financial_subversion }
 
-	# ---- Infrastructure Sabotage: state modifier on random TARGET state + country morale modifier ----
-	# Per-slot phase: each target checked against its own slot's duration.
-	set_variable = { name = iw_effect_slot value = 0 }
-	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = covert_infrastructure_sabotage_action first_country = ROOT }
-		every_participant = {
-			limit = { NOT = { this = ROOT } }
-			ROOT = { change_variable = { name = iw_effect_slot add = 1 } }
-			# Morale effect (country-scoped, per-slot phase)
-			remove_modifier = covert_infra_sabotage_morale
-			if = {
-				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_infrastructure_sabotage_1 var:iw_duration_infrastructure_sabotage_1 >= 12 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_infrastructure_sabotage_2 var:iw_duration_infrastructure_sabotage_2 >= 12 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_infrastructure_sabotage_3 var:iw_duration_infrastructure_sabotage_3 >= 12 }
-						}
-					}
-				}
-				add_modifier = { name = covert_infra_sabotage_morale multiplier = 2 months = 3 }
+		# ---- Infrastructure Sabotage: country morale modifier + state modifier on a random TARGET state ----
+		covert_op_apply_target_effect = { TYPE = infrastructure_sabotage MODIFIER = covert_infra_sabotage_morale }
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_infrastructure_sabotage
+				covert_op_is_established = yes
 			}
-			else_if = {
-				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_infrastructure_sabotage_1 var:iw_duration_infrastructure_sabotage_1 >= 6 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_infrastructure_sabotage_2 var:iw_duration_infrastructure_sabotage_2 >= 6 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_infrastructure_sabotage_3 var:iw_duration_infrastructure_sabotage_3 >= 6 }
-						}
-					}
-				}
-				add_modifier = { name = covert_infra_sabotage_morale months = 3 }
-			}
-			# State-scoped sabotage (random state, per-slot phase)
-			if = {
-				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_infrastructure_sabotage_1 var:iw_duration_infrastructure_sabotage_1 >= 6 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_infrastructure_sabotage_2 var:iw_duration_infrastructure_sabotage_2 >= 6 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_infrastructure_sabotage_3 var:iw_duration_infrastructure_sabotage_3 >= 6 }
-						}
-					}
-				}
+			save_scope_as = iw_op
+			var:iw_target = {
 				random_scope_state = {
 					limit = { any_scope_building = { level >= 1 } }
 					remove_modifier = covert_infrastructure_sabotage
 					if = {
-						limit = {
-							ROOT = {
-								OR = {
-									AND = { var:iw_effect_slot = 1 has_variable = iw_duration_infrastructure_sabotage_1 var:iw_duration_infrastructure_sabotage_1 >= 12 }
-									AND = { var:iw_effect_slot = 2 has_variable = iw_duration_infrastructure_sabotage_2 var:iw_duration_infrastructure_sabotage_2 >= 12 }
-									AND = { var:iw_effect_slot = 3 has_variable = iw_duration_infrastructure_sabotage_3 var:iw_duration_infrastructure_sabotage_3 >= 12 }
-								}
-							}
-						}
+						limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 						add_modifier = { name = covert_infrastructure_sabotage multiplier = 2 months = 3 }
 					}
 					else = {
@@ -408,138 +344,90 @@ covert_ops_apply_all_phase_effects = {
 				}
 			}
 		}
-	}
-	remove_variable = iw_effect_slot
 
-	# ---- Communications Disruption: country modifier on TARGET ----
-	covert_op_apply_target_effect = { ACTION = covert_comms_disruption_action TYPE = comms_disruption MODIFIER = covert_comms_disruption }
+		# ---- Communications Disruption: country modifier on TARGET ----
+		covert_op_apply_target_effect = { TYPE = comms_disruption MODIFIER = covert_comms_disruption }
 
-	# ---- Industrial Espionage: self modifiers (innovation + tech spread) ----
-	# Innovation is always applied; tech spread always applies since target must have tech advantage
-	covert_op_apply_self_effect = { ACTION = covert_industrial_espionage_action TYPE = industrial_espionage MODIFIER = covert_espionage_base }
-	covert_op_apply_self_effect = { ACTION = covert_industrial_espionage_action TYPE = industrial_espionage MODIFIER = covert_industrial_espionage }
-	# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
-	covert_op_apply_target_effect = { ACTION = covert_industrial_espionage_action TYPE = industrial_espionage MODIFIER = covert_industrial_espionage_detected }
+		# ---- Industrial Espionage: self modifiers (innovation + tech spread) ----
+		# Innovation is always applied; tech spread always applies since target must have tech advantage
+		covert_op_apply_self_effect = { TYPE = industrial_espionage MODIFIER = covert_espionage_base }
+		covert_op_apply_self_effect = { TYPE = industrial_espionage MODIFIER = covert_industrial_espionage }
+		# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
+		covert_op_apply_target_effect = { TYPE = industrial_espionage MODIFIER = covert_industrial_espionage_detected }
 
-	# ---- Military Espionage: self modifiers (unit stats always, tech spread conditional) ----
-	covert_op_apply_self_effect = { ACTION = covert_military_espionage_action TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
-	# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
-	covert_op_apply_target_effect = { ACTION = covert_military_espionage_action TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
-	# Conditional tech spread: only if target has tech advantage (best phase of any slot)
-	if = {
-		limit = {
-			any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_military_espionage_action first_country = prev }
-			OR = {
-				AND = { has_variable = iw_duration_military_espionage_1 var:iw_duration_military_espionage_1 >= 6 }
-				AND = { has_variable = iw_duration_military_espionage_2 var:iw_duration_military_espionage_2 >= 6 }
-				AND = { has_variable = iw_duration_military_espionage_3 var:iw_duration_military_espionage_3 >= 6 }
-			}
-		}
-		every_scope_diplomatic_pact = {
-			limit = { is_diplomatic_action_type = covert_military_espionage_action first_country = ROOT }
-			every_participant = {
-				limit = { NOT = { this = ROOT } }
-				save_scope_as = espionage_target
-			}
-		}
+		# ---- Military Espionage: self modifiers (unit stats always, tech spread conditional) ----
+		covert_op_apply_self_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
+		# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
+		covert_op_apply_target_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
+		# Conditional tech spread: only if target has tech advantage (best phase of any operation)
 		if = {
 			limit = {
-				exists = scope:espionage_target
-				espionage_target_tech_advantage > 0
-			}
-			remove_modifier = covert_military_espionage
-			if = {
-				limit = {
-					OR = {
-						AND = { has_variable = iw_duration_military_espionage_1 var:iw_duration_military_espionage_1 >= 12 }
-						AND = { has_variable = iw_duration_military_espionage_2 var:iw_duration_military_espionage_2 >= 12 }
-						AND = { has_variable = iw_duration_military_espionage_3 var:iw_duration_military_espionage_3 >= 12 }
-					}
+				any_in_list = {
+					variable = iw_ops
+					has_tag = iw_op_military_espionage
+					covert_op_is_established = yes
 				}
-				add_modifier = { name = covert_military_espionage multiplier = 2 months = 3 }
 			}
-			else = {
-				add_modifier = { name = covert_military_espionage months = 3 }
-			}
-		}
-	}
-
-	# ---- Influence Campaign: country modifier on TARGET ----
-	covert_op_apply_target_effect = { ACTION = covert_influence_campaign_action TYPE = influence_campaign MODIFIER = covert_influence_campaign }
-
-	# ---- Ideological Subversion: country resist modifier + movement modifiers on TARGET ----
-	covert_op_apply_target_effect = { ACTION = covert_ideological_subversion_action TYPE = ideological_subversion MODIFIER = covert_ideological_subversion_resist }
-	# Movement pressure: per-slot phase
-	set_variable = { name = iw_effect_slot value = 0 }
-	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = covert_ideological_subversion_action first_country = ROOT }
-		every_participant = {
-			limit = { NOT = { this = ROOT } }
-			ROOT = {
-				change_variable = { name = iw_effect_slot add = 1 }
-				save_scope_as = cultural_hegemon
+			every_in_list = {
+				variable = iw_ops
+				limit = { has_tag = iw_op_military_espionage }
+				var:iw_target = { save_scope_as = espionage_target }
 			}
 			if = {
 				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_ideological_subversion_1 var:iw_duration_ideological_subversion_1 >= 6 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_ideological_subversion_2 var:iw_duration_ideological_subversion_2 >= 6 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_ideological_subversion_3 var:iw_duration_ideological_subversion_3 >= 6 }
-						}
-					}
+					exists = scope:espionage_target
+					espionage_target_tech_advantage > 0
 				}
+				remove_modifier = covert_military_espionage
 				if = {
 					limit = {
-						ROOT = {
-							OR = {
-								AND = { var:iw_effect_slot = 1 has_variable = iw_duration_ideological_subversion_1 var:iw_duration_ideological_subversion_1 >= 12 }
-								AND = { var:iw_effect_slot = 2 has_variable = iw_duration_ideological_subversion_2 var:iw_duration_ideological_subversion_2 >= 12 }
-								AND = { var:iw_effect_slot = 3 has_variable = iw_duration_ideological_subversion_3 var:iw_duration_ideological_subversion_3 >= 12 }
-							}
+						any_in_list = {
+							variable = iw_ops
+							has_tag = iw_op_military_espionage
+							covert_op_is_fully_operational = yes
 						}
 					}
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
+					add_modifier = { name = covert_military_espionage multiplier = 2 months = 3 }
 				}
 				else = {
-					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
+					add_modifier = { name = covert_military_espionage months = 3 }
 				}
 			}
 		}
-	}
-	remove_variable = iw_effect_slot
 
-	# ---- Destabilization: country resist modifier + movement modifiers on TARGET ----
-	covert_op_apply_target_effect = { ACTION = covert_destabilization_action TYPE = destabilization MODIFIER = covert_destabilization_resist }
-	set_variable = { name = iw_effect_slot value = 0 }
-	every_scope_diplomatic_pact = {
-		limit = { is_diplomatic_action_type = covert_destabilization_action first_country = ROOT }
-		every_participant = {
-			limit = { NOT = { this = ROOT } }
-			ROOT = { change_variable = { name = iw_effect_slot add = 1 } }
-			if = {
-				limit = {
-					ROOT = {
-						OR = {
-							AND = { var:iw_effect_slot = 1 has_variable = iw_duration_destabilization_1 var:iw_duration_destabilization_1 >= 6 }
-							AND = { var:iw_effect_slot = 2 has_variable = iw_duration_destabilization_2 var:iw_duration_destabilization_2 >= 6 }
-							AND = { var:iw_effect_slot = 3 has_variable = iw_duration_destabilization_3 var:iw_duration_destabilization_3 >= 6 }
-						}
-					}
-				}
+		# ---- Influence Campaign: country modifier on TARGET ----
+		covert_op_apply_target_effect = { TYPE = influence_campaign MODIFIER = covert_influence_campaign }
+
+		# ---- Ideological Subversion: country resist modifier + movement modifiers on TARGET ----
+		covert_op_apply_target_effect = { TYPE = ideological_subversion MODIFIER = covert_ideological_subversion_resist }
+		# Movement pressure from the establishing phase on (same strength once fully operational)
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_ideological_subversion
+				covert_op_is_established = yes
+			}
+			ROOT = { save_scope_as = cultural_hegemon }
+			var:iw_target = {
+				ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no }
+			}
+		}
+
+		# ---- Destabilization: country resist modifier + movement modifiers on TARGET ----
+		covert_op_apply_target_effect = { TYPE = destabilization MODIFIER = covert_destabilization_resist }
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_destabilization
+				covert_op_is_established = yes
+			}
+			save_scope_as = iw_op
+			var:iw_target = {
 				# Separatist movement pressure
 				every_political_movement = {
 					remove_modifier = covert_destabilization_separatist
 					if = {
-						limit = {
-							ROOT = {
-								OR = {
-									AND = { var:iw_effect_slot = 1 has_variable = iw_duration_destabilization_1 var:iw_duration_destabilization_1 >= 12 }
-									AND = { var:iw_effect_slot = 2 has_variable = iw_duration_destabilization_2 var:iw_duration_destabilization_2 >= 12 }
-									AND = { var:iw_effect_slot = 3 has_variable = iw_duration_destabilization_3 var:iw_duration_destabilization_3 >= 12 }
-								}
-							}
-						}
+						limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 						add_modifier = { name = covert_destabilization_separatist multiplier = 2 months = 3 }
 					}
 					else = {
@@ -549,15 +437,7 @@ covert_ops_apply_all_phase_effects = {
 				# General destabilization pressure
 				remove_modifier = covert_destabilization_general
 				if = {
-					limit = {
-						ROOT = {
-							OR = {
-								AND = { var:iw_effect_slot = 1 has_variable = iw_duration_destabilization_1 var:iw_duration_destabilization_1 >= 12 }
-								AND = { var:iw_effect_slot = 2 has_variable = iw_duration_destabilization_2 var:iw_duration_destabilization_2 >= 12 }
-								AND = { var:iw_effect_slot = 3 has_variable = iw_duration_destabilization_3 var:iw_duration_destabilization_3 >= 12 }
-							}
-						}
-					}
+					limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 					add_modifier = { name = covert_destabilization_general multiplier = 2 months = 3 }
 				}
 				else = {
@@ -566,7 +446,6 @@ covert_ops_apply_all_phase_effects = {
 			}
 		}
 	}
-	remove_variable = iw_effect_slot
 }
 
 # ============================================================================
@@ -582,65 +461,27 @@ covert_ops_apply_all_phase_effects = {
 covert_op_election_confidence_effect = {
 	set_variable = { name = iw_election_worst_phase value = 0 }
 
-	# Save ROOT's capital for comparison inside nested scopes
-	capital = { save_scope_as = iw_my_capital }
-
-	# Iterate all election interference pacts where ROOT is the target
+	# Every attacker running election interference against ROOT
 	every_scope_diplomatic_pact = {
 		limit = { is_diplomatic_action_type = covert_election_interference_action second_country = { this = ROOT } }
-		# Get the other participant (attacker)
 		every_participant = {
-			limit = { NOT = { this = ROOT } }
-
-			# Check each of attacker's 3 slots for one targeting ROOT
-			# Slot 1
-			if = {
-				limit = {
-					has_variable = iw_target_election_interference_1
-					scope:iw_my_capital = { this = PREV.var:iw_target_election_interference_1 }
-				}
-				if = {
-					limit = { has_variable = iw_duration_election_interference_1 var:iw_duration_election_interference_1 >= 12 }
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 3 } }
-				}
-				else_if = {
-					limit = { has_variable = iw_duration_election_interference_1 var:iw_duration_election_interference_1 >= 6 }
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 2 } }
-				}
-				else = {
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 1 } }
-				}
+			limit = {
+				NOT = { this = ROOT }
+				has_variable_list = iw_ops
 			}
-			# Slot 2
-			else_if = {
+			# The attacker's operation against ROOT
+			every_in_list = {
+				variable = iw_ops
 				limit = {
-					has_variable = iw_target_election_interference_2
-					scope:iw_my_capital = { this = PREV.var:iw_target_election_interference_2 }
+					has_tag = iw_op_election_interference
+					var:iw_target ?= ROOT
 				}
 				if = {
-					limit = { has_variable = iw_duration_election_interference_2 var:iw_duration_election_interference_2 >= 12 }
+					limit = { covert_op_is_fully_operational = yes }
 					ROOT = { change_variable = { name = iw_election_worst_phase max = 3 } }
 				}
 				else_if = {
-					limit = { has_variable = iw_duration_election_interference_2 var:iw_duration_election_interference_2 >= 6 }
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 2 } }
-				}
-				else = {
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 1 } }
-				}
-			}
-			# Slot 3
-			else_if = {
-				limit = {
-					has_variable = iw_target_election_interference_3
-					scope:iw_my_capital = { this = PREV.var:iw_target_election_interference_3 }
-				}
-				if = {
-					limit = { has_variable = iw_duration_election_interference_3 var:iw_duration_election_interference_3 >= 12 }
-					ROOT = { change_variable = { name = iw_election_worst_phase max = 3 } }
-				}
-				else_if = {
-					limit = { has_variable = iw_duration_election_interference_3 var:iw_duration_election_interference_3 >= 6 }
+					limit = { covert_op_is_established = yes }
 					ROOT = { change_variable = { name = iw_election_worst_phase max = 2 } }
 				}
 				else = {

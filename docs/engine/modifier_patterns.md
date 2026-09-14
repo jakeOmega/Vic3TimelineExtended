@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-07-03T21:30:36+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-09-13T19:29:55+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 
@@ -1059,8 +1059,8 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_{religion}_standard_of_living_add`
 
 - Placeholder: `religion` (vocab: `religion`)
-- Members: **17**
-  - Examples: `animist`, `atheist`, `catholic`, `confucian`, `gelugpa`, `hindu`
+- Members: **24**
+  - Examples: `animist`, `atheist`, `catholic`, `confucian`, `custom_religion_animist`, `custom_religion_buddhist`
 
 ### `unit_{combat_unit}_defense_mult`
 

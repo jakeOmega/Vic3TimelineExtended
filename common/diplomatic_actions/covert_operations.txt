@@ -36,8 +36,7 @@ covert_election_interference_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = election_interference DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = election_interference DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -135,8 +134,8 @@ covert_election_interference_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = election_interference } }
+		auto_break_effect = { covert_op_end = { TYPE = election_interference } }
 	}
 
 	ai = {
@@ -203,8 +202,7 @@ covert_financial_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = financial_subversion DEFENSE_MOD = country_covert_defense_economic_add }
+		covert_op_start = { TYPE = financial_subversion DEFENSE_MOD = country_covert_defense_economic_add }
 	}
 
 	potential = {
@@ -279,8 +277,8 @@ covert_financial_subversion_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = financial_subversion } }
+		auto_break_effect = { covert_op_end = { TYPE = financial_subversion } }
 	}
 
 	ai = {
@@ -350,8 +348,7 @@ covert_infrastructure_sabotage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = infrastructure_sabotage DEFENSE_MOD = country_covert_defense_military_add }
+		covert_op_start = { TYPE = infrastructure_sabotage DEFENSE_MOD = country_covert_defense_military_add }
 	}
 
 	potential = {
@@ -428,8 +425,8 @@ covert_infrastructure_sabotage_action = {
 			}
 		}
 
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = infrastructure_sabotage } }
+		auto_break_effect = { covert_op_end = { TYPE = infrastructure_sabotage } }
 	}
 
 	ai = {
@@ -478,8 +475,7 @@ covert_comms_disruption_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = comms_disruption DEFENSE_MOD = country_covert_defense_military_add }
+		covert_op_start = { TYPE = comms_disruption DEFENSE_MOD = country_covert_defense_military_add }
 	}
 
 	potential = {
@@ -556,8 +552,8 @@ covert_comms_disruption_action = {
 			}
 		}
 
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = comms_disruption } }
+		auto_break_effect = { covert_op_end = { TYPE = comms_disruption } }
 	}
 
 	ai = {
@@ -611,8 +607,7 @@ covert_industrial_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = industrial_espionage DEFENSE_MOD = country_covert_defense_economic_add }
+		covert_op_start = { TYPE = industrial_espionage DEFENSE_MOD = country_covert_defense_economic_add }
 	}
 
 	potential = {
@@ -689,8 +684,8 @@ covert_industrial_espionage_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = industrial_espionage } }
+		auto_break_effect = { covert_op_end = { TYPE = industrial_espionage } }
 	}
 
 	ai = {
@@ -750,8 +745,7 @@ covert_military_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = military_espionage DEFENSE_MOD = country_covert_defense_military_add }
+		covert_op_start = { TYPE = military_espionage DEFENSE_MOD = country_covert_defense_military_add }
 	}
 
 	potential = {
@@ -822,8 +816,8 @@ covert_military_espionage_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = military_espionage } }
+		auto_break_effect = { covert_op_end = { TYPE = military_espionage } }
 	}
 
 	ai = {
@@ -878,8 +872,7 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = influence_campaign DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = influence_campaign DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -970,8 +963,8 @@ covert_influence_campaign_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = influence_campaign } }
+		auto_break_effect = { covert_op_end = { TYPE = influence_campaign } }
 	}
 
 	ai = {
@@ -1036,8 +1029,7 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = ideological_subversion DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = ideological_subversion DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -1129,8 +1121,8 @@ covert_ideological_subversion_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = ideological_subversion } }
+		auto_break_effect = { covert_op_end = { TYPE = ideological_subversion } }
 	}
 
 	ai = {
@@ -1199,8 +1191,7 @@ covert_destabilization_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_refresh_all_targets = yes
-		covert_op_register_new_target = { TYPE = destabilization DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = destabilization DEFENSE_MOD = country_covert_defense_ideological_add }
 	}
 
 	potential = {
@@ -1298,8 +1289,8 @@ covert_destabilization_action = {
 				}
 			}
 		}
-		manual_break_effect = { covert_op_refresh_all_targets = yes }
-		auto_break_effect = { covert_op_refresh_all_targets = yes }
+		manual_break_effect = { covert_op_end = { TYPE = destabilization } }
+		auto_break_effect = { covert_op_end = { TYPE = destabilization } }
 	}
 
 	ai = {

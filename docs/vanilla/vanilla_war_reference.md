@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** war systems work, written for AI agents that need context before touching mod content that hooks the war/military layer (anti-war movement events, war-support modifiers, mobilization-side modifiers, treaty articles tied to war outcomes, etc.). Mod-specific systems (covert warfare, nuclear weapons, the world-war journal entry, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`.
 
-> **Last verified against vanilla:** 1.13.9 ("Matcha"). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** The wiki source for this doc is roughly a week post-1.13 patch and may be slightly inaccurate in places — verify any specific name or number via the server before relying on it.
+> **Last verified against vanilla:** 1.14.2 (open beta). § 13 rewritten for the 1.14 war support rework. When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** The wiki source for this doc is roughly a week post-1.13 patch and may be slightly inaccurate in places — verify any specific name or number via the server before relying on it.
 >
 > **Verify before relying on names.** Modifier names, unit type IDs, and trigger names cited below should be confirmed via the mod state server (`/modifier-search?q=`, `/engine-docs/modifiers`, `/raw/CombatUnitType/<id>`) before you reference them in code. Vanilla renames things across patches.
 >
@@ -49,7 +49,7 @@ Autonomous subjects can only be swayed via the *Liberate Subject* war goal, and 
 
 ### 1.5 War goals
 
-Each war goal carries an **objective**: fulfilling it accelerates the enemy's war-support loss, and war support cannot drop below 0 while any unfulfilled war goal targets that enemy. Occupying the target country's capital is a universal objective for all war goals against it.
+Each war goal carries an **objective** (its `contestion_type`): progress on it raises the holder's war support and lowers the target's, and since 1.14 a goal with a `mirrored_wargoal` block can self-enforce mid-war once held long enough (§ 13).
 
 Common regular war goals (verify infamy/maneuver costs via the server, since they're balance levers):
 
@@ -373,37 +373,51 @@ Power projection = average of (offense + defense) × manpower-ratio, summed acro
 
 ## 13. War support — the political ceiling on a war
 
-This is the section that matters most for anti-war movement and wartime-event design. **War support** is a per-country value in roughly [−100, +100], starting full when war begins and decreasing each week from **exhaustion**. For how lobby clout and IG approval feed back into war support exhaustion — and for the radicals → exhaustion loop that compounds with casualties — see `vanilla_politics_reference.md` § 5.4 and § 5.6.
+This is the section that matters most for anti-war movement and wartime-event design. **1.14 rewrote this system**: the old "war exhaustion" layer (a weekly drain with its own triggers, effects and modifiers) is gone, replaced by a signed per-beat **war support change** computed in script. For how lobby clout and IG approval interact with wars, see `vanilla_politics_reference.md` § 5.4 and § 5.6.
 
-### Exhaustion sources
+**Scale.** War support is a per-country, per-war value from **0 to 100**. A war starts at 100 adjusted by the country's entry disposition, floored at 50 (75 for the side's peace negotiator). Each beat it **drifts toward a neutral point** (`NDiplomacy|WAR_SUPPORT_DRIFT_TARGET`, 50), strongest at the extremes. Two bands matter for script: at or above `WAR_SUPPORT_CONFIDENT_THRESHOLD` a country is "winning" and won't consider peace on war-support grounds; at or below `WAR_SUPPORT_RADICALIZATION_THRESHOLD` (the red band) it takes a combat malus and radicalization, subjects gain liberty desire, and severity grows non-linearly toward 0.
 
-War-support exhaustion is the *sum* of several contributing sources, each tunable in `common/defines/`. The structural categories (durable across patches):
+### War support change sources
 
-- **Base trickle** every week regardless of conditions.
-- **War-goal control** — the enemy controlling unfulfilled war goals against you accelerates exhaustion, scaled by the fraction occupied.
-- **Radicals** — every percentage point of radicalized population adds exhaustion. **A country with significant radical population bleeds noticeably more war support per week from population alone.** Movement-driven radicalization is a real wartime cost, not just flavor; it compounds with casualties and occupation.
-- **Casualties vs max manpower** — exhaustion scales with the casualty fraction; "losing all battles" multiplies the casualty-driven exhaustion several-fold over "winning all battles."
-- **Cultural casualties** — casualties of accepted cultures on both sides add exhaustion.
-- **Lobby clout** — opposed-to-war lobbies add exhaustion; supportive lobbies subtract it.
-- **Occupation tiers** — capital and home-state occupation by the enemy generate large exhaustion bumps that escalate sharply as occupation deepens. Heavy occupation can drive multi-points-per-week loss.
+The weekly change is the sum of the named script values in vanilla `common/script_values/war_support_values.txt` (`war_support_change`). Each source's weight is a `NWar|WAR_SUPPORT_CHANGE_*` define. Read that file for the current list; the structural categories:
 
-**Floor logic.** A country cannot fall below 0 war support **unless** an enemy occupies all its war goals or its capital state. Subjects do not capitulate independently of their overlord.
+- **Casualties** relative to military size (a loss), and **battles** won-minus-lost weighted by size (either sign), ramping in only after a number of significant battles.
+- **War duration**: a short-war enthusiasm bonus that decays over the first months, then an ever-growing symmetric drain after a grace period, which guarantees every war eventually ends.
+- **War goals**: progress on goals a country holds (advancing / occupying / enforced tiers) raises its support and lowers the target's, capped per beat and time-ramped so early months count for little. A *stalled* goal (neither contested nor advanced) pushes both sides back toward the neutral point.
+- **Enemy occupation**: weighted occupation of the country's territory.
+- **Home front**: turmoil, population-weighted **average devastation**, loyalist fraction (positive), cultural fervor (only when holding or targeted by a goal), and acceptance of the dead on both sides (per-acceptance-status `war_support_impact_own_side` / `war_support_impact_other_side`).
+- **Lobbies**: anti-war clout lowers it and pro-war clout raises it, both saturating at modest clout. In a defensive war anti-war clout is ignored and pro-war clout counts double.
+- **Economy**: GDP change since the war began (either sign, with a tolerance band), land lost (hardens resolve), gold reserves (positive), taking loans, looming bankruptcy (ramps in as weeks-until-bankruptcy shrinks) and default.
+- **Relations**: fighting a declared rival (positive); for AI subjects fighting beside their overlord, their attitude toward it.
+- **Scripted**: `add_war_support_change` accumulates event-driven change, readable via `additional_war_support_change`.
 
-### Capitulation
+**Mod-relevant consequence.** Defines the mod already overrides can now move war support indirectly. In particular the mod's `NWar|DEVASTATION_*` overrides (much higher devastation per battle than vanilla) feed straight into the devastation source.
 
-At minimum war support a country auto-capitulates: all war goals against it are enforced, and it leaves the war. Voluntary capitulation is also possible at any time. If all countries on one side fully capitulate, the war ends.
+### Capitulation and war-goal self-enforcement
+
+Low war support raises AI capitulation desire (`NAI|AI_CAPITULATE_*`); on capitulation all war goals against the country are enforced and it leaves the war. Voluntary capitulation is also possible at any time. If all countries on one side fully capitulate, the war ends.
+
+1.14 also lets war goals **self-enforce mid-war**: a goal with a `mirrored_wargoal` block fills an occupation bar while contested (`fill_per_week` / `deplete_per_week`, default `WAR_GOAL_ENFORCEMENT_*` defines) and enforces itself at 100. The loser then receives an infamy-free mirror goal (retake the land, swap, reparations, …) so the war continues. Goals with `assent_required` or no mirror block only enforce through capitulation or a peace deal. `side_switch` decides whether an enforced subjugation also moves the target to the enforcer's side. See `<vic3_modding_digests_path>/1.14-openbeta/types/war_goal_types.md` for the full schema.
 
 ### Peace negotiation
 
 Aside from capitulation, peace deals require unanimous agreement from all **negotiating participants** (countries with or targeted by war goals) on each war goal pressed. Subjects don't get a say. The deal applies to the entire war — no partial peace with a subset of belligerents.
 
+### Triggers for script
+
+- **Porting pre-1.14 numbers**: vanilla halved every war support delta (`add_war_war_support`, `add_diplomatic_play_war_support`) when the range shrank from 200 to 100 points; map old levels `v` to `(v+100)/2`.
+- `has_war_support = { target = X value < N }` (war scope): the 0–100 level. Use this for "the war is going badly" checks, ideally against the band defines above.
+- `has_war_support_change = { target = X value < N }` (war scope): the signed **per-beat delta**, not a level. Vanilla uses `value < -5` for "support is collapsing".
+- Newer war-state reads: `war_duration_months`, `num_significant_battles`, `size_weighted_won_battles_fraction`, `enemy_side_occupation`, `is_at_war_with_rival`, `has_stalled_wargoal_against` / `_held_by`, `war_goal_time_ramp`, `average_devastation`, `weeks_until_bankruptcy`.
+
 ### Modifier names that touch war support
 
 (Names that follow are the *handle* into the system — useful for searching the catalog. Their values are tuning balance, found in their owning files.)
 
-- `country_war_exhaustion_casualties_mult` (vanilla) — scales the casualties-driven portion of war exhaustion. Negative values reduce exhaustion from casualties (a wartime upside).
+- `country_war_support_casualties_mult` (vanilla, 1.14 rename of `country_war_exhaustion_casualties_mult`, same sign) — scales war support lost to casualties. Negative values shrink the loss (a wartime upside); the factor floors at 0.
+- `country_war_support_battles_increase_mult` / `country_war_support_battles_decrease_mult` (vanilla, 1.14) — scale support gained from won battles / lost to lost battles.
 - `state_war_support_monthly_add` (mod-added) — direct per-state war-support gain.
-- `state_loyalists_from_political_movements_mult`, `state_radicals_from_political_movements_mult` (vanilla) — gate how movement activism translates to pop loyalty/radicalization (and therefore into war-support exhaustion).
+- `state_loyalists_from_political_movements_mult`, `state_radicals_from_political_movements_mult` (vanilla) — gate how movement activism translates to pop loyalty/radicalization (and therefore into turmoil and loyalist-fraction war support).
 - `political_movement_pop_attraction_mult`, `political_movement_radicalism_add` (vanilla) — applied **to a movement scope** to shrink/grow its size and activism. Used by mod modifiers like `anti_war_movement_suppressed`.
 - Diplomatic-play modifiers (vanilla): `country_diplomatic_play_maneuvers_add`, `country_diplomatic_play_maneuvers_mult`, `country_infamy_decay_mult`, `country_infamy_generation_mult`, `country_infamy_generation_against_unrecognized_mult`. Verify the current list with `/modifier-search?q=infamy` and `/modifier-search?q=diplomatic_play`.
 
@@ -418,7 +432,9 @@ Aside from capitulation, peace deals require unanimous agreement from all **nego
 - `common/laws/00_naval_doctrines.txt` (or similar) — Naval Doctrine law group added in 1.13.
 - `common/character_traits/` — commander aptitude traits and their modifiers.
 - `common/diplomatic_plays/` — war goal definitions; mod additions live in `te_unification_plays.txt`.
-- `common/laws/extra_laws.txt` — search for `country_war_exhaustion_casualties_mult` to see how mod-side laws gate wartime resilience.
+- `common/laws/extra_laws.txt` — search for `country_war_support_casualties_mult` to see how mod-side laws gate wartime resilience.
+- `common/script_values/war_support_values.txt` (vanilla, 1.14) — the whole war support change formula.
+- `common/war_goal_types/` — war goal definitions (kind, contestion, mirrored goal); the mod's generic same-culture annexation goal is `te_reunify_country.txt`.
 - `common/power_bloc_principles/extra_power_bloc_principles.txt` — power-bloc-level military bonuses.
 - `events/<system>_events.txt` — wartime events. Anti-war movement: `events/movement_events_te.txt`. Active wars (mobilization, fronts, capitulation): vanilla `events/war_events.txt` and mod overlays.
 - `common/on_actions/extra_on_actions.txt` — wartime pulse hooks (`on_war_started`, `on_war_lost`, monthly pulses gated on `is_at_war = yes`).
@@ -429,7 +445,7 @@ Aside from capitulation, peace deals require unanimous agreement from all **nego
 
 The mod has an active anti-war movement system surfacing as `movement_anti_war` political movements. Events in `events/movement_events_te.txt` (5–8) gate on the movement's existence and, where appropriate, on `is_at_war = yes`. When designing or rebalancing these events:
 
-- Prefer real war-mechanic levers (`country_war_exhaustion_casualties_mult`, `political_movement_pop_attraction_mult`, `political_movement_radicalism_add`) over invented or fake modifier names. The engine silently no-ops invalid names.
+- Prefer real war-mechanic levers (`country_war_support_casualties_mult`, `political_movement_pop_attraction_mult`, `political_movement_radicalism_add`) over invented or fake modifier names. The engine silently no-ops invalid names.
 - Anti-war movement scope is reachable via `random_political_movement = { limit = { is_political_movement_type = movement_anti_war } save_scope_as = anti_war_movement }` in the event's `immediate` block. Apply movement-side modifiers to that saved scope.
-- War support is *the* mechanical ceiling on a war's duration. Options that radicalize the lower strata also accelerate war-support loss via the radical → exhaustion linkage. This is intended pressure, not a bug.
-- Lobby clout is also a war-support lever (see § 13 exhaustion table — opposed lobby clout adds 0.01/week per percent, supportive lobby clout subtracts 0.01/week). The hooks are vanilla lobby-strength mechanics rather than a single named modifier; use `add_lobby_appeasement_*` effects, `country_lobby_leverage_generation_mult` modifiers, and IG-clout shifts to move lobbies the way you want.
+- War support is *the* mechanical ceiling on a war's duration. Options that radicalize the lower strata also accelerate war-support loss, now indirectly via turmoil and a smaller loyalist fraction (1.14 removed the direct radicals term). This is intended pressure, not a bug.
+- Lobby clout is also a war-support lever (see § 13 sources — anti-war clout lowers support and pro-war clout raises it, both saturating at modest clout; anti-war clout is ignored in defensive wars). The hooks are vanilla lobby-strength mechanics rather than a single named modifier; use `add_lobby_appeasement_*` effects, `country_lobby_leverage_generation_mult` modifiers, and IG-clout shifts to move lobbies the way you want.

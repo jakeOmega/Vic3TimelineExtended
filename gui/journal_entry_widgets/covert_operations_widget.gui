@@ -1,0 +1,99 @@
+﻿### Covert Warfare JE widgets
+### Lists every running covert operation. Each operation is a script container
+### referenced from the country's `iw_ops` variable list (see
+### common/scripted_effects/covert_warfare_effects.txt for its tags and variables).
+### Wired via `widget = { name = "widget_je_covert_operations" container = "custom_widget_container_2" }`
+### in je_covert_warfare, so the rows render directly under the status description.
+
+types covert_operations_widget_types
+{
+	type widget_je_covert_operation_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_large
+	}
+
+	type widget_je_covert_operation_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+
+		# ---- Operation type and target (exactly one tag matches) ----
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_election_interference')]"
+			text = "je_iw_op_row_election_interference"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_financial_subversion')]"
+			text = "je_iw_op_row_financial_subversion"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_infrastructure_sabotage')]"
+			text = "je_iw_op_row_infrastructure_sabotage"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_comms_disruption')]"
+			text = "je_iw_op_row_comms_disruption"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_industrial_espionage')]"
+			text = "je_iw_op_row_industrial_espionage"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_military_espionage')]"
+			text = "je_iw_op_row_military_espionage"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_influence_campaign')]"
+			text = "je_iw_op_row_influence_campaign"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_ideological_subversion')]"
+			text = "je_iw_op_row_ideological_subversion"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_destabilization')]"
+			text = "je_iw_op_row_destabilization"
+		}
+
+		# ---- Phase (months 0-5 / 6-11 / 12+) and detection risk ----
+		widget_je_covert_operation_text = {
+			visible = "[GreaterThanOrEqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)12')]"
+			text = "je_iw_op_row_phase_full"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[And(GreaterThanOrEqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)6'), LessThan_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)12'))]"
+			text = "je_iw_op_row_phase_est"
+		}
+		widget_je_covert_operation_text = {
+			visible = "[LessThan_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)6')]"
+			text = "je_iw_op_row_phase_prep"
+		}
+	}
+}
+
+
+### WIDGETS
+flowcontainer = {
+	name = "widget_je_covert_operations"
+	direction = vertical
+	parentanchor = hcenter
+	spacing = 4
+
+	datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_ops')]"
+
+	item = {
+		widget_je_covert_operation_row = {
+			datacontext = "[Scope.GetScriptContainer]"
+		}
+	}
+}

@@ -1,4 +1,4 @@
-# Auto-generated from on_actions.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from on_actions.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 austrian_monarchy_yearly_events|country|from_code=no
 bp1_misc_yearly_events|country|from_code=no
@@ -33,6 +33,7 @@ movement_half_yearly_events|country|from_code=no
 on_acquired_technology|country|from_code=yes
 on_ally_capitulated_notification||from_code=yes
 on_amendment_repealed||from_code=yes
+on_amendment_timeout||from_code=yes
 on_battle_ended||from_code=yes
 on_battle_lost||from_code=yes
 on_battle_started||from_code=yes
@@ -78,6 +79,7 @@ on_diplo_play_declare_neutrality||from_code=yes
 on_diplo_play_join_side||from_code=yes
 on_diplo_play_start||from_code=yes
 on_diplo_play_start_third_party||from_code=yes
+on_diplo_play_subject_backstab_overlord||from_code=yes
 on_diplo_play_subject_released||from_code=yes
 on_diplo_play_subject_released_overlord||from_code=yes
 on_diplo_play_switch_sides||from_code=yes
@@ -233,6 +235,7 @@ on_treaty_article_removed||from_code=yes
 on_treaty_dissolved||from_code=yes
 on_treaty_enforced||from_code=yes
 on_treaty_entered_into_force||from_code=yes
+on_treaty_ports_inherited||from_code=yes
 on_treaty_proposal_declined||from_code=yes
 on_treaty_proposed||from_code=yes
 on_unification_candidate_added||from_code=yes

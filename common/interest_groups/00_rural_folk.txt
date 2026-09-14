@@ -30,6 +30,7 @@ ig_rural_folk = {
 	}
 
 	on_enable = {
+		# ONLY HANDLE IG TRAITS IN THIS BLOCK
 		ig:ig_rural_folk ?= {
 			if = {
 				limit = {
@@ -52,7 +53,6 @@ ig_rural_folk = {
 				limit = {
 					owner = { c:EGY ?= this }
 				}
-				set_interest_group_name = ig_fellahin
 				set_ig_trait = ig_trait:ig_trait_old_ways
 				set_ig_trait = ig_trait:ig_trait_fellahin
 				set_ig_trait = ig_trait:ig_trait_farmers_markets
@@ -71,7 +71,6 @@ ig_rural_folk = {
 						}
 					}
 				}
-				set_interest_group_name = ig_ryots
 				set_ig_trait = ig_trait:ig_trait_of_the_sovereign_alone
 				set_ig_trait = ig_trait:ig_trait_imandari
 				set_ig_trait = ig_trait:ig_trait_bazaar_bargains
@@ -80,22 +79,18 @@ ig_rural_folk = {
 				limit = {
 					owner = { c:PAN ?= this }
 				}
-				set_interest_group_name = ig_jats
 				set_ig_trait = ig_trait:ig_trait_old_ways
 				set_ig_trait = ig_trait:ig_trait_honest_work
 				set_ig_trait = ig_trait:ig_trait_khalsa_panth
 			}
-			# Landvolk
 			else_if = {
 				limit = {
-					has_dlc_feature = ip3_content
 					owner = {
 						any_primary_culture = {
 							has_discrimination_trait = language_germanophone
 						}
 					}
 				}
-				set_interest_group_name = ig_landvolk
 				set_ig_trait = ig_trait:ig_trait_born_particularists
 				set_ig_trait = ig_trait:ig_trait_honest_work
 				set_ig_trait = ig_trait:ig_trait_farmers_markets
@@ -107,8 +102,9 @@ ig_rural_folk = {
 			}
 		}
 
-		# Jeffersonian Ideology
-		if = {
+
+		# FLAVOUR AND IDEOLOGIES GO HERE
+		if = { # Jeffersonian Ideology
 			limit = {
 				OR = {
 					country_has_primary_culture = cu:yankee
@@ -121,9 +117,7 @@ ig_rural_folk = {
 				set_interest_group_name = ig_yeoman_farmers
 			}
 		}
-
-		# Heimin
-		if = {
+		else_if = { # Heimin
 			limit = {
 				country_has_primary_culture = cu:japanese
 			}
@@ -131,8 +125,7 @@ ig_rural_folk = {
 				set_interest_group_name = ig_peasants
 			}
 		}
-		# Maka'āinana
-		if = {
+		else_if = { # Maka'āinana
 			limit = {
 				country_has_primary_culture = cu:hawaiian
 			}
@@ -140,8 +133,7 @@ ig_rural_folk = {
 				set_interest_group_name = ig_maka_ainana
 			}
 		}
-		# Sikh Empire
-		if = {
+		else_if = { # Sikh Empire
 			limit = {
 				c:PAN ?= this
 			}
@@ -149,8 +141,7 @@ ig_rural_folk = {
 				set_interest_group_name = ig_jats
 			}
 		}
-		# India
-		else_if = {
+		else_if = { # India
 			limit = {
 				OR = {
 					c:BIC ?= this
@@ -166,8 +157,7 @@ ig_rural_folk = {
 				set_interest_group_name = ig_ryots
 			}
 		}
-		# Nepal
-		else_if = {
+		else_if = { # Nepal
 			limit = {
 				any_primary_culture = {
 					has_discrimination_trait_group = heritage_group_south_asian
@@ -177,6 +167,20 @@ ig_rural_folk = {
 			ig:ig_rural_folk ?= {
 				set_interest_group_name = ig_kisanharu
 			}
+		}
+		else_if = {
+			limit = {
+				c:EGY ?= this
+			}
+			ig:ig_rural_folk ?= { set_interest_group_name = ig_fellahin }
+		}
+		else_if = { # Germans
+			limit = {
+				any_primary_culture = {
+					has_discrimination_trait = language_germanophone
+				}
+			}
+			ig:ig_rural_folk ?= { set_interest_group_name = ig_landvolk }
 		}
 	}
 	on_disable = {}
@@ -430,10 +434,10 @@ ig_rural_folk = {
 	commander_weight = {
 		value = 1.0
 	}
-	
+
 	magnate_weight = {
 		value = 0.25
-	}	
+	}
 
 	executive_weight = {
 		value = 0.1

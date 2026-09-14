@@ -226,6 +226,39 @@ types construction_panel
 					using = entry_bg_simple
 				}
 
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					align = nobaseline
+					margin_left = 10
+					tooltip = "SUPPLY_SHIPS_TOPBAR_TOOLTIP"
+					text = "DECOMMISSION_SUPPLY_SHIPS_AVAILABLE"
+				}
+
+				button = {
+					parentanchor = right|vcenter
+					position = { -10 0 }
+					size = { 250 36 }
+					using = default_button
+					enabled = "[GreaterThan_int32(GetPlayer.GetNumAvailableSupplyShips, '(int32)0')]"
+					tooltip = "DECOMMISSION_SUPPLY_SHIPS_BUTTON_TOOLTIP"
+					text = "DECOMMISSION_SUPPLY_SHIPS_BUTTON"
+					onclick = "[PopupManager.ShowDecommissionSupplyShipsWindow]"
+				}
+			}
+
+			widget = {
+				size = { 2 2 }
+			}
+
+			widget = {
+				parentanchor = hcenter
+				minimumsize = { @panel_width 50 }
+
+				background = {
+					using = entry_bg_simple
+				}
+
 				### Navy maintenance cost
 				textbox = {
 					visible = "[GreaterThan_CFixedPoint(Country.GetTotalMaintenanceDemand, '(CFixedPoint)0')]"

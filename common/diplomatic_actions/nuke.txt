@@ -15,34 +15,38 @@
 	}
 
 	possible = {
-		var:nuclear_weapon_stockpile > 0
-		OR = {
-			# Normal: can use if no humanitarian/limited war laws
-			NOT = {
-				OR = {
-					has_law = law_type:law_humanitarian_regulations
-					has_law = law_type:law_limited_war
-				}
-			}
-			# Retaliation: already been nuked overrides war laws
-			any_scope_state = {
-				OR = {
-					has_modifier = nuclear_strike_aftermath
-					has_modifier = tactical_nuke_aftermath
-				}
-			}
-			# Existential threat overrides war laws
-			any_scope_war = {
-				is_target_of_wargoal_in_war = ROOT
-				OR = {
-					has_war_goal = make_protectorate
-					has_war_goal = make_dominion
-					has_war_goal = make_tributary
-					has_war_goal = annex_country
-				}
-			}
-		}
-	}
+        var:nuclear_weapon_stockpile > 0
+        OR = {
+            # Normal: can use if no humanitarian/limited war laws
+            NOT = {
+                OR = {
+                    has_law = law_type:law_humanitarian_regulations
+                    has_law = law_type:law_limited_war
+                }
+            }
+            # Retaliation: already been nuked overrides war laws
+            any_scope_state = {
+                OR = {
+                    has_modifier = nuclear_strike_aftermath
+                    has_modifier = tactical_nuke_aftermath
+                }
+            }
+            # Existential threat overrides war laws
+            any_scope_war = {
+                is_target_of_wargoal_in_war = ROOT
+                OR = {
+                    has_war_goal = make_protectorate
+                    has_war_goal = make_dominion
+                    has_war_goal = make_tributary
+                    has_war_goal = make_personal_union
+                    has_war_goal = make_crown_land
+                    has_war_goal = make_chartered_company
+                    has_war_goal = annex_country
+                    has_war_goal = te_reunify_country
+                }
+            }
+        }
+    }
 
 	second_state_trigger = {
 		exists = scope:country
@@ -112,23 +116,25 @@
 			# Must be at war with the target
 			has_war_with = scope:country
 
-			# Must face a sufficiently severe threat - no nuking over minor disputes
-			OR = {
-				# Existential threat: enemy wants to subjugate or annex us
-				enemy_has_existential_war_goal = yes
-				# Losing core incorporated territory AND the war is going badly
-				AND = {
-					any_scope_state = {
-						is_target_of_wargoal = scope:country
-						is_incorporated = yes
-					}
-					any_scope_war = {
-						has_war_exhaustion = { target = ROOT value > 40 }
-					}
-				}
-				# Retaliation: this specific enemy nuked us
-				was_nuked_by_enemy = yes
-			}
+            # Must face a sufficiently severe threat - no nuking over minor disputes
+            OR = {
+                # Existential threat: enemy wants to subjugate or annex us
+                enemy_has_existential_war_goal = yes
+                # Losing core incorporated territory AND the war is going badly
+                AND = {
+                    any_scope_state = {
+                        is_target_of_wargoal = scope:country
+                        is_incorporated = yes
+                    }
+                    # 1.14: war exhaustion became a 0-100 war support scale; the red band
+                    # (radicalization + combat malus) is vanilla's own "going badly" line
+                    any_scope_war = {
+                        has_war_support = { target = ROOT value <= define:NDiplomacy|WAR_SUPPORT_RADICALIZATION_THRESHOLD }
+                    }
+                }
+                # Retaliation: this specific enemy nuked us
+                was_nuked_by_enemy = yes
+            }
 
 			# Cautious or honorable leaders require extreme circumstances
 			OR = {
@@ -183,33 +189,37 @@ tactical_nuke_diplo_action = {
 	}
 
 	possible = {
-		has_technology_researched = tactical_nuclear_weapons
-		has_variable = nuclear_weapon_stockpile
-		var:nuclear_weapon_stockpile > 0
-		OR = {
-			# Normal: can use if no limited war law
-			NOT = {
-				has_law = law_type:law_limited_war
-			}
-			# Retaliation: already been nuked overrides war laws
-			any_scope_state = {
-				OR = {
-					has_modifier = nuclear_strike_aftermath
-					has_modifier = tactical_nuke_aftermath
-				}
-			}
-			# Existential threat overrides limited war law
-			any_scope_war = {
-				is_target_of_wargoal_in_war = ROOT
-				OR = {
-					has_war_goal = make_protectorate
-					has_war_goal = make_dominion
-					has_war_goal = make_tributary
-					has_war_goal = annex_country
-				}
-			}
-		}
-	}
+        has_technology_researched = tactical_nuclear_weapons
+        has_variable = nuclear_weapon_stockpile
+        var:nuclear_weapon_stockpile > 0
+        OR = {
+            # Normal: can use if no limited war law
+            NOT = {
+                has_law = law_type:law_limited_war
+            }
+            # Retaliation: already been nuked overrides war laws
+            any_scope_state = {
+                OR = {
+                    has_modifier = nuclear_strike_aftermath
+                    has_modifier = tactical_nuke_aftermath
+                }
+            }
+            # Existential threat overrides limited war law
+            any_scope_war = {
+                is_target_of_wargoal_in_war = ROOT
+                OR = {
+                    has_war_goal = make_protectorate
+                    has_war_goal = make_dominion
+                    has_war_goal = make_tributary
+                    has_war_goal = make_personal_union
+                    has_war_goal = make_crown_land
+                    has_war_goal = make_chartered_company
+                    has_war_goal = annex_country
+                    has_war_goal = te_reunify_country
+                }
+            }
+        }
+    }
 
 	second_state_trigger = {
 		exists = scope:country
@@ -325,6 +335,26 @@ tactical_nuke_diplo_action = {
 					}
 					any_scope_war = {
 						has_war_exhaustion = { target = ROOT value > 25 }
+					}
+				}
+				# Retaliation: this specific enemy nuked us
+				was_nuked_by_enemy = yes
+			}
+
+			# Must face a sufficiently severe threat - no tactical nukes over minor disputes
+			OR = {
+				# Existential threat: enemy wants to subjugate or annex us
+				enemy_has_existential_war_goal = yes
+				# Losing core incorporated territory AND the war is going badly
+				AND = {
+					any_scope_state = {
+						is_target_of_wargoal = scope:country
+						is_incorporated = yes
+					}
+					# 1.14: tactical use tolerates a milder slide than strategic -- war
+					# support below the level it drifts toward rather than in the red band
+					any_scope_war = {
+						has_war_support = { target = ROOT value < define:NDiplomacy|WAR_SUPPORT_DRIFT_TARGET }
 					}
 				}
 				# Retaliation: this specific enemy nuked us

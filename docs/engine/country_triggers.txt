@@ -1,6 +1,6 @@
-# Auto-generated from triggers.log @ 2026-07-03T21:30:36+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
-additional_war_exhaustion: Compares the additional war exhaustion the scoped country has accumulated from scripted events in the target diplomatic play
+additional_war_support_change: Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
 any_active_law: Iterate through all active laws in a country
 any_active_party: Iterate through all active political parties in a country
@@ -57,9 +57,11 @@ approaching_bureaucracy_shortage: Check if Institutions in the country will incu
 arable_land_country: Compare arable land in *all* states
 army_mobilization_option_fraction: Checks that a countries army has a certain percentage of units with a specific monbilization option scope:country
 army_power_projection: Compare to a country's total army power projection  scope:example_country
+attitude_towards_overlord: Checks a subject's AI attitude toward its overlord
 authority: Compares the available authority of the scoped country
 authority_usage: Compares the consumed authority of the scoped country
 average_country_infrastructure: Check average infrastructure in all states owned by scope country
+average_devastation: Compares the population-weighted average devastation of a country's states (0-1)
 average_incorporated_country_infrastructure: Check average infrastructure in incorporated states owned by the scope country
 average_sol_for_culture: Compares the average standard of living for the target culture in the country
 average_sol_for_primary_cultures: Compare average standard of living for primary cultures
@@ -130,8 +132,8 @@ enactment_chance_for_law_without_enactment_modifier: Compares the enactment succ
 enactment_chance_without_enactment_modifier: Compares the current enactment success chance in scope country but excludes values from enactment modifier
 enactment_phase: Compares the current law enactment phase in scope country.
 enactment_setback_count: Compares the current enactment setback count in scope country.
-enemy_contested_wargoals: Determines the fraction of war goals that enemies in the war are currently contesting
 enemy_occupation: Determines the (weighted) enemy occupation score of a country
+enemy_side_occupation: Average weighted occupation of the countries on the enemy side of the scoped war, from the scoped country's perspective (0-1)
 expanding_institution: Checks if the institution is expanding
 fixed_expenses: Does the country have this amount of weekly fixed expenses
 fixed_income: Does the country have this amount of weekly fixed income
@@ -205,10 +207,12 @@ has_strategic_region_interest_tier: Checks the scoped country's interest tier ra
 has_strategy: Checks if country in scope has a particular AI strategy
 has_subject_relation_with: Checks if country in scope is subject or overlord of event target
 has_sufficient_construction_capacity_for_investment: Check if country has enough construction capacity to be spending all of its incoming investment pool funds.
+has_sufficient_sailors: Check if the Naval Administrations can deliver enough sailors for every ship the country already has
 has_technology_progress: Does the country have the required progress for an technology Where X is an technology and Y is a fixed point
 has_technology_researched: True if a country has researched an technology
 has_treaty_port_in_market: Checks if the scoped country has a treaty port in target market c:POR
 has_truce_with: Check if a country has a truce with a different target country
+has_unreachable_ship_construction_fleet: Checks if a country is building a ship with a target fleet it will not be able to reach once built
 has_war_with: Checks if country in scope is at war with event target
 has_wasted_construction: Check if country is wasting any of its produced construction.
 highest_overlapping_interest_tier: Compares the highest interest tier rank (scope country) among strategic regions where both countries have an interest.
@@ -343,6 +347,7 @@ ship_modification_market_demand_ratio: Goods-weighted buy/sell ratio for the con
 should_set_wargoal: 
 shrinking_institution: Checks if the institution is shrinking expanding_institution
 size_weighted_lost_battles_fraction: Determines the fraction of battles the target country has lost in the target war, weighted by manpower size of all battles in the war
+size_weighted_won_battles_fraction: Determines the fraction of battles the target country has won in the target war, weighted by manpower size of all battles in the war
 sol_ranking: Compares a Country's Standard of Living Ranking (position)
 stall_chance: Compares the current enactment stall chance in scope country (including values from enactment modifier)
 stall_chance_for_law: Compares the enactment stall chance in scope country for given law (including values from enactment modifier)
@@ -369,6 +374,8 @@ transfer_money_gross_income: Does the country have this amount of gross income (
 transfer_money_net_income: Does the country have this amount of net income (income after expenses) from money transfer treaties
 war_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 war_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
+war_support_from_war_goals: Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier
 was_formed_from: Check if a formed country previously had a specific definition
 wealth_share: Checks the wealth political strength share of a pop type, religion or culture in a country or state.
+weeks_until_bankruptcy: Compares how many weeks the country can sustain its current deficit before its debt reaches its credit limit
 would_accept_diplomatic_action: Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score, to allow for checking if they would accept with a...

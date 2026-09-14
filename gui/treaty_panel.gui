@@ -1121,13 +1121,17 @@ types treaty_panel_types
 
 	type ship_input_article = widget {
 		visible = "[Article.RequiresInput('ship')]"
-		size = { 140 75 }
+		size = { 140 90 }
 		datacontext = "[Article.GetShip]"
+
+		tooltipwidget = {
+			FancyTooltip_Ship = {}
+		}
 
 		flowcontainer = {
 			direction = vertical
 			parentanchor = vcenter
-			margin = { 5 0 }
+			margin = { 5 5 }
 			spacing = 5
 
 			textbox = {
@@ -1157,12 +1161,28 @@ types treaty_panel_types
 				datacontext = "[Ship.GetTemplate]"
 				spacing = 2
 				parentanchor = hcenter
-				datamodel = "[ShipTemplate.GetModifications]"
 
-				item = {
-					icon = {
-						size = { 20 20 }
-						texture = "[ShipModificationType.GetIcon]"
+				flowcontainer = {
+					spacing = 2
+					datamodel = "[ShipTemplate.GetModifications]"
+
+					item = {
+						icon = {
+							size = { 20 20 }
+							texture = "[ShipModificationType.GetIcon]"
+						}
+					}
+				}
+
+				flowcontainer = {
+					spacing = 2
+					datamodel = "[ShipTemplate.GetUtilityModifications]"
+
+					item = {
+						icon = {
+							size = { 20 20 }
+							texture = "[ShipModificationType.GetIcon]"
+						}
 					}
 				}
 			}

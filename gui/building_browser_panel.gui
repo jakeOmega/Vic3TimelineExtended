@@ -1659,6 +1659,11 @@ types building_browser_panel_types
 													texture = "gfx/interface/icons/state_status_icons/incorporated_state.dds"
 												}
 
+												blockoverride "line_button_icon_size"
+												{
+													size = { 25 25 }
+												}
+
 												blockoverride "line_button_selected"
 												{
 													visible = "[BuildingBrowserPanel.IsFilterYes('incorporated_state')]"
@@ -1679,6 +1684,11 @@ types building_browser_panel_types
 												blockoverride "line_button_icon_texture"
 												{
 													texture = "gfx/interface/icons/state_status_icons/unincorporated_state.dds"
+												}
+
+												blockoverride "line_button_icon_size"
+												{
+													size = { 25 25 }
 												}
 
 												blockoverride "line_button_selected"
@@ -2763,6 +2773,107 @@ types building_browser_panel_types
 						}
 					}
 
+					### BUILDING INCORPORATION FILTER
+					building_browser_filter_line = {
+						parentanchor = hcenter
+						blockoverride "line_background" {}
+
+						blockoverride "filter_line_label"
+						{
+							text = "INCORPORATION"
+						}
+
+						blockoverride "filter_line_active_visible"
+						{
+							visible = "[BuildingBrowserPanel.IsFiltered('incorporated_state')]"
+						}
+
+						blockoverride "line_size"
+						{
+							size = { @panel_width 38 }
+						}
+
+						blockoverride "filter_line_buttons"
+						{
+							building_browser_filter_line_button = {
+								blockoverride "line_button_tooltip"
+								{
+									tooltip = "ALL"
+								}
+
+								blockoverride "line_button_onclick"
+								{
+									onclick = "[BuildingBrowserPanel.SetFilterMode('incorporated_state', 'off')]"
+								}
+
+								blockoverride "line_button_icon_texture"
+								{
+									texture = "gfx/interface/icons/building_icons/building_browser_filter_icons/filter_icons_all.dds"
+								}
+
+								blockoverride "line_button_selected"
+								{
+									visible = "[Not(BuildingBrowserPanel.IsFiltered('incorporated_state'))]"
+									alpha = @all_filter_selected_alpha
+								}
+
+							}
+							building_browser_filter_line_button = {
+								blockoverride "line_button_tooltip"
+								{
+									tooltip = "SITUATED_IN_INCORPORATED_STATE"
+								}
+
+								blockoverride "line_button_onclick"
+								{
+									onclick = "[BuildingBrowserPanel.SetFilterMode('incorporated_state', 'yes')]"
+								}
+
+								blockoverride "line_button_icon_texture"
+								{
+									texture = "gfx/interface/icons/state_status_icons/incorporated_state.dds"
+								}
+
+								blockoverride "line_button_icon_size"
+								{
+									size = { 25 25 }
+								}
+
+								blockoverride "line_button_selected"
+								{
+									visible = "[BuildingBrowserPanel.IsFilterYes('incorporated_state')]"
+								}
+
+							}
+							building_browser_filter_line_button = {
+								blockoverride "line_button_tooltip"
+								{
+									tooltip = "NOT_SITUATED_IN_INCORPORATED_STATE"
+								}
+
+								blockoverride "line_button_onclick"
+								{
+									onclick = "[BuildingBrowserPanel.SetFilterMode('incorporated_state', 'no')]"
+								}
+
+								blockoverride "line_button_icon_texture"
+								{
+									texture = "gfx/interface/icons/state_status_icons/unincorporated_state.dds"
+								}
+
+								blockoverride "line_button_icon_size"
+								{
+									size = { 25 25 }
+								}
+
+								blockoverride "line_button_selected"
+								{
+									visible = "[BuildingBrowserPanel.IsFilterNo('incorporated_state')]"
+								}
+							}
+						}
+					}
+
 					### POTENTIAL BUILDING TYPES FILTER
 					building_browser_filter_line = {
 						visible = no # todo - PRCAL-36023 - Remove this visible check
@@ -3783,12 +3894,11 @@ types building_browser_panel_types {
 
 		# under construction
 		textbox = {
-			size = { 100% 100% }
 			visible = "[Not(Building.IsActive)]"
-
-			text = "BUILDING_BROWSER_CONSTRUCTING"
+			size = { 100% 100% }
 			using = empty_state_text_properties
 			align = hcenter|nobaseline
+			text = "BUILDING_BROWSER_CONSTRUCTING"
 		}
 
 		# active
@@ -3800,6 +3910,7 @@ types building_browser_panel_types {
 			# "normal" building or manor house or financial district
 			building_ownership_or_property_portfolio_stacked_barchart_short = {
 				parentanchor = center
+
 				blockoverride "barchart_size" {
 					size = { 200 40 }
 				}
@@ -3807,12 +3918,11 @@ types building_browser_panel_types {
 
 			# always government owned
 			textbox = {
-				size = { 100% 100% }
 				visible = "[Building.IsGovernmentFunded]"
-
-				raw_text = "[concept_government_building]"
+				size = { 100% 100% }
 				using = empty_state_text_properties
 				align = hcenter|nobaseline
+				raw_text = "[concept_government_building]"
 			}
 		}
 	}
