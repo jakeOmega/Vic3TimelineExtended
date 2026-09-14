@@ -120,6 +120,24 @@ class ClassificationTests(unittest.TestCase):
         e = LogEntry("00:00:00", "pdx_gui_factory.cpp:909", "X is not a valid type")
         self.assertEqual(e.category, "gui_parse_error")
 
+    def test_physfs_lines_are_vfs_mount_not_other(self):
+        # #254 §6: the rule lived in SOURCE_CATEGORY_PREFIX as
+        # "virtualfilesystem_physfs.cpp:" — a key `_classify` could never match,
+        # since it compares whole `file:line` sources. Any line of that file is
+        # a mount complaint.
+        for source in ("virtualfilesystem_physfs.cpp:213",
+                       "virtualfilesystem_physfs.cpp:57",
+                       "virtualfilesystem_physfs.cpp"):
+            with self.subTest(source=source):
+                e = LogEntry("00:00:00", source, "Could not mount ...")
+                self.assertEqual(e.category, "vfs_mount")
+
+    def test_no_dead_prefix_keys(self):
+        # A `"<file>:"` key in the exact-match table is unreachable; whole-file
+        # rules belong in SOURCE_CATEGORY_FILE. (#254 §6)
+        dead = [k for k in SOURCE_CATEGORY_PREFIX if not k.rpartition(":")[2].isdigit()]
+        self.assertEqual(dead, [])
+
 
 class FilterTests(unittest.TestCase):
     def test_mod_only_keeps_entries_with_mod_paths(self):
@@ -552,7 +570,7 @@ Couldn't find any animation state for harvest condition type
                 source="harvest_condition_graphics.cpp:52",
                 message="Couldn't find any animation state for harvest condition type 'bull_market'",
             )
-            tag_vanilla_bugs(entry_list := [entry], by_basename, by_source)
+            tag_vanilla_bugs([entry], by_basename, by_source)
             self.assertIsNotNone(entry.vanilla_bug_ref)
             self.assertEqual(entry.vanilla_bug_ref["kind"], "mod_low_priority")
             self.assertIn("tracked_issue", entry.vanilla_bug_ref)

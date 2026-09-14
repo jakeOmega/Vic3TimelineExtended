@@ -146,7 +146,7 @@ principle_group_education = {
 principle_group_diplomacy = {
 	primary_for_identity = identity_diplomatic
 	unlocking_identity = identity_diplomatic
-	
+
 	levels = {
 		principle_diplomacy_1
 		principle_diplomacy_2
@@ -254,13 +254,13 @@ principle_group_engineering_and_logistics = {
 }
 
 principle_group_environmental_sustainability = {
-    levels = {
-        principle_environmental_sustainability_1
-        principle_environmental_sustainability_2
-        principle_environmental_sustainability_3
-        principle_environmental_sustainability_4
-        principle_environmental_sustainability_5
-    }
+	levels = {
+		principle_environmental_sustainability_1
+		principle_environmental_sustainability_2
+		principle_environmental_sustainability_3
+		principle_environmental_sustainability_4
+		principle_environmental_sustainability_5
+	}
 }
 
 principle_group_urban_planning = {

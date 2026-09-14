@@ -54,7 +54,13 @@ When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemo
 
 **Both `days = N` and `months = N` are valid `add_modifier` / `cooldown` syntax** when N is a literal integer (vanilla uses `months = 12`, `months = 120`, etc. — see `paris_commune_pulse_events.txt`, `alaska_events.txt`, `canal_events.txt`). The bug pattern this section warns about is *only* mixing the `*_modifier_time` script values (defined in days) with the `months =` keyword. A code review that flags every `months = N` as a bug will produce false positives — verify against vanilla precedent before "fixing".
 
-**`set_variable` accepts `days = N` only for engine-side auto-cleanup, NOT `months`.** The fields are `name`, `value`, optionally `days = N` (variable auto-clears after N days). There is no `months` field. `set_variable = { name = X value = 6 months = yes }` parse-errors with `Named value not found: yes: yes` because the parser sees `value = 6` + an orphan `months = yes` pair. If you want a months-based cooldown, either use `days = (months × 30)` for engine cleanup, or — if your system already decrements the variable in an `on_action` monthly pulse (e.g. `space_race_on_actions.txt`'s `change_variable subtract = 1` on `sr_failure_cooldown`) — drop the time field entirely and store the months-count in `value`. Don't double-up engine cleanup and manual decrement.
+**`set_variable`'s lifetime field is an *optional companion* to `value`, and `months` / `years` work as well as `days`.** The canonical shape from the engine docs is `set_variable = { name = X value = Y days = Z }` with **`days` optional** (`docs/engine/effects_summary.txt`, and `set_variable` / `set_global_variable` / `set_local_variable` in `docs/engine/vic3_triggers_effects_reference.md`: "An optional days where Z is the number of days"). `Y` may be a number, a script value, a bool, an event target or a `flag:W`. Three things follow:
+
+- **`value` + a time field together is legal**, and the mod does it in 6 places — `cultural_hegemony_effects.txt:258` (`value = yes days = 180`), `je_colonial_empire.txt:269`/`:273` (`value = yes days = 3650`), `international_relations_events.txt:823`/`:848`/`:870` (`value = N days = 30`).
+- **A time field alone is also legal** — the variable exists as a timed flag with no stored number.
+- **`months` and `years` are valid units, not just `days`.** The vanilla election idiom is `set_variable = { name = election_event_cooldown months = election_event_cooldown_months }` — 36 sites across `modern_election_events.txt` / `repeatable_events.txt`, with `election_event_cooldown_months` a *vanilla script value* (it is in `docs/engine/effect_trigger_valid_keys.txt`) — and `religious_revival_events.txt` uses `set_variable = { name = rre_recent_cooldown years = 5 }`. **Do not "fix" either of these into `days = N`.**
+
+The actual failure mode is narrow: a **time field set to a boolean**. `set_variable = { name = X value = 6 months = yes }` fails with `Named value not found: yes: yes` — `months` wants a number or script value, and `yes` is neither. (`value = yes` is perfectly legal; it is the *time* field that must be numeric.) Separately, if your system already decrements the variable itself in an `on_action` monthly pulse (e.g. `space_race_on_actions.txt`'s `change_variable subtract = 1` on `sr_failure_cooldown`), drop the time field entirely and store the months-count in `value` — don't double up engine cleanup and manual decrement.
 
 ## Modifier Design: Don't Borrow Modifiers from Other Systems
 
@@ -72,7 +78,7 @@ Some modifiers contribute to **relative** comparisons; others to **absolute** th
 - `character_prominence_add` — leader-selection picks the top-N most prominent of an eligible pool. Uniform boosts don't move the ranking.
 - Similar relative effects: anything that drives "who's #1 / who's most attractive / who's selected from a pool."
 
-For these, apply **targeted via `every_scope_character = { limit = { ... } add_modifier = { ... } }`** so only a subset (one gender, one culture, one IG, the head-of-state) gets the bonus. The asymmetry is what produces game effect. See `events/feminist_events.txt:200/100` for the pattern (female-only cascade on the success and backlash branches of the feminism JE).
+For these, apply **targeted via `every_scope_character = { limit = { ... } add_modifier = { ... } }`** so only a subset (one gender, one culture, one IG, the head-of-state) gets the bonus. The asymmetry is what produces game effect. See `common/scripted_effects/heir_education_effects.txt:694` for the live shape of the pattern (a `limit` narrowing the cascade to adult characters in specific roles). The previous example here cited `events/feminist_events.txt`, which no longer exists — the feminism JE was retired and its surviving events folded into `events/society_technology_events.txt` (see `docs/systems/mod_systems.md` § Social Movement Journal Entries).
 
 **Absolute-mechanic modifiers (country-scope cascade is fine):**
 - `character_loyalty_add` — loyalty thresholds are absolute (low loyalty triggers events / coup eligibility regardless of how loyal others are).
@@ -1020,6 +1026,81 @@ The building's operational PM then grants `state_building_X_max_level_add = 1` p
 **When NOT to use `has_max_level`:** If a building is meant to be a non-buyable unique monument (`buildable = no`, `expandable = no`), it cannot be purchased by companies — no `has_max_level` pattern is needed. The old `buildable = no` + `expandable = no` pattern is correct for buildings you never want companies to acquire.
 
 **Megastructure buildings** (`building_space_elevator`, `building_solar_collector`, `building_orbital_battlestation`, `building_mind_upload_nexus`, `building_antimatter_facility`, `building_nanofabrication_center`, `building_consciousness_network`) use `has_max_level` because they were deliberately converted to allow company ownership while retaining on_action level gating.
+
+## There Is No Engine PM Lock — Use the Self-Reference Ratchet
+
+There is **no** way to gate a production method on game state. PM gating is limited to
+`unlocking_technologies`, `unlocking_production_methods`, `unlocking_laws`,
+`unlocking_principles`, `unlocking_company_categories`, `unlocking_identity`,
+`disallowing_laws` and `is_hidden_when_unavailable`. PMs have **no** `possible` / `potential` /
+`available` trigger block, and there is no `unlocking_global_variables` (zero hits repo-wide) —
+so a scripted effect cannot mark a PM as chosen. Country-level gates (law / principle /
+identity) force every building of that type in the country onto one PM, so they cannot express
+a *per-building* choice.
+
+To make a per-building PM choice **permanent**, exploit the fact that
+`unlocking_production_methods` is an **OR** over its list and can reference the PM itself:
+
+```
+pm_foo_undedicated = {          # the entry point
+    is_default = yes
+    is_hidden_when_unavailable = yes
+    unlocking_production_methods = { pm_foo_undedicated }
+}
+
+pm_foo_variant_a = {
+    is_hidden_when_unavailable = yes
+    unlocking_production_methods = { pm_foo_undedicated pm_foo_variant_a }
+}
+```
+
+Fresh build: the default is active, so every variant is available. After picking one, only that
+variant's own self-reference is satisfied — the default and every sibling become unreachable, and
+changing the choice means demolishing the building. `is_hidden_when_unavailable` keeps the group
+showing exactly one row instead of a column of dead ends. Never put `replacement_if_valid` on a
+ratcheted PM; it auto-swaps and defeats the lock.
+
+Live example: `common/production_methods/grand_monument_pms.txt` (`pmg_monument_dedication`).
+
+**Caveat:** every *other* use of `unlocking_production_methods` in this repo is cross-group, so
+the self-reference is unusual. Verify in-game that (a) the default really is selectable at build
+time and (b) siblings really do disappear after a pick. Secondary deterrent if it ever loosens:
+this mod's `pm_retooling` override applies `goods_input_construction_mult = 10`
+(`common/static_modifiers/extra_modifiers.txt`), which taxes any PM change in proportion to the
+building's construction-goods input.
+
+To set such a PM from script, use `activate_production_method` (country/state scope):
+
+```
+scope:some_state = {
+    activate_production_method = {
+        building_type = building_foo
+        production_method = pm_foo_variant_a
+    }
+}
+```
+
+At state scope this targets the buildings of that type in that state, which is per-building
+control for any building that can only exist once per state.
+
+## Country-Scope Modifiers on Repeatable Per-State Buildings Stack Nationally
+
+A building that can be built in **every** state applies its `country_modifiers` once per
+building, and `level_scaled` multiplies that by each building's level. 20 buildings × 20 levels
+× `-0.01` is `-4.0`, which slams into the engine's `-1.0` clamp and makes the effect free.
+
+Rule of thumb for a repeatable building:
+
+| Modifier family | Block | Why |
+|---|---|---|
+| `state_*`, `building_*_throughput_add` | `level_scaled` | genuinely local to the state it sits in |
+| `country_*`, `interest_group_*` | `unscaled` | country-wide; flat per building, bounded by state count |
+
+See `common/production_methods/grand_monument_pms.txt` for the split applied in practice.
+
+**Design corollary:** if a variant's only effect is country-scope, it ends up `unscaled` and the
+building gains *nothing* from levels 2+ while its siblings keep growing. Give every variant a
+`level_scaled` state-local modifier as well, and let the national one ride on top.
 
 ## Production Method Modifier Scaling Blocks
 

@@ -91,6 +91,14 @@ construction_cost_mega_high = 5000
 construction_cost_extreme = 10000
 construction_cost_space_mine = 20000
 
+# Repeatable Grand Monuments (common/buildings/grand_monuments.txt). Sits between
+# mega_high and extreme. At 1 tourism/level output (100/mo at base price) against
+# 50/mo of construction-goods maintenance, that is roughly a 65-year payback at base
+# tourism price -- shortening as late-game luxury demand lifts it. Intentionally an
+# order of magnitude worse than any real factory: the point is a construction sink
+# that is always available, not a good investment.
+construction_cost_grand_monument = 10000
+
 war_support_training_decrease = {
 	value = 0
 	every_combat_unit = {
@@ -698,6 +706,11 @@ yearly_temperature_change_abs_display = {
 }
 
 temperature_anomaly_display = {
+	# The two `divide = 100` steps are deliberate, not a copy-paste duplicate:
+	# together they are the documented /10000 (see yearly_temperature_change_display
+	# above), and `round = yes` sits between them so the displayed anomaly is
+	# quantised to 0.01 C. Collapsing them to one divide would report 100x the
+	# real warming.
 	value = global_var:greenhouse_gas_emissions
 	divide = 100
 	round = yes
@@ -1287,6 +1300,11 @@ same_owner_state_region_arable_land_added = {
 	}
 }
 
+# Land this system should add to the state THIS tick:
+#   (arable_land - already_added) * mult - already_added
+# Both `subtract` lines are load-bearing and are NOT a duplicate: the first
+# recovers the geographic base so the mult applies to base land only, the second
+# removes what earlier ticks already granted so re-running is idempotent.
 state_arable_land_add_script_value = {
 	value = arable_land
 	subtract = same_owner_state_region_arable_land_added  # isolate the geographic base first
@@ -1945,14 +1963,13 @@ country_gdp_per_capita = {
 construction_cost_scaling_mult = {
 	value = country_gdp_per_capita
 	subtract = construction_cost_gdppc_floor
-	min = 0  # poor countries: no penalty
+	min = 0  # poor countries: no penalty; also the lower half of the clamp documented above (everything downstream is non-negative)
 	divide = {
 		value = construction_cost_gdppc_ceiling
 		subtract = construction_cost_gdppc_floor
 		min = 1  # prevent division by zero
 	}
 	multiply = construction_cost_max_mult
-	min = 0
 	max = construction_cost_max_mult
 }
 

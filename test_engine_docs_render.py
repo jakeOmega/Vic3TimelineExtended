@@ -3,7 +3,6 @@ and an integration test for the `render_all` driver that writes every
 reference file into a tempdir.
 """
 import os
-import re
 import tempfile
 import unittest
 

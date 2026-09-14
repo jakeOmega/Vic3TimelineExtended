@@ -38,7 +38,6 @@ from gen_pm_icons import (
     convert_to_dds,
     find_texconv,
     load_silhouette,
-    parse_color,
 )
 
 # ── paths ────────────────────────────────────────────────────────────────
@@ -317,7 +316,6 @@ def draw_sword_crossed() -> Image.Image:
     for angle_offset in [-35, 35]:
         a = math.radians(angle_offset)
         # Blade
-        points = []
         blade_len = 300
         blade_w = 16
         cx, cy = C, C + 20
@@ -1015,7 +1013,6 @@ def draw_lightbulb_locked() -> Image.Image:
 def draw_lightbulb_branched() -> Image.Image:
     """Lightbulb with branching filaments — open source innovation."""
     img = draw_lightbulb()
-    d = _d(img)
     # Branching lines radiating from center inside bulb (cutouts)
     arr = np.array(img)
     cx, cy = C, 190

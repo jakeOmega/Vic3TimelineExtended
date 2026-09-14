@@ -26,7 +26,7 @@ financial_panic = {
 
 	# Financial panics are contagious and can spread to neighboring states.
 	range = { integer_range = { min = 1 max = 8 } }
-	
+
 	# Panics are long-lasting events, representing a deep recession.
 	duration = { fixed_range = { min = 26 max = 208 } } # 0.5 to 4 years
 
@@ -46,8 +46,8 @@ financial_panic = {
 	# This block determines the probability of the event firing in an eligible state.
 	chance = {
 		value = 0.001
-		 # National cycle stress → multiply chance
-		 if = {
+		# National cycle stress → multiply chance
+		if = {
 			limit = {
 				any_scope_state = {
 					owner = {
@@ -66,7 +66,7 @@ financial_panic = {
 		else = {
 			multiply = 0
 		}
-		
+
 	}
 
 	# Visuals
@@ -153,8 +153,8 @@ bull_market = {
 
 	chance = {
 		value = 0.01 # Rare at first
-		 # National cycle boom → multiply chance
-		 if = {
+		# National cycle boom → multiply chance
+		if = {
 			limit = {
 				any_scope_state = {
 					owner = {
@@ -165,7 +165,7 @@ bull_market = {
 			if = { limit = { any_scope_state = { owner = { has_variable = finance_cycle_value var:finance_cycle_value >= 40 var:finance_cycle_value < 60 } } } multiply = 2.0 } # Boom
 			else_if = { limit = { any_scope_state = { owner = { has_variable = finance_cycle_value var:finance_cycle_value >= 60 var:finance_cycle_value < 80 } } } multiply = 1.5 } # Overheating
 			else_if = { limit = { any_scope_state = { owner = { has_variable = finance_cycle_value var:finance_cycle_value < 40 } } } multiply = 0 }
-		 }
+		}
 		else = {
 			multiply = 0
 		}

@@ -223,6 +223,8 @@
  building_googleplex:0 "The Googleplex"
  building_gotaverken_gothenburg_shipyard:0 "Götaverken Gothenburg Shipyard"
  building_gran_azucarera_aranjuez_refinery:0 "Gran Azucarera Aranjuez Refinery"
+ building_grand_monument:0 "Grand Monument"
+ building_grand_monument_desc:0 "A monument raised for its own sake — a tower, an arch, a hall of marble. Ruinously expensive to build and almost free to keep, it draws visitors and lends the state a little of whatever it was raised to honour. Its [concept_tourism_throughput] bonus only pays off where a Tourism Industry exists to receive it."
  building_graphite_mine:0 "Graphite Mine"
  building_graphite_mine_throughput_add:0 "$building_graphite_mine$ building [concept_throughput]"
  building_graphite_mine_throughput_add_desc:0 "$building_graphite_mine$ building [concept_throughput]"

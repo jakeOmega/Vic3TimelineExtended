@@ -11,7 +11,6 @@ Functions are importable:
 """
 
 import argparse
-import sys
 
 # ── Pop Growth Constants (from game defines) ──────────────────────────────────
 MIN_BIRTHRATE = 0.00080 * 12

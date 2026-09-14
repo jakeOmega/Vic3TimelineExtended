@@ -28,6 +28,8 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from mod_state import split_loc_line
+
 
 @dataclass
 class ConceptFlag:
@@ -69,27 +71,17 @@ def _parse_reviewed(comment: str | None) -> dict | None:
 
 
 def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
-    """Mirror `mod_state.add_localization`'s parser.
+    r"""Split one loc line with the shared, escape-aware
+    `mod_state.split_loc_line` — the same rule `ModState.add_localization`
+    uses — so a `\"` inside a value no longer truncates it (or misfiles the
+    rest of the text as `trailing`).
 
     Returns (key, value, trailing) where `trailing` is everything after the
     closing quote (used to find `# REVIEWED ...` suppression comments).
     Returns None for blank lines, comment-only lines, the file header
     (`l_english:`), and malformed entries.
     """
-    line = raw.rstrip("\n")
-    stripped = line.lstrip()
-    if not stripped or stripped.startswith("#") or ":" not in stripped:
-        return None
-    key, rest = line.split(":", 1)
-    key = key.strip()
-    if not key:
-        return None
-    quote_locations = [i for i, c in enumerate(rest) if c == '"']
-    if len(quote_locations) < 2:
-        return None
-    value = rest[quote_locations[0] + 1: quote_locations[1]]
-    trailing = rest[quote_locations[1] + 1:]
-    return key, value, trailing
+    return split_loc_line(raw)
 
 
 def _registered_concepts(ms) -> set[str]:

@@ -352,6 +352,7 @@
  bg_company_buildings:0 "Company Buildings"
  bg_discoverable_mining:0 "Discoverable Mining"
  bg_exotic:0 "Exotic Infrastructure"
+ bg_grand_monuments:0 "Grand Monuments"
  bg_high_tech:0 "High-Tech Industry"
  bg_parks:0 "Parks"
  bg_resettlement:0 "Resettlement"

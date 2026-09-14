@@ -719,7 +719,6 @@ def _txt_header(source_label: str, source_mtime: float | None) -> str:
 # ---------------------------------------------------------------------------
 def _cli():
     """Standalone fallback: regenerate from disk without the server."""
-    import sys
 
     from path_constants import vanilla_docs_path, doc_path
 

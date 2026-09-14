@@ -1,0 +1,11 @@
+# Known block-compressed DDS textures whose width/height is not a multiple of 4.
+# Read by scripts/analysis/check_dds_dimensions.py: listed paths are reported but
+# do not fail CI. Every entry here is a bug — issue #246 re-exports these four
+# company icons at 256x256, after which this file should be empty.
+#
+# Repo-relative paths, one per line. The checker also fails on a *stale* entry
+# (a listed file that no longer violates), so fixing an icon forces the line out.
+gfx/interface/icons/company_icons/historical_company_icons/american_google.dds
+gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds
+gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds
+gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds

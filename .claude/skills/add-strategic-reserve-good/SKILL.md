@@ -29,7 +29,7 @@ For each good the user wants to add, lock these decisions before touching any fi
 Before writing the static flow modifiers, run this audit for the new good(s):
 
 ```bash
-VAN="/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/common/modifier_type_definitions/01_building_modifier_types.txt"
+VAN="$(python3 -c 'import path_constants; print(path_constants.base_game_path)')/game/common/modifier_type_definitions/01_building_modifier_types.txt"
 for good in <NEW_GOOD_1> <NEW_GOOD_2>; do
   printf "%-15s input_mult=%s output_mult=%s\n" "$good" \
     "$(grep -c "^goods_input_${good}_mult={" "$VAN")" \
@@ -43,7 +43,7 @@ Reference: `docs/guides/scripting_best_practices.md` § goods modifier registrat
 
 ## File layout
 
-All paths relative to `/home/jakef/src/Vic3TimelineExtended/`. The pattern is identical for every good — most lines are mechanical copies. Snippet templates with the `<GOOD>` placeholder live in `references/per_good_templates.md`; this section names every file and what to add.
+All paths are repo-relative (`mod_path` in `path_constants`). The pattern is identical for every good — most lines are mechanical copies. Snippet templates with the `<GOOD>` placeholder live in `references/per_good_templates.md`; this section names every file and what to add.
 
 | # | File | What to add per new good |
 |---|---|---|

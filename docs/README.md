@@ -64,7 +64,7 @@ The directory has its own [`vanilla/CLAUDE.md`](vanilla/CLAUDE.md) — a condens
 
 ## Engine Reference & Auto-Generated Dumps — `engine/`
 
-All files in this directory are `[auto-gen]` — regenerated on `POST /reload` (see `auto_generated_files.md`).
+All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Most regenerate on `POST /reload`; the engine dumps below regenerate from the engine-doc snapshots at server start, and `engine/effect_trigger_valid_keys.txt` is a **one-shot bootstrap** refreshed by hand on a vanilla bump (`effect_trigger_validity_audit.py bootstrap`) — never per reload.
 
 ### Mod data dumps
 
@@ -80,8 +80,8 @@ All files in this directory are `[auto-gen]` — regenerated on `POST /reload` (
 
 | File | Contents |
 |------|----------|
-| [`engine/vic3_triggers_effects_reference.md`](engine/vic3_triggers_effects_reference.md) | Full compressed reference: 84 iterator families, 820 triggers, 337 effects |
-| [`engine/vic3_modifier_type_definitions_reference.md`](engine/vic3_modifier_type_definitions_reference.md) | All ~2,300 modifier type keys from vanilla |
+| [`engine/vic3_triggers_effects_reference.md`](engine/vic3_triggers_effects_reference.md) | Full compressed reference: 96 iterator families, 895 standalone triggers, 380 standalone effects (counts are in the file's own generated header — trust that, not this table, after a vanilla bump) |
+| [`engine/vic3_modifier_type_definitions_reference.md`](engine/vic3_modifier_type_definitions_reference.md) | All 7,783 vanilla modifier type keys — 1,113 standalone (grouped by mask) + 6,670 members of 155 dynamic patterns |
 | [`engine/triggers_summary.txt`](engine/triggers_summary.txt) | Compact pipe-delimited trigger index (scope \| name \| description) |
 | [`engine/effects_summary.txt`](engine/effects_summary.txt) | Compact pipe-delimited effect index (scope \| name \| description) |
 | [`engine/modifiers_summary.txt`](engine/modifiers_summary.txt) | Compact pipe-delimited modifier index |
@@ -112,6 +112,16 @@ All files in this directory are `[auto-gen]` — regenerated on `POST /reload` (
 | [`engine/any_limit_report.md`](engine/any_limit_report.md) | `limit = { }` placed as an immediate child of an `any_*` trigger (silently ignored → meaning flip) |
 | [`engine/iterator_limit_report.md`](engine/iterator_limit_report.md) | An iterator's `limit = { }` written after an effect sibling — the limit gates that effect too |
 | [`engine/modifier_multiplier_var_report.md`](engine/modifier_multiplier_var_report.md) | Permanent `add_modifier { multiplier = var:X }` whose backing variable is removed later in the same block |
+| [`engine/loc_coverage_report.md`](engine/loc_coverage_report.md) | Mod-introduced entities with no `*_l_english.yml` key — the engine shows the raw key with no warning |
+| [`engine/concept_reference_report.md`](engine/concept_reference_report.md) | `[concept_X]` loc references to concepts not declared in `common/game_concepts/` — three error lines per render plus in-game lag |
+| [`engine/localization_accessor_report.md`](engine/localization_accessor_report.md) | `[X.Y.Z]` accessor chains in loc YAML the engine silently resolves to the empty string |
+| [`engine/mod_structure_report.md`](engine/mod_structure_report.md) | Brace-balance failures, silent-INJECT failures, within-namespace top-level collisions |
+| [`engine/pm_employment_report.md`](engine/pm_employment_report.md) | Professions whose employment total goes negative in some valid PM combination |
+| [`engine/orphaned_event_report.md`](engine/orphaned_event_report.md) | `is_triggered_only` events no dispatch path ever references |
+| [`engine/effect_trigger_validity_report.md`](engine/effect_trigger_validity_report.md) | Effect/trigger keywords absent from the frozen valid-key catalog |
+| [`engine/effect_trigger_valid_keys.txt`](engine/effect_trigger_valid_keys.txt) | The frozen catalog that report reads. **One-shot bootstrap**, not regenerated per reload — refresh on a vanilla bump via `effect_trigger_validity_audit.py bootstrap` |
+| [`engine/duplicate_key_report.md`](engine/duplicate_key_report.md) | Repeated scalar keys *inside* one block (the engine only warns on top-level entity collisions) |
+| [`engine/attitude_key_report.md`](engine/attitude_key_report.md) | `attitude = <bareword>` values outside the engine's fixed 15-key catalog — silently never match |
 | [`engine/error_log_digest.md`](engine/error_log_digest.md) | Mod-only summary of `error.log` + diff vs. `error.1.log` (gitignored) |
 
 ## Audits & Living Trackers — `audits/`
@@ -126,13 +136,21 @@ All files in this directory are `[auto-gen]` — regenerated on `POST /reload` (
 | [`audits/mod_only_tech_modifier_baseline.md`](audits/mod_only_tech_modifier_baseline.md) | User-supplied baseline targets for mod-only tech modifiers | Re-tuning tech modifier targets or refreshing the audit anchor |
 | [`audits/script_parameterization_audit.md`](audits/script_parameterization_audit.md) | Catalog of helper scripted_effects / scripted_triggers and the parameterization pattern used | Considering whether to introduce a new helper vs. inlining |
 | [`audits/steam_workshop_description.md`](audits/steam_workshop_description.md) | Draft Steam Workshop description maintained per release | Updating the Workshop listing copy |
+| [`audits/tech_era_appropriateness_audit.md`](audits/tech_era_appropriateness_audit.md) | Manual review of every mod-added tech against real-world invention/adoption years vs its assigned era (issue #40) | Adding a tech, or re-checking an era assignment |
+| [`audits/strata_social_axis_report.md`](audits/strata_social_axis_report.md) | Generated report (manual run only, not in the reload chain): events using mirrored upper/lower-strata radicals+loyalists as a stand-in for the social-progressivism axis. Regen: `scripts/analysis/strata_social_axis_audit.py` | Writing or reviewing an event's strata effects |
+| [`audits/strata_social_axis_exceptions.md`](audits/strata_social_axis_exceptions.md) | Hand-maintained exemption list the audit above reads | Exempting an event whose strata shape is genuinely economic |
+| [`audits/concept_term_candidates.md`](audits/concept_term_candidates.md) | Generated report (manual run only): loc terms that could carry a `[concept_X]` link but don't. Regen: `scripts/analysis/concept_term_audit.py` | Adding concept links across a loc family |
+| [`audits/concept_term_uncategorized.md`](audits/concept_term_uncategorized.md) | Generated report (manual run only, same script): concept ids with a single-word surface form not yet classified safe/unsafe to auto-link | Same pass; deciding which surface forms may be auto-linked |
+| [`audits/nightly_audit_README.md`](audits/nightly_audit_README.md) | How the rotating judgement-based nightly audit picks its slice; per-area checklists index | Running or changing the nightly audit (`scripts/nightly_audit_select.py`) |
+| `audits/nightly_checklists/` | Per-area checklists (`events.md`, `gui.md`, `journal_entries.md`, `laws_and_politics.md`, `localization.md`, `production_methods_and_buildings.md`, `scripted_effects_and_triggers.md`, `technologies.md`) the nightly prompt splices in | Auditing one of those areas, by hand or via the `nightly-audit` skill |
+| `audits/nightly/<date>/` | Per-run nightly audit artifacts: `targets.json`, `prompt.md`, and the run's `findings.md` / `report.md` | Reviewing what a past nightly covered and found |
 
 ## Machine-Readable Data — `data/`
 
 | File | Contents | Read When... |
 |------|----------|--------------|
 | [`data/balance_snapshot.json`](data/balance_snapshot.json) | JSON dump of mod balance state for vanilla-bump comparisons (`scripts/snapshot_balance.py`) | Bumping vanilla; diffing balance against a previous snapshot |
-| [`data/tech_modifier_baseline.json`](data/tech_modifier_baseline.json) | Vanilla tech modifier baseline cache (per-modifier min/median/max) | Refresh after vanilla bumps via `tech_balance_audit.py --refresh-baseline` |
+| [`data/tech_modifier_baseline.json`](data/tech_modifier_baseline.json) | Vanilla tech modifier baseline cache (per-modifier min/median/max) | Refresh after vanilla bumps via `scripts/analysis/tech_balance_audit.py --refresh-baseline` |
 | [`data/tech_modifier_pattern_baseline.json`](data/tech_modifier_pattern_baseline.json) | Vanilla pattern-grouped baseline (e.g. `building_*_throughput_add` median) | Same audit cache, parametric-pattern half |
 | [`data/tech_modifier_pattern_overrides.yml`](data/tech_modifier_pattern_overrides.yml) | Hand overrides for parametric pattern medians | When a pattern's vanilla median needs a designer adjustment |
 | [`data/tech_modifier_polarity.yml`](data/tech_modifier_polarity.yml) | Override registry for tech-modifier polarity classification | When the heuristic mis-labels a modifier's polarity |

@@ -112,7 +112,7 @@ ruler_poor_administrator = {
 		ruler_average_administrator
 		ruler_skilled_administrator
 		ruler_exceptional_administrator
-			ruler_terrible_administrator
+		ruler_terrible_administrator
 	}
 }
 ruler_average_administrator = {
@@ -156,7 +156,7 @@ ruler_average_administrator = {
 		ruler_poor_administrator
 		ruler_skilled_administrator
 		ruler_exceptional_administrator
-			ruler_terrible_administrator
+		ruler_terrible_administrator
 	}
 }
 
@@ -219,7 +219,7 @@ ruler_skilled_administrator = {
 		ruler_poor_administrator
 		ruler_average_administrator
 		ruler_exceptional_administrator
-			ruler_terrible_administrator
+		ruler_terrible_administrator
 	}
 }
 
@@ -285,7 +285,7 @@ ruler_exceptional_administrator = {
 		ruler_poor_administrator
 		ruler_average_administrator
 		ruler_skilled_administrator
-			ruler_terrible_administrator
+		ruler_terrible_administrator
 	}
 }
 
@@ -398,7 +398,7 @@ ruler_poor_diplomat = {
 		ruler_average_diplomat
 		ruler_skilled_diplomat
 		ruler_exceptional_diplomat
-			ruler_terrible_diplomat
+		ruler_terrible_diplomat
 	}
 }
 ruler_average_diplomat = {
@@ -442,7 +442,7 @@ ruler_average_diplomat = {
 		ruler_poor_diplomat
 		ruler_skilled_diplomat
 		ruler_exceptional_diplomat
-			ruler_terrible_diplomat
+		ruler_terrible_diplomat
 	}
 }
 
@@ -505,7 +505,7 @@ ruler_skilled_diplomat = {
 		ruler_poor_diplomat
 		ruler_average_diplomat
 		ruler_exceptional_diplomat
-			ruler_terrible_diplomat
+		ruler_terrible_diplomat
 	}
 }
 
@@ -571,7 +571,7 @@ ruler_exceptional_diplomat = {
 		ruler_poor_diplomat
 		ruler_average_diplomat
 		ruler_skilled_diplomat
-			ruler_terrible_diplomat
+		ruler_terrible_diplomat
 	}
 }
 
@@ -696,7 +696,7 @@ ruler_poor_commander = {
 		ruler_average_commander
 		ruler_skilled_commander
 		ruler_exceptional_commander
-			ruler_terrible_commander
+		ruler_terrible_commander
 	}
 }
 ruler_average_commander = {
@@ -742,7 +742,7 @@ ruler_average_commander = {
 		ruler_poor_commander
 		ruler_skilled_commander
 		ruler_exceptional_commander
-			ruler_terrible_commander
+		ruler_terrible_commander
 	}
 }
 
@@ -814,7 +814,7 @@ ruler_skilled_commander = {
 		ruler_poor_commander
 		ruler_average_commander
 		ruler_exceptional_commander
-			ruler_terrible_commander
+		ruler_terrible_commander
 	}
 }
 
@@ -890,6 +890,6 @@ ruler_exceptional_commander = {
 		ruler_poor_commander
 		ruler_average_commander
 		ruler_skilled_commander
-			ruler_terrible_commander
+		ruler_terrible_commander
 	}
 }

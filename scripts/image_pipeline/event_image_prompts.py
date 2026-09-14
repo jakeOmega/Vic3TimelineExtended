@@ -2163,89 +2163,6 @@ IMAGES = {
 # =============================================================================
 
 def get_event_image(event_id: str) -> tuple:
-    """Look up which image an event uses.
-
-    Returns (image_key, image_dict) or (None, None) if unmapped.
-    """
-    for key, img in IMAGES.items():
-        if event_id in img["events"]:
-            return key, img
-    return None, None
-
-
-def get_all_mapped_events() -> set:
-    """Return set of all event IDs that have an image mapping."""
-    mapped = set()
-    for img in IMAGES.values():
-        mapped.update(img["events"])
-    return mapped
-
-
-def validate():
-    """Check for duplicate event assignments and report stats."""
-    seen = {}
-    duplicates = []
-    for key, img in IMAGES.items():
-        for event_id in img["events"]:
-            if event_id in seen:
-                duplicates.append((event_id, seen[event_id], key))
-            else:
-                seen[event_id] = key
-
-    total_images = len(IMAGES)
-    total_events = len(seen)
-
-    print(f"Total unique images: {total_images}")
-    print(f"Total mapped events: {total_events}")
-    if duplicates:
-        print(f"\nDUPLICATES FOUND ({len(duplicates)}):")
-        for event_id, key1, key2 in duplicates:
-            print(f"  {event_id} -> {key1} AND {key2}")
-    else:
-        print("No duplicate event mappings.")
-
-    return duplicates
-
-
-if __name__ == "__main__":
-    import json
-    import sys
-
-    if "--validate" in sys.argv:
-        validate()
-    elif "--json" in sys.argv:
-        print(json.dumps(IMAGES, indent=2))
-    elif "--list-unmapped" in sys.argv:
-        # Compare against events from mod state server if available
-        try:
-            import urllib.request
-            resp = urllib.request.urlopen("http://localhost:8950/events")
-            events = json.loads(resp.read())
-            server_ids = {e["event_id"] for e in events}
-        except Exception:
-            server_ids = set()
-            print("(mod state server unavailable, showing mapped events only)")
-
-        mapped = get_all_mapped_events()
-        if server_ids:
-            unmapped = server_ids - mapped
-            if unmapped:
-                print(f"Unmapped events ({len(unmapped)}):")
-                for eid in sorted(unmapped):
-                    print(f"  {eid}")
-            else:
-                print("All server events are mapped!")
-        print(f"\nMapped events: {len(mapped)}")
-        print(f"Unique images: {len(IMAGES)}")
-    else:
-        print(f"Usage: python {sys.argv[0]} [--validate | --json | --list-unmapped]")
-        print(f"\n  --validate     Check for duplicate event assignments")
-        print(f"  --json         Output all image definitions as JSON")
-        print(f"  --list-unmapped  Show events not yet mapped to images")
-
-
-
-def get_event_image(event_id):
     """Look up which image key an event uses. Returns (key, image_dict) or (None, None)."""
     for key, img in IMAGES.items():
         if event_id in img["events"]:
@@ -2253,7 +2170,7 @@ def get_event_image(event_id):
     return None, None
 
 
-def get_all_mapped_events():
+def get_all_mapped_events() -> set:
     """Return set of all event IDs that have an image mapping."""
     mapped = set()
     for img in IMAGES.values():

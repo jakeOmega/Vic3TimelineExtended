@@ -199,8 +199,6 @@ def generate_icon(
 
     # Measure text
     bbox = draw.textbbox((0, 0), symbol, font=font)
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
 
     # Center the symbol in the union content area.
     # Content union bounds: x in [21,218], y in [14,302]
@@ -264,7 +262,6 @@ def generate_icon(
     # Alpha composite the glow
     for ch in range(3):
         ga = glow_arr[:, :, 3].astype(np.float64) / 255.0
-        ca = content_arr[:, :, 3].astype(np.float64) / 255.0
         # Only apply glow where content mask is True
         mask = content_mask & (ga > 0.01)
         blended = (glow_arr[:, :, ch].astype(np.float64) * ga +

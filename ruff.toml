@@ -1,0 +1,28 @@
+# Ruff configuration for the Vic3TimelineExtended Python tooling (issue #253).
+#
+# Scope: the pyflakes ("F") rules only — undefined names, duplicate definitions
+# and dict keys, shadowed imports, unused imports/locals, f-strings without
+# placeholders. These are correctness signals, not style opinions, so they can
+# be enforced repo-wide without reformatting anything. Style/import-order rules
+# (E/I/UP/...) are deliberately NOT selected; adding them would churn every file.
+#
+# `extend-exclude` (NOT `exclude`) lists the generated / scratch directories that
+# can hold .py files: `exclude` REPLACES ruff's built-in default list (.git,
+# __pycache__, build/, dist/, node_modules, …), while `extend-exclude` adds to it.
+# Every entry below is gitignored and ruff honours .gitignore by default, so these
+# are belt-and-braces for the cases where it doesn't (a non-git checkout, or
+# --no-respect-gitignore).
+
+target-version = "py311"
+
+extend-exclude = [
+    ".venv",
+    "generated_images",
+    "scratch",
+    "scripts/image_pipeline/company_logos_generated",
+    "scripts/image_pipeline/preview_law_icons",
+    "tests",
+]
+
+[lint]
+select = ["F"]

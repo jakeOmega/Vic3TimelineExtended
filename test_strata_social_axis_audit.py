@@ -2,7 +2,6 @@
 
 Run: python3 test_strata_social_axis_audit.py
 """
-import os
 import sys
 import tempfile
 import unittest

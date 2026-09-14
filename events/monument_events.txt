@@ -1,0 +1,425 @@
+﻿namespace = monument_events
+
+# ============================================================================
+# GRAND MONUMENTS
+# ============================================================================
+# Event 1  - hidden building_event, fires from on_building_built. Hops to country
+#            scope because building scope supports neither variables nor modifiers.
+# Event 2  - the dedication ceremony. Sets the monument's dedication PM via
+#            activate_production_method on the saved state scope.
+# Events 3+ - recurring flavour, dispatched from monument_events_on_actions.txt.
+# ============================================================================
+
+# Event 1: construction finished (hidden plumbing).
+# ROOT is the newly-built BUILDING. Save the state so the ceremony event can target
+# activate_production_method at it, then hand off to the owner country.
+monument_events.1 = {
+	type = building_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				is_building_group = bg_grand_monuments
+				exists = owner
+			}
+			state = { save_scope_as = monument_state }
+			owner = { trigger_event = { id = monument_events.2 } }
+		}
+	}
+}
+
+# Event 2: The Dedication. One option per unlocked dedication; each locks the choice
+# in permanently via the unlocking_production_methods ratchet (see
+# common/production_methods/grand_monument_pms.txt).
+monument_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+
+	title = monument_events.2.t
+	desc = monument_events.2.d
+	flavor = monument_events.2.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:monument_state
+	}
+
+	immediate = { }
+
+	# Leave it undedicated -- the monument keeps pm_monument_undedicated and the
+	# player can still dedicate it by hand in the building panel later.
+	option = {
+		name = monument_events.2.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+
+	# Civic
+	option = {
+		name = monument_events.2.b
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_civic
+			}
+		}
+	}
+
+	# Religious
+	option = {
+		name = monument_events.2.c
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_religious
+			}
+		}
+	}
+
+	# War memorial
+	option = {
+		name = monument_events.2.e
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_war_memorial
+			}
+		}
+	}
+
+	# Artistic
+	option = {
+		name = monument_events.2.g
+		trigger = {
+			has_technology_researched = romanticism
+		}
+
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_artistic
+			}
+		}
+	}
+
+	# Naturalist
+	option = {
+		name = monument_events.2.h
+		trigger = {
+			has_technology_researched = romanticism
+		}
+
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_naturalist
+			}
+		}
+	}
+
+	# Scientific
+	option = {
+		name = monument_events.2.i
+		trigger = {
+			has_technology_researched = empiricism
+		}
+
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_scientific
+			}
+		}
+	}
+
+	# Industrial
+	option = {
+		name = monument_events.2.j
+		trigger = {
+			has_technology_researched = marketing_research
+		}
+
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_industrial
+			}
+		}
+	}
+
+	# Athletic
+	option = {
+		name = monument_events.2.k
+		trigger = {
+			has_technology_researched = television_broadcasting
+		}
+
+		ai_chance = { base = 3 }
+
+		scope:monument_state = {
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_athletic
+			}
+		}
+	}
+
+}
+
+# ============================================================================
+# RECURRING FLAVOUR (dispatched from monument_events_on_actions.txt)
+# Each is gated on owning a monument of that dedication at level 3 or more, so
+# they only start appearing once a monument is a real landmark.
+# ============================================================================
+
+monument_events.3 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+
+	title = monument_events.3.t
+	desc = monument_events.3.d
+	flavor = monument_events.3.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_civic
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.3.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.4 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = monument_events.4.t
+	desc = monument_events.4.d
+	flavor = monument_events.4.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_religious
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.4.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.5 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = monument_events.5.t
+	desc = monument_events.5.d
+	flavor = monument_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_war_memorial
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.5.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.6 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = monument_events.6.t
+	desc = monument_events.6.d
+	flavor = monument_events.6.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_artistic
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.6.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.7 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = monument_events.7.t
+	desc = monument_events.7.d
+	flavor = monument_events.7.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_naturalist
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.7.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.8 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = monument_events.8.t
+	desc = monument_events.8.d
+	flavor = monument_events.8.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_scientific
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.8.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.9 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = monument_events.9.t
+	desc = monument_events.9.d
+	flavor = monument_events.9.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_industrial
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.9.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+monument_events.10 = {
+	type = country_event
+	placement = root
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+
+	title = monument_events.10.t
+	desc = monument_events.10.d
+	flavor = monument_events.10.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_athletic
+			level >= 3
+		}
+	}
+
+	option = {
+		name = monument_events.10.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}

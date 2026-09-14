@@ -42,7 +42,7 @@ VERBOSE = True
 
 def fit_to_square(img):
     """Return *img* fit within ICON_SIZE×ICON_SIZE, centered on a transparent canvas."""
-    from PIL import Image  # noqa: local import
+    from PIL import Image  # local import: Pillow is an optional dependency
 
     img = img.convert("RGBA")
     w, h = img.size
@@ -63,7 +63,7 @@ def _winpath(p: Path) -> str:
 
 
 def convert(input_path: Path, output_path: Path, texconv: Path) -> Path:
-    from PIL import Image  # noqa: local import
+    from PIL import Image  # local import: Pillow is an optional dependency
 
     img = Image.open(input_path)
     fitted = fit_to_square(img)

@@ -61,6 +61,10 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
 # ---------------------------------------------------------------------------
 # Categorization (source-file → coarse error category)
 # ---------------------------------------------------------------------------
+# Keys here are matched EXACTLY against an entry's `file:line` source. A rule
+# that should cover every line of a file belongs in SOURCE_CATEGORY_FILE below —
+# a `"<file>:"` key here never matches anything (that's how the physfs rule sat
+# dead until #254).
 SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     "gamedatabase.h:378": "duplicated_key",
     "gamedatabase.h:395": "inject_to_missing",
@@ -68,7 +72,6 @@ SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     "jomini_trigger.cpp:721": "inconsistent_trigger_scope",
     "jomini_effect.cpp:752": "inconsistent_effect_scope",
     "virtualfilesystem.cpp:569": "missing_file",
-    "virtualfilesystem_physfs.cpp:": "vfs_mount",
     "guitexturehandler.h:155": "missing_texture_for_entity",
     "gfx_dds_loader.cpp:442": "dds_dimensions",
 }
@@ -82,6 +85,9 @@ SOURCE_CATEGORY_FILE: dict[str, str] = {
     "jomini_trigger.cpp": "inconsistent_trigger_scope",
     "jomini_effect.cpp": "inconsistent_effect_scope",
     "virtualfilesystem.cpp": "missing_file",
+    # Every line of the physfs VFS layer is a mount/filesystem complaint,
+    # regardless of line number.
+    "virtualfilesystem_physfs.cpp": "vfs_mount",
     "guitexturehandler.h": "missing_texture_for_entity",
     "gfx_dds_loader.cpp": "dds_dimensions",
     "ai_strategy.cpp": "ai",

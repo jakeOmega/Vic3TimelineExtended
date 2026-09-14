@@ -19,7 +19,6 @@ import argparse
 import math
 import os
 import re
-import sys
 import numpy as np
 
 from path_constants import base_game_path, mod_path

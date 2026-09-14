@@ -1,7 +1,6 @@
 paths.local.json
 *.pyc
 *__pycache__
-.github/
 *.exe
 /.vscode
 # docs/ is tracked; only runtime-derived dumps from auto-run generators are

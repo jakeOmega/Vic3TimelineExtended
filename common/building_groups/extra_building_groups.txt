@@ -1,19 +1,19 @@
 ﻿REPLACE_OR_CREATE:bg_parks = {
-    category = development
+	category = development
 
-    land_usage = rural
+	land_usage = rural
 
 	always_possible = yes
-	
+
 	is_government_funded = yes
-	
+
 	economy_of_scale = no
-	
+
 	lens = development
-	
+
 	urbanization = 20
 	infrastructure_usage_per_level = 1
-	
+
 	economy_of_scale_ai_factor = 2.0
 }
 
@@ -78,4 +78,28 @@ REPLACE_OR_CREATE:bg_high_tech = {
 
 INJECT:bg_power = {
 	construction_efficiency_modifier = yes
+}
+
+# Repeatable "Grand Monument" buildings (see common/buildings/grand_monuments.txt).
+# Deliberately a TOP-LEVEL group with NO parent_group: two existing systems iterate
+# bg_monuments and assume its members are unique one-off wonders --
+#   * tourism.txt / tourism_throughput_from_monuments  (+0.25 per bg_monuments building)
+#   * cultural_hegemony_script_values.txt / cultural_pull_from_monuments (+3 each, uncapped)
+# An infinitely repeatable member would break both, so Grand Monuments stay outside
+# bg_monuments and contribute to those systems on their own capped terms instead.
+# NOT is_government_funded: the treasury paying the whole goods input would wreck the
+# deliberately-long tourism payback.
+bg_grand_monuments = {
+	category = urban
+
+	lens = development
+
+	always_possible = yes
+
+	economy_of_scale = no
+
+	urbanization = 10
+	infrastructure_usage_per_level = 1
+
+	foreign_investment_ai_factor = 0
 }

@@ -310,15 +310,15 @@
 					limit = { global_var:un_authority >= 30 }
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 					je:je_united_nations ?= { add_modifier = {
-						name = un_membership_benefits_modifier
-						multiplier = {
-							value = global_var:un_authority
-							divide = 50
-							multiply = {
-								value = 1
-								add = modifier:country_un_institutional_alignment
-							}
-						} }
+							name = un_membership_benefits_modifier
+							multiplier = {
+								value = global_var:un_authority
+								divide = 50
+								multiply = {
+									value = 1
+									add = modifier:country_un_institutional_alignment
+								}
+							} }
 					}
 				}
 				else = {
@@ -330,12 +330,12 @@
 					limit = { global_var:un_authority >= 50 }
 					je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
 					je:je_united_nations ?= { add_modifier = {
-						name = un_high_authority_infamy_modifier
-						multiplier = {
-							value = global_var:un_authority
-							subtract = 40
-							divide = 30
-						} }
+							name = un_high_authority_infamy_modifier
+							multiplier = {
+								value = global_var:un_authority
+								subtract = 40
+								divide = 30
+							} }
 					}
 				}
 				else = {
