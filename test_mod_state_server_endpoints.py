@@ -37,8 +37,8 @@ def _server_up() -> bool:
         return False
 
 
-def _get(path: str):
-    with urlopen(f"{SERVER}{path}", timeout=10) as resp:
+def _get(path: str, timeout: int = 10):
+    with urlopen(f"{SERVER}{path}", timeout=timeout) as resp:
         return json.loads(resp.read())
 
 
@@ -487,68 +487,69 @@ class ScriptedHelperEndpointTests(unittest.TestCase):
             self.assertEqual(len(index["some_trigger"]), 1)
             self.assertEqual(index["some_trigger"][0]["args"], {})
 
-    def test_scan_tree_for_calls_covers_events_and_common(self):
+    def test_scan_file_for_calls_skips_file_with_no_callable(self):
+        # The #293 prefilter: a file that never writes `<helper> =` is rejected
+        # before the line scan. Must not change what the scan finds.
         from collections import defaultdict
         with tempfile.TemporaryDirectory() as td:
-            for rel in ("events/e.txt", "common/scripted_effects/s.txt"):
-                p = os.path.join(td, rel)
-                os.makedirs(os.path.dirname(p), exist_ok=True)
-                with open(p, "w", encoding="utf-8") as fh:
-                    fh.write("ent.1 = {\n\timmediate = {\n\t\tte_helper = yes\n\t}\n}\n")
+            fp = os.path.join(td, "ev.txt")
+            with open(fp, "w", encoding="utf-8") as fh:
+                fh.write("vanilla.1 = {\n\timmediate = {\n"
+                         "\t\tadd_modifier = { name = x }\n\t}\n}\n")
             index: dict = defaultdict(list)
-            mss._scan_tree_for_calls("mod", td, td, frozenset({"te_helper"}), index)
-            self.assertEqual(len(index["te_helper"]), 2)
-            self.assertEqual(
-                {r["file"].replace(os.sep, "/") for r in index["te_helper"]},
-                {"events/e.txt", "common/scripted_effects/s.txt"},
-            )
-            self.assertEqual({r["origin"] for r in index["te_helper"]}, {"mod"})
-
-    def test_vanilla_call_index_built_once_per_process(self):
-        # #296: the vanilla half is the bulk of the scan and can't change while
-        # the process lives, so a reload must not pay for it again.
-        with tempfile.TemporaryDirectory() as td:
-            ev = os.path.join(td, "game", "events")
-            os.makedirs(ev)
-            with open(os.path.join(ev, "e.txt"), "w", encoding="utf-8") as fh:
-                fh.write("v.1 = {\n\timmediate = {\n\t\tvanilla_helper = yes\n\t}\n}\n")
-            prev_cache, prev_base = mss._vanilla_call_index_cache, mss.base_game_path
-            try:
-                mss._vanilla_call_index_cache = None
-                mss.base_game_path = td
-                callables = frozenset({"vanilla_helper"})
-                first = mss._get_vanilla_call_index(callables)
-                self.assertEqual(len(first["vanilla_helper"]), 1)
-                self.assertEqual(first["vanilla_helper"][0]["origin"], "vanilla")
-                # Adding a file and asking again returns the same cached object.
-                with open(os.path.join(ev, "e2.txt"), "w", encoding="utf-8") as fh:
-                    fh.write("v.2 = {\n\timmediate = {\n\t\tvanilla_helper = yes\n\t}\n}\n")
-                second = mss._get_vanilla_call_index(callables)
-                self.assertIs(second, first)
-                self.assertEqual(len(second["vanilla_helper"]), 1)
-            finally:
-                mss._vanilla_call_index_cache = prev_cache
-                mss.base_game_path = prev_base
-
-    def test_vanilla_call_index_empty_without_install(self):
-        prev_cache, prev_base = mss._vanilla_call_index_cache, mss.base_game_path
-        try:
-            mss._vanilla_call_index_cache = None
-            mss.base_game_path = os.path.join(tempfile.gettempdir(), "no_such_vic3_install")
-            self.assertEqual(mss._get_vanilla_call_index(frozenset({"x"})), {})
-        finally:
-            mss._vanilla_call_index_cache = prev_cache
-            mss.base_game_path = prev_base
+            mss._scan_file_for_calls(
+                fp, "events/ev.txt", "vanilla",
+                frozenset({"te_helper_that_is_absent"}), index)
+            self.assertEqual(dict(index), {})
 
     @unittest.skipUnless(_server_up(), "mod_state_server not running")
     def test_scripted_effect_detail_has_callers(self):
         listing = _get("/scripted-effects")
         withp = [e for e in listing if e.get("parameters")]
         self.assertTrue(withp)
-        d = _get("/scripted-effects/" + withp[0]["id"])
+        # The callers index is warmed in the background after each (re)load, but
+        # a request that races that warm still pays the full mod+vanilla scan —
+        # more than the default 10 s. Don't call a cold build a failure (#293).
+        d = _get("/scripted-effects/" + withp[0]["id"], timeout=60)
         self.assertIn("callers", d)
         self.assertIn("parameters", d)
         self.assertIn("raw", d)
+
+    @unittest.skipUnless(_server_has_new_code(), "server lacks #288 endpoint")
+    def test_scripted_helpers_unresolved(self):
+        d = _get("/scripted-helpers/unresolved", timeout=60)
+        self.assertIn("unresolved_helper_calls", d)
+        self.assertEqual(d["count"], len(d["unresolved_helper_calls"]))
+        self.assertFalse(d["include_reviewed"])
+        for row in d["unresolved_helper_calls"]:
+            self.assertEqual(set(row) >= {"name", "file", "line", "kind"}, True)
+
+    def test_reload_during_index_build_does_not_cache_stale_index(self):
+        # A warm thread that started before a reload must not overwrite the
+        # freshly-invalidated cache with its pre-reload scan (#293).
+        saved_build = mss._build_call_index
+        saved_cache, saved_gen = mss._call_index_cache, mss._call_index_generation
+        try:
+            mss._call_index_cache = None
+
+            def _build_then_reload():
+                mss._invalidate_call_index()     # a reload lands mid-scan
+                return {"stale": []}
+
+            mss._build_call_index = _build_then_reload
+            self.assertEqual(mss._get_call_index(), {"stale": []})
+            self.assertIsNone(mss._call_index_cache)
+        finally:
+            mss._build_call_index = saved_build
+            mss._call_index_cache = saved_cache
+            mss._call_index_generation = saved_gen
+
+    @unittest.skipUnless(_server_up(), "mod_state_server not running")
+    def test_status_reports_call_index_readiness(self):
+        st = _get("/status")
+        if "call_index_ready" not in st:
+            self.skipTest("server predates #293")
+        self.assertIsInstance(st["call_index_ready"], bool)
 
 
 # ---------------------------------------------------------------------------

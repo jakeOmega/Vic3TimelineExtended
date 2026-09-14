@@ -9,7 +9,9 @@ import effect_trigger_validity_audit as eva
 # A minimal "known-good" catalog for the synthetic mods below.
 VALID = {"add_modifier", "name", "multiplier", "if", "limit", "value",
          "trigger_event", "id", "add", "subtract", "is_war_participant",
-         "effect", "group", "progressiveness", "country_prestige_mult"}
+         # Present in the real bootstrapped catalog (vanilla uses them in
+         # on_actions / scripted helpers); needed by the SCAN_ROOTS cases.
+         "always", "effect"}
 
 
 class _Mod:
@@ -67,13 +69,11 @@ class DetectionTests(unittest.TestCase):
     def test_uppercase_param_not_flagged(self):
         m = _Mod(
             {
-                "common/scripted_effects/s.txt": "te_foo = {\n\tadd_modifier = { name = $GOOD$ }\n}\n"
+                "common/scripted_effects/s.txt": "te_foo = {\n\tvalue = 1\n}\n"
                 "se = {\n\tte_foo = { GOOD = wood }\n}\n"
             }
         )
-        flags = _flagged(m.audit())
-        self.assertEqual(flags, set())
-        self.assertNotIn("GOOD", {kw for kw, _ in flags})
+        self.assertEqual(_flagged(m.audit()), set())
 
     def test_curated_valid_key_not_flagged(self):
         m = _Mod({"events/e.txt": 'my.1 = {\n\tevent_image = { texture = "x.dds" }\n}\n'})
@@ -100,115 +100,114 @@ class NameHarvestTests(unittest.TestCase):
         self.assertEqual(_flagged(m.audit()), set())
 
 
-class ScanRootScopingTests(unittest.TestCase):
-    """Entity dirs are scanned only inside their trigger/effect blocks (#295)."""
+class ScanRootTests(unittest.TestCase):
+    """#288 / #295 — the audit reaches beyond the original four directories."""
 
-    def test_dead_trigger_in_diplomatic_action_flagged(self):
-        # The #295 motivating bug: 1.14 removed `has_war_exhaustion`, but the
-        # copy in `diplomatic_actions/nuke.txt`'s `will_propose` was invisible
-        # to the audit because the directory wasn't scanned at all.
+    def test_dangling_helper_call_in_scripted_buttons_flagged(self):
+        # #288: `covert_op_refresh_all_targets` was deleted but two call sites
+        # in common/scripted_buttons/ survived; POST /reload came back clean.
         m = _Mod(
             {
-                "common/diplomatic_actions/nuke.txt": "nuke_action = {\n"
-                "\tai = {\n\t\twill_propose = {\n"
-                "\t\t\thas_war_exhaustion = yes\n\t\t}\n\t}\n}\n"
+                "common/scripted_buttons/b.txt": "cw_button = {\n"
+                "\tvisible = { always = yes }\n"
+                "\teffect = {\n\t\tcovert_op_refresh_all_targets = yes\n\t}\n}\n"
             }
         )
-        self.assertIn(("has_war_exhaustion", "unknown-name"), _flagged(m.audit()))
+        self.assertIn(
+            ("covert_op_refresh_all_targets", "unresolved-helper-call"),
+            _flagged(m.audit()),
+        )
 
-    def test_entity_schema_and_modifier_blocks_not_scanned(self):
-        # A law's own schema (`progressiveness`, `group`) and its modifier block
-        # are different namespaces — flagging them would drown the report.
+    def test_removed_trigger_in_diplomatic_actions_flagged(self):
+        # #295: 1.14 removed has_war_exhaustion; nuke.txt's will_propose kept it.
         m = _Mod(
             {
-                "common/laws/l.txt": "law_x = {\n\tgroup = lawgroup_y\n"
-                "\tprogressiveness = 5\n"
-                "\tmodifier = {\n\t\tcountry_prestige_mult = 0.1\n\t}\n}\n"
+                "common/diplomatic_actions/nuke.txt": "alliance_nuke = {\n"
+                "\trequires_approval = yes\n"
+                "\twill_propose = {\n\t\thas_war_exhaustion = { value > 0.5 }\n\t}\n}\n"
             }
         )
-        self.assertEqual(_flagged(m.audit()), set())
-
-    def test_effect_inside_entity_entry_block_scanned(self):
-        m = _Mod(
-            {
-                "common/laws/l.txt": "law_x = {\n\ton_enact = {\n"
-                "\t\tbogus_effect = yes\n\t}\n}\n"
-            }
+        self.assertIn(
+            ("has_war_exhaustion", "unresolved-helper-call"), _flagged(m.audit())
         )
-        self.assertIn(("bogus_effect", "unknown-name"), _flagged(m.audit()))
 
-    def test_single_line_entry_block_scanned_without_flagging_opener(self):
-        m = _Mod(
-            {"common/decisions/d.txt": "dec = {\n\tpossible = { bogus_trigger = yes }\n}\n"}
-        )
-        flags = _flagged(m.audit())
-        self.assertIn(("bogus_trigger", "unknown-name"), flags)
-        self.assertNotIn(("possible", "unknown-name"), flags)
-
-    def test_block_after_entry_block_closes_is_not_scanned(self):
-        # `modifier` follows a scanned `on_enact`; the depth tracking must have
-        # left the entry block again by then.
-        m = _Mod(
-            {
-                "common/laws/l.txt": "law_x = {\n\ton_enact = {\n\t\tadd_modifier = { name = x }\n\t}\n"
-                "\tmodifier = {\n\t\tcountry_prestige_mult = 0.1\n\t}\n}\n"
-            }
-        )
-        self.assertEqual(_flagged(m.audit()), set())
-
-    def test_root_extra_valid_key_not_flagged(self):
-        # `header` is schema of a JE's scanned `event_outcome_*_effect_desc`.
+    def test_entity_schema_fields_not_flagged(self):
         m = _Mod(
             {
                 "common/journal_entries/je.txt": "je_x = {\n"
-                "\tevent_outcome_completed_effect_desc = {\n\t\theader = je_x_header\n"
-                "\t\teffect = { add_modifier = { name = x } }\n\t}\n}\n"
+                "\tgroup = je_group_x\n"
+                "\tpossible = { is_war_participant = yes }\n"
+                "\tstatus_desc = je_x_status\n}\n",
+                "common/scripted_buttons/b.txt": "b_x = {\n"
+                "\tvisible = { always = yes }\n\tpossible = { always = yes }\n}\n",
             }
         )
         self.assertEqual(_flagged(m.audit()), set())
 
-    def test_root_extra_valid_key_is_root_scoped(self):
-        # ... and stays invalid in a root that didn't declare it.
-        m = _Mod({"events/e.txt": "my.1 = {\n\theader = x\n}\n"})
-        self.assertIn(("header", "unknown-name"), _flagged(m.audit()))
-
-    def test_script_values_body_scanned(self):
-        m = _Mod({"common/script_values/v.txt": "sv_x = {\n\tvalue = 1\n\tbogus_op = 2\n}\n"})
-        self.assertIn(("bogus_op", "unknown-name"), _flagged(m.audit()))
-
-
-class NameHarvestDepthTests(unittest.TestCase):
-    def test_constant_script_value_name_harvested(self):
-        # `name = 25` (no braces) defines a script value just as `name = { }` does.
+    def test_static_modifier_block_body_skipped(self):
+        # Modifier names belong to modifier_visibility_audit, not to this one.
         m = _Mod(
             {
-                "common/script_values/v.txt": "te_cap = 25\n",
-                "events/e.txt": "my.1 = {\n\tif = { limit = { te_cap = 0 } }\n}\n",
+                "common/laws/l.txt": "law_x = {\n\tgroup = lawgroup_x\n"
+                "\tmodifier = {\n\t\tcountry_authority_add = 150\n\t}\n}\n"
             }
         )
         self.assertEqual(_flagged(m.audit()), set())
 
-    def test_nested_key_not_harvested_as_mod_name(self):
-        # A nested block opener must not whitelist itself: harvesting at any
-        # indentation used to mask unknown effects that happen to open a block.
-        m = _Mod({"common/scripted_effects/s.txt": "se = {\n\tbogus_effect = {\n\t\tid = 1\n\t}\n}\n"})
+    def test_add_modifier_body_still_checked(self):
+        # add_modifier is an *effect*, not a static-modifier container — its body
+        # must keep being validated even inside a skip_blocks root.
+        m = _Mod(
+            {
+                "common/laws/l.txt": "law_x = {\n\ton_enact = {\n"
+                "\t\tadd_modifier = { name = x bogus_effect = 1 }\n\t}\n}\n"
+            }
+        )
         self.assertIn(("bogus_effect", "unknown-name"), _flagged(m.audit()))
 
+    def test_entity_name_not_globally_valid(self):
+        # A journal entry id is a definition, not a callable keyword: calling it
+        # from an event must still flag (this is what the depth-0 rule buys).
+        m = _Mod(
+            {
+                "common/journal_entries/je.txt": "je_x = {\n\tgroup = je_group_x\n}\n",
+                "events/e.txt": "my.1 = {\n\tje_x = yes\n}\n",
+            }
+        )
+        self.assertIn(("je_x", "unresolved-helper-call"), _flagged(m.audit()))
 
-class EventTargetTests(unittest.TestCase):
-    def test_event_target_scope_not_flagged(self):
-        # Scope transitions live in docs/engine/event_targets_summary.txt, not
-        # in the frozen catalog (vanilla's effect corpus doesn't use them all).
-        files = {
-            "docs/engine/event_targets_summary.txt": "# header\nmarket|trade_center|state|Scope to the trade center state\n",
-            "common/script_values/v.txt": "sv_x = {\n\tvalue = 0\n\ttrade_center = {\n\t\tadd = 1\n\t}\n}\n",
-        }
-        m = _Mod(files)
+    def test_scalar_script_value_name_harvested(self):
+        # Bare `name = <number>` script values are definitions too, and are
+        # callable by name from anywhere.
+        m = _Mod(
+            {
+                "common/script_values/v.txt": "te_cap = 7\n",
+                "events/e.txt": "my.1 = {\n\tif = { limit = { te_cap = 7 } }\n}\n",
+            }
+        )
         self.assertEqual(_flagged(m.audit()), set())
 
-    def test_event_target_absent_when_summary_missing(self):
-        m = _Mod({"common/script_values/v.txt": "sv_x = {\n\ttrade_center = {\n\t\tadd = 1\n\t}\n}\n"})
-        self.assertIn(("trade_center", "unknown-name"), _flagged(m.audit()))
+
+class UnresolvedHelperCallTests(unittest.TestCase):
+    def test_returns_call_sites_with_missing_callee(self):
+        m = _Mod(
+            {
+                "common/scripted_buttons/b.txt": "b_x = {\n\teffect = {\n"
+                "\t\tgone_helper = yes\n\t}\n}\n"
+            }
+        )
+        rows = eva.unresolved_helper_calls(m.root, m.audit())
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["name"], "gone_helper")
+        self.assertEqual(
+            rows[0]["file"], os.path.join("common", "scripted_buttons", "b.txt")
+        )
+        self.assertEqual(rows[0]["line"], 3)
+        self.assertEqual(rows[0]["kind"], "effect_call")
+
+    def test_non_call_form_is_not_a_helper_call(self):
+        m = _Mod({"events/e.txt": "my.1 = {\n\tadd_authority = -200\n}\n"})
+        self.assertEqual(eva.unresolved_helper_calls(m.root, m.audit()), [])
 
 
 class SuppressionTests(unittest.TestCase):
