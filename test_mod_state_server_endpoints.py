@@ -460,6 +460,90 @@ class ScriptedHelperEndpointTests(unittest.TestCase):
         self.assertEqual(
             mss._caller_type("common/on_actions/x.txt"), "On Actions")
 
+    def test_scan_tree_for_calls_covers_events_and_common(self):
+        from collections import defaultdict
+        with tempfile.TemporaryDirectory() as td:
+            for rel in ("events/e.txt", "common/scripted_effects/s.txt"):
+                fp = os.path.join(td, rel)
+                os.makedirs(os.path.dirname(fp), exist_ok=True)
+                with open(fp, "w", encoding="utf-8") as fh:
+                    fh.write("ent.1 = {\n\timmediate = {\n\t\tte_helper = yes\n\t}\n}\n")
+            index: dict = defaultdict(list)
+            mss._scan_tree_for_calls("mod", td, td, frozenset({"te_helper"}), index)
+            self.assertEqual(len(index["te_helper"]), 2)
+            self.assertEqual(
+                {r["file"].replace(os.sep, "/") for r in index["te_helper"]},
+                {"events/e.txt", "common/scripted_effects/s.txt"},
+            )
+            self.assertEqual({r["origin"] for r in index["te_helper"]}, {"mod"})
+
+    def test_vanilla_call_index_built_once_per_process(self):
+        # #296: the vanilla half is the bulk of the scan and can't change while
+        # the process lives, so a reload must not re-walk it.
+        with tempfile.TemporaryDirectory() as td:
+            ev = os.path.join(td, "game", "events")
+            os.makedirs(ev)
+            with open(os.path.join(ev, "e.txt"), "w", encoding="utf-8") as fh:
+                fh.write("v.1 = {\n\timmediate = {\n\t\tvanilla_helper = yes\n\t}\n}\n")
+            prev_cache, prev_base = mss._vanilla_call_index_cache, mss.base_game_path
+            try:
+                mss._vanilla_call_index_cache = None
+                mss.base_game_path = td
+                callables = frozenset({"vanilla_helper"})
+                first = mss._get_vanilla_call_index(callables)
+                self.assertEqual(len(first["vanilla_helper"]), 1)
+                self.assertEqual(first["vanilla_helper"][0]["origin"], "vanilla")
+                # Adding a file and asking again returns the same cached object.
+                with open(os.path.join(ev, "e2.txt"), "w", encoding="utf-8") as fh:
+                    fh.write("v.2 = {\n\timmediate = {\n\t\tvanilla_helper = yes\n\t}\n}\n")
+                second = mss._get_vanilla_call_index(callables)
+                self.assertIs(second, first)
+                self.assertEqual(len(second["vanilla_helper"]), 1)
+            finally:
+                mss._vanilla_call_index_cache = prev_cache
+                mss.base_game_path = prev_base
+
+    def test_vanilla_call_index_empty_without_install(self):
+        prev_cache, prev_base = mss._vanilla_call_index_cache, mss.base_game_path
+        try:
+            mss._vanilla_call_index_cache = None
+            mss.base_game_path = os.path.join(tempfile.gettempdir(), "no_such_vic3_install")
+            self.assertEqual(mss._get_vanilla_call_index(frozenset({"x"})), {})
+        finally:
+            mss._vanilla_call_index_cache = prev_cache
+            mss.base_game_path = prev_base
+
+    def test_concurrent_get_call_index_builds_once(self):
+        # #296: a request racing the background warm must wait for the in-flight
+        # scan, not start a second one.
+        import threading
+        import time
+        from unittest import mock
+        prev_cache = mss._call_index_cache
+        builds = []
+        start = threading.Barrier(2)
+
+        def _slow_build():
+            builds.append(1)
+            time.sleep(0.2)
+            return {"te_helper": []}
+
+        try:
+            mss._call_index_cache = None
+            with mock.patch.object(mss, "_build_call_index", _slow_build):
+                def _call():
+                    start.wait(timeout=5)
+                    mss._get_call_index()
+                threads = [threading.Thread(target=_call) for _ in range(2)]
+                for t in threads:
+                    t.start()
+                for t in threads:
+                    t.join(timeout=10)
+            self.assertEqual(len(builds), 1, "index was built more than once")
+            self.assertEqual(mss._call_index_cache, {"te_helper": []})
+        finally:
+            mss._call_index_cache = prev_cache
+
     def test_scan_file_for_calls_captures_args(self):
         from collections import defaultdict
         with tempfile.TemporaryDirectory() as td:
