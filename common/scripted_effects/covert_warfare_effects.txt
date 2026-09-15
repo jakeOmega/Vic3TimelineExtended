@@ -32,6 +32,10 @@
 
 # Create an operation container and add it to the operator's iw_ops list.
 # Leaves scope:iw_new_op pointing at the new container.
+# Callers must guard any use of scope:iw_new_op with `exists`. When a
+# diplomatic action's tooltip or confirmation box renders its accept_effect,
+# the engine resolves scope links inside hidden_effect but never creates the
+# container, so the scope is unset.
 # Parameters: $TYPE$ = short name (e.g. election_interference)
 #             $TARGET$ = target country (a scope: reference — it is read inside on_created)
 # Scope: operator country
@@ -40,13 +44,21 @@ covert_op_create = {
 	create_container = {
 		tags = { iw_op iw_op_$TYPE$ }
 		parent = scope:iw_operator
+		# Saved both ways on purpose. Neither placement is verified in-game, and
+		# if the scope stays unset, the container never reaches iw_ops and the
+		# monthly sync creates a duplicate. Remove one only after checking that
+		# `list_containers iw_op` in the console matches the covert pact count.
+		save_scope_as = iw_new_op
 		on_created = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
 			save_scope_as = iw_new_op
 		}
 	}
-	add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
+	if = {
+		limit = { exists = scope:iw_new_op }
+		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
+	}
 }
 
 # Destroy the $TYPE$ operation against $TARGET$, if there is one. The
@@ -111,7 +123,10 @@ covert_op_start = {
 		# be waiting for the monthly sync. Clear it so the new op starts at month 0.
 		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:target_country }
 		covert_op_create = { TYPE = $TYPE$ TARGET = scope:target_country }
-		scope:iw_new_op = { covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ } }
+		if = {
+			limit = { exists = scope:iw_new_op }
+			scope:iw_new_op = { covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ } }
+		}
 	}
 }
 

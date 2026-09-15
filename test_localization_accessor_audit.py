@@ -128,8 +128,16 @@ class ContextClassificationTests(unittest.TestCase):
             classify_context("voluntary_union", diplo_action_keys=action_keys),
             "diplomatic_actions",
         )
+        # The action's own _desc routes to the stricter descs context.
         self.assertEqual(
             classify_context("voluntary_union_desc", diplo_action_keys=action_keys),
+            "diplomatic_action_descs",
+        )
+        # A _desc whose base is not an action key keeps its own routing.
+        self.assertEqual(
+            classify_context(
+                "voluntary_union_proposal_accepted_desc", diplo_action_keys=action_keys
+            ),
             "diplomatic_actions",
         )
         self.assertEqual(
@@ -258,6 +266,19 @@ class ValidationTests(unittest.TestCase):
         )
         self.assertIsNotNone(reason)
         self.assertIn("GetDiplomaticPact", reason)
+
+    def test_target_country_denied_in_action_desc(self):
+        # An action's own _desc renders with no target bound.
+        reason = self._validate(
+            "[TARGET_COUNTRY.GetName]", "diplomatic_action_descs"
+        )
+        self.assertIsNotNone(reason)
+        self.assertIn("TARGET_COUNTRY", reason)
+
+    def test_country_ok_in_action_desc(self):
+        self.assertIsNone(
+            self._validate("[COUNTRY.GetName]", "diplomatic_action_descs")
+        )
 
     def test_get_diplomatic_pact_ok_in_general_diplo_context(self):
         # The same chain is valid in `_pact_desc` (diplomatic_actions context),
