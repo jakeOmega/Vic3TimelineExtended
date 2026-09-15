@@ -692,11 +692,13 @@ Both can store scope references, but they differ in persistence and loc access:
 
 - **Events** (`<namespace>.<n>.<suffix>` keys): `[ROOT.…]`, `[SCOPE.sCountry('name').…]`, `[SCOPE.sState('name').…]`, `[SCOPE.sCharacter('name').…]`, `[SCOPE.gsInterestGroup('name').…]`, plus uppercase magic scopes like `[STATE.…]`, `[CHARACTER.…]`, `[CULTURE.…]`, `[POP.…]`, `[BUILDING.…]`, `[MARKET.…]`, `[GOODS.…]`, `[POWER_BLOC.…]`, etc.
 - **Diplomatic actions** — the actor scope is **context-dependent**, and the magic-scope catalog's blanket "`[COUNTRY.GetName]` = the actor" is too coarse (verified by runtime debug.log, 2026-05-24):
-  - **Action / effect / trigger descs** (`<action>_desc`, `<action>_effect_desc_first/third`, `<action>_trigger_desc`): bare `[COUNTRY.GetName]` / `[COUNTRY.GetAdjectiveNoFlag]` IS the actor (vanilla `increase_relations_effect_desc_first/third` use it). `[TARGET_COUNTRY.GetName]` = recipient.
+  - **Effect / trigger descs** (`<action>_effect_desc_first/third`, `<action>_trigger_desc_first/third`): bare `[COUNTRY.GetName]` / `[COUNTRY.GetAdjectiveNoFlag]` IS the actor (vanilla `increase_relations_effect_desc_first/third` use it). `[TARGET_COUNTRY.GetName]` = recipient.
+  - **The action's own description** (`<action>_desc`): **no target is bound.** `[TARGET_COUNTRY.GetName]` promotes to nullptr on every render (`voluntary_union_desc`, 2026-09-14), and no vanilla `<action>_desc` names the target. Describe it generically ("the target country").
+  - **`custom_tooltip` text in `possible` / `selectable` (including scripted triggers they call)**: `TARGET_COUNTRY` is unbound here too. Use `[SCOPE.sCountry('target_country').GetName]`, as vanilla `SUPPORT_SEPARATISM_SUFFICIENT_POPS` and `invite_to_power_bloc_recently_declined` do. (`te_irredentist_bloc_check_peace_*_tt` spammed 414 nullptr promotes before the switch.)
   - **Notification / proposal descs** (`<action>_action_notification_desc`, `_proposal_notification_desc`, `_action_notification_break_desc`): bare `[COUNTRY.…]` is **unbound** here — it promotes to `nullptr` at render and spams `Promote 'COUNTRY' returned nullptr, in 'COUNTRY.GetName'` (a per-frame UI-lag class). The actor is `[INITIATOR_COUNTRY.GetName]`; vanilla uses it uniformly in every `*_action_notification_desc`. Never bare `COUNTRY` in a notification desc.
   - **Pact descs** (`<action>_pact_desc`, fired while the pact is active): `[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName]` = initiator, `GetSecondCountry` = target. This chain is **null in any pre-pact or one-shot context** (proposal/notification before the pact exists, or actions like annexation that create no lasting pact) — same nullptr spam. Do not reuse a `_pact_desc` accessor in a notification desc; and don't use `GetSecondCountry` (the *target*) where you mean the actor.
   - NOT `[SCOPE.GetTargetCountry.GetName]` — that's a draft error that silently drops.
-  - **Now audited (#149):** `localization_accessor_audit` routes `*_action_notification_desc` / `*_proposal_notification_desc` / `*_action_notification_break_desc` keys to a `diplomatic_action_notifications` context that affirmatively denies bare `[COUNTRY.…]` and `[*.GetDiplomaticPact.*]` (suggesting `INITIATOR_COUNTRY` / `TARGET_COUNTRY`). Name-variant suffixes still use the permissive diplomatic context.
+  - **Now audited (#149):** `localization_accessor_audit` routes `*_action_notification_desc` / `*_proposal_notification_desc` / `*_action_notification_break_desc` keys to a `diplomatic_action_notifications` context that affirmatively denies bare `[COUNTRY.…]` and `[*.GetDiplomaticPact.*]` (suggesting `INITIATOR_COUNTRY` / `TARGET_COUNTRY`). Name-variant suffixes still use the permissive diplomatic context. A bare `<action>_desc` routes to `diplomatic_action_descs`, which denies `[TARGET_COUNTRY.…]`. `custom_tooltip` texts aren't audited, because their key names don't identify the rendering context.
 - **War goals** (`war_goal_<x>(_desc|_sway_desc)?`): `[WAR_GOAL_DRAFT.GetTarget.GetName]`, `[WAR_GOAL_DRAFT.GetHolder.GetName]`, `[WAR_GOAL_DRAFT.GetTargetState.GetName]`.
 - **Treaty articles**: `[FIRST_COUNTRY.…]`, `[SECOND_COUNTRY.…]`.
 - **Journal entries** (`je_<x>*`): `[JournalEntry.GetGoalProgressValue|D]`, etc.
@@ -1228,12 +1230,16 @@ When a system tracks several instances of something the engine has no object for
 create_container = {
     tags = { iw_op iw_op_$TYPE$ }         # tag every container with a mod prefix
     parent = scope:iw_operator            # culled (lazily, ≤1 tick) if the owner stops existing
+    save_scope_as = iw_new_op             # create_container's own parameter...
     on_created = {                        # scope here = the new container
         set_variable = { name = iw_target value = scope:target_country }  # pass scope: refs, not PREV
-        save_scope_as = iw_new_op         # resolves after create_container returns
+        save_scope_as = iw_new_op         # ...and here too, until one placement is verified in-game
     }
 }
-add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
+if = {
+    limit = { exists = scope:iw_new_op }  # unset in tooltip renders (rule 6)
+    add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
+}
 ```
 
 Rules that bite:
@@ -1243,7 +1249,7 @@ Rules that bite:
 3. **Don't edit a variable list while iterating it.** Collect doomed entries with `add_to_temporary_list` (name it per `$TYPE$` if the helper runs several times in one effect — temporary lists live for the whole top-level effect), then walk `every_in_list = { list = … }` to remove and destroy.
 4. **Guard list iteration with `has_variable_list`** (vanilla's pattern) when the list may never have been created.
 5. **Reconcile against the real source of truth.** If instances mirror something the engine owns (diplomatic pacts here), hooks alone miss paths — target annexed, pact removed by script, pre-refactor saves. Mark containers backed by a live pact, create missing ones, destroy the unmarked, once per pulse. Note that in a diplomatic action's `accept_effect` the pact does not exist yet, so create directly there rather than reconciling.
-6. **Container trigger tooltips are debug-only.** Wrap player-facing gates in `custom_tooltip`, and container effects in `accept_effect` (with `show_effect_in_tooltip = yes`) in `hidden_effect`.
+6. **Container trigger tooltips are debug-only.** Wrap player-facing gates in `custom_tooltip`, and container effects in `accept_effect` (with `show_effect_in_tooltip = yes`) in `hidden_effect`. **`hidden_effect` hides the text but doesn't stop the render from resolving scopes.** While a diplomatic action's tooltip or confirmation box is open, the engine re-walks `accept_effect` every frame. It never creates the container in that pass, so `scope:iw_new_op = { … }` hits an unset scope. That logged ~1,800 `Undefined event target 'iw_new_op'` errors a second (2026-09-14) and rotated error.log 5 times in 8 seconds. Guard every use of the saved scope after `create_container` with `if = { limit = { exists = scope:x } … }`. The tooltip render should then skip the block. The evidence is that `covert_op_destroy`'s `scope:iw_ended_op = { }`, which already sat inside an `if`/`limit` whose limit was false, never logged. Confirm on a relaunch that error.log stays quiet while a covert action's confirmation box is open.
 7. **Display needs a GUI widget, not `status_desc`.** Loc can't loop. A JE `widget = { gui = … container = "custom_widget_container_2" }` with `datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_ops')]"` and `datacontext = "[Scope.GetScriptContainer]"` per item exposes `ScriptContainer.HasTag(…)` / `GetVariableValue(…)` (vanilla precedent for list widgets: `gui/journal_entry_widgets/ep2_japan_widgets.gui`).
 8. **Dropping legacy slot variables:** a `remove_variable` sweep for names the live code no longer sets logs "used but never set" on every load (see below). If nothing reads the old variables, leave them inert in old saves.
 9. **Hand a container to its events as a saved scope.** Saved scopes survive `trigger_event`, delayed ones included (vanilla `red_scare.12` fires `red_scare.13` with `years = 3`, which reads the culture `.12` saved). An event that reads `scope:x` instead of a "current instance" global keeps working when a newer instance opens. Second worked example: UN resolutions (`un_resolution_open` in `common/scripted_effects/un_vote_effects.txt`, #275).

@@ -92,7 +92,7 @@ Three rules — break any of them and the integration fails silently or deadlock
 
 After adding the module + appending to `POST_LOAD_GENERATORS`, validate without disrupting a running server: run `.venv/bin/python <your_module>.py` (the standalone path) and confirm the output file is rewritten. The integration test (`[post-load] <name> ok` line) only fires on a fresh server start — pick that up on the next natural restart rather than killing the running PID for a check.
 
-**Edits to an existing post-load generator don't take effect on `/reload`.** Python caches the module on first import; `POST /reload` re-runs the chain but each entry is the version that was imported at server startup. Symptom: a fix to `pm_costs.py` works when invoked directly (`.venv/bin/python pm_costs.py`) but `/reload` still produces the broken output. Restart the server to pick up the edit.
+**Edits to an existing post-load generator don't take effect on `/reload`.** Python caches the module on first import; `POST /reload` re-runs the chain but each entry is the version that was imported at server startup. Symptom: a fix to `pm_costs.py` works when invoked directly (`.venv/bin/python pm_costs.py`) but `/reload` still produces the broken output. Restart the server to pick up the edit. The same thing happens when a long-running server predates merged audit changes. If its `/status` `uptime_seconds` goes back before the latest `git log` touching a `POST_LOAD_*` module, `/reload` rewrites `docs/engine/*_report.md` with the old code. On 2026-09-14 a 14-hour-old server reverted `effect_trigger_validity_report.md` to its pre-#298 scan roots. Check uptime before you trust a report diff.
 
 ### Generator idempotency around hand-edited loc
 

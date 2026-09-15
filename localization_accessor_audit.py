@@ -798,6 +798,17 @@ def _build_permissive_scopes() -> dict[str, str]:
     return out
 
 
+# A diplomatic action's own `<action>_desc` is its generic description, and it
+# renders with no target bound: `[TARGET_COUNTRY.…]` there promotes to nullptr
+# (`voluntary_union_desc` logged 138 per-frame nullptr promotes, 2026-09-14).
+# Vanilla never names the target in `<action>_desc`. The table is copied from
+# `diplomatic_actions` before `permissive` is built, so the union is unchanged.
+_MAGIC_SCOPES_BY_CONTEXT["diplomatic_action_descs"] = {
+    name: typ
+    for name, typ in _MAGIC_SCOPES_BY_CONTEXT["diplomatic_actions"].items()
+    if name != "TARGET_COUNTRY"
+}
+
 _MAGIC_SCOPES_BY_CONTEXT["permissive"] = _build_permissive_scopes()
 
 
@@ -814,6 +825,13 @@ _DENIED_SCOPES_BY_CONTEXT: dict[str, dict[str, str]] = {
             "(renders nullptr, spams 'Promote COUNTRY returned nullptr' every "
             "frame) — the actor is [INITIATOR_COUNTRY.…], the target "
             "[TARGET_COUNTRY.…]"
+        ),
+    },
+    "diplomatic_action_descs": {
+        "TARGET_COUNTRY": (
+            "'TARGET_COUNTRY' is unbound in a diplomatic action's own _desc "
+            "(renders nullptr every frame) — describe the target generically, "
+            "as vanilla does"
         ),
     },
 }
@@ -999,6 +1017,8 @@ def classify_context(
     ):
         if key.endswith(suffix) and key[: -len(suffix)] in diplo_action_keys:
             return "diplomatic_action_notifications"
+    if key.endswith("_desc") and key[: -len("_desc")] in diplo_action_keys:
+        return "diplomatic_action_descs"
     # Diplomatic-action-related keys: the action name AND its standard suffixes.
     for suffix in (
         "", "_desc", "_action_name", "_action_propose_name",
