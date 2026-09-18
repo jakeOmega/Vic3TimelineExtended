@@ -43,7 +43,7 @@ entity's opening line:
 
 ## Coverage
 
-- files audited: 132
+- files audited: 133
 - flags by category:
   - Modifier Types: 1
   - Modifiers: 14

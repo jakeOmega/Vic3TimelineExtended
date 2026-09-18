@@ -22,6 +22,17 @@ te_construction_market_public_use_target = {
 				is_construction_paused = no
 			}
 			value = var:te_construction_market_public_target
+			# Cap at what the government queue can absorb this week, mirroring
+			# the private-side cap in te_construction_market_private_use_target.
+			# A player-set target above that would otherwise buy construction
+			# the government queue can't use. Only the effective use is capped;
+			# the variable (the number shown in the construction panel) keeps
+			# the player's setting. The AI's target is already capped the same
+			# way in te_construction_market_ai_purchase_target.
+			max = {
+				value = construction_queue_num_queued_government_levels
+				multiply = modifier:country_max_weekly_construction_progress_add
+			}
 		}
 		else = {
 			value = 0
@@ -60,8 +71,17 @@ te_construction_market_private_use_target = {
 		}
 		min = 1000
 	}
+	# Cap at what the private queue can absorb this week: each queued level
+	# takes at most country_max_weekly_construction_progress_add. Without it,
+	# an empty or short private queue still sizes site throughput (and the
+	# government-funded construction-goods purchase) for the full
+	# investment-pool target; the private sector can't use that slice, so the
+	# government ends up spending past te_construction_market_public_target.
+	# Worse, an unspendable pool keeps growing, which inflates this target.
+	# Last clamp on purpose — it must override the `min = 1000` floor above.
 	max = {
-		value = 1000
+		value = construction_queue_num_queued_private_levels
+		max = 1000
 		multiply = modifier:country_max_weekly_construction_progress_add
 	}
 }
@@ -84,6 +104,19 @@ te_construction_market_private_share_target = {
 		value = 1
 	}
 	multiply = 100
+	# Keep a token private allocation while the private queue is empty (the
+	# cap in te_construction_market_private_use_target then zeroes the share)
+	# so the autonomous investment AI is never left at a 0% allocation, a
+	# state vanilla never reaches. It adds no throughput (sites are still
+	# sized to public + private use); worst case, if the engine wastes rather
+	# than re-routes unused private allocation, ~1% of the government-bought
+	# construction goes unused. Drop this block to trade that for a 0% share.
+	if = {
+		limit = {
+			investment_pool_gross_income > 0
+		}
+		min = 1
+	}
 }
 
 te_construction_market_price_stabilizer_next_value = {

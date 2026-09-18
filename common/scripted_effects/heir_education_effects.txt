@@ -685,22 +685,48 @@ heir_education_cleanup_effect = {
 # Assigns aptitude traits to adult characters who lack them.
 # 5-tier distribution for characters without formal education.
 # Generals/admirals biased toward better military traits.
+#
+# Game rules (every limit below starts with te_aptitude_traits_enabled):
+#   Heir Education off + Universal off -> no-op; nobody gets aptitude traits
+#   Universal on (either Heir Education state) -> every adult character, role filter bypassed
+#   Heir Education on + Universal off   -> only rulers and heirs
+# Characters often hold several roles (a ruler who is also a general); holding ruler or heir is
+# what qualifies. aptitude_traits_cleanup_effect (monthly) brings existing characters in line.
+# A character whose traits were stripped on leaving the throne gets the same tiers back from the
+# remembered ruler_*_tier variables (restore_aptitude_traits_effect) instead of a fresh roll.
+# The traits' own `possible` blocks can't enforce this: `possible` only filters random trait
+# generation, and add_trait ignores it.
 
 assign_aptitude_traits_effect = {
-	# Administrative trait
-	# When universal_aptitude_traits_enabled game rule is active, the role filter is bypassed
-	# and every adult character gets aptitude traits. When disabled (default), only rulers,
-	# politicians, agitators, generals, and admirals qualify.
+	# Remembered tiers first, so the rolls below skip returning rulers
 	every_scope_character = {
 		limit = {
+			te_aptitude_traits_enabled = yes
+			OR = {
+				has_game_rule = universal_aptitude_traits_enabled
+				has_role_of_type = ruler
+				has_role_of_type = heir
+			}
+		}
+		restore_aptitude_traits_effect = yes
+	}
+
+	# Administrative trait
+	every_scope_character = {
+		limit = {
+			te_aptitude_traits_enabled = yes
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
 				has_game_rule = universal_aptitude_traits_enabled
 				has_role_of_type = ruler
-				has_role_of_type = politician
-				has_role_of_type = agitator
-				has_role_of_type = general
-				has_role_of_type = admiral
+				has_role_of_type = heir
+			}
+			# An heir in active education gets traits from heir_education_resolve_effect instead
+			NOT = {
+				AND = {
+					has_role_of_type = heir
+					root = { has_journal_entry = je_heir_education }
+				}
 			}
 			NOR = {
 				has_trait = ruler_terrible_administrator
@@ -722,14 +748,19 @@ assign_aptitude_traits_effect = {
 	# Diplomatic trait
 	every_scope_character = {
 		limit = {
+			te_aptitude_traits_enabled = yes
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
 				has_game_rule = universal_aptitude_traits_enabled
 				has_role_of_type = ruler
-				has_role_of_type = politician
-				has_role_of_type = agitator
-				has_role_of_type = general
-				has_role_of_type = admiral
+				has_role_of_type = heir
+			}
+			# An heir in active education gets traits from heir_education_resolve_effect instead
+			NOT = {
+				AND = {
+					has_role_of_type = heir
+					root = { has_journal_entry = je_heir_education }
+				}
 			}
 			NOR = {
 				has_trait = ruler_terrible_diplomat
@@ -751,14 +782,19 @@ assign_aptitude_traits_effect = {
 	# Military trait - biased toward skilled/exceptional for generals/admirals
 	every_scope_character = {
 		limit = {
+			te_aptitude_traits_enabled = yes
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
 				has_game_rule = universal_aptitude_traits_enabled
 				has_role_of_type = ruler
-				has_role_of_type = politician
-				has_role_of_type = agitator
-				has_role_of_type = general
-				has_role_of_type = admiral
+				has_role_of_type = heir
+			}
+			# An heir in active education gets traits from heir_education_resolve_effect instead
+			NOT = {
+				AND = {
+					has_role_of_type = heir
+					root = { has_journal_entry = je_heir_education }
+				}
 			}
 			NOR = {
 				has_trait = ruler_terrible_commander
@@ -797,14 +833,19 @@ assign_aptitude_traits_effect = {
 	# Set GUI display variables for all characters with aptitude traits
 	every_scope_character = {
 		limit = {
+			te_aptitude_traits_enabled = yes
 			NOT = { age < define:NCharacters|ADULT_AGE }
 			OR = {
 				has_game_rule = universal_aptitude_traits_enabled
 				has_role_of_type = ruler
-				has_role_of_type = politician
-				has_role_of_type = agitator
-				has_role_of_type = general
-				has_role_of_type = admiral
+				has_role_of_type = heir
+			}
+			# An heir in active education gets traits from heir_education_resolve_effect instead
+			NOT = {
+				AND = {
+					has_role_of_type = heir
+					root = { has_journal_entry = je_heir_education }
+				}
 			}
 			OR = {
 				has_trait = ruler_terrible_administrator
@@ -816,5 +857,120 @@ assign_aptitude_traits_effect = {
 			NOT = { has_variable = ruler_admin_tier }
 		}
 		set_aptitude_trait_vars_effect = yes
+	}
+}
+
+# ──────────────────────── APTITUDE TRAIT CLEANUP ────────────────────────
+# Country-scope, run monthly (aptitude_traits_cleanup_on_action). Brings existing characters in
+# line with the game rules: add_trait ignores a trait's `possible` block, so characters given
+# traits under an older role list (or by any future ungated add_trait) would otherwise keep them.
+#   Heir Education off + Universal off -> strip aptitude traits and tier variables from everyone.
+#   Heir Education on + Universal off  -> strip the traits from anyone holding neither the ruler
+#       nor the heir role, but keep (refresh) their ruler_*_tier variables. The traits do real
+#       work outside the throne (command_modifier for generals, interest_group_modifier for IG
+#       leaders), so a voted-out president must not carry an exceptional commander trait into a
+#       field of trait-less generals; restore_aptitude_traits_effect hands the same tiers
+#       back the month they return to power. Roles overlap (a ruler who is also a general): holding
+#       ruler or heir is what counts.
+#   Universal on -> no-op; every adult is meant to have them.
+
+aptitude_traits_cleanup_effect = {
+	if = {
+		limit = { te_aptitude_traits_enabled = no }
+		every_scope_character = {
+			limit = {
+				OR = {
+					te_has_any_aptitude_trait = yes
+					has_variable = ruler_admin_tier
+					has_variable = ruler_diplo_tier
+					has_variable = ruler_military_tier
+				}
+			}
+			remove_aptitude_traits_effect = yes
+			if = { limit = { has_variable = ruler_admin_tier } remove_variable = ruler_admin_tier }
+			if = { limit = { has_variable = ruler_diplo_tier } remove_variable = ruler_diplo_tier }
+			if = { limit = { has_variable = ruler_military_tier } remove_variable = ruler_military_tier }
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_game_rule = universal_aptitude_traits_enabled } }
+		every_scope_character = {
+			limit = {
+				te_has_any_aptitude_trait = yes
+				NOR = {
+					has_role_of_type = ruler
+					has_role_of_type = heir
+				}
+			}
+			set_aptitude_trait_vars_effect = yes
+			remove_aptitude_traits_effect = yes
+		}
+		# A character back on the throne (or made heir) gets their remembered tiers now,
+		# rather than waiting for the yearly assign_aptitude_traits_effect pass
+		every_scope_character = {
+			limit = {
+				OR = {
+					has_role_of_type = ruler
+					has_role_of_type = heir
+				}
+				OR = {
+					has_variable = ruler_admin_tier
+					has_variable = ruler_diplo_tier
+					has_variable = ruler_military_tier
+				}
+			}
+			restore_aptitude_traits_effect = yes
+		}
+	}
+}
+
+# Character-scope. Removes all 15 aptitude traits; leaves the ruler_*_tier variables alone.
+# remove_trait on a trait the character lacks is a silent no-op (same idiom as
+# apply_combined_arms_bonuses).
+remove_aptitude_traits_effect = {
+	remove_trait = ruler_terrible_administrator
+	remove_trait = ruler_poor_administrator
+	remove_trait = ruler_average_administrator
+	remove_trait = ruler_skilled_administrator
+	remove_trait = ruler_exceptional_administrator
+	remove_trait = ruler_terrible_diplomat
+	remove_trait = ruler_poor_diplomat
+	remove_trait = ruler_average_diplomat
+	remove_trait = ruler_skilled_diplomat
+	remove_trait = ruler_exceptional_diplomat
+	remove_trait = ruler_terrible_commander
+	remove_trait = ruler_poor_commander
+	remove_trait = ruler_average_commander
+	remove_trait = ruler_skilled_commander
+	remove_trait = ruler_exceptional_commander
+}
+
+# Character-scope. Re-adds, per category, the trait matching a remembered ruler_*_tier
+# variable (1=terrible .. 5=exceptional; see set_aptitude_trait_vars_effect) when the
+# character has no trait in that category. No-op for characters without remembered tiers.
+restore_aptitude_traits_effect = {
+	restore_aptitude_trait_tier = { VAR = ruler_admin_tier TRAIT = administrator }
+	restore_aptitude_trait_tier = { VAR = ruler_diplo_tier TRAIT = diplomat }
+	restore_aptitude_trait_tier = { VAR = ruler_military_tier TRAIT = commander }
+}
+
+# Parameters: $VAR$ = tier variable, $TRAIT$ = administrator / diplomat / commander
+restore_aptitude_trait_tier = {
+	if = {
+		limit = {
+			has_variable = $VAR$
+			NOR = {
+				has_trait = ruler_terrible_$TRAIT$
+				has_trait = ruler_poor_$TRAIT$
+				has_trait = ruler_average_$TRAIT$
+				has_trait = ruler_skilled_$TRAIT$
+				has_trait = ruler_exceptional_$TRAIT$
+			}
+		}
+		if = { limit = { var:$VAR$ >= 5 } add_trait = ruler_exceptional_$TRAIT$ }
+		else_if = { limit = { var:$VAR$ >= 4 } add_trait = ruler_skilled_$TRAIT$ }
+		else_if = { limit = { var:$VAR$ >= 3 } add_trait = ruler_average_$TRAIT$ }
+		else_if = { limit = { var:$VAR$ >= 2 } add_trait = ruler_poor_$TRAIT$ }
+		else = { add_trait = ruler_terrible_$TRAIT$ }
 	}
 }

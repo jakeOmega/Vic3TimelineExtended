@@ -57,7 +57,11 @@ un_resolution_open = {
 	change_global_variable = { name = un_resolution_seq add = 1 }
 	create_container = {
 		tags = { un_resolution un_topic_$TOPIC$ un_res_voting }
-		on_created = {
+		save_scope_as = un_resolution
+	}
+	if = {
+		limit = { exists = scope:un_resolution }
+		scope:un_resolution = {
 			set_variable = { name = un_res_seq value = global_var:un_resolution_seq }
 			set_variable = { name = un_res_proposer value = scope:un_res_proposer_scope }
 			if = {
@@ -68,7 +72,6 @@ un_resolution_open = {
 			set_variable = { name = un_res_oppose value = 0 }
 			set_variable = { name = un_res_months value = 0 }
 			add_to_variable_list = { name = un_res_yes target = scope:un_res_proposer_scope }
-			save_scope_as = un_resolution
 		}
 	}
 	set_global_variable = un_vote_active

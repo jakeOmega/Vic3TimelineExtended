@@ -394,7 +394,9 @@ types market_panel
 					margin_bottom = 10
 					parentanchor = hcenter
 
-					### TE: Import Partners + Export Partners charts (side by side).
+					### TE: Export Partners + Import Partners charts (side by side,
+					### matching the Export/Import column order used by the two chart
+					### rows above).
 					### Drawn from the alcah/victoria3-tradepartners mod: directional
 					### bilateral volume per partner market, with a per-good breakdown
 					### tooltip (RegularTooltip_TE_TradePartnerGoods).
@@ -410,57 +412,6 @@ types market_panel
 						spacing = 10
 						margin_bottom = 10
 						parentanchor = hcenter
-
-						compact_chart = {
-							blockoverride "datamodel" {
-								datamodel = "[MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_import_markets')]"
-							}
-
-							blockoverride "show_more_button_visibility" {
-								visible = "[GreaterThan_int32(GetDataModelSize(MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_import_markets')), '(int32)3')]"
-							}
-
-							blockoverride "heading" {
-								raw_text = "#title @market_imports! Import Partners#!"
-							}
-
-							blockoverride "tooltip" {
-								tooltipwidget = {
-									RegularTooltip_TE_TradePartnerGoods = {
-										datacontext = "[Scope.GetMarket.GetOwner]"
-										datacontext = "[MarketPanel.GetMarket]"
-									}
-								}
-							}
-
-							blockoverride "pieslice" {
-								value = "[FixedPointToFloat(GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_imports_from_target'))]"
-							}
-
-							blockoverride "color" {
-								color = "[Scope.GetMarket.GetOwner.GetMapColor]"
-							}
-
-							blockoverride "pie_item_goto_button" {
-								button = {
-									using = clean_button
-									size = { 100% 100% }
-									onclick = "[InformationPanelBar.OpenMarketPanel(Scope.GetMarket.Self)]"
-								}
-							}
-
-							blockoverride "leftside_info" {
-								visible = no
-							}
-
-							blockoverride "rightside1_info" {
-								text = "[Scope.GetMarket.GetOwner.GetFlagTextIcon] [GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_imports_from_target')|v0]"
-							}
-
-							blockoverride "rightside2_info" {
-								visible = no
-							}
-						}
 
 						compact_chart = {
 							blockoverride "datamodel" {
@@ -506,6 +457,57 @@ types market_panel
 
 							blockoverride "rightside1_info" {
 								text = "[Scope.GetMarket.GetOwner.GetFlagTextIcon] [GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_exports_to_target')|v0]"
+							}
+
+							blockoverride "rightside2_info" {
+								visible = no
+							}
+						}
+
+						compact_chart = {
+							blockoverride "datamodel" {
+								datamodel = "[MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_import_markets')]"
+							}
+
+							blockoverride "show_more_button_visibility" {
+								visible = "[GreaterThan_int32(GetDataModelSize(MarketPanel.GetMarket.GetOwner.MakeScope.GetList('te_tp_import_markets')), '(int32)3')]"
+							}
+
+							blockoverride "heading" {
+								raw_text = "#title @market_imports! Import Partners#!"
+							}
+
+							blockoverride "tooltip" {
+								tooltipwidget = {
+									RegularTooltip_TE_TradePartnerGoods = {
+										datacontext = "[Scope.GetMarket.GetOwner]"
+										datacontext = "[MarketPanel.GetMarket]"
+									}
+								}
+							}
+
+							blockoverride "pieslice" {
+								value = "[FixedPointToFloat(GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_imports_from_target'))]"
+							}
+
+							blockoverride "color" {
+								color = "[Scope.GetMarket.GetOwner.GetMapColor]"
+							}
+
+							blockoverride "pie_item_goto_button" {
+								button = {
+									using = clean_button
+									size = { 100% 100% }
+									onclick = "[InformationPanelBar.OpenMarketPanel(Scope.GetMarket.Self)]"
+								}
+							}
+
+							blockoverride "leftside_info" {
+								visible = no
+							}
+
+							blockoverride "rightside1_info" {
+								text = "[Scope.GetMarket.GetOwner.GetFlagTextIcon] [GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', Scope.GetMarket.MakeScope).ScriptValue('gui_imports_from_target')|v0]"
 							}
 
 							blockoverride "rightside2_info" {

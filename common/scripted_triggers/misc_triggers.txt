@@ -257,3 +257,36 @@ te_target_economically_subordinate = {
 		economic_dependence = { target = root value > 3 }
 	}
 }
+
+# True if ruler aptitude traits (admin / diplo / military, common/character_traits/
+# ruler_aptitude_traits.txt) exist in this game. Either rule turns them on
+# independently: Heir Education (rulers and heirs; heirs shaped by education) or
+# Universal Aptitude Traits (every adult, education not required). With both off, no character should carry them. Reads only game
+# rules, so it works from any scope.
+te_aptitude_traits_enabled = {
+	OR = {
+		has_game_rule = heir_education_enabled
+		has_game_rule = universal_aptitude_traits_enabled
+	}
+}
+
+# Character-scope. True if the character carries any of the 15 ruler aptitude traits.
+te_has_any_aptitude_trait = {
+	OR = {
+		has_trait = ruler_terrible_administrator
+		has_trait = ruler_poor_administrator
+		has_trait = ruler_average_administrator
+		has_trait = ruler_skilled_administrator
+		has_trait = ruler_exceptional_administrator
+		has_trait = ruler_terrible_diplomat
+		has_trait = ruler_poor_diplomat
+		has_trait = ruler_average_diplomat
+		has_trait = ruler_skilled_diplomat
+		has_trait = ruler_exceptional_diplomat
+		has_trait = ruler_terrible_commander
+		has_trait = ruler_poor_commander
+		has_trait = ruler_average_commander
+		has_trait = ruler_skilled_commander
+		has_trait = ruler_exceptional_commander
+	}
+}

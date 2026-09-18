@@ -130,6 +130,7 @@ global_fine_art_production = {
 global_prestige_total = {
 	value = 0
 	every_country = {
+		limit = { is_country_type = recognized }
 		add = prestige
 	}
 	min = 1
@@ -263,9 +264,13 @@ cultural_pull_from_art = {
 
 # Prestige share of global prestige (0-100 scale)
 country_prestige_share_pct = {
-	value = prestige
-	divide = global_var:ch_cached_prestige
-	multiply = 100
+	value = 0
+	if = {
+		limit = { is_country_type = recognized }
+		add = prestige
+		divide = global_var:ch_cached_prestige
+		multiply = 100
+	}
 }
 
 # Prestige absolute (scaled down to comparable range)

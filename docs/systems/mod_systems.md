@@ -502,6 +502,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `society_technology_events_on_action` — society tech events
 - `world_war_events_on_action` — world war events
 - `overbuild_protection_on_action` — prevents wonder overbuilding
+- `aptitude_traits_cleanup_on_action` — strips aptitude traits from characters the game rules don't allow them on
 
 **`on_yearly_pulse_state`** (Root = State):
 - `global_warming_update_on_action` — GHG emissions calculation
@@ -781,7 +782,18 @@ At JE start, heirs older than newborn receive pre-initialized investments:
 - **Age 15+:** +1-3 per trait (25/50/25) + random ideology lean ±1 + random IG lean
 
 ### Non-Educated Characters
-`assign_aptitude_traits_effect` assigns traits to characters who reach adulthood without education: 20% terrible, 30% poor, 35% average, 12% skilled, 3% exceptional. Generals/admirals get a better military distribution (5/15/30/35/15).
+`assign_aptitude_traits_effect` (yearly) assigns traits to adult characters who lack them: 20% terrible, 30% poor, 35% average, 12% skilled, 3% exceptional. Generals/admirals (including a ruler or heir who also holds a command) get a better military distribution (5/15/30/35/15). It skips an heir whose country has `je_heir_education` active — that heir's traits come from education.
+
+**Rule gating** (`te_aptitude_traits_enabled` in `misc_triggers.txt` = Heir Education **or** Universal Aptitude Traits):
+
+| Heir Education | Universal | Who has aptitude traits | Monthly `aptitude_traits_cleanup_effect` |
+|---|---|---|---|
+| off | off | nobody | strips every character |
+| on | off | rulers and heirs (roles overlap — a ruler who is also a general qualifies) | strips traits from anyone holding neither role but keeps their `ruler_*_tier` vars; `restore_aptitude_traits_effect` gives the same tiers back the month they return to power (the yearly pass also restores before rolling). Keeping traits for life was rejected: the traits also work outside the throne (`command_modifier`, `interest_group_modifier`), so a voted-out exceptional commander would become the only such general in a world of trait-less ones |
+| off | on | every adult (traits can't be shaped by education) | no-op |
+| on | on | every adult | no-op |
+
+Only the both-off state also clears the `ruler_*_tier` vars; in the Heir-Education-only state they are the memory that restoration reads. The traits' `possible` blocks carry the same trigger but can't enforce it — `possible` only filters random trait generation and `add_trait` ignores it, which is how rule-off games leaked traits to every ruler after #183 un-wrapped the effect.
 
 ### Simulation
 `sim_heir_education.py` — Monte Carlo simulation (20,000 runs per scenario) that validates the probability distributions. Key scenarios: newborn with 1-3 focuses, adult heirs, neglected education, intelligence impact analysis. Run this to tune parameters before changing thresholds.
@@ -1135,19 +1147,19 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | `world_war_rule` | `world_war_enabled` | **disabled** | World war escalation, related JEs |
 | `cultural_hegemony_rule` | `cultural_hegemony_enabled` | enabled | Cultural pull calculation, hegemony JE, hegemony on-action |
 | `covert_warfare_rule` | `covert_warfare_enabled` | enabled | Cyber operations, digital sovereignty JE, all 4 cyber diplomatic actions |
-| `heir_education_rule` | `heir_education_enabled` | enabled | Heir education JE and focus modifiers |
+| `heir_education_rule` | `heir_education_enabled` | **disabled** | Heir education JE and focus modifiers; aptitude traits for rulers and heirs |
 | `united_nations_rule` | `united_nations_enabled` | enabled | UN JE, vote events, international institutions |
 | `nuclear_weapons_rule` | `nuclear_weapons_enabled` | enabled | Nuclear program JE, nuclear strike events, disarmament treaty |
 | `decolonization_rule` | `decolonization_enabled` | enabled | Decolonization events and colonial collapse absorption |
 | `space_race_rule` | `space_race_enabled` | enabled | Space race JE, satellite/moon/interplanetary events |
 | `social_movements_rule` | `social_movements_enabled` | enabled | 8 social movement JEs and associated events |
-| `universal_aptitude_traits_rule` | `universal_aptitude_traits_enabled` | **disabled** | Assigns admin/diplo/military aptitude traits to ALL adult characters instead of only rulers/politicians/agitators/generals/admirals |
+| `universal_aptitude_traits_rule` | `universal_aptitude_traits_enabled` | **disabled** | Assigns admin/diplo/military aptitude traits to ALL adult characters instead of only rulers and heirs — works with Heir Education off too. With both rules off, no aptitude traits at all |
 
 **Gating pattern:** Each rule sets a flag checked via `has_game_rule = <flag>`:
 - **Journal entries:** `is_shown_when_inactive = { has_game_rule = X_enabled }`
 - **On-actions:** Early `return = yes` if `NOT = { has_game_rule = X_enabled }`
 - **Diplomatic actions:** `potential = { has_game_rule = X_enabled ... }`
-- **Trait assignment (aptitude):** `limit = { OR = { is_ruler = yes ... has_game_rule = universal_aptitude_traits_enabled } }`
+- **Trait assignment (aptitude):** `limit = { te_aptitude_traits_enabled = yes  OR = { has_game_rule = universal_aptitude_traits_enabled  has_role_of_type = ruler  has_role_of_type = heir } }`
 
 **Localization:** Rule names, option labels, and descriptions in `te_game_rules_l_english.yml`. Each rule has 5 keys: `rule_X_rule`, `setting_X_enabled`, `setting_X_enabled_desc`, `setting_X_disabled`, `setting_X_disabled_desc`.
 

@@ -77,9 +77,7 @@ pollution_generation_mult_effect = {
 
 cheaty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_law_enactment_speed_mult = 5
-	country_law_enactment_success_add = 1
-	country_monthly_loyalists_add = 0.1
+	country_tax_income_add = 50000
 }
 
 nuclear_weapon_program_funding = {

@@ -1481,6 +1481,8 @@ Key pattern: `remove_modifier` + `add_modifier` with `multiplier` calculated fro
 
 When adding a new tier to a mutually exclusive trait group (e.g., adding "terrible" tier to the ruler_poor/average/skilled/exceptional series), EVERY existing trait's `replace = { ... }` block must be updated to include the new trait. Otherwise two traits from the same group can coexist on a character. The `replace` list causes the engine to automatically remove any listed trait when the new one is added.
 
+**A trait's `possible` block does not gate `add_trait`.** `possible` only decides whether the trait is a valid *random* pick (vanilla `common/character_traits/character_traits.md`: "Does NOT impact the validity of the trait once it's acquired"), and scripted `add_trait` ignores it entirely. Putting `has_game_rule = X_enabled` in `possible` therefore does nothing for script-granted traits — gate the effect that calls `add_trait`. The ruler aptitude traits had `has_game_rule = heir_education_enabled` in every `possible` while an ungated yearly `add_trait` sweep handed all three to every ruler in rule-off games. Characters keep a trait whose `possible` later fails, so fixing the gate needs a removal pass for existing saves (`aptitude_traits_cleanup_effect`).
+
 ## `character_*` Modifiers in Country Scope (Tech, Laws, etc.)
 
 **Status (post-1.13):** `character_*` modifiers in country-scope `modifier = { ... }` blocks (techs, laws, INJECTed laws, power bloc `member_modifier` / `leader_modifier`, country-scope static modifiers) **work** — the engine cascades them to every character belonging to the country. Verified empirically with `character_popularity_add` from a tech.

@@ -44,19 +44,14 @@ covert_op_create = {
 	create_container = {
 		tags = { iw_op iw_op_$TYPE$ }
 		parent = scope:iw_operator
-		# Saved both ways on purpose. Neither placement is verified in-game, and
-		# if the scope stays unset, the container never reaches iw_ops and the
-		# monthly sync creates a duplicate. Remove one only after checking that
-		# `list_containers iw_op` in the console matches the covert pact count.
 		save_scope_as = iw_new_op
-		on_created = {
-			set_variable = { name = iw_target value = $TARGET$ }
-			set_variable = { name = iw_duration value = 0 }
-			save_scope_as = iw_new_op
-		}
 	}
 	if = {
 		limit = { exists = scope:iw_new_op }
+		scope:iw_new_op = {
+			set_variable = { name = iw_target value = $TARGET$ }
+			set_variable = { name = iw_duration value = 0 }
+		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 	}
 }

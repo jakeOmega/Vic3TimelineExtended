@@ -3720,6 +3720,8 @@ company_bayer = {
 	preferred_headquarters = { STATE_RHINELAND }
 	building_types = {
 		building_chemical_plant
+		building_synthetics_plant
+		building_synthetics_plant_silk
 		building_synthetics_plant_biomass
 		building_bayer_leverkusen_plant
 	}
