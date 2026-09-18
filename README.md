@@ -64,7 +64,7 @@ Thirteen mod systems can be turned on or off at game setup. Defaults below; full
 | `global_warming_rule` | enabled | CO₂ tracking, climate JE, warming modifiers |
 | `cultural_hegemony_rule` | enabled | Soft-power JE and on-action |
 | `covert_warfare_rule` | enabled | Cyber operations, digital sovereignty JE, 9 covert diplomatic actions |
-| `heir_education_rule` | enabled | Heir education JE and focus modifiers |
+| `heir_education_rule` | **disabled** | Heir education JE and focus modifiers; also turns on aptitude traits for rulers and heirs |
 | `united_nations_rule` | enabled | UN JE, vote events, specialized agencies |
 | `nuclear_weapons_rule` | enabled | Nuclear program JE, strike events, nuclear-disarmament treaty article |
 | `decolonization_rule` | enabled | Decolonization events, colonial-collapse absorption |
@@ -72,7 +72,7 @@ Thirteen mod systems can be turned on or off at game setup. Defaults below; full
 | `social_movements_rule` | enabled | 8 social-movement JEs and event chains |
 | `world_war_rule` | **disabled** | World War JE leadup → active → post-war lifecycle |
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
-| `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers/politicians/agitators/officers |
+| `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
 
 Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
 
