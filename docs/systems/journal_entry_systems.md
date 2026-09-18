@@ -517,15 +517,15 @@ Suspension durations are literals, not script values: `set_variable`'s `days` ar
 
 | Loss | Site | Amount |
 |---|---|---|
-| Programme abandoned before 24 months | `common/scripted_effects/un_standing_effects.txt:213` (`un_standing_program_tick`, counter-discard branch) | 2 |
-| Undermining the order | `common/scripted_effects/un_standing_effects.txt:231` (`un_standing_undermine_tick`) | 0.15/month |
+| Programme abandoned before 24 months | `common/scripted_effects/un_standing_effects.txt:217` (`un_standing_program_tick`, counter-discard branch) | 2 |
+| Undermining the order | `common/scripted_effects/un_standing_effects.txt:235` (`un_standing_undermine_tick`) | 0.15/month |
 | Censured by the Assembly | `events/un_vote_events.txt:2239` (`un_vote.2`, condemn passed, not vetoed) | 8 |
 | — having accepted the censure | `events/un_vote_events.txt:2248` | 3 |
 | Rebuked (vetoed censure, graduated form) | `events/un_vote_events.txt:2280` | 3 |
 | Sanctioned | `events/un_vote_events.txt:2532` | 6 |
 | — having accepted the sanctions | `events/un_vote_events.txt:2538` | 3 |
 | Partial sanctions (vetoed form) | `events/un_vote_events.txt:2557` | 3 |
-| Defied a binding resolution | `events/un_vote_events.txt:2889` (`un_vote.3` option C) | 5 |
+| Defied a binding resolution | `events/un_vote_events.txt:2899` (`un_vote.3` option C) | 5 |
 | Sanctions busting | `events/un_events.txt:582` (`un_events.5` option C) | 5 |
 | Court defiance | `events/un_events.txt:1011` (`un_events.8` option C) | 5 |
 | Mandate violated / abandoned / complied-while-forfeit | `common/scripted_effects/un_mandate_effects.txt:268` (`un_mandate_on_violated`) | 12 **+ 10-year suspension** |
