@@ -47,6 +47,21 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Credit Expansion, Consumption Ceiling, Council Directive, Worker Buyout
 - Each has an enable/disable toggle pair. Modifiers use prefix `cooperative_*`.
 
+### Policy Dashboard (journal-entry widget)
+Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface; the scripted-button grid stays below them.
+
+- **File:** `gui/journal_entry_widgets/banking_dashboard_widget.gui`
+- **Handlers:** `common/scripted_guis/banking_dashboard_scripted_gui.txt`
+- **Shared helpers:** `common/scripted_triggers/banking_policy_triggers.txt` (`banking_possible_<button>`), `common/scripted_effects/banking_policy_effects.txt` (`banking_effect_<button>`), plus the `banking_tool_*_active` family in `market_triggers.txt`
+- **Display-only reads:** `banking_display_value_monthly_add`, `banking_display_momentum_monthly_add`, `banking_display_momentum_decay`, `banking_display_bubble_monthly_add`, `banking_display_points_free` in `extra_script_values.txt`
+
+Areas:
+1. **Current Conditions** — cycle phase (named from `banking_cycle_is_*`), momentum, bubble pressure, free intervention budget. Each tooltip explains the reading and lists its current drivers from the `banking_display_*` script values.
+2. **Active Policies** — one row per intervention currently in force, gated on `banking_tool_*_active` only (no economic-system gate), each with a working Disable action.
+3. **Available Interventions** — only the current economic system's policies, in collapsible categories. Ineligible policies stay visible but disabled, with the reason in the action tooltip.
+
+Editing rules: change a policy's cost, eligibility or effect in the **helper**, not in the button or the scripted GUI. Never delete a `scripted_button = …` line from `je_banking.txt` — those `ai_chance` blocks are the AI's only path to banking policy.
+
 **Budget system:** All tools spend from a shared `country_banking_intervention_max_add` pool. The JE's `progress_desc` shows the economy-appropriate label:
 - Market → "Free Intervention Points"
 - Command Economy → "Free Planning Budget"
@@ -58,7 +73,7 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - `banking_capital_controls_out` — removed when conditions normalize
 - **Command Economy modifiers** (`planning_*`): 8 mods applied by CE planning-tool buttons
 - **Cooperative modifiers** (`cooperative_*`): 8 mods applied by CW council-tool buttons
-- **Law-change cleanup:** `on_law_enactment_pass` → `te_banking_law_change_cleanup` (in `extra_on_actions.txt`) removes all economy-type-specific modifiers automatically when the economic law changes. CE → market removes `planning_*`; CW → market removes `cooperative_*`; market → CE/CW removes all 14 `banking_*` CB-tool modifiers.
+- **Law-change cleanup:** `on_law_enactment_pass` → `te_banking_law_change_cleanup` (in `extra_on_actions.txt`) removes all economy-type-specific modifiers automatically when the economic law changes. CE → market removes `planning_*`; CW → market removes `cooperative_*`; market → CE/CW removes all 14 `banking_*` CB-tool modifiers. The dashboard's Active Policies area deliberately does **not** apply an economic-system gate, so if that cleanup ever misses a case (a law swapped by something other than `on_law_enactment_pass`) the stale policy still shows up with a working Disable action.
 
 ### Events
 - `minor_events_timelineextended.6` — crash announcement (origin country)
