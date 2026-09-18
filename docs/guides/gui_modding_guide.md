@@ -1460,6 +1460,12 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 17. **Two `visible` properties on one widget is a bug, not a conjunction.** When a type instance needs to combine its own condition with one coming from a `blockoverride`, write a single `visible = "[And( A, B )]"` (vanilla: `gui/journal_entry.gui:670`). Multiple `onclick` lines on one button, by contrast, *are* ordinary vanilla and all run (`gui/panel_military.gui:715`, `gui/market_panel.gui:553`) — which is how an arm/confirm pair executes a scripted GUI and clears its `GetVariableSystem` flag in one click.
 
+18. **Script-built tooltip text prints a scope's own lines before its nested blocks' lines.** Confirmed in-game: in an `ExecuteTooltip` block, every `custom_tooltip` at the current scope renders first, then everything produced inside nested country-scope iterations (`every_in_list` over a country list, `every_country`, …). A "header, list, header, list" structure therefore renders as both headers on top and one undivided list below. Never put a header above a script-built country list: make each entry say which group it belongs to (`#G In favour#! — X` / `#R Opposed#! — X`), and where the structure really matters, use real GUI rows — one widget and one `ExecuteTooltip` call each — instead of one script-built block.
+
+19. **The engine already prefixes a country-scope tooltip line with that country's flag.** A `custom_tooltip` printed inside a country scope change gets a bullet and a flag for free, so adding `GetFlagTextIcon` inside that entry shows the flag twice. Lines printed at the *current* scope that merely reference a country through a saved scope (`SCOPE.sCountry('x')…`) get no automatic flag and still need the explicit one.
+
+20. **`JournalEntry.GetCountry.GetCustom('x')` works in JE widget loc** — confirmed in-game, alongside `.MakeScope.ScriptValue('x')` and `.MakeScope.Var('x')`.
+
 ---
 
 ## Patterns from Workshop Mods

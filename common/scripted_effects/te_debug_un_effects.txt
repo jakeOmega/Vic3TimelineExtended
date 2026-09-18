@@ -123,9 +123,11 @@ te_debug_un_set_standing = {
 #
 # Costs, cooldowns, the standing floor and the authority gate are all skipped:
 # this reaches straight past un_propose_*_possible into un_resolution_open.
-# Parameters: $PROPOSER$ = c:TAG, $TOPIC$ = condemn | sanctions | climate | ...
-#             $TARGET$   = c:TAG
-# Scope: country (the player; only used to find the proposer)
+# Parameters: $PROPOSER$ = a country scope or a tag (`scope:x`, `c:FRA`)
+#             $TOPIC$    = condemn | sanctions | climate | ...
+#             $TARGET$   = a country scope or a tag
+# Scope: country (the player; only used to reach the proposer)
+# Called from te_debug_un.1's options — there is no console `effect` command.
 te_debug_un_open_resolution = {
 	te_debug_un_clear_vote = yes
 	$PROPOSER$ = {
