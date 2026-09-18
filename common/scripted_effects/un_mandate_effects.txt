@@ -220,9 +220,19 @@ un_mandate_on_complied = {
 			}
 		}
 	}
-	# STANDING STAGE: award the actor standing here. v1 keeps beneficiary
-	# relations out because the beneficiary is always the actor itself; once
-	# un_mnd_beneficiary can differ, the relations/catalyst pair belongs here.
+	# ---- International standing ----
+	# A delivered commitment: the single largest one-off award in the system,
+	# paid exactly once because un_mandate_close has already cleared the
+	# actor's un_mandate_current index before calling this hook, so no path
+	# can re-enter for the same mandate. Diminishing returns apply inside
+	# un_standing_gain, so an already-Exemplary actor collects only a sliver.
+	var:un_mnd_actor ?= {
+		un_standing_gain = { AMOUNT = un_standing_mandate_complied_gain REASON = 6 }
+	}
+	# v1 keeps beneficiary relations out because the beneficiary is always the
+	# actor itself (un_propose_mandate_button sets un_res_mandate_beneficiary
+	# to the proposer). Once un_mnd_beneficiary can differ, the relations and
+	# diplomatic-catalyst pair belongs here, next to the standing award.
 }
 
 # Fires when the mandate ended in bad faith: a prohibited objective was taken,
@@ -243,9 +253,21 @@ un_mandate_on_violated = {
 			}
 		}
 	}
-	# STANDING STAGE: deduct standing here, and consider opening a condemnation
-	# resolution against the actor rather than applying un_condemned_modifier
-	# directly.
+	# ---- International standing ----
+	# Exceeding, abandoning or forfeiting an authorization is the system's
+	# canonical serious violation: the heaviest single loss AND a ten-year
+	# suspension of every positive tier benefit, so a country cannot simply
+	# out-earn a broken mandate with programme accrual. Paid exactly once per
+	# mandate, for the same reason the compliance hook is — un_mandate_close
+	# clears the actor's index before calling either.
+	#
+	# Still not opening a condemnation resolution from here: un_resolution_open
+	# takes the single General Assembly vote lock, and a violation detected
+	# from the monthly sweep could seize it from a vote already in session.
+	var:un_mnd_actor ?= {
+		un_standing_loss = { AMOUNT = un_standing_mandate_violated_loss REASON = 27 }
+		un_standing_suspend = { DAYS = 3650 }
+	}
 }
 
 # ============================================================================

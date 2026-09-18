@@ -1,0 +1,136 @@
+﻿# ============================================================================
+# UN INTERNATIONAL STANDING — TRIGGERS
+# ============================================================================
+# Every tier is derived from the single country variable un_standing; nothing
+# here caches a tier, and nothing outside
+# common/scripted_effects/un_standing_effects.txt writes the variable.
+#
+# SAVE COMPATIBILITY IS THE RULE HERE. A country that has never been a UN
+# member — and every country in a save made before this feature — simply has
+# no un_standing variable. Every read below is guarded by `has_variable`, and
+# the missing case reads as Neutral: no tier modifier, no gate failure.
+# The variable is seeded once, on a member's first monthly UN pulse.
+# ============================================================================
+
+# ---- Tiers ----
+# Mutually exclusive by construction; un_standing_tier_neutral is also the
+# answer for a country with no variable at all.
+
+# Scope: country
+un_standing_tier_exemplary = {
+	has_variable = un_standing
+	var:un_standing >= un_standing_tier_exemplary_floor
+}
+
+# Scope: country
+un_standing_tier_respected = {
+	has_variable = un_standing
+	var:un_standing >= un_standing_tier_respected_floor
+	var:un_standing < un_standing_tier_exemplary_floor
+}
+
+# Scope: country
+un_standing_tier_neutral = {
+	OR = {
+		NOT = { has_variable = un_standing }
+		AND = {
+			has_variable = un_standing
+			var:un_standing >= un_standing_tier_neutral_floor
+			var:un_standing < un_standing_tier_respected_floor
+		}
+	}
+}
+
+# Scope: country
+un_standing_tier_poor = {
+	has_variable = un_standing
+	var:un_standing >= un_standing_tier_poor_floor
+	var:un_standing < un_standing_tier_neutral_floor
+}
+
+# Scope: country
+un_standing_tier_disgraced = {
+	has_variable = un_standing
+	var:un_standing < un_standing_tier_poor_floor
+}
+
+# ---- Suspension ----
+
+# Whether the positive tier benefits are withheld regardless of the score.
+# Two sources, deliberately different in shape:
+#   - un_standing_suspended, a TIMED variable stamped by a single serious
+#     violation (a broken mandate, a permanent seat stripped by the Assembly).
+#     It runs out on its own.
+#   - sustained undermining, which is a state rather than an event: it lifts
+#     the month the country stops, because the counter is discarded then.
+# Negative tiers are unaffected — a suspension withholds rewards, it does not
+# also erase a penalty.
+# Scope: country
+un_standing_benefits_suspended = {
+	OR = {
+		has_variable = un_standing_suspended
+		AND = {
+			has_variable = un_standing_months_undermine
+			var:un_standing_months_undermine >= un_standing_undermine_suspend_months
+		}
+	}
+}
+
+# ---- Which ongoing programmes are actually running ----
+# One trigger per programme, so the monthly tick can ask "is this programme
+# genuinely under way" rather than "is its marker present".
+#
+# The distinction is not academic for the two programmes that carry a separate
+# GDP-scaled cost modifier. un_vote_apply_resolution_compliance (un_vote.3)
+# pledges a country to peacekeeping by adding ONLY
+# un_peacekeeping_contributor_modifier — un_vote.2 already ran its levy before
+# un_vote.3 fires, so the pledger carries no un_peacekeeping_contributor_cost
+# until the NEXT request resolution carries. A pledge that costs nothing yet
+# must not start a standing clock, or a free marker would quietly accrue; and
+# when un_vote.2's failed/vetoed branches revoke exactly those cost-free
+# markers, no clock should be discarded and no early-exit charge levied for an
+# exit the member never chose. Requiring the cost closes both.
+#
+# The other three programmes have no separate cost modifier — their marker IS
+# the cost bundle (un_champion_order_cost is literally named for it) — so
+# marker presence is the whole answer.
+# Scope: country
+
+un_standing_program_active_peacekeeping = {
+	je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+	je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost }
+}
+
+un_standing_program_active_development = {
+	je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+	je:je_united_nations ?= { has_modifier = un_development_contributor_cost }
+}
+
+un_standing_program_active_human_rights = {
+	je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+}
+
+un_standing_program_active_arms_control = {
+	je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+}
+
+un_standing_program_active_champion = {
+	je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+}
+
+# ---- Gates ----
+
+# Whether the scoped country's standing is at least $VALUE$. A country with no
+# standing variable passes: the gate is there to bar a member that has ruined
+# its record, not to bar everyone a save migration has not reached yet.
+# Parameters: $VALUE$ = threshold (a number or a script value)
+# Scope: country
+un_standing_at_least = {
+	OR = {
+		NOT = { has_variable = un_standing }
+		AND = {
+			has_variable = un_standing
+			var:un_standing >= $VALUE$
+		}
+	}
+}

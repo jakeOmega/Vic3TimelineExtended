@@ -3063,6 +3063,52 @@ un_vote_failure_penalty = {
 	country_influence_mult = -0.05
 }
 
+# ---- International Standing Tiers ----
+# One modifier per tier of the un_standing country variable, applied at country
+# scope and swapped only on a tier change by un_standing_refresh_tier_modifier
+# (common/scripted_effects/un_standing_effects.txt) — the system's single
+# refresh site. Neutral (40-59) carries none.
+#
+# Scale, deliberately modest against what the mod already grants:
+#   country_diplomatic_reputation_add — law_war_crimes_forbidden +2,
+#     law_humanitarian_regulations +4, law_limited_war +6, law_total_war -20,
+#     principle_multilateral_institutions +5 per level, mandate_system_modifier
+#     +5. A top-tier +4 is one good law, not a new pillar.
+#   country_infamy_decay_mult — un_condemnation_leader_modifier +0.15,
+#     un_arms_control_participant_modifier +0.10, un_condemned_modifier -0.20,
+#     vanilla diplomatic_mitigation +0.25. A top-tier +0.10 sits below every
+#     one of those.
+#   country_improve_relations_speed_mult — un_member_modifier already grants
+#     +0.10, un_membership_benefits_modifier another +0.10. The Exemplary +0.05
+#     is a quarter of what membership itself is worth.
+# No tier grants prestige, influence or leverage: those are the UN membership
+# and Security Council modifiers' territory, and standing must not quietly
+# become a second copy of them.
+
+un_standing_exemplary_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 4
+	country_infamy_decay_mult = 0.10
+	country_improve_relations_speed_mult = 0.05
+}
+
+un_standing_respected_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 2
+	country_infamy_decay_mult = 0.05
+}
+
+un_standing_poor_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_reputation_add = -2
+}
+
+un_standing_disgraced_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_reputation_add = -4
+	country_infamy_decay_mult = -0.10
+}
+
 # ---- Formation Event Modifiers ----
 
 un_founding_member_modifier = {

@@ -573,6 +573,173 @@ un_chamber_mandates_block = {
 	}
 }
 
+# ============================================================================
+# INTERNATIONAL STANDING
+# ============================================================================
+# Our own national record in the organisation, rendered under the membership
+# line of the chamber's status panel. Same contract as everything else in this
+# file: read-only, nothing but custom_tooltip lines and trigger evaluation.
+# No country other than the scoped one is referenced anywhere below, so there
+# is nothing here that an annexation can break.
+#
+# The score, the tier, the suspension state and the year's accrual are all read
+# live off the one country variable and the script values over it
+# (common/script_values/un_standing_values.txt) — nothing is cached for
+# display, and a member that has not yet had its first pulse simply reads as
+# the neutral tier.
+
+# The tier we sit in, with the score. Mirrors the tier triggers in
+# common/scripted_triggers/un_standing_triggers.txt in the same order the
+# modifier refresh applies them, so the panel cannot describe a tier the
+# refresh would not grant.
+# Scope: country
+un_standing_tier_line = {
+	if = {
+		# A member whose first monthly pulse has not run yet (it just joined,
+		# or the save predates the feature). Handled first because it is the
+		# one case where the score itself cannot be printed.
+		limit = { NOT = { has_variable = un_standing } }
+		custom_tooltip_no_bullet = je_un_standing_tier_unrated
+	}
+	else_if = {
+		limit = { un_standing_tier_exemplary = yes }
+		custom_tooltip_no_bullet = je_un_standing_tier_exemplary
+	}
+	else_if = {
+		limit = { un_standing_tier_respected = yes }
+		custom_tooltip_no_bullet = je_un_standing_tier_respected
+	}
+	else_if = {
+		limit = { un_standing_tier_poor = yes }
+		custom_tooltip_no_bullet = je_un_standing_tier_poor
+	}
+	else_if = {
+		limit = { un_standing_tier_disgraced = yes }
+		custom_tooltip_no_bullet = je_un_standing_tier_disgraced
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_standing_tier_neutral
+	}
+}
+
+# What the current tier is actually doing to us, quoted from the static
+# modifier's own name and description rather than restated with numbers here,
+# so this line can never drift from common/static_modifiers/extra_modifiers.txt.
+# Suspension is checked first: while it holds, a positive tier grants nothing
+# at all, and saying otherwise would be a lie the modifier list would expose.
+# Scope: country
+un_standing_effects_line = {
+	if = {
+		limit = {
+			un_standing_benefits_suspended = yes
+			OR = {
+				un_standing_tier_exemplary = yes
+				un_standing_tier_respected = yes
+			}
+		}
+		custom_tooltip_no_bullet = je_un_standing_effects_withheld
+	}
+	else_if = {
+		limit = { un_standing_tier_exemplary = yes }
+		custom_tooltip_no_bullet = je_un_standing_effects_exemplary
+	}
+	else_if = {
+		limit = { un_standing_tier_respected = yes }
+		custom_tooltip_no_bullet = je_un_standing_effects_respected
+	}
+	else_if = {
+		limit = { un_standing_tier_poor = yes }
+		custom_tooltip_no_bullet = je_un_standing_effects_poor
+	}
+	else_if = {
+		limit = { un_standing_tier_disgraced = yes }
+		custom_tooltip_no_bullet = je_un_standing_effects_disgraced
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_standing_effects_neutral
+	}
+}
+
+# Why the benefits are withheld, when they are. The two sources are told apart
+# because they end differently: the timed one runs out on its own, the other
+# lifts the month we stop undermining.
+# Scope: country
+un_standing_suspension_line = {
+	if = {
+		limit = { has_variable = un_standing_suspended }
+		custom_tooltip_no_bullet = je_un_standing_suspended_violation
+	}
+	else_if = {
+		limit = {
+			has_variable = un_standing_months_undermine
+			var:un_standing_months_undermine >= un_standing_undermine_suspend_months
+		}
+		custom_tooltip_no_bullet = je_un_standing_suspended_undermining
+	}
+}
+
+# The most recent thing that moved the score. Reads the numeric code stamped by
+# un_standing_gain / un_standing_loss — a variable holds a number, not a
+# string, so the code is mapped back to words here. KEEP IN STEP with the
+# reason-code table at the top of
+# common/scripted_effects/un_standing_effects.txt.
+# Scope: country
+un_standing_reason_line = {
+	if = {
+		limit = { NOT = { has_variable = un_standing_last_reason } }
+		custom_tooltip_no_bullet = je_un_standing_reason_none
+	}
+	else_if = { limit = { var:un_standing_last_reason = 1 } custom_tooltip_no_bullet = je_un_standing_reason_1 }
+	else_if = { limit = { var:un_standing_last_reason = 2 } custom_tooltip_no_bullet = je_un_standing_reason_2 }
+	else_if = { limit = { var:un_standing_last_reason = 3 } custom_tooltip_no_bullet = je_un_standing_reason_3 }
+	else_if = { limit = { var:un_standing_last_reason = 4 } custom_tooltip_no_bullet = je_un_standing_reason_4 }
+	else_if = { limit = { var:un_standing_last_reason = 5 } custom_tooltip_no_bullet = je_un_standing_reason_5 }
+	else_if = { limit = { var:un_standing_last_reason = 6 } custom_tooltip_no_bullet = je_un_standing_reason_6 }
+	else_if = { limit = { var:un_standing_last_reason = 20 } custom_tooltip_no_bullet = je_un_standing_reason_20 }
+	else_if = { limit = { var:un_standing_last_reason = 21 } custom_tooltip_no_bullet = je_un_standing_reason_21 }
+	else_if = { limit = { var:un_standing_last_reason = 22 } custom_tooltip_no_bullet = je_un_standing_reason_22 }
+	else_if = { limit = { var:un_standing_last_reason = 23 } custom_tooltip_no_bullet = je_un_standing_reason_23 }
+	else_if = { limit = { var:un_standing_last_reason = 24 } custom_tooltip_no_bullet = je_un_standing_reason_24 }
+	else_if = { limit = { var:un_standing_last_reason = 25 } custom_tooltip_no_bullet = je_un_standing_reason_25 }
+	else_if = { limit = { var:un_standing_last_reason = 26 } custom_tooltip_no_bullet = je_un_standing_reason_26 }
+	else_if = { limit = { var:un_standing_last_reason = 27 } custom_tooltip_no_bullet = je_un_standing_reason_27 }
+	else_if = { limit = { var:un_standing_last_reason = 28 } custom_tooltip_no_bullet = je_un_standing_reason_28 }
+	else_if = { limit = { var:un_standing_last_reason = 29 } custom_tooltip_no_bullet = je_un_standing_reason_29 }
+	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
+}
+
+# The whole standing block, as it appears under the membership line.
+# Non-members get one line: standing is a record of membership, and a country
+# outside the organisation is neither earning nor spending it.
+# Scope: country
+un_standing_status_block = {
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		un_standing_tier_line = yes
+		un_standing_suspension_line = yes
+		un_standing_effects_line = yes
+		if = {
+			limit = { has_variable = un_standing }
+			custom_tooltip_no_bullet = je_un_standing_year_budget
+			un_standing_reason_line = yes
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_standing_nonmember
+	}
+}
+
+# "How standing works", behind its own collapsed toggle in the widget. Plain
+# language, and deliberately the ONE place the tuning figures are restated in
+# words — see the header of common/script_values/un_standing_values.txt.
+# Scope: country
+un_standing_help_block = {
+	custom_tooltip_no_bullet = je_un_standing_help_intro
+	custom_tooltip_no_bullet = je_un_standing_help_sources
+	custom_tooltip_no_bullet = je_un_standing_help_losses
+	custom_tooltip_no_bullet = je_un_standing_help_limits
+}
+
 # The case the propose button would table if pressed right now. Calls the very
 # effect the button calls (un_mandate_select_case), so the preview cannot drift
 # from the proposal: both leave the same two temporary scopes and neither

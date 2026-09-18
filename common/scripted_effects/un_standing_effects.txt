@@ -1,0 +1,354 @@
+﻿# ============================================================================
+# UN INTERNATIONAL STANDING — THE ONLY WRITERS OF un_standing
+# ============================================================================
+# Standing is ONE bounded country variable, `un_standing`, on the 0-100 scale.
+# It is a national record of what a member has delivered and complied with —
+# distinct from global_var:un_authority, which measures the institution itself
+# and is untouched by anything in this file.
+#
+#   un_standing                       the score. Written ONLY by
+#                                     un_standing_gain / un_standing_loss /
+#                                     un_standing_init below.
+#   un_standing_last_reason           numeric code of the most recent change,
+#                                     for the chamber panel (codes below)
+#   un_standing_suspended             TIMED. While it exists, positive tier
+#                                     benefits are withheld.
+#   un_standing_year_months           rolling-year pulse counter (0-11)
+#   un_standing_year_gain             nominal programme accrual booked this
+#                                     rolling year (the yearly cap)
+#   un_standing_months_peacekeeping   continuous months of each ongoing
+#   un_standing_months_development    programme. Discarded the month the
+#   un_standing_months_human_rights   programme ends, which is what makes
+#   un_standing_months_arms_control   enable -> disable -> enable worthless.
+#   un_standing_months_champion
+#   un_standing_months_undermine      continuous months spent undermining
+#
+# Tuning: common/script_values/un_standing_values.txt (every number, once).
+# Tiers and gates: common/scripted_triggers/un_standing_triggers.txt.
+#
+# REASON CODES (kept in step with un_standing_reason_line below and the
+# je_un_standing_reason_* loc keys):
+#    1 sustained programme contributions      20 programme abandoned early
+#    2 humanitarian aid delivered             21 undermining the organisation
+#    3 peacekeepers deployed                  22 condemned by the Assembly
+#    4 contribution to a UN request           23 rebuked by the Assembly
+#    5 complied with a binding decision       24 sanctioned by the Assembly
+#    6 an authorized mandate fulfilled        25 partially sanctioned
+#                                             26 defied a binding decision
+#                                             27 an authorization broken
+#                                             28 withdrew from the UN
+#                                             29 stripped of a permanent seat
+#
+# OLD SAVES: nothing here assumes any of these variables exist. A member is
+# seeded with the neutral value on its first monthly UN pulse; every other
+# country simply has no standing, and both the gain and the loss helpers are
+# no-ops until the variable exists. That is deliberate — it keeps standing a
+# record of UN membership rather than a score every country in the world
+# silently carries.
+# ============================================================================
+
+# ---- The three writers ----
+
+# Seed a member that has none. Called from the member branch of the monthly
+# pulse, and nowhere else: a country that has never joined has no standing,
+# and a country that has left keeps the score it walked out with (see
+# "leaving" in the docs — frozen, not reset, so a disgraced member cannot
+# launder its record by resigning and rejoining).
+# Scope: country
+un_standing_init = {
+	if = {
+		limit = { NOT = { has_variable = un_standing } }
+		set_variable = { name = un_standing value = un_standing_neutral_start }
+	}
+}
+
+# Award standing. $AMOUNT$ is the NOMINAL award; diminishing returns scale it
+# down as standing rises (un_standing_gain_scale), so the same delivery is
+# worth full value to a middling member and a tenth of it at the ceiling.
+# No-op for a country with no standing variable.
+# Parameters: $AMOUNT$ = nominal points (number or script value, >= 0)
+#             $REASON$ = reason code (see the table above)
+# Scope: country
+un_standing_gain = {
+	if = {
+		limit = { has_variable = un_standing }
+		change_variable = {
+			name = un_standing
+			add = {
+				value = $AMOUNT$
+				multiply = un_standing_gain_scale
+			}
+		}
+		un_standing_clamp = yes
+		set_variable = { name = un_standing_last_reason value = $REASON$ }
+	}
+}
+
+# Deduct standing. Losses are NOT scaled by diminishing returns: a violation
+# costs what it costs wherever the offender stands, which is what stops a
+# country banking standing and then spending it on bad faith cheaply.
+# No-op for a country with no standing variable.
+# Parameters: $AMOUNT$ = points (number or script value, >= 0)
+#             $REASON$ = reason code (see the table above)
+# Scope: country
+un_standing_loss = {
+	if = {
+		limit = { has_variable = un_standing }
+		change_variable = {
+			name = un_standing
+			subtract = $AMOUNT$
+		}
+		un_standing_clamp = yes
+		set_variable = { name = un_standing_last_reason value = $REASON$ }
+	}
+}
+
+# Hold the score inside [un_standing_min, un_standing_max]. change_variable has
+# no clamp argument, so this is applied straight after every write — the same
+# shape as the un_authority clamp in un_global_authority_on_action.
+# Scope: country (expects un_standing to exist)
+un_standing_clamp = {
+	if = {
+		limit = { var:un_standing > un_standing_max }
+		set_variable = { name = un_standing value = un_standing_max }
+	}
+	else_if = {
+		limit = { var:un_standing < un_standing_min }
+		set_variable = { name = un_standing value = un_standing_min }
+	}
+}
+
+# Withhold the positive tier benefits for $DAYS$ days. Called only from the
+# serious-violation sites (a broken mandate; a permanent seat stripped by the
+# Assembly). Re-stamping refreshes the clock rather than stacking.
+# Parameters: $DAYS$ = duration in days (a literal; set_variable's `days`
+#             argument is not documented to take a script value)
+# Scope: country
+un_standing_suspend = {
+	set_variable = { name = un_standing_suspended days = $DAYS$ }
+}
+
+# ============================================================================
+# THE MONTHLY PULSE
+# ============================================================================
+# One entry point, called once from je_united_nations' on_monthly_pulse. It is
+# the single refresh site for the tier modifier (CLAUDE.md: "give each modifier
+# exactly one refresh site"), and the only place programme accrual happens.
+# Identical for the player and the AI — there is no is_ai branch anywhere in
+# the standing system.
+# Scope: country (any holder of je_united_nations)
+un_standing_country_pulse = {
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		un_standing_init = yes
+		un_standing_year_rollover = yes
+		# Undermining first, so that a member who is both undermining and
+		# running a programme shows the programme as its latest reason.
+		un_standing_undermine_tick = yes
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_peacekeeping COUNTER = un_standing_months_peacekeeping }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_development COUNTER = un_standing_months_development }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_human_rights COUNTER = un_standing_months_human_rights }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_arms_control COUNTER = un_standing_months_arms_control }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_champion COUNTER = un_standing_months_champion }
+		un_standing_program_award = yes
+	}
+	else = {
+		# Not (or no longer) a member: drop the duration counters without
+		# charging for them. Walking out is charged once, by un_leave_button;
+		# billing it again per programme would make leaving ruinous rather
+		# than costly. The score itself is left frozen.
+		un_standing_clear_counters = yes
+	}
+	un_standing_refresh_tier_modifier = yes
+}
+
+# Advance the rolling year and reset the programme budget every twelfth pulse.
+# Scope: country
+un_standing_year_rollover = {
+	if = {
+		limit = { NOT = { has_variable = un_standing_year_months } }
+		set_variable = { name = un_standing_year_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = un_standing_year_gain } }
+		set_variable = { name = un_standing_year_gain value = 0 }
+	}
+	change_variable = { name = un_standing_year_months add = 1 }
+	if = {
+		limit = { var:un_standing_year_months >= un_standing_months_per_year }
+		set_variable = { name = un_standing_year_months value = 0 }
+		set_variable = { name = un_standing_year_gain value = 0 }
+	}
+}
+
+# One ongoing programme's monthly tick. While the programme runs, its
+# continuous-month counter advances. The month it ends, the counter is
+# DISCARDED — restarting the programme begins again from zero, which is the
+# whole anti-toggle rule — and if it had not yet run the minimum, the early
+# exit is charged here.
+#
+# Charging from the pulse rather than from the withdraw buttons is deliberate:
+# it covers every exit path in one place (all five withdraw buttons and
+# anything added later), it needs no edit to the button effect blocks that
+# gen_un_button_descs.py generates tooltips from, and it treats the AI exactly
+# like the player. The trade-off is that the withdraw button's own tooltip does
+# not name the standing cost; the chamber's "How standing works" panel does.
+#
+# $ACTIVE$ is a trigger, NOT a bare marker test — see the
+# un_standing_program_active_* block in
+# common/scripted_triggers/un_standing_triggers.txt for why a cost-free
+# peacekeeping pledge must neither start a clock nor be charged for losing one.
+# Parameters: $ACTIVE$ = the programme's "genuinely running" trigger
+#             $COUNTER$ = this programme's continuous-month variable
+# Scope: country (a member)
+un_standing_program_tick = {
+	if = {
+		limit = { $ACTIVE$ = yes }
+		if = {
+			limit = { NOT = { has_variable = $COUNTER$ } }
+			set_variable = { name = $COUNTER$ value = 0 }
+		}
+		change_variable = { name = $COUNTER$ add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = $COUNTER$ }
+		if = {
+			limit = { var:$COUNTER$ < un_standing_program_min_months }
+			un_standing_loss = { AMOUNT = un_standing_early_withdrawal_loss REASON = 20 }
+		}
+		remove_variable = $COUNTER$
+	}
+}
+
+# Undermining the order is the mirror of a programme: a continuous state that
+# drains standing while it lasts, and suspends the benefits outright once it
+# has lasted un_standing_undermine_suspend_months.
+# Scope: country (a member)
+un_standing_undermine_tick = {
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		if = {
+			limit = { NOT = { has_variable = un_standing_months_undermine } }
+			set_variable = { name = un_standing_months_undermine value = 0 }
+		}
+		change_variable = { name = un_standing_months_undermine add = 1 }
+		un_standing_loss = { AMOUNT = un_standing_undermine_monthly_loss REASON = 21 }
+	}
+	else_if = {
+		limit = { has_variable = un_standing_months_undermine }
+		remove_variable = un_standing_months_undermine
+	}
+}
+
+# Award this month's programme accrual, book it against the rolling year's
+# nominal budget, and stop when the budget is spent.
+#
+# Ordering matters and is safe: un_standing_program_award_value depends on the
+# programme counters and on un_standing_year_gain, neither of which
+# un_standing_gain touches, so the second read below returns the same figure
+# the award used. Diminishing returns are applied inside un_standing_gain, so
+# what actually lands is at most the nominal figure booked here.
+# Scope: country (a member)
+un_standing_program_award = {
+	if = {
+		limit = { un_standing_program_award_value > 0 }
+		un_standing_gain = { AMOUNT = un_standing_program_award_value REASON = 1 }
+		change_variable = { name = un_standing_year_gain add = un_standing_program_award_value }
+	}
+}
+
+# Drop every duration counter. Called for a non-member; charges nothing.
+# Deliberately leaves un_standing, un_standing_last_reason, the rolling-year
+# variables and un_standing_suspended alone: leaving must not reset the record
+# or refund the year's budget.
+# Scope: country
+un_standing_clear_counters = {
+	if = { limit = { has_variable = un_standing_months_peacekeeping } remove_variable = un_standing_months_peacekeeping }
+	if = { limit = { has_variable = un_standing_months_development } remove_variable = un_standing_months_development }
+	if = { limit = { has_variable = un_standing_months_human_rights } remove_variable = un_standing_months_human_rights }
+	if = { limit = { has_variable = un_standing_months_arms_control } remove_variable = un_standing_months_arms_control }
+	if = { limit = { has_variable = un_standing_months_champion } remove_variable = un_standing_months_champion }
+	if = { limit = { has_variable = un_standing_months_undermine } remove_variable = un_standing_months_undermine }
+}
+
+# ============================================================================
+# THE TIER MODIFIER — ONE FAMILY, ONE REFRESH SITE
+# ============================================================================
+# Four discrete country-scoped static modifiers rather than one dynamically
+# scaled one: the effects are small enough that a continuous multiplier would
+# be unreadable in the modifier list, and a discrete tier is what the player is
+# actually told they have. Applied at COUNTRY scope (not on the journal entry)
+# so they show up in the country's own modifier list with their own name and
+# description.
+#
+# Swapped only when the tier actually changes — the has_modifier probe below
+# means an unchanged tier writes nothing at all, so the monthly pulse does not
+# churn the modifier list.
+#
+# Suspension withholds the two POSITIVE tiers only. A suspended Exemplary
+# member carries no tier modifier at all; a suspended Disgraced one still
+# carries its penalty.
+
+# Scope: country
+un_standing_clear_tier_modifiers = {
+	if = { limit = { has_modifier = un_standing_exemplary_modifier } remove_modifier = un_standing_exemplary_modifier }
+	if = { limit = { has_modifier = un_standing_respected_modifier } remove_modifier = un_standing_respected_modifier }
+	if = { limit = { has_modifier = un_standing_poor_modifier } remove_modifier = un_standing_poor_modifier }
+	if = { limit = { has_modifier = un_standing_disgraced_modifier } remove_modifier = un_standing_disgraced_modifier }
+}
+
+# THE single refresh site for the un_standing_*_modifier family. Called once
+# per country per month from un_standing_country_pulse, and from nowhere else.
+# Scope: country
+un_standing_refresh_tier_modifier = {
+	if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_standing_tier_exemplary = yes
+			NOT = { un_standing_benefits_suspended = yes }
+		}
+		if = {
+			limit = { NOT = { has_modifier = un_standing_exemplary_modifier } }
+			un_standing_clear_tier_modifiers = yes
+			add_modifier = { name = un_standing_exemplary_modifier }
+		}
+	}
+	else_if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_standing_tier_respected = yes
+			NOT = { un_standing_benefits_suspended = yes }
+		}
+		if = {
+			limit = { NOT = { has_modifier = un_standing_respected_modifier } }
+			un_standing_clear_tier_modifiers = yes
+			add_modifier = { name = un_standing_respected_modifier }
+		}
+	}
+	else_if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_standing_tier_poor = yes
+		}
+		if = {
+			limit = { NOT = { has_modifier = un_standing_poor_modifier } }
+			un_standing_clear_tier_modifiers = yes
+			add_modifier = { name = un_standing_poor_modifier }
+		}
+	}
+	else_if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_standing_tier_disgraced = yes
+		}
+		if = {
+			limit = { NOT = { has_modifier = un_standing_disgraced_modifier } }
+			un_standing_clear_tier_modifiers = yes
+			add_modifier = { name = un_standing_disgraced_modifier }
+		}
+	}
+	else = {
+		# Neutral, suspended-while-positive, or not a member.
+		un_standing_clear_tier_modifiers = yes
+	}
+}

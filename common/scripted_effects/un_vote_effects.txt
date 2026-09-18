@@ -473,6 +473,41 @@ un_apply_ratified_conventions = {
 	}
 }
 
+# Standing award for actually taking on a share of a peacekeeping deployment
+# or an aid programme the Assembly has already voted through. Called from the
+# two pledge branches of un_vote_apply_resolution_compliance below.
+#
+# WHY THIS IS THE DELIVERY SITE, AND WHY IT CANNOT PAY TWICE.
+# un_vote.2 (which levies the costs) iterates every country that *currently
+# carries* the contributor marker, so it sweeps up donors from earlier
+# resolutions and, for peacekeeping, every standing programme member as well —
+# awarding standing there would pay the same country on every future request.
+# The pledge is made HERE instead, in un_vote.3, which un_vote.2 fires exactly
+# once per member per resolution; an event runs exactly one option, and the two
+# options that reach this effect (A and B) are mutually exclusive by their own
+# triggers. So this runs at most once per country per resolution, and the
+# branch it sits in is the same one that books the contribution count.
+#
+# The relations gain is the "limited relations with aid recipients / mission
+# partners" case, implemented only where an existing site already knows both
+# countries: scope:un_vote_proposer is the country that asked for the aid or
+# the peacekeepers. One-off, never repeating, and skipped when the contributor
+# is the requester itself.
+# Expects: ROOT = the contributing country, scope:un_vote_proposer = requester.
+un_vote_standing_request_contribution = {
+	custom_tooltip = {
+		text = un_standing_contribution_tt
+		un_standing_gain = { AMOUNT = un_standing_request_contribution_gain REASON = 4 }
+	}
+	if = {
+		limit = {
+			exists = scope:un_vote_proposer
+			NOT = { THIS = scope:un_vote_proposer }
+		}
+		change_relations = { country = scope:un_vote_proposer value = un_standing_delivery_relations }
+	}
+}
+
 # Apply the residual (non-modifier) effects of complying with a passed UN
 # resolution: infamy reduction, power-bloc leverage, peacekeeping/aid contributor
 # pledges, and leader leverage on aid/peacekeeping. Per-topic treaty modifiers
@@ -525,6 +560,7 @@ un_vote_apply_resolution_compliance = {
 			set_variable = { name = un_peacekeeping_contribution_count value = 0 }
 		}
 		change_variable = { name = un_peacekeeping_contribution_count add = 1 }
+		un_vote_standing_request_contribution = yes
 	}
 	if = {
 		limit = {
@@ -541,6 +577,7 @@ un_vote_apply_resolution_compliance = {
 			set_variable = { name = un_aid_contribution_count value = 0 }
 		}
 		change_variable = { name = un_aid_contribution_count add = 1 }
+		un_vote_standing_request_contribution = yes
 	}
 
 	# Power bloc leader providing aid/peacekeeping: gain leverage over the recipient

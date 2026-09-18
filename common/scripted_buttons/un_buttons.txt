@@ -385,6 +385,16 @@ un_leave_button = {
 				is_decaying = yes
 			}
 		}
+		# International standing: walking out costs the record, once. The score
+		# itself is FROZEN rather than reset — resigning must not let a
+		# disgraced member launder its history by rejoining at the neutral
+		# value. The monthly pulse drops the programme duration counters
+		# without charging for them separately, so this is the only charge for
+		# leaving. Wrapped so the variable write is not tooltip noise.
+		custom_tooltip = {
+			text = un_standing_leave_tt
+			un_standing_loss = { AMOUNT = un_standing_leave_loss REASON = 28 }
+		}
 	}
 }
 
@@ -517,6 +527,20 @@ un_propose_mandate_button = {
 		custom_tooltip = {
 			text = un_mandate_cooldown_tt
 			NOT = { has_variable = un_mandate_proposal_cooldown }
+		}
+		# Standing floor, set at the Disgraced boundary (20). A member that has
+		# done nothing at all sits at the neutral 50, so this bars only a
+		# country whose record the Assembly has already wrecked — it cannot
+		# make the mandate unreachable for an ordinary member.
+		#
+		# Deliberately NOT added to un_mandate_actor_in_good_standing: that
+		# trigger is also read by un_mandate_still_valid, so a floor there
+		# would VOID a mandate already in the field the moment the actor's
+		# standing dipped — deleting a war the player is fighting over a score
+		# movement. The gate belongs on the proposal, not on the authorization.
+		custom_tooltip = {
+			text = un_mandate_standing_tt
+			un_standing_at_least = { VALUE = un_standing_mandate_floor }
 		}
 		custom_tooltip = {
 			text = un_mandate_case_tt

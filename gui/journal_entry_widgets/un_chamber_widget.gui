@@ -81,6 +81,35 @@ flowcontainer = {
 		}
 	}
 
+	# ---- How international standing works ----
+	# Collapsed by default like every other section here. The text never
+	# changes, and ExecuteTooltip re-renders it every frame the panel is
+	# visible, so there is no reason to keep it open. The score itself, its
+	# tier and this year's accrual are in the always-visible status panel
+	# above — this is only the explanation of where they come from.
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_standing_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_standing')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_standing'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_standing')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_standing')]"
+
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_standing_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
 	# ---- Recorded ballot of the resolution in session ----
 	un_chamber_section_header = {
 		blockoverride "left_text" {

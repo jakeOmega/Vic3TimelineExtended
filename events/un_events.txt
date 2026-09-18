@@ -416,6 +416,16 @@ un_events.4 = {
 		}
 		custom_tooltip = un_authority_change_plus_3
 		change_global_variable = { name = un_authority add = 3 }
+		# International standing: an actual deployment, not a pledge. Option B
+		# (observers only) is the token gesture and deliberately pays NOTHING —
+		# the whole point of standing is that only delivery counts. One payout
+		# per firing; the event is gated on the target not already carrying
+		# un_peacekeeping_deployed_modifier and on a five-year cooldown, and
+		# the relations gain with the host is already in this option.
+		custom_tooltip = {
+			text = un_standing_peacekeeping_delivered_tt
+			un_standing_gain = { AMOUNT = un_standing_peacekeeping_delivered_gain REASON = 3 }
+		}
 		change_relations = { country = scope:peacekeeping_target value = 20 }
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:peacekeeping_target }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -518,6 +528,14 @@ un_events.5 = {
 		}
 		custom_tooltip = un_authority_change_plus_3
 		change_global_variable = { name = un_authority add = 3 }
+		# International standing: enforcing a sanctions regime at cost to
+		# yourself is compliance with a binding decision, not mere agreement.
+		# One payout per firing of this event, which is gated by the
+		# un_sanctions_enforcer_modifier trigger and a five-year event cooldown.
+		custom_tooltip = {
+			text = un_standing_complied_tt
+			un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+		}
 		change_relations = { country = scope:sanctioned_country value = -20 }
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:sanctioned_country }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -556,6 +574,13 @@ un_events.5 = {
 		}
 		custom_tooltip = un_authority_change_minus_3
 		change_global_variable = { name = un_authority add = -3 }
+		# International standing: quietly trading through a sanctions regime is
+		# defiance of a binding decision, priced the same as refusing one
+		# outright in un_vote.3.
+		custom_tooltip = {
+			text = un_standing_defied_tt
+			un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
+		}
 		change_relations = { country = scope:sanctioned_country value = 10 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -752,6 +777,17 @@ un_events.7 = {
 		}
 		custom_tooltip = un_authority_change_plus_3
 		change_global_variable = { name = un_authority add = 3 }
+		# International standing: aid actually delivered, at a GDP-scaled cost.
+		# Option B (a token contribution) pays NOTHING — token donations must
+		# not generate standing at all, or the cheapest option would be the
+		# most efficient one. One payout per firing; the event is gated on not
+		# already carrying un_humanitarian_aid_modifier /
+		# un_humanitarian_token_modifier and on a five-year cooldown, and the
+		# relations gain with the recipient is already in this option.
+		custom_tooltip = {
+			text = un_standing_aid_delivered_tt
+			un_standing_gain = { AMOUNT = un_standing_aid_delivered_gain REASON = 2 }
+		}
 		change_relations = { country = scope:crisis_country value = 30 }
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:crisis_country }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -923,6 +959,15 @@ un_events.8 = {
 		}
 		custom_tooltip = un_authority_change_plus_3
 		change_global_variable = { name = un_authority add = 3 }
+		# International standing: accepting a ruling against yourself is
+		# compliance at a real cost. Option B (contest the jurisdiction) pays
+		# and costs nothing — arguing a case is legitimate. One payout per
+		# firing; the event is gated on carrying neither court modifier and on
+		# a five-year cooldown.
+		custom_tooltip = {
+			text = un_standing_complied_tt
+			un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+		}
 		ig_approval_effect = { IG = ig_armed_forces  MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -959,6 +1004,12 @@ un_events.8 = {
 		}
 		custom_tooltip = un_authority_change_minus_5
 		change_global_variable = { name = un_authority add = -5 }
+		# International standing: openly repudiating the court's jurisdiction,
+		# priced the same as any other defiance of a binding decision.
+		custom_tooltip = {
+			text = un_standing_defied_tt
+			un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
+		}
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}

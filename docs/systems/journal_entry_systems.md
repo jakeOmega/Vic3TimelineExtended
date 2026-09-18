@@ -293,6 +293,9 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 | `un_mandate_seq` | global | Counter behind each mandate's `un_mnd_seq` |
 | `un_mandate_registry` | global list | Every authorized military mandate, live and closed, capped at `un_mandate_registry_cap` (12) |
 | `un_mandate_current` | country | The actor's live mandate container — the "one at a time" rule and an O(1) index in one |
+| `un_standing` | country | 0-100 national record of delivered commitments and compliance — see § UN Standing |
+| `un_standing_last_reason` | country | numeric code of the most recent standing change, for the chamber panel |
+| `un_standing_suspended` | country | timed; while it exists the positive standing tiers grant nothing |
 | `un_agency_*` | global | Specialized agency flags (who, unesco, icj, unhrc, iaea, unep, unhcr, unoosa) |
 
 ### Buttons (17+)
@@ -448,6 +451,182 @@ Proposing needs: UN membership, `un_authority` ≥ 40, no live mandate of our ow
 **Veto = flat block.** `military_mandate` joins `reform` as a binding topic with no graduated form: there is no coherent weaker version of "you may go to war over this", so a veto blocks it outright and `un_vote.2` applies no effect. Vetoing one is deliberately **not** on the infamy-on-veto list (ICC / condemn / peacekeeping) — charging infamy for restraint would read as the system punishing peace.
 
 **AI.** `ai_strategy_un_mandate` is picked up only by a country that holds a live mandate, its `aggression` fires only at the named target, and `wargoal_weights` puts the authorized goal ahead of the alternatives. The AI faces exactly the player's gates: the war goal's `possible`, the play type's `possible` and `selectable_in_lens` all read the same mandate.
+
+### UN Standing (international standing)
+
+A member's own **record** in the organisation: what it has delivered and what it has complied with. Stage 2 of the mandates / standing / lobbying arc, built on the two hooks stage 1 left in `un_mandate_effects.txt`.
+
+Standing is **not** `global_var:un_authority`. Authority is one global number measuring how much the institution itself is worth; standing is a per-country number measuring how much *this* member is worth to it. Nothing in the standing system reads or writes `un_authority`, and nothing in the authority system reads standing.
+
+**Files:** `common/script_values/un_standing_values.txt` (every tuning number, once), `common/scripted_triggers/un_standing_triggers.txt` (tiers, suspension, the five `un_standing_program_active_*` definitions, the proposal gate), `common/scripted_effects/un_standing_effects.txt` (the only writers, the monthly pulse, the tier-modifier refresh), the four `un_standing_*_modifier` entries in `common/static_modifiers/extra_modifiers.txt`, the display block in `common/scripted_effects/un_chamber_display_effects.txt` + `common/scripted_guis/un_chamber_sguis.txt` + `gui/journal_entry_widgets/un_chamber_widget.gui`, plus the hook sites listed below.
+
+#### The score
+
+| | |
+|---|---|
+| Variable | `un_standing` — country, 0–100 |
+| Neutral seed | **50**, written once on a member's first monthly UN pulse |
+| Written by | `un_standing_gain = { AMOUNT REASON }`, `un_standing_loss = { AMOUNT REASON }`, and `un_standing_init` (seed only). **Nothing else writes it.** |
+| Clamped by | `un_standing_clamp`, called from both helpers straight after the write (`change_variable` has no clamp argument — same shape as the `un_authority` clamp) |
+| Reason | `un_standing_last_reason`, a numeric code stamped by both helpers; mapped back to words by `un_standing_reason_line` for the chamber panel. A variable holds a number, not a string, so the code table at the top of `un_standing_effects.txt` and the `je_un_standing_reason_*` keys must be kept in step. |
+
+**Both helpers are a no-op for a country with no `un_standing` variable.** That is what makes standing a record *of membership*: a country that has never joined has no standing and cannot acquire one by being censured, and every country in a save made before this feature simply has none until it next pulses as a member. It also removes any ordering dependency — `un_leave_button` can charge a loss without worrying about whether the variable exists.
+
+**Tiers** are derived from the one variable by scripted triggers; nothing caches a tier. A country with no variable reads as Neutral.
+
+| Tier | Range | Trigger |
+|---|---|---|
+| Disgraced | < 20 | `un_standing_tier_disgraced` |
+| Poor | 20–39 | `un_standing_tier_poor` |
+| Neutral | 40–59 | `un_standing_tier_neutral` (also the no-variable case) |
+| Respected | 60–79 | `un_standing_tier_respected` |
+| Exemplary | ≥ 80 | `un_standing_tier_exemplary` |
+
+#### Tuning table
+
+Every figure below is a script value in `common/script_values/un_standing_values.txt` and is defined exactly once. Two places restate them in words and must be edited alongside a re-tune: `je_un_standing_help_sources` / `_losses` / `_limits`, and the `un_standing_*_tt` **loss** tooltips. Gains are deliberately stated without a figure, because diminishing returns mean the delivered amount is almost never the nominal one.
+
+| Script value | Value | What it does |
+|---|---|---|
+| `un_standing_min` / `un_standing_max` | 0 / 100 | bounds |
+| `un_standing_neutral_start` | 50 | seed for a new member |
+| `un_standing_tier_poor_floor` … `_exemplary_floor` | 20 / 40 / 60 / 80 | tier boundaries |
+| `un_standing_dr_divisor` | 50 | gains × clamp((100 − standing)/50, floor, 1) |
+| `un_standing_dr_floor` | 0.1 | a gain is never worth less than a tenth of face value |
+| `un_standing_program_min_months` | 24 | continuous months before an ongoing programme pays anything |
+| `un_standing_program_monthly_gain` | 0.3 | nominal, per qualifying programme, per month |
+| `un_standing_program_yearly_cap` | 6 | nominal programme accrual per rolling 12 pulses, **across all five programmes together** |
+| `un_standing_months_per_year` | 12 | rolling-year length |
+| `un_standing_early_withdrawal_loss` | 2 | abandoning a programme before the minimum |
+| `un_standing_undermine_monthly_loss` | 0.15 | per month while undermining |
+| `un_standing_undermine_suspend_months` | 24 | sustained undermining suspends the benefits |
+| `un_standing_aid_delivered_gain` | 3 | real humanitarian aid delivered |
+| `un_standing_peacekeeping_delivered_gain` | 3 | a real peacekeeping deployment |
+| `un_standing_request_contribution_gain` | 2 | taking on a share of an aid/peacekeeping programme the Assembly voted through |
+| `un_standing_compliance_gain` | 2 | complying with a binding decision at a real cost |
+| `un_standing_mandate_complied_gain` | 6 | an authorized military mandate discharged as written |
+| `un_standing_delivery_relations` | 5 | one-off relations with the country that asked for the aid / peacekeepers |
+| `un_standing_mandate_violated_loss` | 12 | mandate violated, abandoned, or complied-while-forfeit |
+| `un_standing_defiance_loss` | 5 | refusing a binding resolution, sanctions busting, court defiance |
+| `un_standing_condemned_loss` | 8 | censured by the Assembly |
+| `un_standing_rebuked_loss` | 3 | non-binding rebuke (a vetoed censure); also an *accepted* censure |
+| `un_standing_sanctioned_loss` | 6 | placed under sanctions |
+| `un_standing_sanctioned_partial_loss` | 3 | partial sanctions; also *accepted* sanctions |
+| `un_standing_leave_loss` | 5 | withdrawing from the UN |
+| `un_standing_seat_stripped_loss` | 5 | a permanent seat voted away |
+| `un_standing_mandate_floor` | 20 | standing floor on the propose-mandate button |
+
+Suspension durations are literals, not script values: `set_variable`'s `days` argument is not documented to take one. 3650 days (10 years) for a broken mandate, 1825 (5 years) for a stripped seat.
+
+#### Sources — reward delivery, not toggling
+
+**Ongoing programmes.** Five of them. "Running" is a scripted trigger per programme — `un_standing_program_active_*` — not a bare marker test. Peacekeeping and development require **both** the marker and the GDP-scaled cost modifier on the journal entry (`un_peacekeeping_contributor_modifier` + `un_peacekeeping_contributor_cost`, `un_development_contributor_modifier` + `un_development_contributor_cost`); human rights, arms control and championing the order require only their marker (`un_human_rights_champion_modifier`, `un_arms_control_participant_modifier`, `un_champion_order_cost`), because that marker *is* the cost bundle. The distinction is load-bearing: `un_vote_apply_resolution_compliance` pledges a country to peacekeeping by adding only the marker — `un_vote.2`'s levy already ran before `un_vote.3` fires, so the pledger pays nothing until the *next* request carries — and a cost-free pledge must neither start a standing clock (a free marker accruing 0.3/month is exactly the token-for-rewards the brief forbids) nor be charged an early-exit fee when `un_vote.2`'s failed/vetoed branches revoke precisely those cost-free markers. Each programme is ticked by `un_standing_program_tick` from the monthly pulse into its own continuous-month counter (`un_standing_months_peacekeeping`, `…_development`, `…_human_rights`, `…_arms_control`, `…_champion`). A programme pays **nothing** until its counter reaches 24, and the counter is **discarded** the month the programme ends — so enable → disable → enable starts again from zero and yields nothing. Accrual is `count × 0.3` nominal per month, trimmed to what is left of the year's 6-point nominal budget (`un_standing_year_gain`, reset every twelfth pulse), and then scaled by diminishing returns inside `un_standing_gain`.
+
+**One-off deliveries.** Each is paid at the single site where the delivery actually happens, and none of them draws on the programme yearly cap — each is structurally single-payout behind its own multi-year cooldown, so there is nothing to farm. The cap exists to stop programme toggling, not to ration genuine deliveries.
+
+| Delivery | Site | Amount | Why it cannot pay twice |
+|---|---|---|---|
+| Humanitarian aid delivered | `events/un_events.txt:789` (`un_events.7` option A) | 3 | One option runs per event firing; the event's own trigger requires the country to carry neither `un_humanitarian_aid_modifier` nor `un_humanitarian_token_modifier`, and it has a five-year `cooldown`. Option B (a token contribution) pays **0** by design. |
+| Peacekeepers deployed | `events/un_events.txt:427` (`un_events.4` option A) | 3 | Same shape: one option per firing, five-year cooldown, and the target must not already carry `un_peacekeeping_deployed_modifier`. Option B (observers only) pays **0**. |
+| Share of a voted-through aid / peacekeeping programme | `common/scripted_effects/un_vote_effects.txt:560, 577` via `un_vote_standing_request_contribution` | 2 (+5 relations with the requester) | `un_vote.2` fires `un_vote.3` **once per member per resolution**; an event runs exactly one option, and the only two options that reach `un_vote_apply_resolution_compliance` (A and B) are mutually exclusive by their own triggers. It sits in the same branch that books `un_aid_contribution_count` / `un_peacekeeping_contribution_count`. |
+| Complied with a binding decision we voted against | `un_vote.3` option B, `events/un_vote_events.txt` | 2 | Same once-per-member-per-resolution argument. Gated on `un_resolution_is_binding` — yielding on a recommendation costs nothing, so it earns nothing — and **excluding `un_topic_peacekeeping_request`**, the one topic that is both binding and a pledge topic: `un_vote_apply_resolution_compliance` has just paid this same country the contribution award, and paying compliance on top would make a no-voter who complies worth twice a yes-voter doing the same thing. |
+| Enforced a sanctions regime | `events/un_events.txt:537` (`un_events.5` option A) | 2 | One option per firing; the event requires `un_sanctions_enforcer_modifier` and not `un_sanctions_enforcement_modifier`, plus a five-year cooldown. Option B (token compliance) pays **0**. |
+| Accepted a court ruling against us | `events/un_events.txt:969` (`un_events.8` option A) | 2 | One option per firing; the event requires neither court modifier be present, plus a five-year cooldown. Option B (contest the jurisdiction) pays and costs **0** — arguing a case is legitimate. |
+| Mandate discharged as written | `common/scripted_effects/un_mandate_effects.txt:230` (`un_mandate_on_complied`) | 6 | `un_mandate_close` clears the actor's `un_mandate_current` index **before** calling the hook, so no path can re-enter for the same mandate; the hook fires exactly once per mandate. |
+
+**Voting is never a delivery.** Voting with the majority, voting yes, and casting a veto all pay nothing. A veto is a lawful act of a permanent member and costs nothing either.
+
+**Relations gains** are implemented only where an existing site already knows both countries. That is the request-contribution site (the contributor and `scope:un_vote_proposer`, the country that asked) and the aid / peacekeeping events, which already grant +30 / +20 relations with the recipient in the vanilla-of-this-mod option body. The mandate beneficiary case is **not** implemented: `un_mnd_beneficiary` is always the actor in v1, and the documented gate for it stays where stage 1 left it, in `un_mandate_on_complied`.
+
+#### Losses
+
+| Loss | Site | Amount |
+|---|---|---|
+| Programme abandoned before 24 months | `common/scripted_effects/un_standing_effects.txt:217` (`un_standing_program_tick`, counter-discard branch) | 2 |
+| Undermining the order | `common/scripted_effects/un_standing_effects.txt:235` (`un_standing_undermine_tick`) | 0.15/month |
+| Censured by the Assembly | `events/un_vote_events.txt:2239` (`un_vote.2`, condemn passed, not vetoed) | 8 |
+| — having accepted the censure | `events/un_vote_events.txt:2248` | 3 |
+| Rebuked (vetoed censure, graduated form) | `events/un_vote_events.txt:2280` | 3 |
+| Sanctioned | `events/un_vote_events.txt:2532` | 6 |
+| — having accepted the sanctions | `events/un_vote_events.txt:2538` | 3 |
+| Partial sanctions (vetoed form) | `events/un_vote_events.txt:2557` | 3 |
+| Defied a binding resolution | `events/un_vote_events.txt:2899` (`un_vote.3` option C) | 5 |
+| Sanctions busting | `events/un_events.txt:582` (`un_events.5` option C) | 5 |
+| Court defiance | `events/un_events.txt:1011` (`un_events.8` option C) | 5 |
+| Mandate violated / abandoned / complied-while-forfeit | `common/scripted_effects/un_mandate_effects.txt:268` (`un_mandate_on_violated`) | 12 **+ 10-year suspension** |
+| Permanent seat voted away | `events/un_vote_events.txt:2175` (`un_vote.2`, expulsion passed) | 5 **+ 5-year suspension** |
+| Withdrawing from the UN | `common/scripted_buttons/un_buttons.txt:396` (`un_leave_button`) | 5, then **frozen** |
+
+**Early withdrawal is charged from the pulse, not from the withdraw buttons.** One site then covers every voluntary exit path — the four withdraw buttons, `un_stop_championing_button`, and anything added later — treats the AI exactly like the player, and needs no edit to the button effect blocks that `gen_un_button_descs.py` generates tooltips from. (Verified: `gen_un_button_descs.py --dry-run` reports "no changes" against this branch.) It does **not** charge for a cost-free peacekeeping pledge revoked by `un_vote.2`, because the `un_standing_program_active_*` trigger never opened a clock for one. The trade-off: a withdraw button's own tooltip does not name the standing cost. The chamber's "How standing works" panel does.
+
+**Leaving freezes, it does not reset.** `un_standing_clear_counters` drops only the duration counters; the score, the last-reason code, the rolling-year variables and any suspension are left alone. Resetting to neutral would make resignation a way for a disgraced member to launder its record by rejoining. Leaving is charged once (5) and the per-programme early-withdrawal charges are skipped — the pulse's non-member branch discards counters without billing them, or walking out mid-programme would cost up to 5 × 2 on top.
+
+**"Expulsion" in this mod is seat-stripping only.** The `expulsion` topic strips `un_permanent_member_modifier` / `un_security_council_modifier`; it does not remove `un_member_modifier`. (`un_expelled_cooldown` is defined in `extra_modifiers.txt` and checked by `un_join_button`, but nothing ever applies it.) So there is no "expelled from the UN" standing case to write.
+
+**"Successful mediation" has no source.** The UN system ships no mediation mechanic — `un_walkout_mediator_modifier` is a one-shot event outcome in `un_events.20`, not a mediation *process* with a success condition. Nothing was invented for it; it is a future source once a mediation mechanic exists.
+
+**Refusing to volunteer aid costs nothing.** `un_events.7` option C already carries `un_refused_aid_penalty_modifier` and an authority hit. Declining to volunteer is not a broken commitment, a defied resolution or an exceeded mandate, so it is deliberately outside the loss list.
+
+#### Benefits — modest, capped, suspended on serious violation
+
+Four discrete country-scoped static modifiers, not one dynamically scaled family: the effects are small enough that a continuous multiplier would be unreadable in the modifier list, and a discrete tier is what the player is told they have. Applied at **country** scope (not on the journal entry) so they appear in the country's own modifier list with their own name and description.
+
+| Tier | Modifier | Effects |
+|---|---|---|
+| Exemplary | `un_standing_exemplary_modifier` | `country_diplomatic_reputation_add = 4`, `country_infamy_decay_mult = 0.10`, `country_improve_relations_speed_mult = 0.05` |
+| Respected | `un_standing_respected_modifier` | `country_diplomatic_reputation_add = 2`, `country_infamy_decay_mult = 0.05` |
+| Neutral | *(none)* | — |
+| Poor | `un_standing_poor_modifier` | `country_diplomatic_reputation_add = -2` |
+| Disgraced | `un_standing_disgraced_modifier` | `country_diplomatic_reputation_add = -4`, `country_infamy_decay_mult = -0.10` |
+
+**Scale evidence.** `country_diplomatic_reputation_add`: `law_war_crimes_forbidden` +2, `law_humanitarian_regulations` +4, `law_limited_war` +6, `law_total_war` −20, each `principle_multilateral_institutions_*` level +5, `mandate_system_modifier` +5. A top tier worth +4 is one good law, not a new pillar. `country_infamy_decay_mult`: `un_condemnation_leader_modifier` +0.15, `un_arms_control_participant_modifier` +0.10, `un_condemned_modifier` −0.20, vanilla `diplomatic_mitigation` +0.25 — a top tier of +0.10 sits below all of them. `country_improve_relations_speed_mult`: `un_member_modifier` already grants +0.10 and `un_membership_benefits_modifier` another +0.10, so +0.05 is a quarter of what membership itself is worth. No tier grants prestige, influence or leverage: those belong to the membership and Security Council modifiers, and standing must not become a second copy of them.
+
+**One refresh site.** `un_standing_refresh_tier_modifier`, called once per country per month from `un_standing_country_pulse`, which is itself called from exactly one place: `je_united_nations`' `on_monthly_pulse` (`common/journal_entries/je_united_nations.txt:472`). It sits *outside* the member-only block, because a country that has left still needs its counters dropped and its tier modifier removed. The swap only writes when the tier actually changes (`NOT = { has_modifier = X }` probe first), so an unchanged tier churns nothing.
+
+**Suspension** withholds the two positive tiers only; a suspended Exemplary member carries no tier modifier at all, and a suspended Disgraced one still carries its penalty. `un_standing_benefits_suspended` reads two sources, deliberately different in shape: the timed `un_standing_suspended` variable stamped by a single serious violation (broken mandate, stripped seat), which runs out on its own; and sustained undermining (`un_standing_months_undermine >= 24`), which is a *state* and lifts the month the country stops, because the counter is discarded then.
+
+#### AI parity
+
+There is **no `is_ai` branch anywhere in the standing system**. Accrual, losses, suspension and the tier modifier all run from the same monthly pulse for every holder of the journal entry, and every hook site is in an effect block both the player and the AI reach. The one AI-specific piece is the vote lean below, which reads the *proposer's* standing and is therefore symmetric between a human proposer and an AI one.
+
+#### The AI vote hook
+
+Four `modifier` blocks with **literal adds**, one per non-neutral standing tier — Exemplary **+5**, Respected **+2**, Poor **−2**, Disgraced **−5** — sit together at the top of `un_vote.1` option A's `ai_chance` in `events/un_vote_events.txt` (search `SHARED PROPOSER-STANDING LEAN`), against a base of 40 and next to the existing alliance (+20), bloc (+15) and rivalry (−30) terms. It is a lean, never a guarantee. Option B is untouched: raising A already lowers B's share of the roll, and a symmetric penalty would double a deliberately modest nudge. Nothing else in any `ai_chance` was changed.
+
+Each block reads `scope:un_vote_proposer ?= { un_standing_tier_<tier> = yes }`: the `?=` covers a proposer annexed mid-vote, and the tier triggers treat a country with no recorded standing (a founder's first month, a pre-feature save) as Neutral, so at most one block ever applies.
+
+> **Why literals.** No vanilla or mod event uses a **named script value** as an `ai_chance` modifier's `add`, and a rejected value would fail silently — the lean would simply never apply. The first draft used one shared script value; it was replaced with tier-keyed literal adds, which is the form every existing block in that `ai_chance` already uses.
+
+#### Gates
+
+`un_propose_mandate_button`'s `possible` gained one line (`common/scripted_buttons/un_buttons.txt:543`): `un_standing_at_least = { VALUE = un_standing_mandate_floor }`, i.e. not Disgraced. A member that has done nothing at all sits at the neutral 50, so this cannot make the mandate unreachable for an ordinary member — it bars only a country whose record the Assembly has already wrecked, and `un_standing_at_least` passes for a country with no variable.
+
+It was deliberately **not** added to `un_mandate_actor_in_good_standing`. That trigger is also read by `un_mandate_still_valid`, so a floor there would **void a mandate already in the field** the moment the actor's standing dipped — deleting a war the player is fighting over a score movement. The gate belongs on the proposal, not on the authorization.
+
+#### Display
+
+The chamber widget's status panel (`un_chamber_status_sgui`, `common/scripted_guis/un_chamber_sguis.txt:45`) gained `un_standing_status_block`: the tier and the score, why benefits are suspended if they are, what the current tier is doing (quoted from the static modifier's own `$name$` and `$name_desc$` loc, so the line cannot drift from `extra_modifiers.txt`), this rolling year's programme accrual against the cap, and the most recent reason for a change. A member whose first pulse has not run yet reads as "not yet recorded" rather than printing a missing variable; a non-member gets one line saying standing is a record of membership.
+
+A new collapsed-by-default section, "How International Standing Works" (`un_chamber_standing_help_sgui`, toggle key `un_chamber_standing`), carries the sources, the losses and the limits in plain language. Split into its own SGUI for the same reason the archive is: `ExecuteTooltip` re-renders every frame the panel is visible.
+
+Every line is `custom_tooltip` text built in script, in the same read-only file as the rest of the chamber's display effects, and no country other than the scoped one is referenced anywhere in it — so there is nothing an annexation can break.
+
+#### Save compatibility
+
+Nothing assumes any standing variable exists. A save that predates the feature loads with no `un_standing` anywhere; each member is seeded with the neutral 50 on its first monthly UN pulse, non-members get nothing, and every trigger treats "no variable" as Neutral / gate-passes. Nothing existing was renamed, and no existing variable, modifier or effect changed meaning. The only new tooltip text on existing buttons is one line on `un_leave_button` and one gate line on `un_propose_mandate_button`.
+
+#### History-chart hook (not implemented here)
+
+PR #308 adds a history store. Once both are merged, national standing should be sampled monthly from the UN country pulse with `te_history_record_sample = { METRIC = un_standing VALUE = var:<un_standing> }`, placed at the end of `un_standing_country_pulse` inside the member branch. That effect is **not** referenced anywhere in this branch's script — it does not exist in this checkout.
+
+#### Notes for the lobbying stage
+
+- **Helpers to call:** `un_standing_gain = { AMOUNT = <points> REASON = <code> }` and `un_standing_loss = { AMOUNT = <points> REASON = <code> }`, both country-scoped, both no-ops for a country with no standing. Add your reason codes to the table at the top of `un_standing_effects.txt`, the chain in `un_standing_reason_line`, and matching `je_un_standing_reason_<code>` keys. Use the 30+ range to stay clear of this stage's 1–6 and 20–29.
+- **A broken lobbying promise** is a broken commitment: call `un_standing_loss` once, at the single site where the promise is detected as broken, and put the tuning figure in `un_standing_values.txt` next to the rest. If it is meant to be a *serious* violation, also call `un_standing_suspend = { DAYS = <literal> }` — `set_variable`'s `days` argument will not take a script value.
+- **A fulfilled promise** is a delivery: call `un_standing_gain` once, at the site where the thing promised actually happens, not where it is promised. Diminishing returns are applied inside the helper — do not pre-scale. Decide explicitly whether it should draw on the programme yearly cap; nothing outside `un_standing_program_award` does today, and the simplest correct answer is that it should not.
+- **The AI vote hook** is in `events/un_vote_events.txt`, `un_vote.1` option A's `ai_chance`, marked `<-- LOBBYING STAGE: ADD YOURS HERE`. Add your own `modifier` block(s) there with **literal** adds (see *Why literals* above); do not fold lobbying into the standing blocks. The two must stay separately tunable and separately attributable.
+- **Do not write `un_standing` directly.** The clamp, the diminishing returns and the reason stamp all live in the two helpers, and the "no other code writes the variable" rule is what makes the score auditable.
+
 
 ### Vote System (3-phase)
 1. **un_vote.1** (Phase 1): Fires to all other UN members 30 days after opening. Each country votes yes/no (permanent members may veto binding topics) with topic-adaptive titles, descriptions, and AI logic. Votes are recorded on the resolution; a vote cast after it closed is ignored.
