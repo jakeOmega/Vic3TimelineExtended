@@ -689,7 +689,7 @@ Common undocumented-but-real triggers worth knowing: `has_treaty_defensive_pact_
   - `.GetLaw.GetName` — law stored in variable (PROVEN in vanilla)
   - `.GetBuildingType.GetName` — building type in variable (PROVEN in vanilla)
   - `.GetValue|0` — numeric value (PROVEN in vanilla)
-  - `.GetCountry.GetName` — **UNVERIFIED in this mod; did not work in testing.** Vanilla 1.14 does use `[ROOT.Var('current_expedition_location_var').GetCountry.GetName]` (`ep2_04_l_english.yml`) with a country stored via `prev`, so it may work — but until verified in-game here, use the capital workaround below (covert operation containers do: `iw_target_capital`).
+  - `.GetCountry.GetName` — **UNVERIFIED in this mod; did not work in testing.** Vanilla 1.14 does use `[ROOT.Var('current_expedition_location_var').GetCountry.GetName]` (`ep2_04_l_english.yml`) and `[...Var('coup_sponsor').GetCountry.GetAdjective]` (`ip4_misc_01_l_english.yml`) with a country stored via `prev`, so it may work — but until verified in-game here, use the capital workaround below (covert operation containers do: `iw_target_capital`), or the scripted-GUI workaround below it when the variable is not yours to change.
 - **`.GetName` directly on `Var()` does NOT work** — you must chain the type accessor first (e.g., `.GetState.GetName`, not just `.GetName`).
 - **Error symptom:** `Could not find data system function 'GetName' in '....MakeScope.Var('my_var').GetName'` — means you forgot the type accessor (`.GetCountry`, `.GetState`, etc.).
 
@@ -709,6 +709,39 @@ every_participant = {
 # Or show capital name ("our spies in Moscow"):
 [ROOT.GetCountry.MakeScope.Var('my_target').GetState.GetStateRegion.GetName]
 ```
+
+### Workaround 2: Rendering Country Variables You Must Not Change (scripted GUI + `ExecuteTooltip`)
+The capital workaround needs you to control the `set_variable` call. When you're building a *read-only view* over data someone else owns — a display widget over script containers, say — you can't add a capital variable, and `Var('X').GetCountry.GetName` is the chain that doesn't work here. Do the navigation in **script** instead and hand the GUI finished text:
+
+```
+# common/scripted_guis/<x>_sguis.txt — vanilla's "SGUIs to build lists in loc"
+# pattern (game/common/scripted_guis/scripted_guis.md). Declare only `scope`
+# and `effect`; vanilla's own tooltip builders in journal_entry_sguis.txt omit
+# is_shown / is_valid / ai_is_valid.
+my_list_sgui = {
+    scope = country
+    effect = {
+        if = {
+            limit = { has_variable_list = my_countries }
+            every_in_list = { variable = my_countries custom_tooltip = MY_LIST_ENTRY }
+        }
+        else = { custom_tooltip_no_bullet = MY_LIST_EMPTY }
+    }
+}
+```
+```
+# loc — THIS is the current scope of the line; the AddLocalizationIf guard is
+# how vanilla handles an entry whose country has since been annexed
+MY_LIST_ENTRY:0 "[AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'MY_COUNTRY_GONE')]"
+```
+```
+# .gui — ExecuteTooltip renders the effect without executing it
+text = "[GetScriptedGui('my_list_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+```
+
+Vanilla ships exactly this for a country list: `je_hispanoamerica_not_recognized_countries_sgui` + `HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY` (`ip4_spain_l_english.yml`). Numbers and script values on the current scope read as `[THIS.Var('x').GetValue|0]` / `[THIS.ScriptValue('x')|0]`, and a scope saved earlier in the same effect chain reads as `[SCOPE.sCountry('x').GetName]`. `AddLocalizationIf(bool, 'LOC_KEY')` localizes the key (434 vanilla uses), so the fallback branch is a normal loc key.
+
+Two costs to budget for: `ExecuteTooltip` re-renders **every frame** the widget is visible, so put long lists behind a collapsed-by-default toggle; and `common/scripted_guis/` is not in `effect_trigger_validity_audit`'s `SCAN_ROOTS`, so effect/trigger names there are not name-validated — keep the logic in `common/scripted_effects/` helpers (which *are* scanned) and let the SGUI just call them. `gui/journal_entry_widgets/un_chamber_widget.gui` + `common/scripted_guis/un_chamber_sguis.txt` + `common/scripted_effects/un_chamber_display_effects.txt` are the worked example.
 
 ### `save_scope_as` vs `set_variable` for Scope References
 Both can store scope references, but they differ in persistence and loc access:
@@ -797,6 +830,12 @@ add = {
 The `desc` value is a loc key whose string explains what this term contributes. Mod content that omits `desc` produces a hidden term — bare numbers with no breakdown is the worst possible UX for diplomatic acceptance.
 
 **Acceptance threshold: the AI accepts iff `accept_score` evaluates to strictly `> 0`** (per the vanilla engine doc, `common/diplomatic_actions/diplomatic_action.md`: *"If this value evaluates to above zero, AI will accept this action if proposed"*). It's a hard binary cliff by default, so design around a `0` boundary: a strongly negative baseline (e.g. `-75`) that positive factors must accumulate past. Setting **`uses_random_approval = yes`** on the action turns that cliff into a probability — a positive score becomes a % chance to accept (`+30` → 30%). Most actions leave it off (binary). Knowing which mode you're in is load-bearing for tuning the magnitudes: under binary, a target one point short always declines; under random, the same point is a 1% swing.
+
+## `variable_list_size` Does Not Load — Count With `any_in_list`
+
+`triggers.log` documents `variable_list_size = { name = X target >= Y }` (and the `global_` / `local_` variants), but in 1.14 the engine rejects it at load: `debug.log` prints `Failed to read 'target' for 'variable_list_size' at <file>:<line>` — for a literal as well as for a script value — and the enclosing `limit` then never passes. Nothing else is logged, and no offline audit notices. Vanilla never uses the trigger. It cost this mod three silent "bounded" lists that were never pruned (resolution history, mandate registry, chart samples) before the first play test caught it.
+
+Use the vanilla-proven iterator count instead: `any_in_list = { variable = X count >= N <cheap trigger> }` (`any_in_global_list` for globals); `count >= N` has hundreds of vanilla uses. "Is the list non-empty" is just `any_in_list = { variable = X exists = this }`. Write `N` as a literal and cross-reference it from the cap's script value, since `count` with a named script value is unproven.
 
 ## `random_list` Requires Literal Integer Weights
 

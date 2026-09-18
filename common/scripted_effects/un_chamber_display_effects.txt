@@ -1,0 +1,421 @@
+﻿# ============================================================================
+# UN CHAMBER — DISPLAY-ONLY TOOLTIP BUILDERS
+# ============================================================================
+# Every effect in this file is READ-ONLY. They contain nothing but
+# custom_tooltip / custom_tooltip_no_bullet lines and scope navigation, and
+# exist purely so gui/journal_entry_widgets/un_chamber_widget.gui can render
+# the General Assembly's state. They are called from
+# common/scripted_guis/un_chamber_sguis.txt through
+# `[GetScriptedGui('...').ExecuteTooltip(...)]`, which renders an effect
+# without executing it (vanilla's documented "SGUIs to build lists in loc"
+# pattern — see game/common/scripted_guis/scripted_guis.md and
+# game/common/scripted_guis/journal_entry_sguis.txt).
+#
+# NOTHING HERE MAY WRITE GAMEPLAY STATE. Resolution creation, vote recording,
+# the pass/fail decision, archiving and pruning all live in
+# common/scripted_effects/un_vote_effects.txt and are untouched by this file.
+#
+# Scope for every effect below: a UN resolution script container (the tags and
+# variables are documented at the top of un_vote_effects.txt).
+#
+# Why tooltip text rather than a GUI datamodel over the containers: the
+# resolution containers store *countries* (un_res_proposer / un_res_target /
+# un_res_vetoer, and the un_res_yes / un_res_no voter lists). The GUI chain
+# `Var('x').GetCountry.GetName` is recorded as not working in this mod
+# (docs/guides/scripting_best_practices.md "Saved Scopes vs Variables in
+# Localization", gui_modding_guide.md gotcha #11) — which is exactly why the
+# covert-operations widget stores a *state* (iw_target_capital) instead.
+# Navigating to the country in script and letting loc print the name is the
+# shape vanilla itself ships for this case, in two flavours, both used here:
+#   - a list, printed per entry as `[THIS.GetCountry.GetName]` —
+#     je_hispanoamerica_not_recognized_countries_sgui +
+#     HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY (ip4_spain_l_english.yml),
+#     which also supplies the AddLocalizationIf(...Exists) annexed-country guard;
+#   - a single country, stashed with save_temporary_scope_as and printed as
+#     `[SCOPE.sCountry('...').GetName]` from the *container's* own line —
+#     je_india_railway_*_sgui + INDIAN_RAILWAY_ENTRY (ip2_misc_02_l_english.yml).
+#     Preferred for the singletons (proposer / target / vetoer) because the
+#     tooltip line stays at container scope: wrapping a custom_tooltip in a
+#     country scope-change block risks the engine prefixing the line with a
+#     redundant "<Country>:" header.
+# ============================================================================
+
+# The resolution's topic, with its sequence number. Exactly one topic tag is
+# set by un_resolution_open, so the chain is mutually exclusive.
+# Scope: resolution container
+un_chamber_topic_line = {
+	if = {
+		limit = { has_tag = un_topic_condemn }
+		custom_tooltip_no_bullet = je_un_chamber_topic_condemn
+	}
+	else_if = {
+		limit = { has_tag = un_topic_human_rights }
+		custom_tooltip_no_bullet = je_un_chamber_topic_human_rights
+	}
+	else_if = {
+		limit = { has_tag = un_topic_reform }
+		custom_tooltip_no_bullet = je_un_chamber_topic_reform
+	}
+	else_if = {
+		limit = { has_tag = un_topic_heritage }
+		custom_tooltip_no_bullet = je_un_chamber_topic_heritage
+	}
+	else_if = {
+		limit = { has_tag = un_topic_decolonization }
+		custom_tooltip_no_bullet = je_un_chamber_topic_decolonization
+	}
+	else_if = {
+		limit = { has_tag = un_topic_npt }
+		custom_tooltip_no_bullet = je_un_chamber_topic_npt
+	}
+	else_if = {
+		limit = { has_tag = un_topic_pandemic }
+		custom_tooltip_no_bullet = je_un_chamber_topic_pandemic
+	}
+	else_if = {
+		limit = { has_tag = un_topic_climate }
+		custom_tooltip_no_bullet = je_un_chamber_topic_climate
+	}
+	else_if = {
+		limit = { has_tag = un_topic_refugee }
+		custom_tooltip_no_bullet = je_un_chamber_topic_refugee
+	}
+	else_if = {
+		limit = { has_tag = un_topic_space }
+		custom_tooltip_no_bullet = je_un_chamber_topic_space
+	}
+	else_if = {
+		limit = { has_tag = un_topic_law_of_sea }
+		custom_tooltip_no_bullet = je_un_chamber_topic_law_of_sea
+	}
+	else_if = {
+		limit = { has_tag = un_topic_icc }
+		custom_tooltip_no_bullet = je_un_chamber_topic_icc
+	}
+	else_if = {
+		limit = { has_tag = un_topic_peacekeeping_request }
+		custom_tooltip_no_bullet = je_un_chamber_topic_peacekeeping_request
+	}
+	else_if = {
+		limit = { has_tag = un_topic_aid_request }
+		custom_tooltip_no_bullet = je_un_chamber_topic_aid_request
+	}
+	else_if = {
+		limit = { has_tag = un_topic_sanctions }
+		custom_tooltip_no_bullet = je_un_chamber_topic_sanctions
+	}
+	else_if = {
+		limit = { has_tag = un_topic_expulsion }
+		custom_tooltip_no_bullet = je_un_chamber_topic_expulsion
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_topic_unknown
+	}
+}
+
+# Proposer and (when the topic names one) target. Both reads are guarded
+# twice: `exists = var:X` catches a reference that no longer resolves, and the
+# loc line's AddLocalizationIf(SCOPE.sCountry('...').Exists, ...) catches a
+# country object that survives as a dead tag after annexation.
+# Scope: resolution container
+un_chamber_parties_line = {
+	if = {
+		limit = { exists = var:un_res_proposer }
+		var:un_res_proposer ?= { save_temporary_scope_as = un_chamber_proposer }
+		custom_tooltip_no_bullet = je_un_chamber_proposer
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_proposer_gone
+	}
+	if = {
+		limit = { has_variable = un_res_target }
+		if = {
+			limit = { exists = var:un_res_target }
+			var:un_res_target ?= { save_temporary_scope_as = un_chamber_target }
+			custom_tooltip_no_bullet = je_un_chamber_target
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_target_gone
+		}
+	}
+	if = {
+		limit = { has_tag = un_res_target_accepted }
+		custom_tooltip_no_bullet = je_un_chamber_target_accepted
+	}
+}
+
+# Vote tally plus the passage rule the resolve step actually applies.
+# Mirrors un_resolution_decide (un_vote_effects.txt:156-175): expulsion needs
+# un_vote_expulsion_passed >= 0 (a 2/3 supermajority of all current members);
+# every other topic needs un_res_margin >= 1 (a simple majority of the votes
+# cast). The same two script values are evaluated here, so the projection line
+# can never drift from the rule.
+# Scope: resolution container
+un_chamber_tally_line = {
+	custom_tooltip_no_bullet = je_un_chamber_tally
+	if = {
+		limit = { has_tag = un_topic_expulsion }
+		custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	}
+}
+
+# Live projection of the same pass test, for a vote still in session.
+# Scope: resolution container
+un_chamber_projection_line = {
+	if = {
+		limit = { has_tag = un_topic_expulsion }
+		if = {
+			limit = { un_vote_expulsion_passed >= 0 }
+			custom_tooltip_no_bullet = je_un_chamber_projection_pass
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_projection_fail
+		}
+	}
+	else_if = {
+		limit = { un_res_margin >= 1 }
+		custom_tooltip_no_bullet = je_un_chamber_projection_pass
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_projection_fail
+	}
+}
+
+# Veto exposure and, once a veto has been cast, the vetoing country.
+# Only the five binding topics can be vetoed (un_resolution_is_binding in
+# common/scripted_triggers/un_resolution_triggers.txt:27-35); the veto tag is
+# checked first anyway so a legacy save can't fall through to the wrong line.
+# Scope: resolution container
+un_chamber_veto_line = {
+	if = {
+		limit = { has_tag = un_res_vetoed }
+		if = {
+			limit = { exists = var:un_res_vetoer }
+			var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+			custom_tooltip_no_bullet = je_un_chamber_vetoed_by
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
+		}
+	}
+	else_if = {
+		limit = { un_resolution_is_binding = yes }
+		custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	}
+}
+
+# What passage would do, reusing the very tooltips un_vote.2 shows when the
+# outcome is applied (un_vote_<topic>_passed_tt / ..._passed_vetoed_tt in
+# localization/english/te_miscellaneous_l_english.yml) so the numbers here can
+# never drift from the ones the event actually applies.
+# Scope: resolution container
+un_chamber_consequences_line = {
+	if = {
+		limit = { has_tag = un_topic_condemn }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_condemn_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_condemn
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_human_rights }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_human_rights
+	}
+	else_if = {
+		limit = { has_tag = un_topic_reform }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_reform
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_heritage }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_heritage
+	}
+	else_if = {
+		limit = { has_tag = un_topic_decolonization }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_decolonization
+	}
+	else_if = {
+		limit = { has_tag = un_topic_npt }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_npt
+	}
+	else_if = {
+		limit = { has_tag = un_topic_pandemic }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_pandemic
+	}
+	else_if = {
+		limit = { has_tag = un_topic_climate }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_climate
+	}
+	else_if = {
+		limit = { has_tag = un_topic_refugee }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_refugee
+	}
+	else_if = {
+		limit = { has_tag = un_topic_space }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_space
+	}
+	else_if = {
+		limit = { has_tag = un_topic_law_of_sea }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_law_of_sea
+	}
+	else_if = {
+		limit = { has_tag = un_topic_icc }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_icc_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_icc
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_peacekeeping_request }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_aid_request }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_aid_request
+	}
+	else_if = {
+		limit = { has_tag = un_topic_sanctions }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_sanctions_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_sanctions
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_expulsion }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_expulsion
+	}
+	if = {
+		limit = { has_tag = un_topic_expulsion }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_fail_expulsion
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_conseq_fail
+	}
+}
+
+# Final outcome of a closed resolution. A veto is orthogonal to pass/fail —
+# un_resolution_decide has no veto branch, and un_vote.2 carries dedicated
+# "passed + vetoed" descriptions (events/un_vote_events.txt:1616-1628,
+# 1665-1682) for the graduated forms. Reform is the one binding topic with no
+# graduated fallback, so a vetoed reform that carried the Assembly is still
+# blocked outright (un_vote.2.d_reform_passed_vetoed).
+# `un_res_lapsed` means un_vote.2 never fired and the watchdog in
+# un_resolutions_monthly_update closed the vote after 14 months.
+# Scope: resolution container (closed)
+un_chamber_outcome_line = {
+	if = {
+		limit = { has_tag = un_res_lapsed }
+		custom_tooltip_no_bullet = je_un_chamber_outcome_lapsed
+	}
+	else_if = {
+		limit = {
+			has_tag = un_res_passed
+			has_tag = un_res_vetoed
+			has_tag = un_topic_reform
+		}
+		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed_reform
+	}
+	else_if = {
+		limit = {
+			has_tag = un_res_passed
+			has_tag = un_res_vetoed
+		}
+		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed
+	}
+	else_if = {
+		limit = { has_tag = un_res_passed }
+		custom_tooltip_no_bullet = je_un_chamber_outcome_passed
+	}
+	else_if = {
+		limit = {
+			has_tag = un_res_failed
+			has_tag = un_res_vetoed
+		}
+		custom_tooltip_no_bullet = je_un_chamber_outcome_failed_vetoed
+	}
+	else_if = {
+		limit = { has_tag = un_res_failed }
+		custom_tooltip_no_bullet = je_un_chamber_outcome_failed
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_outcome_unknown
+	}
+	if = {
+		limit = { has_tag = un_res_vetoed }
+		if = {
+			limit = { exists = var:un_res_vetoer }
+			var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+			custom_tooltip_no_bullet = je_un_chamber_vetoed_by
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
+		}
+	}
+}
+
+# The recorded ballot. Both lists are iterated in place — nothing is copied
+# into a country or global variable. Entries whose country has since been
+# annexed print the "a former member" fallback instead of a broken name.
+# Scope: resolution container
+un_chamber_ballot_lines = {
+	# Tooltip generation prints a scope's own lines first and its nested
+	# country blocks afterwards, so a "In favour:" header followed by a list
+	# renders as every header on top and every country underneath (seen in the
+	# first play test). Each entry therefore says which side it is on, and the
+	# only line printed at this level is one sentence of introduction.
+	custom_tooltip_no_bullet = je_un_chamber_ballot_intro
+	if = {
+		limit = { has_variable_list = un_res_yes }
+		every_in_list = {
+			variable = un_res_yes
+			custom_tooltip = je_un_chamber_voter_entry_yes
+		}
+	}
+	if = {
+		limit = { has_variable_list = un_res_no }
+		every_in_list = {
+			variable = un_res_no
+			custom_tooltip = je_un_chamber_voter_entry_no
+		}
+	}
+}
+
+# One archived resolution, as rendered in the history list.
+# Scope: resolution container (closed)
+un_chamber_history_entry = {
+	un_chamber_topic_line = yes
+	un_chamber_parties_line = yes
+	un_chamber_outcome_line = yes
+	un_chamber_tally_line = yes
+	custom_tooltip_no_bullet = je_un_chamber_hist_months
+	if = {
+		limit = { has_variable = un_res_cooldown }
+		custom_tooltip_no_bullet = je_un_chamber_hist_cooldown
+	}
+}

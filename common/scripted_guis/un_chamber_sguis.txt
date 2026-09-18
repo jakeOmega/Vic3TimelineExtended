@@ -1,0 +1,155 @@
+﻿# ============================================================================
+# UN CHAMBER — READ-ONLY TOOLTIP BUILDERS FOR THE JOURNAL ENTRY WIDGET
+# ============================================================================
+# Each entry here exists only so gui/journal_entry_widgets/un_chamber_widget.gui
+# can call `[GetScriptedGui('<key>').ExecuteTooltip(GuiScope.SetRoot(
+# JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
+# ExecuteTooltip *renders* an effect without running it — this is vanilla's
+# documented "Using SGUIs to build lists in loc" pattern; see
+# game/common/scripted_guis/scripted_guis.md and the tooltip builders in
+# game/common/scripted_guis/journal_entry_sguis.txt (which likewise declare
+# nothing but `scope` and `effect`).
+#
+# DISPLAY ONLY. The effects contain nothing but scope navigation and
+# custom_tooltip lines (see common/scripted_effects/un_chamber_display_effects.txt).
+# Proposals, voting, the pass/fail decision, archiving and history pruning all
+# stay with the existing events, buttons and un_vote_effects.txt.
+#
+# The active resolution and the bounded history are read in place through
+# global_var:un_active_resolution and the un_resolution_history global list —
+# no country-side copy of either is kept.
+# ============================================================================
+
+# The player's own standing in the organisation.
+un_chamber_status_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			if = {
+				limit = { is_un_permanent_member = yes }
+				custom_tooltip_no_bullet = je_un_chamber_status_permanent
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_chamber_status_member
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_status_nonmember
+		}
+	}
+}
+
+# The resolution currently before the General Assembly, or the empty state.
+un_chamber_active_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = un_active_resolution
+				exists = global_var:un_active_resolution
+			}
+			global_var:un_active_resolution ?= {
+				un_chamber_topic_line = yes
+				un_chamber_parties_line = yes
+				un_chamber_tally_line = yes
+				un_chamber_projection_line = yes
+				un_chamber_veto_line = yes
+				custom_tooltip_no_bullet = je_un_chamber_months
+				un_chamber_consequences_line = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_no_active
+		}
+	}
+}
+
+# How the active resolution's members have voted so far.
+un_chamber_active_voters_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = un_active_resolution
+				exists = global_var:un_active_resolution
+			}
+			global_var:un_active_resolution ?= {
+				un_chamber_ballot_lines = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_no_active_votes
+		}
+	}
+}
+
+# Closed resolutions, newest first. Read straight out of the bounded
+# un_resolution_history global list, so pruning in un_resolution_archive is
+# invisible here: no index, count or cap is assumed. The `has_tag`
+# emptiness probe also covers a list variable that still exists after its
+# last entry was evicted.
+#
+# `max` here is a rendering ceiling, not the history cap: it is set far above
+# anything un_resolution_archive can leave behind (only one vote runs at a
+# time and a closed resolution holds its topic cooldown for 5-10 years, so a
+# handful of entries can outlive the 25-entry cap at most). It is stated
+# explicitly only because an ordered_ iterator's default span is ambiguous —
+# vanilla writes `max` out whenever the count matters (ep2_iwakura_events.txt:306).
+un_chamber_history_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable_list = un_resolution_history
+				any_in_global_list = {
+					variable = un_resolution_history
+					has_tag = un_resolution
+				}
+			}
+			ordered_in_global_list = {
+				variable = un_resolution_history
+				order_by = un_res_recency_order
+				max = 100
+				un_chamber_history_entry = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_no_history
+		}
+	}
+}
+
+# The same history with each resolution's recorded ballot appended. Split from
+# un_chamber_history_sgui rather than driven by a flag because ExecuteTooltip
+# re-renders every frame the widget is visible; the widget keeps this variant
+# behind its own collapsed-by-default toggle.
+un_chamber_history_details_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable_list = un_resolution_history
+				any_in_global_list = {
+					variable = un_resolution_history
+					has_tag = un_resolution
+				}
+			}
+			ordered_in_global_list = {
+				variable = un_resolution_history
+				order_by = un_res_recency_order
+				max = 100
+				un_chamber_history_entry = yes
+				un_chamber_ballot_lines = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_no_history
+		}
+	}
+}

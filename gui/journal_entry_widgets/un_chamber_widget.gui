@@ -1,0 +1,156 @@
+﻿### United Nations JE widget — the General Assembly chamber.
+### Shows the resolution currently before the Assembly, the recorded ballot,
+### and the bounded history of closed resolutions.
+###
+### Everything this widget renders is built in script and handed over as
+### tooltip text by common/scripted_guis/un_chamber_sguis.txt (vanilla's
+### "Using SGUIs to build lists in loc" pattern — see
+### game/common/scripted_guis/scripted_guis.md). The resolution containers
+### store *countries* (un_res_proposer / un_res_target / un_res_vetoer and the
+### un_res_yes / un_res_no voter lists), and the GUI chain
+### `Var('x').GetCountry.GetName` is recorded as not working in this mod
+### (docs/guides/gui_modding_guide.md gotcha #11) — which is why the
+### covert-operations widget stores a state instead of a country. Iterating the
+### country lists in script and printing `[THIS.GetCountry.GetName]` is the
+### shape vanilla ships for exactly this case
+### (je_hispanoamerica_not_recognized_countries_sgui, ip4_spain_l_english.yml).
+###
+### This widget is display-only: it never calls an SGUI's effect, only
+### ExecuteTooltip, which renders without executing. Proposals and votes stay
+### with the existing events and scripted buttons.
+###
+### Wired via `widget = { name = "widget_je_un_chamber" container =
+### "custom_widget_container_2" }` in je_united_nations, so it sits under the
+### status description and above the button grid.
+###
+### The expand/collapse state lives in GetVariableSystem (client-side UI state,
+### never saved and never gameplay state), keyed per section rather than per
+### row: a script container exposes no stable string id to the GUI
+### (ScriptContainer has no GetIDString, and GetVariableValue returns a
+### CFixedPoint that cannot be fed to Concatenate), so a per-row toggle key
+### cannot be built. One toggle switches the whole history between the brief
+### and the detailed rendering instead.
+
+types un_chamber_widget_types
+{
+	type un_chamber_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_large
+	}
+
+	type un_chamber_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	type un_chamber_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
+		}
+	}
+}
+
+
+### WIDGETS
+flowcontainer = {
+	name = "widget_je_un_chamber"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 4
+
+	# ---- Our own standing, and the resolution in session ----
+	un_chamber_panel = {
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
+	# ---- Recorded ballot of the resolution in session ----
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_votes_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_votes')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_votes'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_votes')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_votes')]"
+
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_active_voters_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
+	# ---- Archive of closed resolutions ----
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_history_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_history')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_history'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_history')]"
+		}
+	}
+
+	# Voting-detail depth for the archive. Only offered while the archive is
+	# open, and rebuilt from the containers every frame, so nothing about it
+	# survives a save/load beyond the toggle itself.
+	un_chamber_section_header = {
+		visible = "[GetVariableSystem.Exists('un_chamber_history')]"
+
+		blockoverride "left_text" {
+			text = "je_un_chamber_details_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_history_details')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_history_details'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_history_details')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_history')]"
+
+		un_chamber_text = {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_history_details'))]"
+			text = "[GetScriptedGui('un_chamber_history_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_text = {
+			visible = "[GetVariableSystem.Exists('un_chamber_history_details')]"
+			text = "[GetScriptedGui('un_chamber_history_details_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+}

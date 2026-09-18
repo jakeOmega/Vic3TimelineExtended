@@ -1475,7 +1475,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 10. **JournalEntry scope:** `JournalEntry.GetCountry` returns the owning country. In JE context, `ROOT.GetCountry.MakeScope.ScriptValue('x')` is the pattern.
 
-11. **`Var().GetCountry.GetName` does NOT work** for country variables. Store the country's capital instead and chain `Var('cap').GetState.GetCountry.GetName`.
+11. **`Var().GetCountry.GetName` is unreliable** for country variables — it rendered blank when tested in this mod, though vanilla 1.14 does ship the chain (`ep2_04_l_english.yml`, `ip4_misc_01_l_english.yml`). Two workarounds, in order of preference. (a) If the variable is yours to write, store the country's **capital** and chain `Var('cap').GetState.GetCountry.GetName` — what the covert-operations widget does with `iw_target_capital`. (b) If the variable belongs to data you must not change — a read-only view over someone else's script containers — navigate it **in script** from a `scripted_gui` and render the result with `[GetScriptedGui('x').ExecuteTooltip(GuiScope.SetRoot(<obj>.MakeScope).End)]`, printing `[THIS.GetCountry.GetName]` on each `custom_tooltip` line. That is vanilla's own shape for a country variable list (`je_hispanoamerica_not_recognized_countries_sgui` + `HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY` in `ip4_spain_l_english.yml`), and it brings the annexed-country guard `AddLocalizationIf(THIS.GetCountry.Exists, 'FALLBACK_KEY')` with it. `gui/journal_entry_widgets/un_chamber_widget.gui` is this mod's worked example.
 
 12. **Map markers/HUD overlays cannot be added.** The HUD is engine-level. Mods can override existing HUD files but cannot add new map layers or HUD elements.
 
@@ -1592,7 +1592,9 @@ Currently 20 GUI files, all full-file replacements of vanilla panels:
 | `treaty_panel.gui` | Treaty view | Enhanced treaty display |
 | `zzz_extra_goods_texticons.gui` | (additive) | Custom goods text icons |
 
-Scripted GUIs: `fmc_construction_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers.
+Scripted GUIs: `fmc_construction_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `un_chamber_sguis.txt` — read-only tooltip builders for the UN chamber widget (no `effect` that writes state; called only through `ExecuteTooltip`).
+
+Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journal_entry_widgets/` is attached to a JE with a `widget = { gui = "..." name = "..." container = "custom_widget_container_N" }` block and renders inside vanilla's `journal_entry.gui` slots, so it costs no panel replacement. `custom_widget_container_1` sits above the status description, `_2` between the status description and the scripted-button grid, `_3` below the button grid; `_4`–`_7` are further down the panel. Keep content within `@panel_width_minus_20` (520 px) — the existing widgets use a 480 px text column plus a `margin = { 20 8 }`. Current widgets: `covert_operations_widget.gui`, `strategic_reserve_widget.gui`, `un_chamber_widget.gui`.
 
 Plus the **additive** journal-entry widgets under `gui/journal_entry_widgets/`, which override nothing — each is mounted into a vanilla `custom_widget_container_*` slot by a `widget = { … }` entry on its journal entry:
 
