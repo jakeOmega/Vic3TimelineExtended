@@ -679,6 +679,35 @@ flowcontainer = {
 
 The GUI has no built-in sort/filter. Use game-side `ordered_` iterators or script value sorting in scripted_guis, or rely on the game data model's own ordering.
 
+### Charting script-held data (column charts)
+
+**`plotline` cannot render mod data.** Its `plotpoints` property only accepts the output of `GetTrendPlotPoints` / `GetTrendPlotPointsNormalized` / `GetDynTrendPlotPoints`, and all three take an engine-side `DataTrend` (`Country.GetGDPTrend`, `Goods.GetPriceTrend`, …). No global function in `data_types_*.txt` returns a `DataTrend`, and no `DataTrend` exists for a script variable, so stored samples cannot feed a line graph. Draw a column chart instead — one bar per stored sample over a datamodel. Worked example: `gui/journal_entry_widgets/te_history_chart.gui`.
+
+**Size a bar from data with a `progressbar`, never with `size`.** `size` takes no data expression; `progressbar` takes `value` / `min` / `max` and does.
+
+```
+progressbar = {
+    size = { 100% 100% }
+    direction = vertical            # fills upward from the floor
+    min = 0
+    max = 100
+    value = "[FixedPointToFloat( ScriptContainer.GetVariableValue( 'my_value' ) )]"
+    progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+    noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+    texture_density = 2
+    skip_initial_animation = yes
+    color = { 0.42 0.62 0.85 1.0 }  # tints the white progress texture
+}
+```
+
+Use a **bare `progressbar`**, not `white_progressbar_vertical`: that type inherits `progressbar_properties`, whose frame texture has 6 px sprite borders and whose glow animations are sized for a 300×40 bar — at a few pixels wide it renders as noise.
+
+**Negative values: vanilla's "REVERSE HACK".** Stack two half-height bars around a zero axis. The lower one swaps `progresstexture` and `noprogresstexture` and uses a `min = -N`, `max = 0` range, so the coloured part is drawn from the far end and hangs *down* from the axis (`gui/shared/progressbars.gui` → `double_direction_progressbar`). Clamp each half's value in the expression (`Max_CFixedPoint('(CFixedPoint)0', v)` / `Min_CFixedPoint`) so a positive sample draws nothing below the axis.
+
+**Bars that share the width.** An `hbox` of fixed width whose items are `size = { 0 100% }` + `layoutpolicy_horizontal = expanding` (+ a `maximumsize` cap) divides the width between the *visible* items — vanilla `levels_progressbar` (`gui/shared/progressbars.gui`, used by `country_panel.gui`). With `ignoreinvisible = yes` on the hbox, hiding out-of-range samples widens the remaining bars instead of leaving empty slots, which is how a 1 / 5 / 10-year range selector works without three separate layouts.
+
+**Per-bar tooltips.** Give the item widget a `tooltip = "<loc key>"`; the loc key reads the item's datacontext (`[ScriptContainer.GetVariableValue('x')|1]`) and can branch with `[SelectLocalization( ScriptContainer.HasVariable('x'), 'key_a', 'key_b' )]` — the way to show "not recorded" rather than a misleading zero.
+
 ---
 
 ## State Animations
@@ -1566,6 +1595,16 @@ Currently 20 GUI files, all full-file replacements of vanilla panels:
 Scripted GUIs: `fmc_construction_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `un_chamber_sguis.txt` — read-only tooltip builders for the UN chamber widget (no `effect` that writes state; called only through `ExecuteTooltip`).
 
 Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journal_entry_widgets/` is attached to a JE with a `widget = { gui = "..." name = "..." container = "custom_widget_container_N" }` block and renders inside vanilla's `journal_entry.gui` slots, so it costs no panel replacement. `custom_widget_container_1` sits above the status description, `_2` between the status description and the scripted-button grid, `_3` below the button grid; `_4`–`_7` are further down the panel. Keep content within `@panel_width_minus_20` (520 px) — the existing widgets use a 480 px text column plus a `margin = { 20 8 }`. Current widgets: `covert_operations_widget.gui`, `strategic_reserve_widget.gui`, `un_chamber_widget.gui`.
+
+Plus the **additive** journal-entry widgets under `gui/journal_entry_widgets/`, which override nothing — each is mounted into a vanilla `custom_widget_container_*` slot by a `widget = { … }` entry on its journal entry:
+
+| File | Journal entry | Purpose |
+|---|---|---|
+| `covert_operations_widget.gui` | `je_covert_warfare` | one row per running operation (script-container datamodel) |
+| `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
+| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
+| `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
+| `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 
 ## GUI 3-way merge across vanilla patches
 
