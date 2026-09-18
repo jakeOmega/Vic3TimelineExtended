@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 749
-**Event files:** 39
+**Total events:** 752
+**Event files:** 41
 
 ## agricultural_diffusion_events.txt
 
@@ -4040,6 +4040,14 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** (none)
 - **Current image:** (unknown)
 
+## te_debug_un_events.txt
+
+### te_debug_un.1
+- **Title:** UN Test Console
+- **Description:** Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\n\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick.
+- **Flavor:** 'Is this in order?'\n\n'Nothing about this is in order.'
+- **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
+
 ## te_formable_formation_events.txt
 
 ### formation_te.1
@@ -4301,6 +4309,20 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** Delegates at the United Nations have drafted a statute to establish a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. For [ROOT.GetCountry.GetName], joining would signal commitment to international justice — but it would also mean submitting citizens, including military personnel, to foreign prosecution.
 - **Flavor:** The legal scholar adjusted his spectacles and addressed the committee. 'The question before us is simple,' he said. 'Shall the powerful be accountable, or shall they merely be powerful?'\n\nThe military attaché in the back row leaned toward his colleague. 'And who,' he whispered, 'shall guard the guardians?'\n\n'That,' the scholar replied, having excellent hearing, 'is the entire point of this court.'
 - **Current image:** gfx/event_pictures/human_rights_declaration.dds
+
+## un_mandate_events.txt
+
+### un_mandate.1
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** 'The resolution said one province.'\n\n'The resolution said a great many things.'
+- **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
+
+### un_mandate.2
+- **Title:** The Mandate Invoked
+- **Description:** Our [concept_diplomatic_play] against [SCOPE.sCountry('un_mandate_notice_target').GetName] now carries the demand the [concept_un_general_assembly] authorized: the return of [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. That demand costs us no [concept_infamy], and the mandate is now bound to this play — it cannot be carried into another.\n\n#bold What the mandate does not cover:#! any other demand against that country for territory, subjugation, regime change or humiliation. Adding one to this play #R voids the mandate#!: the Assembly condemns us, [concept_un_authority] falls, and our standing benefits are suspended for ten years. Backing down from the play forfeits it in the same way.\n\nOther demands — war reparations, opening markets and the like — are allowed, at their normal price.
+- **Flavor:** 'One province, Minister. Those are the words on the paper.'\n\n'Then let us hope the generals can read.'
+- **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ## un_vote_events.txt
 

@@ -3756,6 +3756,20 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_DEBUG_UN
+#
+ te_debug_un.1.a:0 "Found the United Nations and seat the powers"
+ te_debug_un.1.b:0 "Grant me a mandate against a neighbour"
+ te_debug_un.1.c:0 "Set my standing to Exemplary (85)"
+ te_debug_un.1.d:0 "Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\n\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick."
+ te_debug_un.1.e:0 "Set my standing to Disgraced (10)"
+ te_debug_un.1.f:0 "'Is this in order?'\n\n'Nothing about this is in order.'"
+ te_debug_un.1.g:0 "Have another member propose a condemnation I can vote on"
+ te_debug_un.1.h:0 "Clear the floor (discard the open resolution)"
+ te_debug_un.1.t:0 "UN Test Console"
+ te_debug_un.1.z:0 "Close"
+
+#
 # TE_MAP_MODES
 #
  te_map_modes.1.a:0 "Tourism appeal"
@@ -4037,15 +4051,15 @@
  un_mandate.1.d_violated:0 "We were authorized to recover one territory from [AddLocalizationIf(SCOPE.sCountry('un_mandate_closed_target').Exists, SCOPE.sCountry('un_mandate_closed_target').GetName)] and we demanded more than that. The mandate is void, the authorized war goal is no longer ours to take, and the chamber has been shown exactly what its authorizations are worth. #R −5 [concept_un_authority]#!, and the censure of the organisation."
  un_mandate.1.d_void:0 "The mandate can no longer be exercised on the terms the Assembly set — the territory changed hands, a party to it ceased to exist, or we are no longer a member of the body that issued it. No censure attaches; the authorization simply is not there any more."
  un_mandate.1.f:0 "'The resolution said one province.'\n\n'The resolution said a great many things.'"
- un_mandate.2.a:0 "Understood."
- un_mandate.2.d:0 "Our [concept_diplomatic_play] against [SCOPE.sCountry('un_mandate_notice_target').GetName] now carries the demand the [concept_un_general_assembly] authorized: the return of [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. That demand costs us no [concept_infamy], and the mandate is now bound to this play — it cannot be carried into another.\n\n#bold What the mandate does not cover:#! any other demand against that country for territory, subjugation, regime change or humiliation. Adding one to this play #R voids the mandate#!: the Assembly condemns us, [concept_un_authority] falls, and our standing benefits are suspended for ten years. Backing down from the play forfeits it in the same way.\n\nOther demands — war reparations, opening markets and the like — are allowed, at their normal price."
- un_mandate.2.f:0 "'One province, Minister. Those are the words on the paper.'\n\n'Then let us hope the generals can read.'"
- un_mandate.2.t:0 "The Mandate Invoked"
  un_mandate.1.t_abandoned:0 "The Mandate Abandoned"
  un_mandate.1.t_complied:0 "The Mandate Discharged"
  un_mandate.1.t_expired:0 "The Mandate Lapses"
  un_mandate.1.t_violated:0 "The Mandate Exceeded"
  un_mandate.1.t_void:0 "The Mandate Falls Away"
+ un_mandate.2.a:0 "Understood."
+ un_mandate.2.d:0 "Our [concept_diplomatic_play] against [SCOPE.sCountry('un_mandate_notice_target').GetName] now carries the demand the [concept_un_general_assembly] authorized: the return of [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. That demand costs us no [concept_infamy], and the mandate is now bound to this play — it cannot be carried into another.\n\n#bold What the mandate does not cover:#! any other demand against that country for territory, subjugation, regime change or humiliation. Adding one to this play #R voids the mandate#!: the Assembly condemns us, [concept_un_authority] falls, and our standing benefits are suspended for ten years. Backing down from the play forfeits it in the same way.\n\nOther demands — war reparations, opening markets and the like — are allowed, at their normal price."
+ un_mandate.2.f:0 "'One province, Minister. Those are the words on the paper.'\n\n'Then let us hope the generals can read.'"
+ un_mandate.2.t:0 "The Mandate Invoked"
 
 #
 # UN_VOTE
@@ -4511,14 +4525,3 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
-# TE_DEBUG_UN
- te_debug_un.1.a:0 "Found the United Nations and seat the powers"
- te_debug_un.1.b:0 "Grant me a mandate against a neighbour"
- te_debug_un.1.c:0 "Set my standing to Exemplary (85)"
- te_debug_un.1.d:0 "Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\n\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick."
- te_debug_un.1.e:0 "Set my standing to Disgraced (10)"
- te_debug_un.1.f:0 "'Is this in order?'\n\n'Nothing about this is in order.'"
- te_debug_un.1.g:0 "Have another member propose a condemnation I can vote on"
- te_debug_un.1.h:0 "Clear the floor (discard the open resolution)"
- te_debug_un.1.t:0 "UN Test Console"
- te_debug_un.1.z:0 "Close"
