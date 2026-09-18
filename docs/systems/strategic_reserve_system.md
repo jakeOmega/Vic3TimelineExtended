@@ -15,10 +15,13 @@ This document describes the **current implementation**. See §8 for deviations f
 | [common/modifier_type_definitions/st_res_modifier_types.txt](../common/modifier_type_definitions/st_res_modifier_types.txt) | `country_sr_<good>_capacity_add`, `country_sr_<good>_decay_add`, `building_strategic_reserve_hub_throughput_add` |
 | [common/static_modifiers/extra_modifiers.txt](../common/static_modifiers/extra_modifiers.txt) | `INJECT:base_values` (decay bases) + `sr_rate_slow` / `sr_rate_fast` static modifiers |
 | [common/script_values/st_res_script_values.txt](../common/script_values/st_res_script_values.txt) | Hub level, throughput factor, signed rate cap, weekly deltas, capacity, fill-% |
-| [common/scripted_effects/st_res_effects.txt](../common/scripted_effects/st_res_effects.txt) | Init, reset, hub-cache refresh, hub-flow rebuild, weekly bookkeeping, signed-rate controls |
-| [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) | Shared step-size button + six per-good increase/decrease rate buttons |
-| [common/journal_entries/je_strategic_reserve.txt](../common/journal_entries/je_strategic_reserve.txt) | Player-facing control panel and weekly pulse owner |
-| [common/customizable_localization/st_res_custom_loc.txt](../common/customizable_localization/st_res_custom_loc.txt) | Derived mode labels based on signed rates and stockpile bounds |
+| [common/scripted_effects/st_res_effects.txt](../common/scripted_effects/st_res_effects.txt) | Init, reset, hub-cache refresh, hub-flow rebuild, weekly bookkeeping, signed-rate controls, status derivation |
+| [common/scripted_triggers/st_res_triggers.txt](../common/scripted_triggers/st_res_triggers.txt) | `st_res_<good>_unlocked_trigger` — the single source of truth for per-good availability |
+| [common/scripted_guis/st_res_scripted_gui.txt](../common/scripted_guis/st_res_scripted_gui.txt) | `st_res_adjust_<good>_sgui` — thin per-good validation wrappers for the widget's row controls |
+| [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) | The two shared, reserve-wide buttons: step size and reset-all |
+| [common/journal_entries/je_strategic_reserve.txt](../common/journal_entries/je_strategic_reserve.txt) | Summary text, shared buttons, widget wiring and weekly pulse owner |
+| [gui/journal_entry_widgets/strategic_reserve_widget.gui](../gui/journal_entry_widgets/strategic_reserve_widget.gui) | The reserve inventory table — one row per unlocked good |
+| [common/customizable_localization/st_res_custom_loc.txt](../common/customizable_localization/st_res_custom_loc.txt) | `st_res_<good>_mode_text` / `st_res_<good>_reason_text`, both driven by the bookkeeping status code |
 | [common/technology/technologies/modified.txt](../common/technology/technologies/modified.txt) | `INJECT:` decay reductions for `vacuum_canning`, `bolt_action_rifles`, `fractional_distillation` |
 | [localization/english/te_strategic_reserve_l_english.yml](../localization/english/te_strategic_reserve_l_english.yml) | All user-visible strings |
 
@@ -72,6 +75,30 @@ All values are `level_scaled`. `pmg_sr_ammunition` has `unlocking_technologies =
 | `st_res_adjust_step_tier` | Shared step-size tier: 0 = 1, 1 = 10, 2 = 100, 3 = 1000, 4 = 10000 |
 | `st_res_hub_level_cached` | Live hub level cached from building scope |
 | `st_res_hub_throughput_cached` | Live hub `modifier:building_throughput_add` cached from building scope |
+| `st_res_<good>_last_delta` | **Display only.** The ACTUAL net movement the last weekly tick applied, measured after the `[0, capacity]` clamp — not recomputed from rates. Written by `st_res_apply_weekly_good_effect`, read through the guarded `st_res_<good>_last_net` script value. |
+| `st_res_<good>_last_status` | **Display only.** The status/reason code the inventory widget renders. Written by `st_res_set_good_status_effect`. |
+
+#### Status codes (`st_res_<good>_last_status`)
+
+| Code | Widget label | Meaning |
+|---|---|---|
+| 0 | Idle | Nothing configured, nothing moving |
+| 1 | Storing | Configured intake applied in full |
+| 2 | Withdrawing | Configured release applied in full |
+| 3 | Storing | Clipped by the hub's weekly flow cap |
+| 4 | Withdrawing | Clipped by the hub's weekly flow cap |
+| 5 | Blocked | Stockpile at capacity |
+| 6 | Blocked | Stockpile empty with a release configured |
+| 7 | Blocked | Hub understaffed (occupancy below 100%) |
+| 8 | Blocked | No Strategic Reserve Hub |
+
+`st_res_set_good_status_effect` is the **only** place this is derived. It is called from `st_res_refresh_hub_flow_effect`, which is the shared tail of both the weekly pulse and every rate/step button press, so the label reacts to a click immediately instead of lagging a week. `st_res_<good>_mode_text` and `st_res_<good>_reason_text` (customizable localization) map the code to the label and the one-sentence explanation; the GUI never re-derives either.
+
+Both variables are **save-safe**: absent on a save made before the widget existed, `st_res_init_good_effect` seeds them with 0 (no movement / Idle), and the first weekly tick overwrites them with real data.
+
+Two precedence details worth knowing, both consequences of `st_res_clamp_stockpiles_effect` driving the configured rate to 0 once a stockpile hits a bound:
+- **Full** accepts `rate >= 0`, not `rate > 0`. Otherwise a full reserve would report *Idle* the tick after the auto-clamp fires.
+- **Empty** deliberately keeps `rate < 0`. A stockpile that is empty *and* unconfigured is genuinely idle; the row tooltip still says it is empty.
 
 `st_res_init_effect` defaults stored amounts and signed rates to 0, `st_res_adjust_step_tier` to 1, and the hub caches to 0. `st_res_reset_vars_effect` zeros the same live vars when the JE goes invalid. Display-mode text is derived on demand in [common/customizable_localization/st_res_custom_loc.txt](../common/customizable_localization/st_res_custom_loc.txt), so the live system no longer keeps persistent `sr_<good>_mode` variables.
 
@@ -160,14 +187,18 @@ If a stockpile is full, empty, or configured with no legal effective flow, the d
 
 ## 5. Journal Entry — Control Panel
 
-`je_strategic_reserve` (group: `je_group_internal_affairs`) is the sole UI surface:
+`je_strategic_reserve` (group: `je_group_internal_affairs`) is the sole UI surface. Per-good presentation and control lives in the **reserve inventory widget**, [gui/journal_entry_widgets/strategic_reserve_widget.gui](../gui/journal_entry_widgets/strategic_reserve_widget.gui), mounted in `custom_widget_container_2` (directly under the summary text, above the shared buttons).
 
-- **Activation:** `possible` = the country has a hub built. `is_shown_when_inactive` requires `logistics`.
-- **Status text:** A rate-cap/throughput line, a step-size line, and one line per visible good showing `stored / capacity`, the derived mode label, the configured signed rate, and decay.
-- **Step-size button:** `st_res_cycle_step_size_button` cycles the shared adjustment size through 1, 10, 100, 1000, and 10000.
-- **Rate buttons:** Each good has its own increase/decrease pair. Grain is always visible; ammunition and oil buttons are gated by `bolt_action_rifles` and `fractional_distillation` respectively.
+- **Activation:** `possible` = the country has a hub built. `is_shown_when_inactive` requires `logistics`. The widget root is gated on `[JournalEntry.IsActive]` so it does not render — and does not read reserve variables — for a country that has never built a hub.
+- **Summary text (`status_desc`):** hub status (no hub / deactivated / active), weekly sales income, and the hub flow cap. Deliberately short, because `status_desc` also renders in the journal *list*, where one block per good was unreadable.
+- **Inventory rows:** one per unlocked good — `@good!` icon and name, `stored / capacity`, a fill bar driven by `st_res_<good>_fill_pct`, the configured signed rate, the actual net weekly movement (`st_res_<good>_last_net`), a Storing / Withdrawing / Idle / Blocked label, and decrease / stop / increase controls. The row tooltip breaks down stock, rate setting, active rate, net movement, weekly decay, hub flow cap and hub staffing, then states the reason movement differs from the setting.
+- **Row visibility** is `ScriptedGui.IsShown`, delegating to `st_res_<good>_unlocked_trigger` — the unlock conditions are never duplicated in a GUI expression.
+- **Row controls** call `st_res_adjust_<good>_sgui` with the action in a `dir` saved scope (`0` decrease, `1` stop, `2` increase). Each branch delegates to the existing `st_res_{increase,decrease,stop}_<good>_rate_effect` helpers, so the rate rules live in script, not in GUI. "Stop" zeroes only that good's rate.
+- **Shared buttons (vanilla-rendered JE buttons):** `st_res_cycle_step_size_button` cycles the adjustment size through 1, 10, 100, 1000, 10000; `st_res_reset_rates_button` zeroes every good's rate. The current step is shown once, in the widget header.
 - **`invalid`:** JE ends if the hub is destroyed.
 - **`on_invalid`:** `st_res_reset_vars_effect` zeros all live vars and hub caches, so a rebuilt hub starts clean.
+
+> The journal entry binds `scripted_progress_bar` and `scripted_button` declarations at **activation** time. A save whose SR journal entry is already running may still show the pre-widget bars/buttons until the hub is demolished and rebuilt.
 
 ---
 
@@ -181,7 +212,11 @@ Button presses call country-scoped wrapper effects in [common/scripted_effects/s
 
 ## 7. AI
 
-The scripted control buttons are currently player-only. All buttons in [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) use `ai_chance = { value = 0 }`, so AI countries do not currently micromanage signed reserve rates or step size through the JE.
+The Strategic Reserve is **player-only, and always has been**. Every button in [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) carries `ai_chance = { value = 0 }`, and no on-action, event or decision drives reserve rates — `grep -rn "st_res" common/on_actions/ events/` returns nothing. The AI therefore never touched these controls.
+
+That is why moving the per-good controls out of the journal entry and into the inventory widget's scripted GUIs was safe: there was no AI path to preserve. The scripted GUIs are explicitly `ai_is_valid = { always = no }`, matching the previous behaviour rather than opening a new one.
+
+If AI reserve management is ever wanted, the entry points are the shared effects (`st_res_increase_<good>_rate_effect` and friends) called from an on-action — not the scripted GUIs, which exist only to validate player clicks.
 
 ---
 
@@ -202,24 +237,16 @@ The scripted control buttons are currently player-only. All buttons in [common/s
 
 ## 9. Extending with a New Good
 
-To add e.g. `rubber`:
+**The authoritative, file-by-file procedure is the `add-strategic-reserve-good` skill** (`.claude/skills/add-strategic-reserve-good/SKILL.md`, with verbatim snippets in `references/per_good_templates.md`). Follow it rather than this section — it is kept in sync with the implementation, including the vanilla mult-axis registration gap that silently breaks a new good.
 
-1. **Modifier types:** add `country_st_res_rubber_capacity_add` and `country_st_res_rubber_decay_add` to `sr_modifier_types.txt`.
-2. **Base decay:** add `country_st_res_rubber_decay_add = <rate>` to `INJECT:base_values` in `extra_modifiers.txt`.
-3. **PMs:** add `pm_sr_rubber_idle/store/withdraw` and `pmg_sr_rubber` to `strategic_reserve_pms.txt`. Add the PMG to the hub's `production_method_groups`. Extend `pm_sr_silo_capacity` with rubber capacity.
-4. **Script values:** add `st_res_rubber_decay_rate`, `st_res_rubber_weekly_decay`, `st_res_rubber_rate_abs`, `st_res_rubber_rate_base_applied`, `st_res_rubber_effective_rate`, `st_res_rubber_weekly_delta`, `st_res_rubber_capacity`, and `st_res_rubber_fill_pct`.
-5. **Effects:** extend `st_res_init_effect`, `st_res_reset_vars_effect`, the shared-local setup in `st_res_rebuild_hub_flow_modifiers_effect`, `st_res_clamp_stockpiles_effect`, and `st_res_weekly_update_effect`. Add `sr_rebuild_rubber_flow_modifiers_effect = { st_res_rebuild_good_flow_modifiers_effect = { GOOD = rubber } }`, then call it from the hub rebuild orchestrator. Also add `sr_increase_rubber_rate_effect` and `sr_decrease_rubber_rate_effect`.
-6. **Buttons:** add `sr_increase_rubber_rate_button` and `sr_decrease_rubber_rate_button` to `sr_buttons.txt` and reference them from the JE.
-7. **Custom loc:** add `st_res_rubber_mode_text` to `sr_custom_loc.txt`.
-8. **Tech (optional):** add an `INJECT:<tech>` reducing `country_st_res_rubber_decay_add`.
-9. **YAML:** add loc keys (PMs, PMG, modifiers, status line, button name/desc).
+What the inventory widget added to that procedure, in short: a good now also needs an entry in `st_res_triggers.txt` (its unlock trigger), an `st_res_adjust_<good>_sgui` in `st_res_scripted_gui.txt`, `st_res_<good>_mode_text` **and** `st_res_<good>_reason_text` custom loc, an `st_res_<good>_last_net` script value, a `st_res_stop_<good>_rate_effect` wrapper, one call each added to the per-good lists in `st_res_init_effect` / `st_res_reset_vars_effect` / `st_res_weekly_update_effect` / `st_res_refresh_hub_flow_effect`, and one row instance plus its five loc keys in the widget. It no longer needs a scripted progress bar, a pair of scripted buttons or a journal-entry status line.
 
 ---
 
 ## 10. Known Limitations / Future Work
 
 - The hub has no animated icon or dedicated art.
-- The SR scripted-effects slice now uses `$GOOD$` parameterization for the hub flow rebuild, but the remaining per-good repetition in [common/script_values/st_res_script_values.txt](../common/script_values/st_res_script_values.txt) and [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) is still a future cleanup candidate.
+- The SR scripted-effects slice is now `$GOOD$`-parameterized for init, reset, the hub flow rebuild, the weekly apply and the status derivation. The remaining per-good repetition is in [common/script_values/st_res_script_values.txt](../common/script_values/st_res_script_values.txt), [common/scripted_guis/st_res_scripted_gui.txt](../common/scripted_guis/st_res_scripted_gui.txt) and [common/customizable_localization/st_res_custom_loc.txt](../common/customizable_localization/st_res_custom_loc.txt) — none of those file types accept `$GOOD$` parameters, so the repetition is structural rather than a cleanup candidate.
 - No event flavor — a short event chain could celebrate reaching capacity or warn of shortages.
 - Decay only has single-tech reductions; a second tier (e.g. `vitalism` or `combustion_engine` / later aerospace refining) could halve decay again.
 - Silo has no distinctive icon — reuses the government-admin icon.

@@ -1436,7 +1436,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 5. **`ScriptValue` requires `MakeScope`.** `Country.ScriptValue('x')` does NOT work. Use `Country.MakeScope.ScriptValue('x')`.
 
-6. **No `AddScope` in V3.** Only `GuiScope.SetRoot(object.MakeScope).End` is available. The `AddScope` pattern seen in some workshop mods appears to be from V3 updates or CK3 crossover — vanilla V3 uses only `SetRoot`.
+6. **`AddScope` DOES exist in V3** — an earlier version of this list claimed otherwise. `TopScope.AddScope(Arg0, Arg1)` is in the engine data-type docs (`data_types_script.txt`) and vanilla uses it: `gui/journal_entry_widgets/ep2_japan_widgets.gui` and `gui/character_panel.gui` both call `GuiScope.SetRoot(X.MakeScope).AddScope('frame', MakeScopeValue('(CFixedPoint)0')).End`. The receiving scripted GUI declares `saved_scopes = { frame }` and reads `scope:frame` in its triggers/effects. This mod uses it in two places: `gui/market_panel.gui` passes a partner market (`AddScope('base_market', …)`) into a script value, and `gui/journal_entry_widgets/strategic_reserve_widget.gui` passes a small integer to **parameterize one scripted GUI across several buttons** — see the pattern note below.
 
 7. **`@variables` are compile-time constants.** `@my_width = 400` is resolved at load time, not runtime. Use data binding for dynamic values.
 
@@ -1459,6 +1459,39 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 ### Pattern: Construction Spending Slider (PSC / FMC)
 
 Uses scripted_guis with click_modifiers for +/- buttons, game variables for state, and an invisible widget with `state { trigger_when }` to extract GUI-only economic data into game variables.
+
+### Pattern: One scripted GUI, several buttons (`AddScope` parameterization)
+
+When a row of related buttons differs only by *which* action it takes, don't write one scripted GUI per button. Write one per row-entity and pass the action in as a saved scope holding a plain number:
+
+```gui
+# in the row's type — datacontext comes from the row instance,
+# so this markup is identical for every row
+button_icon_minus_action = {
+    visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+    enabled = "[ScriptedGui.IsValid(  GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+    onclick = "[ScriptedGui.Execute(  GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+}
+```
+
+```txt
+my_sgui = {
+    scope = country
+    saved_scopes = { dir }
+    is_valid = {
+        trigger_if   = { limit = { scope:dir = 0 } <triggers for action 0> }
+        trigger_else = { <triggers for the other action> }
+    }
+    effect = { if = { limit = { scope:dir = 0 } … } else = { … } }
+}
+```
+
+Notes learned building the Strategic Reserve inventory widget:
+- Set the `ScriptedGui` **datacontext on the row instance**, not on each button. The buttons inherit it, so the three control buttons can live in the shared row *type* with zero per-row markup.
+- Use non-negative integers for the selector (`0/1/2`). A `'(CFixedPoint)-1'` literal is untested here; there is no vanilla precedent for a negative one.
+- The mapping is an implicit contract between the `.gui` and the script. Document it in *both* file headers.
+- Variable *names* can't be built from a scope (`set_variable = { name = st_res_$scope:good$_rate }` is not a thing), so a saved scope can select a branch but cannot replace per-entity script. One scripted GUI per entity with the action as the saved scope is usually the right split.
+- Phrase `custom_tooltip` text inside `is_valid` as a **condition** ("Stays within the weekly cap"), not a complaint ("Cannot change rate"): `ScriptedGui.IsValidTooltip` renders it with a tick when valid and a cross when not, and a negative phrasing reads wrong in the valid case.
 
 ### Pattern: Dynamic Tooltip Lists (DAUI)
 
