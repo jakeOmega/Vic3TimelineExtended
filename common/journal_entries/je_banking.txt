@@ -14,7 +14,25 @@
 	scripted_progress_bar = banking_cycle_momentum_bar
 	scripted_progress_bar = banking_bubble_pressure_bar
 
+	# Policy dashboard. Both widgets are presentation only: every action they
+	# expose runs through common/scripted_guis/banking_dashboard_scripted_gui.txt,
+	# which calls the same shared triggers and effects as the scripted buttons
+	# below, so the two surfaces cannot diverge.
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
+		name = "widget_je_banking_conditions"
+		container = "custom_widget_container_1"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
+		name = "widget_je_banking_policies"
+		container = "custom_widget_container_2"
+	}
+
 	# Buttons
+	# These stay declared here: their `ai_chance` blocks are the AI's only path to
+	# banking policy, and they remain the player's fallback controls next to the
+	# dashboard above.
 	scripted_button = cb_policy_rate_hike
 	scripted_button = cb_disable_policy_rate_hike
 	scripted_button = cb_open_market_ops
