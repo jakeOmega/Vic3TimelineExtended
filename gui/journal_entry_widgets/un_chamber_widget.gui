@@ -105,6 +105,33 @@ flowcontainer = {
 		}
 	}
 
+	# ---- Authorized military mandates ----
+	# Collapsed by default like every other section here: ExecuteTooltip
+	# re-renders each frame the panel is visible, and the register only has
+	# anything to say once the Assembly has issued an authorization.
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_mandates_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_mandates')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_mandates'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_mandates')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_mandates')]"
+
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_mandates_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
 	# ---- Archive of closed resolutions ----
 	un_chamber_section_header = {
 		blockoverride "left_text" {

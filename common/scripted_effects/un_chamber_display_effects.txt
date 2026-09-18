@@ -108,8 +108,35 @@ un_chamber_topic_line = {
 		limit = { has_tag = un_topic_expulsion }
 		custom_tooltip_no_bullet = je_un_chamber_topic_expulsion
 	}
+	else_if = {
+		limit = { has_tag = un_topic_military_mandate }
+		custom_tooltip_no_bullet = je_un_chamber_topic_military_mandate
+	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_topic_unknown
+	}
+}
+
+# The territory and beneficiary a military_mandate resolution names. Printed
+# under the parties line, and only for that topic — every other topic leaves
+# both variables unset, so the `has_variable` guard doubles as the topic test.
+# Scope: resolution container
+un_chamber_mandate_terms_line = {
+	if = {
+		limit = {
+			has_variable = un_res_mandate_region
+			exists = var:un_res_mandate_region
+		}
+		var:un_res_mandate_region ?= { save_temporary_scope_as = un_chamber_res_region }
+		custom_tooltip_no_bullet = je_un_chamber_res_mandate_territory
+	}
+	if = {
+		limit = {
+			has_variable = un_res_mandate_beneficiary
+			exists = var:un_res_mandate_beneficiary
+		}
+		var:un_res_mandate_beneficiary ?= { save_temporary_scope_as = un_chamber_res_beneficiary }
+		custom_tooltip_no_bullet = je_un_chamber_res_mandate_beneficiary
 	}
 }
 
@@ -310,6 +337,16 @@ un_chamber_consequences_line = {
 		limit = { has_tag = un_topic_expulsion }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_expulsion
 	}
+	else_if = {
+		limit = { has_tag = un_topic_military_mandate }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_military_mandate_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_military_mandate
+		}
+	}
 	if = {
 		limit = { has_tag = un_topic_expulsion }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_fail_expulsion
@@ -340,6 +377,14 @@ un_chamber_outcome_line = {
 			has_tag = un_topic_reform
 		}
 		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed_reform
+	}
+	else_if = {
+		limit = {
+			has_tag = un_res_passed
+			has_tag = un_res_vetoed
+			has_tag = un_topic_military_mandate
+		}
+		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed_mandate
 	}
 	else_if = {
 		limit = {
@@ -413,11 +458,145 @@ un_chamber_ballot_lines = {
 un_chamber_history_entry = {
 	un_chamber_topic_line = yes
 	un_chamber_parties_line = yes
+	un_chamber_mandate_terms_line = yes
 	un_chamber_outcome_line = yes
 	un_chamber_tally_line = yes
 	custom_tooltip_no_bullet = je_un_chamber_hist_months
 	if = {
 		limit = { has_variable = un_res_cooldown }
 		custom_tooltip_no_bullet = je_un_chamber_hist_cooldown
+	}
+}
+
+# ============================================================================
+# MANDATES IN FORCE
+# ============================================================================
+# The chamber's record of authorized military mandates. Same contract as the
+# rest of this file: read-only, built out of custom_tooltip lines and scope
+# navigation, rendered through ExecuteTooltip. The register
+# (global list un_mandate_registry) is read in place — no index, length or cap
+# is assumed, so the monthly pruner in un_mandate_effects.txt is invisible here
+# and a save that has never issued a mandate simply shows the empty state.
+#
+# Countries are printed the same way the resolution lines print them: navigated
+# to in script, stashed with save_temporary_scope_as, and rendered from the
+# container's own line as [SCOPE.sCountry('...').GetName] behind an
+# AddLocalizationIf(...Exists, ...) guard, so an actor or target annexed since
+# the mandate was issued reads as "a former member" rather than a broken name.
+# The territory is a state_region, which never stops existing, and prints
+# through [SCOPE.sStateRegion('...').GetName].
+
+# One mandate, as rendered in the register.
+# Scope: mandate container
+un_chamber_mandate_entry = {
+	custom_tooltip_no_bullet = je_un_chamber_mandate_header
+	if = {
+		limit = { exists = var:un_mnd_actor }
+		var:un_mnd_actor ?= { save_temporary_scope_as = un_chamber_mnd_actor }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_actor
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mandate_actor_gone
+	}
+	if = {
+		limit = { exists = var:un_mnd_target }
+		var:un_mnd_target ?= { save_temporary_scope_as = un_chamber_mnd_target }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_target
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mandate_target_gone
+	}
+	if = {
+		limit = { exists = var:un_mnd_region }
+		var:un_mnd_region ?= { save_temporary_scope_as = un_chamber_mnd_region }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_territory
+	}
+	if = {
+		limit = { exists = var:un_mnd_beneficiary }
+		var:un_mnd_beneficiary ?= { save_temporary_scope_as = un_chamber_mnd_beneficiary }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_beneficiary
+	}
+	# Status. Exactly one of these tags is set at a time; the live pair comes
+	# first so a closed mandate can never be read as still standing.
+	if = {
+		limit = { has_tag = un_mandate_active }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_active
+		custom_tooltip_no_bullet = je_un_chamber_mandate_expiry
+	}
+	else_if = {
+		limit = { has_tag = un_mandate_bound }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_bound
+		if = {
+			limit = { has_tag = un_mandate_forfeit }
+			custom_tooltip_no_bullet = je_un_chamber_mandate_forfeit
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_mandate_complied }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_complied
+	}
+	else_if = {
+		limit = { has_tag = un_mandate_violated }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_violated
+	}
+	else_if = {
+		limit = { has_tag = un_mandate_abandoned }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_abandoned
+	}
+	else_if = {
+		limit = { has_tag = un_mandate_expired }
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_expired
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mandate_status_void
+	}
+}
+
+# The whole register, newest first, or the empty state.
+# Scope: any
+un_chamber_mandates_block = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mandate_registry
+			any_in_global_list = {
+				variable = un_mandate_registry
+				has_tag = un_mandate
+			}
+		}
+		ordered_in_global_list = {
+			variable = un_mandate_registry
+			order_by = un_mandate_recency_order
+			max = 100
+			un_chamber_mandate_entry = yes
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_no_mandates
+	}
+}
+
+# The case the propose button would table if pressed right now. Calls the very
+# effect the button calls (un_mandate_select_case), so the preview cannot drift
+# from the proposal: both leave the same two temporary scopes and neither
+# writes gameplay state.
+# Scope: country
+un_chamber_mandate_case_line = {
+	if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			NOT = { un_mandate_has_live_mandate = yes }
+			un_mandate_case_exists = yes
+		}
+		un_mandate_select_case = yes
+		if = {
+			limit = {
+				exists = scope:un_mandate_case_target
+				exists = scope:un_mandate_case_state
+			}
+			scope:un_mandate_case_state = {
+				state_region = { save_temporary_scope_as = un_chamber_case_region }
+			}
+			custom_tooltip_no_bullet = je_un_chamber_mandate_case
+		}
 	}
 }

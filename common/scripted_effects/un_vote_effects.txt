@@ -20,6 +20,11 @@
 #           un_res_months     months open (lapse watchdog)
 #           un_res_cooldown   timed, set on close: the topic can't be proposed
 #                             again while any closed resolution of it carries it
+#                             (military_mandate opts out — see un_buttons.txt)
+#           un_res_mandate_region       military_mandate only: the state region
+#                             the resolution would authorize recovering
+#           un_res_mandate_beneficiary  military_mandate only: who receives it
+#                             (v1: always the proposer)
 #   lists   un_res_yes, un_res_no  voters (the proposer is in un_res_yes)
 #
 # Globals:

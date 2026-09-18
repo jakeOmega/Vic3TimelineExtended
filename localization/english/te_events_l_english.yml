@@ -4027,6 +4027,23 @@
  un_events.9.t:0 "UNESCO: Protecting World Heritage"
 
 #
+# UN_MANDATE
+#
+ un_mandate.1.a:0 "So it is recorded."
+ un_mandate.1.d_abandoned:0 "We raised the play the Assembly authorized and then walked away from it. The mandate is void, and the chamber has noted that its name was spent on a war we would not fight. #R −5 [concept_un_authority]#!, and the censure of the organisation falls on us."
+ un_mandate.1.d_complied:0 "[AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] is ours again, taken under the authority of the General Assembly and by the terms it set. The mandate is discharged. #G +5 [concept_un_authority]#!, and the organisation's standing is the better for having been obeyed."
+ un_mandate.1.d_complied_forfeit:0 "The territory is ours — but we took it after leaving the organisation whose authorization we were using. The chamber does not recognise a mandate exercised by a state that has walked out of it. #R −5 [concept_un_authority]#!, and the censure that would have gone to a violator falls on us instead."
+ un_mandate.1.d_expired:0 "Five years have passed and the authorization has lapsed unexercised. The Assembly's licence was never a standing one; pressing the claim now would be an ordinary war, at an ordinary price."
+ un_mandate.1.d_violated:0 "We were authorized to recover one territory from [AddLocalizationIf(SCOPE.sCountry('un_mandate_closed_target').Exists, SCOPE.sCountry('un_mandate_closed_target').GetName)] and we demanded more than that. The mandate is void, the authorized war goal is no longer ours to take, and the chamber has been shown exactly what its authorizations are worth. #R −5 [concept_un_authority]#!, and the censure of the organisation."
+ un_mandate.1.d_void:0 "The mandate can no longer be exercised on the terms the Assembly set — the territory changed hands, a party to it ceased to exist, or we are no longer a member of the body that issued it. No censure attaches; the authorization simply is not there any more."
+ un_mandate.1.f:0 "'The resolution said one province.'\n\n'The resolution said a great many things.'"
+ un_mandate.1.t_abandoned:0 "The Mandate Abandoned"
+ un_mandate.1.t_complied:0 "The Mandate Discharged"
+ un_mandate.1.t_expired:0 "The Mandate Lapses"
+ un_mandate.1.t_violated:0 "The Mandate Exceeded"
+ un_mandate.1.t_void:0 "The Mandate Falls Away"
+
+#
 # UN_VOTE
 #
  un_vote.1.a:0 "We vote in favor."
@@ -4045,6 +4062,8 @@
  un_vote.1.d_human_rights:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Universal Declaration of Human Rights to the General Assembly, establishing fundamental freedoms as the common standard for all peoples and nations. A vote in favor means our country ratifies the declaration and commits to upholding its [Concept('concept_power_bloc_principle', 'principles')]."
  un_vote.1.d_icc:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the Rome Statute establishing a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. A vote in favor submits our military and political leadership to international criminal jurisdiction."
  un_vote.1.d_law_of_sea:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on the Law of the Sea, establishing territorial waters, exclusive economic zones, and international maritime law. A vote in favor commits our country to international arbitration of maritime disputes and shared stewardship of the oceans."
+ un_vote.1.d_military_mandate:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize it, by name, to take back territory held by [SCOPE.sCountry('un_vote_target').GetName] — a state this chamber has already had occasion to censure. The resolution is narrow: one [concept_state_region], one claimant, one war, and nothing else. It is also the gravest thing this body can do. Carried, it lends the organisation's name to a war someone else will fight; refused, the claim stays a grievance and the Assembly keeps its hands clean. How shall [ROOT.GetCountry.GetName] vote?"
+ un_vote.1.d_military_mandate_target:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize a war against us — to license, in the organisation's own name, the seizure of territory we hold. We sit in this chamber too, and we may vote. To vote against is to deny the charge and dare them to come without a mandate. To vote in favour is to concede the claim before a shot is fired, and to be seen to have conceded it."
  un_vote.1.d_npt:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has brought the Nuclear Non-Proliferation Treaty before the General Assembly. A vote in favor commits [ROOT.GetCountry.GetName] to the treaty's terms - renouncing the pursuit of nuclear weapons and accepting international inspections."
  un_vote.1.d_pandemic:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a resolution for coordinated international pandemic response, establishing shared research protocols and mutual assistance frameworks. A vote in favor commits our country to full data-sharing and resource cooperation during health emergencies."
  un_vote.1.d_peacekeeping_request:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has requested the deployment of [concept_un_peacekeeping] forces to stabilize its territory. The General Assembly must vote on whether to authorize the mission. A vote in favor commits contributing nations to deploy forces and bear the costs of the operation."
@@ -4064,6 +4083,7 @@
  un_vote.1.t_human_rights:0 "Human Rights Declaration Vote"
  un_vote.1.t_icc:0 "International Criminal Court Vote"
  un_vote.1.t_law_of_sea:0 "Convention on the Law of the Sea Vote"
+ un_vote.1.t_military_mandate:0 "Authorized Military Mandate Vote"
  un_vote.1.t_npt:0 "Non-Proliferation Treaty Vote"
  un_vote.1.t_pandemic:0 "Pandemic Response Vote"
  un_vote.1.t_peacekeeping_request:0 "Peacekeeping Deployment Vote"
@@ -4095,6 +4115,9 @@
  un_vote.2.d_icc_passed_vetoed:0 "The Rome Statute referral was vetoed in the [concept_un_security_council]. The General Assembly's simple majority instead issued a symbolic censure — a formal expression of concern with no court jurisdiction attached. Accountability, again, deferred."
  un_vote.2.d_law_of_sea_failed:0 "The Convention on the Law of the Sea has failed to pass the General Assembly. Maritime powers were unwilling to submit their naval prerogatives to international arbitration. The oceans remain a contested frontier."
  un_vote.2.d_law_of_sea_passed:0 "The Convention on the Law of the Sea has been adopted by the General Assembly. The International Tribunal for the Law of the Sea (ITLOS) is established to adjudicate maritime disputes and enforce the new framework of territorial waters and exclusive economic zones."
+ un_vote.2.d_military_mandate_failed:0 "The General Assembly declined to authorize the mandate. The claim remains a claim, and any attempt to press it will be an ordinary war, priced accordingly."
+ un_vote.2.d_military_mandate_passed:0 "The General Assembly has authorized the mandate. For the next five years we may pursue the named territory against the named state without incurring [concept_infamy] — in one [concept_diplomatic_play], for that territory, and for nothing else. Any further demand we make against that state in the same war voids the authorization and calls the chamber's censure down on us instead."
+ un_vote.2.d_military_mandate_passed_vetoed:0 "The Assembly carried the resolution and a [concept_un_permanent_member] struck it down. There is no lesser form of a licence to use force — either this body authorizes a war or it does not — so the mandate is blocked outright. The majority is on the record, and nothing else."
  un_vote.2.d_npt_failed:0 "The Nuclear Non-Proliferation Treaty has failed to pass the General Assembly. Nuclear powers and aspiring states alike found common cause in rejecting constraints on their arsenals. The atom remains unbound by international law."
  un_vote.2.d_npt_passed:0 "The Nuclear Non-Proliferation Treaty has been adopted by the General Assembly with a strong majority. The international community has spoken clearly against the spread of nuclear weapons. The International Atomic Energy Agency is established to enforce the treaty's provisions."
  un_vote.2.d_pandemic_failed:0 "The Pandemic Cooperation Resolution has failed to pass the General Assembly. National sovereignty concerns and economic anxieties proved stronger than the call for international health cooperation. Each nation will face the next epidemic alone."

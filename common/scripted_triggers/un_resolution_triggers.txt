@@ -20,9 +20,14 @@ un_resolution_topic_on_cooldown = {
 	}
 }
 
-# Whether the resolution is *binding* (vetoable). The 5 binding topics are
-# sanctions, peacekeeping_request, icc, condemn and reform; all others are
-# recommendatory and cannot be vetoed.
+# Whether the resolution is *binding* (vetoable). The 6 binding topics are
+# sanctions, peacekeeping_request, icc, condemn, reform and military_mandate;
+# all others are recommendatory and cannot be vetoed.
+#
+# military_mandate and reform are the two with NO graduated form: a veto on an
+# authorization to use force blocks it outright, because there is no coherent
+# weaker version of "you may go to war over this" (un_vote.2 applies no effect
+# for either). See docs/systems/journal_entry_systems.md § Military mandates.
 # Scope: resolution container
 un_resolution_is_binding = {
 	OR = {
@@ -31,6 +36,7 @@ un_resolution_is_binding = {
 		has_tag = un_topic_icc
 		has_tag = un_topic_condemn
 		has_tag = un_topic_reform
+		has_tag = un_topic_military_mandate
 	}
 }
 

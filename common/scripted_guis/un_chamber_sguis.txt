@@ -54,6 +54,7 @@ un_chamber_active_sgui = {
 			global_var:un_active_resolution ?= {
 				un_chamber_topic_line = yes
 				un_chamber_parties_line = yes
+				un_chamber_mandate_terms_line = yes
 				un_chamber_tally_line = yes
 				un_chamber_projection_line = yes
 				un_chamber_veto_line = yes
@@ -151,5 +152,24 @@ un_chamber_history_details_sgui = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_no_history
 		}
+	}
+}
+
+# Authorized military mandates: the register of authorizations the Assembly has
+# issued, plus — while we hold none — the case we would be tabling if we
+# proposed one now. Read straight out of the un_mandate_registry global list,
+# with the same no-index/no-length contract as the resolution history above, so
+# the monthly pruner in un_mandate_effects.txt stays invisible here and a save
+# that predates the system shows the empty state.
+#
+# `max` is a rendering ceiling, not the register cap
+# (un_mandate_registry_cap = 12): stated explicitly only because an ordered_
+# iterator's default span is ambiguous, same as un_chamber_history_sgui.
+un_chamber_mandates_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_mandates_block = yes
+		un_chamber_mandate_case_line = yes
 	}
 }
