@@ -9,68 +9,65 @@
 #   lower half of this file rather than the low-level scope-bridge helpers.
 
 # --------------------------------------------------------------------------
+# st_res_init_good_effect — Per-good half of st_res_init_effect.
+# Parameter: GOOD = grain | ammunition | oil | small_arms | artillery |
+#            aeroplanes | tanks.
+# `st_res_$GOOD$_last_delta` / `st_res_$GOOD$_last_status` are the display
+# bookkeeping vars read by the JE inventory widget. They are SAVE-SAFE: a save
+# made before the widget existed simply has neither, and this effect seeds them
+# with 0 (= no movement recorded / status "Idle") until the next weekly tick
+# overwrites them with real data.
+#
+# The ten reserve-policy variables are seeded behind ONE guard on
+# `st_res_$GOOD$_policy`, because they are only ever written together: a save
+# from before policies existed has none of them, gets all ten at once, and can
+# never be left in a half-configured state. The seeded policy is 0 (Manual)
+# with the Standard preset's settings, so loading a pre-feature save changes
+# nothing a player can see — every good keeps the rate it had and keeps being
+# driven by hand until the player picks a policy.
+# --------------------------------------------------------------------------
+st_res_init_good_effect = {
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_stored } }
+		set_variable = { name = st_res_$GOOD$_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_rate } }
+		set_variable = { name = st_res_$GOOD$_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_last_delta } }
+		set_variable = { name = st_res_$GOOD$_last_delta value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_last_status } }
+		set_variable = { name = st_res_$GOOD$_last_status value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_policy } }
+		set_variable = { name = st_res_$GOOD$_policy value = 0 }
+		set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+		set_variable = { name = st_res_$GOOD$_policy_status value = 0 }
+		set_variable = { name = st_res_$GOOD$_policy_price value = 0 }
+		st_res_apply_preset_standard_base = { GOOD = $GOOD$ }
+	}
+}
+
+# --------------------------------------------------------------------------
 # st_res_init_effect — Initialize vars if missing. Called on JE immediate and the
 # weekly pulse as a safety net. Existing saves keep their stockpile values and
 # start with zero configured flow. The shared step-size tier defaults to 1,
 # which means 10-unit adjustments.
 # --------------------------------------------------------------------------
 st_res_init_effect = {
-	if = {
-		limit = { NOT = { has_variable = st_res_grain_stored } }
-		set_variable = { name = st_res_grain_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_grain_rate } }
-		set_variable = { name = st_res_grain_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_ammunition_stored } }
-		set_variable = { name = st_res_ammunition_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_ammunition_rate } }
-		set_variable = { name = st_res_ammunition_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_oil_stored } }
-		set_variable = { name = st_res_oil_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_oil_rate } }
-		set_variable = { name = st_res_oil_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_small_arms_stored } }
-		set_variable = { name = st_res_small_arms_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_small_arms_rate } }
-		set_variable = { name = st_res_small_arms_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_artillery_stored } }
-		set_variable = { name = st_res_artillery_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_artillery_rate } }
-		set_variable = { name = st_res_artillery_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_aeroplanes_stored } }
-		set_variable = { name = st_res_aeroplanes_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_aeroplanes_rate } }
-		set_variable = { name = st_res_aeroplanes_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_tanks_stored } }
-		set_variable = { name = st_res_tanks_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_tanks_rate } }
-		set_variable = { name = st_res_tanks_rate value = 0 }
-	}
+	st_res_init_good_effect = { GOOD = grain }
+	st_res_init_good_effect = { GOOD = ammunition }
+	st_res_init_good_effect = { GOOD = oil }
+	st_res_init_good_effect = { GOOD = small_arms }
+	st_res_init_good_effect = { GOOD = artillery }
+	st_res_init_good_effect = { GOOD = aeroplanes }
+	st_res_init_good_effect = { GOOD = tanks }
+
 	if = {
 		limit = { NOT = { has_variable = st_res_adjust_step_tier } }
 		set_variable = { name = st_res_adjust_step_tier value = 1 }
@@ -90,28 +87,40 @@ st_res_init_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_reset_good_vars_effect — Per-good half of st_res_reset_vars_effect.
+# Parameter: GOOD.
+# --------------------------------------------------------------------------
+st_res_reset_good_vars_effect = {
+	set_variable = { name = st_res_$GOOD$_stored value = 0 }
+	set_variable = { name = st_res_$GOOD$_rate value = 0 }
+	set_variable = { name = st_res_$GOOD$_last_delta value = 0 }
+	set_variable = { name = st_res_$GOOD$_last_status value = 0 }
+	set_variable = { name = st_res_$GOOD$_policy value = 0 }
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+	set_variable = { name = st_res_$GOOD$_policy_status value = 0 }
+	set_variable = { name = st_res_$GOOD$_policy_price value = 0 }
+	st_res_apply_preset_standard_base = { GOOD = $GOOD$ }
+}
+
+# --------------------------------------------------------------------------
 # st_res_reset_vars_effect — Zero all live SR vars. Called from JE invalidation so
 # a rebuilt hub starts from a clean slate rather than inheriting stale data.
 # --------------------------------------------------------------------------
 st_res_reset_vars_effect = {
-	set_variable = { name = st_res_grain_stored value = 0 }
-	set_variable = { name = st_res_grain_rate value = 0 }
-	set_variable = { name = st_res_ammunition_stored value = 0 }
-	set_variable = { name = st_res_ammunition_rate value = 0 }
-	set_variable = { name = st_res_oil_stored value = 0 }
-	set_variable = { name = st_res_oil_rate value = 0 }
-	set_variable = { name = st_res_small_arms_stored value = 0 }
-	set_variable = { name = st_res_small_arms_rate value = 0 }
-	set_variable = { name = st_res_artillery_stored value = 0 }
-	set_variable = { name = st_res_artillery_rate value = 0 }
-	set_variable = { name = st_res_aeroplanes_stored value = 0 }
-	set_variable = { name = st_res_aeroplanes_rate value = 0 }
-	set_variable = { name = st_res_tanks_stored value = 0 }
-	set_variable = { name = st_res_tanks_rate value = 0 }
+	st_res_reset_good_vars_effect = { GOOD = grain }
+	st_res_reset_good_vars_effect = { GOOD = ammunition }
+	st_res_reset_good_vars_effect = { GOOD = oil }
+	st_res_reset_good_vars_effect = { GOOD = small_arms }
+	st_res_reset_good_vars_effect = { GOOD = artillery }
+	st_res_reset_good_vars_effect = { GOOD = aeroplanes }
+	st_res_reset_good_vars_effect = { GOOD = tanks }
 	set_variable = { name = st_res_adjust_step_tier value = 1 }
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
 	set_variable = { name = st_res_hub_workforce_cached value = 1 }
+	# Clearing the one-shot AI marker lets st_res_ai_seed_policies_effect hand a
+	# rebuilt hub its presets again, exactly as a freshly activated JE would.
+	remove_variable = st_res_policy_ai_seeded
 }
 
 # --------------------------------------------------------------------------
@@ -270,6 +279,88 @@ st_res_rebuild_hub_flow_modifiers_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_set_good_status_effect — Derive the display status code for one good.
+# Parameter: GOOD.
+#
+# This is the ONLY site that decides what the JE inventory widget shows as a
+# good's status: the widget and its tooltips read `st_res_$GOOD$_last_status`
+# and never re-derive the reason from GUI expressions. It is called once, at
+# the end of st_res_refresh_hub_flow_effect, which is itself the shared tail of
+# both the weekly pulse and every rate/step button press — so one call site
+# covers both "what happened this tick" and "what will happen now that you
+# clicked", without the label lagging a week behind the player's input.
+#
+# Status codes (mirrored in st_res_custom_loc.txt and the widget loc keys):
+#   0 = Idle              — nothing configured, nothing moving
+#   1 = Storing           — configured intake is being applied in full
+#   2 = Withdrawing       — configured release is being applied in full
+#   3 = Storing, clipped by the hub's weekly flow cap
+#   4 = Withdrawing, clipped by the hub's weekly flow cap
+#   5 = Blocked, stockpile at capacity
+#   6 = Blocked, stockpile empty while a release is configured
+#   7 = Blocked, hub understaffed (occupancy below 100%)
+#   8 = Blocked, no Strategic Reserve Hub
+#
+# Precedence note: st_res_clamp_stockpiles_effect drives the configured rate to
+# 0 once a stockpile hits a bound, so the "full" branch deliberately accepts
+# `rate >= 0` — otherwise a full reserve would report Idle the tick after the
+# auto-clamp fires. The "empty" branch keeps `rate < 0` on purpose: an empty,
+# unconfigured reserve is genuinely idle, and the row tooltip says it is empty.
+# --------------------------------------------------------------------------
+st_res_set_good_status_effect = {
+	set_local_variable = { name = st_res_status_capacity value = st_res_$GOOD$_capacity }
+
+	if = {
+		limit = { var:st_res_hub_level_cached <= 0 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 8 }
+	}
+	else_if = {
+		limit = { var:st_res_hub_workforce_cached <= 0.99 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 7 }
+	}
+	else_if = {
+		limit = {
+			local_var:st_res_status_capacity > 0
+			var:st_res_$GOOD$_stored >= st_res_$GOOD$_capacity
+			var:st_res_$GOOD$_rate >= 0
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 5 }
+	}
+	else_if = {
+		limit = {
+			var:st_res_$GOOD$_stored <= 0
+			var:st_res_$GOOD$_rate < 0
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 6 }
+	}
+	else_if = {
+		limit = {
+			var:st_res_$GOOD$_rate > 0
+			var:st_res_$GOOD$_actual_rate_cached > st_res_weekly_base_rate_cap
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 3 }
+	}
+	else_if = {
+		limit = {
+			var:st_res_$GOOD$_rate < 0
+			var:st_res_$GOOD$_actual_rate_cached < st_res_neg_weekly_base_rate_cap
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 4 }
+	}
+	else_if = {
+		limit = { var:st_res_$GOOD$_rate > 0 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 1 }
+	}
+	else_if = {
+		limit = { var:st_res_$GOOD$_rate < 0 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 2 }
+	}
+	else = {
+		set_variable = { name = st_res_$GOOD$_last_status value = 0 }
+	}
+}
+
+# --------------------------------------------------------------------------
 # st_res_refresh_hub_flow_effect — Refresh hub cache, then rebuild the transient
 # building modifiers that express the current country-owned reserve settings.
 # --------------------------------------------------------------------------
@@ -289,6 +380,15 @@ st_res_refresh_hub_flow_effect = {
 	set_variable = { name = st_res_tanks_actual_rate_cached value = st_res_tanks_actual_rate }
 	st_res_rebuild_hub_flow_modifiers_effect = yes
 	st_res_apply_sell_profit_effect = yes
+
+	# Single derivation site for the JE inventory widget's status labels.
+	st_res_set_good_status_effect = { GOOD = grain }
+	st_res_set_good_status_effect = { GOOD = ammunition }
+	st_res_set_good_status_effect = { GOOD = oil }
+	st_res_set_good_status_effect = { GOOD = small_arms }
+	st_res_set_good_status_effect = { GOOD = artillery }
+	st_res_set_good_status_effect = { GOOD = aeroplanes }
+	st_res_set_good_status_effect = { GOOD = tanks }
 }
 
 # --------------------------------------------------------------------------
@@ -323,6 +423,43 @@ st_res_clamp_stockpiles_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_apply_weekly_good_effect — Apply one weekly tick for a single good and
+# record what actually moved. Parameter: GOOD.
+#
+# The stockpile arithmetic is unchanged from the pre-widget implementation
+# (add weekly_delta, clamp into [0, capacity]); the only addition is the
+# before/after snapshot that writes `st_res_$GOOD$_last_delta`. That variable is
+# the ACTUAL net weekly movement, i.e. after the capacity/empty clamp bites, so
+# the number shown in the JE inventory widget always matches what bookkeeping
+# really did rather than what the configured rate asked for.
+# --------------------------------------------------------------------------
+st_res_apply_weekly_good_effect = {
+	set_local_variable = { name = st_res_weekly_prev value = var:st_res_$GOOD$_stored }
+
+	change_variable = { name = st_res_$GOOD$_stored add = st_res_$GOOD$_weekly_delta }
+	clamp_variable = { name = st_res_$GOOD$_stored min = 0 max = st_res_$GOOD$_capacity }
+
+	set_local_variable = { name = st_res_weekly_moved value = var:st_res_$GOOD$_stored }
+	change_local_variable = {
+		name = st_res_weekly_moved
+		add = {
+			value = local_var:st_res_weekly_prev
+			multiply = -1
+		}
+	}
+	set_variable = { name = st_res_$GOOD$_last_delta value = local_var:st_res_weekly_moved }
+}
+
+# --------------------------------------------------------------------------
+# st_res_mark_good_no_hub_effect — Weekly bookkeeping for a good while no hub
+# exists. Parameter: GOOD. Nothing moves and the widget shows "no hub".
+# --------------------------------------------------------------------------
+st_res_mark_good_no_hub_effect = {
+	set_variable = { name = st_res_$GOOD$_last_delta value = 0 }
+	set_variable = { name = st_res_$GOOD$_last_status value = 8 }
+}
+
+# --------------------------------------------------------------------------
 # st_res_weekly_update_effect — Country-scoped weekly bookkeeping for one SR tick.
 # Applies one week of configured signed flow plus one week of decay, clamps the
 # stockpile to [0, capacity], then refreshes hub flow modifiers. JE pulses
@@ -331,6 +468,9 @@ st_res_clamp_stockpiles_effect = {
 st_res_weekly_update_effect = {
 	st_res_init_effect = yes
 	st_res_refresh_hub_cache_effect = yes
+	# One-shot, AI-only. Guarded internally, so this costs a `has_variable`
+	# check for a human player and for any AI that has already been seeded.
+	st_res_ai_seed_policies_effect = yes
 
 	if = {
 		limit = {
@@ -338,30 +478,52 @@ st_res_weekly_update_effect = {
 				is_building_type = building_strategic_reserve_hub
 			}
 		}
-		change_variable = { name = st_res_grain_stored add = st_res_grain_weekly_delta }
-		clamp_variable = { name = st_res_grain_stored min = 0 max = st_res_grain_capacity }
+		st_res_apply_weekly_good_effect = { GOOD = grain }
+		st_res_apply_weekly_good_effect = { GOOD = ammunition }
+		st_res_apply_weekly_good_effect = { GOOD = oil }
+		st_res_apply_weekly_good_effect = { GOOD = small_arms }
+		st_res_apply_weekly_good_effect = { GOOD = artillery }
+		st_res_apply_weekly_good_effect = { GOOD = aeroplanes }
+		st_res_apply_weekly_good_effect = { GOOD = tanks }
 
-		change_variable = { name = st_res_ammunition_stored add = st_res_ammunition_weekly_delta }
-		clamp_variable = { name = st_res_ammunition_stored min = 0 max = st_res_ammunition_capacity }
-
-		change_variable = { name = st_res_oil_stored add = st_res_oil_weekly_delta }
-		clamp_variable = { name = st_res_oil_stored min = 0 max = st_res_oil_capacity }
-
-		change_variable = { name = st_res_small_arms_stored add = st_res_small_arms_weekly_delta }
-		clamp_variable = { name = st_res_small_arms_stored min = 0 max = st_res_small_arms_capacity }
-
-		change_variable = { name = st_res_artillery_stored add = st_res_artillery_weekly_delta }
-		clamp_variable = { name = st_res_artillery_stored min = 0 max = st_res_artillery_capacity }
-
-		change_variable = { name = st_res_aeroplanes_stored add = st_res_aeroplanes_weekly_delta }
-		clamp_variable = { name = st_res_aeroplanes_stored min = 0 max = st_res_aeroplanes_capacity }
-
-		change_variable = { name = st_res_tanks_stored add = st_res_tanks_weekly_delta }
-		clamp_variable = { name = st_res_tanks_stored min = 0 max = st_res_tanks_capacity }
+		# Re-decide every automated lane AFTER last week's movement has been
+		# booked and BEFORE the shared refresh/clamp tail, so the rate the hub
+		# trades on next week is the one the policy just chose. The evaluator
+		# rewrites the configured rate unconditionally, which is what makes it
+		# immune to st_res_clamp_stockpiles_effect having zeroed that rate at a
+		# stockpile bound last week.
+		st_res_policy_evaluate_good_effect = { GOOD = grain }
+		st_res_policy_evaluate_good_effect = { GOOD = ammunition }
+		st_res_policy_evaluate_good_effect = { GOOD = oil }
+		st_res_policy_evaluate_good_effect = { GOOD = small_arms }
+		st_res_policy_evaluate_good_effect = { GOOD = artillery }
+		st_res_policy_evaluate_good_effect = { GOOD = aeroplanes }
+		st_res_policy_evaluate_good_effect = { GOOD = tanks }
 
 		st_res_refresh_hub_flow_effect = yes
 		st_res_clamp_stockpiles_effect = yes
 		st_res_apply_sell_profit_effect = yes
+	}
+	else = {
+		st_res_mark_good_no_hub_effect = { GOOD = grain }
+		st_res_mark_good_no_hub_effect = { GOOD = ammunition }
+		st_res_mark_good_no_hub_effect = { GOOD = oil }
+		st_res_mark_good_no_hub_effect = { GOOD = small_arms }
+		st_res_mark_good_no_hub_effect = { GOOD = artillery }
+		st_res_mark_good_no_hub_effect = { GOOD = aeroplanes }
+		st_res_mark_good_no_hub_effect = { GOOD = tanks }
+
+		# The evaluator also runs with no hub: its `hub_level_cached <= 0`
+		# branch writes policy status 9 and touches no rate. Keeping the call in
+		# BOTH branches is what makes st_res_policy_evaluate_good_effect the one
+		# and only writer of st_res_<good>_policy_status.
+		st_res_policy_evaluate_good_effect = { GOOD = grain }
+		st_res_policy_evaluate_good_effect = { GOOD = ammunition }
+		st_res_policy_evaluate_good_effect = { GOOD = oil }
+		st_res_policy_evaluate_good_effect = { GOOD = small_arms }
+		st_res_policy_evaluate_good_effect = { GOOD = artillery }
+		st_res_policy_evaluate_good_effect = { GOOD = aeroplanes }
+		st_res_policy_evaluate_good_effect = { GOOD = tanks }
 	}
 }
 
@@ -369,54 +531,18 @@ st_res_weekly_update_effect = {
 # JE entry points. Journal entries should call only these wrapper effects so
 # the JE stays at the lifecycle layer rather than the helper layer.
 # --------------------------------------------------------------------------
+# The per-good fill bars are no longer scripted_progress_bars on the journal
+# entry — the inventory widget draws them itself and reads
+# st_res_<good>_fill_pct live, so there is nothing to push into JE scope here.
 st_res_je_immediate_effect = {
 	st_res_init_effect = yes
+	st_res_ai_seed_policies_effect = yes
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
-
-	# Compute per-good fill % into temporary vars so the journal-entry scope
-	# can read concrete numeric values (avoids 'none' when evaluated in JE scope).
-	set_variable = { name = st_res_grain_fill_for_bar value = st_res_grain_fill_pct }
-	set_variable = { name = st_res_ammunition_fill_for_bar value = st_res_ammunition_fill_pct }
-	set_variable = { name = st_res_oil_fill_for_bar value = st_res_oil_fill_pct }
-	set_variable = { name = st_res_small_arms_fill_for_bar value = st_res_small_arms_fill_pct }
-	set_variable = { name = st_res_artillery_fill_for_bar value = st_res_artillery_fill_pct }
-	set_variable = { name = st_res_aeroplanes_fill_for_bar value = st_res_aeroplanes_fill_pct }
-	set_variable = { name = st_res_tanks_fill_for_bar value = st_res_tanks_fill_pct }
-
-	scope:journal_entry = {
-		set_bar_progress = { name = st_res_grain_fill_bar value = ROOT.var:st_res_grain_fill_for_bar }
-		set_bar_progress = { name = st_res_ammunition_fill_bar value = ROOT.var:st_res_ammunition_fill_for_bar }
-		set_bar_progress = { name = st_res_oil_fill_bar value = ROOT.var:st_res_oil_fill_for_bar }
-		set_bar_progress = { name = st_res_small_arms_fill_bar value = ROOT.var:st_res_small_arms_fill_for_bar }
-		set_bar_progress = { name = st_res_artillery_fill_bar value = ROOT.var:st_res_artillery_fill_for_bar }
-		set_bar_progress = { name = st_res_aeroplanes_fill_bar value = ROOT.var:st_res_aeroplanes_fill_for_bar }
-		set_bar_progress = { name = st_res_tanks_fill_bar value = ROOT.var:st_res_tanks_fill_for_bar }
-	}
 }
 
 st_res_je_weekly_pulse_effect = {
 	st_res_weekly_update_effect = yes
-
-	# Refresh the JE bars after weekly bookkeeping. Compute temp vars first so
-	# the journal-entry scope reads concrete numeric values.
-	set_variable = { name = st_res_grain_fill_for_bar value = st_res_grain_fill_pct }
-	set_variable = { name = st_res_ammunition_fill_for_bar value = st_res_ammunition_fill_pct }
-	set_variable = { name = st_res_oil_fill_for_bar value = st_res_oil_fill_pct }
-	set_variable = { name = st_res_small_arms_fill_for_bar value = st_res_small_arms_fill_pct }
-	set_variable = { name = st_res_artillery_fill_for_bar value = st_res_artillery_fill_pct }
-	set_variable = { name = st_res_aeroplanes_fill_for_bar value = st_res_aeroplanes_fill_pct }
-	set_variable = { name = st_res_tanks_fill_for_bar value = st_res_tanks_fill_pct }
-
-	scope:journal_entry = {
-		set_bar_progress = { name = st_res_grain_fill_bar value = ROOT.var:st_res_grain_fill_for_bar }
-		set_bar_progress = { name = st_res_ammunition_fill_bar value = ROOT.var:st_res_ammunition_fill_for_bar }
-		set_bar_progress = { name = st_res_oil_fill_bar value = ROOT.var:st_res_oil_fill_for_bar }
-		set_bar_progress = { name = st_res_small_arms_fill_bar value = ROOT.var:st_res_small_arms_fill_for_bar }
-		set_bar_progress = { name = st_res_artillery_fill_bar value = ROOT.var:st_res_artillery_fill_for_bar }
-		set_bar_progress = { name = st_res_aeroplanes_fill_bar value = ROOT.var:st_res_aeroplanes_fill_for_bar }
-		set_bar_progress = { name = st_res_tanks_fill_bar value = ROOT.var:st_res_tanks_fill_for_bar }
-	}
 }
 
 st_res_je_invalid_effect = {
@@ -440,8 +566,17 @@ st_res_cycle_step_size_effect = {
 }
 
 # ---------------- RESET RATES ----------------
+# Also drops every good back to Manual. "Reset Reserve Rates" is one of the two
+# player actions that switch automation off — see st_res_switch_to_manual_base.
 st_res_reset_rates_effect = {
 	st_res_init_effect = yes
+	st_res_switch_to_manual_base = { GOOD = grain }
+	st_res_switch_to_manual_base = { GOOD = ammunition }
+	st_res_switch_to_manual_base = { GOOD = oil }
+	st_res_switch_to_manual_base = { GOOD = small_arms }
+	st_res_switch_to_manual_base = { GOOD = artillery }
+	st_res_switch_to_manual_base = { GOOD = aeroplanes }
+	st_res_switch_to_manual_base = { GOOD = tanks }
 	set_variable = { name = st_res_grain_rate value = 0 }
 	set_variable = { name = st_res_ammunition_rate value = 0 }
 	set_variable = { name = st_res_oil_rate value = 0 }
@@ -460,8 +595,15 @@ st_res_reset_rates_effect = {
 # each wrapper delegates to one of these two bases.
 # Country scope. st_res_init_effect ensures the rate variable exists.
 
+# All three bases hand the good back to the player FIRST. Touching a rate by
+# hand is an explicit, visible takeover: the row's policy line flips to "Manual"
+# on the same click and the automated evaluator stops writing that lane. The
+# auto-clamp is deliberately NOT a takeover — it only ever moves the rate
+# variable, never the policy, which is why the weekly evaluator can safely
+# rewrite the rate it zeroed.
 st_res_increase_rate_base = {
 	st_res_init_effect = yes
+	st_res_switch_to_manual_base = { GOOD = $GOOD$ }
 	change_variable = { name = st_res_$GOOD$_rate add = st_res_adjust_step_value }
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
@@ -469,7 +611,19 @@ st_res_increase_rate_base = {
 
 st_res_decrease_rate_base = {
 	st_res_init_effect = yes
+	st_res_switch_to_manual_base = { GOOD = $GOOD$ }
 	change_variable = { name = st_res_$GOOD$_rate subtract = st_res_adjust_step_value }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+# "Stop" — park one good's lane at 0/week without touching any other good.
+# Same shape as the increase/decrease bases so the hub refresh and the stockpile
+# clamp run exactly as they do for a stepped adjustment.
+st_res_stop_rate_base = {
+	st_res_init_effect = yes
+	st_res_switch_to_manual_base = { GOOD = $GOOD$ }
+	set_variable = { name = st_res_$GOOD$_rate value = 0 }
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
 }
@@ -491,6 +645,14 @@ st_res_decrease_aeroplanes_rate_effect  = { st_res_decrease_rate_base = { GOOD =
 st_res_increase_tanks_rate_effect       = { st_res_increase_rate_base = { GOOD = tanks       } }
 st_res_decrease_tanks_rate_effect       = { st_res_decrease_rate_base = { GOOD = tanks       } }
 
+st_res_stop_grain_rate_effect           = { st_res_stop_rate_base     = { GOOD = grain       } }
+st_res_stop_ammunition_rate_effect      = { st_res_stop_rate_base     = { GOOD = ammunition  } }
+st_res_stop_oil_rate_effect             = { st_res_stop_rate_base     = { GOOD = oil         } }
+st_res_stop_small_arms_rate_effect      = { st_res_stop_rate_base     = { GOOD = small_arms  } }
+st_res_stop_artillery_rate_effect       = { st_res_stop_rate_base     = { GOOD = artillery   } }
+st_res_stop_aeroplanes_rate_effect      = { st_res_stop_rate_base     = { GOOD = aeroplanes  } }
+st_res_stop_tanks_rate_effect           = { st_res_stop_rate_base     = { GOOD = tanks       } }
+
 st_res_apply_sell_profit_effect = {
 	remove_modifier = st_res_sell_profit_modifier
 	set_variable = { name = st_res_sell_profit value = 0 }
@@ -502,4 +664,426 @@ st_res_apply_sell_profit_effect = {
 	change_variable = { name = st_res_sell_profit add = st_res_aeroplanes_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_tanks_sale_profit }
 	add_modifier = { name = st_res_sell_profit_modifier multiplier = var:st_res_sell_profit }
+}
+
+# ============================================================================
+# Reserve policies
+# ============================================================================
+# A policy lets one good's weekly rate be re-decided automatically from the
+# market price instead of by hand. Policies are OFF by default: every good,
+# in every save, starts at policy 0 (Manual) with its rate untouched.
+#
+# Policy ids (st_res_<good>_policy):
+#   0 = Manual                   — the player drives the rate; nothing automated
+#   1 = Buy When Cheap           — buys below the purchase threshold only
+#   2 = Release When Expensive   — sells above the release threshold only
+#   3 = Stabilize Prices         — both sides
+#
+# Engagement latch (st_res_<good>_engaged), the hysteresis state:
+#   0 = idle | 1 = engaged buying | 2 = engaged releasing
+# An engaged lane keeps going until the price crosses the *stop* threshold,
+# which sits st_res_policy_buy_band above the purchase threshold, or
+# st_res_policy_sell_band below the release threshold. That is what stops a
+# price oscillating around a single trigger from flapping the lane on and off
+# week after week.
+#
+# Policy status codes (st_res_<good>_policy_status) — the plain-language
+# explanation the inventory row shows, rendered through
+# st_res_<good>_policy_reason_text in st_res_custom_loc.txt:
+#   0 = Manual (no policy)
+#   1 = Buying
+#   2 = Buying, limited by the weekly budget
+#   3 = Releasing
+#   4 = Waiting — the price has not crossed a trigger threshold
+#   5 = Paused — target stockpile reached
+#   6 = Paused — protected stockpile reached
+#   7 = Paused — weekly budget spent
+#   8 = Paused — hub understaffed
+#   9 = Paused — no Strategic Reserve Hub
+#
+# st_res_policy_evaluate_good_effect is the ONLY writer of both
+# st_res_<good>_policy_status and st_res_<good>_engaged, in the same spirit as
+# st_res_set_good_status_effect owning st_res_<good>_last_status. It is called
+# from BOTH branches of the weekly pulse and from every policy-panel press, so
+# no other effect ever has to guess a status code.
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# Presets. THESE THREE EFFECTS ARE THE TUNING TABLE — the eighteen preset
+# numbers below exist nowhere else in the mod. Everything else about the
+# policies (step sizes, hysteresis bands, stepper bounds) lives in the
+# `st_res_policy_*` constants at the bottom of
+# common/script_values/st_res_script_values.txt.
+#
+# Thresholds are percentage points against the good's base price on the
+# country's own market. Floor and ceiling are percentages of the good's current
+# reserve capacity, so they scale automatically when the player adds Silos.
+# Budget is an ESTIMATED weekly spend cap in GBP (see
+# st_res_policy_evaluate_good_effect for why it can only be an estimate).
+#
+# The three presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
+# ceil_pct - floor_pct >= st_res_policy_stock_min_gap (10), which is the same
+# non-overlap rule the steppers are gated on.
+# --------------------------------------------------------------------------
+st_res_apply_preset_conservative_base = {
+	set_variable = { name = st_res_$GOOD$_buy_thr value = -20 }
+	set_variable = { name = st_res_$GOOD$_sell_thr value = 30 }
+	set_variable = { name = st_res_$GOOD$_max_flow value = 100 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 40 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 60 }
+	set_variable = { name = st_res_$GOOD$_budget value = 5000 }
+	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
+	# must re-test against the new band instead of the old stop threshold.
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+st_res_apply_preset_standard_base = {
+	set_variable = { name = st_res_$GOOD$_buy_thr value = -10 }
+	set_variable = { name = st_res_$GOOD$_sell_thr value = 20 }
+	set_variable = { name = st_res_$GOOD$_max_flow value = 250 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 20 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 80 }
+	set_variable = { name = st_res_$GOOD$_budget value = 15000 }
+	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
+	# must re-test against the new band instead of the old stop threshold.
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+st_res_apply_preset_aggressive_base = {
+	set_variable = { name = st_res_$GOOD$_buy_thr value = -5 }
+	set_variable = { name = st_res_$GOOD$_sell_thr value = 10 }
+	set_variable = { name = st_res_$GOOD$_max_flow value = 600 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 10 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 95 }
+	set_variable = { name = st_res_$GOOD$_budget value = 40000 }
+	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
+	# must re-test against the new band instead of the old stop threshold.
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+# --------------------------------------------------------------------------
+# st_res_switch_to_manual_base — hand one good back to the player.
+# Parameter: GOOD.
+#
+# The ONLY two things that call this are player actions: the three row controls
+# (decrease / stop / increase, via the rate bases) and "Reset Reserve Rates".
+# st_res_clamp_stockpiles_effect deliberately does not — it zeroes a rate at a
+# stockpile bound, which is bookkeeping, not intent, and an automated lane must
+# survive it.
+#
+# The status write is delegated to the evaluator rather than done here, so
+# st_res_policy_evaluate_good_effect stays the single derivation site for
+# st_res_<good>_policy_status. With policy already 0 the evaluator takes its
+# Manual branch, writes status 0 and touches no rate, so it cannot fight the
+# rate change the caller is about to make.
+# --------------------------------------------------------------------------
+st_res_switch_to_manual_base = {
+	set_variable = { name = st_res_$GOOD$_policy value = 0 }
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+	st_res_policy_evaluate_good_effect = { GOOD = $GOOD$ }
+}
+
+# --------------------------------------------------------------------------
+# st_res_policy_select_base — switch one good to a policy.
+# Parameters: GOOD, POLICY (0-3).
+# Always clears the engagement latch: carrying "engaged buying" from Buy When
+# Cheap into Stabilize Prices would apply the wrong stop threshold on the first
+# tick after the switch.
+# --------------------------------------------------------------------------
+st_res_policy_select_base = {
+	set_variable = { name = st_res_$GOOD$_policy value = $POLICY$ }
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+# --------------------------------------------------------------------------
+# st_res_policy_step_up_base / st_res_policy_step_down_base — move one setting
+# by one stepper click and clamp it to its absolute bounds.
+# Parameters: GOOD, SETTING (buy_thr | sell_thr | max_flow | floor_pct |
+#             ceil_pct | budget), STEP, MIN, MAX.
+# The RELATIVE bounds (purchase band vs release band, floor vs ceiling) are
+# enforced in st_res_policy_<good>_sgui's is_valid, which disables the stepper
+# and says why; these clamps are the absolute backstop.
+# --------------------------------------------------------------------------
+st_res_policy_step_up_base = {
+	change_variable = { name = st_res_$GOOD$_$SETTING$ add = $STEP$ }
+	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
+}
+
+st_res_policy_step_down_base = {
+	change_variable = { name = st_res_$GOOD$_$SETTING$ subtract = $STEP$ }
+	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
+}
+
+# --------------------------------------------------------------------------
+# st_res_apply_rate_target_base — THE ONLY path automation may take to a
+# configured rate. Parameter: GOOD. Reads local_var:st_res_policy_target.
+#
+# It writes st_res_<good>_rate and then applies exactly the two clamps
+# st_res_clamp_stockpiles_effect applies to that rate, which are the same
+# bounds the manual +/- buttons are gated on: the hub's signed weekly flow cap,
+# and the remaining storage room / remaining stockpile. Everything downstream —
+# the flow cap, hub throughput, staffing, decay, capacity, the per-good tech
+# unlocks and the cost of the goods themselves — therefore applies to an
+# automated lane exactly as it does to a hand-driven one. Automation buys goods
+# through the same hub production-method modifiers and pays the same money for
+# them; it creates nothing and bypasses no bookkeeping.
+# --------------------------------------------------------------------------
+st_res_apply_rate_target_base = {
+	set_variable = { name = st_res_$GOOD$_rate value = local_var:st_res_policy_target }
+	clamp_variable = { name = st_res_$GOOD$_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
+	clamp_variable = { name = st_res_$GOOD$_rate min = st_res_$GOOD$_max_withdrawable max = st_res_$GOOD$_max_storable }
+}
+
+# --------------------------------------------------------------------------
+# st_res_policy_evaluate_good_effect — one good, one weekly decision.
+# Parameter: GOOD. Country scope. Expects st_res_init_effect and
+# st_res_refresh_hub_cache_effect to have run.
+#
+# Cost for a good on Manual or still locked by tech: one variable comparison
+# and two variable writes. No iterators anywhere in this file's policy path.
+#
+# ON THE BUDGET. Reserve purchases are not a money effect — the hub buys its
+# input goods through production-method modifiers, so the money leaves the
+# treasury inside the normal building-expense system and there is no cost value
+# to read back. The weekly budget is therefore an ESTIMATE, computed here as
+# (budget / current unit price) - this week's decay replacement, and the
+# player-facing localization says so. It is a per-week cap, not a running pot:
+# whatever is not spent this week does not carry over. That keeps it stateless,
+# save-safe and impossible to desynchronise from the real spend.
+# --------------------------------------------------------------------------
+st_res_policy_evaluate_good_effect = {
+	if = {
+		# Manual, or a good this country has not unlocked yet.
+		limit = {
+			OR = {
+				NOT = { has_variable = st_res_$GOOD$_policy }
+				var:st_res_$GOOD$_policy = 0
+				NOT = { st_res_$GOOD$_unlocked_trigger = yes }
+			}
+		}
+		set_variable = { name = st_res_$GOOD$_policy_status value = 0 }
+		set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+	}
+	else_if = {
+		# No hub: nothing to drive. Leave the configured rate alone so it is
+		# still there if the hub comes back before the JE invalidates.
+		limit = { var:st_res_hub_level_cached <= 0 }
+		set_variable = { name = st_res_$GOOD$_policy_status value = 9 }
+		set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+	}
+	else = {
+		# --- Inputs -------------------------------------------------------
+		# Signed market premium against base price, in percentage points.
+		set_local_variable = {
+			name = st_res_policy_price
+			value = {
+				value = st_res_$GOOD$_price_rel
+				multiply = 100
+			}
+		}
+		set_variable = { name = st_res_$GOOD$_policy_price value = local_var:st_res_policy_price }
+
+		# Protected floor and target ceiling, converted from percent of
+		# capacity into units.
+		set_local_variable = {
+			name = st_res_policy_room
+			value = {
+				value = st_res_$GOOD$_capacity
+				multiply = var:st_res_$GOOD$_ceil_pct
+				divide = 100
+				subtract = var:st_res_$GOOD$_stored
+				min = 0
+			}
+		}
+		set_local_variable = {
+			name = st_res_policy_spare
+			value = {
+				value = var:st_res_$GOOD$_stored
+				subtract = {
+					value = st_res_$GOOD$_capacity
+					multiply = var:st_res_$GOOD$_floor_pct
+					divide = 100
+				}
+				min = 0
+			}
+		}
+
+		# Estimated units this week's budget can pay for, net of the decay
+		# replacement the hub buys before any of the configured rate.
+		set_local_variable = {
+			name = st_res_policy_afford
+			value = {
+				value = var:st_res_$GOOD$_budget
+				divide = st_res_$GOOD$_unit_price
+				subtract = st_res_$GOOD$_weekly_decay
+				min = 0
+			}
+		}
+
+		# --- Hysteresis ---------------------------------------------------
+		# An engaged lane uses the stop threshold instead of the start one.
+		set_local_variable = { name = st_res_policy_buy_at value = var:st_res_$GOOD$_buy_thr }
+		if = {
+			limit = { var:st_res_$GOOD$_engaged = 1 }
+			change_local_variable = { name = st_res_policy_buy_at add = st_res_policy_buy_band }
+		}
+		set_local_variable = { name = st_res_policy_sell_at value = var:st_res_$GOOD$_sell_thr }
+		if = {
+			limit = { var:st_res_$GOOD$_engaged = 2 }
+			change_local_variable = { name = st_res_policy_sell_at subtract = st_res_policy_sell_band }
+		}
+
+		# --- Decision -----------------------------------------------------
+		set_local_variable = { name = st_res_policy_target value = 0 }
+		set_local_variable = { name = st_res_policy_next_engaged value = 0 }
+		set_local_variable = { name = st_res_policy_next_status value = 4 }
+
+		if = {
+			# BUY side — Buy When Cheap and Stabilize Prices.
+			limit = {
+				OR = {
+					var:st_res_$GOOD$_policy = 1
+					var:st_res_$GOOD$_policy = 3
+				}
+				local_var:st_res_policy_price < local_var:st_res_policy_buy_at
+			}
+			if = {
+				limit = { local_var:st_res_policy_room <= 0 }
+				set_local_variable = { name = st_res_policy_next_status value = 5 }
+			}
+			else_if = {
+				limit = { local_var:st_res_policy_afford <= 0 }
+				set_local_variable = { name = st_res_policy_next_status value = 7 }
+			}
+			else = {
+				# What the policy wants before money is considered...
+				set_local_variable = {
+					name = st_res_policy_want
+					value = {
+						value = var:st_res_$GOOD$_max_flow
+						max = local_var:st_res_policy_room
+						max = st_res_weekly_base_rate_cap
+						min = 0
+					}
+				}
+				# ...and what it can actually afford this week.
+				set_local_variable = {
+					name = st_res_policy_target
+					value = {
+						value = local_var:st_res_policy_want
+						max = local_var:st_res_policy_afford
+					}
+				}
+				set_local_variable = { name = st_res_policy_next_engaged value = 1 }
+				set_local_variable = { name = st_res_policy_next_status value = 1 }
+				if = {
+					limit = { local_var:st_res_policy_afford < local_var:st_res_policy_want }
+					set_local_variable = { name = st_res_policy_next_status value = 2 }
+				}
+			}
+		}
+		else_if = {
+			# RELEASE side — Release When Expensive and Stabilize Prices.
+			# Reachable only when the buy side did not fire, and the two bands
+			# are held apart by st_res_policy_min_gap, so the sides can never
+			# both be true for the same price.
+			limit = {
+				OR = {
+					var:st_res_$GOOD$_policy = 2
+					var:st_res_$GOOD$_policy = 3
+				}
+				local_var:st_res_policy_price > local_var:st_res_policy_sell_at
+			}
+			if = {
+				limit = { local_var:st_res_policy_spare <= 0 }
+				set_local_variable = { name = st_res_policy_next_status value = 6 }
+			}
+			else = {
+				set_local_variable = {
+					name = st_res_policy_target
+					value = {
+						value = var:st_res_$GOOD$_max_flow
+						max = local_var:st_res_policy_spare
+						max = st_res_weekly_base_rate_cap
+						min = 0
+						multiply = -1
+					}
+				}
+				set_local_variable = { name = st_res_policy_next_engaged value = 2 }
+				set_local_variable = { name = st_res_policy_next_status value = 3 }
+			}
+		}
+
+		# An understaffed hub trades nothing whatever the rate says, so the
+		# explanation has to lead with that. The target is still written, so
+		# the lane resumes on the correct rate the moment staffing recovers.
+		if = {
+			limit = { var:st_res_hub_workforce_cached <= 0.99 }
+			set_local_variable = { name = st_res_policy_next_status value = 8 }
+		}
+
+		# --- Commit -------------------------------------------------------
+		set_variable = { name = st_res_$GOOD$_engaged value = local_var:st_res_policy_next_engaged }
+		set_variable = { name = st_res_$GOOD$_policy_status value = local_var:st_res_policy_next_status }
+		st_res_apply_rate_target_base = { GOOD = $GOOD$ }
+	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_policy_apply_good_effect — re-decide ONE good right now and refresh the
+# hub. Parameter: GOOD. Every branch of st_res_policy_<good>_sgui ends here, so
+# a policy change, a preset or a stepper click shows its consequence on the same
+# click instead of a week later — the same reason the rate buttons run the
+# refresh tail.
+# --------------------------------------------------------------------------
+st_res_policy_apply_good_effect = {
+	st_res_init_effect = yes
+	st_res_refresh_hub_cache_effect = yes
+	st_res_policy_evaluate_good_effect = { GOOD = $GOOD$ }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+# --------------------------------------------------------------------------
+# AI
+# --------------------------------------------------------------------------
+# building_strategic_reserve_hub carries a real ai_value (+50 for a great or
+# major power, +150 while at war — common/buildings/strategic_reserve.txt), so
+# AI majors DO build hubs and DO get this journal entry. Before policies existed
+# they simply never moved a rate and the reserve sat empty forever.
+#
+# st_res_ai_seed_good_effect hands an AI country the Conservative preset once,
+# and from then on the AI runs through st_res_policy_evaluate_good_effect —
+# the same evaluator, the same thresholds, the same clamps and the same costs
+# as a human on the same preset. There is no AI-only shortcut anywhere.
+#
+# It is one-shot, marked by st_res_policy_ai_seeded, and gated on is_ai, so it
+# never touches a human player's goods and never re-seeds a country it has
+# already set up. The one case it does overwrite tuned settings is a country
+# that passes from a human to the AI mid-game: the marker was never set, so the
+# AI seeds its own presets on the next pulse. That is the intended outcome for
+# a country the player has walked away from, but it is a genuine overwrite,
+# not something the marker prevents.
+# --------------------------------------------------------------------------
+st_res_ai_seed_good_effect = {
+	st_res_apply_preset_conservative_base = { GOOD = $GOOD$ }
+	set_variable = { name = st_res_$GOOD$_policy value = $POLICY$ }
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+st_res_ai_seed_policies_effect = {
+	if = {
+		limit = {
+			is_ai = yes
+			NOT = { has_variable = st_res_policy_ai_seeded }
+		}
+		set_variable = { name = st_res_policy_ai_seeded value = 1 }
+		st_res_ai_seed_good_effect = { GOOD = grain       POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = ammunition  POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = oil         POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = small_arms  POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = artillery   POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = aeroplanes  POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = tanks       POLICY = 1 }
+	}
 }

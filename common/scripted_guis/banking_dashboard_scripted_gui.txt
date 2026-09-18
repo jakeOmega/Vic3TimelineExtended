@@ -1,0 +1,665 @@
+﻿# Banking policy dashboard — scripted GUI handlers.
+#
+# Read by gui/journal_entry_widgets/banking_dashboard_widget.gui.
+#
+# The AI never uses these (`ai_is_valid = { always = no }`): AI policy selection
+# still runs through the `ai_chance` blocks on the je_banking_cycle scripted
+# buttons, which are left untouched. Every handler delegates to the same shared
+# triggers/effects the buttons use, so both surfaces behave identically.
+#
+# Read-only handlers (systems, phases, signals) carry an empty effect and exist
+# purely so the widget can ask script a yes/no question.
+
+# ---------------------------------------------------------------------------
+# Economic-system gates — decide which intervention sections are shown.
+# ---------------------------------------------------------------------------
+banking_dash_system_market = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_system_command = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_system_coop = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Cycle-phase and signal readouts for the Current Conditions area.
+# ---------------------------------------------------------------------------
+banking_dash_phase_panic = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_panic = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_phase_downturn = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_downturn = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_phase_stagnation = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_stagnation = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_phase_stable = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_stable = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_phase_expansion = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_expansion = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_phase_boom = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_boom = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_phase_frenzy = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_frenzy = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_momentum_rising = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_momentum banking_cycle_bubble_risk_rising = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_momentum_falling = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_momentum banking_cycle_risk_falling = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_bubble_risk_high = {
+	scope = country
+	is_shown = { has_variable = finance_cycle_value banking_cycle_bubble_risk_high = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# True while at least one intervention is active, whatever economic system
+# enacted it — this is what keeps a policy inherited from a repealed law
+# visible in the Active Policies area with a working disable action.
+banking_dash_any_policy_active = {
+	scope = country
+	is_shown = {
+		OR = {
+			banking_tool_rate_hike_active = yes
+			banking_tool_omo_active = yes
+			banking_tool_moral_suasion_active = yes
+			banking_tool_buffer_active = yes
+			banking_tool_margin_req_active = yes
+			banking_tool_deposit_active = yes
+			banking_tool_directed_active = yes
+			banking_tool_export_credit_active = yes
+			banking_tool_fx_devaluation_active = yes
+			banking_tool_fx_support_active = yes
+			banking_tool_fx_swap_lines_active = yes
+			banking_tool_capital_controls_active = yes
+			banking_tool_eliq_active = yes
+			banking_tool_asset_relief_active = yes
+			banking_tool_ce_plan_revision_active = yes
+			banking_tool_ce_target_cut_active = yes
+			banking_tool_ce_consolidation_active = yes
+			banking_tool_ce_allocation_active = yes
+			banking_tool_ce_stockpile_active = yes
+			banking_tool_ce_distribution_active = yes
+			banking_tool_ce_admin_campaign_active = yes
+			banking_tool_ce_coordination_active = yes
+			banking_tool_cw_dividend_active = yes
+			banking_tool_cw_mutual_aid_active = yes
+			banking_tool_cw_capital_plan_active = yes
+			banking_tool_cw_credit_active = yes
+			banking_tool_cw_directive_active = yes
+			banking_tool_cw_ceiling_active = yes
+			banking_tool_cw_solidarity_active = yes
+			banking_tool_cw_buyout_active = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Policy actions. `is_shown` mirrors the matching scripted_button's `visible`,
+# `is_valid` its `possible`, and `effect` calls the same shared effect.
+# ---------------------------------------------------------------------------
+banking_dash_enable_cb_policy_rate_hike = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_rate_hike_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_policy_rate_hike = yes }
+	effect = { banking_effect_cb_policy_rate_hike = yes }
+}
+
+banking_dash_disable_cb_policy_rate_hike = {
+	scope = country
+	is_shown = { banking_tool_rate_hike_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_rate_hike_active = yes }
+	effect = { banking_effect_cb_disable_policy_rate_hike = yes }
+}
+
+banking_dash_enable_cb_open_market_ops = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_omo_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_open_market_ops = yes }
+	effect = { banking_effect_cb_open_market_ops = yes }
+}
+
+banking_dash_disable_cb_open_market_ops = {
+	scope = country
+	is_shown = { banking_tool_omo_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_omo_active = yes }
+	effect = { banking_effect_cb_disable_open_market_ops = yes }
+}
+
+banking_dash_enable_cb_moral_suasion = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_moral_suasion_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_moral_suasion = yes }
+	effect = { banking_effect_cb_moral_suasion = yes }
+}
+
+banking_dash_disable_cb_moral_suasion = {
+	scope = country
+	is_shown = { banking_tool_moral_suasion_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_moral_suasion_active = yes }
+	effect = { banking_effect_cb_disable_moral_suasion = yes }
+}
+
+banking_dash_enable_cb_countercyclical_buffer = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_buffer_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_countercyclical_buffer = yes }
+	effect = { banking_effect_cb_countercyclical_buffer = yes }
+}
+
+banking_dash_disable_cb_countercyclical_buffer = {
+	scope = country
+	is_shown = { banking_tool_buffer_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_buffer_active = yes }
+	effect = { banking_effect_cb_disable_countercyclical_buffer = yes }
+}
+
+banking_dash_enable_cb_raise_margin_requirements = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_margin_req_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_raise_margin_requirements = yes }
+	effect = { banking_effect_cb_raise_margin_requirements = yes }
+}
+
+banking_dash_disable_cb_raise_margin_requirements = {
+	scope = country
+	is_shown = { banking_tool_margin_req_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_margin_req_active = yes }
+	effect = { banking_effect_cb_disable_raise_margin_requirements = yes }
+}
+
+banking_dash_enable_cb_expand_deposit_guarantee = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_deposit_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_expand_deposit_guarantee = yes }
+	effect = { banking_effect_cb_expand_deposit_guarantee = yes }
+}
+
+banking_dash_disable_cb_expand_deposit_guarantee = {
+	scope = country
+	is_shown = { banking_tool_deposit_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_deposit_active = yes }
+	effect = { banking_effect_cb_disable_expand_deposit_guarantee = yes }
+}
+
+banking_dash_enable_cb_directed_credit_infrastructure = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_directed_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_directed_credit_infrastructure = yes }
+	effect = { banking_effect_cb_directed_credit_infrastructure = yes }
+}
+
+banking_dash_disable_cb_directed_credit_infrastructure = {
+	scope = country
+	is_shown = { banking_tool_directed_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_directed_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_infrastructure = yes }
+}
+
+banking_dash_enable_cb_export_credit_facility = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_export_credit_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_export_credit_facility = yes }
+	effect = { banking_effect_cb_export_credit_facility = yes }
+}
+
+banking_dash_disable_cb_export_credit_facility = {
+	scope = country
+	is_shown = { banking_tool_export_credit_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_export_credit_active = yes }
+	effect = { banking_effect_cb_disable_export_credit_facility = yes }
+}
+
+banking_dash_enable_cb_fx_devaluation = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_fx_devaluation_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_fx_devaluation = yes }
+	effect = { banking_effect_cb_fx_devaluation = yes }
+}
+
+banking_dash_disable_cb_fx_devaluation = {
+	scope = country
+	is_shown = { banking_tool_fx_devaluation_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_fx_devaluation_active = yes }
+	effect = { banking_effect_cb_disable_fx_devaluation = yes }
+}
+
+banking_dash_enable_cb_fx_support = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_fx_support_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_fx_support = yes }
+	effect = { banking_effect_cb_fx_support = yes }
+}
+
+banking_dash_disable_cb_fx_support = {
+	scope = country
+	is_shown = { banking_tool_fx_support_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_fx_support_active = yes }
+	effect = { banking_effect_cb_disable_fx_support = yes }
+}
+
+banking_dash_enable_cb_fx_swap_lines = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_fx_swap_lines_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_fx_swap_lines = yes }
+	effect = { banking_effect_cb_fx_swap_lines = yes }
+}
+
+banking_dash_disable_cb_fx_swap_lines = {
+	scope = country
+	is_shown = { banking_tool_fx_swap_lines_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_fx_swap_lines_active = yes }
+	effect = { banking_effect_cb_disable_fx_swap_lines = yes }
+}
+
+banking_dash_enable_cb_capital_controls_outflow = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_capital_controls_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_capital_controls_outflow = yes }
+	effect = { banking_effect_cb_capital_controls_outflow = yes }
+}
+
+banking_dash_disable_cb_capital_controls_outflow = {
+	scope = country
+	is_shown = { banking_tool_capital_controls_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_capital_controls_active = yes }
+	effect = { banking_effect_cb_disable_capital_controls_outflow = yes }
+}
+
+banking_dash_enable_cb_emergency_liquidity_program = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_eliq_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_emergency_liquidity_program = yes }
+	effect = { banking_effect_cb_emergency_liquidity_program = yes }
+}
+
+banking_dash_disable_cb_emergency_liquidity_program = {
+	scope = country
+	is_shown = { banking_tool_eliq_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_eliq_active = yes }
+	effect = { banking_effect_cb_disable_emergency_liquidity_program = yes }
+}
+
+banking_dash_enable_cb_asset_relief_program = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_asset_relief_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_asset_relief_program = yes }
+	effect = { banking_effect_cb_asset_relief_program = yes }
+}
+
+banking_dash_disable_cb_asset_relief_program = {
+	scope = country
+	is_shown = { banking_tool_asset_relief_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_asset_relief_active = yes }
+	effect = { banking_effect_cb_disable_asset_relief_program = yes }
+}
+
+banking_dash_enable_ce_plan_revision = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_plan_revision_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_plan_revision = yes }
+	effect = { banking_effect_ce_plan_revision = yes }
+}
+
+banking_dash_disable_ce_plan_revision = {
+	scope = country
+	is_shown = { banking_tool_ce_plan_revision_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_plan_revision_active = yes }
+	effect = { banking_effect_ce_disable_plan_revision = yes }
+}
+
+banking_dash_enable_ce_target_reduction = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_target_cut_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_target_reduction = yes }
+	effect = { banking_effect_ce_target_reduction = yes }
+}
+
+banking_dash_disable_ce_target_reduction = {
+	scope = country
+	is_shown = { banking_tool_ce_target_cut_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_target_cut_active = yes }
+	effect = { banking_effect_ce_disable_target_reduction = yes }
+}
+
+banking_dash_enable_ce_consolidation_order = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_consolidation_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_consolidation_order = yes }
+	effect = { banking_effect_ce_consolidation_order = yes }
+}
+
+banking_dash_disable_ce_consolidation_order = {
+	scope = country
+	is_shown = { banking_tool_ce_consolidation_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_consolidation_active = yes }
+	effect = { banking_effect_ce_disable_consolidation_order = yes }
+}
+
+banking_dash_enable_ce_emergency_allocation = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_allocation_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_emergency_allocation = yes }
+	effect = { banking_effect_ce_emergency_allocation = yes }
+}
+
+banking_dash_disable_ce_emergency_allocation = {
+	scope = country
+	is_shown = { banking_tool_ce_allocation_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_allocation_active = yes }
+	effect = { banking_effect_ce_disable_emergency_allocation = yes }
+}
+
+banking_dash_enable_ce_strategic_stockpile = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_stockpile_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_strategic_stockpile = yes }
+	effect = { banking_effect_ce_strategic_stockpile = yes }
+}
+
+banking_dash_disable_ce_strategic_stockpile = {
+	scope = country
+	is_shown = { banking_tool_ce_stockpile_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_stockpile_active = yes }
+	effect = { banking_effect_ce_disable_strategic_stockpile = yes }
+}
+
+banking_dash_enable_ce_distribution_upgrade = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_distribution_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_distribution_upgrade = yes }
+	effect = { banking_effect_ce_distribution_upgrade = yes }
+}
+
+banking_dash_disable_ce_distribution_upgrade = {
+	scope = country
+	is_shown = { banking_tool_ce_distribution_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_distribution_active = yes }
+	effect = { banking_effect_ce_disable_distribution_upgrade = yes }
+}
+
+banking_dash_enable_ce_admin_campaign = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_admin_campaign_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_admin_campaign = yes }
+	effect = { banking_effect_ce_admin_campaign = yes }
+}
+
+banking_dash_disable_ce_admin_campaign = {
+	scope = country
+	is_shown = { banking_tool_ce_admin_campaign_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_admin_campaign_active = yes }
+	effect = { banking_effect_ce_disable_admin_campaign = yes }
+}
+
+banking_dash_enable_ce_coordination_protocol = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes banking_tool_ce_coordination_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_coordination_protocol = yes }
+	effect = { banking_effect_ce_coordination_protocol = yes }
+}
+
+banking_dash_disable_ce_coordination_protocol = {
+	scope = country
+	is_shown = { banking_tool_ce_coordination_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_ce_coordination_active = yes }
+	effect = { banking_effect_ce_disable_coordination_protocol = yes }
+}
+
+banking_dash_enable_ce_invest_pool_inject = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_invest_pool_inject = yes }
+	effect = { banking_effect_ce_invest_pool_inject = yes }
+}
+
+banking_dash_enable_ce_invest_pool_withdraw = {
+	scope = country
+	is_shown = { banking_is_command_economy = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_ce_invest_pool_withdraw = yes }
+	effect = { banking_effect_ce_invest_pool_withdraw = yes }
+}
+
+banking_dash_enable_cw_dividend_restraint = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_dividend_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_dividend_restraint = yes }
+	effect = { banking_effect_cw_dividend_restraint = yes }
+}
+
+banking_dash_disable_cw_dividend_restraint = {
+	scope = country
+	is_shown = { banking_tool_cw_dividend_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_dividend_active = yes }
+	effect = { banking_effect_cw_disable_dividend_restraint = yes }
+}
+
+banking_dash_enable_cw_mutual_aid_fund = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_mutual_aid_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_mutual_aid_fund = yes }
+	effect = { banking_effect_cw_mutual_aid_fund = yes }
+}
+
+banking_dash_disable_cw_mutual_aid_fund = {
+	scope = country
+	is_shown = { banking_tool_cw_mutual_aid_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_mutual_aid_active = yes }
+	effect = { banking_effect_cw_disable_mutual_aid_fund = yes }
+}
+
+banking_dash_enable_cw_capital_plan = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_capital_plan_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_capital_plan = yes }
+	effect = { banking_effect_cw_capital_plan = yes }
+}
+
+banking_dash_disable_cw_capital_plan = {
+	scope = country
+	is_shown = { banking_tool_cw_capital_plan_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_capital_plan_active = yes }
+	effect = { banking_effect_cw_disable_capital_plan = yes }
+}
+
+banking_dash_enable_cw_credit_expansion = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_credit_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_credit_expansion = yes }
+	effect = { banking_effect_cw_credit_expansion = yes }
+}
+
+banking_dash_disable_cw_credit_expansion = {
+	scope = country
+	is_shown = { banking_tool_cw_credit_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_credit_active = yes }
+	effect = { banking_effect_cw_disable_credit_expansion = yes }
+}
+
+banking_dash_enable_cw_council_directive = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_directive_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_council_directive = yes }
+	effect = { banking_effect_cw_council_directive = yes }
+}
+
+banking_dash_disable_cw_council_directive = {
+	scope = country
+	is_shown = { banking_tool_cw_directive_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_directive_active = yes }
+	effect = { banking_effect_cw_disable_council_directive = yes }
+}
+
+banking_dash_enable_cw_consumption_ceiling = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_ceiling_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_consumption_ceiling = yes }
+	effect = { banking_effect_cw_consumption_ceiling = yes }
+}
+
+banking_dash_disable_cw_consumption_ceiling = {
+	scope = country
+	is_shown = { banking_tool_cw_ceiling_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_ceiling_active = yes }
+	effect = { banking_effect_cw_disable_consumption_ceiling = yes }
+}
+
+banking_dash_enable_cw_solidarity_campaign = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_solidarity_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_solidarity_campaign = yes }
+	effect = { banking_effect_cw_solidarity_campaign = yes }
+}
+
+banking_dash_disable_cw_solidarity_campaign = {
+	scope = country
+	is_shown = { banking_tool_cw_solidarity_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_solidarity_active = yes }
+	effect = { banking_effect_cw_disable_solidarity_campaign = yes }
+}
+
+banking_dash_enable_cw_worker_buyout = {
+	scope = country
+	is_shown = { banking_is_cooperative_economy = yes banking_tool_cw_buyout_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cw_worker_buyout = yes }
+	effect = { banking_effect_cw_worker_buyout = yes }
+}
+
+banking_dash_disable_cw_worker_buyout = {
+	scope = country
+	is_shown = { banking_tool_cw_buyout_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_cw_buyout_active = yes }
+	effect = { banking_effect_cw_disable_worker_buyout = yes }
+}
