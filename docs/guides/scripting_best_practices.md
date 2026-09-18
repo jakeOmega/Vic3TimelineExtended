@@ -552,10 +552,20 @@ Both `market_goods_pricier` and `market_goods_cheaper` exist, and both are value
 If your logic needs a signed premium that is correct on **both** sides of base price, don't guess. Build it as
 
 ```
-value_up   = { value = 0  add = <scope>.market.mg:<good>.market_goods_pricier  min = 0 }   # max(x, 0)
-value_down = { value = 0  add = <scope>.market.mg:<good>.market_goods_cheaper   min = 0 }   # max(x, 0)
-value_rel  = { value = value_up  subtract = value_down }
+value_up = {                                   # max(pricier, 0)
+	value = 0
+	market = { mg:<good> = { add = market_goods_pricier } }
+	min = 0
+}
+value_down = {                                 # max(cheaper, 0)
+	value = 0
+	market = { mg:<good> = { add = market_goods_cheaper } }
+	min = 0
+}
+value_rel = { value = value_up  subtract = value_down }
 ```
+
+Use the `market = { mg:<good> = { add = … } }` **block** form rather than a `this.market.mg:<good>.<value>` dot chain. Vanilla reaches market-goods values from country scope exactly this way (`common/script_values/00_gfx_route_graphics_values.txt`); nothing in vanilla reads through `mg:` with a dot chain, and a market read that silently evaluates to 0 produces no error anywhere — just logic that quietly never fires.
 
 `min = 0` after the read is the max-with-zero clamp. Under the "clamped" hypothesis exactly one term is non-zero; under the "signed mirror" hypothesis the negative term clamps to zero. Either way `value_rel` is the correct signed fraction. The Strategic Reserve's policy trigger uses this (`st_res_<good>_price_rel`, `common/script_values/st_res_script_values.txt`); the older `st_res_<good>_sale_profit` values still read bare `market_goods_pricier` and are only correct below base under the signed hypothesis.
 

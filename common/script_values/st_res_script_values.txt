@@ -1033,6 +1033,12 @@ st_res_policy_stock_min_gap = { value = 10 }  # minimum ceiling - floor, pp
 # PRICE SIGNAL. `market_goods_pricier` / `market_goods_cheaper` are readable as
 # script values inside `market_goods` scope (vanilla precedent:
 # common/treaty_articles/13_goods_transfer.txt reads `value = market_goods_cheaper`).
+# The `market = { mg:<good> = { add = ... } }` block form below is the shape
+# vanilla itself uses to read a market_goods value from country scope
+# (common/script_values/00_gfx_route_graphics_values.txt, gfx_infantry_mobilization_count).
+# Do NOT rewrite it as a `this.market.mg:<good>.<value>` dot chain: nothing in
+# vanilla reads through `mg:` that way, and a price read that silently returns
+# zero would park every automated lane in "Waiting" forever with no error.
 # Each is documented as "at least X percent pricier/cheaper than base price".
 # The engine may return them clamped at zero or as signed mirrors of each other,
 # and nothing in the docs settles which — so `_price_rel` is built as
@@ -1047,13 +1053,21 @@ st_res_policy_stock_min_gap = { value = 10 }  # minimum ceiling - floor, pp
 # --- GRAIN ---
 st_res_grain_price_up = {
 	value = 0
-	add = this.market.mg:grain.market_goods_pricier
+	market = {
+		mg:grain = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_grain_price_down = {
 	value = 0
-	add = this.market.mg:grain.market_goods_cheaper
+	market = {
+		mg:grain = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 
@@ -1130,13 +1144,21 @@ st_res_grain_policy_ceil_down_limit = {
 # --- AMMUNITION ---
 st_res_ammunition_price_up = {
 	value = 0
-	add = this.market.mg:ammunition.market_goods_pricier
+	market = {
+		mg:ammunition = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_ammunition_price_down = {
 	value = 0
-	add = this.market.mg:ammunition.market_goods_cheaper
+	market = {
+		mg:ammunition = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 
@@ -1213,13 +1235,21 @@ st_res_ammunition_policy_ceil_down_limit = {
 # --- OIL ---
 st_res_oil_price_up = {
 	value = 0
-	add = this.market.mg:oil.market_goods_pricier
+	market = {
+		mg:oil = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_oil_price_down = {
 	value = 0
-	add = this.market.mg:oil.market_goods_cheaper
+	market = {
+		mg:oil = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 
@@ -1296,13 +1326,21 @@ st_res_oil_policy_ceil_down_limit = {
 # --- SMALL_ARMS ---
 st_res_small_arms_price_up = {
 	value = 0
-	add = this.market.mg:small_arms.market_goods_pricier
+	market = {
+		mg:small_arms = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_small_arms_price_down = {
 	value = 0
-	add = this.market.mg:small_arms.market_goods_cheaper
+	market = {
+		mg:small_arms = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 
@@ -1379,13 +1417,21 @@ st_res_small_arms_policy_ceil_down_limit = {
 # --- ARTILLERY ---
 st_res_artillery_price_up = {
 	value = 0
-	add = this.market.mg:artillery.market_goods_pricier
+	market = {
+		mg:artillery = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_artillery_price_down = {
 	value = 0
-	add = this.market.mg:artillery.market_goods_cheaper
+	market = {
+		mg:artillery = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 
@@ -1462,13 +1508,21 @@ st_res_artillery_policy_ceil_down_limit = {
 # --- AEROPLANES ---
 st_res_aeroplanes_price_up = {
 	value = 0
-	add = this.market.mg:aeroplanes.market_goods_pricier
+	market = {
+		mg:aeroplanes = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_aeroplanes_price_down = {
 	value = 0
-	add = this.market.mg:aeroplanes.market_goods_cheaper
+	market = {
+		mg:aeroplanes = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 
@@ -1545,13 +1599,21 @@ st_res_aeroplanes_policy_ceil_down_limit = {
 # --- TANKS ---
 st_res_tanks_price_up = {
 	value = 0
-	add = this.market.mg:tanks.market_goods_pricier
+	market = {
+		mg:tanks = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_tanks_price_down = {
 	value = 0
-	add = this.market.mg:tanks.market_goods_cheaper
+	market = {
+		mg:tanks = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 

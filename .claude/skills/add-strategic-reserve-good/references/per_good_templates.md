@@ -162,13 +162,21 @@ These back the price-triggered policies. `_price_rel` is the signed premium agai
 # --- <GOOD_DISPLAY upper> ---
 st_res_<GOOD>_price_up = {
 	value = 0
-	add = this.market.mg:<GOOD>.market_goods_pricier
+	market = {
+		mg:<GOOD> = {
+			add = market_goods_pricier
+		}
+	}
 	min = 0
 }
 
 st_res_<GOOD>_price_down = {
 	value = 0
-	add = this.market.mg:<GOOD>.market_goods_cheaper
+	market = {
+		mg:<GOOD> = {
+			add = market_goods_cheaper
+		}
+	}
 	min = 0
 }
 

@@ -45,7 +45,10 @@
 ### Both files carry the op-code table; keep them in sync:
 ###
 ###   0-3   select policy   Manual / Buy When Cheap / Release When Expensive /
-###                         Stabilize Prices
+###                         Stabilize Prices. The four buttons use the SHORT
+###                         labels (st_res_policy_short_*) so they fit the
+###                         116px button; line 3 and the tooltips carry the
+###                         full names.
 ###   10-12 apply preset    Conservative / Standard / Aggressive
 ###   20/21 purchase threshold  - / +      26/27 protected stockpile - / +
 ###   22/23 release threshold   - / +      28/29 target stockpile    - / +
@@ -324,7 +327,7 @@ types strategic_reserve_widget_types
 			spacing = 3
 
 			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_manual" }
+				blockoverride "choice_label" { text = "st_res_policy_short_manual" }
 				blockoverride "choice_action" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -332,7 +335,7 @@ types strategic_reserve_widget_types
 				}
 			}
 			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_buy_cheap" }
+				blockoverride "choice_label" { text = "st_res_policy_short_buy_cheap" }
 				blockoverride "choice_action" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
@@ -340,7 +343,7 @@ types strategic_reserve_widget_types
 				}
 			}
 			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_release_high" }
+				blockoverride "choice_label" { text = "st_res_policy_short_release_high" }
 				blockoverride "choice_action" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
@@ -348,7 +351,7 @@ types strategic_reserve_widget_types
 				}
 			}
 			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_stabilize" }
+				blockoverride "choice_label" { text = "st_res_policy_short_stabilize" }
 				blockoverride "choice_action" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
