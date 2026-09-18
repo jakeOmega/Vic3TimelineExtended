@@ -28,20 +28,48 @@ types te_history_chart_types
 	### An unsigned series (0 .. max): one bar growing up from the floor.
 	### `color` tints the white progress texture, exactly as vanilla's
 	### white_progressbar_vertical does for morale bars.
-	type te_history_bar_unsigned = progressbar {
+	type te_history_bar_unsigned = widget {
 		size = { 100% 100% }
-		direction = vertical
-		progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
-		noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-		texture_density = 2
-		skip_initial_animation = yes
 
-		block "values" {
-			min = 0
-			max = 100
+		### A true line graph is engine-only (plotline takes its points from
+		### GetTrendPlotPoints* and nothing a mod can build), so each month is
+		### drawn as an area column with a bright cap: a full-colour bar up to
+		### the value, then a dark translucent cover up to just below it. With
+		### no gap between columns the caps read as a stepped line over a
+		### shaded area. The instance supplies the same reading twice — once
+		### as "values", once minus the cap thickness as "cover_values".
+		progressbar = {
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+
+			block "values" {
+				min = 0
+				max = 100
+			}
+			block "color" {
+				color = { 0.42 0.62 0.85 1.0 }
+			}
 		}
-		block "color" {
-			color = { 0.42 0.62 0.85 1.0 }
+
+		progressbar = {
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.05 0.06 0.08 0.78 }
+
+			block "cover_values" {
+				min = 0
+				max = 100
+			}
 		}
 	}
 
@@ -77,6 +105,22 @@ types te_history_chart_types
 					color = { 0.36 0.68 0.40 1.0 }
 				}
 			}
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.05 0.06 0.08 0.78 }
+
+				block "positive_cover_values" {
+					min = 0
+					max = 6
+				}
+			}
 		}
 
 		widget = {
@@ -97,6 +141,22 @@ types te_history_chart_types
 				}
 				block "negative_color" {
 					color = { 0.78 0.31 0.28 1.0 }
+				}
+			}
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				noprogresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.05 0.06 0.08 0.78 }
+
+				block "negative_cover_values" {
+					min = -6
+					max = 0
 				}
 			}
 		}
@@ -181,7 +241,7 @@ types te_history_chart_types
 				size = { 484 84 }
 				parentanchor = center
 				ignoreinvisible = yes
-				spacing = 1
+				spacing = 0
 
 				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"
 

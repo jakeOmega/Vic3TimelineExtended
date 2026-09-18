@@ -123,6 +123,11 @@ flowcontainer = {
 						max = 100
 						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) )]"
 					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+					}
 					blockoverride "color" {
 						color = { 0.42 0.62 0.85 1.0 }
 					}
@@ -161,10 +166,20 @@ flowcontainer = {
 						max = 6
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
 					}
+					blockoverride "positive_cover_values" {
+						min = 0
+						max = 6
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
+					}
 					blockoverride "negative_values" {
 						min = -6
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
+					}
+					blockoverride "negative_cover_values" {
+						min = -6
+						max = 0
+						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
 					}
 				}
 			}
@@ -188,6 +203,11 @@ flowcontainer = {
 						min = 0
 						max = 100
 						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ), '(CFixedPoint)4' ) ) )]"
 					}
 					blockoverride "color" {
 						color = { 0.85 0.55 0.28 1.0 }
