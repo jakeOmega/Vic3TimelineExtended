@@ -455,6 +455,47 @@ un_vote.1 = {
 				}
 				add = -15
 			}
+			# ================================================================
+			# MEANS TEST: aid is for countries that need it. The Assembly is
+			# far less moved by a great power with one poor province than by a
+			# poor country, and nobody likes paying for someone richer per head
+			# than themselves. (The request only needs one state with low standard
+			# of living or devastation, so without this the world's largest
+			# economy could pass the hat as easily as its poorest.)
+			# ================================================================
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
+					scope:un_vote_proposer ?= { country_rank >= rank_value:great_power }
+				}
+				add = -50
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
+					scope:un_vote_proposer ?= {
+						country_rank >= rank_value:major_power
+						country_rank < rank_value:great_power
+					}
+				}
+				add = -25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
+					# Per head, not in total: Luxembourg may well vote aid to a Nigeria
+					# whose economy is larger than its own.
+					scope:un_vote_proposer ?= { country_gdp_per_capita > root.country_gdp_per_capita }
+				}
+				add = -25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_aid_request }
+					scope:un_vote_proposer ?= { gdp_per_capita_ranking <= 15 }
+				}
+				add = -15
+			}
 			modifier = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }

@@ -96,3 +96,15 @@ un_chamber_is_proposer = {
 un_veto_would_change_outcome = {
 	scope:un_resolution ?= { un_res_margin >= 2 }
 }
+
+# Whether this resolution's "target" is who it HELPS rather than who it is aimed
+# at: a request for aid or peacekeepers names the requester as its target.
+# Anything that reasons "the target is my rival, so I like this" must exclude
+# these, or a rival of the requester counts as eager to help it.
+# Scope: resolution container
+un_resolution_target_is_beneficiary = {
+	OR = {
+		has_tag = un_topic_aid_request
+		has_tag = un_topic_peacekeeping_request
+	}
+}

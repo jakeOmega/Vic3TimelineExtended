@@ -238,7 +238,7 @@ un_chamber_vote_sgui = {
 		# un_vote.1 option C's own `trigger`, which is what gates the veto on
 		# the event path.
 		trigger_if = {
-			limit = { scope:op = 2 }
+			limit = { exists = scope:op scope:op = 2 }
 			is_un_permanent_member = yes
 			global_var:un_active_resolution ?= { un_resolution_is_binding = yes }
 		}
@@ -316,15 +316,15 @@ un_chamber_vote_sgui = {
 		# exactly as un_vote.1's `immediate` establishes them.
 		un_chamber_cast_prepare = yes
 		if = {
-			limit = { scope:op = 0 }
+			limit = { exists = scope:op scope:op = 0 }
 			un_vote_cast_yes = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { exists = scope:op scope:op = 1 }
 			un_vote_cast_no = yes
 		}
 		else_if = {
-			limit = { scope:op = 2 }
+			limit = { exists = scope:op scope:op = 2 }
 			un_vote_cast_veto = yes
 		}
 	}
@@ -363,7 +363,7 @@ un_chamber_propose_sgui = {
 
 	is_valid = {
 		trigger_if = {
-			limit = { scope:op = 0 }
+			limit = { exists = scope:op scope:op = 0 }
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_condemn
 				un_propose_condemn_available = yes
@@ -371,7 +371,7 @@ un_chamber_propose_sgui = {
 			un_propose_condemn_possible = yes
 		}
 		trigger_else_if = {
-			limit = { scope:op = 1 }
+			limit = { exists = scope:op scope:op = 1 }
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_sanctions
 				un_propose_sanctions_available = yes
@@ -379,7 +379,7 @@ un_chamber_propose_sgui = {
 			un_propose_sanctions_possible = yes
 		}
 		trigger_else_if = {
-			limit = { scope:op = 2 }
+			limit = { exists = scope:op scope:op = 2 }
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_expulsion
 				un_propose_expulsion_available = yes
@@ -387,7 +387,7 @@ un_chamber_propose_sgui = {
 			un_propose_expulsion_possible = yes
 		}
 		trigger_else_if = {
-			limit = { scope:op = 3 }
+			limit = { exists = scope:op scope:op = 3 }
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_mandate
 				un_propose_mandate_available = yes
@@ -395,7 +395,7 @@ un_chamber_propose_sgui = {
 			un_propose_mandate_possible = yes
 		}
 		trigger_else_if = {
-			limit = { scope:op = 4 }
+			limit = { exists = scope:op scope:op = 4 }
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_peacekeepers
 				un_propose_peacekeepers_available = yes
@@ -403,7 +403,7 @@ un_chamber_propose_sgui = {
 			un_propose_peacekeepers_possible = yes
 		}
 		trigger_else_if = {
-			limit = { scope:op = 5 }
+			limit = { exists = scope:op scope:op = 5 }
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_aid
 				un_propose_aid_available = yes
@@ -417,27 +417,27 @@ un_chamber_propose_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { exists = scope:op scope:op = 0 }
 			un_propose_condemn_effect = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { exists = scope:op scope:op = 1 }
 			un_propose_sanctions_effect = yes
 		}
 		else_if = {
-			limit = { scope:op = 2 }
+			limit = { exists = scope:op scope:op = 2 }
 			un_propose_expulsion_effect = yes
 		}
 		else_if = {
-			limit = { scope:op = 3 }
+			limit = { exists = scope:op scope:op = 3 }
 			un_propose_mandate_effect = yes
 		}
 		else_if = {
-			limit = { scope:op = 4 }
+			limit = { exists = scope:op scope:op = 4 }
 			un_propose_peacekeepers_effect = yes
 		}
 		else_if = {
-			limit = { scope:op = 5 }
+			limit = { exists = scope:op scope:op = 5 }
 			un_propose_aid_effect = yes
 		}
 	}
@@ -461,27 +461,27 @@ un_chamber_propose_row_sgui = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			if = {
-				limit = { scope:op = 0 }
+				limit = { exists = scope:op scope:op = 0 }
 				un_chamber_propose_condemn_row = yes
 			}
 			else_if = {
-				limit = { scope:op = 1 }
+				limit = { exists = scope:op scope:op = 1 }
 				un_chamber_propose_sanctions_row = yes
 			}
 			else_if = {
-				limit = { scope:op = 2 }
+				limit = { exists = scope:op scope:op = 2 }
 				un_chamber_propose_expulsion_row = yes
 			}
 			else_if = {
-				limit = { scope:op = 3 }
+				limit = { exists = scope:op scope:op = 3 }
 				un_chamber_propose_mandate_row = yes
 			}
 			else_if = {
-				limit = { scope:op = 4 }
+				limit = { exists = scope:op scope:op = 4 }
 				un_chamber_propose_peacekeepers_row = yes
 			}
 			else_if = {
-				limit = { scope:op = 5 }
+				limit = { exists = scope:op scope:op = 5 }
 				un_chamber_propose_aid_row = yes
 			}
 		}

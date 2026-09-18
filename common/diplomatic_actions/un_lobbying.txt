@@ -231,13 +231,16 @@ un_secure_commitment_action = {
 				}
 			}
 
-			# Our ties to the country the resolution is aimed at. Written from
+			# Our ties to the country the resolution is aimed AT — skipped for aid and
+			# peacekeeping requests, whose "target" is the country being helped (a
+			# rival of the requester is not eager to help it). Written from
 			# the target's side with ROOT as the other end, because these three
 			# relationships are symmetric and that avoids chaining a scope
 			# through a container variable inside a script value.
 			if = {
 				limit = {
 					global_var:un_active_resolution ?= {
+						NOT = { un_resolution_target_is_beneficiary = yes }
 						var:un_res_target ?= { has_treaty_alliance_with = { TARGET = ROOT } }
 					}
 				}
@@ -249,6 +252,7 @@ un_secure_commitment_action = {
 			else_if = {
 				limit = {
 					global_var:un_active_resolution ?= {
+						NOT = { un_resolution_target_is_beneficiary = yes }
 						var:un_res_target ?= { is_in_same_power_bloc = ROOT }
 					}
 				}
@@ -260,6 +264,7 @@ un_secure_commitment_action = {
 			else_if = {
 				limit = {
 					global_var:un_active_resolution ?= {
+						NOT = { un_resolution_target_is_beneficiary = yes }
 						var:un_res_target ?= { has_diplomatic_pact = { who = ROOT type = rivalry } }
 					}
 				}

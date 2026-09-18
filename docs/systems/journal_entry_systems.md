@@ -577,7 +577,7 @@ Suspension durations are literals, not script values: `set_variable`'s `days` ar
 
 #### Benefits — modest, capped, suspended on serious violation
 
-Four discrete country-scoped static modifiers, not one dynamically scaled family: the effects are small enough that a continuous multiplier would be unreadable in the modifier list, and a discrete tier is what the player is told they have. Applied at **country** scope (not on the journal entry) so they appear in the country's own modifier list with their own name and description.
+Four discrete static modifiers, not one dynamically scaled family: the effects are small enough that a continuous multiplier would be unreadable in the modifier list, and a discrete tier is what the player is told they have. Applied **on the UN journal entry**, beside `un_member_modifier` and the rest of the UN's effects, which is where a player looks for them (play-test feedback; the first build put them on the country). `un_standing_clear_tier_modifiers` also strips any copy an earlier build left on the country.
 
 | Tier | Modifier | Effects |
 |---|---|---|

@@ -105,7 +105,7 @@
  un_secure_commitment_action_proposal_accepted_name:0 "A vote pledged to us"
  un_secure_commitment_action_proposal_declined_desc:0 "[TARGET_COUNTRY.GetName] will not commit their vote to our resolution."
  un_secure_commitment_action_proposal_declined_name:0 "Our approach was refused"
- un_secure_commitment_action_proposal_notification_desc:0 "[INITIATOR_COUNTRY.GetName] asks us to vote in favour of the resolution they have tabled before the [concept_un_general_assembly]."
+ un_secure_commitment_action_proposal_notification_desc:0 "[INITIATOR_COUNTRY.GetName] asks us to vote in favour of the resolution they have proposed before the [concept_un_general_assembly]."
  un_secure_commitment_action_proposal_notification_effects_desc:0 "$un_secure_commitment_action_desc$"
  un_secure_commitment_action_proposal_notification_name:0 "A request for our vote at the United Nations"
  voluntary_union_proposal_accepted_desc:0 "[TARGET_COUNTRY.GetName] has accepted our proposal of voluntary union."
