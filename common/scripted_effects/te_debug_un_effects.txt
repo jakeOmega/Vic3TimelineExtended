@@ -8,6 +8,8 @@
 #   effect te_debug_un_setup = yes
 #   effect te_debug_un_grant_mandate = { TARGET = c:PRU REGION = s:STATE_ALSACE_LORRAINE }
 #   effect te_debug_un_set_standing = { VALUE = 85 }
+#   effect te_debug_un_open_resolution = { PROPOSER = c:FRA TOPIC = condemn TARGET = c:PRU }
+#   effect te_debug_un_clear_vote = yes
 #
 # They skip votes, costs and eligibility on purpose, so never call them from
 # gameplay script.
@@ -105,4 +107,53 @@ te_debug_un_grant_mandate = {
 # Scope: country
 te_debug_un_set_standing = {
 	set_variable = { name = un_standing value = $VALUE$ } # REVIEWED 2026-09-18: console-only test helper; the gameplay writers are un_standing_gain / un_standing_loss
+}
+
+# Open a resolution on $TOPIC$ with $PROPOSER$ as its sponsor, so the player can
+# vote on it from the chamber card on day one instead of waiting for a proposer
+# event to fire and then thirty days for the un_vote.1 popup. $PROPOSER$ must be
+# a UN member other than the player (run te_debug_un_setup first); the player is
+# then an ordinary voter with Vote in Favour / Vote Against live immediately,
+# and Veto too if the player holds a permanent seat and $TOPIC$ is binding.
+#
+# $TARGET$ is ALWAYS required — a scripted effect has no default parameters, and
+# a second definition supplying one would be a duplicated top-level key the
+# engine silently drops. Only the topics that name a country read it (condemn,
+# sanctions, expulsion, military_mandate, and the two request topics, where the
+# requester is its own target); for every other topic pass the proposer again,
+# e.g. `TARGET = c:FRA`. un_resolution_open stores it as un_res_target either
+# way and every consumer of that variable is guarded by `has_variable`.
+#
+# Costs, cooldowns, the standing floor and the authority gate are all skipped:
+# this reaches straight past un_propose_*_possible into un_resolution_open.
+# Parameters: $PROPOSER$ = c:TAG, $TOPIC$ = condemn | sanctions | climate | ...
+#             $TARGET$   = c:TAG
+# Scope: country (the player; only used to find the proposer)
+te_debug_un_open_resolution = {
+	te_debug_un_clear_vote = yes
+	$PROPOSER$ = {
+		$TARGET$ = { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = $TOPIC$ }
+	}
+}
+
+# Throw away whatever is on the floor: destroy the open resolution and give back
+# the lock, so another te_debug_un_open_resolution can run straight away. The
+# queued un_vote.1 / un_vote.2 events for the discarded resolution fail their
+# own triggers once its container is gone.
+# Scope: any
+te_debug_un_clear_vote = {
+	global_var:un_active_resolution ?= { destroy_container = yes }
+	if = {
+		limit = { has_global_variable = un_active_resolution }
+		remove_global_variable = un_active_resolution
+	}
+	if = {
+		limit = { has_global_variable = un_vote_reservation }
+		remove_global_variable = un_vote_reservation
+	}
+	if = {
+		limit = { has_global_variable = un_vote_active }
+		remove_global_variable = un_vote_active
+	}
 }

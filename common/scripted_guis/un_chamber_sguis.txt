@@ -1,19 +1,26 @@
 ﻿# ============================================================================
-# UN CHAMBER — READ-ONLY TOOLTIP BUILDERS FOR THE JOURNAL ENTRY WIDGET
+# UN CHAMBER — SCRIPTED GUIS FOR THE JOURNAL ENTRY WIDGET
 # ============================================================================
-# Each entry here exists only so gui/journal_entry_widgets/un_chamber_widget.gui
-# can call `[GetScriptedGui('<key>').ExecuteTooltip(GuiScope.SetRoot(
-# JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
-# ExecuteTooltip *renders* an effect without running it — this is vanilla's
-# documented "Using SGUIs to build lists in loc" pattern; see
-# game/common/scripted_guis/scripted_guis.md and the tooltip builders in
-# game/common/scripted_guis/journal_entry_sguis.txt (which likewise declare
-# nothing but `scope` and `effect`).
+# Two kinds of entry live here, and the file is split accordingly.
 #
-# DISPLAY ONLY. The effects contain nothing but scope navigation and
-# custom_tooltip lines (see common/scripted_effects/un_chamber_display_effects.txt).
-# Proposals, voting, the pass/fail decision, archiving and history pruning all
-# stay with the existing events, buttons and un_vote_effects.txt.
+# 1. TOOLTIP BUILDERS (everything down to un_chamber_mandates_sgui). Each exists
+#    only so gui/journal_entry_widgets/un_chamber_widget.gui can call
+#    `[GetScriptedGui('<key>').ExecuteTooltip(GuiScope.SetRoot(
+#    JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
+#    ExecuteTooltip *renders* an effect without running it — vanilla's
+#    documented "Using SGUIs to build lists in loc" pattern; see
+#    game/common/scripted_guis/scripted_guis.md and the tooltip builders in
+#    game/common/scripted_guis/journal_entry_sguis.txt (which likewise declare
+#    nothing but `scope` and `effect`). They contain nothing but scope
+#    navigation and custom_tooltip lines (see
+#    common/scripted_effects/un_chamber_display_effects.txt).
+#
+# 2. INTERACTIVE CONTROLS (from un_chamber_vote_sgui down). These do act, and
+#    they act by calling the very effects the events and the journal entry's
+#    scripted buttons call — see the section header further down.
+#
+# The pass/fail decision, archiving and history pruning stay entirely with
+# un_vote_effects.txt; nothing here touches them.
 #
 # The active resolution and the bounded history are read in place through
 # global_var:un_active_resolution and the un_resolution_history global list —
@@ -396,34 +403,42 @@ un_chamber_propose_sgui = {
 # Rendered with ExecuteTooltip, which runs the effect without executing it, so
 # the selectors it calls leave nothing behind. Same op table as
 # un_chamber_propose_sgui.
+#
+# A non-member renders nothing: the list is meaningless outside the
+# organisation, and un_chamber_propose_intro_sgui says so in one line instead.
+# ExecuteTooltip does not consult is_shown — it renders the effect — so the
+# membership test has to sit inside the effect rather than beside it.
 un_chamber_propose_row_sgui = {
 	scope = country
 	saved_scopes = { op }
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
-			un_chamber_propose_condemn_row = yes
-		}
-		else_if = {
-			limit = { scope:op = 1 }
-			un_chamber_propose_sanctions_row = yes
-		}
-		else_if = {
-			limit = { scope:op = 2 }
-			un_chamber_propose_expulsion_row = yes
-		}
-		else_if = {
-			limit = { scope:op = 3 }
-			un_chamber_propose_mandate_row = yes
-		}
-		else_if = {
-			limit = { scope:op = 4 }
-			un_chamber_propose_peacekeepers_row = yes
-		}
-		else_if = {
-			limit = { scope:op = 5 }
-			un_chamber_propose_aid_row = yes
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			if = {
+				limit = { scope:op = 0 }
+				un_chamber_propose_condemn_row = yes
+			}
+			else_if = {
+				limit = { scope:op = 1 }
+				un_chamber_propose_sanctions_row = yes
+			}
+			else_if = {
+				limit = { scope:op = 2 }
+				un_chamber_propose_expulsion_row = yes
+			}
+			else_if = {
+				limit = { scope:op = 3 }
+				un_chamber_propose_mandate_row = yes
+			}
+			else_if = {
+				limit = { scope:op = 4 }
+				un_chamber_propose_peacekeepers_row = yes
+			}
+			else_if = {
+				limit = { scope:op = 5 }
+				un_chamber_propose_aid_row = yes
+			}
 		}
 	}
 }
@@ -434,7 +449,10 @@ un_chamber_assembly_business_sgui = {
 	scope = country
 
 	effect = {
-		un_chamber_assembly_business_block = yes
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			un_chamber_assembly_business_block = yes
+		}
 	}
 }
 
