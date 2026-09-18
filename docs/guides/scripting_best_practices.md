@@ -513,6 +513,47 @@ The same family as the per-building `_mult` pitfall, but along a different axis:
 
 **See also** the script-only modifier-type comment in `common/modifier_type_definitions/diplomatic_play_escalation_modifier_types.txt` near the `country_aggressor_diplomatic_play_escalation_weekly_*` block.
 
+## War Goal Types: Where Conditional Infamy Can Live, and What `possible` Actually Gates
+
+Established while building the UN authorized-mandate goal (`common/war_goal_types/te_un_mandate_restore_state.txt`). The authoritative reference is vanilla `game/common/war_goal_types/war_goal_types.md`; these are the parts that decide architecture.
+
+- **`infamy` is a full script value, not a number** — and so are `maneuvers`, plus the `possible` / `valid` triggers and the `on_enforced` effect. All five see the same scopes: `root` = **holder**, `scope:creator_country`, `scope:diplomatic_play`, `scope:target_country`, `scope:target_state`, `scope:stakeholder`, `scope:target_region`, `scope:article_options` (`war_goal_types.md` § Triggers and Effect). The *current* scope at the top level of each block is the holder country — vanilla `21_return_state.txt`'s infamy reads `modifier:country_infamy_generation_against_unrecognized_mult` and `is_country_type = unrecognized` bare, which only works on a country.
+- **Therefore conditional infamy works.** A script value can carry `if = { limit = { <any trigger> } add = { … } }`, and triggers can read country variables, global variables and script containers. So "this goal is free only while a live authorization covers it" is expressible as one `if` over a scripted trigger, and the discount is attached to **the goal**, not to the country. That matters: a country-wide `country_infamy_generation_mult` modifier would discount *every* goal in the play. Compute the zero rather than declaring it (`value = 0`, then add the full vanilla formula in the `NOT` branch) so an unauthorized path still costs what vanilla charges.
+- **`possible` is the *listing* filter; `valid` is the re-validation hook.** `war_goal_types.md` describes `possible` as "if a goal with its target data is **listed** when selecting a war goal in the diplo play panel", and `valid` as "if the war goal is valid from a script perspective" with further code-side validation. Do not put state that can lapse mid-war into `valid`: an authorization or claim that expires would silently delete a war goal the player is already fighting over. Keep `valid` vanilla-shaped and put the gate in `possible` (plus the play type's `possible`, plus conditional infamy, as defence in depth).
+- **`scope:diplomatic_play` is not always bound.** Vanilla `21_return_state.txt` writes `scope:diplomatic_play ?= {` in its own infamy block — the `?=` is the tell that the play can be unset when the *initial* goal of a play is evaluated (it does not exist yet). Any clause that reads the play must be optional, and must not be the only thing keeping the goal listed.
+- **A goal is only reachable through a play type.** `common/diplomatic_plays/` is where a play gets its starting `war_goal`; `settings = { skip_build_list }` additionally removes the goal from the "add a war goal" list. If you want a player to *start* a war over a custom goal, ship a `dp_*` play type for it (vanilla `dp_return_state`, `00_diplomatic_plays.txt:129`), otherwise the goal is only ever a secondary demand in somebody else's play. A play type's `possible` sees `scope:target_country`; its `selectable_in_lens` does **not**.
+- **Leave `add_infamy_for_starting_initiator_wargoals` at its default** when the discount lives in the goal's own `infamy` block. Switching it off on the play type would hand out a free starting goal even in the cases the goal's formula is written to charge for.
+
+## Play Lifecycle: Which on_actions Let Script Watch a War Goal
+
+From `game/common/on_actions/00_code_on_actions.txt` (the header comments there are the only documentation of each on_action's scopes; `on_actions.log` lists names only).
+
+| on_action | Root | Scopes | Use |
+|---|---|---|---|
+| `on_diplomatic_play_started` (:2477) | the play | `scope:initiator`, `scope:target` | play opened |
+| `on_wargoal_added` (:6992) | the play | `scope:actor` = **war goal owner** | a goal was added — but **not which goal** |
+| `on_wargoal_removed` (:7000) | the play | `scope:actor` | a goal went away |
+| `on_diplo_play_back_down` (:4264) | the play | `scope:actor` = the country that backed down | abandonment |
+| `on_diplo_play_war_start` (:4316) | the play | — | escalation to war |
+| `on_wargoal_enforced` (:6239) | **country** | `scope:actor`, `scope:target`, `scope:diplomatic_play`, `scope:war_goal_enforced`, `scope:enforced_by_timer` | a goal was enforced |
+| `on_war_end` (:7008) | the play | `scope:actor`, `scope:target` | war over |
+
+Two things follow:
+
+- **`on_wargoal_added` does not tell you which goal was added.** There is no war-goal iterator and no trigger that takes a `war_goal` scope (`scope:war_goal_enforced` is declared in `event_scopes.log` but no vanilla script reads it and no trigger declares `Supported Scopes: war_goal`). The only readable form is `{play,war}_participant_has_war_goal_of_type_against = { type = <key> target = <country> }` and `has_play_goal = <key>` (play scope), which name **one type at a time**. Detecting "did they add anything other than X" therefore requires an explicit prohibited-type list, not an enumeration.
+- **Prefer the war goal type's own `on_enforced` over `on_wargoal_enforced`** when you care about one goal type: it can only fire for that type, and it hands you `scope:target_state` as well. Use `on_wargoal_enforced` only when you need to react to *any* goal.
+
+Pair each on_action hook with a monthly sweep doing the same work. The hooks make the state right *immediately* (closing windows where a stale flag is exploitable); the sweep is what survives an on_action that does not fire for some path.
+
+## Script Containers: An O(1) Index Beats Iterating the Pool
+
+A container pool is global and unindexed — `every_container = { tag = X }` scans **all** containers, and `parent = <scope>` does not change that (`Modding-Digests/1.13.10/script_containers.md` § Notes). When a container belongs to exactly one country, store it as a country variable and read it back with `root.var:my_container ?= { … }`. That turns a per-frame gate (a war goal's `possible`/`infamy` are re-evaluated for every candidate target as the panel redraws) from a pool scan into one variable read.
+
+Two habits that go with it:
+
+- **Test the container's tags, not the variable's presence.** `has_variable = x` is true for a dangling reference; `var:x ?= { has_tag = … }` is not. Writing the gate as "does the index point at something still live" means a stale index from another version can never lock the country out of the feature, and a monthly `if = { limit = { has_variable = x  NOT = { var:x ?= { has_tag = my_tag } } } remove_variable = x }` cleans it up.
+- **Variables can hold `state_region` scopes** — vanilla does it (`00_victoria_ep2_scripted_effects.txt:695`, `set_variable = { name = daimyo_var value = s:STATE_KYUSHU }`). Prefer a `state_region` over a `state` for anything that must survive ownership changes: a state is a (region, owner) pair and can be split or merged, a state region is a static definition. Compare with `scope:target_state.state_region ?= var:my_region`, and reach the states with `state_region_scope = { any_scope_state = { owner ?= scope:x } }` (`any_scope_state` supports `state_region`).
+
 ## `interest_group =` Parameter in Effects Requires `ig:` Prefix
 
 - In `add_radicals`, `add_loyalists`, and similar effects, the `interest_group` parameter requires the `ig:` prefix: `interest_group = ig:ig_devout`.

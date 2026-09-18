@@ -265,17 +265,20 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 | `un_active_resolution` | global | Scope: the open resolution container |
 | `un_resolution_history` | global list | Closed resolution containers, capped at `un_resolution_history_cap` (25) |
 | `un_resolution_seq` | global | Counter behind each resolution's `un_res_seq` |
+| `un_mandate_seq` | global | Counter behind each mandate's `un_mnd_seq` |
+| `un_mandate_registry` | global list | Every authorized military mandate, live and closed, capped at `un_mandate_registry_cap` (12) |
+| `un_mandate_current` | country | The actor's live mandate container — the "one at a time" rule and an O(1) index in one |
 | `un_agency_*` | global | Specialized agency flags (who, unesco, icj, unhrc, iaea, unep, unhcr, unoosa) |
 
 ### Buttons (17+)
 - **Founding:** `un_found_button` (GP + tech required)
 - **Membership:** `un_join_button`, `un_leave_button`
-- **Requests (trigger GA votes):** `un_request_peacekeepers_button`, `un_request_humanitarian_aid_button`, `un_propose_condemn_button`, `un_propose_sanctions_button`
+- **Requests (trigger GA votes):** `un_request_peacekeepers_button`, `un_request_humanitarian_aid_button`, `un_propose_condemn_button`, `un_propose_sanctions_button`, `un_propose_mandate_button`
 - **Policy (members):** `un_lift_sanctions_button`, `un_peacekeeping_button`, `un_end_peacekeeping_button`, `un_fund_development_button`, `un_defund_development_button`, `un_human_rights_button`, `un_arms_control_button`
 - **GP influence:** `un_champion_order_button`, `un_stop_championing_button`, `un_undermine_order_button`, `un_stop_undermining_button`
 
-### Vote Topics (16, of which 5 are *binding* / vetoable)
-The 5 binding topics — sanctions, peacekeeping_request, icc, condemn, reform — can be vetoed by [concept_un_permanent_member]s via the third option in `un_vote.1`. Vetoed binding resolutions that still have GA simple-majority pass in graduated/weak form (except reform, which is flat-blocked). All other 10 topics are recommendatory (non-vetoable). The 16th topic, `expulsion`, is recommendatory but uses a 2/3 supermajority threshold instead of simple majority.
+### Vote Topics (17, of which 6 are *binding* / vetoable)
+The 6 binding topics — sanctions, peacekeeping_request, icc, condemn, reform, military_mandate — can be vetoed by [concept_un_permanent_member]s via the third option in `un_vote.1`. Vetoed binding resolutions that still have GA simple-majority pass in graduated/weak form, except the two that have **no** graduated form and are flat-blocked: reform (charter changes really do need P5 unanimity) and military_mandate (there is no weaker version of a licence to use force). All other 10 topics are recommendatory (non-vetoable). `expulsion` is recommendatory but uses a 2/3 supermajority threshold instead of simple majority.
 
 
 | Resolution Tag | Triggered By | Description |
@@ -296,12 +299,13 @@ The 5 binding topics — sanctions, peacekeeping_request, icc, condemn, reform �
 | `un_topic_aid_request` | Request Aid button | Humanitarian aid to requesting country |
 | `un_topic_sanctions` | Propose Sanctions button | Economic sanctions against target country |
 | `un_topic_expulsion` | Propose Expulsion button | Strip a permanent member's seat (2/3 supermajority) |
+| `un_topic_military_mandate` | Propose Military Mandate button | Authorize one member to recover one claimed state region from one censured state — see § Military Mandates |
 
 ### Resolutions (script containers, 1.13.10+)
 Every General Assembly resolution is a script container. Tags, variables and the lifecycle effects are documented in the header of `common/scripted_effects/un_vote_effects.txt`; checks live in `common/scripted_triggers/un_resolution_triggers.txt`.
 
 - **Tags:** `un_resolution`, `un_topic_<topic>`, and a status: `un_res_voting` while open, then `un_res_passed` / `un_res_failed` / `un_res_lapsed`. `un_res_vetoed` marks a permanent-member veto; `un_res_target_accepted` marks a target that voted for its own censure.
-- **Variables:** `un_res_proposer`, `un_res_target`, `un_res_support` (starts at 1, the proposer), `un_res_oppose`, `un_res_seq`, `un_res_months`, `un_res_vetoer`, `un_res_promoted` (expulsion). Voters are in the `un_res_yes` / `un_res_no` lists.
+- **Variables:** `un_res_proposer`, `un_res_target`, `un_res_support` (starts at 1, the proposer), `un_res_oppose`, `un_res_seq`, `un_res_months`, `un_res_vetoer`, `un_res_promoted` (expulsion), `un_res_mandate_region` / `un_res_mandate_beneficiary` (military_mandate). Voters are in the `un_res_yes` / `un_res_no` lists.
 - **Lifecycle:** `un_resolution_open = { TOPIC = x }` creates the container, takes the lock, fires `un_vote.1` and schedules `un_vote.2`. `un_vote.2`'s immediate runs `un_resolution_decide` and `un_resolution_archive` (topic cooldown, history, lock release). Proposer events hold the lock with `un_vote_reserve` in their immediate and give it back with `un_vote_release` if they don't propose.
 - **Scope passing:** the vote events get the resolution as `scope:un_resolution` through `trigger_event` and never read `un_active_resolution`, so a resolution stays readable after a newer one opens.
 - **Cooldowns:** a closed resolution carries the timed `un_res_cooldown` variable (5 years, 10 for expulsion); `un_resolution_topic_on_cooldown = { TOPIC = x }` checks `un_resolution_history` for it. History eviction skips entries still on cooldown.
@@ -313,7 +317,7 @@ Every General Assembly resolution is a script container. Tags, variables and the
 - **Old saves: documented break.** A vote in progress when the mod updates is dropped: its queued `un_vote.1`/`.2` events carry no `scope:un_resolution` and fail their triggers, and the watchdog frees the lock on the next monthly pulse. Topic cooldowns from before the update are forgotten (they were global timed variables), and the legacy `un_vote_*` globals are left inert. Migrating would have meant reading ~25 variable names the code no longer sets, which logs "used but never set" on every load.
 
 ### Chamber Widget (display-only)
-`gui/journal_entry_widgets/un_chamber_widget.gui`, wired into `custom_widget_container_2` of `je_united_nations`. It shows our own standing (member / permanent member / outsider), the resolution currently before the Assembly — topic, proposer, target, tally, the passage rule with a live projection of it, veto exposure or the recorded vetoer, months in session, and what carrying or falling would do — a collapsible ballot of the recorded yes/no voters, and a collapsible archive of the closed resolutions in `un_resolution_history`, newest first. Both empty states are spelled out ("No resolution is currently before the Assembly", "No resolutions have been recorded yet").
+`gui/journal_entry_widgets/un_chamber_widget.gui`, wired into `custom_widget_container_2` of `je_united_nations`. It shows our own standing (member / permanent member / outsider), the resolution currently before the Assembly — topic, proposer, target, tally, the passage rule with a live projection of it, veto exposure or the recorded vetoer, months in session, and what carrying or falling would do — a collapsible ballot of the recorded yes/no voters, a collapsible register of authorized military mandates (`un_chamber_mandates_sgui`, § Military Mandates — actor, target, territory, beneficiary, status, months to expiry, plus the case we could table if we hold none), and a collapsible archive of the closed resolutions in `un_resolution_history`, newest first. Every empty state is spelled out ("No resolution is currently before the Assembly", "No resolutions have been recorded yet", "The Assembly has authorized no military mandate").
 
 It is strictly a reader. Nothing in it creates, votes on, decides, archives or prunes a resolution — that all stays with the events, buttons and `un_vote_effects.txt`. Its text is built in script by `common/scripted_guis/un_chamber_sguis.txt` (five `scope = country` tooltip builders) over the line helpers in `common/scripted_effects/un_chamber_display_effects.txt`, and rendered through `[GetScriptedGui('...').ExecuteTooltip(...)]` — vanilla's documented "Using SGUIs to build lists in loc" pattern (`game/common/scripted_guis/scripted_guis.md`). It reads `global_var:un_active_resolution` and the `un_resolution_history` list in place: no country-side copy of either is kept, and no index, length or cap is assumed, so archive pruning is invisible to it.
 
@@ -325,6 +329,97 @@ It is strictly a reader. Nothing in it creates, votes on, decides, archives or p
 - **Timing.** Only what the containers store: `un_res_months` (months in session / months it sat) and `un_res_seq` ("Resolution No. N"). A closed resolution still carrying `un_res_cooldown` gets a qualitative "cannot be tabled again" note — the variable is a timed one, and no date precision is claimed.
 - **Expand/collapse state** lives in `GetVariableSystem` (client-side, never saved, never gameplay state): `un_chamber_votes`, `un_chamber_history`, `un_chamber_history_details`. Toggles are per *section*, not per row — a script container exposes no stable string id to the GUI (`ScriptContainer` has no `GetIDString`, and `GetVariableValue` returns a `CFixedPoint` that `Concatenate` cannot take), so a per-row toggle key cannot be built.
 - **Cost.** `ExecuteTooltip` re-renders every frame the widget is visible, so the archive and its voting details each sit behind their own collapsed-by-default toggle.
+
+### Military Mandates (authorized military mandates)
+
+A **mandate** is the General Assembly's written authorization for **one** actor to recover **one** state region from **one** target, and nothing else. It is the only thing that makes the mod's `te_un_mandate_restore_state` war goal selectable, and the only thing that makes it free. Stage 1 of the mandates / standing / lobbying arc; the two standing hooks below are the seam stage 2 fills in.
+
+**Files:** `common/scripted_effects/un_mandate_effects.txt` (state machine + the two hooks), `common/scripted_triggers/un_mandate_triggers.txt` (every gate), `common/war_goal_types/te_un_mandate_restore_state.txt`, `common/diplomatic_plays/te_un_mandate_play.txt`, `common/on_actions/un_mandate_on_actions.txt`, `events/un_mandate_events.txt`, `common/ai_strategies/other.txt` (`ai_strategy_un_mandate`), plus the mandate branches in `un_buttons.txt`, `un_vote_events.txt`, `un_chamber_display_effects.txt`, `un_chamber_sguis.txt` and `un_chamber_widget.gui`.
+
+#### The objective, and why this one
+
+`kind = return_state`: recover a named state region the actor holds a `has_claim_by` claim on from the state that holds it. Everything about the goal except `possible` and `infamy` is vanilla `return_state` — same kind, contestion, execution priority, maneuvers, `mirrored_wargoal`. Two settings differ: `can_add_for_other_country` is **absent** (so holder ≡ creator: the mandate names one actor, and 1.14 does not document which of the two the engine charges for a goal added on another country's behalf), and `requires_interest` is **absent** (the Assembly's authorization is what licenses the intervention; an interest marker is not additionally required).
+
+**v1 beneficiary = the actor.** `un_mnd_beneficiary` is a real field on the container and is read wherever the beneficiary is displayed or validated, but the propose button always sets it to the proposer. Widening it to a third party needs `can_add_for_other_country`, a beneficiary that is a participant in the play, and an answer to the infamy-attribution question above — all of which are v2, and none of which need a save migration, because the field already exists.
+
+#### Where the discount lives
+
+Zero infamy is **computed, not declared**. `infamy` adds the full vanilla `return_state` formula only when `un_mandate_covers_goal = no`, so a goal reachable without a mandate (a future version, a path `possible` does not cover) costs exactly what vanilla charges. Nothing anywhere adds a country-wide infamy modifier, which is what makes "only the authorized goal is discounted" true by construction: a plain `return_state` on the very same province, added in the same play, still costs full price.
+
+`un_mandate_covers_goal` accepts both `un_mandate_active` and `un_mandate_bound` on purpose. The infamy block is re-read whenever the play panel redraws, and a goal whose price jumped from 0 to the full figure the instant it was added would be unreadable.
+
+#### State model
+
+Container tags: `un_mandate`, plus exactly one lifecycle tag —
+
+| Tag | Meaning |
+|---|---|
+| `un_mandate_active` | issued, not yet exercised |
+| `un_mandate_bound` | exercised: the war goal is in a play |
+| `un_mandate_complied` | the authorized goal was enforced |
+| `un_mandate_violated` | a prohibited objective was taken against the same target |
+| `un_mandate_abandoned` | the actor backed down from the bound play |
+| `un_mandate_expired` | lapsed unused after `un_mandate_expiry_months` (60) |
+| `un_mandate_void` | preconditions failed (`un_mandate_still_valid`), or the bound play ended without enforcement |
+| `un_mandate_forfeit` | set *alongside* `bound`: the actor left the UN mid-play. Compliance still happens but pays nothing and routes to the violation hook instead |
+
+Container variables: `un_mnd_seq`, `un_mnd_actor`, `un_mnd_beneficiary`, `un_mnd_target`, `un_mnd_region` (a `state_region`, which unlike a state never stops existing), `un_mnd_resolution` (a back-reference; may dangle once the resolution is evicted from `un_resolution_history` — nothing reads it), `un_mnd_months`, `un_mnd_grace` (timed, 60 days, set on binding), `un_mnd_closed_months`.
+
+Globals: `un_mandate_seq` (counter), `un_mandate_registry` (every mandate, live and closed, capped at `un_mandate_registry_cap` = 12; closed entries retire after `un_mandate_closed_retention_months` = 60, one per month).
+
+Country side: `un_mandate_current` on the actor. This is simultaneously the "one live mandate per country" rule and an O(1) index, so the war goal's `possible` and `infamy` never scan the container pool. Every gate reads it through `un_mandate_has_live_mandate`, which tests the container's tags rather than the variable's mere presence, so a dangling index can never lock a country out; the monthly country pulse drops one if it finds it.
+
+#### Lifecycle
+
+| Step | Trigger site | Effect |
+|---|---|---|
+| propose | `un_propose_mandate_button` | `un_resolution_open = { TOPIC = military_mandate }`, then stores `un_res_mandate_region` / `un_res_mandate_beneficiary` on the resolution |
+| grant | `un_vote.2`, passed and not vetoed | `un_mandate_create` (re-validates first) |
+| bind | `on_wargoal_added`, monthly sweep | `un_mandate_try_bind` |
+| comply | the war goal's own `on_enforced` | `un_mandate_record_enforcement` |
+| violate | `on_wargoal_added`, monthly sweep | `un_mandate_check_prohibited` |
+| abandon | `on_diplo_play_back_down` | `un_mandate_on_back_down` |
+| expire / void / prune | monthly sweep | `un_mandate_tick`, `un_mandate_prune_registry` |
+
+Every on_action hook is mirrored by the monthly sweep, which is the safety net if one fails to fire; the hooks exist so the state is right *immediately*, closing the window in which a mandate still reads `active` after its goal is already in a play.
+
+**One-play binding.** `un_mandate_authorizes_new_goal` lists the goal when the mandate is `active` (first and only exercise), or when it is `bound` **and the play already carries the goal type** — which is the binding rule expressed as a trigger, because a fresh play cannot answer `has_play_goal`. Re-adding in a second play is therefore impossible, and a second *copy* in the same play is blocked by `validate_conflicts_war_goals_holder` plus the fact that a (state region, owner) pair is a single state. Compliance can pay out only once because `un_mandate_close` clears the actor's index before calling the hooks.
+
+**Prohibited objectives** are an explicit list (`un_mandate_has_prohibited_goal`): annex_country, conquer_state, regime_change, humiliation, the four make-subject goals, unification and the mod's te_reunify_country, checked in both the play and the war forms. The list is explicit because the engine offers no way to enumerate a play's war goals from script — `*_has_war_goal_of_type_against` names one type at a time. Keep it in step with `common/war_goal_types/`.
+
+#### Edge cases
+
+| Situation | Outcome | Hook |
+|---|---|---|
+| Expires unused (60 months `active`) | `un_mandate_expired` | none |
+| Expires while `bound` | stays valid for that play: `un_mnd_months` keeps counting but only the `active` branch checks it against expiry | — |
+| Target no longer holds the region, or claim revoked, while `active` | `un_mandate_void` | none |
+| Target / beneficiary ceases to exist while `active` | `un_mandate_void` | none |
+| Actor leaves or is annexed while `active` | `un_mandate_void` | none |
+| Actor leaves the UN while `bound` | keeps the mandate (stripping it would delete a war in progress) and adds `un_mandate_forfeit`; a later compliance is recorded but routed to the violation hook | `un_mandate_on_violated`, on completion |
+| Bound play ends with the goal never enforced | `un_mandate_void` after the 60-day grace — deliberately *not* a violation, because the goal can vanish for reasons outside the actor's control | none |
+| Actor backs down from the bound play | `un_mandate_abandoned` | `un_mandate_on_violated` |
+| Prohibited objective added against the same target | `un_mandate_violated` | `un_mandate_on_violated` |
+| Authorized goal enforced | `un_mandate_complied` | `un_mandate_on_complied` |
+| UN game rule disabled | `un_mandate_still_valid` fails (`has_game_rule = united_nations_enabled`) → `un_mandate_void` on the next sweep | none |
+
+Void and closed mandates stay on the register for five years so the chamber panel can show them, then the monthly pruner destroys one per month. Nothing leaks: every terminal transition goes through `un_mandate_close`, which clears the actor's index, and the pruner only ever retires entries that `un_mandate_is_closed`.
+
+#### Standing hooks (stage 2)
+
+`un_mandate_on_complied` and `un_mandate_on_violated` are called from **container scope**, with the outcome tag already stamped, so a standing implementation can branch on `has_tag = un_mandate_abandoned` vs `un_mandate_violated` without new plumbing. They fire **exactly once per mandate**. v1 contents, built only from effects and modifiers the UN system already ships: complied → `un_authority +5` and `un_vote_success_reward` on the actor; violated / abandoned / complied-while-forfeit → `un_authority −5` and `un_condemned_modifier` on the actor. Stage 2 should *add* to these, not replace them, and the relations/catalyst pair for a third-party beneficiary belongs in `un_mandate_on_complied` once `un_mnd_beneficiary` can differ from the actor.
+
+#### Proposal, eligibility and AI
+
+Proposing needs: UN membership, `un_authority` ≥ 40, no live mandate of our own, no `un_ga_resolution_modifier` / `un_request_cooldown`, no vote in session, no mandate proposal of ours in the last five years (`un_mandate_proposal_cooldown`), and an eligible case. A case is a country that is not a subject, not decentralized, **already censured by this Assembly or notorious in its own right** (`un_mandate_target_is_notorious`: infamy ≥ 25, or `un_condemned_modifier` / `un_non_binding_rebuke_modifier` / `un_sanctions_target_modifier` / `un_sanctions_partial_modifier`), and holding a state we have a claim on. That gate is what keeps the topic from becoming a general-purpose land-grab licence, and it ties the mandate into the existing condemn / sanctions machinery.
+
+**The button picks the case**; a scripted button cannot prompt. `un_mandate_select_case` takes the highest-scoring target by `un_mandate_case_score` (already condemned > sanctioned > merely notorious, rival > stranger, weaker > stronger) and its largest claimed state. `un_mandate_case_exists` mirrors the same filter for the gate — **the two must be kept in step**. The chamber panel renders the same pick through the same effect *before* the button is pressed, so the preview cannot drift from the proposal.
+
+**Cooldown divergence, deliberate.** `un_resolution_topic_on_cooldown` is topic-wide: one member's mandate vote would bar every other member for five years and leave the feature dead on a busy map. The mandate topic opts out and throttles per country instead. `un_resolution_archive` still stamps `un_res_cooldown` on the closed resolution (that is what keeps it in the history), but nothing consults it for this topic.
+
+**Veto = flat block.** `military_mandate` joins `reform` as a binding topic with no graduated form: there is no coherent weaker version of "you may go to war over this", so a veto blocks it outright and `un_vote.2` applies no effect. Vetoing one is deliberately **not** on the infamy-on-veto list (ICC / condemn / peacekeeping) — charging infamy for restraint would read as the system punishing peace.
+
+**AI.** `ai_strategy_un_mandate` is picked up only by a country that holds a live mandate, its `aggression` fires only at the named target, and `wargoal_weights` puts the authorized goal ahead of the alternatives. The AI faces exactly the player's gates: the war goal's `possible`, the play type's `possible` and `selectable_in_lens` all read the same mandate.
 
 ### Vote System (3-phase)
 1. **un_vote.1** (Phase 1): Fires to all other UN members 30 days after opening. Each country votes yes/no (permanent members may veto binding topics) with topic-adaptive titles, descriptions, and AI logic. Votes are recorded on the resolution; a vote cast after it closed is ignored.
