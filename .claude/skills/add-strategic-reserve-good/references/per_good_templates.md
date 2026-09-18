@@ -441,7 +441,7 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
  st_res_row_<GOOD>_name:0 "@<GOOD>! #bold <GOOD_DISPLAY>#!"
  st_res_row_<GOOD>_amount:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0]"
  st_res_row_<GOOD>_status:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]"
- st_res_row_<GOOD>_flow:0 "#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]  #bold Net:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
+ st_res_row_<GOOD>_flow:0 "#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]  #bold Last wk:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
 ```
 
 `@<GOOD>!` is the goods texticon — confirm it exists with `grep -n "icon = <GOOD>$" "$VIC3/game/gui/goods_texticons.gui"` (a mod-only good needs an entry in `gui/zzz_extra_goods_texticons.gui` instead).
