@@ -166,40 +166,76 @@ un_mandate_holds_authorized_goal = {
 }
 
 # Whether the scoped country has taken a *prohibited* objective against
-# $TARGET$ — anything that goes beyond restoring the named territory. The
-# Assembly authorized a restoration, not a conquest, a regime change or a
-# protectorate; taking one of these voids the mandate and calls the violation
-# hook.
+# $TARGET$ — any further TERRITORIAL or SUBJUGATION demand beyond restoring
+# the named region. The Assembly authorized a restoration, not a conquest, a
+# partition, a protectorate or a regime change; taking one of these voids the
+# mandate and calls the violation hook.
+#
+# `return_state` is on the list on purpose: a second, fully-priced claim
+# recovered from the same state in the same war is still more territory than
+# the resolution named, and it is the most obvious thing a player would reach
+# for. Matching is by type key, so the mandate's own
+# te_un_mandate_restore_state never collides with it.
+#
+# NOT on the list, deliberately: the goals that take nothing for the holder
+# (liberate_subject, independence, revoke_claim/revoke_all_claims,
+# break_enforced_treaties) and the non-territorial demands (open_market,
+# ban_slavery, humiliation-adjacent treaty articles, the demand_* group,
+# force_nationalization, foreign_investment_rights, colonization_rights,
+# contain_threat, enforce_treaty_article, increase_autonomy/reduce_autonomy,
+# join_power_bloc/leave_power_bloc). A mandate holder may still bargain; it may
+# not take more land or more subjects. `humiliation` is included because it is
+# a punitive demand the Assembly did not license.
 #
 # The list is explicit rather than "any goal that is not ours" because the
 # engine offers no way to enumerate a play's war goals from script: the only
 # read available is `*_has_war_goal_of_type_against`, which names one type at
-# a time. Keep it in step with common/war_goal_types/ when new annexationist
-# goals are added.
+# a time. Keep it in step with common/war_goal_types/ when new territorial or
+# subjugation goals are added.
 # Parameters: $TARGET$ = target country scope
 # Scope: the mandate actor
 un_mandate_has_prohibited_goal = {
 	OR = {
+		# --- territorial ---
 		play_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
 		play_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		# --- subjugation ---
 		play_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
 		play_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
 		play_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
 		play_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
+		# --- punitive ---
+		play_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+
 		war_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
 		war_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
 		war_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
 		war_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
 		war_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
 		war_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
 	}
 }
 

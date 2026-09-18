@@ -322,16 +322,39 @@ un_mandate_check_prohibited = {
 
 # The actor walked away from the play it raised under the authorization.
 # Called from on_diplo_play_back_down, already filtered to plays that carry the
-# authorized war goal.
+# authorized war goal — but that filter is not enough on its own: the play in
+# question may be somebody ELSE's mandate play in which this country is the
+# target, and this country may hold an unrelated mandate of its own. So the
+# holder's own goal against its own mandate's target is re-checked here.
+#
+# Accepts `active` as well as `bound`: a back-down that lands before the
+# binding hook ran would otherwise leave the authorization reusable, which is
+# exactly the cancellation loophole the design is meant to close.
 # Scope: the country that backed down
 un_mandate_on_back_down = {
 	if = {
 		limit = {
 			has_variable = un_mandate_current
-			var:un_mandate_current ?= { has_tag = un_mandate_bound }
+			var:un_mandate_current ?= {
+				OR = {
+					has_tag = un_mandate_active
+					has_tag = un_mandate_bound
+				}
+				exists = var:un_mnd_target
+			}
 		}
 		var:un_mandate_current ?= {
-			un_mandate_close = { STATUS = abandoned }
+			save_temporary_scope_as = un_mandate_backing_down
+			var:un_mnd_target ?= { save_temporary_scope_as = un_mandate_back_down_target }
+		}
+		if = {
+			limit = {
+				exists = scope:un_mandate_back_down_target
+				un_mandate_holds_authorized_goal = { TARGET = scope:un_mandate_back_down_target }
+			}
+			scope:un_mandate_backing_down = {
+				un_mandate_close = { STATUS = abandoned }
+			}
 		}
 	}
 }
