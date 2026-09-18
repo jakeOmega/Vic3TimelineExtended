@@ -399,6 +399,7 @@ The check acts on a **bound** mandate only. A country that fights an ordinary, f
 | Target / beneficiary ceases to exist while `active` | `un_mandate_void` | none |
 | Actor leaves or is annexed while `active` | `un_mandate_void` | none |
 | Actor leaves the UN while `bound` | keeps the mandate (stripping it would delete a war in progress) and adds `un_mandate_forfeit`; a later compliance is recorded but routed to the violation hook | `un_mandate_on_violated`, on completion |
+| Actor annexed while `bound` | `un_mandate_void` — checked first in the bound branch, because every later check needs a live actor and the pruner only retires *closed* entries |  none |
 | Bound play ends with the goal never enforced | `un_mandate_void` after the 60-day grace — deliberately *not* a violation, because the goal can vanish for reasons outside the actor's control | none |
 | Actor backs down from a play in which it holds the authorized goal (`active` or `bound`) | `un_mandate_abandoned` | `un_mandate_on_violated` |
 | Prohibited objective added against the same target | `un_mandate_violated` | `un_mandate_on_violated` |

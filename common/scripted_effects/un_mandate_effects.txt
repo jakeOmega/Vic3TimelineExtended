@@ -427,11 +427,20 @@ un_mandate_tick = {
 			add_tag = un_mandate_forfeit
 		}
 
-		# The target stopped existing. Nothing is left to enforce, and every
-		# `scope:un_mnd_target_scope` read below would be a stale scope from
-		# another mandate in the same sweep, so this must come first.
+		# A party stopped existing: the actor was annexed, or the target was.
+		# Nothing is left to enforce either way, and without this a bound
+		# mandate with a dead actor would age forever — every check below
+		# requires `exists = var:un_mnd_actor`, and the register pruner only
+		# ever retires CLOSED entries. It must also come first because every
+		# `scope:un_mnd_target_scope` read below would otherwise fall through
+		# to a stale scope from another mandate in the same sweep.
 		if = {
-			limit = { NOT = { exists = var:un_mnd_target } }
+			limit = {
+				OR = {
+					NOT = { exists = var:un_mnd_actor }
+					NOT = { exists = var:un_mnd_target }
+				}
+			}
 			un_mandate_close = { STATUS = void }
 		}
 		else_if = {
