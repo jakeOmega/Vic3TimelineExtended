@@ -1,0 +1,41 @@
+# ============================================================================
+# Strategic Reserve — Scripted Triggers
+# ============================================================================
+# One unlock trigger per reserve good. This is the SINGLE source of truth for
+# "is this good available in the Strategic Reserve UI yet". It is consumed by:
+#   - common/scripted_guis/st_res_scripted_gui.txt  (`is_shown` per good)
+#   - gui/journal_entry_widgets/strategic_reserve_widget.gui
+#     (row visibility, via `ScriptedGui.IsShown`)
+# Never duplicate these tech conditions in a GUI expression or a JE trigger —
+# add the good here and reference the trigger.
+#
+# Country scope.
+# ============================================================================
+
+st_res_grain_unlocked_trigger = {
+	always = yes
+}
+
+st_res_ammunition_unlocked_trigger = {
+	has_technology_researched = percussion_cap
+}
+
+st_res_oil_unlocked_trigger = {
+	has_technology_researched = fractional_distillation
+}
+
+st_res_small_arms_unlocked_trigger = {
+	always = yes
+}
+
+st_res_artillery_unlocked_trigger = {
+	always = yes
+}
+
+st_res_aeroplanes_unlocked_trigger = {
+	has_technology_researched = military_aviation
+}
+
+st_res_tanks_unlocked_trigger = {
+	has_technology_researched = mobile_armor
+}

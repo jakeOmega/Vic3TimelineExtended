@@ -1,10 +1,26 @@
-﻿# Mode text is derived from country vars at display time. The live Strategic
-# Reserve system no longer maintains persistent sr_*_mode variables.
+# ============================================================================
+# Strategic Reserve — Customizable Localization
+# ============================================================================
+# Both families read ONE variable: `st_res_<good>_last_status`, written by
+# st_res_set_good_status_effect (common/scripted_effects/st_res_effects.txt).
+# Nothing here re-derives a reserve's state from rates or stockpiles, so the
+# label the player reads and the state the bookkeeping decided can never drift.
 #
-# Each storing/withdrawing trigger is gated on `has_variable` because the
-# customizable_localization fires for every country (including those that
-# never opened the JE), and unguarded `var:` reads on unset variables raise
-# script-system errors.
+#   0 Idle | 1 Storing | 2 Withdrawing | 3 Storing (flow-capped)
+#   4 Withdrawing (flow-capped) | 5 Full | 6 Empty | 7 Understaffed | 8 No hub
+#
+# `st_res_<good>_mode_text`   -> the short Storing / Withdrawing / Idle /
+#                                Blocked label shown in the inventory row.
+# `st_res_<good>_reason_text` -> the one-sentence explanation of why the actual
+#                                weekly movement differs from the configured
+#                                rate, shown in that row's tooltip.
+#
+# Every branch is `has_variable`-guarded because customizable_localization is
+# evaluated for countries that have never opened the journal entry, and an
+# unguarded `var:` read on an unset variable raises script-system errors. A save
+# from before these variables existed therefore falls through to Idle / no
+# explanation until the first weekly tick writes a real status.
+# ============================================================================
 
 st_res_grain_mode_text = {
 	type = country
@@ -12,21 +28,30 @@ st_res_grain_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_grain_rate
-			has_variable = st_res_grain_stored
-			var:st_res_grain_rate > 0
-			var:st_res_grain_stored < st_res_grain_capacity
+			has_variable = st_res_grain_last_status
+			OR = {
+				var:st_res_grain_last_status = 1
+				var:st_res_grain_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_grain_rate
-			has_variable = st_res_grain_stored
-			var:st_res_grain_rate < 0
-			var:st_res_grain_stored > 0
+			has_variable = st_res_grain_last_status
+			OR = {
+				var:st_res_grain_last_status = 2
+				var:st_res_grain_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -40,21 +65,30 @@ st_res_ammunition_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_ammunition_rate
-			has_variable = st_res_ammunition_stored
-			var:st_res_ammunition_rate > 0
-			var:st_res_ammunition_stored < st_res_ammunition_capacity
+			has_variable = st_res_ammunition_last_status
+			OR = {
+				var:st_res_ammunition_last_status = 1
+				var:st_res_ammunition_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_ammunition_rate
-			has_variable = st_res_ammunition_stored
-			var:st_res_ammunition_rate < 0
-			var:st_res_ammunition_stored > 0
+			has_variable = st_res_ammunition_last_status
+			OR = {
+				var:st_res_ammunition_last_status = 2
+				var:st_res_ammunition_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -68,21 +102,30 @@ st_res_oil_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_oil_rate
-			has_variable = st_res_oil_stored
-			var:st_res_oil_rate > 0
-			var:st_res_oil_stored < st_res_oil_capacity
+			has_variable = st_res_oil_last_status
+			OR = {
+				var:st_res_oil_last_status = 1
+				var:st_res_oil_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_oil_rate
-			has_variable = st_res_oil_stored
-			var:st_res_oil_rate < 0
-			var:st_res_oil_stored > 0
+			has_variable = st_res_oil_last_status
+			OR = {
+				var:st_res_oil_last_status = 2
+				var:st_res_oil_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -96,21 +139,30 @@ st_res_small_arms_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_small_arms_rate
-			has_variable = st_res_small_arms_stored
-			var:st_res_small_arms_rate > 0
-			var:st_res_small_arms_stored < st_res_small_arms_capacity
+			has_variable = st_res_small_arms_last_status
+			OR = {
+				var:st_res_small_arms_last_status = 1
+				var:st_res_small_arms_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_small_arms_rate
-			has_variable = st_res_small_arms_stored
-			var:st_res_small_arms_rate < 0
-			var:st_res_small_arms_stored > 0
+			has_variable = st_res_small_arms_last_status
+			OR = {
+				var:st_res_small_arms_last_status = 2
+				var:st_res_small_arms_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -124,21 +176,30 @@ st_res_artillery_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_artillery_rate
-			has_variable = st_res_artillery_stored
-			var:st_res_artillery_rate > 0
-			var:st_res_artillery_stored < st_res_artillery_capacity
+			has_variable = st_res_artillery_last_status
+			OR = {
+				var:st_res_artillery_last_status = 1
+				var:st_res_artillery_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_artillery_rate
-			has_variable = st_res_artillery_stored
-			var:st_res_artillery_rate < 0
-			var:st_res_artillery_stored > 0
+			has_variable = st_res_artillery_last_status
+			OR = {
+				var:st_res_artillery_last_status = 2
+				var:st_res_artillery_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -152,21 +213,30 @@ st_res_aeroplanes_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_aeroplanes_rate
-			has_variable = st_res_aeroplanes_stored
-			var:st_res_aeroplanes_rate > 0
-			var:st_res_aeroplanes_stored < st_res_aeroplanes_capacity
+			has_variable = st_res_aeroplanes_last_status
+			OR = {
+				var:st_res_aeroplanes_last_status = 1
+				var:st_res_aeroplanes_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_aeroplanes_rate
-			has_variable = st_res_aeroplanes_stored
-			var:st_res_aeroplanes_rate < 0
-			var:st_res_aeroplanes_stored > 0
+			has_variable = st_res_aeroplanes_last_status
+			OR = {
+				var:st_res_aeroplanes_last_status = 2
+				var:st_res_aeroplanes_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -180,24 +250,495 @@ st_res_tanks_mode_text = {
 
 	text = {
 		trigger = {
-			has_variable = st_res_tanks_rate
-			has_variable = st_res_tanks_stored
-			var:st_res_tanks_rate > 0
-			var:st_res_tanks_stored < st_res_tanks_capacity
+			has_variable = st_res_tanks_last_status
+			OR = {
+				var:st_res_tanks_last_status = 1
+				var:st_res_tanks_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			has_variable = st_res_tanks_rate
-			has_variable = st_res_tanks_stored
-			var:st_res_tanks_rate < 0
-			var:st_res_tanks_stored > 0
+			has_variable = st_res_tanks_last_status
+			OR = {
+				var:st_res_tanks_last_status = 2
+				var:st_res_tanks_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
 	}
 	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = st_res_mode_idle
+	}
+}
+
+st_res_grain_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
+st_res_ammunition_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
+st_res_oil_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
+st_res_small_arms_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
+st_res_artillery_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
+st_res_aeroplanes_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
+st_res_tanks_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
 	}
 }
