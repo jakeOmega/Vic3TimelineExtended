@@ -132,9 +132,11 @@ un_secure_commitment_action = {
 	}
 
 	ai = {
-		# Rarely considered. Securing a vote costs a standing diplomatic
-		# obligation, and the AI should treat that as a scarce thing rather than
-		# as something to spend on every resolution it happens to have tabled.
+		# Almost never. An obligation — above all a great power's — is one of the
+		# strongest things a country can hand another, so the AI only offers one
+		# for a resolution it has a real stake in: its own military mandate, or a
+		# binding resolution aimed at one of its rivals. For everything else it
+		# has tabled the chance is zero, and even then it is a rare move.
 		evaluation_chance = {
 			value = 0
 
@@ -144,9 +146,19 @@ un_secure_commitment_action = {
 					global_var:un_active_resolution ?= {
 						has_tag = un_res_voting
 						var:un_res_proposer ?= ROOT
+						OR = {
+							has_tag = un_topic_military_mandate
+							AND = {
+								un_resolution_is_binding = yes
+								has_variable = un_res_target
+								var:un_res_target ?= {
+									has_diplomatic_pact = { who = ROOT type = rivalry }
+								}
+							}
+						}
 					}
 				}
-				add = 0.05
+				add = 0.02
 			}
 		}
 

@@ -2,14 +2,11 @@
 # UN TEST HELPERS — console only
 # ============================================================================
 # Nothing in the mod calls these. They exist so the UN chamber, mandates,
-# standing and lobbying can be exercised in minutes instead of decades. Run them
-# from the console (debug_mode) as the country you are playing:
+# standing and lobbying can be exercised in minutes instead of decades. Vic3's
+# console has no `effect` command, so they are reached through a console-fired
+# event (events/te_debug_un_events.txt):
 #
-#   effect te_debug_un_setup = yes
-#   effect te_debug_un_grant_mandate = { TARGET = c:PRU REGION = s:STATE_ALSACE_LORRAINE }
-#   effect te_debug_un_set_standing = { VALUE = 85 }
-#   effect te_debug_un_open_resolution = { PROPOSER = c:FRA TOPIC = condemn TARGET = c:PRU }
-#   effect te_debug_un_clear_vote = yes
+#   event te_debug_un.1
 #
 # They skip votes, costs and eligibility on purpose, so never call them from
 # gameplay script.
