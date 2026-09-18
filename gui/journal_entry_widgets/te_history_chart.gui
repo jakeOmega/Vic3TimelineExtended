@@ -187,7 +187,11 @@ types te_history_chart_types
 
 				item = {
 					widget = {
-						size = { 0 100% }
+						### Fixed height + expanding width, matching vanilla
+						### levels_progressbar's `size = { 0 15 }` item — one
+						### fewer percentage to resolve against a zero-width
+						### parent.
+						size = { 0 84 }
 						layoutpolicy_horizontal = expanding
 						maximumsize = { 40 -1 }
 						datacontext = "[Scope.GetScriptContainer]"

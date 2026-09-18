@@ -41,11 +41,12 @@
 # the end and removes the single oldest from the front, so insertion order is
 # chronological as long as `remove_list_variable` erases in place. If the bars
 # ever render out of order in game, that assumption is wrong and the fix is
-# local: rebuild the list chronologically after each eviction
-# (`ordered_in_list` with `order_by = te_history_sample_order` and no
-# `position` iterates every element in order) instead of removing in place.
-# Eviction itself is already order-independent — it uses `order_by`, not
-# position 0 of the raw list.
+# local: rebuild the list after each eviction (`ordered_in_list` with
+# `order_by = te_history_sample_order` and no `position` iterates every
+# element in that order) instead of removing in place. Eviction itself is
+# already order-independent — it uses `order_by`, not position 0 of the raw
+# list. Remember that `ordered_*` sorts descending, which is why
+# te_history_sample_order negates the month index.
 #
 # Every helper is wrapped in `hidden_effect` because the banking policy
 # effects that call the marker helper are also rendered as button tooltips;

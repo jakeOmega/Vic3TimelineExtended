@@ -71,8 +71,16 @@ te_history_since_month = {
 }
 
 # Eviction order for the sample lists. Evaluated in sample-container scope by
-# `ordered_in_list`/`ordered_in_global_list`, so position 0 is always the
-# oldest sample no matter what order the engine keeps the list in.
+# `ordered_in_list`/`ordered_in_global_list`, so position 0 is the oldest
+# sample no matter what order the engine keeps the list in.
+#
+# NEGATED ON PURPOSE. Jomini's `ordered_*` iterators sort **descending** —
+# vanilla's `ordered_subject_or_below = { order_by = country_rank position = 0 }`
+# picks the *highest*-ranked subject (00_victoria_ip3_scripted_effects.txt).
+# Ordering by the raw month index would therefore put the newest sample at
+# position 0, and the pruner would destroy the container it had just created.
+# `un_resolution_age_order` in un_script_values.txt negates for the same reason.
 te_history_sample_order = {
-	value = var:te_hist_i
+	value = 0
+	subtract = var:te_hist_i
 }
