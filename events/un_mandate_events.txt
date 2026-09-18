@@ -93,3 +93,25 @@ un_mandate.1 = {
 		ai_chance = { base = 100 }
 	}
 }
+
+# The mandate has just been bound to a play: spell out, to a human holder, what
+# it covers and what voids it. Fired from un_mandate_try_bind.
+un_mandate.2 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_mandate.2.t
+	desc = un_mandate.2.d
+	flavor = un_mandate.2.f
+
+	option = {
+		name = un_mandate.2.a
+		default_option = yes
+	}
+}

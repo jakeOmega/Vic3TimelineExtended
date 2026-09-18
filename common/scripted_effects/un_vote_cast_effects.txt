@@ -1,0 +1,423 @@
+﻿# ============================================================================
+# UN GENERAL ASSEMBLY — CASTING A BALLOT
+# ============================================================================
+# THE single implementation of what casting a vote does. Two callers:
+#
+#   1. events/un_vote_events.txt, un_vote.1 options A / B / C — the popup that
+#      reaches every member 30 days after a resolution opens, and the only path
+#      the AI ever uses.
+#   2. common/scripted_guis/un_chamber_sguis.txt, un_chamber_vote_sgui — the
+#      Vote in Favour / Vote Against / Veto controls on the chamber widget's
+#      active-resolution card, available to a human member from the day the
+#      resolution opens.
+#
+# Each body below was lifted VERBATIM out of its un_vote.1 option (the only
+# deliberate change is the `un_vote_can_cast_ballot` wrapper described next),
+# so the two paths cannot drift: the tooltip the popup shows and the tooltip the
+# chamber button shows are rendered from the same script.
+#
+# THE WRAPPER. Every cast sits inside `if = { limit = { un_vote_can_cast_ballot
+# = yes } ... }`. A delayed `trigger_event` re-checks the event's own trigger
+# when it FIRES, not when it is queued, so voting in the chamber on day 1 means
+# the day-30 popup never appears at all. What the wrapper actually guards is the
+# other order: the popup fires (trigger passed), the player leaves it sitting in
+# the notification list, votes in the chamber, and only then answers the popup.
+# Without the guard that books a second ballot — a duplicate entry in
+# un_res_yes / un_res_no, a double tally increment and a second set of IG
+# approval modifiers. With it, the option is a no-op that says why.
+#
+# EXPECTED SCOPES — identical for both callers:
+#   ROOT / this        the voting country
+#   scope:un_resolution the resolution container (the event's saved scope; the
+#                      chamber establishes it in un_chamber_cast_prepare)
+#   scope:un_vote_proposer / scope:un_vote_target
+#                      set from the container's un_res_proposer / un_res_target
+#                      (un_vote.1's `immediate`; un_chamber_cast_prepare does
+#                      the same two lines)
+#
+# The veto's own eligibility (permanent seat + binding topic) is NOT re-checked
+# here: it is un_vote.1 option C's `trigger` on the event path and
+# un_chamber_vote_sgui's `is_shown` on the chamber path, exactly as the
+# lobbying stage left it.
+# ============================================================================
+
+# Vote in favour. Extracted from un_vote.1 option A.
+# Carries that option's `show_as_tooltip` block as well as its effects: on the
+# eleven treaty topics it is the engine-generated modifier preview that tells a
+# player what they are ratifying, and the chamber button's tooltip needs it as
+# much as the popup does. That block's original note, kept from un_vote.1:
+#
+#   Treaty-topic preview: if this resolution passes and we comply (the default
+#   Option A path in un_vote.3), the engine-generated modifier tooltip surfaces
+#   what we're agreeing to before we commit. show_as_tooltip renders the
+#   add_modifier without executing — the actual application happens later in
+#   un_vote.3 option A via un_vote_apply_treaty_modifier.
+un_vote_cast_yes = {
+	if = {
+		limit = { un_vote_can_cast_ballot = yes }
+		show_as_tooltip = {
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
+				je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }
+				je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
+				je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
+				add_modifier = {
+					name = un_reform_champion_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
+				je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
+				add_modifier = {
+					name = un_decolonization_champion_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
+				je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
+				je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
+				je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
+				add_modifier = { name = un_law_of_sea_modifier }
+			}
+			if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_icc }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+				}
+				add_modifier = { name = un_icc_member_modifier }
+			}
+		}
+
+		# Lobbying: what this vote does to a pledge we made. Deliberately OUTSIDE
+		# the custom_tooltip wrapper below — that wrapper replaces the recorded
+		# effects' own tooltip with one line, so the settlement inside
+		# un_resolution_record_vote would otherwise be invisible. Display only;
+		# the settlement itself happens at its single site.
+		if = {
+			limit = { un_lobby_holds_pending_commitment = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
+		}
+
+		custom_tooltip = {
+			text = UN_VOTE_IN_FAVOR_TT
+			un_resolution_record_vote = { LIST = un_res_yes COUNT = un_res_support }
+		}
+
+		# Target-perspective acceptance: voting in favor of a resolution
+		# targeting yourself is "performative contrition." Pre-applies the
+		# un_self_corrected_modifier, tags the resolution un_res_target_accepted
+		# (un_vote.2 then skips the standard un_condemned / un_sanctions_target
+		# modifier on pass, and other AI voters lean yes: "permission"), and
+		# produces an asymmetric IG reaction set instead of the standard
+		# topic-conditional one.
+		if = {
+			limit = { scope:un_vote_target ?= this }
+			custom_tooltip = UN_VOTE_ACCEPT_TARGET_TT
+			hidden_effect = {
+				scope:un_resolution ?= {
+					if = {
+						limit = { has_tag = un_res_voting }
+						add_tag = un_res_target_accepted
+					}
+				}
+			}
+
+			add_modifier = {
+				name = un_self_corrected_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+
+			# Small reconciliation gesture toward proposer (less than the standard
+			# +15 that other voters give — the proposer just tried to condemn us)
+			if = {
+				limit = { exists = scope:un_vote_proposer }
+				change_relations = { country = scope:un_vote_proposer value = 10 }
+				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
+			}
+
+			# Domestic IG reactions to public capitulation
+			# Armed forces strongly disapprove (longer than the standard short_modifier_time)
+			if = {
+				limit = { ig:ig_armed_forces ?= { is_marginal = no } }
+				ig:ig_armed_forces = { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes } }
+			}
+			# Petty bourgeoisie nationalist sentiment disapproves
+			if = {
+				limit = { ig:ig_petty_bourgeoisie ?= { is_marginal = no } }
+				ig:ig_petty_bourgeoisie = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			}
+			# Intelligentsia approves of international norm-following
+			if = {
+				limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+				ig:ig_intelligentsia = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+			}
+		}
+		else = {
+			# Standard non-target voter path
+
+			# Relations boost with proposer + diplomatic catalyst
+			if = {
+				limit = { exists = scope:un_vote_proposer }
+				change_relations = { country = scope:un_vote_proposer value = 15 }
+				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
+			}
+
+			# Relations damage with vote target on hostile resolutions
+			# (mirrors the NO-vote +15-with-target solidarity bonus). Voting yes
+			# on a condemn/sanctions/icc/expulsion vote is a public hostile act
+			# against the target — it shouldn't be a free vote. Skip when voter
+			# == target (the target-perspective branch above handles that case).
+			if = {
+				limit = {
+					exists = scope:un_vote_target
+					NOT = { scope:un_vote_target ?= this }
+					OR = {
+						scope:un_resolution ?= { has_tag = un_topic_condemn }
+						scope:un_resolution ?= { has_tag = un_topic_sanctions }
+						scope:un_resolution ?= { has_tag = un_topic_icc }
+						scope:un_resolution ?= { has_tag = un_topic_expulsion }
+					}
+				}
+				change_relations = { country = scope:un_vote_target value = -15 }
+				create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_target }
+			}
+
+			# IG reactions to voting yes
+			# Intelligentsia generally approves of international cooperation
+			if = {
+				limit = {
+					ig:ig_intelligentsia ?= { is_marginal = no }
+				}
+				ig:ig_intelligentsia = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+			}
+			# Armed forces disapprove of cooperative/disarmament votes
+			if = {
+				limit = {
+					OR = {
+						scope:un_resolution ?= { has_tag = un_topic_npt }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+						scope:un_resolution ?= { has_tag = un_topic_icc }
+					}
+					ig:ig_armed_forces ?= { is_marginal = no }
+				}
+				ig:ig_armed_forces = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			}
+			# Industrialists disapprove of binding climate/pandemic regulation
+			if = {
+				limit = {
+					OR = {
+						scope:un_resolution ?= { has_tag = un_topic_climate }
+						scope:un_resolution ?= { has_tag = un_topic_pandemic }
+					}
+					ig:ig_industrialists ?= { is_marginal = no }
+				}
+				ig:ig_industrialists = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+			}
+		}
+	}
+	else = {
+		custom_tooltip = UN_VOTE_BALLOT_ALREADY_CAST_TT
+	}
+}
+
+# Vote against. Extracted from un_vote.1 option B.
+un_vote_cast_no = {
+	if = {
+		limit = { un_vote_can_cast_ballot = yes }
+		if = {
+			limit = { un_lobby_holds_pending_commitment = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
+
+		custom_tooltip = {
+			text = UN_VOTE_AGAINST_TT
+			un_resolution_record_vote = { LIST = un_res_no COUNT = un_res_oppose }
+		}
+
+		# Relations damage with proposer + negative diplomatic catalyst
+		if = {
+			limit = { exists = scope:un_vote_proposer }
+			change_relations = { country = scope:un_vote_proposer value = -15 }
+			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
+		}
+
+		# Relations boost with vote target (solidarity against condemnation/sanctions).
+		# Skip when voter == target — self-loop relations / catalyst is a no-op.
+		if = {
+			limit = {
+				exists = scope:un_vote_target
+				NOT = { scope:un_vote_target ?= this }
+				OR = {
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
+				}
+			}
+			change_relations = { country = scope:un_vote_target value = 15 }
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
+		}
+
+		# IG reactions to voting no
+		# Armed forces approve opposing disarmament/peacekeeping commitments
+		if = {
+			limit = {
+				OR = {
+					scope:un_resolution ?= { has_tag = un_topic_npt }
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+					scope:un_resolution ?= { has_tag = un_topic_icc }
+				}
+				ig:ig_armed_forces ?= { is_marginal = no }
+			}
+			ig:ig_armed_forces = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+		}
+		# Industrialists approve opposing climate/pandemic regulation
+		if = {
+			limit = {
+				OR = {
+					scope:un_resolution ?= { has_tag = un_topic_climate }
+					scope:un_resolution ?= { has_tag = un_topic_pandemic }
+				}
+				ig:ig_industrialists ?= { is_marginal = no }
+			}
+			ig:ig_industrialists = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+		}
+		# Intelligentsia disapproves of opposing international cooperation
+		if = {
+			limit = {
+				ig:ig_intelligentsia ?= { is_marginal = no }
+			}
+			ig:ig_intelligentsia = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+		}
+
+	}
+	else = {
+		custom_tooltip = UN_VOTE_BALLOT_ALREADY_CAST_TT
+	}
+}
+
+# Veto. Extracted from un_vote.1 option C. A veto books a NO vote as well as
+# tagging the resolution, so it settles a lobbying commitment as broken — see
+# un_resolution_record_veto.
+un_vote_cast_veto = {
+	if = {
+		limit = { un_vote_can_cast_ballot = yes }
+		if = {
+			limit = { un_lobby_holds_pending_commitment = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
+
+		custom_tooltip = {
+			text = UN_VOTE_VETO_TT
+			# Tags the resolution un_res_vetoed, which kills the binding form
+			# regardless of the GA tally. The vetoer's no still counts toward the
+			# tally (the graduated form needs a majority). Only the first veto on
+			# a resolution dents the single global UN authority.
+			un_resolution_record_veto = yes
+			add_modifier = {
+				name = un_veto_authority_drain_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Diplomatic isolation
+			add_modifier = {
+				name = un_veto_isolation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+
+		# Infamy hit on punitive resolutions (vetoing humanitarian intervention,
+		# accountability, or peacekeeping requests is read poorly internationally).
+		# Recommendatory and protective topics don't trigger this.
+		#
+		# military_mandate is deliberately NOT on this list: blocking an
+		# authorization to go to war is not the same kind of act as blocking a
+		# humanitarian one, and charging infamy for restraint would read as the
+		# system punishing peace.
+		if = {
+			limit = {
+				OR = {
+					scope:un_resolution ?= { has_tag = un_topic_icc }
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+				}
+			}
+			change_infamy = 3
+		}
+
+		# Relations damage with proposer
+		if = {
+			limit = { exists = scope:un_vote_proposer }
+			change_relations = { country = scope:un_vote_proposer value = -25 }
+			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
+		}
+
+		# Relations boost with the protected target (sanctions/condemn)
+		if = {
+			limit = {
+				exists = scope:un_vote_target
+				NOT = { scope:un_vote_target ?= this }
+				OR = {
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
+				}
+			}
+			change_relations = { country = scope:un_vote_target value = 20 }
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
+		}
+
+		# IG reactions: armed forces approve assertive sovereignty, intelligentsia disapproves
+		if = {
+			limit = { ig:ig_armed_forces ?= { is_marginal = no } }
+			ig:ig_armed_forces = { add_modifier = { name = ig_approval_positive_modifier days = short_modifier_time is_decaying = yes } }
+		}
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+			ig:ig_intelligentsia = { add_modifier = { name = ig_approval_negative_modifier days = short_modifier_time is_decaying = yes } }
+		}
+
+	}
+	else = {
+		custom_tooltip = UN_VOTE_BALLOT_ALREADY_CAST_TT
+	}
+}
+
+# Establish, from the chamber, exactly the scopes un_vote.1 hands its options.
+# `scope:un_resolution` is the event's saved scope there and the open resolution
+# read out of the global here; the proposer / target pair is un_vote.1's
+# `immediate` line for line. Read-only — it writes no gameplay state, which is
+# what makes it safe for the buttons' ExecuteTooltip previews to run it every
+# frame the card is on screen.
+# Scope: the voting country
+un_chamber_cast_prepare = {
+	global_var:un_active_resolution ?= { save_scope_as = un_resolution }
+	scope:un_resolution ?= {
+		var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
+		var:un_res_target ?= { save_scope_as = un_vote_target }
+	}
+}

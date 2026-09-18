@@ -2,6 +2,20 @@
 # UNITED NATIONS SCRIPTED BUTTONS
 # Founding, membership, request, policy, and GP influence buttons
 # ============================================================================
+#
+# THE SIX PROPOSAL BUTTONS ARE NOW THIN. un_request_peacekeepers,
+# un_request_humanitarian_aid, un_propose_condemn, un_propose_expulsion,
+# un_propose_mandate and un_propose_sanctions keep their name, desc and
+# ai_chance here and delegate `visible` / `possible` / `effect` to
+# common/scripted_triggers/un_propose_triggers.txt and
+# common/scripted_effects/un_propose_effects.txt. The chamber widget's "Table a
+# Resolution" section calls the very same triggers and effects, so a human
+# proposing from the journal entry and an AI proposing through the button grid
+# run identical script. Edit the shared file, never a copy.
+#
+# The buttons are deliberately NOT hidden for human players now that the chamber
+# can propose: they are the AI's only proposal path, and hiding a scripted
+# button from humans alone has no verified mechanism in this engine.
 
 # ---- 0. FOUND THE UNITED NATIONS ----
 # A Great Power with intergovernmental_organizations tech creates the UN.
@@ -132,32 +146,9 @@ un_request_peacekeepers_button = {
 	name = "UN_REQUEST_PEACEKEEPERS"
 	desc = "UN_REQUEST_PEACEKEEPERS_DESC"
 
-	visible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
-		OR = {
-			is_at_war = yes
-			any_scope_state = { devastation > 5 }
-		}
-	}
+	visible = { un_propose_peacekeepers_available = yes }
 
-	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		custom_tooltip = {
-			text = un_no_active_vote_tt
-			NOT = { has_global_variable = un_vote_active }
-		}
-		custom_tooltip = {
-			text = un_no_resolution_cooldown_tt
-			NOT = { un_resolution_topic_on_cooldown = { TOPIC = peacekeeping_request } }
-		}
-		NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
-		NOT = { has_modifier = un_request_cooldown }
-		OR = {
-			is_at_war = yes
-			any_scope_state = { devastation > 5 }
-		}
-	}
+	possible = { un_propose_peacekeepers_possible = yes }
 
 	ai_chance = {
 		value = 0
@@ -172,55 +163,16 @@ un_request_peacekeepers_button = {
 		}
 	}
 
-	effect = {
-		custom_tooltip = {
-			text = "UN_REQUEST_PEACEKEEPERS_TT"
-			add_modifier = {
-				name = un_request_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			# Open the vote; the requester is also the resolution's target
-			save_scope_as = un_vote_target
-			un_resolution_open = { TOPIC = peacekeeping_request }
-		}
-	}
+	effect = { un_propose_peacekeepers_effect = yes }
 }
 
 un_request_humanitarian_aid_button = {
 	name = "UN_REQUEST_AID"
 	desc = "UN_REQUEST_AID_DESC"
 
-	visible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
-		any_scope_state = {
-			OR = {
-				average_sol < 8
-				devastation > 5
-			}
-		}
-	}
+	visible = { un_propose_aid_available = yes }
 
-	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		custom_tooltip = {
-			text = un_no_active_vote_tt
-			NOT = { has_global_variable = un_vote_active }
-		}
-		custom_tooltip = {
-			text = un_no_resolution_cooldown_tt
-			NOT = { un_resolution_topic_on_cooldown = { TOPIC = aid_request } }
-		}
-		NOT = { has_modifier = un_humanitarian_aid_received_modifier }
-		NOT = { has_modifier = un_request_cooldown }
-		any_scope_state = {
-			OR = {
-				average_sol < 8
-				devastation > 5
-			}
-		}
-	}
+	possible = { un_propose_aid_possible = yes }
 
 	ai_chance = {
 		value = 0
@@ -238,52 +190,16 @@ un_request_humanitarian_aid_button = {
 		}
 	}
 
-	effect = {
-		custom_tooltip = {
-			text = "UN_REQUEST_AID_TT"
-			add_modifier = {
-				name = un_request_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			# Open the vote; the requester is also the resolution's target
-			save_scope_as = un_vote_target
-			un_resolution_open = { TOPIC = aid_request }
-		}
-	}
+	effect = { un_propose_aid_effect = yes }
 }
 
 un_propose_condemn_button = {
 	name = "UN_PROPOSE_CONDEMN"
 	desc = "UN_PROPOSE_CONDEMN_DESC"
 
-	visible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		any_country = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-			is_at_war = yes
-			is_diplomatic_play_initiator = yes
-		}
-	}
+	visible = { un_propose_condemn_available = yes }
 
-	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		custom_tooltip = {
-			text = un_no_active_vote_tt
-			NOT = { has_global_variable = un_vote_active }
-		}
-		custom_tooltip = {
-			text = un_no_resolution_cooldown_tt
-			NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
-		}
-		NOT = { has_modifier = un_ga_resolution_modifier }
-		NOT = { has_modifier = un_request_cooldown }
-		any_country = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-			is_at_war = yes
-			is_diplomatic_play_initiator = yes
-		}
-	}
+	possible = { un_propose_condemn_possible = yes }
 
 	ai_chance = {
 		value = 0
@@ -291,31 +207,7 @@ un_propose_condemn_button = {
 		if = { limit = { global_var:un_authority >= 40 } add = 10 }
 	}
 
-	effect = {
-		custom_tooltip = {
-			text = "UN_PROPOSE_CONDEMN_TT"
-			# Find the condemned country
-			random_country = {
-				limit = {
-					has_diplomatic_pact = { who = ROOT type = rivalry }
-					is_at_war = yes
-					is_diplomatic_play_initiator = yes
-				}
-				save_scope_as = un_vote_target
-			}
-			add_modifier = {
-				name = un_ga_resolution_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-			add_modifier = {
-				name = un_request_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			un_resolution_open = { TOPIC = condemn }
-		}
-	}
+	effect = { un_propose_condemn_effect = yes }
 }
 
 un_leave_button = {
@@ -408,32 +300,9 @@ un_propose_expulsion_button = {
 	name = "UN_PROPOSE_EXPULSION"
 	desc = "UN_PROPOSE_EXPULSION_DESC"
 
-	visible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		any_country = {
-			NOT = { this = ROOT }
-			is_un_permanent_member = yes
-			has_modifier = un_veto_isolation_modifier
-		}
-	}
+	visible = { un_propose_expulsion_available = yes }
 
-	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		custom_tooltip = {
-			text = un_no_active_vote_tt
-			NOT = { has_global_variable = un_vote_active }
-		}
-		custom_tooltip = {
-			text = un_no_resolution_cooldown_tt
-			NOT = { un_resolution_topic_on_cooldown = { TOPIC = expulsion } }
-		}
-		NOT = { has_modifier = un_request_cooldown }
-		any_country = {
-			NOT = { this = ROOT }
-			is_un_permanent_member = yes
-			has_modifier = un_veto_isolation_modifier
-		}
-	}
+	possible = { un_propose_expulsion_possible = yes }
 
 	ai_chance = {
 		value = 0
@@ -453,30 +322,7 @@ un_propose_expulsion_button = {
 		if = { limit = { has_global_variable = un_authority global_var:un_authority < 30 } add = -15 }
 	}
 
-	effect = {
-		custom_tooltip = {
-			text = "UN_PROPOSE_EXPULSION_TT"
-			# Pick a deterministic expellable target (highest country_rank first).
-			# Prior `scaled_debug_value` was a placeholder — undefined script value.
-			ordered_country = {
-				limit = {
-					NOT = { this = ROOT }
-					is_un_permanent_member = yes
-					has_modifier = un_veto_isolation_modifier
-				}
-				order_by = country_rank
-				max = 1
-				save_scope_as = un_vote_target
-			}
-			add_modifier = {
-				name = un_request_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			# Every other member votes, including the target — it gets to defend itself
-			un_resolution_open = { TOPIC = expulsion }
-		}
-	}
+	effect = { un_propose_expulsion_effect = yes }
 }
 
 # ---- 1d. PROPOSE AN AUTHORIZED MILITARY MANDATE ----
@@ -502,53 +348,9 @@ un_propose_mandate_button = {
 	name = "UN_PROPOSE_MANDATE"
 	desc = "UN_PROPOSE_MANDATE_DESC"
 
-	visible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		has_global_variable = un_authority
-		NOT = { un_mandate_has_live_mandate = yes }
-		un_mandate_case_exists = yes
-	}
+	visible = { un_propose_mandate_available = yes }
 
-	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		custom_tooltip = {
-			text = un_no_active_vote_tt
-			NOT = { has_global_variable = un_vote_active }
-		}
-		custom_tooltip = {
-			text = un_mandate_no_live_mandate_tt
-			NOT = { un_mandate_has_live_mandate = yes }
-		}
-		custom_tooltip = {
-			text = un_mandate_authority_tt
-			has_global_variable = un_authority
-			global_var:un_authority >= 40
-		}
-		custom_tooltip = {
-			text = un_mandate_cooldown_tt
-			NOT = { has_variable = un_mandate_proposal_cooldown }
-		}
-		# Standing floor, set at the Disgraced boundary (20). A member that has
-		# done nothing at all sits at the neutral 50, so this bars only a
-		# country whose record the Assembly has already wrecked — it cannot
-		# make the mandate unreachable for an ordinary member.
-		#
-		# Deliberately NOT added to un_mandate_actor_in_good_standing: that
-		# trigger is also read by un_mandate_still_valid, so a floor there
-		# would VOID a mandate already in the field the moment the actor's
-		# standing dipped — deleting a war the player is fighting over a score
-		# movement. The gate belongs on the proposal, not on the authorization.
-		custom_tooltip = {
-			text = un_mandate_standing_tt
-			un_standing_at_least = { VALUE = un_standing_mandate_floor }
-		}
-		custom_tooltip = {
-			text = un_mandate_case_tt
-			un_mandate_case_exists = yes
-		}
-		NOT = { has_modifier = un_ga_resolution_modifier }
-		NOT = { has_modifier = un_request_cooldown }
-	}
+	possible = { un_propose_mandate_possible = yes }
 
 	ai_chance = {
 		value = 0
@@ -561,45 +363,7 @@ un_propose_mandate_button = {
 		if = { limit = { has_law = law_type:law_total_war } add = -20 }
 	}
 
-	effect = {
-		custom_tooltip = {
-			text = "UN_PROPOSE_MANDATE_TT"
-			un_mandate_select_case = yes
-			if = {
-				limit = {
-					exists = scope:un_mandate_case_target
-					exists = scope:un_mandate_case_state
-				}
-				scope:un_mandate_case_target = { save_scope_as = un_vote_target }
-				add_modifier = {
-					name = un_ga_resolution_modifier
-					days = normal_modifier_time
-					is_decaying = yes
-				}
-				add_modifier = {
-					name = un_request_cooldown
-					days = long_modifier_time
-					is_decaying = yes
-				}
-				set_variable = { name = un_mandate_proposal_cooldown days = 1825 }
-				un_resolution_open = { TOPIC = military_mandate }
-				# The topic-specific fields ride on the resolution container, so
-				# un_vote.1/.2 and the chamber can read them without a
-				# country-side copy. un_resolution_open leaves scope:un_resolution
-				# pointing at the new container.
-				scope:un_resolution ?= {
-					set_variable = {
-						name = un_res_mandate_region
-						value = scope:un_mandate_case_state.state_region
-					}
-					set_variable = {
-						name = un_res_mandate_beneficiary
-						value = ROOT
-					}
-				}
-			}
-		}
-	}
+	effect = { un_propose_mandate_effect = yes }
 }
 
 # ---- 2. SANCTIONS ----
@@ -608,29 +372,9 @@ un_propose_sanctions_button = {
 	name = "UN_PROPOSE_SANCTIONS"
 	desc = "UN_PROPOSE_SANCTIONS_DESC"
 
-	visible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { has_modifier = un_sanctions_enforcer_modifier }
-	}
+	visible = { un_propose_sanctions_available = yes }
 
-	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		country_rank >= rank_value:major_power
-		custom_tooltip = {
-			text = un_no_active_vote_tt
-			NOT = { has_global_variable = un_vote_active }
-		}
-		custom_tooltip = {
-			text = un_no_resolution_cooldown_tt
-			NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
-		}
-		NOT = { has_modifier = un_ga_resolution_modifier }
-		NOT = { has_modifier = un_request_cooldown }
-		any_country = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-			NOT = { has_modifier = un_sanctions_target_modifier }
-		}
-	}
+	possible = { un_propose_sanctions_possible = yes }
 
 	ai_chance = {
 		value = 0
@@ -647,30 +391,7 @@ un_propose_sanctions_button = {
 		if = { limit = { country_rank >= rank_value:great_power } add = 10 }
 	}
 
-	effect = {
-		custom_tooltip = {
-			text = "UN_PROPOSE_SANCTIONS_TT"
-			# Find the sanctions target
-			random_country = {
-				limit = {
-					has_diplomatic_pact = { who = ROOT type = rivalry }
-					NOT = { has_modifier = un_sanctions_target_modifier }
-				}
-				save_scope_as = un_vote_target
-			}
-			add_modifier = {
-				name = un_ga_resolution_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-			add_modifier = {
-				name = un_request_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			un_resolution_open = { TOPIC = sanctions }
-		}
-	}
+	effect = { un_propose_sanctions_effect = yes }
 }
 
 un_lift_sanctions_button = {

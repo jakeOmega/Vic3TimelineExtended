@@ -48,6 +48,46 @@ un_resolution_has_vote = {
 	is_target_in_variable_list = { name = $LIST$ target = ROOT }
 }
 
+# Whether ROOT may still cast a ballot on scope:un_resolution. This is
+# un_vote.1's own `trigger`, word for word, pulled out so the shared cast
+# effects (common/scripted_effects/un_vote_cast_effects.txt) can re-assert it
+# at the moment the option is actually pressed. A delayed trigger_event
+# re-evaluates the event trigger when it FIRES, so a popup queued before the
+# player voted in the chamber never appears; what this guards is the popup that
+# had already fired and was left sitting in the notification list.
+# Scope: the voting country; expects scope:un_resolution
+un_vote_can_cast_ballot = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	scope:un_resolution ?= {
+		has_tag = un_res_voting
+		NOT = { un_resolution_has_vote = { LIST = un_res_yes } }
+		NOT = { un_resolution_has_vote = { LIST = un_res_no } }
+	}
+}
+
+# The same question asked of the OPEN resolution rather than of a saved scope.
+# A scripted GUI's is_shown / is_valid cannot save a scope, so the chamber's
+# vote controls have to reach global_var:un_active_resolution directly.
+# un_lobby_has_voted covers both ballot lists, a veto included.
+# Scope: the voting country
+un_chamber_ballot_open = {
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= {
+		has_tag = un_res_voting
+		NOT = { un_lobby_has_voted = { COUNTRY = ROOT } }
+	}
+}
+
+# Whether ROOT tabled the open resolution. Checked before "already voted" in the
+# chamber's vote controls, because un_resolution_open books the proposer into
+# un_res_yes — without this the proposer would be told it had already voted
+# rather than that its vote is the proposal.
+# Scope: country
+un_chamber_is_proposer = {
+	has_global_variable = un_active_resolution
+	global_var:un_active_resolution ?= { var:un_res_proposer ?= ROOT }
+}
+
 # Whether the AI should consider vetoing scope:un_resolution. Used by the
 # un_vote.1 veto option's ai_chance: only veto a resolution that would pass
 # even with our "no". Our vote isn't cast yet when this is evaluated, so that
@@ -55,4 +95,16 @@ un_resolution_has_vote = {
 # Scope: voting country
 un_veto_would_change_outcome = {
 	scope:un_resolution ?= { un_res_margin >= 2 }
+}
+
+# Whether this resolution's "target" is who it HELPS rather than who it is aimed
+# at: a request for aid or peacekeepers names the requester as its target.
+# Anything that reasons "the target is my rival, so I like this" must exclude
+# these, or a rival of the requester counts as eager to help it.
+# Scope: resolution container
+un_resolution_target_is_beneficiary = {
+	OR = {
+		has_tag = un_topic_aid_request
+		has_tag = un_topic_peacekeeping_request
+	}
 }

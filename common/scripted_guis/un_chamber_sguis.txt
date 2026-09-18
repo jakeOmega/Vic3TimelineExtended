@@ -1,19 +1,26 @@
 ﻿# ============================================================================
-# UN CHAMBER — READ-ONLY TOOLTIP BUILDERS FOR THE JOURNAL ENTRY WIDGET
+# UN CHAMBER — SCRIPTED GUIS FOR THE JOURNAL ENTRY WIDGET
 # ============================================================================
-# Each entry here exists only so gui/journal_entry_widgets/un_chamber_widget.gui
-# can call `[GetScriptedGui('<key>').ExecuteTooltip(GuiScope.SetRoot(
-# JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
-# ExecuteTooltip *renders* an effect without running it — this is vanilla's
-# documented "Using SGUIs to build lists in loc" pattern; see
-# game/common/scripted_guis/scripted_guis.md and the tooltip builders in
-# game/common/scripted_guis/journal_entry_sguis.txt (which likewise declare
-# nothing but `scope` and `effect`).
+# Two kinds of entry live here, and the file is split accordingly.
 #
-# DISPLAY ONLY. The effects contain nothing but scope navigation and
-# custom_tooltip lines (see common/scripted_effects/un_chamber_display_effects.txt).
-# Proposals, voting, the pass/fail decision, archiving and history pruning all
-# stay with the existing events, buttons and un_vote_effects.txt.
+# 1. TOOLTIP BUILDERS (everything down to un_chamber_mandates_sgui). Each exists
+#    only so gui/journal_entry_widgets/un_chamber_widget.gui can call
+#    `[GetScriptedGui('<key>').ExecuteTooltip(GuiScope.SetRoot(
+#    JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
+#    ExecuteTooltip *renders* an effect without running it — vanilla's
+#    documented "Using SGUIs to build lists in loc" pattern; see
+#    game/common/scripted_guis/scripted_guis.md and the tooltip builders in
+#    game/common/scripted_guis/journal_entry_sguis.txt (which likewise declare
+#    nothing but `scope` and `effect`). They contain nothing but scope
+#    navigation and custom_tooltip lines (see
+#    common/scripted_effects/un_chamber_display_effects.txt).
+#
+# 2. INTERACTIVE CONTROLS (from un_chamber_vote_sgui down). These do act, and
+#    they act by calling the very effects the events and the journal entry's
+#    scripted buttons call — see the section header further down.
+#
+# The pass/fail decision, archiving and history pruning stay entirely with
+# un_vote_effects.txt; nothing here touches them.
 #
 # The active resolution and the bounded history are read in place through
 # global_var:un_active_resolution and the un_resolution_history global list —
@@ -188,5 +195,324 @@ un_chamber_mandates_sgui = {
 	effect = {
 		un_chamber_mandates_block = yes
 		un_chamber_mandate_case_line = yes
+	}
+}
+
+# ============================================================================
+# INTERACTIVE CONTROLS
+# ============================================================================
+# Everything above renders; everything below acts. Both kinds are reached the
+# same way from gui/journal_entry_widgets/un_chamber_widget.gui — a widget
+# takes `datacontext = "[GetScriptedGui('<key>')]"` and its children call the
+# bare ScriptedGui.IsShown / IsValid / Execute, parameterized by a single `op`
+# saved scope carrying a number. That is the shape the strategic reserve's
+# policy panel already uses in this mod.
+#
+# `ai_is_valid = { always = no }` on both: the AI votes through un_vote.1 and
+# proposes through the journal entry's scripted buttons, and neither of those
+# paths is touched by this file.
+# ============================================================================
+
+# Cast our ballot on the resolution in session, from the chamber card, without
+# waiting for the un_vote.1 popup that arrives 30 days in.
+#
+#   op 0   vote in favour   -> un_vote_cast_yes
+#   op 1   vote against     -> un_vote_cast_no
+#   op 2   veto             -> un_vote_cast_veto   (permanent seat, binding topic)
+#
+# The op table is repeated in the widget; keep the two in step. The effects
+# themselves are the un_vote.1 option bodies — see
+# common/scripted_effects/un_vote_cast_effects.txt — so this control cannot
+# apply a different vote from the popup, and the button's ExecuteTooltip shows
+# the popup's own consequence text, lobbying keep/break line included.
+un_chamber_vote_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		has_global_variable = un_active_resolution
+		exists = global_var:un_active_resolution
+		global_var:un_active_resolution ?= { has_tag = un_res_voting }
+		# The veto control exists only where the veto does. This mirrors
+		# un_vote.1 option C's own `trigger`, which is what gates the veto on
+		# the event path.
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			is_un_permanent_member = yes
+			global_var:un_active_resolution ?= { un_resolution_is_binding = yes }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		# Asked before "have we voted" because un_resolution_open books the
+		# proposer into un_res_yes: without this the country that tabled the
+		# motion would be told it had already voted, rather than that its vote
+		# IS the proposal.
+		custom_tooltip = {
+			text = je_un_chamber_vote_not_proposer_tt
+			NOT = { un_chamber_is_proposer = yes }
+		}
+		# A ballot already cast is refused by naming which way it went, rather
+		# than with a bare "you have voted" — the direction is otherwise only
+		# visible by opening the Recorded Ballot section. Exactly one of these
+		# renders, and each is `always = no`, so the line IS the refusal.
+		# A veto is checked before an ordinary no vote because it books one as
+		# well; a second vetoer overwrites un_res_vetoer, and that case falls
+		# through to the no-vote line, which is still true of it.
+		trigger_if = {
+			limit = { NOT = { un_chamber_is_proposer = yes } }
+			trigger_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						un_lobby_in_list = { LIST = un_res_yes COUNTRY = ROOT }
+					}
+				}
+				custom_tooltip = {
+					text = je_un_chamber_vote_already_yes_tt
+					always = no
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						has_tag = un_res_vetoed
+						var:un_res_vetoer ?= ROOT
+					}
+				}
+				custom_tooltip = {
+					text = je_un_chamber_vote_already_veto_tt
+					always = no
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						un_lobby_in_list = { LIST = un_res_no COUNTRY = ROOT }
+					}
+				}
+				custom_tooltip = {
+					text = je_un_chamber_vote_already_no_tt
+					always = no
+				}
+			}
+			# Nothing on the record: the clause that actually gates the control,
+			# and the one green tick a player who can vote sees.
+			trigger_else = {
+				custom_tooltip = {
+					text = je_un_chamber_vote_not_yet_cast_tt
+					un_chamber_ballot_open = yes
+				}
+			}
+		}
+	}
+
+	effect = {
+		# scope:un_resolution, scope:un_vote_proposer and scope:un_vote_target,
+		# exactly as un_vote.1's `immediate` establishes them.
+		un_chamber_cast_prepare = yes
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_vote_cast_yes = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_vote_cast_no = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_vote_cast_veto = yes
+		}
+	}
+}
+
+# Table a resolution of our own.
+#
+#   op 0   condemnation of aggression
+#   op 1   international sanctions
+#   op 2   motion to strip a permanent seat
+#   op 3   authorized military mandate
+#   op 4   request a peacekeeping deployment
+#   op 5   request humanitarian aid
+#
+# The op table is repeated in the widget and in the row renderers in
+# common/scripted_effects/un_chamber_display_effects.txt; keep all three in
+# step. Every gate and every effect is the journal-entry button's own, shared
+# through common/scripted_triggers/un_propose_triggers.txt and
+# common/scripted_effects/un_propose_effects.txt, so a human proposing here and
+# an AI proposing through the button grid run identical script.
+#
+# `is_shown` is membership alone, deliberately: a topic we have no case for
+# stays visible and disabled, with the reason in the row and in the button's
+# IsValidTooltip. A control that vanishes teaches nothing.
+un_chamber_propose_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_condemn
+				un_propose_condemn_available = yes
+			}
+			un_propose_condemn_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_sanctions
+				un_propose_sanctions_available = yes
+			}
+			un_propose_sanctions_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_expulsion
+				un_propose_expulsion_available = yes
+			}
+			un_propose_expulsion_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_mandate
+				un_propose_mandate_available = yes
+			}
+			un_propose_mandate_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_peacekeepers
+				un_propose_peacekeepers_available = yes
+			}
+			un_propose_peacekeepers_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_aid
+				un_propose_aid_available = yes
+			}
+			un_propose_aid_possible = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_propose_condemn_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_propose_sanctions_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_propose_expulsion_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_propose_mandate_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_propose_peacekeepers_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_propose_aid_effect = yes
+		}
+	}
+}
+
+# The descriptive half of one proposal row: topic, whether it binds, its
+# passage rule, the target it would name and why it can or cannot be tabled.
+# Rendered with ExecuteTooltip, which runs the effect without executing it, so
+# the selectors it calls leave nothing behind. Same op table as
+# un_chamber_propose_sgui.
+#
+# A non-member renders nothing: the list is meaningless outside the
+# organisation, and un_chamber_propose_intro_sgui says so in one line instead.
+# ExecuteTooltip does not consult is_shown — it renders the effect — so the
+# membership test has to sit inside the effect rather than beside it.
+un_chamber_propose_row_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	effect = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			if = {
+				limit = { exists = scope:op scope:op = 0 }
+				un_chamber_propose_condemn_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 1 }
+				un_chamber_propose_sanctions_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 2 }
+				un_chamber_propose_expulsion_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 3 }
+				un_chamber_propose_mandate_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 4 }
+				un_chamber_propose_peacekeepers_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 5 }
+				un_chamber_propose_aid_row = yes
+			}
+		}
+	}
+}
+
+# The eleven topics with no proposal control: what they are, and whether a
+# recent resolution has put one on cooldown.
+un_chamber_assembly_business_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			un_chamber_assembly_business_block = yes
+		}
+	}
+}
+
+# Non-members get one line where the proposal list would be, rather than an
+# empty section: the list is meaningless outside the organisation.
+un_chamber_propose_intro_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_intro
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_propose_nonmember
+		}
 	}
 }

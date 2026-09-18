@@ -35,6 +35,10 @@ un_mandate_on_wargoal_added = {
 			# BOUND mandate, so binding first is what lets a play opened with
 			# the authorized goal and a conquest in the same breath be caught
 			# on the very addition that completes the pair, in either order.
+			# An AI holder has the offending demand struck instead of blundering
+			# into a violation (see un_mandate_ai_strike_prohibited). Root here is
+			# the diplomatic play, which is the scope remove_war_goal needs.
+			un_mandate_ai_strike_prohibited = yes
 			scope:actor = { un_mandate_check_prohibited = yes }
 		}
 	}

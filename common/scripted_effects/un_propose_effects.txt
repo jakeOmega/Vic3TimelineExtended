@@ -1,0 +1,240 @@
+﻿# ============================================================================
+# TABLING A RESOLUTION — SHARED EFFECTS
+# ============================================================================
+# What each of the six member-initiated topics actually does when tabled:
+# the costs and cooldowns it takes, the target it names, and the
+# un_resolution_open call that opens the vote.
+#
+# Extracted word for word out of each scripted button's `effect` in
+# common/scripted_buttons/un_buttons.txt, so the button (which is how the AI
+# proposes) and the chamber widget's Propose control run the same script.
+# The gates live next door in common/scripted_triggers/un_propose_triggers.txt.
+#
+# TARGET SELECTION. Three topics name a country. Each has a selector effect that
+# leaves the pick in a temporary scope, in the shape un_mandate_select_case
+# already used: the proposal promotes it to scope:un_vote_target, and the
+# chamber's row preview calls the same selector to show who would be named. That
+# is what makes the preview unable to drift from the proposal.
+#
+# Condemnation and sanctions previously picked with `random_country`, which
+# cannot be previewed — a row that promised one rival and censured another would
+# be worse than no preview at all. For a HUMAN proposer both now pick the
+# highest-ranked eligible rival, which is what the expulsion button has always
+# done. The AI keeps its random pick from the same pool, so nothing the AI does
+# changed.
+# ============================================================================
+
+# Scope: the proposing country
+un_propose_condemn_select_target = {
+	# The AI keeps the random pick it has always made; only a human proposer,
+	# who sees the pick previewed in the chamber, needs it to be deterministic.
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				is_at_war = yes
+				is_diplomatic_play_initiator = yes
+			}
+			save_temporary_scope_as = un_propose_condemn_target
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				is_at_war = yes
+				is_diplomatic_play_initiator = yes
+			}
+			order_by = country_rank
+			max = 1
+			save_temporary_scope_as = un_propose_condemn_target
+		}
+	}
+}
+
+# Scope: the proposing country
+un_propose_sanctions_select_target = {
+	# The AI keeps the random pick it has always made; only a human proposer,
+	# who sees the pick previewed in the chamber, needs it to be deterministic.
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				NOT = { has_modifier = un_sanctions_target_modifier }
+			}
+			save_temporary_scope_as = un_propose_sanctions_target
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				NOT = { has_modifier = un_sanctions_target_modifier }
+			}
+			order_by = country_rank
+			max = 1
+			save_temporary_scope_as = un_propose_sanctions_target
+		}
+	}
+}
+
+# Scope: the proposing country
+un_propose_expulsion_select_target = {
+	ordered_country = {
+		limit = {
+			NOT = { this = ROOT }
+			is_un_permanent_member = yes
+			has_modifier = un_veto_isolation_modifier
+		}
+		order_by = country_rank
+		max = 1
+		save_temporary_scope_as = un_propose_expulsion_target
+	}
+}
+
+# Condemnation of aggression — binding, simple majority, names a rival that is
+# prosecuting a war of its own making.
+# Scope: the proposing country
+un_propose_condemn_effect = {
+	custom_tooltip = {
+		text = "UN_PROPOSE_CONDEMN_TT"
+		# Name the condemned country. Deterministic (highest rank first) so the
+		# chamber row can preview the same pick — see the file header.
+		un_propose_condemn_select_target = yes
+		scope:un_propose_condemn_target ?= { save_scope_as = un_vote_target }
+		add_modifier = {
+			name = un_ga_resolution_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		un_resolution_open = { TOPIC = condemn }
+	}
+}
+
+# International sanctions — binding, simple majority, names a rival not already
+# under sanction. Major power or better may propose.
+# Scope: the proposing country
+un_propose_sanctions_effect = {
+	custom_tooltip = {
+		text = "UN_PROPOSE_SANCTIONS_TT"
+		# Name the sanctions target. Deterministic (highest rank first) so the
+		# chamber row can preview the same pick — see the file header.
+		un_propose_sanctions_select_target = yes
+		scope:un_propose_sanctions_target ?= { save_scope_as = un_vote_target }
+		add_modifier = {
+			name = un_ga_resolution_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		un_resolution_open = { TOPIC = sanctions }
+	}
+}
+
+# Motion to strip a permanent seat — recommendatory in form but decided by a
+# two-thirds supermajority of current members (un_resolution_decide).
+# Scope: the proposing country
+un_propose_expulsion_effect = {
+	custom_tooltip = {
+		text = "UN_PROPOSE_EXPULSION_TT"
+		# Pick a deterministic expellable target (highest country_rank first).
+		# Prior `scaled_debug_value` was a placeholder — undefined script value.
+		un_propose_expulsion_select_target = yes
+		scope:un_propose_expulsion_target ?= { save_scope_as = un_vote_target }
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Every other member votes, including the target — it gets to defend itself
+		un_resolution_open = { TOPIC = expulsion }
+	}
+}
+
+# Authorized military mandate — binding, simple majority, and the only topic
+# whose proposal also names a territory. Gates are the fullest of the six.
+# Scope: the proposing country
+un_propose_mandate_effect = {
+	custom_tooltip = {
+		text = "UN_PROPOSE_MANDATE_TT"
+		un_mandate_select_case = yes
+		if = {
+			limit = {
+				exists = scope:un_mandate_case_target
+				exists = scope:un_mandate_case_state
+			}
+			scope:un_mandate_case_target = { save_scope_as = un_vote_target }
+			add_modifier = {
+				name = un_ga_resolution_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+			add_modifier = {
+				name = un_request_cooldown
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			set_variable = { name = un_mandate_proposal_cooldown days = 1825 }
+			un_resolution_open = { TOPIC = military_mandate }
+			# The topic-specific fields ride on the resolution container, so
+			# un_vote.1/.2 and the chamber can read them without a
+			# country-side copy. un_resolution_open leaves scope:un_resolution
+			# pointing at the new container.
+			scope:un_resolution ?= {
+				set_variable = {
+					name = un_res_mandate_region
+					value = scope:un_mandate_case_state.state_region
+				}
+				set_variable = {
+					name = un_res_mandate_beneficiary
+					value = ROOT
+				}
+			}
+		}
+	}
+}
+
+# Request a peacekeeping deployment on our own soil — binding, simple majority.
+# The requester is also the resolution target.
+# Scope: the proposing country
+un_propose_peacekeepers_effect = {
+	custom_tooltip = {
+		text = "UN_REQUEST_PEACEKEEPERS_TT"
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Open the vote; the requester is also the resolution's target
+		save_scope_as = un_vote_target
+		un_resolution_open = { TOPIC = peacekeeping_request }
+	}
+}
+
+# Request humanitarian aid — recommendatory, simple majority. The requester is
+# also the resolution target.
+# Scope: the proposing country
+un_propose_aid_effect = {
+	custom_tooltip = {
+		text = "UN_REQUEST_AID_TT"
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Open the vote; the requester is also the resolution's target
+		save_scope_as = un_vote_target
+		un_resolution_open = { TOPIC = aid_request }
+	}
+}

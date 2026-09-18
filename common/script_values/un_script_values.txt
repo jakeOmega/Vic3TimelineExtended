@@ -239,11 +239,57 @@ un_authority_drift_undermine = {
 	}
 }
 
-# -1 per member at war with another member. Mirrors un_member_wars_count (which
-# is membership-gated and uses has_war_with = PREV, correct in any scope) so the
-# drift is valid both in the global updater and the country-scoped loc display.
+# Member wars. A member at war with another member drags the UN's authority down,
+# weighted by how much of the world order it represents and capped per month:
+#   - Only INDEPENDENT members count. A subject is at war because its overlord is,
+#     so an empire fighting with twenty dominions and puppets in tow is one
+#     belligerent, not twenty-one.
+#   - Weighted by rank, the same ladder un_authority_drift_institutional uses: a
+#     great power at war costs 1, a major power 0.5, a minor power 0.25, anyone
+#     smaller 0.1. A war between great powers therefore hurts far more than a
+#     colonial expedition.
+#   - The monthly total is capped at un_authority_war_drift_cap, so even a world
+#     war erodes authority over years rather than erasing it in months.
+# Membership-gated and uses has_war_with = PREV (correct in any scope), so it is
+# valid both in the global updater and in the country-scoped loc display.
+un_authority_war_drift_cap = 3
+
+un_member_wars_weight = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			is_subject = no
+			is_at_war = yes
+			any_country = {
+				has_war_with = PREV
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+		}
+		add = {
+			value = 1
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				multiply = 1.0
+			}
+			else_if = {
+				limit = { country_rank >= rank_value:major_power }
+				multiply = 0.5
+			}
+			else_if = {
+				limit = { country_rank >= rank_value:minor_power }
+				multiply = 0.25
+			}
+			else = {
+				multiply = 0.1
+			}
+		}
+	}
+}
+
 un_authority_drift_wars = {
-	value = un_member_wars_count
+	value = un_member_wars_weight
+	max = un_authority_war_drift_cap
 	multiply = -1
 }
 

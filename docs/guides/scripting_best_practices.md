@@ -3611,6 +3611,30 @@ Scripted buttons cannot prompt for a free choice of target, which normally force
 
 On this machine, `grep` over `~/src/Modding-Digests/<patch>/docs/effects.log` (~936 KB, ~39 600 lines) matches nothing at all — not even a pattern that `od` proves is in the file — while `wc -l` on the same file works and `grep` over `triggers.log` beside it works. Use Python (`re.finditer` over `open(path).read()`) to search that file, or you will conclude an effect does not exist when it does. Worth re-testing after a tooling bump, but budget for it: it is the difference between "Vic3 cannot do X from script" and "Vic3 has shipped X since 1.0".
 
+## A Delayed `trigger_event` Re-Checks Its Trigger When It Fires, Not When It Is Queued
+
+`trigger_event = { id = X days = 30 }` evaluates `X`'s own `trigger` block at fire time. That is the load-bearing assumption behind the UN vote's save-compat story (`common/scripted_effects/un_vote_effects.txt` header: a vote queued before the container rewrite "carries no `scope:un_resolution` and fails its trigger"), and it is what lets a second way of answering the same question coexist with a delayed popup: act in a panel on day 1 and the day-30 popup never appears, because by then the event's trigger is false.
+
+**It does not protect you from the popup that has already fired.** Vic3 events sit in the notification list until the player answers them, and nothing re-runs the trigger at click time. So a panel control and a queued event that do the same thing can both run if the player postpones the popup, opens the panel, acts there, and only then answers. Put the event's trigger into a scripted trigger and wrap the shared effect body in it:
+
+```
+un_vote_cast_yes = {
+	if = {
+		limit = { un_vote_can_cast_ballot = yes }   # == un_vote.1's own trigger
+		<the option body, verbatim>
+	}
+	else = {
+		custom_tooltip = UN_VOTE_BALLOT_ALREADY_CAST_TT
+	}
+}
+```
+
+The wrapper is behaviour-neutral in every state that was reachable before the panel existed (the limit is exactly what the event already guaranteed), it renders identically in the option's tooltip when the limit passes, and it turns the double-answer into a no-op that explains itself. Gating the *option* with a `trigger` instead is worse: an event whose options all fail their triggers has nothing to click.
+
+## `confirm_title` / `confirm_text` on a Scripted GUI Are Documented but Unused in Vanilla
+
+`game/common/scripted_guis/scripted_guis.md` lists `confirm_title = {}` and `confirm_text = {}` alongside `notification_key`, but **no file under `game/common/` uses any of the three**, so there is no syntax to copy and no way to verify one without launching the game. If a destructive scripted-GUI action needs a confirmation, build it in the GUI out of `GetVariableSystem` state instead — an "arm" button that toggles a flag, a "confirm" button visible only while the flag is set that calls `ScriptedGui.Execute` *and* toggles the flag off, and a "cancel" that only toggles it off. Multiple `onclick` lines on one button are ordinary vanilla (`gui/panel_military.gui:715`, `gui/market_panel.gui:553`). The cost is that the flag is global client-side UI state with no lifetime of its own: it survives closing and reopening the panel, so the confirm button can be the first thing a returning player sees. Name it distinctly and label it as the confirmation, not as the action.
+
 ## Journal-Entry Buttons Are the AI's Only Path — Don't Move Them Into a Widget
 
 The AI activates a journal entry's policies by evaluating the `ai_chance` block on each `scripted_button` declared on the JE (vanilla `common/scripted_buttons/scripted_buttons.md`: "#Country scope `ai_chance`"). Scripted GUIs have their own, separate AI hook (`ai_is_valid` + `ai_chance` + `ai_frequency`). So when you replace a JE's button grid with a custom widget, **keep every `scripted_button = …` line on the JE** — deleting one, or gating its `visible` on `is_ai`, silently removes that option from the AI with no log line and no test that catches it. Give the widget's handlers `ai_is_valid = { always = no }` so the AI never double-dips. Done this way in the banking policy dashboard (`docs/systems/mod_systems.md` § Policy Dashboard); the redundant vanilla grid under the widget is the deliberate price of not touching AI behaviour, and doubles as the fallback if a scripted-GUI name is ever mistyped.
