@@ -42,7 +42,7 @@ banking_dash_system_coop = {
 # ---------------------------------------------------------------------------
 banking_dash_phase_panic = {
 	scope = country
-	is_shown = { banking_cycle_is_panic = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_panic = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -50,7 +50,7 @@ banking_dash_phase_panic = {
 
 banking_dash_phase_downturn = {
 	scope = country
-	is_shown = { banking_cycle_is_downturn = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_downturn = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -58,7 +58,7 @@ banking_dash_phase_downturn = {
 
 banking_dash_phase_stagnation = {
 	scope = country
-	is_shown = { banking_cycle_is_stagnation = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_stagnation = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -66,7 +66,7 @@ banking_dash_phase_stagnation = {
 
 banking_dash_phase_stable = {
 	scope = country
-	is_shown = { banking_cycle_is_stable = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_stable = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -74,7 +74,7 @@ banking_dash_phase_stable = {
 
 banking_dash_phase_expansion = {
 	scope = country
-	is_shown = { banking_cycle_is_expansion = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_expansion = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -82,7 +82,7 @@ banking_dash_phase_expansion = {
 
 banking_dash_phase_boom = {
 	scope = country
-	is_shown = { banking_cycle_is_boom = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_boom = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -90,7 +90,7 @@ banking_dash_phase_boom = {
 
 banking_dash_phase_frenzy = {
 	scope = country
-	is_shown = { banking_cycle_is_frenzy = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_is_frenzy = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -98,7 +98,7 @@ banking_dash_phase_frenzy = {
 
 banking_dash_momentum_rising = {
 	scope = country
-	is_shown = { banking_cycle_bubble_risk_rising = yes }
+	is_shown = { has_variable = finance_cycle_momentum banking_cycle_bubble_risk_rising = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -106,7 +106,7 @@ banking_dash_momentum_rising = {
 
 banking_dash_momentum_falling = {
 	scope = country
-	is_shown = { banking_cycle_risk_falling = yes }
+	is_shown = { has_variable = finance_cycle_momentum banking_cycle_risk_falling = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -114,7 +114,7 @@ banking_dash_momentum_falling = {
 
 banking_dash_bubble_risk_high = {
 	scope = country
-	is_shown = { banking_cycle_bubble_risk_high = yes }
+	is_shown = { has_variable = finance_cycle_value banking_cycle_bubble_risk_high = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
