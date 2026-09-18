@@ -48,7 +48,7 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Each has an enable/disable toggle pair. Modifiers use prefix `cooperative_*`.
 
 ### Policy Dashboard (journal-entry widget)
-Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface; the scripted-button grid stays below them.
+Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface. The 62 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
 
 - **File:** `gui/journal_entry_widgets/banking_dashboard_widget.gui`
 - **Handlers:** `common/scripted_guis/banking_dashboard_scripted_gui.txt`

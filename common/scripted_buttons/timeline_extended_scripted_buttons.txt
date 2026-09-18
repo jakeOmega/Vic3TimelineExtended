@@ -177,10 +177,18 @@ decrease_funding_nuclear_program = {
 	}
 }
 
+# ----------------------------------------------------------------------------
+# PLAYER-FACING SURFACE: the policy dashboard widget
+# (gui/journal_entry_widgets/banking_dashboard_widget.gui). Every banking button
+# below carries `is_ai = yes` in its `visible`, so the vanilla button grid shows
+# nothing to a human: the buttons exist for the AI, which picks policies through
+# their `ai_chance` (confirmed in play testing, 2026-09-18). Do not remove them,
+# and do not drop the is_ai line without restoring a player surface.
+# ----------------------------------------------------------------------------
 cb_policy_rate_hike = {
 	name = "CB_POLICY_RATE_HIKE"
 	desc = "CB_POLICY_RATE_HIKE_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_rate_hike_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_rate_hike_active = no }
 	ai_chance = {
 		value = 0
 		# Core: use when hot / bubble risk high
@@ -210,7 +218,7 @@ cb_policy_rate_hike = {
 cb_disable_policy_rate_hike = {
 	name = "CB_DISABLE_POLICY_RATE_HIKE"
 	desc = "CB_DISABLE_POLICY_RATE_HIKE_DESC"
-	visible = { banking_tool_rate_hike_active = yes }
+	visible = { is_ai = yes banking_tool_rate_hike_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_recession = yes } add = 85 }
@@ -227,7 +235,7 @@ cb_disable_policy_rate_hike = {
 cb_open_market_ops = {
 	name = "CB_OPEN_MARKET_OPS"
 	desc = "CB_OPEN_MARKET_OPS_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_omo_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_omo_active = no }
 
 	ai_chance = {
 		value = 0
@@ -261,7 +269,7 @@ cb_open_market_ops = {
 cb_disable_open_market_ops = {
 	name = "CB_DISABLE_OPEN_MARKET_OPS"
 	desc = "CB_DISABLE_OPEN_MARKET_OPS_DESC"
-	visible = { banking_tool_omo_active = yes }
+	visible = { is_ai = yes banking_tool_omo_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
@@ -277,7 +285,7 @@ cb_disable_open_market_ops = {
 cb_countercyclical_buffer = {
 	name = "CB_COUNTERCYCLICAL_BUFFER"
 	desc = "CB_COUNTERCYCLICAL_BUFFER_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_buffer_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_buffer_active = no }
 
 	ai_chance = {
 		value = 0
@@ -306,7 +314,7 @@ cb_countercyclical_buffer = {
 cb_disable_countercyclical_buffer = {
 	name = "CB_DISABLE_COUNTERCYCLICAL_BUFFER"
 	desc = "CB_DISABLE_COUNTERCYCLICAL_BUFFER_DESC"
-	visible = { banking_tool_buffer_active = yes }
+	visible = { is_ai = yes banking_tool_buffer_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_recession = yes } add = 75 }
@@ -322,7 +330,7 @@ cb_disable_countercyclical_buffer = {
 cb_expand_deposit_guarantee = {
 	name = "CB_EXPAND_DEPOSIT_GUARANTEE"
 	desc = "CB_EXPAND_DEPOSIT_GUARANTEE_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_deposit_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_deposit_active = no }
 
 	ai_chance = {
 		value = 0
@@ -352,7 +360,7 @@ cb_expand_deposit_guarantee = {
 cb_disable_expand_deposit_guarantee = {
 	name = "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE"
 	desc = "CB_DISABLE_EXPAND_DEPOSIT_GUARANTEE_DESC"
-	visible = { banking_tool_deposit_active = yes }
+	visible = { is_ai = yes banking_tool_deposit_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -368,7 +376,7 @@ cb_disable_expand_deposit_guarantee = {
 cb_directed_credit_infrastructure = {
 	name = "CB_DIRECTED_CREDIT_INFRA"
 	desc = "CB_DIRECTED_CREDIT_INFRA_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_directed_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_active = no }
 
 	ai_chance = {
 		value = 0
@@ -396,7 +404,7 @@ cb_directed_credit_infrastructure = {
 cb_disable_directed_credit_infrastructure = {
 	name = "CB_DISABLE_DIRECTED_CREDIT_INFRA"
 	desc = "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC"
-	visible = { banking_tool_directed_active = yes }
+	visible = { is_ai = yes banking_tool_directed_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
@@ -412,7 +420,7 @@ cb_disable_directed_credit_infrastructure = {
 cb_emergency_liquidity_program = {
 	name = "CB_EMERGENCY_LIQUIDITY"
 	desc = "CB_EMERGENCY_LIQUIDITY_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_eliq_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_eliq_active = no }
 
 	ai_chance = {
 		value = 0
@@ -442,7 +450,7 @@ cb_emergency_liquidity_program = {
 cb_disable_emergency_liquidity_program = {
 	name = "CB_DISABLE_EMERGENCY_LIQUIDITY"
 	desc = "CB_DISABLE_EMERGENCY_LIQUIDITY_DESC"
-	visible = { banking_tool_eliq_active = yes }
+	visible = { is_ai = yes banking_tool_eliq_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 25 }
@@ -458,7 +466,7 @@ cb_disable_emergency_liquidity_program = {
 cb_moral_suasion = {
 	name = "CB_MORAL_SUASION"
 	desc = "CB_MORAL_SUASION_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_moral_suasion_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_moral_suasion_active = no }
 
 	ai_chance = {
 		value = 0
@@ -482,7 +490,7 @@ cb_moral_suasion = {
 cb_disable_moral_suasion = {
 	name = "CB_DISABLE_MORAL_SUASION"
 	desc = "CB_DISABLE_MORAL_SUASION_DESC"
-	visible = { banking_tool_moral_suasion_active = yes }
+	visible = { is_ai = yes banking_tool_moral_suasion_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 35 }
@@ -498,7 +506,7 @@ cb_disable_moral_suasion = {
 cb_raise_margin_requirements = {
 	name = "CB_RAISE_MARGIN_REQ"
 	desc = "CB_RAISE_MARGIN_REQ_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_margin_req_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_margin_req_active = no }
 
 	ai_chance = {
 		value = 0
@@ -526,7 +534,7 @@ cb_raise_margin_requirements = {
 cb_disable_raise_margin_requirements = {
 	name = "CB_DISABLE_RAISE_MARGIN_REQ"
 	desc = "CB_DISABLE_RAISE_MARGIN_REQ_DESC"
-	visible = { banking_tool_margin_req_active = yes }
+	visible = { is_ai = yes banking_tool_margin_req_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_recession = yes } add = 75 }
@@ -542,7 +550,7 @@ cb_disable_raise_margin_requirements = {
 cb_fx_devaluation = {
 	name = "CB_FX_DEVALUATION"
 	desc = "CB_FX_DEVALUATION_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_fx_devaluation_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_fx_devaluation_active = no }
 
 	ai_chance = {
 		value = 0
@@ -575,7 +583,7 @@ cb_fx_devaluation = {
 cb_disable_fx_devaluation = {
 	name = "CB_DISABLE_FX_DEVALUATION"
 	desc = "CB_DISABLE_FX_DEVALUATION_DESC"
-	visible = { banking_tool_fx_devaluation_active = yes }
+	visible = { is_ai = yes banking_tool_fx_devaluation_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -592,7 +600,7 @@ cb_disable_fx_devaluation = {
 cb_fx_support = {
 	name = "CB_FX_SUPPORT"
 	desc = "CB_FX_SUPPORT_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_fx_support_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_fx_support_active = no }
 
 	ai_chance = {
 		value = 0
@@ -625,7 +633,7 @@ cb_fx_support = {
 cb_disable_fx_support = {
 	name = "CB_DISABLE_FX_SUPPORT"
 	desc = "CB_DISABLE_FX_SUPPORT_DESC"
-	visible = { banking_tool_fx_support_active = yes }
+	visible = { is_ai = yes banking_tool_fx_support_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -642,7 +650,7 @@ cb_disable_fx_support = {
 cb_capital_controls_outflow = {
 	name = "CB_CAPITAL_CONTROLS_OUT"
 	desc = "CB_CAPITAL_CONTROLS_OUT_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_capital_controls_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_capital_controls_active = no }
 
 	ai_chance = {
 		value = 0
@@ -675,7 +683,7 @@ cb_capital_controls_outflow = {
 cb_disable_capital_controls_outflow = {
 	name = "CB_DISABLE_CAPITAL_CONTROLS_OUT"
 	desc = "CB_DISABLE_CAPITAL_CONTROLS_OUT_DESC"
-	visible = { banking_tool_capital_controls_active = yes }
+	visible = { is_ai = yes banking_tool_capital_controls_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
@@ -691,7 +699,7 @@ cb_disable_capital_controls_outflow = {
 cb_fx_swap_lines = {
 	name = "CB_FX_SWAP_LINES"
 	desc = "CB_FX_SWAP_LINES_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_fx_swap_lines_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_fx_swap_lines_active = no }
 
 	ai_chance = {
 		value = 0
@@ -724,7 +732,7 @@ cb_fx_swap_lines = {
 cb_disable_fx_swap_lines = {
 	name = "CB_DISABLE_FX_SWAP_LINES"
 	desc = "CB_DISABLE_FX_SWAP_LINES_DESC"
-	visible = { banking_tool_fx_swap_lines_active = yes }
+	visible = { is_ai = yes banking_tool_fx_swap_lines_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
@@ -741,7 +749,7 @@ cb_disable_fx_swap_lines = {
 cb_export_credit_facility = {
 	name = "CB_EXPORT_CREDIT"
 	desc = "CB_EXPORT_CREDIT_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_export_credit_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_export_credit_active = no }
 
 	ai_chance = {
 		value = 0
@@ -774,7 +782,7 @@ cb_export_credit_facility = {
 cb_disable_export_credit_facility = {
 	name = "CB_DISABLE_EXPORT_CREDIT"
 	desc = "CB_DISABLE_EXPORT_CREDIT_DESC"
-	visible = { banking_tool_export_credit_active = yes }
+	visible = { is_ai = yes banking_tool_export_credit_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
@@ -790,7 +798,7 @@ cb_disable_export_credit_facility = {
 cb_asset_relief_program = {
 	name = "CB_ASSET_RELIEF"
 	desc = "CB_ASSET_RELIEF_DESC"
-	visible = { banking_is_market_economy = yes banking_tool_asset_relief_active = no }
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_asset_relief_active = no }
 
 	ai_chance = {
 		value = 0
@@ -816,7 +824,7 @@ cb_asset_relief_program = {
 cb_disable_asset_relief_program = {
 	name = "CB_DISABLE_ASSET_RELIEF"
 	desc = "CB_DISABLE_ASSET_RELIEF_DESC"
-	visible = { banking_tool_asset_relief_active = yes }
+	visible = { is_ai = yes banking_tool_asset_relief_active = yes }
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
