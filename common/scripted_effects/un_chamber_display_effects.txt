@@ -184,8 +184,13 @@ un_chamber_tally_line = {
 	# it. un_res_commit_pending is a variable rather than a list size because
 	# loc can print a variable and cannot print a list size; it is decremented
 	# at the same single site that settles the commitment.
+	# Only while the vote is in session: on a closed resolution in the archive
+	# an unsettled pledge is a promise nobody ever got to keep, and "N more are
+	# expected to vote" would be a lie. The Commitments list below still shows
+	# those entries, worded so it reads correctly either way.
 	if = {
 		limit = {
+			has_tag = un_res_voting
 			has_variable = un_res_commit_pending
 			var:un_res_commit_pending >= 1
 		}

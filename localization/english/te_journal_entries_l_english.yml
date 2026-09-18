@@ -381,7 +381,7 @@
  je_un_chamber_binding_not_vetoed:0 "  [concept_un_resolution_binding] — any [concept_un_permanent_member] may still [concept_un_veto] it."
  je_un_chamber_commitment_broken:0 "#R Broken#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetFlagTextIcon)] [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] went back on a pledged vote."
  je_un_chamber_commitment_kept:0 "#G Delivered#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetFlagTextIcon)] [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] voted in favour, as pledged."
- je_un_chamber_commitment_pending:0 "#v Pledged#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetFlagTextIcon)] [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] has undertaken to vote in favour, and has not yet voted."
+ je_un_chamber_commitment_pending:0 "#v Pledged#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetFlagTextIcon)] [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] undertook to vote in favour. No vote of theirs is on the record."
  je_un_chamber_commitments_header:0 "#bold Commitments to the sponsor:#! undertakings, not votes — none of them is counted in the tally above."
  je_un_chamber_conseq_aid_request:0 "  #bold If it carries:#! $un_vote_aid_request_passed_tt$"
  je_un_chamber_conseq_climate:0 "  #bold If it carries:#! $un_vote_climate_passed_tt$"
