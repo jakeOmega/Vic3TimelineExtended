@@ -27,6 +27,13 @@
 #                             (v1: always the proposer)
 #   lists   un_res_yes, un_res_no  voters (the proposer is in un_res_yes)
 #
+# Resolution lobbying adds four more lists (un_res_lobbied,
+# un_res_committed_yes, un_res_commit_kept, un_res_commit_broken) and two more
+# variables (un_res_commit_count, un_res_commit_pending) to the same container.
+# They are documented where they are written, at the top of
+# common/scripted_effects/un_lobby_effects.txt, and need nothing from the
+# lifecycle here: they are archived with the resolution and destroyed with it.
+#
 # Globals:
 #   un_vote_active         the vote lock: one resolution (or reservation) at a time
 #   un_vote_reservation    a proposer event holds the lock before choosing to propose
@@ -120,6 +127,12 @@ un_vote_release = {
 
 # Record the scoped country's vote on scope:un_resolution. A vote cast after
 # the resolution closed (a popup answered late) changes nothing.
+#
+# This is also where a lobbying commitment is settled — see
+# un_lobby_settle_commitment (common/scripted_effects/un_lobby_effects.txt),
+# which is a no-op for a voter that pledged nothing. It sits inside the
+# `un_res_voting` guard on purpose: a ballot that arrives too late to count
+# must not settle a promise either.
 # Parameters: $LIST$ = un_res_yes | un_res_no
 #             $COUNT$ = un_res_support | un_res_oppose
 # Scope: voting country
@@ -130,12 +143,18 @@ un_resolution_record_vote = {
 			limit = { has_tag = un_res_voting }
 			add_to_variable_list = { name = $LIST$ target = scope:un_res_voter }
 			change_variable = { name = $COUNT$ add = 1 }
+			un_lobby_settle_commitment = yes
 		}
 	}
 }
 
 # Record a permanent member's veto on scope:un_resolution: a no vote plus the
 # un_res_vetoed tag. Only the first veto dents the global UN authority.
+#
+# A veto books a NO vote, so it settles a lobbying commitment exactly as an
+# ordinary no vote does — as broken. The veto RIGHT is never bound by a pledge
+# (the option's own trigger is untouched); exercising it against a resolution
+# you promised to carry is simply the most emphatic way of breaking the promise.
 # Scope: vetoing country
 un_resolution_record_veto = {
 	save_scope_as = un_res_voter
@@ -150,6 +169,7 @@ un_resolution_record_veto = {
 			set_variable = { name = un_res_vetoer value = scope:un_res_voter }
 			add_to_variable_list = { name = un_res_no target = scope:un_res_voter }
 			change_variable = { name = un_res_oppose add = 1 }
+			un_lobby_settle_commitment = yes
 		}
 	}
 }

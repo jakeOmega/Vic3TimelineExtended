@@ -1,0 +1,106 @@
+# ============================================================================
+# RESOLUTION LOBBYING — TRIGGERS
+# ============================================================================
+# The gates behind the "Seek a Vote Commitment" diplomatic action
+# (common/diplomatic_actions/un_lobbying.txt) and behind the vote-time
+# settlement in common/scripted_effects/un_lobby_effects.txt. The state model
+# is documented at the top of that file.
+#
+# SAVE COMPATIBILITY IS THE RULE HERE, exactly as it is for standing. A
+# resolution opened before this feature carries none of the lobbying lists or
+# counters, so every read below is guarded by `has_variable_list` /
+# `has_variable` and the missing case reads as "nobody has been lobbied".
+# ============================================================================
+
+# Whether $COUNTRY$ is on the resolution's $LIST$. The has_variable_list guard
+# is what makes this safe to ask of a resolution that has never been lobbied —
+# and of a pre-feature save, where none of the lists exist at all.
+# Parameters: $LIST$  = un_res_lobbied | un_res_committed_yes |
+#                       un_res_commit_kept | un_res_commit_broken |
+#                       un_res_yes | un_res_no
+#             $COUNTRY$ = the country asked about (a scope)
+# Scope: resolution container
+un_lobby_in_list = {
+	has_variable_list = $LIST$
+	is_target_in_variable_list = { name = $LIST$ target = $COUNTRY$ }
+}
+
+# Whether $LIST$ has anything in it. `has_variable_list` alone is not enough:
+# a list keeps existing after its last entry is removed, and the pending list
+# is emptied one entry at a time as commitments settle.
+# Parameters: $LIST$ = a list on the resolution container
+# Scope: resolution container
+un_lobby_list_has_entries = {
+	has_variable_list = $LIST$
+	variable_list_size = { name = $LIST$ target >= 1 }
+}
+
+# Whether this resolution's proposer may still secure another commitment.
+# un_res_commit_count only ever goes up, so a settled commitment still occupies
+# its slot.
+# Scope: resolution container
+un_lobby_under_cap = {
+	OR = {
+		NOT = { has_variable = un_res_commit_count }
+		var:un_res_commit_count < un_lobby_commitment_cap
+	}
+}
+
+# Whether $COUNTRY$ has already cast a vote on this resolution, either way.
+# A veto goes into un_res_no like any other no vote, so this covers it.
+# Parameters: $COUNTRY$ = the country asked about (a scope)
+# Scope: resolution container
+un_lobby_has_voted = {
+	OR = {
+		un_lobby_in_list = { LIST = un_res_yes COUNTRY = $COUNTRY$ }
+		un_lobby_in_list = { LIST = un_res_no COUNTRY = $COUNTRY$ }
+	}
+}
+
+# The whole "this deal can still be struck" test, from the resolution's side.
+# Asked twice: once by the diplomatic action's `possible` (so the player is
+# told why the button is greyed out, one custom_tooltip per clause) and once
+# inside un_lobby_accept_commitment, because a HUMAN recipient can sit on the
+# request for months and the engine does not re-run `possible` when they
+# finally answer.
+# Parameters: $LOBBYIST$ = the proposing country (a scope)
+#             $COUNTRY$  = the prospective recipient (a scope)
+# Scope: resolution container
+un_lobby_deal_available = {
+	has_tag = un_res_voting
+	var:un_res_proposer ?= $LOBBYIST$
+	# Written out rather than as a bare `NOT = { var:un_res_target ?= ... }` so
+	# it is unambiguous on the majority of topics, which set no target at all.
+	NOT = {
+		AND = {
+			has_variable = un_res_target
+			var:un_res_target ?= $COUNTRY$
+		}
+	}
+	NOT = { un_lobby_has_voted = { COUNTRY = $COUNTRY$ } }
+	NOT = { un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = $COUNTRY$ } }
+	un_lobby_under_cap = yes
+}
+
+# Whether ROOT holds an unsettled commitment on scope:un_resolution. THE trigger
+# the vote hook keys on: it is read by un_vote.1's option tooltips and by the
+# literal `add`s in its ai_chance blocks, where ROOT is the voting country.
+#
+# `un_res_committed_yes` is the PENDING list — un_lobby_settle_commitment takes
+# the recipient off it the instant the vote is booked — so this answers "still
+# owes a vote", never "once promised one".
+# Scope: the voting country (expects scope:un_resolution)
+un_lobby_holds_pending_commitment = {
+	scope:un_resolution ?= {
+		un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = ROOT }
+	}
+}
+
+# Whether this resolution has ever had a commitment made on it — the gate for
+# the chamber's Commitments block, which stays hidden entirely on a resolution
+# nobody lobbied (and on every resolution in a pre-feature save).
+# Scope: resolution container
+un_lobby_resolution_has_commitments = {
+	has_variable = un_res_commit_count
+	var:un_res_commit_count >= 1
+}
