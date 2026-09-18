@@ -1,14 +1,43 @@
-﻿### Strategic Reserve JE widgets
-### Renders a small badge showing the current rate-adjustment step tier.
-### Wired via `widget = { name = "widget_je_strategic_reserve_step_size" container = "custom_widget_container_1" }` in je_strategic_reserve.
+﻿### Strategic Reserve JE widget — reserve inventory
+###
+### One row per unlocked reserve good: icon + name, stored / capacity, fill
+### bar, configured signed rate, actual net weekly movement, status label, and
+### decrease / stop / increase controls. Replaces the old stand-alone step
+### badge, the seven full-width scripted progress bars and the fourteen
+### per-good journal-entry buttons.
+###
+### Wired via
+###   widget = { name = "widget_je_strategic_reserve_inventory"
+###              container = "custom_widget_container_2" }
+### in je_strategic_reserve, so the table renders directly under the journal
+### entry's summary text and above the two shared buttons (Cycle Step Size,
+### Reset Reserve Rates), which remain vanilla-rendered journal-entry buttons.
+###
+### Data contract — everything the rows show comes from script, nothing is
+### re-derived here:
+###   - row visibility  -> ScriptedGui.IsShown, which delegates to
+###                        st_res_<good>_unlocked_trigger
+###                        (common/scripted_triggers/st_res_triggers.txt)
+###   - button enabled  -> ScriptedGui.IsValid (cap / stockpile-room checks)
+###   - status label    -> GetCustom('st_res_<good>_mode_text'), driven by the
+###                        st_res_<good>_last_status variable written by
+###                        st_res_set_good_status_effect
+###   - net movement    -> ScriptValue('st_res_<good>_last_net'), i.e. the
+###                        post-clamp delta recorded by the weekly pulse
+###
+### The three controls share one scripted GUI per good and differ only by the
+### 'dir' saved scope (0 = decrease, 1 = stop, 2 = increase). Adding a good
+### means one new row instance here plus one new sgui — see
+### .claude/skills/add-strategic-reserve-good/SKILL.md.
 
 types strategic_reserve_widget_types
 {
-	type widget_je_strategic_reserve_step_size_type = flowcontainer {
+	### Shared header: the current adjustment step, which the vanilla-rendered
+	### "Cycle Step Size" journal-entry button changes.
+	type widget_je_st_res_header = flowcontainer {
 		direction = horizontal
 		parentanchor = hcenter
 		ignoreinvisible = yes
-		layoutpolicy_horizontal = expanding
 
 		background = {
 			using = blurry_dark_background
@@ -21,8 +50,116 @@ types strategic_reserve_widget_types
 			default_format = "#header"
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 360
+			max_width = 480
 			margin = { 12 6 }
+		}
+	}
+
+	### One inventory row. The instance supplies `datacontext` (the good's
+	### scripted GUI), `visible`, `tooltip` and the five text/value blocks;
+	### everything else — including all three control buttons — is identical
+	### for every good because the buttons read the inherited ScriptedGui.
+	type widget_je_st_res_inventory_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+		margin = { 8 6 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+
+		### Line 1 — good, stock vs capacity, status, controls
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			textbox = {
+				block "row_name" {}
+				size = { 150 30 }
+				align = left|nobaseline
+				using = fontsize_large
+				parentanchor = vcenter
+				elide = right
+			}
+
+			textbox = {
+				block "row_amount" {}
+				size = { 135 30 }
+				align = right|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+			}
+
+			textbox = {
+				block "row_status" {}
+				size = { 105 30 }
+				align = right|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+			}
+
+			widget = { size = { 4 1 } }
+
+			### Decrease — dir 0
+			button_icon_minus_action = {
+				size = { 30 30 }
+				parentanchor = vcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				tooltip = "st_res_row_decrease_tooltip"
+			}
+
+			### Stop — dir 1
+			button_icon_cancel = {
+				size = { 30 30 }
+				parentanchor = vcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_stop_tooltip"
+			}
+
+			### Increase — dir 2
+			button_icon_plus_action = {
+				size = { 30 30 }
+				parentanchor = vcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "st_res_row_increase_tooltip"
+			}
+		}
+
+		### Line 2 — fill bar and the configured rate vs. the actual net change
+		flowcontainer = {
+			direction = horizontal
+			spacing = 6
+
+			default_progressbar_horizontal = {
+				size = { 210 16 }
+				parentanchor = vcenter
+
+				blockoverride "values" {
+					block "row_bar_value" {}
+					min = 0
+					max = 100
+				}
+			}
+
+			textbox = {
+				block "row_flow" {}
+				size = { 270 22 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+			}
 		}
 	}
 }
@@ -30,7 +167,115 @@ types strategic_reserve_widget_types
 
 ### WIDGETS
 flowcontainer = {
-	name = "widget_je_strategic_reserve_step_size"
+	name = "widget_je_strategic_reserve_inventory"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 4
 
-	widget_je_strategic_reserve_step_size_type = {}
+	# je_strategic_reserve has is_shown_when_inactive = logistics, so the panel
+	# can render for a country that has never built a hub and therefore has
+	# none of the reserve variables. Only draw the inventory once the journal
+	# entry is actually running.
+	visible = "[JournalEntry.IsActive]"
+
+	widget_je_st_res_header = {}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_grain_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_grain_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_grain_name" }
+		blockoverride "row_amount" { text = "st_res_row_grain_amount" }
+		blockoverride "row_status" { text = "st_res_row_grain_status" }
+		blockoverride "row_flow" { text = "st_res_row_grain_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_grain_fill_pct'))]"
+		}
+	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_ammunition_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_ammunition_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_ammunition_name" }
+		blockoverride "row_amount" { text = "st_res_row_ammunition_amount" }
+		blockoverride "row_status" { text = "st_res_row_ammunition_status" }
+		blockoverride "row_flow" { text = "st_res_row_ammunition_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_ammunition_fill_pct'))]"
+		}
+	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_oil_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_oil_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_oil_name" }
+		blockoverride "row_amount" { text = "st_res_row_oil_amount" }
+		blockoverride "row_status" { text = "st_res_row_oil_status" }
+		blockoverride "row_flow" { text = "st_res_row_oil_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_oil_fill_pct'))]"
+		}
+	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_small_arms_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_small_arms_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_small_arms_name" }
+		blockoverride "row_amount" { text = "st_res_row_small_arms_amount" }
+		blockoverride "row_status" { text = "st_res_row_small_arms_status" }
+		blockoverride "row_flow" { text = "st_res_row_small_arms_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_small_arms_fill_pct'))]"
+		}
+	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_artillery_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_artillery_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_artillery_name" }
+		blockoverride "row_amount" { text = "st_res_row_artillery_amount" }
+		blockoverride "row_status" { text = "st_res_row_artillery_status" }
+		blockoverride "row_flow" { text = "st_res_row_artillery_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_artillery_fill_pct'))]"
+		}
+	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_aeroplanes_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_aeroplanes_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_aeroplanes_name" }
+		blockoverride "row_amount" { text = "st_res_row_aeroplanes_amount" }
+		blockoverride "row_status" { text = "st_res_row_aeroplanes_status" }
+		blockoverride "row_flow" { text = "st_res_row_aeroplanes_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_aeroplanes_fill_pct'))]"
+		}
+	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_tanks_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_tanks_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_tanks_name" }
+		blockoverride "row_amount" { text = "st_res_row_tanks_amount" }
+		blockoverride "row_status" { text = "st_res_row_tanks_status" }
+		blockoverride "row_flow" { text = "st_res_row_tanks_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_tanks_fill_pct'))]"
+		}
+	}
 }

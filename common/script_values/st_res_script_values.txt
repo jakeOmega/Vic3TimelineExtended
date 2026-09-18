@@ -807,62 +807,162 @@ st_res_tanks_sale_profit = {
 	}
 }
 
-# --- Capacity utilization (for AI hints / loc) ---
+# --- Capacity utilization (for AI hints / loc / the JE inventory widget) ---
+# `has_variable` guarded: the inventory widget evaluates these every frame via
+# GuiScope.ScriptValue, including for a country that has the JE visible-but-
+# inactive (is_shown_when_inactive = logistics) and has therefore never run
+# st_res_init_effect. An unguarded `var:` read there raises script-system errors.
 st_res_grain_fill_pct = {
-	value = var:st_res_grain_stored
-	divide = {
-		value = st_res_grain_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_stored }
+		value = var:st_res_grain_stored
+		divide = {
+			value = st_res_grain_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
 }
 st_res_ammunition_fill_pct = {
-	value = var:st_res_ammunition_stored
-	divide = {
-		value = st_res_ammunition_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_stored }
+		value = var:st_res_ammunition_stored
+		divide = {
+			value = st_res_ammunition_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
 }
 st_res_oil_fill_pct = {
-	value = var:st_res_oil_stored
-	divide = {
-		value = st_res_oil_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_stored }
+		value = var:st_res_oil_stored
+		divide = {
+			value = st_res_oil_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
 }
 st_res_small_arms_fill_pct = {
-	value = var:st_res_small_arms_stored
-	divide = {
-		value = st_res_small_arms_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_stored }
+		value = var:st_res_small_arms_stored
+		divide = {
+			value = st_res_small_arms_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
 }
 st_res_artillery_fill_pct = {
-	value = var:st_res_artillery_stored
-	divide = {
-		value = st_res_artillery_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_stored }
+		value = var:st_res_artillery_stored
+		divide = {
+			value = st_res_artillery_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
 }
 st_res_aeroplanes_fill_pct = {
-	value = var:st_res_aeroplanes_stored
-	divide = {
-		value = st_res_aeroplanes_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_stored }
+		value = var:st_res_aeroplanes_stored
+		divide = {
+			value = st_res_aeroplanes_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
 }
 st_res_tanks_fill_pct = {
-	value = var:st_res_tanks_stored
-	divide = {
-		value = st_res_tanks_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_stored }
+		value = var:st_res_tanks_stored
+		divide = {
+			value = st_res_tanks_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
+}
+
+# --- Widget accessors -------------------------------------------------------
+# Guarded read-only wrappers over the bookkeeping variables the JE inventory
+# widget displays. The widget evaluates these every frame, including on a save
+# made before those variables existed, so every one of them falls back to 0
+# rather than raising a script-system error on an unset `var:`.
+
+# Hub occupancy, 0-1. Below 1 the hub trades nothing and cannot replace decay.
+st_res_hub_staffing = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_hub_workforce_cached }
+		value = var:st_res_hub_workforce_cached
+	}
+}
+
+# ACTUAL net movement recorded by the last weekly tick, after the
+# [0, capacity] clamp. This is what the widget labels "Net"; it is not
+# recomputed from rates, so it always matches what bookkeeping really did.
+st_res_grain_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_last_delta }
+		value = var:st_res_grain_last_delta
+	}
+}
+st_res_ammunition_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_last_delta }
+		value = var:st_res_ammunition_last_delta
+	}
+}
+st_res_oil_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_last_delta }
+		value = var:st_res_oil_last_delta
+	}
+}
+st_res_small_arms_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_last_delta }
+		value = var:st_res_small_arms_last_delta
+	}
+}
+st_res_artillery_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_last_delta }
+		value = var:st_res_artillery_last_delta
+	}
+}
+st_res_aeroplanes_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_last_delta }
+		value = var:st_res_aeroplanes_last_delta
+	}
+}
+st_res_tanks_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_last_delta }
+		value = var:st_res_tanks_last_delta
+	}
 }
 
 # --- Aggregate weekly sales income across all goods ---

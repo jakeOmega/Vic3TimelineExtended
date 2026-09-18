@@ -1,0 +1,400 @@
+﻿# ============================================================================
+# Strategic Reserve — Scripted GUIs
+# ============================================================================
+# Thin validation wrappers for the per-good controls in the Strategic Reserve
+# inventory widget (gui/journal_entry_widgets/strategic_reserve_widget.gui).
+# They own NO gameplay rules of their own: every branch delegates to the shared
+# rate effects in common/scripted_effects/st_res_effects.txt, and visibility
+# delegates to the per-good unlock triggers in
+# common/scripted_triggers/st_res_triggers.txt.
+#
+# One scripted GUI per good, with the button's direction passed in from the
+# .gui as a saved scope. IMPLICIT CONTRACT with the widget — keep both sides in
+# sync:
+#
+#   scope:dir = 0  ->  decrease this good's weekly rate by the shared step
+#   scope:dir = 1  ->  stop  (set this good's weekly rate to exactly 0)
+#   scope:dir = 2  ->  increase this good's weekly rate by the shared step
+#
+# The widget passes it as
+#   AddScope( 'dir', MakeScopeValue( '(CFixedPoint)<n>' ) )
+# (the vanilla je_meiji_restoration_get_faction_sgui pattern).
+#
+# `is_valid` phrases its custom tooltips as CONDITIONS, not complaints, because
+# ScriptedGui.IsValidTooltip renders them with a tick or a cross either way.
+#
+# All of these are player-only (`ai_is_valid = { always = no }`), matching the
+# `ai_chance = { value = 0 }` on every Strategic Reserve scripted button: the AI
+# has never driven reserve rates and this change does not give it a new path.
+# ============================================================================
+
+st_res_adjust_grain_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_grain_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_grain_rate > st_res_grain_max_withdrawable
+				var:st_res_grain_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_grain_rate < st_res_grain_max_storable
+				var:st_res_grain_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_grain_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_grain_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_grain_rate_effect = yes
+		}
+		else = {
+			st_res_stop_grain_rate_effect = yes
+		}
+	}
+}
+
+st_res_adjust_ammunition_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_ammunition_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_ammunition_rate > st_res_ammunition_max_withdrawable
+				var:st_res_ammunition_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_ammunition_rate < st_res_ammunition_max_storable
+				var:st_res_ammunition_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_ammunition_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_ammunition_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_ammunition_rate_effect = yes
+		}
+		else = {
+			st_res_stop_ammunition_rate_effect = yes
+		}
+	}
+}
+
+st_res_adjust_oil_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_oil_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_oil_rate > st_res_oil_max_withdrawable
+				var:st_res_oil_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_oil_rate < st_res_oil_max_storable
+				var:st_res_oil_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_oil_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_oil_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_oil_rate_effect = yes
+		}
+		else = {
+			st_res_stop_oil_rate_effect = yes
+		}
+	}
+}
+
+st_res_adjust_small_arms_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_small_arms_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_small_arms_rate > st_res_small_arms_max_withdrawable
+				var:st_res_small_arms_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_small_arms_rate < st_res_small_arms_max_storable
+				var:st_res_small_arms_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_small_arms_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_small_arms_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_small_arms_rate_effect = yes
+		}
+		else = {
+			st_res_stop_small_arms_rate_effect = yes
+		}
+	}
+}
+
+st_res_adjust_artillery_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_artillery_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_artillery_rate > st_res_artillery_max_withdrawable
+				var:st_res_artillery_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_artillery_rate < st_res_artillery_max_storable
+				var:st_res_artillery_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_artillery_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_artillery_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_artillery_rate_effect = yes
+		}
+		else = {
+			st_res_stop_artillery_rate_effect = yes
+		}
+	}
+}
+
+st_res_adjust_aeroplanes_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_aeroplanes_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_aeroplanes_rate > st_res_aeroplanes_max_withdrawable
+				var:st_res_aeroplanes_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_aeroplanes_rate < st_res_aeroplanes_max_storable
+				var:st_res_aeroplanes_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_aeroplanes_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_aeroplanes_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_aeroplanes_rate_effect = yes
+		}
+		else = {
+			st_res_stop_aeroplanes_rate_effect = yes
+		}
+	}
+}
+
+st_res_adjust_tanks_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_tanks_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_tanks_rate > st_res_tanks_max_withdrawable
+				var:st_res_tanks_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_tanks_rate < st_res_tanks_max_storable
+				var:st_res_tanks_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_tanks_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_tanks_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_tanks_rate_effect = yes
+		}
+		else = {
+			st_res_stop_tanks_rate_effect = yes
+		}
+	}
+}

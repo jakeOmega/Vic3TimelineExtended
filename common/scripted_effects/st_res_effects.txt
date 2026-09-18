@@ -9,68 +9,49 @@
 #   lower half of this file rather than the low-level scope-bridge helpers.
 
 # --------------------------------------------------------------------------
+# st_res_init_good_effect — Per-good half of st_res_init_effect.
+# Parameter: GOOD = grain | ammunition | oil | small_arms | artillery |
+#            aeroplanes | tanks.
+# `st_res_$GOOD$_last_delta` / `st_res_$GOOD$_last_status` are the display
+# bookkeeping vars read by the JE inventory widget. They are SAVE-SAFE: a save
+# made before the widget existed simply has neither, and this effect seeds them
+# with 0 (= no movement recorded / status "Idle") until the next weekly tick
+# overwrites them with real data.
+# --------------------------------------------------------------------------
+st_res_init_good_effect = {
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_stored } }
+		set_variable = { name = st_res_$GOOD$_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_rate } }
+		set_variable = { name = st_res_$GOOD$_rate value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_last_delta } }
+		set_variable = { name = st_res_$GOOD$_last_delta value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_last_status } }
+		set_variable = { name = st_res_$GOOD$_last_status value = 0 }
+	}
+}
+
+# --------------------------------------------------------------------------
 # st_res_init_effect — Initialize vars if missing. Called on JE immediate and the
 # weekly pulse as a safety net. Existing saves keep their stockpile values and
 # start with zero configured flow. The shared step-size tier defaults to 1,
 # which means 10-unit adjustments.
 # --------------------------------------------------------------------------
 st_res_init_effect = {
-	if = {
-		limit = { NOT = { has_variable = st_res_grain_stored } }
-		set_variable = { name = st_res_grain_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_grain_rate } }
-		set_variable = { name = st_res_grain_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_ammunition_stored } }
-		set_variable = { name = st_res_ammunition_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_ammunition_rate } }
-		set_variable = { name = st_res_ammunition_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_oil_stored } }
-		set_variable = { name = st_res_oil_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_oil_rate } }
-		set_variable = { name = st_res_oil_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_small_arms_stored } }
-		set_variable = { name = st_res_small_arms_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_small_arms_rate } }
-		set_variable = { name = st_res_small_arms_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_artillery_stored } }
-		set_variable = { name = st_res_artillery_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_artillery_rate } }
-		set_variable = { name = st_res_artillery_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_aeroplanes_stored } }
-		set_variable = { name = st_res_aeroplanes_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_aeroplanes_rate } }
-		set_variable = { name = st_res_aeroplanes_rate value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_tanks_stored } }
-		set_variable = { name = st_res_tanks_stored value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = st_res_tanks_rate } }
-		set_variable = { name = st_res_tanks_rate value = 0 }
-	}
+	st_res_init_good_effect = { GOOD = grain }
+	st_res_init_good_effect = { GOOD = ammunition }
+	st_res_init_good_effect = { GOOD = oil }
+	st_res_init_good_effect = { GOOD = small_arms }
+	st_res_init_good_effect = { GOOD = artillery }
+	st_res_init_good_effect = { GOOD = aeroplanes }
+	st_res_init_good_effect = { GOOD = tanks }
+
 	if = {
 		limit = { NOT = { has_variable = st_res_adjust_step_tier } }
 		set_variable = { name = st_res_adjust_step_tier value = 1 }
@@ -90,24 +71,28 @@ st_res_init_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_reset_good_vars_effect — Per-good half of st_res_reset_vars_effect.
+# Parameter: GOOD.
+# --------------------------------------------------------------------------
+st_res_reset_good_vars_effect = {
+	set_variable = { name = st_res_$GOOD$_stored value = 0 }
+	set_variable = { name = st_res_$GOOD$_rate value = 0 }
+	set_variable = { name = st_res_$GOOD$_last_delta value = 0 }
+	set_variable = { name = st_res_$GOOD$_last_status value = 0 }
+}
+
+# --------------------------------------------------------------------------
 # st_res_reset_vars_effect — Zero all live SR vars. Called from JE invalidation so
 # a rebuilt hub starts from a clean slate rather than inheriting stale data.
 # --------------------------------------------------------------------------
 st_res_reset_vars_effect = {
-	set_variable = { name = st_res_grain_stored value = 0 }
-	set_variable = { name = st_res_grain_rate value = 0 }
-	set_variable = { name = st_res_ammunition_stored value = 0 }
-	set_variable = { name = st_res_ammunition_rate value = 0 }
-	set_variable = { name = st_res_oil_stored value = 0 }
-	set_variable = { name = st_res_oil_rate value = 0 }
-	set_variable = { name = st_res_small_arms_stored value = 0 }
-	set_variable = { name = st_res_small_arms_rate value = 0 }
-	set_variable = { name = st_res_artillery_stored value = 0 }
-	set_variable = { name = st_res_artillery_rate value = 0 }
-	set_variable = { name = st_res_aeroplanes_stored value = 0 }
-	set_variable = { name = st_res_aeroplanes_rate value = 0 }
-	set_variable = { name = st_res_tanks_stored value = 0 }
-	set_variable = { name = st_res_tanks_rate value = 0 }
+	st_res_reset_good_vars_effect = { GOOD = grain }
+	st_res_reset_good_vars_effect = { GOOD = ammunition }
+	st_res_reset_good_vars_effect = { GOOD = oil }
+	st_res_reset_good_vars_effect = { GOOD = small_arms }
+	st_res_reset_good_vars_effect = { GOOD = artillery }
+	st_res_reset_good_vars_effect = { GOOD = aeroplanes }
+	st_res_reset_good_vars_effect = { GOOD = tanks }
 	set_variable = { name = st_res_adjust_step_tier value = 1 }
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
@@ -270,6 +255,88 @@ st_res_rebuild_hub_flow_modifiers_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_set_good_status_effect — Derive the display status code for one good.
+# Parameter: GOOD.
+#
+# This is the ONLY site that decides what the JE inventory widget shows as a
+# good's status: the widget and its tooltips read `st_res_$GOOD$_last_status`
+# and never re-derive the reason from GUI expressions. It is called once, at
+# the end of st_res_refresh_hub_flow_effect, which is itself the shared tail of
+# both the weekly pulse and every rate/step button press — so one call site
+# covers both "what happened this tick" and "what will happen now that you
+# clicked", without the label lagging a week behind the player's input.
+#
+# Status codes (mirrored in st_res_custom_loc.txt and the widget loc keys):
+#   0 = Idle              — nothing configured, nothing moving
+#   1 = Storing           — configured intake is being applied in full
+#   2 = Withdrawing       — configured release is being applied in full
+#   3 = Storing, clipped by the hub's weekly flow cap
+#   4 = Withdrawing, clipped by the hub's weekly flow cap
+#   5 = Blocked, stockpile at capacity
+#   6 = Blocked, stockpile empty while a release is configured
+#   7 = Blocked, hub understaffed (occupancy below 100%)
+#   8 = Blocked, no Strategic Reserve Hub
+#
+# Precedence note: st_res_clamp_stockpiles_effect drives the configured rate to
+# 0 once a stockpile hits a bound, so the "full" branch deliberately accepts
+# `rate >= 0` — otherwise a full reserve would report Idle the tick after the
+# auto-clamp fires. The "empty" branch keeps `rate < 0` on purpose: an empty,
+# unconfigured reserve is genuinely idle, and the row tooltip says it is empty.
+# --------------------------------------------------------------------------
+st_res_set_good_status_effect = {
+	set_local_variable = { name = st_res_status_capacity value = st_res_$GOOD$_capacity }
+
+	if = {
+		limit = { var:st_res_hub_level_cached <= 0 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 8 }
+	}
+	else_if = {
+		limit = { var:st_res_hub_workforce_cached <= 0.99 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 7 }
+	}
+	else_if = {
+		limit = {
+			local_var:st_res_status_capacity > 0
+			var:st_res_$GOOD$_stored >= st_res_$GOOD$_capacity
+			var:st_res_$GOOD$_rate >= 0
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 5 }
+	}
+	else_if = {
+		limit = {
+			var:st_res_$GOOD$_stored <= 0
+			var:st_res_$GOOD$_rate < 0
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 6 }
+	}
+	else_if = {
+		limit = {
+			var:st_res_$GOOD$_rate > 0
+			var:st_res_$GOOD$_actual_rate_cached > st_res_weekly_base_rate_cap
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 3 }
+	}
+	else_if = {
+		limit = {
+			var:st_res_$GOOD$_rate < 0
+			var:st_res_$GOOD$_actual_rate_cached < st_res_neg_weekly_base_rate_cap
+		}
+		set_variable = { name = st_res_$GOOD$_last_status value = 4 }
+	}
+	else_if = {
+		limit = { var:st_res_$GOOD$_rate > 0 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 1 }
+	}
+	else_if = {
+		limit = { var:st_res_$GOOD$_rate < 0 }
+		set_variable = { name = st_res_$GOOD$_last_status value = 2 }
+	}
+	else = {
+		set_variable = { name = st_res_$GOOD$_last_status value = 0 }
+	}
+}
+
+# --------------------------------------------------------------------------
 # st_res_refresh_hub_flow_effect — Refresh hub cache, then rebuild the transient
 # building modifiers that express the current country-owned reserve settings.
 # --------------------------------------------------------------------------
@@ -289,6 +356,15 @@ st_res_refresh_hub_flow_effect = {
 	set_variable = { name = st_res_tanks_actual_rate_cached value = st_res_tanks_actual_rate }
 	st_res_rebuild_hub_flow_modifiers_effect = yes
 	st_res_apply_sell_profit_effect = yes
+
+	# Single derivation site for the JE inventory widget's status labels.
+	st_res_set_good_status_effect = { GOOD = grain }
+	st_res_set_good_status_effect = { GOOD = ammunition }
+	st_res_set_good_status_effect = { GOOD = oil }
+	st_res_set_good_status_effect = { GOOD = small_arms }
+	st_res_set_good_status_effect = { GOOD = artillery }
+	st_res_set_good_status_effect = { GOOD = aeroplanes }
+	st_res_set_good_status_effect = { GOOD = tanks }
 }
 
 # --------------------------------------------------------------------------
@@ -323,6 +399,43 @@ st_res_clamp_stockpiles_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_apply_weekly_good_effect — Apply one weekly tick for a single good and
+# record what actually moved. Parameter: GOOD.
+#
+# The stockpile arithmetic is unchanged from the pre-widget implementation
+# (add weekly_delta, clamp into [0, capacity]); the only addition is the
+# before/after snapshot that writes `st_res_$GOOD$_last_delta`. That variable is
+# the ACTUAL net weekly movement, i.e. after the capacity/empty clamp bites, so
+# the number shown in the JE inventory widget always matches what bookkeeping
+# really did rather than what the configured rate asked for.
+# --------------------------------------------------------------------------
+st_res_apply_weekly_good_effect = {
+	set_local_variable = { name = st_res_weekly_prev value = var:st_res_$GOOD$_stored }
+
+	change_variable = { name = st_res_$GOOD$_stored add = st_res_$GOOD$_weekly_delta }
+	clamp_variable = { name = st_res_$GOOD$_stored min = 0 max = st_res_$GOOD$_capacity }
+
+	set_local_variable = { name = st_res_weekly_moved value = var:st_res_$GOOD$_stored }
+	change_local_variable = {
+		name = st_res_weekly_moved
+		add = {
+			value = local_var:st_res_weekly_prev
+			multiply = -1
+		}
+	}
+	set_variable = { name = st_res_$GOOD$_last_delta value = local_var:st_res_weekly_moved }
+}
+
+# --------------------------------------------------------------------------
+# st_res_mark_good_no_hub_effect — Weekly bookkeeping for a good while no hub
+# exists. Parameter: GOOD. Nothing moves and the widget shows "no hub".
+# --------------------------------------------------------------------------
+st_res_mark_good_no_hub_effect = {
+	set_variable = { name = st_res_$GOOD$_last_delta value = 0 }
+	set_variable = { name = st_res_$GOOD$_last_status value = 8 }
+}
+
+# --------------------------------------------------------------------------
 # st_res_weekly_update_effect — Country-scoped weekly bookkeeping for one SR tick.
 # Applies one week of configured signed flow plus one week of decay, clamps the
 # stockpile to [0, capacity], then refreshes hub flow modifiers. JE pulses
@@ -338,30 +451,26 @@ st_res_weekly_update_effect = {
 				is_building_type = building_strategic_reserve_hub
 			}
 		}
-		change_variable = { name = st_res_grain_stored add = st_res_grain_weekly_delta }
-		clamp_variable = { name = st_res_grain_stored min = 0 max = st_res_grain_capacity }
-
-		change_variable = { name = st_res_ammunition_stored add = st_res_ammunition_weekly_delta }
-		clamp_variable = { name = st_res_ammunition_stored min = 0 max = st_res_ammunition_capacity }
-
-		change_variable = { name = st_res_oil_stored add = st_res_oil_weekly_delta }
-		clamp_variable = { name = st_res_oil_stored min = 0 max = st_res_oil_capacity }
-
-		change_variable = { name = st_res_small_arms_stored add = st_res_small_arms_weekly_delta }
-		clamp_variable = { name = st_res_small_arms_stored min = 0 max = st_res_small_arms_capacity }
-
-		change_variable = { name = st_res_artillery_stored add = st_res_artillery_weekly_delta }
-		clamp_variable = { name = st_res_artillery_stored min = 0 max = st_res_artillery_capacity }
-
-		change_variable = { name = st_res_aeroplanes_stored add = st_res_aeroplanes_weekly_delta }
-		clamp_variable = { name = st_res_aeroplanes_stored min = 0 max = st_res_aeroplanes_capacity }
-
-		change_variable = { name = st_res_tanks_stored add = st_res_tanks_weekly_delta }
-		clamp_variable = { name = st_res_tanks_stored min = 0 max = st_res_tanks_capacity }
+		st_res_apply_weekly_good_effect = { GOOD = grain }
+		st_res_apply_weekly_good_effect = { GOOD = ammunition }
+		st_res_apply_weekly_good_effect = { GOOD = oil }
+		st_res_apply_weekly_good_effect = { GOOD = small_arms }
+		st_res_apply_weekly_good_effect = { GOOD = artillery }
+		st_res_apply_weekly_good_effect = { GOOD = aeroplanes }
+		st_res_apply_weekly_good_effect = { GOOD = tanks }
 
 		st_res_refresh_hub_flow_effect = yes
 		st_res_clamp_stockpiles_effect = yes
 		st_res_apply_sell_profit_effect = yes
+	}
+	else = {
+		st_res_mark_good_no_hub_effect = { GOOD = grain }
+		st_res_mark_good_no_hub_effect = { GOOD = ammunition }
+		st_res_mark_good_no_hub_effect = { GOOD = oil }
+		st_res_mark_good_no_hub_effect = { GOOD = small_arms }
+		st_res_mark_good_no_hub_effect = { GOOD = artillery }
+		st_res_mark_good_no_hub_effect = { GOOD = aeroplanes }
+		st_res_mark_good_no_hub_effect = { GOOD = tanks }
 	}
 }
 
@@ -369,54 +478,17 @@ st_res_weekly_update_effect = {
 # JE entry points. Journal entries should call only these wrapper effects so
 # the JE stays at the lifecycle layer rather than the helper layer.
 # --------------------------------------------------------------------------
+# The per-good fill bars are no longer scripted_progress_bars on the journal
+# entry — the inventory widget draws them itself and reads
+# st_res_<good>_fill_pct live, so there is nothing to push into JE scope here.
 st_res_je_immediate_effect = {
 	st_res_init_effect = yes
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
-
-	# Compute per-good fill % into temporary vars so the journal-entry scope
-	# can read concrete numeric values (avoids 'none' when evaluated in JE scope).
-	set_variable = { name = st_res_grain_fill_for_bar value = st_res_grain_fill_pct }
-	set_variable = { name = st_res_ammunition_fill_for_bar value = st_res_ammunition_fill_pct }
-	set_variable = { name = st_res_oil_fill_for_bar value = st_res_oil_fill_pct }
-	set_variable = { name = st_res_small_arms_fill_for_bar value = st_res_small_arms_fill_pct }
-	set_variable = { name = st_res_artillery_fill_for_bar value = st_res_artillery_fill_pct }
-	set_variable = { name = st_res_aeroplanes_fill_for_bar value = st_res_aeroplanes_fill_pct }
-	set_variable = { name = st_res_tanks_fill_for_bar value = st_res_tanks_fill_pct }
-
-	scope:journal_entry = {
-		set_bar_progress = { name = st_res_grain_fill_bar value = ROOT.var:st_res_grain_fill_for_bar }
-		set_bar_progress = { name = st_res_ammunition_fill_bar value = ROOT.var:st_res_ammunition_fill_for_bar }
-		set_bar_progress = { name = st_res_oil_fill_bar value = ROOT.var:st_res_oil_fill_for_bar }
-		set_bar_progress = { name = st_res_small_arms_fill_bar value = ROOT.var:st_res_small_arms_fill_for_bar }
-		set_bar_progress = { name = st_res_artillery_fill_bar value = ROOT.var:st_res_artillery_fill_for_bar }
-		set_bar_progress = { name = st_res_aeroplanes_fill_bar value = ROOT.var:st_res_aeroplanes_fill_for_bar }
-		set_bar_progress = { name = st_res_tanks_fill_bar value = ROOT.var:st_res_tanks_fill_for_bar }
-	}
 }
 
 st_res_je_weekly_pulse_effect = {
 	st_res_weekly_update_effect = yes
-
-	# Refresh the JE bars after weekly bookkeeping. Compute temp vars first so
-	# the journal-entry scope reads concrete numeric values.
-	set_variable = { name = st_res_grain_fill_for_bar value = st_res_grain_fill_pct }
-	set_variable = { name = st_res_ammunition_fill_for_bar value = st_res_ammunition_fill_pct }
-	set_variable = { name = st_res_oil_fill_for_bar value = st_res_oil_fill_pct }
-	set_variable = { name = st_res_small_arms_fill_for_bar value = st_res_small_arms_fill_pct }
-	set_variable = { name = st_res_artillery_fill_for_bar value = st_res_artillery_fill_pct }
-	set_variable = { name = st_res_aeroplanes_fill_for_bar value = st_res_aeroplanes_fill_pct }
-	set_variable = { name = st_res_tanks_fill_for_bar value = st_res_tanks_fill_pct }
-
-	scope:journal_entry = {
-		set_bar_progress = { name = st_res_grain_fill_bar value = ROOT.var:st_res_grain_fill_for_bar }
-		set_bar_progress = { name = st_res_ammunition_fill_bar value = ROOT.var:st_res_ammunition_fill_for_bar }
-		set_bar_progress = { name = st_res_oil_fill_bar value = ROOT.var:st_res_oil_fill_for_bar }
-		set_bar_progress = { name = st_res_small_arms_fill_bar value = ROOT.var:st_res_small_arms_fill_for_bar }
-		set_bar_progress = { name = st_res_artillery_fill_bar value = ROOT.var:st_res_artillery_fill_for_bar }
-		set_bar_progress = { name = st_res_aeroplanes_fill_bar value = ROOT.var:st_res_aeroplanes_fill_for_bar }
-		set_bar_progress = { name = st_res_tanks_fill_bar value = ROOT.var:st_res_tanks_fill_for_bar }
-	}
 }
 
 st_res_je_invalid_effect = {
@@ -474,6 +546,16 @@ st_res_decrease_rate_base = {
 	st_res_clamp_stockpiles_effect = yes
 }
 
+# "Stop" — park one good's lane at 0/week without touching any other good.
+# Same shape as the increase/decrease bases so the hub refresh and the stockpile
+# clamp run exactly as they do for a stepped adjustment.
+st_res_stop_rate_base = {
+	st_res_init_effect = yes
+	set_variable = { name = st_res_$GOOD$_rate value = 0 }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
 # --- Concrete per-good wrappers (kept as named entry points for buttons) ----
 
 st_res_increase_grain_rate_effect       = { st_res_increase_rate_base = { GOOD = grain       } }
@@ -490,6 +572,14 @@ st_res_increase_aeroplanes_rate_effect  = { st_res_increase_rate_base = { GOOD =
 st_res_decrease_aeroplanes_rate_effect  = { st_res_decrease_rate_base = { GOOD = aeroplanes  } }
 st_res_increase_tanks_rate_effect       = { st_res_increase_rate_base = { GOOD = tanks       } }
 st_res_decrease_tanks_rate_effect       = { st_res_decrease_rate_base = { GOOD = tanks       } }
+
+st_res_stop_grain_rate_effect           = { st_res_stop_rate_base     = { GOOD = grain       } }
+st_res_stop_ammunition_rate_effect      = { st_res_stop_rate_base     = { GOOD = ammunition  } }
+st_res_stop_oil_rate_effect             = { st_res_stop_rate_base     = { GOOD = oil         } }
+st_res_stop_small_arms_rate_effect      = { st_res_stop_rate_base     = { GOOD = small_arms  } }
+st_res_stop_artillery_rate_effect       = { st_res_stop_rate_base     = { GOOD = artillery   } }
+st_res_stop_aeroplanes_rate_effect      = { st_res_stop_rate_base     = { GOOD = aeroplanes  } }
+st_res_stop_tanks_rate_effect           = { st_res_stop_rate_base     = { GOOD = tanks       } }
 
 st_res_apply_sell_profit_effect = {
 	remove_modifier = st_res_sell_profit_modifier

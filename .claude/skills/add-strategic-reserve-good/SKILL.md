@@ -1,13 +1,15 @@
 ---
 name: add-strategic-reserve-good
-description: Add one or more new goods to the Strategic Reserve journal entry in the Vic3TimelineExtended mod (the JE that lets a country stockpile strategic goods in a Hub building). Use whenever the user mentions extending, adding to, or putting a new good into the Strategic Reserve / SR system / `je_strategic_reserve` — phrases like "add gold to the reserve", "extend SR to cover steel", "add a new strategic reserve good", "let players stockpile X". Also triggers when the user wants to change which goods the SR Hub buys/sells or adds new per-good progress bars to that journal. Touches ~10 files in a strict per-good pattern; this skill walks through every one and surfaces the vanilla mult-axis registration gap that silently breaks new goods otherwise.
+description: Add one or more new goods to the Strategic Reserve journal entry in the Vic3TimelineExtended mod (the JE that lets a country stockpile strategic goods in a Hub building). Use whenever the user mentions extending, adding to, or putting a new good into the Strategic Reserve / SR system / `je_strategic_reserve` — phrases like "add gold to the reserve", "extend SR to cover steel", "add a new strategic reserve good", "let players stockpile X". Also triggers when the user wants to change which goods the SR Hub buys/sells or adds a new good row to that journal's reserve inventory widget. Touches ~14 files in a strict per-good pattern; this skill walks through every one and surfaces the vanilla mult-axis registration gap that silently breaks new goods otherwise.
 ---
 
 # Add a strategic-reserve good
 
 ## When to use
 
-The Strategic Reserve is a country-scoped stockpile system anchored on `je_strategic_reserve` and the `building_strategic_reserve_hub` building. Each covered good has its own stored stockpile, configurable weekly storage/withdraw rate, decay rate, fill bar, and pair of +/- buttons in the JE. The system already covers `grain`, `ammunition`, `oil`, `small_arms`, `artillery`, `aeroplanes`, `tanks`. Adding any new good touches ~10 files with a strict copy-paste-modify pattern — miss one and the good silently does nothing in-game.
+The Strategic Reserve is a country-scoped stockpile system anchored on `je_strategic_reserve` and the `building_strategic_reserve_hub` building. Each covered good has its own stored stockpile, configurable weekly storage/withdraw rate, decay rate, and one row in the **reserve inventory widget** (`gui/journal_entry_widgets/strategic_reserve_widget.gui`) carrying its fill bar, net weekly movement, status label and decrease/stop/increase controls. The system already covers `grain`, `ammunition`, `oil`, `small_arms`, `artillery`, `aeroplanes`, `tanks`. Adding any new good touches ~14 files with a strict copy-paste-modify pattern — miss one and the good silently does nothing in-game.
+
+**Read this if you last worked on the SR before the inventory widget:** per-good `scripted_progress_bar`s, per-good `scripted_button`s and per-good journal-entry `status_desc` lines are **gone**. A good is now surfaced by an unlock scripted trigger, a scripted GUI, a widget row and two customizable-localization blocks. Don't re-add the old shapes.
 
 This skill is a workflow, not a script. The repetition is mechanical, but the decisions per good (tech gate, decay rate, mult-axis check) need judgment. Drive it file-by-file; the verification step at the end is non-optional.
 
@@ -51,17 +53,20 @@ All paths are repo-relative (`mod_path` in `path_constants`). The pattern is ide
 | 2 | `common/modifier_type_definitions/mod_entity_modifier_types.txt` | **Only if the pre-flight audit flagged a missing mult axis.** Add the missing `goods_input_<GOOD>_mult` and/or `goods_output_<GOOD>_mult` entry, modeled on the existing `goods_input_grain_mult` block. |
 | 3 | `common/static_modifiers/extra_modifiers.txt` | (a) one base decay value in the `INJECT:base_values` block near the top, (b) two hub-flow static modifiers (`st_res_<GOOD>_store_flow` with `goods_input_<GOOD>_mult = 1`, `st_res_<GOOD>_withdraw_flow` with `goods_output_<GOOD>_mult = 1`) added next to the existing `st_res_oil_*_flow` entries near the bottom of the file |
 | 4 | `common/production_methods/strategic_reserve_pms.txt` | (a) one capacity line in `pm_st_res_hub_reserve` `country_modifiers > level_scaled` (`country_st_res_<GOOD>_capacity_add = 5000`), (b) two goods-I/O lines in `pm_st_res_hub_reserve` `building_modifiers > workforce_scaled` (`goods_input_<GOOD>_add = 1`, `goods_output_<GOOD>_add = 1`), (c) one capacity line in `pm_st_res_silo_capacity` `country_modifiers > level_scaled` (`country_st_res_<GOOD>_capacity_add = 1000`) |
-| 5 | `common/script_values/st_res_script_values.txt` | One full per-good section (10 script values: decay_rate, weekly_decay, actual_rate, actual_rate_base_applied, weekly_delta, capacity, good_mult, max_withdrawable, max_storable, sale_profit) appended after the existing `--- TANKS ---` section, plus one `st_res_<GOOD>_fill_pct` value at the end with the other fill_pct entries. See template. |
-| 6 | `common/scripted_effects/st_res_effects.txt` | Eight existing effects extended to enumerate the new good (`st_res_init_effect`, `st_res_reset_vars_effect`, `st_res_clamp_stockpiles_effect`, `st_res_weekly_update_effect`, `st_res_je_immediate_effect`, `st_res_je_weekly_pulse_effect`, `st_res_reset_rates_effect`, `st_res_apply_sell_profit_effect`, plus the cached actual-rate writes in `st_res_refresh_hub_flow_effect`, plus the per-good calls in `st_res_rebuild_hub_flow_modifiers_effect`); add 1 new wrapper effect (`st_res_rebuild_<GOOD>_flow_modifiers_effect` that just calls `st_res_rebuild_good_flow_modifiers_effect = { GOOD = <GOOD> }`) and 2 rate-adjust effects (`st_res_increase_<GOOD>_rate_effect`, `st_res_decrease_<GOOD>_rate_effect`). See template. |
-| 7 | `common/scripted_buttons/st_res_buttons.txt` | 2 buttons (`st_res_increase_<GOOD>_rate_button`, `st_res_decrease_<GOOD>_rate_button`) — copy from the existing oil button pair, change the good name everywhere, swap the `has_technology_researched = fractional_distillation` line for the chosen tech (or remove the `has_technology_researched` line entirely if no tech gate). |
-| 8 | `common/scripted_progress_bars/st_res_progress_bars.txt` | One `st_res_<GOOD>_fill_bar` block (5 lines, identical structure to the existing oil bar). |
-| 9 | `common/customizable_localization/st_res_custom_loc.txt` | One `st_res_<GOOD>_mode_text` block (3 text branches: storing/withdrawing/idle), copy of the oil block with name swapped. |
-| 10 | `common/journal_entries/je_strategic_reserve.txt` | 3 wirings: (a) one `scripted_progress_bar = st_res_<GOOD>_fill_bar` line, (b) two `scripted_button = st_res_{increase,decrease}_<GOOD>_rate_button` lines, (c) one `triggered_desc { desc = je_strategic_reserve_<GOOD>_line trigger = { has_technology_researched = <TECH> } }` block in the `status_desc` (use `trigger = { always = yes }` for no-tech-gate goods). |
-| 11 | `localization/english/te_modifiers_l_english.yml` | 4 keys: `country_st_res_<GOOD>_capacity_add` + `_desc`, `country_st_res_<GOOD>_decay_add` + `_desc`. Insert in alphabetical position among the existing `country_st_res_*` keys. |
-| 12 | `localization/english/te_journal_entries_l_english.yml` | 1 key: `je_strategic_reserve_<GOOD>_line`. Also update `je_strategic_reserve_desc` to add the new good's name to the comma list. |
-| 13 | `localization/english/te_miscellaneous_l_english.yml` | 5 keys: `st_res_<GOOD>_fill_bar_name`, `st_res_<GOOD>_store_flow`, `st_res_<GOOD>_withdraw_flow`, `st_res_increase_<GOOD>_rate_button`, `st_res_decrease_<GOOD>_rate_button`. |
-| 14 | `localization/english/te_concepts_l_english.yml` | 5 keys: `st_res_<GOOD>_fill_bar_desc`, `st_res_<GOOD>_store_flow_desc`, `st_res_<GOOD>_withdraw_flow_desc`, `st_res_increase_<GOOD>_rate_button_desc`, `st_res_decrease_<GOOD>_rate_button_desc`. |
-| 15 | `localization/english/te_buildings_l_english.yml` | (Optional polish) Update `building_strategic_reserve_hub_desc` to include the new good's name in its enumeration, same for `pm_st_res_silo_capacity_desc` in `te_production_methods_l_english.yml`. |
+| 5 | `common/script_values/st_res_script_values.txt` | One full per-good section (10 script values: decay_rate, weekly_decay, actual_rate, actual_rate_base_applied, weekly_delta, capacity, good_mult, max_withdrawable, max_storable, sale_profit) appended after the existing `--- TANKS ---` section, plus **two** widget accessors at the end with their siblings: `st_res_<GOOD>_fill_pct` and `st_res_<GOOD>_last_net`. Both accessors **must be `has_variable`-guarded** — the widget evaluates them every frame. See template. |
+| 6 | `common/scripted_triggers/st_res_triggers.txt` | 1 trigger: `st_res_<GOOD>_unlocked_trigger`, holding the tech gate (or `always = yes`). This is the only place the unlock condition may live. |
+| 7 | `common/scripted_effects/st_res_effects.txt` | Add the good to six per-good call lists (`st_res_init_effect`, `st_res_reset_vars_effect`, `st_res_rebuild_hub_flow_modifiers_effect` — both halves, `st_res_weekly_update_effect` — both branches, `st_res_refresh_hub_flow_effect` — cached rate write **and** status call); extend `st_res_clamp_stockpiles_effect`, `st_res_reset_rates_effect`, `st_res_apply_sell_profit_effect`; add 4 wrapper effects (`st_res_rebuild_<GOOD>_flow_modifiers_effect`, `st_res_{increase,decrease,stop}_<GOOD>_rate_effect`). See template. |
+| 8 | `common/scripted_guis/st_res_scripted_gui.txt` | 1 scripted GUI: `st_res_adjust_<GOOD>_sgui`, with `saved_scopes = { dir }` (0 decrease / 1 stop / 2 increase). Copy the oil block and swap the good name. |
+| 9 | `common/customizable_localization/st_res_custom_loc.txt` | 2 blocks: `st_res_<GOOD>_mode_text` (4 branches on `st_res_<GOOD>_last_status`) and `st_res_<GOOD>_reason_text` (9 branches). Copy the oil pair. |
+| 10 | `gui/journal_entry_widgets/strategic_reserve_widget.gui` | 1 `widget_je_st_res_inventory_row` instance in the root flowcontainer: datacontext + visible + tooltip + 5 blockoverrides. The row `type` itself needs no change. |
+| 11 | `common/journal_entries/je_strategic_reserve.txt` | **Nothing.** No per-good bar, button or status line exists any more. |
+| 12 | `localization/english/te_modifiers_l_english.yml` | 4 keys: `country_st_res_<GOOD>_capacity_add` + `_desc`, `country_st_res_<GOOD>_decay_add` + `_desc`. Insert in alphabetical position among the existing `country_st_res_*` keys. |
+| 13 | `localization/english/te_journal_entries_l_english.yml` | No new key. Update `je_strategic_reserve_desc` to add the new good's name to the comma list. |
+| 14 | `localization/english/te_miscellaneous_l_english.yml` | 6 keys: `st_res_<GOOD>_store_flow`, `st_res_<GOOD>_withdraw_flow`, `st_res_row_<GOOD>_name`, `st_res_row_<GOOD>_amount`, `st_res_row_<GOOD>_status`, `st_res_row_<GOOD>_flow`. |
+| 15 | `localization/english/te_concepts_l_english.yml` | 3 keys: `st_res_<GOOD>_store_flow_desc`, `st_res_<GOOD>_withdraw_flow_desc`, `st_res_row_<GOOD>_tooltip`. |
+| 16 | `localization/english/te_buildings_l_english.yml` | (Optional polish) Update `building_strategic_reserve_hub_desc` to include the new good's name in its enumeration, same for `pm_st_res_silo_capacity_desc` in `te_production_methods_l_english.yml`. |
+
+**Goods texticon.** The row name and tooltip header use `@<GOOD>!`. Vanilla goods already have one (`grep -n "icon = <GOOD>$" "$VIC3/game/gui/goods_texticons.gui"`); a mod-only good needs an entry added to `gui/zzz_extra_goods_texticons.gui` or the icon renders as literal text.
 
 **Conventions enforced by this list:**
 - Identifiers use the bare good ID with underscores (`small_arms`, never `smallarms` or `SmallArms`).
@@ -70,7 +75,7 @@ All paths are repo-relative (`mod_path` in `path_constants`). The pattern is ide
 
 ## Snippet templates
 
-Open `references/per_good_templates.md` for the verbatim template blocks for files 5 (script values), 6 (effects), 7 (buttons), 8 (bar), 9 (mode text). Each template uses `<GOOD>` (lowercase good ID) and `<GOOD_DISPLAY>` (the prose form: e.g. "Small Arms" for the good_id `small_arms`) as placeholders — copy and substitute.
+Open `references/per_good_templates.md` for the verbatim template blocks for files 5 (script values), 6 (unlock trigger), 7 (effects), 8 (scripted GUI), 9 (custom loc), 10 (widget row) and the localization keys. Each template uses `<GOOD>` (lowercase good ID) and `<GOOD_DISPLAY>` (the prose form: e.g. "Small Arms" for the good_id `small_arms`) as placeholders — copy and substitute.
 
 ## Capacity & rate baselines (already established)
 
@@ -96,12 +101,13 @@ Run all four after the edits, in order:
 
 ## In-game verification caveat (mention this proactively)
 
-The journal entry binds its `scripted_progress_bar` and `scripted_button` declarations **at activation time**. An already-active `je_strategic_reserve` instance (e.g. on a save from before this skill ran) won't pick up the new bars/buttons on script reload. The user must:
+The widget's rows are plain GUI, so a new good's row **does** appear immediately on script reload — no rebuild needed for the UI. What still needs care:
 
-1. Demolish the Strategic Reserve Hub building (this fires `on_invalid` → `st_res_je_invalid_effect`, deactivating the JE and resetting all SR vars).
-2. Rebuild the hub (re-activates JE, `st_res_je_immediate_effect` re-binds with the full new bar+button set).
+- `st_res_<GOOD>_last_delta` / `st_res_<GOOD>_last_status` do not exist until `st_res_init_effect` runs (JE activation or the next weekly pulse). Until then the row reads "Idle" with net 0. That is intentional and save-safe; wait a week of in-game time before judging the numbers.
+- The journal entry still binds `scripted_button` declarations at **activation** time, so if you ever change the two shared buttons the user must demolish and rebuild the hub for them to re-bind.
+- The **Reset Reserve Rates** button reaches new goods even on an old JE instance, because its effect (`st_res_reset_rates_effect`) is what was updated, not the button itself.
 
-The pre-existing **Reset Reserve Rates** button reaches the new goods even on an old JE instance because its effect (`st_res_reset_rates_effect`) is what was updated, not the button itself — a user wanting to neutralize the new goods' hub I/O without rebuilding can click Reset.
+Things only a running game can confirm for a new good: the goods texticon actually renders, the row fits the panel width, the fill bar tracks the stockpile, and the three controls move only that good's rate.
 
 ## Gotchas
 
@@ -109,9 +115,13 @@ The pre-existing **Reset Reserve Rates** button reaches the new goods even on an
 - **Don't rename existing goods.** Removing or renaming `grain`/`ammunition`/`oil`/etc. would orphan saved variables (`st_res_<old>_stored`, `_rate`) and require a save-migration effect. The existing system is additive-only by design.
 - **Adding a NEW non-vanilla good** (e.g. a mod-only good called `helium`) is in scope, but ALSO requires registering `goods_input_<good>_add` / `goods_output_<good>_add` in `mod_entity_modifier_types.txt` because the good itself isn't in vanilla. Confirm the good exists before treating this as an SR-only task.
 - **The `disable_input_flow` / `disable_output_flow` static modifiers** that exist for grain/ammunition in `extra_modifiers.txt` are dead code (no effect references them). Don't add new ones for the new goods — store_flow + withdraw_flow are sufficient. The else-branch of `st_res_rebuild_good_flow_modifiers_effect` applies these two with `multiplier = -1` to neutralize the hub PM's base 1-unit goods I/O when the good is idle (rate=0), which is the only thing that matters.
+- **Never re-derive a good's status in GUI or loc.** `st_res_set_good_status_effect` is the only place the Storing / Withdrawing / Idle / Blocked state and its reason are decided; the widget and the custom loc only read `st_res_<GOOD>_last_status`. Same for net movement: `st_res_apply_weekly_good_effect` records the post-clamp delta, and the widget reads it. If you find yourself writing a rate comparison in a `.gui` expression, stop.
+- **`dir` is an implicit contract.** The widget passes `AddScope('dir', MakeScopeValue('(CFixedPoint)N'))` and the scripted GUI branches on `scope:dir`. `0` decrease, `1` stop, `2` increase. Both file headers document it — keep them in sync.
+- **The Strategic Reserve is player-only.** Every SR button carries `ai_chance = { value = 0 }`, the scripted GUIs carry `ai_is_valid = { always = no }`, and no on-action or event drives reserve rates. Don't quietly give a new good an AI path; that is a separate design decision.
 
 ## Reference
 
-- `references/per_good_templates.md` — verbatim per-good snippet bodies for files 5–9.
+- `references/per_good_templates.md` — verbatim per-good snippet bodies for files 5–10 and the loc keys.
+- `docs/systems/strategic_reserve_system.md` — the system reference (§4 status codes, §5 panel layout, §7 AI).
 - `docs/guides/scripting_best_practices.md` § goods modifier registration — the mult-axis registration rule.
-- `docs/systems/mod_systems.md` § Strategic Reserve — high-level system overview.
+- `docs/guides/gui_modding_guide.md` § "One scripted GUI, several buttons" — the `AddScope` parameterization pattern the row controls use.
