@@ -20,7 +20,11 @@
 # no country-side copy of either is kept.
 # ============================================================================
 
-# The player's own standing in the organisation.
+# The player's own seat in the organisation, and the national record it has
+# built there: the international-standing score, its tier, whether the tier's
+# benefits are currently withheld and roughly why, what the tier is doing,
+# this rolling year's programme accrual against the cap, and the last thing
+# that moved the score.
 un_chamber_status_sgui = {
 	scope = country
 
@@ -38,6 +42,19 @@ un_chamber_status_sgui = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_status_nonmember
 		}
+		un_standing_status_block = yes
+	}
+}
+
+# "How standing works" — the sources, the losses and the limits in plain
+# language. Split into its own SGUI behind its own collapsed-by-default toggle
+# for the same reason the archive is: ExecuteTooltip re-renders every frame the
+# panel is visible, and this text never changes.
+un_chamber_standing_help_sgui = {
+	scope = country
+
+	effect = {
+		un_standing_help_block = yes
 	}
 }
 
