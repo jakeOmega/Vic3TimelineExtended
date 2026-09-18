@@ -210,35 +210,3 @@ un_standing_year_gain_display = {
 		add = var:un_standing_year_gain
 	}
 }
-
-# ---- AI reception of a proposer's standing ----
-# The ONE shared nudge the General Assembly's AI voters give a well-regarded
-# proposer. Range -5 .. +5 against un_vote.1's option A base of 40, which is
-# small next to the existing alliance (+20), bloc (+15) and rivalry (-30)
-# terms: a lean, never a guarantee.
-#
-# LOBBYING STAGE: add your own shared script value next to this one in
-# un_vote.1's option A ai_chance (see the marked comment there). Do not fold
-# lobbying into this value — standing and lobbying must stay separately
-# tunable and separately attributable.
-#
-# Scope: the voting country; reads scope:un_vote_proposer, saved in un_vote.1's
-# immediate. Guarded twice: the proposer may have been annexed mid-vote, and it
-# may never have held a standing variable (a founder's first month, a save that
-# predates the feature).
-un_vote_proposer_standing_lean = {
-	value = 0
-	if = {
-		limit = {
-			exists = scope:un_vote_proposer
-			scope:un_vote_proposer = { has_variable = un_standing }
-		}
-		add = {
-			value = scope:un_vote_proposer.var:un_standing
-			subtract = un_standing_neutral_start
-			divide = 10
-		}
-	}
-	min = -5
-	max = 5
-}

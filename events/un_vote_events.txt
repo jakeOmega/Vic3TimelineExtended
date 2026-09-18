@@ -456,24 +456,37 @@ un_vote.1 = {
 			# ================================================================
 			# SHARED PROPOSER-STANDING LEAN  <-- LOBBYING STAGE: ADD YOURS HERE
 			# ================================================================
-			# The Assembly listens harder to a member with a record. ONE shared
-			# script value carries the whole effect (range -5 .. +5 against the
-			# base of 40), rather than a lean per topic, so the nudge is tuned
-			# and audited in one place:
-			# common/script_values/un_standing_values.txt.
+			# The Assembly listens harder to a member with a record. One block per
+			# standing tier, literal adds (range -5 .. +5 against the base of 40),
+			# kept together here rather than spread per topic. Literal adds on
+			# purpose: no vanilla or mod event uses a named script value as an
+			# ai_chance modifier's `add`, and a rejected value would fail silently.
+			# The tier triggers are mutually exclusive and treat a proposer with no
+			# recorded standing as Neutral, so at most one block ever applies.
 			#
-			# The lobbying stage should add a SECOND modifier block right here,
-			# with its own shared script value — not fold itself into
-			# un_vote_proposer_standing_lean. Standing and lobbying have to stay
-			# separately tunable and separately attributable.
+			# The lobbying stage should add its own block(s) right here, in the
+			# same literal form, not fold itself into these. Standing and lobbying
+			# have to stay separately tunable and separately attributable.
 			#
 			# Only the yes option is touched. Option B ("vote against") is left
 			# exactly as it was: raising A already lowers B's share of the roll,
 			# and a symmetric penalty there would double the effect of a
 			# deliberately modest nudge.
 			modifier = {
-				trigger = { exists = scope:un_vote_proposer }
-				add = un_vote_proposer_standing_lean
+				trigger = { scope:un_vote_proposer ?= { un_standing_tier_exemplary = yes } }
+				add = 5
+			}
+			modifier = {
+				trigger = { scope:un_vote_proposer ?= { un_standing_tier_respected = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:un_vote_proposer ?= { un_standing_tier_poor = yes } }
+				add = -2
+			}
+			modifier = {
+				trigger = { scope:un_vote_proposer ?= { un_standing_tier_disgraced = yes } }
+				add = -5
 			}
 
 			# ================================================================
