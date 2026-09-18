@@ -1436,7 +1436,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 5. **`ScriptValue` requires `MakeScope`.** `Country.ScriptValue('x')` does NOT work. Use `Country.MakeScope.ScriptValue('x')`.
 
-6. **No `AddScope` in V3.** Only `GuiScope.SetRoot(object.MakeScope).End` is available. The `AddScope` pattern seen in some workshop mods appears to be from V3 updates or CK3 crossover — vanilla V3 uses only `SetRoot`.
+6. **`AddScope` DOES exist in V3** — an earlier version of this list claimed otherwise. `TopScope.AddScope(Arg0, Arg1)` is in the engine data-type docs (`data_types_script.txt`) and vanilla uses it: `gui/journal_entry_widgets/ep2_japan_widgets.gui` and `gui/character_panel.gui` both call `GuiScope.SetRoot(X.MakeScope).AddScope('frame', MakeScopeValue('(CFixedPoint)0')).End`. The receiving scripted GUI declares `saved_scopes = { frame }` and reads `scope:frame` in its triggers/effects. This mod uses it in two places: `gui/market_panel.gui` passes a partner market (`AddScope('base_market', …)`) into a script value, and `gui/journal_entry_widgets/strategic_reserve_widget.gui` passes a small integer to **parameterize one scripted GUI across several buttons** — see the pattern note below.
 
 7. **`@variables` are compile-time constants.** `@my_width = 400` is resolved at load time, not runtime. Use data binding for dynamic values.
 
@@ -1459,6 +1459,49 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 ### Pattern: Construction Spending Slider (PSC / FMC)
 
 Uses scripted_guis with click_modifiers for +/- buttons, game variables for state, and an invisible widget with `state { trigger_when }` to extract GUI-only economic data into game variables.
+
+### Pattern: One scripted GUI, several buttons (`AddScope` parameterization)
+
+When a row of related buttons differs only by *which* action it takes, don't write one scripted GUI per button. Write one per row-entity and pass the action in as a saved scope holding a plain number:
+
+```gui
+# in the row's type — datacontext comes from the row instance,
+# so this markup is identical for every row
+button_icon_minus_action = {
+    visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+    enabled = "[ScriptedGui.IsValid(  GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+    onclick = "[ScriptedGui.Execute(  GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+}
+```
+
+```txt
+my_sgui = {
+    scope = country
+    saved_scopes = { dir }
+    is_valid = {
+        trigger_if   = { limit = { scope:dir = 0 } <triggers for action 0> }
+        trigger_else = { <triggers for the other action> }
+    }
+    effect = { if = { limit = { scope:dir = 0 } … } else = { … } }
+}
+```
+
+Notes learned building the Strategic Reserve inventory widget:
+- Set the `ScriptedGui` **datacontext on the row instance**, not on each button. The buttons inherit it, so the three control buttons can live in the shared row *type* with zero per-row markup.
+- Use non-negative integers for the selector (`0/1/2`). A `'(CFixedPoint)-1'` literal is untested here; there is no vanilla precedent for a negative one.
+- The mapping is an implicit contract between the `.gui` and the script. Document it in *both* file headers.
+- Variable *names* can't be built from a scope (`set_variable = { name = st_res_$scope:good$_rate }` is not a thing), so a saved scope can select a branch but cannot replace per-entity script. One scripted GUI per entity with the action as the saved scope is usually the right split.
+- Phrase `custom_tooltip` text inside `is_valid` as a **condition** ("Stays within the weekly cap"), not a complaint ("Cannot change rate"): `ScriptedGui.IsValidTooltip` renders it with a tick when valid and a cross when not, and a negative phrasing reads wrong in the valid case.
+
+Notes learned adding the reserve-policy panel to the same widget:
+- **One saved scope, wider op codes, beats two chained `AddScope`s.** `TopScope.AddScope` returns `TopScope`, so chaining type-checks, but no vanilla `.gui` chains it and `.gui` errors only surface in-game. A single `op` integer that encodes both the action and which setting it acts on (`0-3` select, `10-12` preset, `20-31` six +/- steppers) keeps the exact shape vanilla demonstrates while backing 20 controls from one scripted GUI.
+- **A shared control panel needs only its datacontext overridden per entity.** Put the whole panel in one `type`, give it a `block` that the instance fills with `datacontext = "[GetScriptedGui('..._<entity>_sgui')]"`, and every button inside can then address the action by op code alone. In the Strategic Reserve that turned a would-be ~900-line per-good GUI into one ~270-line type plus ~20 lines per row.
+- **Both composition steps vanilla actually uses are safe**, and they are what make that work: a `type` may instance another `type` and supply `blockoverride`s for it (1055 sites in vanilla), and a `blockoverride` body may itself declare a new `block` for the *instance* to fill (296 sites). That second one is how a shared stepper template can still show a per-entity value.
+- **`text` accepts an inline data function**, not just a loc key — `text = "[Country.GetRank|v]"` is vanilla (`diplomatic_overview.gui`). For a value cell that only ever shows one variable, inlining `[JournalEntry.GetCountry.MakeScope.Var('x').GetValue|+0]` in the `.gui` avoids a loc key per entity per setting. Keep units in the (shared) label instead, so the value cell needs no literal `%` or `@money!` escaping.
+- **Expanders are presentation-only state, and should stay that way.** `GetVariableSystem.Toggle('key_<entity>')` / `.Exists(...)` (vanilla: `states_panel.gui`, and already used in this mod's `building_details_panel.gui`) is per-client, unsaved, and invisible to script. That is the right property: collapsing a settings panel must not change what the system does, and the system must keep running with the panel — and the whole journal entry — closed.
+- **`is_valid` doubles as a "you are here" indicator.** For a selector, making the *currently active* option invalid greys it out for free, with a tooltip that says why, and saves a whole parallel highlight path.
+- **Verify every template name against `gui/shared/`, not `gui/frontend/`.** `window_component_library.gui` says outright that `button_standard`, `button_primary` and friends are CK3 names kept only for the frontend. The in-game text-button idiom is a plain `button` with `using = default_button_action` (see `scripted_journal_entry_button` in `journal_entry.gui`).
+
 
 ### Pattern: Dynamic Tooltip Lists (DAUI)
 

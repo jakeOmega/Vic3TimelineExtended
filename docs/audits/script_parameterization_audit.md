@@ -66,6 +66,21 @@ The repo already uses parameterized helpers in several systems:
 - Exact thresholds and guards
 - Exact single-hop country-scope to building-scope structure
 
+### Second wave (2026-09-17, reserve inventory widget)
+
+Six more `$GOOD$` helpers, all Style A (concrete per-good call sites kept in the orchestrators so the supported goods stay grep-able):
+
+| Helper | Replaces | Notes |
+|---|---|---|
+| `st_res_init_good_effect` | 14 `if NOT has_variable` blocks in `st_res_init_effect` | Also seeds the two new display vars, so a new good gets save-safe defaults for free |
+| `st_res_reset_good_vars_effect` | 14 `set_variable` lines in `st_res_reset_vars_effect` | |
+| `st_res_apply_weekly_good_effect` | 14 change/clamp lines in `st_res_weekly_update_effect` | Adds the before/after snapshot that records `st_res_<good>_last_delta` |
+| `st_res_mark_good_no_hub_effect` | (new) the `else` branch of `st_res_weekly_update_effect` | |
+| `st_res_set_good_status_effect` | (new) | The single derivation site for `st_res_<good>_last_status` |
+| `st_res_stop_rate_base` | (new) | Third sibling of `st_res_{increase,decrease}_rate_base` |
+
+**Why a saved scope can't go further here.** The row controls pass their direction into `st_res_adjust_<good>_sgui` as a `dir` saved scope, which collapses three scripted GUIs per good into one. It cannot collapse the *goods* the same way: variable names can't be built from a scope (`set_variable = { name = st_res_$scope:good$_rate }` is not a thing), so per-good script is irreducible below one entity per good. Scripted GUIs, script values and customizable localization also accept no `$GOOD$` parameters at all, which is why those three files keep full per-good copies while the effects file does not.
+
 ## Remaining Good Candidates
 
 The big candidates are mostly addressed (see commits leading to and including the `Phase 1..5 refactor` series finishing in `Phase 5 refactor: extract apply_banking_crash_softening_option_effect helper`, and the earlier `Phase 7 refactor: banking law-change cleanup bundles + bloc principle base`). What's left is small or deliberately deferred:
@@ -73,7 +88,7 @@ The big candidates are mostly addressed (see commits leading to and including th
 | File | Candidate | Why it fits | Risk |
 |---|---|---|---|
 | [common/script_values/st_res_script_values.txt](../common/script_values/st_res_script_values.txt) | Per-good weekly delta and capacity values | Grain/ammunition/oil blocks share the same skeleton | Medium: many JE/status references depend on the existing names |
-| [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) | Per-good increase/decrease rate buttons | Thin wrappers around per-good effect names | Low |
+| ~~`common/scripted_buttons/st_res_buttons.txt`~~ | ~~Per-good increase/decrease rate buttons~~ | **Done differently (2026-09-17):** the 14 per-good buttons were deleted outright, not parameterized — the reserve inventory widget's row controls replaced them. Only the two shared buttons remain. | — |
 | [common/scripted_triggers/wonder_triggers.txt](../common/scripted_triggers/wonder_triggers.txt) | Repeated continent/building checks | Placeholder-friendly, but not as high leverage as SR | Medium |
 | [common/scripted_effects/legacy_modifier_cleanup.txt](../common/scripted_effects/legacy_modifier_cleanup.txt) | 207 inline `if has_modifier remove_modifier` patterns | Could use `remove_modifier_if_exists_effect` | **Skip**: temporary save-migration code, slated for deletion once no pre-migration saves exist |
 | [common/buildings/wonders.txt](../common/buildings/wonders.txt), synthetics plants in `extra_buildings.txt` | Repeated building boilerplate | 46 wonders + 11 synthetics share scaffolding | **Skip**: pure data, intentionally grep-friendly; would belong to a generator if scaled further |
