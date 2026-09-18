@@ -204,7 +204,10 @@ un_resolution_archive = {
 	}
 	if = {
 		limit = {
-			global_variable_list_size = { name = un_resolution_history target > un_resolution_history_cap }
+			# `any_in_*list = { count >= N }` rather than `*variable_list_size`: in 1.14
+			# the engine rejects that trigger's documented `target` key at load
+			# ("Failed to read 'target'"), so the limit never passed. N is cap + 1.
+			any_in_global_list = { variable = un_resolution_history count >= 26 has_tag = un_resolution } # un_resolution_history_cap + 1
 			any_in_global_list = {
 				variable = un_resolution_history
 				NOT = { has_variable = un_res_cooldown }
