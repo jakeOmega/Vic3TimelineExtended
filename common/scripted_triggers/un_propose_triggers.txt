@@ -1,0 +1,234 @@
+﻿# ============================================================================
+# TABLING A RESOLUTION — SHARED GATES
+# ============================================================================
+# The six topics a member can put before the General Assembly on its own
+# initiative, each with the two gates its journal-entry scripted button used to
+# carry inline:
+#
+#   un_propose_<key>_available   the button's `visible` — whether the topic is
+#                                on the table at all for us right now (there is
+#                                a case, we are not already enforcing it, ...)
+#   un_propose_<key>_possible    the button's `possible` — every cost, cooldown,
+#                                lock and standing gate, with the custom_tooltip
+#                                lines that explain a refusal
+#
+# Extracted word for word out of common/scripted_buttons/un_buttons.txt so the
+# button and the chamber widget's "Table a Resolution" section cannot drift:
+# the button `possible = { un_propose_condemn_possible = yes }`, and
+# un_chamber_propose_sgui's `is_valid` asks the same trigger. The AI still
+# proposes through the buttons' ai_chance, so both callers must stay honest.
+#
+# The remaining eleven topics (human rights, reform, heritage, decolonization,
+# NPT, pandemic, climate, refugee, space, law of the sea, ICC) are raised by the
+# proposer events in events/un_events.txt and have no button and no trigger
+# here — see docs/systems/journal_entry_systems.md § The chamber widget.
+# ============================================================================
+
+# Condemnation of aggression — binding, simple majority, names a rival that is
+# prosecuting a war of its own making.
+# Scope: the proposing country
+un_propose_condemn_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	any_country = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		is_at_war = yes
+		is_diplomatic_play_initiator = yes
+	}
+}
+
+# Scope: the proposing country
+un_propose_condemn_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
+	}
+	NOT = { has_modifier = un_ga_resolution_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+	any_country = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		is_at_war = yes
+		is_diplomatic_play_initiator = yes
+	}
+}
+
+# International sanctions — binding, simple majority, names a rival not already
+# under sanction. Major power or better may propose.
+# Scope: the proposing country
+un_propose_sanctions_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_modifier = un_sanctions_enforcer_modifier }
+}
+
+# Scope: the proposing country
+un_propose_sanctions_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
+	}
+	NOT = { has_modifier = un_ga_resolution_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+	any_country = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		NOT = { has_modifier = un_sanctions_target_modifier }
+	}
+}
+
+# Motion to strip a permanent seat — recommendatory in form but decided by a
+# two-thirds supermajority of current members (un_resolution_decide).
+# Scope: the proposing country
+un_propose_expulsion_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	any_country = {
+		NOT = { this = ROOT }
+		is_un_permanent_member = yes
+		has_modifier = un_veto_isolation_modifier
+	}
+}
+
+# Scope: the proposing country
+un_propose_expulsion_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = expulsion } }
+	}
+	NOT = { has_modifier = un_request_cooldown }
+	any_country = {
+		NOT = { this = ROOT }
+		is_un_permanent_member = yes
+		has_modifier = un_veto_isolation_modifier
+	}
+}
+
+# Authorized military mandate — binding, simple majority, and the only topic
+# whose proposal also names a territory. Gates are the fullest of the six.
+# Scope: the proposing country
+un_propose_mandate_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	has_global_variable = un_authority
+	NOT = { un_mandate_has_live_mandate = yes }
+	un_mandate_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_mandate_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_mandate_no_live_mandate_tt
+		NOT = { un_mandate_has_live_mandate = yes }
+	}
+	custom_tooltip = {
+		text = un_mandate_authority_tt
+		has_global_variable = un_authority
+		global_var:un_authority >= 40
+	}
+	custom_tooltip = {
+		text = un_mandate_cooldown_tt
+		NOT = { has_variable = un_mandate_proposal_cooldown }
+	}
+	# Standing floor, set at the Disgraced boundary (20). A member that has
+	# done nothing at all sits at the neutral 50, so this bars only a
+	# country whose record the Assembly has already wrecked — it cannot
+	# make the mandate unreachable for an ordinary member.
+	#
+	# Deliberately NOT added to un_mandate_actor_in_good_standing: that
+	# trigger is also read by un_mandate_still_valid, so a floor there
+	# would VOID a mandate already in the field the moment the actor's
+	# standing dipped — deleting a war the player is fighting over a score
+	# movement. The gate belongs on the proposal, not on the authorization.
+	custom_tooltip = {
+		text = un_mandate_standing_tt
+		un_standing_at_least = { VALUE = un_standing_mandate_floor }
+	}
+	custom_tooltip = {
+		text = un_mandate_case_tt
+		un_mandate_case_exists = yes
+	}
+	NOT = { has_modifier = un_ga_resolution_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+}
+
+# Request a peacekeeping deployment on our own soil — binding, simple majority.
+# The requester is also the resolution target.
+# Scope: the proposing country
+un_propose_peacekeepers_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+	OR = {
+		is_at_war = yes
+		any_scope_state = { devastation > 5 }
+	}
+}
+
+# Scope: the proposing country
+un_propose_peacekeepers_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = peacekeeping_request } }
+	}
+	NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+	OR = {
+		is_at_war = yes
+		any_scope_state = { devastation > 5 }
+	}
+}
+
+# Request humanitarian aid — recommendatory, simple majority. The requester is
+# also the resolution target.
+# Scope: the proposing country
+un_propose_aid_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_modifier = un_humanitarian_aid_received_modifier }
+	any_scope_state = {
+		OR = {
+			average_sol < 8
+			devastation > 5
+		}
+	}
+}
+
+# Scope: the proposing country
+un_propose_aid_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = aid_request } }
+	}
+	NOT = { has_modifier = un_humanitarian_aid_received_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+	any_scope_state = {
+		OR = {
+			average_sol < 8
+			devastation > 5
+		}
+	}
+}
