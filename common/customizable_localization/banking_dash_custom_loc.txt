@@ -1,0 +1,69 @@
+﻿# ============================================================================
+# Banking dashboard — banded readings
+# ============================================================================
+# The cycle's momentum and bubble pressure are deliberately imperfect
+# information: the player reads a bar and a band, never the number behind it.
+# These two blocks turn the hidden variables into that band for the Current
+# Conditions rows (gui/journal_entry_widgets/banking_dashboard_widget.gui).
+# The band edges reuse thresholds the script already acts on (momentum +-3 is
+# banking_cycle_bubble_risk_rising / banking_cycle_risk_falling; bubble 15 / 30
+# / 50 are crash-roll steps in banking_cycle_effects.txt).
+# ============================================================================
+
+banking_dash_momentum_band = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = finance_cycle_momentum } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 3 }
+		localization_key = banking_dash_momentum_band_surging
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 1 }
+		localization_key = banking_dash_momentum_band_rising
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -1 }
+		localization_key = banking_dash_momentum_band_steady
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -3 }
+		localization_key = banking_dash_momentum_band_falling
+	}
+	text = {
+		localization_key = banking_dash_momentum_band_collapsing
+	}
+}
+
+banking_dash_bubble_band = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = bubble_pressure } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:bubble_pressure < 15 }
+		localization_key = banking_dash_bubble_band_low
+	}
+	text = {
+		trigger = { var:bubble_pressure < 30 }
+		localization_key = banking_dash_bubble_band_building
+	}
+	text = {
+		trigger = { var:bubble_pressure < 50 }
+		localization_key = banking_dash_bubble_band_elevated
+	}
+	text = {
+		trigger = { var:bubble_pressure < 75 }
+		localization_key = banking_dash_bubble_band_high
+	}
+	text = {
+		localization_key = banking_dash_bubble_band_severe
+	}
+}

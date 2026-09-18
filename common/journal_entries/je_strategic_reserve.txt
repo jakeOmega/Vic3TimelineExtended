@@ -2,11 +2,14 @@
 # Strategic Reserve Journal Entry
 # ============================================================================
 # Activates automatically when a country builds a Strategic Reserve Hub.
-# Displays current stockpile vs capacity for each good and exposes signed rate
-# controls plus a shared step-size selector. Positive rates store goods,
-# negative rates withdraw them, and the hub follows the chosen weekly rate for
-# each good. Persistent reserve state lives on country vars; this JE only owns
-# visibility, buttons, and lifecycle entry points into the SR wrapper effects.
+# All per-good presentation and control lives in the inventory widget
+# (gui/journal_entry_widgets/strategic_reserve_widget.gui): one row per
+# unlocked good with its stock, capacity, fill bar, configured signed rate,
+# actual net weekly movement, status label and decrease/stop/increase controls.
+# Positive rates store goods, negative rates withdraw them. This JE keeps only
+# the reserve-wide summary text, the two shared buttons (step size, reset all)
+# and the lifecycle entry points into the SR wrapper effects; persistent
+# reserve state lives on country vars.
 # ============================================================================
 
 je_strategic_reserve = {
@@ -39,37 +42,25 @@ je_strategic_reserve = {
 		st_res_je_invalid_effect = yes
 	}
 
+	# Reserve inventory table: one row per unlocked good with its stock, fill
+	# bar, configured rate, actual net weekly movement, status and controls.
+	# container_2 puts it directly under the summary status text and above the
+	# two shared buttons below.
 	widget = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
-		name = "widget_je_strategic_reserve_step_size"
-		container = "custom_widget_container_1"
+		name = "widget_je_strategic_reserve_inventory"
+		container = "custom_widget_container_2"
 	}
 
-	scripted_progress_bar = st_res_grain_fill_bar
-	scripted_progress_bar = st_res_ammunition_fill_bar
-	scripted_progress_bar = st_res_oil_fill_bar
-	scripted_progress_bar = st_res_small_arms_fill_bar
-	scripted_progress_bar = st_res_artillery_fill_bar
-	scripted_progress_bar = st_res_aeroplanes_fill_bar
-	scripted_progress_bar = st_res_tanks_fill_bar
-
+	# Per-good fill bars and the fourteen per-good rate buttons now live inside
+	# the inventory widget above. Only the two shared, reserve-wide actions stay
+	# as vanilla-rendered journal-entry buttons.
 	scripted_button = st_res_cycle_step_size_button
 	scripted_button = st_res_reset_rates_button
-	scripted_button = st_res_decrease_grain_rate_button
-	scripted_button = st_res_increase_grain_rate_button
-	scripted_button = st_res_decrease_ammunition_rate_button
-	scripted_button = st_res_increase_ammunition_rate_button
-	scripted_button = st_res_decrease_oil_rate_button
-	scripted_button = st_res_increase_oil_rate_button
-	scripted_button = st_res_decrease_small_arms_rate_button
-	scripted_button = st_res_increase_small_arms_rate_button
-	scripted_button = st_res_decrease_artillery_rate_button
-	scripted_button = st_res_increase_artillery_rate_button
-	scripted_button = st_res_decrease_aeroplanes_rate_button
-	scripted_button = st_res_increase_aeroplanes_rate_button
-	scripted_button = st_res_decrease_tanks_rate_button
-	scripted_button = st_res_increase_tanks_rate_button
 
+	# Summary only. The per-good stock / rate / status detail moved into the
+	# inventory widget; status_desc also renders in the journal list, where
+	# seven multi-line good blocks were pure noise.
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
@@ -98,38 +89,6 @@ je_strategic_reserve = {
 		triggered_desc = {
 			desc = je_strategic_reserve_rate_line
 			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_step_line
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_grain_line
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_ammunition_line
-			trigger = { has_technology_researched = percussion_cap }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_oil_line
-			trigger = { has_technology_researched = fractional_distillation }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_small_arms_line
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_artillery_line
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_aeroplanes_line
-			trigger = { has_technology_researched = military_aviation }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_tanks_line
-			trigger = { has_technology_researched = mobile_armor }
 		}
 	}
 

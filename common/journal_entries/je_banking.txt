@@ -14,7 +14,34 @@
 	scripted_progress_bar = banking_cycle_momentum_bar
 	scripted_progress_bar = banking_bubble_pressure_bar
 
+	# Policy dashboard. Both widgets are presentation only: every action they
+	# expose runs through common/scripted_guis/banking_dashboard_scripted_gui.txt,
+	# which calls the same shared triggers and effects as the scripted buttons
+	# below, so the two surfaces cannot diverge.
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
+		name = "widget_je_banking_conditions"
+		container = "custom_widget_container_1"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
+		name = "widget_je_banking_policies"
+		container = "custom_widget_container_3"
+	}
+
+	# History charts. Collapsed by default, so the bars are only built once the
+	# player asks for them. Purely a view over the samples te_history_effects.txt
+	# records from the monthly pulse below — the section has no effect of its own.
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_history_widget.gui"
+		name = "widget_je_banking_history"
+		container = "custom_widget_container_2"
+	}
+
 	# Buttons
+	# These stay declared here: their `ai_chance` blocks are the AI's only path to
+	# banking policy, and they remain the player's fallback controls next to the
+	# dashboard above.
 	scripted_button = cb_policy_rate_hike
 	scripted_button = cb_disable_policy_rate_hike
 	scripted_button = cb_open_market_ops
@@ -195,6 +222,11 @@
 			banking_cycle_update_fiscal_policy = yes
 			banking_cycle_advance_variables = yes
 			banking_cycle_check_and_execute_crash = yes
+
+			# Sample the month's settled cycle state for the history charts.
+			# Runs after the crash check so a crash month's bar shows the
+			# post-crash values next to its crash marker.
+			te_history_record_banking_samples = yes
 
 			set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
 
