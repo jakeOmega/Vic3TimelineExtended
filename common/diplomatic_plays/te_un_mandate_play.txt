@@ -13,7 +13,8 @@
 #
 # Shape follows vanilla dp_return_state
 # (game/common/diplomatic_plays/00_diplomatic_plays.txt:129-153); the extra
-# `selectable_in_lens` and the mandate clauses in `possible` are the gate.
+# mandate clauses in `possible` are the gate (see the note on
+# selectable_in_lens below).
 # ============================================================================
 
 dp_te_un_mandate_restore_state = {
@@ -25,10 +26,13 @@ dp_te_un_mandate_restore_state = {
 
 	# Evaluated without a target in scope, so this is only "do we hold an
 	# unexercised authorization at all".
-	selectable_in_lens = {
-		has_variable = un_mandate_current
-		var:un_mandate_current ?= { has_tag = un_mandate_active }
-	}
+	# No selectable_in_lens block, on purpose. With a mandate-state trigger there
+	# (`has_variable = un_mandate_current` ...) the play never appeared for a
+	# mandate holder; removing the block fixed it (confirmed in play testing,
+	# 2026-09-18). Vanilla only ever writes `always = no` in that block and
+	# documents that it "does not contain target in scope" — treat it as an
+	# off-switch, not as a place for country-state triggers. `possible` below
+	# does all the gating.
 
 	possible = {
 		NOT = { is_country_type = decentralized }
