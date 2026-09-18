@@ -459,6 +459,17 @@
 				}
 				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
 			}
+
+			# ---- International standing (all countries with the JE) ----
+			# The whole national-standing system's monthly work, in one call:
+			# seed a new member at the neutral value, advance the rolling year,
+			# tick the ongoing-programme and undermining counters, award the
+			# capped programme accrual, and swap the tier modifier. This is the
+			# SINGLE refresh site for the un_standing_*_modifier family
+			# (common/scripted_effects/un_standing_effects.txt). It sits outside
+			# the member-only block on purpose: a country that has left still
+			# needs its counters dropped and its tier modifier removed.
+			un_standing_country_pulse = yes
 		}
 	}
 

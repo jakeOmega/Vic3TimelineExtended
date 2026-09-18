@@ -1,0 +1,244 @@
+# ============================================================================
+# UN INTERNATIONAL STANDING — TUNING VALUES
+# ============================================================================
+# Every number the standing system uses is defined here exactly once. The
+# mechanics live in common/scripted_effects/un_standing_effects.txt and the
+# gates in common/scripted_triggers/un_standing_triggers.txt.
+#
+# RE-TUNING CHECKLIST. Two places restate these figures in words and must be
+# edited alongside them:
+#   - je_un_standing_help_sources / _losses / _limits
+#     (te_journal_entries_l_english.yml) — the "How standing works" panel.
+#   - the un_standing_*_tt LOSS tooltips (te_miscellaneous_l_english.yml).
+#     Only losses name a figure; gains are stated without one on purpose,
+#     because diminishing returns mean the delivered amount is almost never
+#     the nominal one.
+# The docs table is in docs/systems/journal_entry_systems.md § UN Standing.
+#
+# Standing is a NATIONAL record (country variable un_standing). It is not
+# global_var:un_authority, which measures the institution rather than a member.
+# ============================================================================
+
+# ---- Bounds and the neutral seed ----
+
+un_standing_min = 0
+un_standing_max = 100
+
+# What a member is worth to the Assembly on the day it joins: nothing owed,
+# nothing earned. Chosen at the midpoint so the first movement in either
+# direction is legible, and so a save that predates this feature starts every
+# member from the same defensible place rather than from a guess at its past.
+un_standing_neutral_start = 50
+
+# ---- Tier floors ----
+# Disgraced < 20 <= Poor < 40 <= Neutral < 60 <= Respected < 80 <= Exemplary
+
+un_standing_tier_poor_floor = 20
+un_standing_tier_neutral_floor = 40
+un_standing_tier_respected_floor = 60
+un_standing_tier_exemplary_floor = 80
+
+# ---- Diminishing returns ----
+# Every GAIN is multiplied by (100 - standing) / 50, clamped to [0.1, 1.0]:
+# full value at the neutral 50 and below, half at 75, a tenth at the ceiling.
+# Losses are NOT scaled — a violation costs what it costs wherever you stand.
+
+un_standing_dr_divisor = 50
+un_standing_dr_floor = 0.1
+
+# ---- Sustained programmes ----
+# The five ongoing programmes (peacekeeping contribution, development funding,
+# human rights championing, arms control, championing the order) each accrue
+# standing only after they have run CONTINUOUSLY for the minimum, and the
+# combined accrual is capped per rolling year. Both numbers together are what
+# makes enable -> disable -> enable worthless.
+
+un_standing_program_min_months = 24
+un_standing_program_monthly_gain = 0.3
+
+# Nominal (pre-diminishing-returns) programme accrual allowed in each rolling
+# 12-pulse year. Two qualifying programmes nominally earn 7.2/year, so the cap
+# bites for a member near the neutral mark and diminishing returns take over
+# from it as standing climbs.
+un_standing_program_yearly_cap = 6
+un_standing_months_per_year = 12
+
+# Abandoning a programme before it has run the minimum. Charged once, from the
+# monthly pulse, when the counter is discarded — so every exit path (the
+# withdraw buttons, a failed pledge revoked by un_vote.2, anything future)
+# costs the same, for the player and the AI alike.
+un_standing_early_withdrawal_loss = 2
+
+# ---- Undermining ----
+
+un_standing_undermine_monthly_loss = 0.15
+un_standing_undermine_suspend_months = 24
+
+# ---- One-off deliveries ----
+# Paid at the single site where the delivery actually happens. None of these
+# draw on the programme yearly cap: each is structurally single-payout and
+# sits behind its own multi-year cooldown, so there is nothing to farm.
+
+un_standing_aid_delivered_gain = 3
+un_standing_peacekeeping_delivered_gain = 3
+un_standing_request_contribution_gain = 2
+un_standing_compliance_gain = 2
+un_standing_mandate_complied_gain = 6
+
+# Relations granted to a delivering contributor with the country that asked
+# for the aid or the peacekeepers. One-off, at the same single site.
+un_standing_delivery_relations = 5
+
+# ---- Losses ----
+
+un_standing_mandate_violated_loss = 12
+un_standing_defiance_loss = 5
+un_standing_condemned_loss = 8
+un_standing_rebuked_loss = 3
+un_standing_sanctioned_loss = 6
+un_standing_sanctioned_partial_loss = 3
+un_standing_leave_loss = 5
+un_standing_seat_stripped_loss = 5
+
+# ---- Gates ----
+
+# Standing floor for tabling a military mandate. Deliberately set at the
+# Disgraced boundary: a member that has never done anything sits at the
+# neutral 50 and is nowhere near it, so this bars only a country that has
+# already wrecked its record. It is NOT part of
+# un_mandate_actor_in_good_standing — see the note there.
+un_standing_mandate_floor = 20
+
+# ---- Derived values ----
+
+# The diminishing-returns multiplier applied to every gain. Guarded so the
+# value is meaningful (1.0) for a country that has no standing variable yet;
+# un_standing_gain will not write in that case anyway.
+un_standing_gain_scale = {
+	value = 1
+	if = {
+		limit = { has_variable = un_standing }
+		subtract = 1
+		add = {
+			value = un_standing_max
+			subtract = var:un_standing
+			divide = un_standing_dr_divisor
+		}
+	}
+	min = un_standing_dr_floor
+	max = 1
+}
+
+# How many of the five ongoing programmes have run long enough to pay.
+# Scope: country
+un_standing_program_accrual_count = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = un_standing_months_peacekeeping
+			var:un_standing_months_peacekeeping >= un_standing_program_min_months
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = un_standing_months_development
+			var:un_standing_months_development >= un_standing_program_min_months
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = un_standing_months_human_rights
+			var:un_standing_months_human_rights >= un_standing_program_min_months
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = un_standing_months_arms_control
+			var:un_standing_months_arms_control >= un_standing_program_min_months
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = un_standing_months_champion
+			var:un_standing_months_champion >= un_standing_program_min_months
+		}
+		add = 1
+	}
+}
+
+# This month's nominal programme accrual, before the yearly cap and before
+# diminishing returns.
+# Scope: country
+un_standing_program_monthly_nominal = {
+	value = un_standing_program_accrual_count
+	multiply = un_standing_program_monthly_gain
+}
+
+# Nominal programme accrual still allowed this rolling year. Also what the
+# chamber panel prints as "remaining".
+# Scope: country
+un_standing_program_budget_left = {
+	value = un_standing_program_yearly_cap
+	if = {
+		limit = { has_variable = un_standing_year_gain }
+		subtract = var:un_standing_year_gain
+	}
+	min = 0
+}
+
+# What the pulse actually awards this month: the nominal accrual, trimmed to
+# whatever is left of the year's budget. Diminishing returns are applied after
+# this, inside un_standing_gain, so the cap is stated in nominal points and the
+# delivered figure is never larger.
+# Scope: country
+un_standing_program_award_value = {
+	value = un_standing_program_monthly_nominal
+	min = 0
+	max = un_standing_program_budget_left
+}
+
+# Nominal programme accrual booked so far this rolling year, for display.
+# Scope: country
+un_standing_year_gain_display = {
+	value = 0
+	if = {
+		limit = { has_variable = un_standing_year_gain }
+		add = var:un_standing_year_gain
+	}
+}
+
+# ---- AI reception of a proposer's standing ----
+# The ONE shared nudge the General Assembly's AI voters give a well-regarded
+# proposer. Range -5 .. +5 against un_vote.1's option A base of 40, which is
+# small next to the existing alliance (+20), bloc (+15) and rivalry (-30)
+# terms: a lean, never a guarantee.
+#
+# LOBBYING STAGE: add your own shared script value next to this one in
+# un_vote.1's option A ai_chance (see the marked comment there). Do not fold
+# lobbying into this value — standing and lobbying must stay separately
+# tunable and separately attributable.
+#
+# Scope: the voting country; reads scope:un_vote_proposer, saved in un_vote.1's
+# immediate. Guarded twice: the proposer may have been annexed mid-vote, and it
+# may never have held a standing variable (a founder's first month, a save that
+# predates the feature).
+un_vote_proposer_standing_lean = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:un_vote_proposer
+			scope:un_vote_proposer = { has_variable = un_standing }
+		}
+		add = {
+			value = scope:un_vote_proposer.var:un_standing
+			subtract = un_standing_neutral_start
+			divide = 10
+		}
+	}
+	min = -5
+	max = 5
+}
