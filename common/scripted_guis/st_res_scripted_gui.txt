@@ -511,8 +511,16 @@ st_res_policy_grain_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
@@ -822,8 +830,16 @@ st_res_policy_ammunition_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
@@ -1133,8 +1149,16 @@ st_res_policy_oil_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
@@ -1444,8 +1468,16 @@ st_res_policy_small_arms_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
@@ -1755,8 +1787,16 @@ st_res_policy_artillery_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
@@ -2066,8 +2106,16 @@ st_res_policy_aeroplanes_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
@@ -2377,8 +2425,16 @@ st_res_policy_tanks_sgui = {
 		}
 		trigger_else_if = {
 			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction.
-			limit = { scope:op < 20 }
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
 			always = yes
 		}
 		trigger_else_if = {
