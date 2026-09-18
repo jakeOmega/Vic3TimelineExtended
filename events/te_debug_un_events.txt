@@ -52,6 +52,53 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		}
 	}
 
+	# Another member tables a condemnation of a third member, so the player can
+	# vote on it from the chamber at once (binding: a permanent member also gets
+	# the veto). Replaces whatever is on the floor.
+	option = {
+		name = te_debug_un.1.g
+		trigger = {
+			any_country = {
+				count >= 2
+				NOT = { this = ROOT }
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+		}
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+			save_scope_as = te_debug_res_proposer
+		}
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				NOT = { this = scope:te_debug_res_proposer }
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+			save_scope_as = te_debug_res_target
+		}
+		if = {
+			limit = {
+				exists = scope:te_debug_res_proposer
+				exists = scope:te_debug_res_target
+			}
+			te_debug_un_open_resolution = {
+				PROPOSER = scope:te_debug_res_proposer
+				TOPIC = condemn
+				TARGET = scope:te_debug_res_target
+			}
+		}
+	}
+
+	# Throw away whatever is on the floor and give back the vote lock.
+	option = {
+		name = te_debug_un.1.h
+		trigger = { has_global_variable = un_vote_active }
+		te_debug_un_clear_vote = yes
+	}
+
 	option = {
 		name = te_debug_un.1.c
 		te_debug_un_set_standing = { VALUE = 85 }

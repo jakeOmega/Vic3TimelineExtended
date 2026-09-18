@@ -18,36 +18,65 @@
 #
 # Condemnation and sanctions previously picked with `random_country`, which
 # cannot be previewed — a row that promised one rival and censured another would
-# be worse than no preview at all. Both now pick the highest-ranked eligible
-# rival, which is what the expulsion button has always done. This is the one
-# change of behaviour the AI can see; the eligibility sets are untouched, so the
-# AI still proposes against exactly the same pool.
+# be worse than no preview at all. For a HUMAN proposer both now pick the
+# highest-ranked eligible rival, which is what the expulsion button has always
+# done. The AI keeps its random pick from the same pool, so nothing the AI does
+# changed.
 # ============================================================================
 
 # Scope: the proposing country
 un_propose_condemn_select_target = {
-	ordered_country = {
-		limit = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-			is_at_war = yes
-			is_diplomatic_play_initiator = yes
+	# The AI keeps the random pick it has always made; only a human proposer,
+	# who sees the pick previewed in the chamber, needs it to be deterministic.
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				is_at_war = yes
+				is_diplomatic_play_initiator = yes
+			}
+			save_temporary_scope_as = un_propose_condemn_target
 		}
-		order_by = country_rank
-		max = 1
-		save_temporary_scope_as = un_propose_condemn_target
+	}
+	else = {
+		ordered_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				is_at_war = yes
+				is_diplomatic_play_initiator = yes
+			}
+			order_by = country_rank
+			max = 1
+			save_temporary_scope_as = un_propose_condemn_target
+		}
 	}
 }
 
 # Scope: the proposing country
 un_propose_sanctions_select_target = {
-	ordered_country = {
-		limit = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-			NOT = { has_modifier = un_sanctions_target_modifier }
+	# The AI keeps the random pick it has always made; only a human proposer,
+	# who sees the pick previewed in the chamber, needs it to be deterministic.
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				NOT = { has_modifier = un_sanctions_target_modifier }
+			}
+			save_temporary_scope_as = un_propose_sanctions_target
 		}
-		order_by = country_rank
-		max = 1
-		save_temporary_scope_as = un_propose_sanctions_target
+	}
+	else = {
+		ordered_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				NOT = { has_modifier = un_sanctions_target_modifier }
+			}
+			order_by = country_rank
+			max = 1
+			save_temporary_scope_as = un_propose_sanctions_target
+		}
 	}
 }
 
