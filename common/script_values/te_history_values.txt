@@ -1,0 +1,78 @@
+﻿# ============================================================================
+# HISTORY STORE — script values
+# ============================================================================
+# Shared by every charted series (see docs/systems/mod_systems.md, "History
+# store and charts"). Nothing here reads a system-specific variable, so a new
+# series never has to touch this file.
+#
+# te_history_month_index is the store's clock: a monotonic integer that
+# increases by exactly 1 every game month and is identical for every country
+# and for the global series, so samples taken in the same month line up
+# without any shared counter in the save. `year` is a valid script value in
+# vanilla (common/script_values/ip4_je_values.txt `years_since_game_start`);
+# `month` is only a trigger (Jan = 0 ... Dec = 11), hence the if-chain.
+# ============================================================================
+
+# Retained samples per series. 120 monthly samples = the 10-year chart range.
+te_history_sample_cap = 120
+
+# Monotonic month counter: year * 12 + (0 = January ... 11 = December).
+te_history_month_index = {
+	value = year
+	multiply = 12
+	if = { limit = { month = 1 } add = 1 }
+	if = { limit = { month = 2 } add = 2 }
+	if = { limit = { month = 3 } add = 3 }
+	if = { limit = { month = 4 } add = 4 }
+	if = { limit = { month = 5 } add = 5 }
+	if = { limit = { month = 6 } add = 6 }
+	if = { limit = { month = 7 } add = 7 }
+	if = { limit = { month = 8 } add = 8 }
+	if = { limit = { month = 9 } add = 9 }
+	if = { limit = { month = 10 } add = 10 }
+	if = { limit = { month = 11 } add = 11 }
+}
+
+# Calendar year of the sample being written.
+te_history_current_year = {
+	value = year
+}
+
+# Calendar month of the sample being written, 1 = January ... 12 = December.
+# Stored (rather than derived from the index in the GUI) because the chart
+# tooltips need it and the GUI has no integer division.
+te_history_current_month = {
+	value = 1
+	if = { limit = { month = 1 } add = 1 }
+	if = { limit = { month = 2 } add = 2 }
+	if = { limit = { month = 3 } add = 3 }
+	if = { limit = { month = 4 } add = 4 }
+	if = { limit = { month = 5 } add = 5 }
+	if = { limit = { month = 6 } add = 6 }
+	if = { limit = { month = 7 } add = 7 }
+	if = { limit = { month = 8 } add = 8 }
+	if = { limit = { month = 9 } add = 9 }
+	if = { limit = { month = 10 } add = 10 }
+	if = { limit = { month = 11 } add = 11 }
+}
+
+# Oldest retained sample's date, for the "History available since" line.
+# Localization cannot read a raw country variable — `[SCOPE.MakeScope.Var('x').GetValue]`
+# does not resolve in a .yml value (docs/guides/scripting_best_practices.md) —
+# so the two cached country variables are exposed as script values, which is
+# the canonical `[SCOPE.MakeScope.ScriptValue('x')|0]` loc pattern.
+# Scope: country
+te_history_since_year = {
+	value = var:te_hist_since_y
+}
+
+te_history_since_month = {
+	value = var:te_hist_since_mo
+}
+
+# Eviction order for the sample lists. Evaluated in sample-container scope by
+# `ordered_in_list`/`ordered_in_global_list`, so position 0 is always the
+# oldest sample no matter what order the engine keeps the list in.
+te_history_sample_order = {
+	value = var:te_hist_i
+}
