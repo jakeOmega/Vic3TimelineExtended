@@ -429,27 +429,25 @@ un_chamber_outcome_line = {
 # annexed print the "a former member" fallback instead of a broken name.
 # Scope: resolution container
 un_chamber_ballot_lines = {
-	custom_tooltip_no_bullet = je_un_chamber_voters_yes_header
+	# Tooltip generation prints a scope's own lines first and its nested
+	# country blocks afterwards, so a "In favour:" header followed by a list
+	# renders as every header on top and every country underneath (seen in the
+	# first play test). Each entry therefore says which side it is on, and the
+	# only line printed at this level is one sentence of introduction.
+	custom_tooltip_no_bullet = je_un_chamber_ballot_intro
 	if = {
 		limit = { has_variable_list = un_res_yes }
 		every_in_list = {
 			variable = un_res_yes
-			custom_tooltip = je_un_chamber_voter_entry
+			custom_tooltip = je_un_chamber_voter_entry_yes
 		}
 	}
-	else = {
-		custom_tooltip = je_un_chamber_voters_none
-	}
-	custom_tooltip_no_bullet = je_un_chamber_voters_no_header
 	if = {
 		limit = { has_variable_list = un_res_no }
 		every_in_list = {
 			variable = un_res_no
-			custom_tooltip = je_un_chamber_voter_entry
+			custom_tooltip = je_un_chamber_voter_entry_no
 		}
-	}
-	else = {
-		custom_tooltip = je_un_chamber_voters_none
 	}
 }
 
