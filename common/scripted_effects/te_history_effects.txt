@@ -1,0 +1,303 @@
+﻿# ============================================================================
+# HISTORY STORE — generic recording helpers
+# ============================================================================
+# A bounded, save-persistent store of monthly samples that the history charts
+# (gui/journal_entry_widgets/te_history_chart.gui) render. Nothing in this file
+# knows about banking, reserves or the UN: a new series is one
+# `te_history_record_sample` call plus one chart instance. See
+# docs/systems/mod_systems.md, "History store and charts".
+#
+# DATA MODEL — one script container per (country, month), NOT per metric:
+#
+#   tags    te_hist, te_hist_sample  (+ te_hist_global for the global series)
+#   parent  the recording country — the engine culls the containers when the
+#           country stops existing, so history never outlives its owner
+#   vars    te_hist_i          monotonic month index (te_history_month_index)
+#           te_hist_y          calendar year   ] display only; the GUI has no
+#           te_hist_mo         calendar month  ] integer division
+#           te_hist_v_<METRIC> one per metric recorded that month
+#           te_hist_mk         number of markers recorded that month
+#           te_hist_mk_<MARK>  one per distinct marker recorded that month
+#
+# The country holds the references and the cursor:
+#
+#   te_hist         variable list of sample containers, capped at
+#                   te_history_sample_cap (oldest evicted)
+#   te_hist_cur     the current month's container
+#   te_hist_cur_i   its month index — the once-per-month guard
+#   te_hist_now_i   this month's index, recomputed on every call
+#   te_hist_since_y / te_hist_since_mo   oldest retained sample's date, for
+#                   the "History available since" line
+#
+# Sharing one container between all of a month's metrics is what keeps the
+# store affordable: 120 containers per tracked country covers every series
+# instead of 120 per series, and markers land on the same container as the
+# month they describe, so the chart never has to search for them. A metric
+# that was not recorded in a month simply has no `te_hist_v_<METRIC>`
+# variable there, which is how the charts tell "no data" from a real zero.
+#
+# LIST ORDER. The chart lays its bars out in `GetList` order, which is the
+# order the engine keeps the variable list in. This store only ever appends to
+# the end and removes the single oldest from the front, so insertion order is
+# chronological as long as `remove_list_variable` erases in place. If the bars
+# ever render out of order in game, that assumption is wrong and the fix is
+# local: rebuild the list after each eviction (`ordered_in_list` with
+# `order_by = te_history_sample_order` and no `position` iterates every
+# element in that order) instead of removing in place. Eviction itself is
+# already order-independent — it uses `order_by`, not position 0 of the raw
+# list. Remember that `ordered_*` sorts descending, which is why
+# te_history_sample_order negates the month index.
+#
+# Every helper is wrapped in `hidden_effect` because the banking policy
+# effects that call the marker helper are also rendered as button tooltips;
+# during that render the engine resolves scope links but never creates
+# containers (see covert_warfare_effects.txt), so an unwrapped call would both
+# spray text into the tooltip and read a scope that was never set.
+# ============================================================================
+
+# Make sure this country has a sample container for the current month, and
+# leave `var:te_hist_cur` pointing at it. Safe to call many times a month:
+# the te_hist_cur_i == te_hist_now_i test makes every call after the first a
+# no-op, so two pulses in one month share one container.
+# Scope: country
+te_history_touch_month = {
+	set_variable = { name = te_hist_now_i value = te_history_month_index }
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = te_hist_cur }
+				NOT = { has_variable = te_hist_cur_i }
+				NOT = { var:te_hist_cur_i = var:te_hist_now_i }
+			}
+		}
+		save_scope_as = te_hist_owner
+		create_container = {
+			tags = { te_hist te_hist_sample }
+			parent = scope:te_hist_owner
+			save_scope_as = te_hist_new
+		}
+		if = {
+			limit = { exists = scope:te_hist_new }
+			scope:te_hist_new = {
+				set_variable = { name = te_hist_i value = scope:te_hist_owner.var:te_hist_now_i }
+				set_variable = { name = te_hist_y value = te_history_current_year }
+				set_variable = { name = te_hist_mo value = te_history_current_month }
+			}
+			add_to_variable_list = { name = te_hist target = scope:te_hist_new }
+			set_variable = { name = te_hist_cur value = scope:te_hist_new }
+			set_variable = { name = te_hist_cur_i value = var:te_hist_now_i }
+			te_history_prune_samples = yes
+			te_history_refresh_since = yes
+		}
+	}
+}
+
+# Evict the oldest sample once the list is over cap. Exactly one sample is
+# added per month, so removing one per creation keeps the list at the cap.
+# `order_by` rather than raw list position, so eviction is correct however the
+# engine orders the underlying list.
+# Scope: country
+te_history_prune_samples = {
+	if = {
+		# `any_in_*list = { count >= N }` rather than `*variable_list_size`: in 1.14
+		# the engine rejects that trigger's documented `target` key at load
+		# ("Failed to read 'target'"), so the limit never passed. N is cap + 1.
+		limit = { any_in_list = { variable = te_hist count >= 121 has_tag = te_hist_sample } } # te_history_sample_cap + 1
+		ordered_in_list = {
+			variable = te_hist
+			position = 0
+			order_by = te_history_sample_order
+			save_scope_as = te_hist_evicted
+		}
+		if = {
+			limit = { exists = scope:te_hist_evicted }
+			remove_list_variable = { name = te_hist target = scope:te_hist_evicted }
+			scope:te_hist_evicted = { destroy_container = yes }
+		}
+	}
+}
+
+# Cache the oldest retained sample's date for the "History available since"
+# line, so the GUI reads two plain country variables instead of chasing a
+# scope variable into a container.
+# Scope: country
+te_history_refresh_since = {
+	ordered_in_list = {
+		variable = te_hist
+		position = 0
+		order_by = te_history_sample_order
+		save_scope_as = te_hist_oldest
+	}
+	if = {
+		limit = { exists = scope:te_hist_oldest }
+		set_variable = { name = te_hist_since_y value = scope:te_hist_oldest.var:te_hist_y }
+		set_variable = { name = te_hist_since_mo value = scope:te_hist_oldest.var:te_hist_mo }
+	}
+}
+
+# Record one metric for the current month.
+# Parameters: $METRIC$ = short metric name (becomes te_hist_v_$METRIC$ and is
+#                        what the chart instance reads)
+#             $VALUE$  = the value, evaluated in country scope (a `var:`
+#                        reference or a script value)
+# Scope: country
+te_history_record_sample = {
+	hidden_effect = {
+		if = {
+			limit = { te_history_country_is_tracked = yes }
+			set_variable = { name = te_hist_stage value = $VALUE$ }
+			te_history_touch_month = yes
+			if = {
+				limit = { has_variable = te_hist_cur }
+				save_scope_as = te_hist_writer
+				var:te_hist_cur = {
+					set_variable = { name = te_hist_v_$METRIC$ value = scope:te_hist_writer.var:te_hist_stage }
+				}
+			}
+			remove_variable = te_hist_stage # REVIEWED 2026-09-17: staging slot for a cross-scope copy, not a modifier multiplier
+		}
+	}
+}
+
+# Record that something worth explaining happened this month. The chart draws
+# one icon on that month's bar; the tooltip text comes from
+# common/scripted_guis/te_history_scripted_gui.txt, which branches on the
+# te_hist_mk_$MARK$ variable this writes.
+# Parameters: $MARK$ = marker key, unique per describable event
+# Scope: country
+te_history_record_marker = {
+	hidden_effect = {
+		if = {
+			limit = { te_history_country_is_tracked = yes }
+			te_history_touch_month = yes
+			if = {
+				limit = { has_variable = te_hist_cur }
+				var:te_hist_cur = {
+					if = {
+						limit = { NOT = { has_variable = te_hist_mk } }
+						set_variable = { name = te_hist_mk value = 0 }
+					}
+					change_variable = { name = te_hist_mk add = 1 }
+					set_variable = { name = te_hist_mk_$MARK$ value = 1 }
+				}
+			}
+		}
+	}
+}
+
+
+# ============================================================================
+# GLOBAL SERIES
+# ============================================================================
+# Same store, stored once for the whole world instead of per country — for
+# series like UN global authority that are not a property of any one country.
+# The containers carry the extra `te_hist_global` tag and have no parent
+# (vanilla-free but proven in this mod: un_vote_effects.txt creates parentless
+# resolution containers). The references live in global variables:
+#
+#   te_hist_g       variable list of global sample containers
+#   te_hist_g_cur / te_hist_g_cur_i / te_hist_g_now_i   as above
+#   te_hist_g_since_y / te_hist_g_since_mo
+#
+# No eligibility trigger applies; the caller decides when the global series is
+# live (e.g. only once the UN exists).
+# ============================================================================
+
+# Scope: any
+te_history_global_touch_month = {
+	set_global_variable = { name = te_hist_g_now_i value = te_history_month_index }
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_global_variable = te_hist_g_cur }
+				NOT = { has_global_variable = te_hist_g_cur_i }
+				NOT = { global_var:te_hist_g_cur_i = global_var:te_hist_g_now_i }
+			}
+		}
+		create_container = {
+			tags = { te_hist te_hist_sample te_hist_global }
+			save_scope_as = te_hist_g_new
+		}
+		if = {
+			limit = { exists = scope:te_hist_g_new }
+			scope:te_hist_g_new = {
+				set_variable = { name = te_hist_i value = global_var:te_hist_g_now_i }
+				set_variable = { name = te_hist_y value = te_history_current_year }
+				set_variable = { name = te_hist_mo value = te_history_current_month }
+			}
+			add_to_global_variable_list = { name = te_hist_g target = scope:te_hist_g_new }
+			set_global_variable = { name = te_hist_g_cur value = scope:te_hist_g_new }
+			set_global_variable = { name = te_hist_g_cur_i value = global_var:te_hist_g_now_i }
+			te_history_prune_global_samples = yes
+			te_history_refresh_global_since = yes
+		}
+	}
+}
+
+# Scope: any
+te_history_prune_global_samples = {
+	if = {
+		limit = { any_in_global_list = { variable = te_hist_g count >= 121 has_tag = te_hist_sample } } # te_history_sample_cap + 1; see te_history_prune_samples
+		ordered_in_global_list = {
+			variable = te_hist_g
+			position = 0
+			order_by = te_history_sample_order
+			save_scope_as = te_hist_g_evicted
+		}
+		if = {
+			limit = { exists = scope:te_hist_g_evicted }
+			remove_list_global_variable = { name = te_hist_g target = scope:te_hist_g_evicted }
+			scope:te_hist_g_evicted = { destroy_container = yes }
+		}
+	}
+}
+
+# Scope: any
+te_history_refresh_global_since = {
+	ordered_in_global_list = {
+		variable = te_hist_g
+		position = 0
+		order_by = te_history_sample_order
+		save_scope_as = te_hist_g_oldest
+	}
+	if = {
+		limit = { exists = scope:te_hist_g_oldest }
+		set_global_variable = { name = te_hist_g_since_y value = scope:te_hist_g_oldest.var:te_hist_y }
+		set_global_variable = { name = te_hist_g_since_mo value = scope:te_hist_g_oldest.var:te_hist_mo }
+	}
+}
+
+# Parameters: $METRIC$ / $VALUE$ as te_history_record_sample.
+# Scope: any
+te_history_record_global_sample = {
+	hidden_effect = {
+		set_global_variable = { name = te_hist_g_stage value = $VALUE$ }
+		te_history_global_touch_month = yes
+		if = {
+			limit = { has_global_variable = te_hist_g_cur }
+			global_var:te_hist_g_cur = {
+				set_variable = { name = te_hist_v_$METRIC$ value = global_var:te_hist_g_stage }
+			}
+		}
+		remove_global_variable = te_hist_g_stage
+	}
+}
+
+# Parameters: $MARK$ as te_history_record_marker.
+# Scope: any
+te_history_record_global_marker = {
+	hidden_effect = {
+		te_history_global_touch_month = yes
+		if = {
+			limit = { has_global_variable = te_hist_g_cur }
+			global_var:te_hist_g_cur = {
+				if = {
+					limit = { NOT = { has_variable = te_hist_mk } }
+					set_variable = { name = te_hist_mk value = 0 }
+				}
+				change_variable = { name = te_hist_mk add = 1 }
+				set_variable = { name = te_hist_mk_$MARK$ value = 1 }
+			}
+		}
+	}
+}

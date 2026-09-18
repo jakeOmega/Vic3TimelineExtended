@@ -62,6 +62,16 @@ Areas:
 
 Editing rules: change a policy's cost, eligibility or effect in the **helper**, not in the button or the scripted GUI. Never delete a `scripted_button = …` line from `je_banking.txt` — those `ai_chance` blocks are the AI's only path to banking policy.
 
+### History Charts (journal-entry widget)
+A third custom widget in `custom_widget_container_3`, collapsed by default.
+
+- **File:** `gui/journal_entry_widgets/banking_history_widget.gui` (chart types: `gui/journal_entry_widgets/te_history_chart.gui`)
+- **Series:** cycle value and bubble pressure (0–100 indices) and momentum (signed monthly delta) — three separate charts, because the units differ.
+- **Sampling:** `te_history_record_banking_samples` from the JE's own `on_monthly_pulse`, after `banking_cycle_check_and_execute_crash`. Gated on `has_game_rule = banking_system_enabled` + `has_journal_entry = je_banking_cycle` and on `te_history_country_is_tracked` (player, or major power and above).
+- **Markers:** policy adopted / withdrawn, recorded inside each `banking_effect_<button>` helper so the AI's buttons and the dashboard both hit it; plus `crash` and `crash_contagion` from the crash subsystem. Hovering a bar shows the date, the reading and — via `te_history_marker_tooltip` — each marker's own policy name, description and static-modifier effect list.
+- **Ranges:** 1 / 5 / 10 years, held in the GUI variable system only. Retention is 120 monthly samples.
+- **No gameplay effect.** Recording is additive and `hidden_effect`-wrapped; the widget's only clicks write GUI variables. Full data model, caps and the "how to add a series" recipe: `docs/systems/mod_systems.md` → **History Store and Charts**.
+
 **Budget system:** All tools spend from a shared `country_banking_intervention_max_add` pool. The JE's `progress_desc` shows the economy-appropriate label:
 - Market → "Free Intervention Points"
 - Command Economy → "Free Planning Budget"
