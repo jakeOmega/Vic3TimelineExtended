@@ -132,6 +132,11 @@ types banking_dashboard_widget_types
 ### ==========================================================================
 flowcontainer = {
 	name = "widget_je_banking_conditions"
+
+	# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
+	# country whose entry has not activated yet and therefore has none of the
+	# cycle variables. Draw nothing until the journal entry is running.
+	visible = "[JournalEntry.IsActive]"
 	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
@@ -248,6 +253,11 @@ flowcontainer = {
 ### ==========================================================================
 flowcontainer = {
 	name = "widget_je_banking_policies"
+
+	# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
+	# country whose entry has not activated yet and therefore has none of the
+	# cycle variables. Draw nothing until the journal entry is running.
+	visible = "[JournalEntry.IsActive]"
 	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
