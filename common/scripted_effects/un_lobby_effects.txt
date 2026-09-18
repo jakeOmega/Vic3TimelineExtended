@@ -1,0 +1,244 @@
+﻿# ============================================================================
+# RESOLUTION LOBBYING — "secure a commitment" (proof of concept)
+# ============================================================================
+# ONE lobbying action, and nothing else. While a resolution is open, its
+# PROPOSER may ask one other member to commit to voting with it. If that member
+# accepts, it is committed, and the proposer immediately takes on a vanilla
+# diplomatic obligation toward it — the engine's own "I owe you a favour",
+# redeemable through vanilla's redeem_obligation action and already understood
+# by the AI and by the diplomacy UI.
+#
+#   the deal      a pledged YES vote  <->  an obligation owed to the pledger
+#   the vehicle   common/diplomatic_actions/un_lobbying.txt, a pactless
+#                 requires_approval = yes action, so a HUMAN recipient gets the
+#                 native accept/decline request and the native itemised
+#                 acceptance tooltip
+#   the settlement  un_lobby_settle_commitment below, called the moment the
+#                 recipient's vote is booked, exactly once per commitment
+#
+# ---------------------------------------------------------------------------
+# STATE — ALL OF IT ON THE RESOLUTION CONTAINER
+# ---------------------------------------------------------------------------
+# Nothing is copied onto a country. The resolution already outlives an annexed
+# proposer, is already archived by un_resolution_archive and already destroyed
+# by its eviction step, so the lobbying record is archived, shown in history
+# and pruned WITH the resolution for free.
+#
+#   lists   un_res_lobbied         every member approached on this resolution,
+#                                  accepted or declined. The "one attempt per
+#                                  (resolution, recipient)" rule.
+#           un_res_committed_yes   PENDING commitments. A recipient is taken
+#                                  off this list the instant its vote is
+#                                  booked, so membership means "still owes a
+#                                  vote", never "once promised one".
+#           un_res_commit_kept     settled: voted the way it pledged
+#           un_res_commit_broken   settled: did not
+#   vars    un_res_commit_count    commitments ACCEPTED, ever. Only ever goes
+#                                  up; it is what un_lobby_under_cap reads, so
+#                                  a slot cannot be recycled by lobbying
+#                                  somebody who then votes early.
+#           un_res_commit_pending  unsettled commitments, for the chamber's
+#                                  tally line. A variable rather than a list
+#                                  size because loc can print a variable
+#                                  ([THIS.Var('x').GetValue]) and cannot print
+#                                  a list size.
+#
+# WHY LISTS AND NOT ONE CONTAINER PER COMMITMENT. A commitment container would
+# have to be destroyed when its resolution is evicted from un_resolution_history
+# (un_vote_effects.txt: `scope:un_res_evicted = { destroy_container = yes }`),
+# which destroys the resolution and nothing else — so every commitment would
+# leak unless each one were created with `parent = <the resolution>` and that
+# cascade verified in game, which cannot be verified here. Four lists and two
+# counters on the resolution itself cannot leak by construction, need no
+# lifecycle of their own, and carry everything this POC records. If lobbying
+# ever grows a per-commitment payload (a sum of money, a dated pledge, an
+# opponent's counter-offer), a parented container is the right next step.
+#
+# WHY THE PROPOSER ONLY. v1 lets exactly one country lobby — the resolution's
+# proposer — for exactly one side, YES. Opposition lobbying is not symmetric in
+# the way it looks: there is no single "opponent" to hold the obligation, no
+# obvious cap holder, and no proposer-shaped seat in the chamber display for a
+# second lobbyist. There is therefore no un_res_committed_no list; if opponent
+# lobbying is ever added, it gets its own mirrored set of lists and its own cap.
+#
+# OLD SAVES. Nothing here assumes any of the lists or counters exist. A
+# resolution already in session when the mod updated simply has no lobbying
+# state: every read is guarded (common/scripted_triggers/un_lobby_triggers.txt),
+# the chamber's Commitments block stays hidden, and the vote hook's trigger is
+# false for everyone.
+# ============================================================================
+
+# Book the approach itself, whatever the answer was. Called from BOTH the
+# accept and the decline branch of the diplomatic action, which is what makes
+# "one attempt per (resolution, recipient)" true for a refusal as well as for a
+# deal — you get one ask, and a no is an answer.
+#
+# A request the recipient never answers at all (it expires unanswered) records
+# nothing and may be made again. That is the engine's behaviour, not a choice
+# made here: no effect of ours runs on an expiry.
+# Expects: ROOT = the lobbyist, scope:target_country = the recipient.
+un_lobby_record_attempt = {
+	scope:target_country = { save_scope_as = un_lobby_recipient }
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = {
+				has_tag = un_res_voting
+				NOT = { un_lobby_in_list = { LIST = un_res_lobbied COUNTRY = scope:un_lobby_recipient } }
+			}
+			add_to_variable_list = { name = un_res_lobbied target = scope:un_lobby_recipient }
+		}
+	}
+}
+
+# The recipient said yes: record the commitment and hand over the obligation.
+#
+# Every precondition is re-checked here against the LIVE resolution rather than
+# trusted from the action's `possible`. A human recipient can hold the request
+# open for as long as the engine lets it stand, and in that time it may have
+# voted, the resolution may have closed or lapsed, the cap may have filled from
+# another accepted request, or the proposer may have been annexed. The engine
+# does not re-run `possible` when the answer finally arrives, so this is the
+# check that counts.
+#
+# The commitment and the obligation are created in the SAME `if`, so the
+# recipient can never end up committed without the lobbyist paying, or the
+# lobbyist paying for a commitment that was not recorded.
+#
+# Residual edge, documented rather than fixed: if the same proposer opens a
+# SECOND resolution while an unanswered request from the first is still
+# outstanding, a late acceptance binds the recipient to the new resolution —
+# global_var:un_active_resolution is read at answer time. It needs a request to
+# survive a full 12-month vote plus the gap to the next proposal, and the deal
+# struck is still a real one (open resolution, honest lists, obligation paid),
+# just not the one the recipient was asked about.
+# Expects: ROOT = the lobbyist, scope:target_country = the recipient.
+un_lobby_accept_commitment = {
+	save_scope_as = un_lobby_lobbyist
+	scope:target_country = { save_scope_as = un_lobby_recipient }
+	un_lobby_record_attempt = yes
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = {
+				un_lobby_deal_available = {
+					LOBBYIST = scope:un_lobby_lobbyist
+					COUNTRY = scope:un_lobby_recipient
+				}
+			}
+			add_to_variable_list = { name = un_res_committed_yes target = scope:un_lobby_recipient }
+			if = {
+				limit = { NOT = { has_variable = un_res_commit_count } }
+				set_variable = { name = un_res_commit_count value = 0 }
+			}
+			change_variable = { name = un_res_commit_count add = 1 }
+			if = {
+				limit = { NOT = { has_variable = un_res_commit_pending } }
+				set_variable = { name = un_res_commit_pending value = 0 }
+			}
+			change_variable = { name = un_res_commit_pending add = 1 }
+			# The price, paid up front and in full. set_owes_obligation_to is
+			# scoped to the country that OWES (vanilla: common/decisions/
+			# france_savoy.txt:97, common/history/diplomacy/00_favors.txt:3).
+			scope:un_lobby_lobbyist = {
+				set_owes_obligation_to = {
+					country = scope:un_lobby_recipient
+					setting = yes
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# THE SINGLE SETTLEMENT SITE
+# ============================================================================
+# Called from un_resolution_record_vote and un_resolution_record_veto
+# (common/scripted_effects/un_vote_effects.txt) — between them, the only two
+# places in the mod that ever book a vote onto a resolution — immediately after
+# the vote goes onto its list and inside the same `has_tag = un_res_voting`
+# guard, so a ballot cast after the vote closed settles nothing.
+#
+# IT CANNOT SETTLE THE SAME COMMITMENT TWICE. Everything below is inside one
+# `if` whose condition is "the voter is on the PENDING list", and the first
+# statement inside it removes the voter from that list. Re-entry on any path —
+# a second call from the same option, a queued un_vote.1 answered twice, a veto
+# followed by a vote — finds the condition false and does nothing. It cannot
+# settle a commitment that was never made either: a voter who is not on the
+# pending list falls straight through.
+#
+# A commitment left pending when the resolution is decided, lapses, or loses
+# its recipient is simply never settled: no site fires, nothing is paid either
+# way, and the chamber shows it as unsettled. That is the "void, no penalty"
+# case, and it costs no extra code because there is no extra site.
+#
+# A VETO BY A COMMITTED PERMANENT MEMBER IS A BROKEN COMMITMENT. The veto right
+# itself is never bound — the option is offered to every permanent member on
+# every binding topic regardless of what it has pledged — but a veto is recorded
+# as a NO vote (un_resolution_record_veto), and a member that pledged its YES
+# and then killed the resolution outright has defeated the whole purpose of the
+# pledge. It settles as broken, at the same site, for the same cost.
+#
+# WHICH WAY THEY VOTED is read back off un_res_yes, which the caller wrote one
+# line earlier. Reading a variable back inside the same effect block is the
+# established shape in this system — un_standing_clamp (un_standing_effects.txt)
+# reads var:un_standing immediately after un_standing_gain's change_variable —
+# and it is only add_modifier / remove_modifier whose results are deferred
+# (docs/guides/scripting_best_practices.md).
+# Expects: scope:un_res_voter = the country whose vote has just been booked.
+# Scope: resolution container (still tagged un_res_voting)
+un_lobby_settle_commitment = {
+	if = {
+		limit = { un_lobby_in_list = { LIST = un_res_committed_yes COUNTRY = scope:un_res_voter } }
+		remove_list_variable = { name = un_res_committed_yes target = scope:un_res_voter }
+		if = {
+			limit = { has_variable = un_res_commit_pending }
+			change_variable = { name = un_res_commit_pending add = -1 }
+		}
+		# The other party. Guarded because a proposer annexed mid-vote leaves a
+		# variable that no longer resolves — the recipient's own record still
+		# settles, only the bilateral half is skipped.
+		var:un_res_proposer ?= { save_temporary_scope_as = un_lobby_settle_lobbyist }
+		if = {
+			limit = { un_lobby_in_list = { LIST = un_res_yes COUNTRY = scope:un_res_voter } }
+			add_to_variable_list = { name = un_res_commit_kept target = scope:un_res_voter }
+			scope:un_res_voter = {
+				un_standing_gain = { AMOUNT = un_standing_commitment_kept_gain REASON = 30 }
+				if = {
+					limit = { exists = scope:un_lobby_settle_lobbyist }
+					change_relations = {
+						country = scope:un_lobby_settle_lobbyist
+						value = un_standing_commitment_kept_relations
+					}
+				}
+			}
+			# The obligation stands. It was the price of the pledge, the pledge
+			# was delivered, and the recipient redeems it whenever it likes
+			# through vanilla's own redeem_obligation action.
+		}
+		else = {
+			add_to_variable_list = { name = un_res_commit_broken target = scope:un_res_voter }
+			scope:un_res_voter = {
+				un_standing_loss = { AMOUNT = un_standing_commitment_broken_loss REASON = 31 }
+				if = {
+					limit = { exists = scope:un_lobby_settle_lobbyist }
+					change_relations = {
+						country = scope:un_lobby_settle_lobbyist
+						value = un_standing_commitment_broken_relations
+					}
+				}
+			}
+			# The lobbyist bought nothing, so it stops paying: the obligation it
+			# took on is struck off. `setting = no` is a no-op if the recipient
+			# has already redeemed it, which is the behaviour we want — a favour
+			# already called in cannot be un-called.
+			if = {
+				limit = { exists = scope:un_lobby_settle_lobbyist }
+				scope:un_lobby_settle_lobbyist = {
+					set_owes_obligation_to = {
+						country = scope:un_res_voter
+						setting = no
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,107 @@
+﻿# ============================================================================
+# UN TEST HELPERS — console only
+# ============================================================================
+# Nothing in the mod calls these. They exist so the UN chamber, mandates,
+# standing and lobbying can be exercised in minutes instead of decades. Vic3's
+# console has no `effect` command, so they are reached through a console-fired
+# event (events/te_debug_un_events.txt):
+#
+#   event te_debug_un.1
+#
+# They skip votes, costs and eligibility on purpose, so never call them from
+# gameplay script.
+# ============================================================================
+
+# Found the UN if nobody has, and seat the player plus every great and major
+# power as members (the first five great powers, player included, as permanent
+# members). Safe to run twice: run it again if the chamber still says
+# "non-member", which means the journal entry had not activated yet.
+# Scope: country
+te_debug_un_setup = {
+	if = {
+		limit = { NOT = { has_global_variable = un_founded } }
+		set_global_variable = un_founded
+		set_global_variable = { name = un_hq_country value = ROOT }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = un_authority } }
+		set_global_variable = { name = un_authority value = 80 }
+	}
+	te_debug_un_seat_member = yes
+	every_country = {
+		limit = {
+			NOT = { this = ROOT }
+			country_rank >= rank_value:major_power
+			is_subject = no
+		}
+		te_debug_un_seat_member = yes
+	}
+}
+
+# Scope: country
+te_debug_un_seat_member = {
+	if = {
+		limit = { NOT = { has_journal_entry = je_united_nations } }
+		add_journal_entry = { type = je_united_nations }
+	}
+	je:je_united_nations ?= {
+		if = {
+			limit = { NOT = { has_modifier = un_member_modifier } }
+			add_modifier = { name = un_member_modifier }
+		}
+	}
+	if = {
+		limit = {
+			country_rank >= rank_value:great_power
+			un_permanent_seat_count < 5
+			je:je_united_nations ?= { NOT = { has_modifier = un_permanent_member_modifier } }
+		}
+		je:je_united_nations ?= {
+			add_modifier = { name = un_security_council_modifier }
+			add_modifier = { name = un_permanent_member_modifier }
+		}
+	}
+}
+
+# Hand the player a live mandate without a vote: claims $REGION$ for the player
+# (the war goal's own `valid` needs the claim), then creates the same container
+# un_mandate_create builds. $TARGET$ must own a state in $REGION$ and the player
+# must be a UN member, or the monthly sweep voids the mandate.
+# Parameters: $TARGET$ = c:TAG, $REGION$ = s:STATE_X
+# Scope: country
+te_debug_un_grant_mandate = {
+	save_scope_as = te_debug_mnd_actor
+	$REGION$ = { add_claim = scope:te_debug_mnd_actor }
+	if = {
+		limit = { NOT = { has_global_variable = un_mandate_seq } }
+		set_global_variable = { name = un_mandate_seq value = 0 }
+	}
+	change_global_variable = { name = un_mandate_seq add = 1 }
+	create_container = {
+		tags = { un_mandate un_mandate_active }
+		save_scope_as = te_debug_mnd
+	}
+	if = {
+		limit = { exists = scope:te_debug_mnd }
+		scope:te_debug_mnd = {
+			set_variable = { name = un_mnd_seq value = global_var:un_mandate_seq }
+			set_variable = { name = un_mnd_actor value = scope:te_debug_mnd_actor }
+			set_variable = { name = un_mnd_beneficiary value = scope:te_debug_mnd_actor }
+			set_variable = { name = un_mnd_target value = $TARGET$ }
+			set_variable = { name = un_mnd_region value = $REGION$ }
+			set_variable = { name = un_mnd_months value = 0 }
+			set_variable = { name = un_mnd_closed_months value = 0 }
+		}
+		add_to_global_variable_list = { name = un_mandate_registry target = scope:te_debug_mnd }
+		set_variable = { name = un_mandate_current value = scope:te_debug_mnd }
+	}
+}
+
+# Set the player's UN Standing directly, to look at a tier without earning it.
+# The tier modifier swaps on the next monthly pulse. Deliberately bypasses
+# un_standing_gain / un_standing_loss — test helper only.
+# Parameters: $VALUE$ = 0-100
+# Scope: country
+te_debug_un_set_standing = {
+	set_variable = { name = un_standing value = $VALUE$ } # REVIEWED 2026-09-18: console-only test helper; the gameplay writers are un_standing_gain / un_standing_loss
+}

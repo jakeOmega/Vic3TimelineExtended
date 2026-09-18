@@ -1,0 +1,68 @@
+﻿# ============================================================================
+# UN TEST CONSOLE — fired only from the console: `event te_debug_un.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. It calls the
+# console-only helpers in common/scripted_effects/te_debug_un_effects.txt so
+# the chamber, mandates, standing and lobbying can be tried in minutes.
+# ============================================================================
+namespace = te_debug_un
+
+te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_un.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_un.1.t
+	desc = te_debug_un.1.d
+	flavor = te_debug_un.1.f
+
+	# Found the UN; seat the player and every great and major power.
+	option = {
+		name = te_debug_un.1.a
+		default_option = yes
+		te_debug_un_setup = yes
+	}
+
+	# A mandate against a neighbour, for one of its states bordering us.
+	option = {
+		name = te_debug_un.1.b
+		trigger = {
+			any_neighbouring_state = { NOT = { owner = ROOT } }
+		}
+		random_neighbouring_state = {
+			limit = { NOT = { owner = ROOT } }
+			save_scope_as = te_debug_mnd_state
+			owner = { save_scope_as = te_debug_mnd_target }
+		}
+		if = {
+			limit = {
+				exists = scope:te_debug_mnd_state
+				exists = scope:te_debug_mnd_target
+			}
+			te_debug_un_grant_mandate = {
+				TARGET = scope:te_debug_mnd_target
+				REGION = scope:te_debug_mnd_state.state_region
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_un.1.c
+		te_debug_un_set_standing = { VALUE = 85 }
+	}
+
+	option = {
+		name = te_debug_un.1.e
+		te_debug_un_set_standing = { VALUE = 10 }
+	}
+
+	option = {
+		name = te_debug_un.1.z
+	}
+}

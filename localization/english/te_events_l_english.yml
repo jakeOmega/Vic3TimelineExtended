@@ -4507,3 +4507,12 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+# TE_DEBUG_UN
+ te_debug_un.1.a:0 "Found the United Nations and seat the powers"
+ te_debug_un.1.b:0 "Grant me a mandate against a neighbour"
+ te_debug_un.1.c:0 "Set my standing to Exemplary (85)"
+ te_debug_un.1.d:0 "Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\n\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick."
+ te_debug_un.1.e:0 "Set my standing to Disgraced (10)"
+ te_debug_un.1.f:0 "'Is this in order?'\n\n'Nothing about this is in order.'"
+ te_debug_un.1.t:0 "UN Test Console"
+ te_debug_un.1.z:0 "Close"

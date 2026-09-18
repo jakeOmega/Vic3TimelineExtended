@@ -122,6 +122,18 @@ un_res_margin = {
 # Also written as the literal 26 (cap + 1) in un_resolution_archive — change both.
 un_resolution_history_cap = 25
 
+# ---- Resolution lobbying ----
+
+# How many vote commitments one resolution's proposer may secure, ever. Counted
+# against un_res_commit_count on the resolution container, which only ever goes
+# up — a commitment that has already been settled still occupies a slot, so the
+# cap cannot be recycled by lobbying somebody who then votes early.
+#
+# Deliberately tiny. Two commitments cannot carry a resolution on their own in
+# an Assembly of any size; they are there to swing a vote the proposer has
+# already nearly won, at the price of two standing diplomatic obligations.
+un_lobby_commitment_cap = 2
+
 # Eviction order for un_resolution_history: highest for the oldest resolution.
 # Scope: resolution container
 un_resolution_age_order = {

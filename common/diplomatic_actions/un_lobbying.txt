@@ -1,0 +1,306 @@
+﻿# ============================================================================
+# RESOLUTION LOBBYING — "Seek a Vote Commitment"
+# ============================================================================
+# The vehicle for the one lobbying action in the proof of concept. A diplomatic
+# action rather than a journal-entry button, for three reasons that are all
+# engine capabilities rather than preferences:
+#
+#   1. A scripted button cannot prompt for a free choice of country. A
+#      diplomatic action is targeted through the ordinary diplomacy UI, so the
+#      proposer picks whichever member it wants.
+#   2. `requires_approval = yes` gives a HUMAN recipient the engine's own
+#      accept/decline request — the design requirement "human-controlled
+#      recipients receive a choice" — with no popup event of our own.
+#   3. The `ai.accept_score` block is itemised: every `add` carries a `desc`,
+#      and the engine renders the whole list as the acceptance tooltip. That is
+#      the requirement "display the main reasons for support or opposition
+#      without guaranteeing an uncertain vote", for free and always in step
+#      with the numbers the AI actually uses.
+#
+# Structure copied from vanilla's pactless, approval-requiring action
+# game/common/diplomatic_actions/03_violate_sovereignty.txt (no `pact` block =
+# no pact is created, per game/common/diplomatic_actions/diplomatic_action.md).
+# Conventions (groups, custom_tooltip'd `possible` clauses, loc key families)
+# follow the mod's own nine covert-warfare actions in
+# common/diplomatic_actions/covert_operations.txt.
+#
+# SCOPES, which flip between blocks and are easy to get wrong:
+#   selectable                  ROOT = us, no target at all
+#   potential / possible        ROOT = the lobbyist, scope:target_country = the
+#                               prospective recipient
+#   accept_effect/decline_effect  same as possible
+#   ai.will_propose             ROOT = the AI lobbyist, scope:target_country =
+#                               the recipient
+#   ai.accept_score             ROOT = the AI RECIPIENT, scope:actor = the
+#                               lobbyist (diplomatic_action.md: "the AI country
+#                               is always root")
+#
+# THE 30-DAY WINDOW. un_vote.1 reaches every other member 30 days after the
+# resolution opens, and an AI answers it on arrival — so an AI recipient can
+# only be lobbied inside those 30 days, after which it has voted and
+# `un_lobby_has_voted` closes the door. A human recipient can be lobbied right
+# up until it answers its own popup. This is a property of the existing vote
+# timeline, not something this action changes.
+# ============================================================================
+
+un_secure_commitment_action = {
+	groups = {
+		general
+	}
+
+	requires_approval = yes
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = no
+	should_notify_third_parties = no
+
+	# The engine's own "spend an obligation the target owes us to force this
+	# through" is switched OFF. This deal is the mirror of that — WE take on the
+	# obligation — and letting both run at once would let a proposer cash in one
+	# favour to buy another, which is not a trade anybody could read.
+	can_use_obligations = no # REVIEWED 2026-09-18: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:8). effect_trigger_validity_audit has no schema for this entity type.
+
+	# Proposer-side only: evaluated once for us, not per target, so it is the
+	# right place for the structural gates.
+	selectable = {
+		has_game_rule = united_nations_enabled
+		has_global_variable = un_active_resolution
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		global_var:un_active_resolution ?= {
+			has_tag = un_res_voting
+			var:un_res_proposer ?= ROOT
+		}
+	}
+
+	potential = {
+		NOT = { is_country_type = decentralized }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+	}
+
+	# Every clause carries its own custom_tooltip so a greyed-out action says
+	# which rule it is failing, the way the covert-warfare actions do.
+	possible = {
+		custom_tooltip = {
+			text = un_lobby_not_the_target_tt
+			global_var:un_active_resolution ?= {
+				NOT = {
+					AND = {
+						has_variable = un_res_target
+						var:un_res_target ?= scope:target_country
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_has_not_voted_tt
+			global_var:un_active_resolution ?= {
+				NOT = { un_lobby_has_voted = { COUNTRY = scope:target_country } }
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_not_yet_approached_tt
+			global_var:un_active_resolution ?= {
+				NOT = { un_lobby_in_list = { LIST = un_res_lobbied COUNTRY = scope:target_country } }
+			}
+		}
+		custom_tooltip = {
+			text = un_lobby_under_cap_tt
+			global_var:un_active_resolution ?= { un_lobby_under_cap = yes }
+		}
+		custom_tooltip = {
+			text = un_lobby_no_obligation_owed_tt
+			NOT = { owes_obligation_to = scope:target_country }
+		}
+		is_revolutionary = no
+		scope:target_country = { is_revolutionary = no }
+	}
+
+	accept_effect = {
+		custom_tooltip = {
+			text = un_lobby_commitment_struck_tt
+		}
+		un_lobby_accept_commitment = yes
+	}
+
+	decline_effect = { # REVIEWED 2026-09-18: diplomatic-action field, not an effect/trigger — vanilla violate_sovereignty uses it (game/common/diplomatic_actions/03_violate_sovereignty.txt:66). effect_trigger_validity_audit has no schema for this entity type.
+		# The ask is still booked: one approach per recipient per resolution,
+		# and a refusal is an answer.
+		un_lobby_record_attempt = yes
+	}
+
+	ai = {
+		# Almost never. An obligation — above all a great power's — is one of the
+		# strongest things a country can hand another, so the AI only offers one
+		# for a resolution it has a real stake in: its own military mandate, or a
+		# binding resolution aimed at one of its rivals. For everything else it
+		# has tabled the chance is zero, and even then it is a rare move.
+		evaluation_chance = {
+			value = 0
+
+			if = {
+				limit = {
+					has_global_variable = un_active_resolution
+					global_var:un_active_resolution ?= {
+						has_tag = un_res_voting
+						var:un_res_proposer ?= ROOT
+						OR = {
+							has_tag = un_topic_military_mandate
+							AND = {
+								un_resolution_is_binding = yes
+								has_variable = un_res_target
+								var:un_res_target ?= {
+									has_diplomatic_pact = { who = ROOT type = rivalry }
+								}
+							}
+						}
+					}
+				}
+				add = 0.02
+			}
+		}
+
+		# Only toward a plausible recipient. No is_ai test anywhere: these are
+		# the same rules a human proposer plays by, they just also decide
+		# whether the AI bothers.
+		will_propose = {
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+			has_diplomatic_relevance = scope:target_country
+			NOT = { scope:target_country.relations:root < relations_threshold:cordial }
+		}
+
+		propose_score = {
+			value = 10
+		}
+
+		# ROOT is the RECIPIENT here and scope:actor is the lobbyist. Positive
+		# means accept. Six factors, each of which is a line in the acceptance
+		# tooltip the recipient sees.
+		accept_score = {
+			value = 0
+
+			# Pledging a vote away in advance is a real cost: the deal starts
+			# under water and the obligation has to lift it out.
+			add = {
+				desc = "UN_LOBBY_ACCEPT_BASE"
+				value = -20
+			}
+
+			# What is being offered. The engine's own diplomatic obligation,
+			# redeemable at a moment of our choosing.
+			add = {
+				desc = "UN_LOBBY_ACCEPT_OBLIGATION"
+				value = 40
+			}
+
+			# Relations with the country asking.
+			add = {
+				desc = "UN_LOBBY_ACCEPT_RELATIONS"
+				if = {
+					limit = { "relations(scope:actor)" < relations_threshold:cordial }
+					value = -30
+				}
+				if = {
+					limit = {
+						"relations(scope:actor)" >= relations_threshold:cordial
+						"relations(scope:actor)" < relations_threshold:amicable
+					}
+					value = 10
+				}
+				if = {
+					limit = {
+						"relations(scope:actor)" >= relations_threshold:amicable
+						"relations(scope:actor)" < relations_threshold:friendly
+					}
+					value = 25
+				}
+				if = {
+					limit = { "relations(scope:actor)" >= relations_threshold:friendly }
+					value = 40
+				}
+			}
+
+			# A rival does not do favours.
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:actor type = rivalry } }
+				add = {
+					desc = "UN_LOBBY_ACCEPT_RIVALRY"
+					value = -60
+				}
+			}
+
+			# Our ties to the country the resolution is aimed at. Written from
+			# the target's side with ROOT as the other end, because these three
+			# relationships are symmetric and that avoids chaining a scope
+			# through a container variable inside a script value.
+			if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						var:un_res_target ?= { has_treaty_alliance_with = { TARGET = ROOT } }
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_TARGET_ALLY"
+					value = -60
+				}
+			}
+			else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						var:un_res_target ?= { is_in_same_power_bloc = ROOT }
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_TARGET_BLOC"
+					value = -30
+				}
+			}
+			else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						var:un_res_target ?= { has_diplomatic_pact = { who = ROOT type = rivalry } }
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_TARGET_RIVAL"
+					value = 25
+				}
+			}
+
+			# The asker's record in the organisation. The same tier triggers the
+			# Assembly's own vote lean reads, so a member that has built a record
+			# finds its requests easier to place — and a disgraced one finds them
+			# harder.
+			if = {
+				limit = { scope:actor = { un_standing_tier_exemplary = yes } }
+				add = {
+					desc = "UN_LOBBY_ACCEPT_STANDING"
+					value = 15
+				}
+			}
+			else_if = {
+				limit = { scope:actor = { un_standing_tier_respected = yes } }
+				add = {
+					desc = "UN_LOBBY_ACCEPT_STANDING"
+					value = 8
+				}
+			}
+			else_if = {
+				limit = { scope:actor = { un_standing_tier_poor = yes } }
+				add = {
+					desc = "UN_LOBBY_ACCEPT_STANDING"
+					value = -8
+				}
+			}
+			else_if = {
+				limit = { scope:actor = { un_standing_tier_disgraced = yes } }
+				add = {
+					desc = "UN_LOBBY_ACCEPT_STANDING"
+					value = -15
+				}
+			}
+		}
+	}
+}

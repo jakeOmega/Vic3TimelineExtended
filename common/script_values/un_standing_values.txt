@@ -13,6 +13,9 @@
 #     Only losses name a figure; gains are stated without one on purpose,
 #     because diminishing returns mean the delivered amount is almost never
 #     the nominal one.
+#   - UN_VOTE_COMMITMENT_KEEP_TT / UN_VOTE_COMMITMENT_BREAK_TT
+#     (te_miscellaneous_l_english.yml) — the two option tooltips a lobbied
+#     member sees in un_vote.1. BREAK names both lobbying figures.
 # The docs table is in docs/systems/journal_entry_systems.md § UN Standing.
 #
 # Standing is a NATIONAL record (country variable un_standing). It is not
@@ -88,6 +91,30 @@ un_standing_mandate_complied_gain = 6
 # Relations granted to a delivering contributor with the country that asked
 # for the aid or the peacekeepers. One-off, at the same single site.
 un_standing_delivery_relations = 5
+
+# ---- Resolution lobbying (the "secure a commitment" deal) ----
+# Settled once per commitment, at un_lobby_settle_commitment, the moment the
+# recipient's vote is recorded. Deliberately smaller than every other figure
+# here: a pledged vote is a favour between two members, not a programme run for
+# years or an authorization from the whole Assembly.
+
+# Honouring a pledged vote. Nominal — diminishing returns apply inside
+# un_standing_gain, so this is a nudge for a middling member and nothing at all
+# near the ceiling, which is the point: you cannot farm standing by promising
+# votes you were going to cast anyway.
+un_standing_commitment_kept_gain = 1
+
+# Breaking one. Four points is under the defiance loss (5) and a third of a
+# broken mandate (12) on purpose — reneging on a bilateral pledge is bad faith,
+# not a violation of a binding decision of the Assembly, and it carries NO
+# suspension.
+un_standing_commitment_broken_loss = 4
+
+# Relations between the two parties, settled at the same site. The broken value
+# is the larger of the two: the lobbyist paid an obligation up front and got
+# nothing, and the relations hit is the part of that the diplomacy screen shows.
+un_standing_commitment_kept_relations = 10
+un_standing_commitment_broken_relations = -20
 
 # ---- Losses ----
 

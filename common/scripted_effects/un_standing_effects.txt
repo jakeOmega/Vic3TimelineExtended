@@ -34,10 +34,18 @@
 #    4 contribution to a UN request           23 rebuked by the Assembly
 #    5 complied with a binding decision       24 sanctioned by the Assembly
 #    6 an authorized mandate fulfilled        25 partially sanctioned
-#                                             26 defied a binding decision
+#   30 a pledged vote delivered               26 defied a binding decision
 #                                             27 an authorization broken
 #                                             28 withdrew from the UN
 #                                             29 stripped of a permanent seat
+#                                             31 a pledged vote broken
+#
+# The 30+ range belongs to resolution lobbying
+# (common/scripted_effects/un_lobby_effects.txt). Both of its codes are stamped
+# at one site, un_lobby_settle_commitment. Neither draws on the programme yearly
+# cap — nothing outside un_standing_program_award does — and neither suspends
+# benefits: going back on a bilateral pledge is bad faith, not a violation of a
+# binding decision of the Assembly.
 #
 # OLD SAVES: nothing here assumes any of these variables exist. A member is
 # seeded with the neutral value on its first monthly UN pulse; every other

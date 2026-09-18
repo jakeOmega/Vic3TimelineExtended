@@ -332,6 +332,16 @@ un_vote.1 = {
 			}
 		}
 
+		# Lobbying: what this vote does to a pledge we made. Deliberately OUTSIDE
+		# the custom_tooltip wrapper below — that wrapper replaces the recorded
+		# effects' own tooltip with one line, so the settlement inside
+		# un_resolution_record_vote would otherwise be invisible. Display only;
+		# the settlement itself happens at its single site.
+		if = {
+			limit = { un_lobby_holds_pending_commitment = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
+		}
+
 		custom_tooltip = {
 			text = UN_VOTE_IN_FAVOR_TT
 			un_resolution_record_vote = { LIST = un_res_yes COUNT = un_res_support }
@@ -487,6 +497,29 @@ un_vote.1 = {
 			modifier = {
 				trigger = { scope:un_vote_proposer ?= { un_standing_tier_disgraced = yes } }
 				add = -5
+			}
+
+			# ================================================================
+			# RESOLUTION LOBBYING — A PLEDGED VOTE
+			# ================================================================
+			# We gave our word and took an obligation for it. Kept separate from
+			# the standing block above on purpose: standing is a lean, this is a
+			# promise, and the two must stay separately tunable and separately
+			# attributable.
+			#
+			# +150 against a base of 40 dwarfs every other term in this block
+			# (the largest of which is ±30), which together with the mirrored
+			# penalties on option B and on the veto is what "a committed AI
+			# honours its pledge" means in practice. It is a weight, not a
+			# bypass: the AI still runs the event and could in principle roll
+			# another way, and the option itself is never removed.
+			#
+			# Literal, like every other add here — a named script value in an
+			# ai_chance modifier is not a shape any vanilla or mod event uses and
+			# a rejected one fails silently (see *Why literals* above).
+			modifier = {
+				trigger = { un_lobby_holds_pending_commitment = yes }
+				add = 150
 			}
 
 			# ================================================================
@@ -1225,6 +1258,14 @@ un_vote.1 = {
 			text = un_vote.1.b
 		}
 
+		# Lobbying: a human recipient keeps a free choice here, and this is where
+		# it is told what going back on its pledge costs. Same reason as option
+		# A for sitting outside the custom_tooltip wrapper.
+		if = {
+			limit = { un_lobby_holds_pending_commitment = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
+
 		custom_tooltip = {
 			text = UN_VOTE_AGAINST_TT
 			un_resolution_record_vote = { LIST = un_res_no COUNT = un_res_oppose }
@@ -1286,6 +1327,20 @@ un_vote.1 = {
 
 		ai_chance = {
 			base = 10
+
+			# ================================================================
+			# RESOLUTION LOBBYING — THE MIRROR OF OPTION A's PLEDGE BONUS
+			# ================================================================
+			# Voting against a resolution we pledged to carry. The one place in
+			# this event where a negative mirror is warranted: option A's lean
+			# terms are nudges that only need to move a probability, but a
+			# pledge is supposed to be kept, and leaving option B untouched
+			# would let an AI with strong independent reasons to oppose take the
+			# obligation and then renege anyway.
+			modifier = {
+				trigger = { un_lobby_holds_pending_commitment = yes }
+				add = -100
+			}
 
 			# ================================================================
 			# DIPLOMATIC RELATIONSHIP MODIFIERS
@@ -1601,6 +1656,14 @@ un_vote.1 = {
 			scope:un_resolution ?= { un_resolution_is_binding = yes }
 		}
 
+		# Lobbying: the veto right is never gated on a pledge — this option's own
+		# trigger is untouched — but a veto books a NO vote, so it settles a
+		# commitment as broken. Say so before it is pressed.
+		if = {
+			limit = { un_lobby_holds_pending_commitment = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
+
 		custom_tooltip = {
 			text = UN_VOTE_VETO_TT
 			# Tags the resolution un_res_vetoed, which kills the binding form
@@ -1673,6 +1736,15 @@ un_vote.1 = {
 
 		ai_chance = {
 			base = 0
+
+			# Resolution lobbying: a pledged vote weighs against reaching for the
+			# veto at all. The RIGHT is untouched (this option's trigger never
+			# reads a commitment) — this is only the AI declining to spend it on
+			# a resolution it promised to carry.
+			modifier = {
+				trigger = { un_lobby_holds_pending_commitment = yes }
+				add = -100
+			}
 
 			# Only consider vetoing when the resolution would otherwise pass.
 			# (un_veto_would_change_outcome checks a margin >= 2, meaning even our
