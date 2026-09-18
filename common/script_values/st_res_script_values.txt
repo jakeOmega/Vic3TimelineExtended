@@ -897,6 +897,74 @@ st_res_tanks_fill_pct = {
 	}
 }
 
+# --- Widget accessors -------------------------------------------------------
+# Guarded read-only wrappers over the bookkeeping variables the JE inventory
+# widget displays. The widget evaluates these every frame, including on a save
+# made before those variables existed, so every one of them falls back to 0
+# rather than raising a script-system error on an unset `var:`.
+
+# Hub occupancy, 0-1. Below 1 the hub trades nothing and cannot replace decay.
+st_res_hub_staffing = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_hub_workforce_cached }
+		value = var:st_res_hub_workforce_cached
+	}
+}
+
+# ACTUAL net movement recorded by the last weekly tick, after the
+# [0, capacity] clamp. This is what the widget labels "Net"; it is not
+# recomputed from rates, so it always matches what bookkeeping really did.
+st_res_grain_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_last_delta }
+		value = var:st_res_grain_last_delta
+	}
+}
+st_res_ammunition_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_last_delta }
+		value = var:st_res_ammunition_last_delta
+	}
+}
+st_res_oil_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_last_delta }
+		value = var:st_res_oil_last_delta
+	}
+}
+st_res_small_arms_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_last_delta }
+		value = var:st_res_small_arms_last_delta
+	}
+}
+st_res_artillery_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_last_delta }
+		value = var:st_res_artillery_last_delta
+	}
+}
+st_res_aeroplanes_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_last_delta }
+		value = var:st_res_aeroplanes_last_delta
+	}
+}
+st_res_tanks_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_last_delta }
+		value = var:st_res_tanks_last_delta
+	}
+}
+
 # --- Aggregate weekly sales income across all goods ---
 # Sum of every per-good `_sale_profit` (each is 0 unless that good is being sold,
 # i.e. rate < 0 with stored > 0). Result is gross weekly £ income at current

@@ -39,10 +39,14 @@ je_strategic_reserve = {
 		st_res_je_invalid_effect = yes
 	}
 
+	# Reserve inventory table: one row per unlocked good with its stock, fill
+	# bar, configured rate, actual net weekly movement, status and controls.
+	# container_2 puts it directly under the summary status text and above the
+	# two shared buttons below.
 	widget = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
-		name = "widget_je_strategic_reserve_step_size"
-		container = "custom_widget_container_1"
+		name = "widget_je_strategic_reserve_inventory"
+		container = "custom_widget_container_2"
 	}
 
 	scripted_progress_bar = st_res_grain_fill_bar
