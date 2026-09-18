@@ -3,6 +3,17 @@
 
 	group = je_group_foreign_affairs
 
+	# The General Assembly chamber: the resolution in session, its recorded
+	# ballot and the bounded archive. Display-only — it reads
+	# global_var:un_active_resolution and the un_resolution_history list in
+	# place through common/scripted_guis/un_chamber_sguis.txt. Sits in
+	# container_2 (under the status description, above the button grid).
+	widget = {
+		gui = "gui/journal_entry_widgets/un_chamber_widget.gui"
+		name = "widget_je_un_chamber"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = {
 		has_game_rule = united_nations_enabled
 		OR = {
