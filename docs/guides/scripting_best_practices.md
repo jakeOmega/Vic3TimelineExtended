@@ -3483,6 +3483,26 @@ For any country history doesn't give a law in some group, the engine auto-assign
 
 `every_*` / `random_*` / `ordered_*` / `any_*` take `limit = { }` as a property of the iterator, not as a sequential statement. `every_scope_state = { do_a = yes  limit = { has_building = X }  do_b = yes }` runs **both** `do_a` and `do_b` only in states that have X — `do_a` is not "before the filter". Found 2026-09-12 in `remove_invalid_buildings` (`extra_on_actions.txt`), where the generated company-building sweep was silently gated by an unrelated space-program limit. Put `limit` first by convention, and split into two iterations when two child effects need different filters. Enforced by `iterator_limit_audit.py` on every `POST /reload` (`docs/engine/iterator_limit_report.md`).
 
+## Journal-Entry Buttons Are the AI's Only Path — Don't Move Them Into a Widget
+
+The AI activates a journal entry's policies by evaluating the `ai_chance` block on each `scripted_button` declared on the JE (vanilla `common/scripted_buttons/scripted_buttons.md`: "#Country scope `ai_chance`"). Scripted GUIs have their own, separate AI hook (`ai_is_valid` + `ai_chance` + `ai_frequency`). So when you replace a JE's button grid with a custom widget, **keep every `scripted_button = …` line on the JE** — deleting one, or gating its `visible` on `is_ai`, silently removes that option from the AI with no log line and no test that catches it. Give the widget's handlers `ai_is_valid = { always = no }` so the AI never double-dips. Done this way in the banking policy dashboard (`docs/systems/mod_systems.md` § Policy Dashboard); the redundant vanilla grid under the widget is the deliberate price of not touching AI behaviour, and doubles as the fallback if a scripted-GUI name is ever mistyped.
+
+## Single-Sourcing a Policy Between a JE Button and a Scripted GUI
+
+Two surfaces that can both enact the same thing will drift. Extract each button's `possible` into a scripted **trigger** and its `effect` into a scripted **effect**, then have the button and the scripted GUI both call the helper (`possible = { banking_possible_X = yes }` / `is_valid = { banking_possible_X = yes }`). For `visible`, prefer an existing named trigger over an inline `has_modifier` test so the "is it active" question has exactly one definition. When doing this in bulk, drive it from a table in a throwaway script and **verify the refactor by inlining the helpers back and diffing whitespace-normalised against the pre-change bodies** — that turns a 60-button mechanical edit into a provable no-op (186 bodies checked this way for the banking dashboard).
+
+## Asking Script a Yes/No Question From `.gui`
+
+`.gui` has no string comparison and no way to pick one item out of a datamodel by key, so any per-entity branching has to come from script. The general-purpose escape hatch is a read-only scripted GUI: `is_shown = { <existing scripted trigger> }`, `is_valid = { always = no }`, `effect = { }`, read from the widget as `[GetScriptedGui('name').IsShown( GuiScope.SetRoot( <Scope>.MakeScope ).End )]`. Use it instead of re-encoding thresholds as `GreaterThanOrEqualTo_CFixedPoint(... , '(CFixedPoint)40')` in the `.gui`, which duplicates balance numbers outside script. Useful relatives on the same object: `IsValid`, `Execute`, `IsValidTooltip`, `ExecuteTooltip`, `BuildTooltip` (data-type docs: `Modding-Digests/<patch>/docs/data_types_script.txt`).
+
+## Showing Costs and Effects in UI Without Hard-Coding Numbers
+
+`[GetStaticModifier('<name>').GetName|v]` / `.GetDesc` render a static modifier's real, current effect list into any loc string (vanilla uses it throughout `event_effects_l_english.yml`). For a scripted GUI, `ExecuteTooltip` renders its effect body — `add_treasury`, `add_radicals`, `add_modifier` and all — and `IsValidTooltip` renders the eligibility failure, so `tooltip = "[Concatenate( ScriptedGui.IsValidTooltip(…), ScriptedGui.ExecuteTooltip(…) )]"` gives a complete, drift-proof action tooltip. For numbers that live in a modifier rather than a static modifier, add a thin display-only script value (`value = modifier:country_x_add`) and read it with `[<Scope>.MakeScope.ScriptValue('name')|1]`; raw variables read as `[<Scope>.MakeScope.Var('name').GetValue|0]`.
+
+## Presentation-Only UI State Belongs in the GUI Variable System
+
+Collapsible sections, selected tabs and similar UI-only flags go in `GetVariableSystem` (`Toggle` / `Exists` / `Clear`, vanilla `company_panel.gui:1563`, `battle.gui:1331`), never in a script variable — script variables are saved, replicated and would make a cosmetic toggle part of save state and multiplayer sync. Note vanilla's convention is `Exists` = expanded (default collapsed); invert both the content's `visible` and the `onclick_showmore`/`onclick_showless` blockoverrides if you want sections open by default.
+
 ## Journal-Entry Widgets: Derive Display State Once, in Script
 
 Building the Strategic Reserve inventory widget (2026-09-17) surfaced four rules for any JE that replaces per-good `scripted_progress_bar`s / `scripted_button`s with a custom widget:
