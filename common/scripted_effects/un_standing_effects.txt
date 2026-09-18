@@ -145,11 +145,11 @@ un_standing_country_pulse = {
 		# Undermining first, so that a member who is both undermining and
 		# running a programme shows the programme as its latest reason.
 		un_standing_undermine_tick = yes
-		un_standing_program_tick = { MODIFIER = un_peacekeeping_contributor_modifier COUNTER = un_standing_months_peacekeeping }
-		un_standing_program_tick = { MODIFIER = un_development_contributor_modifier COUNTER = un_standing_months_development }
-		un_standing_program_tick = { MODIFIER = un_human_rights_champion_modifier COUNTER = un_standing_months_human_rights }
-		un_standing_program_tick = { MODIFIER = un_arms_control_participant_modifier COUNTER = un_standing_months_arms_control }
-		un_standing_program_tick = { MODIFIER = un_champion_order_cost COUNTER = un_standing_months_champion }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_peacekeeping COUNTER = un_standing_months_peacekeeping }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_development COUNTER = un_standing_months_development }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_human_rights COUNTER = un_standing_months_human_rights }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_arms_control COUNTER = un_standing_months_arms_control }
+		un_standing_program_tick = { ACTIVE = un_standing_program_active_champion COUNTER = un_standing_months_champion }
 		un_standing_program_award = yes
 	}
 	else = {
@@ -188,18 +188,22 @@ un_standing_year_rollover = {
 # exit is charged here.
 #
 # Charging from the pulse rather than from the withdraw buttons is deliberate:
-# it covers every exit path in one place (the withdraw buttons, a pledge
-# revoked by un_vote.2 when a request resolution fails, anything added later),
-# it needs no edit to the button effect blocks that gen_un_button_descs.py
-# generates tooltips from, and it treats the AI exactly like the player.
-# The trade-off is that the withdraw button's own tooltip does not name the
-# standing cost; the chamber's "How standing works" panel does.
-# Parameters: $MODIFIER$ = the journal-entry modifier that marks the programme
+# it covers every exit path in one place (all five withdraw buttons and
+# anything added later), it needs no edit to the button effect blocks that
+# gen_un_button_descs.py generates tooltips from, and it treats the AI exactly
+# like the player. The trade-off is that the withdraw button's own tooltip does
+# not name the standing cost; the chamber's "How standing works" panel does.
+#
+# $ACTIVE$ is a trigger, NOT a bare marker test — see the
+# un_standing_program_active_* block in
+# common/scripted_triggers/un_standing_triggers.txt for why a cost-free
+# peacekeeping pledge must neither start a clock nor be charged for losing one.
+# Parameters: $ACTIVE$ = the programme's "genuinely running" trigger
 #             $COUNTER$ = this programme's continuous-month variable
 # Scope: country (a member)
 un_standing_program_tick = {
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
+		limit = { $ACTIVE$ = yes }
 		if = {
 			limit = { NOT = { has_variable = $COUNTER$ } }
 			set_variable = { name = $COUNTER$ value = 0 }

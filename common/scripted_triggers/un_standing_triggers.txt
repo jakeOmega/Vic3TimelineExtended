@@ -76,6 +76,48 @@ un_standing_benefits_suspended = {
 	}
 }
 
+# ---- Which ongoing programmes are actually running ----
+# One trigger per programme, so the monthly tick can ask "is this programme
+# genuinely under way" rather than "is its marker present".
+#
+# The distinction is not academic for the two programmes that carry a separate
+# GDP-scaled cost modifier. un_vote_apply_resolution_compliance (un_vote.3)
+# pledges a country to peacekeeping by adding ONLY
+# un_peacekeeping_contributor_modifier — un_vote.2 already ran its levy before
+# un_vote.3 fires, so the pledger carries no un_peacekeeping_contributor_cost
+# until the NEXT request resolution carries. A pledge that costs nothing yet
+# must not start a standing clock, or a free marker would quietly accrue; and
+# when un_vote.2's failed/vetoed branches revoke exactly those cost-free
+# markers, no clock should be discarded and no early-exit charge levied for an
+# exit the member never chose. Requiring the cost closes both.
+#
+# The other three programmes have no separate cost modifier — their marker IS
+# the cost bundle (un_champion_order_cost is literally named for it) — so
+# marker presence is the whole answer.
+# Scope: country
+
+un_standing_program_active_peacekeeping = {
+	je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+	je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost }
+}
+
+un_standing_program_active_development = {
+	je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+	je:je_united_nations ?= { has_modifier = un_development_contributor_cost }
+}
+
+un_standing_program_active_human_rights = {
+	je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+}
+
+un_standing_program_active_arms_control = {
+	je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+}
+
+un_standing_program_active_champion = {
+	je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+}
+
 # ---- Gates ----
 
 # Whether the scoped country's standing is at least $VALUE$. A country with no

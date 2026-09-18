@@ -2850,8 +2850,18 @@ un_vote.3 = {
 		# on a recommendation costs nothing and so earns nothing.
 		# Once per member per resolution — un_vote.3 fires once per member, and
 		# an event runs exactly one option.
+		#
+		# peacekeeping_request is excluded because it is the ONE topic that is
+		# both binding and a pledge topic: un_vote_apply_resolution_compliance
+		# just paid this country the contribution award for taking on a share
+		# of the deployment, and paying the compliance award on top would make
+		# a no-voter who complies worth twice a yes-voter who does the same
+		# thing. The pledge is the compliance, and it has already been paid.
 		if = {
-			limit = { scope:un_resolution ?= { un_resolution_is_binding = yes } }
+			limit = {
+				scope:un_resolution ?= { un_resolution_is_binding = yes }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
+			}
 			custom_tooltip = {
 				text = un_standing_complied_tt
 				un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
