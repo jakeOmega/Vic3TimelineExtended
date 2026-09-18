@@ -1,6 +1,6 @@
 ﻿# Strategic Reserve System (SRS)
 
-A national stockpile system that lets countries physically hoard **grain**, **ammunition**, and **oil**. Storing/withdrawing interacts directly with the market through transient hub-building modifiers, so reserve operations shift prices. The player controls a **signed weekly rate** per good plus one shared **step size**: positive rates store goods, negative rates withdraw goods, and stockpiles decay continuously.
+A national stockpile system that lets countries physically hoard **grain**, **ammunition**, and **oil**. Storing/withdrawing interacts directly with the market through transient hub-building modifiers, so reserve operations shift prices. The player controls a **signed weekly rate** per good plus one shared **step size**: positive rates store goods, negative rates withdraw goods, and stockpiles decay continuously. Each good can instead be put on a **price-triggered policy** that re-decides its rate every week from the market price (§4.6).
 
 This document describes the **current implementation**. See §8 for deviations from the original AI-drafted spec.
 
@@ -183,6 +183,108 @@ Each wrapper delegates to the shared helper `st_res_rebuild_good_flow_modifiers_
 
 If a stockpile is full, empty, or configured with no legal effective flow, the disable modifiers keep the hub from consuming or producing that good even when the configured signed rate remains nonzero. This is the live replacement for the old auto-idle pattern: the rate variable stays as configured, but the building-side market flow shuts off whenever stockpile bounds require it.
 
+
+### 4.6 Reserve policies (price-triggered automation)
+
+A good can be handed a **policy** instead of a hand-set rate. The weekly pulse then re-decides that good's `st_res_<good>_rate` from the market price, inside limits the player configures. Policies are opt-in and off by default: every good, in every save, starts on Manual with its rate untouched.
+
+| `st_res_<good>_policy` | Policy | Behaviour |
+|---|---|---|
+| 0 | Manual | The player drives the rate. Nothing automated runs. |
+| 1 | Buy When Cheap | Buys below the purchase threshold. Never sells. |
+| 2 | Release When Expensive | Sells above the release threshold. Never buys. |
+| 3 | Stabilize Prices | Both sides. |
+
+#### The price signal — and which market it is
+
+`st_res_<good>_price_rel` is the **signed premium against the good's base price on the country's own market** (`this.market.mg:<good>`), as a fraction: `-0.12` means 12% below base.
+
+That is the same market [`st_res_<good>_sale_profit`](../../common/script_values/st_res_script_values.txt) already prices reserve sales at, and the market the hub's goods input/output clears on — the hub is capital-only, and the capital is in the country's market by construction. Player-facing localization therefore calls it the *national market price* rather than a local price. The nuance worth knowing: a building's true clearing price is its **state's** local price, which differs from the market price by local shortage and market access. For a capital state those two track each other closely, and using the market price keeps the policy signal consistent with the sale-revenue bookkeeping that already existed. If a future change ever moves the hub out of the capital, this is the assumption to revisit.
+
+`market_goods_pricier` and `market_goods_cheaper` are readable as script values in `market_goods` scope — vanilla itself does it in `common/treaty_articles/13_goods_transfer.txt` (`value = market_goods_cheaper`). The reads use the `market = { mg:<good> = { add = … } }` **block** form, which is how vanilla reaches a market-goods value from country scope (`common/script_values/00_gfx_route_graphics_values.txt`, `gfx_infantry_mobilization_count`). Do not rewrite them as a `this.market.mg:<good>.<value>` dot chain: no vanilla file reads through `mg:` that way, and a price read that silently returned zero would park every automated lane in *Waiting* forever with no error to show for it. What the engine docs do **not** settle is whether each is clamped at zero or is the signed mirror of the other. `st_res_<good>_price_rel` is therefore built as
+
+```
+max(market_goods_pricier, 0) - max(market_goods_cheaper, 0)
+```
+
+via `st_res_<good>_price_up` / `_price_down` (`min = 0` after the read is the max-with-zero clamp). That expression yields the same correct signed premium under **either** engine behaviour. Do not simplify it to a bare `market_goods_pricier` read.
+
+> The pre-existing `st_res_<good>_sale_profit` values still read bare `market_goods_pricier`. They are left alone deliberately — changing them would move sale revenue and therefore balance. If `pricier` turns out to be clamped at zero, those values slightly over-state revenue when selling below base price; that is a pre-existing question, not one policies introduce.
+
+#### Hysteresis
+
+Each good carries an engagement latch, `st_res_<good>_engaged` (0 idle / 1 engaged buying / 2 engaged releasing). An engaged lane keeps going until the price crosses the **stop** threshold rather than the start threshold:
+
+| | Start | Stop |
+|---|---|---|
+| Buying | below `buy_thr` | above `buy_thr + st_res_policy_buy_band` |
+| Releasing | above `sell_thr` | below `sell_thr - st_res_policy_sell_band` |
+
+With the Standard preset that reads: start buying below −10%, stop above −5%; start releasing above +20%, stop below +10%. A price oscillating around a single trigger therefore cannot flap the lane on and off week after week.
+
+The two engaged regions can never overlap, because every path that writes a threshold keeps `sell_thr - buy_thr >= st_res_policy_min_gap` (= `buy_band + sell_band` = 15). The presets satisfy it by construction and the steppers are gated on it in `is_valid`, not only in GUI.
+
+#### Settings, and where every number is defined
+
+Six per-good settings. **Presets fill all six in one click**; the steppers fine-tune them.
+
+| Setting | Variable | Unit | Conservative | Standard | Aggressive | Stepper |
+|---|---|---|---|---|---|---|
+| Purchase threshold | `st_res_<good>_buy_thr` | pp vs base price | −20 | −10 | −5 | ±5, range −50…0 |
+| Release threshold | `st_res_<good>_sell_thr` | pp vs base price | +30 | +20 | +10 | ±5, range 0…+75 |
+| Maximum weekly flow | `st_res_<good>_max_flow` | units/week | 100 | 250 | 600 | ±50, range 50…2000 |
+| Protected stockpile | `st_res_<good>_floor_pct` | % of capacity | 40 | 20 | 10 | ±5, range 0…100 |
+| Target stockpile | `st_res_<good>_ceil_pct` | % of capacity | 60 | 80 | 95 | ±5, range 0…100 |
+| Weekly purchase budget | `st_res_<good>_budget` | GBP/week, estimated | 5 000 | 15 000 | 40 000 | ±1 000, range 1 000…100 000 |
+
+**Every one of these numbers is defined exactly once.** The eighteen preset values live in the three `st_res_apply_preset_{conservative,standard,aggressive}_base` effects in [st_res_effects.txt](../../common/scripted_effects/st_res_effects.txt); the step sizes, hysteresis bands and absolute bounds live in the `st_res_policy_*` constants at the bottom of [st_res_script_values.txt](../../common/script_values/st_res_script_values.txt). To retune, edit those and nothing else — the sgui gates, the evaluator and the tooltips all read them.
+
+Floor and ceiling are percentages of capacity rather than unit counts, so they keep meaning when the player builds Silos.
+
+#### The budget is an estimate, and it is per week
+
+Reserve purchases are **not** a money effect. The hub buys its input goods through production-method modifiers, so the money leaves the treasury inside the normal building-expense system and there is no cost value to read back. The budget is therefore applied as
+
+```
+affordable units = budget / current unit price - this week's decay replacement   (floored at 0)
+```
+
+and every player-facing string says "estimated". It is a **per-week cap, not a running pot**: what is not spent this week does not carry over. That keeps it stateless, save-safe, and impossible to desynchronise from the real spend. It also means "budget exhausted mid-week" is not a state that exists — the cap binds once, at the pulse, and shows as *Buying, limited by the weekly budget* or *Paused — this week's purchase budget is spent*.
+
+One interaction to know: the hub buys enough to replace decay even at a configured rate of zero — that is pre-existing maintenance behaviour, not something policies added — so a *Waiting* or *Paused* lane still spends a little. The budget subtracts that decay replacement before deciding how many units it can cover, but it does not gate the replacement itself.
+
+#### Status codes (`st_res_<good>_policy_status`)
+
+| Code | Row explanation |
+|---|---|
+| 0 | Manual control — you set this good's rate by hand |
+| 1 | Buying — price below the purchase threshold |
+| 2 | Buying — limited by the weekly budget |
+| 3 | Releasing — price above the release threshold |
+| 4 | Waiting — the price has not crossed a trigger threshold |
+| 5 | Paused — target stockpile reached |
+| 6 | Paused — protected stockpile reached |
+| 7 | Paused — this week's purchase budget is spent |
+| 8 | Paused — hub understaffed |
+| 9 | Paused — no Strategic Reserve Hub |
+
+`st_res_policy_evaluate_good_effect` is the **only** writer of this variable and of the engagement latch, exactly as `st_res_set_good_status_effect` is the only writer of `st_res_<good>_last_status`. It is called from **both** branches of the weekly pulse (the no-hub branch takes its code-9 path) and from every policy-panel press, so nothing else ever has to guess a status.
+
+#### How a policy reaches the rate
+
+Automation has exactly one path to a configured rate: `st_res_apply_rate_target_base`. It writes `st_res_<good>_rate` and then applies the same two clamps `st_res_clamp_stockpiles_effect` applies — the hub's signed weekly flow cap, and the remaining storage room / remaining stockpile — which are the same bounds the manual +/− buttons are gated on. Everything downstream therefore applies to an automated lane exactly as to a hand-driven one: the flow cap, hub throughput, staffing, capacity, decay, the per-good tech unlocks, and the cost of the goods themselves. **Automation creates no goods and bypasses no bookkeeping**, and there are no new money effects anywhere in the feature.
+
+Order inside the weekly pulse matters and is deliberate: last week's movement is booked first (`st_res_apply_weekly_good_effect`), then the policy re-decides, then the existing shared refresh/clamp tail runs **once**. The evaluator rewrites the rate unconditionally every tick, which is what makes it immune to the auto-clamp having zeroed that rate at a stockpile bound last week.
+
+#### Manual takeover
+
+Two things — and only two — switch a good back to Manual, both of them explicit player actions:
+
+- any of the row's decrease / stop / increase controls (the three rate bases call `st_res_switch_to_manual_base` before touching the rate), and
+- the **Reset Reserve Rates** button.
+
+`st_res_clamp_stockpiles_effect` deliberately does **not**. The auto-clamp zeroing a rate at a stockpile bound is bookkeeping, not intent; treating it as intervention would silently cancel a policy the first time a reserve filled up.
+
 ---
 
 ## 5. Journal Entry — Control Panel
@@ -193,7 +295,19 @@ If a stockpile is full, empty, or configured with no legal effective flow, the d
 - **Summary text (`status_desc`):** hub status (no hub / deactivated / active), weekly sales income, and the hub flow cap. Deliberately short, because `status_desc` also renders in the journal *list*, where one block per good was unreadable.
 - **Inventory rows:** one per unlocked good — `@good!` icon and name, `stored / capacity`, a fill bar driven by `st_res_<good>_fill_pct`, the configured signed rate, the actual net weekly movement (`st_res_<good>_last_net`), a Storing / Withdrawing / Idle / Blocked label, and decrease / stop / increase controls. The row tooltip breaks down stock, rate setting, active rate, net movement, weekly decay, hub flow cap and hub staffing, then states the reason movement differs from the setting.
 - **Row visibility** is `ScriptedGui.IsShown`, delegating to `st_res_<good>_unlocked_trigger` — the unlock conditions are never duplicated in a GUI expression.
-- **Row controls** call `st_res_adjust_<good>_sgui` with the action in a `dir` saved scope (`0` decrease, `1` stop, `2` increase). Each branch delegates to the existing `st_res_{increase,decrease,stop}_<good>_rate_effect` helpers, so the rate rules live in script, not in GUI. "Stop" zeroes only that good's rate.
+- **Row controls** call `st_res_adjust_<good>_sgui` with the action in a `dir` saved scope (`0` decrease, `1` stop, `2` increase). Each branch delegates to the existing `st_res_{increase,decrease,stop}_<good>_rate_effect` helpers, so the rate rules live in script, not in GUI. "Stop" zeroes only that good's rate. All three also switch the good to Manual — see §4.6.
+- **Policy lines (3 and 4):** the good's policy, the national market price against base, and the weekly flow the policy settled on; then the plain-language explanation, straight from `st_res_<good>_policy_reason_text`. A gear button expands the per-good **settings panel**: the four policy buttons, the three presets, and six +/− steppers.
+- **Policy controls** call a second scripted GUI per good, `st_res_policy_<good>_sgui`, parameterized by a single `op` saved scope. One saved scope rather than two keeps the shape vanilla demonstrates (`je_meiji_restoration_get_faction_sgui`), so the op code carries both the action and which setting it acts on:
+
+  | op | action | op | action |
+  |---|---|---|---|
+  | 0–3 | select policy Manual / Buy When Cheap / Release When Expensive / Stabilize Prices | 24 / 25 | maximum weekly flow − / + |
+  | 10 / 11 / 12 | apply Conservative / Standard / Aggressive preset | 26 / 27 | protected stockpile − / + |
+  | 20 / 21 | purchase threshold − / + | 28 / 29 | target stockpile − / + |
+  | 22 / 23 | release threshold − / + | 30 / 31 | weekly budget − / + |
+
+  The table is duplicated in the sgui file header and the widget header; keep all three in sync. `is_valid` carries the whole validation surface, so every disabled control explains itself — including the non-overlap rules, which are never enforced in GUI alone.
+- **The expander is presentation-only:** `GetVariableSystem.Toggle('st_res_policy_open_<good>')`, a key no script ever reads. Collapsing a panel cannot change what the reserve does, the state is intentionally not saved, and **policies keep running with the journal entry closed** because the evaluator lives on the weekly pulse.
 - **Shared buttons (vanilla-rendered JE buttons):** `st_res_cycle_step_size_button` cycles the adjustment size through 1, 10, 100, 1000, 10000; `st_res_reset_rates_button` zeroes every good's rate. The current step is shown once, in the widget header.
 - **`invalid`:** JE ends if the hub is destroyed.
 - **`on_invalid`:** `st_res_reset_vars_effect` zeros all live vars and hub caches, so a rebuilt hub starts clean.
@@ -212,11 +326,18 @@ Button presses call country-scoped wrapper effects in [common/scripted_effects/s
 
 ## 7. AI
 
-The Strategic Reserve is **player-only, and always has been**. Every button in [common/scripted_buttons/st_res_buttons.txt](../common/scripted_buttons/st_res_buttons.txt) carries `ai_chance = { value = 0 }`, and no on-action, event or decision drives reserve rates — `grep -rn "st_res" common/on_actions/ events/` returns nothing. The AI therefore never touched these controls.
+**The reserve used to be player-only. It no longer is** — and the reason matters, because the old claim was wrong about the premise rather than the code.
 
-That is why moving the per-good controls out of the journal entry and into the inventory widget's scripted GUIs was safe: there was no AI path to preserve. The scripted GUIs are explicitly `ai_is_valid = { always = no }`, matching the previous behaviour rather than opening a new one.
+`building_strategic_reserve_hub` carries a real construction desire: [`common/buildings/strategic_reserve.txt:38-54`](../../common/buildings/strategic_reserve.txt) gives it `ai_value` +50 for a great or major power and a further +150 while at war. AI majors therefore **do** build hubs and **do** get this journal entry. What they never had was anything that moved a rate, so an AI reserve sat empty forever: every scripted button carries `ai_chance = { value = 0 }` and both scripted GUIs carry `ai_is_valid = { always = no }`.
 
-If AI reserve management is ever wanted, the entry points are the shared effects (`st_res_increase_<good>_rate_effect` and friends) called from an on-action — not the scripted GUIs, which exist only to validate player clicks.
+Reserve policies close that gap without giving the AI a UI path. `st_res_ai_seed_policies_effect` hands an AI country the **Conservative** preset once — Stabilize Prices for grain, Buy When Cheap for every military good — and from then on it runs through `st_res_policy_evaluate_good_effect`, the same evaluator, thresholds, clamps and costs as a human on the same preset. There is no AI-only shortcut anywhere in the feature.
+
+Details worth knowing:
+
+- **One-shot**, marked by `st_res_policy_ai_seeded`, and gated on `is_ai`: it never touches a human player's goods and never re-seeds a country it has already set up. `st_res_reset_vars_effect` clears the marker so a rebuilt hub re-seeds. The marker does **not** protect a country that passes from a human to the AI mid-game — that country has no marker, so the AI seeds its own presets on the next pulse and the player's tuning is lost. That is the intended outcome for a country the player has walked away from, but it is worth knowing it is an overwrite.
+- It runs from the JE's `immediate` **and** from the weekly pulse, because `immediate` does not re-run for a journal entry that is already active in a loaded save. The weekly cost for an already-seeded country is one `has_variable` check.
+- The scripted GUIs stay `ai_is_valid = { always = no }`. They exist to validate player clicks; the AI reaches the same policies through script.
+- The AI presets are **static** — they do not react to war. Conservative Buy When Cheap on six military goods is at most about £30 000/week for a country wealthy enough to have built a hub in the first place, and a war-reactive variant is a balance decision rather than a correctness one.
 
 ---
 
@@ -241,6 +362,8 @@ If AI reserve management is ever wanted, the entry points are the shared effects
 
 What the inventory widget added to that procedure, in short: a good now also needs an entry in `st_res_triggers.txt` (its unlock trigger), an `st_res_adjust_<good>_sgui` in `st_res_scripted_gui.txt`, `st_res_<good>_mode_text` **and** `st_res_<good>_reason_text` custom loc, an `st_res_<good>_last_net` script value, a `st_res_stop_<good>_rate_effect` wrapper, one call each added to the per-good lists in `st_res_init_effect` / `st_res_reset_vars_effect` / `st_res_weekly_update_effect` / `st_res_refresh_hub_flow_effect`, and one row instance plus its five loc keys in the widget. It no longer needs a scripted progress bar, a pair of scripted buttons or a journal-entry status line.
 
+Reserve policies added a second layer on top of that: a `st_res_policy_<good>_sgui`, `st_res_<good>_policy_text` **and** `st_res_<good>_policy_reason_text` custom loc, the six policy script values (`_price_up`, `_price_down`, `_price_rel`, `_unit_price`, and the four `_policy_*_limit` stepper guards), two more calls in `st_res_weekly_update_effect` (**both** branches), one `st_res_ai_seed_good_effect` call, the row's two extra loc keys and its policy-panel blockoverrides. The ten new per-good variables need no new init code — they are seeded by the single guard already in `st_res_init_good_effect`.
+
 ---
 
 ## 10. Known Limitations / Future Work
@@ -248,5 +371,8 @@ What the inventory widget added to that procedure, in short: a good now also nee
 - The hub has no animated icon or dedicated art.
 - The SR scripted-effects slice is now `$GOOD$`-parameterized for init, reset, the hub flow rebuild, the weekly apply and the status derivation. The remaining per-good repetition is in [common/script_values/st_res_script_values.txt](../common/script_values/st_res_script_values.txt), [common/scripted_guis/st_res_scripted_gui.txt](../common/scripted_guis/st_res_scripted_gui.txt) and [common/customizable_localization/st_res_custom_loc.txt](../common/customizable_localization/st_res_custom_loc.txt) — none of those file types accept `$GOOD$` parameters, so the repetition is structural rather than a cleanup candidate.
 - No event flavor — a short event chain could celebrate reaching capacity or warn of shortages.
+- The weekly purchase budget is an **estimate** applied as a units cap, not a true spend meter, because reserve purchases go through production-method modifiers rather than a money effect (§4.6). A real meter would need the engine to expose the hub's realised goods expense.
+- The policy price signal is the **national market** price, not the hub state's local price (§4.6). They diverge when the capital is badly connected or in local shortage.
+- AI policy presets are static and do not react to war.
 - Decay only has single-tech reductions; a second tier (e.g. `vitalism` or `combustion_engine` / later aerospace refining) could halve decay again.
 - Silo has no distinctive icon — reuses the government-admin icon.

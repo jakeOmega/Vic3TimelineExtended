@@ -154,6 +154,96 @@ st_res_<GOOD>_last_net = {
 
 ---
 
+### Reserve-policy values (six more, appended after the main section)
+
+These back the price-triggered policies. `_price_rel` is the signed premium against base price on the country's own market; do **not** collapse it into a bare `market_goods_pricier` read — the double `min = 0` construction is what keeps it correct whether the engine clamps `pricier`/`cheaper` at zero or returns them as signed mirrors. The four `_limit` values exist because a Paradox trigger needs a `var:` on its left side, so the sgui cannot compare a gap script value to a constant directly.
+
+```
+# --- <GOOD_DISPLAY upper> ---
+st_res_<GOOD>_price_up = {
+	value = 0
+	market = {
+		mg:<GOOD> = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+}
+
+st_res_<GOOD>_price_down = {
+	value = 0
+	market = {
+		mg:<GOOD> = {
+			add = market_goods_cheaper
+		}
+	}
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_<GOOD>_price_rel = {
+	value = st_res_<GOOD>_price_up
+	subtract = st_res_<GOOD>_price_down
+}
+
+# Current market price of one unit, in GBP. `min = 1` keeps the budget division safe.
+st_res_<GOOD>_unit_price = {
+	value = 1
+	g:<GOOD> = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_<GOOD>_price_rel
+	}
+	min = 1
+}
+
+st_res_<GOOD>_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_sell_thr }
+		add = var:st_res_<GOOD>_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+st_res_<GOOD>_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_buy_thr }
+		add = var:st_res_<GOOD>_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+st_res_<GOOD>_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_ceil_pct }
+		add = var:st_res_<GOOD>_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+st_res_<GOOD>_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_floor_pct }
+		add = var:st_res_<GOOD>_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+```
+
+The shared `st_res_policy_*` constants at the bottom of the file are **not** per-good — don't touch them when adding a good.
+
+---
+
 ## File 6: `common/scripted_triggers/st_res_triggers.txt` (unlock trigger)
 
 The single source of truth for "is this good available yet". The scripted GUI reads it and the widget row's visibility flows from there — **never duplicate the tech condition anywhere else.**
@@ -185,9 +275,21 @@ Most of the per-good work is now one line added to an existing `$GOOD$`-paramete
 	st_res_reset_good_vars_effect    = { GOOD = <GOOD> }  # in st_res_reset_vars_effect
 	st_res_startup_good_setup_effect = { GOOD = <GOOD> }  # in st_res_rebuild_hub_flow_modifiers_effect (country half)
 	st_res_apply_weekly_good_effect  = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch)
+	st_res_policy_evaluate_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch, AFTER the apply loop)
 	st_res_mark_good_no_hub_effect   = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch)
+	st_res_policy_evaluate_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch too — see below)
 	st_res_set_good_status_effect    = { GOOD = <GOOD> }  # at the END of st_res_refresh_hub_flow_effect
+	st_res_switch_to_manual_base     = { GOOD = <GOOD> }  # in st_res_reset_rates_effect
+	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 1 }  # in st_res_ai_seed_policies_effect
 ```
+
+`st_res_policy_evaluate_good_effect` goes in **both** branches of the weekly pulse. That is not redundancy: it is the single derivation site for `st_res_<GOOD>_policy_status`, and its no-hub branch is what writes status 9. Drop the else-branch call and a policy's explanation goes stale the moment the hub is destroyed.
+
+Its position in the hub branch matters too — after `st_res_apply_weekly_good_effect` (so last week's movement is booked first) and before the shared `st_res_refresh_hub_flow_effect` / `st_res_clamp_stockpiles_effect` tail (so the rate it picks is the one the hub trades on next week). The tail still runs **once**, not once per good.
+
+For `st_res_ai_seed_good_effect`, pick the AI's policy: `3` (Stabilize Prices) for a civilian good whose price the AI should smooth, `1` (Buy When Cheap) for war materiel. Grain is the only `3` today.
+
+The ten new per-good policy variables need **no** new init code — `st_res_init_good_effect` seeds all ten behind one `NOT = { has_variable = st_res_$GOOD$_policy }` guard, and `st_res_reset_good_vars_effect` resets them, both already `$GOOD$`-parameterized.
 
 Inside the `random_scope_building = { limit = { is_building_type = building_strategic_reserve_hub } … }` block of `st_res_rebuild_hub_flow_modifiers_effect`:
 
@@ -305,6 +407,14 @@ st_res_adjust_<GOOD>_sgui = {
 
 ---
 
+### The policy scripted GUI (second sgui per good)
+
+A good also needs an `st_res_policy_<GOOD>_sgui`, in the lower half of the same file. It is long but entirely mechanical: **copy the `st_res_policy_grain_sgui` block and replace every `grain` with `<GOOD>`.** Nothing else changes — the op codes are identical for every good, and the file header carries the op-code table.
+
+Do not hand-write it from the table; the `is_valid` chain has twenty branches and the relative-bound branches (ops 21, 22, 27, 28) reference that good's `_policy_*_limit` script values, which is exactly where a hand copy goes wrong.
+
+---
+
 ## File 9: `common/customizable_localization/st_res_custom_loc.txt`
 
 Two blocks per good, **both driven by `st_res_<GOOD>_last_status`** (written by `st_res_set_good_status_effect`). Never re-derive the state from rates or stockpiles here — that is exactly what makes the label and the bookkeeping drift apart.
@@ -380,6 +490,12 @@ The nine `st_res_reason_*` and four `st_res_mode_*` keys are **shared across all
 
 ---
 
+### Policy custom loc (two more blocks)
+
+`st_res_<GOOD>_policy_text` (4 branches on `st_res_<GOOD>_policy`) and `st_res_<GOOD>_policy_reason_text` (10 branches on `st_res_<GOOD>_policy_status`). Copy the grain pair and swap the good name; every branch keeps its `has_variable` guard for the same reason the existing pair does. The `localization_key` values are shared across goods — no new loc keys are needed for these two.
+
+---
+
 ## File 10: `gui/journal_entry_widgets/strategic_reserve_widget.gui`
 
 One row instance, appended to the root `widget_je_strategic_reserve_inventory` flowcontainer in the same order as the other goods. Nothing in the row `type` needs to change: the three control buttons read the inherited `ScriptedGui` datacontext, so they are identical for every good.
@@ -397,8 +513,44 @@ One row instance, appended to the root `widget_je_strategic_reserve_inventory` f
 		blockoverride "row_bar_value" {
 			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_<GOOD>_fill_pct'))]"
 		}
+		blockoverride "row_policy_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_<GOOD>' )]"
+			tooltip = "st_res_row_policy_toggle_tooltip"
+		}
+		blockoverride "row_policy" { text = "st_res_row_<GOOD>_policy" }
+		blockoverride "row_policy_reason" { text = "st_res_row_<GOOD>_policy_reason" }
+		blockoverride "row_policy_panel" {
+			widget_je_st_res_policy_panel = {
+				blockoverride "policy_panel_context" {
+					datacontext = "[GetScriptedGui('st_res_policy_<GOOD>_sgui')]"
+				}
+				blockoverride "policy_panel_visible" {
+					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_<GOOD>' )]"
+				}
+				blockoverride "policy_value_buy_thr" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_buy_thr').GetValue|+0]"
+				}
+				blockoverride "policy_value_sell_thr" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_sell_thr').GetValue|+0]"
+				}
+				blockoverride "policy_value_max_flow" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_max_flow').GetValue|0]"
+				}
+				blockoverride "policy_value_floor_pct" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_floor_pct').GetValue|0]"
+				}
+				blockoverride "policy_value_ceil_pct" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ceil_pct').GetValue|0]"
+				}
+				blockoverride "policy_value_budget" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_budget').GetValue|0]"
+				}
+			}
+		}
 	}
 ```
+
+The three policy-panel `type`s (`widget_je_st_res_policy_choice`, `_stepper`, `_panel`) are **shared** — the op codes are the same for every good, so a new good adds only the blockoverrides above, never a new type. The six value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
 
 **`.gui` files need a UTF-8 BOM** — `bom_normalizer` adds one on the next reload, but keep it if you rewrite the file wholesale.
 
@@ -446,12 +598,23 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
 
 `@<GOOD>!` is the goods texticon — confirm it exists with `grep -n "icon = <GOOD>$" "$VIC3/game/gui/goods_texticons.gui"` (a mod-only good needs an entry in `gui/zzz_extra_goods_texticons.gui` instead).
 
+### te_miscellaneous_l_english.yml — policy row lines (two more keys)
+
+```
+ st_res_row_<GOOD>_policy:0 "#bold Policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]  ·  #bold Market:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] vs base  ·  #bold Flow:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]/wk"
+ st_res_row_<GOOD>_policy_reason:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]"
+```
+
+Everything else the policy panel shows — policy names, preset names, settings labels, all the tooltips and all ten explanations — is shared across goods and already exists.
+
+---
+
 ### te_concepts_l_english.yml (row tooltip + flow modifier descs)
 
 ```
  st_res_<GOOD>_store_flow_desc:0 "This hub is purchasing <GOOD_DISPLAY lower> for the strategic reserve."
  st_res_<GOOD>_withdraw_flow_desc:0 "This hub is releasing <GOOD_DISPLAY lower> from the strategic reserve."
- st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]"
+ st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Price at the last weekly review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%"
 ```
 
 The three control-button tooltips (`st_res_row_decrease_tooltip`, `st_res_row_stop_tooltip`, `st_res_row_increase_tooltip`) are shared across all goods — they already exist.

@@ -23,9 +23,18 @@
 # `is_valid` phrases its custom tooltips as CONDITIONS, not complaints, because
 # ScriptedGui.IsValidTooltip renders them with a tick or a cross either way.
 #
+# MANUAL TAKEOVER. All three directions run through the rate bases, which call
+# st_res_switch_to_manual_base first. Touching a rate by hand therefore drops
+# that good out of any automated reserve policy, visibly, on the same click.
+# That is deliberate, and it is the only such path besides "Reset Reserve
+# Rates" — the automatic stockpile clamp must NOT count as intervention.
+#
 # All of these are player-only (`ai_is_valid = { always = no }`), matching the
-# `ai_chance = { value = 0 }` on every Strategic Reserve scripted button: the AI
-# has never driven reserve rates and this change does not give it a new path.
+# `ai_chance = { value = 0 }` on every Strategic Reserve scripted button: these
+# wrappers exist to validate player clicks. Since reserve policies were added
+# the AI DOES drive reserve rates, but it does so through
+# st_res_ai_seed_policies_effect and the shared weekly evaluator in
+# common/scripted_effects/st_res_effects.txt — a script path, never this one.
 # ============================================================================
 
 st_res_adjust_grain_sgui = {
@@ -396,5 +405,2297 @@ st_res_adjust_tanks_sgui = {
 		else = {
 			st_res_stop_tanks_rate_effect = yes
 		}
+	}
+}
+
+# ============================================================================
+# Reserve policy controls — one scripted GUI per good
+# ============================================================================
+# The second scripted GUI a good owns (the first is st_res_adjust_<good>_sgui
+# above). It backs every control in the row's policy panel: the four policy
+# buttons, the three presets and the six settings steppers. Like its sibling it
+# owns NO gameplay rules — every branch delegates to a shared `$GOOD$` effect in
+# common/scripted_effects/st_res_effects.txt, and every branch ends in
+# st_res_policy_apply_good_effect so the change is re-evaluated and the hub
+# refreshed on the same click.
+#
+# IMPLICIT CONTRACT with gui/journal_entry_widgets/strategic_reserve_widget.gui
+# — keep both sides in sync. The widget passes a single integer as
+#   AddScope( 'op', MakeScopeValue( '(CFixedPoint)<n>' ) )
+# because one saved scope is the shape vanilla demonstrates
+# (je_meiji_restoration_get_faction_sgui), so the op code encodes both the
+# action and which setting it acts on:
+#
+#   op  | action
+#   ----+--------------------------------------------------------------------
+#    0  | select policy Manual
+#    1  | select policy Buy When Cheap
+#    2  | select policy Release When Expensive
+#    3  | select policy Stabilize Prices
+#   10  | apply the Conservative preset
+#   11  | apply the Standard preset
+#   12  | apply the Aggressive preset
+#   20  | purchase threshold  -  (st_res_policy_thr_step)
+#   21  | purchase threshold  +
+#   22  | release threshold   -
+#   23  | release threshold   +
+#   24  | maximum weekly flow -  (st_res_policy_flow_step)
+#   25  | maximum weekly flow +
+#   26  | protected stockpile -  (st_res_policy_pct_step, % of capacity)
+#   27  | protected stockpile +
+#   28  | target stockpile    -  (st_res_policy_pct_step, % of capacity)
+#   29  | target stockpile    +
+#   30  | weekly budget       -  (st_res_policy_budget_step)
+#   31  | weekly budget       +
+#
+# `is_valid` carries the whole validation surface, so a disabled stepper always
+# explains itself in the tooltip and no rule lives only in a .gui expression:
+#   - a policy button is invalid when that policy is already selected;
+#   - a stepper is invalid at its absolute bound;
+#   - the purchase/release threshold steppers are additionally invalid when one
+#     more click would let the two bands overlap, and the floor/ceiling
+#     steppers when one more click would cross the stock band.
+# The relative limits are read as `var:X <= st_res_<good>_policy_*_limit`
+# script values, because a Paradox trigger needs a `var:` on its left side.
+#
+# Phrased as CONDITIONS, not complaints, because ScriptedGui.IsValidTooltip
+# renders them with a tick or a cross either way — same convention as above.
+#
+# `ai_is_valid = { always = no }`: these wrappers exist to validate player
+# clicks. The AI reaches the very same policies through
+# st_res_ai_seed_policies_effect and the shared weekly evaluator instead, which
+# is a script path, not a UI path.
+# ============================================================================
+
+st_res_policy_grain_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_grain_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_grain_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_grain_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_grain_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_grain_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_grain_buy_thr <= st_res_grain_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_grain_sell_thr >= st_res_grain_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_grain_floor_pct <= st_res_grain_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_grain_ceil_pct >= st_res_grain_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = grain POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = grain POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = grain POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = grain POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = grain }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = grain }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = grain }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = grain }
+	}
+}
+
+st_res_policy_ammunition_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_ammunition_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_ammunition_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_ammunition_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_ammunition_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_ammunition_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_ammunition_buy_thr <= st_res_ammunition_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_ammunition_sell_thr >= st_res_ammunition_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_ammunition_floor_pct <= st_res_ammunition_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_ammunition_ceil_pct >= st_res_ammunition_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = ammunition POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = ammunition POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = ammunition POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = ammunition POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = ammunition }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = ammunition }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = ammunition }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = ammunition }
+	}
+}
+
+st_res_policy_oil_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_oil_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_oil_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_oil_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_oil_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_oil_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_oil_buy_thr <= st_res_oil_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_oil_sell_thr >= st_res_oil_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_oil_floor_pct <= st_res_oil_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_oil_ceil_pct >= st_res_oil_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = oil POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = oil POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = oil POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = oil POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = oil }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = oil }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = oil }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = oil }
+	}
+}
+
+st_res_policy_small_arms_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_small_arms_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_small_arms_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_small_arms_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_small_arms_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_small_arms_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_small_arms_buy_thr <= st_res_small_arms_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_small_arms_sell_thr >= st_res_small_arms_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_small_arms_floor_pct <= st_res_small_arms_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_small_arms_ceil_pct >= st_res_small_arms_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = small_arms POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = small_arms POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = small_arms POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = small_arms POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = small_arms }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = small_arms }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = small_arms }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = small_arms }
+	}
+}
+
+st_res_policy_artillery_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_artillery_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_artillery_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_artillery_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_artillery_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_artillery_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_artillery_buy_thr <= st_res_artillery_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_artillery_sell_thr >= st_res_artillery_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_artillery_floor_pct <= st_res_artillery_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_artillery_ceil_pct >= st_res_artillery_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = artillery POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = artillery POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = artillery POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = artillery POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = artillery }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = artillery }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = artillery }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = artillery }
+	}
+}
+
+st_res_policy_aeroplanes_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_aeroplanes_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_aeroplanes_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_aeroplanes_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_aeroplanes_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_aeroplanes_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_aeroplanes_buy_thr <= st_res_aeroplanes_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_aeroplanes_sell_thr >= st_res_aeroplanes_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_aeroplanes_floor_pct <= st_res_aeroplanes_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_aeroplanes_ceil_pct >= st_res_aeroplanes_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = aeroplanes POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = aeroplanes POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = aeroplanes POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = aeroplanes POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = aeroplanes }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = aeroplanes }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = aeroplanes }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = aeroplanes }
+	}
+}
+
+st_res_policy_tanks_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_tanks_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_tanks_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_tanks_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_tanks_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_tanks_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_tanks_buy_thr <= st_res_tanks_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_tanks_sell_thr >= st_res_tanks_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_tanks_floor_pct <= st_res_tanks_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_tanks_ceil_pct >= st_res_tanks_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 30 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 31 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_budget < st_res_policy_budget_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = tanks POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = tanks POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = tanks POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = tanks POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = tanks }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = tanks }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = tanks }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_policy_budget_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = tanks }
 	}
 }

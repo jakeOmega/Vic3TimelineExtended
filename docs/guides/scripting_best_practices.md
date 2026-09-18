@@ -545,6 +545,55 @@ To display a current-price value in a tooltip, write a script value of shape `(1
 
 Script values are not parameterizable, so generators that need one SV per (entity, good-mix) tuple should pre-multiply `base_price × quantity` in Python and emit the result as a literal `multiply = N` constant rather than chaining `g:<good> = { multiply = base_price }` + a separate quantity multiply at runtime — keeps the generated file readable and skips a redundant scope hop.
 
+### Is it signed below base price? Build it so you don't have to know
+
+Both `market_goods_pricier` and `market_goods_cheaper` exist, and both are value-readable in `market_goods` scope (vanilla does it: `common/treaty_articles/13_goods_transfer.txt` has `value = market_goods_cheaper`). What no engine doc states is whether each is **clamped at zero** or is the **signed mirror** of the other — `triggers.log` only says "at least the specified percentage more expensive/cheaper than base price", and every vanilla call site guards with `> 0.1` first, so none of them disambiguates it.
+
+If your logic needs a signed premium that is correct on **both** sides of base price, don't guess. Build it as
+
+```
+value_up = {                                   # max(pricier, 0)
+	value = 0
+	market = { mg:<good> = { add = market_goods_pricier } }
+	min = 0
+}
+value_down = {                                 # max(cheaper, 0)
+	value = 0
+	market = { mg:<good> = { add = market_goods_cheaper } }
+	min = 0
+}
+value_rel = { value = value_up  subtract = value_down }
+```
+
+Use the `market = { mg:<good> = { add = … } }` **block** form rather than a `this.market.mg:<good>.<value>` dot chain. Vanilla reaches market-goods values from country scope exactly this way (`common/script_values/00_gfx_route_graphics_values.txt`); nothing in vanilla reads through `mg:` with a dot chain, and a market read that silently evaluates to 0 produces no error anywhere — just logic that quietly never fires.
+
+`min = 0` after the read is the max-with-zero clamp. Under the "clamped" hypothesis exactly one term is non-zero; under the "signed mirror" hypothesis the negative term clamps to zero. Either way `value_rel` is the correct signed fraction. The Strategic Reserve's policy trigger uses this (`st_res_<good>_price_rel`, `common/script_values/st_res_script_values.txt`); the older `st_res_<good>_sale_profit` values still read bare `market_goods_pricier` and are only correct below base under the signed hypothesis.
+
+## A trigger needs a `var:` on its LEFT side — script values only go on the right
+
+`var:my_variable > my_script_value` is a valid trigger. `my_script_value > 20` is **not** — a bare script value is not a trigger, so a comparison that starts with one is silently not the check you wrote. This bites whenever validation is naturally phrased as "is this derived quantity big enough": *"the gap between these two variables must stay ≥ 15"* has no direct form.
+
+Invert it. Define the script value as **the limit the variable may not pass**, and compare the variable to it:
+
+```
+# NOT a trigger:            my_gap_script_value >= 20
+# Works: define the limit, then compare a variable to it.
+st_res_<good>_policy_buy_up_limit = {           # = sell_thr - min_gap - step
+	value = 0
+	if = { limit = { has_variable = st_res_<good>_sell_thr }  add = var:st_res_<good>_sell_thr }
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+# in the scripted GUI's is_valid:
+var:st_res_<good>_buy_thr <= st_res_<good>_policy_buy_up_limit
+```
+
+Same number of script values, and the rule stays in `is_valid` where a disabled button can explain itself, rather than leaking into a `.gui` expression.
+
+## Repeated `min` / `max` in a script value are sequential clamps
+
+`min` and `max` are applied in the order they appear, clamping the running total each time, so repeating `max` is how you write "take the smallest of these". `value = A  max = B  max = C  min = 0` is `clamp(min(A, B, C), 0, ∞)`. Vanilla does it (`common/script_values/negotiation_values.txt`). Order matters relative to the arithmetic: a `multiply = -1` **after** `min = 0` negates the clamped result, which is the clean way to turn a "how much can I move" magnitude into a signed negative rate.
+
 ## Ship Crew (`ship_crew_max_add`) Must Be a Multiple of 100
 
 The engine hires sailors to a ship in units of 100, so a ship type whose `ship_crew_max_add` is not a multiple of 100 crews only to the **multiple of 100 just below** its stated capacity (e.g. 250 → 200, 220 → 200), silently wasting the remainder. All 21 vanilla ship types use clean multiples of 100 (200…1200), so vanilla never trips this. When adding or tuning mod ships in `common/ship_types/extra_ship_types.txt`, keep `ship_crew_max_add` on a multiple of 100; round the smallest drone/auto crews **up** to 100 rather than down to 0.
