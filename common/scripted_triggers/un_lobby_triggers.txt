@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # RESOLUTION LOBBYING — TRIGGERS
 # ============================================================================
 # The gates behind the "Seek a Vote Commitment" diplomatic action
@@ -32,7 +32,8 @@ un_lobby_in_list = {
 # Scope: resolution container
 un_lobby_list_has_entries = {
 	has_variable_list = $LIST$
-	variable_list_size = { name = $LIST$ target >= 1 }
+	# Not `variable_list_size`: its documented `target` key fails to load in 1.14.
+	any_in_list = { variable = $LIST$ exists = this }
 }
 
 # Whether this resolution's proposer may still secure another commitment.
