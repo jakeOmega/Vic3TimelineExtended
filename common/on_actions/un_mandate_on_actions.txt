@@ -1,0 +1,62 @@
+﻿# ============================================================================
+# UN AUTHORIZED MANDATES — PLAY LIFECYCLE HOOKS
+# ============================================================================
+# Three code on_actions carry the mandate through a diplomatic play. The engine
+# unions same-name on_action declarations across files, so declaring
+# on_wargoal_added / on_diplo_play_back_down here does not disturb the other
+# systems that already extend them (te_construction_market_on_actions.txt).
+#
+# Everything these hooks do is also done by the monthly sweep in
+# un_mandate_effects.txt, which is the safety net if an on_action ever fails to
+# fire; the hooks exist so the state is right *immediately*, closing the window
+# in which a mandate still reads as `active` after its goal is already in a
+# play (and could therefore be exercised in a second one).
+#
+# Mandate model and every effect called from here: un_mandate_effects.txt
+# ============================================================================
+
+# Root = Diplomatic Play
+# scope:actor = War Goal Owner
+# (game/common/on_actions/00_code_on_actions.txt:6992-6999)
+on_wargoal_added = {
+	on_actions = {
+		un_mandate_on_wargoal_added
+	}
+}
+
+un_mandate_on_wargoal_added = {
+	effect = {
+		if = {
+			limit = { exists = scope:actor }
+			# Bind first: the goal that was just added may be the authorized one.
+			scope:actor = { un_mandate_try_bind = yes }
+			# Then look for a prohibited objective against the same target.
+			# The order matters: un_mandate_check_prohibited only acts on a
+			# BOUND mandate, so binding first is what lets a play opened with
+			# the authorized goal and a conquest in the same breath be caught
+			# on the very addition that completes the pair, in either order.
+			scope:actor = { un_mandate_check_prohibited = yes }
+		}
+	}
+}
+
+# Root = Diplomatic Play
+# scope:actor = the country that backed down
+# (game/common/on_actions/00_code_on_actions.txt:4264-4292)
+on_diplo_play_back_down = {
+	on_actions = {
+		un_mandate_on_diplo_play_back_down
+	}
+}
+
+un_mandate_on_diplo_play_back_down = {
+	effect = {
+		if = {
+			limit = {
+				exists = scope:actor
+				has_play_goal = te_un_mandate_restore_state
+			}
+			scope:actor = { un_mandate_on_back_down = yes }
+		}
+	}
+}

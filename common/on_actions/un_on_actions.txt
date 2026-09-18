@@ -1,6 +1,20 @@
 ﻿# United Nations events - wired into monthly country pulse
 un_events_on_action = {
 	effect = {
+		# Hygiene: drop an authorized-mandate index that no longer points at a
+		# mandate container. un_mandate_close clears it on every ordinary
+		# closure, so this only ever fires for a save carried across a version
+		# that destroyed the container some other way. Guards are cheap and the
+		# consequence of a dangling index would be a country that can never
+		# propose a mandate again.
+		if = {
+			limit = {
+				has_variable = un_mandate_current
+				NOT = { var:un_mandate_current ?= { has_tag = un_mandate } }
+			}
+			remove_variable = un_mandate_current
+		}
+
 		# Recurring events - only for members, and only once the UN exists
 		if = {
 			limit = {
@@ -321,6 +335,12 @@ un_global_authority_on_action = {
 			# General Assembly upkeep: lapse a resolution whose results event never
 			# fired, and free an orphaned vote lock (un_vote_effects.txt).
 			un_resolutions_monthly_update = yes
+
+			# Authorized-mandate upkeep: age live authorizations toward expiry,
+			# re-validate them, bind or void them, and retire closed ones from
+			# the register (un_mandate_effects.txt). No-op until the first
+			# mandate is issued.
+			un_mandates_monthly_update = yes
 		}
 	}
 }

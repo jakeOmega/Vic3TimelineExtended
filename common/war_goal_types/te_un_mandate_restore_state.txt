@@ -1,0 +1,234 @@
+﻿# ============================================================================
+# UN AUTHORIZED MANDATE — RESTORE STATE
+#
+# The one objective a General Assembly `military_mandate` resolution can
+# authorize: recover a single named state region from a single named target.
+# Mechanically it is vanilla `return_state` (same kind, same contestion, same
+# mirror) with two differences:
+#
+#   1. `possible` requires a live mandate for exactly this holder, target and
+#      state region. Without one the goal is never listed.
+#   2. `infamy` is zero while that mandate is live, and the full vanilla
+#      return_state figure otherwise. The discount is attached to THIS GOAL,
+#      not to the country: any other goal the holder adds in the same play —
+#      including a plain `return_state` on the very same province — keeps its
+#      normal price, because nothing here touches a country-wide infamy
+#      modifier.
+#
+# The zero is deliberately computed rather than hard-coded: if the goal is
+# ever reachable without a mandate (a save from a future version, a path the
+# `possible` gate does not cover), it costs exactly what vanilla charges.
+#
+# `can_add_for_other_country` is deliberately ABSENT so holder and creator are
+# always the same country — the mandate names one actor, and which of the two
+# the engine charges for a goal added on someone else's behalf is not
+# documented in 1.14.
+#
+# `requires_interest` is likewise absent, unlike vanilla return_state: the
+# Assembly's authorization is what licenses the intervention, so an interest
+# marker in the target's strategic region is not additionally required.
+#
+# Mandate state model: common/scripted_effects/un_mandate_effects.txt
+# Gates: common/scripted_triggers/un_mandate_triggers.txt
+# ============================================================================
+
+te_un_mandate_restore_state = {
+	icon = "gfx/interface/icons/war_goals/return_state.dds"
+
+	kind = return_state
+
+	settings = {
+		require_target_be_part_of_war
+		annexes_entire_state
+
+		# Validation
+		validate_conflicts_war_goals_holder
+		validate_conflicts_conquer_state
+		validate_target_not_treaty_port
+
+		conflicts_with_country_creation
+		conflicts_with_annex_state
+	}
+
+	execution_priority = 70
+
+	contestion_type = control_target_state
+
+	target_type = state
+
+	possible = {
+		# scopes: root = holder, creator_country, diplomatic_play, target_country,
+		# target_state, stakeholder, target_region, article_options
+		un_mandate_authorizes_new_goal = yes
+	}
+
+	valid = {
+		# Vanilla return_state's validation, unchanged. Mandate state is
+		# deliberately NOT read here: `valid` is re-evaluated by the engine and
+		# a mandate that lapses mid-war must not delete a war goal the player
+		# is already fighting over.
+		scope:target_state = {
+			owner = scope:target_country
+			has_claim_by = root
+		}
+	}
+
+	maneuvers = {
+		value = 0
+
+		add = {
+			desc = "MANEUVERS_BASE_VALUE"
+			value = 10
+		}
+
+		multiply = {
+			desc = "MANEUVERS_TARGET_STATE_POPULATION_FACTOR"
+			value = scope:target_state.state_population
+			divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+			multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+			max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE
+		}
+	}
+
+	infamy = {
+		value = 0
+
+		# Authorized: the Assembly carried the resolution, so the war goal is
+		# free. Unauthorized: vanilla return_state's figure, verbatim.
+		if = {
+			limit = { NOT = { un_mandate_covers_goal = yes } }
+			add = {
+				value = 0
+
+				add = {
+					desc = "INFAMY_BASE_VALUE"
+					value = 2
+				}
+
+				multiply = {
+					desc = "INFAMY_STATE_POPULATION_FACTOR"
+					value = scope:target_state.state_population
+					divide = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER
+					add = 1
+					max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE
+				}
+
+				multiply = {
+					desc = "country_infamy_generation_against_unrecognized_mult"
+					value = 1
+					if = {
+						limit = {
+							NOR = {
+								is_country_type = unrecognized
+								is_country_type = decentralized
+							}
+							scope:target_country = {
+								OR = {
+									is_country_type = unrecognized
+									is_country_type = decentralized
+								}
+							}
+						}
+						add = modifier:country_infamy_generation_against_unrecognized_mult
+					}
+				}
+
+				multiply = {
+					desc = "IG_OTHER_FACTORS_HEADER"
+					value = 1
+
+					if = {
+						limit = {
+							scope:target_state = {
+								is_homeland_of_country_cultures = root
+							}
+						}
+						add = define:NDiplomacy|WAR_GOAL_INFAMY_HOMELAND_FACTOR
+					}
+
+					if = {
+						limit = {
+							scope:target_state = {
+								is_incorporated = no
+							}
+						}
+						add = define:NDiplomacy|WAR_GOAL_INFAMY_UNINCORPORATED_FACTOR
+					}
+				}
+
+				multiply = {
+					desc = "concept_interest_tier"
+					value = 1
+
+					if = {
+						limit = {
+							NOT = {
+								has_strategic_region_interest_tier = {
+									strategic_region = scope:target_region
+									value >= 2
+								}
+							}
+						}
+						add = interest_tier_effect_infamy_cost_increase_high_value
+					}
+
+					if = {
+						limit = {
+							has_strategic_region_interest_tier = {
+								strategic_region = scope:target_region
+								value >= 2
+							}
+							NOT = {
+								has_strategic_region_interest_tier = {
+									strategic_region = scope:target_region
+									value >= 3
+								}
+							}
+						}
+						add = interest_tier_effect_infamy_cost_increase_medium_value
+					}
+
+					if = {
+						limit = {
+							has_strategic_region_interest_tier = {
+								strategic_region = scope:target_region
+								value >= 5
+							}
+						}
+						add = interest_tier_effect_infamy_cost_decrease_medium_value
+					}
+				}
+
+				min = {
+					desc = "INFAMY_MINIMUM_VALUE"
+					value = 2
+				}
+			}
+		}
+	}
+
+	on_enforced = {
+		# The engine performs the transfer per `kind = return_state`. We only
+		# record that the authorization was discharged as written, which closes
+		# the mandate and fires the compliance hook. Idempotent: the mandate is
+		# gone after the first call, so enforcing a second state of the same
+		# region cannot pay out twice.
+		#
+		# scope:creator_country is the holder (no `can_add_for_other_country`),
+		# and is the scope te_reunify_country's on_enforced already relies on.
+		scope:creator_country ?= {
+			un_mandate_record_enforcement = yes
+		}
+	}
+
+	# Marks the goal timer-enforceable and spawns the infamy-free retake goal
+	# for the loser, exactly as vanilla return_state does.
+	mirrored_wargoal = {
+		method = territorial
+	}
+
+	ai = {
+		is_significant_demand = yes
+	}
+}

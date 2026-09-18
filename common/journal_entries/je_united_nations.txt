@@ -42,6 +42,7 @@
 	scripted_button = un_request_peacekeepers_button
 	scripted_button = un_request_humanitarian_aid_button
 	scripted_button = un_propose_condemn_button
+	scripted_button = un_propose_mandate_button
 
 	# ---- Policy buttons (members only) ----
 	scripted_button = un_propose_sanctions_button

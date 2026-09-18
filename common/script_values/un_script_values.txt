@@ -482,3 +482,64 @@ un_agency_count = {
 	if = { limit = { has_global_variable = un_agency_unhcr } add = 1 }
 	if = { limit = { has_global_variable = un_agency_unoosa } add = 1 }
 }
+
+# ---- Authorized Military Mandates ----
+# See common/scripted_effects/un_mandate_effects.txt for the container model.
+
+# How long an authorization stays usable before it lapses, in months of the
+# global UN pulse. Five years: long enough to raise the play and fight it,
+# short enough that a mandate cannot be banked indefinitely.
+un_mandate_expiry_months = 60
+
+# Closed mandates kept in un_mandate_registry for the chamber's record. Past
+# this, the oldest closed entry is destroyed.
+# Also written as the literal 13 (cap + 1) in un_mandate_prune_registry — change both.
+un_mandate_registry_cap = 12
+
+# How long a closed mandate stays on the record before it is destroyed, even
+# under the cap.
+un_mandate_closed_retention_months = 60
+
+# Months of authorization left. Clamped at 0 so a mandate the sweep has not
+# reached yet never displays a negative figure.
+# Scope: mandate container
+un_mandate_months_left = {
+	value = un_mandate_expiry_months
+	subtract = var:un_mnd_months
+	min = 0
+}
+
+# Display order for the chamber's mandate list: highest for the newest
+# mandate, so `ordered_in_global_list = { order_by = un_mandate_recency_order }`
+# walks un_mandate_registry newest-first.
+# Scope: mandate container
+un_mandate_recency_order = {
+	value = var:un_mnd_seq
+}
+
+# Eviction order for un_mandate_registry: highest for the oldest mandate.
+# The inverse of un_mandate_recency_order.
+# Scope: mandate container
+un_mandate_age_order = {
+	value = 0
+	subtract = var:un_mnd_seq
+}
+
+# Which candidate target the propose button tables a mandate against, when
+# more than one qualifies. Prefers the state the Assembly has already censured
+# over one merely notorious, and a rival over a stranger, and breaks ties
+# toward the weaker state — the Assembly authorizes the winnable restoration,
+# not the biggest war available.
+# Scope: candidate target country; ROOT = the prospective proposer
+un_mandate_case_score = {
+	value = 0
+	if = { limit = { has_modifier = un_condemned_modifier } add = 40 }
+	if = { limit = { has_modifier = un_sanctions_target_modifier } add = 40 }
+	if = { limit = { has_modifier = un_sanctions_partial_modifier } add = 20 }
+	if = { limit = { has_modifier = un_non_binding_rebuke_modifier } add = 20 }
+	if = {
+		limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }
+		add = 20
+	}
+	subtract = country_rank
+}

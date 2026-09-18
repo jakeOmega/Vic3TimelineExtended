@@ -1,0 +1,61 @@
+﻿# ============================================================================
+# UN AUTHORIZED MANDATE — DIPLOMATIC PLAY
+#
+# The play a mandate holder raises to exercise its authorization. It exists so
+# the holder does not have to open a plain `dp_return_state` (and pay that
+# play's starting war goal in full) just to reach the free authorized goal.
+#
+# `add_infamy_for_starting_initiator_wargoals` is deliberately left at its
+# default (yes): the discount belongs to te_un_mandate_restore_state's own
+# infamy block, which is zero only while a mandate covers the goal. Switching
+# it off here would hand out a free starting goal even in the cases the war
+# goal's own formula is written to charge for.
+#
+# Shape follows vanilla dp_return_state
+# (game/common/diplomatic_plays/00_diplomatic_plays.txt:129-153); the extra
+# mandate clauses in `possible` are the gate (see the note on
+# selectable_in_lens below).
+# ============================================================================
+
+dp_te_un_mandate_restore_state = {
+	requires_interest_marker = no
+
+	war_goal = te_un_mandate_restore_state
+
+	texture = "gfx/interface/icons/war_goals/return_state.dds"
+
+	# Evaluated without a target in scope, so this is only "do we hold an
+	# unexercised authorization at all".
+	# No selectable_in_lens block, on purpose. With a mandate-state trigger there
+	# (`has_variable = un_mandate_current` ...) the play never appeared for a
+	# mandate holder; removing the block fixed it (confirmed in play testing,
+	# 2026-09-18). Vanilla only ever writes `always = no` in that block and
+	# documents that it "does not contain target in scope" — treat it as an
+	# off-switch, not as a place for country-state triggers. `possible` below
+	# does all the gating.
+
+	possible = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		diplomatic_play_has_no_relations_blockers = yes
+
+		# The authorization must be live and must name this country.
+		has_variable = un_mandate_current
+		var:un_mandate_current ?= {
+			has_tag = un_mandate_active
+			var:un_mnd_target ?= scope:target_country
+		}
+	}
+
+	ai_acceptance_max = 90 # REVIEWED 2026-09-18: diplomatic-play field, not an effect/trigger — vanilla dp_return_state uses it (game/common/diplomatic_plays/00_diplomatic_plays.txt:146). effect_trigger_validity_audit has no schema for this entity type.
+
+	on_weekly_pulse = {}
+
+	on_war_begins = {}
+
+	on_war_end = {}
+}

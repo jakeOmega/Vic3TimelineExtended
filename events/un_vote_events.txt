@@ -32,6 +32,15 @@
 #   aid_request           - Humanitarian aid (request button)
 #   sanctions             - International sanctions (sanctions button)
 #   expulsion             - Strip a permanent member's seat (expulsion button)
+#   military_mandate      - Authorize one member to recover one claimed state
+#                           region from one censured state (mandate button).
+#                           Binding and vetoable, with no graduated form: a
+#                           veto blocks the authorization outright, exactly as
+#                           it does for reform. The resolution carries two
+#                           extra variables, un_res_mandate_region and
+#                           un_res_mandate_beneficiary; carrying it un-vetoed
+#                           creates the mandate container
+#                           (common/scripted_effects/un_mandate_effects.txt).
 # ============================================================================
 
 # ---- Phase 1: All UN members vote on the proposed resolution ----
@@ -111,6 +120,10 @@ un_vote.1 = {
 				desc = un_vote.1.t_expulsion
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 			}
+			triggered_desc = {
+				desc = un_vote.1.t_military_mandate
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+			}
 			desc = un_vote.1.t
 		}
 	}
@@ -130,6 +143,13 @@ un_vote.1 = {
 				desc = un_vote.1.d_sanctions_target
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_sanctions }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_military_mandate_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
 					scope:un_vote_target ?= this
 				}
 			}
@@ -204,6 +224,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_expulsion
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_military_mandate
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
 			}
 			desc = un_vote.1.d
 		}
@@ -1028,6 +1052,127 @@ un_vote.1 = {
 				}
 				add = -25
 			}
+
+			# ================================================================
+			# TOPIC: Authorized military mandate
+			# ================================================================
+			# Licensing force is the Assembly's gravest act, so the base lean
+			# is against and the inputs are the same ones the other
+			# target-naming topics use: how we stand to the target, how we
+			# stand to the proposer, and how we read the use of force.
+			# Authorising a war against our ally or bloc partner is
+			# unthinkable; authorising one against a rival is cheap.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+				}
+				add = -25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
+				}
+				add = -60
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					is_in_same_power_bloc = scope:un_vote_target
+				}
+				add = -30
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					has_diplomatic_pact = {
+						who = scope:un_vote_target
+						type = rivalry
+					}
+				}
+				add = 35
+			}
+			# The target already stands censured by this Assembly — the case
+			# for enforcement makes itself.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					scope:un_vote_target = { has_modifier = un_condemned_modifier }
+				}
+				add = 25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					scope:un_vote_target = { has_modifier = un_sanctions_target_modifier }
+				}
+				add = 20
+			}
+			# Allies and bloc partners of the proposer back their own.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_proposer
+					has_treaty_alliance_with = { TARGET = scope:un_vote_proposer }
+				}
+				add = 25
+			}
+			# Doctrine: states that have restrained war by law are the least
+			# willing to license it; states that have not are the most.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					has_law = law_type:law_humanitarian_regulations
+				}
+				add = -20
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					has_law = law_type:law_isolationism
+				}
+				add = -25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					has_law = law_type:law_total_war
+				}
+				add = 15
+			}
+			# A strong Assembly can afford to act; a weak one cannot carry it.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					has_global_variable = un_authority
+					global_var:un_authority >= 70
+				}
+				add = 15
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					has_global_variable = un_authority
+					global_var:un_authority < 50
+				}
+				add = -20
+			}
+			# Nobody wants a precedent that could be turned on them: a state
+			# that is itself censurable enough to be a future target votes its
+			# fears. Same test the propose button applies to the target
+			# (un_mandate_target_is_notorious).
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					un_mandate_target_is_notorious = yes
+				}
+				add = -25
+			}
 		}
 	}
 
@@ -1443,6 +1588,11 @@ un_vote.1 = {
 		# Infamy hit on punitive resolutions (vetoing humanitarian intervention,
 		# accountability, or peacekeeping requests is read poorly internationally).
 		# Recommendatory and protective topics don't trigger this.
+		#
+		# military_mandate is deliberately NOT on this list: blocking an
+		# authorization to go to war is not the same kind of act as blocking a
+		# humanitarian one, and charging infamy for restraint would read as the
+		# system punishing peace.
 		if = {
 			limit = {
 				OR = {
@@ -1552,6 +1702,40 @@ un_vote.1 = {
 					NOT = { scope:un_vote_proposer = { is_un_permanent_member = yes } }
 				}
 				add = 30
+			}
+
+			# Authorizing force is the thing the veto exists for. A permanent
+			# member leans toward blocking any mandate, and blocks outright when
+			# the country about to be invaded is its ally or bloc partner —
+			# there is no graduated form to fall back on, so the veto is the
+			# only instrument available.
+			modifier = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					OR = {
+						scope:un_vote_target ?= this
+						has_treaty_alliance_with = { TARGET = scope:un_vote_target }
+						is_in_same_power_bloc = scope:un_vote_target
+					}
+				}
+				add = 55
+			}
+			# ...but not against a rival we would rather see cut down to size.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					exists = scope:un_vote_target
+					has_diplomatic_pact = {
+						who = scope:un_vote_target
+						type = rivalry
+					}
+				}
+				add = -40
 			}
 
 			# Peacekeeping deployment requested by an aligned target — let it go
@@ -1815,6 +1999,27 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 				desc = un_vote.2.d_icc_failed
+			}
+			# Military Mandate - Passed but vetoed (blocked outright, as reform)
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_military_mandate
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_military_mandate_passed_vetoed
+			}
+			# Military Mandate - Passed
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate has_tag = un_res_passed } }
+				desc = un_vote.2.d_military_mandate_passed
+			}
+			# Military Mandate - Failed
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+				desc = un_vote.2.d_military_mandate_failed
 			}
 			# Expulsion - Passed with promotion (2/3 supermajority; vacated seat filled)
 			triggered_desc = {
@@ -2296,6 +2501,36 @@ un_vote.2 = {
 				custom_tooltip = un_vote_law_of_sea_passed_tt
 				change_global_variable = { name = un_authority add = 5 }
 				set_global_variable = un_agency_itlos
+			}
+
+			# ---- Military Mandate: authorize one narrow objective ----
+			# Like reform, this binding topic has NO graduated form. There is
+			# no weaker version of a licence to use force, so a veto blocks it
+			# outright and no mandate is issued. un_mandate_create re-validates
+			# before issuing: a year has passed since the vote opened, and the
+			# target may have lost the territory, we may have left the UN, or
+			# we may already hold another authorization — in any of those cases
+			# the resolution carries but grants nothing.
+			if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+				}
+				custom_tooltip = un_vote_military_mandate_passed_tt
+				change_global_variable = { name = un_authority add = 3 }
+				# Hidden: create_container / set_variable have no player-facing
+				# tooltip worth showing, and letting them render would push the
+				# container's internals in under the custom_tooltip above. Same
+				# reasoning as the un_vote_apply_treaty_modifier split — this
+				# file controls what the option tooltip says.
+				hidden_effect = {
+					un_mandate_create = yes
+				}
+			}
+			else_if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+				custom_tooltip = un_vote_military_mandate_passed_vetoed_tt
+				# No effect — flat block, as with reform.
 			}
 
 			# ---- International Criminal Court: Global criminal justice ----

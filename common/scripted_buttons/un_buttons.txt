@@ -469,6 +469,115 @@ un_propose_expulsion_button = {
 	}
 }
 
+# ---- 1d. PROPOSE AN AUTHORIZED MILITARY MANDATE ----
+# A binding, vetoable resolution licensing ONE member to recover ONE state
+# region it claims from ONE state the Assembly has already censured. Carrying
+# it issues a mandate container (common/scripted_effects/un_mandate_effects.txt);
+# the mandate is what makes te_un_mandate_restore_state selectable, and free.
+#
+# The button picks the case, rather than offering a selection UI: a scripted
+# button's effect cannot prompt, and the alternative — an event listing N
+# candidate pairs — buys a choice the eligibility rules have already narrowed
+# to a handful. un_mandate_select_case picks the highest-scoring target
+# (un_mandate_case_score) and its largest claimed state; the same pick is
+# rendered in the chamber widget's "Mandates in Force" panel *before* the
+# button is pressed, so the player sees which case they would be tabling.
+#
+# Cooldown: deliberately NOT un_resolution_topic_on_cooldown. That check is
+# topic-wide — one member's mandate vote would bar every other member for five
+# years, which would leave the feature dead on a busy map. The throttle is
+# per-country instead: un_mandate_proposal_cooldown (5 years) plus the shared
+# un_request_cooldown that every propose button already takes.
+un_propose_mandate_button = {
+	name = "UN_PROPOSE_MANDATE"
+	desc = "UN_PROPOSE_MANDATE_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		has_global_variable = un_authority
+		NOT = { un_mandate_has_live_mandate = yes }
+		un_mandate_case_exists = yes
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		custom_tooltip = {
+			text = un_no_active_vote_tt
+			NOT = { has_global_variable = un_vote_active }
+		}
+		custom_tooltip = {
+			text = un_mandate_no_live_mandate_tt
+			NOT = { un_mandate_has_live_mandate = yes }
+		}
+		custom_tooltip = {
+			text = un_mandate_authority_tt
+			has_global_variable = un_authority
+			global_var:un_authority >= 40
+		}
+		custom_tooltip = {
+			text = un_mandate_cooldown_tt
+			NOT = { has_variable = un_mandate_proposal_cooldown }
+		}
+		custom_tooltip = {
+			text = un_mandate_case_tt
+			un_mandate_case_exists = yes
+		}
+		NOT = { has_modifier = un_ga_resolution_modifier }
+		NOT = { has_modifier = un_request_cooldown }
+	}
+
+	ai_chance = {
+		value = 0
+		# An AI only reaches for force through the Assembly when the Assembly
+		# is worth something and it cannot simply take the land cheaply.
+		if = { limit = { global_var:un_authority >= 60 } add = 20 }
+		if = { limit = { infamy >= 25 } add = 20 }
+		if = { limit = { country_rank >= rank_value:major_power } add = 10 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -40 }
+		if = { limit = { has_law = law_type:law_total_war } add = -20 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "UN_PROPOSE_MANDATE_TT"
+			un_mandate_select_case = yes
+			if = {
+				limit = {
+					exists = scope:un_mandate_case_target
+					exists = scope:un_mandate_case_state
+				}
+				scope:un_mandate_case_target = { save_scope_as = un_vote_target }
+				add_modifier = {
+					name = un_ga_resolution_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				add_modifier = {
+					name = un_request_cooldown
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				set_variable = { name = un_mandate_proposal_cooldown days = 1825 }
+				un_resolution_open = { TOPIC = military_mandate }
+				# The topic-specific fields ride on the resolution container, so
+				# un_vote.1/.2 and the chamber can read them without a
+				# country-side copy. un_resolution_open leaves scope:un_resolution
+				# pointing at the new container.
+				scope:un_resolution ?= {
+					set_variable = {
+						name = un_res_mandate_region
+						value = scope:un_mandate_case_state.state_region
+					}
+					set_variable = {
+						name = un_res_mandate_beneficiary
+						value = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
 # ---- 2. SANCTIONS ----
 
 un_propose_sanctions_button = {
