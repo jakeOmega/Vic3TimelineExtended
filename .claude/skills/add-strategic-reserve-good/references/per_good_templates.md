@@ -3,15 +3,17 @@
 Copy-paste-and-substitute templates for the verbose per-good blocks. Replace:
 - `<GOOD>` → lowercase good ID (e.g. `small_arms`, `gold`)
 - `<GOOD_DISPLAY>` → prose form (e.g. `Small Arms`, `Gold`)
-- `<TECH>` → gating tech ID (e.g. `military_aviation`) — or remove the `has_technology_researched` line entirely if the good is always available
+- `<TECH>` → gating tech ID (e.g. `military_aviation`) — or use `always = yes` if the good is always available
 
 The templates assume tab indentation. Existing entries in the source files are the ground truth — when in doubt, grep for an existing good's name to see exact spacing.
+
+> **Since the reserve inventory widget landed**, a good no longer needs a scripted progress bar, a pair of scripted buttons or a journal-entry status line. It needs an unlock trigger, a scripted GUI, a widget row and two custom-loc blocks instead. The numbering below matches the table in `SKILL.md`.
 
 ---
 
 ## File 5: `common/script_values/st_res_script_values.txt`
 
-Append the section below after the existing `--- TANKS ---` section (or whichever section is currently last). Then add the `_fill_pct` value at the very bottom alongside the existing `_fill_pct` entries.
+Append the main section after the existing `--- TANKS ---` section (or whichever section is currently last). Then add `_fill_pct` and `_last_net` at the bottom alongside their siblings.
 
 ### Main section (10 values)
 
@@ -26,17 +28,28 @@ st_res_<GOOD>_decay_rate = {
 }
 
 st_res_<GOOD>_weekly_decay = {
-	value = var:st_res_<GOOD>_stored
-	multiply = st_res_<GOOD>_decay_rate
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_stored }
+		value = var:st_res_<GOOD>_stored
+		multiply = st_res_<GOOD>_decay_rate
+	}
 }
 
+# Decay-add must stay INSIDE the workforce gate: an undermanned hub cannot
+# auto-replenish decay loss, and pulling it out would make weekly_delta read 0
+# while the stockpile is actually shrinking.
 st_res_<GOOD>_actual_rate = {
 	value = 0
 	if = {
-		limit = { var:st_res_hub_workforce_cached > 0.99 }
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_<GOOD>_rate
+		}
 		add = var:st_res_<GOOD>_rate
+		add = st_res_<GOOD>_weekly_decay
 	}
-	add = st_res_<GOOD>_weekly_decay
 }
 
 st_res_<GOOD>_actual_rate_base_applied = {
@@ -110,46 +123,181 @@ st_res_<GOOD>_sale_profit = {
 }
 ```
 
-### Fill-percentage value (at end, with siblings)
+### Widget accessors (two more, in their own sibling groups near the bottom)
+
+**Both MUST be `has_variable`-guarded.** The inventory widget evaluates them every frame, including on a save made before the good existed; an unguarded `var:` read there raises script-system errors.
 
 ```
 st_res_<GOOD>_fill_pct = {
-	value = var:st_res_<GOOD>_stored
-	divide = {
-		value = st_res_<GOOD>_capacity
-		min = 1
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_stored }
+		value = var:st_res_<GOOD>_stored
+		divide = {
+			value = st_res_<GOOD>_capacity
+			min = 1
+		}
+		multiply = 100
 	}
-	multiply = 100
+}
+```
+
+```
+st_res_<GOOD>_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_last_delta }
+		value = var:st_res_<GOOD>_last_delta
+	}
 }
 ```
 
 ---
 
-## File 6: `common/scripted_effects/st_res_effects.txt`
+### Reserve-policy values (six more, appended after the main section)
 
-The pattern: extend EVERY existing per-good enumeration to include `<GOOD>`, then add three new helpers.
-
-### 6a. Extend `st_res_init_effect` (add a stored-var + rate-var pair, mirroring oil's pair)
+These back the price-triggered policies. `_price_rel` is the signed premium against base price on the country's own market; do **not** collapse it into a bare `market_goods_pricier` read — the double `min = 0` construction is what keeps it correct whether the engine clamps `pricier`/`cheaper` at zero or returns them as signed mirrors. The four `_limit` values exist because a Paradox trigger needs a `var:` on its left side, so the sgui cannot compare a gap script value to a constant directly.
 
 ```
-	if = {
-		limit = { NOT = { has_variable = st_res_<GOOD>_stored } }
-		set_variable = { name = st_res_<GOOD>_stored value = 0 }
+# --- <GOOD_DISPLAY upper> ---
+st_res_<GOOD>_price_up = {
+	value = 0
+	market = {
+		mg:<GOOD> = {
+			add = market_goods_pricier
+		}
 	}
-	if = {
-		limit = { NOT = { has_variable = st_res_<GOOD>_rate } }
-		set_variable = { name = st_res_<GOOD>_rate value = 0 }
+	min = 0
+}
+
+st_res_<GOOD>_price_down = {
+	value = 0
+	market = {
+		mg:<GOOD> = {
+			add = market_goods_cheaper
+		}
 	}
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_<GOOD>_price_rel = {
+	value = st_res_<GOOD>_price_up
+	subtract = st_res_<GOOD>_price_down
+}
+
+# Current market price of one unit, in GBP. `min = 1` keeps the budget division safe.
+st_res_<GOOD>_unit_price = {
+	value = 1
+	g:<GOOD> = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_<GOOD>_price_rel
+	}
+	min = 1
+}
+
+st_res_<GOOD>_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_sell_thr }
+		add = var:st_res_<GOOD>_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+st_res_<GOOD>_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_buy_thr }
+		add = var:st_res_<GOOD>_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+st_res_<GOOD>_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_ceil_pct }
+		add = var:st_res_<GOOD>_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+st_res_<GOOD>_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_floor_pct }
+		add = var:st_res_<GOOD>_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
 ```
 
-### 6b. Extend `st_res_reset_vars_effect` (mirror oil's two `set_variable` lines)
+The shared `st_res_policy_*` constants at the bottom of the file are **not** per-good — don't touch them when adding a good.
+
+---
+
+## File 6: `common/scripted_triggers/st_res_triggers.txt` (unlock trigger)
+
+The single source of truth for "is this good available yet". The scripted GUI reads it and the widget row's visibility flows from there — **never duplicate the tech condition anywhere else.**
 
 ```
-	set_variable = { name = st_res_<GOOD>_stored value = 0 }
-	set_variable = { name = st_res_<GOOD>_rate value = 0 }
+st_res_<GOOD>_unlocked_trigger = {
+	has_technology_researched = <TECH>
+}
 ```
 
-### 6c. Extend `st_res_clamp_stockpiles_effect` (one stored-clamp line + two rate-clamp lines per good)
+No tech gate:
+
+```
+st_res_<GOOD>_unlocked_trigger = {
+	always = yes
+}
+```
+
+---
+
+## File 7: `common/scripted_effects/st_res_effects.txt`
+
+Most of the per-good work is now one line added to an existing `$GOOD$`-parameterized list. Only the wrapper effects are genuinely new.
+
+### 7a. Add one line to each per-good call list
+
+```
+	st_res_init_good_effect          = { GOOD = <GOOD> }  # in st_res_init_effect
+	st_res_reset_good_vars_effect    = { GOOD = <GOOD> }  # in st_res_reset_vars_effect
+	st_res_startup_good_setup_effect = { GOOD = <GOOD> }  # in st_res_rebuild_hub_flow_modifiers_effect (country half)
+	st_res_apply_weekly_good_effect  = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch)
+	st_res_policy_evaluate_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch, AFTER the apply loop)
+	st_res_mark_good_no_hub_effect   = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch)
+	st_res_policy_evaluate_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch too — see below)
+	st_res_set_good_status_effect    = { GOOD = <GOOD> }  # at the END of st_res_refresh_hub_flow_effect
+	st_res_switch_to_manual_base     = { GOOD = <GOOD> }  # in st_res_reset_rates_effect
+	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 1 }  # in st_res_ai_seed_policies_effect
+```
+
+`st_res_policy_evaluate_good_effect` goes in **both** branches of the weekly pulse. That is not redundancy: it is the single derivation site for `st_res_<GOOD>_policy_status`, and its no-hub branch is what writes status 9. Drop the else-branch call and a policy's explanation goes stale the moment the hub is destroyed.
+
+Its position in the hub branch matters too — after `st_res_apply_weekly_good_effect` (so last week's movement is booked first) and before the shared `st_res_refresh_hub_flow_effect` / `st_res_clamp_stockpiles_effect` tail (so the rate it picks is the one the hub trades on next week). The tail still runs **once**, not once per good.
+
+For `st_res_ai_seed_good_effect`, pick the AI's policy: `3` (Stabilize Prices) for a civilian good whose price the AI should smooth, `1` (Buy When Cheap) for war materiel. Grain is the only `3` today.
+
+The ten new per-good policy variables need **no** new init code — `st_res_init_good_effect` seeds all ten behind one `NOT = { has_variable = st_res_$GOOD$_policy }` guard, and `st_res_reset_good_vars_effect` resets them, both already `$GOOD$`-parameterized.
+
+Inside the `random_scope_building = { limit = { is_building_type = building_strategic_reserve_hub } … }` block of `st_res_rebuild_hub_flow_modifiers_effect`:
+
+```
+			st_res_rebuild_<GOOD>_flow_modifiers_effect = yes
+```
+
+### 7b. Extend `st_res_clamp_stockpiles_effect` (one stored clamp + two rate clamps)
 
 ```
 	clamp_variable = { name = st_res_<GOOD>_stored min = 0 max = st_res_<GOOD>_capacity }
@@ -160,60 +308,27 @@ The pattern: extend EVERY existing per-good enumeration to include `<GOOD>`, the
 	clamp_variable = { name = st_res_<GOOD>_rate min = st_res_<GOOD>_max_withdrawable max = st_res_<GOOD>_max_storable }
 ```
 
-### 6d. Extend `st_res_weekly_update_effect` (inside the `if = { limit = { any_scope_building = ... } }`)
-
-```
-		change_variable = { name = st_res_<GOOD>_stored add = st_res_<GOOD>_weekly_delta }
-		clamp_variable = { name = st_res_<GOOD>_stored min = 0 max = st_res_<GOOD>_capacity }
-```
-
-### 6e. Extend `st_res_je_immediate_effect` AND `st_res_je_weekly_pulse_effect` (both files; same shape)
-
-Add one `set_variable` line at the country-scope level:
-
-```
-	set_variable = { name = st_res_<GOOD>_fill_for_bar value = st_res_<GOOD>_fill_pct }
-```
-
-…and one `set_bar_progress` line inside `scope:journal_entry`:
-
-```
-		set_bar_progress = { name = st_res_<GOOD>_fill_bar value = ROOT.var:st_res_<GOOD>_fill_for_bar }
-```
-
-### 6f. Extend `st_res_reset_rates_effect`
+### 7c. Extend `st_res_reset_rates_effect`
 
 ```
 	set_variable = { name = st_res_<GOOD>_rate value = 0 }
 ```
 
-### 6g. Extend `st_res_refresh_hub_flow_effect` (the cached actual-rate writes)
+### 7d. Extend `st_res_refresh_hub_flow_effect` (the cached actual-rate writes)
+
+Must come **before** the `st_res_set_good_status_effect` calls — the status derivation reads this cached value to detect flow-cap clipping.
 
 ```
 	set_variable = { name = st_res_<GOOD>_actual_rate_cached value = st_res_<GOOD>_actual_rate }
 ```
 
-### 6h. Extend `st_res_rebuild_hub_flow_modifiers_effect` (TWO places)
-
-At the country-scope startup section:
-
-```
-	st_res_startup_good_setup_effect = { GOOD = <GOOD> }
-```
-
-Inside the `random_scope_building = { limit = { is_building_type = building_strategic_reserve_hub } ... }` block:
-
-```
-			st_res_rebuild_<GOOD>_flow_modifiers_effect = yes
-```
-
-### 6i. Extend `st_res_apply_sell_profit_effect`
+### 7e. Extend `st_res_apply_sell_profit_effect`
 
 ```
 	change_variable = { name = st_res_sell_profit add = st_res_<GOOD>_sale_profit }
 ```
 
-### 6j. New wrapper effect (one per good)
+### 7f. New wrapper effects (four one-liners per good)
 
 ```
 st_res_rebuild_<GOOD>_flow_modifiers_effect = {
@@ -221,97 +336,92 @@ st_res_rebuild_<GOOD>_flow_modifiers_effect = {
 }
 ```
 
-### 6k. New rate-adjust effects (two per good)
+```
+st_res_increase_<GOOD>_rate_effect  = { st_res_increase_rate_base = { GOOD = <GOOD> } }
+st_res_decrease_<GOOD>_rate_effect  = { st_res_decrease_rate_base = { GOOD = <GOOD> } }
+st_res_stop_<GOOD>_rate_effect      = { st_res_stop_rate_base     = { GOOD = <GOOD> } }
+```
+
+---
+
+## File 8: `common/scripted_guis/st_res_scripted_gui.txt`
+
+One scripted GUI per good. The three row controls share it and pass the action in a `dir` saved scope. **The `dir` mapping is an implicit contract with the widget — `0` decrease, `1` stop, `2` increase.** Player-only, matching the `ai_chance = { value = 0 }` that every Strategic Reserve button has always carried.
+
+The `custom_tooltip` texts are phrased as **conditions**, not complaints: `ScriptedGui.IsValidTooltip` renders them with a tick when valid and a cross when not.
 
 ```
-st_res_increase_<GOOD>_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_<GOOD>_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
-}
+st_res_adjust_<GOOD>_sgui = {
+	scope = country
+	saved_scopes = { dir }
 
-st_res_decrease_<GOOD>_rate_effect = {
-	st_res_init_effect = yes
-	change_variable = { name = st_res_<GOOD>_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_<GOOD>_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_<GOOD>_rate > st_res_<GOOD>_max_withdrawable
+				var:st_res_<GOOD>_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_<GOOD>_rate < st_res_<GOOD>_max_storable
+				var:st_res_<GOOD>_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_<GOOD>_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_<GOOD>_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_<GOOD>_rate_effect = yes
+		}
+		else = {
+			st_res_stop_<GOOD>_rate_effect = yes
+		}
+	}
 }
 ```
 
 ---
 
-## File 7: `common/scripted_buttons/st_res_buttons.txt`
+### The policy scripted GUI (second sgui per good)
 
-Two buttons. If the good has a tech gate, include the `has_technology_researched = <TECH>` line in the `visible` block; otherwise drop it (only `has_journal_entry = je_strategic_reserve` remains).
+A good also needs an `st_res_policy_<GOOD>_sgui`, in the lower half of the same file. It is long but entirely mechanical: **copy the `st_res_policy_grain_sgui` block and replace every `grain` with `<GOOD>`.** Nothing else changes — the op codes are identical for every good, and the file header carries the op-code table.
 
-```
-# ---------------- <GOOD_DISPLAY upper> RATE BUTTONS ----------------
-st_res_increase_<GOOD>_rate_button = {
-	name = "st_res_increase_<GOOD>_rate_button"
-	desc = "st_res_increase_<GOOD>_rate_button_desc"
-	visible = {
-		has_journal_entry = je_strategic_reserve
-		has_technology_researched = <TECH>
-	}
-	ai_chance = {
-		value = 0
-	}
-	possible = {
-		custom_tooltip = {
-			text = "st_res_rate_adjustment_disabled"
-			var:st_res_<GOOD>_rate < st_res_<GOOD>_max_storable
-			var:st_res_<GOOD>_rate < st_res_weekly_base_rate_cap
-		}
-	}
-	effect = {
-		st_res_increase_<GOOD>_rate_effect = yes
-	}
-}
-
-st_res_decrease_<GOOD>_rate_button = {
-	name = "st_res_decrease_<GOOD>_rate_button"
-	desc = "st_res_decrease_<GOOD>_rate_button_desc"
-	visible = {
-		has_journal_entry = je_strategic_reserve
-		has_technology_researched = <TECH>
-	}
-	ai_chance = {
-		value = 0
-	}
-	possible = {
-		custom_tooltip = {
-			text = "st_res_rate_adjustment_disabled"
-			var:st_res_<GOOD>_rate > st_res_<GOOD>_max_withdrawable
-			var:st_res_<GOOD>_rate > st_res_neg_weekly_base_rate_cap
-		}
-	}
-	effect = {
-		st_res_decrease_<GOOD>_rate_effect = yes
-	}
-}
-```
-
----
-
-## File 8: `common/scripted_progress_bars/st_res_progress_bars.txt`
-
-```
-st_res_<GOOD>_fill_bar = {
-	name = "st_res_<GOOD>_fill_bar_name"
-	desc = "st_res_<GOOD>_fill_bar_desc"
-
-	default_green = yes
-
-	start_value = 0
-	min_value = 0
-	max_value = 100
-}
-```
+Do not hand-write it from the table; the `is_valid` chain has twenty branches and the relative-bound branches (ops 21, 22, 27, 28) reference that good's `_policy_*_limit` script values, which is exactly where a hand copy goes wrong.
 
 ---
 
 ## File 9: `common/customizable_localization/st_res_custom_loc.txt`
+
+Two blocks per good, **both driven by `st_res_<GOOD>_last_status`** (written by `st_res_set_good_status_effect`). Never re-derive the state from rates or stockpiles here — that is exactly what makes the label and the bookkeeping drift apart.
+
+Status codes: `0` Idle, `1` Storing, `2` Withdrawing, `3` Storing (flow-capped), `4` Withdrawing (flow-capped), `5` Full, `6` Empty, `7` Understaffed, `8` No hub.
+
+Every branch is `has_variable`-guarded: customizable localization is evaluated for countries that never opened the journal entry.
 
 ```
 st_res_<GOOD>_mode_text = {
@@ -320,17 +430,30 @@ st_res_<GOOD>_mode_text = {
 
 	text = {
 		trigger = {
-			var:st_res_<GOOD>_rate > 0
-			var:st_res_<GOOD>_stored < st_res_<GOOD>_capacity
+			has_variable = st_res_<GOOD>_last_status
+			OR = {
+				var:st_res_<GOOD>_last_status = 1
+				var:st_res_<GOOD>_last_status = 3
+			}
 		}
 		localization_key = st_res_mode_storing
 	}
 	text = {
 		trigger = {
-			var:st_res_<GOOD>_rate < 0
-			var:st_res_<GOOD>_stored > 0
+			has_variable = st_res_<GOOD>_last_status
+			OR = {
+				var:st_res_<GOOD>_last_status = 2
+				var:st_res_<GOOD>_last_status = 4
+			}
 		}
 		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_<GOOD>_last_status
+			var:st_res_<GOOD>_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
 	}
 	text = {
 		trigger = { always = yes }
@@ -339,46 +462,107 @@ st_res_<GOOD>_mode_text = {
 }
 ```
 
----
-
-## File 10: `common/journal_entries/je_strategic_reserve.txt`
-
-Three insertions inside the `je_strategic_reserve = { ... }` body:
-
-(a) progress bar declaration (next to the existing `scripted_progress_bar = st_res_oil_fill_bar`):
-
 ```
-	scripted_progress_bar = st_res_<GOOD>_fill_bar
-```
+st_res_<GOOD>_reason_text = {
+	type = country
+	random_valid = no
 
-(b) two button declarations (next to the existing `scripted_button = st_res_increase_oil_rate_button`):
-
-```
-	scripted_button = st_res_decrease_<GOOD>_rate_button
-	scripted_button = st_res_increase_<GOOD>_rate_button
-```
-
-(c) status_desc triggered_desc (next to the existing oil/aeroplanes/tanks lines). With tech gate:
-
-```
-		triggered_desc = {
-			desc = je_strategic_reserve_<GOOD>_line
-			trigger = { has_technology_researched = <TECH> }
+	text = {
+		trigger = {
+			has_variable = st_res_<GOOD>_last_status
+			var:st_res_<GOOD>_last_status = 8
 		}
+		localization_key = st_res_reason_no_hub
+	}
+	# … repeat one block per code, highest first:
+	#   7 -> st_res_reason_unstaffed          3 -> st_res_reason_cap_store
+	#   6 -> st_res_reason_empty              2 -> st_res_reason_on_target_withdraw
+	#   5 -> st_res_reason_full               1 -> st_res_reason_on_target_store
+	#   4 -> st_res_reason_cap_withdraw
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
 ```
 
-Without tech gate:
-
-```
-		triggered_desc = {
-			desc = je_strategic_reserve_<GOOD>_line
-			trigger = { always = yes }
-		}
-```
+The nine `st_res_reason_*` and four `st_res_mode_*` keys are **shared across all goods** — they already exist, don't add new ones.
 
 ---
 
-## Localization templates (files 11–14)
+### Policy custom loc (two more blocks)
+
+`st_res_<GOOD>_policy_text` (4 branches on `st_res_<GOOD>_policy`) and `st_res_<GOOD>_policy_reason_text` (10 branches on `st_res_<GOOD>_policy_status`). Copy the grain pair and swap the good name; every branch keeps its `has_variable` guard for the same reason the existing pair does. The `localization_key` values are shared across goods — no new loc keys are needed for these two.
+
+---
+
+## File 10: `gui/journal_entry_widgets/strategic_reserve_widget.gui`
+
+One row instance, appended to the root `widget_je_strategic_reserve_inventory` flowcontainer in the same order as the other goods. Nothing in the row `type` needs to change: the three control buttons read the inherited `ScriptedGui` datacontext, so they are identical for every good.
+
+```
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_<GOOD>_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_<GOOD>_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_<GOOD>_name" }
+		blockoverride "row_amount" { text = "st_res_row_<GOOD>_amount" }
+		blockoverride "row_status" { text = "st_res_row_<GOOD>_status" }
+		blockoverride "row_flow" { text = "st_res_row_<GOOD>_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_<GOOD>_fill_pct'))]"
+		}
+		blockoverride "row_policy_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_<GOOD>' )]"
+			tooltip = "st_res_row_policy_toggle_tooltip"
+		}
+		blockoverride "row_policy" { text = "st_res_row_<GOOD>_policy" }
+		blockoverride "row_policy_reason" { text = "st_res_row_<GOOD>_policy_reason" }
+		blockoverride "row_policy_panel" {
+			widget_je_st_res_policy_panel = {
+				blockoverride "policy_panel_context" {
+					datacontext = "[GetScriptedGui('st_res_policy_<GOOD>_sgui')]"
+				}
+				blockoverride "policy_panel_visible" {
+					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_<GOOD>' )]"
+				}
+				blockoverride "policy_value_buy_thr" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_buy_thr').GetValue|+0]"
+				}
+				blockoverride "policy_value_sell_thr" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_sell_thr').GetValue|+0]"
+				}
+				blockoverride "policy_value_max_flow" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_max_flow').GetValue|0]"
+				}
+				blockoverride "policy_value_floor_pct" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_floor_pct').GetValue|0]"
+				}
+				blockoverride "policy_value_ceil_pct" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ceil_pct').GetValue|0]"
+				}
+				blockoverride "policy_value_budget" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_budget').GetValue|0]"
+				}
+			}
+		}
+	}
+```
+
+The three policy-panel `type`s (`widget_je_st_res_policy_choice`, `_stepper`, `_panel`) are **shared** — the op codes are the same for every good, so a new good adds only the blockoverrides above, never a new type. The six value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
+
+**`.gui` files need a UTF-8 BOM** — `bom_normalizer` adds one on the next reload, but keep it if you rewrite the file wholesale.
+
+---
+
+## File 11: `common/journal_entries/je_strategic_reserve.txt`
+
+**Nothing to add per good.** The journal entry no longer declares per-good progress bars, buttons or status lines — the widget covers all of it. Only update `je_strategic_reserve_desc` (below) so the good is named in the prose list.
+
+---
+
+## Localization templates
 
 ### te_modifiers_l_english.yml
 
@@ -393,33 +577,47 @@ Without tech gate:
 
 ### te_journal_entries_l_english.yml
 
-One key per good (the JE status line). The format is verbose but mechanical — copy the existing oil line and substitute. Note: `Active` shows the *actual* gross flow (includes decay replenishment) which can differ from the player's *Rate Setting*.
+No per-good key any more. Just update the prose list:
 
 ```
- je_strategic_reserve_<GOOD>_line:0 "\n#bold <GOOD_DISPLAY>:#! [ROOT.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_capacity_add')]\n#bold Rate Setting:#! [ROOT.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|0] / week\n#bold Active:#! [ROOT.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|0] / week\n#bold Status:#! [ROOT.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]\n#bold Decay:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_decay_add')]\n"
+ je_strategic_reserve_desc:0 "Manage the national stockpile of grain, ammunition, oil, …, and <GOOD_DISPLAY lower>. …"
 ```
 
-Also update `je_strategic_reserve_desc:0 "Manage the national stockpile of grain, ammunition, oil, ..."` to add the new good name in its comma list.
+### te_miscellaneous_l_english.yml (widget row cells + flow modifier names)
 
-### te_miscellaneous_l_english.yml
+All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the widget's data context is the journal entry, not a scripted button.
 
 ```
- st_res_<GOOD>_fill_bar_name:0 "<GOOD_DISPLAY> Fill"
  st_res_<GOOD>_store_flow:0 "Strategic Reserve <GOOD_DISPLAY> Intake"
  st_res_<GOOD>_withdraw_flow:0 "Strategic Reserve <GOOD_DISPLAY> Release"
- st_res_increase_<GOOD>_rate_button:0 "Increase <GOOD_DISPLAY> Rate"
- st_res_decrease_<GOOD>_rate_button:0 "Decrease <GOOD_DISPLAY> Rate"
+ st_res_row_<GOOD>_name:0 "@<GOOD>! #bold <GOOD_DISPLAY>#!"
+ st_res_row_<GOOD>_amount:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0]"
+ st_res_row_<GOOD>_status:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]"
+ st_res_row_<GOOD>_flow:0 "#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]  #bold Last wk:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
 ```
 
-### te_concepts_l_english.yml
+`@<GOOD>!` is the goods texticon — confirm it exists with `grep -n "icon = <GOOD>$" "$VIC3/game/gui/goods_texticons.gui"` (a mod-only good needs an entry in `gui/zzz_extra_goods_texticons.gui` instead).
+
+### te_miscellaneous_l_english.yml — policy row lines (two more keys)
 
 ```
- st_res_<GOOD>_fill_bar_desc:0 "<GOOD_DISPLAY>: [ROOT.ScriptValue('st_res_<GOOD>_fill_pct')|1]% Full"
+ st_res_row_<GOOD>_policy:0 "#bold Policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]  ·  #bold Market:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] vs base  ·  #bold Flow:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]/wk"
+ st_res_row_<GOOD>_policy_reason:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]"
+```
+
+Everything else the policy panel shows — policy names, preset names, settings labels, all the tooltips and all ten explanations — is shared across goods and already exists.
+
+---
+
+### te_concepts_l_english.yml (row tooltip + flow modifier descs)
+
+```
  st_res_<GOOD>_store_flow_desc:0 "This hub is purchasing <GOOD_DISPLAY lower> for the strategic reserve."
  st_res_<GOOD>_withdraw_flow_desc:0 "This hub is releasing <GOOD_DISPLAY lower> from the strategic reserve."
- st_res_increase_<GOOD>_rate_button_desc:0 "Increase the <GOOD_DISPLAY lower> reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Positive values store <GOOD_DISPLAY lower>, negative values withdraw them. Current setting: [ROOT.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|0] / week."
- st_res_decrease_<GOOD>_rate_button_desc:0 "Decrease the <GOOD_DISPLAY lower> reserve rate setting by [ROOT.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Positive values store <GOOD_DISPLAY lower>, negative values withdraw them. Current setting: [ROOT.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|0] / week."
+ st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Price at the last weekly review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%"
 ```
+
+The three control-button tooltips (`st_res_row_decrease_tooltip`, `st_res_row_stop_tooltip`, `st_res_row_increase_tooltip`) are shared across all goods — they already exist.
 
 `organize_loc.py` will re-sort these on the next mod_state_server reload. Don't worry about exact insertion position — alphabetical-ish is enough for diff readability.
 
