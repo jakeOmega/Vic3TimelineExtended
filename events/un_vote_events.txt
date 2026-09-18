@@ -454,6 +454,29 @@ un_vote.1 = {
 			base = 40
 
 			# ================================================================
+			# SHARED PROPOSER-STANDING LEAN  <-- LOBBYING STAGE: ADD YOURS HERE
+			# ================================================================
+			# The Assembly listens harder to a member with a record. ONE shared
+			# script value carries the whole effect (range -5 .. +5 against the
+			# base of 40), rather than a lean per topic, so the nudge is tuned
+			# and audited in one place:
+			# common/script_values/un_standing_values.txt.
+			#
+			# The lobbying stage should add a SECOND modifier block right here,
+			# with its own shared script value — not fold itself into
+			# un_vote_proposer_standing_lean. Standing and lobbying have to stay
+			# separately tunable and separately attributable.
+			#
+			# Only the yes option is touched. Option B ("vote against") is left
+			# exactly as it was: raising A already lowers B's share of the roll,
+			# and a symmetric penalty there would double the effect of a
+			# deliberately modest nudge.
+			modifier = {
+				trigger = { exists = scope:un_vote_proposer }
+				add = un_vote_proposer_standing_lean
+			}
+
+			# ================================================================
 			# DIPLOMATIC RELATIONSHIP MODIFIERS
 			# ================================================================
 
@@ -2142,6 +2165,16 @@ un_vote.2 = {
 						days = long_modifier_time
 						is_decaying = yes
 					}
+					# International standing: having the Assembly vote your seat
+					# away is a serious violation, so the benefits are suspended
+					# as well as the score dented. Paid once — this option runs
+					# once per resolution, and the expulsion topic carries a
+					# ten-year cooldown afterwards.
+					custom_tooltip = {
+						text = un_standing_seat_stripped_tt
+						un_standing_loss = { AMOUNT = un_standing_seat_stripped_loss REASON = 29 }
+						un_standing_suspend = { DAYS = 1825 }
+					}
 				}
 				change_relations = { country = scope:un_vote_target value = -25 }
 			}
@@ -2201,6 +2234,19 @@ un_vote.2 = {
 								days = long_modifier_time
 								is_decaying = yes
 							}
+							custom_tooltip = {
+								text = un_standing_censured_tt
+								un_standing_loss = { AMOUNT = un_standing_condemned_loss REASON = 22 }
+							}
+						}
+						else = {
+							# Accepted the verdict before the vote: a much lighter
+							# dent. Owning a censure is still compliance, and the
+							# target already carries un_self_corrected_modifier.
+							custom_tooltip = {
+								text = un_standing_censured_accepted_tt
+								un_standing_loss = { AMOUNT = un_standing_rebuked_loss REASON = 22 }
+							}
 						}
 					}
 				}
@@ -2225,6 +2271,13 @@ un_vote.2 = {
 								name = un_non_binding_rebuke_modifier
 								days = normal_modifier_time
 								is_decaying = yes
+							}
+							# The graduated form of a censure costs the graduated
+							# dent. An accepted rebuke costs nothing at all —
+							# it is the mildest outcome the Assembly can reach.
+							custom_tooltip = {
+								text = un_standing_rebuked_tt
+								un_standing_loss = { AMOUNT = un_standing_rebuked_loss REASON = 23 }
 							}
 						}
 					}
@@ -2474,6 +2527,16 @@ un_vote.2 = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = { name = un_sanctions_target_modifier }
+							custom_tooltip = {
+								text = un_standing_sanctioned_tt
+								un_standing_loss = { AMOUNT = un_standing_sanctioned_loss REASON = 24 }
+							}
+						}
+						else = {
+							custom_tooltip = {
+								text = un_standing_sanctioned_accepted_tt
+								un_standing_loss = { AMOUNT = un_standing_sanctioned_partial_loss REASON = 24 }
+							}
 						}
 					}
 					change_relations = { country = scope:un_vote_target value = -30 }
@@ -2489,6 +2552,10 @@ un_vote.2 = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = { name = un_sanctions_partial_modifier }
+							custom_tooltip = {
+								text = un_standing_sanctioned_partial_tt
+								un_standing_loss = { AMOUNT = un_standing_sanctioned_partial_loss REASON = 25 }
+							}
 						}
 					}
 					change_relations = { country = scope:un_vote_target value = -10 }
@@ -2774,6 +2841,22 @@ un_vote.3 = {
 		# Same effects as yes voters - you accept the majority decision
 		un_vote_apply_treaty_modifier = yes
 		un_vote_apply_resolution_compliance = yes
+
+		# International standing: complying with a BINDING decision you voted
+		# against is the one act in this event that is not merely voting — the
+		# member is bound by something it argued against and submits anyway.
+		# Voting with the majority pays nothing (option A above is untouched).
+		# Restricted to binding resolutions because only those bind: yielding
+		# on a recommendation costs nothing and so earns nothing.
+		# Once per member per resolution — un_vote.3 fires once per member, and
+		# an event runs exactly one option.
+		if = {
+			limit = { scope:un_resolution ?= { un_resolution_is_binding = yes } }
+			custom_tooltip = {
+				text = un_standing_complied_tt
+				un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+			}
+		}
 		ai_chance = { base = 50 }
 	}
 
@@ -2794,6 +2877,18 @@ un_vote.3 = {
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
 		change_infamy = 3
+
+		# International standing: openly refusing a BINDING decision is the
+		# defiance the brief asks to punish. Refusing a recommendatory one is
+		# legal dissent — the same reasoning that leaves the veto free — so it
+		# costs nothing here.
+		if = {
+			limit = { scope:un_resolution ?= { un_resolution_is_binding = yes } }
+			custom_tooltip = {
+				text = un_standing_defied_tt
+				un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
+			}
+		}
 
 		# Power bloc leverage: defying bloc decision
 		if = {
