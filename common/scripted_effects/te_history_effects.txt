@@ -36,6 +36,17 @@
 # that was not recorded in a month simply has no `te_hist_v_<METRIC>`
 # variable there, which is how the charts tell "no data" from a real zero.
 #
+# LIST ORDER. The chart lays its bars out in `GetList` order, which is the
+# order the engine keeps the variable list in. This store only ever appends to
+# the end and removes the single oldest from the front, so insertion order is
+# chronological as long as `remove_list_variable` erases in place. If the bars
+# ever render out of order in game, that assumption is wrong and the fix is
+# local: rebuild the list chronologically after each eviction
+# (`ordered_in_list` with `order_by = te_history_sample_order` and no
+# `position` iterates every element in order) instead of removing in place.
+# Eviction itself is already order-independent — it uses `order_by`, not
+# position 0 of the raw list.
+#
 # Every helper is wrapped in `hidden_effect` because the banking policy
 # effects that call the marker helper are also rendered as button tooltips;
 # during that render the engine resolves scope links but never creates
