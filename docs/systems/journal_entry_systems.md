@@ -594,7 +594,7 @@ Nothing assumes any standing variable exists. A save that predates the feature l
 
 PR #308 adds a history store. Once both are merged, national standing should be sampled monthly from the UN country pulse with `te_history_record_sample = { METRIC = un_standing VALUE = var:<un_standing> }`, placed at the end of `un_standing_country_pulse` inside the member branch. That effect is **not** referenced anywhere in this branch's script — it does not exist in this checkout.
 
-#### Notes for the lobbying stage
+#### Notes for the lobbying stage (stage 3, now built — see *Resolution lobbying* below)
 
 - **Helpers to call:** `un_standing_gain = { AMOUNT = <points> REASON = <code> }` and `un_standing_loss = { AMOUNT = <points> REASON = <code> }`, both country-scoped, both no-ops for a country with no standing. Add your reason codes to the table at the top of `un_standing_effects.txt`, the chain in `un_standing_reason_line`, and matching `je_un_standing_reason_<code>` keys. Use the 30+ range to stay clear of this stage's 1–6 and 20–29.
 - **A broken lobbying promise** is a broken commitment: call `un_standing_loss` once, at the single site where the promise is detected as broken, and put the tuning figure in `un_standing_values.txt` next to the rest. If it is meant to be a *serious* violation, also call `un_standing_suspend = { DAYS = <literal> }` — `set_variable`'s `days` argument will not take a script value.
@@ -602,6 +602,131 @@ PR #308 adds a history store. Once both are merged, national standing should be 
 - **The AI vote hook** is in `events/un_vote_events.txt`, `un_vote.1` option A's `ai_chance`, marked `<-- LOBBYING STAGE: ADD YOURS HERE`. Add your own `modifier` block(s) there with **literal** adds (see *Why literals* above); do not fold lobbying into the standing blocks. The two must stay separately tunable and separately attributable.
 - **Do not write `un_standing` directly.** The clamp, the diminishing returns and the reason stamp all live in the two helpers, and the "no other code writes the variable" rule is what makes the score auditable.
 
+
+### Resolution lobbying (proof of concept)
+
+One lobbying action, deliberately. While a resolution is open, its **proposer** may ask one other member to undertake to vote in favour; in exchange the proposer immediately owes that member a vanilla **diplomatic obligation**. The undertaking is recorded on the resolution *separately from the ballot*, and it is settled — honoured or broken — exactly once, at the moment the recipient's vote is booked. Stage 3 of the mandates / standing / lobbying arc, and the last of them.
+
+Everything else in the original lobbying brief is **not built**; the list is at the end of this section.
+
+#### The vehicle: a diplomatic action, not a journal-entry button
+
+`un_secure_commitment_action`, in `common/diplomatic_actions/un_lobbying.txt`. A scripted button cannot prompt for a free choice of country, so the alternative would have been the mandate button's "deterministically target the single best candidate" shape (`un_mandate_select_case`, `un_mandate_effects.txt:69`) — a worse fit for an action whose whole point is *which* member you go to. Three engine capabilities decided it:
+
+- **Targeting.** A diplomatic action is aimed through the ordinary diplomacy UI at whichever member the proposer likes.
+- **`requires_approval = yes`** gives a human recipient the engine's own accept/decline request, which is the "human-controlled recipients receive a choice" requirement satisfied with no popup event of our own (`game/common/diplomatic_actions/diplomatic_action.md`, "Whether this action requires the approval of the target").
+- **`ai.accept_score` is itemised**: every `add` carries a `desc`, and the engine renders the list as the acceptance tooltip. That is "display the main reasons for support or opposition" for free, and permanently in step with the numbers the AI actually uses. Template: vanilla's pactless approval action `game/common/diplomatic_actions/03_violate_sovereignty.txt` (no `pact` block ⇒ no pact is created). Conventions — `groups`, `custom_tooltip`'d `possible` clauses, loc key families — follow the mod's own nine covert-warfare actions in `common/diplomatic_actions/covert_operations.txt`. Diplomatic actions need no GUI or category registration.
+
+#### The obligation is real, and script can both create and remove it
+
+`set_owes_obligation_to = { country = <country> setting = yes|no }`, **scoped to the country that owes**. Verified in vanilla at `game/common/history/diplomacy/00_favors.txt:3` (the historical favour setup), `game/common/decisions/france_savoy.txt:97` (granted), and `game/common/diplomatic_actions/02_obligation_actions.txt:27` (`redeem_obligation` clears it with `setting = no`). The matching triggers are `owes_obligation_to = <country>` and `is_owed_obligation_by = <country>`. The engine's own `redeem_obligation` action is how the recipient cashes the favour in, so the mod adds no redemption path of its own.
+
+The action sets `can_use_obligations = no`. The engine's built-in obligation mechanic lets the *proposer spend a favour the target already owes* to force a deal through; this deal is the mirror of that, and running both at once would let a proposer cash in one favour to buy another.
+
+#### State model — all of it on the resolution container
+
+Nothing is copied onto a country. The resolution container already outlives an annexed proposer, is already archived by `un_resolution_archive` and is already destroyed by its eviction step, so the lobbying record is archived, shown in history and pruned *with* the resolution for free.
+
+| On the resolution container | Meaning |
+| --- | --- |
+| list `un_res_lobbied` | every member approached, accepted or declined — the one-attempt rule |
+| list `un_res_committed_yes` | **pending** commitments; a recipient leaves this list the instant its vote is booked |
+| list `un_res_commit_kept` | settled: voted as pledged |
+| list `un_res_commit_broken` | settled: did not |
+| var `un_res_commit_count` | commitments accepted, ever. Only goes up; this is what the cap reads |
+| var `un_res_commit_pending` | unsettled commitments, for the chamber's tally line |
+
+> **Why lists and not one container per commitment.** A per-commitment container would have to be destroyed when its resolution is evicted from `un_resolution_history` — and that eviction is `scope:un_res_evicted = { destroy_container = yes }` (`un_vote_effects.txt`), which destroys the resolution and nothing else. Every commitment would leak unless each were created with `parent = <the resolution>` and that cascade verified in game, which could not be verified without running it. Four lists and two counters on the resolution itself cannot leak by construction and carry everything this POC records. If lobbying ever grows a per-commitment payload (a sum of money, a dated pledge, a counter-offer), a parented container is the right next step.
+
+> **Why the proposer only, and only for "yes".** Opposition lobbying is not as symmetric as it looks: there is no single "opponent" to hold the obligation, no obvious holder of the cap, and no proposer-shaped seat in the chamber for a second lobbyist. There is therefore no `un_res_committed_no` list. If opponent lobbying is added, it gets its own mirrored lists and its own cap.
+
+`un_res_commit_pending` is a variable rather than a list size because localization can print a variable (`[THIS.Var('un_res_commit_pending').GetValue|0]`) and cannot print a list size.
+
+#### Limits
+
+- **One attempt per (resolution, recipient)**, accepted *or* declined — both branches call `un_lobby_record_attempt`. A request the recipient never answers records nothing and may be made again; no effect of ours runs on an expiry.
+- **Cap**: `un_lobby_commitment_cap = 2` accepted commitments per resolution (`un_script_values.txt`). `un_res_commit_count` only ever rises, so a slot cannot be recycled by lobbying somebody who then votes early.
+- **Cannot lobby** the resolution's target, a member that has already voted either way, a non-member, a decentralized country, yourself (the proposer is already in `un_res_yes`, so `un_lobby_has_voted` excludes it), or a member we already owe an obligation to.
+- **Only while the resolution is `un_res_voting`**, and **only the proposer** (`var:un_res_proposer ?= ROOT`).
+- **A permanent member's veto right is never bound.** The veto option's own trigger is untouched — a committed P5 may always veto. But a veto books a **no** vote (`un_resolution_record_veto`), so it settles the commitment as **broken**: a member that pledged its yes and then killed the resolution outright has defeated the entire purpose of the pledge. The AI is leaned away from it (`add = -100` on the veto `ai_chance`); a human is told the cost in the option tooltip.
+
+#### The 30-day window
+
+`un_vote.1` reaches every other member 30 days after a resolution opens, and an AI answers it on arrival. **An AI recipient can therefore only be lobbied inside those first 30 days.** A human recipient can be lobbied right up until it answers its own popup. This is a property of the existing vote timeline, not something lobbying changes, and it is stated in the action's own description so the player is not left guessing.
+
+#### AI acceptance — six factors, each a line in the tooltip
+
+`ai.accept_score`, where **ROOT is the recipient** and **`scope:actor` is the lobbyist** (`diplomatic_action.md`: "the AI country is always root"). Positive means accept.
+
+| Factor | Value | `desc` key |
+| --- | --- | --- |
+| Pledging a vote away in advance | −20 | `UN_LOBBY_ACCEPT_BASE` |
+| The obligation offered | +40 | `UN_LOBBY_ACCEPT_OBLIGATION` |
+| Relations with the lobbyist | −30 / +10 / +25 / +40 by threshold | `UN_LOBBY_ACCEPT_RELATIONS` |
+| Rivalry with the lobbyist | −60 | `UN_LOBBY_ACCEPT_RIVALRY` |
+| Ties to the resolution's **target** — ally / same bloc / rival | −60 / −30 / +25 | `UN_LOBBY_ACCEPT_TARGET_*` |
+| The lobbyist's standing tier | +15 / +8 / −8 / −15 | `UN_LOBBY_ACCEPT_STANDING` |
+
+The three target-tie tests are written from the *target's* side with `ROOT` as the other end (`var:un_res_target ?= { has_treaty_alliance_with = { TARGET = ROOT } }`) because all three relationships are symmetric, and that avoids chaining a scope through a container variable inside a script value.
+
+**AI lobbyists** use the same rules — there is no `is_ai` branch anywhere in the feature. They simply reach for it rarely: `evaluation_chance` 0.05 and only while they are themselves the proposer of an open resolution; `will_propose` adds "not a rivalry, diplomatically relevant, relations at least cordial"; `propose_score` 10.
+
+Not used, because it is not cheaply knowable: **the recipient's existing lean on the topic**. The per-topic reasoning lives in `un_vote.1`'s `ai_chance` blocks, which are event option weights and cannot be read from a diplomatic action.
+
+#### Honouring the vote
+
+In `un_vote.1`, a committed AI is pushed to its pledged side by **literal adds** in the marked `ai_chance` spot, keyed on `un_lobby_holds_pending_commitment` — option A **+150** against a base of 40 (the largest other term in that block is ±30), option B **−100**, the veto option **−100**. It is a weight, not a bypass: the AI still runs the event, and no option is ever removed. A human recipient keeps a completely free choice, and both option tooltips say what it costs: `UN_VOTE_COMMITMENT_KEEP_TT` on A, `UN_VOTE_COMMITMENT_BREAK_TT` on B and on the veto. Those `custom_tooltip`s sit **outside** the `custom_tooltip = { text = … }` wrapper around the vote-recording call, because that wrapper replaces the recorded effects' own tooltip with one line.
+
+#### The single settlement site, and why it cannot pay twice
+
+`un_lobby_settle_commitment` (`common/scripted_effects/un_lobby_effects.txt`) is called from `un_resolution_record_vote` and `un_resolution_record_veto` — between them the only two places in the mod that ever book a vote onto a resolution — immediately after the vote goes onto its list and **inside the same `has_tag = un_res_voting` guard**, so a ballot cast after the vote closed settles nothing.
+
+The no-double-settlement argument is one sentence: everything the effect does is inside a single `if` whose condition is *"the voter is on the pending list `un_res_committed_yes`"*, and the **first statement inside that `if` removes the voter from that list**. Any re-entry on any path — a second call in the same option, a queued `un_vote.1` answered twice, a veto followed by a vote — finds the condition false and does nothing. A voter that never pledged falls straight through. Which way they voted is read back off `un_res_yes`, which the caller wrote one line earlier; reading a variable back inside the same effect block is the established shape here (`un_standing_clamp` reads `var:un_standing` immediately after `un_standing_gain`'s `change_variable`) — it is only `add_modifier` / `remove_modifier` whose results are deferred.
+
+A commitment still pending when the resolution is decided, lapses, or loses its recipient is **never settled**: no site fires, nothing is paid either way, and the chamber shows it as still pledged. That is the "void, no penalty" case, and it costs no extra code because there is no extra site. The obligation the lobbyist already handed over stands in that case — the recipient did nothing wrong, and the favour bought a pledge that circumstances, not bad faith, made moot.
+
+#### Consequences
+
+Every figure is defined once in `common/script_values/un_standing_values.txt`, next to the rest of the standing scale (complying with a binding resolution +2, defiance −5, a violated mandate −12).
+
+| | Recipient's standing | Relations with the lobbyist | The obligation |
+| --- | --- | --- | --- |
+| **Honoured** | `un_standing_commitment_kept_gain` = **+1** nominal, reason code **30** | `un_standing_commitment_kept_relations` = **+10** | stands; redeemed through vanilla's `redeem_obligation` whenever the recipient likes |
+| **Broken** | `un_standing_commitment_broken_loss` = **−4**, reason code **31** | `un_standing_commitment_broken_relations` = **−20** | struck off (`setting = no`) |
+| **Void** | nothing | nothing | stands |
+
+Deliberately modest. Four points is under the defiance loss and a third of a broken mandate: going back on a bilateral pledge is bad faith, not a violation of a binding decision of the Assembly. It is **not** a serious violation and carries **no** `un_standing_suspend`. The gain runs through `un_standing_gain`, so diminishing returns apply inside the helper — a pledge delivered by an already-Exemplary member is worth almost nothing, which is exactly the point: you cannot farm standing by promising votes you were going to cast anyway. **Neither figure draws on the programme yearly cap** — nothing outside `un_standing_program_award` does.
+
+`setting = no` on an obligation the recipient has already redeemed is a harmless no-op, which is the behaviour we want: a favour already called in cannot be un-called.
+
+#### Display
+
+The chamber's ballot block (`un_chamber_ballot_lines`, called by both `un_chamber_active_voters_sgui` and `un_chamber_history_details_sgui`, so it covers the resolution in session *and* the archive's voting details) gained `un_chamber_commitment_lines`: a **Commitments** sub-list, headed "undertakings, not votes", printing pending / delivered / broken as three disjoint groups with the same guarded flag-and-name accessor the ballot uses. The whole block is hidden unless a commitment was ever made on that resolution, which is also what keeps it invisible on every resolution in a pre-feature save.
+
+`un_chamber_tally_line` gained one conditional line naming how many further members have pledged but not yet voted. **`un_chamber_projection_line` is untouched** — it still evaluates the real passage rule (`un_res_margin` / `un_vote_expulsion_passed`) on votes actually cast, and commitments are never counted as votes. A second "if all commitments hold" projection line was considered and **not** built: the requirement made it optional, and there is no way to express it without restating the passage rule in a second script value, which is precisely the drift the existing comment on that effect warns about.
+
+#### Save compatibility
+
+Nothing assumes any lobbying list or counter exists. Every read is guarded by `has_variable_list` / `has_variable` in `common/scripted_triggers/un_lobby_triggers.txt`, so a resolution already in session when the mod updated simply has no lobbying state: the Commitments block stays hidden, the tally line prints as before, `un_lobby_holds_pending_commitment` is false for everyone, and the settlement call is a no-op. Nothing was renamed and no existing variable, list, effect or trigger changed meaning; the only additions to existing files are the two settlement calls, three conditional option tooltips, three `ai_chance` modifier blocks and the display lines.
+
+#### Known limitations
+
+- **A late acceptance binds the current resolution.** `un_lobby_accept_commitment` reads `global_var:un_active_resolution` at answer time, because the engine does not re-run `possible` when a human finally answers a standing request. If the same proposer opens a *second* resolution while an unanswered request from the first is still outstanding, a late yes commits the recipient to the new one. It needs a request to outlive a full twelve-month vote plus the gap to the next proposal, and the deal struck is still a real one — open resolution, honest lists, obligation paid — just not the one the recipient was asked about.
+- **Every precondition is therefore re-checked inside the accept path** against the live resolution, and the commitment and the obligation are created in the same `if`, so the recipient can never be committed without the lobbyist paying, nor the lobbyist pay for a commitment that was not recorded.
+- **The obligation cancelled on a broken pledge is assumed to be ours.** Lobbying refuses to start if we already owe the recipient one, so the obligation in force at settlement is the one we granted — unless some third source granted another in the meantime, in which case the cancellation strikes that one off instead.
+
+#### Not yet built (mapped to the original scope)
+
+| In the original brief | Status |
+| --- | --- |
+| Diplomatic outreach / public endorsements / funded aid pledges as separate approaches | **Not built.** One action, one currency: an obligation. |
+| "Expressed support" as a third category beside commitments and cast votes | **Not built.** The chamber distinguishes two: commitments and votes cast. |
+| Lobbying for a **no** vote by a resolution's opponents | **Not built.** See "why the proposer only" above. |
+| Counter-lobbying, coalitions | **Not built.** |
+| A reasons display beyond the acceptance tooltip | **Not built.** The itemised `accept_score` is the whole of it — six factors, and it is the same list the AI decides on. |
+| The recipient's existing lean on the topic as an acceptance factor | **Not built.** Not cheaply knowable from a diplomatic action. |
+| Money or a dated pledge attached to a commitment | **Not built.** Would be the trigger to move commitments to parented containers. |
+| An "if all commitments hold" projection line | **Not built,** by choice — it cannot be written without restating the passage rule. |
 
 ### Vote System (3-phase)
 1. **un_vote.1** (Phase 1): Fires to all other UN members 30 days after opening. Each country votes yes/no (permanent members may veto binding topics) with topic-adaptive titles, descriptions, and AI logic. Votes are recorded on the resolution; a vote cast after it closed is ignored.
