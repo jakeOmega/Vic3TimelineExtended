@@ -2483,3 +2483,34 @@ te_pop_transfer_disruption_strength = {
 # resolved num_mandates in the calling country scope (where it's invalid) rather
 # than the enclosing power_bloc block. The tier ladder now lives inline in
 # te_unused_mandate_reserve_on_action so num_mandates evaluates in power_bloc scope.
+
+# ---------------------------------------------------------------------------
+# Banking policy dashboard — display-only reads.
+# These carry no gameplay effect; they exist so the dashboard tooltips in
+# gui/journal_entry_widgets/banking_dashboard_widget.gui can quote the same
+# numbers the monthly pulse actually uses (see banking_cycle_advance_variables
+# in common/scripted_effects/banking_cycle_effects.txt) instead of hard-coding
+# them in localization, where they would silently drift.
+# ---------------------------------------------------------------------------
+banking_display_value_monthly_add = {
+	value = modifier:country_finance_value_monthly_add
+}
+
+banking_display_momentum_monthly_add = {
+	value = modifier:country_finance_momentum_monthly_add
+}
+
+# The monthly `change_variable = { name = finance_cycle_momentum multiply = 0.9 }`
+# step, expressed as the amount it subtracts from current momentum.
+banking_display_momentum_decay = {
+	value = var:finance_cycle_momentum
+	multiply = -0.1
+}
+
+banking_display_bubble_monthly_add = {
+	value = modifier:country_bubble_pressure_monthly_add
+}
+
+banking_display_points_free = {
+	value = modifier:country_banking_intervention_max_add
+}

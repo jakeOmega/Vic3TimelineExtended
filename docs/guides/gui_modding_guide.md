@@ -679,6 +679,35 @@ flowcontainer = {
 
 The GUI has no built-in sort/filter. Use game-side `ordered_` iterators or script value sorting in scripted_guis, or rely on the game data model's own ordering.
 
+### Charting script-held data (column charts)
+
+**`plotline` cannot render mod data.** Its `plotpoints` property only accepts the output of `GetTrendPlotPoints` / `GetTrendPlotPointsNormalized` / `GetDynTrendPlotPoints`, and all three take an engine-side `DataTrend` (`Country.GetGDPTrend`, `Goods.GetPriceTrend`, …). No global function in `data_types_*.txt` returns a `DataTrend`, and no `DataTrend` exists for a script variable, so stored samples cannot feed a line graph. Draw a column chart instead — one bar per stored sample over a datamodel. Worked example: `gui/journal_entry_widgets/te_history_chart.gui`.
+
+**Size a bar from data with a `progressbar`, never with `size`.** `size` takes no data expression; `progressbar` takes `value` / `min` / `max` and does.
+
+```
+progressbar = {
+    size = { 100% 100% }
+    direction = vertical            # fills upward from the floor
+    min = 0
+    max = 100
+    value = "[FixedPointToFloat( ScriptContainer.GetVariableValue( 'my_value' ) )]"
+    progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+    noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+    texture_density = 2
+    skip_initial_animation = yes
+    color = { 0.42 0.62 0.85 1.0 }  # tints the white progress texture
+}
+```
+
+Use a **bare `progressbar`**, not `white_progressbar_vertical`: that type inherits `progressbar_properties`, whose frame texture has 6 px sprite borders and whose glow animations are sized for a 300×40 bar — at a few pixels wide it renders as noise.
+
+**Negative values: vanilla's "REVERSE HACK".** Stack two half-height bars around a zero axis. The lower one swaps `progresstexture` and `noprogresstexture` and uses a `min = -N`, `max = 0` range, so the coloured part is drawn from the far end and hangs *down* from the axis (`gui/shared/progressbars.gui` → `double_direction_progressbar`). Clamp each half's value in the expression (`Max_CFixedPoint('(CFixedPoint)0', v)` / `Min_CFixedPoint`) so a positive sample draws nothing below the axis.
+
+**Bars that share the width.** An `hbox` of fixed width whose items are `size = { 0 100% }` + `layoutpolicy_horizontal = expanding` (+ a `maximumsize` cap) divides the width between the *visible* items — vanilla `levels_progressbar` (`gui/shared/progressbars.gui`, used by `country_panel.gui`). With `ignoreinvisible = yes` on the hbox, hiding out-of-range samples widens the remaining bars instead of leaving empty slots, which is how a 1 / 5 / 10-year range selector works without three separate layouts.
+
+**Per-bar tooltips.** Give the item widget a `tooltip = "<loc key>"`; the loc key reads the item's datacontext (`[ScriptContainer.GetVariableValue('x')|1]`) and can branch with `[SelectLocalization( ScriptContainer.HasVariable('x'), 'key_a', 'key_b' )]` — the way to show "not recorded" rather than a misleading zero.
+
 ---
 
 ## State Animations
@@ -1436,7 +1465,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 5. **`ScriptValue` requires `MakeScope`.** `Country.ScriptValue('x')` does NOT work. Use `Country.MakeScope.ScriptValue('x')`.
 
-6. **`AddScope` does exist in V3** (this entry previously said otherwise). Vanilla uses `GuiScope.SetRoot(X.MakeScope).AddScope('name', Y.MakeScope).End` in both `.gui` (`character_panel.gui:249`, `journal_entry_widgets/ep2_japan_widgets.gui`) and loc (`ip4_spain_l_english.yml`), paired with `saved_scopes = { name }` on the scripted GUI. `SetRoot(...).End` on its own remains the common case.
+6. **`AddScope` DOES exist in V3** — an earlier version of this list claimed otherwise. `TopScope.AddScope(Arg0, Arg1)` is in the engine data-type docs (`data_types_script.txt`) and vanilla uses it: `gui/journal_entry_widgets/ep2_japan_widgets.gui` and `gui/character_panel.gui` both call `GuiScope.SetRoot(X.MakeScope).AddScope('frame', MakeScopeValue('(CFixedPoint)0')).End`. The receiving scripted GUI declares `saved_scopes = { frame }` and reads `scope:frame` in its triggers/effects. This mod uses it in two places: `gui/market_panel.gui` passes a partner market (`AddScope('base_market', …)`) into a script value, and `gui/journal_entry_widgets/strategic_reserve_widget.gui` passes a small integer to **parameterize one scripted GUI across several buttons** — see the pattern note below.
 
 7. **`@variables` are compile-time constants.** `@my_width = 400` is resolved at load time, not runtime. Use data binding for dynamic values.
 
@@ -1473,6 +1502,49 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 ### Pattern: Construction Spending Slider (PSC / FMC)
 
 Uses scripted_guis with click_modifiers for +/- buttons, game variables for state, and an invisible widget with `state { trigger_when }` to extract GUI-only economic data into game variables.
+
+### Pattern: One scripted GUI, several buttons (`AddScope` parameterization)
+
+When a row of related buttons differs only by *which* action it takes, don't write one scripted GUI per button. Write one per row-entity and pass the action in as a saved scope holding a plain number:
+
+```gui
+# in the row's type — datacontext comes from the row instance,
+# so this markup is identical for every row
+button_icon_minus_action = {
+    visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+    enabled = "[ScriptedGui.IsValid(  GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+    onclick = "[ScriptedGui.Execute(  GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+}
+```
+
+```txt
+my_sgui = {
+    scope = country
+    saved_scopes = { dir }
+    is_valid = {
+        trigger_if   = { limit = { scope:dir = 0 } <triggers for action 0> }
+        trigger_else = { <triggers for the other action> }
+    }
+    effect = { if = { limit = { scope:dir = 0 } … } else = { … } }
+}
+```
+
+Notes learned building the Strategic Reserve inventory widget:
+- Set the `ScriptedGui` **datacontext on the row instance**, not on each button. The buttons inherit it, so the three control buttons can live in the shared row *type* with zero per-row markup.
+- Use non-negative integers for the selector (`0/1/2`). A `'(CFixedPoint)-1'` literal is untested here; there is no vanilla precedent for a negative one.
+- The mapping is an implicit contract between the `.gui` and the script. Document it in *both* file headers.
+- Variable *names* can't be built from a scope (`set_variable = { name = st_res_$scope:good$_rate }` is not a thing), so a saved scope can select a branch but cannot replace per-entity script. One scripted GUI per entity with the action as the saved scope is usually the right split.
+- Phrase `custom_tooltip` text inside `is_valid` as a **condition** ("Stays within the weekly cap"), not a complaint ("Cannot change rate"): `ScriptedGui.IsValidTooltip` renders it with a tick when valid and a cross when not, and a negative phrasing reads wrong in the valid case.
+
+Notes learned adding the reserve-policy panel to the same widget:
+- **One saved scope, wider op codes, beats two chained `AddScope`s.** `TopScope.AddScope` returns `TopScope`, so chaining type-checks, but no vanilla `.gui` chains it and `.gui` errors only surface in-game. A single `op` integer that encodes both the action and which setting it acts on (`0-3` select, `10-12` preset, `20-31` six +/- steppers) keeps the exact shape vanilla demonstrates while backing 20 controls from one scripted GUI.
+- **A shared control panel needs only its datacontext overridden per entity.** Put the whole panel in one `type`, give it a `block` that the instance fills with `datacontext = "[GetScriptedGui('..._<entity>_sgui')]"`, and every button inside can then address the action by op code alone. In the Strategic Reserve that turned a would-be ~900-line per-good GUI into one ~270-line type plus ~20 lines per row.
+- **Both composition steps vanilla actually uses are safe**, and they are what make that work: a `type` may instance another `type` and supply `blockoverride`s for it (1055 sites in vanilla), and a `blockoverride` body may itself declare a new `block` for the *instance* to fill (296 sites). That second one is how a shared stepper template can still show a per-entity value.
+- **`text` accepts an inline data function**, not just a loc key — `text = "[Country.GetRank|v]"` is vanilla (`diplomatic_overview.gui`). For a value cell that only ever shows one variable, inlining `[JournalEntry.GetCountry.MakeScope.Var('x').GetValue|+0]` in the `.gui` avoids a loc key per entity per setting. Keep units in the (shared) label instead, so the value cell needs no literal `%` or `@money!` escaping.
+- **Expanders are presentation-only state, and should stay that way.** `GetVariableSystem.Toggle('key_<entity>')` / `.Exists(...)` (vanilla: `states_panel.gui`, and already used in this mod's `building_details_panel.gui`) is per-client, unsaved, and invisible to script. That is the right property: collapsing a settings panel must not change what the system does, and the system must keep running with the panel — and the whole journal entry — closed.
+- **`is_valid` doubles as a "you are here" indicator.** For a selector, making the *currently active* option invalid greys it out for free, with a tooltip that says why, and saves a whole parallel highlight path.
+- **Verify every template name against `gui/shared/`, not `gui/frontend/`.** `window_component_library.gui` says outright that `button_standard`, `button_primary` and friends are CK3 names kept only for the frontend. The in-game text-button idiom is a plain `button` with `using = default_button_action` (see `scripted_journal_entry_button` in `journal_entry.gui`).
+
 
 ### Pattern: Dynamic Tooltip Lists (DAUI)
 
@@ -1537,6 +1609,16 @@ Currently 20 GUI files, all full-file replacements of vanilla panels:
 Scripted GUIs: `fmc_construction_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `un_chamber_sguis.txt` — read-only tooltip builders for the UN chamber widget (no `effect` that writes state; called only through `ExecuteTooltip`).
 
 Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journal_entry_widgets/` is attached to a JE with a `widget = { gui = "..." name = "..." container = "custom_widget_container_N" }` block and renders inside vanilla's `journal_entry.gui` slots, so it costs no panel replacement. `custom_widget_container_1` sits above the status description, `_2` between the status description and the scripted-button grid, `_3` below the button grid; `_4`–`_7` are further down the panel. Keep content within `@panel_width_minus_20` (520 px) — the existing widgets use a 480 px text column plus a `margin = { 20 8 }`. Current widgets: `covert_operations_widget.gui`, `strategic_reserve_widget.gui`, `un_chamber_widget.gui`.
+
+Plus the **additive** journal-entry widgets under `gui/journal_entry_widgets/`, which override nothing — each is mounted into a vanilla `custom_widget_container_*` slot by a `widget = { … }` entry on its journal entry:
+
+| File | Journal entry | Purpose |
+|---|---|---|
+| `covert_operations_widget.gui` | `je_covert_warfare` | one row per running operation (script-container datamodel) |
+| `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
+| `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
+| `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
+| `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 
 ## GUI 3-way merge across vanilla patches
 

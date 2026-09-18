@@ -1,0 +1,277 @@
+﻿# Banking policy dashboard — shared eligibility triggers.
+#
+# Each `banking_possible_<button>` holds the body that used to live inline in the
+# matching scripted_button's `possible` block. Both the journal-entry button
+# (common/scripted_buttons/) and the dashboard scripted GUI
+# (common/scripted_guis/banking_dashboard_scripted_gui.txt) call these, so player
+# clicks through either surface are gated by exactly the same rules.
+# Disable-side eligibility reuses the `banking_tool_*_active` family in
+# common/scripted_triggers/market_triggers.txt.
+
+banking_possible_cb_policy_rate_hike = {
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+	NOT = { je:je_banking_cycle = { has_modifier = banking_open_market_ops } }
+}
+
+banking_possible_cb_open_market_ops = {
+	modifier:country_can_use_open_market_ops_bool = yes
+	custom_tooltip = {
+		text = BANKING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
+	}
+	NOT = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_open_market_ops_bool = no
+	}
+}
+
+banking_possible_cb_moral_suasion = {
+	custom_tooltip = {
+		text = BANKING_POINTS_1
+		modifier:country_banking_intervention_max_add >= 1
+	}
+}
+
+banking_possible_cb_countercyclical_buffer = {
+	modifier:country_can_use_countercyclical_buffer_bool = yes
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_cb_raise_margin_requirements = {
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_cb_expand_deposit_guarantee = {
+	modifier:country_can_use_deposit_guarantee_bool = yes
+	custom_tooltip = {
+		text = BANKING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
+	}
+}
+
+banking_possible_cb_directed_credit_infrastructure = {
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_directed_credit_bool = no
+	}
+}
+
+banking_possible_cb_export_credit_facility = {
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+	modifier:country_can_use_export_credit_bool = yes
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_export_credit_bool = no
+	}
+}
+
+banking_possible_cb_fx_devaluation = {
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	modifier:country_can_use_fx_devaluation_bool = yes
+	NOT = { je:je_banking_cycle = { has_modifier = banking_fx_support } }
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_fx_devaluation_bool = no
+	}
+}
+
+banking_possible_cb_fx_support = {
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	modifier:country_can_use_fx_support_bool = yes
+	NOT = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } }
+}
+
+banking_possible_cb_fx_swap_lines = {
+	custom_tooltip = {
+		text = BANKING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
+	}
+	modifier:country_can_use_fx_swap_lines_bool = yes
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_fx_swap_lines_bool = no
+	}
+	NOT = {
+		country_rank >= rank_value:great_power
+	}
+}
+
+banking_possible_cb_capital_controls_outflow = {
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+	custom_tooltip = {
+		text = banking_button_locked_capital_controls_tt
+		OR = {
+			modifier:country_banking_lock_capital_controls_bool = no
+			is_at_war = yes
+		}
+	}
+}
+
+banking_possible_cb_emergency_liquidity_program = {
+	modifier:country_can_use_emergency_liquidity_bool = yes
+	custom_tooltip = {
+		text = BANKING_POINTS_6
+		modifier:country_banking_intervention_max_add >= 6
+	}
+}
+
+banking_possible_cb_asset_relief_program = {
+	custom_tooltip = {
+		text = BANKING_POINTS_5
+		modifier:country_banking_intervention_max_add >= 5
+	}
+	modifier:country_can_use_asset_relief_bool = yes
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_asset_relief_bool = no
+	}
+}
+
+banking_possible_ce_plan_revision = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+}
+
+banking_possible_ce_target_reduction = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_ce_consolidation_order = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_ce_emergency_allocation = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+}
+
+banking_possible_ce_strategic_stockpile = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_ce_distribution_upgrade = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
+	}
+}
+
+banking_possible_ce_admin_campaign = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+}
+
+banking_possible_ce_coordination_protocol = {
+	custom_tooltip = {
+		text = PLANNING_POINTS_1
+		modifier:country_banking_intervention_max_add >= 1
+	}
+}
+
+banking_possible_ce_invest_pool_inject = {
+	always = yes
+}
+
+banking_possible_ce_invest_pool_withdraw = {
+	custom_tooltip = {
+		text = CE_WITHDRAW_POSSIBLE_TT
+		investment_pool > 0
+	}
+}
+
+banking_possible_cw_dividend_restraint = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_cw_mutual_aid_fund = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
+	}
+}
+
+banking_possible_cw_capital_plan = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
+	}
+}
+
+banking_possible_cw_credit_expansion = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+}
+
+banking_possible_cw_council_directive = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_1
+		modifier:country_banking_intervention_max_add >= 1
+	}
+}
+
+banking_possible_cw_consumption_ceiling = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+banking_possible_cw_solidarity_campaign = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_1
+		modifier:country_banking_intervention_max_add >= 1
+	}
+}
+
+banking_possible_cw_worker_buyout = {
+	custom_tooltip = {
+		text = COUNCIL_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+}
