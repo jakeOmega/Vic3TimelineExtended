@@ -25,11 +25,19 @@
 # (docs/guides/scripting_best_practices.md "Saved Scopes vs Variables in
 # Localization", gui_modding_guide.md gotcha #11) — which is exactly why the
 # covert-operations widget stores a *state* (iw_target_capital) instead.
-# Iterating the country list in script and printing `[THIS.GetCountry.GetName]`
-# is the shape vanilla itself ships for this case
-# (je_hispanoamerica_not_recognized_countries_sgui +
-# HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY in ip4_spain_l_english.yml),
-# including the AddLocalizationIf(...Exists) guard for annexed countries.
+# Navigating to the country in script and letting loc print the name is the
+# shape vanilla itself ships for this case, in two flavours, both used here:
+#   - a list, printed per entry as `[THIS.GetCountry.GetName]` —
+#     je_hispanoamerica_not_recognized_countries_sgui +
+#     HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY (ip4_spain_l_english.yml),
+#     which also supplies the AddLocalizationIf(...Exists) annexed-country guard;
+#   - a single country, stashed with save_temporary_scope_as and printed as
+#     `[SCOPE.sCountry('...').GetName]` from the *container's* own line —
+#     je_india_railway_*_sgui + INDIAN_RAILWAY_ENTRY (ip2_misc_02_l_english.yml).
+#     Preferred for the singletons (proposer / target / vetoer) because the
+#     tooltip line stays at container scope: wrapping a custom_tooltip in a
+#     country scope-change block risks the engine prefixing the line with a
+#     redundant "<Country>:" header.
 # ============================================================================
 
 # The resolution's topic, with its sequence number. Exactly one topic tag is
@@ -107,13 +115,14 @@ un_chamber_topic_line = {
 
 # Proposer and (when the topic names one) target. Both reads are guarded
 # twice: `exists = var:X` catches a reference that no longer resolves, and the
-# loc line's AddLocalizationIf(THIS.GetCountry.Exists, ...) catches a country
-# object that survives as a dead tag after annexation.
+# loc line's AddLocalizationIf(SCOPE.sCountry('...').Exists, ...) catches a
+# country object that survives as a dead tag after annexation.
 # Scope: resolution container
 un_chamber_parties_line = {
 	if = {
 		limit = { exists = var:un_res_proposer }
-		var:un_res_proposer ?= { custom_tooltip_no_bullet = je_un_chamber_proposer }
+		var:un_res_proposer ?= { save_temporary_scope_as = un_chamber_proposer }
+		custom_tooltip_no_bullet = je_un_chamber_proposer
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_proposer_gone
@@ -122,7 +131,8 @@ un_chamber_parties_line = {
 		limit = { has_variable = un_res_target }
 		if = {
 			limit = { exists = var:un_res_target }
-			var:un_res_target ?= { custom_tooltip_no_bullet = je_un_chamber_target }
+			var:un_res_target ?= { save_temporary_scope_as = un_chamber_target }
+			custom_tooltip_no_bullet = je_un_chamber_target
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_target_gone
@@ -184,7 +194,8 @@ un_chamber_veto_line = {
 		limit = { has_tag = un_res_vetoed }
 		if = {
 			limit = { exists = var:un_res_vetoer }
-			var:un_res_vetoer ?= { custom_tooltip_no_bullet = je_un_chamber_vetoed_by }
+			var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+			custom_tooltip_no_bullet = je_un_chamber_vetoed_by
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
@@ -359,7 +370,8 @@ un_chamber_outcome_line = {
 		limit = { has_tag = un_res_vetoed }
 		if = {
 			limit = { exists = var:un_res_vetoer }
-			var:un_res_vetoer ?= { custom_tooltip_no_bullet = je_un_chamber_vetoed_by }
+			var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+			custom_tooltip_no_bullet = je_un_chamber_vetoed_by
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
