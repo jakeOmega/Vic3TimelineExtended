@@ -586,6 +586,55 @@ To display a current-price value in a tooltip, write a script value of shape `(1
 
 Script values are not parameterizable, so generators that need one SV per (entity, good-mix) tuple should pre-multiply `base_price × quantity` in Python and emit the result as a literal `multiply = N` constant rather than chaining `g:<good> = { multiply = base_price }` + a separate quantity multiply at runtime — keeps the generated file readable and skips a redundant scope hop.
 
+### Is it signed below base price? Build it so you don't have to know
+
+Both `market_goods_pricier` and `market_goods_cheaper` exist, and both are value-readable in `market_goods` scope (vanilla does it: `common/treaty_articles/13_goods_transfer.txt` has `value = market_goods_cheaper`). What no engine doc states is whether each is **clamped at zero** or is the **signed mirror** of the other — `triggers.log` only says "at least the specified percentage more expensive/cheaper than base price", and every vanilla call site guards with `> 0.1` first, so none of them disambiguates it.
+
+If your logic needs a signed premium that is correct on **both** sides of base price, don't guess. Build it as
+
+```
+value_up = {                                   # max(pricier, 0)
+	value = 0
+	market = { mg:<good> = { add = market_goods_pricier } }
+	min = 0
+}
+value_down = {                                 # max(cheaper, 0)
+	value = 0
+	market = { mg:<good> = { add = market_goods_cheaper } }
+	min = 0
+}
+value_rel = { value = value_up  subtract = value_down }
+```
+
+Use the `market = { mg:<good> = { add = … } }` **block** form rather than a `this.market.mg:<good>.<value>` dot chain. Vanilla reaches market-goods values from country scope exactly this way (`common/script_values/00_gfx_route_graphics_values.txt`); nothing in vanilla reads through `mg:` with a dot chain, and a market read that silently evaluates to 0 produces no error anywhere — just logic that quietly never fires.
+
+`min = 0` after the read is the max-with-zero clamp. Under the "clamped" hypothesis exactly one term is non-zero; under the "signed mirror" hypothesis the negative term clamps to zero. Either way `value_rel` is the correct signed fraction. The Strategic Reserve's policy trigger uses this (`st_res_<good>_price_rel`, `common/script_values/st_res_script_values.txt`); the older `st_res_<good>_sale_profit` values still read bare `market_goods_pricier` and are only correct below base under the signed hypothesis.
+
+## A trigger needs a `var:` on its LEFT side — script values only go on the right
+
+`var:my_variable > my_script_value` is a valid trigger. `my_script_value > 20` is **not** — a bare script value is not a trigger, so a comparison that starts with one is silently not the check you wrote. This bites whenever validation is naturally phrased as "is this derived quantity big enough": *"the gap between these two variables must stay ≥ 15"* has no direct form.
+
+Invert it. Define the script value as **the limit the variable may not pass**, and compare the variable to it:
+
+```
+# NOT a trigger:            my_gap_script_value >= 20
+# Works: define the limit, then compare a variable to it.
+st_res_<good>_policy_buy_up_limit = {           # = sell_thr - min_gap - step
+	value = 0
+	if = { limit = { has_variable = st_res_<good>_sell_thr }  add = var:st_res_<good>_sell_thr }
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+# in the scripted GUI's is_valid:
+var:st_res_<good>_buy_thr <= st_res_<good>_policy_buy_up_limit
+```
+
+Same number of script values, and the rule stays in `is_valid` where a disabled button can explain itself, rather than leaking into a `.gui` expression.
+
+## Repeated `min` / `max` in a script value are sequential clamps
+
+`min` and `max` are applied in the order they appear, clamping the running total each time, so repeating `max` is how you write "take the smallest of these". `value = A  max = B  max = C  min = 0` is `clamp(min(A, B, C), 0, ∞)`. Vanilla does it (`common/script_values/negotiation_values.txt`). Order matters relative to the arithmetic: a `multiply = -1` **after** `min = 0` negates the clamped result, which is the clean way to turn a "how much can I move" magnitude into a signed negative rate.
+
 ## Ship Crew (`ship_crew_max_add`) Must Be a Multiple of 100
 
 The engine hires sailors to a ship in units of 100, so a ship type whose `ship_crew_max_add` is not a multiple of 100 crews only to the **multiple of 100 just below** its stated capacity (e.g. 250 → 200, 220 → 200), silently wasting the remainder. All 21 vanilla ship types use clean multiples of 100 (200…1200), so vanilla never trips this. When adding or tuning mod ships in `common/ship_types/extra_ship_types.txt`, keep `ship_crew_max_add` on a multiple of 100; round the smallest drone/auto crews **up** to 100 rather than down to 0.
@@ -1338,6 +1387,18 @@ Rules that bite:
 12. **Give a lock-holding instance a watchdog.** If a follow-up event's `trigger` fails (the owner left the organization or stopped existing), nothing closes the instance and the lock stays forever. Count months on the container and close it from a global pulse past the deadline.
 
 If you do keep parallel variable families for some reason, the helper that rewrites them must rewrite **all** families in one idempotent call — never a subset — or cancel/break/start paths outside the monthly pulse will desync them (the old covert bug: a new op inheriting a cancelled op's months).
+
+### Containers as a bounded time series (the history store)
+
+Containers are also the way to store a *history* of a value. Vic3 variables hold one value and variable names cannot be built from an index at runtime, so "the last 120 monthly readings" has no variable-family expression that isn't 120 generated names. The pattern lives in `common/scripted_effects/te_history_effects.txt`; the parts worth reusing:
+
+- **One container per (owner, time bucket), not per (owner, metric, time bucket).** Every metric sampled in the same month writes its own `te_hist_v_<METRIC>` variable onto the *same* container, so a new series costs no new containers at all. A metric not recorded in some month simply has no variable there — which is how a GUI distinguishes missing data from a real zero (`ScriptContainer.HasVariable(…)`).
+- **Derive the bucket index; never count it.** `te_history_month_index` = `year * 12 + month`. `year` is a valid **script value** (vanilla `years_since_game_start`, `common/script_values/ip4_je_values.txt`); `month` is trigger-only (Jan = 0 … Dec = 11), so it needs an 11-branch `if` chain inside the script value. Because the index is a pure function of the date it is identical for every country and for global series, needs no seeding on an existing save, and reduces the "once per period" guard to comparing it against a stored cursor — which is what makes two pulses in one month idempotent.
+- **Cap by adding one and evicting one.** `variable_list_size = { name = X target > <cap script value> }` (note `target`, not `value`), then `ordered_in_list = { variable = X position = 0 order_by = <script value reading the index> }`. Use `order_by` rather than trusting raw list position, so eviction is correct however the engine stores the list. `remove_list_variable` before `destroy_container`, always.
+- **`ordered_*` iterators sort DESCENDING — negate the key to get the oldest/smallest.** `position = 0` is the *largest* `order_by` value: vanilla's `ordered_subject_or_below = { order_by = country_rank position = 0 }` picks the highest-ranked subject (`00_victoria_ip3_scripted_effects.txt`). An eviction ordered by a raw, increasing sequence number therefore evicts the element you just added — and if that element is also the cursor the system writes through, the writes go to a destroyed container. Both time-series stores in this mod negate for this reason (`te_history_sample_order`, `un_resolution_age_order` = `value = 0 subtract = var:<index>`). This fails silently in review: the script reads correctly and every offline audit passes.
+- **`create_container` without `parent` is legal** (no vanilla precedent, but proven here by `un_resolution_open`), which is how a *global* series keeps one container per period with no owning country. With a `parent`, the engine culls the containers when the parent dies — free cleanup for per-country history.
+- **Wrap recording in `hidden_effect`.** Any helper reachable from an effect the engine also renders as a tooltip (a scripted button, a scripted-GUI action, `accept_effect`) must not print its bookkeeping into that tooltip, and must survive the render pass in which `create_container` never actually creates anything.
+- **Reading a country variable from a `.yml` loc value needs a script-value wrapper.** `[SCOPE.MakeScope.Var('x').GetValue|0]` does not resolve in loc (it *does* work in a `.gui` `raw_text` — `gui/market_panel.gui`), so expose it as `sv = { value = var:x }` and use the canonical `[SCOPE.MakeScope.ScriptValue('sv')|0]`. Container variables are different: `[ScriptContainer.GetVariableValue('x')|0]` resolves in loc directly.
 
 ## Event Architecture
 
@@ -3513,3 +3574,32 @@ For any country history doesn't give a law in some group, the engine auto-assign
 ## Iterator `limit` Filters the Whole Iteration Regardless of Position
 
 `every_*` / `random_*` / `ordered_*` / `any_*` take `limit = { }` as a property of the iterator, not as a sequential statement. `every_scope_state = { do_a = yes  limit = { has_building = X }  do_b = yes }` runs **both** `do_a` and `do_b` only in states that have X — `do_a` is not "before the filter". Found 2026-09-12 in `remove_invalid_buildings` (`extra_on_actions.txt`), where the generated company-building sweep was silently gated by an unrelated space-program limit. Put `limit` first by convention, and split into two iterations when two child effects need different filters. Enforced by `iterator_limit_audit.py` on every `POST /reload` (`docs/engine/iterator_limit_report.md`).
+
+## Journal-Entry Buttons Are the AI's Only Path — Don't Move Them Into a Widget
+
+The AI activates a journal entry's policies by evaluating the `ai_chance` block on each `scripted_button` declared on the JE (vanilla `common/scripted_buttons/scripted_buttons.md`: "#Country scope `ai_chance`"). Scripted GUIs have their own, separate AI hook (`ai_is_valid` + `ai_chance` + `ai_frequency`). So when you replace a JE's button grid with a custom widget, **keep every `scripted_button = …` line on the JE** — deleting one, or gating its `visible` on `is_ai`, silently removes that option from the AI with no log line and no test that catches it. Give the widget's handlers `ai_is_valid = { always = no }` so the AI never double-dips. Done this way in the banking policy dashboard (`docs/systems/mod_systems.md` § Policy Dashboard); the redundant vanilla grid under the widget is the deliberate price of not touching AI behaviour, and doubles as the fallback if a scripted-GUI name is ever mistyped.
+
+## Single-Sourcing a Policy Between a JE Button and a Scripted GUI
+
+Two surfaces that can both enact the same thing will drift. Extract each button's `possible` into a scripted **trigger** and its `effect` into a scripted **effect**, then have the button and the scripted GUI both call the helper (`possible = { banking_possible_X = yes }` / `is_valid = { banking_possible_X = yes }`). For `visible`, prefer an existing named trigger over an inline `has_modifier` test so the "is it active" question has exactly one definition. When doing this in bulk, drive it from a table in a throwaway script and **verify the refactor by inlining the helpers back and diffing whitespace-normalised against the pre-change bodies** — that turns a 60-button mechanical edit into a provable no-op (186 bodies checked this way for the banking dashboard).
+
+## Asking Script a Yes/No Question From `.gui`
+
+`.gui` has no string comparison and no way to pick one item out of a datamodel by key, so any per-entity branching has to come from script. The general-purpose escape hatch is a read-only scripted GUI: `is_shown = { <existing scripted trigger> }`, `is_valid = { always = no }`, `effect = { }`, read from the widget as `[GetScriptedGui('name').IsShown( GuiScope.SetRoot( <Scope>.MakeScope ).End )]`. Use it instead of re-encoding thresholds as `GreaterThanOrEqualTo_CFixedPoint(... , '(CFixedPoint)40')` in the `.gui`, which duplicates balance numbers outside script. Useful relatives on the same object: `IsValid`, `Execute`, `IsValidTooltip`, `ExecuteTooltip`, `BuildTooltip` (data-type docs: `Modding-Digests/<patch>/docs/data_types_script.txt`).
+
+## Showing Costs and Effects in UI Without Hard-Coding Numbers
+
+`[GetStaticModifier('<name>').GetName|v]` / `.GetDesc` render a static modifier's real, current effect list into any loc string (vanilla uses it throughout `event_effects_l_english.yml`). For a scripted GUI, `ExecuteTooltip` renders its effect body — `add_treasury`, `add_radicals`, `add_modifier` and all — and `IsValidTooltip` renders the eligibility failure, so `tooltip = "[Concatenate( ScriptedGui.IsValidTooltip(…), ScriptedGui.ExecuteTooltip(…) )]"` gives a complete, drift-proof action tooltip. For numbers that live in a modifier rather than a static modifier, add a thin display-only script value (`value = modifier:country_x_add`) and read it with `[<Scope>.MakeScope.ScriptValue('name')|1]`; raw variables read as `[<Scope>.MakeScope.Var('name').GetValue|0]`.
+
+## Presentation-Only UI State Belongs in the GUI Variable System
+
+Collapsible sections, selected tabs and similar UI-only flags go in `GetVariableSystem` (`Toggle` / `Exists` / `Clear`, vanilla `company_panel.gui:1563`, `battle.gui:1331`), never in a script variable — script variables are saved, replicated and would make a cosmetic toggle part of save state and multiplayer sync. Note vanilla's convention is `Exists` = expanded (default collapsed); invert both the content's `visible` and the `onclick_showmore`/`onclick_showless` blockoverrides if you want sections open by default.
+
+## Journal-Entry Widgets: Derive Display State Once, in Script
+
+Building the Strategic Reserve inventory widget (2026-09-17) surfaced four rules for any JE that replaces per-good `scripted_progress_bar`s / `scripted_button`s with a custom widget:
+
+- **A scripted GUI can be parameterized by a saved scope.** `saved_scopes = { dir }` + `AddScope('dir', MakeScopeValue('(CFixedPoint)N'))` from the `.gui` lets one scripted GUI back several buttons; `trigger_if`/`trigger_else_if`/`trigger_else` on `scope:dir` picks the branch. Vanilla precedent: `je_meiji_restoration_get_faction_sgui`. Full pattern (and the `docs/guides/gui_modding_guide.md` gotcha it corrects) in that guide's "One scripted GUI, several buttons" section. Variable *names* still can't be built from a scope, so a saved scope selects a branch — it does not replace per-entity script.
+- **Removing a `scripted_progress_bar` from a JE means removing its `set_bar_progress` calls too.** Writing to a bar the JE no longer declares errors at runtime. Same for the temp `_for_bar` variables that fed it.
+- **The clamp that protects a variable will hide the state you want to display.** SR clamps each good's configured rate to `[max_withdrawable, max_storable]` every tick, so at full capacity the rate is driven to 0 — a naive "full means `rate > 0` and `stored >= capacity`" check reports *Idle* one tick later. Derive "at a bound" from the bound itself (`stored >= capacity`), not from the rate that the clamp just erased.
+- **Give the display state one derivation site, and pick a site both paths already call.** SR writes `st_res_<good>_last_status` in `st_res_set_good_status_effect`, called only from `st_res_refresh_hub_flow_effect` — the shared tail of the weekly pulse *and* every button press. One definition, one call site, and the label still reacts to a click instead of lagging a week. The widget and the customizable localization only read the variable; neither re-derives it.

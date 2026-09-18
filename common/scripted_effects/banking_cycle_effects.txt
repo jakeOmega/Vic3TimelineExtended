@@ -1469,6 +1469,8 @@ banking_contagion_crash_check = {
 
 	if = {
 		limit = { var:contagion_crash > 0 }
+		# History-chart marker on this month's bar (te_history_effects.txt)
+		te_history_record_banking_marker = { MARK = crash_contagion }
 		# Crash severity = target's own bubble pressure + boost from origin severity
 		set_variable = { name = crash_severity value = var:bubble_pressure }
 		if = {
@@ -1769,6 +1771,9 @@ banking_cycle_check_and_execute_crash = {
 	if = {
 		limit = { var:crash > 0 }
 		save_scope_as = banking_crash_origin_country
+
+		# History-chart marker on this month's bar (te_history_effects.txt)
+		te_history_record_banking_marker = { MARK = crash }
 
 		# Severity scales with bubble pressure (random multiplier 0.5–2.0)
 		set_variable = { name = crash_severity value = var:bubble_pressure }

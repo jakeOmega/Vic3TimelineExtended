@@ -1,0 +1,52 @@
+﻿# ============================================================================
+# HISTORY STORE — banking series
+# ============================================================================
+# The banking system's side of the generic store in te_history_effects.txt:
+# three metrics and the markers that explain their turning points. This is the
+# whole per-system surface — a future reserve or UN series adds a file exactly
+# like this one and nothing else in common/.
+#
+# Metrics (te_hist_v_<METRIC> on the month's sample container):
+#   bank_value      finance_cycle_value      0..100
+#   bank_momentum   finance_cycle_momentum   signed, roughly -6..+6
+#   bank_bubble     bubble_pressure          0..100
+#
+# Markers:
+#   on_<button> / off_<button>   a banking policy was enabled/disabled
+#   act_ce_invest_pool_*         a one-shot investment-pool action
+#   crash                        this country's own banking crash began
+#   crash_contagion              a crash arrived through financial contagion
+#
+# Both helpers re-check the game rule and the journal entry. The sampling call
+# already sits inside je_banking_cycle's monthly pulse, but the marker call is
+# reached from the policy effects, which the AI can also run from the journal
+# entry's scripted buttons — so the gate lives here rather than at each of the
+# 62 call sites.
+# ============================================================================
+
+# One sample per metric per month, taken from je_banking_cycle's monthly pulse
+# after the cycle has advanced, so each sample is that month's settled state.
+# Scope: country
+te_history_record_banking_samples = {
+	if = {
+		limit = {
+			has_game_rule = banking_system_enabled
+			has_journal_entry = je_banking_cycle
+		}
+		te_history_record_sample = { METRIC = bank_value    VALUE = var:finance_cycle_value }
+		te_history_record_sample = { METRIC = bank_momentum VALUE = var:finance_cycle_momentum }
+		te_history_record_sample = { METRIC = bank_bubble   VALUE = var:bubble_pressure }
+	}
+}
+
+# Parameters: $MARK$ = marker key (see the header)
+# Scope: country
+te_history_record_banking_marker = {
+	if = {
+		limit = {
+			has_game_rule = banking_system_enabled
+			has_journal_entry = je_banking_cycle
+		}
+		te_history_record_marker = { MARK = $MARK$ }
+	}
+}

@@ -1,0 +1,302 @@
+﻿### Reusable history chart component.
+###
+### One column per stored monthly sample, read straight out of the history
+### store in common/scripted_effects/te_history_effects.txt. Types declared in
+### a .gui file are global (vanilla does the same in gui/shared/), so any
+### journal-entry widget can instantiate te_history_chart without including
+### this file.
+###
+### WHY COLUMNS AND NOT A LINE GRAPH
+### The engine's `plotline` widget only accepts `plotpoints`, and every
+### function that produces those (GetTrendPlotPoints / GetTrendPlotPointsNormalized
+### / GetDynTrendPlotPoints) takes an engine-side DataTrend. No global function
+### in data_types_*.txt returns a DataTrend, and no DataTrend exists for a mod
+### variable, so stored samples cannot feed a plotline. The column chart below
+### is the supported way to draw script-held history.
+###
+### HOW TO ADD A SERIES (see docs/systems/mod_systems.md)
+###   1. `te_history_record_sample = { METRIC = <m> VALUE = <v> }` from the
+###      system's monthly pulse.
+###   2. Instantiate te_history_chart with blockoverrides for the title, the
+###      legend, and a bar body reading `te_hist_v_<m>`.
+###   3. Add the loc keys for the title, the legend and the bar tooltip.
+### Nothing else — the store, the pruning, the ranges, the marker icons, the
+### empty state and the "available since" line are all shared.
+
+types te_history_chart_types
+{
+	### An unsigned series (0 .. max): one bar growing up from the floor.
+	### `color` tints the white progress texture, exactly as vanilla's
+	### white_progressbar_vertical does for morale bars.
+	type te_history_bar_unsigned = widget {
+		size = { 100% 100% }
+
+		### A true line graph is engine-only (plotline takes its points from
+		### GetTrendPlotPoints* and nothing a mod can build), so each month is
+		### drawn as an area column with a bright cap: a full-colour bar up to
+		### the value, then a dark translucent cover up to just below it. With
+		### no gap between columns the caps read as a stepped line over a
+		### shaded area. The instance supplies the same reading twice — once
+		### as "values", once minus the cap thickness as "cover_values".
+		progressbar = {
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+
+			block "values" {
+				min = 0
+				max = 100
+			}
+			block "color" {
+				color = { 0.42 0.62 0.85 1.0 }
+			}
+		}
+
+		progressbar = {
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.05 0.06 0.08 0.78 }
+
+			block "cover_values" {
+				min = 0
+				max = 100
+			}
+		}
+	}
+
+	### A signed series: the upper half grows up from the zero axis for
+	### positive values, the lower half hangs down from it for negative ones.
+	###
+	### The lower half uses vanilla's "REVERSE HACK" from
+	### gui/shared/progressbars.gui `double_direction_progressbar`: swap the
+	### progress and no-progress textures and give the bar a `min .. 0` range,
+	### so the coloured part is drawn from the far end. Both halves clamp their
+	### value in the expression, so a positive month draws nothing in the lower
+	### half and vice versa.
+	type te_history_bar_signed = widget {
+		size = { 100% 100% }
+
+		widget = {
+			size = { 100% 50% }
+			parentanchor = top
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+
+				block "positive_values" {
+					min = 0
+					max = 6
+				}
+				block "positive_color" {
+					color = { 0.36 0.68 0.40 1.0 }
+				}
+			}
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.05 0.06 0.08 0.78 }
+
+				block "positive_cover_values" {
+					min = 0
+					max = 6
+				}
+			}
+		}
+
+		widget = {
+			size = { 100% 50% }
+			parentanchor = bottom
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				noprogresstexture = "gfx/interface/backgrounds/white.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+
+				block "negative_values" {
+					min = -6
+					max = 0
+				}
+				block "negative_color" {
+					color = { 0.78 0.31 0.28 1.0 }
+				}
+			}
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				noprogresstexture = "gfx/interface/backgrounds/white.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.05 0.06 0.08 0.78 }
+
+				block "negative_cover_values" {
+					min = -6
+					max = 0
+				}
+			}
+		}
+	}
+
+	### One range button. The active range is greyed out rather than hidden, so
+	### the three buttons never move. The range lives in the GUI variable
+	### system only: it is presentation state and is never written to the save.
+	type te_history_range_button = button {
+		using = default_button_action
+		size = { 72 26 }
+		parentanchor = vcenter
+
+		block "range_text" {}
+		block "range_enabled" {}
+		block "range_onclick" {}
+	}
+
+	### The chart itself.
+	###
+	### Required blockoverrides: "chart_title", "chart_legend", "bar_body",
+	### "bar_tooltip". Optional: "zero_axis" (signed series only).
+	###
+	### The bars come from the country's `te_hist` list — one container per
+	### month, shared by every metric — so a month with no value for this
+	### chart's metric renders as an empty slot instead of a zero-height bar.
+	### `layoutpolicy_horizontal = expanding` on the item makes the visible
+	### bars divide the plot width between them (vanilla levels_progressbar),
+	### so switching from 10 years to 1 year widens the bars instead of
+	### leaving 108 empty slots.
+	type te_history_chart = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		margin = { 0 4 }
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+			margin_left = 4
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 260
+				elide = right
+				align = nobaseline
+				using = fontsize_large
+				default_format = "#title"
+				block "chart_title" {}
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 300
+				elide = right
+				align = nobaseline
+				using = fontsize_small
+				block "chart_legend" {}
+			}
+		}
+
+		### Plot area
+		widget = {
+			size = { 496 96 }
+			parentanchor = hcenter
+
+			background = {
+				texture = "gfx/interface/graph/graph_frame.dds"
+				spriteType = Corneredtiled
+				spriteborder = { 2 2 }
+				texture_density = 2
+				alpha = 0.85
+			}
+
+			block "zero_axis" {}
+
+			hbox = {
+				size = { 484 84 }
+				parentanchor = center
+				ignoreinvisible = yes
+				spacing = 0
+
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"
+
+				item = {
+					widget = {
+						### Fixed height + expanding width, matching vanilla
+						### levels_progressbar's `size = { 0 15 }` item — one
+						### fewer percentage to resolve against a zero-width
+						### parent.
+						size = { 0 84 }
+						layoutpolicy_horizontal = expanding
+						# No maximum width: the recorded months always share the full plot, so
+						# the columns touch and the caps join up however short the history is.
+						datacontext = "[Scope.GetScriptContainer]"
+
+						### Range filter. Unset range = 10 years = every stored
+						### sample, so the default view needs no test at all.
+						### The sample's age in months is "now" minus the month
+						### index stored on the container.
+						visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
+
+						block "bar_tooltip" {}
+						block "bar_body" {}
+
+						### Marker pips. The tooltip that explains them is part
+						### of the bar tooltip, so the icons stay mouse-through.
+						icon = {
+							visible = "[ScriptContainer.HasVariable( 'te_hist_mk' )]"
+							parentanchor = hcenter
+							alwaystransparent = yes
+							size = { 9 9 }
+							texture = "gfx/interface/icons/generic_icons/information.dds"
+						}
+						icon = {
+							visible = "[Or( ScriptContainer.HasVariable( 'te_hist_mk_crash' ), ScriptContainer.HasVariable( 'te_hist_mk_crash_contagion' ) )]"
+							parentanchor = hcenter
+							alwaystransparent = yes
+							size = { 11 11 }
+							texture = "gfx/interface/icons/generic_icons/warning.dds"
+						}
+					}
+				}
+			}
+
+			### Empty state — nothing recorded yet, e.g. an existing save that
+			### has not reached its first monthly pulse since the update.
+			textbox = {
+				visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') )]"
+				parentanchor = center
+				autoresize = yes
+				multiline = yes
+				max_width = 420
+				align = hcenter|nobaseline
+				text = "te_hist_empty_state"
+			}
+		}
+	}
+}

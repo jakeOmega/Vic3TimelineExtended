@@ -1,0 +1,22 @@
+﻿# ============================================================================
+# HISTORY STORE — eligibility
+# ============================================================================
+# One rule for every charted series, applied identically to AI and human
+# countries: the player's own country always records, plus every country at
+# major-power rank or above (rank_value:major_power = 6, so great_power = 7 is
+# included and unrecognized_major_power = 5 is not — unrecognized powers are
+# deliberately out, they are numerous and rarely run the charted systems).
+#
+# A country that drops below the bar keeps whatever history it has (the
+# containers are parented to the country, so they die with it) but stops
+# adding samples; its chart simply stops at the last recorded month. Re-entry
+# resumes recording and leaves the gap visibly empty, because a bar with no
+# stored value for the metric renders as an empty slot rather than as zero.
+# ============================================================================
+
+te_history_country_is_tracked = {
+	OR = {
+		is_player = yes
+		country_rank >= rank_value:major_power
+	}
+}
