@@ -56,8 +56,12 @@ types banking_dashboard_widget_types
 
 	### One action button. The data context is a scripted GUI, so visibility,
 	### the disabled state, the tooltip and the click all come from script.
-	type banking_dash_action_button = button_standard_small {
-		size = { 100 26 }
+	### `button` + `default_button_action` is the in-game text-button idiom
+	### (vanilla budget_panel.gui "PAUSE_ALL_CONSTRUCTION_BUTTON"); the
+	### frontend-only button_standard_* family is never instantiated in-game.
+	type banking_dash_action_button = button {
+		using = default_button_action
+		size = { 100 30 }
 		parentanchor = vcenter
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -1585,6 +1589,7 @@ flowcontainer = {
 					text = "banking_dash_btn_execute"
 				}
 				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject')]"
 					visible = no
 				}
 			}
@@ -1603,6 +1608,7 @@ flowcontainer = {
 					text = "banking_dash_btn_execute"
 				}
 				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw')]"
 					visible = no
 				}
 			}
