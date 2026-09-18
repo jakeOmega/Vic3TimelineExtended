@@ -1259,6 +1259,17 @@ Rules that bite:
 
 If you do keep parallel variable families for some reason, the helper that rewrites them must rewrite **all** families in one idempotent call — never a subset — or cancel/break/start paths outside the monthly pulse will desync them (the old covert bug: a new op inheriting a cancelled op's months).
 
+### Containers as a bounded time series (the history store)
+
+Containers are also the way to store a *history* of a value. Vic3 variables hold one value and variable names cannot be built from an index at runtime, so "the last 120 monthly readings" has no variable-family expression that isn't 120 generated names. The pattern lives in `common/scripted_effects/te_history_effects.txt`; the parts worth reusing:
+
+- **One container per (owner, time bucket), not per (owner, metric, time bucket).** Every metric sampled in the same month writes its own `te_hist_v_<METRIC>` variable onto the *same* container, so a new series costs no new containers at all. A metric not recorded in some month simply has no variable there — which is how a GUI distinguishes missing data from a real zero (`ScriptContainer.HasVariable(…)`).
+- **Derive the bucket index; never count it.** `te_history_month_index` = `year * 12 + month`. `year` is a valid **script value** (vanilla `years_since_game_start`, `common/script_values/ip4_je_values.txt`); `month` is trigger-only (Jan = 0 … Dec = 11), so it needs an 11-branch `if` chain inside the script value. Because the index is a pure function of the date it is identical for every country and for global series, needs no seeding on an existing save, and reduces the "once per period" guard to comparing it against a stored cursor — which is what makes two pulses in one month idempotent.
+- **Cap by adding one and evicting one.** `variable_list_size = { name = X target > <cap script value> }` (note `target`, not `value`), then `ordered_in_list = { variable = X position = 0 order_by = <script value reading the index> }`. Use `order_by` rather than trusting raw list position, so eviction is correct however the engine stores the list. `remove_list_variable` before `destroy_container`, always.
+- **`create_container` without `parent` is legal** (no vanilla precedent, but proven here by `un_resolution_open`), which is how a *global* series keeps one container per period with no owning country. With a `parent`, the engine culls the containers when the parent dies — free cleanup for per-country history.
+- **Wrap recording in `hidden_effect`.** Any helper reachable from an effect the engine also renders as a tooltip (a scripted button, a scripted-GUI action, `accept_effect`) must not print its bookkeeping into that tooltip, and must survive the render pass in which `create_container` never actually creates anything.
+- **Reading a country variable from a `.yml` loc value needs a script-value wrapper.** `[SCOPE.MakeScope.Var('x').GetValue|0]` does not resolve in loc (it *does* work in a `.gui` `raw_text` — `gui/market_panel.gui`), so expose it as `sv = { value = var:x }` and use the canonical `[SCOPE.MakeScope.ScriptValue('sv')|0]`. Container variables are different: `[ScriptContainer.GetVariableValue('x')|0]` resolves in loc directly.
+
 ## Event Architecture
 
 - **Extract large logic blocks into scripted effects.** Event-triggering logic (weighted random_list with many entries) belongs in `common/scripted_effects/`, not inlined in journal entries.

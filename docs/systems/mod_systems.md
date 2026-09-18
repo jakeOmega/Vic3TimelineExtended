@@ -208,11 +208,15 @@ Custom `state_panel_status_item_small` widgets added to `gui/states_panel.gui` f
 
 **Layout.** One `banking_dash_policy_row` type, instantiated per policy with blockoverrides (label / cost / enable action / disable action). Category sections collapse through `GetVariableSystem.Toggle('banking_dash_collapsed_<cat>')` — GUI-only state, never written to the save. Rows are fixed-width columns inside `widget` wrappers with eliding text, no absolute positioning.
 
+### History Charts
+`gui/journal_entry_widgets/banking_history_widget.gui` adds a third custom widget (`custom_widget_container_3`): a collapsed-by-default **History** section with one column chart each for cycle value, momentum and bubble pressure, plus 1 / 5 / 10-year ranges and dated policy and crash markers. The store, the chart type and the marker tooltips are shared infrastructure — see **History Store and Charts** below before touching any of it.
+
 ### Monthly Pulse Architecture
 The `on_monthly_pulse` calls these scripted effects in order (all in `common/scripted_effects/banking_cycle_effects.txt`):
 1. **`banking_cycle_update_fiscal_policy`** — re-applies fiscal policy modifier based on deficit/surplus relative to GDP.
 2. **`banking_cycle_advance_variables`** — momentum decay, modifier-driven changes, investment pool, random mean-reversion nudge (scaled by `banking_random_nudge_down/up_value`), apply momentum to value, clamp all variables.
 3. **`banking_cycle_check_and_execute_crash`** — asymmetric crash probability check based on bubble pressure × phase, scaled by `banking_crash_chance_multiplier_value`. If crash triggers, fires origin event (.6) and spreads contagion via `banking_cycle_spread_contagion`.
+3b. **`te_history_record_banking_samples`** (`common/scripted_effects/te_history_banking_effects.txt`) — writes the month's cycle value, momentum and bubble pressure into the history store (**History Store and Charts**, below). Deliberately placed after the crash check so a crash month's bar shows the post-crash readings beside its crash marker.
 4. **`banking_cycle_apply_phase_modifiers`** — removes old phase + bubble-inertia modifiers, applies current ones based on cycle value and economic law type.
 5. **`banking_cycle_update_progress_bars`** — updates the 3 JE progress bars (uses `scope:journal_entry`).
 6. **`banking_cycle_cleanup_capital_controls`** — removes capital controls modifier if law/war conditions no longer apply.
@@ -264,6 +268,82 @@ All banking events (77 in `banking_cycle_events.txt`, plus `.6`/`.7` in `minor_e
 - **`apply_banking_crash_origin_effects`** — sets cycle vars based on crash severity (called from event .6 options).
 - **`apply_banking_contagion_effects`** — subtracts from cycle vars based on origin severity (called from event .7 options).
 - **`banking_cycle_post_event_refresh`** — combines `banking_cycle_apply_phase_modifiers` + bar update via `je:je_banking_cycle` accessor (for event context where `scope:journal_entry` is unavailable).
+
+## History Store and Charts
+
+A bounded, save-persistent store of monthly samples, plus a reusable column chart that renders them inside a journal entry. The banking system is its first consumer; the reserve and UN series are meant to be added with a sampling call and a chart instance and nothing else.
+
+### Files
+
+| File | Role |
+|---|---|
+| `common/script_values/te_history_values.txt` | the clock (`te_history_month_index`), the cap, eviction order, the "available since" readers |
+| `common/scripted_triggers/te_history_triggers.txt` | `te_history_country_is_tracked` — the one eligibility rule |
+| `common/scripted_effects/te_history_effects.txt` | generic country and global recording/pruning helpers |
+| `common/scripted_effects/te_history_banking_effects.txt` | the banking series' sampling + marker wrappers |
+| `common/scripted_guis/te_history_scripted_gui.txt` | `te_history_marker_tooltip` — display-only, emits `custom_tooltip` lines |
+| `gui/journal_entry_widgets/te_history_chart.gui` | the reusable `te_history_chart` / `te_history_bar_*` / `te_history_range_button` types |
+| `gui/journal_entry_widgets/banking_history_widget.gui` | the three banking charts, wired to `custom_widget_container_3` of `je_banking_cycle` |
+
+### Data model
+
+**One script container per (country, month), not per metric.** Each container carries:
+
+| Variable | Meaning |
+|---|---|
+| `te_hist_i` | monotonic month index (`te_history_month_index` = `year * 12 + month`, Jan = 0) |
+| `te_hist_y` / `te_hist_mo` | calendar year and month 1–12, display only (the GUI has no integer division) |
+| `te_hist_v_<METRIC>` | one per metric recorded that month |
+| `te_hist_mk` | number of markers that month — its presence is what draws the marker pip |
+| `te_hist_mk_<MARK>` | one per distinct marker recorded that month |
+
+Tags are `te_hist te_hist_sample` (plus `te_hist_global` for the global series); the parent is the recording country, so the engine culls the history when the country stops existing. The country holds `te_hist` (the capped list), `te_hist_cur` / `te_hist_cur_i` (the current month's container and its index — the once-per-month guard), `te_hist_now_i`, and `te_hist_since_y` / `te_hist_since_mo`.
+
+Sharing one container between all of a month's metrics is what makes the store affordable: 120 containers per tracked country covers *every* series rather than 120 per series, and a month's markers land on the same container as its readings, so the chart never has to search for them. A metric that was not recorded in a month simply has no `te_hist_v_<METRIC>` variable there — that is how the charts tell **missing data from a genuine zero**, and why a country that drops out of eligibility leaves a visible gap rather than a run of zeroes.
+
+`te_history_month_index` is stateless: the same arithmetic on the current date, identical for every country and for the global series. Nothing has to be seeded on an existing save, two pulses in one month resolve to the same container, and there is no counter that can drift.
+
+### Caps and eligibility
+
+- **Cap:** `te_history_sample_cap = 120` — ten years of monthly samples, defined once. One sample is added per month and `te_history_prune_samples` evicts exactly one when the list goes over, using `ordered_in_list { position = 0 order_by = te_history_sample_order }` so the oldest goes regardless of how the engine orders the list. The evicted container is `destroy_container`ed after `remove_list_variable`, never before, so the list never holds a dead reference.
+- **Eligibility:** `te_history_country_is_tracked` = `is_player = yes` OR `country_rank >= rank_value:major_power`. Identical for AI and human countries. `unrecognized_major_power` (rank_value 5) is deliberately out — those countries are numerous and rarely run the charted systems.
+- **Dropping out:** a country that falls below the bar stops sampling and **keeps** its stored history; nothing prunes it early. It is bounded at 120 containers and dies with the country, so stale history costs at most one country's worth of samples. Re-entry resumes recording and the gap renders empty.
+- **System gating:** a series also gates on its own system. `te_history_record_banking_samples` requires `has_game_rule = banking_system_enabled` and `has_journal_entry = je_banking_cycle`, so a country with banking switched off records no banking metrics at all.
+
+### Markers
+
+`te_history_record_marker = { MARK = <key> }` sets `te_hist_mk_<key>` on the month's container and bumps `te_hist_mk`. The banking markers are recorded at the single shared site each policy already has — the `banking_effect_<button>` helpers, which both the AI's journal-entry buttons and the dashboard call — plus `banking_cycle_check_and_execute_crash` (`crash`) and `banking_contagion_crash_check` (`crash_contagion`).
+
+The tooltip is built in script, not in `.gui`: `te_history_marker_tooltip` is a `scope = country` scripted GUI with `saved_scopes = { te_hist_sample }` whose effect is nothing but `custom_tooltip` lines, rendered from loc with `[GetScriptedGui('te_history_marker_tooltip').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'te_hist_sample', ScriptContainer.MakeScope ).End )]`. Its policy branches quote the dashboard's existing `banking_dash_tt_<button>` keys, so a marker shows the policy's real name, description and `[GetStaticModifier(…).GetDesc]` effect list — **no number is retyped**, and retuning a policy updates its marker text automatically. `is_valid`/`ai_is_valid` are `always = no`, so neither a player nor the AI can ever execute it.
+
+### Opening the GUI never writes state
+
+Every recording helper body is wrapped in `hidden_effect`. That matters because the `banking_effect_<button>` helpers are also rendered as button tooltips; during a tooltip render the engine resolves scope links but never creates containers, so an unwrapped call would both spray text into the policy tooltip and read a scope that was never set. The chart itself has no effect at all: the only click targets are the collapse header and the three range buttons, and both write GUI-variable-system values that never reach the save.
+
+### The chart
+
+`plotline` cannot be used. Its `plotpoints` property only accepts the output of `GetTrendPlotPoints` / `GetTrendPlotPointsNormalized` / `GetDynTrendPlotPoints`, all of which take an engine-side `DataTrend`; no global function in the 1.14 data-type docs returns a `DataTrend`, and no `DataTrend` exists for a mod variable. So the chart is one vertical `progressbar` per stored month, over `datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"`.
+
+- **Width.** The plot is a fixed-width `hbox`; each item is `size = { 0 100% }` + `layoutpolicy_horizontal = expanding` + `maximumsize = { 40 -1 }`, so the *visible* bars divide the width between them (vanilla's `levels_progressbar` idiom). Switching to 1 year widens the bars instead of leaving 108 empty slots.
+- **Ranges.** `GetVariableSystem` holds `te_hist_range` = `1`, `5` or `10`; unset means 10 years, which is the whole store, so the default view needs no per-bar test to pass. Each bar's `visible` compares `te_history_month_index` (now) minus its own `te_hist_i` against 12 / 60.
+- **Signed series.** `te_history_bar_signed` stacks two half-height bars around a zero axis. The lower one uses vanilla's `double_direction_progressbar` "REVERSE HACK": swap `progresstexture` and `noprogresstexture` and give the bar a `min .. 0` range, so the coloured part is drawn from the far end and hangs down from the axis. Both halves clamp their value with `Max_CFixedPoint`/`Min_CFixedPoint`, so a positive month draws nothing below the axis and vice versa.
+- **Empty state.** `IsDataModelEmpty` on the same list shows "nothing recorded yet" — what an existing save sees until its first monthly pulse. `te_hist_since` prints the oldest retained sample's date and says in words that earlier months were never recorded.
+- **Collapsed by default.** The section header toggles a GUI flag named for the *open* state (the inverse of the dashboard's collapsed flags), so a player who never opens it never pays for the bars.
+
+### How to add a series
+
+1. **Sample it.** From the system's own monthly pulse, in country scope:
+   `te_history_record_sample = { METRIC = res_stock VALUE = var:st_res_stock_grain }`
+   Wrap it in the system's own gate (game rule + journal entry) the way `te_history_record_banking_samples` does. For a world-level series use `te_history_record_global_sample` instead; it writes to the global list and needs no eligibility trigger.
+2. **Chart it.** Instantiate `te_history_chart` with blockoverrides for `chart_title`, `chart_legend`, `bar_tooltip` and `bar_body`. Use `te_history_bar_unsigned` for a one-sided metric (override `values` with `min`/`max`/`value` and `color`), `te_history_bar_signed` plus a `zero_axis` override for a signed one. The bar body's `visible` must be `[ScriptContainer.HasVariable( 'te_hist_v_<METRIC>' )]` so months without that metric stay empty.
+3. **Localize it.** A title, a legend, a `…_row` line and a tooltip key modelled on `te_hist_tt_bank_value` — the tooltip key is where the date line and the marker block are composed.
+4. **Mark it, if the series has turning points.** `te_history_record_marker = { MARK = <key> }` at the single site the event already has, plus one branch in `te_history_marker_tooltip`.
+
+Nothing else. The store, pruning, ranges, marker pips, empty state and "available since" line are all shared. **Do not** add a second store, a per-metric container list, or a parallel chart implementation.
+
+### Cost
+
+Per tracked country: 120 containers, each with 3 bookkeeping variables plus one per recorded metric (3 for banking today), plus 6 country variables. Per month per tracked country: one container create, one destroy, ~6 `set_variable`, and two 120-element ordered scans. GUI cost is paid only while the section is open: 120 items per chart, each running one script-value evaluation for the range test.
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
