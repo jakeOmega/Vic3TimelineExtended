@@ -1,0 +1,95 @@
+﻿namespace = un_mandate
+
+# ============================================================================
+# UN AUTHORIZED MANDATES — NOTIFICATION
+#
+# One event, fired to the mandate's actor from un_mandate_close whenever an
+# authorization reaches a terminal state. The consequences have already been
+# applied by the standing hooks by the time the player reads this; the event
+# exists so a mandate never ends silently.
+#
+# scope:un_mandate_closed = the mandate container, outcome tag already stamped
+# (see common/scripted_effects/un_mandate_effects.txt).
+# ============================================================================
+
+un_mandate.1 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_mandate.1.t_complied
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_complied } }
+			}
+			triggered_desc = {
+				desc = un_mandate.1.t_violated
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_violated } }
+			}
+			triggered_desc = {
+				desc = un_mandate.1.t_abandoned
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_abandoned } }
+			}
+			triggered_desc = {
+				desc = un_mandate.1.t_expired
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_expired } }
+			}
+			desc = un_mandate.1.t_void
+		}
+	}
+
+	desc = {
+		first_valid = {
+			# Compliance by an actor that had meanwhile left the organisation
+			# pays nothing — un_mandate_close routes it to the violation hook.
+			triggered_desc = {
+				desc = un_mandate.1.d_complied_forfeit
+				trigger = {
+					scope:un_mandate_closed ?= {
+						has_tag = un_mandate_complied
+						has_tag = un_mandate_forfeit
+					}
+				}
+			}
+			triggered_desc = {
+				desc = un_mandate.1.d_complied
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_complied } }
+			}
+			triggered_desc = {
+				desc = un_mandate.1.d_violated
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_violated } }
+			}
+			triggered_desc = {
+				desc = un_mandate.1.d_abandoned
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_abandoned } }
+			}
+			triggered_desc = {
+				desc = un_mandate.1.d_expired
+				trigger = { scope:un_mandate_closed ?= { has_tag = un_mandate_expired } }
+			}
+			desc = un_mandate.1.d_void
+		}
+	}
+
+	flavor = un_mandate.1.f
+
+	duration = 3
+
+	# A save from before the mandate system, or a queued event whose container
+	# was destroyed, carries no scope and fails here.
+	trigger = {
+		exists = scope:un_mandate_closed
+	}
+
+	option = {
+		name = un_mandate.1.a
+		default_option = yes
+		ai_chance = { base = 100 }
+	}
+}

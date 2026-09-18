@@ -1,0 +1,489 @@
+﻿# ============================================================================
+# UN AUTHORIZED MILITARY MANDATES — script containers
+# ============================================================================
+# A mandate is the General Assembly's written authorization for ONE actor to
+# recover ONE state region from ONE target, and nothing else. It is created
+# when a `military_mandate` resolution carries without a veto, and it is the
+# only thing that makes `te_un_mandate_restore_state` selectable or free.
+#
+#   tags    un_mandate
+#           un_mandate_active     issued, not yet exercised
+#           un_mandate_bound      exercised: the war goal is in a play
+#           un_mandate_complied   the authorized goal was enforced
+#           un_mandate_violated   a prohibited objective was taken
+#           un_mandate_abandoned  the actor backed down from the bound play
+#           un_mandate_expired    lapsed unused
+#           un_mandate_void       preconditions failed (see un_mandate_still_valid)
+#           un_mandate_forfeit    set alongside bound: the actor left the UN
+#                                 mid-play, so compliance pays nothing and
+#                                 calls the violation hook instead
+#   parent  none — a mandate must outlive an actor annexed mid-play so the
+#           chamber's record still reads
+#   vars    un_mnd_seq            creation order (global counter un_mandate_seq)
+#           un_mnd_actor          the authorized country
+#           un_mnd_beneficiary    who receives the territory (v1: the actor)
+#           un_mnd_target         the country that holds it
+#           un_mnd_region         the authorized state region
+#           un_mnd_resolution     the resolution that granted it
+#           un_mnd_months         months since issue (expiry counter)
+#           un_mnd_grace          timed, 60 days: set on binding so the
+#                                 "war goal has vanished" sweep cannot fire
+#                                 in the tick the goal was added
+#           un_mnd_closed_months  months since the mandate closed (pruning)
+#
+# Globals:
+#   un_mandate_seq       counter behind un_mnd_seq
+#   un_mandate_registry  every mandate, live and closed, bounded by
+#                        un_mandate_registry_cap
+# Country side:
+#   un_mandate_current   the actor's live mandate. One per country — this is
+#                        both the "no second mandate" rule and an O(1) index
+#                        so the war goal's `possible` and `infamy` never scan
+#                        the container pool.
+#
+# Old saves: nothing here assumes the globals, the list or the country
+# variable exist. A save made before this system loads with no mandates and
+# behaves exactly as it did.
+#
+# Lifecycle, in one place:
+#   propose  un_propose_mandate_button -> un_resolution_open TOPIC=military_mandate
+#   grant    un_vote.2 (passed, not vetoed) -> un_mandate_create
+#   bind     on_wargoal_added / monthly sweep -> un_mandate_try_bind
+#   comply   te_un_mandate_restore_state.on_enforced -> un_mandate_record_enforcement
+#   violate  on_wargoal_added / monthly sweep -> un_mandate_check_prohibited
+#   abandon  on_diplo_play_back_down -> un_mandate_on_back_down
+#   expire   monthly sweep -> un_mandate_tick
+#   void     monthly sweep -> un_mandate_tick (un_mandate_still_valid failed)
+# ============================================================================
+
+# Pick the case a mandate resolution would be tabled about: the highest-scoring
+# eligible target, and within it the largest state whose region we claim.
+# MIRRORS un_mandate_case_exists (un_mandate_triggers.txt) — the trigger answers
+# "is there a case", this effect picks which one, and the two limit blocks must
+# be kept identical.
+#
+# Leaves scope:un_mandate_case_target and scope:un_mandate_case_state as
+# TEMPORARY scopes, so it is safe to call from a display-only tooltip builder
+# as well as from the button.
+# Scope: the prospective proposer (ROOT)
+un_mandate_select_case = {
+	ordered_country = {
+		limit = {
+			NOT = { THIS = ROOT }
+			NOT = { is_country_type = decentralized }
+			is_subject = no
+			un_mandate_target_is_notorious = yes
+			any_scope_state = {
+				has_claim_by = ROOT
+			}
+		}
+		order_by = un_mandate_case_score
+		max = 1
+		save_temporary_scope_as = un_mandate_case_target
+		ordered_scope_state = {
+			limit = {
+				has_claim_by = ROOT
+			}
+			order_by = state_population
+			max = 1
+			save_temporary_scope_as = un_mandate_case_state
+		}
+	}
+}
+
+# Create the mandate a passed, un-vetoed military_mandate resolution calls for.
+# Re-validates first: a year has passed since the vote opened, and the target
+# may have lost the territory, we may have left the UN, or we may already hold
+# another authorization.
+# Scope: the resolution's proposer; expects scope:un_resolution
+un_mandate_create = {
+	save_scope_as = un_mandate_actor_scope
+	scope:un_resolution ?= {
+		var:un_res_target ?= { save_temporary_scope_as = un_mnd_target_scope }
+		var:un_res_mandate_beneficiary ?= { save_temporary_scope_as = un_mnd_beneficiary_scope }
+		var:un_res_mandate_region ?= { save_temporary_scope_as = un_mnd_region_scope }
+	}
+	if = {
+		limit = { un_mandate_can_create = yes }
+		if = {
+			limit = { NOT = { has_global_variable = un_mandate_seq } }
+			set_global_variable = { name = un_mandate_seq value = 0 }
+		}
+		change_global_variable = { name = un_mandate_seq add = 1 }
+		create_container = {
+			tags = { un_mandate un_mandate_active }
+			save_scope_as = un_mandate_new
+		}
+		if = {
+			limit = { exists = scope:un_mandate_new }
+			scope:un_mandate_new = {
+				set_variable = { name = un_mnd_seq value = global_var:un_mandate_seq }
+				set_variable = { name = un_mnd_actor value = scope:un_mandate_actor_scope }
+				set_variable = { name = un_mnd_beneficiary value = scope:un_mnd_beneficiary_scope }
+				set_variable = { name = un_mnd_target value = scope:un_mnd_target_scope }
+				set_variable = { name = un_mnd_region value = scope:un_mnd_region_scope }
+				set_variable = { name = un_mnd_resolution value = scope:un_resolution }
+				set_variable = { name = un_mnd_months value = 0 }
+				set_variable = { name = un_mnd_closed_months value = 0 }
+			}
+			add_to_global_variable_list = { name = un_mandate_registry target = scope:un_mandate_new }
+			set_variable = { name = un_mandate_current value = scope:un_mandate_new }
+		}
+	}
+}
+
+# Close a mandate: strip the live tags, stamp the outcome, release the actor's
+# index slot, tell the actor, and call whichever standing hook the outcome
+# maps to. Idempotent in the sense that matters — once it has run, the actor
+# no longer holds an index to this mandate, so nothing can pay out twice.
+# Parameters: $STATUS$ = complied | violated | abandoned | expired | void
+# Scope: mandate container
+un_mandate_close = {
+	save_scope_as = un_mandate_closed
+	if = { limit = { has_tag = un_mandate_active } remove_tag = un_mandate_active }
+	if = { limit = { has_tag = un_mandate_bound } remove_tag = un_mandate_bound }
+	if = { limit = { NOT = { has_tag = un_mandate_$STATUS$ } } add_tag = un_mandate_$STATUS$ }
+	set_variable = { name = un_mnd_closed_months value = 0 }
+	if = { limit = { has_variable = un_mnd_grace } remove_variable = un_mnd_grace }
+
+	# Saved for un_mandate.1's text: the notification cannot read the container's
+	# variables through loc (no container accessor exists), so the two things it
+	# names are handed over as scopes. Both loc lines guard on .Exists, so a
+	# target annexed since the mandate was issued reads as the fallback.
+	var:un_mnd_target ?= { save_scope_as = un_mandate_closed_target }
+	var:un_mnd_region ?= { save_scope_as = un_mandate_closed_region }
+
+	var:un_mnd_actor ?= {
+		if = {
+			limit = {
+				has_variable = un_mandate_current
+				var:un_mandate_current ?= scope:un_mandate_closed
+			}
+			remove_variable = un_mandate_current
+		}
+		trigger_event = { id = un_mandate.1 }
+	}
+
+	# ---- Standing hooks ----
+	if = {
+		limit = {
+			has_tag = un_mandate_complied
+			NOT = { has_tag = un_mandate_forfeit }
+		}
+		un_mandate_on_complied = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				has_tag = un_mandate_violated
+				has_tag = un_mandate_abandoned
+				AND = {
+					has_tag = un_mandate_complied
+					has_tag = un_mandate_forfeit
+				}
+			}
+		}
+		un_mandate_on_violated = yes
+	}
+}
+
+# ============================================================================
+# STANDING HOOKS
+# ============================================================================
+# These two are the seam the international-standing stage plugs into. They are
+# the ONLY places a mandate outcome turns into consequences, they fire exactly
+# once per mandate (un_mandate_close clears the actor's index before calling
+# them, so no path can re-enter), and they are called from container scope with
+# the outcome tag already stamped — so a standing implementation can branch on
+# `has_tag = un_mandate_abandoned` vs `un_mandate_violated` without any new
+# plumbing.
+#
+# What is here now is the v1 consequence set, built only out of effects and
+# modifiers the UN system already ships. Standing stage: add the standing
+# award/penalty alongside, do not replace what is here.
+# ============================================================================
+
+# Fires when the authorized war goal was enforced by an actor still in good
+# standing. Scope: mandate container (tagged un_mandate_complied).
+un_mandate_on_complied = {
+	if = {
+		limit = { has_global_variable = un_authority }
+		change_global_variable = { name = un_authority add = 5 }
+	}
+	var:un_mnd_actor ?= {
+		if = {
+			limit = { NOT = { has_modifier = un_vote_success_reward } }
+			add_modifier = {
+				name = un_vote_success_reward
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+	# STANDING STAGE: award the actor standing here. v1 keeps beneficiary
+	# relations out because the beneficiary is always the actor itself; once
+	# un_mnd_beneficiary can differ, the relations/catalyst pair belongs here.
+}
+
+# Fires when the mandate ended in bad faith: a prohibited objective was taken,
+# the actor backed down from the play it raised, or it complied after walking
+# out of the organisation. Scope: mandate container (outcome tag stamped).
+un_mandate_on_violated = {
+	if = {
+		limit = { has_global_variable = un_authority }
+		change_global_variable = { name = un_authority add = -5 }
+	}
+	var:un_mnd_actor ?= {
+		if = {
+			limit = { NOT = { has_modifier = un_condemned_modifier } }
+			add_modifier = {
+				name = un_condemned_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+	# STANDING STAGE: deduct standing here, and consider opening a condemnation
+	# resolution against the actor rather than applying un_condemned_modifier
+	# directly.
+}
+
+# ============================================================================
+# LIFECYCLE TRANSITIONS
+# ============================================================================
+
+# Bind an unexercised mandate to the play its war goal has just appeared in.
+# Called from on_wargoal_added (immediate) and from the monthly sweep (safety
+# net, in case the on_action did not fire for this addition). Idempotent: a
+# mandate that is already bound is not active, so the outer test fails.
+# Scope: the mandate actor
+un_mandate_try_bind = {
+	if = {
+		limit = {
+			has_variable = un_mandate_current
+			var:un_mandate_current ?= {
+				has_tag = un_mandate_active
+				exists = var:un_mnd_target
+			}
+		}
+		var:un_mandate_current ?= {
+			save_temporary_scope_as = un_mandate_binding
+			var:un_mnd_target ?= { save_temporary_scope_as = un_mandate_bind_target }
+		}
+		if = {
+			limit = {
+				exists = scope:un_mandate_bind_target
+				un_mandate_holds_authorized_goal = { TARGET = scope:un_mandate_bind_target }
+			}
+			scope:un_mandate_binding = {
+				remove_tag = un_mandate_active
+				add_tag = un_mandate_bound
+				set_variable = { name = un_mnd_grace days = 60 }
+			}
+		}
+	}
+}
+
+# Notice a prohibited objective taken against the mandate's target. Called from
+# on_wargoal_added and from the monthly sweep.
+# Scope: the mandate actor
+un_mandate_check_prohibited = {
+	if = {
+		limit = {
+			has_variable = un_mandate_current
+			var:un_mandate_current ?= {
+				OR = {
+					has_tag = un_mandate_active
+					has_tag = un_mandate_bound
+				}
+				exists = var:un_mnd_target
+			}
+		}
+		var:un_mandate_current ?= {
+			save_temporary_scope_as = un_mandate_checking
+			var:un_mnd_target ?= { save_temporary_scope_as = un_mandate_check_target }
+		}
+		if = {
+			limit = {
+				exists = scope:un_mandate_check_target
+				un_mandate_has_prohibited_goal = { TARGET = scope:un_mandate_check_target }
+			}
+			scope:un_mandate_checking = {
+				un_mandate_close = { STATUS = violated }
+			}
+		}
+	}
+}
+
+# The actor walked away from the play it raised under the authorization.
+# Called from on_diplo_play_back_down, already filtered to plays that carry the
+# authorized war goal.
+# Scope: the country that backed down
+un_mandate_on_back_down = {
+	if = {
+		limit = {
+			has_variable = un_mandate_current
+			var:un_mandate_current ?= { has_tag = un_mandate_bound }
+		}
+		var:un_mandate_current ?= {
+			un_mandate_close = { STATUS = abandoned }
+		}
+	}
+}
+
+# The authorized war goal was enforced. Called from the war goal type's
+# on_enforced, so it can only ever be reached by THIS goal type.
+# Scope: the war goal holder
+un_mandate_record_enforcement = {
+	if = {
+		limit = {
+			has_variable = un_mandate_current
+			var:un_mandate_current ?= {
+				OR = {
+					has_tag = un_mandate_active
+					has_tag = un_mandate_bound
+				}
+				var:un_mnd_target ?= scope:target_country
+			}
+		}
+		var:un_mandate_current ?= {
+			un_mandate_close = { STATUS = complied }
+		}
+	}
+}
+
+# ============================================================================
+# MONTHLY UPKEEP
+# ============================================================================
+
+# One mandate's monthly tick. Live mandates age and are re-validated; closed
+# ones just age their record so the pruner can retire them.
+# Scope: mandate container
+un_mandate_tick = {
+	if = {
+		limit = { has_tag = un_mandate_active }
+		change_variable = { name = un_mnd_months add = 1 }
+		if = { limit = { exists = var:un_mnd_target } var:un_mnd_target ?= { save_temporary_scope_as = un_mnd_target_scope } }
+		if = { limit = { exists = var:un_mnd_beneficiary } var:un_mnd_beneficiary ?= { save_temporary_scope_as = un_mnd_beneficiary_scope } }
+		if = { limit = { exists = var:un_mnd_region } var:un_mnd_region ?= { save_temporary_scope_as = un_mnd_region_scope } }
+		if = {
+			limit = { NOT = { un_mandate_still_valid = yes } }
+			un_mandate_close = { STATUS = void }
+		}
+		else_if = {
+			limit = { var:un_mnd_months >= un_mandate_expiry_months }
+			un_mandate_close = { STATUS = expired }
+		}
+		else_if = {
+			# Safety net for a binding the on_action missed.
+			limit = { exists = var:un_mnd_actor }
+			var:un_mnd_actor ?= { un_mandate_try_bind = yes }
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_mandate_bound }
+		change_variable = { name = un_mnd_months add = 1 }
+		if = { limit = { exists = var:un_mnd_target } var:un_mnd_target ?= { save_temporary_scope_as = un_mnd_target_scope } }
+
+		# Leaving the organisation mid-play does not strip a war goal already
+		# in the field — that would delete a war the player is fighting — but
+		# it does forfeit the reward for finishing it.
+		if = {
+			limit = {
+				NOT = { has_tag = un_mandate_forfeit }
+				OR = {
+					NOT = { exists = var:un_mnd_actor }
+					var:un_mnd_actor ?= { NOT = { un_mandate_actor_in_good_standing = yes } }
+				}
+			}
+			add_tag = un_mandate_forfeit
+		}
+
+		if = {
+			limit = {
+				exists = var:un_mnd_actor
+				exists = scope:un_mnd_target_scope
+				var:un_mnd_actor ?= {
+					un_mandate_has_prohibited_goal = { TARGET = scope:un_mnd_target_scope }
+				}
+			}
+			un_mandate_close = { STATUS = violated }
+		}
+		else_if = {
+			# The play ended and the goal was never enforced. Not treated as a
+			# violation: the goal can also disappear for reasons outside the
+			# actor's control (the target lost the territory to a third party,
+			# the claim was revoked), and backing down is caught explicitly by
+			# on_diplo_play_back_down.
+			limit = {
+				NOT = { has_variable = un_mnd_grace }
+				exists = var:un_mnd_actor
+				exists = scope:un_mnd_target_scope
+				var:un_mnd_actor ?= {
+					NOT = { un_mandate_holds_authorized_goal = { TARGET = scope:un_mnd_target_scope } }
+				}
+			}
+			un_mandate_close = { STATUS = void }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_variable = un_mnd_closed_months }
+			change_variable = { name = un_mnd_closed_months add = 1 }
+		}
+		else = {
+			set_variable = { name = un_mnd_closed_months value = 0 }
+		}
+	}
+}
+
+# Retire at most one closed mandate per month: the oldest, once it has been on
+# the record for un_mandate_closed_retention_months or the register is over
+# un_mandate_registry_cap. Live mandates are never evicted. Mirrors the
+# eviction step of un_resolution_archive.
+un_mandate_prune_registry = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mandate_registry
+			any_in_global_list = {
+				variable = un_mandate_registry
+				un_mandate_is_closed = yes
+			}
+			OR = {
+				global_variable_list_size = { name = un_mandate_registry target > un_mandate_registry_cap }
+				any_in_global_list = {
+					variable = un_mandate_registry
+					un_mandate_is_closed = yes
+					has_variable = un_mnd_closed_months
+					var:un_mnd_closed_months >= un_mandate_closed_retention_months
+				}
+			}
+		}
+		ordered_in_global_list = {
+			variable = un_mandate_registry
+			position = 0
+			limit = { un_mandate_is_closed = yes }
+			order_by = un_mandate_age_order
+			save_scope_as = un_mandate_evicted
+		}
+		if = {
+			limit = { exists = scope:un_mandate_evicted }
+			remove_list_global_variable = { name = un_mandate_registry target = scope:un_mandate_evicted }
+			scope:un_mandate_evicted = { destroy_container = yes }
+		}
+	}
+}
+
+# Global monthly upkeep, called from un_resolutions_monthly_update (which runs
+# once a month in the no-country game scope). No-op on a save that has never
+# issued a mandate.
+un_mandates_monthly_update = {
+	if = {
+		limit = { has_global_variable_list = un_mandate_registry }
+		every_in_global_list = {
+			variable = un_mandate_registry
+			un_mandate_tick = yes
+		}
+		un_mandate_prune_registry = yes
+	}
+}

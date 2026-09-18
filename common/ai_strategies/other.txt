@@ -173,3 +173,75 @@ ai_strategy_irredentist = {
 		}
 	}
 }
+# ============================================================================
+# UN AUTHORIZED MANDATE
+#
+# Makes an AI holder actually exercise an authorization it has been granted,
+# and only that. `possible` is the mandate itself, so no country without a live
+# mandate ever picks this strategy up; `aggression` fires only against the one
+# country the mandate names; `wargoal_weights` puts the authorized goal ahead
+# of the alternatives once a play is running.
+#
+# The same gates the player faces still apply on top of this: the war goal's
+# `possible` and the play type's `possible` both demand a live mandate for this
+# exact holder, target and state region (common/scripted_triggers/
+# un_mandate_triggers.txt), so an AI cannot reach the goal any other way than
+# a player can.
+# ============================================================================
+ai_strategy_un_mandate = {
+	icon = "gfx/interface/icons/ai_strategy_icons/territorial_expansion.dds"
+
+	type = diplomatic
+
+	# An authorized war is the cheap one: infamy is zero for the mandated goal.
+	# Keep the AI's tolerance conservative anyway so it does not pile
+	# unauthorized demands on top and trip the violation check.
+	undesirable_infamy_level = {
+		value = 25
+	}
+
+	unacceptable_infamy_level = {
+		value = 50
+	}
+
+	wargoal_maneuvers_fraction = {
+		value = 0.05
+	}
+
+	diplomatic_play_boldness = {
+		value = 20
+	}
+
+	recklessness = {
+		value = 0.15
+	}
+
+	aggression = {
+		value = 0
+
+		# Evaluated per (holder, candidate) pair; the engine binds
+		# scope:target_country to the candidate.
+		if = {
+			limit = {
+				has_variable = un_mandate_current
+				var:un_mandate_current ?= {
+					has_tag = un_mandate_active
+					var:un_mnd_target ?= scope:target_country
+				}
+			}
+			add = 40
+		}
+	}
+
+	wargoal_weights = {
+		te_un_mandate_restore_state = 5.0
+	}
+
+	possible = {
+		un_mandate_has_live_mandate = yes
+	}
+
+	weight = {
+		value = 20
+	}
+}

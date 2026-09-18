@@ -1,0 +1,226 @@
+﻿# ============================================================================
+# UN AUTHORIZED MILITARY MANDATES — TRIGGERS
+# ============================================================================
+# A *mandate* is a script container created when a `military_mandate` General
+# Assembly resolution carries un-vetoed. It authorizes exactly one actor to
+# recover exactly one state region from exactly one target, and it is the only
+# thing that makes the `te_un_mandate_restore_state` war goal selectable or
+# infamy-free. The container's tags and variables are documented at the top of
+# common/scripted_effects/un_mandate_effects.txt.
+#
+# Every read below is guarded for saves that predate the system: the actor's
+# `un_mandate_current` country variable and the `un_mandate_registry` global
+# list may simply not exist.
+# ============================================================================
+
+# Whether the scoped country is a defensible target for an authorized mandate:
+# the Assembly only licenses force against a state it has already censured, or
+# one whose reputation already speaks for itself. This is what keeps the topic
+# from becoming a general-purpose land-grab licence.
+# Scope: the prospective target country
+un_mandate_target_is_notorious = {
+	OR = {
+		infamy >= 25
+		has_modifier = un_condemned_modifier
+		has_modifier = un_non_binding_rebuke_modifier
+		has_modifier = un_sanctions_target_modifier
+		has_modifier = un_sanctions_partial_modifier
+	}
+}
+
+# Whether ROOT could table a mandate resolution at all: some other country
+# holds territory ROOT claims, and is notorious enough to be a licit target.
+# MIRRORS un_mandate_select_case (un_mandate_effects.txt) — the two must be
+# kept in step, the trigger answering "is there a case" and the effect picking
+# which one.
+# Scope: the prospective proposer (ROOT in a scripted button's `possible`)
+un_mandate_case_exists = {
+	any_country = {
+		NOT = { THIS = ROOT }
+		NOT = { is_country_type = decentralized }
+		is_subject = no
+		un_mandate_target_is_notorious = yes
+		any_scope_state = {
+			has_claim_by = ROOT
+		}
+	}
+}
+
+# Whether the scoped country is a UN member in good standing — the state a
+# mandate holder has to be in for the authorization to mean anything.
+# Scope: country
+un_mandate_actor_in_good_standing = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+}
+
+# Whether the scoped country already holds an authorization it can still use
+# or is still using. Written against the container's tags rather than the mere
+# presence of `un_mandate_current`, so a dangling index left by a save from
+# another version can never lock a country out of proposing again.
+# Scope: country
+un_mandate_has_live_mandate = {
+	has_variable = un_mandate_current
+	var:un_mandate_current ?= {
+		OR = {
+			has_tag = un_mandate_active
+			has_tag = un_mandate_bound
+		}
+	}
+}
+
+# Whether the scoped mandate has already reached a terminal state. Used by the
+# register pruner, which only ever retires closed entries.
+# Scope: mandate container
+un_mandate_is_closed = {
+	NOR = {
+		has_tag = un_mandate_active
+		has_tag = un_mandate_bound
+	}
+}
+
+# Whether an issued, unexercised mandate still stands up: the organisation is
+# still running the system, everyone it names still exists, the actor is still
+# a member, and the target still holds territory the beneficiary claims.
+#
+# Expects scope:un_mnd_target_scope / un_mnd_beneficiary_scope /
+# un_mnd_region_scope, saved by un_mandate_tick from this container's own
+# variables in the same pass. The `exists = var:` lines are what make that
+# safe: a variable that is gone fails here before any stale scope is read.
+# Scope: mandate container
+un_mandate_still_valid = {
+	has_game_rule = united_nations_enabled
+	exists = var:un_mnd_actor
+	exists = var:un_mnd_target
+	exists = var:un_mnd_beneficiary
+	exists = var:un_mnd_region
+	var:un_mnd_actor ?= { un_mandate_actor_in_good_standing = yes }
+	scope:un_mnd_region_scope ?= {
+		any_scope_state = {
+			owner ?= scope:un_mnd_target_scope
+			has_claim_by = scope:un_mnd_beneficiary_scope
+		}
+	}
+}
+
+# Whether a live mandate covers this exact war goal draft: same holder, same
+# target country, same state region. Read from the war goal type's `infamy`
+# and `possible` blocks, where the current scope is the holder and
+# scope:target_country / scope:target_state are bound by the engine.
+#
+# Deliberately accepts BOTH `un_mandate_active` (not yet exercised) and
+# `un_mandate_bound` (exercised in a play). The infamy block is re-read
+# whenever the play panel redraws, and a goal whose price jumped from 0 to the
+# full return_state figure the moment it was added would be indefensible.
+# Scope: war goal holder (root in a war goal type's script blocks)
+un_mandate_covers_goal = {
+	has_variable = un_mandate_current
+	var:un_mandate_current ?= {
+		OR = {
+			has_tag = un_mandate_active
+			has_tag = un_mandate_bound
+		}
+		var:un_mnd_target ?= scope:target_country
+		var:un_mnd_region ?= scope:target_state.state_region
+	}
+}
+
+# Whether the holder may take this war goal in THIS play. The `active` branch
+# is the first (and only) exercise of the authorization. The `bound` branch
+# exists so the goal stays listed and valid in the play it was already added
+# to — a second play cannot satisfy it, because a play that does not yet carry
+# the goal cannot answer `has_play_goal`, which is exactly the one-play
+# binding rule expressed as a trigger.
+# Scope: war goal holder
+un_mandate_authorizes_new_goal = {
+	has_variable = un_mandate_current
+	var:un_mandate_current ?= {
+		var:un_mnd_target ?= scope:target_country
+		var:un_mnd_region ?= scope:target_state.state_region
+		OR = {
+			has_tag = un_mandate_active
+			AND = {
+				has_tag = un_mandate_bound
+				scope:diplomatic_play ?= { has_play_goal = te_un_mandate_restore_state }
+			}
+		}
+	}
+}
+
+# Whether the scoped country currently holds the authorized war goal against
+# $TARGET$, in a play or in the war that play became. Used to bind a mandate
+# on first use and, after the grace period, to notice that the episode ended
+# without the goal ever being enforced.
+# Parameters: $TARGET$ = target country scope
+# Scope: the mandate actor
+un_mandate_holds_authorized_goal = {
+	OR = {
+		play_participant_has_war_goal_of_type_against = {
+			type = te_un_mandate_restore_state
+			target = $TARGET$
+		}
+		war_participant_has_war_goal_of_type_against = {
+			type = te_un_mandate_restore_state
+			target = $TARGET$
+		}
+	}
+}
+
+# Whether the scoped country has taken a *prohibited* objective against
+# $TARGET$ — anything that goes beyond restoring the named territory. The
+# Assembly authorized a restoration, not a conquest, a regime change or a
+# protectorate; taking one of these voids the mandate and calls the violation
+# hook.
+#
+# The list is explicit rather than "any goal that is not ours" because the
+# engine offers no way to enumerate a play's war goals from script: the only
+# read available is `*_has_war_goal_of_type_against`, which names one type at
+# a time. Keep it in step with common/war_goal_types/ when new annexationist
+# goals are added.
+# Parameters: $TARGET$ = target country scope
+# Scope: the mandate actor
+un_mandate_has_prohibited_goal = {
+	OR = {
+		play_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+	}
+}
+
+# Whether the mandate a passed resolution calls for can still be created, a
+# year after the vote opened. Expects the three temporary scopes
+# un_mandate_create saves before calling it.
+# Scope: the resolution's proposer (the prospective actor)
+un_mandate_can_create = {
+	has_game_rule = united_nations_enabled
+	un_mandate_actor_in_good_standing = yes
+	NOT = { un_mandate_has_live_mandate = yes }
+	exists = scope:un_mnd_target_scope
+	exists = scope:un_mnd_beneficiary_scope
+	exists = scope:un_mnd_region_scope
+	NOT = { scope:un_mnd_target_scope ?= this }
+	NOT = { scope:un_mnd_target_scope ?= scope:un_mnd_beneficiary_scope }
+	# The target must still hold the named territory, and we must still claim it.
+	scope:un_mnd_region_scope ?= {
+		any_scope_state = {
+			owner ?= scope:un_mnd_target_scope
+			has_claim_by = scope:un_mnd_beneficiary_scope
+		}
+	}
+}
