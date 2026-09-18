@@ -41,7 +41,7 @@ types te_history_chart_types
 		progressbar = {
 			size = { 100% 100% }
 			direction = vertical
-			progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+			progresstexture = "gfx/interface/backgrounds/white.dds"
 			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 			texture_density = 2
 			skip_initial_animation = yes
@@ -59,7 +59,7 @@ types te_history_chart_types
 		progressbar = {
 			size = { 100% 100% }
 			direction = vertical
-			progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+			progresstexture = "gfx/interface/backgrounds/white.dds"
 			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 			texture_density = 2
 			skip_initial_animation = yes
@@ -92,7 +92,7 @@ types te_history_chart_types
 			progressbar = {
 				size = { 100% 100% }
 				direction = vertical
-				progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+				progresstexture = "gfx/interface/backgrounds/white.dds"
 				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 				texture_density = 2
 				skip_initial_animation = yes
@@ -109,7 +109,7 @@ types te_history_chart_types
 			progressbar = {
 				size = { 100% 100% }
 				direction = vertical
-				progresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+				progresstexture = "gfx/interface/backgrounds/white.dds"
 				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 				texture_density = 2
 				skip_initial_animation = yes
@@ -131,7 +131,7 @@ types te_history_chart_types
 				size = { 100% 100% }
 				direction = vertical
 				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				noprogresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+				noprogresstexture = "gfx/interface/backgrounds/white.dds"
 				texture_density = 2
 				skip_initial_animation = yes
 
@@ -148,7 +148,7 @@ types te_history_chart_types
 				size = { 100% 100% }
 				direction = vertical
 				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				noprogresstexture = "gfx/interface/progressbar/progressbar_white.dds"
+				noprogresstexture = "gfx/interface/backgrounds/white.dds"
 				texture_density = 2
 				skip_initial_animation = yes
 				alwaystransparent = yes
@@ -214,7 +214,7 @@ types te_history_chart_types
 			textbox = {
 				parentanchor = vcenter
 				autoresize = yes
-				max_width = 200
+				max_width = 300
 				elide = right
 				align = nobaseline
 				using = fontsize_small
@@ -253,7 +253,8 @@ types te_history_chart_types
 						### parent.
 						size = { 0 84 }
 						layoutpolicy_horizontal = expanding
-						maximumsize = { 40 -1 }
+						# No maximum width: the recorded months always share the full plot, so
+						# the columns touch and the caps join up however short the history is.
 						datacontext = "[Scope.GetScriptContainer]"
 
 						### Range filter. Unset range = 10 years = every stored

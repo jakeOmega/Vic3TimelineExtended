@@ -121,7 +121,7 @@ flowcontainer = {
 					blockoverride "values" {
 						min = 0
 						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
 					}
 					blockoverride "cover_values" {
 						min = 0
@@ -202,7 +202,7 @@ flowcontainer = {
 					blockoverride "values" {
 						min = 0
 						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) ) )]"
 					}
 					blockoverride "cover_values" {
 						min = 0

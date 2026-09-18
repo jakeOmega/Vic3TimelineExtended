@@ -2180,7 +2180,7 @@
  te_construction_market_site:0 "Construction Site"
  te_hist_chart_bank_bubble_legend:0 "#lore one bar per month#!"
  te_hist_chart_bank_bubble_title:0 "Bubble Pressure"
- te_hist_chart_bank_momentum_legend:0 "#lore one bar per month; above the line is rising, below is falling#!"
+ te_hist_chart_bank_momentum_legend:0 "#lore one bar per month; above the line is rising#!"
  te_hist_chart_bank_momentum_title:0 "Cycle Momentum"
  te_hist_chart_bank_value_legend:0 "#lore one bar per month#!"
  te_hist_chart_bank_value_title:0 "Cycle Value"
