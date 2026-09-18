@@ -881,62 +881,62 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_monetary'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_policy_rate_hike"
-					blockoverride "row_label" {
-						text = "CB_POLICY_RATE_HIKE"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_policy_rate_hike"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_policy_rate_hike')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_policy_rate_hike"
+				blockoverride "row_label" {
+					text = "CB_POLICY_RATE_HIKE"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_policy_rate_hike"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_policy_rate_hike')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_open_market_ops"
-					blockoverride "row_label" {
-						text = "CB_OPEN_MARKET_OPS"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_open_market_ops"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_open_market_ops"
+				blockoverride "row_label" {
+					text = "CB_OPEN_MARKET_OPS"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_open_market_ops"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_moral_suasion"
-					blockoverride "row_label" {
-						text = "CB_MORAL_SUASION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_moral_suasion"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_moral_suasion"
+				blockoverride "row_label" {
+					text = "CB_MORAL_SUASION"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_moral_suasion"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -972,62 +972,62 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_prudential'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_countercyclical_buffer"
-					blockoverride "row_label" {
-						text = "CB_COUNTERCYCLICAL_BUFFER"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_countercyclical_buffer"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_countercyclical_buffer')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_countercyclical_buffer"
+				blockoverride "row_label" {
+					text = "CB_COUNTERCYCLICAL_BUFFER"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_countercyclical_buffer"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_countercyclical_buffer')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_raise_margin_requirements"
-					blockoverride "row_label" {
-						text = "CB_RAISE_MARGIN_REQ"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_raise_margin_requirements"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_raise_margin_requirements')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_raise_margin_requirements')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_raise_margin_requirements"
+				blockoverride "row_label" {
+					text = "CB_RAISE_MARGIN_REQ"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_raise_margin_requirements"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_raise_margin_requirements')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_raise_margin_requirements')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_expand_deposit_guarantee"
-					blockoverride "row_label" {
-						text = "CB_EXPAND_DEPOSIT_GUARANTEE"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_expand_deposit_guarantee"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_expand_deposit_guarantee')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_expand_deposit_guarantee')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_expand_deposit_guarantee"
+				blockoverride "row_label" {
+					text = "CB_EXPAND_DEPOSIT_GUARANTEE"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_expand_deposit_guarantee"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_expand_deposit_guarantee')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_expand_deposit_guarantee')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1063,43 +1063,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_credit'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_directed_credit_infrastructure"
-					blockoverride "row_label" {
-						text = "CB_DIRECTED_CREDIT_INFRA"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_directed_credit_infrastructure"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_infrastructure')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_directed_credit_infrastructure"
+				blockoverride "row_label" {
+					text = "CB_DIRECTED_CREDIT_INFRA"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_directed_credit_infrastructure"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_infrastructure')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_export_credit_facility"
-					blockoverride "row_label" {
-						text = "CB_EXPORT_CREDIT"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_export_credit_facility"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_export_credit_facility')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_export_credit_facility"
+				blockoverride "row_label" {
+					text = "CB_EXPORT_CREDIT"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_export_credit_facility"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_export_credit_facility')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1135,81 +1135,81 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_external'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_fx_devaluation"
-					blockoverride "row_label" {
-						text = "CB_FX_DEVALUATION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_fx_devaluation"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_devaluation')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_fx_devaluation"
+				blockoverride "row_label" {
+					text = "CB_FX_DEVALUATION"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_fx_devaluation"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_devaluation')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_fx_support').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_fx_support"
-					blockoverride "row_label" {
-						text = "CB_FX_SUPPORT"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_fx_support"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_support')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_support')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_support').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_fx_support"
+				blockoverride "row_label" {
+					text = "CB_FX_SUPPORT"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_fx_support"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_support')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_support')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_fx_swap_lines"
-					blockoverride "row_label" {
-						text = "CB_FX_SWAP_LINES"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_fx_swap_lines"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_swap_lines')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_fx_swap_lines"
+				blockoverride "row_label" {
+					text = "CB_FX_SWAP_LINES"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_fx_swap_lines"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_swap_lines')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_capital_controls_outflow"
-					blockoverride "row_label" {
-						text = "CB_CAPITAL_CONTROLS_OUT"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_capital_controls_outflow"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_capital_controls_outflow')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_capital_controls_outflow"
+				blockoverride "row_label" {
+					text = "CB_CAPITAL_CONTROLS_OUT"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_capital_controls_outflow"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_capital_controls_outflow')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1245,43 +1245,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_crisis'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_liquidity_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_emergency_liquidity_program"
-					blockoverride "row_label" {
-						text = "CB_EMERGENCY_LIQUIDITY"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_emergency_liquidity_program"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_emergency_liquidity_program')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_emergency_liquidity_program')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_liquidity_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_emergency_liquidity_program"
+				blockoverride "row_label" {
+					text = "CB_EMERGENCY_LIQUIDITY"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_emergency_liquidity_program"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_emergency_liquidity_program')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_emergency_liquidity_program')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_asset_relief_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_asset_relief_program"
-					blockoverride "row_label" {
-						text = "CB_ASSET_RELIEF"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_asset_relief_program"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_asset_relief_program')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_asset_relief_program')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_asset_relief_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_asset_relief_program"
+				blockoverride "row_label" {
+					text = "CB_ASSET_RELIEF"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_asset_relief_program"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_asset_relief_program')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_asset_relief_program')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1317,62 +1317,62 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_plan'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_plan_revision').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_plan_revision"
-					blockoverride "row_label" {
-						text = "CE_PLAN_REVISION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_plan_revision"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_plan_revision')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_plan_revision')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_plan_revision').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_plan_revision"
+				blockoverride "row_label" {
+					text = "CE_PLAN_REVISION"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_plan_revision"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_plan_revision')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_plan_revision')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_target_reduction').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_target_reduction"
-					blockoverride "row_label" {
-						text = "CE_TARGET_REDUCTION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_target_reduction"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_target_reduction')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_target_reduction')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_target_reduction').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_target_reduction"
+				blockoverride "row_label" {
+					text = "CE_TARGET_REDUCTION"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_target_reduction"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_target_reduction')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_target_reduction')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_consolidation_order').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_consolidation_order"
-					blockoverride "row_label" {
-						text = "CE_CONSOLIDATION_ORDER"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_consolidation_order"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_consolidation_order')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_consolidation_order')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_consolidation_order').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_consolidation_order"
+				blockoverride "row_label" {
+					text = "CE_CONSOLIDATION_ORDER"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_consolidation_order"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_consolidation_order')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_consolidation_order')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1408,62 +1408,62 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_allocation'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_emergency_allocation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_emergency_allocation"
-					blockoverride "row_label" {
-						text = "CE_EMERGENCY_ALLOCATION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_emergency_allocation"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_emergency_allocation')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_emergency_allocation')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_emergency_allocation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_emergency_allocation"
+				blockoverride "row_label" {
+					text = "CE_EMERGENCY_ALLOCATION"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_emergency_allocation"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_emergency_allocation')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_emergency_allocation')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_strategic_stockpile').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_strategic_stockpile"
-					blockoverride "row_label" {
-						text = "CE_STRATEGIC_STOCKPILE"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_strategic_stockpile"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_strategic_stockpile')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_strategic_stockpile')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_strategic_stockpile').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_strategic_stockpile"
+				blockoverride "row_label" {
+					text = "CE_STRATEGIC_STOCKPILE"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_strategic_stockpile"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_strategic_stockpile')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_strategic_stockpile')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_distribution_upgrade').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_distribution_upgrade"
-					blockoverride "row_label" {
-						text = "CE_DISTRIBUTION_UPGRADE"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_distribution_upgrade"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_distribution_upgrade')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_distribution_upgrade')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_distribution_upgrade').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_distribution_upgrade"
+				blockoverride "row_label" {
+					text = "CE_DISTRIBUTION_UPGRADE"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_distribution_upgrade"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_distribution_upgrade')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_distribution_upgrade')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1499,43 +1499,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_admin'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_admin_campaign"
-					blockoverride "row_label" {
-						text = "CE_ADMIN_CAMPAIGN"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_admin_campaign"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_admin_campaign')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_admin_campaign"
+				blockoverride "row_label" {
+					text = "CE_ADMIN_CAMPAIGN"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_admin_campaign"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_admin_campaign')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_coordination_protocol"
-					blockoverride "row_label" {
-						text = "CE_COORDINATION_PROTOCOL"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_coordination_protocol"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_ce_coordination_protocol')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_coordination_protocol"
+				blockoverride "row_label" {
+					text = "CE_COORDINATION_PROTOCOL"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_coordination_protocol"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_ce_coordination_protocol')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1571,41 +1571,41 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_pool'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_invest_pool_inject"
-					blockoverride "row_label" {
-						text = "CE_INVEST_POOL_INJECT"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_invest_pool_inject"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject')]"
-						text = "banking_dash_btn_execute"
-					}
-					blockoverride "disable_action" {
-						visible = no
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_invest_pool_inject"
+				blockoverride "row_label" {
+					text = "CE_INVEST_POOL_INJECT"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_invest_pool_inject"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject')]"
+					text = "banking_dash_btn_execute"
+				}
+				blockoverride "disable_action" {
+					visible = no
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_ce_invest_pool_withdraw"
-					blockoverride "row_label" {
-						text = "CE_INVEST_POOL_WITHDRAW"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_ce_invest_pool_withdraw"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw')]"
-						text = "banking_dash_btn_execute"
-					}
-					blockoverride "disable_action" {
-						visible = no
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_ce_invest_pool_withdraw"
+				blockoverride "row_label" {
+					text = "CE_INVEST_POOL_WITHDRAW"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_ce_invest_pool_withdraw"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw')]"
+					text = "banking_dash_btn_execute"
+				}
+				blockoverride "disable_action" {
+					visible = no
+				}
+			}
 
 		}
 	}
@@ -1641,43 +1641,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_surplus'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_dividend_restraint').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_dividend_restraint"
-					blockoverride "row_label" {
-						text = "CW_DIVIDEND_RESTRAINT"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_dividend_restraint"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_dividend_restraint')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_dividend_restraint')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_dividend_restraint').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_dividend_restraint"
+				blockoverride "row_label" {
+					text = "CW_DIVIDEND_RESTRAINT"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_dividend_restraint"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_dividend_restraint')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_dividend_restraint')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_mutual_aid_fund').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_mutual_aid_fund"
-					blockoverride "row_label" {
-						text = "CW_MUTUAL_AID_FUND"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_mutual_aid_fund"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_mutual_aid_fund')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_mutual_aid_fund')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_mutual_aid_fund').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_mutual_aid_fund"
+				blockoverride "row_label" {
+					text = "CW_MUTUAL_AID_FUND"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_mutual_aid_fund"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_mutual_aid_fund')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_mutual_aid_fund')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1713,43 +1713,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_investment'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_capital_plan').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_capital_plan"
-					blockoverride "row_label" {
-						text = "CW_CAPITAL_PLAN"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_capital_plan"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_capital_plan')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_capital_plan')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_capital_plan').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_capital_plan"
+				blockoverride "row_label" {
+					text = "CW_CAPITAL_PLAN"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_capital_plan"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_capital_plan')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_capital_plan')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_credit_expansion"
-					blockoverride "row_label" {
-						text = "CW_CREDIT_EXPANSION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_credit_expansion"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_credit_expansion')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_credit_expansion"
+				blockoverride "row_label" {
+					text = "CW_CREDIT_EXPANSION"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_credit_expansion"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_credit_expansion')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1785,43 +1785,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_council'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_council_directive').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_council_directive"
-					blockoverride "row_label" {
-						text = "CW_COUNCIL_DIRECTIVE"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_council_directive"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_council_directive')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_council_directive')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_council_directive').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_council_directive"
+				blockoverride "row_label" {
+					text = "CW_COUNCIL_DIRECTIVE"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_council_directive"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_council_directive')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_council_directive')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_consumption_ceiling"
-					blockoverride "row_label" {
-						text = "CW_CONSUMPTION_CEILING"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_consumption_ceiling"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_consumption_ceiling')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_consumption_ceiling"
+				blockoverride "row_label" {
+					text = "CW_CONSUMPTION_CEILING"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_consumption_ceiling"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_consumption_ceiling')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
@@ -1857,43 +1857,43 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_membership'))]"
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_solidarity_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_solidarity_campaign"
-					blockoverride "row_label" {
-						text = "CW_SOLIDARITY_CAMPAIGN"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_solidarity_campaign"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_solidarity_campaign')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_solidarity_campaign')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_solidarity_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_solidarity_campaign"
+				blockoverride "row_label" {
+					text = "CW_SOLIDARITY_CAMPAIGN"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_solidarity_campaign"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_solidarity_campaign')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_solidarity_campaign')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_worker_buyout').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cw_worker_buyout"
-					blockoverride "row_label" {
-						text = "CW_WORKER_BUYOUT"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cw_worker_buyout"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cw_worker_buyout')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cw_worker_buyout')]"
-						text = "banking_dash_btn_disable"
-					}
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cw_worker_buyout').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cw_worker_buyout"
+				blockoverride "row_label" {
+					text = "CW_WORKER_BUYOUT"
 				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cw_worker_buyout"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cw_worker_buyout')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cw_worker_buyout')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 		}
 	}
