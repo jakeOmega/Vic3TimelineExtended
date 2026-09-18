@@ -1057,9 +1057,13 @@ st_res_policy_apply_good_effect = {
 # the same evaluator, the same thresholds, the same clamps and the same costs
 # as a human on the same preset. There is no AI-only shortcut anywhere.
 #
-# It is one-shot, marked by st_res_policy_ai_seeded, so it cannot overwrite
-# settings a human player tuned before handing the country to the AI, and it
-# never touches a human player's goods at all.
+# It is one-shot, marked by st_res_policy_ai_seeded, and gated on is_ai, so it
+# never touches a human player's goods and never re-seeds a country it has
+# already set up. The one case it does overwrite tuned settings is a country
+# that passes from a human to the AI mid-game: the marker was never set, so the
+# AI seeds its own presets on the next pulse. That is the intended outcome for
+# a country the player has walked away from, but it is a genuine overwrite,
+# not something the marker prevents.
 # --------------------------------------------------------------------------
 st_res_ai_seed_good_effect = {
 	st_res_apply_preset_conservative_base = { GOOD = $GOOD$ }

@@ -334,7 +334,7 @@ Reserve policies close that gap without giving the AI a UI path. `st_res_ai_seed
 
 Details worth knowing:
 
-- **One-shot**, marked by `st_res_policy_ai_seeded`, so it cannot overwrite settings a human tuned before handing the country to the AI, and it never touches a human player's goods. `st_res_reset_vars_effect` clears the marker so a rebuilt hub re-seeds.
+- **One-shot**, marked by `st_res_policy_ai_seeded`, and gated on `is_ai`: it never touches a human player's goods and never re-seeds a country it has already set up. `st_res_reset_vars_effect` clears the marker so a rebuilt hub re-seeds. The marker does **not** protect a country that passes from a human to the AI mid-game — that country has no marker, so the AI seeds its own presets on the next pulse and the player's tuning is lost. That is the intended outcome for a country the player has walked away from, but it is worth knowing it is an overwrite.
 - It runs from the JE's `immediate` **and** from the weekly pulse, because `immediate` does not re-run for a journal entry that is already active in a loaded save. The weekly cost for an already-seeded country is one `has_variable` check.
 - The scripted GUIs stay `ai_is_valid = { always = no }`. They exist to validate player clicks; the AI reaches the same policies through script.
 - The AI presets are **static** — they do not react to war. Conservative Buy When Cheap on six military goods is at most about £30 000/week for a country wealthy enough to have built a hub in the first place, and a war-reactive variant is a balance decision rather than a correctness one.
