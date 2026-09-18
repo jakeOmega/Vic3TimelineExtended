@@ -2230,6 +2230,7 @@
  un_request_cooldown:0 "UN Request Cooldown"
  un_request_cooldown_desc:0 "A recent request to the General Assembly is still being processed. Further requests must wait."
  un_sanctions_busting_modifier_desc:0 "This country is quietly circumventing [concept_un_sanctions] for commercial advantage, at the cost of diplomatic reputation."
+ un_secure_commitment_action_desc:0 "Ask another member of the [concept_un_general_assembly] to undertake to vote in favour of the resolution we have tabled, in exchange for an [concept_obligation] we take on toward them. Only the resolution's sponsor may ask, only before the other member has voted, and only once per member per resolution. An undertaking is not a vote: the chamber records it separately, and the member remains free to break its word at the cost of its standing in the organisation, our [concept_relations], and the [concept_obligation] itself. Note that most members vote about thirty days after a resolution is tabled, so there is little time to ask."
  un_sanctions_cooldown:0 "Recent Sanctions Action"
  un_sanctions_cooldown_desc:0 "A sanctions action was recently taken."
  un_sanctions_enforcement_modifier_desc:0 "Strictly enforcing [concept_un_sanctions], this country takes a small trade hit but gains significant diplomatic credibility."
