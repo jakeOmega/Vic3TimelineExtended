@@ -782,6 +782,12 @@ The `desc` value is a loc key whose string explains what this term contributes. 
 
 **Acceptance threshold: the AI accepts iff `accept_score` evaluates to strictly `> 0`** (per the vanilla engine doc, `common/diplomatic_actions/diplomatic_action.md`: *"If this value evaluates to above zero, AI will accept this action if proposed"*). It's a hard binary cliff by default, so design around a `0` boundary: a strongly negative baseline (e.g. `-75`) that positive factors must accumulate past. Setting **`uses_random_approval = yes`** on the action turns that cliff into a probability — a positive score becomes a % chance to accept (`+30` → 30%). Most actions leave it off (binary). Knowing which mode you're in is load-bearing for tuning the magnitudes: under binary, a target one point short always declines; under random, the same point is a 1% swing.
 
+## `variable_list_size` Does Not Load — Count With `any_in_list`
+
+`triggers.log` documents `variable_list_size = { name = X target >= Y }` (and the `global_` / `local_` variants), but in 1.14 the engine rejects it at load: `debug.log` prints `Failed to read 'target' for 'variable_list_size' at <file>:<line>` — for a literal as well as for a script value — and the enclosing `limit` then never passes. Nothing else is logged, and no offline audit notices. Vanilla never uses the trigger. It cost this mod three silent "bounded" lists that were never pruned (resolution history, mandate registry, chart samples) before the first play test caught it.
+
+Use the vanilla-proven iterator count instead: `any_in_list = { variable = X count >= N <cheap trigger> }` (`any_in_global_list` for globals); `count >= N` has hundreds of vanilla uses. "Is the list non-empty" is just `any_in_list = { variable = X exists = this }`. Write `N` as a literal and cross-reference it from the cap's script value, since `count` with a named script value is unproven.
+
 ## `random_list` Requires Literal Integer Weights
 
 - `random_list` weight keys must be **literal integers**: `10 = { ... }`, `90 = { ... }`.
