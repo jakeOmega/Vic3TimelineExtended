@@ -180,6 +180,17 @@ un_chamber_parties_line = {
 # Scope: resolution container
 un_chamber_tally_line = {
 	custom_tooltip_no_bullet = je_un_chamber_tally
+	# Votes pledged but not yet cast, stated next to the tally and kept out of
+	# it. un_res_commit_pending is a variable rather than a list size because
+	# loc can print a variable and cannot print a list size; it is decremented
+	# at the same single site that settles the commitment.
+	if = {
+		limit = {
+			has_variable = un_res_commit_pending
+			var:un_res_commit_pending >= 1
+		}
+		custom_tooltip_no_bullet = je_un_chamber_tally_committed
+	}
 	if = {
 		limit = { has_tag = un_topic_expulsion }
 		custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
@@ -424,9 +435,14 @@ un_chamber_outcome_line = {
 	}
 }
 
-# The recorded ballot. Both lists are iterated in place — nothing is copied
-# into a country or global variable. Entries whose country has since been
-# annexed print the "a former member" fallback instead of a broken name.
+# The recorded ballot, followed by the lobbying commitments made on the same
+# resolution. Every list is iterated in place — nothing is copied into a
+# country or global variable. Entries whose country has since been annexed
+# print the "a former member" fallback instead of a broken name.
+#
+# Called from un_chamber_active_voters_sgui (the resolution in session) and
+# from un_chamber_history_details_sgui (the archive's voting details), so the
+# commitments appear in both without a second builder.
 # Scope: resolution container
 un_chamber_ballot_lines = {
 	custom_tooltip_no_bullet = je_un_chamber_voters_yes_header
@@ -450,6 +466,52 @@ un_chamber_ballot_lines = {
 	}
 	else = {
 		custom_tooltip = je_un_chamber_voters_none
+	}
+	un_chamber_commitment_lines = yes
+}
+
+# Vote commitments secured by the resolution's proposer — SEPARATE from the two
+# ballot lists above, and never folded into them: a commitment is a promise, a
+# vote is a ballot, and the chamber has to be able to tell the player apart.
+# Nothing here is counted by un_chamber_tally_line's figures or by
+# un_chamber_projection_line, both of which read un_res_support / un_res_oppose
+# and therefore see votes actually cast and nothing else.
+#
+# The three lists are disjoint by construction (un_lobby_settle_commitment moves
+# a recipient off the pending list as it adds it to a settled one), so the
+# entries below never repeat. Country names print through the same guarded
+# accessor the ballot uses, so a recipient annexed since it pledged reads as
+# "a former member".
+#
+# The whole block is hidden unless a commitment was ever made on this
+# resolution, which is also what keeps it invisible on every resolution in a
+# save that predates the feature.
+# Scope: resolution container
+un_chamber_commitment_lines = {
+	if = {
+		limit = { un_lobby_resolution_has_commitments = yes }
+		custom_tooltip_no_bullet = je_un_chamber_commitments_header
+		if = {
+			limit = { un_lobby_list_has_entries = { LIST = un_res_committed_yes } }
+			every_in_list = {
+				variable = un_res_committed_yes
+				custom_tooltip = je_un_chamber_commitment_pending
+			}
+		}
+		if = {
+			limit = { un_lobby_list_has_entries = { LIST = un_res_commit_kept } }
+			every_in_list = {
+				variable = un_res_commit_kept
+				custom_tooltip = je_un_chamber_commitment_kept
+			}
+		}
+		if = {
+			limit = { un_lobby_list_has_entries = { LIST = un_res_commit_broken } }
+			every_in_list = {
+				variable = un_res_commit_broken
+				custom_tooltip = je_un_chamber_commitment_broken
+			}
+		}
 	}
 }
 
@@ -707,6 +769,8 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 27 } custom_tooltip_no_bullet = je_un_standing_reason_27 }
 	else_if = { limit = { var:un_standing_last_reason = 28 } custom_tooltip_no_bullet = je_un_standing_reason_28 }
 	else_if = { limit = { var:un_standing_last_reason = 29 } custom_tooltip_no_bullet = je_un_standing_reason_29 }
+	else_if = { limit = { var:un_standing_last_reason = 30 } custom_tooltip_no_bullet = je_un_standing_reason_30 }
+	else_if = { limit = { var:un_standing_last_reason = 31 } custom_tooltip_no_bullet = je_un_standing_reason_31 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
