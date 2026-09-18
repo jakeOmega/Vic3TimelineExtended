@@ -871,6 +871,7 @@
  UN_UNDERMINE_ORDER_DESC:0 "Use our nation's weight to weaken the United Nations and assert sovereign independence. While active, our authority and influence drain monthly to fuel an ongoing #R [concept_un_authority] reduction#! (scales with global rank). $UN_UNDERMINE_ORDER_EFFECTS$ [Concept('concept_great_power', 'Great Powers')] only. Toggle off to stop."
  UN_VOTE_ACCEPT_TARGET_TT:0 "Acknowledge the resolution and accept its verdict. Pre-empts #bold UN Condemnation#! / #bold [concept_un_sanctions]#! if the resolution passes — but international observers read the gesture as performative, and the regime visibly loses face at home."
  UN_VOTE_AGAINST_TT:0 "Cast our vote #bold against#! the resolution."
+ UN_VOTE_BALLOT_ALREADY_CAST_TT:0 "#v Our vote on this resolution is already on the record — answering here changes nothing.#!"
  UN_VOTE_COMMITMENT_BREAK_TT:0 "#R We pledged this vote to the resolution's sponsor.#! Casting it the other way goes back on our word: #R −4 International Standing#!, #R −20 [concept_relations]#! with the sponsor, and the [concept_obligation] they took on to secure the pledge is struck off — we lose the favour we were owed."
  UN_VOTE_COMMITMENT_KEEP_TT:0 "#G We pledged this vote to the resolution's sponsor, and this honours it.#! A small gain in International Standing, #G +10 [concept_relations]#! with the sponsor, and the [concept_obligation] they owe us stands."
  UN_VOTE_IN_FAVOR_TT:0 "Cast our vote #bold in favor#! of the resolution."

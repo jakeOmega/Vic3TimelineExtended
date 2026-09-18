@@ -836,3 +836,207 @@ un_chamber_mandate_case_line = {
 		}
 	}
 }
+
+# ============================================================================
+# "TABLE A RESOLUTION" — THE PROPOSAL LIST
+# ============================================================================
+# One block per topic a member can put before the Assembly on its own
+# initiative, plus the list of topics that only ever arrive as Assembly
+# business. Still display-only: the only effects called from here are the
+# un_propose_*_select_target selectors, which write nothing but a temporary
+# scope, exactly as un_chamber_mandate_case_line already calls
+# un_mandate_select_case. Calling the real selector is the point — the target
+# a row previews is the target the proposal would name, because it is the same
+# line of script.
+#
+# The gates themselves are never restated here: the status line asks the very
+# triggers common/scripted_triggers/un_propose_triggers.txt hands the button
+# and the Propose control, and the per-clause detail lives in the Propose
+# button's own IsValidTooltip.
+# ============================================================================
+
+# Why this topic can or cannot be tabled right now, in one line. The ordering
+# is the order a player would ask the questions in: is the floor free, is there
+# a case at all, and only then the costs and cooldowns.
+# Parameters: $AVAILABLE$ = un_propose_<key>_available
+#             $POSSIBLE$  = un_propose_<key>_possible
+#             $NO_CASE$   = loc key for "there is nothing to propose here"
+# Scope: country
+un_chamber_propose_status_line = {
+	if = {
+		limit = {
+			has_global_variable = un_vote_active
+			has_global_variable = un_vote_reservation
+		}
+		custom_tooltip_no_bullet = je_un_chamber_propose_blocked_reserved
+	}
+	else_if = {
+		limit = { has_global_variable = un_vote_active }
+		custom_tooltip_no_bullet = je_un_chamber_propose_blocked_in_session
+	}
+	else_if = {
+		limit = { NOT = { $AVAILABLE$ = yes } }
+		custom_tooltip_no_bullet = $NO_CASE$
+	}
+	else_if = {
+		limit = { NOT = { $POSSIBLE$ = yes } }
+		custom_tooltip_no_bullet = je_un_chamber_propose_blocked_gates
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_propose_ready
+	}
+}
+
+# Condemnation of aggression.
+# Scope: country
+un_chamber_propose_condemn_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_condemn
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_condemn_available = yes }
+		un_propose_condemn_select_target = yes
+		if = {
+			limit = { exists = scope:un_propose_condemn_target }
+			custom_tooltip_no_bullet = je_un_chamber_propose_target_condemn
+		}
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_condemn_available
+		POSSIBLE = un_propose_condemn_possible
+		NO_CASE = je_un_chamber_propose_no_case_condemn
+	}
+}
+
+# International sanctions.
+# Scope: country
+un_chamber_propose_sanctions_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_sanctions
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_sanctions_available = yes }
+		un_propose_sanctions_select_target = yes
+		if = {
+			limit = { exists = scope:un_propose_sanctions_target }
+			custom_tooltip_no_bullet = je_un_chamber_propose_target_sanctions
+		}
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_sanctions_available
+		POSSIBLE = un_propose_sanctions_possible
+		NO_CASE = je_un_chamber_propose_no_case_sanctions
+	}
+}
+
+# Motion to strip a permanent seat.
+# Scope: country
+un_chamber_propose_expulsion_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_expulsion
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
+	if = {
+		limit = { un_propose_expulsion_available = yes }
+		un_propose_expulsion_select_target = yes
+		if = {
+			limit = { exists = scope:un_propose_expulsion_target }
+			custom_tooltip_no_bullet = je_un_chamber_propose_target_expulsion
+		}
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_expulsion_available
+		POSSIBLE = un_propose_expulsion_possible
+		NO_CASE = je_un_chamber_propose_no_case_expulsion
+	}
+}
+
+# Authorized military mandate. The only topic whose proposal also names a
+# territory, so the preview does too — and it is the same un_mandate_select_case
+# the "Mandates in Force" panel already shows above.
+# Scope: country
+un_chamber_propose_mandate_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_mandate
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_mandate_available = yes }
+		un_mandate_select_case = yes
+		if = {
+			limit = {
+				exists = scope:un_mandate_case_target
+				exists = scope:un_mandate_case_state
+			}
+			scope:un_mandate_case_state = {
+				state_region = { save_temporary_scope_as = un_chamber_case_region }
+			}
+			custom_tooltip_no_bullet = je_un_chamber_propose_target_mandate
+		}
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_mandate_available
+		POSSIBLE = un_propose_mandate_possible
+		NO_CASE = je_un_chamber_propose_no_case_mandate
+	}
+}
+
+# Request a peacekeeping deployment. The requester is its own target, so there
+# is no pick to preview.
+# Scope: country
+un_chamber_propose_peacekeepers_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_peacekeepers
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_peacekeepers_available
+		POSSIBLE = un_propose_peacekeepers_possible
+		NO_CASE = je_un_chamber_propose_no_case_peacekeepers
+	}
+}
+
+# Request humanitarian aid. Requester is its own target here too.
+# Scope: country
+un_chamber_propose_aid_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_aid
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_aid_available
+		POSSIBLE = un_propose_aid_possible
+		NO_CASE = je_un_chamber_propose_no_case_aid
+	}
+}
+
+# One line per topic that has no proposal control of its own: the eleven
+# conventions, declarations and programmes that reach the floor only when the
+# proposer events in events/un_events.txt fire. Listing them is the point —
+# without it a player has no way of knowing the Assembly can take them up at
+# all. The only gate that is cheaply knowable from script is the five-year
+# topic cooldown a closed resolution leaves behind; each event also carries its
+# own `cooldown = { days = ... }` and its own trigger (technology, authority,
+# laws), neither of which script can read.
+# Parameters: $NAME$  = the topic's loc key
+#             $TOPIC$ = topic key for un_resolution_topic_on_cooldown
+# Scope: country
+un_chamber_assembly_topic_line = {
+	custom_tooltip_no_bullet = $NAME$
+	if = {
+		limit = { un_resolution_topic_on_cooldown = { TOPIC = $TOPIC$ } }
+		custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
+	}
+}
+
+# Scope: country
+un_chamber_assembly_business_block = {
+	custom_tooltip_no_bullet = je_un_chamber_assembly_intro
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_reform TOPIC = reform }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_decolonization TOPIC = decolonization }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea }
+}
