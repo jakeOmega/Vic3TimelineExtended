@@ -44,6 +44,14 @@ st_res_reset_rates_button = {
 # wrappers in common/scripted_guis/st_res_scripted_gui.txt. Those wrappers
 # delegate to the same st_res_{increase,decrease}_<good>_rate_effect helpers,
 # so the rate rules did not move. Nothing was lost for the AI either: every
-# Strategic Reserve scripted button has always carried
-# `ai_chance = { value = 0 }` and no on_action or event drives reserve rates,
-# so the AI has never used these controls.
+# Strategic Reserve scripted button carries `ai_chance = { value = 0 }`, so the
+# AI has never used these controls.
+#
+# The AI does now run the reserve, but not from here: reserve policies give it
+# the Conservative preset once via st_res_ai_seed_policies_effect and then drive
+# it from the shared weekly evaluator. See
+# common/scripted_effects/st_res_effects.txt § AI.
+#
+# "Reset Reserve Rates" is one of the two player actions that switch a good
+# back to Manual (the row's +/-/stop controls are the other), so its
+# localization has to say so.

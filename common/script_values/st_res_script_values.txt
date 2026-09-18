@@ -979,3 +979,648 @@ st_res_total_sale_profit = {
 	add = st_res_aeroplanes_sale_profit
 	add = st_res_tanks_sale_profit
 }
+
+
+# ============================================================================
+# Reserve policies — shared tuning constants
+# ============================================================================
+# EVERY tunable number for the automated reserve policies is defined once, here
+# or in the three `st_res_apply_preset_*_base` effects in
+# common/scripted_effects/st_res_effects.txt. Nothing below is duplicated in a
+# trigger, a scripted GUI or a .gui expression: the sgui `is_valid` stepper
+# gates and the weekly evaluator both read these values.
+#
+# Thresholds are expressed in PERCENTAGE POINTS against the good's base price,
+# measured on the country's own market (`this.market.mg:<good>`), because that
+# is the market the reserve hub's purchases and sales clear on — see
+# st_res_<good>_price_rel below.
+
+# Stepper increments, one per settings row in the policy panel.
+st_res_policy_thr_step = { value = 5 }      # purchase / release threshold, pp
+st_res_policy_pct_step = { value = 5 }      # protected floor / target ceiling, pp of capacity
+st_res_policy_flow_step = { value = 50 }    # maximum weekly flow, units
+st_res_policy_budget_step = { value = 1000 } # weekly purchase budget, GBP
+
+# Hysteresis. A lane that is already engaged keeps going until the price
+# crosses the *stop* threshold, which sits `band` points on the far side of the
+# start threshold. Defaults: start buying below -10%, stop above -5%; start
+# releasing above +20%, stop below +10%.
+st_res_policy_buy_band = { value = 5 }
+st_res_policy_sell_band = { value = 10 }
+
+# The purchase and release bands may never overlap: with the stop thresholds at
+# buy_thr + buy_band and sell_thr - sell_band, the two engaged regions stay
+# disjoint exactly when sell_thr - buy_thr >= buy_band + sell_band.
+st_res_policy_min_gap = {
+	value = st_res_policy_buy_band
+	add = st_res_policy_sell_band
+}
+
+# Absolute stepper bounds.
+st_res_policy_thr_floor = { value = -50 }     # lowest purchase threshold, pp
+st_res_policy_thr_ceiling = { value = 75 }    # highest release threshold, pp
+st_res_policy_flow_min = { value = 50 }
+st_res_policy_flow_max = { value = 2000 }
+st_res_policy_budget_min = { value = 1000 }
+st_res_policy_budget_max = { value = 100000 }
+st_res_policy_stock_min = { value = 0 }       # lowest protected floor, % of capacity
+st_res_policy_stock_max = { value = 100 }     # highest target ceiling, % of capacity
+st_res_policy_stock_min_gap = { value = 10 }  # minimum ceiling - floor, pp
+
+# ============================================================================
+# Reserve policies — per-good price signal and validation helpers
+# ============================================================================
+# PRICE SIGNAL. `market_goods_pricier` / `market_goods_cheaper` are readable as
+# script values inside `market_goods` scope (vanilla precedent:
+# common/treaty_articles/13_goods_transfer.txt reads `value = market_goods_cheaper`).
+# Each is documented as "at least X percent pricier/cheaper than base price".
+# The engine may return them clamped at zero or as signed mirrors of each other,
+# and nothing in the docs settles which — so `_price_rel` is built as
+# max(pricier, 0) - max(cheaper, 0), which yields the same signed premium under
+# either behaviour. `min = 0` after the read is the max(x, 0) clamp.
+#
+# The market read is `this.market`, i.e. the country's OWN market. That is the
+# market the Strategic Reserve Hub's goods input/output clears on, and it is the
+# same market `st_res_<good>_sale_profit` already prices sales at. Player-facing
+# localization calls it the "national market price" for exactly that reason.
+
+# --- GRAIN ---
+st_res_grain_price_up = {
+	value = 0
+	add = this.market.mg:grain.market_goods_pricier
+	min = 0
+}
+
+st_res_grain_price_down = {
+	value = 0
+	add = this.market.mg:grain.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_grain_price_rel = {
+	value = st_res_grain_price_up
+	subtract = st_res_grain_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_grain_sale_profit. `min = 1` keeps the budget division safe.
+st_res_grain_unit_price = {
+	value = 1
+	g:grain = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_grain_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_grain_buy_thr <= st_res_grain_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_grain_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_sell_thr }
+		add = var:st_res_grain_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_grain_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_buy_thr }
+		add = var:st_res_grain_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_grain_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_ceil_pct }
+		add = var:st_res_grain_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_grain_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_floor_pct }
+		add = var:st_res_grain_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# --- AMMUNITION ---
+st_res_ammunition_price_up = {
+	value = 0
+	add = this.market.mg:ammunition.market_goods_pricier
+	min = 0
+}
+
+st_res_ammunition_price_down = {
+	value = 0
+	add = this.market.mg:ammunition.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_ammunition_price_rel = {
+	value = st_res_ammunition_price_up
+	subtract = st_res_ammunition_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_ammunition_sale_profit. `min = 1` keeps the budget division safe.
+st_res_ammunition_unit_price = {
+	value = 1
+	g:ammunition = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_ammunition_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_ammunition_buy_thr <= st_res_ammunition_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_ammunition_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_sell_thr }
+		add = var:st_res_ammunition_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_ammunition_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_buy_thr }
+		add = var:st_res_ammunition_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_ammunition_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_ceil_pct }
+		add = var:st_res_ammunition_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_ammunition_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_floor_pct }
+		add = var:st_res_ammunition_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# --- OIL ---
+st_res_oil_price_up = {
+	value = 0
+	add = this.market.mg:oil.market_goods_pricier
+	min = 0
+}
+
+st_res_oil_price_down = {
+	value = 0
+	add = this.market.mg:oil.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_oil_price_rel = {
+	value = st_res_oil_price_up
+	subtract = st_res_oil_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_oil_sale_profit. `min = 1` keeps the budget division safe.
+st_res_oil_unit_price = {
+	value = 1
+	g:oil = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_oil_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_oil_buy_thr <= st_res_oil_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_oil_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_sell_thr }
+		add = var:st_res_oil_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_oil_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_buy_thr }
+		add = var:st_res_oil_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_oil_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_ceil_pct }
+		add = var:st_res_oil_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_oil_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_floor_pct }
+		add = var:st_res_oil_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# --- SMALL_ARMS ---
+st_res_small_arms_price_up = {
+	value = 0
+	add = this.market.mg:small_arms.market_goods_pricier
+	min = 0
+}
+
+st_res_small_arms_price_down = {
+	value = 0
+	add = this.market.mg:small_arms.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_small_arms_price_rel = {
+	value = st_res_small_arms_price_up
+	subtract = st_res_small_arms_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_small_arms_sale_profit. `min = 1` keeps the budget division safe.
+st_res_small_arms_unit_price = {
+	value = 1
+	g:small_arms = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_small_arms_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_small_arms_buy_thr <= st_res_small_arms_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_small_arms_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_sell_thr }
+		add = var:st_res_small_arms_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_small_arms_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_buy_thr }
+		add = var:st_res_small_arms_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_small_arms_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_ceil_pct }
+		add = var:st_res_small_arms_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_small_arms_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_floor_pct }
+		add = var:st_res_small_arms_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# --- ARTILLERY ---
+st_res_artillery_price_up = {
+	value = 0
+	add = this.market.mg:artillery.market_goods_pricier
+	min = 0
+}
+
+st_res_artillery_price_down = {
+	value = 0
+	add = this.market.mg:artillery.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_artillery_price_rel = {
+	value = st_res_artillery_price_up
+	subtract = st_res_artillery_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_artillery_sale_profit. `min = 1` keeps the budget division safe.
+st_res_artillery_unit_price = {
+	value = 1
+	g:artillery = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_artillery_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_artillery_buy_thr <= st_res_artillery_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_artillery_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_sell_thr }
+		add = var:st_res_artillery_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_artillery_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_buy_thr }
+		add = var:st_res_artillery_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_artillery_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_ceil_pct }
+		add = var:st_res_artillery_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_artillery_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_floor_pct }
+		add = var:st_res_artillery_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# --- AEROPLANES ---
+st_res_aeroplanes_price_up = {
+	value = 0
+	add = this.market.mg:aeroplanes.market_goods_pricier
+	min = 0
+}
+
+st_res_aeroplanes_price_down = {
+	value = 0
+	add = this.market.mg:aeroplanes.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_aeroplanes_price_rel = {
+	value = st_res_aeroplanes_price_up
+	subtract = st_res_aeroplanes_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_aeroplanes_sale_profit. `min = 1` keeps the budget division safe.
+st_res_aeroplanes_unit_price = {
+	value = 1
+	g:aeroplanes = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_aeroplanes_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_aeroplanes_buy_thr <= st_res_aeroplanes_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_aeroplanes_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_sell_thr }
+		add = var:st_res_aeroplanes_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_aeroplanes_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_buy_thr }
+		add = var:st_res_aeroplanes_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_aeroplanes_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_ceil_pct }
+		add = var:st_res_aeroplanes_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_aeroplanes_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_floor_pct }
+		add = var:st_res_aeroplanes_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# --- TANKS ---
+st_res_tanks_price_up = {
+	value = 0
+	add = this.market.mg:tanks.market_goods_pricier
+	min = 0
+}
+
+st_res_tanks_price_down = {
+	value = 0
+	add = this.market.mg:tanks.market_goods_cheaper
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_tanks_price_rel = {
+	value = st_res_tanks_price_up
+	subtract = st_res_tanks_price_down
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_tanks_sale_profit. `min = 1` keeps the budget division safe.
+st_res_tanks_unit_price = {
+	value = 1
+	g:tanks = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_tanks_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_tanks_buy_thr <= st_res_tanks_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_tanks_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_sell_thr }
+		add = var:st_res_tanks_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_tanks_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_buy_thr }
+		add = var:st_res_tanks_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_tanks_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_ceil_pct }
+		add = var:st_res_tanks_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_tanks_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_floor_pct }
+		add = var:st_res_tanks_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
