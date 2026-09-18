@@ -257,11 +257,56 @@ un_chamber_vote_sgui = {
 			text = je_un_chamber_vote_not_proposer_tt
 			NOT = { un_chamber_is_proposer = yes }
 		}
+		# A ballot already cast is refused by naming which way it went, rather
+		# than with a bare "you have voted" — the direction is otherwise only
+		# visible by opening the Recorded Ballot section. Exactly one of these
+		# renders, and each is `always = no`, so the line IS the refusal.
+		# A veto is checked before an ordinary no vote because it books one as
+		# well; a second vetoer overwrites un_res_vetoer, and that case falls
+		# through to the no-vote line, which is still true of it.
 		trigger_if = {
 			limit = { NOT = { un_chamber_is_proposer = yes } }
-			custom_tooltip = {
-				text = je_un_chamber_vote_not_yet_cast_tt
-				un_chamber_ballot_open = yes
+			trigger_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						un_lobby_in_list = { LIST = un_res_yes COUNTRY = ROOT }
+					}
+				}
+				custom_tooltip = {
+					text = je_un_chamber_vote_already_yes_tt
+					always = no
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						has_tag = un_res_vetoed
+						var:un_res_vetoer ?= ROOT
+					}
+				}
+				custom_tooltip = {
+					text = je_un_chamber_vote_already_veto_tt
+					always = no
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						un_lobby_in_list = { LIST = un_res_no COUNTRY = ROOT }
+					}
+				}
+				custom_tooltip = {
+					text = je_un_chamber_vote_already_no_tt
+					always = no
+				}
+			}
+			# Nothing on the record: the clause that actually gates the control,
+			# and the one green tick a player who can vote sees.
+			trigger_else = {
+				custom_tooltip = {
+					text = je_un_chamber_vote_not_yet_cast_tt
+					un_chamber_ballot_open = yes
+				}
 			}
 		}
 	}
