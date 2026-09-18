@@ -30,10 +30,11 @@ un_mandate_on_wargoal_added = {
 			limit = { exists = scope:actor }
 			# Bind first: the goal that was just added may be the authorized one.
 			scope:actor = { un_mandate_try_bind = yes }
-			# Then look for a prohibited objective against the same target. Run
-			# in this order so a play that opens with the authorized goal and a
-			# conquest in the same breath still binds before it is voided —
-			# the actor must not keep an unexercised authorization afterwards.
+			# Then look for a prohibited objective against the same target.
+			# The order matters: un_mandate_check_prohibited only acts on a
+			# BOUND mandate, so binding first is what lets a play opened with
+			# the authorized goal and a conquest in the same breath be caught
+			# on the very addition that completes the pair, in either order.
 			scope:actor = { un_mandate_check_prohibited = yes }
 		}
 	}

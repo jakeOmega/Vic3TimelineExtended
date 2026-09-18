@@ -387,6 +387,8 @@ Every on_action hook is mirrored by the monthly sweep, which is the safety net i
 
 **Prohibited objectives** are an explicit list (`un_mandate_has_prohibited_goal`): annex_country, conquer_state, regime_change, humiliation, the four make-subject goals, unification and the mod's te_reunify_country, checked in both the play and the war forms. The list is explicit because the engine offers no way to enumerate a play's war goals from script — `*_has_war_goal_of_type_against` names one type at a time. Keep it in step with `common/war_goal_types/`.
 
+The check acts on a **bound** mandate only. A country that fights an ordinary, fully-priced war against the same state while holding an *unexercised* authorization has abused nothing — it paid for every goal it took. The violation is taking more than the Assembly licensed *while using* the licence. `on_wargoal_added` binds before it checks, so a play opened with the authorized goal and a conquest in the same breath is caught on whichever addition completes the pair. **Known v1 limitation:** goals added after the authorized one has already been enforced are not seen, because the mandate is closed by then — "breaking the settlement" is the part of the brief marked *if detectable*, and this is the part that is not.
+
 #### Edge cases
 
 | Situation | Outcome | Hook |

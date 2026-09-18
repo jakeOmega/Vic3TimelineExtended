@@ -292,10 +292,15 @@ un_mandate_check_prohibited = {
 		limit = {
 			has_variable = un_mandate_current
 			var:un_mandate_current ?= {
-				OR = {
-					has_tag = un_mandate_active
-					has_tag = un_mandate_bound
-				}
+				# BOUND only, deliberately. A country that fights an ordinary,
+				# fully-priced war against the same state while holding an
+				# unexercised authorization has not abused anything — it paid
+				# for every goal it took. The violation is taking more than the
+				# Assembly licensed *while using* the licence, which is what
+				# `bound` means. on_wargoal_added binds before it checks, so a
+				# play opened with the authorized goal and a conquest in the
+				# same breath is still caught.
+				has_tag = un_mandate_bound
 				exists = var:un_mnd_target
 			}
 		}
@@ -399,9 +404,17 @@ un_mandate_tick = {
 			add_tag = un_mandate_forfeit
 		}
 
+		# The target stopped existing. Nothing is left to enforce, and every
+		# `scope:un_mnd_target_scope` read below would be a stale scope from
+		# another mandate in the same sweep, so this must come first.
 		if = {
+			limit = { NOT = { exists = var:un_mnd_target } }
+			un_mandate_close = { STATUS = void }
+		}
+		else_if = {
 			limit = {
 				exists = var:un_mnd_actor
+				exists = var:un_mnd_target
 				exists = scope:un_mnd_target_scope
 				var:un_mnd_actor ?= {
 					un_mandate_has_prohibited_goal = { TARGET = scope:un_mnd_target_scope }
@@ -418,6 +431,7 @@ un_mandate_tick = {
 			limit = {
 				NOT = { has_variable = un_mnd_grace }
 				exists = var:un_mnd_actor
+				exists = var:un_mnd_target
 				exists = scope:un_mnd_target_scope
 				var:un_mnd_actor ?= {
 					NOT = { un_mandate_holds_authorized_goal = { TARGET = scope:un_mnd_target_scope } }
