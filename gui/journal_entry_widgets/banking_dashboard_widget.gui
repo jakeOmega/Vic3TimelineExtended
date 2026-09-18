@@ -2,7 +2,7 @@
 ###
 ### Two root widgets, both wired from common/journal_entries/je_banking.txt:
 ###   widget_je_banking_conditions -> custom_widget_container_1 (above the status text)
-###   widget_je_banking_policies   -> custom_widget_container_2 (below it, above the
+###   widget_je_banking_policies   -> custom_widget_container_3 (below it, above the
 ###                                   vanilla scripted-button grid)
 ###
 ### Every yes/no question and every action is answered by a scripted GUI in

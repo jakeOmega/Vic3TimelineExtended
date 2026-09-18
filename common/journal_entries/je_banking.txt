@@ -26,7 +26,7 @@
 	widget = {
 		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
 		name = "widget_je_banking_policies"
-		container = "custom_widget_container_2"
+		container = "custom_widget_container_3"
 	}
 
 	# History charts. Collapsed by default, so the bars are only built once the
@@ -35,7 +35,7 @@
 	widget = {
 		gui = "gui/journal_entry_widgets/banking_history_widget.gui"
 		name = "widget_je_banking_history"
-		container = "custom_widget_container_3"
+		container = "custom_widget_container_2"
 	}
 
 	# Buttons

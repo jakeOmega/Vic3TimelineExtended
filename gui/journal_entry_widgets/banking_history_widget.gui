@@ -1,7 +1,8 @@
 ﻿### Banking history charts — the "History" section of je_banking_cycle.
 ###
 ### Wired from common/journal_entries/je_banking.txt as
-### `widget = { name = "widget_je_banking_history" container = "custom_widget_container_3" }`.
+### `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
+### directly under Current Conditions.
 ###
 ### Three charts, one per unit: the cycle value and bubble pressure are 0..100
 ### indices, momentum is a signed monthly delta, so they never share an axis.
@@ -17,6 +18,11 @@
 
 flowcontainer = {
 	name = "widget_je_banking_history"
+
+	# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
+	# country whose entry has not activated yet and therefore has none of the
+	# cycle variables. Draw nothing until the journal entry is running.
+	visible = "[JournalEntry.IsActive]"
 	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
