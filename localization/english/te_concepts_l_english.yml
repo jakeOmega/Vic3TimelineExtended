@@ -922,7 +922,7 @@
  disestablishment_push_modifier:0 "Disestablishment Momentum"
  disestablishment_push_modifier_desc:0 "Support for separating church and state is growing, weakening religious institutional power."
  disestablishment_religious_movement_modifier_desc:0 "The push to separate church and state is weakening religious [Concept('concept_political_movement', 'political movements')]."
- dp_te_un_mandate_restore_state_desc:0 "Sets the initiating [concept_war_goal] to recover the [concept_state] the [concept_un_general_assembly] has authorized us to recover. Only available while we hold an unexercised mandate against this [concept_country]."
+ dp_te_un_mandate_restore_state_desc:0 "Sets the initiating [concept_war_goal] to recover the [concept_state] the [concept_un_general_assembly] has authorized us to recover. Only available while we hold an unexercised mandate against this [concept_country]. #R The mandate covers this one demand:#! adding any other demand against that country for territory, subjugation, regime change or humiliation to the same [concept_diplomatic_play] voids it, earns the Assembly's condemnation and suspends our standing benefits for ten years. Backing down from the play forfeits it as well."
  draft_enforcement_modifier:0 "Draft Enforcement"
  draft_enforcement_modifier_desc:0 "Military enforcement of conscription has maintained troop numbers but intensified social [concept_turmoil]."
  eco_reform_env_movement_modifier_desc:0 "Eco-terrorist incidents have galvanized support for the environmental movement."

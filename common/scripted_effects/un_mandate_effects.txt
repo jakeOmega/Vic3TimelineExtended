@@ -302,6 +302,17 @@ un_mandate_try_bind = {
 				add_tag = un_mandate_bound
 				set_variable = { name = un_mnd_grace days = 60 }
 			}
+			# Tell a human holder, at the moment it matters, what the mandate
+			# does and does not cover. (The rule is also in the proposal text and
+			# on the resolution card, but that was a year ago.)
+			if = {
+				limit = { is_player = yes }
+				scope:un_mandate_bind_target = { save_scope_as = un_mandate_notice_target }
+				scope:un_mandate_binding = {
+					var:un_mnd_region ?= { save_scope_as = un_mandate_notice_region }
+				}
+				trigger_event = { id = un_mandate.2 }
+			}
 		}
 	}
 }
@@ -553,5 +564,54 @@ un_mandates_monthly_update = {
 			un_mandate_tick = yes
 		}
 		un_mandate_prune_registry = yes
+	}
+}
+
+# An AI holder cannot read the terms of its mandate, and left alone it piles
+# secondary demands onto every play it opens — so every AI mandate would end
+# "violated", with the condemnation and the ten-year standing suspension that
+# go with it. Rather than exempt the AI from the rule, strike the prohibited
+# demand the moment the AI adds it: same rule, enforced on its behalf. Only
+# where the holder is the play's initiator (`remove_war_goal` addresses a goal
+# by side and type); if nothing is struck, un_mandate_check_prohibited still
+# runs afterwards and the ordinary violation applies.
+# Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
+un_mandate_ai_strike_prohibited = {
+	if = {
+		limit = {
+			exists = scope:actor
+			initiator ?= scope:actor
+			scope:actor = {
+				is_ai = yes
+				has_variable = un_mandate_current
+				var:un_mandate_current ?= { has_tag = un_mandate_bound }
+			}
+		}
+		un_mandate_strike_goal_type = { TYPE = annex_country }
+		un_mandate_strike_goal_type = { TYPE = conquer_state }
+		un_mandate_strike_goal_type = { TYPE = return_state }
+		un_mandate_strike_goal_type = { TYPE = take_treaty_port }
+		un_mandate_strike_goal_type = { TYPE = liberate_country }
+		un_mandate_strike_goal_type = { TYPE = secession }
+		un_mandate_strike_goal_type = { TYPE = unification }
+		un_mandate_strike_goal_type = { TYPE = te_reunify_country }
+		un_mandate_strike_goal_type = { TYPE = make_protectorate }
+		un_mandate_strike_goal_type = { TYPE = make_tributary }
+		un_mandate_strike_goal_type = { TYPE = make_dominion }
+		un_mandate_strike_goal_type = { TYPE = make_personal_union }
+		un_mandate_strike_goal_type = { TYPE = make_crown_land }
+		un_mandate_strike_goal_type = { TYPE = make_chartered_company }
+		un_mandate_strike_goal_type = { TYPE = release_as_subject }
+		un_mandate_strike_goal_type = { TYPE = transfer_subject }
+		un_mandate_strike_goal_type = { TYPE = regime_change }
+		un_mandate_strike_goal_type = { TYPE = humiliation }
+	}
+}
+
+# Scope: diplomatic play
+un_mandate_strike_goal_type = {
+	if = {
+		limit = { has_play_goal = $TYPE$ }
+		remove_war_goal = { who = initiator type = $TYPE$ }
 	}
 }
