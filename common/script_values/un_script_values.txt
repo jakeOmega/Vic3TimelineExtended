@@ -119,6 +119,7 @@ un_res_margin = {
 
 # Closed resolutions kept in un_resolution_history. Past this, the oldest
 # entry whose topic cooldown has run out is destroyed.
+# Also written as the literal 26 (cap + 1) in un_resolution_archive — change both.
 un_resolution_history_cap = 25
 
 # Eviction order for un_resolution_history: highest for the oldest resolution.
