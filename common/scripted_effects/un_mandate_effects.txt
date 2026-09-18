@@ -518,7 +518,7 @@ un_mandate_prune_registry = {
 				un_mandate_is_closed = yes
 			}
 			OR = {
-				global_variable_list_size = { name = un_mandate_registry target > un_mandate_registry_cap }
+				any_in_global_list = { variable = un_mandate_registry count >= 13 has_tag = un_mandate } # un_mandate_registry_cap + 1; variable_list_size's `target` key fails to load in 1.14
 				any_in_global_list = {
 					variable = un_mandate_registry
 					un_mandate_is_closed = yes
