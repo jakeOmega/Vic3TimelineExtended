@@ -493,6 +493,7 @@ un_mandate_expiry_months = 60
 
 # Closed mandates kept in un_mandate_registry for the chamber's record. Past
 # this, the oldest closed entry is destroyed.
+# Also written as the literal 13 (cap + 1) in un_mandate_prune_registry — change both.
 un_mandate_registry_cap = 12
 
 # How long a closed mandate stays on the record before it is destroyed, even
