@@ -717,13 +717,265 @@ ch_model_aligned_display = {
 	round = yes
 }
 
-ch_model_total_display = {
+# The hegemon's model's share of world culture: the combined cultural pull of
+# every country running it, as a percentage of the world's. Not rounded — the
+# widget prints it to one decimal.
+ch_model_share_display = {
 	value = 0
 	if = {
-		limit = { has_global_variable = ch_ideology_country_total }
-		add = global_var:ch_ideology_country_total
+		limit = { has_global_variable = ch_rank_1_ideology_share }
+		add = global_var:ch_rank_1_ideology_share
 	}
-	round = yes
+}
+
+# Strength of the baseline movement pressure every trailing country feels from
+# the rank-1 hegemon's model (ch_refresh_baseline_model_pressure). It follows the
+# MODEL's share of world culture, not the hegemon's own: a 20% power whose model
+# nobody else runs pushes far less than one whose model half the world shares.
+#   share < 15%   no baseline pressure
+#   share 15-75%  share / 50, floored at 0.3 so the weak fallback stays visible
+#   share > 75%   capped at 1.5
+# At a 50% share the multiplier is 1.0: the baseline then equals the weak event
+# modifier held constant (half the full one).
+# The 15% floor is ch_model_pressure_min_share, which the baseline refresh's
+# trigger also reads.
+ch_model_pressure_min_share = 15
+
+ch_model_pressure_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = ch_rank_1_ideology_share
+			global_var:ch_rank_1_ideology_share >= ch_model_pressure_min_share
+		}
+		add = global_var:ch_rank_1_ideology_share
+		divide = 50
+		min = 0.3
+		max = 1.5
+	}
+}
+
+# ---- Political-model breakdown (the widget's "Political models" section) ----
+# One guarded read per model of global_var:ch_ideology_<model>_share, written by
+# ch_finish_model_bucket in the rebuild. Guarded so a save from before the first
+# rebuild reads 0 instead of logging a missing variable every frame.
+
+ch_model_share_republican_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_republican_share }
+		add = global_var:ch_ideology_republican_share
+	}
+}
+
+ch_model_share_corporatist_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_corporatist_share }
+		add = global_var:ch_ideology_corporatist_share
+	}
+}
+
+ch_model_share_anarchist_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_anarchist_share }
+		add = global_var:ch_ideology_anarchist_share
+	}
+}
+
+ch_model_share_other_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_other_share }
+		add = global_var:ch_ideology_other_share
+	}
+}
+
+ch_model_share_royalist_absolutist_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_royalist_absolutist_share }
+		add = global_var:ch_ideology_royalist_absolutist_share
+	}
+}
+
+ch_model_share_technocratic_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_technocratic_share }
+		add = global_var:ch_ideology_technocratic_share
+	}
+}
+
+ch_model_share_religious_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_religious_share }
+		add = global_var:ch_ideology_religious_share
+	}
+}
+
+ch_model_share_socialist_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_socialist_share }
+		add = global_var:ch_ideology_socialist_share
+	}
+}
+
+ch_model_share_military_junta_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_military_junta_share }
+		add = global_var:ch_ideology_military_junta_share
+	}
+}
+
+ch_model_share_royalist_constitutional_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_royalist_constitutional_share }
+		add = global_var:ch_ideology_royalist_constitutional_share
+	}
+}
+
+ch_model_share_communist_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_communist_share }
+		add = global_var:ch_ideology_communist_share
+	}
+}
+
+ch_model_share_liberal_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_liberal_share }
+		add = global_var:ch_ideology_liberal_share
+	}
+}
+
+ch_model_share_reactionary_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_reactionary_share }
+		add = global_var:ch_ideology_reactionary_share
+	}
+}
+
+ch_model_share_developmentalist_junta_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_developmentalist_junta_share }
+		add = global_var:ch_ideology_developmentalist_junta_share
+	}
+}
+
+ch_model_share_fascist_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_fascist_share }
+		add = global_var:ch_ideology_fascist_share
+	}
+}
+
+# Cumulative shares in the pie's clockwise slice order, as 0-1 FRACTIONS: a
+# progresspie reads its value as a fraction of a full turn (every vanilla one is
+# fed 0-1; a 0-100 value with max = 100 drew every layer full). The widget stacks
+# one progresspie per model, filled to ch_model_pie_cum_<n>_display, largest
+# first, so slice n shows between cum_<n-1> and cum_<n>. The order is the CVD-safety
+# mechanism of the palette and is mirrored in
+# scripts/image_pipeline/gen_ch_model_pie_textures.py (MODELS) and in the
+# widget's layer order: change all three together.
+
+ch_model_pie_cum_1_display = {
+	value = ch_model_share_republican_display
+	divide = 100
+}
+
+ch_model_pie_cum_2_display = {
+	value = ch_model_share_corporatist_display
+	divide = 100
+	add = ch_model_pie_cum_1_display
+}
+
+ch_model_pie_cum_3_display = {
+	value = ch_model_share_anarchist_display
+	divide = 100
+	add = ch_model_pie_cum_2_display
+}
+
+ch_model_pie_cum_4_display = {
+	value = ch_model_share_other_display
+	divide = 100
+	add = ch_model_pie_cum_3_display
+}
+
+ch_model_pie_cum_5_display = {
+	value = ch_model_share_royalist_absolutist_display
+	divide = 100
+	add = ch_model_pie_cum_4_display
+}
+
+ch_model_pie_cum_6_display = {
+	value = ch_model_share_technocratic_display
+	divide = 100
+	add = ch_model_pie_cum_5_display
+}
+
+ch_model_pie_cum_7_display = {
+	value = ch_model_share_religious_display
+	divide = 100
+	add = ch_model_pie_cum_6_display
+}
+
+ch_model_pie_cum_8_display = {
+	value = ch_model_share_socialist_display
+	divide = 100
+	add = ch_model_pie_cum_7_display
+}
+
+ch_model_pie_cum_9_display = {
+	value = ch_model_share_military_junta_display
+	divide = 100
+	add = ch_model_pie_cum_8_display
+}
+
+ch_model_pie_cum_10_display = {
+	value = ch_model_share_royalist_constitutional_display
+	divide = 100
+	add = ch_model_pie_cum_9_display
+}
+
+ch_model_pie_cum_11_display = {
+	value = ch_model_share_communist_display
+	divide = 100
+	add = ch_model_pie_cum_10_display
+}
+
+ch_model_pie_cum_12_display = {
+	value = ch_model_share_liberal_display
+	divide = 100
+	add = ch_model_pie_cum_11_display
+}
+
+ch_model_pie_cum_13_display = {
+	value = ch_model_share_reactionary_display
+	divide = 100
+	add = ch_model_pie_cum_12_display
+}
+
+ch_model_pie_cum_14_display = {
+	value = ch_model_share_developmentalist_junta_display
+	divide = 100
+	add = ch_model_pie_cum_13_display
+}
+
+ch_model_pie_cum_15_display = {
+	value = ch_model_share_fascist_display
+	divide = 100
+	add = ch_model_pie_cum_14_display
 }
 
 

@@ -1108,7 +1108,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ## Cultural Hegemony System
 
-**Purpose:** Measures a nation's global cultural influence ("cache") — how much the rest of the world admires, envies, or mimics your culture and political model. The system drives ideology shift in foreign nations (via legitimacy pressure), raises SoL expectations globally, and provides migration bonuses. Prestige is an **input** to cultural pull, not an output. The JE surfaces a yearly leaderboard and exposes player-facing cultural policy controls.
+**Purpose:** Measures a nation's global cultural influence ("cache") — how much the rest of the world admires, envies, or mimics your culture and political model. The system drives ideology shift in foreign nations (via legitimacy pressure and **political-model movement pressure**, below), raises SoL expectations globally, and provides migration bonuses. Prestige is an **input** to cultural pull, not an output. The JE surfaces a yearly leaderboard and exposes player-facing cultural policy controls.
 
 **Activation:** `cultural_hegemony_enabled` game rule; the JE activates once any country has researched `mass_media` and the country itself has `romanticism`. Scores are computed from game start by the on-actions, so they are already stable when the JE first appears.
 
@@ -1134,7 +1134,21 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 - `cultural_hegemony_foreign_benchmark` (dynamic modifier): SoL expectations pressure **and** legitimacy reduction (`country_legitimacy_base_add = -5`) on countries below the global hegemon — scaled by `cultural_hegemony_benchmark_mult` (0–3×). The legitimacy reduction represents ideology shift pressure — the hegemon's cultural dominance undermines rival governments' political legitimacy.
 - Global tracking: `ch_top_cultural_pull` global variable updated yearly (now stores % share)
 
-**JE Display:** a custom widget in all three `custom_widget_container_*` slots — the influence tier and share with a bar, world rank, the hegemon's exported political model, the cultural-programme controls, a collapsible component breakdown, the collapsible top-ten board and a collapsible history chart of the country's share. The entry's own `status_desc` is three lines. Full data contract, op tables and editing rules: `docs/systems/journal_entry_systems.md` → **Cultural Hegemony Widget**.
+**Political models and movement pressure:**
+- **One classification.** `ch_set_political_model` (`cultural_hegemony_effects.txt`) writes `var:ch_model`, 1–15, from one ordered `if/else_if` chain of `has_law_or_variant` tests. The header of that effect has the code table. The order is part of the classification: first match wins. Codes 1–12 are the original families. 13 Technocratic (Technocracy or Algorithmic Governance), 14 Republican (a republic or Direct Democracy that fails the Liberal test) and 15 Developmentalist Junta were added later. A junta counts as developmentalist when it has Interventionism or Command Economy and fails `ch_has_regressive_laws`, which is vanilla's critical-modernization list minus the two taxation laws, plus hereditary bureaucrats, Feudal Contracts and the slavery laws. Neocameralism is deliberately unmapped. Everything else reads `var:ch_model`; nothing re-derives it.
+- **World shares.** Each rebuild classifies every country and sums its `cultural_pull_raw` into `ch_ideology_<model>_raw`, then divides by the `ch_cached_global_raw` refreshed in the same rebuild into `ch_ideology_<model>_share` (percent). The shares are weighted by pull, not by head count, and add up to 100. `ch_rank_1_ideology` (the code), `ch_rank_1_ideology_aligned_count` and `ch_rank_1_ideology_share` describe the leader's model. Don't sum `var:ch_total` for this, because its denominator is the previous rebuild's.
+- **What each model pushes.** `ch_apply_hegemon_movement_pressure` branches on `scope:cultural_hegemon`'s model (re-classified at call time). Each model has a primary movement plus two fallbacks, and a fallback gets the weaker modifier only when the primary movement is absent. Independent social-law blocks also run: feminist, civil/minority rights, environmental, anti-war, anti-slavery, labor and land reform. The new models map as follows:
+  - Technocratic → positivist → modernizer → transhumanist
+  - Republican → radical → liberal → modernizer
+  - Developmentalist Junta → modernizer → land reform → labor
+- **Baseline (constant).** Every rebuild (about every 6 months: 180-day lock, the yearly pulse and war-end rebuilds), `ch_refresh_baseline_model_pressure` runs on every JE holder:
+  - It strips `ch_hegemon_model_pressure` and `_weak` from all movements.
+  - It then re-applies them non-decaying for 13 months where the country carries `cultural_hegemony_foreign_benchmark`, with `multiplier = ch_model_pressure_mult`.
+  - The multiplier is 0 below `ch_model_pressure_min_share` (15%), otherwise `share / 50` clamped to 0.3–1.5. Its source is the **model's** share of world culture, not the hegemon's own.
+- **Event spikes.** Events 7 and 15 apply `ch_hegemon_ideological_pressure(_weak)` non-decaying for half the old decaying duration (7A: 30 months full; 7C: 15 months weak; 7D and 15A: 30 months weak), so each event's lifetime total is unchanged. They stack on the baseline because the modifier names differ. Event 7 still picks a weighted-random ≥15% power, not necessarily rank 1.
+- **Covert Ideological Subversion** calls the same effect with the *attacker* saved as `cultural_hegemon`, `MULT = 1`.
+
+**JE Display:** a custom widget in all three `custom_widget_container_*` slots — the influence tier and share with a bar, world rank, the hegemon's exported political model with its share of world culture, the cultural-programme controls, a collapsible component breakdown, the collapsible top-ten board, a collapsible "Political Models of the World" pie + legend, and a collapsible history chart of the country's share. The entry's own `status_desc` is three lines. Full data contract, op tables and editing rules: `docs/systems/journal_entry_systems.md` → **Cultural Hegemony Widget**.
 
 **JE Status Thresholds (share-based):** Dominant ≥ 25%, Major ≥ 15%, Significant ≥ 10%, Moderate ≥ 5%, Minor ≥ 2%, Negligible < 2%. These five numbers live in exactly one place — `ch_set_display_state` in `cultural_hegemony_effects.txt`, which writes the `ch_tier` variable everything else reads. Do not re-type them in localization, `.gui` or a journal-entry trigger.
 
@@ -1150,14 +1164,15 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 | File | Purpose |
 |---|---|
 | `common/script_values/cultural_hegemony_script_values.txt` | Core raw-score and display-value math for cultural pull |
-| `common/scripted_effects/cultural_hegemony_effects.txt` | Monthly country cache updates, yearly leaderboard rebuild, hegemon ideology pressure helpers |
+| `common/scripted_effects/cultural_hegemony_effects.txt` | Monthly country cache updates, the leaderboard rebuild, `ch_set_political_model` (the one political-model classification), per-model world totals, hegemon movement-pressure helpers and the baseline refresh |
 | `common/on_actions/cultural_hegemony_on_actions.txt` | Monthly and yearly update hooks, plus world-first tech tracking |
 | `common/journal_entries/je_cultural_hegemony.txt` | Three-line summary, the three widget mounts, and JE-scoped modifier application |
 | `common/scripted_buttons/cultural_hegemony_buttons.txt` | The AI's ten policy buttons (`is_ai = yes`); each delegates to a shared helper |
-| `common/scripted_triggers/cultural_hegemony_triggers.txt` | `ch_possible_<button>` eligibility and `ch_shown_<programme>` swap triggers |
+| `common/scripted_triggers/cultural_hegemony_triggers.txt` | `ch_possible_<button>` eligibility, `ch_shown_<programme>` swap triggers, and `ch_has_regressive_laws` (the developmentalist-junta gate) |
 | `common/scripted_guis/cultural_hegemony_sguis.txt` | `ch_policy_sgui` (the widget's controls) plus four display-only handlers |
 | `gui/journal_entry_widgets/cultural_hegemony_widget.gui` | The player-facing panels: summary, programmes, breakdown, board, history |
-| `common/customizable_localization/cultural_hegemony_custom_loc.txt` | Influence tier and exported-model text, branching on `ch_tier` / `ch_rank_1_ideology` |
+| `common/customizable_localization/cultural_hegemony_custom_loc.txt` | Influence tier and exported-model text, branching on `ch_tier` / `ch_rank_1_ideology` (codes 1–15) |
+| `scripts/image_pipeline/gen_ch_model_pie_textures.py` | Generates the 15 per-model pie/swatch textures under `gfx/interface/journal_entry_widgets/ch_model_pie/`; its `MODELS` tuple is the pie's slice order |
 | `common/scripted_effects/te_history_cultural_hegemony_effects.txt` | The `ch_share` history series and its programme markers |
 | `common/static_modifiers/extra_modifiers.txt` | Timed event modifiers plus the persistent JE policy modifiers |
 | `events/cultural_hegemony_events.txt` | Annual soft-power events for both hegemon and target countries |

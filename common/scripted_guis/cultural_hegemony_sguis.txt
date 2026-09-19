@@ -49,6 +49,7 @@
 #   8   infamy row              9   instability row
 #   10  cultural-pull multiplier row
 #   11  "Rank N of M" line      12  exported-model block
+#   31-45  one "Political models" legend row each (op = 30 + ch_model code)
 #   (fail open: no scope -> the row shows)
 #
 # ---- ch_board_row_sgui / ch_board_detail_sgui / ch_board_is_us_sgui --------
@@ -261,6 +262,84 @@ ch_show_sgui = {
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 12 }
 			has_global_variable = ch_rank_1_ideology
+		}
+		# 31-45: one "Political models" legend row per model, op = 30 + the
+		# model's ch_model code. A row shows once its model holds at least half a
+		# percent of world culture, so the legend lists only what the pie shows.
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 31 }
+			has_global_variable = ch_ideology_communist_share
+			global_var:ch_ideology_communist_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 32 }
+			has_global_variable = ch_ideology_anarchist_share
+			global_var:ch_ideology_anarchist_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 33 }
+			has_global_variable = ch_ideology_fascist_share
+			global_var:ch_ideology_fascist_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 34 }
+			has_global_variable = ch_ideology_corporatist_share
+			global_var:ch_ideology_corporatist_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 35 }
+			has_global_variable = ch_ideology_socialist_share
+			global_var:ch_ideology_socialist_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 36 }
+			has_global_variable = ch_ideology_royalist_absolutist_share
+			global_var:ch_ideology_royalist_absolutist_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 37 }
+			has_global_variable = ch_ideology_royalist_constitutional_share
+			global_var:ch_ideology_royalist_constitutional_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 38 }
+			has_global_variable = ch_ideology_religious_share
+			global_var:ch_ideology_religious_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 39 }
+			has_global_variable = ch_ideology_reactionary_share
+			global_var:ch_ideology_reactionary_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 40 }
+			has_global_variable = ch_ideology_military_junta_share
+			global_var:ch_ideology_military_junta_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 41 }
+			has_global_variable = ch_ideology_liberal_share
+			global_var:ch_ideology_liberal_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 42 }
+			has_global_variable = ch_ideology_other_share
+			global_var:ch_ideology_other_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 43 }
+			has_global_variable = ch_ideology_technocratic_share
+			global_var:ch_ideology_technocratic_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 44 }
+			has_global_variable = ch_ideology_republican_share
+			global_var:ch_ideology_republican_share >= 0.5
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 45 }
+			has_global_variable = ch_ideology_developmentalist_junta_share
+			global_var:ch_ideology_developmentalist_junta_share >= 0.5
 		}
 		trigger_else = {
 			always = no

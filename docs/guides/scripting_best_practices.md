@@ -11,7 +11,7 @@ When several scripted effects, triggers, or script values are structurally ident
 - `covert_op_sync` in `common/scripted_effects/covert_warfare_effects.txt` uses `$TYPE$`, `$ACTION$`, and `$DEFENSE_MOD$`.
 - `st_res_rebuild_good_flow_modifiers_effect` in `common/scripted_effects/st_res_effects.txt` uses `$GOOD$` behind explicit grain/ammunition/oil wrapper effects while keeping the hub scope bridge in the outer orchestrator.
 - `covert_ops_type_below_cap` in `common/scripted_triggers/covert_warfare_triggers.txt` uses `$TYPE$`.
-- `ch_apply_primary_or_fallback_movement_pressure` in `common/scripted_effects/cultural_hegemony_effects.txt` uses `$PRIMARY$`, `$FALLBACK_1$`, `$FALLBACK_2$`, `$MODIFIER$`, and related parameters.
+- `ch_apply_primary_or_fallback_movement_pressure` in `common/scripted_effects/cultural_hegemony_effects.txt` uses `$PRIMARY$`, `$FALLBACK_1$`, `$FALLBACK_2$`, `$MODIFIER$`, `$FALLBACK_MODIFIER$`, `$MONTHS$`, `$DECAYING$` and `$MULT$` (the `add_modifier` multiplier: `1`, or a script value name such as `ch_model_pressure_mult`). `ch_reset_model_bucket` / `ch_add_to_model_bucket` / `ch_finish_model_bucket` in the same file substitute `$MODEL$` into global-variable **names** (`ch_ideology_$MODEL$_share`) — parameter substitution is textual, so it works inside a `name =`.
 - `store_trade_partner_data` in `common/scripted_effects/trade_partner_effects.txt` uses `$RANK$`.
 - `generic_wonder_construction_base` in `common/scripted_effects/extra_effects.txt` uses `$WONDER$` and `$MAX_LEVEL$` to drive 7 wonder construction effects with a single 19-branch level-up chain. See "Numeric placeholder substitution into trigger guards" below.
 
@@ -50,7 +50,7 @@ For concrete examples and remaining candidate refactors in this repo, see `docs/
 | `add_modifier = { name = X months = normal_modifier_time }` | `add_modifier = { name = X days = normal_modifier_time }` |
 | `cooldown = { months = normal_modifier_time }` | `cooldown = { days = normal_modifier_time }` |
 
-When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemon_movement_pressure`), callers must pass **literal month counts** (e.g. `MONTHS = 60` for 5 years, `MONTHS = 30` for 2.5 years), NOT script value names.
+When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemon_movement_pressure`), callers must pass **literal month counts** (e.g. `MONTHS = 60` for 5 years, `MONTHS = 30` for 2.5 years), NOT script value names. (Its `MULT` parameter is the opposite: a script value name is fine there, because `multiplier =` takes one.)
 
 **Both `days = N` and `months = N` are valid `add_modifier` / `cooldown` syntax** when N is a literal integer (vanilla uses `months = 12`, `months = 120`, etc. — see `paris_commune_pulse_events.txt`, `alaska_events.txt`, `canal_events.txt`). The bug pattern this section warns about is *only* mixing the `*_modifier_time` script values (defined in days) with the `months =` keyword. A code review that flags every `months = N` as a bug will produce false positives — verify against vanilla precedent before "fixing".
 
@@ -465,6 +465,12 @@ set_variable = { name = prior_shield value = var:new_multiplier }  # remember fo
 - **Fix:** Use `ROOT.owner.ig:ig_devout` from state scope.
 - **General rule:** Verify ROOT scope type: `on_monthly_pulse_state` → ROOT=state, `on_yearly_pulse_country` → ROOT=country, `on_building_built` → ROOT=building.
 - **Equivalent in country scope:** `every_interest_group = { limit = { is_interest_group_type = $IG$ } ... }` reaches the same single IG and is what `ig_approval_effect` (in `common/scripted_effects/ig_approval_effects.txt`) uses behind a `$IG$ $MODIFIER$ $DAYS$` placeholder. Prefer this helper for IG-approval modifiers — it's reusable across systems and handles the iterator/limit boilerplate once.
+
+## Law Tests: `has_law_or_variant`, Not `has_law`
+
+A classification or gate that asks "does this country run law X" should use `has_law_or_variant = law_type:X`. Vanilla ships **law variants** that replace a parent law for specific countries: Bakufu and Neo-Absolutism for Autocracy, Organic Regulation for Oligarchy, Shinsengumi for Secret Police, Colonial Administration for Monarchy, Terakoya for Private Schools, and Homesteading for Peasant Proprietorship. A plain `has_law` misses every one of them, silently. The cultural-hegemony model classifier used `has_law` throughout, so a Bakufu or Neo-Absolutist hegemon matched no autocracy branch until `ch_set_political_model` switched. Vanilla's own gates (`country_has_laws_in_need_of_critical_modernization`) use the variant form.
+
+**But the law you pass must be the parent.** Given a variant (e.g. `has_law_or_variant = law_type:law_homesteading`), the engine logs `Script system error! has_law_or_variant trigger [ Given law is a variant, we expect the parent ]` to `error.log` at runtime. `POST /reload` and every offline audit stay clean. To test one specific variant, use plain `has_law`. A law is a variant when its definition has a `parent = law_x` line.
 
 ## Industry-Ban Triggers for New Buildings
 
