@@ -149,3 +149,294 @@ colonial_state_sol_qualifying_floor = {
 	value = owner.average_sol
 	multiply = 0.8
 }
+
+# ============================================================================
+# COLONIAL STABILITY DRIFT — LEAF TERMS
+#
+# Single source of truth for every term of colonial_stability_bar's
+# monthly_progress. The bar consumes these leaves one-for-one (each still
+# carrying its own `desc` key, so the bar's hover breakdown keeps full
+# per-term granularity); the widget and the history chart consume the group
+# sums and colonial_stability_drift_total below. Nothing is typed twice.
+#
+# SCOPE: country. The bar's monthly_progress runs in journal_entry scope and
+# reaches these as `owner.colonial_stability_term_X` -- the same idiom the bar
+# already used for colonial_overreach_ratio and the acceptance counts.
+#
+# EDITING RULE: to retune a term, change ONLY the leaf here. Do not add a
+# number to the bar, the widget, the charts or any loc string. To add a term:
+# add a leaf, add it to its group below, and add one `add` line to the bar
+# with a matching `desc` key. The full old-term -> leaf mapping is tabulated
+# in docs/systems/mod_systems.md § Stability Bar Formula.
+#
+# Every leaf returns 0 when its gate is false (the gate moved from the bar's
+# enclosing `if` into the leaf), so the bar's `add` lines are unconditional.
+# ============================================================================
+
+# --- Base drift ---
+colonial_stability_term_base = {
+	value = -0.5
+}
+
+# --- Laws, techs and timed event modifiers (aggregated modifier) ---
+colonial_stability_term_laws = {
+	value = modifier:country_colonial_stability_drift_add
+}
+
+# --- Domestic interest-group composition ---
+colonial_stability_term_ig_landowners = {
+	value = 0
+	if = {
+		limit = { ig:ig_landowners ?= { is_powerful = yes } }
+		add = 0.3
+	}
+}
+
+colonial_stability_term_ig_armed_forces = {
+	value = 0
+	if = {
+		limit = { ig:ig_armed_forces ?= { is_powerful = yes } }
+		add = 0.2
+	}
+}
+
+colonial_stability_term_ig_intelligentsia = {
+	value = 0
+	if = {
+		limit = { ig:ig_intelligentsia ?= { is_powerful = yes } }
+		add = -0.4
+	}
+}
+
+colonial_stability_term_ig_unions = {
+	value = 0
+	if = {
+		limit = { ig:ig_trade_unions ?= { is_powerful = yes } }
+		add = -0.3
+	}
+}
+
+# --- Imperial overreach (colonies vs metropole size) ---
+colonial_stability_term_overreach = {
+	value = 0
+	if = {
+		limit = { colonial_overreach_ratio > 0 }
+		add = {
+			value = colonial_overreach_ratio
+			multiply = -0.4
+		}
+	}
+}
+
+# --- Rank standing ---
+colonial_stability_term_gp_rank = {
+	value = 0
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 0.3
+	}
+}
+
+colonial_stability_term_non_gp = {
+	value = 0
+	if = {
+		limit = { NOT = { country_rank >= rank_value:great_power } }
+		add = -0.5
+	}
+}
+
+# --- Great-power pressure (linear + two tier escalations) and support ---
+colonial_stability_term_gp_condemnation = {
+	value = 0
+	if = {
+		limit = { colonial_gp_condemners_count > 0 }
+		add = {
+			value = colonial_gp_condemners_count
+			multiply = -0.6
+		}
+	}
+}
+
+colonial_stability_term_gp_high_pressure = {
+	value = 0
+	if = {
+		limit = { colonial_gp_condemners_count >= 4 }
+		add = -1.0
+	}
+}
+
+colonial_stability_term_gp_extreme_pressure = {
+	value = 0
+	if = {
+		limit = { colonial_gp_condemners_count >= 6 }
+		add = -2.0
+	}
+}
+
+colonial_stability_term_gp_support = {
+	value = 0
+	if = {
+		limit = { colonial_gp_supporters_count > 0 }
+		add = {
+			value = colonial_gp_supporters_count
+			multiply = 0.3
+		}
+	}
+}
+
+# --- Active programme effectiveness (aggregated modifiers; see
+#     common/modifier_type_definitions/colonial_empire_modifier_types.txt) ---
+colonial_stability_term_garrison = {
+	value = 0
+	if = {
+		limit = { has_modifier = colonial_military_garrison_modifier }
+		add = modifier:country_colonial_garrison_effectiveness_add
+	}
+}
+
+colonial_stability_term_assim = {
+	value = 0
+	if = {
+		limit = { has_modifier = colonial_cultural_assimilation_modifier }
+		add = modifier:country_colonial_assim_effectiveness_add
+	}
+}
+
+colonial_stability_term_invest = {
+	value = 0
+	if = {
+		limit = { has_modifier = colonial_development_investment_modifier }
+		add = modifier:country_colonial_invest_effectiveness_add
+	}
+}
+
+# --- Colonial acceptance ---
+colonial_stability_term_low_acceptance = {
+	value = 0
+	if = {
+		limit = { colonial_low_acceptance_count > 0 }
+		add = {
+			value = colonial_low_acceptance_count
+			multiply = -0.4
+		}
+	}
+}
+
+colonial_stability_term_high_acceptance = {
+	value = 0
+	if = {
+		limit = { colonial_high_acceptance_count > 0 }
+		add = {
+			value = colonial_high_acceptance_count
+			multiply = 0.5
+		}
+	}
+}
+
+# --- Domestic disruption ---
+colonial_stability_term_war = {
+	value = 0
+	if = {
+		limit = { is_at_war = yes }
+		add = -0.5
+	}
+}
+
+colonial_stability_term_revolution = {
+	value = 0
+	if = {
+		limit = { has_revolution = yes }
+		add = -1.0
+	}
+}
+
+colonial_stability_term_turmoil = {
+	value = 0
+	if = {
+		limit = { country_turmoil > 0.05 }
+		add = {
+			value = country_turmoil
+			multiply = -2.0
+		}
+	}
+}
+
+# ============================================================================
+# COLONIAL STABILITY DRIFT — GROUP SUMS
+#
+# Display-only aggregation of the leaves above, one per row of the widget's
+# "Colonial Stability" panel. The BAR does not read these (it reads the leaves
+# individually so its hover keeps per-term granularity) -- these exist so the
+# widget can show nine signed rows without re-deriving anything.
+#
+# SCOPE: country. Six of the nine are O(1) modifier / flag / law reads and the
+# widget reads them live; the three that iterate (overreach, gp, acceptance)
+# are snapshotted into variables by colonial_empire_refresh_display because the
+# widget re-evaluates every frame.
+# ============================================================================
+
+colonial_stability_drift_base = {
+	value = colonial_stability_term_base
+}
+
+colonial_stability_drift_laws = {
+	value = colonial_stability_term_laws
+}
+
+colonial_stability_drift_igs = {
+	value = colonial_stability_term_ig_landowners
+	add = colonial_stability_term_ig_armed_forces
+	add = colonial_stability_term_ig_intelligentsia
+	add = colonial_stability_term_ig_unions
+}
+
+# Iterates states (via colonial_state_count / metropole_state_count) -- snapshotted.
+colonial_stability_drift_overreach = {
+	value = colonial_stability_term_overreach
+}
+
+colonial_stability_drift_rank = {
+	value = colonial_stability_term_gp_rank
+	add = colonial_stability_term_non_gp
+}
+
+# Iterates every_country twice -- snapshotted.
+colonial_stability_drift_gp = {
+	value = colonial_stability_term_gp_condemnation
+	add = colonial_stability_term_gp_high_pressure
+	add = colonial_stability_term_gp_extreme_pressure
+	add = colonial_stability_term_gp_support
+}
+
+colonial_stability_drift_policies = {
+	value = colonial_stability_term_garrison
+	add = colonial_stability_term_assim
+	add = colonial_stability_term_invest
+}
+
+# Iterates every state x every pop -- snapshotted.
+colonial_stability_drift_acceptance = {
+	value = colonial_stability_term_low_acceptance
+	add = colonial_stability_term_high_acceptance
+}
+
+colonial_stability_drift_domestic = {
+	value = colonial_stability_term_war
+	add = colonial_stability_term_revolution
+	add = colonial_stability_term_turmoil
+}
+
+# Projected monthly change, identical by construction to the sum the bar
+# applies. Snapshotted into colonial_empire_d_total for the headline and the
+# signed history series.
+colonial_stability_drift_total = {
+	value = colonial_stability_drift_base
+	add = colonial_stability_drift_laws
+	add = colonial_stability_drift_igs
+	add = colonial_stability_drift_overreach
+	add = colonial_stability_drift_rank
+	add = colonial_stability_drift_gp
+	add = colonial_stability_drift_policies
+	add = colonial_stability_drift_acceptance
+	add = colonial_stability_drift_domestic
+}
