@@ -61,6 +61,14 @@ sr_interstellar_transit_value = {
 	value = var:sr_interstellar_transit_progress
 }
 
+# Progress a milestone drifts forward each month while NO approach is selected.
+# The monthly pulse's `else` branch and the journal-entry widget's "drifting"
+# line both read this, so the rate the panel quotes is the rate the pulse adds.
+# Selecting an approach switches both over to sr_progress below.
+sr_progress_drift = {
+	value = 0.5
+}
+
 # Monthly progress value (unified for both approaches)
 # Base progress from space program PM, techs, buildings, companies, partnerships, AND funding
 # All contribute via country_space_race_progress_add modifier (visible in tooltip breakdown)
@@ -76,11 +84,32 @@ sr_progress = {
 	min = 0.5
 }
 
-# Failure risk weight for random_list roll
-# Base risk set per-milestone via sr_base_risk proxy variable
-# Safe approach JEs reduce risk via country_space_race_risk_mult = -0.5 each
-sr_failure_weight = {
-	value = var:sr_base_risk
+# ======= Per-milestone setback risk =======
+# Each milestone's base failure-roll risk. These literals used to live at the
+# call site (`RISK = N` on sr_monthly_progress_update_effect, and an inline
+# `set_variable = { name = sr_base_risk value = 10 }` in the solar colonization
+# pulse) and were copied into a sr_base_risk proxy variable one statement before
+# the roll — which is why the current risk could not be read from the GUI at
+# all. They live here now so the monthly roll and the journal-entry widget's
+# "Setback risk" line read the same number. Change a milestone's risk in exactly
+# one place: here.
+sr_base_risk_suborbital          = { value = 5  }
+sr_base_risk_orbital             = { value = 6  }
+sr_base_risk_moon_landing        = { value = 6  }
+sr_base_risk_probe               = { value = 6  }
+sr_base_risk_moon_base           = { value = 8  }
+sr_base_risk_mars_landing        = { value = 9  }
+sr_base_risk_interstellar_probe  = { value = 9  }
+sr_base_risk_solar_colonization  = { value = 10 }
+
+# Failure risk weight for the milestone's monthly random roll, and the number
+# the widget shows as "Setback risk". Safe-approach journal entries reduce risk
+# via country_space_race_risk_mult = -0.5 each; ambitious ones do not.
+# Arithmetic is byte-for-byte the retired sr_failure_weight, with the proxy
+# variable read replaced by the per-milestone literal above: keep the
+# (1 + mult) multiply form and the min-then-max clamp order if you edit these.
+sr_risk_pct_suborbital = {
+	value = sr_base_risk_suborbital
 	multiply = {
 		value = 1
 		add = modifier:country_space_race_risk_mult
@@ -88,12 +117,68 @@ sr_failure_weight = {
 	min = 1
 	max = 50
 }
-
-# Success weight = 100 - failure weight
-sr_success_weight = {
-	value = 100
-	subtract = sr_failure_weight
-	min = 50
+sr_risk_pct_orbital = {
+	value = sr_base_risk_orbital
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
+}
+sr_risk_pct_moon_landing = {
+	value = sr_base_risk_moon_landing
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
+}
+sr_risk_pct_probe = {
+	value = sr_base_risk_probe
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
+}
+sr_risk_pct_moon_base = {
+	value = sr_base_risk_moon_base
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
+}
+sr_risk_pct_mars_landing = {
+	value = sr_base_risk_mars_landing
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
+}
+sr_risk_pct_interstellar_probe = {
+	value = sr_base_risk_interstellar_probe
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
+}
+sr_risk_pct_solar_colonization = {
+	value = sr_base_risk_solar_colonization
+	multiply = {
+		value = 1
+		add = modifier:country_space_race_risk_mult
+	}
+	min = 1
+	max = 50
 }
 
 # ======= Per-JE System Values =======
@@ -358,4 +443,61 @@ sr_total_global_colonies = {
 	if = { limit = { has_global_variable = sr_colony_makemake } add = 1 }
 	if = { limit = { has_global_variable = sr_colony_haumea } add = 1 }
 	if = { limit = { has_global_variable = sr_colony_sedna } add = 1 }
+}
+
+# ======= Widget display values =======
+# Rough months left on a milestone at the CURRENT monthly progress rate, for the
+# widget's "about N months to go" line. Ignores setbacks entirely (a failure
+# multiplies progress down, which is exactly what makes the estimate rough), so
+# the label must stay hedged. Only read while an approach is selected —
+# sr_progress has min = 0.5, so the divide is safe either way, but with no
+# approach the pulse adds sr_progress_drift instead and the panel says so
+# rather than quoting an estimate.
+sr_eta_months_suborbital = {
+	value = sr_suborbital_goal
+	if = { limit = { has_variable = sr_progress_suborbital } subtract = var:sr_progress_suborbital }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_orbital = {
+	value = sr_orbital_goal
+	if = { limit = { has_variable = sr_progress_orbital } subtract = var:sr_progress_orbital }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_moon_landing = {
+	value = sr_moon_landing_goal
+	if = { limit = { has_variable = sr_progress_moon_landing } subtract = var:sr_progress_moon_landing }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_probe = {
+	value = sr_probe_goal
+	if = { limit = { has_variable = sr_progress_probe } subtract = var:sr_progress_probe }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_moon_base = {
+	value = sr_moon_base_goal
+	if = { limit = { has_variable = sr_progress_moon_base } subtract = var:sr_progress_moon_base }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_mars_landing = {
+	value = sr_mars_landing_goal
+	if = { limit = { has_variable = sr_progress_mars_landing } subtract = var:sr_progress_mars_landing }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_interstellar_probe = {
+	value = sr_interstellar_probe_goal
+	if = { limit = { has_variable = sr_progress_interstellar_probe } subtract = var:sr_progress_interstellar_probe }
+	min = 0
+	divide = sr_progress
+}
+sr_eta_months_solar_colonization = {
+	value = sr_solar_colonization_goal
+	if = { limit = { has_variable = sr_progress_solar_colonization } subtract = var:sr_progress_solar_colonization }
+	min = 0
+	divide = sr_progress
 }

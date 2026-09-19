@@ -91,7 +91,7 @@ je_space_race_suborbital = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital RISK = 5 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital } }
 	}
 
 	# Outcome previews — engine auto-tooltips the effect block; effects do not run.
@@ -227,7 +227,7 @@ je_space_race_orbital = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital RISK = 6 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital } }
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -367,7 +367,7 @@ je_space_race_moon_landing = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing RISK = 6 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing } }
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -504,7 +504,7 @@ je_space_race_probe = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe RISK = 6 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe } }
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -639,7 +639,7 @@ je_space_race_moon_base = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_base RISK = 8 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_base } }
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -776,7 +776,7 @@ je_space_race_mars_landing = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing RISK = 9 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing } }
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -904,7 +904,7 @@ je_space_race_interstellar_probe = {
 	}
 
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = interstellar_probe RISK = 9 } }
+		effect = { sr_monthly_progress_update_effect = { MILESTONE = interstellar_probe } }
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -1192,10 +1192,10 @@ je_space_race_solar_colonization = {
 						change_variable = { name = sr_progress_solar_colonization add = sr_progress }
 						if = {
 							limit = { NOT = { sr_has_failure_cooldown = yes } }
-							set_variable = { name = sr_base_risk value = 10 }
 							random = {
-								chance = sr_failure_weight
+								chance = sr_risk_pct_solar_colonization
 								set_variable = { name = sr_failed_solar_colonization value = yes }
+								sr_count_setback_base = { MILESTONE = solar_colonization }
 								if = {
 									limit = { has_variable = sr_ambitious_solar_colonization }
 									sr_fire_ambitious_failure_event = yes
@@ -1209,7 +1209,7 @@ je_space_race_solar_colonization = {
 					else = {
 						change_variable = {
 							name = sr_progress_solar_colonization
-							add = 0.5
+							add = sr_progress_drift
 						}
 					}
 					# Bar-fill detection: when progress reaches goal, establish a colony and reset
@@ -1240,6 +1240,7 @@ je_space_race_solar_colonization = {
 					}
 				}
 			}
+			sr_set_milestone_status_base = { MILESTONE = solar_colonization }
 		}
 	}
 
