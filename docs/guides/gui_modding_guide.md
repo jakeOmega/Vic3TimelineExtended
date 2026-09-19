@@ -1495,6 +1495,8 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 20. **`JournalEntry.GetCountry.GetCustom('x')` works in JE widget loc** — confirmed in-game, alongside `.MakeScope.ScriptValue('x')` and `.MakeScope.Var('x')`.
 
+21. **Don't branch a scripted GUI's `is_shown` on a saved scope — the engine may not populate one on the `IsShown` path.** `saved_scopes` is documented as giving "event targets for in triggers / effects", and `is_shown` is a trigger, but vanilla declares `saved_scopes` alongside an `is_shown` exactly once (`je_meiji_restoration_get_faction_sgui`) and *that* `is_shown` does not read the saved scope, so nothing proves the scope survives the call. It matters because the failure is silent: an expression that quietly returns false hides the control, and if you were using op 0 / op 1 `is_shown` to pick which of an Adopt/Repeal pair is drawn, the row ends up with **no** control at all — which is exactly the hole a hidden button grid leaves no fallback for. Keep the op saved scope for `is_valid` / `Execute` / the tooltips (proven by `st_res_policy_*_sgui`), and answer "which of the pair applies?" with a separate, scope-free read-only scripted GUI (`is_shown = { <trigger> }`, `is_valid = { always = no }`, `effect = { }`). Set that one as the row's `datacontext` and wrap each control in a `widget` whose `visible` is `[ScriptedGui.IsShown(…)]` / `[Not(ScriptedGui.IsShown(…))]`; the buttons then carry their own action-handler `datacontext` inside the blocks, and one row instance is still ~10 lines. `gui/journal_entry_widgets/global_warming_widget.gui` is the worked example.
+
 ---
 
 ## Patterns from Workshop Mods
