@@ -423,6 +423,31 @@ def find_used_keys_explicitly(directory):
     return used_keys
 
 
+_QUOTED_ARG_RE = re.compile(r"'([\w.\-]+)'")
+
+
+def find_quoted_loc_args(value):
+    """Return the single-quoted tokens inside a loc value's `[...]` expressions.
+
+    These are the keys a data function renders by name —
+    `SelectLocalization( cond, 'a', 'b' )`, `AddLocalizationIf( cond, 'a' )` —
+    which the `$key$` / `[X.GetKey]` patterns in the closure below never see.
+    Text outside brackets is skipped, so a quoted word in prose never counts.
+    """
+    parts, depth = [], 0
+    for ch in value:
+        if ch == "[":
+            depth += 1
+        elif ch == "]" and depth:
+            depth -= 1
+            if not depth:
+                parts.append(" ")
+            continue
+        if depth:
+            parts.append(ch)
+    return _QUOTED_ARG_RE.findall("".join(parts))
+
+
 # ---------------------------------------------------------------------------
 # Main organiser
 # ---------------------------------------------------------------------------
@@ -473,6 +498,7 @@ def organize_all(project_directory, dry_run=False):
                 found.extend(
                     m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", all_loc[key])
                 )
+                found.extend(find_quoted_loc_args(all_loc[key]))
                 for fk in found:
                     if fk in all_keys and fk not in used_keys:
                         newly_found.add(fk)
