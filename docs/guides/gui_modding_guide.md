@@ -1605,7 +1605,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 21 GUI files at the top of `gui/`: 19 full-file replacements of vanilla panels plus 2 additive files (marked below):
+Currently 22 GUI files at the top of `gui/`: 19 full-file replacements of vanilla panels plus 3 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1623,8 +1623,9 @@ Currently 21 GUI files at the top of `gui/`: 19 full-file replacements of vanill
 | `principle_selection_window.gui` | Principle selection | Modified selection |
 | `production_methods.gui` | PM display | Enhanced PM display |
 | `right_click_menu.gui` | Right-click menu | Additional menu options |
-| `states_panel.gui` | States list | Modified state display |
+| `states_panel.gui` | States list | Modified state display; instances the state-view types below |
 | `states_panel_buildings.gui` | State buildings tab | Enhanced building display |
+| `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card |
 | `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
 | `tooltip.gui` | Tooltip widget | Custom tooltip content |
 | `treaty_draft_panel.gui` | Treaty drafting | Custom treaty interface |
@@ -1643,6 +1644,11 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
 | `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
+
+**The state view uses the same idiom, from its own type library.** `gui/te_state_panel_widgets.gui` holds the types; `states_panel.gui`, a full-file override re-merged every vanilla patch, holds only instances.
+- Rows root on `State.MakeScope.ScriptValue(...)`: the JE widgets' `JournalEntry.GetCountry.MakeScope` doesn't exist in the state view.
+- The status grid is a `wrap_count = 2` flowcontainer of 260 px `state_panel_status_item_small` tiles (10 + 70 icon + 10 + 160 text + 10), and it pairs items by count, not by width. Anything added to it must be exactly one tile, or sit outside it; the tourism card is a 530 px sibling above the grid.
+- Put extra readings in a tile's `extra_widget` block as `te_state_tile_row`s (96 px label + 60 px value), not as `\n`-stacked lines in the name loc.
 
 ## GUI 3-way merge across vanilla patches
 

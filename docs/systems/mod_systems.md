@@ -15,7 +15,7 @@ Systems using this pattern:
 - **Construction Cost Scaling** — `construction_cost_scaling` modifier × `construction_cost_scaling_mult` (applied yearly, country scope)
 - **Migration Crowding** — `migration_crowding` modifier × `migration_crowding_mult` (applied yearly, state scope)
 - **Excess Private Construction** — `too_much_private_construction` modifier × `too_much_private_construction_script_value`
-- **Tourism** — `te_tourism_modifier` × `tourism_modifier_mult` (applied yearly, state scope) — uses ~3000 lines of state_region-based script values in `common/script_values/tourism.txt`. **Must** be evaluated in `on_yearly_pulse_state` due to scope chain requirements.
+- **Tourism** — `tourism_output` × `total_tourism_output_bonus_percent` and `tourism_throughput` × `total_tourism_throughput_bonus_percent` (state scope), re-applied by `te_update_tourism_modifier` from `tourism_on_action` on `on_monthly_pulse_state`, because its inputs (`city_size_rank`, building levels) move monthly. Uses ~2700 lines of state_region appeal values in `common/script_values/tourism.txt`. It must run from a state pulse: law, treaty and building hooks have unreliable scope chains for state-targeted script values.
 
 ## Production Methods (PMs)
 
@@ -164,21 +164,29 @@ New buildings get built / expanded
 
 ## State Panel GUI Enhancements
 
-Custom `state_panel_status_item_small` widgets added to `gui/states_panel.gui` for displaying mod-specific state info:
+Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for mod-specific state info. Each tile's name is the concept alone; its readings are aligned label/value rows in the tile's `extra_widget`, and the detail is in the tooltip:
 
-| Widget | Icon | Concept | Content |
-|---|---|---|---|
-| **Homeland Dynamics** | `state_homelands.dds` | `concept_homeland_dynamics` | Creation/removal thresholds with `GetValueWithBreakdownFor`, annual change chance, change speed modifier |
-| **Arable Land** | `wheat_farm.dds` | `concept_arable_land` | Total, geographic base, regional additions, multiplier %, `GetValueWithBreakdownFor('state_arable_land_mult')` |
-| **Migration Crowding** | `population.dds` | `concept_migration_crowding` | Population, threshold, migration pull %, urban capacity breakdown |
-| **Solar Collector** | `space_elevator.dds` | `concept_solar_collector_array` | Available/total slots, active/reserved/queued |
-| **Antimatter Facility** | `power_plant.dds` | `concept_antimatter_facility` | Available/total slots, active/reserved/queued |
+| Widget | Icon | Concept | Rows | Tooltip |
+|---|---|---|---|---|
+| **Homeland Dynamics** | `state_homelands.dds` | `concept_homeland_dynamics` | Creation / removal threshold (`GetValueWithBreakdownFor`) | Annual change chance, change-speed modifier |
+| **Arable Land** | `wheat_farm.dds` | `concept_arable_land` | Total, regional additions, multiplier % | Geographic base, `GetValueWithBreakdownFor('state_arable_land_mult')` |
+| **Migration Crowding** | `population.dds` | `concept_migration_crowding` | Population, threshold, ratio (+ a bar to the 10x knee), pull penalty | Curve explanation, urban capacity breakdown |
+| **Solar Collector** | `space_elevator.dds` | `concept_solar_collector_array` | Available, generated | Active / reserved / queued |
+| **Antimatter Facility** | `power_plant.dds` | `concept_antimatter_facility` | Available, generated | Active / reserved / queued |
 
-- **Loc keys:** `TE_STATE_*_STATUS` (inline text) and `TE_STATE_*_TT` (tooltip) in `localization/english/te_miscellaneous_l_english.yml`.
-- **Script values for GUI:** `arable_land_total`, `arable_land_base`, `arable_land_from_modifiers`, `arable_land_mult_pct`, `migration_crowding_pull_pct`, `migration_crowding_threshold_pop`, `homeland_change_chance`, `solar_*`, `antimatter_*` in `common/script_values/extra_script_values.txt`.
-- **Concepts:** Defined in `common/game_concepts/extra_concepts.txt` with textures for hoverable tooltip links in loc strings.
-- **Tourism panel** breakdown lines also use concepts (`concept_tourism_cities`, `concept_tourism_ports`, `concept_tourism_transit`, `concept_tourism_art`, `concept_tourism_parks`, `concept_tourism_monuments`, `concept_tourism_base_appeal`) for tooltipable category labels.
-- **Pattern:** Use `[concept_X]` in loc for hoverable concept links, `[State.GetModifier.GetValueWithBreakdownFor('modifier_key')]` for modifier breakdowns, and `[State.MakeScope.ScriptValue('sv_name')]` for computed values.
+- **Widget library: `gui/te_state_panel_widgets.gui`.** `states_panel.gui` is a full-file override re-merged on every vanilla patch, so the mod's own types live there and the override holds only instances.
+  - `te_state_stat_row`: a fixed-width label column plus a fixed-width value column with its text anchored right, so a stack of rows ends at one x.
+  - `te_state_tile_row` sizes it for a tile's 160 px text column; `te_state_wide_row` drops the icon slot for headers and footers.
+  - `te_state_stat_bar`: a 4 px headroom bar, a bare `progressbar` fed by a 0–100 `*_fill_pct` script value that carries its own cap.
+- **Tourism card** (`te_state_tourism_card`): a 530 px card between the population block and the status grid.
+  - It sits outside the grid because the grid is `wrap_count = 2` over 260 px tiles, and anything that isn't exactly one tile breaks its rows.
+  - Output column: base appeal, cities (with world rank). Throughput column: ports, transit, art, parks, monuments. Each capped source has a bar toward its cap; the caps are in the `tourism_fill_*_pct` values at the end of `common/script_values/tourism.txt`.
+  - Footer "All modifiers": `State.GetModifier.GetValueWithBreakdownFor('goods_output_tourism_mult')` and `('building_tourism_industry_throughput_add')`. These also carry airports, decrees, pollution, grand monuments and so on, and lag the scripted sources by up to a month.
+  - Per-source tooltips `te_state_tourism_*_tt` state each tier schedule.
+- **Loc keys:** `TE_STATE_*_STATUS` (tile title), `TE_STATE_*_ROW_*` / `TE_STATE_POINTS_ROW_*` (row labels), `TE_STATE_*_TT` (tooltip) and `te_state_tourism_*` in `localization/english/te_miscellaneous_l_english.yml`.
+- **Script values for GUI:** `arable_land_total`, `arable_land_base`, `arable_land_from_modifiers`, `arable_land_mult_pct`, `migration_crowding_pull_pct`, `migration_crowding_threshold_pop`, `migration_crowding_fill_pct`, `homeland_change_chance`, `solar_*`, `antimatter_*` in `common/script_values/extra_script_values.txt`; `tourism_fill_*_pct` in `common/script_values/tourism.txt`.
+- **Concepts:** Defined in `common/game_concepts/extra_concepts.txt`, with textures for hoverable tooltip links. The tourism rows label with `concept_tourism_*` and reuse those concept textures as row icons.
+- **Pattern:** Use `[concept_X]` for hoverable concept links, `[State.GetModifier.GetValueWithBreakdownFor('modifier_key')]` for modifier breakdowns, and `[State.MakeScope.ScriptValue('sv_name')]` for computed values. A value cell that shows one expression inlines it as `raw_text = "#v [...]#!"`.
 
 ## Nuclear Weapons (`je_nuclear_program`)
 
