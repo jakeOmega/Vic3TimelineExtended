@@ -516,3 +516,64 @@ covert_op_election_confidence_effect = {
 
 	remove_variable = iw_election_worst_phase
 }
+
+# ============================================================================
+# FUNDING CONTROLS
+# ============================================================================
+# One definition per funding action, called by BOTH the journal entry's
+# scripted button (`effect`) and the widget's scripted GUI (`effect`), so the
+# two surfaces cannot drift. Eligibility lives in the matching
+# covert_possible_* trigger (covert_warfare_triggers.txt).
+# Scope: country
+
+covert_effect_increase_funding = {
+	custom_tooltip = iw_increase_funding_effect_tt
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_variable = iw_funding_level } }
+			set_variable = { name = iw_funding_level value = 1 }
+		}
+		else = {
+			change_variable = { name = iw_funding_level add = 1 }
+			clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
+		}
+		# Reapply cost modifier immediately
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 1
+			}
+			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+			je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
+		}
+		else_if = {
+			limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+		}
+		# Refresh each operation's detection display (funding changes the odds)
+		covert_ops_sync_all = yes
+	}
+}
+
+covert_effect_decrease_funding = {
+	custom_tooltip = iw_decrease_funding_effect_tt
+	hidden_effect = {
+		change_variable = { name = iw_funding_level subtract = 1 }
+		clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
+		# Reapply cost modifier immediately
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 1
+			}
+			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+			je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
+		}
+		else_if = {
+			limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+		}
+		# Refresh each operation's detection display (funding changes the odds)
+		covert_ops_sync_all = yes
+	}
+}

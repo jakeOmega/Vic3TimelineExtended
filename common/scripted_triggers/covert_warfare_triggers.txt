@@ -52,3 +52,32 @@ covert_op_is_established = {
 covert_op_is_fully_operational = {
 	var:iw_duration >= 12
 }
+
+# ============================================================================
+# FUNDING CONTROLS — shared eligibility
+# ============================================================================
+# One definition per funding action, called by BOTH the journal entry's
+# scripted button (`possible`) and the widget's scripted GUI (`is_valid`), so
+# the two surfaces cannot drift. The custom_tooltip text is phrased as a
+# condition, not a complaint, because ScriptedGui.IsValidTooltip renders it
+# with a tick when it holds and a cross when it does not — and it doubles as
+# the "you are here" indicator at either end of the ladder.
+# Scope: country
+
+covert_possible_increase_funding = {
+	custom_tooltip = {
+		text = iw_funding_not_max_tt
+		OR = {
+			NOT = { has_variable = iw_funding_level }
+			var:iw_funding_level < iw_funding_level_max
+		}
+	}
+}
+
+covert_possible_decrease_funding = {
+	custom_tooltip = {
+		text = iw_funding_not_min_tt
+		has_variable = iw_funding_level
+		var:iw_funding_level > 0
+	}
+}
