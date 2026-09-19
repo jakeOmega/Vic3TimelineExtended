@@ -1,0 +1,46 @@
+﻿# ============================================================================
+# NUCLEAR PROGRAMME TEST HELPERS — console only
+# ============================================================================
+# Called only from events/te_debug_nuclear_events.txt, which is itself only
+# reachable with `event te_debug_nuclear.1` / `.2` from the console. Nothing in
+# the mod fires either. Kept out of the event file because these two iterate
+# other countries and would bury the options they belong to.
+# ============================================================================
+
+# Give the three strongest other great powers an arsenal, so the leaderboard has
+# something to rank and the AI-rival branches of the funding buttons' ai_chance
+# have something to react to.
+te_debug_nuclear_seed_rivals = {
+	ordered_country = {
+		limit = {
+			NOT = { this = ROOT }
+			country_rank >= rank_value:great_power
+			NOT = { is_country_type = decentralized }
+		}
+		order_by = country_innovation
+		max = 3
+		check_range_bounds = no
+
+		set_variable = { name = nuclear_weapon_stockpile value = 4 }
+		set_variable = { name = nuclear_weapons_program_first_nuke_done value = 1 }
+		if = {
+			limit = { NOT = { has_modifier = nuclear_power } }
+			add_modifier = { name = nuclear_power }
+		}
+	}
+	update_nuclear_powers_ranking = yes
+}
+
+# Clear every arsenal in the world, so the leaderboard empties and the panel's
+# ten rows all collapse.
+te_debug_nuclear_wipe_board = {
+	every_country = {
+		limit = { has_variable = nuclear_weapon_stockpile }
+		set_variable = { name = nuclear_weapon_stockpile value = 0 }
+		if = {
+			limit = { has_modifier = nuclear_power }
+			remove_modifier = nuclear_power
+		}
+	}
+	update_nuclear_powers_ranking = yes
+}

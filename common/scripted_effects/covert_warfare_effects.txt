@@ -51,6 +51,10 @@ covert_op_create = {
 		scope:iw_new_op = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
+			# Initialise the display phase so the widget never reads a variable
+			# that does not exist yet; covert_op_refresh_phase derives it from
+			# then on.
+			covert_op_refresh_phase = yes
 		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 	}
@@ -136,13 +140,36 @@ covert_op_end = {
 	}
 }
 
-# Burn a detected operation: remove its pact and destroy its container.
+# Burn a detected operation: remove its pact, destroy its container, and leave
+# the target a record of what it just caught us doing.
+#
+# That record is the ONLY thing a defender's journal entry says about hostile
+# operations, and it is deliberately narrow: this effect runs exactly when the
+# target's counterintelligence exposed this operation, so naming it is not
+# omniscience. The operation-effect modifiers a target carries (covert_*) are
+# NOT aggregated anywhere — those are the effects of operations it has not
+# detected, and surfacing them would hand the defender knowledge the detection
+# system exists to withhold.
+#
+# iw_last_exposed_country holds the country itself, not its capital state: the
+# widget renders the name by navigating into the country in script
+# (covert_last_exposed_sgui), so an annexed attacker falls back to an anonymous
+# line instead of a months-old capital naming whoever conquered it.
+# iw_last_exposed_age is aged by the journal entry's monthly pulse.
+#
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
-#             $TARGET$ = target country
+#             $TARGET$ = target country,
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_burn = {
 	remove_diplomatic_pact = { country = $TARGET$ type = $ACTION$ }
 	covert_op_destroy = { TYPE = $TYPE$ TARGET = $TARGET$ }
+	$TARGET$ = {
+		set_variable = { name = iw_last_exposed_country value = ROOT }
+		set_variable = { name = iw_last_exposed_type value = $CODE$ }
+		set_variable = { name = iw_last_exposed_age value = 0 }
+	}
 }
 
 # ============================================================================
@@ -242,8 +269,8 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
 }
 
-# Age every running operation by one month. A new operation starts at 0, so
-# its first pulse reads as month 1.
+# Age every running operation by one month, then restate its display phase.
+# A new operation starts at 0, so its first pulse reads as month 1.
 # Scope: country
 covert_ops_age_all_durations = {
 	if = {
@@ -251,7 +278,40 @@ covert_ops_age_all_durations = {
 		every_in_list = {
 			variable = iw_ops
 			change_variable = { name = iw_duration add = 1 }
+			covert_op_refresh_phase = yes
 		}
+	}
+}
+
+# THE one place the operation phase is turned into something a widget can read.
+# covert_op_is_established / covert_op_is_fully_operational stay the definition
+# of the thresholds; this only projects them onto two variables so the .gui
+# never has to compare iw_duration against a literal 6 or 12 (which would put
+# balance numbers outside script):
+#   iw_phase              1 preparatory, 2 establishing, 3 fully operational
+#   iw_phase_months_left  months until the next phase; 0 once fully operational
+# Called from covert_ops_age_all_durations (immediately after the +1, so the
+# numbers are never a month stale) and once from covert_op_create, so a
+# brand-new operation has both before its first pulse.
+# Scope: operation container
+covert_op_refresh_phase = {
+	if = {
+		limit = { covert_op_is_fully_operational = yes }
+		set_variable = { name = iw_phase value = 3 }
+		set_variable = { name = iw_phase_months_left value = 0 }
+	}
+	else_if = {
+		limit = { covert_op_is_established = yes }
+		set_variable = { name = iw_phase value = 2 }
+		set_variable = { name = iw_phase_months_left value = 12 }
+		change_variable = { name = iw_phase_months_left subtract = var:iw_duration }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = 12 }
+	}
+	else = {
+		set_variable = { name = iw_phase value = 1 }
+		set_variable = { name = iw_phase_months_left value = 6 }
+		change_variable = { name = iw_phase_months_left subtract = var:iw_duration }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = 6 }
 	}
 }
 
@@ -515,4 +575,106 @@ covert_op_election_confidence_effect = {
 	# Phase 1 (prep): no effect
 
 	remove_variable = iw_election_worst_phase
+}
+
+# ============================================================================
+# FUNDING CONTROLS
+# ============================================================================
+# One definition per funding action, called by BOTH the journal entry's
+# scripted button (`effect`) and the widget's scripted GUI (`effect`), so the
+# two surfaces cannot drift. Eligibility lives in the matching
+# covert_possible_* trigger (covert_warfare_triggers.txt).
+# Scope: country
+
+# Everything that must be true again once iw_funding_level has moved. The
+# monthly pulse recomputes all three of these from the variable, so this is the
+# pulse's work brought forward to the click; without it the panel's funding
+# numbers (read straight from the variable) would disagree with the modifiers
+# actually in force for up to a month.
+#   - covert_operation_funding_cost: the weekly expense, scaled by ops x level.
+#   - iw_funding_defense: the counter-intelligence capacity bonus. The original
+#     buttons did NOT refresh this one, so a click moved the advertised
+#     "+N counterintelligence IC" immediately while the modifier caught up at
+#     the next monthly pulse.
+#   - covert_ops_sync_all: each operation's stored detection display, because
+#     funding changes the odds.
+# Mirrors je_covert_warfare's on_monthly_pulse; keep the two in step.
+covert_refresh_funding_state = {
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+		je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
+	}
+	else_if = {
+		limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+		je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+	}
+	if = {
+		limit = { covert_ops_funding_ci_mult >= 1 }
+		je:je_covert_warfare = { remove_modifier = iw_funding_defense }
+		je:je_covert_warfare = { add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult } }
+	}
+	else_if = {
+		limit = { je:je_covert_warfare = { has_modifier = iw_funding_defense } }
+		je:je_covert_warfare = { remove_modifier = iw_funding_defense }
+	}
+	covert_ops_sync_all = yes
+}
+
+covert_effect_increase_funding = {
+	custom_tooltip = iw_increase_funding_effect_tt
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_variable = iw_funding_level } }
+			set_variable = { name = iw_funding_level value = 1 }
+		}
+		else = {
+			change_variable = { name = iw_funding_level add = 1 }
+			clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
+		}
+		covert_refresh_funding_state = yes
+	}
+}
+
+# Reaching level 0 stands every running operation down: each covert diplomatic
+# action's requirement_to_maintain needs iw_funding_level >= 1. The tooltip says
+# so through covert_decrease_funding_warning (customizable localization), which
+# only speaks up when there is actually something to lose.
+covert_effect_decrease_funding = {
+	custom_tooltip = iw_decrease_funding_effect_tt
+	hidden_effect = {
+		change_variable = { name = iw_funding_level subtract = 1 }
+		clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
+		covert_refresh_funding_state = yes
+	}
+}
+
+# ============================================================================
+# STAND DOWN
+# ============================================================================
+# End one operation from its row in the widget, without waiting for detection
+# and without dropping funding to zero (which would end all of them).
+#
+# This reaches the same end state as breaking the pact in the diplomacy UI. That
+# path runs the pact's manual_break_effect, which is `covert_op_end = { TYPE }`,
+# i.e. covert_op_destroy; this effect removes the pact and calls
+# covert_op_destroy itself. covert_op_destroy is guarded by an any_in_list check,
+# so it is idempotent: whether or not remove_diplomatic_pact also fires the
+# break hook, the pact is gone and the container is destroyed exactly once.
+# It is covert_op_burn without the burn — no infamy and no relations hit, which
+# belong to being caught, not to calling an operation off.
+#
+# Eligibility, including the fail-closed scope check, is in
+# covert_possible_stand_down (covert_warfare_triggers.txt).
+# Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key
+# Scope: operator country; scope:iw_tgt = the row's target country
+covert_effect_stand_down = {
+	custom_tooltip = iw_stand_down_effect_tt
+	hidden_effect = {
+		remove_diplomatic_pact = { country = scope:iw_tgt type = $ACTION$ }
+		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:iw_tgt }
+	}
 }

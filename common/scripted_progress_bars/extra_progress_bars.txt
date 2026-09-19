@@ -41,189 +41,148 @@ colonial_stability_bar = {
 	min_value = 0
 	max_value = 100
 
+	# ========================================================================
+	# Every term of this formula lives as a named LEAF SCRIPT VALUE in
+	# common/script_values/colonial_empire_values.txt
+	# (`colonial_stability_term_*`, country scope). The bar consumes the leaves
+	# one-for-one, each keeping its own `desc` key so the player's hover
+	# breakdown still shows all 21 terms individually. The journal-entry widget
+	# and the history charts consume the group sums (`colonial_stability_drift_*`)
+	# and `colonial_stability_drift_total`, which are built from the SAME leaves.
+	#
+	# DO NOT put a number in this block. Retune the leaf instead, and the bar,
+	# the widget, the charts and every tooltip move together. Adding a term =
+	# one leaf + one group entry + one `add` line here with a `desc` key.
+	#
+	# The gate that used to wrap each `add` in an `if = { limit = { owner = … } }`
+	# now lives inside the leaf, which returns 0 when the gate is false. The
+	# adds below are therefore unconditional; a term that does not apply
+	# contributes exactly 0, as it did before.
+	#
+	# Contributions that are NOT listed here reach the bar through
+	# `country_colonial_stability_drift_add` (laws, the decolonization/
+	# globalization/knowledge_economy techs, and the timed
+	# colonial_stability_positive_event / _negative_event modifiers) and surface
+	# in the `colonial_law_aggregate_tt` line's own breakdown.
+	# ========================================================================
 	monthly_progress = {
 		# Soft natural drift; the governance + IG terms below dominate
 		add = {
 			desc = "colonial_base_drift_tt"
-			value = -0.5
+			value = owner.colonial_stability_term_base
 		}
 
-		# ========================================================================
-		# LAW CONTRIBUTIONS — aggregated via country_colonial_stability_drift_add.
-		# Each contributing law (Colonial Affairs, Minority Rights, Citizenship,
-		# Distribution of Power, Free Speech, Internal Security) declares its
-		# colonial-stability impact in its own modifier block. The law tooltip
-		# shows the contribution directly. See:
+		# Laws, techs and timed event modifiers, aggregated via
+		# country_colonial_stability_drift_add. Each contributing law declares
+		# its colonial-stability impact in its own modifier block, so the law
+		# tooltip shows the contribution directly. See:
 		#   common/laws/colonial_empire_law_injections.txt
 		#   common/modifier_type_definitions/colonial_empire_modifier_types.txt
-		# ========================================================================
 		add = {
 			desc = "colonial_law_aggregate_tt"
-			value = owner.modifier:country_colonial_stability_drift_add
+			value = owner.colonial_stability_term_laws
 		}
 
-		# ========================================================================
-		# IG composition — empire's domestic backers
-		# ========================================================================
-		if = {
-			limit = { owner = { ig:ig_landowners ?= { is_powerful = yes } } }
-			add = { desc = "colonial_ig_landowners_strong_tt" value = 0.3 }
+		# IG composition — the empire's domestic backers
+		add = {
+			desc = "colonial_ig_landowners_strong_tt"
+			value = owner.colonial_stability_term_ig_landowners
 		}
-		if = {
-			limit = { owner = { ig:ig_armed_forces ?= { is_powerful = yes } } }
-			add = { desc = "colonial_ig_armed_forces_strong_tt" value = 0.2 }
+		add = {
+			desc = "colonial_ig_armed_forces_strong_tt"
+			value = owner.colonial_stability_term_ig_armed_forces
 		}
-		if = {
-			limit = { owner = { ig:ig_intelligentsia ?= { is_powerful = yes } } }
-			add = { desc = "colonial_ig_intelligentsia_strong_tt" value = -0.4 }
+		add = {
+			desc = "colonial_ig_intelligentsia_strong_tt"
+			value = owner.colonial_stability_term_ig_intelligentsia
 		}
-		if = {
-			limit = { owner = { ig:ig_trade_unions ?= { is_powerful = yes } } }
-			add = { desc = "colonial_ig_unions_strong_tt" value = -0.3 }
+		add = {
+			desc = "colonial_ig_unions_strong_tt"
+			value = owner.colonial_stability_term_ig_unions
 		}
 
-		# ========================================================================
 		# Imperial overreach — penalty when colonial holdings exceed ~1.5x
 		# metropole size. Belgium with Congo: no penalty. UK with global
 		# empire: heavy penalty. Scaled by metropole size, not raw count.
-		# ========================================================================
-		if = {
-			limit = { owner = { colonial_overreach_ratio > 0 } }
-			add = {
-				desc = "colonial_overreach_tt"
-				value = owner.colonial_overreach_ratio
-				multiply = -0.4
-			}
+		add = {
+			desc = "colonial_overreach_tt"
+			value = owner.colonial_stability_term_overreach
 		}
 
-		# Great power rank bonus
-		if = {
-			limit = { owner = { country_rank >= rank_value:great_power } }
-			add = { desc = "colonial_gp_rank_bonus_tt" value = 0.3 }
+		# Rank standing
+		add = {
+			desc = "colonial_gp_rank_bonus_tt"
+			value = owner.colonial_stability_term_gp_rank
 		}
-		if = {
-			limit = { owner = { NOT = { country_rank >= rank_value:great_power } } }
-			add = { desc = "colonial_non_gp_penalty_tt" value = -0.5 }
-		}
-
-		# Era pressure: contributions live on the techs themselves so they
-		# show up in each tech's tooltip. globalization tech contributes
-		# -1.5/mo, knowledge_economy contributes -0.75/mo. Both flow through
-		# country_colonial_stability_drift_add and surface in the bar's law-
-		# aggregate breakdown above.
-
-		# GP condemnation pressure (linear + tier escalations)
-		if = {
-			limit = { owner = { colonial_gp_condemners_count > 0 } }
-			add = {
-				desc = "colonial_gp_condemnation_tt"
-				value = owner.colonial_gp_condemners_count
-				multiply = -0.6
-			}
-		}
-		if = {
-			limit = { owner = { colonial_gp_condemners_count >= 4 } }
-			add = { desc = "colonial_gp_high_pressure_tt" value = -1.0 }
-		}
-		if = {
-			limit = { owner = { colonial_gp_condemners_count >= 6 } }
-			add = { desc = "colonial_gp_extreme_pressure_tt" value = -2.0 }
+		add = {
+			desc = "colonial_non_gp_penalty_tt"
+			value = owner.colonial_stability_term_non_gp
 		}
 
-		# GP support
-		if = {
-			limit = { owner = { colonial_gp_supporters_count > 0 } }
-			add = {
-				desc = "colonial_gp_support_tt"
-				value = owner.colonial_gp_supporters_count
-				multiply = 0.3
-			}
+		# GP condemnation pressure (linear + tier escalations), and GP support
+		add = {
+			desc = "colonial_gp_condemnation_tt"
+			value = owner.colonial_stability_term_gp_condemnation
+		}
+		add = {
+			desc = "colonial_gp_high_pressure_tt"
+			value = owner.colonial_stability_term_gp_high_pressure
+		}
+		add = {
+			desc = "colonial_gp_extreme_pressure_tt"
+			value = owner.colonial_stability_term_gp_extreme_pressure
+		}
+		add = {
+			desc = "colonial_gp_support_tt"
+			value = owner.colonial_stability_term_gp_support
 		}
 
-		# ========================================================================
-		# BUTTON EFFECTIVENESS (additive composition)
-		# Cruelty boosts Garrison; nice laws cripple it. Investment is the
-		# benevolent-empire primary tool; cruelty undermines it. Assimilation
-		# needs the matching minority law to be effective; ultra-cruel laws
-		# block it (you can't culturally absorb people you're attacking).
-		# ========================================================================
-
-		# --- POLICY EFFECTIVENESS ---
-		# When a policy button is active, the bar reads the corresponding
-		# country_colonial_*_effectiveness_add aggregate. Baselines live in
-		# `base_values` (see common/static_modifiers/extra_modifiers.txt); law
-		# contributions live in each affected law's modifier block. The
-		# aggregate's GetValueWithBreakdownFor tooltip shows the full sum --
-		# base + each law -- in one place.
-		if = {
-			limit = { owner = { has_modifier = colonial_military_garrison_modifier } }
-			add = {
-				desc = "colonial_garrison_aggregate_tt"
-				value = owner.modifier:country_colonial_garrison_effectiveness_add
-			}
+		# Programme effectiveness. Cruelty boosts Garrison; nice laws cripple
+		# it. Investment is the benevolent-empire primary tool; cruelty
+		# undermines it. Assimilation needs the matching minority law to be
+		# effective. Each leaf reads the matching
+		# country_colonial_*_effectiveness_add aggregate while its programme is
+		# active; baselines live in `base_values` and law contributions in each
+		# affected law's modifier block, so the aggregate's
+		# GetValueWithBreakdownFor tooltip shows base + each law in one place.
+		add = {
+			desc = "colonial_garrison_aggregate_tt"
+			value = owner.colonial_stability_term_garrison
 		}
-		if = {
-			limit = { owner = { has_modifier = colonial_cultural_assimilation_modifier } }
-			add = {
-				desc = "colonial_assim_aggregate_tt"
-				value = owner.modifier:country_colonial_assim_effectiveness_add
-			}
+		add = {
+			desc = "colonial_assim_aggregate_tt"
+			value = owner.colonial_stability_term_assim
 		}
-		if = {
-			limit = { owner = { has_modifier = colonial_development_investment_modifier } }
-			add = {
-				desc = "colonial_invest_aggregate_tt"
-				value = owner.modifier:country_colonial_invest_effectiveness_add
-			}
+		add = {
+			desc = "colonial_invest_aggregate_tt"
+			value = owner.colonial_stability_term_invest
 		}
 
 		# Acceptance: per-state penalties / bonuses
-		if = {
-			limit = { owner = { colonial_low_acceptance_count > 0 } }
-			add = {
-				desc = "colonial_low_acceptance_tt"
-				value = owner.colonial_low_acceptance_count
-				multiply = -0.4
-			}
+		add = {
+			desc = "colonial_low_acceptance_tt"
+			value = owner.colonial_stability_term_low_acceptance
 		}
-		if = {
-			limit = { owner = { colonial_high_acceptance_count > 0 } }
-			add = {
-				desc = "colonial_high_acceptance_tt"
-				value = owner.colonial_high_acceptance_count
-				multiply = 0.5
-			}
+		add = {
+			desc = "colonial_high_acceptance_tt"
+			value = owner.colonial_stability_term_high_acceptance
 		}
 
-		# At-war penalty
-		if = {
-			limit = { owner = { is_at_war = yes } }
-			add = { desc = "colonial_war_penalty_tt" value = -0.5 }
+		# Domestic disruption: war, revolution, and radicalization at home.
+		# country_turmoil is a 0-1 fraction; the leaf's threshold gate keeps
+		# trace turmoil out. Scaled: turmoil 0.25 -> -0.5/mo, 0.5 -> -1.0/mo.
+		add = {
+			desc = "colonial_war_penalty_tt"
+			value = owner.colonial_stability_term_war
 		}
-
-		# Revolution: imperial administration has collapsed; colonies run themselves
-		if = {
-			limit = { owner = { has_revolution = yes } }
-			add = { desc = "colonial_revolution_penalty_tt" value = -1.0 }
+		add = {
+			desc = "colonial_revolution_penalty_tt"
+			value = owner.colonial_stability_term_revolution
 		}
-
-		# Domestic turmoil: radicalization at home saps imperial focus.
-		# country_turmoil is a 0-1 fraction; threshold gate keeps trace turmoil
-		# out of the breakdown. Scaled: turmoil 0.25 -> -0.5/mo, 0.5 -> -1.0/mo.
-		if = {
-			limit = { owner = { country_turmoil > 0.05 } }
-			add = {
-				desc = "colonial_turmoil_penalty_tt"
-				value = owner.country_turmoil
-				multiply = -2.0
-			}
+		add = {
+			desc = "colonial_turmoil_penalty_tt"
+			value = owner.colonial_stability_term_turmoil
 		}
-
-		# Timed event modifiers: contributions live on the
-		# colonial_stability_positive_event / _negative_event modifiers
-		# themselves (declared in common/static_modifiers/extra_modifiers.txt).
-		# They flow through country_colonial_stability_drift_add to the bar's
-		# law-aggregate breakdown above.
 	}
 }
 

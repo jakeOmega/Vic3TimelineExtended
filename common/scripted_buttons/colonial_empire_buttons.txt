@@ -3,12 +3,29 @@
 # Used by je_colonial_empire journal entry
 # ============================================================================
 
+# ----------------------------------------------------------------------------
+# PLAYER-FACING SURFACE: the colonial stability widget
+# (gui/journal_entry_widgets/colonial_empire_widget.gui). Every button below
+# carries `is_ai = yes` in its `visible`, so the vanilla button grid shows
+# nothing to a human: the buttons exist for the AI, which picks policies and
+# decolonization decisions through their `ai_chance`. Do not remove them, and do
+# not drop the is_ai line without restoring a player surface.
+#
+# `possible` and `effect` delegate to colonial_empire_possible_* /
+# colonial_empire_effect_* (common/scripted_triggers/colonial_empire_triggers.txt,
+# common/scripted_effects/decolonization.txt), which the widget's scripted GUIs
+# in common/scripted_guis/colonial_empire_sguis.txt call as well -- so the AI's
+# grid and the player's widget can never drift apart. Change a gate or an action
+# in the helper, never here.
+# ----------------------------------------------------------------------------
+
 # ------ Invest in Colonial Development ------
 ce_invest_in_development = {
 	name = "CE_INVEST_IN_DEVELOPMENT"
 	desc = "CE_INVEST_IN_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { has_modifier = colonial_development_investment_modifier }
 	}
 
@@ -29,38 +46,11 @@ ce_invest_in_development = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
-			OR = {
-				any_scope_state = {
-					is_overseas_colonial_state = yes
-				}
-				country_has_qualifying_colonial_subject = yes
-			}
-		}
-		NOT = { has_modifier = colonial_development_investment_modifier }
+		colonial_empire_possible_invest = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CE_INVEST_IN_DEVELOPMENT_DESC"
-			add_modifier = { name = colonial_development_investment_modifier }
-		}
-		# Seed the GDP-scaled expense modifier so the budget line shows up
-		# immediately on activation; the JE monthly pulse refreshes it from
-		# here on, keeping the multiplier in sync with current GDP.
-		add_modifier = {
-			name = colonial_development_investment_expense_modifier
-			multiplier = colonial_invest_monthly_expense
-		}
-		# Program startup cost — a one-shot treasury hit so enabling the
-		# program isn't a free toggle. Parallels the Cultural Assimilation
-		# startup cost; the two read as the same flavor of cost.
-		add_treasury = colonial_invest_startup_cost
-		# IG disapproval (vs. the previous mechanical IG strength erosion).
-		# Industrialists wanted capital at home; the PB resents the diversion.
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		colonial_empire_effect_invest = yes
 	}
 }
 
@@ -69,6 +59,7 @@ ce_remove_invest_in_development = {
 	desc = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = colonial_development_investment_modifier
 	}
 
@@ -81,18 +72,11 @@ ce_remove_invest_in_development = {
 	}
 
 	possible = {
-		has_modifier = colonial_development_investment_modifier
+		colonial_empire_possible_remove_invest = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
-			remove_modifier = colonial_development_investment_modifier
-		}
-		# Drop the budget-line expense too; the JE pulse stops refreshing
-		# it once the policy modifier is gone, but the active copy needs
-		# explicit cleanup or it would linger out a full duration.
-		remove_modifier = colonial_development_investment_expense_modifier
+		colonial_empire_effect_remove_invest = yes
 	}
 }
 
@@ -102,6 +86,7 @@ ce_military_garrison = {
 	desc = "CE_MILITARY_GARRISON_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { has_modifier = colonial_military_garrison_modifier }
 	}
 
@@ -118,31 +103,11 @@ ce_military_garrison = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
-			OR = {
-				any_scope_state = {
-					is_overseas_colonial_state = yes
-				}
-				country_has_qualifying_colonial_subject = yes
-			}
-		}
-		NOT = { has_modifier = colonial_military_garrison_modifier }
-		# Hard authority gate — Garrison is unsustainable for liberal AIs without
-		# the authority-generating regressive law stack. The cruel/Iron-Fist
-		# state has authority to spare; the AI without it can't even click.
-		authority > 300
+		colonial_empire_possible_garrison = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CE_MILITARY_GARRISON_DESC"
-			add_modifier = { name = colonial_military_garrison_modifier }
-		}
-		# Infamy compounds with repeated cycles — a sustained Iron-Fist run
-		# accumulates infamy that itself draws GP condemners (existing -0.6/mo
-		# bar drain per condemner, escalating at tier 4 and 6).
-		change_infamy = 5
+		colonial_empire_effect_garrison = yes
 	}
 }
 
@@ -151,6 +116,7 @@ ce_remove_military_garrison = {
 	desc = "CE_REMOVE_MILITARY_GARRISON_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = colonial_military_garrison_modifier
 	}
 
@@ -163,14 +129,11 @@ ce_remove_military_garrison = {
 	}
 
 	possible = {
-		has_modifier = colonial_military_garrison_modifier
+		colonial_empire_possible_remove_garrison = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CE_REMOVE_MILITARY_GARRISON_DESC"
-			remove_modifier = colonial_military_garrison_modifier
-		}
+		colonial_empire_effect_remove_garrison = yes
 	}
 }
 
@@ -180,6 +143,7 @@ ce_cultural_assimilation = {
 	desc = "CE_CULTURAL_ASSIMILATION_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
 	}
 
@@ -196,27 +160,11 @@ ce_cultural_assimilation = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
-			OR = {
-				any_scope_state = {
-					is_overseas_colonial_state = yes
-				}
-				country_has_qualifying_colonial_subject = yes
-			}
-		}
-		modifier:country_can_use_cultural_assimilation_bool = yes
-		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
+		colonial_empire_possible_assimilation = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CE_CULTURAL_ASSIMILATION_DESC"
-			add_modifier = { name = colonial_cultural_assimilation_modifier }
-		}
-		# Program startup cost — parallel to Development Investment, so the
-		# two activation costs read as the same flavor of "fund the program."
-		add_treasury = colonial_assimilate_startup_cost
+		colonial_empire_effect_assimilation = yes
 	}
 }
 
@@ -225,6 +173,7 @@ ce_remove_cultural_assimilation = {
 	desc = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = colonial_cultural_assimilation_modifier
 	}
 
@@ -237,14 +186,11 @@ ce_remove_cultural_assimilation = {
 	}
 
 	possible = {
-		has_modifier = colonial_cultural_assimilation_modifier
+		colonial_empire_possible_remove_assimilation = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
-			remove_modifier = colonial_cultural_assimilation_modifier
-		}
+		colonial_empire_effect_remove_assimilation = yes
 	}
 }
 
@@ -252,6 +198,12 @@ ce_remove_cultural_assimilation = {
 ce_release_colonial_territory = {
 	name = "CE_RELEASE_COLONIAL_TERRITORY"
 	desc = "CE_RELEASE_COLONIAL_TERRITORY_DESC"
+
+	# No player-facing conditions: this button is AI-only, and the widget's
+	# decision row carries the human's version of it.
+	visible = {
+		is_ai = yes
+	}
 
 	ai_chance = {
 		value = 0
@@ -271,72 +223,11 @@ ce_release_colonial_territory = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES
-			any_scope_state = {
-				is_decolonization_eligible_state = yes
-			}
-		}
+		colonial_empire_possible_release_territory = yes
 	}
 
 	effect = {
-		custom_tooltip = "CE_RELEASE_COLONIAL_TERRITORY_DESC"
-		# Pick the top 3 candidates by population. For each pick, the preview
-		# helper computes its release region (capital + adjacent homeland
-		# states owned by us) and stores the region's state count for loc
-		# display. Subsequent picks exclude states already in a prior
-		# candidate's region — so option 2 won't show a state that option 1
-		# would have already released as part of its flood-fill.
-		#
-		# `max = 1` + region-marker exclusion is preferred over `position = N`:
-		# `check_range_bounds = no` on `position` clamps out-of-range to the
-		# nearest valid index instead of skipping, which produced duplicate
-		# picks when fewer than 3 eligible exist. With max+exclusion, each
-		# scope:decolonization_target_state_N just stays unset when no further
-		# eligible-and-unmarked state remains.
-		ordered_scope_state = {
-			limit = { is_decolonization_eligible_state = yes }
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state_1
-			_decolonization_preview_region = {
-				REGION_VAR = decolonization_region_1_marker
-				COUNT_VAR = decolonization_region_1_count
-				CULTURE_SCOPE = culture_for_region_1
-			}
-		}
-		ordered_scope_state = {
-			limit = {
-				is_decolonization_eligible_state = yes
-				NOT = { has_variable = decolonization_region_1_marker }
-			}
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state_2
-			_decolonization_preview_region = {
-				REGION_VAR = decolonization_region_2_marker
-				COUNT_VAR = decolonization_region_2_count
-				CULTURE_SCOPE = culture_for_region_2
-			}
-		}
-		ordered_scope_state = {
-			limit = {
-				is_decolonization_eligible_state = yes
-				NOT = { has_variable = decolonization_region_1_marker }
-				NOT = { has_variable = decolonization_region_2_marker }
-			}
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state_3
-			_decolonization_preview_region = {
-				REGION_VAR = decolonization_region_3_marker
-				COUNT_VAR = decolonization_region_3_count
-				CULTURE_SCOPE = culture_for_region_3
-			}
-		}
-		set_variable = decolonization_path_release_single
-		debug_log = "DECOL_DEBUG: ce_release_colonial_territory clicked, candidates: 1=[SCOPE.sState('decolonization_target_state_1').GetName] 2=[SCOPE.sState('decolonization_target_state_2').GetName] 3=[SCOPE.sState('decolonization_target_state_3').GetName]"  # DEBUG_DECOLONIZATION_TRACE
-		trigger_event = { id = decolonization_events.400 popup = yes }
+		colonial_empire_effect_release_territory = yes
 	}
 }
 
@@ -344,6 +235,12 @@ ce_release_colonial_territory = {
 ce_planned_decolonization = {
 	name = "CE_PLANNED_DECOLONIZATION"
 	desc = "CE_PLANNED_DECOLONIZATION_DESC"
+
+	# No player-facing conditions: this button is AI-only, and the widget's
+	# decision row carries the human's version of it.
+	visible = {
+		is_ai = yes
+	}
 
 	ai_chance = {
 		value = 0
@@ -368,40 +265,11 @@ ce_planned_decolonization = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CE_NEEDS_COLONIAL_STATES
-			any_scope_state = {
-				is_decolonization_eligible_state = yes
-			}
-		}
+		colonial_empire_possible_planned_decolonization = yes
 	}
 
 	effect = {
-		custom_tooltip = "CE_PLANNED_DECOLONIZATION_DESC"
-		# Mark every decolonization-eligible state; the confirmation event
-		# previews the list and the player's "Proceed" option releases each one.
-		# Uses the same `is_decolonization_eligible_state` trigger as Release /
-		# Round Table so the three buttons agree on what counts as colonial.
-		every_scope_state = {
-			limit = { is_decolonization_eligible_state = yes }
-			set_variable = decolonization_marker
-		}
-		# Count marked states for the confirmation event's loc display.
-		set_variable = { name = decolonization_planned_count value = 0 }
-		every_scope_state = {
-			limit = { has_variable = decolonization_marker }
-			prev = { change_variable = { name = decolonization_planned_count add = 1 } }
-		}
-		# Save the largest marked state as a named scope for event placement.
-		ordered_scope_state = {
-			limit = { has_variable = decolonization_marker }
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state
-		}
-		set_variable = decolonization_path_planned
-		debug_log = "DECOL_DEBUG: ce_planned_decolonization clicked, scope:decolonization_target_state=[SCOPE.sState('decolonization_target_state').GetName] count=[ROOT.GetVariable('decolonization_planned_count').GetValue], firing confirm_release_planned"  # DEBUG_DECOLONIZATION_TRACE
-		trigger_event = { id = decolonization_events.401 popup = yes }
+		colonial_empire_effect_planned_decolonization = yes
 	}
 }
 
@@ -416,6 +284,12 @@ ce_planned_decolonization = {
 ce_round_table_conference = {
 	name = "CE_ROUND_TABLE_CONFERENCE"
 	desc = "CE_ROUND_TABLE_CONFERENCE_DESC"
+
+	# No player-facing conditions: this button is AI-only, and the widget's
+	# decision row carries the human's version of it.
+	visible = {
+		is_ai = yes
+	}
 
 	ai_chance = {
 		value = 0
@@ -438,78 +312,10 @@ ce_round_table_conference = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CE_ROUND_TABLE_REQUIRES_ACCEPTABLE_COLONY
-			any_scope_state = {
-				is_decolonization_eligible_state = yes
-				NOT = {
-					any_scope_pop = {
-						pop_acceptance < acceptance_status_2
-					}
-				}
-			}
-		}
-		authority > 200
+		colonial_empire_possible_round_table = yes
 	}
 
 	effect = {
-		custom_tooltip = "CE_ROUND_TABLE_CONFERENCE_DESC"
-		# Pick the largest sufficiently-accepted colonial state — the diplomatic
-		# transition has to land on a colony where there's a real negotiating
-		# partner, not on a tinderbox. Save it as a named scope (vanilla pattern,
-		# carries into trigger_event); the event handles the actual release.
-		# Top 3 sufficiently-accepted candidates by population. Same exclusion
-		# pattern as Release Colonial Territory — see the comment there for
-		# why `position = N` doesn't work for distinct top-N picking. Each
-		# pick triggers a preview flood-fill so option 2 / 3 won't show states
-		# already inside option 1's release region.
-		ordered_scope_state = {
-			limit = {
-				is_decolonization_eligible_state = yes
-				NOT = { any_scope_pop = { pop_acceptance < acceptance_status_2 } }
-			}
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state_1
-			_decolonization_preview_region = {
-				REGION_VAR = decolonization_region_1_marker
-				COUNT_VAR = decolonization_region_1_count
-				CULTURE_SCOPE = culture_for_region_1
-			}
-		}
-		ordered_scope_state = {
-			limit = {
-				is_decolonization_eligible_state = yes
-				NOT = { any_scope_pop = { pop_acceptance < acceptance_status_2 } }
-				NOT = { has_variable = decolonization_region_1_marker }
-			}
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state_2
-			_decolonization_preview_region = {
-				REGION_VAR = decolonization_region_2_marker
-				COUNT_VAR = decolonization_region_2_count
-				CULTURE_SCOPE = culture_for_region_2
-			}
-		}
-		ordered_scope_state = {
-			limit = {
-				is_decolonization_eligible_state = yes
-				NOT = { any_scope_pop = { pop_acceptance < acceptance_status_2 } }
-				NOT = { has_variable = decolonization_region_1_marker }
-				NOT = { has_variable = decolonization_region_2_marker }
-			}
-			order_by = state_population
-			max = 1
-			save_scope_as = decolonization_target_state_3
-			_decolonization_preview_region = {
-				REGION_VAR = decolonization_region_3_marker
-				COUNT_VAR = decolonization_region_3_count
-				CULTURE_SCOPE = culture_for_region_3
-			}
-		}
-		set_variable = decolonization_path_round_table
-		debug_log = "DECOL_DEBUG: ce_round_table_conference clicked, candidates: 1=[SCOPE.sState('decolonization_target_state_1').GetName] 2=[SCOPE.sState('decolonization_target_state_2').GetName] 3=[SCOPE.sState('decolonization_target_state_3').GetName]"  # DEBUG_DECOLONIZATION_TRACE
-		trigger_event = { id = decolonization_events.400 popup = yes }
+		colonial_empire_effect_round_table = yes
 	}
 }

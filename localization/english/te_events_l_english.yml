@@ -3769,6 +3769,102 @@
  te_debug_ch.1.t:0 "Cultural Hegemony Test Console"
 
 #
+# TE_DEBUG_COLONIAL_EMPIRE
+#
+ te_debug_colonial_empire.1.a:0 "Solidified (95)"
+ te_debug_colonial_empire.1.b:0 "Stable (75)"
+ te_debug_colonial_empire.1.c:0 "Strained (50)"
+ te_debug_colonial_empire.1.d:0 "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session."
+ te_debug_colonial_empire.1.e:0 "Collapsing (10)"
+ te_debug_colonial_empire.1.f:0 "The cartographers await instruction."
+ te_debug_colonial_empire.1.opt_d:0 "Crumbling (30)"
+ te_debug_colonial_empire.1.opt_f:0 "Just refresh the panel (and log it)"
+ te_debug_colonial_empire.1.t:0 "TEST: Colonial Stability Bands"
+ te_debug_colonial_empire.2.a:0 "Every other great power condemns us"
+ te_debug_colonial_empire.2.b:0 "Two great powers back us instead"
+ te_debug_colonial_empire.2.c:0 "Clear every colonial stance"
+ te_debug_colonial_empire.2.d:0 "Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider."
+ te_debug_colonial_empire.2.e:0 "Open: Round Table Conference"
+ te_debug_colonial_empire.2.f:0 "The despatches are ready to send."
+ te_debug_colonial_empire.2.g:0 "Log the decolonization diagnostics"
+ te_debug_colonial_empire.2.opt_d:0 "Open: Release a Colonial Territory"
+ te_debug_colonial_empire.2.opt_f:0 "Open: Planned Full Decolonization"
+ te_debug_colonial_empire.2.t:0 "TEST: Pressure and Decolonization"
+
+#
+# TE_DEBUG_COVERT
+#
+ te_debug_covert.1.a:0 "Funding 0 - Dormant"
+ te_debug_covert.1.b:0 "Funding 1 - Operational"
+ te_debug_covert.1.c:0 "Funding 2 - Tradecraft"
+ te_debug_covert.1.d:0 "Console-only shortcuts for testing the covert-warfare command centre. None of these can happen in normal play.\n\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\n\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation."
+ te_debug_covert.1.e:0 "Funding 3 - Covert Network"
+ te_debug_covert.1.f:0 "The budget line is the whole service."
+ te_debug_covert.1.g:0 "Funding 4 - Black Budget"
+ te_debug_covert.1.h:0 "Funding 5 - Deep State"
+ te_debug_covert.1.t:0 "Covert Warfare Test Console: Funding"
+ te_debug_covert.2.a:0 "Seed three operations, one in each phase"
+ te_debug_covert.2.b:0 "Force a detection now"
+ te_debug_covert.2.c:0 "Cut funding to 0 and stand everything down"
+ te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants three operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11 and military espionage at month 14 - so all three phase layouts show at once and two of them tip over their boundary at the next monthly pulse. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped."
+ te_debug_covert.2.e:0 "Age every operation by a year"
+ te_debug_covert.2.f:0 "Three dead drops, one bad week."
+ te_debug_covert.2.g:0 "Re-derive the rows' display state"
+ te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
+
+#
+# TE_DEBUG_GW
+#
+ te_debug_gw.1.a:0 "Set warming to 0.5°C (Moderate)"
+ te_debug_gw.1.b:0 "Set warming to 1.0°C (Significant)"
+ te_debug_gw.1.c:0 "Set warming to 2.0°C (Severe)"
+ te_debug_gw.1.d:0 "Set warming to 3.2°C (Catastrophic)"
+ te_debug_gw.1.desc:0 "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\n\n#lore Setting the temperature will also fire the one-shot warming threshold events for every tier it crosses, which is deliberate: it exercises the real path.#!"
+ te_debug_gw.1.e:0 "Cool the world back to 0.05°C (below the activation threshold)"
+ te_debug_gw.1.f:0 "Bind us to an emissions-reduction treaty (locks repeals)"
+ te_debug_gw.1.flavor:0 "'The models are unambiguous, minister.'\n\n'Then get better models.'"
+ te_debug_gw.1.g:0 "Release us from the emissions-reduction treaty"
+ te_debug_gw.1.h:0 "Make us a market member under a great power that taxes carbon"
+ te_debug_gw.1.i:0 "Recompute the yearly figures now"
+ te_debug_gw.1.j:0 "Adopt all eight mitigation policies"
+ te_debug_gw.1.k:0 "Repeal all eight mitigation policies"
+ te_debug_gw.1.t:0 "Climate Test Console"
+
+#
+# TE_DEBUG_NUCLEAR
+#
+ te_debug_nuclear.1.a:0 "Fund the programme to step 3, and arm three rivals"
+ te_debug_nuclear.1.b:0 "Cut funding to nothing"
+ te_debug_nuclear.1.c:0 "Bring the next warhead to the brink of completion"
+ te_debug_nuclear.1.d:0 "Put five warheads in the stockpile now"
+ te_debug_nuclear.1.desc:0 "Console-only shortcuts for testing the nuclear programme panel. None of these can happen in normal play.\n\nRun them as a great power that has researched $nuclear_weapons$, or the journal entry will not be active and the panels will correctly draw nothing.\n\nFunding to step 3 also arms the three strongest rival great powers, so the Nuclear Powers section has rows to draw. Bringing a warhead to the brink sets progress to the goal and lets the next weekly pulse finish it through the real code path, so the world-first check, the production rate change and the first-device year all happen for real — advance one week to see it."
+ te_debug_nuclear.1.e:0 "Empty every arsenal in the world"
+ te_debug_nuclear.1.f:0 "'How long, then?'\n\n'That depends entirely on how much of the future you are willing to spend.'"
+ te_debug_nuclear.1.t:0 "Nuclear Programme Test Console"
+ te_debug_nuclear.2.a:0 "Freeze the programme, as a pause treaty would"
+ te_debug_nuclear.2.b:0 "Lift the freeze"
+ te_debug_nuclear.2.c:0 "Impose disarmament (deactivates the journal entry)"
+ te_debug_nuclear.2.d:0 "Lift disarmament (reactivates it)"
+ te_debug_nuclear.2.desc:0 "The two states that stop a programme, each applied and lifted.\n\nA freeze should grey out both funding controls with the pause named as the failing condition, and within one week the funding modifier should be gone from the journal entry itself — check the entry's modifier list, not only the panel.\n\nDisarmament makes the entry's requirements fail, so the entry deactivates: both panels vanish and only the status line speaks. Lifting it reactivates the entry and re-runs its activation effect, which is where the stockpile has to survive. It should survive however long disarmament stood — the pulse branch that empties a stockpile cannot run once the entry is inactive, and only the disarmament treaty article itself empties one. A stockpile of 0 on the way back is a finding, not expected behaviour."
+ te_debug_nuclear.2.f:0 "'The treaty does not say we must forget how.'"
+ te_debug_nuclear.2.t:0 "Nuclear Programme Blockers"
+
+#
+# TE_DEBUG_SPACE_RACE
+#
+ te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
+ te_debug_space_race.1.b:0 "Finish every running milestone on the next tick"
+ te_debug_space_race.1.c:0 "Force a setback now (progress loss, safety review, cooldown)"
+ te_debug_space_race.1.d:0 "Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\n\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel."
+ te_debug_space_race.1.e:0 "Clear the setback cooldown"
+ te_debug_space_race.1.f:0 "'What does the panel do if the programme is nine tenths done and on fire?'\n\n'Let us find out.'"
+ te_debug_space_race.1.g:0 "Put a rival programme in the other top powers"
+ te_debug_space_race.1.h:0 "Let another power claim 'the first' on every milestone I have not won"
+ te_debug_space_race.1.i:0 "Give 'the first' back on every milestone I have not won"
+ te_debug_space_race.1.t:0 "Space Race Test Console"
+ te_debug_space_race.1.z:0 "Close"
+
+#
 # TE_DEBUG_UN
 #
  te_debug_un.1.a:0 "Found the United Nations and seat the powers"

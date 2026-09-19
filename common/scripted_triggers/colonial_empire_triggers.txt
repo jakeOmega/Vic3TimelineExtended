@@ -488,3 +488,109 @@ is_unintegrated_culturally_distinct_state = {
 		}
 	}
 }
+
+# ============================================================================
+# COLONIAL EMPIRE — BUTTON GATES (shared by the JE buttons and the widget)
+#
+# One trigger per scripted button's `possible` block, extracted verbatim so the
+# vanilla button grid (which now only the AI sees) and the journal-entry widget
+# (gui/journal_entry_widgets/colonial_empire_widget.gui, via
+# common/scripted_guis/colonial_empire_sguis.txt) cannot drift apart. The
+# button's `possible` and the sgui's `is_valid` both call the trigger below;
+# neither restates a condition.
+#
+# SCOPE: country.
+#
+# EDITING RULE: change the gate here, never in the button and never in the
+# sgui. A `custom_tooltip` line inside a gate is what the player reads in the
+# widget button's IsValidTooltip, so phrase it as a CONDITION, not a complaint.
+# ============================================================================
+
+colonial_empire_possible_invest = {
+	custom_tooltip = {
+		text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
+		OR = {
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+			country_has_qualifying_colonial_subject = yes
+		}
+	}
+	NOT = { has_modifier = colonial_development_investment_modifier }
+}
+
+colonial_empire_possible_remove_invest = {
+	has_modifier = colonial_development_investment_modifier
+}
+
+colonial_empire_possible_garrison = {
+	custom_tooltip = {
+		text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
+		OR = {
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+			country_has_qualifying_colonial_subject = yes
+		}
+	}
+	NOT = { has_modifier = colonial_military_garrison_modifier }
+	# Hard authority gate — Garrison is unsustainable for liberal AIs without
+	# the authority-generating regressive law stack. The cruel/Iron-Fist
+	# state has authority to spare; the AI without it can't even click.
+	authority > 300
+}
+
+colonial_empire_possible_remove_garrison = {
+	has_modifier = colonial_military_garrison_modifier
+}
+
+colonial_empire_possible_assimilation = {
+	custom_tooltip = {
+		text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
+		OR = {
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+			country_has_qualifying_colonial_subject = yes
+		}
+	}
+	modifier:country_can_use_cultural_assimilation_bool = yes
+	NOT = { has_modifier = colonial_cultural_assimilation_modifier }
+}
+
+colonial_empire_possible_remove_assimilation = {
+	has_modifier = colonial_cultural_assimilation_modifier
+}
+
+colonial_empire_possible_release_territory = {
+	custom_tooltip = {
+		text = CE_NEEDS_COLONIAL_STATES
+		any_scope_state = {
+			is_decolonization_eligible_state = yes
+		}
+	}
+}
+
+colonial_empire_possible_planned_decolonization = {
+	custom_tooltip = {
+		text = CE_NEEDS_COLONIAL_STATES
+		any_scope_state = {
+			is_decolonization_eligible_state = yes
+		}
+	}
+}
+
+colonial_empire_possible_round_table = {
+	custom_tooltip = {
+		text = CE_ROUND_TABLE_REQUIRES_ACCEPTABLE_COLONY
+		any_scope_state = {
+			is_decolonization_eligible_state = yes
+			NOT = {
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_2
+				}
+			}
+		}
+	}
+	authority > 200
+}

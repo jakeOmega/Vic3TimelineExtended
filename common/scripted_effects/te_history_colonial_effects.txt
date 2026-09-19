@@ -1,0 +1,42 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE — HISTORY SAMPLES
+#
+# This is the whole per-system surface in common/ for the colonial charts: one
+# wrapper, called once from je_colonial_empire's on_monthly_pulse. It follows
+# te_history_banking_effects.txt exactly; the shared store, pruning, month
+# index and eligibility rule all live in the te_history_* infrastructure files
+# and are not touched here.
+#
+# Eligibility is te_history_record_sample's own te_history_country_is_tracked
+# check (player or major power) -- deliberately NOT widened. The gate below is
+# only "is this system running for this country", kept in the wrapper rather
+# than at the call site so there is one place to change it.
+#
+# SERIES
+#   colonial_stability — the bar value, bucketed to the nearest 5 by
+#                        colonial_empire_refresh_display. `scripted_bar_progress`
+#                        is a trigger with no script-value form, so a comparison
+#                        ladder is the only way to get the bar into a number;
+#                        the chart's legend says "to the nearest 5" rather than
+#                        implying precision the sample does not have.
+#   colonial_drift     — the projected monthly change, signed. Exact: it is
+#                        colonial_stability_drift_total, the same sum of leaf
+#                        script values the bar itself applies.
+#
+# NO MARKERS this wave. Marker tooltips branch inside the shared
+# common/scripted_guis/te_history_scripted_gui.txt, which this system does not
+# own; policy-on/off and decision markers are a requested follow-up.
+#
+# Scope: country
+# ============================================================================
+
+te_history_record_colonial_samples = {
+	if = {
+		limit = {
+			has_game_rule = decolonization_enabled
+			has_journal_entry = je_colonial_empire
+		}
+		te_history_record_sample = { METRIC = colonial_stability VALUE = var:colonial_empire_bar_bucket }
+		te_history_record_sample = { METRIC = colonial_drift     VALUE = var:colonial_empire_d_total }
+	}
+}

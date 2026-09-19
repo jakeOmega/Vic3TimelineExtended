@@ -38,7 +38,28 @@
 
 	scripted_progress_bar = colonial_stability_bar
 
-	# Scripted buttons - policies the player/AI can toggle
+	# --- Player-facing surface --------------------------------------------
+	# container_2 (under the status line, where the button grid used to be):
+	# stability conditions, international pressure, the three programmes and the
+	# three decolonization decisions.
+	widget = {
+		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
+		name = "widget_je_colonial_empire"
+		container = "custom_widget_container_2"
+	}
+	# container_3 (directly above the native stability bar): history charts,
+	# collapsed by default.
+	widget = {
+		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
+		name = "widget_je_colonial_empire_history"
+		container = "custom_widget_container_3"
+	}
+
+	# Scripted buttons - policies the player/AI can toggle.
+	# Every one of these now carries `is_ai = yes` in its `visible`, so the
+	# vanilla grid shows a human nothing; they remain the AI's only path into the
+	# system (its `ai_chance` blocks). See the header comment in
+	# common/scripted_buttons/colonial_empire_buttons.txt before touching them.
 	scripted_button = ce_invest_in_development
 	scripted_button = ce_remove_invest_in_development
 	scripted_button = ce_military_garrison
@@ -50,97 +71,31 @@
 	scripted_button = ce_planned_decolonization
 
 	immediate = {
+		# Populate the widget's display state on the first frame, so a freshly
+		# activated entry shows real numbers instead of dashes for a month.
+		colonial_empire_refresh_display = yes
 	}
 
 	progressbar = no
 
+	# One summary line. The five tier phrases, the five great-power-pressure
+	# phrases and the seven-slot condemner roster that used to live here (18
+	# triggered_desc in total) are now the widget's "Colonial Stability" and
+	# "International Pressure" sections, where they can be read next to the
+	# numbers that drive them. The tier phrase comes from customizable
+	# localization keyed on var:colonial_empire_tier, so the thresholds stay in
+	# the one ladder in colonial_empire_refresh_display.
+	#
+	# Kept as an untriggered `triggered_desc` rather than the bare
+	# `status_desc = <key>` form: the journal-entry script docs note "value can be
+	# a localization key or first_valid + triggered_desc script" for
+	# `progress_desc` but NOT for `status_desc`, and no vanilla journal entry uses
+	# the bare form for `status_desc` (0 hits across common/journal_entries/). A
+	# wrong form here would fail silently as an empty status line.
 	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_colonial_empire_status_solidified
-				trigger = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 90 }
-				}
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_status_stable
-				trigger = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 65 }
-				}
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_status_strained
-				trigger = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 40 }
-				}
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_status_crumbling
-				trigger = {
-					scope:journal_entry = { "scripted_bar_progress(colonial_stability_bar)" >= 20 }
-				}
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_status_collapsing
-				trigger = { always = yes }
-			}
-		}
-		first_valid = {
-			triggered_desc = {
-				desc = je_colonial_empire_pressure_none
-				trigger = { colonial_gp_condemners_count = 0 }
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_pressure_low
-				trigger = { colonial_gp_condemners_count <= 1 }
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_pressure_moderate
-				trigger = { colonial_gp_condemners_count <= 3 }
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_pressure_high
-				trigger = { colonial_gp_condemners_count <= 5 }
-			}
-			triggered_desc = {
-				desc = je_colonial_empire_pressure_extreme
-				trigger = { always = yes }
-			}
-		}
-		# Named-condemner roster. Slot variables are populated each pulse;
-		# entries surface only the slots currently holding a country, so the
-		# list grows and shrinks as great powers shift stance.
 		triggered_desc = {
-			desc = je_colonial_empire_condemners_header
-			trigger = { has_variable = colonial_condemner_rank_1 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_1_entry
-			trigger = { has_variable = colonial_condemner_rank_1 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_2_entry
-			trigger = { has_variable = colonial_condemner_rank_2 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_3_entry
-			trigger = { has_variable = colonial_condemner_rank_3 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_4_entry
-			trigger = { has_variable = colonial_condemner_rank_4 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_5_entry
-			trigger = { has_variable = colonial_condemner_rank_5 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_6_entry
-			trigger = { has_variable = colonial_condemner_rank_6 }
-		}
-		triggered_desc = {
-			desc = je_colonial_empire_condemner_rank_7_entry
-			trigger = { has_variable = colonial_condemner_rank_7 }
+			desc = je_colonial_empire_status_summary
+			trigger = { always = yes }
 		}
 	}
 
@@ -387,58 +342,14 @@
 				}
 			}
 
-			# --- Pressuring great powers leaderboard ---
-			# Populates colonial_condemner_rank_N slot variables so the
-			# status_desc can show *who* is applying decolonization pressure
-			# (not just the count). Order is by country_rank — the larger
-			# the condemner, the more prominent in the list.
-			remove_variable = colonial_condemner_rank_1
-			remove_variable = colonial_condemner_rank_2
-			remove_variable = colonial_condemner_rank_3
-			remove_variable = colonial_condemner_rank_4
-			remove_variable = colonial_condemner_rank_5
-			remove_variable = colonial_condemner_rank_6
-			remove_variable = colonial_condemner_rank_7
-			set_variable = { name = colonial_condemner_idx value = 0 }
-			ordered_country = {
-				limit = {
-					NOT = { THIS = ROOT }
-					country_rank >= rank_value:great_power
-					has_variable = gp_anti_colonial_stance
-				}
-				order_by = country_rank
-				check_range_bounds = no
-				save_temporary_scope_as = current_condemner
-				if = {
-					limit = { ROOT.var:colonial_condemner_idx < 1 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_1 value = scope:current_condemner } }
-				}
-				else_if = {
-					limit = { ROOT.var:colonial_condemner_idx < 2 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_2 value = scope:current_condemner } }
-				}
-				else_if = {
-					limit = { ROOT.var:colonial_condemner_idx < 3 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_3 value = scope:current_condemner } }
-				}
-				else_if = {
-					limit = { ROOT.var:colonial_condemner_idx < 4 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_4 value = scope:current_condemner } }
-				}
-				else_if = {
-					limit = { ROOT.var:colonial_condemner_idx < 5 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_5 value = scope:current_condemner } }
-				}
-				else_if = {
-					limit = { ROOT.var:colonial_condemner_idx < 6 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_6 value = scope:current_condemner } }
-				}
-				else_if = {
-					limit = { ROOT.var:colonial_condemner_idx < 7 }
-					ROOT = { set_variable = { name = colonial_condemner_rank_7 value = scope:current_condemner } }
-				}
-				ROOT = { change_variable = { name = colonial_condemner_idx add = 1 } }
-			}
+			# The pressuring-great-powers leaderboard used to be built here, into
+			# seven colonial_condemner_rank_N slot variables read by the
+			# status_desc. It is gone: the widget's International Pressure
+			# section walks the great powers live in script
+			# (colonial_empire_pressure_sgui), which removes ~50 lines of monthly
+			# work plus eight variables of save state, and sidesteps the
+			# `Var('x').GetCountry.GetName` chain that gui_modding_guide gotcha
+			# #11 records as rendering blank in this mod.
 
 			# --- State-side assimilation disruption reapplication ---
 			# While the country has the assimilation modifier, every overseas
@@ -571,6 +482,15 @@
 					add_modifier = { name = colonial_pressure_movement_radicalism }
 				}
 			}
+
+			# --- Widget display state -------------------------------------
+			# Last, so the snapshot reflects this month's settled phase
+			# modifiers and this month's bar value.
+			colonial_empire_refresh_display = yes
+
+			# Sample the month for the history charts. Runs after the refresh
+			# so the stability bucket and the drift total are this month's.
+			te_history_record_colonial_samples = yes
 		}
 	}
 

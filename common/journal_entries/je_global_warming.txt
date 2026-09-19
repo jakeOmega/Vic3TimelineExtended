@@ -11,36 +11,26 @@
 		temperature_anomaly_display >= 0.1
 	}
 
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_global_warming_status_catastrophic
-				trigger = { temperature_anomaly_display >= 3.0 }
-			}
-			triggered_desc = {
-				desc = je_global_warming_status_severe
-				trigger = { temperature_anomaly_display >= 2.0 }
-			}
-			triggered_desc = {
-				desc = je_global_warming_status_significant
-				trigger = { temperature_anomaly_display >= 1.0 }
-			}
-			triggered_desc = {
-				desc = je_global_warming_status_moderate
-				trigger = { temperature_anomaly_display >= 0.5 }
-			}
-			triggered_desc = {
-				desc = je_global_warming_status_slight
-				trigger = { temperature_anomaly_display >= 0.1 }
-			}
-			triggered_desc = {
-				desc = je_global_warming_status_negligible
-				trigger = { always = yes }
-			}
-		}
-	}
+	# One line. The six-tier ladder that used to be six triggered_desc blocks
+	# here now lives in gw_severity_text
+	# (common/customizable_localization/global_warming_custom_loc.txt), because
+	# the widget's conditions table needs the same tier and two copies of a
+	# threshold table drift. The six sentence keys themselves are unchanged.
+	status_desc = je_global_warming_status
 
-	# Progress bar: current temperature vs the 4 deg C critical threshold
+	# Shown in the journal list and near the foot of the panel, so the current
+	# reading is legible without opening the entry.
+	progress_desc = je_global_warming_progress
+
+	# Progress bar: current temperature vs the 4 deg C critical threshold.
+	#
+	# DO NOT "SIMPLIFY" `4 - temperature_anomaly_display` TO `4`. Per vanilla's
+	# common/journal_entries/journal_entries.md, current_value and goal_add_value
+	# are evaluated once, AT ACTIVATION, and added together to form the goal.
+	# Activation happens when `possible` first passes, i.e. at ~0.1 C, so the goal
+	# is 0.1 + (4 - 0.1) = 4.0 and is frozen there for the rest of the game. A
+	# flat `value = 4` would instead make the goal 4.1, or worse on a save that
+	# activated the entry late.
 	current_value = {
 		value = temperature_anomaly_display
 	}
@@ -53,6 +43,30 @@
 	}
 
 	progressbar = yes
+
+	# ---- PLAYER-FACING SURFACE: the climate dashboard ---------------------
+	# The sixteen scripted buttons below stay declared because their `ai_chance`
+	# is the AI's only route into this system, but each carries `is_ai = yes` in
+	# its `visible`, so a human sees these three widgets instead of the grid.
+	# Every action the grid offered has a control here — see the mapping in
+	# docs/systems/journal_entry_systems.md.
+	widget = {
+		gui = "gui/journal_entry_widgets/global_warming_widget.gui"
+		name = "widget_je_gw_conditions"
+		container = "custom_widget_container_1"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/global_warming_widget.gui"
+		name = "widget_je_gw_policies"
+		container = "custom_widget_container_2"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/global_warming_widget.gui"
+		name = "widget_je_gw_history"
+		container = "custom_widget_container_3"
+	}
 
 	scripted_button = gw_carbon_tax_button
 	scripted_button = gw_remove_carbon_tax_button
@@ -90,6 +104,12 @@
 				limit = { je:je_global_warming = { has_modifier = global_warming } }
 				je:je_global_warming = { remove_modifier = global_warming }
 			}
+
+			# History samples for the widget's two charts. Gated on the game rule
+			# and on te_history_country_is_tracked inside the helper, and wrapped
+			# in hidden_effect there, so this costs nothing for an untracked
+			# country and never writes state during a tooltip render.
+			te_history_record_global_warming_samples = yes
 		}
 	}
 

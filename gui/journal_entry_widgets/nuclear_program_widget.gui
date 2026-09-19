@@ -1,0 +1,462 @@
+﻿### Nuclear Programme journal-entry widget — two panels for je_nuclear_program.
+###
+### widget_je_nuclear_programme   custom_widget_container_3
+###     The programme itself: funding (a stepper), the warhead production rate,
+###     how long the next warhead will take, the stockpile and the date of the
+###     first device. Mounted in container_3 so it sits immediately ABOVE the
+###     entry's native progress bar, which is progress toward that next warhead —
+###     the numbers that explain the bar are next to it.
+###
+### widget_je_nuclear_deterrence  custom_widget_container_4
+###     Two collapsed sections below the bar: what our warheads can reach and
+###     what our skies can stop, and the global nuclear-powers leaderboard that
+###     used to be eleven triggered_desc lines on the entry.
+###
+### Panel order in gui/journal_entry.gui, for anyone moving these: status
+### desc(188), container_2(207), scripted button grid(215), container_3(236),
+### scripted progress bars(246), native progress bar(670), container_4(728),
+### reason(742).
+###
+### WHERE THE NUMBERS COME FROM. Nothing here computes anything. Every value is
+### a display-only script value in common/script_values/extra_script_values.txt
+### (the nuclear_program_display_* family), every branchy phrase is a
+### customizable-localization block in
+### common/customizable_localization/nuclear_program_custom_loc.txt, and the
+### programme's state is the single variable nuclear_program_last_status, written
+### in one place only — nuclear_program_refresh_state_effect. No threshold and no
+### rate is restated in this file.
+###
+### WHAT A HUMAN CAN DO HERE. The entry's two scripted buttons are hidden from
+### humans (`is_ai = yes` on their `visible`) and remain the AI's only path into
+### the programme. Both of their actions exist below, through
+### nuclear_program_funding_sgui:
+###     op 0   step funding down      op 1   step funding up
+### The op table is repeated in common/scripted_guis/nuclear_program_sguis.txt
+### and in docs/systems/journal_entry_systems.md; keep all three in step.
+###
+### nuclear_program_powers_sgui takes op = rank, 1 to 10, one ExecuteTooltip per
+### row. It is display-only (`is_valid` and `ai_is_valid` are both
+### `always = no`). The rows are separate widgets rather than one script-built
+### list because a scope's own tooltip lines print before the lines produced
+### inside nested scope changes (gui_modding_guide.md gotcha #18), and they carry
+### no flag icon because the engine prefixes a country-scope tooltip line with
+### that country's flag already (gotcha #19).
+###
+### NO CONTROL'S `visible` COMES FROM AN op-BRANCHING `IsShown`. Whether a saved
+### scope passed through `IsShown( … AddScope('op', …) … )` reaches a handler's
+### `is_shown` is unproven in this mod: `is_valid` provably receives it, but no
+### vanilla handler reads a saved scope inside `is_shown`. With this entry's
+### button grid hidden from humans, a stepper whose `visible` silently evaluated
+### false would leave the player unable to act at all, so the two stepper buttons
+### carry no `visible` — they are simply there while the entry is active, and
+### `is_valid` greys them and says why. The ten leaderboard rows do use `IsShown`,
+### but that handler is written fail-open (no `scope:op` means yes) and guards
+### emptiness inside its effect, so the worst case there is a blank line in a
+### section that is collapsed by default.
+###
+### BOTH ROOTS ARE GATED ON JournalEntry.IsActive. je_nuclear_program carries
+### is_shown_when_inactive, so the panel is built for every country that has the
+### tech and the game rule, including ones whose entry never activated and which
+### have none of the programme's variables (gotcha #14). Everything is guarded in
+### script as well, but there is nothing worth drawing in that state and the two
+### sguis re-render every frame the entry is on screen. The one thing that *does*
+### have to speak for a deactivated entry — "a disarmament settlement has
+### dismantled our programme" — is the entry's status_desc, which
+### gui/journal_entry.gui:188 renders with no IsActive gate.
+###
+### Section collapse state lives in GetVariableSystem: client-side, never saved,
+### never gameplay state, and invisible to script.
+
+types nuclear_program_widget_types
+{
+	type nuclear_program_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 1
+		margin = { 10 6 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	type nuclear_program_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
+		}
+	}
+
+	type nuclear_program_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+	}
+
+	### A label/value line. One tooltip for the whole row, so the number and the
+	### explanation of the number are never separated.
+	type nuclear_program_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 6 1 }
+
+		block "row_tooltip" {}
+
+		textbox = {
+			size = { 240 24 }
+			align = left|nobaseline
+			using = fontsize_medium
+			parentanchor = vcenter
+			elide = right
+			alwaystransparent = yes
+			block "row_label" {}
+		}
+
+		textbox = {
+			size = { 236 24 }
+			align = right|nobaseline
+			using = fontsize_medium
+			parentanchor = vcenter
+			elide = right
+			alwaystransparent = yes
+			block "row_value" {}
+		}
+	}
+
+	### The funding control. The scripted GUI's datacontext is set here, on the
+	### row, so both buttons inherit it and address their action by op code
+	### alone. Each tooltip is IsValidTooltip (why the button is greyed out, one
+	### ticked or crossed line per clause of the shared trigger) concatenated
+	### with ExecuteTooltip (what pressing it does, rendered from the very effect
+	### the AI's button runs, without running it).
+	type nuclear_program_funding_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 6 2 }
+		datacontext = "[GetScriptedGui('nuclear_program_funding_sgui')]"
+
+		textbox = {
+			text = "je_nuclear_program_widget_funding_label"
+			size = { 200 24 }
+			align = left|nobaseline
+			using = fontsize_medium
+			parentanchor = vcenter
+			elide = right
+			alwaystransparent = yes
+		}
+
+		button_icon_minus_action = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+		}
+
+		textbox = {
+			text = "je_nuclear_program_widget_funding_value"
+			tooltip = "je_nuclear_program_widget_funding_tt"
+			size = { 216 24 }
+			align = center|nobaseline
+			using = fontsize_medium
+			parentanchor = vcenter
+			elide = right
+		}
+
+		button_icon_plus_action = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
+		}
+	}
+
+	### One leaderboard row, built in script. The instance supplies its op code
+	### twice: once to decide whether the slot is filled at all, once to render
+	### it.
+	type nuclear_program_power_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 6 1 }
+		datacontext = "[GetScriptedGui('nuclear_program_powers_sgui')]"
+
+		block "row_visible" {}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 468 -1 }
+			maximumsize = { 468 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			block "row_text" {}
+		}
+	}
+}
+
+
+### ==========================================================================
+### THE PROGRAMME — container_3, immediately above the native progress bar
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_nuclear_programme"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 2
+
+	visible = "[JournalEntry.IsActive]"
+
+	nuclear_program_section_header = {
+		blockoverride "left_text" {
+			text = "je_nuclear_program_widget_programme_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('nuclear_program_programme_closed')]"
+		}
+		# Open by default, so the arrows are inverted against vanilla's
+		# convention: Exists means *collapsed* for this one section, because the
+		# programme's numbers are the point of the panel.
+		blockoverride "onclick_showmore" {
+			visible = "[GetVariableSystem.Exists('nuclear_program_programme_closed')]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[Not(GetVariableSystem.Exists('nuclear_program_programme_closed'))]"
+		}
+	}
+
+	nuclear_program_panel = {
+		visible = "[Not(GetVariableSystem.Exists('nuclear_program_programme_closed'))]"
+
+		nuclear_program_funding_row = {}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_rate_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_rate_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_rate_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_next_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_next_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_next_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_stockpile_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_stockpile_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_stockpile_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_first_device_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_first_device_value"
+			}
+		}
+	}
+}
+
+
+### ==========================================================================
+### DETERRENCE AND THE NUCLEAR POWERS — container_4, below the progress bar
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_nuclear_deterrence"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 2
+
+	visible = "[JournalEntry.IsActive]"
+
+	### ---- What we can deliver, and what we can stop ------------------------
+	### Collapsed by default. The two ratings are the same modifiers the strike
+	### resolution reads; the tooltips list which technologies are contributing,
+	### reusing the nine te_nuke_attack_* / te_nuke_defense_* customizable
+	### localization blocks that already existed for exactly this breakdown.
+	nuclear_program_section_header = {
+		blockoverride "left_text" {
+			text = "je_nuclear_program_widget_deterrence_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('nuclear_program_deterrence')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('nuclear_program_deterrence'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('nuclear_program_deterrence')]"
+		}
+	}
+
+	nuclear_program_panel = {
+		visible = "[GetVariableSystem.Exists('nuclear_program_deterrence')]"
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_delivery_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_delivery_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_delivery_tt"
+			}
+		}
+
+		nuclear_program_row = {
+			blockoverride "row_label" {
+				text = "je_nuclear_program_widget_defence_label"
+			}
+			blockoverride "row_value" {
+				text = "je_nuclear_program_widget_defence_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "je_nuclear_program_widget_defence_tt"
+			}
+		}
+
+		nuclear_program_text = {
+			text = "je_nuclear_program_widget_odds_note"
+			default_format = "#lore"
+		}
+	}
+
+	### ---- The global leaderboard -------------------------------------------
+	### Collapsed by default: ten ExecuteTooltip calls re-render every frame the
+	### section is open, and nothing here changes faster than once a week.
+	nuclear_program_section_header = {
+		blockoverride "left_text" {
+			text = "je_nuclear_program_widget_powers_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('nuclear_program_powers')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('nuclear_program_powers'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('nuclear_program_powers')]"
+		}
+	}
+
+	nuclear_program_panel = {
+		visible = "[GetVariableSystem.Exists('nuclear_program_powers')]"
+
+		nuclear_program_text = {
+			text = "je_nuclear_program_widget_powers_legend"
+			default_format = "#lore"
+		}
+
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+			}
+		}
+		nuclear_program_power_row = {
+			blockoverride "row_visible" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			}
+			blockoverride "row_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			}
+		}
+	}
+}

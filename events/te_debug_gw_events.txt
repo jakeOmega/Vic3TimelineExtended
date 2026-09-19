@@ -1,0 +1,112 @@
+﻿# ============================================================================
+# GLOBAL WARMING TEST CONSOLE — fired only from the console: `event te_debug_gw.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. It calls the
+# console-only helpers in common/scripted_effects/te_debug_gw_effects.txt so the
+# climate dashboard's interesting states can be reached in minutes.
+#
+# What each option is for:
+#   a-e  drive the temperature through every severity tier, including back down
+#        below the activation threshold, so the ladder, the tier word, the
+#        progress bar and the charts can all be checked
+#   f    toggle the emissions-reduction treaty lock, which must grey the Repeal
+#        controls of the emissions policies while leaving Climate Adaptation's
+#        Repeal enabled
+#   g    become a market member under a great power that has imposed a carbon
+#        tax -- the state the old button grid showed nothing for
+#   h    recompute the yearly snapshots now instead of waiting for January
+#   i/j  adopt or repeal all eight policies at once
+# ============================================================================
+namespace = te_debug_gw
+
+te_debug_gw.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_gw.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/factory_pollution_protest.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = te_debug_gw.1.t
+	desc = te_debug_gw.1.desc
+	flavor = te_debug_gw.1.flavor
+
+	# ---- Temperature tiers ------------------------------------------------
+	option = {
+		name = te_debug_gw.1.a
+		default_option = yes
+		te_debug_gw_set_anomaly = { HUNDREDTHS = 5000 }
+	}
+
+	option = {
+		name = te_debug_gw.1.b
+		te_debug_gw_set_anomaly = { HUNDREDTHS = 10000 }
+	}
+
+	option = {
+		name = te_debug_gw.1.c
+		te_debug_gw_set_anomaly = { HUNDREDTHS = 20000 }
+	}
+
+	option = {
+		name = te_debug_gw.1.d
+		te_debug_gw_set_anomaly = { HUNDREDTHS = 32000 }
+	}
+
+	# Back below the 0.1 C activation threshold. can_deactivate = no, so the
+	# journal entry and the widget stay; only the readings change.
+	option = {
+		name = te_debug_gw.1.e
+		te_debug_gw_set_anomaly = { HUNDREDTHS = 500 }
+	}
+
+	# ---- Treaty lock ------------------------------------------------------
+	option = {
+		name = te_debug_gw.1.f
+		trigger = {
+			NOT = { has_variable = has_emissions_reduction_treaty }
+		}
+		set_variable = has_emissions_reduction_treaty
+	}
+
+	option = {
+		name = te_debug_gw.1.g
+		trigger = {
+			has_variable = has_emissions_reduction_treaty
+		}
+		remove_variable = has_emissions_reduction_treaty # REVIEWED 2026-09-18: console-only treaty-lock toggle, not a modifier multiplier
+	}
+
+	# ---- Market membership ------------------------------------------------
+	option = {
+		name = te_debug_gw.1.h
+		trigger = {
+			is_subject = no
+			any_country = {
+				NOT = { this = ROOT }
+				country_rank >= rank_value:major_power
+				is_subject = no
+			}
+		}
+		te_debug_gw_become_market_member = yes
+	}
+
+	# ---- Snapshots and bulk policy changes --------------------------------
+	option = {
+		name = te_debug_gw.1.i
+		te_debug_gw_refresh_display = yes
+	}
+
+	option = {
+		name = te_debug_gw.1.j
+		te_debug_gw_adopt_all = yes
+	}
+
+	option = {
+		name = te_debug_gw.1.k
+		te_debug_gw_repeal_all = yes
+	}
+}

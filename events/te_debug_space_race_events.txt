@@ -1,0 +1,75 @@
+﻿# ============================================================================
+# SPACE RACE TEST CONSOLE — fired only from the console: `event te_debug_space_race.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. It calls the
+# console-only helpers in
+# common/scripted_effects/te_debug_space_race_effects.txt so every state the
+# milestone panel can show can be reached in a couple of clicks.
+# ============================================================================
+namespace = te_debug_space_race
+
+te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_space_race.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/rocket_ascending_sky.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.1.t
+	desc = te_debug_space_race.1.d
+	flavor = te_debug_space_race.1.f
+
+	# Nine tenths of the way to every running milestone's goal.
+	option = {
+		name = te_debug_space_race.1.a
+		default_option = yes
+		te_debug_sr_set_progress = yes
+	}
+
+	# All the way, so completion, the reward split and the next entry unlocking
+	# can be watched on the next monthly tick.
+	option = {
+		name = te_debug_space_race.1.b
+		te_debug_sr_finish_now = yes
+	}
+
+	# A real setback on every running milestone, cooldown included, so the panel
+	# flips to its shielded reading.
+	option = {
+		name = te_debug_space_race.1.c
+		te_debug_sr_force_setback = yes
+	}
+
+	# Back to an exposed programme showing a real risk figure.
+	option = {
+		name = te_debug_space_race.1.e
+		trigger = { sr_has_failure_cooldown = yes }
+		te_debug_sr_clear_cooldown = yes
+	}
+
+	# Populate "Who else is racing".
+	option = {
+		name = te_debug_space_race.1.g
+		te_debug_sr_seed_rivals = yes
+	}
+
+	# Take "the first" off the table for every milestone we have not won.
+	option = {
+		name = te_debug_space_race.1.h
+		te_debug_sr_claim_firsts = yes
+	}
+
+	# Give it back.
+	option = {
+		name = te_debug_space_race.1.i
+		te_debug_sr_reset_globals = yes
+	}
+
+	option = {
+		name = te_debug_space_race.1.z
+	}
+}
