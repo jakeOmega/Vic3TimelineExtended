@@ -19,13 +19,24 @@
 # An op code nobody defined falls through to `trigger_else = { always = no }`,
 # so a typo greys the control out instead of running the wrong branch.
 #
-# WHY `is_shown` NEVER READS `scope:op`. Vanilla declares `saved_scopes`
-# alongside `is_shown` exactly once (`je_meiji_restoration_get_faction_sgui`)
-# and that `is_shown` does not read the saved scope, so whether the engine
-# populates saved scopes on the `IsShown` call path is unverified -- and a `.gui`
-# expression that silently returns false would leave a row with no control at
-# all. The "is this policy in force?" question therefore comes from the separate
-# read-only `gw_active_<policy>_sgui` handlers below, which take no scope.
+# WHY `is_shown` NEVER READS `scope:op`. Not because it cannot work -- because
+# of the failure direction if it does not. Vanilla has no `is_shown` that reads a
+# saved scope. Strategic Reserve looks like precedent and is not: its `.gui` does
+# pass `AddScope('dir', ...)` into `IsShown`, but `st_res_adjust_<good>_sgui`'s
+# `is_shown` never reads it -- the `trigger_if` on `scope:dir` a few lines below
+# belongs to `is_valid`. The one real in-repo instance is
+# `un_chamber_vote_sgui.is_shown`, which gates its veto control on
+# `scope:op = 2`; it hedges with `exists = scope:op`, and if the scope never
+# arrived that control would merely show too OFTEN.
+#
+# Here the failure direction is the opposite. These rows are the only surface a
+# human has -- the journal entry's button grid is hidden behind `is_ai = yes` --
+# so if an op-keyed `is_shown` silently returned false the row would render with
+# NO control at all and the system would be unreachable. The "is this policy in
+# force?" question therefore comes from the separate, scope-free
+# `gw_active_<policy>_sgui` handlers below. `is_valid`, `Execute` and the
+# tooltips DO read `scope:op`, which Strategic Reserve proves in shipped code.
+# See docs/guides/gui_modding_guide.md gotcha #22.
 #
 # READ-ONLY HANDLERS carry `is_valid = { always = no }` and an empty effect.
 # They exist only so the widget can ask script a yes/no question instead of
