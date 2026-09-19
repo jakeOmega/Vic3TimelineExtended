@@ -1,86 +1,49 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Scripted Buttons for Operation Management
 # ============================================================================
-# Operations are now launched/cancelled via diplomatic action pact toggles.
-# Only funding management buttons remain here.
+# Operations are launched/cancelled via diplomatic action pact toggles.
+# Only funding management buttons live here.
+#
+# BOTH buttons carry `visible = { is_ai = yes }`, so the journal entry's button
+# grid is empty for a human: every action they offer is in the command-centre
+# widget (gui/journal_entry_widgets/covert_operations_widget.gui), which calls
+# the very same shared trigger and effect, so the two surfaces cannot diverge.
+# Modelled on common/scripted_buttons/banking_alt_economy_buttons.txt.
+#
+# The declarations stay because deleting a `scripted_button = …` line is how a
+# journal entry silently loses an option — but note that unlike banking, the
+# AI's real path into covert funding is NOT these buttons: neither declares an
+# `ai_chance`, and je_covert_warfare's own monthly pulse `set_variable`s
+# iw_funding_level for every `is_player = no` country. The `is_ai = yes` gate is
+# therefore a harmless fallback in both branches of an unknown default: if the
+# AI never clicks a button with no ai_chance, nothing changes; if it does, both
+# effects are idempotent and the next monthly pulse re-asserts the AI's chosen
+# level. See docs/guides/scripting_best_practices.md § "Journal-Entry Buttons
+# Are the AI's Only Path".
 # ============================================================================
 
-# ---- FUNDING LEVEL: Increase (0 → 1 → 2 → 3) ----
+# ---- FUNDING LEVEL: Increase (0 → 1 → … → iw_funding_level_max) ----
 iw_increase_funding_button = {
 	name = "iw_increase_funding_button"
-	# Visibility piggybacks on the JE's own activation gate (covert_operation_max_slots
-	# above rank baseline). No separate tech gate — see je_covert_warfare possible.
-	possible = {
-		custom_tooltip = {
-			text = iw_funding_not_max_tt
-			OR = {
-				NOT = { has_variable = iw_funding_level }
-				var:iw_funding_level < iw_funding_level_max
-			}
-		}
+	# Hidden from humans — the widget's funding stepper is the human surface.
+	# Otherwise piggybacks on the JE's own activation gate
+	# (covert_operation_max_slots above rank baseline); no separate tech gate.
+	visible = {
+		is_ai = yes
 	}
-	effect = {
-		custom_tooltip = iw_increase_funding_effect_tt
-		hidden_effect = {
-			if = {
-				limit = { NOT = { has_variable = iw_funding_level } }
-				set_variable = { name = iw_funding_level value = 1 }
-			}
-			else = {
-				change_variable = { name = iw_funding_level add = 1 }
-				clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
-			}
-			# Reapply cost modifier immediately
-			if = {
-				limit = {
-					has_variable = iw_funding_level
-					var:iw_funding_level >= 1
-				}
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-			}
-			# Refresh each operation's detection display (funding changes the odds)
-			covert_ops_sync_all = yes
-		}
-	}
+	possible = { covert_possible_increase_funding = yes }
+	effect = { covert_effect_increase_funding = yes }
 }
 
-# ---- FUNDING LEVEL: Decrease (3 → 2 → 1 → 0) ----
+# ---- FUNDING LEVEL: Decrease (iw_funding_level_max → … → 1 → 0) ----
+# Reaching 0 stands every running operation down: each covert diplomatic
+# action's requirement_to_maintain needs iw_funding_level >= 1.
 iw_decrease_funding_button = {
 	name = "iw_decrease_funding_button"
-	# Visibility piggybacks on the JE's own activation gate (covert_operation_max_slots
-	# above rank baseline). No separate tech gate — see je_covert_warfare possible.
-	possible = {
-		custom_tooltip = {
-			text = iw_funding_not_min_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level > 0
-		}
+	# Hidden from humans — see the header.
+	visible = {
+		is_ai = yes
 	}
-	effect = {
-		custom_tooltip = iw_decrease_funding_effect_tt
-		hidden_effect = {
-			change_variable = { name = iw_funding_level subtract = 1 }
-			clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
-			# Reapply cost modifier immediately
-			if = {
-				limit = {
-					has_variable = iw_funding_level
-					var:iw_funding_level >= 1
-				}
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-			}
-			# Refresh each operation's detection display (funding changes the odds)
-			covert_ops_sync_all = yes
-		}
-	}
+	possible = { covert_possible_decrease_funding = yes }
+	effect = { covert_effect_decrease_funding = yes }
 }
