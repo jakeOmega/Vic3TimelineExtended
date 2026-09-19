@@ -1,0 +1,119 @@
+# ============================================================================
+# CULTURAL HEGEMONY — shared button eligibility triggers
+# ============================================================================
+# Each `ch_possible_<button>` holds the body that used to live inline in the
+# matching scripted_button's `possible` block. Both the journal-entry button and
+# the `ch_policy_sgui` scripted GUI ask these, so what greys a control out
+# cannot drift apart between the two surfaces.
+#
+# The `custom_tooltip` clauses are phrased as CONDITIONS, not complaints,
+# because IsValidTooltip renders each of them with a tick or a cross.
+#
+# Scope: country (the journal entry's owner).
+# ============================================================================
+
+ch_possible_increase_program_funding = {
+	custom_tooltip = {
+		text = CH_REQUIRES_MINISTRY_TT
+		has_law = law_type:law_ministry_of_culture
+	}
+	custom_tooltip = {
+		text = CH_PROGRAM_FUNDING_NOT_MAX
+		OR = {
+			NOT = { has_variable = ch_program_funding_level }
+			var:ch_program_funding_level < ch_program_funding_max_level
+		}
+	}
+}
+
+ch_possible_decrease_program_funding = {
+	custom_tooltip = {
+		text = CH_PROGRAM_FUNDING_NOT_MIN
+		has_variable = ch_program_funding_level
+		var:ch_program_funding_level > 0
+	}
+}
+
+ch_possible_world_exposition = {
+	custom_tooltip = {
+		text = CH_REQUIRES_MINISTRY_TT
+		has_law = law_type:law_ministry_of_culture
+	}
+	custom_tooltip = {
+		text = CH_REQUIRES_MASS_MEDIA_TT
+		has_technology_researched = mass_media
+	}
+}
+
+ch_possible_disable_world_exposition = {
+	has_journal_entry = je_cultural_hegemony
+	je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
+}
+
+ch_possible_cultural_institutes = {
+	custom_tooltip = {
+		text = CH_REQUIRES_MINISTRY_TT
+		has_law = law_type:law_ministry_of_culture
+	}
+}
+
+ch_possible_disable_cultural_institutes = {
+	has_journal_entry = je_cultural_hegemony
+	je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+}
+
+ch_possible_global_media_campaign = {
+	custom_tooltip = {
+		text = CH_REQUIRES_MINISTRY_TT
+		has_law = law_type:law_ministry_of_culture
+	}
+	custom_tooltip = {
+		text = CH_REQUIRES_MASS_MEDIA_TT
+		has_technology_researched = mass_media
+	}
+	custom_tooltip = {
+		text = CH_MEDIA_BLOCKED_BY_PROTECTIONISM
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+	}
+}
+
+ch_possible_disable_global_media_campaign = {
+	has_journal_entry = je_cultural_hegemony
+	je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+}
+
+ch_possible_cultural_protectionism = {
+	custom_tooltip = {
+		text = CH_REQUIRES_MINISTRY_TT
+		has_law = law_type:law_ministry_of_culture
+	}
+	custom_tooltip = {
+		text = CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA
+		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+	}
+}
+
+ch_possible_disable_cultural_protectionism = {
+	has_journal_entry = je_cultural_hegemony
+	je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+}
+
+# ---- Widget row visibility (mirrors each scripted_button's `visible`) ----
+# The enable / disable controls in the widget swap on exactly the conditions the
+# journal-entry buttons swap on, so the pair can never both offer "Enable".
+
+ch_shown_world_exposition = {
+	NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
+}
+
+ch_shown_cultural_institutes = {
+	NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+}
+
+ch_shown_global_media_campaign = {
+	NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+}
+
+ch_shown_cultural_protectionism = {
+	NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+}

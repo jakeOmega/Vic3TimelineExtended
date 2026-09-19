@@ -1,4 +1,25 @@
-﻿ch_increase_program_funding_button = {
+# ============================================================================
+# CULTURAL HEGEMONY — journal-entry buttons (AI-only surface)
+# ============================================================================
+# These ten buttons are the AI's ONLY path into the cultural-hegemony policy
+# system: the AI picks a policy through their `ai_chance` blocks, so never delete
+# a `scripted_button = …` line from je_cultural_hegemony.txt.
+#
+# Every button carries `is_ai = yes` in its `visible`, so the vanilla journal-entry
+# button grid shows nothing to a human. The human surface is the custom widget
+# `gui/journal_entry_widgets/cultural_hegemony_widget.gui`, whose controls call
+# `ch_policy_sgui` (common/scripted_guis/cultural_hegemony_sguis.txt).
+#
+# Neither surface holds its own logic. Each button's eligibility lives in
+# `ch_possible_<button>` (common/scripted_triggers/cultural_hegemony_triggers.txt)
+# and its body in `ch_effect_<button>`
+# (common/scripted_effects/cultural_hegemony_effects.txt), and the scripted GUI
+# asks and calls exactly the same two helpers — so what the AI does and what the
+# widget does cannot drift apart. Change a cost, a gate or an applied modifier in
+# the HELPER, never here.
+# ============================================================================
+
+ch_increase_program_funding_button = {
 	name = "CH_INCREASE_PROGRAM_FUNDING"
 	desc = "CH_INCREASE_PROGRAM_FUNDING_DESC"
 
@@ -6,6 +27,7 @@
 	# button greys out with a tooltip when the player lacks the Ministry of
 	# Culture or has no funding cap yet, instead of disappearing silently.
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
 	}
 
@@ -22,38 +44,11 @@
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CH_REQUIRES_MINISTRY_TT
-			has_law = law_type:law_ministry_of_culture
-		}
-		custom_tooltip = {
-			text = CH_PROGRAM_FUNDING_NOT_MAX
-			OR = {
-				NOT = { has_variable = ch_program_funding_level }
-				var:ch_program_funding_level < ch_program_funding_max_level
-			}
-		}
+		ch_possible_increase_program_funding = yes
 	}
 
 	effect = {
-		hidden_effect = {
-			if = {
-				limit = { NOT = { has_variable = ch_program_funding_level } }
-				set_variable = { name = ch_program_funding_level value = 1 }
-			}
-			else = {
-				change_variable = { name = ch_program_funding_level add = 1 }
-				clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
-			}
-
-			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
-			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
-			if = {
-				limit = { ch_program_funding_level_value >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
-			}
-		}
+		ch_effect_increase_program_funding = yes
 	}
 }
 
@@ -64,6 +59,7 @@ ch_decrease_program_funding_button = {
 	# Stays visible while the JE is up so the JE button count is constant;
 	# greys out via `possible` when funding is already at 0.
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
 	}
 
@@ -80,26 +76,11 @@ ch_decrease_program_funding_button = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CH_PROGRAM_FUNDING_NOT_MIN
-			has_variable = ch_program_funding_level
-			var:ch_program_funding_level > 0
-		}
+		ch_possible_decrease_program_funding = yes
 	}
 
 	effect = {
-		hidden_effect = {
-			change_variable = { name = ch_program_funding_level subtract = 1 }
-			clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
-
-			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
-			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
-			if = {
-				limit = { ch_program_funding_level_value >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
-			}
-		}
+		ch_effect_decrease_program_funding = yes
 	}
 }
 
@@ -111,8 +92,9 @@ ch_world_exposition_button = {
 	desc = "CH_WORLD_EXPOSITION_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
+		ch_shown_world_exposition = yes
 	}
 
 	ai_chance = {
@@ -128,19 +110,11 @@ ch_world_exposition_button = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CH_REQUIRES_MINISTRY_TT
-			has_law = law_type:law_ministry_of_culture
-		}
-		custom_tooltip = {
-			text = CH_REQUIRES_MASS_MEDIA_TT
-			has_technology_researched = mass_media
-		}
+		ch_possible_world_exposition = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult_for_je } }
+		ch_effect_world_exposition = yes
 	}
 }
 
@@ -149,10 +123,18 @@ ch_disable_world_exposition_button = {
 	desc = "CH_DISABLE_WORLD_EXPOSITION_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
 		je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
 	}
 
+	# The no-ministry branch below was the AI's escape hatch from an outreach
+	# programme it could no longer justify: unlike the other three programmes,
+	# the journal entry's monthly pulse never stripped this one when
+	# law_ministry_of_culture was repealed, so the AI had to click it off itself.
+	# The pulse now strips it too (see je_cultural_hegemony.txt), which makes this
+	# branch belt-and-braces rather than the only path — it still fires in the
+	# same tick the law goes away, ahead of the next pulse.
 	ai_chance = {
 		value = 0
 		if = {
@@ -162,13 +144,11 @@ ch_disable_world_exposition_button = {
 	}
 
 	possible = {
-		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
+		ch_possible_disable_world_exposition = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
-		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition_cost }
+		ch_effect_disable_world_exposition = yes
 	}
 }
 
@@ -177,8 +157,9 @@ ch_cultural_institutes_button = {
 	desc = "CH_CULTURAL_INSTITUTES_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+		ch_shown_cultural_institutes = yes
 	}
 
 	ai_chance = {
@@ -194,14 +175,11 @@ ch_cultural_institutes_button = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CH_REQUIRES_MINISTRY_TT
-			has_law = law_type:law_ministry_of_culture
-		}
+		ch_possible_cultural_institutes = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_institutes_program } }
+		ch_effect_cultural_institutes = yes
 	}
 }
 
@@ -210,6 +188,7 @@ ch_disable_cultural_institutes_button = {
 	desc = "CH_DISABLE_CULTURAL_INSTITUTES_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
 		je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
 	}
@@ -223,12 +202,11 @@ ch_disable_cultural_institutes_button = {
 	}
 
 	possible = {
-		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+		ch_possible_disable_cultural_institutes = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
+		ch_effect_disable_cultural_institutes = yes
 	}
 }
 
@@ -240,8 +218,9 @@ ch_global_media_campaign_button = {
 	# ch_disable_global_media_campaign_button; the protectionism mutual-exclusion
 	# moves into `possible` so the slot stays populated and just greys out.
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+		ch_shown_global_media_campaign = yes
 	}
 
 	ai_chance = {
@@ -261,22 +240,11 @@ ch_global_media_campaign_button = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CH_REQUIRES_MINISTRY_TT
-			has_law = law_type:law_ministry_of_culture
-		}
-		custom_tooltip = {
-			text = CH_REQUIRES_MASS_MEDIA_TT
-			has_technology_researched = mass_media
-		}
-		custom_tooltip = {
-			text = CH_MEDIA_BLOCKED_BY_PROTECTIONISM
-			NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
-		}
+		ch_possible_global_media_campaign = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { add_modifier = { name = ch_global_media_campaign } }
+		ch_effect_global_media_campaign = yes
 	}
 }
 
@@ -285,6 +253,7 @@ ch_disable_global_media_campaign_button = {
 	desc = "CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
 		je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
 	}
@@ -302,12 +271,11 @@ ch_disable_global_media_campaign_button = {
 	}
 
 	possible = {
-		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+		ch_possible_disable_global_media_campaign = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
+		ch_effect_disable_global_media_campaign = yes
 	}
 }
 
@@ -316,8 +284,9 @@ ch_cultural_protectionism_button = {
 	desc = "CH_CULTURAL_PROTECTIONISM_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+		ch_shown_cultural_protectionism = yes
 	}
 
 	ai_chance = {
@@ -337,18 +306,11 @@ ch_cultural_protectionism_button = {
 	}
 
 	possible = {
-		custom_tooltip = {
-			text = CH_REQUIRES_MINISTRY_TT
-			has_law = law_type:law_ministry_of_culture
-		}
-		custom_tooltip = {
-			text = CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA
-			NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
-		}
+		ch_possible_cultural_protectionism = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_protectionism_program } }
+		ch_effect_cultural_protectionism = yes
 	}
 }
 
@@ -357,6 +319,7 @@ ch_disable_cultural_protectionism_button = {
 	desc = "CH_DISABLE_CULTURAL_PROTECTIONISM_DESC"
 
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
 		je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
 	}
@@ -374,11 +337,10 @@ ch_disable_cultural_protectionism_button = {
 	}
 
 	possible = {
-		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+		ch_possible_disable_cultural_protectionism = yes
 	}
 
 	effect = {
-		je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
+		ch_effect_disable_cultural_protectionism = yes
 	}
 }

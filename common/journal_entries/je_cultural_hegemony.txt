@@ -363,15 +363,17 @@ je_cultural_hegemony = {
 				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_protectionism_program }
 			}
 
-			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
-			je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
+			# ch_refresh_funding_modifiers removes both funding modifiers and
+			# re-adds them when the level is >= 1. Wrapping it in the law check
+			# reproduces the old inline block exactly: with the law, remove then
+			# conditionally re-add; without it, remove only.
 			if = {
-				limit = {
-					has_law = law_type:law_ministry_of_culture
-					ch_program_funding_level_value >= 1
-				}
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
-				je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
+				limit = { has_law = law_type:law_ministry_of_culture }
+				ch_refresh_funding_modifiers = yes
+			}
+			else = {
+				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
+				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
 			}
 
 			# Apply/remove cultural hegemony modifier (hegemon bonus)
