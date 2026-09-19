@@ -390,7 +390,9 @@ Multi-stage competition system simulating a space race between Great Powers. 9 m
 - **Modifiers:** `common/static_modifiers/space_race_modifiers.txt` — approach, milestone (first/subsequent), failure, economic, plus cross-system (tourism, ISS, extraplanetary integration). Colony modifiers (68) and `sr_solar_system_trade` are applied to **JE scope** (`je:je_space_race_solar_colonization`), not country scope.
 - **Legacy Cleanup:** `common/scripted_effects/legacy_modifier_cleanup.txt` — removes country-scoped colony modifiers from old saves and re-applies them to JE scope (guarded by `has_journal_entry`).
 - **Script Values:** `common/script_values/space_race_values.txt` — progress goals (stage-dependent for colonization), progress rates (with building/company/UN bonuses), failure weights
-- **Scripted Buttons:** `common/scripted_buttons/space_race_buttons.txt` — Safe/Ambitious approach, funding increase/decrease
+- **Scripted Buttons:** `common/scripted_buttons/space_race_buttons.txt` — Safe/Ambitious approach, funding increase/decrease. 32 buttons (4 × 8 entries), all carrying `is_ai = yes` so the vanilla grid is hidden from humans; each delegates its `visible` / `possible` / `effect` to a shared `$MILESTONE$`-parameterized helper.
+- **Journal-entry widget:** `gui/journal_entry_widgets/space_race_widget.gui` — one milestone panel instanced on all nine entries; handlers in `common/scripted_guis/space_race_sguis.txt`, branching text in `common/customizable_localization/space_race_custom_loc.txt`. Full description: `docs/systems/journal_entry_systems.md` → Space Race → Milestone Panel.
+- **Debug console:** `events/te_debug_space_race_events.txt` + `common/scripted_effects/te_debug_space_race_effects.txt` — `event te_debug_space_race.1` reaches every panel state.
 - **Scripted Effects:** `common/scripted_effects/space_race_effects.txt` — milestone completion, failure, cleanup, colony establishment (`sr_establish_colony_effect`), stage advancement (`sr_check_colony_stage_effect`)
 - **Scripted Triggers:** `common/scripted_triggers/space_race_triggers.txt` — has_space_program, is_pursuing, can_start, failure_cooldown
 - **On Actions:** `common/on_actions/space_race_on_actions.txt` — yearly random events for all in-progress and cross-system events
@@ -412,10 +414,12 @@ Suborbital Flight (rocketry tech)
 
 ### Key Mechanics
 - **"The First" Bonus:** Global variables (`sr_global_first_*`) track first achiever. First nation gets ~2× rewards (prestige, innovation max, tech speed) permanently. Subsequent nations get smaller permanent modifiers.
-- **Approach Choice:** Safe (slow progress, ~2-7% failure/month) vs Ambitious (fast progress, ~10-22% failure/month). Selected via scripted buttons.
+- **Approach Choice:** Safe vs Ambitious, per entry. The base monthly setback risk is a per-milestone script value — `sr_base_risk_<m>`, 5 for suborbital rising to 10 for solar colonization — and `sr_risk_pct_<m>` applies `country_space_race_risk_mult` to it (Safe contributes -0.5, Ambitious nothing). **The monthly roll and the widget's "Setback risk" line read the same script value**, so they cannot disagree; `sr_risk_shown_<m>` is the same figure with a zero while the cooldown is running. There is no longer a `sr_base_risk` proxy variable or a `RISK =` parameter — a number copied into a variable one statement before it is rolled is readable by nothing else, which is why the risk could not be shown at all before.
 - **Funding Levels:** 0 to `sr_max_funding_level` (base 3, increased by `country_space_race_max_funding_add` modifier from techs like `reusable_rocketry` +1, `space_colonization` +2). Each level costs innovation (-15/level via `sr_space_program_cost` consolidated modifier). Funding and approach are **per-JE** — you can fund moon landing heavily with safe approach while running a cheap ambitious probe.
-- **Consolidated Cost:** Single `sr_space_program_cost` modifier with `multiplier = sr_total_space_cost` (sum of all per-JE funding levels + approach overhead: safe=1, ambitious=2). Recalculated via `sr_recalculate_cost` whenever funding or approach changes.
-- **Failure:** Reduces progress (50% for ambitious, 15% for safe), adds cooldown (6-24 months), applies decaying negative modifiers. Progress reduction happens inline in the monthly pulse. Cooldown is global (decremented once via `on_monthly_pulse_country`, not per-JE). Does NOT permanently block — just wastes time.
+- **Per-JE Cost:** each active milestone's journal entry carries `sr_space_program_cost` with `multiplier = sr_<m>_cost` (that milestone's funding level + approach overhead: safe=1, ambitious=2, times an era factor from 1x for suborbital to 12x for the interstellar probe). Re-posted by `sr_recalculate_cost` whenever funding or approach changes. A single consolidated `sr_total_space_cost` script value used to exist for this and is gone — nothing read it after the per-JE split.
+- **Failure:** Reduces progress (×0.75 for ambitious, ×0.85 for safe), adds cooldown (6-24 months), applies decaying negative modifiers. Progress reduction happens inline in the monthly pulse. Cooldown is global (decremented once via `on_monthly_pulse_country`, not per-JE). Does NOT permanently block — just wastes time.
+- **Known behaviour — the cooldown shields, it does not pause.** The cooldown check sits *below* the `change_variable = { name = sr_progress_<m> add = sr_progress }` line (`space_race_effects.txt:25`), so a programme inside its cooldown accrues progress at full rate with zero chance of a setback. The widget displays this as "shielded" rather than inventing a pause. Not changed; recorded so it can be judged deliberately.
+- **Known behaviour — no approach means a flat drift.** With neither `sr_safe_<m>` nor `sr_ambitious_<m>` set the pulse adds `sr_progress_drift` (0.5), not `sr_progress`. The widget quotes the drift rate in that state (`sr_pace_rate_<m>`) so the number on screen is the number being added.
 - **Failure Flags:** When failure occurs, per-JE `sr_failed_<milestone>` boolean flags are set before firing failure events. `sr_temporary_safety_review_effect` checks all flags (using `if` not `else_if`) to apply a decaying safety-review modifier to every failed milestone that month.
 - **Moon Landing Site:** Special event (space_race_events.5) offers Shackleton Crater (high risk, science windfall) vs Equatorial Plain (low risk, modest rewards).
 - **Interstellar Probe:** Launches a probe to Alpha Centauri. On completion, spawns a passive `je_space_race_interstellar_results` JE that ticks 1/month for 132 months (~11 years) using a separate `sr_interstellar_transit_progress` variable (not shared `sr_milestone_progress`). When complete, fires event 60 (Interstellar Probe Data Received) which randomly selects one of 30 possible discoveries across 4 categories:
@@ -454,7 +458,8 @@ Suborbital Flight (rocketry tech)
 | `sr_safe_<m>` / `sr_ambitious_<m>` | Per-JE approach flags |
 | `sr_failed_<m>` | Per-JE failure flag (set in pulse, read by events) |
 | `sr_interstellar_transit_progress` | Interstellar probe transit progress (passive JE, not per-JE) |
-| `sr_funding_level` | **Proxy variable** — set from per-JE funding before script value evaluation in monthly pulse. Safe because script values evaluate immediately. |
+| `sr_<m>_last_status` | Widget display state, 0-4. Single derivation site: `sr_set_milestone_status_base`. Absent when the milestone is not running. |
+| `sr_<m>_setbacks` | Lifetime setback count for that milestone, shown by the widget. Incremented in `sr_count_setback_base`. |
 | `sr_failure_cooldown` | Global months until failure can occur again (decremented once/month via on_action) |
 | `sr_progress_boost` | **Proxy variable** — set before calling `sr_boost_active_milestones` |
 | `sr_moon_site_shackleton/equatorial` | Moon landing site choice |
@@ -1104,8 +1109,10 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 5. **Monuments** (`cultural_pull_from_monuments`): +3 per building in `bg_monuments` building group (all 25+ wonder buildings). Uses `every_scope_state > every_scope_building` with `building_group = bg_monuments`.
 6. **Megaprojects** (`cultural_pull_from_megaprojects`): +3 per completed megaproject (space elevator, solar collector, orbital battlestation, mind upload nexus, antimatter facility, nanofabrication center, consciousness network). Capped at 1 per type (unique buildings not in `bg_monuments`).
 7. **Modifier Hooks** (`cultural_pull_from_modifiers`): Via `country_cultural_pull_add`.
-8. **Rank Multiplier**: GP ×1.5, Major ×1.0, Minor ×0.5, Insignificant ×0.25.
+8. **Infamy and Instability** (`cultural_pull_from_infamy`, `cultural_pull_from_stability`): negative-only terms — infamy × -0.1, turmoil × -10, and a flat -20 for an active civil war.
 9. **General Multiplier**: `country_cultural_pull_mult` hook.
+
+**Country rank does *not* multiply the raw score.** Rank scaling applies to the standard-of-living term alone (`cultural_pull_from_sol`: great power and above full, major ×0.5, minor ×0.25, lesser ×0), which is where a country's weight-class belongs — a small country with a world-leading art industry is not penalised for being small. (An earlier version of this section listed a whole-score rank multiplier; no such multiplier has ever existed in `cultural_hegemony_script_values.txt`.)
 
 **Final Score:** `cultural_pull_total = (cultural_pull_raw / global_raw_cultural_pull) × 100` (0–100% share).
 
@@ -1114,10 +1121,9 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 - `cultural_hegemony_foreign_benchmark` (dynamic modifier): SoL expectations pressure **and** legitimacy reduction (`country_legitimacy_base_add = -5`) on countries below the global hegemon — scaled by `cultural_hegemony_benchmark_mult` (0–3×). The legitimacy reduction represents ideology shift pressure — the hegemon's cultural dominance undermines rival governments' political legitimacy.
 - Global tracking: `ch_top_cultural_pull` global variable updated yearly (now stores % share)
 
-**JE Display:** Shows cultural share (%), raw score, component breakdown (art, prestige, SoL vs avg, tech, monuments, megaprojects, rank), and global hegemon comparison.
+**JE Display:** a custom widget in all three `custom_widget_container_*` slots — the influence tier and share with a bar, world rank, the hegemon's exported political model, the cultural-programme controls, a collapsible component breakdown, the collapsible top-ten board and a collapsible history chart of the country's share. The entry's own `status_desc` is three lines. Full data contract, op tables and editing rules: `docs/systems/journal_entry_systems.md` → **Cultural Hegemony Widget**.
 
-**JE Status Thresholds (share-based):**
-- Dominant: ≥ 25%, Major: ≥ 15%, Significant: ≥ 10%, Moderate: ≥ 5%, Minor: ≥ 2%, Negligible: < 2%
+**JE Status Thresholds (share-based):** Dominant ≥ 25%, Major ≥ 15%, Significant ≥ 10%, Moderate ≥ 5%, Minor ≥ 2%, Negligible < 2%. These five numbers live in exactly one place — `ch_set_display_state` in `cultural_hegemony_effects.txt`, which writes the `ch_tier` variable everything else reads. Do not re-type them in localization, `.gui` or a journal-entry trigger.
 
 **Events:** `events/cultural_hegemony_events.txt` (`cultural_hegemony.1`–`.16`) — recurring soft-power events for both the hegemon and the countries under its pull (e.g. `.2` fires for a country below 5% share carrying `cultural_hegemony_foreign_benchmark`; `.3` for a country at ≥ 20% share).
 
@@ -1133,20 +1139,27 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 | `common/script_values/cultural_hegemony_script_values.txt` | Core raw-score and display-value math for cultural pull |
 | `common/scripted_effects/cultural_hegemony_effects.txt` | Monthly country cache updates, yearly leaderboard rebuild, hegemon ideology pressure helpers |
 | `common/on_actions/cultural_hegemony_on_actions.txt` | Monthly and yearly update hooks, plus world-first tech tracking |
-| `common/journal_entries/je_cultural_hegemony.txt` | Display JE, active policy readout, and JE-scoped modifier application |
-| `common/scripted_buttons/cultural_hegemony_buttons.txt` | Funding controls, timed exposition action, and persistent policy toggles |
+| `common/journal_entries/je_cultural_hegemony.txt` | Three-line summary, the three widget mounts, and JE-scoped modifier application |
+| `common/scripted_buttons/cultural_hegemony_buttons.txt` | The AI's ten policy buttons (`is_ai = yes`); each delegates to a shared helper |
+| `common/scripted_triggers/cultural_hegemony_triggers.txt` | `ch_possible_<button>` eligibility and `ch_shown_<programme>` swap triggers |
+| `common/scripted_guis/cultural_hegemony_sguis.txt` | `ch_policy_sgui` (the widget's controls) plus four display-only handlers |
+| `gui/journal_entry_widgets/cultural_hegemony_widget.gui` | The player-facing panels: summary, programmes, breakdown, board, history |
+| `common/customizable_localization/cultural_hegemony_custom_loc.txt` | Influence tier and exported-model text, branching on `ch_tier` / `ch_rank_1_ideology` |
+| `common/scripted_effects/te_history_cultural_hegemony_effects.txt` | The `ch_share` history series and its programme markers |
 | `common/static_modifiers/extra_modifiers.txt` | Timed event modifiers plus the persistent JE policy modifiers |
 | `events/cultural_hegemony_events.txt` | Annual soft-power events for both hegemon and target countries |
+| `events/te_debug_ch_events.txt` | Console test harness (`event te_debug_ch.1`) for the widget's awkward states |
 
 ### Player Controls
 - **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` and a separate GDP-scaled expense modifier. The maximum level comes from `country_cultural_program_max_funding_add`.
 - **Funding cap sources:** `institution_ministry_of_culture` grants funding tiers through ministry investment, while `mass_media` and `television` each raise the cap further.
-- **Host World Exposition:** One-shot timed action that adds a decaying JE modifier for prestige, migration attraction, and cultural pull plus a separate GDP-scaled exposition cost.
+- **Begin International Cultural Outreach** (internally `ch_world_exposition`): a **persistent toggle**, not a one-shot and not timed — the JE-scoped modifier has no duration and runs, with its GDP-scaled cost, until the player ends it or the Ministry goes away. (An earlier version of this section described it as a one-shot decaying action; it never was one.)
 - **Fund Cultural Institutes:** JE-scoped policy that trades bureaucracy for higher `country_cultural_pull_mult` and society tech progress.
 - **Launch Global Media Campaign:** JE-scoped policy that requires `mass_media` and converts authority into prestige plus stronger cultural projection.
 - **Enact Cultural Protectionism:** JE-scoped defensive policy that boosts pull and authority while reducing migration attraction and society tech openness.
 - **Mutual exclusivity:** Global Media Campaign and Cultural Protectionism cannot be active at the same time.
-- **Law cleanup:** If `law_ministry_of_culture` is removed, the JE monthly pulse zeroes funding and strips all three persistent cultural policy modifiers automatically.
+- **Law cleanup:** If `law_ministry_of_culture` is removed, the JE monthly pulse zeroes funding and strips **all four** persistent cultural policy modifiers automatically, International Cultural Outreach and its cost included. Outreach was missing from that list until this was fixed, so an outreach programme begun under the Ministry kept paying out — and charging — for the rest of the game after a repeal.
+- **Player surface:** the ten buttons are AI-only (`is_ai = yes`); a human acts through the widget, whose controls call the same `ch_possible_*` / `ch_effect_*` helpers. See `docs/systems/journal_entry_systems.md` → **Cultural Hegemony Widget** for the op tables and editing rules.
 
 ### Notable Rules
 - **Activation gate:** JE shows once the rule is enabled, any country has `mass_media`, and the player has `romanticism`.

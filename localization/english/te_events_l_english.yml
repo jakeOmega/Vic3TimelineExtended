@@ -3758,6 +3758,17 @@
 #
 # TE_DEBUG_UN
 #
+ te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
+ te_debug_space_race.1.b:0 "Finish every running milestone on the next tick"
+ te_debug_space_race.1.c:0 "Force a setback now (progress loss, safety review, cooldown)"
+ te_debug_space_race.1.d:0 "Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\n\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel."
+ te_debug_space_race.1.e:0 "Clear the setback cooldown"
+ te_debug_space_race.1.f:0 "'What does the panel do if the programme is nine tenths done and on fire?'\n\n'Let us find out.'"
+ te_debug_space_race.1.g:0 "Put a rival programme in the other top powers"
+ te_debug_space_race.1.h:0 "Let another power claim 'the first' on every milestone I have not won"
+ te_debug_space_race.1.i:0 "Give 'the first' back on every milestone I have not won"
+ te_debug_space_race.1.t:0 "Space Race Test Console"
+ te_debug_space_race.1.z:0 "Close"
  te_debug_colonial_empire.1.a:0 "Solidified (95)"
  te_debug_colonial_empire.1.b:0 "Stable (75)"
  te_debug_colonial_empire.1.c:0 "Strained (50)"
@@ -4544,3 +4555,13 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+
+### Cultural Hegemony test console
+ te_debug_ch.1.a:0 "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running"
+ te_debug_ch.1.b:0 "B — Put us at rank 1 on the board"
+ te_debug_ch.1.c:0 "C — Fill the board with others and put us at rank 14 of 168"
+ te_debug_ch.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here."
+ te_debug_ch.1.d_option:0 "D — Empty board slot 5 (the annexed case)"
+ te_debug_ch.1.e:0 "E — Repeal the Ministry of Culture and watch all four programmes stop"
+ te_debug_ch.1.f:0 ""Every ministry keeps a drawer of numbers it would rather no one saw.""
+ te_debug_ch.1.t:0 "Cultural Hegemony Test Console"

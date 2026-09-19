@@ -292,9 +292,70 @@ Persistent journal entry.
 ### Purpose
 The player's window into the cultural-hegemony system: the country's share of global cultural pull, its component breakdown, the yearly top-10 leaderboard and the cultural policy controls. All computation runs from on-actions and scripted effects; the entry displays it and owns the JE-scoped policy modifiers. Mechanics, files and hooks are documented in `mod_systems.md` § Cultural Hegemony System.
 
-### Buttons (10)
+### Buttons (10, AI-only)
 - `ch_increase_program_funding_button`, `ch_decrease_program_funding_button`
 - 4 enable/disable pairs: `ch_world_exposition_button`, `ch_cultural_institutes_button`, `ch_global_media_campaign_button`, `ch_cultural_protectionism_button` (each with a `ch_disable_*` counterpart)
+
+All ten carry `is_ai = yes` in `visible`, so the vanilla button grid shows nothing to a human — the widget below is the human surface. **Never delete a `scripted_button = …` line from the entry:** those `ai_chance` blocks are the AI's only path into the system. Each button's `possible` lives in `ch_possible_<button>` (`common/scripted_triggers/cultural_hegemony_triggers.txt`) and its `effect` in `ch_effect_<button>` (`common/scripted_effects/cultural_hegemony_effects.txt`); the widget's controls call the same two helpers, so the AI's path and the player's cannot drift. `ch_shown_<programme>` mirrors the enable/disable swap for both surfaces.
+
+All four programmes are **persistent toggles**, not timed one-shots — including International Cultural Outreach (`ch_world_exposition`), whose static modifier is untimed.
+
+### Variables
+| Variable | Scope | Written by | Meaning |
+|---|---|---|---|
+| `ch_total`, `ch_art`, `ch_sol`, `ch_monuments`, `ch_megaprojects` | country | `ch_monthly_country_update` | monthly cache of the pull components |
+| `ch_tech_firsts_recent` | country | `cultural_hegemony_tech_first_on_action`, decayed yearly | world-first tech bonus |
+| `ch_program_funding_level` | country | the two funding steppers; zeroed by the monthly pulse when the Ministry goes | 0…cap |
+| `ch_tier` | country | **`ch_set_display_state` only** | 0 negligible … 5 hegemon. The 2/5/10/15/25 share thresholds exist nowhere else |
+| `ch_prog_count` | country | **`ch_set_display_state` only** | active programmes, 0…4 |
+| `ch_rank_self` | country | the `ordered_country` pass in `ch_yearly_global_update`; cleared by `ch_monthly_country_update` when `cultural_pull_raw < 0.01` | 1-based board position |
+| `ch_ranked_total` | global | end of the same pass | how many countries have any pull |
+| `ch_rank_N`, `ch_rank_N_{score,delta,prev,art,prs,sol,tech,raw}` | global | `ch_yearly_global_update` | the yearly top-ten snapshot. All ten deltas are zeroed before being computed, so the board never reads an unset global |
+| `ch_rank_1_ideology`, `ch_rank_1_ideology_aligned_count`, `ch_ideology_country_total` | global | `ch_cache_rank_1_ideology_alignment_summary` | the hegemon's exported model and its reach |
+
+`ch_set_display_state` is called from the shared tail of `ch_monthly_country_update` **and** of every `ch_effect_<button>`, which is why a click moves the widget's labels without waiting for the next pulse.
+
+### Cultural Hegemony Widget (journal-entry widget)
+Three custom widgets replace a 55-entry `status_desc` — a ten-line hand-rolled leaderboard, a twelve-branch ideology ladder, ten breakdown lines and four policy lines, all of which were a table pretending to be prose. `status_desc` now carries three lines (tier, share, funding level), which is what a pinned or unopened entry shows.
+
+- **File:** `gui/journal_entry_widgets/cultural_hegemony_widget.gui` (chart types: `gui/journal_entry_widgets/te_history_chart.gui`)
+- **Handlers:** `common/scripted_guis/cultural_hegemony_sguis.txt`
+- **Shared helpers:** `common/scripted_triggers/cultural_hegemony_triggers.txt` (`ch_possible_<button>`, `ch_active_<programme>`, `ch_shown_<programme>`), `common/scripted_effects/cultural_hegemony_effects.txt` (`ch_effect_<button>`, `ch_refresh_funding_modifiers`, `ch_set_display_state`)
+- **Handlers, 10:** `ch_policy_sgui` (the only interactive one), four scope-free `ch_active_<programme>_sgui`, and five display-only — `ch_show_sgui`, `ch_board_row_sgui`, `ch_board_detail_sgui`, `ch_board_is_us_sgui`, `ch_history_marker_sgui`
+- **Branchy text:** `common/customizable_localization/cultural_hegemony_custom_loc.txt` — `ch_tier_text`, `ch_tier_blurb`, `ch_exported_model_text`, `ch_exported_model_owner`
+- **Display-only reads:** `cultural_pull_from_modifiers_display`, `ch_pull_mult_pct_display`, `ch_art_mult_pct_display`, `ch_global_raw_display`, `ch_rank_self_display`, `ch_ranked_total_display`, `ch_share_fill_pct`, `ch_prog_count_display`, `ch_model_aligned_display`, `ch_model_total_display` in `cultural_hegemony_script_values.txt`, alongside the pre-existing `*_display` family
+
+Areas:
+1. **Cultural Influence** (`custom_widget_container_1`) — tier name and blurb from custom loc, the share of global influence as a bar plus a number, world rank, and the hegemon's exported political model with how many countries share it. The tier line is deliberately duplicated with `status_desc`: one is the unopened entry, the other the open panel.
+2. **Cultural Programmes** (`custom_widget_container_2`) — the funding stepper and one row per programme, each showing whether it is running and carrying the enable and disable controls. Exactly one of the pair renders: the Disable control is drawn on `ch_active_<programme>_sgui`'s `IsShown` and the Enable control on `Not(...)` of the same, which is the same `ch_active_<programme>` trigger the journal-entry buttons' `visible` reads. Mutual exclusion between Global Media Campaign and Cultural Protectionism leaves the Enable control visible and disabled, with the reason in its tooltip. The two funding steppers are always drawn and grey out through `is_valid`.
+3. **Standing** (`custom_widget_container_3`) — three collapsible sections, all collapsed by default: the pull breakdown, the top-ten board, and the history chart.
+
+**Whether the player can act never depends on a saved scope.** It is unproven in this mod that a `saved_scopes` value reaches a handler's `is_shown`: Strategic Reserve passes `AddScope('dir', …)` to `IsShown` but its `is_shown` never reads the scope, vanilla ships no handler whose `is_shown` does, and vanilla's `scripted_guis.md` promises saved scopes only "in triggers / effects". So the Enable/Disable swap — the one question the player's ability to act rests on — is answered by four **scope-free** `ch_active_<programme>_sgui` handlers in the banking dashboard's play-tested shape (`is_shown` asks the shared trigger, `is_valid = { always = no }`, empty effect), and `ch_policy_sgui`'s own `is_shown` is just `has_journal_entry = je_cultural_hegemony`. `op` still drives `is_valid`, `Execute` and the tooltips, where Strategic Reserve proves it works. The two display handlers that branch on `op` for row visibility **fail open** (a scope that never arrives shows the row), so the worst case is a cosmetic line rather than a missing reading; `ch_board_is_us_sgui` is the single fail-closed handler, because no marker beats ten.
+
+Op table — `ch_policy_sgui` (interactive; `is_valid` → the trigger, `effect` → the effect):
+
+| op | control | helper suffix |
+|---|---|---|
+| 0 / 1 | programme funding − / + | `decrease_program_funding` / `increase_program_funding` |
+| 2 / 3 | International Cultural Outreach begin / end | `world_exposition` / `disable_world_exposition` |
+| 4 / 5 | Cultural Institutes fund / defund | `cultural_institutes` / `disable_cultural_institutes` |
+| 6 / 7 | Global Media Campaign launch / end | `global_media_campaign` / `disable_global_media_campaign` |
+| 8 / 9 | Cultural Protectionism enact / end | `cultural_protectionism` / `disable_cultural_protectionism` |
+
+Op table — `ch_show_sgui` (display only, empty effect, **fail open**). Ops 0–12 each reproduce one condition that used to gate a `triggered_desc`, so no threshold moved into `.gui`: 0 art (no diminishing returns), 1 art (diminished), 2 prestige, 3 standard of living, 4 tech leadership, 5 monuments, 6 megaprojects, 7 flat pull modifiers, 8 infamy, 9 instability, 10 pull multiplier, 11 the "Rank N of M" line, 12 the exported-model block.
+
+`ch_board_row_sgui` (fail open), `ch_board_detail_sgui` (`is_shown = { always = yes }`) and `ch_board_is_us_sgui` (**fail closed**) all take **op = board rank 1…10**: the row's line, its hover breakdown, and its "us" marker. `ch_history_marker_sgui` takes `saved_scopes = { te_hist_sample }`. The four `ch_active_<programme>_sgui` handlers take no scope at all.
+
+**Why the board is script-built text and not GUI rows.** The leaderboard is a list of *countries*, and `.gui` cannot name one: `Var().GetCountry.GetName` is recorded as rendering blank in this mod (`gui_modding_guide.md` gotcha #11) and `Scope.GetCountry` appears in no vanilla `.gui` (gotcha #15); `GetGlobalVariable` appears in no vanilla or mod `.gui` at all, and there is no `HasGlobalVariable` to hide an empty slot. `ch_board_row_sgui` therefore enters `global_var:ch_rank_N`'s scope **in script** and prints `[THIS.GetCountry.GetName]`, which is vanilla's own shape for a country list inside a scripted GUI. Each rank is its own widget with its own `ExecuteTooltip`, so gotcha #18 (a scope's own lines print before its nested blocks') cannot apply. `is_shown` doubles as the row's visibility, so an empty or annexed slot collapses instead of printing a placeholder.
+
+**History.** One series, `ch_share` (`var:ch_total`, axis 0–50), sampled monthly from the entry's own pulse by `te_history_record_cultural_hegemony_samples`, plus eight programme on/off markers recorded inside the `ch_effect_*` helpers. The series **re-bases each January**: the numerator moves monthly but `global_var:ch_cached_global_raw` is only refreshed by the yearly pulse, so a step at the turn of the year is the world total being recomputed, not this country gaining influence. The chart legend says so. No funding marker — `te_history_record_marker` sets one flag per (month, marker) but bumps the month's marker count on every call, and a funding nudge is not a turning point. Marker tooltips come from the CH-owned `ch_history_marker_sgui` via a per-instance `bar_tooltip` blockoverride, so no shared history file needs a cultural-hegemony branch.
+
+**Editing rules.** Change a gate, a cost or an applied modifier in the **helper**, never in the button or the scripted GUI. Move a share threshold in `ch_set_display_state` and nowhere else; move the art diminishing-returns threshold in `cultural_pull_art_dr_threshold` and nowhere else. Add a breakdown row by adding a `ch_show_sgui` op, not a `.gui` comparison. Never delete a `scripted_button = …` line from the entry. **Never make a control's `visible` depend on a saved scope** — a new action control either reuses a scope-free `ch_active_*_sgui`, or is drawn unconditionally and greys out through `is_valid`; and a new display handler that does branch on `op` gets the fail-open first branch (`trigger_if = { limit = { NOT = { exists = scope:op } } always = yes }`).
+
+Traced scenarios: fresh activation without the Ministry (all controls disabled, "Requires Ministry of Culture"); an inactive entry under `is_shown_when_inactive` (all three roots gated on `JournalEntry.IsActive`, nothing renders, no sgui runs); all four programmes running; Media on and Protectionism's Enable greyed; funding at cap; the Ministry repealed (pulse zeroes funding and stops all four programmes); an annexed board slot (row collapses); an AI country (grid hidden from humans only, every `ai_chance` intact, every handler `ai_is_valid = { always = no }`); an old save (no new persistent state is needed to render — `ch_tier`/`ch_prog_count` arrive on the first monthly pulse, `ch_rank_self` on the first yearly pass, and every read is guarded); the game rule disabled mid-game.
+
+### Debug harness
+`event te_debug_ch.1` (`events/te_debug_ch_events.txt`, helpers in `common/scripted_effects/te_debug_ch_effects.txt`): **A** set up the Ministry, a funding cap of 4 and three running programmes; **B** put us at rank 1; **C** fill the board with others and put us at rank 14 of 168; **D** empty board slot 5 (the annexed case); **E** repeal the Ministry. The console-only `ch_debug_funding_cap` static modifier grants the funding cap.
 
 ### Never Completes
 Persistent journal entry.
@@ -1148,14 +1209,14 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
-Multi-stage competitive space race system with 8 milestones. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
+Multi-stage competitive space race system across nine journal entries — seven milestones with a bar, the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
 
 ### Key Mechanics
-- **8 Milestones:** Suborbital Flight → Orbital Flight → Moon Landing / Probe (parallel) → Moon Base / Mars Landing (parallel) → Mars Terraforming → Solar System Colonization
+- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing / Deep-Space Probe (parallel) → Moon Base / Mars Landing (parallel) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization (repeatable)
 - **"The First" Bonus:** Global flags track first achiever per milestone. First nation gets ~2× permanent rewards.
-- **Approach Choice:** Safe (slow, ~2-7% failure) vs Ambitious (fast, ~10-22% failure) via scripted buttons.
-- **Funding Levels:** 0-3 levels affecting progress speed and innovation drain.
-- **Failure:** Halves progress + cooldown period. Does NOT permanently block.
+- **Approach Choice:** Safe vs Ambitious, per entry. Base setback risk is 5–10% a month depending on the milestone (`sr_base_risk_<m>`); Safe halves it and Ambitious leaves it alone, through `country_space_race_risk_mult`. The roll and the panel's "Setback risk" figure read the same `sr_risk_pct_<m>`.
+- **Funding Levels:** 0 to `sr_max_funding_level` (base 3) affecting progress speed and innovation drain.
+- **Failure:** Multiplies progress down (×0.75 ambitious, ×0.85 safe) and starts a cooldown. The cooldown suppresses only the **roll** — progress keeps accruing at full rate while it runs. Does NOT permanently block.
 - **Moon Landing Site:** Shackleton Crater (high risk, science) vs Equatorial Plain (low risk, modest).
 - **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Space Mine + UN partnership + SpaceX company + funding + tech bonuses.
 - **Cross-System:** UN space partnership, SpaceX company, space elevator, space mine, and tourism all provide progress bonuses and/or reduce failure risk.
@@ -1169,13 +1230,56 @@ Multi-stage competitive space race system with 8 milestones. Great/Major Powers 
 | Moon Landing | space_exploration | Orbital complete |
 | Outer Solar System Probe | space_exploration | Orbital complete |
 | Moon Base | reusable_rocketry | Moon Landing complete |
-| Mars Landing | reusable_rocketry | Orbital complete |
-| Mars Terraforming | space_colonization | Mars Landing complete |
-| Solar System Colonization | space_colonization | Moon Base + Mars Landing complete |
+| Mars Landing | knowledge_economy | Orbital + Moon Landing complete |
+| Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
+| Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
+| Solar System Colonization | directed_energy_weapons | Moon Base + Mars Landing complete |
 
-### Buttons (4 per JE)
-- `sr_select_safe_approach` / `sr_select_ambitious_approach` — approach toggle
-- `sr_increase_funding` / `sr_decrease_funding` — funding level (0-3)
+Each entry additionally requires the matching `country_sr_*_program_bool` from the space programme's production method; losing it fires the entry's `fail`.
+
+### Buttons (4 per JE × 8 JEs = 32)
+Per milestone `<m>`: `sr_btn_safe_<m>` / `sr_btn_ambitious_<m>` (approach) and `sr_btn_fund_up_<m>` / `sr_btn_fund_down_<m>` (funding level, 0 to `sr_max_funding_level`). `je_space_race_interstellar_results` has none.
+
+All 32 carry `is_ai = yes` in their `visible`, so the vanilla grid shows a human nothing: the buttons exist for the AI, which picks approach and funding through their `ai_chance`. None of them holds a rule — `visible`, `possible` and `effect` all delegate to the shared helpers the widget's scripted GUIs also call, so the two surfaces cannot drift. Never delete a `scripted_button = …` line: those `ai_chance` blocks are the AI's only path into the space race.
+
+### Milestone Panel (journal-entry widget)
+One shared panel mounted on **all nine** entries in `custom_widget_container_2`, replacing the hidden button grid and the 44-branch `triggered_desc` chains (each `status_desc` is now one line).
+
+- **File:** `gui/journal_entry_widgets/space_race_widget.gui` — one `widget_je_sr_milestone_panel` type instanced by nine named widgets (`widget_je_space_race_<m>`). Vanilla precedent for several named widgets in one journal-entry widget file: `gui/journal_entry_widgets/ep2_japan_widgets.gui:501,550`, mounted by `00_meiji_restoration.txt:10,16`.
+- **Handlers:** `common/scripted_guis/space_race_sguis.txt` — eight `sr_milestone_<m>_sgui` (one per milestone with buttons) plus the display-only `sr_rivals_sgui`.
+- **Shared helpers:** `common/scripted_triggers/space_race_triggers.txt` (`sr_controls_shown`, `sr_solar_controls_shown`, `sr_possible_{safe,ambitious,fund_up,fund_down}`), `common/scripted_effects/space_race_effects.txt` (`sr_effect_{safe,ambitious,fund_up,fund_down}`). All parameterized on `$MILESTONE$`.
+- **Branching text:** `common/customizable_localization/space_race_custom_loc.txt` — `sr_<m>_profile` (the moved `triggered_desc` branches), `sr_<m>_pace` (one sentence explaining the pace figures), `sr_prog_<m>` (one word per programme-overview row). Every target key is plain text; the numbers all live in the outer widget loc keys.
+- **Display-only reads:** `sr_pace_rate_<m>` (the rate the pulse actually applies), `sr_risk_shown_<m>` (the roll's own value, forced to zero while the cooldown suppresses the roll), `sr_eta_months_<m>`, `sr_setbacks_<m>_value`, `sr_colony_count_value`, `sr_interstellar_months_left` — all in `space_race_values.txt`.
+
+Areas:
+1. **Readout** — progress against goal; pace, setback risk and lifetime setbacks; a rough estimate of months left; one sentence naming the state; the mission-profile flavour. The pace-and-estimate line is gated on the same `is_shown` as the controls, because solar colonization's entry stays alive with every colony claimed: there the rate falls back to the drift floor with no progress variable left to divide, and the estimate would read in the hundreds of months. The sentence below it still says the programme is not running. Its tooltip is the reward preview, built from `GetStaticModifier('sr_first_<m>').GetDesc` and `GetStaticModifier('sr_<m>').GetDesc` — never a typed number. Two exceptions: solar colonization has no `sr_first_*` / `sr_*` pair and uses `sr_solar_system_trade`; `interstellar_results` has no single modifier and describes the uncertainty in prose.
+2. **Controls** — Safe / Ambitious as a two-option selector where the option in force greys itself out through `is_valid`, and a funding stepper. The whole inset is gated on the scripted GUI's `is_shown`, which is also what keeps its `Var` read of `sr_funding_<m>` safe and what hides the controls when solar colonization drops into passive mode.
+3. **Who else is racing** (collapsed) — who is running a programme for this milestone and whether "the first" is still unclaimed. Built in script because `.gui` cannot list countries (gotchas #11, #15). It deliberately does **not** show rivals' progress. Its `limit` requires `sr_ai_should_participate = yes`, because a great power outside the top three can hold `sr_active_<m>` and never tick a month. **Solar colonization gets the participation list only** (`sr_rivals_participants_base`, not `sr_rivals_line_base`): it has no `sr_first_solar_colonization` reward and never writes a `sr_global_first_` flag, so there is no first to race for — the debug console's claim/release options leave it out for the same reason.
+4. **The programme so far** (collapsed) — all nine milestones as done / ours-and-first / under way / claimed by another / not begun. Restates no prerequisites; those are already legible in the journal list through `is_shown_when_inactive`.
+
+Op table (repeated in the `.gui` header and the sgui header — keep all three in step):
+
+| op | control |
+|---|---|
+| 0 | select the Safe approach |
+| 1 | select the Ambitious approach |
+| 2 | decrease this milestone's funding level |
+| 3 | increase this milestone's funding level |
+
+The milestone is **not** in the op code: it arrives through the panel's datacontext, which names one of the eight handlers.
+
+**Editing rules:** change an approach or funding rule in the **helper**, not in the button and not in the scripted GUI. Never re-derive a milestone's state in `.gui` or in localization — read `sr_<m>_last_status`, whose single derivation site is `sr_set_milestone_status_base`. Never put a scope expression in a customizable-localization target key (this repo has no precedent for one); put the numbers in the outer widget loc key, which is read in real GUI context. Expander state is per milestone and lives in `GetVariableSystem` (`sr_panel_rivals_<m>`, `sr_panel_programme_<m>`) — several milestone entries can be active at once, and collapsing a section must not touch the game.
+
+**Cost:** the two collapsible sections are the only expensive part, and both sit inside the container whose `visible` is their expander flag, so neither is evaluated while collapsed. `sr_rivals_sgui` walks every country once per frame while its section is open, which is why it is closed by default.
+
+Traced scenarios: fresh activation (no approach → drift rate, no risk); inactive entry with `is_shown_when_inactive` (root gated on `[JournalEntry.IsActive]`); either approach toggle; funding at each bound; a setback month (progress loss, counter, cooldown → shielded reading); a rival annexed or a rival that never ticks; an AI country; the programme's production method lost mid-way; an old save with neither display variable yet; solar colonization completing into passive mode; three milestones active at once; the read-only waiting entry.
+
+**Known behaviours the panel now makes visible** (existing mechanics, unchanged):
+- The failure cooldown suppresses only the **roll**. Progress is added before the check (`space_race_effects.txt:25`), so a programme inside its cooldown runs at full speed with zero chance of a setback. The panel says "shielded", not "paused".
+- With no approach selected the pulse adds a flat `sr_progress_drift` (0.5), not `sr_progress`. The panel quotes the drift rate in that state so the two agree.
+
+### Debug harness
+`event te_debug_space_race.1` (`events/te_debug_space_race_events.txt`, helpers in `common/scripted_effects/te_debug_space_race_effects.txt`) reaches every panel state: 90% / 100% progress, a forced setback with its cooldown, clearing the cooldown, seeding rival programmes, and claiming or releasing "the first". The rival flags are not backed by a journal entry, so the monthly cleanup wipes them — pause first.
 
 ### Events (34 total)
 - `.1`-`.9` — Milestone completion events (1 per milestone + notification)
@@ -1194,4 +1298,8 @@ Multi-stage competitive space race system with 8 milestones. Great/Major Powers 
 - Values: `common/script_values/space_race_values.txt`
 - Modifiers: `common/static_modifiers/space_race_modifiers.txt`
 - On Actions: `common/on_actions/space_race_on_actions.txt`
+- Widget: `gui/journal_entry_widgets/space_race_widget.gui`
+- Scripted GUIs: `common/scripted_guis/space_race_sguis.txt`
+- Customizable localization: `common/customizable_localization/space_race_custom_loc.txt`
+- Debug console: `events/te_debug_space_race_events.txt`, `common/scripted_effects/te_debug_space_race_effects.txt`
 - Localization: Organized into main loc files by `organize_loc.py` (events, JE labels, modifiers, etc.)

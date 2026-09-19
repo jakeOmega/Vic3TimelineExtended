@@ -6072,6 +6072,15 @@ ch_world_exposition_cost = {
 	country_expenses_add = 1
 }
 
+# Cultural Hegemony TEST CONSOLE ONLY (`event te_debug_ch.1`, option A). Grants a
+# cultural-programme funding cap without waiting for Ministry of Culture
+# investment, so the journal-entry widget's funding stepper has headroom to test
+# against. Nothing in normal play applies this.
+ch_debug_funding_cap = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_program_max_funding_add = 4
+}
+
 # Event 6 Option A: Fund talent retention
 ch_talent_retention = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds

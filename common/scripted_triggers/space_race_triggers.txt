@@ -48,3 +48,59 @@ has_space_company = {
 		has_company = company_type:company_roscosmos
 	}
 }
+
+# ---------------------------------------------------------------------------
+# Shared gates for the milestone controls
+# ---------------------------------------------------------------------------
+# Each of the 32 space race journal-entry buttons and each op on the matching
+# scripted GUI (common/scripted_guis/space_race_sguis.txt) reads its gate from
+# here, so the AI's button grid and the player's widget can never disagree about
+# when a control is offered or allowed. $MILESTONE$ is one of the eight tokens
+# suborbital | orbital | moon_landing | probe | moon_base | mars_landing |
+# interstellar_probe | solar_colonization.
+#
+# The `possible` gates phrase their custom tooltips as CONDITIONS rather than
+# complaints, because ScriptedGui.IsValidTooltip renders them with a tick when
+# they pass and a cross when they do not.
+
+sr_controls_shown = {
+	has_variable = sr_active_$MILESTONE$
+}
+
+# Solar colonization's four controls carry two extra conditions: its journal
+# entry deliberately stays alive in passive mode once every colony is claimed
+# (it holds the colony modifiers) and while the production method is switched
+# off, and in neither state may funding or approach be touched.
+sr_solar_controls_shown = {
+	has_variable = sr_active_solar_colonization
+	modifier:country_sr_solar_colonization_program_bool = yes
+	NOT = { has_variable = sr_completed_solar_colonization }
+}
+
+sr_possible_safe = {
+	custom_tooltip = {
+		text = "SR_NOT_ALREADY_SAFE"
+		NOT = { has_variable = sr_safe_$MILESTONE$ }
+	}
+}
+
+sr_possible_ambitious = {
+	custom_tooltip = {
+		text = "SR_NOT_ALREADY_AMBITIOUS"
+		NOT = { has_variable = sr_ambitious_$MILESTONE$ }
+	}
+}
+
+sr_possible_fund_up = {
+	custom_tooltip = {
+		text = "SR_MAX_FUNDING_NOT_REACHED"
+		var:sr_funding_$MILESTONE$ < sr_max_funding_level
+	}
+}
+
+sr_possible_fund_down = {
+	custom_tooltip = {
+		text = "SR_MIN_FUNDING_NOT_REACHED"
+		var:sr_funding_$MILESTONE$ > 0
+	}
+}
