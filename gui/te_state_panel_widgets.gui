@@ -1,0 +1,510 @@
+﻿### State-view widget library — types instanced from gui/states_panel.gui.
+###
+### states_panel.gui is a full-file override of vanilla and is re-merged on
+### every vanilla patch, so the mod's own markup lives here and the override
+### carries only the instances. Types declared in a .gui file are global
+### (te_history_chart.gui is instanced from other files the same way), so
+### nothing includes this file.
+###
+### ALIGNMENT. Every reading is a te_state_stat_row: the label in a fixed-width
+### column and the number right-anchored in a fixed-width column beside it, so
+### a stack of rows ends at one x with no padding spaces in localization — the
+### same idiom as ch_breakdown_row and nuclear_program_row in the JE widgets.
+### The defaults suit a 250 px column of the tourism card;
+### te_state_tile_row resizes them for the 160 px text column of a
+### state_panel_status_item_small tile.
+###
+### DATA. Every number is a state-scope script value read through
+### State.MakeScope.ScriptValue (ScriptValue needs MakeScope, and the JE
+### widgets' JournalEntry.GetCountry.MakeScope root does not exist here). Bars
+### read *_fill_pct script values that are already clamped to 0-100 and carry
+### their cap in script, so no threshold or cap is restated in this file.
+
+types te_state_panel_widget_types
+{
+	### One label/value line: an optional 20 px icon, the label column, then
+	### the value column with its text anchored right.
+	type te_state_stat_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		block "row_visible" {}
+		block "row_tooltip" {}
+
+		block "row_icon" {
+			icon = {
+				size = { 20 20 }
+				parentanchor = vcenter
+				block "row_icon_texture" {}
+			}
+		}
+
+		widget = {
+			block "label_size" {
+				size = { 162 22 }
+			}
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				block "label_max_width" {
+					max_width = 162
+				}
+				elide = right
+				align = nobaseline
+				block "row_font" {
+					using = fontsize_medium
+				}
+				block "row_label" {}
+			}
+		}
+
+		widget = {
+			block "value_size" {
+				size = { 60 22 }
+			}
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				block "value_max_width" {
+					max_width = 60
+				}
+				elide = right
+				align = right|nobaseline
+				block "row_font" {
+					using = fontsize_medium
+				}
+				block "row_value" {}
+			}
+		}
+	}
+
+	### The same row sized for a status tile's 160 px text column: no icon,
+	### 96 px of label, 60 px of value.
+	type te_state_tile_row = te_state_stat_row {
+		blockoverride "row_icon" {}
+
+		blockoverride "label_size" {
+			size = { 96 20 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 96
+		}
+		blockoverride "value_size" {
+			size = { 60 20 }
+		}
+		blockoverride "value_max_width" {
+			max_width = 60
+		}
+	}
+
+	### A row with no icon whose label takes the icon's place, so it spans the
+	### full 250 px column — column headers and the card's footer.
+	type te_state_wide_row = te_state_stat_row {
+		blockoverride "row_icon" {}
+
+		blockoverride "label_size" {
+			size = { 186 24 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 186
+		}
+		blockoverride "value_size" {
+			size = { 60 24 }
+		}
+	}
+
+	### A thin headroom bar: how far a source has climbed toward its own cap.
+	### A bare progressbar over a dark track — gui_modding_guide.md: vanilla's
+	### framed progressbar_properties bars turn to noise a few pixels tall. The
+	### instance supplies `value` from a 0-100 *_fill_pct script value. The
+	### default indent lines the bar up under a te_state_stat_row's label
+	### (20 px icon + 4 px spacing).
+	type te_state_stat_bar = flowcontainer {
+		direction = horizontal
+		alwaystransparent = yes
+
+		block "bar_indent" {
+			widget = {
+				size = { 24 4 }
+			}
+		}
+
+		widget = {
+			block "bar_size" {
+				size = { 226 4 }
+			}
+			alwaystransparent = yes
+
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.0 0.0 0.0 0.35 }
+				alwaystransparent = yes
+			}
+
+			progressbar = {
+				size = { 100% 100% }
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				min = 0
+				max = 100
+
+				block "bar_value" {
+					value = 0
+				}
+				block "bar_color" {
+					color = { 0.86 0.70 0.36 1.0 }
+				}
+			}
+		}
+	}
+
+	### One source of a breakdown: its row, the bar under it, and one tooltip
+	### over both, so the number, the bar and the rule behind them are never
+	### separated.
+	type te_state_meter = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		alwaystransparent = no
+
+		block "meter_tooltip" {}
+	}
+
+	### Column header: the concept name and the column total, in the tiles'
+	### title font, over a divider. Laid out like te_state_wide_row but with
+	### its own textboxes, so the instance's header_label / header_value land
+	### directly on a block of this type rather than being forwarded through a
+	### blockoverride of a nested derived type.
+	type te_state_column_header = flowcontainer {
+		direction = vertical
+		spacing = 3
+		alwaystransparent = no
+
+		block "header_tooltip" {}
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			widget = {
+				size = { 186 24 }
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 186
+					elide = right
+					align = nobaseline
+					block "header_label" {}
+				}
+			}
+
+			widget = {
+				size = { 60 24 }
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 60
+					elide = right
+					align = right|nobaseline
+					block "header_value" {}
+				}
+			}
+		}
+
+		divider_clean = {
+			blockoverride "size" {
+				size = { 250 2 }
+			}
+		}
+	}
+
+	### TOURISM
+	###
+	### A full-width card above the status grid rather than a tile in it: the
+	### grid is a wrap_count = 2 flowcontainer of 260 px tiles, and anything that
+	### is not exactly one tile breaks its rows (the old in-grid tourism box was
+	### 250 px wide and ~220 px tall beside a ~90 px tile). 530 px matches the
+	### population block above and the two-tile span below.
+	###
+	### Left column: the output sources (common/script_values/tourism.txt,
+	### total_tourism_output_bonus_percent). Right column: the throughput
+	### sources (total_tourism_throughput_bonus_percent). Both are re-applied
+	### monthly by te_update_tourism_modifier as the tourism_output /
+	### tourism_throughput static modifiers; the footer reads the state's live
+	### modifier values, which also carry airports, decrees, pollution, turmoil
+	### and the rest, with the engine's own breakdown on hover.
+	type te_state_tourism_card = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		margin_top = 10
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin = { 10 8 }
+			spacing = 6
+
+			background = {
+				using = entry_bg_simple
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 10
+
+				### OUTPUT
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_state_column_header = {
+						blockoverride "header_tooltip" {
+							tooltip = "te_state_tourism_output_tt"
+						}
+						blockoverride "header_label" {
+							text = "[concept_tourism_output]"
+						}
+						blockoverride "header_value" {
+							raw_text = "#bold [State.MakeScope.ScriptValue('total_tourism_output_bonus_percent')|+=0%]#!"
+						}
+					}
+
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_appeal_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/goods_icons/tourism.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_base_appeal]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_bonus_from_base_appeal')|+=0%]"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_base_appeal_pct'))]"
+							}
+						}
+					}
+
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_cities_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/urban_center.dds"
+							}
+							blockoverride "row_label" {
+								text = "[SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('city_size_rank'), '(CFixedPoint)0'), 'te_state_tourism_cities_ranked', 'te_state_tourism_cities_unranked')]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_bonus_from_urban_centers')|+=0%]"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_urban_centers_pct'))]"
+							}
+						}
+					}
+				}
+
+				### THROUGHPUT
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_state_column_header = {
+						blockoverride "header_tooltip" {
+							tooltip = "te_state_tourism_throughput_tt"
+						}
+						blockoverride "header_label" {
+							text = "[concept_tourism_throughput]"
+						}
+						blockoverride "header_value" {
+							raw_text = "#bold [State.MakeScope.ScriptValue('total_tourism_throughput_bonus_percent')|+=0%]#!"
+						}
+					}
+
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_ports_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/building_port.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_ports]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_ports')|+=0%]"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_ports_pct'))]"
+							}
+							blockoverride "bar_color" {
+								color = { 0.42 0.68 0.78 1.0 }
+							}
+						}
+					}
+
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_transit_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_transit]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_land_transport')|+=0%]"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_land_transport_pct'))]"
+							}
+							blockoverride "bar_color" {
+								color = { 0.42 0.68 0.78 1.0 }
+							}
+						}
+					}
+
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_art_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/goods_icons/fine_art.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_art]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_art')|+=0%]"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_art_pct'))]"
+							}
+							blockoverride "bar_color" {
+								color = { 0.42 0.68 0.78 1.0 }
+							}
+						}
+					}
+
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_parks_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/state_status_icons/pollution.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_parks]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_parks')|+=0%]"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_parks_pct'))]"
+							}
+							blockoverride "bar_color" {
+								color = { 0.42 0.68 0.78 1.0 }
+							}
+						}
+					}
+
+					### Monuments are uncapped (+25% each), so there is no
+					### headroom to draw.
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_monuments_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/statue_of_liberty.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_monuments]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_monuments')|+=0%]"
+							}
+						}
+					}
+				}
+			}
+
+			divider_clean = {
+				blockoverride "size" {
+					size = { 510 2 }
+				}
+			}
+
+			### FOOTER — the modifiers actually on the state right now.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 10
+
+				te_state_wide_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_state_tourism_output_applied_tt"
+					}
+					blockoverride "row_label" {
+						text = "te_state_tourism_applied_label"
+					}
+					blockoverride "row_value" {
+						raw_text = "[State.GetModifier.GetValueWithBreakdownFor('goods_output_tourism_mult')]"
+					}
+				}
+
+				te_state_wide_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_state_tourism_throughput_applied_tt"
+					}
+					blockoverride "row_label" {
+						text = "te_state_tourism_applied_label"
+					}
+					blockoverride "row_value" {
+						raw_text = "[State.GetModifier.GetValueWithBreakdownFor('building_tourism_industry_throughput_add')]"
+					}
+				}
+			}
+		}
+	}
+}
