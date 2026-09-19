@@ -1439,6 +1439,12 @@ types state_panel_types
 			}
 		}
 
+		### TOURISM (TE) — a full-width card; its markup lives in
+		### gui/te_state_panel_widgets.gui. Kept out of the status grid below,
+		### which is wrap_count = 2 over 260 px tiles: the old in-grid tourism box
+		### was neither one tile wide nor one tile tall and broke the grid's rows.
+		te_state_tourism_card = {}
+
 		flowcontainer = {
 			parentanchor = hcenter
 			margin = { 10 10 }
@@ -1458,55 +1464,6 @@ types state_panel_types
 				
 				blockoverride "name" {
 					text = "GDPPERCAPITA"
-				}
-			}
-
-			flowcontainer = {
-				spacing = 10
-				margin = { 10 10 }
-
-				background = {
-					using = entry_bg_simple
-				}
-				
-				flowcontainer = {
-					direction = vertical
-					parentanchor = vcenter
-					textbox = {
-						text = "tourism_title"
-						autoresize = yes
-						minimumsize = { 230 -1 }
-						maximumsize = { 230 -1 }
-						align = hcenter|nobaseline
-					}
-					icon = {
-						texture = "gfx/interface/icons/goods_icons/tourism.dds"
-						block "alpha" {}
-						size = { 70 70 }
-						parentanchor = hcenter
-					}
-					flowcontainer = {
-						parentanchor = hcenter
-						direction = horizontal
-
-						textbox = {
-							text = state_tourism_output_breakdown
-							autoresize = yes
-							minimumsize = { 115 -1 }
-							maximumsize = { 115 -1 }
-							multiline = yes
-							align = nobaseline
-						}
-
-						textbox = {
-							text = state_tourism_throughput_breakdown
-							autoresize = yes
-							minimumsize = { 115 -1 }
-							maximumsize = { 115 -1 }
-							multiline = yes
-							align = nobaseline
-						}
-					}
 				}
 			}
 
@@ -2175,6 +2132,11 @@ types state_panel_types
 				}
 			}
 
+			### TE STATUS TILES — the tile name is the concept alone; the readings
+			### are te_state_tile_rows (gui/te_state_panel_widgets.gui) in
+			### extra_widget, so their numbers right-align in one column instead of
+			### riding along \n-stacked loc lines.
+
 			### HOMELAND DYNAMICS
 			state_panel_status_item_small = {
 				visible = "[State.HasHomelands]"
@@ -2186,6 +2148,31 @@ types state_panel_types
 
 				blockoverride "name" {
 					text = "TE_STATE_HOMELAND_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_HOMELAND_ROW_CREATE"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.GetModifier.GetValueWithBreakdownFor('state_homeland_creation_threshold_add')]"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_HOMELAND_ROW_REMOVE"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.GetModifier.GetValueWithBreakdownFor('state_homeland_removal_threshold_add')]"
+							}
+						}
+					}
 				}
 			}
 
@@ -2199,6 +2186,40 @@ types state_panel_types
 
 				blockoverride "name" {
 					text = "TE_STATE_ARABLE_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_ARABLE_ROW_TOTAL"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('arable_land_total')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_ARABLE_ROW_REGIONAL"
+							}
+							blockoverride "row_value" {
+								raw_text = "#G +[State.MakeScope.ScriptValue('arable_land_from_modifiers')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_ARABLE_ROW_MULT"
+							}
+							blockoverride "row_value" {
+								raw_text = "#G +[State.MakeScope.ScriptValue('arable_land_mult_pct')|0]%#!"
+							}
+						}
+					}
 				}
 			}
 
@@ -2214,6 +2235,63 @@ types state_panel_types
 				blockoverride "name" {
 					text = "TE_STATE_CROWDING_STATUS"
 				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_CROWDING_ROW_POP"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.GetPopulationSize|Kv]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_CROWDING_ROW_THRESHOLD"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('migration_crowding_threshold_pop')|Kv]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_CROWDING_ROW_RATIO"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('migration_crowding_ratio')|%0]#!"
+							}
+						}
+
+						### The ratio against the 10x knee; full from the knee on.
+						te_state_stat_bar = {
+							blockoverride "bar_indent" {}
+							blockoverride "bar_size" {
+								size = { 160 4 }
+							}
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('migration_crowding_fill_pct'))]"
+							}
+							blockoverride "bar_color" {
+								color = { 0.82 0.38 0.34 1.0 }
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_CROWDING_ROW_PULL"
+							}
+							blockoverride "row_value" {
+								raw_text = "#R -[State.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#!"
+							}
+						}
+					}
+				}
 			}
 
 			### SOLAR COLLECTOR POINTS
@@ -2228,6 +2306,31 @@ types state_panel_types
 				blockoverride "name" {
 					text = "TE_STATE_SOLAR_STATUS"
 				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_POINTS_ROW_AVAILABLE"
+							}
+							blockoverride "row_value" {
+								raw_text = "#G [State.GetOwner.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_POINTS_ROW_GENERATED"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.GetOwner.MakeScope.ScriptValue('solar_total_generated_points')|0]#!"
+							}
+						}
+					}
+				}
 			}
 
 			### ANTIMATTER FACILITY POINTS
@@ -2241,6 +2344,31 @@ types state_panel_types
 
 				blockoverride "name" {
 					text = "TE_STATE_ANTIMATTER_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_POINTS_ROW_AVAILABLE"
+							}
+							blockoverride "row_value" {
+								raw_text = "#G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_POINTS_ROW_GENERATED"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!"
+							}
+						}
+					}
 				}
 			}
 
