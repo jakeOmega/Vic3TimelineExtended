@@ -4525,3 +4525,13 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+
+### Cultural Hegemony test console
+ te_debug_ch.1.a:0 "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running"
+ te_debug_ch.1.b:0 "B — Put us at rank 1 on the board"
+ te_debug_ch.1.c:0 "C — Fill the board with others and put us at rank 14 of 168"
+ te_debug_ch.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here."
+ te_debug_ch.1.d_option:0 "D — Empty board slot 5 (the annexed case)"
+ te_debug_ch.1.e:0 "E — Repeal the Ministry of Culture and watch all four programmes stop"
+ te_debug_ch.1.f:0 ""Every ministry keeps a drawer of numbers it would rather no one saw.""
+ te_debug_ch.1.t:0 "Cultural Hegemony Test Console"

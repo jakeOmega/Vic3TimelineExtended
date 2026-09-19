@@ -1084,8 +1084,10 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 5. **Monuments** (`cultural_pull_from_monuments`): +3 per building in `bg_monuments` building group (all 25+ wonder buildings). Uses `every_scope_state > every_scope_building` with `building_group = bg_monuments`.
 6. **Megaprojects** (`cultural_pull_from_megaprojects`): +3 per completed megaproject (space elevator, solar collector, orbital battlestation, mind upload nexus, antimatter facility, nanofabrication center, consciousness network). Capped at 1 per type (unique buildings not in `bg_monuments`).
 7. **Modifier Hooks** (`cultural_pull_from_modifiers`): Via `country_cultural_pull_add`.
-8. **Rank Multiplier**: GP ×1.5, Major ×1.0, Minor ×0.5, Insignificant ×0.25.
+8. **Infamy and Instability** (`cultural_pull_from_infamy`, `cultural_pull_from_stability`): negative-only terms — infamy × -0.1, turmoil × -10, and a flat -20 for an active civil war.
 9. **General Multiplier**: `country_cultural_pull_mult` hook.
+
+**Country rank does *not* multiply the raw score.** Rank scaling applies to the standard-of-living term alone (`cultural_pull_from_sol`: great power and above full, major ×0.5, minor ×0.25, lesser ×0), which is where a country's weight-class belongs — a small country with a world-leading art industry is not penalised for being small. (An earlier version of this section listed a whole-score rank multiplier; no such multiplier has ever existed in `cultural_hegemony_script_values.txt`.)
 
 **Final Score:** `cultural_pull_total = (cultural_pull_raw / global_raw_cultural_pull) × 100` (0–100% share).
 
@@ -1094,10 +1096,9 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 - `cultural_hegemony_foreign_benchmark` (dynamic modifier): SoL expectations pressure **and** legitimacy reduction (`country_legitimacy_base_add = -5`) on countries below the global hegemon — scaled by `cultural_hegemony_benchmark_mult` (0–3×). The legitimacy reduction represents ideology shift pressure — the hegemon's cultural dominance undermines rival governments' political legitimacy.
 - Global tracking: `ch_top_cultural_pull` global variable updated yearly (now stores % share)
 
-**JE Display:** Shows cultural share (%), raw score, component breakdown (art, prestige, SoL vs avg, tech, monuments, megaprojects, rank), and global hegemon comparison.
+**JE Display:** a custom widget in all three `custom_widget_container_*` slots — the influence tier and share with a bar, world rank, the hegemon's exported political model, the cultural-programme controls, a collapsible component breakdown, the collapsible top-ten board and a collapsible history chart of the country's share. The entry's own `status_desc` is three lines. Full data contract, op tables and editing rules: `docs/systems/journal_entry_systems.md` → **Cultural Hegemony Widget**.
 
-**JE Status Thresholds (share-based):**
-- Dominant: ≥ 25%, Major: ≥ 15%, Significant: ≥ 10%, Moderate: ≥ 5%, Minor: ≥ 2%, Negligible: < 2%
+**JE Status Thresholds (share-based):** Dominant ≥ 25%, Major ≥ 15%, Significant ≥ 10%, Moderate ≥ 5%, Minor ≥ 2%, Negligible < 2%. These five numbers live in exactly one place — `ch_set_display_state` in `cultural_hegemony_effects.txt`, which writes the `ch_tier` variable everything else reads. Do not re-type them in localization, `.gui` or a journal-entry trigger.
 
 **Events:** `events/cultural_hegemony_events.txt` (`cultural_hegemony.1`–`.16`) — recurring soft-power events for both the hegemon and the countries under its pull (e.g. `.2` fires for a country below 5% share carrying `cultural_hegemony_foreign_benchmark`; `.3` for a country at ≥ 20% share).
 
@@ -1113,20 +1114,27 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 | `common/script_values/cultural_hegemony_script_values.txt` | Core raw-score and display-value math for cultural pull |
 | `common/scripted_effects/cultural_hegemony_effects.txt` | Monthly country cache updates, yearly leaderboard rebuild, hegemon ideology pressure helpers |
 | `common/on_actions/cultural_hegemony_on_actions.txt` | Monthly and yearly update hooks, plus world-first tech tracking |
-| `common/journal_entries/je_cultural_hegemony.txt` | Display JE, active policy readout, and JE-scoped modifier application |
-| `common/scripted_buttons/cultural_hegemony_buttons.txt` | Funding controls, timed exposition action, and persistent policy toggles |
+| `common/journal_entries/je_cultural_hegemony.txt` | Three-line summary, the three widget mounts, and JE-scoped modifier application |
+| `common/scripted_buttons/cultural_hegemony_buttons.txt` | The AI's ten policy buttons (`is_ai = yes`); each delegates to a shared helper |
+| `common/scripted_triggers/cultural_hegemony_triggers.txt` | `ch_possible_<button>` eligibility and `ch_shown_<programme>` swap triggers |
+| `common/scripted_guis/cultural_hegemony_sguis.txt` | `ch_policy_sgui` (the widget's controls) plus four display-only handlers |
+| `gui/journal_entry_widgets/cultural_hegemony_widget.gui` | The player-facing panels: summary, programmes, breakdown, board, history |
+| `common/customizable_localization/cultural_hegemony_custom_loc.txt` | Influence tier and exported-model text, branching on `ch_tier` / `ch_rank_1_ideology` |
+| `common/scripted_effects/te_history_cultural_hegemony_effects.txt` | The `ch_share` history series and its programme markers |
 | `common/static_modifiers/extra_modifiers.txt` | Timed event modifiers plus the persistent JE policy modifiers |
 | `events/cultural_hegemony_events.txt` | Annual soft-power events for both hegemon and target countries |
+| `events/te_debug_ch_events.txt` | Console test harness (`event te_debug_ch.1`) for the widget's awkward states |
 
 ### Player Controls
 - **Increase/Decrease Cultural Program Funding:** Adjusts a `ch_program_funding_level` variable that re-applies JE-scoped flat `country_cultural_pull_add` and a separate GDP-scaled expense modifier. The maximum level comes from `country_cultural_program_max_funding_add`.
 - **Funding cap sources:** `institution_ministry_of_culture` grants funding tiers through ministry investment, while `mass_media` and `television` each raise the cap further.
-- **Host World Exposition:** One-shot timed action that adds a decaying JE modifier for prestige, migration attraction, and cultural pull plus a separate GDP-scaled exposition cost.
+- **Begin International Cultural Outreach** (internally `ch_world_exposition`): a **persistent toggle**, not a one-shot and not timed — the JE-scoped modifier has no duration and runs, with its GDP-scaled cost, until the player ends it or the Ministry goes away. (An earlier version of this section described it as a one-shot decaying action; it never was one.)
 - **Fund Cultural Institutes:** JE-scoped policy that trades bureaucracy for higher `country_cultural_pull_mult` and society tech progress.
 - **Launch Global Media Campaign:** JE-scoped policy that requires `mass_media` and converts authority into prestige plus stronger cultural projection.
 - **Enact Cultural Protectionism:** JE-scoped defensive policy that boosts pull and authority while reducing migration attraction and society tech openness.
 - **Mutual exclusivity:** Global Media Campaign and Cultural Protectionism cannot be active at the same time.
-- **Law cleanup:** If `law_ministry_of_culture` is removed, the JE monthly pulse zeroes funding and strips all three persistent cultural policy modifiers automatically.
+- **Law cleanup:** If `law_ministry_of_culture` is removed, the JE monthly pulse zeroes funding and strips **all four** persistent cultural policy modifiers automatically, International Cultural Outreach and its cost included. Outreach was missing from that list until this was fixed, so an outreach programme begun under the Ministry kept paying out — and charging — for the rest of the game after a repeal.
+- **Player surface:** the ten buttons are AI-only (`is_ai = yes`); a human acts through the widget, whose controls call the same `ch_possible_*` / `ch_effect_*` helpers. See `docs/systems/journal_entry_systems.md` → **Cultural Hegemony Widget** for the op tables and editing rules.
 
 ### Notable Rules
 - **Activation gate:** JE shows once the rule is enabled, any country has `mass_media`, and the player has `romanticism`.

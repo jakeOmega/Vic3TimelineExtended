@@ -16,6 +16,19 @@ ch_monthly_country_update = {
 	set_variable = { name = ch_monuments value = cultural_pull_from_monuments }
 	set_variable = { name = ch_megaprojects value = cultural_pull_from_megaprojects }
 
+	# A country that drops below the leaderboard pass's `cultural_pull_raw >= 0.01`
+	# limit is never visited again by ch_yearly_global_update, so a stored board
+	# position would stay frozen forever. Clear it here instead.
+	if = {
+		limit = {
+			has_variable = ch_rank_self
+			cultural_pull_raw < 0.01
+		}
+		remove_variable = ch_rank_self # REVIEWED 2026-09-18: clears a stale display rank; not a modifier multiplier
+	}
+
+	ch_set_display_state = yes
+
 	# Foreign benchmark is now applied in JE on_monthly_pulse
 	# (only affects countries that have the journal entry active)
 	# Clean up stale foreign benchmark from countries without the JE
@@ -25,6 +38,195 @@ ch_monthly_country_update = {
 			NOT = { has_journal_entry = je_cultural_hegemony }
 		}
 		remove_modifier = cultural_hegemony_foreign_benchmark
+	}
+}
+
+# ---- DISPLAY STATE ----
+# Scope: Country
+# The single site where the journal-entry widget's banded readings are derived.
+# Nothing in .gui or localization re-derives any of this, and the share
+# thresholds below are the only copy of 2 / 5 / 10 / 15 / 25 in the system.
+#
+#   ch_tier        0 negligible, 1 minor, 2 moderate, 3 significant,
+#                  4 major, 5 hegemon
+#   ch_prog_count  how many of the four cultural programmes are running
+#
+# Called from ch_monthly_country_update (the monthly on-action, which runs for
+# every country from game start) AND from the tail of every ch_effect_<button>,
+# so the widget's labels react to a click without waiting for the next pulse.
+ch_set_display_state = {
+	if = {
+		limit = { NOT = { has_variable = ch_total } }
+		set_variable = { name = ch_tier value = 0 }
+	}
+	else_if = {
+		limit = { var:ch_total >= 25 }
+		set_variable = { name = ch_tier value = 5 }
+	}
+	else_if = {
+		limit = { var:ch_total >= 15 }
+		set_variable = { name = ch_tier value = 4 }
+	}
+	else_if = {
+		limit = { var:ch_total >= 10 }
+		set_variable = { name = ch_tier value = 3 }
+	}
+	else_if = {
+		limit = { var:ch_total >= 5 }
+		set_variable = { name = ch_tier value = 2 }
+	}
+	else_if = {
+		limit = { var:ch_total >= 2 }
+		set_variable = { name = ch_tier value = 1 }
+	}
+	else = {
+		set_variable = { name = ch_tier value = 0 }
+	}
+
+	set_variable = { name = ch_prog_count value = 0 }
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition } }
+		change_variable = { name = ch_prog_count add = 1 }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program } }
+		change_variable = { name = ch_prog_count add = 1 }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign } }
+		change_variable = { name = ch_prog_count add = 1 }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program } }
+		change_variable = { name = ch_prog_count add = 1 }
+	}
+}
+
+# ============================================================================
+# SHARED BUTTON EFFECTS
+# ============================================================================
+# Each `ch_effect_<button>` holds the body that used to live inline in the
+# matching scripted_button's `effect` block. Both the journal-entry button and
+# `ch_policy_sgui` call these, so the two surfaces cannot drift.
+#
+# Three deliberate additions over the original inline bodies:
+#   * `ch_set_display_state = yes` in the tail, so a click moves the widget's
+#     labels immediately.
+#   * on the four programme toggles, one
+#     `te_history_record_cultural_hegemony_marker` call, so the history chart can
+#     date the change. Both the AI's journal-entry button and the widget reach it
+#     from here.
+#   * on the two funding steppers, one `custom_tooltip` OUTSIDE the
+#     `hidden_effect`: the original body is wholly hidden, so the widget's
+#     composed tooltip would otherwise render an empty "what this does" half.
+# Everything else is byte-identical to the pre-change button bodies.
+# Scope: country (the journal entry's owner).
+# ============================================================================
+
+# The remove-then-conditionally-re-add block that the two funding steppers and
+# the journal entry's monthly pulse all used to carry verbatim.
+# Scope: country
+ch_refresh_funding_modifiers = {
+	je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
+	je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
+	if = {
+		limit = { ch_program_funding_level_value >= 1 }
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_cost_mult_for_je } }
+	}
+}
+
+ch_effect_increase_program_funding = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_variable = ch_program_funding_level } }
+			set_variable = { name = ch_program_funding_level value = 1 }
+		}
+		else = {
+			change_variable = { name = ch_program_funding_level add = 1 }
+			clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
+		}
+
+		ch_refresh_funding_modifiers = yes
+		ch_set_display_state = yes
+	}
+	custom_tooltip = ch_policy_funding_step_tt
+}
+
+ch_effect_decrease_program_funding = {
+	hidden_effect = {
+		change_variable = { name = ch_program_funding_level subtract = 1 }
+		clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
+
+		ch_refresh_funding_modifiers = yes
+		ch_set_display_state = yes
+	}
+	custom_tooltip = ch_policy_funding_step_tt
+}
+
+ch_effect_world_exposition = {
+	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
+	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult_for_je } }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_on_outreach }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_disable_world_exposition = {
+	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
+	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition_cost }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_off_outreach }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_cultural_institutes = {
+	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_institutes_program } }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_on_institutes }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_disable_cultural_institutes = {
+	je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_off_institutes }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_global_media_campaign = {
+	je:je_cultural_hegemony = { add_modifier = { name = ch_global_media_campaign } }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_on_media }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_disable_global_media_campaign = {
+	je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_off_media }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_cultural_protectionism = {
+	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_protectionism_program } }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_on_protectionism }
+		ch_set_display_state = yes
+	}
+}
+
+ch_effect_disable_cultural_protectionism = {
+	je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
+	hidden_effect = {
+		te_history_record_cultural_hegemony_marker = { MARK = ch_off_protectionism }
+		ch_set_display_state = yes
 	}
 }
 
@@ -317,12 +519,19 @@ ch_yearly_global_update = {
 		remove_global_variable = ch_rank_9
 		remove_global_variable = ch_rank_10
 
-		# Single ordered pass: top 10 countries by raw cultural pull
+		# Single ordered pass: every country with any pull, highest first
+		# (`ordered_*` sorts descending), so index 0 is the world's leader. The
+		# first ten fill the board slots; every country in the pass also records
+		# its own 1-based position in ch_rank_self, which is what the journal
+		# entry's "Rank N of M" line reads. ch_ranked_total is the M.
 		set_global_variable = { name = ch_ldr_idx value = 0 }
 		ordered_country = {
 			limit = { cultural_pull_raw >= 0.01 }
 			order_by = cultural_pull_raw
 			check_range_bounds = no
+
+			set_variable = { name = ch_rank_self value = global_var:ch_ldr_idx }
+			change_variable = { name = ch_rank_self add = 1 }
 
 			if = {
 				limit = { global_var:ch_ldr_idx < 1 }
@@ -427,8 +636,23 @@ ch_yearly_global_update = {
 			}
 			change_global_variable = { name = ch_ldr_idx add = 1 }
 		}
+		set_global_variable = { name = ch_ranked_total value = global_var:ch_ldr_idx }
 
-		# Compute year-over-year deltas
+		# Compute year-over-year deltas. Every slot's delta is zeroed first: the
+		# journal-entry widget's board rows print it unconditionally, and a loc
+		# read of a global that was never set logs "failed to fetch variable"
+		# every frame the board is open. In the first year, and for a slot whose
+		# occupant is new, zero is also the honest answer.
+		set_global_variable = { name = ch_rank_1_delta value = 0 }
+		set_global_variable = { name = ch_rank_2_delta value = 0 }
+		set_global_variable = { name = ch_rank_3_delta value = 0 }
+		set_global_variable = { name = ch_rank_4_delta value = 0 }
+		set_global_variable = { name = ch_rank_5_delta value = 0 }
+		set_global_variable = { name = ch_rank_6_delta value = 0 }
+		set_global_variable = { name = ch_rank_7_delta value = 0 }
+		set_global_variable = { name = ch_rank_8_delta value = 0 }
+		set_global_variable = { name = ch_rank_9_delta value = 0 }
+		set_global_variable = { name = ch_rank_10_delta value = 0 }
 		if = {
 			limit = { has_global_variable = ch_rank_1_prev }
 			set_global_variable = { name = ch_rank_1_delta value = global_var:ch_rank_1_score }
