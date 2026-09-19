@@ -1,0 +1,61 @@
+# ============================================================================
+# HISTORY STORE — cultural-hegemony series
+# ============================================================================
+# The cultural-hegemony system's side of the generic store in
+# te_history_effects.txt: one metric and the programme changes that explain its
+# turning points. Same shape as te_history_banking_effects.txt.
+#
+# Metric (te_hist_v_<METRIC> on the month's sample container):
+#   ch_share   var:ch_total — this country's share of global cultural influence,
+#              0..100. The numerator moves every month (ch_monthly_country_update
+#              rewrites ch_total from cultural_pull_total), but the denominator
+#              global_var:ch_cached_global_raw is only refreshed by the yearly
+#              pulse, so the series RE-BASES each January: a step at the turn of
+#              the year is the world total being recomputed, not this country
+#              gaining or losing influence. The chart legend says so.
+#
+# Markers:
+#   ch_on_<prog> / ch_off_<prog>   a cultural programme was started / stopped,
+#                                  for prog in outreach, institutes, media,
+#                                  protectionism.
+#
+# Deliberately NO marker for the funding stepper. te_history_record_marker sets
+# one flag per (month, marker) but increments the month's marker count on every
+# call, so a player who walks funding up three steps in one month would leave
+# three counts behind one flag — and a funding step is a small, frequent,
+# reversible nudge rather than a turning point worth a pip. Programme toggles are
+# the events that visibly bend the line.
+#
+# Both helpers re-check the game rule and the journal entry. The sampling call
+# sits inside je_cultural_hegemony's monthly pulse, but the marker call is
+# reached from the ch_effect_* helpers, which the AI can also run from the
+# journal entry's scripted buttons — so the gate lives here rather than at each
+# call site. Eligibility itself is te_history_country_is_tracked, unchanged:
+# the store stays bounded per tracked owner and this series widens nothing.
+# ============================================================================
+
+# One sample per month, taken from je_cultural_hegemony's monthly pulse after the
+# programme modifiers have been refreshed.
+# Scope: country
+te_history_record_cultural_hegemony_samples = {
+	if = {
+		limit = {
+			has_game_rule = cultural_hegemony_enabled
+			has_journal_entry = je_cultural_hegemony
+			has_variable = ch_total
+		}
+		te_history_record_sample = { METRIC = ch_share VALUE = var:ch_total }
+	}
+}
+
+# Parameters: $MARK$ = marker key (see the header)
+# Scope: country
+te_history_record_cultural_hegemony_marker = {
+	if = {
+		limit = {
+			has_game_rule = cultural_hegemony_enabled
+			has_journal_entry = je_cultural_hegemony
+		}
+		te_history_record_marker = { MARK = $MARK$ }
+	}
+}

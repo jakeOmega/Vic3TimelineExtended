@@ -2613,3 +2613,18 @@
  ww_war_propaganda_modifier:0 "War Propaganda Campaign"
  ww_wartime_rationing_modifier:0 "Wartime Rationing"
  youth_mental_health_funding_modifier:0 "Youth Mental Health Funding"
+
+### Cultural Hegemony journal-entry widget
+ ch_hist_mk_ch_off_institutes_tt:0 "#R Ended#! — $CH_DISABLE_CULTURAL_INSTITUTES$\n[GetStaticModifier('ch_cultural_institutes_program').GetDesc]"
+ ch_hist_mk_ch_off_media_tt:0 "#R Ended#! — $CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN$\n[GetStaticModifier('ch_global_media_campaign').GetDesc]"
+ ch_hist_mk_ch_off_outreach_tt:0 "#R Ended#! — $CH_DISABLE_WORLD_EXPOSITION$\n[GetStaticModifier('ch_world_exposition').GetDesc]"
+ ch_hist_mk_ch_off_protectionism_tt:0 "#R Ended#! — $CH_DISABLE_CULTURAL_PROTECTIONISM$\n[GetStaticModifier('ch_cultural_protectionism_program').GetDesc]"
+ ch_hist_mk_ch_on_institutes_tt:0 "#G Began#! — $CH_CULTURAL_INSTITUTES$\n[GetStaticModifier('ch_cultural_institutes_program').GetDesc]"
+ ch_hist_mk_ch_on_media_tt:0 "#G Began#! — $CH_GLOBAL_MEDIA_CAMPAIGN$\n[GetStaticModifier('ch_global_media_campaign').GetDesc]"
+ ch_hist_mk_ch_on_outreach_tt:0 "#G Began#! — $CH_WORLD_EXPOSITION$\n[GetStaticModifier('ch_world_exposition').GetDesc]"
+ ch_hist_mk_ch_on_protectionism_tt:0 "#G Began#! — $CH_CULTURAL_PROTECTIONISM$\n[GetStaticModifier('ch_cultural_protectionism_program').GetDesc]"
+ te_hist_chart_ch_share_legend:0 "#lore one bar per month; the world total is recomputed each January, so a step at the turn of the year is a re-basing, not a change in our own output#!"
+ te_hist_chart_ch_share_title:0 "Share of Global Influence"
+ te_hist_tt_ch_markers:0 "\n$TOOLTIP_DELIMITER$\n[GetScriptedGui('ch_history_marker_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'te_hist_sample', ScriptContainer.MakeScope ).End )]"
+ te_hist_tt_ch_share:0 "$te_hist_tt_date$\n[SelectLocalization( ScriptContainer.HasVariable('te_hist_v_ch_share'), 'te_hist_tt_ch_share_row', 'te_hist_tt_missing' )][SelectLocalization( ScriptContainer.HasVariable('te_hist_mk'), 'te_hist_tt_ch_markers', 'te_hist_tt_no_markers' )]"
+ te_hist_tt_ch_share_row:0 "$te_hist_chart_ch_share_title$: #v [ScriptContainer.GetVariableValue('te_hist_v_ch_share')|1]%#!"
