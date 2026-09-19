@@ -1,0 +1,301 @@
+﻿# Global Warming — shared eligibility triggers.
+#
+# Each `gw_possible_<button>` holds the body that used to live inline in the
+# matching scripted_button's `possible` block in
+# common/scripted_buttons/global_warming_buttons.txt. Both the journal-entry
+# button and the widget's scripted GUI
+# (common/scripted_guis/global_warming_sguis.txt) call these, so a click through
+# either surface is gated by exactly the same rules.
+#
+# The eight policy modifiers live on the JOURNAL ENTRY, not the country, so
+# "is it active" is always `je:je_global_warming ?= { has_modifier = X }` --
+# a country-scope has_modifier cannot see them.
+#
+# EVERY CLAUSE IS PHRASED AS A CONDITION, NOT A COMPLAINT. The widget renders
+# these through `ScriptedGui.IsValidTooltip`, which prints each line with a tick
+# when satisfied and a cross when not, so "Leads its own market" reads correctly
+# in both states where "Cannot do this" would not. `produced_authority` is
+# deliberately left unwrapped: the engine's own rendering carries the live
+# number, which a custom_tooltip would hide.
+#
+# MARKET LEADERSHIP IS AN ELIGIBILITY RULE, NEVER A VISIBILITY RULE. The three
+# market-wide policies are applied to every market MEMBER's journal entry by the
+# leader, so a member can have a carbon tax in force that it did not choose. The
+# widget therefore shows all eight rows to everyone and lets these triggers grey
+# the control, instead of hiding the row the way the old button grid did.
+
+# ---------------------------------------------------------------------------
+# "Is this policy in force for this country?" — the single definition, used by
+# the widget's row status, its controls' `is_shown`, and the display counters.
+# `?=` because a country whose journal entry never activated has no instance.
+# ---------------------------------------------------------------------------
+gw_policy_carbon_tax_active = {
+	je:je_global_warming ?= { has_modifier = carbon_tax_modifier }
+}
+
+gw_policy_renewable_investment_active = {
+	je:je_global_warming ?= { has_modifier = renewable_investment_modifier }
+}
+
+gw_policy_emission_standards_active = {
+	je:je_global_warming ?= { has_modifier = emission_standards_modifier }
+}
+
+gw_policy_climate_adaptation_active = {
+	je:je_global_warming ?= { has_modifier = climate_adaptation_modifier }
+}
+
+gw_policy_reforestation_active = {
+	je:je_global_warming ?= { has_modifier = reforestation_subsidies_modifier }
+}
+
+gw_policy_public_transit_active = {
+	je:je_global_warming ?= { has_modifier = public_transit_modifier }
+}
+
+gw_policy_fossil_fuel_divestment_active = {
+	je:je_global_warming ?= { has_modifier = fossil_fuel_divestment_modifier }
+}
+
+gw_policy_green_building_codes_active = {
+	je:je_global_warming ?= { has_modifier = green_building_codes_modifier }
+}
+
+# Does this country lead its own market? The three market-wide policies can only
+# be adopted or repealed by the leader.
+gw_is_market_leader = {
+	market_capital.owner = THIS
+}
+
+# Have the yearly emissions figures been taken yet? False on a brand-new game
+# before the first yearly state pulse and on a save upgraded mid-year, which is
+# when the widget shows "figures update each January" instead of a row of
+# misleading zeroes. Both halves are checked because the market snapshot and the
+# world re-base land on different pulses.
+gw_has_yearly_figures = {
+	has_global_variable = gw_g_global_emis
+	market_capital ?= {
+		owner ?= { has_variable = gw_disp_market_emis }
+	}
+}
+
+# At least one of the eight policies is in force. Drives the widget's
+# "no policies adopted yet" line.
+gw_any_policy_active = {
+	OR = {
+		gw_policy_carbon_tax_active = yes
+		gw_policy_renewable_investment_active = yes
+		gw_policy_emission_standards_active = yes
+		gw_policy_climate_adaptation_active = yes
+		gw_policy_reforestation_active = yes
+		gw_policy_public_transit_active = yes
+		gw_policy_fossil_fuel_divestment_active = yes
+		gw_policy_green_building_codes_active = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Adopt / repeal eligibility. Bodies extracted verbatim from the scripted
+# buttons' `possible` blocks; only custom_tooltip phrasing has been added.
+# ---------------------------------------------------------------------------
+gw_possible_carbon_tax = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	custom_tooltip = {
+		text = gw_cond_leads_market
+		market_capital.owner = THIS
+	}
+}
+
+gw_possible_remove_carbon_tax = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = carbon_tax_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_leads_market
+		market_capital.owner = THIS
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}
+
+gw_possible_renewable_investment = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	custom_tooltip = {
+		text = gw_cond_leads_market
+		market_capital.owner = THIS
+	}
+}
+
+gw_possible_remove_renewable_investment = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = renewable_investment_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_leads_market
+		market_capital.owner = THIS
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}
+
+gw_possible_climate_adaptation = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
+	}
+	produced_authority > 250
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+}
+
+gw_possible_remove_climate_adaptation = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = climate_adaptation_modifier }
+	}
+}
+
+gw_possible_emission_standards = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	custom_tooltip = {
+		text = gw_cond_leads_market
+		market_capital.owner = THIS
+	}
+	produced_authority > 200
+}
+
+gw_possible_remove_emission_standards = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = emission_standards_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_leads_market
+		market_capital.owner = THIS
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}
+
+gw_possible_reforestation = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	produced_authority > 100
+}
+
+gw_possible_remove_reforestation = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}
+
+gw_possible_public_transit = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	produced_authority > 150
+}
+
+gw_possible_remove_public_transit = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = public_transit_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}
+
+gw_possible_fossil_fuel_divestment = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_moderate
+		temperature_anomaly_display >= 1.0
+	}
+	produced_authority > 200
+}
+
+gw_possible_remove_fossil_fuel_divestment = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}
+
+gw_possible_green_building_codes = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	produced_authority > 100
+}
+
+gw_possible_remove_green_building_codes = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = green_building_codes_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { has_variable = has_emissions_reduction_treaty }
+	}
+}

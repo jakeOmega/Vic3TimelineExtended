@@ -662,9 +662,16 @@ global_warming_update_on_action = {
 				owner.market_capital = THIS
 			}
 			owner = {
+				# Snapshot first, accumulate from the snapshot. The market-wide
+				# emissions sweep is evaluated exactly once, as before, and the
+				# journal-entry widget then reads the stored figure instead of
+				# recomputing it in loc every frame. Variable writes are visible
+				# later in the same effect block, so the number added to the
+				# global total is identical to what this on_action added before.
+				gw_snapshot_market_emissions_effect = yes
 				change_global_variable = {
 					name = greenhouse_gas_emissions
-					add = market_greenhouse_gas_emissions_script_value
+					add = var:gw_disp_market_emis
 				}
 			}
 		}
@@ -673,6 +680,15 @@ global_warming_update_on_action = {
 
 global_warming_events_on_action = {
 	effect = {
+		# Display snapshots for the journal-entry widget. Both are here because
+		# this on_action is the one global-scope monthly pulse, so each runs
+		# exactly once for the whole world rather than once per country.
+		# gw_refresh_global_counts_effect is a single country sweep that fills
+		# all eight adoption counters; gw_rebase_annual_emissions_effect is O(1)
+		# and only does work in January. Neither has a gameplay effect.
+		gw_rebase_annual_emissions_effect = yes
+		gw_refresh_global_counts_effect = yes
+
 		# Fire warming-threshold environmentalism events exactly once globally when
 		# temperature_anomaly_display crosses each threshold upward. Runs in the
 		# global (world) scope of on_monthly_pulse — every_country inside the

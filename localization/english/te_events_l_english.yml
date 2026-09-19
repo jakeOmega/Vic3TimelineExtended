@@ -3756,6 +3756,24 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_DEBUG_GW
+#
+ te_debug_gw.1.a:0 "Set warming to 0.5°C (Moderate)"
+ te_debug_gw.1.b:0 "Set warming to 1.0°C (Significant)"
+ te_debug_gw.1.c:0 "Set warming to 2.0°C (Severe)"
+ te_debug_gw.1.d:0 "Set warming to 3.2°C (Catastrophic)"
+ te_debug_gw.1.e:0 "Cool the world back to 0.05°C (below the activation threshold)"
+ te_debug_gw.1.f:0 "Bind us to an emissions-reduction treaty (locks repeals)"
+ te_debug_gw.1.g:0 "Release us from the emissions-reduction treaty"
+ te_debug_gw.1.h:0 "Make us a market member under a great power that taxes carbon"
+ te_debug_gw.1.i:0 "Recompute the yearly figures now"
+ te_debug_gw.1.j:0 "Adopt all eight mitigation policies"
+ te_debug_gw.1.k:0 "Repeal all eight mitigation policies"
+ te_debug_gw.1.desc:0 "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\n\n#lore Setting the temperature will also fire the one-shot warming threshold events for every tier it crosses, which is deliberate: it exercises the real path.#!"
+ te_debug_gw.1.flavor:0 "'The models are unambiguous, minister.'\n\n'Then get better models.'"
+ te_debug_gw.1.t:0 "Climate Test Console"
+
+#
 # TE_DEBUG_UN
 #
  te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
