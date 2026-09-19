@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 752
-**Event files:** 41
+**Total events:** 761
+**Event files:** 47
 
 ## agricultural_diffusion_events.txt
 
@@ -4039,6 +4039,72 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** (no localization)
 - **Flavor:** (none)
 - **Current image:** (unknown)
+
+## te_debug_ch_events.txt
+
+### te_debug_ch.1
+- **Title:** Cultural Hegemony Test Console
+- **Description:** #lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here.
+- **Flavor:** "Every ministry keeps a drawer of numbers it would rather no one saw."
+- **Current image:** gfx/event_pictures/cultural_exhibition_grand.dds
+
+## te_debug_colonial_empire_events.txt
+
+### te_debug_colonial_empire.1
+- **Title:** TEST: Colonial Stability Bands
+- **Description:** Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session.
+- **Flavor:** The cartographers await instruction.
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
+### te_debug_colonial_empire.2
+- **Title:** TEST: Pressure and Decolonization
+- **Description:** Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider.
+- **Flavor:** The despatches are ready to send.
+- **Current image:** gfx/event_pictures/independence_celebration.dds
+
+## te_debug_covert_events.txt
+
+### te_debug_covert.1
+- **Title:** Covert Warfare Test Console: Funding
+- **Description:** Console-only shortcuts for testing the covert-warfare command centre. None of these can happen in normal play.\n\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\n\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation.
+- **Flavor:** The budget line is the whole service.
+- **Current image:** gfx/event_pictures/espionage_dead_drop.dds
+
+### te_debug_covert.2
+- **Title:** Covert Warfare Test Console: Operations
+- **Description:** Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants three operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11 and military espionage at month 14 - so all three phase layouts show at once and two of them tip over their boundary at the next monthly pulse. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped.
+- **Flavor:** Three dead drops, one bad week.
+- **Current image:** gfx/event_pictures/espionage_dead_drop.dds
+
+## te_debug_gw_events.txt
+
+### te_debug_gw.1
+- **Title:** Climate Test Console
+- **Description:** Set warming to 3.2°C (Catastrophic)
+- **Flavor:** Bind us to an emissions-reduction treaty (locks repeals)
+- **Current image:** gfx/event_pictures/factory_pollution_protest.dds
+
+## te_debug_nuclear_events.txt
+
+### te_debug_nuclear.1
+- **Title:** Nuclear Programme Test Console
+- **Description:** Put five warheads in the stockpile now
+- **Flavor:** 'How long, then?'\n\n'That depends entirely on how much of the future you are willing to spend.'
+- **Current image:** gfx/event_pictures/mushroom_cloud.dds
+
+### te_debug_nuclear.2
+- **Title:** Nuclear Programme Blockers
+- **Description:** Lift disarmament (reactivates it)
+- **Flavor:** 'The treaty does not say we must forget how.'
+- **Current image:** gfx/event_pictures/mushroom_cloud.dds
+
+## te_debug_space_race_events.txt
+
+### te_debug_space_race.1
+- **Title:** Space Race Test Console
+- **Description:** Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\n\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel.
+- **Flavor:** 'What does the panel do if the programme is nine tenths done and on fire?'\n\n'Let us find out.'
+- **Current image:** gfx/event_pictures/rocket_ascending_sky.dds
 
 ## te_debug_un_events.txt
 

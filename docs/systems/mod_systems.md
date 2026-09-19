@@ -230,7 +230,7 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
 **Layout.** One `banking_dash_policy_row` type, instantiated per policy with blockoverrides (label / cost / enable action / disable action). Category sections collapse through `GetVariableSystem.Toggle('banking_dash_collapsed_<cat>')` — GUI-only state, never written to the save. Rows are fixed-width columns inside `widget` wrappers with eliding text, no absolute positioning.
 
 ### History Charts
-`gui/journal_entry_widgets/banking_history_widget.gui` adds a third custom widget (`custom_widget_container_3`): a collapsed-by-default **History** section with one column chart each for cycle value, momentum and bubble pressure, plus 1 / 5 / 10-year ranges and dated policy and crash markers. The store, the chart type and the marker tooltips are shared infrastructure — see **History Store and Charts** below before touching any of it.
+`gui/journal_entry_widgets/banking_history_widget.gui` adds a third custom widget (`custom_widget_container_2` - the policy list took `_3`): a collapsed-by-default **History** section with one column chart each for cycle value, momentum and bubble pressure, plus 1 / 5 / 10-year ranges and dated policy and crash markers. The store, the chart type and the marker tooltips are shared infrastructure — see **History Store and Charts** below before touching any of it.
 
 ### Monthly Pulse Architecture
 The `on_monthly_pulse` calls these scripted effects in order (all in `common/scripted_effects/banking_cycle_effects.txt`):
@@ -304,7 +304,7 @@ A bounded, save-persistent store of monthly samples, plus a reusable column char
 | `common/scripted_effects/te_history_banking_effects.txt` | the banking series' sampling + marker wrappers |
 | `common/scripted_guis/te_history_scripted_gui.txt` | `te_history_marker_tooltip` — display-only, emits `custom_tooltip` lines |
 | `gui/journal_entry_widgets/te_history_chart.gui` | the reusable `te_history_chart` / `te_history_bar_*` / `te_history_range_button` types |
-| `gui/journal_entry_widgets/banking_history_widget.gui` | the three banking charts, wired to `custom_widget_container_3` of `je_banking_cycle` |
+| `gui/journal_entry_widgets/banking_history_widget.gui` | the three banking charts, wired to `custom_widget_container_2` of `je_banking_cycle` |
 
 ### Data model
 
