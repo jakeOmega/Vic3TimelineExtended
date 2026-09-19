@@ -900,27 +900,65 @@ Tracks nuclear weapon development and stockpile. Requires Great Power status (or
 ### Variables
 | Variable | Description |
 |----------|-------------|
-| `nuclear_weapon_stockpile` | Number of nukes |
+| `nuclear_weapon_stockpile` | Number of nukes. Seeded to 0 for every country in 1836 by `common/history/extra_history.txt`, so it always exists |
 | `nuclear_weapon_program_progress` | Current progress |
 | `nuclear_weapons_program_first_nuke_done` | Flag (0/1) |
-| `nuclear_weapons_program_funding` | Funding level |
+| `nuclear_weapons_program_funding` | Funding level (the step count, not the cost) |
+| `nuclear_program_last_status` | Display state, written only by `nuclear_program_refresh_state_effect`: 0 unfunded, 1 first device under development, 2 series production, 3 frozen by a pause treaty |
+| `nuclear_program_first_device_year` | Calendar year of the first device, written once in the weekly pulse's first-device branch |
 | `is_world_first_nuclear_power` | World-first flag |
 | `world_first_nuclear_weapon` | Global — set when first nuke created |
 
 ### Buttons (2)
 - `increase_funding_nuclear_program`, `decrease_funding_nuclear_program`
+- Both carry `is_ai = yes` in `visible` alongside the original `always = yes`, so the grid is hidden from humans and the two steppers in the widget are the player's route. **Never delete either `scripted_button = …` line, and never gate one on `is_ai = no`** — their `ai_chance` blocks are the AI's only path into the programme.
+- `possible` and `effect` are single-sourced in `nuclear_program_possible_<up|down>_funding` (`common/scripted_triggers/nuke_triggers.txt`) and `nuclear_program_effect_<up|down>_funding` (`common/scripted_effects/nuclear_weapon_effects.txt`). Retune the helper, never the button.
+
+### Nuclear Programme Widget (journal-entry widget)
+Two panels, mounted either side of the entry's native progress bar so the figures that explain the bar sit next to it.
+
+- **File:** `gui/journal_entry_widgets/nuclear_program_widget.gui` — `widget_je_nuclear_programme` in `custom_widget_container_3` (above the bar), `widget_je_nuclear_deterrence` in `custom_widget_container_4` (below it). Both roots gated on `visible = "[JournalEntry.IsActive]"`.
+- **Handlers:** `common/scripted_guis/nuclear_program_sguis.txt` — `nuclear_program_funding_sgui` (the stepper) and `nuclear_program_powers_sgui` (the leaderboard, display-only). Both carry `ai_is_valid = { always = no }`.
+- **Shared helpers:** `nuclear_program_possible_*` / `nuclear_program_effect_*` (the same two the buttons call), `nuclear_program_can_run_programme` (the same trigger the entry's `possible` calls), `nuclear_program_refresh_state_effect`.
+- **Display-only reads:** the `nuclear_program_display_*` family in `extra_script_values.txt` — `stockpile`, `funding`, `weekly_cost`, `progress_remaining`, `monthly_progress`, `weekly_progress_floor`, `months_to_next`, `first_device_year`, `aid_bonus`, `attack_rating`, `defense_rating`. Each starts at 0 and reads a variable only inside a `has_variable` guard.
+- **Branchy text:** `common/customizable_localization/nuclear_program_custom_loc.txt` — `nuclear_program_status_line`, `_rate_note`, `_aid_note`, `_next_warhead`, `_first_device`, `_world_first_note`.
+
+Areas:
+1. **The Programme** (open by default) — funding as a `[−] step N · @innovation N/week [+]` stepper; warhead production per month with a tooltip naming what sets it (funding step, the ×10 post-first-device rate, foreign assistance, a pause); time to the next warhead; warheads held; the year of the first device with its world-first mark.
+2. **Deterrence** (collapsed) — our delivery capability and home defence as percentages, each tooltip listing the contributing technologies through the nine pre-existing `te_nuke_attack_*` / `te_nuke_defense_*` customizable-localization blocks, plus one line on how a strike's odds are resolved.
+3. **Nuclear Powers** (collapsed) — the ten largest arsenals, one `ExecuteTooltip` row each, entering the `nuke_rank_N` globals in script. Disclosure is unchanged from the eleven `triggered_desc` lines this replaced.
+
+Op table (repeated in the sgui header and the `.gui` header — keep all three in step):
+
+| sgui | op | meaning |
+|---|---|---|
+| `nuclear_program_funding_sgui` | 0 | step funding down |
+| | 1 | step funding up |
+| `nuclear_program_powers_sgui` | 1–10 | leaderboard rank to render |
+
+**Editing rules.**
+- Change a rate, a cost or an eligibility rule in the **helper or the script value**, never in the `.gui` or in localization. No threshold or rate is restated in the `.gui`.
+- `nuclear_program_last_status` has exactly one writer, `nuclear_program_refresh_state_effect`, called from the entry's `immediate`, the tail of its weekly pulse, and both button effects — so the panel reacts to a click instead of lagging a week. Do not derive the state anywhere else.
+- **`status_desc` is the only surface that renders for a deactivated entry** (`gui/journal_entry.gui:188` has no `IsActive` gate, unlike the progress bar at `:670`). Because `possible` fails the instant a disarmament settlement lands and the entry carries `can_deactivate = yes`, the widget is gone in that state. Blocking conditions therefore belong in `je_nuclear_program_status_line`, not in the panel.
+- Loc roots differ by context: `status_desc` reaches the country through `ROOT.GetCountry`, widget loc through `JournalEntry.GetCountry`. The `nuclear_program_status_line` branches therefore carry **no** country accessor at all — the stockpile is appended by the calling key.
+- Custom-loc blocks here are `random_valid = no`, so every branch's trigger is evaluated until one matches. Pair every variable read with `has_variable`, and keep the two live-modifier branches (disarmament, ineligibility) first: by the time they apply, the weekly pulse has stopped and the status code is stale.
+
+Traced states: fresh activation (status variable absent → guarded fallback branch); inactive-but-shown (both roots hidden, no sgui runs); disarmament (entry deactivates, status line speaks); pause treaty (status 3, both steppers greyed with the pause named); unaffordable increase; first warhead completing; AI country (grid visible to the AI only); old save (status and first-device year absent until the next pulse); rank lost then regained; aid treaty doubling the rate; funding stepped to 0 (modifier removed rather than left at `multiplier = 0`).
 
 ### Modifiers
 - `nuclear_power` — applied when stockpile > 0
 - `nuclear_disarmament` — blocks program growth
+- `nuclear_weapon_program_funding` — the weekly innovation cost, applied **in `je:je_nuclear_program` scope** with `multiplier = nuclear_weapons_program_current_cost`. Owned by `nuclear_program_refresh_state_effect`, which takes it off when funding reaches 0. A `remove_modifier` for it in country scope is a silent no-op.
+- `nuclear_program_debug_pause` — console-only, carries `country_nuclear_program_pause_bool` for the test harness. Nothing in the mod applies it.
 - War support (1.14): an enemy with `nuclear_power` costs a non-nuclear country −0.25 per beat — `common/script_values/zz_te_war_support_injections.txt` (see `mod_systems.md` § War Support Feeds)
 
 ### Events
 - `nuclear_weapon_events.10` — fired for creating country
 - `nuclear_weapon_events.9` — fired (14-day delay) to all other countries
+- `te_debug_nuclear.1` / `.2` — console-only test harness (`events/te_debug_nuclear_events.txt`): funding steps, first device, warheads, leaderboard fill/empty; pause and disarmament applied and lifted.
 
 ### Never Completes
-Persistent journal entry.
+Persistent journal entry. `immediate` therefore runs again on every re-activation, which is why the stockpile and the first-device flag are created only when absent — progress and funding are still zeroed unconditionally, because the bar's goal is fixed at activation from `current_value + goal_add_value`.
 
 ---
 
