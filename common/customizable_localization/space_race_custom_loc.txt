@@ -728,14 +728,15 @@ sr_prog_interstellar_probe = {
 	}
 }
 
+# No "first" / "taken" rows here: solar colonization has no race for the first.
+# It completes in je_space_race.txt, not through sr_complete_milestone_effect_base,
+# so sr_was_first_solar_colonization and sr_global_first_solar_colonization are
+# never set (see the notes in space_race_effects.txt and space_race_sguis.txt).
+# Reading them made the engine log "used but is never set" at load.
 sr_prog_solar_colonization = {
 	type = country
 	random_valid = no
 
-	text = {
-		trigger = { has_variable = sr_was_first_solar_colonization }
-		localization_key = sr_prog_state_first
-	}
 	text = {
 		trigger = { has_variable = sr_completed_solar_colonization }
 		localization_key = sr_prog_state_done
@@ -743,10 +744,6 @@ sr_prog_solar_colonization = {
 	text = {
 		trigger = { has_variable = sr_active_solar_colonization }
 		localization_key = sr_prog_state_running
-	}
-	text = {
-		trigger = { has_global_variable = sr_global_first_solar_colonization }
-		localization_key = sr_prog_state_taken
 	}
 	text = {
 		localization_key = sr_prog_state_open

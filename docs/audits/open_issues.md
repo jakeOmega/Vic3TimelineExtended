@@ -174,6 +174,13 @@ Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` su
 
 **Fix:** Unresolved; next investigation step is comparing against a warning-free mod building's full gfx surface (icon + any `city_gfx`/entity/asset references) to find the queried-but-missing slot.
 
+### L23. Console-only debug test events logged as orphaned (by design)
+**Files:** `events/te_debug_*_events.txt` (seven today: ch, colonial_empire, covert, gw, nuclear, space_race, un)
+
+**Problem (2026-09-19):** The test consoles are events fired by hand from the console (`event te_debug_<x>.1`). Nothing in script fires them, so the engine logs `Event te_debug_<x>.1 is orphaned` (source `jomini_eventmanager.cpp:376`) at load for each one. The event definitions already carry a `# REVIEWED` comment for `orphaned_event_audit`. Filtered from log triage via `docs/audits/mod_known_noise.md`. The signature there is only `Event te_debug_`, so a real mod event that becomes orphaned still shows up in triage.
+
+**Fix:** None needed while the consoles exist. A new `te_debug_*` console needs no registry change. Delete this entry if the consoles are ever removed.
+
 ---
 
 ## Vanilla 1.13.7 patch impact (2026-05-27)
