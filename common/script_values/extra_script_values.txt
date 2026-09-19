@@ -2398,6 +2398,16 @@ migration_crowding_threshold_pop = {
 	}
 }
 
+# State scope. 0-100 fill for the crowding bar on the state view's crowding
+# tile (gui/states_panel.gui): migration_crowding_ratio against the 10x knee
+# (ratio 1.0). Past the knee the bar stays full and the tooltip carries the rest.
+migration_crowding_fill_pct = {
+	value = migration_crowding_ratio
+	multiply = 100
+	min = 0
+	max = 100
+}
+
 #==================================================
 # GUI Display Script Values — Arable Land Breakdown
 #==================================================

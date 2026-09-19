@@ -2693,8 +2693,8 @@
 
 # --- INDIVIDUAL TOURISM OUTPUT MODIFIERS ---
 
-# From the state's static, unchangeable appeal score (0-100)
-# Assumes the score is stored in a state variable, e.g., via script from your dictionary
+# From the state's static, unchangeable appeal score (0-1, from the
+# base_tourism_appeal_value table above)
 tourism_bonus_from_base_appeal = {
 	value = base_tourism_appeal_value
 }
@@ -2897,4 +2897,63 @@ total_tourism_throughput_bonus_percent = {
 	add = tourism_throughput_from_parks
 	add = tourism_throughput_from_monuments
 	# Decree now handled via decree modifier block
+}
+
+# --- DISPLAY: STATE-VIEW HEADROOM BARS ---
+# Read only by te_state_tourism_card (gui/te_state_panel_widgets.gui). Each is
+# 0-100: how far one source has climbed toward its own cap, drawn as the thin
+# bar under its row. The caps are derived from the tiers above and written
+# here once, never in the .gui — keep them in step with those tiers.
+# Monuments are uncapped and have no bar.
+
+# Appeal is already a 0-1 score.
+tourism_fill_base_appeal_pct = {
+	value = tourism_bonus_from_base_appeal
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# Rank 1 earns +100%, the most the cities tier can give.
+tourism_fill_urban_centers_pct = {
+	value = tourism_bonus_from_urban_centers
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# Cap +36%: 100 levels x 0.2% + 400 levels x 0.04%.
+tourism_fill_ports_pct = {
+	value = tourism_throughput_from_ports
+	divide = 0.36
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# Cap +36%: railways and highways, each 100 levels x 0.1% + 400 levels x 0.02%.
+tourism_fill_land_transport_pct = {
+	value = tourism_throughput_from_land_transport
+	divide = 0.36
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# Cap +70%: 20 levels x 1% + 80 x 0.25% + 400 x 0.05% + 1000 x 0.01%.
+tourism_fill_art_pct = {
+	value = tourism_throughput_from_art
+	divide = 0.70
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# A national park is all or nothing.
+tourism_fill_parks_pct = {
+	value = 0
+	if = {
+		limit = { has_building = building_national_park }
+		value = 100
+	}
 }

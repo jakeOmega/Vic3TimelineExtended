@@ -3,15 +3,16 @@
 # ============================================================================
 # Two readings that used to be a chain of `triggered_desc` entries on the journal
 # entry: the country's influence tier (six branches) and the world hegemon's
-# exported political model (twelve). Both are read from the widget as
+# exported political model (fifteen). Both are read from the widget as
 # [JournalEntry.GetCountry.GetCustom('<key>')].
 #
 # Neither block owns a threshold or a classification. The tier reads `ch_tier`,
 # whose only derivation site is `ch_set_display_state`
 # (common/scripted_effects/cultural_hegemony_effects.txt), where 2/5/10/15/25
-# live. The exported model reads `global_var:ch_rank_1_ideology`, whose only
-# derivation site is `ch_cache_rank_1_ideology_alignment_summary` in the same
-# file — the 1..12 mapping below is that effect's, in its order.
+# live. The exported model reads `global_var:ch_rank_1_ideology`, the rank-1
+# country's `var:ch_model`, whose only derivation site is
+# `ch_set_political_model` in the same file — the 1..15 codes below are that
+# effect's (its header has the table; 13-15 are the newer models).
 # ============================================================================
 
 ch_tier_text = {
@@ -81,10 +82,10 @@ ch_tier_blurb = {
 	}
 }
 
-# The world hegemon's political model, in the twelve families
-# ch_cache_rank_1_ideology_alignment_summary classifies it into. The guard comes
-# first: the global does not exist until the first yearly pulse, and on an old
-# save it can be absent for up to a year.
+# The world hegemon's political model, in the fifteen families
+# ch_set_political_model classifies it into. The guard comes first: the global
+# does not exist until the first rebuild, and on an old save it can be absent
+# for up to a year.
 ch_exported_model_text = {
 	type = country
 	random_valid = no
@@ -142,6 +143,18 @@ ch_exported_model_text = {
 		localization_key = ch_model_other
 	}
 	text = {
+		trigger = { global_var:ch_rank_1_ideology = 13 }
+		localization_key = ch_model_technocratic
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 14 }
+		localization_key = ch_model_republican
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 15 }
+		localization_key = ch_model_developmentalist_junta
+	}
+	text = {
 		localization_key = ch_model_unknown
 	}
 }
@@ -168,5 +181,83 @@ ch_exported_model_owner = {
 	}
 	text = {
 		localization_key = ch_model_owner_unknown
+	}
+}
+
+# The scoped country's OWN political model, from the last census
+# (var:ch_model_census, written by ch_add_country_to_model_totals). Used by the
+# model events to name a country's model in prose:
+#   [ROOT.GetCountry.GetCustom('ch_country_model_text')]
+#   [SCOPE.sCountry('ch_domino_country').GetCustom('ch_country_model_text')]
+ch_country_model_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = ch_model_census } }
+		localization_key = ch_model_unknown
+	}
+	text = {
+		trigger = { var:ch_model_census = 1 }
+		localization_key = ch_model_communist
+	}
+	text = {
+		trigger = { var:ch_model_census = 2 }
+		localization_key = ch_model_anarchist
+	}
+	text = {
+		trigger = { var:ch_model_census = 3 }
+		localization_key = ch_model_fascist
+	}
+	text = {
+		trigger = { var:ch_model_census = 4 }
+		localization_key = ch_model_corporatist
+	}
+	text = {
+		trigger = { var:ch_model_census = 5 }
+		localization_key = ch_model_socialist
+	}
+	text = {
+		trigger = { var:ch_model_census = 6 }
+		localization_key = ch_model_royalist_absolutist
+	}
+	text = {
+		trigger = { var:ch_model_census = 7 }
+		localization_key = ch_model_royalist_constitutional
+	}
+	text = {
+		trigger = { var:ch_model_census = 8 }
+		localization_key = ch_model_religious
+	}
+	text = {
+		trigger = { var:ch_model_census = 9 }
+		localization_key = ch_model_reactionary
+	}
+	text = {
+		trigger = { var:ch_model_census = 10 }
+		localization_key = ch_model_military_junta
+	}
+	text = {
+		trigger = { var:ch_model_census = 11 }
+		localization_key = ch_model_liberal
+	}
+	text = {
+		trigger = { var:ch_model_census = 12 }
+		localization_key = ch_model_other
+	}
+	text = {
+		trigger = { var:ch_model_census = 13 }
+		localization_key = ch_model_technocratic
+	}
+	text = {
+		trigger = { var:ch_model_census = 14 }
+		localization_key = ch_model_republican
+	}
+	text = {
+		trigger = { var:ch_model_census = 15 }
+		localization_key = ch_model_developmentalist_junta
+	}
+	text = {
+		localization_key = ch_model_unknown
 	}
 }

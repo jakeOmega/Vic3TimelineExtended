@@ -2287,7 +2287,13 @@ decolonization_events.18 = {
 			any_political_movement = {
 				is_revolutionary = yes
 			}
-			primary_cultures_percent_country < 0.5
+			# 1.14.3 changed this trigger to take the country whose primary
+			# cultures are counted; the bare `primary_cultures_percent_country < 0.5`
+			# form now fails PostValidate (triggers.log still shows the old form).
+			primary_cultures_percent_country = {
+				target_country = ROOT
+				value < 0.5
+			}
 			any_scope_pop = {
 				is_pop_type = soldiers
 				pop_radical_fraction >= 0.3

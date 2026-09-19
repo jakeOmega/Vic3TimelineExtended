@@ -6119,12 +6119,66 @@ ch_cultural_exchange = {
 # Event 7: Hegemon ideology boosts matching political movement (strong version)
 ch_hegemon_ideological_pressure = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 0.10
-	political_movement_pop_attraction_mult = 0.25
+	political_movement_radicalism_add = 0.20
+	political_movement_pop_attraction_mult = 0.50
 }
 
 # Event 7: Hegemon ideology boosts matching political movement (weak version)
 ch_hegemon_ideological_pressure_weak = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 0.10
+	political_movement_pop_attraction_mult = 0.20
+}
+
+# Baseline pressure from the rank-1 hegemon's political model, on the matching
+# movement in every country that trails it. Unit values: applied non-decaying by
+# ch_refresh_baseline_model_pressure with multiplier = ch_model_pressure_mult
+# (0.3-1.5, by the model's share of world culture). Separate from the event
+# modifiers above so an event's spike stacks on top instead of replacing it.
+ch_hegemon_model_pressure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	political_movement_radicalism_add = 0.10
+	political_movement_pop_attraction_mult = 0.20
+}
+
+# Event 17 (Our Model Abroad) option A: the hegemon champions its model abroad.
+# Besides these fields, while it lasts ch_model_pressure_mult adds
+# ch_model_champion_mult_bonus to the baseline pressure every trailing country
+# feels from this model.
+ch_model_champion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.10
+	country_influence_add = -25
+}
+
+# Event 17 option B: the hegemon leads by example at home instead.
+ch_model_exemplar = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_base_add = 10
+}
+
+# Event 18 (Rival Models) option C: declining to side with either power.
+ch_non_aligned_stance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_base_add = 5
+}
+
+# Event 19 (The Model Falters) option A: holding to a model the world's leading
+# power has abandoned.
+ch_model_orphaned = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -10
+}
+
+# Event 20 (Domino) option A: the cost of policing a neighbour's example.
+ch_ideological_cordon = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+}
+
+# Baseline pressure on an aligned fallback movement, when the model's own
+# movement does not exist in this country.
+ch_hegemon_model_pressure_weak = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	political_movement_radicalism_add = 0.05
 	political_movement_pop_attraction_mult = 0.10

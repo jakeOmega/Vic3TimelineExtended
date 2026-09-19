@@ -40,7 +40,11 @@ Mod-added: `event_power_plant`, `event_skyscrapers_sunset`, `event_space_station
 
 ## Available Event Icons
 
-`event_default.dds`, `event_diplomacy.dds`, `event_election.dds`, `event_fire.dds`, `event_industry.dds`, `event_military.dds`, `event_money.dds`, `event_newspaper.dds`, `event_portrait.dds`, `event_protest.dds`, `event_scales.dds`, `event_trade.dds`, `event_urbanization.dds`, `stock_bag.dds`, `waving_flag.dds` (all under `gfx/interface/icons/event_icons/`).
+Vanilla (1.14.3): `bicorne_hat.dds`, `event_carlist_beret.dds`, `event_default.dds`, `event_election.dds`, `event_fire.dds`, `event_industry.dds`, `event_map.dds`, `event_military.dds`, `event_newspaper.dds`, `event_portrait.dds`, `event_protest.dds`, `event_raiding.dds`, `event_scales.dds`, `event_skull.dds`, `event_trade.dds`, `tutorial_icon.dds`, `waving_flag.dds` (all under `gfx/interface/icons/event_icons/`).
+
+Mod-added: `mushroom_cloud.dds`.
+
+There is **no** `event_diplomacy`, `event_money`, `event_urbanization` or `stock_bag` icon. An earlier version of this list named them, and a missing icon only shows up as a `VFSOpen Error: … not found` line in `debug.log`. Before using an icon not listed here, check it exists with `ls "<vanilla>/game/gfx/interface/icons/event_icons/"`. For city/construction events vanilla uses `event_map.dds` (e.g. `skyscraper_events.txt`).
 
 ## IG Approval Modifiers (mod-defined)
 
