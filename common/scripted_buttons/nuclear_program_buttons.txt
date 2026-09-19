@@ -1,9 +1,36 @@
-﻿# Nuclear weapons
+﻿# Nuclear weapons — journal-entry funding buttons
+#
+# THESE TWO BUTTONS ARE THE AI'S ONLY PATH INTO THE NUCLEAR PROGRAMME.
+# The AI funds and defunds its weapons programme solely by evaluating the
+# `ai_chance` blocks below; scripted GUIs have a separate AI hook, which the
+# widget's handlers switch off (`ai_is_valid = { always = no }`). So never delete
+# a `scripted_button = …` line from je_nuclear_program and never gate one on
+# `is_ai = no` — either silently removes the programme from every AI country,
+# with no log line and no offline test that catches it. See
+# docs/guides/scripting_best_practices.md, "Journal-Entry Buttons Are the AI's
+# Only Path", and the same header on
+# common/scripted_buttons/banking_alt_economy_buttons.txt.
+#
+# `is_ai = yes` was added to each `visible` block — keeping its existing
+# condition — when the programme panel replaced the grid: the AI still sees and
+# picks these buttons, a human sees nothing and uses
+# gui/journal_entry_widgets/nuclear_program_widget.gui instead. Because the grid
+# is hidden, every action a human could previously take must exist in the panel;
+# both do, as nuclear_program_funding_sgui ops 1 (up) and 0 (down).
+#
+# `possible` and `effect` are single-sourced: the bodies live in
+# nuclear_program_possible_* (common/scripted_triggers/nuke_triggers.txt) and
+# nuclear_program_effect_* (common/scripted_effects/nuclear_weapon_effects.txt),
+# and the widget's scripted GUI calls the very same helpers. Retune the helper,
+# never the button.
 increase_funding_nuclear_program = {
 	name = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
 	desc = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 
-	visible = { always = yes }
+	visible = {
+		always = yes
+		is_ai = yes
+	}
 
 	#Country scope
 	ai_chance = {
@@ -65,33 +92,11 @@ increase_funding_nuclear_program = {
 	}
 
 	possible = {
-		country_innovation > nuclear_weapon_program_funding_step
-		NOT = {
-			modifier:country_nuclear_disarmament_bool = yes
-		}
-		NOT = {
-			modifier:country_nuclear_program_pause_bool = yes
-		}
+		nuclear_program_possible_increase_funding = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
-			change_variable = {
-				name = nuclear_weapons_program_funding
-				add = 1
-			}
-			je:je_nuclear_program = {
-				if = {
-					limit = { has_modifier = nuclear_weapon_program_funding }
-					remove_modifier = nuclear_weapon_program_funding
-				}
-				add_modifier = {
-					name = nuclear_weapon_program_funding
-					multiplier = nuclear_weapons_program_current_cost
-				}
-			}
-		}
+		nuclear_program_effect_increase_funding = yes
 	}
 }
 
@@ -99,7 +104,10 @@ decrease_funding_nuclear_program = {
 	name = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
 	desc = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 
-	visible = { always = yes }
+	visible = {
+		always = yes
+		is_ai = yes
+	}
 
 	#Country scope
 	ai_chance = {
@@ -153,26 +161,10 @@ decrease_funding_nuclear_program = {
 	}
 
 	possible = {
-		var:nuclear_weapons_program_funding > 0
+		nuclear_program_possible_decrease_funding = yes
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
-			change_variable = {
-				name = nuclear_weapons_program_funding
-				subtract = 1
-			}
-			je:je_nuclear_program = {
-				if = {
-					limit = { has_modifier = nuclear_weapon_program_funding }
-					remove_modifier = nuclear_weapon_program_funding
-				}
-				add_modifier = {
-					name = nuclear_weapon_program_funding
-					multiplier = nuclear_weapons_program_current_cost
-				}
-			}
-		}
+		nuclear_program_effect_decrease_funding = yes
 	}
 }

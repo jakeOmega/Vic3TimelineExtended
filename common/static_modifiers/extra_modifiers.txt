@@ -85,6 +85,15 @@ nuclear_weapon_program_funding = {
 	country_weekly_innovation_add = -1
 }
 
+# Console-only. The nuclear_program_pause treaty article carries this boolean as
+# its target_modifier, and there is no other way to reach that state without
+# negotiating a treaty, so events/te_debug_nuclear_events.txt applies this to try
+# the frozen-programme branches of the panel. Nothing in the mod applies it.
+nuclear_program_debug_pause = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_nuclear_program_pause_bool = yes
+}
+
 nuclear_strike_aftermath = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_infrastructure_mult = -0.5

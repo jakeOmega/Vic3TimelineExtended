@@ -3792,6 +3792,23 @@
  te_debug_covert.2.g:0 "Re-derive the rows' display state"
  te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
 
+# TE_DEBUG_NUCLEAR
+#
+ te_debug_nuclear.1.a:0 "Fund the programme to step 3, and arm three rivals"
+ te_debug_nuclear.1.b:0 "Cut funding to nothing"
+ te_debug_nuclear.1.c:0 "Bring the next warhead to the brink of completion"
+ te_debug_nuclear.1.d:0 "Put five warheads in the stockpile now"
+ te_debug_nuclear.1.e:0 "Empty every arsenal in the world"
+ te_debug_nuclear.1.desc:0 "Console-only shortcuts for testing the nuclear programme panel. None of these can happen in normal play.\n\nRun them as a great power that has researched $nuclear_weapons$, or the journal entry will not be active and the panels will correctly draw nothing.\n\nFunding to step 3 also arms the three strongest rival great powers, so the Nuclear Powers section has rows to draw. Bringing a warhead to the brink sets progress to the goal and lets the next weekly pulse finish it through the real code path, so the world-first check, the production rate change and the first-device year all happen for real — advance one week to see it."
+ te_debug_nuclear.1.f:0 "'How long, then?'\n\n'That depends entirely on how much of the future you are willing to spend.'"
+ te_debug_nuclear.1.t:0 "Nuclear Programme Test Console"
+ te_debug_nuclear.2.a:0 "Freeze the programme, as a pause treaty would"
+ te_debug_nuclear.2.b:0 "Lift the freeze"
+ te_debug_nuclear.2.c:0 "Impose disarmament (deactivates the journal entry)"
+ te_debug_nuclear.2.d:0 "Lift disarmament (reactivates it)"
+ te_debug_nuclear.2.desc:0 "The two states that stop a programme, each applied and lifted.\n\nA freeze should grey out both funding controls with the pause named as the failing condition, and within one week the funding modifier should be gone from the journal entry itself — check the entry's modifier list, not only the panel.\n\nDisarmament makes the entry's requirements fail, so the entry deactivates: both panels vanish and only the status line speaks. Lifting it reactivates the entry and re-runs its activation effect, which is where the stockpile has to survive. It should survive however long disarmament stood — the pulse branch that empties a stockpile cannot run once the entry is inactive, and only the disarmament treaty article itself empties one. A stockpile of 0 on the way back is a finding, not expected behaviour."
+ te_debug_nuclear.2.f:0 "'The treaty does not say we must forget how.'"
+ te_debug_nuclear.2.t:0 "Nuclear Programme Blockers"
 #
 # TE_DEBUG_UN
 #
