@@ -16,13 +16,20 @@
 ### Both delegate to the same shared trigger and effect the journal entry's
 ### scripted buttons call, so the grid and this widget cannot diverge.
 ###
+### The per-row "Stand down" controls use no op code. They pass the row's target
+### country as the saved scope `iw_tgt` and pick the operation type by which of
+### the nine covert_stand_down_<type>_sgui entries the instance points at — so
+### the target can travel alone in a SINGLE AddScope, the only shape vanilla
+### demonstrates. Fail-closed: see covert_possible_stand_down.
+###
 ### EDITING RULES
 ### * Never compare a game number against a literal here. The phase lines read
 ###   the stored `iw_phase` (1/2/3), written by covert_op_refresh_phase; the 6
 ###   and 12 month thresholds live only in covert_op_is_established /
 ###   covert_op_is_fully_operational.
 ### * Every question that needs script asks it through an is_shown-only
-###   scripted GUI (covert_ops_dormant_sgui, covert_ops_phase_ready_sgui).
+###   scripted GUI (covert_ops_dormant_sgui, covert_last_exposed_known_sgui,
+###   covert_ops_phase_ready_sgui).
 ### * Panel NUMBERS come from JournalEntry.GetCountry.MakeScope.ScriptValue, a
 ###   proven read. GetModifier.GetValueWithBreakdownFor is used for hover
 ###   breakdowns ONLY, so if that chain fails in-game the panel still reads
@@ -117,6 +124,44 @@ types covert_operations_widget_types
 		using = fontsize_large
 	}
 
+	### "Stand down" for one row. Nine instances per row, of which exactly one is
+	### visible — `sd_visible` combines the row's operation tag with the
+	### panel-level arming toggle in a single `visible` (two `visible` properties
+	### on one widget is a bug, not a conjunction: gotcha #17).
+	###
+	### `sd_context` is the only other per-instance part: it points the button at
+	### that type's covert_stand_down_<type>_sgui. Everything else is shared,
+	### because the target travels as a saved scope built from the row's own
+	### container, so the markup is identical for all nine.
+	###
+	### The target country is reached through the stored capital state, the same
+	### chain the row's title line uses (gotcha #11). If that chain or the saved
+	### scope ever fails, covert_possible_stand_down does not hold and the button
+	### is simply disabled — it can never end the wrong operation.
+	type covert_op_stand_down_button = button {
+		using = default_button_action
+		size = { 150 24 }
+		margin_left = 12
+		margin_top = 2
+
+		block "sd_context" {}
+		block "sd_visible" {}
+
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'iw_tgt', ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'iw_tgt', ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.MakeScope ).End )]"
+		tooltip = "je_iw_stand_down_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 140
+			elide = right
+			using = fontsize_small
+			text = "je_iw_stand_down_button"
+		}
+	}
+
 	### The phase, dormancy and detection lines, indented under the title.
 	type widget_je_covert_operation_detail = textbox {
 		autoresize = yes
@@ -204,6 +249,84 @@ types covert_operations_widget_types
 		# ---- This operation's own monthly detection risk ----
 		widget_je_covert_operation_detail = {
 			text = "je_iw_op_row_detection"
+		}
+
+
+		# ---- Stand down (hidden until armed from the command centre) ----
+		# One instance per type; only the row's own type is ever visible, and
+		# only while the panel-level toggle is set. The toggle is presentation
+		# state in GetVariableSystem, so arming it changes nothing in script.
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_election_interference_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_election_interference'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_financial_subversion_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_financial_subversion'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_infrastructure_sabotage_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_infrastructure_sabotage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_comms_disruption_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_comms_disruption'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_industrial_espionage_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_industrial_espionage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_military_espionage_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_military_espionage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_influence_campaign_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_influence_campaign'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_ideological_subversion_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_ideological_subversion'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_destabilization_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[And( ScriptContainer.HasTag('iw_op_destabilization'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+			}
 		}
 	}
 }
@@ -301,6 +424,29 @@ flowcontainer = {
 		}
 		blockoverride "line_extra" {
 			visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+	}
+
+	### Arms the per-row "Stand down" controls. One toggle for the whole panel,
+	### not one per row: a GetVariableSystem key cannot be built from a script
+	### container. Presentation-only and unsaved, so arming it is invisible to
+	### script and to other clients — ending an operation still takes a second,
+	### deliberate click on the row itself.
+	button = {
+		using = default_button_action
+		size = { 220 24 }
+		margin_top = 6
+		onclick = "[GetVariableSystem.Toggle( 'covert_stand_down_armed' )]"
+		tooltip = "je_iw_stand_down_toggle_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 210
+			elide = right
+			using = fontsize_small
+			text = "je_iw_stand_down_toggle"
 		}
 	}
 }

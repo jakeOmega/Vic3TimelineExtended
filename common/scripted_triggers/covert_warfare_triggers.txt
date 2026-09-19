@@ -81,3 +81,32 @@ covert_possible_decrease_funding = {
 		var:iw_funding_level > 0
 	}
 }
+
+# ============================================================================
+# STAND DOWN — shared eligibility
+# ============================================================================
+# Whether the operation a widget row is showing can be ended from that row.
+#
+# FAIL-CLOSED BY DESIGN. The row hands the target country to script through a
+# saved scope, and this trigger requires BOTH that the scope resolved AND that we
+# really run an operation of this exact type against that exact country. If the
+# scope ever arrives unset — the one part of the mechanism with no vanilla
+# precedent for a scripted GUI, see the .gui header — the control greys out and
+# does nothing. It can never end an operation other than the one the row names.
+# Parameters: $TYPE$ = short name (e.g. election_interference)
+# Scope: operator country; scope:iw_tgt = the row's target country
+covert_possible_stand_down = {
+	custom_tooltip = {
+		text = iw_stand_down_target_known_tt
+		exists = scope:iw_tgt
+	}
+	custom_tooltip = {
+		text = iw_stand_down_op_matches_tt
+		has_variable_list = iw_ops
+		any_in_list = {
+			variable = iw_ops
+			has_tag = iw_op_$TYPE$
+			var:iw_target ?= scope:iw_tgt
+		}
+	}
+}

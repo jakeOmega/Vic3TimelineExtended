@@ -1,13 +1,12 @@
 ﻿# ============================================================================
 # COVERT WARFARE — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGETS
 # ============================================================================
-# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Three kinds
+# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Four kinds
 # of entry live here.
 #
-# 1. THE FUNDING CONTROL (covert_funding_sgui). The only handler that acts. It
-#    delegates to the same covert_possible_* trigger and covert_effect_*
-#    effect the journal entry's scripted buttons call, so the grid and the
-#    widget cannot diverge.
+# 1. THE FUNDING CONTROL (covert_funding_sgui). Delegates to the same
+#    covert_possible_* trigger and covert_effect_* effect the journal entry's
+#    scripted buttons call, so the grid and the widget cannot diverge.
 #
 #      op | control            | delegates to
 #      ---+--------------------+------------------------------------------
@@ -24,12 +23,18 @@
 #    documented "Using SGUIs to build lists in loc" pattern; see
 #    game/common/scripted_guis/scripted_guis.md.
 #
-# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_ops_phase_ready_sgui).
-#    `.gui` has no way to ask script a question, so each of these is an
-#    is_shown-only entry read as `[GetScriptedGui('…').IsShown(…)]`. They exist
-#    so the widget never re-encodes a threshold or an existence check itself.
-#    See docs/guides/scripting_best_practices.md § "Asking Script a Yes/No
-#    Question From `.gui`".
+# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_last_exposed_known_sgui,
+#    covert_ops_phase_ready_sgui). `.gui` has no way to ask script a question, so
+#    each of these is an is_shown-only entry read as
+#    `[GetScriptedGui('…').IsShown(…)]`. They exist so the widget never
+#    re-encodes a threshold or an existence check itself. See
+#    docs/guides/scripting_best_practices.md § "Asking Script a Yes/No Question
+#    From `.gui`".
+#
+# 4. THE STAND-DOWN HANDLERS (covert_stand_down_<type>_sgui, nine of them). One
+#    per operation type, each ending the operation a widget row is showing. See
+#    their own section header for why there are nine rather than one with a type
+#    op code, and for the single unproven link in the mechanism.
 #
 # Every entry declares `ai_is_valid = { always = no }`: the AI's path into
 # covert funding is je_covert_warfare's monthly pulse, and it must never
@@ -267,6 +272,215 @@ covert_ops_phase_ready_sgui = {
 	}
 
 	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- STAND DOWN: one handler per operation type ----------------------------
+# A widget row can end the operation it is showing. One scripted GUI per type,
+# rather than one with a type op code, for a specific reason: the row must tell
+# script BOTH which type and which target, and the type is already settled by the
+# row's own per-tag markup, which lets the target travel alone in a SINGLE
+# AddScope. Chaining two AddScope calls type-checks but has no vanilla precedent
+# (docs/guides/gui_modding_guide.md, "One scripted GUI, several buttons"), and
+# .gui errors only surface in-game, so the shape vanilla demonstrates wins.
+#
+# The remaining unproven link is that an object scope passed through AddScope
+# arrives in a scripted GUI's saved_scopes. Passing an object that way is proven
+# in this mod for a script value (gui/market_panel.gui reads scope:base_market),
+# but not yet for a scripted GUI. covert_possible_stand_down is therefore
+# fail-closed: if the scope arrives unset the control greys out. The worst case
+# is a permanently disabled button, never a wrong operation ended — and the
+# diplomacy UI's own break-pact path is untouched either way.
+#
+# Every one of these delegates to covert_possible_stand_down /
+# covert_effect_stand_down; the only thing that differs is the two parameters.
+
+covert_stand_down_election_interference_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = election_interference }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = election_interference ACTION = covert_election_interference_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_financial_subversion_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = financial_subversion }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = financial_subversion ACTION = covert_financial_subversion_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_infrastructure_sabotage_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = infrastructure_sabotage }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_comms_disruption_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = comms_disruption }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = comms_disruption ACTION = covert_comms_disruption_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_industrial_espionage_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = industrial_espionage }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_military_espionage_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = military_espionage }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = military_espionage ACTION = covert_military_espionage_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_influence_campaign_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = influence_campaign }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = influence_campaign ACTION = covert_influence_campaign_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_ideological_subversion_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = ideological_subversion }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_destabilization_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = destabilization }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = destabilization ACTION = covert_destabilization_action }
+	}
 
 	ai_is_valid = {
 		always = no

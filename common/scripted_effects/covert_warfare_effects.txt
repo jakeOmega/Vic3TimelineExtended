@@ -651,3 +651,30 @@ covert_effect_decrease_funding = {
 		covert_refresh_funding_state = yes
 	}
 }
+
+# ============================================================================
+# STAND DOWN
+# ============================================================================
+# End one operation from its row in the widget, without waiting for detection
+# and without dropping funding to zero (which would end all of them).
+#
+# This reaches the same end state as breaking the pact in the diplomacy UI. That
+# path runs the pact's manual_break_effect, which is `covert_op_end = { TYPE }`,
+# i.e. covert_op_destroy; this effect removes the pact and calls
+# covert_op_destroy itself. covert_op_destroy is guarded by an any_in_list check,
+# so it is idempotent: whether or not remove_diplomatic_pact also fires the
+# break hook, the pact is gone and the container is destroyed exactly once.
+# It is covert_op_burn without the burn — no infamy and no relations hit, which
+# belong to being caught, not to calling an operation off.
+#
+# Eligibility, including the fail-closed scope check, is in
+# covert_possible_stand_down (covert_warfare_triggers.txt).
+# Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key
+# Scope: operator country; scope:iw_tgt = the row's target country
+covert_effect_stand_down = {
+	custom_tooltip = iw_stand_down_effect_tt
+	hidden_effect = {
+		remove_diplomatic_pact = { country = scope:iw_tgt type = $ACTION$ }
+		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:iw_tgt }
+	}
+}
