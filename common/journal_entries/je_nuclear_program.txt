@@ -8,8 +8,30 @@
 		has_technology_researched = nuclear_weapons
 	}
 
+	# Kept, and kept visible to the AI: these two declarations are the AI's only
+	# path into the programme. `is_ai = yes` on their `visible` hides the grid
+	# from a human, who uses the two panels below instead. See the header of
+	# common/scripted_buttons/nuclear_program_buttons.txt.
 	scripted_button = increase_funding_nuclear_program
 	scripted_button = decrease_funding_nuclear_program
+
+	# The programme readout sits in container_3, immediately above the native
+	# progress bar, so the numbers that explain the bar are next to it; the
+	# deterrence and nuclear-powers sections sit in container_4, immediately
+	# below it. Panel order in gui/journal_entry.gui: status_desc(188),
+	# container_2(207), button grid(215), container_3(236), scripted
+	# bars(246), native bar(670), container_4(728), reason(742).
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_program_widget.gui"
+		name = "widget_je_nuclear_programme"
+		container = "custom_widget_container_3"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_program_widget.gui"
+		name = "widget_je_nuclear_deterrence"
+		container = "custom_widget_container_4"
+	}
 
 	current_value = {
 		value = root.var:nuclear_weapon_program_progress
@@ -21,37 +43,49 @@
 
 	progressbar = yes
 
+	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt, because
+	# the programme's status line has to explain a *deactivated* entry and must
+	# ask exactly the same question this does. With can_deactivate = yes below,
+	# the entry drops back to inactive the moment this goes false — which is what
+	# happens the instant a disarmament settlement or the UN's NPT modifier
+	# lands, before the weekly pulse can run.
 	possible = {
-		OR = {
-			country_rank >= rank_value:great_power
-			AND = {
-				country_rank = rank_value:major_power
-				has_technology_researched = ICBMs
-			}
-			modifier:country_receiving_nuclear_program_aid_bool = yes
-		}
-		NOT = {
-			modifier:country_nuclear_disarmament_bool = yes
-		}
+		nuclear_program_can_run_programme = yes
 	}
 
 	immediate = {
-		set_variable = {
-			name = nuclear_weapon_stockpile
-			value = 0
+		# Runs on *every* activation, not just the first. The stockpile and the
+		# first-device flag are therefore created only if they are missing: a
+		# great power that drops below `possible` (losing the entry) and is later
+		# promoted again used to have its entire arsenal silently deleted here.
+		# Progress and funding are still zeroed unconditionally — the goal value
+		# is fixed at activation from current_value + goal_add_value, so a
+		# re-activation carrying leftover progress would give the native bar a
+		# non-zero baseline and a goal of 100 + that leftover, and the bar would
+		# read negative after the next warhead wrapped it.
+		if = {
+			limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+			set_variable = {
+				name = nuclear_weapon_stockpile
+				value = 0
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = nuclear_weapons_program_first_nuke_done } }
+			set_variable = {
+				name = nuclear_weapons_program_first_nuke_done
+				value = 0
+			}
 		}
 		set_variable = {
 			name = nuclear_weapon_program_progress
 			value = 0
 		}
 		set_variable = {
-			name = nuclear_weapons_program_first_nuke_done
-			value = 0
-		}
-		set_variable = {
 			name = nuclear_weapons_program_funding
 			value = 0
 		}
+		nuclear_program_refresh_state_effect = yes
 	}
 
 	complete = {
@@ -103,6 +137,13 @@
 				}
 				add_modifier = { name = nuclear_power }
 			}
+			# A pause treaty zeroes funding. Taking the funding modifier back off
+			# is left to nuclear_program_refresh_state_effect at the tail of this
+			# block, the one site that owns that modifier. The remove_modifier
+			# that used to sit here ran in *country* scope, while the buttons
+			# apply the modifier in `je:je_nuclear_program` scope — so it was a
+			# silent no-op and a paused programme went on paying its full weekly
+			# innovation bill for ever.
 			if = {
 				limit = {
 					modifier:country_nuclear_program_pause_bool = yes
@@ -110,10 +151,6 @@
 				set_variable = {
 					name = nuclear_weapons_program_funding
 					value = 0
-				}
-				if = {
-					limit = { has_modifier = nuclear_weapon_program_funding }
-					remove_modifier = nuclear_weapon_program_funding
 				}
 			}
 			change_variable = {
@@ -146,6 +183,13 @@
 					change_variable = {
 						name = nuclear_weapon_program_progress
 						multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+					}
+					# The year of the first device, for the panel's "First
+					# device" row. `year` is a valid script value (see
+					# common/script_values/te_history_values.txt).
+					set_variable = {
+						name = nuclear_program_first_device_year
+						value = year
 					}
 					# Track whether this is the first nuclear power in the world
 					if = {
@@ -202,55 +246,24 @@
 					trigger_event = { id = nuclear_weapon_events.18 days = 7 }
 				}
 			}
+
+			# The one site that derives the programme's display state. Last in
+			# the block, so it sees this week's funding change, this week's
+			# warheads and this week's first-device flag. Also owns the funding
+			# modifier — see its header in
+			# common/scripted_effects/nuclear_weapon_effects.txt.
+			nuclear_program_refresh_state_effect = yes
 		}
 	}
-	status_desc = {
-		# Nuclear Powers leaderboard
-		triggered_desc = {
-			desc = je_nuclear_powers_header
-			trigger = { has_global_variable = nuke_rank_1 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_1_entry
-			trigger = { has_global_variable = nuke_rank_1 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_2_entry
-			trigger = { has_global_variable = nuke_rank_2 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_3_entry
-			trigger = { has_global_variable = nuke_rank_3 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_4_entry
-			trigger = { has_global_variable = nuke_rank_4 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_5_entry
-			trigger = { has_global_variable = nuke_rank_5 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_6_entry
-			trigger = { has_global_variable = nuke_rank_6 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_7_entry
-			trigger = { has_global_variable = nuke_rank_7 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_8_entry
-			trigger = { has_global_variable = nuke_rank_8 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_9_entry
-			trigger = { has_global_variable = nuke_rank_9 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_10_entry
-			trigger = { has_global_variable = nuke_rank_10 }
-		}
-	}
+
+	# One line. Unlike the widget, status_desc is rendered by
+	# gui/journal_entry.gui:188 with no IsActive gate, so this is the only
+	# surface that can speak for a *deactivated* entry — the state a disarmament
+	# settlement puts the programme into. The eleven triggered_desc entries that
+	# used to live here were the global nuclear-powers leaderboard; it is now a
+	# collapsed section of the deterrence panel.
+	status_desc = je_nuclear_program_status_line
+
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes

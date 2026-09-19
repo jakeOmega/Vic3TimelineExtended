@@ -3,6 +3,58 @@
 # Reusable triggers for nuclear weapon diplomatic actions AI logic
 # ============================================================================
 
+# ============================================================================
+# NUCLEAR PROGRAMME GATES
+# ============================================================================
+# Single-source of the three conditions the nuclear-programme surfaces ask.
+# Each body is the verbatim text that used to sit inline on the journal entry
+# or on one of its two scripted buttons; the button and the widget's scripted
+# GUI both call the helper, so the two surfaces cannot drift apart.
+# See docs/systems/journal_entry_systems.md, "Nuclear Programme Widget".
+
+# Country scope: can this country sustain a nuclear weapons programme at all?
+# The body of je_nuclear_program's `possible`. Also read by the programme's
+# status line (common/customizable_localization/nuclear_program_custom_loc.txt),
+# which has to explain a *deactivated* entry — the entry drops back to inactive
+# the moment this goes false, because it carries can_deactivate = yes.
+nuclear_program_can_run_programme = {
+	OR = {
+		country_rank >= rank_value:great_power
+		AND = {
+			country_rank = rank_value:major_power
+			has_technology_researched = ICBMs
+		}
+		modifier:country_receiving_nuclear_program_aid_bool = yes
+	}
+	NOT = {
+		modifier:country_nuclear_disarmament_bool = yes
+	}
+}
+
+# Country scope: may funding be stepped up? Body of
+# increase_funding_nuclear_program's `possible`. Deliberately carries no
+# custom_tooltip: the engine renders these three clauses with a tick or a cross
+# each, which is both more informative than a hand-written line and impossible
+# to let drift away from the real condition.
+nuclear_program_possible_increase_funding = {
+	country_innovation > nuclear_weapon_program_funding_step
+	NOT = {
+		modifier:country_nuclear_disarmament_bool = yes
+	}
+	NOT = {
+		modifier:country_nuclear_program_pause_bool = yes
+	}
+}
+
+# Country scope: may funding be stepped down? Body of
+# decrease_funding_nuclear_program's `possible`. Reads the variable unguarded,
+# exactly as the button did: every caller is gated on the entry being active,
+# which is the only state in which the variable exists (the entry's `immediate`
+# creates it).
+nuclear_program_possible_decrease_funding = {
+	var:nuclear_weapons_program_funding > 0
+}
+
 # Country scope: True if scope:country has existential war goals against ROOT
 # (any subjugation war goal, or outright annexation incl. the mod's te_reunify_country)
 # Requires scope:country to be set (the enemy)

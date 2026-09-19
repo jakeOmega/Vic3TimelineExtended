@@ -185,11 +185,18 @@ Custom `state_panel_status_item_small` widgets added to `gui/states_panel.gui` f
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.
 
 - Journal entry with progress bar for nuclear weapon development.
-- Requires Great Power or Major Power + ICBMs tech.
-- 2 funding buttons (increase/decrease).
-- Diplomatic actions: `nuke_diplo_action`, `tactical_nuke_diplo_action`.
-- Treaty articles: `nuclear_disarmament`, `nuclear_program_aid`.
-- Events: `nuclear_weapon_events.txt` — nuclear strike response events.
+- Requires Great Power or Major Power + ICBMs tech — the gate is the scripted trigger `nuclear_program_can_run_programme` in `common/scripted_triggers/nuke_triggers.txt`, which the entry's `possible` and the programme's status line both call.
+- 2 funding buttons (increase/decrease), hidden from humans with `is_ai = yes` and kept as the AI's only path into the system. Their `possible` / `effect` bodies live in `nuclear_program_possible_*` and `nuclear_program_effect_*`.
+- Player-facing UI is the **programme panel** plus a **deterrence readout** (`gui/journal_entry_widgets/nuclear_program_widget.gui`, containers `_3` and `_4`, bracketing the native progress bar). Full description: `docs/systems/journal_entry_systems.md` → Nuclear Programme Widget.
+- Diplomatic actions: `nuke_diplo_action`, `tactical_nuke_diplo_action`. These stay diplomatic actions; the widget never launches a strike.
+- Treaty articles: `nuclear_disarmament`, `nuclear_program_aid`, `nuclear_program_pause`.
+- Events: `nuclear_weapon_events.txt` — nuclear strike response events. `events/te_debug_nuclear_events.txt` is a console-only test harness (`event te_debug_nuclear.1` / `.2`).
+
+**The funding modifier lives on the journal entry, not the country.** The buttons apply `nuclear_weapon_program_funding` in `je:je_nuclear_program` scope with `multiplier = nuclear_weapons_program_current_cost`, so every `has_modifier` / `remove_modifier` for it must use that scope too — in country scope it is a silent no-op. `nuclear_program_refresh_state_effect` is the single site that owns it: it takes the modifier off when `nuclear_weapons_program_funding` reaches 0, deciding from the variable rather than from `has_modifier`, because modifier changes are not visible inside the same effect block and a scripted-effect call is inlined into its caller's.
+
+**Disarmament deactivates the entry.** `possible` excludes `country_nuclear_disarmament_bool` and the entry has `can_deactivate = yes`, so a `nuclear_disarmament` article or the UN's `un_npt_disarmament_modifier` drops it back to inactive before the weekly pulse can run — which is why the article zeroes the variables itself in `on_entry_into_force`, and why "our programme has been dismantled" is in `status_desc` rather than in the widget.
+
+**Re-activation preserves the arsenal.** `immediate` runs on every activation, so `nuclear_weapon_stockpile` and `nuclear_weapons_program_first_nuke_done` are created only when absent. `nuclear_weapon_program_progress` and `nuclear_weapons_program_funding` are still zeroed unconditionally, deliberately: the progress bar's goal is computed once at activation from `current_value + goal_add_value`, so leftover progress would give a non-zero baseline and a goal above 100, and the bar would read negative once the next warhead wrapped it.
 
 ## Banking Cycle (`je_banking_cycle`)
 
