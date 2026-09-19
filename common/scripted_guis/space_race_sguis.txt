@@ -491,7 +491,10 @@ sr_rivals_sgui = {
 			sr_rivals_line_base = { MILESTONE = interstellar_probe }
 		}
 		else = {
-			sr_rivals_line_base = { MILESTONE = solar_colonization }
+			# Solar colonization only gets the participation list: there is no
+			# "first" to claim on it (no sr_first_solar_colonization modifier and
+			# no sr_global_first_ flag is ever written for it).
+			sr_rivals_participants_base = { MILESTONE = solar_colonization }
 		}
 	}
 }

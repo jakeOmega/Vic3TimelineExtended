@@ -124,6 +124,9 @@ te_debug_sr_seed_rivals = {
 	}
 }
 
+# Solar colonization is absent from both lists on purpose: it has no "first"
+# reward and never writes a sr_global_first_ flag, so setting one would invent
+# state no gameplay path produces.
 # Hand "the first" for one milestone to nobody in particular: the global flag is
 # what the panel and the reward split read, and setting it is exactly what
 # another power finishing first would do. Only touches milestones we have not
@@ -147,7 +150,6 @@ te_debug_sr_claim_firsts = {
 	te_debug_sr_claim_first_base = { MILESTONE = moon_base          }
 	te_debug_sr_claim_first_base = { MILESTONE = mars_landing       }
 	te_debug_sr_claim_first_base = { MILESTONE = interstellar_probe }
-	te_debug_sr_claim_first_base = { MILESTONE = solar_colonization }
 }
 
 # Undo the two global-state options so a test can be repeated. Scope: country.
@@ -169,5 +171,4 @@ te_debug_sr_reset_globals = {
 	te_debug_sr_release_first_base = { MILESTONE = moon_base          }
 	te_debug_sr_release_first_base = { MILESTONE = mars_landing       }
 	te_debug_sr_release_first_base = { MILESTONE = interstellar_probe }
-	te_debug_sr_release_first_base = { MILESTONE = solar_colonization }
 }

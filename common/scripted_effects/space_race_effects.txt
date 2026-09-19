@@ -1046,6 +1046,16 @@ sr_fire_safe_setback_event = {
 # given. The claim on "the first" is public — it is a global variable — so that
 # is shown.
 sr_rivals_line_base = {
+	sr_rivals_first_line_base = { MILESTONE = $MILESTONE$ }
+	sr_rivals_participants_base = { MILESTONE = $MILESTONE$ }
+}
+
+# Whether "the first" is still on the table. NOT used for solar colonization:
+# that entry has no sr_first_solar_colonization reward and never sets a
+# sr_global_first_ flag (it does not go through sr_complete_milestone_effect_base
+# at all), so telling the player a first is unclaimed there would be a lie — and
+# would contradict this system's own reward preview.
+sr_rivals_first_line_base = {
 	if = {
 		limit = { has_global_variable = sr_global_first_$MILESTONE$ }
 		custom_tooltip_no_bullet = sr_rivals_first_claimed
@@ -1053,6 +1063,9 @@ sr_rivals_line_base = {
 	else = {
 		custom_tooltip_no_bullet = sr_rivals_first_open
 	}
+}
+
+sr_rivals_participants_base = {
 	if = {
 		limit = {
 			any_country = {

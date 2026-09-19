@@ -397,7 +397,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_suborbital"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_suborbital"
 		}
 		blockoverride "panel_note" {
@@ -472,7 +477,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_orbital"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_orbital"
 		}
 		blockoverride "panel_note" {
@@ -547,7 +557,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_moon_landing"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_moon_landing"
 		}
 		blockoverride "panel_note" {
@@ -622,7 +637,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_probe"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_probe"
 		}
 		blockoverride "panel_note" {
@@ -697,7 +717,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_moon_base"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_moon_base"
 		}
 		blockoverride "panel_note" {
@@ -772,7 +797,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_mars_landing"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_mars_landing"
 		}
 		blockoverride "panel_note" {
@@ -847,7 +877,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_interstellar_probe"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_interstellar_probe"
 		}
 		blockoverride "panel_note" {
@@ -964,7 +999,12 @@ flowcontainer = {
 		blockoverride "panel_progress" {
 			text = "je_space_race_widget_progress_solar_colonization"
 		}
+		# No pace and no estimate for a programme that is not running: solar
+		# colonization keeps its entry alive with every colony claimed, and the
+		# rate would fall back to the drift floor with no progress left to divide.
+		# The sentence below still says so, from GetCustom.
 		blockoverride "panel_pace" {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			text = "je_space_race_widget_pace_solar_colonization"
 		}
 		blockoverride "panel_note" {
