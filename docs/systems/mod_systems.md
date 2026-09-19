@@ -27,13 +27,19 @@ Systems using this pattern:
 
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.
 
-- A persistent journal entry (never completes: `complete = { always = no }`).
-- Tracks `temperature_anomaly_display` script value against a 4°C progress bar.
-- Has `should_be_involved` for all countries with `greenhouse_gas_emissions`.
-- Has `status_desc` with 6 temperature tiers (negligible → catastrophic).
-- Uses 16 scripted buttons (`gw_*`) for climate policies.
+- A persistent journal entry (never completes: `complete = { always = no }`, `can_deactivate = no`).
+- Tracks `temperature_anomaly_display` script value against a 4°C progress bar. The goal is frozen at activation, which is why `goal_add_value` is `4 - temperature_anomaly_display` and not a flat `4` — see `journal_entry_systems.md` before touching it.
+- Auto-activates from `is_shown_when_inactive` (game rule) + `possible` (anomaly ≥ 0.1°C). There is **no** `should_be_involved` block; an earlier version of this line claimed one.
+- 6 temperature tiers (negligible → catastrophic), defined **once** in `gw_severity_text` / `gw_severity_short` (`common/customizable_localization/global_warming_custom_loc.txt`). `status_desc` is a single key that calls it.
+- Uses 16 scripted buttons (`gw_*`) for climate policies, each carrying `is_ai = yes` so only the AI sees the grid. Their `possible`/`effect` bodies live in `common/scripted_triggers/global_warming_triggers.txt` and `common/scripted_effects/global_warming_effects.txt`, shared with the widget's scripted GUIs.
+- **Player surface: the climate dashboard**, three widgets from `gui/journal_entry_widgets/global_warming_widget.gui` in `custom_widget_container_1/_2/_3`, handled by `common/scripted_guis/global_warming_sguis.txt`. Full documentation, op table and editing rules in `journal_entry_systems.md` → **Climate Dashboard**.
+- **Emissions are a property of a market, not a country.** `market_greenhouse_gas_emissions_script_value` sums the whole market's oil and coal consumption, so the snapshot is stored on the market leader and every member reads it through `market_capital.owner`.
+- **Display figures are snapshots, not live reads.** The reason text used to evaluate 14 script values every frame the panel was open, three of them world-scale sweeps. Now: `gw_snapshot_market_emissions_effect` (yearly state pulse, leaders only, at the site that was already computing the figure), `gw_rebase_annual_emissions_effect` (monthly global pulse, acts in January, O(1)), `gw_refresh_global_counts_effect` (monthly global pulse, one country sweep filling all eight adoption counters). Readers are the guarded O(1) values in `common/script_values/global_warming_values.txt`. The eight old `gw_countries_with_*_script_value` sweeps are deleted — do not reintroduce them.
+- **History charts:** two series (`gw_temp`, `gw_share`) recorded by `common/scripted_effects/te_history_global_warming_effects.txt`. Both step once a year because that is the cadence emissions move at. Temperature is global but stored per tracked country, because `te_history_chart`'s datamodel is hard-coded to the country list — see **History Store and Charts**. No markers this wave.
 - Events: `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C, 3.0°C.
 - Cooling/reversal support: `global_warming_events_on_action` now also fires one-time recovery events when temperatures decline below 3.0°C, 2.0°C, 1.0°C, 0.5°C, and 0.1°C (`environmentalism_events.17`–`environmentalism_events.21`).
+- Test console: `event te_debug_gw.1` (`events/te_debug_gw_events.txt`).
+- The JE sits in `je_group_internal_affairs`. A `je_group_environment` is declared in `common/journal_entry_groups/timeline_extended_je_groups.txt` and unused; moving this entry there was deliberately left out of scope.
 
 ## Construction Cost Scaling
 

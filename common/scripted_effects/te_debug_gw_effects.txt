@@ -1,0 +1,127 @@
+﻿# ============================================================================
+# GLOBAL WARMING TEST HELPERS — console only
+# ============================================================================
+# Nothing in the mod calls these. They exist so the climate dashboard can be
+# exercised in minutes instead of decades of game time. Vic3's console has no
+# `effect` command (that is CK3), so they are reached through a console-fired
+# event (events/te_debug_gw_events.txt):
+#
+#   event te_debug_gw.1
+#
+# They skip gates, costs and eligibility on purpose, so never call them from
+# gameplay script.
+# ============================================================================
+
+# Force the world temperature anomaly. temperature_anomaly_display is
+# global_var:greenhouse_gas_emissions / 10000 (via two divides with a round
+# between them), so the variable is the anomaly in hundredths of a degree times
+# 100 -- i.e. 10000 = 1.00 C.
+#
+# Setting this activates je_global_warming at the next evaluation once the value
+# is above 0.1 C, and will fire the one-shot environmentalism threshold events
+# for every tier crossed, which is the point: it exercises the real path.
+#
+# Parameters: $HUNDREDTHS$ = the target value for the global variable
+# Scope: any
+te_debug_gw_set_anomaly = {
+	set_global_variable = {
+		name = greenhouse_gas_emissions
+		value = $HUNDREDTHS$
+	}
+	te_debug_gw_refresh_display = yes
+}
+
+# Recompute every display snapshot immediately, instead of waiting for the
+# yearly state pulse and the January re-base.
+#
+# This deliberately uses the EXPENSIVE live script value for the world figure --
+# the one the journal entry used to render every frame -- because a console
+# helper runs once and correctness beats cost here. Gameplay script must keep
+# using gw_rebase_annual_emissions_effect.
+# Scope: country
+te_debug_gw_refresh_display = {
+	if = {
+		limit = { gw_is_market_leader = yes }
+		gw_snapshot_market_emissions_effect = yes
+	}
+	set_global_variable = {
+		name = gw_g_global_emis
+		value = global_greenhouse_gas_emissions_script_value_display
+	}
+	if = {
+		limit = { has_global_variable = greenhouse_gas_emissions }
+		set_global_variable = {
+			name = gw_g_emis_prev
+			value = global_var:greenhouse_gas_emissions
+		}
+	}
+	gw_refresh_global_counts_effect = yes
+}
+
+# Put the player under a great power as a puppet, which moves it into that
+# power's market, then have the new leader impose a market-wide carbon tax.
+# Reproduces the case the old button grid could not show at all: a market MEMBER
+# carrying a policy it did not choose and cannot repeal.
+# Scope: country (the player)
+te_debug_gw_become_market_member = {
+	if = {
+		limit = {
+			any_country = {
+				NOT = { this = ROOT }
+				country_rank >= rank_value:major_power
+				is_subject = no
+				gw_is_market_leader = yes
+			}
+		}
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				country_rank >= rank_value:major_power
+				is_subject = no
+				gw_is_market_leader = yes
+			}
+			save_scope_as = te_debug_gw_overlord
+		}
+		if = {
+			limit = { exists = scope:te_debug_gw_overlord }
+			scope:te_debug_gw_overlord = {
+				create_diplomatic_pact = {
+					country = ROOT
+					type = puppet
+				}
+				# The leader adopts it, which applies the modifier to every
+				# member's journal entry through the shared helper.
+				gw_effect_carbon_tax = yes
+			}
+		}
+	}
+}
+
+# Adopt all eight policies through the real shared helpers, ignoring the
+# authority and warming gates the widget would enforce.
+# Scope: country
+te_debug_gw_adopt_all = {
+	gw_effect_carbon_tax = yes
+	gw_effect_renewable_investment = yes
+	gw_effect_emission_standards = yes
+	gw_effect_climate_adaptation = yes
+	gw_effect_reforestation = yes
+	gw_effect_public_transit = yes
+	gw_effect_fossil_fuel_divestment = yes
+	gw_effect_green_building_codes = yes
+	te_debug_gw_refresh_display = yes
+}
+
+# Repeal all eight, ignoring the treaty lock.
+# Scope: country
+te_debug_gw_repeal_all = {
+	gw_effect_remove_carbon_tax = yes
+	gw_effect_remove_renewable_investment = yes
+	gw_effect_remove_emission_standards = yes
+	gw_effect_remove_climate_adaptation = yes
+	gw_effect_remove_reforestation = yes
+	gw_effect_remove_public_transit = yes
+	gw_effect_remove_fossil_fuel_divestment = yes
+	gw_effect_remove_green_building_codes = yes
+	te_debug_gw_refresh_display = yes
+}

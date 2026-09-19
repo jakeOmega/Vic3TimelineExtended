@@ -1,0 +1,124 @@
+﻿# ============================================================================
+# GLOBAL WARMING — branchy display text
+# ============================================================================
+# Read from je_global_warming's `status_desc` / `progress_desc` as
+# [ROOT.GetCountry.GetCustom('<key>')] and from
+# gui/journal_entry_widgets/global_warming_widget.gui as
+# [JournalEntry.GetCountry.GetCustom('<key>')].
+#
+# THE SEVERITY LADDER IS DEFINED EXACTLY ONCE, HERE. It used to be six
+# `triggered_desc` blocks inside the journal entry's `status_desc`; the widget
+# needs the same tier, and duplicating a threshold table is how the two drift.
+# The six sentence keys are the originals, unchanged -- only the branching moved.
+# Thresholds match the journal entry's own scale and the four warming-threshold
+# events in global_warming_events_on_action; change them in all three places or
+# in none.
+#
+# `temperature_anomaly_display` is read as a bare script value on the left of a
+# comparison, which is the documented form for using a script value as a trigger.
+# It is O(1) (one global-variable read and two divides), so these are safe to
+# evaluate per frame.
+# ============================================================================
+
+# The full tier sentence — the journal entry's one-line status.
+gw_severity_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { temperature_anomaly_display >= 3.0 }
+		localization_key = je_global_warming_status_catastrophic
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 2.0 }
+		localization_key = je_global_warming_status_severe
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 1.0 }
+		localization_key = je_global_warming_status_significant
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 0.5 }
+		localization_key = je_global_warming_status_moderate
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 0.1 }
+		localization_key = je_global_warming_status_slight
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = je_global_warming_status_negligible
+	}
+}
+
+# The same ladder as a single coloured word, for the conditions table and the
+# outliner line where a whole sentence will not fit.
+gw_severity_short = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { temperature_anomaly_display >= 3.0 }
+		localization_key = gw_tier_short_catastrophic
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 2.0 }
+		localization_key = gw_tier_short_severe
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 1.0 }
+		localization_key = gw_tier_short_significant
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 0.5 }
+		localization_key = gw_tier_short_moderate
+	}
+	text = {
+		trigger = { temperature_anomaly_display >= 0.1 }
+		localization_key = gw_tier_short_slight
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = gw_tier_short_negligible
+	}
+}
+
+# Sign and colour for the yearly temperature change.
+#
+# Deliberately NOT `te_yearly_temp_change_prefix` in zzz_extra_custom_loc.txt:
+# that one's triggers read `global_greenhouse_gas_emissions_script_value_display`,
+# which iterates every state in the world, and reusing it here would re-import
+# per frame exactly the cost this widget exists to remove. This reads the
+# guarded yearly snapshot instead.
+gw_trend_prefix = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { gw_yearly_change_display < 0 }
+		localization_key = gw_trend_prefix_cooling
+	}
+	text = {
+		trigger = { gw_yearly_change_display > 0 }
+		localization_key = gw_trend_prefix_warming
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = gw_trend_prefix_steady
+	}
+}
+
+# Whether this country sets its market's emissions policy or inherits it.
+gw_market_role_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { gw_is_market_leader = yes }
+		localization_key = gw_market_role_leader
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = gw_market_role_member
+	}
+}

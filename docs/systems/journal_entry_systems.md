@@ -417,21 +417,73 @@ Persistent journal entry.
 Persistent environmental tracker that applies scaled penalties based on global temperature rise. Uses `temperature_anomaly_display` script value against a 4°C threshold.
 
 ### Key Mechanics
-- **Progress:** `temperature_anomaly_display` / 4.0°C goal
-- **6 temperature tiers:** negligible (<0.1°C), slight (0.1-0.5), moderate (0.5-1.0), significant (1.0-2.0), severe (2.0-3.0), catastrophic (3.0+)
+- **Progress:** `temperature_anomaly_display` against a 4.0°C goal. **Do not "simplify" `goal_add_value = 4 - temperature_anomaly_display` to a flat `4`.** Per vanilla's `journal_entries.md`, `current_value` and `goal_add_value` are evaluated **once, at activation**, and summed to form the goal. Activation happens when `possible` first passes (~0.1°C), so that expression is exactly what pins the goal at 4.0 and freezes it there.
+- **6 temperature tiers:** negligible (<0.1°C), slight (0.1-0.5), moderate (0.5-1.0), significant (1.0-2.0), severe (2.0-3.0), catastrophic (3.0+). Defined **once**, in `gw_severity_text` / `gw_severity_short` (`common/customizable_localization/global_warming_custom_loc.txt`); `status_desc` and the widget both read it.
 - **Dynamic modifier pattern:** `global_warming` modifier × `temperature_anomaly_display` multiplier, reapplied monthly
-- **`should_be_involved`:** All countries with `greenhouse_gas_emissions`
+- **Activation:** `is_shown_when_inactive = { has_game_rule = global_warming_enabled }` plus `possible = { temperature_anomaly_display >= 0.1 }`. Both must hold, so the entry renders greyed for every country for the decades before the world warms. There is **no** `should_be_involved` block (an earlier version of this doc claimed one).
+- **Emissions are a property of a market, not a country.** `market_greenhouse_gas_emissions_script_value` sums the whole market's oil and coal consumption, so there is no per-country emissions figure to show. The snapshot lives on the market leader and every member reads it.
 
 ### Buttons (16)
 8 toggle pairs for climate policies:
 - Carbon tax, renewable investment, climate adaptation, emission standards
 - Reforestation, public transit, fossil fuel divestment, green building codes
 
+Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_triggers/global_warming_triggers.txt`) and its `effect` in `gw_effect_<button>` (`common/scripted_effects/global_warming_effects.txt`); the widget's scripted GUIs call the same helpers. **Change a policy's eligibility or effect in the helper, never in the button and never in the scripted GUI.** Every button carries `is_ai = yes` in its `visible`, so the grid shows a human nothing — but the declarations must stay, because `ai_chance` is the AI's only route into the system.
+
+3 policies are market-wide (carbon tax, renewable investment, emission standards) and are applied by the leader to **every member's** journal entry; 5 are national.
+
+### Climate Dashboard (journal-entry widget)
+Three additive widgets mounted into the vanilla panel are the player-facing surface.
+
+- **File:** `gui/journal_entry_widgets/global_warming_widget.gui` (`widget_je_gw_conditions` → `custom_widget_container_1`, `widget_je_gw_policies` → `_2`, `widget_je_gw_history` → `_3`)
+- **Handlers:** `common/scripted_guis/global_warming_sguis.txt` (19)
+- **Shared helpers:** `gw_possible_*` / `gw_effect_*`, plus `gw_policy_<x>_active`, `gw_is_market_leader`, `gw_any_policy_active`, `gw_has_yearly_figures` in `global_warming_triggers.txt`
+- **Display-only reads:** `common/script_values/global_warming_values.txt` — all O(1)
+- **Branchy text:** `common/customizable_localization/global_warming_custom_loc.txt`
+- **Charts:** `te_history_chart` from `te_history_chart.gui`; samples from `common/scripted_effects/te_history_global_warming_effects.txt`
+
+Areas:
+1. **Climate Conditions** — anomaly + tier word, change last year, this market's emissions (and carbon captured), share of world emissions, emissions cut in force, market role, warming-penalty scale. Each tooltip explains the reading; the penalty tooltip renders `[GetStaticModifier('global_warming').GetDesc]` so no number is retyped.
+2. **Mitigation Policies** — all 8 rows, always, for every country. One control per row (Adopt or Repeal) and a status cell. A collapsible **Adoption Around the World** sub-section shows how many nations run each policy.
+3. **History** — collapsed by default. Two charts: global temperature (0–4°C) and this market's share of world emissions (0–100%). Both step once a year; the legends say so.
+
+**Op table** (identical for all eight policy handlers, so the row type bakes them in and a row instance carries no op markup):
+
+| op | action | delegates to |
+|---|---|---|
+| 0 | Adopt | `gw_possible_<policy>` / `gw_effect_<policy>` |
+| 1 | Repeal | `gw_possible_remove_<policy>` / `gw_effect_remove_<policy>` |
+
+An op nobody defined falls through to `trigger_else = { always = no }`.
+
+**Editing rules.**
+- Change eligibility or effect in the **helper**, not in the button or the scripted GUI.
+- Never delete a `scripted_button = …` line from `je_global_warming.txt`.
+- **Market leadership and the treaty lock are `is_valid` conditions, never `is_shown`.** The three market-wide policies are imposed on members by their leader, so a member must be able to *see* "Active — set by market leader" with a greyed Repeal. Hiding the row (what the old grid did) hid the policy.
+- **`is_shown` must never read `scope:op` here** — because of the failure direction, not because it cannot work. These rows are the only surface a human has (the grid is hidden behind `is_ai = yes`), so a silently-false op-keyed `is_shown` would leave a row with **no** control and make the system unreachable. The in-force question therefore comes from the scope-free `gw_active_<policy>_sgui` handlers, while `is_valid`, `Execute` and the tooltips do read `scope:op`. Note Strategic Reserve is **not** precedent for the `is_shown` case even though its `.gui` passes `AddScope('dir', …)` to `IsShown`: its `is_shown` never reads the scope (the `trigger_if` on `scope:dir` is in `is_valid`). Full evidence in `docs/guides/gui_modding_guide.md` gotcha #22.
+- The widget is deliberately **more forthcoming than the old grid**: every row is visible and the anomaly/authority gates are readable conditions, where the buttons' `visible` inconsistently hid some rows.
+
+**Traced scenarios.** Inactive entry (nothing renders, root gated on `[JournalEntry.IsActive]`); first crossing of 0.1°C (all rows greyed with reasons, charts empty); adopt as leader (row flips next frame; the cut figure is live, the emissions figures wait for January); repeal under treaty (row visible, Repeal greyed with "We are not bound by an emissions-reduction treaty" crossed; Climate Adaptation's Repeal stays enabled — the treaty only binds emissions policies); market member with a leader-imposed carbon tax; authority shortfall; AI country (grid hidden, `ai_chance` untouched, every handler `ai_is_valid = no`); old save pre-first-pulse (guarded readers return 0 and the rows show "Updates each January"); market leadership changes; cooling back below 0.1°C (`can_deactivate = no`, so the entry and widget stay).
+
+### Display snapshots (why the figures are not live)
+The reason text used to compute **14 script values live, in loc, every frame the panel was open** — including an every-state-in-the-world sweep, three `every_scope_building` passes over a whole market, and eight separate `every_country` sweeps. The heavy work now runs where the simulation already did it:
+
+| Written by | When | Variables |
+|---|---|---|
+| `gw_snapshot_market_emissions_effect` | yearly state pulse, market leaders only (`global_warming_update_on_action`) | `gw_disp_market_emis`, `gw_disp_capture` |
+| `gw_rebase_annual_emissions_effect` | monthly global pulse, acts in January | `gw_g_global_emis`, `gw_g_emis_prev` |
+| `gw_refresh_global_counts_effect` | monthly global pulse, one country sweep | the eight `gw_g_n_*` counters |
+
+The market sweep is evaluated **once**: the value goes into the variable and the global accumulation then reads the variable, so the number added to `greenhouse_gas_emissions` is unchanged. Every reader is `has_variable`/`has_global_variable`-guarded, because this entry has `is_shown_when_inactive` and is evaluated in the scope of countries that have never run a pulse.
+
+**Emissions reduction in force and the active-policy count stay live reads** — they are cheap and must react to a click, which a variable written from a button tail could not do, because `add_modifier` is invisible inside the effect block that applied it.
+
 ### Events
-- `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C milestones
+- `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C, 3.0°C, plus cooling/recovery events 17–21
+- `events/te_debug_gw_events.txt` — console-only test harness, `event te_debug_gw.1` (helpers in `common/scripted_effects/te_debug_gw_effects.txt`)
 
 ### Never Completes
-Persistent journal entry. Can be deactivated. Revolution inheritable.
+Persistent journal entry. `can_deactivate = no`, so once the world has warmed the entry never goes back to inactive. Revolution inheritable.
 
 ---
 

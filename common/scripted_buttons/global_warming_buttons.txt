@@ -1,9 +1,34 @@
 ﻿# Global Warming mitigation buttons
+#
+# ----------------------------------------------------------------------------
+# PLAYER-FACING SURFACE: the climate dashboard widget
+# (gui/journal_entry_widgets/global_warming_widget.gui). Every button below
+# carries `is_ai = yes` in its `visible`, so the vanilla button grid shows
+# nothing to a human: the buttons exist for the AI, which picks policies through
+# their `ai_chance`. Do not remove them, and do not drop the is_ai line without
+# restoring a player surface -- a scripted GUI has its own, separate AI hook
+# (ai_is_valid/ai_chance/ai_frequency) and the widget's handlers all set
+# `ai_is_valid = { always = no }`, so deleting a scripted_button would silently
+# remove that option from the AI with no log line and no test that catches it.
+#
+# Each button's `possible` and `effect` bodies live in
+# common/scripted_triggers/global_warming_triggers.txt and
+# common/scripted_effects/global_warming_effects.txt, which the widget's scripted
+# GUIs call as well. Change a policy's eligibility or effect in the HELPER, never
+# here and never in the scripted GUI.
+#
+# `visible` is deliberately left as it was otherwise, inconsistencies included
+# (some rows hid themselves before the warming threshold, others showed greyed).
+# The widget normalises that by showing all eight rows always and letting
+# `is_valid` carry the anomaly and authority gates as readable conditions, so it
+# is intentionally more forthcoming than this grid ever was.
+# ----------------------------------------------------------------------------
 gw_carbon_tax_button = {
 	name = "GW_CARBON_TAX"
 	desc = "GW_CARBON_TAX_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
 		# Emissions reduction only applies for the market leader; restrict button accordingly
 		market_capital.owner = THIS
@@ -27,24 +52,9 @@ gw_carbon_tax_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-		temperature_anomaly_display >= 0.5
-		market_capital.owner = THIS
-	}
+	possible = { gw_possible_carbon_tax = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_CARBON_TAX_DESC"
-			every_country = {
-				limit = {
-					market_capital = ROOT.market_capital
-					NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-				}
-				je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
-			}
-		}
-	}
+	effect = { gw_effect_carbon_tax = yes }
 }
 
 gw_remove_carbon_tax_button = {
@@ -52,6 +62,7 @@ gw_remove_carbon_tax_button = {
 	desc = "GW_REMOVE_CARBON_TAX_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = carbon_tax_modifier }
 		market_capital.owner = THIS
 		NOT = { has_variable = has_emissions_reduction_treaty }
@@ -71,24 +82,9 @@ gw_remove_carbon_tax_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = carbon_tax_modifier }
-		market_capital.owner = THIS
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_carbon_tax = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_CARBON_TAX_DESC"
-			every_country = {
-				limit = {
-					market_capital = ROOT.market_capital
-					je:je_global_warming = { has_modifier = carbon_tax_modifier }
-				}
-				je:je_global_warming = { remove_modifier = carbon_tax_modifier }
-			}
-		}
-	}
+	effect = { gw_effect_remove_carbon_tax = yes }
 }
 
 gw_renewable_investment_button = {
@@ -96,6 +92,7 @@ gw_renewable_investment_button = {
 	desc = "GW_RENEWABLE_INVESTMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
 		# Emissions reduction only applies for the market leader; restrict button accordingly
 		market_capital.owner = THIS
@@ -113,24 +110,9 @@ gw_renewable_investment_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-		temperature_anomaly_display >= 0.5
-		market_capital.owner = THIS
-	}
+	possible = { gw_possible_renewable_investment = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_RENEWABLE_INVESTMENT_DESC"
-			every_country = {
-				limit = {
-					market_capital = ROOT.market_capital
-					NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-				}
-				je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
-			}
-		}
-	}
+	effect = { gw_effect_renewable_investment = yes }
 }
 
 gw_remove_renewable_investment_button = {
@@ -138,6 +120,7 @@ gw_remove_renewable_investment_button = {
 	desc = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = renewable_investment_modifier }
 		market_capital.owner = THIS
 		NOT = { has_variable = has_emissions_reduction_treaty }
@@ -161,24 +144,9 @@ gw_remove_renewable_investment_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = renewable_investment_modifier }
-		market_capital.owner = THIS
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_renewable_investment = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
-			every_country = {
-				limit = {
-					market_capital = ROOT.market_capital
-					je:je_global_warming = { has_modifier = renewable_investment_modifier }
-				}
-				je:je_global_warming = { remove_modifier = renewable_investment_modifier }
-			}
-		}
-	}
+	effect = { gw_effect_remove_renewable_investment = yes }
 }
 
 gw_climate_adaptation_button = {
@@ -186,6 +154,7 @@ gw_climate_adaptation_button = {
 	desc = "GW_CLIMATE_ADAPTATION_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
 	}
 
@@ -205,18 +174,9 @@ gw_climate_adaptation_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
-		produced_authority > 250
-		temperature_anomaly_display >= 0.5
-	}
+	possible = { gw_possible_climate_adaptation = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_CLIMATE_ADAPTATION_DESC"
-			je:je_global_warming = { add_modifier = { name = climate_adaptation_modifier } }
-		}
-	}
+	effect = { gw_effect_climate_adaptation = yes }
 }
 
 gw_remove_climate_adaptation_button = {
@@ -224,6 +184,7 @@ gw_remove_climate_adaptation_button = {
 	desc = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = climate_adaptation_modifier }
 	}
 
@@ -235,16 +196,9 @@ gw_remove_climate_adaptation_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = climate_adaptation_modifier }
-	}
+	possible = { gw_possible_remove_climate_adaptation = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
-			je:je_global_warming = { remove_modifier = climate_adaptation_modifier }
-		}
-	}
+	effect = { gw_effect_remove_climate_adaptation = yes }
 }
 
 gw_emission_standards_button = {
@@ -252,6 +206,7 @@ gw_emission_standards_button = {
 	desc = "GW_EMISSION_STANDARDS_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
 		temperature_anomaly_display >= 0.5
 		market_capital.owner = THIS
@@ -273,25 +228,9 @@ gw_emission_standards_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
-		temperature_anomaly_display >= 0.5
-		market_capital.owner = THIS
-		produced_authority > 200
-	}
+	possible = { gw_possible_emission_standards = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_EMISSION_STANDARDS_DESC"
-			every_country = {
-				limit = {
-					market_capital = ROOT.market_capital
-					NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
-				}
-				je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
-			}
-		}
-	}
+	effect = { gw_effect_emission_standards = yes }
 }
 
 gw_remove_emission_standards_button = {
@@ -299,6 +238,7 @@ gw_remove_emission_standards_button = {
 	desc = "GW_REMOVE_EMISSION_STANDARDS_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = emission_standards_modifier }
 		market_capital.owner = THIS
 		NOT = { has_variable = has_emissions_reduction_treaty }
@@ -316,24 +256,9 @@ gw_remove_emission_standards_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = emission_standards_modifier }
-		market_capital.owner = THIS
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_emission_standards = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_EMISSION_STANDARDS_DESC"
-			every_country = {
-				limit = {
-					market_capital = ROOT.market_capital
-					je:je_global_warming = { has_modifier = emission_standards_modifier }
-				}
-				je:je_global_warming = { remove_modifier = emission_standards_modifier }
-			}
-		}
-	}
+	effect = { gw_effect_remove_emission_standards = yes }
 }
 
 gw_reforestation_button = {
@@ -341,6 +266,7 @@ gw_reforestation_button = {
 	desc = "GW_REFORESTATION_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
 		temperature_anomaly_display >= 0.5
 	}
@@ -357,18 +283,9 @@ gw_reforestation_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
-		temperature_anomaly_display >= 0.5
-		produced_authority > 100
-	}
+	possible = { gw_possible_reforestation = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REFORESTATION_DESC"
-			je:je_global_warming = { add_modifier = { name = reforestation_subsidies_modifier } }
-		}
-	}
+	effect = { gw_effect_reforestation = yes }
 }
 
 gw_remove_reforestation_button = {
@@ -376,6 +293,7 @@ gw_remove_reforestation_button = {
 	desc = "GW_REMOVE_REFORESTATION_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
@@ -388,17 +306,9 @@ gw_remove_reforestation_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_reforestation = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_REFORESTATION_DESC"
-			je:je_global_warming = { remove_modifier = reforestation_subsidies_modifier }
-		}
-	}
+	effect = { gw_effect_remove_reforestation = yes }
 }
 
 gw_public_transit_button = {
@@ -406,6 +316,7 @@ gw_public_transit_button = {
 	desc = "GW_PUBLIC_TRANSIT_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
 	}
 
@@ -421,18 +332,9 @@ gw_public_transit_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
-		temperature_anomaly_display >= 0.5
-		produced_authority > 150
-	}
+	possible = { gw_possible_public_transit = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_PUBLIC_TRANSIT_DESC"
-			je:je_global_warming = { add_modifier = { name = public_transit_modifier } }
-		}
-	}
+	effect = { gw_effect_public_transit = yes }
 }
 
 gw_remove_public_transit_button = {
@@ -440,6 +342,7 @@ gw_remove_public_transit_button = {
 	desc = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = public_transit_modifier }
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
@@ -452,17 +355,9 @@ gw_remove_public_transit_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = public_transit_modifier }
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_public_transit = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
-			je:je_global_warming = { remove_modifier = public_transit_modifier }
-		}
-	}
+	effect = { gw_effect_remove_public_transit = yes }
 }
 
 gw_fossil_fuel_divestment_button = {
@@ -470,6 +365,7 @@ gw_fossil_fuel_divestment_button = {
 	desc = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
 	}
 
@@ -489,18 +385,9 @@ gw_fossil_fuel_divestment_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
-		temperature_anomaly_display >= 1.0
-		produced_authority > 200
-	}
+	possible = { gw_possible_fossil_fuel_divestment = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
-			je:je_global_warming = { add_modifier = { name = fossil_fuel_divestment_modifier } }
-		}
-	}
+	effect = { gw_effect_fossil_fuel_divestment = yes }
 }
 
 gw_remove_fossil_fuel_divestment_button = {
@@ -508,6 +395,7 @@ gw_remove_fossil_fuel_divestment_button = {
 	desc = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
@@ -524,17 +412,9 @@ gw_remove_fossil_fuel_divestment_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_fossil_fuel_divestment = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
-			je:je_global_warming = { remove_modifier = fossil_fuel_divestment_modifier }
-		}
-	}
+	effect = { gw_effect_remove_fossil_fuel_divestment = yes }
 }
 
 gw_green_building_codes_button = {
@@ -542,6 +422,7 @@ gw_green_building_codes_button = {
 	desc = "GW_GREEN_BUILDING_CODES_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
 	}
 
@@ -561,18 +442,9 @@ gw_green_building_codes_button = {
 		}
 	}
 
-	possible = {
-		NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
-		temperature_anomaly_display >= 0.5
-		produced_authority > 100
-	}
+	possible = { gw_possible_green_building_codes = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_GREEN_BUILDING_CODES_DESC"
-			je:je_global_warming = { add_modifier = { name = green_building_codes_modifier } }
-		}
-	}
+	effect = { gw_effect_green_building_codes = yes }
 }
 
 gw_remove_green_building_codes_button = {
@@ -580,6 +452,7 @@ gw_remove_green_building_codes_button = {
 	desc = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_global_warming = { has_modifier = green_building_codes_modifier }
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
@@ -596,15 +469,7 @@ gw_remove_green_building_codes_button = {
 		}
 	}
 
-	possible = {
-		je:je_global_warming = { has_modifier = green_building_codes_modifier }
-		NOT = { has_variable = has_emissions_reduction_treaty }
-	}
+	possible = { gw_possible_remove_green_building_codes = yes }
 
-	effect = {
-		custom_tooltip = {
-			text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
-			je:je_global_warming = { remove_modifier = green_building_codes_modifier }
-		}
-	}
+	effect = { gw_effect_remove_green_building_codes = yes }
 }

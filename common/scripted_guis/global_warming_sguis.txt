@@ -1,0 +1,455 @@
+﻿# ============================================================================
+# GLOBAL WARMING — journal-entry widget handlers
+# ============================================================================
+# Read by gui/journal_entry_widgets/global_warming_widget.gui.
+#
+# The AI never uses these (`ai_is_valid = { always = no }`). AI policy selection
+# still runs through the `ai_chance` blocks on je_global_warming's sixteen
+# scripted buttons, which are untouched. Every action handler delegates to the
+# same `gw_possible_*` / `gw_effect_*` helpers the buttons call, so the two
+# surfaces cannot drift.
+#
+# OP CODES — one handler per policy, two actions, selected by the `op` saved
+# scope. Identical for all eight policies, so the widget's row type hard-codes
+# them and a row instance carries no op markup of its own:
+#
+#   0   Adopt   -> gw_possible_<policy>        / gw_effect_<policy>
+#   1   Repeal  -> gw_possible_remove_<policy> / gw_effect_remove_<policy>
+#
+# An op code nobody defined falls through to `trigger_else = { always = no }`,
+# so a typo greys the control out instead of running the wrong branch.
+#
+# WHY `is_shown` NEVER READS `scope:op`. Not because it cannot work -- because
+# of the failure direction if it does not. Vanilla has no `is_shown` that reads a
+# saved scope. Strategic Reserve looks like precedent and is not: its `.gui` does
+# pass `AddScope('dir', ...)` into `IsShown`, but `st_res_adjust_<good>_sgui`'s
+# `is_shown` never reads it -- the `trigger_if` on `scope:dir` a few lines below
+# belongs to `is_valid`. The one real in-repo instance is
+# `un_chamber_vote_sgui.is_shown`, which gates its veto control on
+# `scope:op = 2`; it hedges with `exists = scope:op`, and if the scope never
+# arrived that control would merely show too OFTEN.
+#
+# Here the failure direction is the opposite. These rows are the only surface a
+# human has -- the journal entry's button grid is hidden behind `is_ai = yes` --
+# so if an op-keyed `is_shown` silently returned false the row would render with
+# NO control at all and the system would be unreachable. The "is this policy in
+# force?" question therefore comes from the separate, scope-free
+# `gw_active_<policy>_sgui` handlers below. `is_valid`, `Execute` and the
+# tooltips DO read `scope:op`, which Strategic Reserve proves in shipped code.
+# See docs/guides/gui_modding_guide.md gotcha #22.
+#
+# READ-ONLY HANDLERS carry `is_valid = { always = no }` and an empty effect.
+# They exist only so the widget can ask script a yes/no question instead of
+# re-encoding a threshold in `.gui`.
+
+# ---------------------------------------------------------------------------
+# Policy actions
+# ---------------------------------------------------------------------------
+gw_policy_carbon_tax_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_carbon_tax = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_carbon_tax = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_carbon_tax = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_carbon_tax = yes
+		}
+	}
+}
+
+gw_policy_renewable_investment_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_renewable_investment = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_renewable_investment = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_renewable_investment = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_renewable_investment = yes
+		}
+	}
+}
+
+gw_policy_emission_standards_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_emission_standards = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_emission_standards = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_emission_standards = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_emission_standards = yes
+		}
+	}
+}
+
+gw_policy_climate_adaptation_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_climate_adaptation = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_climate_adaptation = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_climate_adaptation = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_climate_adaptation = yes
+		}
+	}
+}
+
+gw_policy_reforestation_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_reforestation = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_reforestation = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_reforestation = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_reforestation = yes
+		}
+	}
+}
+
+gw_policy_public_transit_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_public_transit = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_public_transit = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_public_transit = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_public_transit = yes
+		}
+	}
+}
+
+gw_policy_fossil_fuel_divestment_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_fossil_fuel_divestment = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_fossil_fuel_divestment = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_fossil_fuel_divestment = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_fossil_fuel_divestment = yes
+		}
+	}
+}
+
+gw_policy_green_building_codes_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_green_building_codes = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_green_building_codes = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			gw_effect_green_building_codes = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			gw_effect_remove_green_building_codes = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# "Is this policy in force?" — one per policy, no saved scope. Drives each row's
+# status cell and which of its two controls is rendered. Delegates to the same
+# gw_policy_<x>_active trigger the counters and the buttons use.
+# ---------------------------------------------------------------------------
+gw_active_carbon_tax_sgui = {
+	scope = country
+	is_shown = { gw_policy_carbon_tax_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_renewable_investment_sgui = {
+	scope = country
+	is_shown = { gw_policy_renewable_investment_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_emission_standards_sgui = {
+	scope = country
+	is_shown = { gw_policy_emission_standards_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_climate_adaptation_sgui = {
+	scope = country
+	is_shown = { gw_policy_climate_adaptation_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_reforestation_sgui = {
+	scope = country
+	is_shown = { gw_policy_reforestation_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_public_transit_sgui = {
+	scope = country
+	is_shown = { gw_policy_public_transit_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_fossil_fuel_divestment_sgui = {
+	scope = country
+	is_shown = { gw_policy_fossil_fuel_divestment_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_active_green_building_codes_sgui = {
+	scope = country
+	is_shown = { gw_policy_green_building_codes_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Widget-wide yes/no questions
+# ---------------------------------------------------------------------------
+
+# Does this country lead its own market? A market member sees the three
+# market-wide policies as in force but not repealable, and this is what lets the
+# row say "set by market leader" instead of just greying a button.
+gw_is_market_leader_sgui = {
+	scope = country
+	is_shown = { gw_is_market_leader = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# At least one policy in force — inverted in the widget to show the
+# "no policies adopted yet" line.
+gw_any_policy_active_sgui = {
+	scope = country
+	is_shown = { gw_any_policy_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Have the yearly emissions figures been taken yet? False before the first
+# yearly state pulse of a new game and on a save upgraded mid-year, when the
+# widget shows "figures update each January" rather than a row of zeroes.
+gw_has_yearly_figures_sgui = {
+	scope = country
+	is_shown = { gw_has_yearly_figures = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
