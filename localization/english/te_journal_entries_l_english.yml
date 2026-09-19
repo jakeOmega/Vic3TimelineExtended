@@ -571,6 +571,7 @@
  je_un_chamber_conseq_sanctions:0 "  #bold If it carries:#! $un_vote_sanctions_passed_tt$"
  je_un_chamber_conseq_sanctions_vetoed:0 "  #bold If it carries:#! $un_vote_sanctions_passed_vetoed_tt$"
  je_un_chamber_conseq_space:0 "  #bold If it carries:#! $un_vote_space_passed_tt$"
+ je_un_chamber_country_gone:0 "a former member"
  je_un_chamber_details_header:0 "Voting Details"
  je_un_chamber_hist_cooldown:0 "  #v The topic cannot be proposed again while this resolution stands on the record.#!"
  je_un_chamber_hist_months:0 "  Sat for [THIS.Var('un_res_months').GetValue|0] months."
