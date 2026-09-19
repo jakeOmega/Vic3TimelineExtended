@@ -51,7 +51,7 @@ without an inflation cost.
 ## Pre-flight rulings (orchestrator)
 
 - R1 — §17 checks 1–4 (INJECT sum vs last-wins) are unresolved. Techs: **script
-  compensation** inside the structural premium (no vanilla tech INJECT) — the spec calls this
+  compensation** per R3 (no vanilla tech INJECT) — the spec calls this
   right regardless. Ranks + `law_laissez_faire`: **cancel-INJECTs** (spec's chosen path,
   same precedent as `sol_expectations_vanilla_injections.txt`). Isolate them in one file,
   `common/country_ranks/te_monetary_rank_injections.txt` / one clearly-marked law block, so a
