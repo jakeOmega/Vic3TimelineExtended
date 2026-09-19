@@ -342,7 +342,7 @@
  gw_cond_temp_label:0 "Global Temperature"
  gw_cond_temp_value:0 "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('temperature_anomaly_display')|2]#! °C"
  gw_cond_tier_value:0 "[JournalEntry.GetCountry.GetCustom('gw_severity_short')]"
- gw_cond_temp_tt:0 "How far the planet has warmed above its pre-industrial average. The journal entry's bar runs to #v 4°C#!, the point at which the model treats the damage as unbounded.\n\n#lore Every nation carries the same anomaly; what differs is how much of it each economy caused.#!"
+ gw_cond_temp_tt:0 "The [concept_temperature_anomaly]: how far the planet has warmed above its pre-industrial average. The journal entry's bar runs to #v 4°C#!, the point at which the model treats the damage as unbounded.\n\n#lore Every nation carries the same anomaly; what differs is how much of it each economy caused.#!"
  gw_cond_trend_label:0 "Change Last Year"
  gw_cond_trend_value:0 "[JournalEntry.GetCountry.GetCustom('gw_trend_prefix')][JournalEntry.GetCountry.MakeScope.ScriptValue('gw_yearly_change_abs_display')|2]#! °C"
  gw_cond_trend_tt:0 "Warming added over the last completed calendar year, measured from the change in world cumulative emissions.\n\n#lore Re-based every January, so it holds steady through the year rather than flickering monthly.#!"
