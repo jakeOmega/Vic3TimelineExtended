@@ -1,5 +1,95 @@
 ﻿# Nuclear weapon system scripted effects
 
+# ============================================================================
+# PROGRAMME FUNDING — the two button effects, and the one refresh site
+# ============================================================================
+# nuclear_program_effect_increase_funding / _decrease_funding hold the verbatim
+# bodies that used to sit inline on the two scripted buttons in
+# common/scripted_buttons/nuclear_program_buttons.txt, with one call appended.
+# The button and the widget's nuclear_program_funding_sgui both call the helper,
+# so the hidden grid and the panel cannot drift apart.
+
+nuclear_program_effect_increase_funding = {
+	custom_tooltip = {
+		text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+		change_variable = {
+			name = nuclear_weapons_program_funding
+			add = 1
+		}
+		je:je_nuclear_program = {
+			if = {
+				limit = { has_modifier = nuclear_weapon_program_funding }
+				remove_modifier = nuclear_weapon_program_funding
+			}
+			add_modifier = {
+				name = nuclear_weapon_program_funding
+				multiplier = nuclear_weapons_program_current_cost
+			}
+		}
+	}
+	nuclear_program_refresh_state_effect = yes
+}
+
+nuclear_program_effect_decrease_funding = {
+	custom_tooltip = {
+		text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+		change_variable = {
+			name = nuclear_weapons_program_funding
+			subtract = 1
+		}
+		je:je_nuclear_program = {
+			if = {
+				limit = { has_modifier = nuclear_weapon_program_funding }
+				remove_modifier = nuclear_weapon_program_funding
+			}
+			add_modifier = {
+				name = nuclear_weapon_program_funding
+				multiplier = nuclear_weapons_program_current_cost
+			}
+		}
+	}
+	nuclear_program_refresh_state_effect = yes
+}
+
+# ----------------------------------------------------------------------------
+# The single derivation site for everything the panel displays.
+# ----------------------------------------------------------------------------
+# Called from exactly four places, which between them cover every way the
+# programme's state can move: je_nuclear_program's `immediate` (so an active
+# entry always has a status code), the tail of its on_weekly_pulse, and the two
+# button effects above — and therefore both stepper ops in the widget, which
+# delegate to those effects. In `immediate` the journal entry is still being
+# activated. Nothing else may write nuclear_program_last_status, and neither the
+# .gui nor the localization may re-derive it — see
+# docs/guides/scripting_best_practices.md, "Journal-Entry Widgets: Derive Display
+# State Once, in Script".
+nuclear_program_refresh_state_effect = {
+	# The status code the panel and the status line read. Order matters: a pause
+	# treaty forces funding to 0, so without testing the pause first a frozen
+	# programme would report itself as merely unfunded.
+	if = {
+		limit = { modifier:country_nuclear_program_pause_bool = yes }
+		set_variable = { name = nuclear_program_last_status value = 3 }
+	}
+	else_if = {
+		limit = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding = 0
+		}
+		set_variable = { name = nuclear_program_last_status value = 0 }
+	}
+	else_if = {
+		limit = {
+			has_variable = nuclear_weapons_program_first_nuke_done
+			var:nuclear_weapons_program_first_nuke_done > 0
+		}
+		set_variable = { name = nuclear_program_last_status value = 2 }
+	}
+	else = {
+		set_variable = { name = nuclear_program_last_status value = 1 }
+	}
+}
+
 # Updates global ranking of nuclear powers (top 10 by stockpile)
 # Called from je_nuclear_program on_weekly_pulse
 update_nuclear_powers_ranking = {

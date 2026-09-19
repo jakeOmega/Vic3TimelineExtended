@@ -8,6 +8,10 @@
 		has_technology_researched = nuclear_weapons
 	}
 
+	# Kept, and kept visible to the AI: these two declarations are the AI's only
+	# path into the programme. `is_ai = yes` on their `visible` hides the grid
+	# from a human, who uses the two panels below instead. See the header of
+	# common/scripted_buttons/nuclear_program_buttons.txt.
 	scripted_button = increase_funding_nuclear_program
 	scripted_button = decrease_funding_nuclear_program
 
@@ -21,18 +25,14 @@
 
 	progressbar = yes
 
+	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt, because
+	# the programme's status line has to explain a *deactivated* entry and must
+	# ask exactly the same question this does. With can_deactivate = yes below,
+	# the entry drops back to inactive the moment this goes false — which is what
+	# happens the instant a disarmament settlement or the UN's NPT modifier
+	# lands, before the weekly pulse can run.
 	possible = {
-		OR = {
-			country_rank >= rank_value:great_power
-			AND = {
-				country_rank = rank_value:major_power
-				has_technology_researched = ICBMs
-			}
-			modifier:country_receiving_nuclear_program_aid_bool = yes
-		}
-		NOT = {
-			modifier:country_nuclear_disarmament_bool = yes
-		}
+		nuclear_program_can_run_programme = yes
 	}
 
 	immediate = {
@@ -41,17 +41,18 @@
 			value = 0
 		}
 		set_variable = {
-			name = nuclear_weapon_program_progress
+			name = nuclear_weapons_program_first_nuke_done
 			value = 0
 		}
 		set_variable = {
-			name = nuclear_weapons_program_first_nuke_done
+			name = nuclear_weapon_program_progress
 			value = 0
 		}
 		set_variable = {
 			name = nuclear_weapons_program_funding
 			value = 0
 		}
+		nuclear_program_refresh_state_effect = yes
 	}
 
 	complete = {
@@ -147,6 +148,13 @@
 						name = nuclear_weapon_program_progress
 						multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
 					}
+					# The year of the first device, for the panel's "First
+					# device" row. `year` is a valid script value (see
+					# common/script_values/te_history_values.txt).
+					set_variable = {
+						name = nuclear_program_first_device_year
+						value = year
+					}
 					# Track whether this is the first nuclear power in the world
 					if = {
 						limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
@@ -202,8 +210,16 @@
 					trigger_event = { id = nuclear_weapon_events.18 days = 7 }
 				}
 			}
+
+			# The one site that derives the programme's display state. Last in
+			# the block, so it sees this week's funding change, this week's
+			# warheads and this week's first-device flag. Also owns the funding
+			# modifier — see its header in
+			# common/scripted_effects/nuclear_weapon_effects.txt.
+			nuclear_program_refresh_state_effect = yes
 		}
 	}
+
 	status_desc = {
 		# Nuclear Powers leaderboard
 		triggered_desc = {
@@ -251,6 +267,7 @@
 			trigger = { has_global_variable = nuke_rank_10 }
 		}
 	}
+
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
