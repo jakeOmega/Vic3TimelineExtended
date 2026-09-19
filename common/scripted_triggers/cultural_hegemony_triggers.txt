@@ -102,18 +102,40 @@ ch_possible_disable_cultural_protectionism = {
 # The enable / disable controls in the widget swap on exactly the conditions the
 # journal-entry buttons swap on, so the pair can never both offer "Enable".
 
+# Is the programme running? The one positive check per programme, read by three
+# places that must agree: ch_shown_<programme> below (the journal-entry enable
+# button's `visible` swap), the disable button's `visible`, and
+# ch_active_<programme>_sgui's `is_shown`, which is what the widget's Enable /
+# Disable pair reads. `?=` rather than `=` so a country without the journal entry
+# answers "not running" instead of logging an invalid-scope read.
+ch_active_world_exposition = {
+	je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition }
+}
+
+ch_active_cultural_institutes = {
+	je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program }
+}
+
+ch_active_global_media_campaign = {
+	je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign }
+}
+
+ch_active_cultural_protectionism = {
+	je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program }
+}
+
 ch_shown_world_exposition = {
-	NOT = { je:je_cultural_hegemony = { has_modifier = ch_world_exposition } }
+	NOT = { ch_active_world_exposition = yes }
 }
 
 ch_shown_cultural_institutes = {
-	NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program } }
+	NOT = { ch_active_cultural_institutes = yes }
 }
 
 ch_shown_global_media_campaign = {
-	NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+	NOT = { ch_active_global_media_campaign = yes }
 }
 
 ch_shown_cultural_protectionism = {
-	NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+	NOT = { ch_active_cultural_protectionism = yes }
 }
