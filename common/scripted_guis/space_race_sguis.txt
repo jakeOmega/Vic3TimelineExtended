@@ -1,0 +1,497 @@
+﻿# ============================================================================
+# Space Race — Scripted GUIs
+# ============================================================================
+# The handlers behind the milestone panels in
+# gui/journal_entry_widgets/space_race_widget.gui. They own NO rules of their
+# own: visibility delegates to the shared gates in
+# common/scripted_triggers/space_race_triggers.txt and every action delegates to
+# the shared bodies in common/scripted_effects/space_race_effects.txt — the very
+# helpers the journal entries' own scripted buttons call. Change an approach or
+# funding rule in the helper and both surfaces follow.
+#
+# One scripted GUI per milestone, with the control passed in from the .gui as a
+# single saved scope. IMPLICIT CONTRACT with the widget — keep both sides in
+# sync (the table is repeated in the .gui header):
+#
+#   scope:op = 0  ->  select the Safe approach
+#   scope:op = 1  ->  select the Ambitious approach
+#   scope:op = 2  ->  decrease this milestone's funding level
+#   scope:op = 3  ->  increase this milestone's funding level
+#
+# The milestone itself is NOT encoded in the op code: it arrives free through
+# the panel's datacontext, which names one of these eight handlers. Folding it
+# into the op would buy a 32-branch chain and save nothing, because variable
+# names cannot be built from a scope.
+#
+# All of these are player-only (`ai_is_valid = { always = no }`). The AI still
+# reaches the same helpers through the `ai_chance` blocks on the journal
+# entries' scripted buttons, which is its only path into the space race — see
+# docs/guides/scripting_best_practices.md, "Journal-Entry Buttons Are the AI's
+# Only Path".
+#
+# sr_rivals_sgui at the bottom is display-only: it is called through
+# ExecuteTooltip and never Execute, and its is_valid is always = no.
+# ============================================================================
+
+sr_milestone_suborbital_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_suborbital
+		sr_controls_shown = { MILESTONE = suborbital }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = suborbital }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = suborbital }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = suborbital }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = suborbital }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = suborbital }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = suborbital }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = suborbital }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = suborbital }
+		}
+	}
+}
+
+sr_milestone_orbital_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_orbital
+		sr_controls_shown = { MILESTONE = orbital }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = orbital }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = orbital }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = orbital }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = orbital }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = orbital }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = orbital }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = orbital }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = orbital }
+		}
+	}
+}
+
+sr_milestone_moon_landing_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_moon_landing
+		sr_controls_shown = { MILESTONE = moon_landing }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = moon_landing }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = moon_landing }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = moon_landing }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = moon_landing }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = moon_landing }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = moon_landing }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = moon_landing }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = moon_landing }
+		}
+	}
+}
+
+sr_milestone_probe_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_probe
+		sr_controls_shown = { MILESTONE = probe }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = probe }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = probe }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = probe }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = probe }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = probe }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = probe }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = probe }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = probe }
+		}
+	}
+}
+
+sr_milestone_moon_base_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_moon_base
+		sr_controls_shown = { MILESTONE = moon_base }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = moon_base }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = moon_base }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = moon_base }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = moon_base }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = moon_base }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = moon_base }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = moon_base }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = moon_base }
+		}
+	}
+}
+
+sr_milestone_mars_landing_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_mars_landing
+		sr_controls_shown = { MILESTONE = mars_landing }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = mars_landing }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = mars_landing }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = mars_landing }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = mars_landing }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = mars_landing }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = mars_landing }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = mars_landing }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = mars_landing }
+		}
+	}
+}
+
+sr_milestone_interstellar_probe_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_interstellar_probe
+		sr_controls_shown = { MILESTONE = interstellar_probe }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = interstellar_probe }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = interstellar_probe }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = interstellar_probe }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = interstellar_probe }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = interstellar_probe }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = interstellar_probe }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = interstellar_probe }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = interstellar_probe }
+		}
+	}
+}
+
+sr_milestone_solar_colonization_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_solar_controls_shown = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			sr_possible_safe = { MILESTONE = solar_colonization }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			sr_possible_ambitious = { MILESTONE = solar_colonization }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			sr_possible_fund_down = { MILESTONE = solar_colonization }
+		}
+		trigger_else = {
+			sr_possible_fund_up = { MILESTONE = solar_colonization }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_effect_safe = { MILESTONE = solar_colonization }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_effect_ambitious = { MILESTONE = solar_colonization }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_effect_fund_down = { MILESTONE = solar_colonization }
+		}
+		else = {
+			sr_effect_fund_up = { MILESTONE = solar_colonization }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Who else is racing. Display only — the widget calls ExecuteTooltip, which
+# renders the effect body without running it, and is_valid is always = no so no
+# control can ever fire it.
+#
+#   scope:op   0 suborbital · 1 orbital · 2 moon_landing · 3 probe
+#              4 moon_base  · 5 mars_landing · 6 interstellar_probe
+#              7 solar_colonization
+#
+# `.gui` has no verified way to list countries (docs/guides/gui_modding_guide.md
+# gotchas #11 and #15), so the list is built here and handed over as text. Each
+# entry prints inside a country scope change, which is what gives it a flag and
+# a bullet for free (gotcha #19). Note gotcha #18: every line printed at ROOT
+# scope — the two "first" lines and the intro — renders ABOVE the country
+# entries whatever order the script is in.
+# ----------------------------------------------------------------------------
+sr_rivals_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			sr_rivals_line_base = { MILESTONE = suborbital }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			sr_rivals_line_base = { MILESTONE = orbital }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			sr_rivals_line_base = { MILESTONE = moon_landing }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			sr_rivals_line_base = { MILESTONE = probe }
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			sr_rivals_line_base = { MILESTONE = moon_base }
+		}
+		else_if = {
+			limit = { scope:op = 5 }
+			sr_rivals_line_base = { MILESTONE = mars_landing }
+		}
+		else_if = {
+			limit = { scope:op = 6 }
+			sr_rivals_line_base = { MILESTONE = interstellar_probe }
+		}
+		else = {
+			sr_rivals_line_base = { MILESTONE = solar_colonization }
+		}
+	}
+}

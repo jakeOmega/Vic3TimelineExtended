@@ -11,6 +11,15 @@ je_space_race_suborbital = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_suborbital"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
 		has_technology_researched = rocketry
@@ -50,15 +59,7 @@ je_space_race_suborbital = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_suborbital_status_ambitious
-				trigger = { has_variable = sr_ambitious_suborbital }
-			}
-			triggered_desc = {
-				desc = je_space_race_suborbital_status_safe
-				trigger = { has_variable = sr_safe_suborbital }
-			}
-			triggered_desc = {
-				desc = je_space_race_suborbital_status_default
+				desc = je_space_race_suborbital_status
 				trigger = { always = yes }
 			}
 		}
@@ -136,6 +137,15 @@ je_space_race_orbital = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_orbital"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = suborbital TECH = guided_missiles } }
 
 	possible = {
@@ -174,27 +184,7 @@ je_space_race_orbital = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_orbital_status_civilian
-				trigger = { has_variable = sr_orbital_civilian }
-			}
-			triggered_desc = {
-				desc = je_space_race_orbital_status_military
-				trigger = { has_variable = sr_orbital_military }
-			}
-			triggered_desc = {
-				desc = je_space_race_orbital_status_scientist
-				trigger = { has_variable = sr_orbital_scientist }
-			}
-			triggered_desc = {
-				desc = je_space_race_orbital_status_ambitious
-				trigger = { has_variable = sr_ambitious_orbital }
-			}
-			triggered_desc = {
-				desc = je_space_race_orbital_status_safe
-				trigger = { has_variable = sr_safe_orbital }
-			}
-			triggered_desc = {
-				desc = je_space_race_orbital_status_default
+				desc = je_space_race_orbital_status
 				trigger = { always = yes }
 			}
 		}
@@ -272,6 +262,15 @@ je_space_race_moon_landing = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_moon_landing"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
@@ -310,31 +309,7 @@ je_space_race_moon_landing = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_moon_landing_status_shackleton
-				trigger = { has_variable = sr_moon_site_shackleton }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_landing_status_equatorial
-				trigger = { has_variable = sr_moon_site_equatorial }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_landing_status_tranquility
-				trigger = { has_variable = sr_moon_site_tranquility }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_landing_status_far_side
-				trigger = { has_variable = sr_moon_site_far_side }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_landing_status_ambitious
-				trigger = { has_variable = sr_ambitious_moon_landing }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_landing_status_safe
-				trigger = { has_variable = sr_safe_moon_landing }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_landing_status_default
+				desc = je_space_race_moon_landing_status
 				trigger = { always = yes }
 			}
 		}
@@ -412,6 +387,15 @@ je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_probe"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
@@ -451,27 +435,7 @@ je_space_race_probe = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_probe_status_venus
-				trigger = { has_variable = sr_probe_target_venus }
-			}
-			triggered_desc = {
-				desc = je_space_race_probe_status_mars
-				trigger = { has_variable = sr_probe_target_mars }
-			}
-			triggered_desc = {
-				desc = je_space_race_probe_status_asteroid
-				trigger = { has_variable = sr_probe_target_asteroid }
-			}
-			triggered_desc = {
-				desc = je_space_race_probe_status_ambitious
-				trigger = { has_variable = sr_ambitious_probe }
-			}
-			triggered_desc = {
-				desc = je_space_race_probe_status_safe
-				trigger = { has_variable = sr_safe_probe }
-			}
-			triggered_desc = {
-				desc = je_space_race_probe_status_default
+				desc = je_space_race_probe_status
 				trigger = { always = yes }
 			}
 		}
@@ -548,6 +512,15 @@ je_space_race_moon_base = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_moon_base"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = moon_landing TECH = reusable_rocketry } }
 
 	possible = {
@@ -586,27 +559,7 @@ je_space_race_moon_base = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_moon_base_status_scientific
-				trigger = { has_variable = sr_moon_base_scientific }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_base_status_industrial
-				trigger = { has_variable = sr_moon_base_industrial }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_base_status_military_purpose
-				trigger = { has_variable = sr_moon_base_military }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_base_status_ambitious
-				trigger = { has_variable = sr_ambitious_moon_base }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_base_status_safe
-				trigger = { has_variable = sr_safe_moon_base }
-			}
-			triggered_desc = {
-				desc = je_space_race_moon_base_status_default
+				desc = je_space_race_moon_base_status
 				trigger = { always = yes }
 			}
 		}
@@ -684,6 +637,15 @@ je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_mars_landing"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = knowledge_economy } }
 
 	possible = {
@@ -723,27 +685,7 @@ je_space_race_mars_landing = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_mars_landing_status_direct
-				trigger = { has_variable = sr_mars_direct }
-			}
-			triggered_desc = {
-				desc = je_space_race_mars_landing_status_orbital_first
-				trigger = { has_variable = sr_mars_orbital_first }
-			}
-			triggered_desc = {
-				desc = je_space_race_mars_landing_status_robotic
-				trigger = { has_variable = sr_mars_robotic }
-			}
-			triggered_desc = {
-				desc = je_space_race_mars_landing_status_ambitious
-				trigger = { has_variable = sr_ambitious_mars_landing }
-			}
-			triggered_desc = {
-				desc = je_space_race_mars_landing_status_safe
-				trigger = { has_variable = sr_safe_mars_landing }
-			}
-			triggered_desc = {
-				desc = je_space_race_mars_landing_status_default
+				desc = je_space_race_mars_landing_status
 				trigger = { always = yes }
 			}
 		}
@@ -821,6 +763,15 @@ je_space_race_interstellar_probe = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_interstellar_probe"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
 		has_variable = sr_completed_probe
@@ -863,15 +814,7 @@ je_space_race_interstellar_probe = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_interstellar_probe_status_ambitious
-				trigger = { has_variable = sr_ambitious_interstellar_probe }
-			}
-			triggered_desc = {
-				desc = je_space_race_interstellar_probe_status_safe
-				trigger = { has_variable = sr_safe_interstellar_probe }
-			}
-			triggered_desc = {
-				desc = je_space_race_interstellar_probe_status_default
+				desc = je_space_race_interstellar_probe_status
 				trigger = { always = yes }
 			}
 		}
@@ -948,6 +891,15 @@ je_space_race_interstellar_probe = {
 je_space_race_interstellar_results = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
+
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_interstellar_results"
+		container = "custom_widget_container_2"
+	}
 
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
@@ -1036,6 +988,15 @@ je_space_race_solar_colonization = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	group = je_group_foreign_affairs
 
+	# The player-facing surface. The vanilla button grid below is hidden from
+	# humans (every space race button carries `is_ai = yes`), so every action it
+	# offered is offered here, through common/scripted_guis/space_race_sguis.txt.
+	widget = {
+		gui = "gui/journal_entry_widgets/space_race_widget.gui"
+		name = "widget_je_space_race_solar_colonization"
+		container = "custom_widget_container_2"
+	}
+
 	is_shown_when_inactive = {
 		has_game_rule = space_race_enabled
 		has_variable = sr_completed_moon_base
@@ -1105,33 +1066,8 @@ je_space_race_solar_colonization = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
-				desc = je_space_race_solar_colonization_status_complete
-				trigger = { has_variable = sr_completed_solar_colonization }
-			}
-			triggered_desc = {
-				desc = je_space_race_solar_colonization_status_stage1
-				trigger = {
-					OR = {
-						NOT = { has_global_variable = sr_colonization_stage }
-						global_var:sr_colonization_stage = 1
-					}
-				}
-			}
-			triggered_desc = {
-				desc = je_space_race_solar_colonization_status_stage2
-				trigger = { global_var:sr_colonization_stage = 2 }
-			}
-			triggered_desc = {
-				desc = je_space_race_solar_colonization_status_stage3
-				trigger = { global_var:sr_colonization_stage = 3 }
-			}
-			triggered_desc = {
-				desc = je_space_race_solar_colonization_status_stage4
-				trigger = { global_var:sr_colonization_stage = 4 }
-			}
-			triggered_desc = {
-				desc = je_space_race_solar_colonization_status_stage5
-				trigger = { global_var:sr_colonization_stage = 5 }
+				desc = je_space_race_solar_colonization_status
+				trigger = { always = yes }
 			}
 		}
 	}

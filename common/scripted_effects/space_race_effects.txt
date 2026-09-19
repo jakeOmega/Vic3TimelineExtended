@@ -486,9 +486,11 @@ sr_set_milestone_status_base = {
 	if = {
 		limit = { NOT = { has_variable = sr_active_$MILESTONE$ } }
 		if = { limit = { has_variable = sr_$MILESTONE$_last_status } remove_variable = sr_$MILESTONE$_last_status }
+		if = { limit = { has_variable = sr_$MILESTONE$_setbacks    } remove_variable = sr_$MILESTONE$_setbacks    }
 	}
 	else_if = {
 		limit = { has_variable = sr_safe_$MILESTONE$ }
+		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
 		if = {
 			limit = { sr_has_failure_cooldown = yes }
 			set_variable = { name = sr_$MILESTONE$_last_status value = 3 }
@@ -499,6 +501,7 @@ sr_set_milestone_status_base = {
 	}
 	else_if = {
 		limit = { has_variable = sr_ambitious_$MILESTONE$ }
+		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
 		if = {
 			limit = { sr_has_failure_cooldown = yes }
 			set_variable = { name = sr_$MILESTONE$_last_status value = 4 }
@@ -508,7 +511,20 @@ sr_set_milestone_status_base = {
 		}
 	}
 	else = {
+		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
 		set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
+	}
+}
+
+# The panel's pace line prints the setback count beside the risk, so the counter
+# has to exist for as long as the milestone does — including in a save where the
+# milestone was already running before this widget was written. Called from the
+# status derivation above, which runs from every button, every `immediate`, the
+# monthly pulse and the cleanup.
+sr_ensure_setback_counter_base = {
+	if = {
+		limit = { NOT = { has_variable = sr_$MILESTONE$_setbacks } }
+		set_variable = { name = sr_$MILESTONE$_setbacks value = 0 }
 	}
 }
 
@@ -1011,5 +1027,51 @@ sr_fire_safe_setback_event = {
 		10 = {
 			trigger_event = { id = space_race_events.73 }
 		}
+	}
+}
+
+# --- Display-only: who else is racing for one milestone ----------------------
+# Rendered by sr_rivals_sgui through ExecuteTooltip, so nothing here ever runs.
+# Country scope (ROOT = the panel's owner). $MILESTONE$ is one of the eight
+# milestone tokens.
+#
+# The participation test is deliberately the same one the monthly pulse uses:
+# sr_ai_should_participate. A great power outside the top three can hold
+# sr_active_$MILESTONE$ and never tick a single month of progress, and listing it
+# as a competitor would be a lie.
+#
+# What this does NOT show is how far along a rival is. Programmes are announced;
+# their internal schedules are not, and reading another country's
+# sr_progress_$MILESTONE$ would hand the player omniscience the system has never
+# given. The claim on "the first" is public — it is a global variable — so that
+# is shown.
+sr_rivals_line_base = {
+	if = {
+		limit = { has_global_variable = sr_global_first_$MILESTONE$ }
+		custom_tooltip_no_bullet = sr_rivals_first_claimed
+	}
+	else = {
+		custom_tooltip_no_bullet = sr_rivals_first_open
+	}
+	if = {
+		limit = {
+			any_country = {
+				NOT = { THIS = ROOT }
+				has_variable = sr_active_$MILESTONE$
+				sr_ai_should_participate = yes
+			}
+		}
+		custom_tooltip_no_bullet = sr_rivals_intro
+		every_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				has_variable = sr_active_$MILESTONE$
+				sr_ai_should_participate = yes
+			}
+			custom_tooltip = sr_rivals_entry
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = sr_rivals_none
 	}
 }

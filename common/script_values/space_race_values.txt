@@ -56,9 +56,19 @@ sr_solar_colonization_goal = {
 	}
 }
 
-# Script value for interstellar transit progress display
+# Script value for interstellar transit progress display. Guarded: the journal
+# entry widget reads it, and a widget is built for every country that can see the
+# entry at all — including ones whose transit variable has never existed.
 sr_interstellar_transit_value = {
-	value = var:sr_interstellar_transit_progress
+	value = 0
+	if = { limit = { has_variable = sr_interstellar_transit_progress } add = var:sr_interstellar_transit_progress }
+}
+
+# Months of the 132-month Alpha Centauri transit still to run, for the widget.
+sr_interstellar_months_left = {
+	value = 132
+	subtract = sr_interstellar_transit_value
+	min = 0
 }
 
 # Progress a milestone drifts forward each month while NO approach is selected.
@@ -413,59 +423,292 @@ sr_total_global_colonies = {
 	if = { limit = { has_global_variable = sr_colony_sedna } add = 1 }
 }
 
+# The monthly rate the panel quotes, and the rate its estimate divides by: the
+# real progress rate once an approach is chosen, the drift rate before that.
+# Keeps the number on screen equal to the number the pulse adds.
+sr_pace_rate_suborbital = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_suborbital
+				has_variable = sr_ambitious_suborbital
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_orbital = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_orbital
+				has_variable = sr_ambitious_orbital
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_moon_landing = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_moon_landing
+				has_variable = sr_ambitious_moon_landing
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_probe = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_probe
+				has_variable = sr_ambitious_probe
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_moon_base = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_moon_base
+				has_variable = sr_ambitious_moon_base
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_mars_landing = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_mars_landing
+				has_variable = sr_ambitious_mars_landing
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_interstellar_probe = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_interstellar_probe
+				has_variable = sr_ambitious_interstellar_probe
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+sr_pace_rate_solar_colonization = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_variable = sr_safe_solar_colonization
+				has_variable = sr_ambitious_solar_colonization
+			}
+		}
+		add = sr_progress
+	}
+	else = {
+		add = sr_progress_drift
+	}
+	min = 0.5
+}
+
+# The setback risk the panel shows. Identical to sr_risk_pct_<m> — the value the
+# roll actually uses — except that it reads zero while the post-setback cooldown
+# is running, because during the cooldown the pulse skips the roll entirely.
+# Never used for a roll; sr_risk_pct_<m> is.
+sr_risk_shown_suborbital = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_suborbital
+	}
+}
+sr_risk_shown_orbital = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_orbital
+	}
+}
+sr_risk_shown_moon_landing = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_moon_landing
+	}
+}
+sr_risk_shown_probe = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_probe
+	}
+}
+sr_risk_shown_moon_base = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_moon_base
+	}
+}
+sr_risk_shown_mars_landing = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_mars_landing
+	}
+}
+sr_risk_shown_interstellar_probe = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_interstellar_probe
+	}
+}
+sr_risk_shown_solar_colonization = {
+	value = 0
+	if = {
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
+		add = sr_risk_pct_solar_colonization
+	}
+}
+
 # ======= Widget display values =======
+# Guarded reads of the two display variables, so the widget never touches a
+# variable that may not exist yet. A save whose milestone was already running
+# before the setback counter existed reads 0 here until the next monthly tick
+# writes a real one, instead of logging a failed variable fetch every frame.
+sr_setbacks_suborbital_value = {
+	value = 0
+	if = { limit = { has_variable = sr_suborbital_setbacks } add = var:sr_suborbital_setbacks }
+}
+sr_setbacks_orbital_value = {
+	value = 0
+	if = { limit = { has_variable = sr_orbital_setbacks } add = var:sr_orbital_setbacks }
+}
+sr_setbacks_moon_landing_value = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_landing_setbacks } add = var:sr_moon_landing_setbacks }
+}
+sr_setbacks_probe_value = {
+	value = 0
+	if = { limit = { has_variable = sr_probe_setbacks } add = var:sr_probe_setbacks }
+}
+sr_setbacks_moon_base_value = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_base_setbacks } add = var:sr_moon_base_setbacks }
+}
+sr_setbacks_mars_landing_value = {
+	value = 0
+	if = { limit = { has_variable = sr_mars_landing_setbacks } add = var:sr_mars_landing_setbacks }
+}
+sr_setbacks_interstellar_probe_value = {
+	value = 0
+	if = { limit = { has_variable = sr_interstellar_probe_setbacks } add = var:sr_interstellar_probe_setbacks }
+}
+sr_setbacks_solar_colonization_value = {
+	value = 0
+	if = { limit = { has_variable = sr_solar_colonization_setbacks } add = var:sr_solar_colonization_setbacks }
+}
+sr_colony_count_value = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_count } add = var:sr_colony_count }
+}
+
 # Rough months left on a milestone at the CURRENT monthly progress rate, for the
 # widget's "about N months to go" line. Ignores setbacks entirely (a failure
 # multiplies progress down, which is exactly what makes the estimate rough), so
 # the label must stay hedged. Only read while an approach is selected —
-# sr_progress has min = 0.5, so the divide is safe either way, but with no
-# approach the pulse adds sr_progress_drift instead and the panel says so
-# rather than quoting an estimate.
+# Divides by sr_pace_rate_<m>, which is floored at 0.5, so the divide is always
+# safe and the estimate follows whichever rate is actually being applied.
 sr_eta_months_suborbital = {
 	value = sr_suborbital_goal
 	if = { limit = { has_variable = sr_progress_suborbital } subtract = var:sr_progress_suborbital }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_suborbital
 }
 sr_eta_months_orbital = {
 	value = sr_orbital_goal
 	if = { limit = { has_variable = sr_progress_orbital } subtract = var:sr_progress_orbital }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_orbital
 }
 sr_eta_months_moon_landing = {
 	value = sr_moon_landing_goal
 	if = { limit = { has_variable = sr_progress_moon_landing } subtract = var:sr_progress_moon_landing }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_moon_landing
 }
 sr_eta_months_probe = {
 	value = sr_probe_goal
 	if = { limit = { has_variable = sr_progress_probe } subtract = var:sr_progress_probe }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_probe
 }
 sr_eta_months_moon_base = {
 	value = sr_moon_base_goal
 	if = { limit = { has_variable = sr_progress_moon_base } subtract = var:sr_progress_moon_base }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_moon_base
 }
 sr_eta_months_mars_landing = {
 	value = sr_mars_landing_goal
 	if = { limit = { has_variable = sr_progress_mars_landing } subtract = var:sr_progress_mars_landing }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_mars_landing
 }
 sr_eta_months_interstellar_probe = {
 	value = sr_interstellar_probe_goal
 	if = { limit = { has_variable = sr_progress_interstellar_probe } subtract = var:sr_progress_interstellar_probe }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_interstellar_probe
 }
 sr_eta_months_solar_colonization = {
 	value = sr_solar_colonization_goal
 	if = { limit = { has_variable = sr_progress_solar_colonization } subtract = var:sr_progress_solar_colonization }
 	min = 0
-	divide = sr_progress
+	divide = sr_pace_rate_solar_colonization
 }
