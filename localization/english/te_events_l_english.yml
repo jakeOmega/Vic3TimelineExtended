@@ -3756,6 +3756,27 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_DEBUG_COVERT
+#
+ te_debug_covert.1.a:0 "Funding 0 - Dormant"
+ te_debug_covert.1.b:0 "Funding 1 - Operational"
+ te_debug_covert.1.c:0 "Funding 2 - Tradecraft"
+ te_debug_covert.1.d:0 "Console-only shortcuts for testing the covert-warfare command centre. None of these can happen in normal play.\n\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\n\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation."
+ te_debug_covert.1.e:0 "Funding 3 - Covert Network"
+ te_debug_covert.1.f:0 "The budget line is the whole service."
+ te_debug_covert.1.g:0 "Funding 4 - Black Budget"
+ te_debug_covert.1.h:0 "Funding 5 - Deep State"
+ te_debug_covert.1.t:0 "Covert Warfare Test Console: Funding"
+ te_debug_covert.2.a:0 "Seed three operations, one in each phase"
+ te_debug_covert.2.b:0 "Force a detection now"
+ te_debug_covert.2.c:0 "Cut funding to 0 and stand everything down"
+ te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants three operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11 and military espionage at month 14 - so all three phase layouts show at once and two of them tip over their boundary at the next monthly pulse. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped."
+ te_debug_covert.2.e:0 "Age every operation by a year"
+ te_debug_covert.2.f:0 "Three dead drops, one bad week."
+ te_debug_covert.2.g:0 "Re-derive the rows' display state"
+ te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
+
+#
 # TE_DEBUG_UN
 #
  te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"

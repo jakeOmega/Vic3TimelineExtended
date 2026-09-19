@@ -1,0 +1,122 @@
+﻿# ============================================================================
+# COVERT WARFARE TEST CONSOLE — fired only from the console:
+#     event te_debug_covert.1     funding levels and the stand-down cascade
+#     event te_debug_covert.2     operations at each phase boundary, and detection
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires these events.
+#
+# Between them they reach every state the command-centre widget can show:
+# each funding level and its ladder row, an operation in each of the three
+# phases, the dormancy annotation, the detection event's "last exposed" record
+# on the defender, and the funding-0 cascade that stands several operations
+# down at once.
+#
+# Requires the covert_warfare_enabled game rule and an active je_covert_warfare
+# (its `possible` wants one operation slot above your rank's baseline).
+# ============================================================================
+namespace = te_debug_covert
+
+te_debug_covert.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_covert.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = te_debug_covert.1.t
+	desc = te_debug_covert.1.d
+	flavor = te_debug_covert.1.f
+
+	# ---- Funding level, one option per rung of the ladder ----
+	option = {
+		name = te_debug_covert.1.a
+		default_option = yes
+		te_debug_covert_set_funding = { LEVEL = 0 }
+	}
+	option = {
+		name = te_debug_covert.1.b
+		te_debug_covert_set_funding = { LEVEL = 1 }
+	}
+	option = {
+		name = te_debug_covert.1.c
+		te_debug_covert_set_funding = { LEVEL = 2 }
+	}
+	option = {
+		name = te_debug_covert.1.e
+		te_debug_covert_set_funding = { LEVEL = 3 }
+	}
+	option = {
+		name = te_debug_covert.1.g
+		te_debug_covert_set_funding = { LEVEL = 4 }
+	}
+	option = {
+		name = te_debug_covert.1.h
+		te_debug_covert_set_funding = { LEVEL = 5 }
+	}
+}
+
+te_debug_covert.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_covert.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = te_debug_covert.2.t
+	desc = te_debug_covert.2.d
+	flavor = te_debug_covert.2.f
+
+	# ---- Three operations against the first eligible neighbour, one in each
+	#      phase, so all three row layouts and both phase boundaries show at once.
+	#      Durations are set one month BEFORE the boundary, so the next monthly
+	#      pulse tips two of them over and the "months until" line can be watched
+	#      changing.
+	option = {
+		name = te_debug_covert.2.a
+		default_option = yes
+		trigger = {
+			any_country = {
+				NOT = { this = ROOT }
+				covert_action_valid_target = yes
+			}
+		}
+		te_debug_covert_seed_phases = yes
+	}
+
+	# ---- Force the detection roll to land, burning one operation. The target
+	#      gets covert_warfare.2 and, whether or not that event's cooldown lets
+	#      it through, the "last exposed" record the command centre reads.
+	option = {
+		name = te_debug_covert.2.b
+		trigger = { covert_operations_active >= 1 }
+		trigger_event = { id = covert_warfare.1 }
+	}
+
+	# ---- The cascade: drop funding to 0 with operations running, so every
+	#      pact's requirement_to_maintain fails at the next evaluation.
+	option = {
+		name = te_debug_covert.2.c
+		te_debug_covert_set_funding = { LEVEL = 0 }
+	}
+
+	# ---- Age every running operation by a year, without waiting.
+	option = {
+		name = te_debug_covert.2.e
+		trigger = { covert_operations_active >= 1 }
+		te_debug_covert_age_year = yes
+	}
+
+	# ---- Close the old-save window on demand: re-derive iw_phase for every
+	#      container, which is what the first monthly pulse after loading does.
+	option = {
+		name = te_debug_covert.2.g
+		te_debug_covert_refresh_display = yes
+	}
+}

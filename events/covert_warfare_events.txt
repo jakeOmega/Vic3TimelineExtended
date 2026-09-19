@@ -107,39 +107,39 @@ covert_warfare.1 = {
 			}
 			if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_election_interference_action } }
-				covert_op_burn = { TYPE = election_interference ACTION = covert_election_interference_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = election_interference ACTION = covert_election_interference_action TARGET = scope:detected_by_country CODE = 0 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
-				covert_op_burn = { TYPE = financial_subversion ACTION = covert_financial_subversion_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = financial_subversion ACTION = covert_financial_subversion_action TARGET = scope:detected_by_country CODE = 1 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
-				covert_op_burn = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action TARGET = scope:detected_by_country CODE = 2 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
-				covert_op_burn = { TYPE = comms_disruption ACTION = covert_comms_disruption_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = comms_disruption ACTION = covert_comms_disruption_action TARGET = scope:detected_by_country CODE = 3 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
-				covert_op_burn = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action TARGET = scope:detected_by_country CODE = 4 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
-				covert_op_burn = { TYPE = military_espionage ACTION = covert_military_espionage_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = military_espionage ACTION = covert_military_espionage_action TARGET = scope:detected_by_country CODE = 5 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
-				covert_op_burn = { TYPE = influence_campaign ACTION = covert_influence_campaign_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = influence_campaign ACTION = covert_influence_campaign_action TARGET = scope:detected_by_country CODE = 6 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
-				covert_op_burn = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action TARGET = scope:detected_by_country CODE = 7 }
 			}
 			else_if = {
 				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_destabilization_action } }
-				covert_op_burn = { TYPE = destabilization ACTION = covert_destabilization_action TARGET = scope:detected_by_country }
+				covert_op_burn = { TYPE = destabilization ACTION = covert_destabilization_action TARGET = scope:detected_by_country CODE = 8 }
 			}
 
 			scope:detected_by_country = {
