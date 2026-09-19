@@ -203,14 +203,21 @@ Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_
 |---|---|---|
 | `colonial_empire_display_ready` | read-only | has `colonial_empire_refresh_display` run yet? One gate for all ten var reads |
 | `colonial_empire_has_candidates` | read-only | is `colonial_empire_largest_eligible_state` set? |
+| `colonial_empire_active_invest_sgui` | read-only | is Development Investment running? **Decides which half of its row is drawn** |
+| `colonial_empire_active_garrison_sgui` | read-only | is Military Garrison running? Ditto |
+| `colonial_empire_active_assimilation_sgui` | read-only | is Cultural Assimilation running? Ditto |
 | `colonial_empire_pressure_sgui` | read-only text | walks the great powers live and names condemners / supporters |
 | `colonial_empire_policy_sgui` | action, `saved_scopes = { op }` | the three programmes, enable and disable |
 | `colonial_empire_decision_sgui` | action, `saved_scopes = { op }` | the three decolonization decisions |
+
+Eight handlers. All carry `ai_is_valid = { always = no }`; the five read-only ones also carry `is_valid = { always = no }` and an empty `effect`, so nothing can execute them.
 
 **Op tables** (repeated in the `.gui` header and the sgui header — keep all three in step):
 
 `colonial_empire_policy_sgui`: 0 enable Invest · 1 disable Invest · 2 enable Garrison · 3 disable Garrison · 4 enable Assimilation · 5 disable Assimilation.
 `colonial_empire_decision_sgui`: 0 Release a Colonial Territory · 1 Planned Full Decolonization · 2 Round Table Conference.
+
+**An op code decides what a control does, never whether it is drawn.** `AddScope` is passed to `IsValid`, `Execute` and the tooltips only — the three paths `st_res_scripted_gui.txt` has shipped. Whether a saved scope reaches an `is_shown` block is *unproven* in this mod: Strategic Reserve passes one to `IsShown` but its `is_shown` never reads it, vanilla ships no handler whose `is_shown` reads a saved scope, and the one in-mod case (`un_chamber_vote_sgui`'s veto branch) is fail-open and so would look correct either way. With the button grid hidden from humans, a programme row whose visibility quietly evaluated false would leave no control at all, so each Enable/Disable pair keys off a scope-free `colonial_empire_active_*_sgui` instead — Disable on `IsShown(…)`, Enable on `Not(IsShown(…))`, which is the shape banking's dashboard is play-tested with. `colonial_empire_policy_sgui.is_shown` is therefore unconditional, and `colonial_empire_decision_sgui.is_shown` is `always = yes` (a decision with nothing to release stays visible and disabled), so no control's visibility depends on that path.
 
 **Display-only reads** — the widget derives nothing:
 - Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]`, reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`.
@@ -233,6 +240,7 @@ Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_
 6. **Every `var:` read in the widget stays behind `colonial_empire_display_ready`** — `is_shown_when_inactive` means the widget is built for countries whose entry never activated.
 7. **`GetValueWithBreakdownFor` is not used in the widget** — its object chain is confirmed for `ROOT.GetCountry.GetModifier…` in a JE desc but not for `JournalEntry.GetCountry.GetModifier…` in a widget. Thin display script values (`colonial_{invest,garrison,assim}_effectiveness_display`) read the aggregates; the bar's own hover keeps the full breakdown.
 8. **A loc key reachable from BOTH a description and a widget must carry no country accessor at all.** `ROOT.` is the proven root in a description and in an `ExecuteTooltip`-rendered effect; `JournalEntry.` is the proven root in a widget. The trap is *nesting*: `je_colonial_empire_tt_invest` is a `.gui` `tooltip = "key"` (widget context), so while it included `$CE_INVEST_IN_DEVELOPMENT_DESC$` it dragged that key's `ROOT.GetCountry.GetModifier…` line into widget context — even though the `_DESC` key itself was untouched and is correct for the button and for `ExecuteTooltip`. Fix shape: keep the prose in an accessor-free `CE_*_BODY` key that both sides include, and let each side append its own root-appropriate reading of the number. Check the whole reachability graph (`$KEY$`, `SelectLocalization`, `AddLocalizationIf`, `GetCustom` targets), not just the keys the `.gui` names directly.
+9. **Never move a control's visibility onto an op-parameterised `IsShown`.** See the paragraph above the op tables: visibility comes from a scope-free read-only handler, because a saved scope reaching an `is_shown` block is unproven here and the hidden button grid leaves no fallback. Adding a fourth programme means adding a fourth `colonial_empire_active_*_sgui` alongside its two op codes.
 
 #### Traced scenarios
 Fresh activation (`immediate` populates the display state on frame one) · inactive entry (root `visible = "[JournalEntry.IsActive]"`, nothing runs) · each programme on and off (row and the six live groups move the next frame; only the three iterating snapshots lag a month) · Garrison below the authority gate (greyed, condition in `IsValidTooltip`) · Assimilation without the era-6 tech · no eligible territory (decisions greyed, "largest" row hidden by its own guard) · decision opened then cancelled (event option D clears every marker) · AI country (acts only through `ai_chance`) · law passed mid-entry · old save mid-entry (guarded, shows the pending line) · bar reaches 0 or 100 (cleanup removes all ten variables).

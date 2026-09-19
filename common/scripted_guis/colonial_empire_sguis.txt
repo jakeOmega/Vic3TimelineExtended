@@ -34,6 +34,25 @@
 # Both tables are repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md § Colonial Stability Widget. Keep all
 # three in step.
+#
+# ---------------------------------------------------------------------------
+# WHY THE OP CODE DECIDES WHAT A CONTROL *DOES* BUT NEVER WHETHER IT IS *DRAWN*
+#
+# Passing a saved scope to `IsValid` / `Execute` / the tooltips is proven in this
+# mod (st_res_scripted_gui.txt has shipped it). Passing one to `IsShown` is NOT:
+# Strategic Reserve hands `AddScope('dir', …)` to IsShown but its `is_shown`
+# never reads the scope, vanilla ships no handler whose `is_shown` reads a saved
+# scope at all, and the one in-mod case (un_chamber_vote_sgui's veto branch) is
+# written fail-open, so it would look fine either way. Vanilla's
+# scripted_guis.md only promises saved scopes "in triggers / effects".
+#
+# With the button grid hidden from humans, a programme row whose visibility
+# quietly evaluated false would leave the player no control at all — the one
+# failure this surface cannot afford. So each programme's Enable/Disable pair
+# takes its visibility from a SCOPE-FREE read-only handler below
+# (colonial_empire_active_*_sgui), which is the shape banking's dashboard has
+# been play-tested with. The op code still selects the gate, the effect and the
+# tooltip text.
 # ============================================================================
 
 
@@ -69,6 +88,55 @@ colonial_empire_has_candidates = {
 	scope = country
 	is_shown = {
 		has_variable = colonial_empire_largest_eligible_state
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+
+# ---------------------------------------------------------------------------
+# Read-only: is programme X running? One per programme, and the ONLY thing that
+# decides which half of each Enable/Disable pair the widget draws.
+#
+# Deliberately scope-free (no `saved_scopes`), because whether a saved scope
+# reaches `is_shown` is unproven here — see the note in the file header. This is
+# the shape banking's dashboard has been play-tested with.
+#
+# Each `is_shown` is the same check as the matching scripted_button's `visible`
+# (minus its `is_ai = yes`), read in the SAME scope the button reads it in. The
+# three programme modifiers are country-scoped: the button effects apply them at
+# the top level of a country-scope effect, the bar reads them as
+# `owner = { has_modifier = … }`, and colonial_empire_je_cleanup_effect removes
+# them in country scope. (Contrast the five colonial_empire_*_modifier PHASE
+# modifiers, which the JE pulse applies to the ENTRY with
+# `je:je_colonial_empire = { add_modifier = … }` and which a country-scope
+# has_modifier would therefore never see. None of those are read here.)
+# ---------------------------------------------------------------------------
+colonial_empire_active_invest_sgui = {
+	scope = country
+	is_shown = {
+		has_modifier = colonial_development_investment_modifier
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+colonial_empire_active_garrison_sgui = {
+	scope = country
+	is_shown = {
+		has_modifier = colonial_military_garrison_modifier
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+colonial_empire_active_assimilation_sgui = {
+	scope = country
+	is_shown = {
+		has_modifier = colonial_cultural_assimilation_modifier
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -143,41 +211,23 @@ colonial_empire_pressure_sgui = {
 # ---------------------------------------------------------------------------
 # The three colonial programmes, enable and disable.
 #
-# `is_shown` mirrors the matching scripted_button's `visible` (minus its
-# `is_ai = yes`), so exactly one of the pair's two buttons is ever shown -- the
-# same arrangement banking's dashboard uses. `is_valid` and `effect` delegate.
+# `is_valid` delegates to the same trigger the matching scripted_button's
+# `possible` calls, and `effect` to the same effect its `effect` calls, selected
+# by op code. Those three paths (IsValid / Execute / the tooltips) are the ones
+# `AddScope` is proven on in this mod.
+#
+# `is_shown` is deliberately unconditional: WHICH half of each pair is drawn is
+# decided by the scope-free colonial_empire_active_*_sgui handlers above, so no
+# control's visibility depends on a saved scope reaching an `is_shown` block.
+# See the file header for why. A stray op code cannot produce a live control
+# either way -- `is_valid`'s `trigger_else = { always = no }` greys out anything
+# outside 0-5, and `effect` has no branch for it.
 # ---------------------------------------------------------------------------
 colonial_empire_policy_sgui = {
 	scope = country
 	saved_scopes = { op }
 
-	is_shown = {
-		trigger_if = {
-			limit = { exists = scope:op scope:op = 0 }
-			NOT = { has_modifier = colonial_development_investment_modifier }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			has_modifier = colonial_development_investment_modifier
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			NOT = { has_modifier = colonial_military_garrison_modifier }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 3 }
-			has_modifier = colonial_military_garrison_modifier
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 4 }
-			NOT = { has_modifier = colonial_cultural_assimilation_modifier }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 5 }
-			has_modifier = colonial_cultural_assimilation_modifier
-		}
-		trigger_else = { always = no }
-	}
+	is_shown = { always = yes }
 
 	ai_is_valid = { always = no }
 
