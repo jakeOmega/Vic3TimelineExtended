@@ -3,15 +3,16 @@
 # ============================================================================
 # Two readings that used to be a chain of `triggered_desc` entries on the journal
 # entry: the country's influence tier (six branches) and the world hegemon's
-# exported political model (twelve). Both are read from the widget as
+# exported political model (fifteen). Both are read from the widget as
 # [JournalEntry.GetCountry.GetCustom('<key>')].
 #
 # Neither block owns a threshold or a classification. The tier reads `ch_tier`,
 # whose only derivation site is `ch_set_display_state`
 # (common/scripted_effects/cultural_hegemony_effects.txt), where 2/5/10/15/25
-# live. The exported model reads `global_var:ch_rank_1_ideology`, whose only
-# derivation site is `ch_cache_rank_1_ideology_alignment_summary` in the same
-# file — the 1..12 mapping below is that effect's, in its order.
+# live. The exported model reads `global_var:ch_rank_1_ideology`, the rank-1
+# country's `var:ch_model`, whose only derivation site is
+# `ch_set_political_model` in the same file — the 1..15 codes below are that
+# effect's (its header has the table; 13-15 are the newer models).
 # ============================================================================
 
 ch_tier_text = {
@@ -81,10 +82,10 @@ ch_tier_blurb = {
 	}
 }
 
-# The world hegemon's political model, in the twelve families
-# ch_cache_rank_1_ideology_alignment_summary classifies it into. The guard comes
-# first: the global does not exist until the first yearly pulse, and on an old
-# save it can be absent for up to a year.
+# The world hegemon's political model, in the fifteen families
+# ch_set_political_model classifies it into. The guard comes first: the global
+# does not exist until the first rebuild, and on an old save it can be absent
+# for up to a year.
 ch_exported_model_text = {
 	type = country
 	random_valid = no
@@ -140,6 +141,18 @@ ch_exported_model_text = {
 	text = {
 		trigger = { global_var:ch_rank_1_ideology = 12 }
 		localization_key = ch_model_other
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 13 }
+		localization_key = ch_model_technocratic
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 14 }
+		localization_key = ch_model_republican
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 15 }
+		localization_key = ch_model_developmentalist_junta
 	}
 	text = {
 		localization_key = ch_model_unknown
