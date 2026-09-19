@@ -1495,6 +1495,8 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 20. **`JournalEntry.GetCountry.GetCustom('x')` works in JE widget loc** — confirmed in-game, alongside `.MakeScope.ScriptValue('x')` and `.MakeScope.Var('x')`.
 
+21. **`EqualTo_CFixedPoint` exists (35 vanilla uses), and it is what lets you stop encoding thresholds in `.gui`.** The comparison family is `EqualTo_`, `NotEqualTo_`, `GreaterThanOrEqualTo_`, `LessThanOrEqualTo_CFixedPoint`. Testing a *band* in the `.gui` (`GreaterThanOrEqualTo_CFixedPoint(Var('iw_duration'), '(CFixedPoint)12')`) copies a balance number out of script; have script write the classification into its own variable at the site that already recomputes the input, then test identity here. The catch is that a newly introduced variable is absent on containers and countries restored from an older save until the next pulse, and a `.gui` read of a missing variable logs "Failed to fetch variable" *every frame* — so gate the lines that use it on an `is_shown`-only scripted GUI that asks script whether it has landed (`covert_ops_phase_ready_sgui` in `covert_operations_widget.gui`).
+
 ---
 
 ## Patterns from Workshop Mods
@@ -1535,6 +1537,10 @@ Notes learned building the Strategic Reserve inventory widget:
 - The mapping is an implicit contract between the `.gui` and the script. Document it in *both* file headers.
 - Variable *names* can't be built from a scope (`set_variable = { name = st_res_$scope:good$_rate }` is not a thing), so a saved scope can select a branch but cannot replace per-entity script. One scripted GUI per entity with the action as the saved scope is usually the right split.
 - Phrase `custom_tooltip` text inside `is_valid` as a **condition** ("Stays within the weekly cap"), not a complaint ("Cannot change rate"): `ScriptedGui.IsValidTooltip` renders it with a tick when valid and a cross when not, and a negative phrasing reads wrong in the valid case.
+
+Note learned wiring the covert-warfare operation rows (**when a row must pass an object, not a number**):
+- An `AddScope` argument does not have to be a `MakeScopeValue` literal. This mod already passes an object — `gui/market_panel.gui:439` sends a partner market as `AddScope('base_market', Scope.GetMarket.MakeScope)` and `gui_chart_script_values.txt` reads it back as `scope:base_market`. That is proven for a **script value**; whether the same object arrives in a **scripted GUI's** `saved_scopes` has no vanilla precedent, so treat it as unverified until someone sees it work in-game, and make the receiving `is_valid` fail closed (`exists = scope:x` plus an exact match against the entity the row names) so an unset scope greys the control instead of acting on the wrong thing.
+- When a row needs to tell script **two** things (which entity *and* which action), prefer one scripted GUI per action with the entity as the single saved scope over chaining two `AddScope` calls. Chaining type-checks — `TopScope.AddScope` returns `TopScope` — but no vanilla `.gui` does it, and `.gui` errors only surface in-game. If the row already has per-entity `visible` markup (one `HasTag` block per type, say), that markup can carry the `datacontext` that picks the handler, so the second dimension costs a `blockoverride` rather than an unproven engine shape.
 
 Notes learned adding the reserve-policy panel to the same widget:
 - **One saved scope, wider op codes, beats two chained `AddScope`s.** `TopScope.AddScope` returns `TopScope`, so chaining type-checks, but no vanilla `.gui` chains it and `.gui` errors only surface in-game. A single `op` integer that encodes both the action and which setting it acts on (`0-3` select, `10-12` preset, `20-31` six +/- steppers) keeps the exact shape vanilla demonstrates while backing 20 controls from one scripted GUI.

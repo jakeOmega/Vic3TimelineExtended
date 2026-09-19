@@ -180,10 +180,56 @@ Models the challenge of maintaining overseas colonies after decolonization tech.
 Command centre for the covert-operations layer: intelligence capacity, operation slots, funding level and detection risk. Operations themselves are launched as diplomatic actions (`common/diplomatic_actions/covert_operations.txt`), not from this entry. Mechanics, files and AI behaviour are documented in `mod_systems.md` § Covert Warfare System.
 
 ### Buttons (2)
-- `iw_increase_funding_button`, `iw_decrease_funding_button`
+- `iw_increase_funding_button`, `iw_decrease_funding_button` — both carry `visible = { is_ai = yes }`, so the vanilla grid shows a human nothing; the widget's funding stepper is the human surface and calls the same helpers.
 
-### Operations Widget (journal-entry widget)
-**File:** `gui/journal_entry_widgets/covert_operations_widget.gui` — `widget_je_covert_operations` in `custom_widget_container_2`. Read-only: one row per running operation (type, target, phase, detection) from the operator's `iw_ops` script-container list. It stores each target's **capital state** (`iw_target_capital`) because `Var().GetCountry.GetName` renders blank in a widget (`gui_modding_guide.md` gotcha #11).
+Unlike banking, these buttons are **not** the AI's path into the system: neither declares an `ai_chance`, and the entry's own `on_monthly_pulse` sets `iw_funding_level` directly for every `is_player = no` country. The declarations stay anyway (deleting a `scripted_button = …` line is how an entry silently loses an option), and the gate is safe whichever way the undocumented no-`ai_chance` default falls — if the AI never clicks, nothing changes; if it does, both effects are idempotent and the next pulse re-asserts the AI's level.
+
+### Status Desc (2 entries)
+Down from 22 `triggered_desc` lines and three `iw_separator` delimiters to the five-way intelligence-standing verdict (`je_iw_status_fortress` … `_vulnerable`, the one genuinely prose reading) plus `je_iw_no_operations`, which points at the diplomatic actions. Everything else moved into the command centre. Keys rendered from `status_desc` keep the `ROOT.` accessor; keys rendered by a widget use `JournalEntry.GetCountry…`. No key is reachable from both.
+
+### Variables
+Country: `iw_funding_level` (0 – `iw_funding_level_max`, which is **5**), `iw_defender_event_cooldown` / `_age`, `iw_last_exposed_country` / `_type` / `_age`, and the staging pair `target_max_ic` / `target_type_defense`. Operation container: `iw_target`, `iw_duration`, `iw_target_capital`, `iw_detect`, `iw_tgt_ic`, `iw_tgt_td`, `iw_phase`, `iw_phase_months_left`.
+
+### Command Centre (journal-entry widget)
+Two custom widgets, both from one file, wired from `je_covert_warfare.txt` into `custom_widget_container_1` (above the status text) and `_2` (below it).
+
+- **File:** `gui/journal_entry_widgets/covert_operations_widget.gui` — `widget_je_covert_command_centre`, `widget_je_covert_operations`
+- **Handlers:** `common/scripted_guis/covert_warfare_sguis.txt`
+- **Shared helpers:** `common/scripted_triggers/covert_warfare_triggers.txt` (`covert_possible_increase_funding`, `covert_possible_decrease_funding`, `covert_possible_stand_down`), `common/scripted_effects/covert_warfare_effects.txt` (`covert_effect_increase_funding`, `covert_effect_decrease_funding`, `covert_effect_stand_down`, and the shared tail `covert_refresh_funding_state`)
+- **Display-only reads:** `intelligence_capacity_from_modifiers_display`, `covert_defense_economic_display`, `covert_defense_military_display`, `covert_defense_ideological_display`, `covert_detection_base_display`, `covert_ops_max_per_type_display`, `covert_last_exposed_age_display`, and `covert_funding_detect_reduction_at_1…5` / `covert_funding_ci_ic_at_1…5` (each a sum of the tuning constants in `covert_warfare_script_values.txt` § 1, so the funding ladder cannot drift from the detection formula)
+- **Customizable localization:** `common/customizable_localization/covert_warfare_custom_loc.txt` — `covert_funding_level_name`, `covert_funding_state_line`, `covert_decrease_funding_warning`, `covert_last_exposed_type_name`
+
+Areas:
+1. **Intelligence capacity** — total, standing relative to the global best, and the components (modifiers, literacy, GDP share). The modifier row's value comes from a script value; its `GetValueWithBreakdownFor` breakdown is in the tooltip only.
+2. **Operation slots** — in use / maximum / free, plus the per-type cap from `covert_ops_max_per_type`. Slot breakdown in the tooltip.
+3. **Funding** — the level and its name, what that level means, a `[-] n [+]` stepper, and a six-row ladder naming every level's detection reduction and counterintelligence bonus with the row in force marked. Current weekly cost and the cost one level up. A dormancy banner when funding is 0.
+4. **Detection risk** — base rate, funding stealth reduction, covert efficiency. Deliberately no country-level risk number: see the Known-behaviours note in `mod_systems.md`. Each operation's own risk is on its row.
+5. **Covert defence** — unused slots redirected to counterintelligence, the funding bonus, and the three `country_covert_defense_*_add` axes with their breakdowns in the tooltip.
+6. **Last exposed** — what our own counterintelligence caught, written by `covert_op_burn` at the moment of exposure. Dropped after ten years.
+7. **Operation rows** — one per `iw_ops` container: type and target, phase by name with months until the next phase, a dormancy line, and that operation's own detection risk with the IC-versus-defence arithmetic. Optionally a per-row **Stand down** control.
+
+Op table:
+
+| op | control | delegates to |
+|---|---|---|
+| 0 | funding stepper `[-]` | `covert_possible_decrease_funding` / `covert_effect_decrease_funding` |
+| 1 | funding stepper `[+]` | `covert_possible_increase_funding` / `covert_effect_increase_funding` |
+| — | per-row **Stand down** | `covert_possible_stand_down` / `covert_effect_stand_down`, parameterized by type; the target arrives as the saved scope `iw_tgt` |
+
+**Stand down** ends one operation without waiting for detection and without cutting funding to zero (which would end all of them). It removes the pact and calls `covert_op_destroy`, reaching the same end state as breaking the pact from the diplomacy outliner — that path runs `manual_break_effect = { covert_op_end }`, i.e. the same `covert_op_destroy`, and the effect's `any_in_list` guard makes it idempotent, so it does not matter whether `remove_diplomatic_pact` also fires the break hook. It is `covert_op_burn` without the infamy and relations hit, which belong to being caught. There are nine handlers, one per type, rather than one with a type op code, because the row's existing per-tag markup already settles the type — which lets the target travel alone in a **single** `AddScope`, the only shape vanilla demonstrates. Eligibility is fail-closed: it requires both that `scope:iw_tgt` resolved and that we run an operation of that exact type against that exact country, so the worst case is a permanently greyed button rather than the wrong operation ending.
+
+Editing rules:
+- Change a funding action's eligibility or effect in the **helper**, never in the button or the scripted GUI.
+- Never compare a game number against a literal in the `.gui`. The phase lines read `iw_phase` (1/2/3) and `iw_phase_months_left`, written by `covert_op_refresh_phase`; the 6- and 12-month thresholds live only in `covert_op_is_established` / `covert_op_is_fully_operational`.
+- Anything the widget needs to know but cannot ask goes through an `is_shown`-only scripted GUI: `covert_ops_dormant_sgui`, `covert_last_exposed_known_sgui`, `covert_ops_phase_ready_sgui`.
+- Panel numbers come from `MakeScope.ScriptValue`; `GetModifier.GetValueWithBreakdownFor` is for tooltips only, so if that chain fails in-game the panel still reads correctly and only the hover is lost.
+- Target country names go through the stored capital state (`iw_target_capital`, refreshed monthly inside `covert_op_refresh_detection`) because `Var().GetCountry.GetName` renders blank in this mod (`gui_modding_guide.md` gotcha #11). The last-exposed attacker is stored as the **country** instead and named by navigating into it in script, so an annexed attacker degrades to an anonymous line.
+- Both widget roots are gated on `[JournalEntry.IsActive]`: the entry has `is_shown_when_inactive`, so without the gate every display read would run for countries that have none of these variables (gotcha #14).
+
+Traced scenarios: fresh activation (no operations, dormant banner, empty-state line); inactive entry (neither widget renders, no variable reads); `[+]` 0→1 (cost and counter-intelligence modifiers both applied in the same click); `[-]` 1→0 with operations running (tooltip warns, then every pact lapses); either end of the ladder (stepper greys itself with the condition as its tooltip); target annexed mid-month (row renders from the stored capital until the sync collects the container, Stand down greys out); AI country (grid still declared and visible to the AI, every handler `ai_is_valid = { always = no }`); entry deactivated by losing a slot (widgets hidden, pacts keep running); save made before this widget (phase lines hidden for at most one month).
+
+### Debug Harness
+`event te_debug_covert.1` sets funding to any of the six levels; `event te_debug_covert.2` seeds three operations at months 5 / 11 / 14, forces a detection, cuts funding to 0, ages everything by a year, and re-derives the rows' display state. Files: `events/te_debug_covert_events.txt`, `common/scripted_effects/te_debug_covert_effects.txt`.
 
 ### Never Completes
 Persistent journal entry.
