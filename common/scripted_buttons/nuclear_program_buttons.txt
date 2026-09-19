@@ -1,0 +1,178 @@
+﻿# Nuclear weapons
+increase_funding_nuclear_program = {
+	name = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
+	desc = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+
+	visible = { always = yes }
+
+	#Country scope
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation > nuclear_weapon_program_funding_step }
+			add = 15
+		}
+		if = {
+			limit = { country_innovation >= 200 }
+			add = 10
+		}
+		if = {
+			limit = { country_innovation >= 300 }
+			add = 10
+		}
+		if = {
+			limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+			add = 30
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
+			add = 35
+		}
+		if = {
+			limit = {
+				var:nuclear_weapons_program_first_nuke_done = 0
+				var:nuclear_weapon_program_progress >= 75
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				has_variable = nuclear_weapon_stockpile
+				any_rival_country = {
+					has_modifier = nuclear_power
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+				}
+			}
+			add = 20
+		}
+		if = {
+			limit = { is_at_war = yes }
+			add = 10
+		}
+		if = {
+			limit = { country_innovation < 150 }
+			add = -15
+		}
+		if = {
+			limit = { country_innovation < nuclear_weapons_program_current_cost }
+			add = -20
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
+			add = -45
+		}
+	}
+
+	possible = {
+		country_innovation > nuclear_weapon_program_funding_step
+		NOT = {
+			modifier:country_nuclear_disarmament_bool = yes
+		}
+		NOT = {
+			modifier:country_nuclear_program_pause_bool = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+			change_variable = {
+				name = nuclear_weapons_program_funding
+				add = 1
+			}
+			je:je_nuclear_program = {
+				if = {
+					limit = { has_modifier = nuclear_weapon_program_funding }
+					remove_modifier = nuclear_weapon_program_funding
+				}
+				add_modifier = {
+					name = nuclear_weapon_program_funding
+					multiplier = nuclear_weapons_program_current_cost
+				}
+			}
+		}
+	}
+}
+
+decrease_funding_nuclear_program = {
+	name = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING"
+	desc = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+
+	visible = { always = yes }
+
+	#Country scope
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { country_innovation < 150 }
+			add = 20
+		}
+		if = {
+			limit = { country_innovation < nuclear_weapons_program_current_cost }
+			add = 25
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
+			add = 35
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile }
+			add = 15
+		}
+		if = {
+			limit = {
+				var:nuclear_weapons_program_first_nuke_done > 0
+				country_innovation < 250
+			}
+			add = 10
+		}
+		if = {
+			limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+			add = -40
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
+			add = -35
+		}
+		if = {
+			limit = {
+				has_variable = nuclear_weapon_stockpile
+				any_rival_country = {
+					has_modifier = nuclear_power
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+				}
+			}
+			add = -20
+		}
+		if = {
+			limit = { is_at_war = yes }
+			add = -15
+		}
+	}
+
+	possible = {
+		var:nuclear_weapons_program_funding > 0
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
+			change_variable = {
+				name = nuclear_weapons_program_funding
+				subtract = 1
+			}
+			je:je_nuclear_program = {
+				if = {
+					limit = { has_modifier = nuclear_weapon_program_funding }
+					remove_modifier = nuclear_weapon_program_funding
+				}
+				add_modifier = {
+					name = nuclear_weapon_program_funding
+					multiplier = nuclear_weapons_program_current_cost
+				}
+			}
+		}
+	}
+}

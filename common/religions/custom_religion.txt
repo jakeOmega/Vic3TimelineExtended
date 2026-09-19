@@ -1,5 +1,5 @@
 ﻿# Custom religion families used by the timeline-extended scripted-buttons "select
-# a custom religion" flow (`timeline_extended_scripted_buttons.txt:5740+`) and
+# a custom religion" flow (the `select_*` / `create_custom_religion` buttons in `timeline_extended_scripted_buttons.txt`) and
 # the `country_has_any_custom_religion` trigger in `misc_triggers.txt`. Each
 # entry mirrors the closest vanilla heritage so pops/triggers behave coherently.
 custom_religion_christian = {
