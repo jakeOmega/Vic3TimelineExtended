@@ -1581,15 +1581,15 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 20 GUI files, all full-file replacements of vanilla panels:
+Currently 21 GUI files at the top of `gui/`: 19 full-file replacements of vanilla panels plus 2 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
-| `commander_panel.gui` | Commander details | Modified commander display |
 | `construction_panel.gui` | Construction queue | Public/private construction slider |
 | `goods_state_panel.gui` | Goods by state | Modified goods display |
+| `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts |
 | `military_formation_panel.gui` | Military formation | Custom military info |
 | `panel_military.gui` | Military overview | Modified military overview |
 | `politics_panel_institutions.gui` | Institutions tab | Custom institution display |
@@ -1601,16 +1601,15 @@ Currently 20 GUI files, all full-file replacements of vanilla panels:
 | `right_click_menu.gui` | Right-click menu | Additional menu options |
 | `states_panel.gui` | States list | Modified state display |
 | `states_panel_buildings.gui` | State buildings tab | Enhanced building display |
+| `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
 | `tooltip.gui` | Tooltip widget | Custom tooltip content |
 | `treaty_draft_panel.gui` | Treaty drafting | Custom treaty interface |
 | `treaty_panel.gui` | Treaty view | Enhanced treaty display |
 | `zzz_extra_goods_texticons.gui` | (additive) | Custom goods text icons |
 
-Scripted GUIs: `fmc_construction_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `un_chamber_sguis.txt` — read-only tooltip builders for the UN chamber widget (no `effect` that writes state; called only through `ExecuteTooltip`).
+Scripted GUIs (`common/scripted_guis/`): `te_construction_market_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `st_res_scripted_gui.txt` — one `op`-parameterized handler per Strategic Reserve good. `banking_dashboard_scripted_gui.txt` — the banking policy dashboard's handlers. `un_chamber_sguis.txt` — the UN chamber's tooltip builders (called only through `ExecuteTooltip`) plus its vote/propose handlers. `te_history_scripted_gui.txt` — the history charts' marker tooltip.
 
-Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journal_entry_widgets/` is attached to a JE with a `widget = { gui = "..." name = "..." container = "custom_widget_container_N" }` block and renders inside vanilla's `journal_entry.gui` slots, so it costs no panel replacement. `custom_widget_container_1` sits above the status description, `_2` between the status description and the scripted-button grid, `_3` below the button grid; `_4`–`_7` are further down the panel. Keep content within `@panel_width_minus_20` (520 px) — the existing widgets use a 480 px text column plus a `margin = { 20 8 }`. Current widgets: `covert_operations_widget.gui`, `strategic_reserve_widget.gui`, `un_chamber_widget.gui`.
-
-Plus the **additive** journal-entry widgets under `gui/journal_entry_widgets/`, which override nothing — each is mounted into a vanilla `custom_widget_container_*` slot by a `widget = { … }` entry on its journal entry:
+Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journal_entry_widgets/` is attached to a JE with a `widget = { gui = "..." name = "..." container = "custom_widget_container_N" }` block and renders inside vanilla's `journal_entry.gui` slots, so it costs no panel replacement. `custom_widget_container_1` sits above the status description, `_2` between the status description and the scripted-button grid, `_3` below the button grid; `_4`–`_7` are further down the panel. Keep content within `@panel_width_minus_20` (520 px) — the existing widgets use a 480 px text column plus a `margin = { 20 8 }`. The current widgets (add a row here when a journal entry gains one):
 
 | File | Journal entry | Purpose |
 |---|---|---|
@@ -1618,6 +1617,7 @@ Plus the **additive** journal-entry widgets under `gui/journal_entry_widgets/`, 
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
 | `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
 | `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
+| `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 
 ## GUI 3-way merge across vanilla patches

@@ -378,7 +378,7 @@ Key gotchas:
   - `on_entry_into_force` applies market-wide mitigation modifiers (`carbon_tax_modifier`, `renewable_investment_modifier`, `emission_standards_modifier`) and country-level mitigation modifiers (`reforestation_subsidies_modifier`, `public_transit_modifier`, `fossil_fuel_divestment_modifier`, `green_building_codes_modifier`) to the source country context.
   - Sets country variable `has_emissions_reduction_treaty` used by GW scripted buttons.
   - `non_fulfillment` freezes the treaty if required mitigation modifiers are removed.
-- **Button lock integration:** Remove-button `possible`/`visible` checks in `common/scripted_buttons/timeline_extended_scripted_buttons.txt` now block rollback when `has_emissions_reduction_treaty` is present (for emissions-reduction policies only).
+- **Button lock integration:** Remove-button `possible`/`visible` checks in `common/scripted_buttons/global_warming_buttons.txt` now block rollback when `has_emissions_reduction_treaty` is present (for emissions-reduction policies only).
 
 ## Space Race (`je_space_race_*`)
 
@@ -1068,11 +1068,11 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ---
 
-## Cultural Hegemony (Soft Power)
+## Cultural Hegemony System
 
-**Purpose:** Measures a nation's global cultural influence ("cache") — how much the rest of the world admires, envies, or mimics your culture and political model. The system drives ideology shift in foreign nations (via legitimacy pressure), raises SoL expectations globally, and provides migration bonuses. Prestige is an **input** to cultural pull, not an output.
+**Purpose:** Measures a nation's global cultural influence ("cache") — how much the rest of the world admires, envies, or mimics your culture and political model. The system drives ideology shift in foreign nations (via legitimacy pressure), raises SoL expectations globally, and provides migration bonuses. Prestige is an **input** to cultural pull, not an output. The JE surfaces a yearly leaderboard and exposes player-facing cultural policy controls.
 
-**Activation:** Country rank ≥ Minor Power + has researched `romanticism`.
+**Activation:** `cultural_hegemony_enabled` game rule; the JE activates once any country has researched `mass_media` and the country itself has `romanticism`. Scores are computed from game start by the on-actions, so they are already stable when the JE first appears.
 
 **Architecture:** Share-based. Every country computes a "raw" cultural pull score, then each country's final score is `(raw / global_sum_of_raw) × 100` — a percentage of global cultural influence. This scales naturally as populations grow 5× and GDP grows 1000×+ over a 200-year game.
 
@@ -1099,107 +1099,13 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 **JE Status Thresholds (share-based):**
 - Dominant: ≥ 25%, Major: ≥ 15%, Significant: ≥ 10%, Moderate: ≥ 5%, Minor: ≥ 2%, Negligible: < 2%
 
-**Events:**
-- `information_warfare.2` — "The World is Watching" (one-time at share ≥ 10%)
-- `information_warfare.3` — "The Cultural Hegemon" (one-time at share ≥ 25%)
-
-**Files:**
-- Journal Entry: `common/journal_entries/je_cultural_hegemony.txt`
-- Journal Entry Group: `common/journal_entry_groups/timeline_extended_je_groups.txt` (`je_group_soft_power`)
-- Script Values: `common/script_values/hegemony_cyber_script_values.txt`
-- Static Modifiers: `common/static_modifiers/extra_modifiers.txt` (search `cultural_hegemony`)
-- Modifier Types: `common/modifier_type_definitions/hegemony_cyber_modifier_types.txt`
-- On-action: `common/on_actions/hegemony_cyber_on_actions.txt` (tech-first tracking)
-- On-action wiring: `common/on_actions/extra_on_actions.txt` (added `cultural_hegemony_tech_first_on_action`)
-- Events: `events/information_warfare_events.txt` (events 2, 3)
-- Loc: `te_journal_entries_l_english.yml`, `te_modifiers_l_english.yml`, `te_events_l_english.yml`
+**Events:** `events/cultural_hegemony_events.txt` (`cultural_hegemony.1`–`.16`) — recurring soft-power events for both the hegemon and the countries under its pull (e.g. `.2` fires for a country below 5% share carrying `cultural_hegemony_foreign_benchmark`; `.3` for a country at ≥ 20% share).
 
 **Hooks (for other systems to modify):**
 - `country_cultural_pull_add` — flat pull bonus (techs, laws, buildings)
 - `country_cultural_pull_mult` — percentage pull multiplier
 - `country_cultural_hegemony_art_mult` — art production contribution multiplier
 - `country_ideology_resistance_mult` — resist foreign ideology shift
-
----
-
-## Information Warfare (Cyber Power)
-
-**Purpose:** Enables digital subversion of rivals through covert cyber operations, balanced by a defensive Digital Sovereignty score. Operations have ongoing costs, risk of detection, and generate infamy on exposure. Operations are launched via **diplomatic actions** targeting specific countries.
-
-**Activation:** Has researched `television` (era 6).
-
-### Digital Sovereignty (Defense)
-
-**Architecture:** Uses modifier hooks applied directly to techs, laws, and institutions via `country_digital_sovereignty_add` (like the nuclear attack/defense pattern), rather than hardcoded script value checks. This makes DS contributions visible in tech/law tooltips and extensible.
-
-**Score Computation (script value: `digital_sovereignty_total`, 0–100):**
-1. **Tech/Laws/Institutions** (`digital_sovereignty_from_modifiers`): Sum of `modifier:country_digital_sovereignty_add` from all sources:
-   - Techs: Telecommunications +2, Radio +2, Television +3, Mainframe Computers +4, Personal Computers +4, Cloud Computing +3, Military-Grade Cybersecurity +5 (total: up to 23)
-   - Laws: Secret Police +5, Censorship +3, Right of Assembly +1
-   - Institutions: Intelligence Ministry +4 per investment level (up to 20 at max)
-2. **Literacy** (`digital_sovereignty_from_literacy`): `literacy_rate × 100`, capped at 20.
-3. **GDP Share** (`digital_sovereignty_from_gdp`): `(gdp / global_gdp) × 100`, capped at 15.
-4. **Multiplier Hook**: `country_digital_sovereignty_mult`.
-
-**Defensive Effect:** `digital_sovereignty_defense` dynamic modifier — separatism resistance and coup resistance, scaled by `digital_sovereignty_modifier_mult` (0–5×).
-
-**JE Display:** Shows breakdown by tech/laws/institutions (combined), literacy, and GDP share.
-
-### Cyber Operations (Offense)
-
-**Operation Slots (script value: `cyber_operation_max_slots`):**
-- Base 1, +2 for GP, +1 for Major, +1 for Mainframe Computers tech, +`country_cyber_operation_slot_add` hook. Max 6.
-
-**Mission Types (launched via diplomatic actions):**
-| Operation | Diplomatic Action | Type | Effect | Requires |
-|---|---|---|---|---|
-| Election Interference | `cyber_election_interference_action` | Peacetime | -5 Legitimacy, -25 Authority on rival | Rivalry + peace |
-| Financial Subversion | `cyber_financial_subversion_action` | Peacetime | +2 bubble pressure on rival | Rivalry + peace |
-| Infrastructure Sabotage | `cyber_infrastructure_sabotage_action` | Wartime | -15% infra, -10% throughput on enemy state | Active war |
-| Comms Disruption | `cyber_comms_disruption_action` | Wartime | -10% offense/defense on enemy | Active war |
-
-**Diplomatic Action Flow:**
-1. Player selects target country via diplomatic action interface
-2. `accept_effect` stores `iw_op_<type>` (active flag) and `iw_target_<type>` (target country reference)
-3. JE monthly pulse reads stored target variables and applies effects to the specific target country
-4. Cancel buttons on JE remove both the op flag and the target variable
-5. AI evaluation uses `propose_score` system with rivalry/war checks
-
-**Funding Levels:** 0 (Paused) to 3 (High). At level 0, operations remain in slots but have no effects, no cost, and no detection risk. Higher funding increases effectiveness but also detection risk and cost. Funding is managed via scripted buttons on the JE.
-
-**Detection:** Monthly `random_list` check (only when funding ≥ 1); base 10% + funding bonus. Detection fires `information_warfare.1`, which cancels one operation, generates infamy, and provides deny/harden choice. The detector is scoped from stored target variables.
-
-**Cost:** `cyber_operation_funding_cost` dynamic modifier scales minting by active ops × funding level × GDP fraction.
-
-**Wartime ops auto-cancel on peace** (target variables cleaned up in monthly pulse).
-
-**Events:**
-- `information_warfare.1` — "Operation Compromised" (detection; cleans up target variables)
-- `information_warfare.4` — "Foreign Interference Detected" (defender perspective)
-
-**Files:**
-- Journal Entry: `common/journal_entries/je_information_warfare.txt`
-- Journal Entry Group: `common/journal_entry_groups/timeline_extended_je_groups.txt` (`je_group_cyber_power`)
-- Diplomatic Actions: `common/diplomatic_actions/cyber_operations.txt` (4 actions for launching ops)
-- Scripted Buttons: `common/scripted_buttons/hegemony_cyber_scripted_buttons.txt` (6 buttons: 4 cancel + 2 funding)
-- Script Values: `common/script_values/hegemony_cyber_script_values.txt`
-- Static Modifiers: `common/static_modifiers/extra_modifiers.txt` (search `cyber_`, `digital_sovereignty`)
-- Modifier Types: `common/modifier_type_definitions/hegemony_cyber_modifier_types.txt`
-- Messages: `common/messages/extra_messages.txt` (search `iw_`)
-- Events: `events/information_warfare_events.txt` (events 1, 4)
-- Loc: `te_journal_entries_l_english.yml`, `te_modifiers_l_english.yml`, `te_events_l_english.yml`, `te_notifications_l_english.yml`, `te_miscellaneous_l_english.yml`, `te_concepts_l_english.yml` (diplo action descs)
-
-**Hooks (for other systems to modify):**
-- `country_digital_sovereignty_add` — flat defense bonus (institutions, laws)
-- `country_digital_sovereignty_mult` — percentage defense multiplier
-- `country_cyber_attack_efficiency_mult` — offensive stealth/effectiveness
-- `country_cyber_operation_slot_add` — extra operation slots
-
----
-
-## Cultural Hegemony System
-
-**Purpose:** Tracks each country's share of global cultural influence from prestige, art, standard of living, recent tech-first leadership, monuments, megaprojects, modifiers, and instability. The JE surfaces a yearly leaderboard and exposes player-facing cultural policy controls.
 
 ### Key Files
 | File | Purpose |
@@ -1240,7 +1146,7 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | `global_warming_rule` | `global_warming_enabled` | enabled | CO₂ tracking, GW modifiers |
 | `world_war_rule` | `world_war_enabled` | **disabled** | World war escalation, related JEs |
 | `cultural_hegemony_rule` | `cultural_hegemony_enabled` | enabled | Cultural pull calculation, hegemony JE, hegemony on-action |
-| `covert_warfare_rule` | `covert_warfare_enabled` | enabled | Cyber operations, digital sovereignty JE, all 4 cyber diplomatic actions |
+| `covert_warfare_rule` | `covert_warfare_enabled` | enabled | Covert operations command-centre JE (`je_covert_warfare`), all 9 covert diplomatic actions |
 | `heir_education_rule` | `heir_education_enabled` | **disabled** | Heir education JE and focus modifiers; aptitude traits for rulers and heirs |
 | `united_nations_rule` | `united_nations_enabled` | enabled | UN JE, vote events, international institutions |
 | `nuclear_weapons_rule` | `nuclear_weapons_enabled` | enabled | Nuclear program JE, nuclear strike events, disarmament treaty |
@@ -1262,6 +1168,8 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 ---
 
 ## Covert Warfare System
+
+> Supersedes the earlier *Information Warfare (Cyber Power)* design (`je_information_warfare`, `cyber_*` diplomatic actions, Digital Sovereignty), which was removed from the mod in `45cd7d8`. Nothing from that design remains in script.
 
 **Purpose:** Adds an espionage/covert operations layer to the Cold War+ era. Countries can run covert operations against rivals (election interference, sabotage, espionage, etc.) using pact-based diplomatic actions. Operations consume operation slots, cost GDP-scaled expenses, and carry detection risk.
 

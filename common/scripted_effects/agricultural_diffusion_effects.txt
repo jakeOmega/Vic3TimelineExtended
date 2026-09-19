@@ -8,8 +8,8 @@
 # The first researcher additionally gets agdiff_first_mover_prestige.
 #
 # Naming follows the world_first_* / is_world_first_* / first_*_country
-# pattern established by nuclear weapons (common/journal_entries/
-# timeline_extended_journal_entries.txt:140-164).
+# pattern established by nuclear weapons (the on-complete block of
+# common/journal_entries/je_nuclear_program.txt).
 #
 # Diffusion-eligible techs: nitrogen_fixation, modern_chemical_processes,
 # green_revolution, gene_splicing, biotechnology.

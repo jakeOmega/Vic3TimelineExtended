@@ -1,0 +1,257 @@
+﻿je_nuclear_program = {
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		has_game_rule = nuclear_weapons_enabled
+		has_technology_researched = nuclear_weapons
+	}
+
+	scripted_button = increase_funding_nuclear_program
+	scripted_button = decrease_funding_nuclear_program
+
+	current_value = {
+		value = root.var:nuclear_weapon_program_progress
+	}
+
+	goal_add_value = {
+		value = nuclear_weapon_program_goal_value
+	}
+
+	progressbar = yes
+
+	possible = {
+		OR = {
+			country_rank >= rank_value:great_power
+			AND = {
+				country_rank = rank_value:major_power
+				has_technology_researched = ICBMs
+			}
+			modifier:country_receiving_nuclear_program_aid_bool = yes
+		}
+		NOT = {
+			modifier:country_nuclear_disarmament_bool = yes
+		}
+	}
+
+	immediate = {
+		set_variable = {
+			name = nuclear_weapon_stockpile
+			value = 0
+		}
+		set_variable = {
+			name = nuclear_weapon_program_progress
+			value = 0
+		}
+		set_variable = {
+			name = nuclear_weapons_program_first_nuke_done
+			value = 0
+		}
+		set_variable = {
+			name = nuclear_weapons_program_funding
+			value = 0
+		}
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_complete = {
+		if = {
+			limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+			custom_tooltip = {
+				text = "ADDITIONAL_NUKE_CREATED"
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = "FIRST_NUKE_CREATED"
+			}
+		}
+	}
+
+	on_weekly_pulse = {
+		effect = {
+			# Update global nuclear powers leaderboard
+			update_nuclear_powers_ranking = yes
+
+			if = {
+				limit = {
+					modifier:country_nuclear_disarmament_bool = yes
+				}
+				set_variable = {
+					name = nuclear_weapon_stockpile
+					value = 0
+				}
+				set_variable = {
+					name = nuclear_weapon_program_progress
+					value = 0
+				}
+				remove_modifier = nuclear_power
+			}
+			# Self-heal: the first-nuke branch below only grants nuclear_power
+			# on the initial build (gated on first_nuke_done = 0), so a
+			# disarmed-and-rebuilt country would otherwise be nuclear-armed
+			# without the modifier.
+			if = {
+				limit = {
+					NOT = { modifier:country_nuclear_disarmament_bool = yes }
+					var:nuclear_weapon_stockpile >= 1
+					NOT = { has_modifier = nuclear_power }
+				}
+				add_modifier = { name = nuclear_power }
+			}
+			if = {
+				limit = {
+					modifier:country_nuclear_program_pause_bool = yes
+				}
+				set_variable = {
+					name = nuclear_weapons_program_funding
+					value = 0
+				}
+				if = {
+					limit = { has_modifier = nuclear_weapon_program_funding }
+					remove_modifier = nuclear_weapon_program_funding
+				}
+			}
+			change_variable = {
+				name = nuclear_weapon_program_progress
+				add = {
+					value = nuclear_weapon_program_monthly_progress
+					divide = 4
+					multiply = {
+						value = 1
+						add = modifier:country_nuclear_program_progress_mult
+					}
+				}
+			}
+			while = {
+				limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
+				change_variable = {
+					name = nuclear_weapon_program_progress
+					subtract = nuclear_weapon_program_goal_value
+				}
+				change_variable = {
+					name = nuclear_weapon_stockpile
+					add = 1
+				}
+				if = {
+					limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+					set_variable = {
+						name = nuclear_weapons_program_first_nuke_done
+						value = 1
+					}
+					change_variable = {
+						name = nuclear_weapon_program_progress
+						multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+					}
+					# Track whether this is the first nuclear power in the world
+					if = {
+						limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
+						set_variable = { name = is_world_first_nuclear_power value = yes }
+					}
+					set_global_variable = { name = world_first_nuclear_weapon value = yes }
+					trigger_event = { id = nuclear_weapon_events.10 }
+					save_scope_as = first_nuke_country
+					every_country = {
+						limit = {
+							NOT = { THIS = scope:first_nuke_country }
+						}
+						trigger_event = { id = nuclear_weapon_events.9 days = 14 }
+					}
+				}
+			}
+
+			# ---- Development events (only during first nuke, with active funding) ----
+			if = {
+				limit = {
+					var:nuclear_weapons_program_first_nuke_done = 0
+					has_variable = nuclear_weapons_program_funding
+					var:nuclear_weapons_program_funding >= 1
+					var:nuclear_weapon_program_progress >= 5
+				}
+				random_list = {
+					490 = { } # nothing happens
+					5 = {
+						trigger_event = { id = nuclear_weapon_events.19 }
+					}
+					5 = {
+						trigger_event = { id = nuclear_weapon_events.20 }
+					}
+				}
+			}
+
+			# ---- Proliferation alert (non-first country nearing completion) ----
+			if = {
+				limit = {
+					has_global_variable = world_first_nuclear_weapon
+					NOT = { has_variable = is_world_first_nuclear_power }
+					var:nuclear_weapons_program_first_nuke_done = 0
+					var:nuclear_weapon_program_progress >= 75
+					NOT = { has_variable = nuclear_proliferation_alert_sent }
+				}
+				set_variable = { name = nuclear_proliferation_alert_sent value = 1 }
+				save_scope_as = proliferating_country
+				every_country = {
+					limit = {
+						NOT = { THIS = ROOT }
+						NOT = { is_country_type = decentralized }
+					}
+					trigger_event = { id = nuclear_weapon_events.18 days = 7 }
+				}
+			}
+		}
+	}
+	status_desc = {
+		# Nuclear Powers leaderboard
+		triggered_desc = {
+			desc = je_nuclear_powers_header
+			trigger = { has_global_variable = nuke_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_1_entry
+			trigger = { has_global_variable = nuke_rank_1 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_2_entry
+			trigger = { has_global_variable = nuke_rank_2 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_3_entry
+			trigger = { has_global_variable = nuke_rank_3 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_4_entry
+			trigger = { has_global_variable = nuke_rank_4 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_5_entry
+			trigger = { has_global_variable = nuke_rank_5 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_6_entry
+			trigger = { has_global_variable = nuke_rank_6 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_7_entry
+			trigger = { has_global_variable = nuke_rank_7 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_8_entry
+			trigger = { has_global_variable = nuke_rank_8 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_9_entry
+			trigger = { has_global_variable = nuke_rank_9 }
+		}
+		triggered_desc = {
+			desc = je_nuke_rank_10_entry
+			trigger = { has_global_variable = nuke_rank_10 }
+		}
+	}
+	should_be_pinned_by_default_uninvolved_or_context = yes
+	can_revolution_inherit = yes
+	can_deactivate = yes
+}

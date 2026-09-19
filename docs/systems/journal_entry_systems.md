@@ -171,9 +171,45 @@ Models the challenge of maintaining overseas colonies after decolonization tech.
 
 ---
 
+## Covert Warfare (`je_covert_warfare`)
+
+**File:** `common/journal_entries/je_covert_warfare.txt` (buttons: `common/scripted_buttons/covert_warfare_scripted_buttons.txt`)
+**Group:** `je_group_covert_warfare`
+
+### Purpose
+Command centre for the covert-operations layer: intelligence capacity, operation slots, funding level and detection risk. Operations themselves are launched as diplomatic actions (`common/diplomatic_actions/covert_operations.txt`), not from this entry. Mechanics, files and AI behaviour are documented in `mod_systems.md` § Covert Warfare System.
+
+### Buttons (2)
+- `iw_increase_funding_button`, `iw_decrease_funding_button`
+
+### Operations Widget (journal-entry widget)
+**File:** `gui/journal_entry_widgets/covert_operations_widget.gui` — `widget_je_covert_operations` in `custom_widget_container_2`. Read-only: one row per running operation (type, target, phase, detection) from the operator's `iw_ops` script-container list. It stores each target's **capital state** (`iw_target_capital`) because `Var().GetCountry.GetName` renders blank in a widget (`gui_modding_guide.md` gotcha #11).
+
+### Never Completes
+Persistent journal entry.
+
+---
+
+## Cultural Hegemony (`je_cultural_hegemony`)
+
+**File:** `common/journal_entries/je_cultural_hegemony.txt` (buttons: `common/scripted_buttons/cultural_hegemony_buttons.txt`)
+**Group:** `je_group_soft_power`
+
+### Purpose
+The player's window into the cultural-hegemony system: the country's share of global cultural pull, its component breakdown, the yearly top-10 leaderboard and the cultural policy controls. All computation runs from on-actions and scripted effects; the entry displays it and owns the JE-scoped policy modifiers. Mechanics, files and hooks are documented in `mod_systems.md` § Cultural Hegemony System.
+
+### Buttons (10)
+- `ch_increase_program_funding_button`, `ch_decrease_program_funding_button`
+- 4 enable/disable pairs: `ch_world_exposition_button`, `ch_cultural_institutes_button`, `ch_global_media_campaign_button`, `ch_cultural_protectionism_button` (each with a `ch_disable_*` counterpart)
+
+### Never Completes
+Persistent journal entry.
+
+---
+
 ## Global Warming (`je_global_warming`)
 
-**File:** `common/journal_entries/je_global_warming.txt`
+**File:** `common/journal_entries/je_global_warming.txt` (buttons: `common/scripted_buttons/global_warming_buttons.txt`)
 **Group:** `je_group_internal_affairs`
 
 ### Purpose
@@ -847,7 +883,7 @@ Persistent. Revolution inheritable.
 
 ## Nuclear Program (`je_nuclear_program`)
 
-**File:** `common/journal_entries/timeline_extended_journal_entries.txt`
+**File:** `common/journal_entries/je_nuclear_program.txt` (buttons: `common/scripted_buttons/nuclear_program_buttons.txt`)
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
