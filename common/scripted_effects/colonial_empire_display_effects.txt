@@ -1,0 +1,217 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE — DISPLAY STATE
+#
+# One effect, one place. colonial_empire_refresh_display derives every value the
+# journal-entry widget (gui/journal_entry_widgets/colonial_empire_widget.gui)
+# shows that cannot be read cheaply per frame, and nothing else derives them.
+#
+# CALLED FROM exactly three kinds of site:
+#   - je_colonial_empire's `immediate` block  (so a freshly activated entry is
+#     populated on the first frame instead of showing dashes for a month)
+#   - je_colonial_empire's `on_monthly_pulse` tail
+#   - the tail of all nine colonial_empire_effect_* button actions
+#     (so a click moves the numbers immediately)
+#
+# SCOPE: country.
+#
+# The whole body is wrapped in `hidden_effect` -- the same reason
+# te_history_record_sample is. The nine button actions are rendered as widget
+# button tooltips through ScriptedGui.ExecuteTooltip, which re-renders every
+# frame the panel is open; this effect must contribute no tooltip text and must
+# not have its iterators walked during that render.
+#
+# WHAT IS *NOT* HERE, deliberately:
+#   Six of the nine drift groups (base, laws, igs, rank, policies, domestic) are
+#   O(1) modifier / flag / law reads, so the widget reads them LIVE as
+#   [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_X')].
+#   Live is strictly better there: it is the same value the bar consumes, and it
+#   updates the frame after a click. A snapshot could not, because add_modifier /
+#   remove_modifier results are invisible inside the effect that wrote them, so a
+#   has_modifier-derived snapshot taken in a button's own tail is always one
+#   month stale. Only the three groups that iterate are snapshotted below.
+#
+# EDITING RULE: if the widget needs a new number, add it here and read
+# `var:` in the .gui. Never derive state in .gui, never in loc, and never
+# re-encode a tier boundary anywhere but the ladder below.
+# ============================================================================
+
+colonial_empire_refresh_display = {
+	hidden_effect = {
+		# --- Stability tier and the next band's boundary -------------------
+		# The five bands are the ones je_colonial_empire's own phase-modifier
+		# ladder uses: collapsing 0-20, crumbling 20-40, strained 40-65,
+		# stable 65-90, solidified 90+. Stored as an integer so the widget can
+		# pick a label through customizable localization without knowing a
+		# single threshold, and as the next boundary so the panel can say
+		# "Stable -> Solidified at 90" without a literal in the .gui.
+		#
+		# Read through the `je:` scope link rather than scope:journal_entry,
+		# because this effect is also called from button actions and from
+		# `immediate`, where scope:journal_entry is not reliably saved. `?=`
+		# because the entry may already have ended.
+		if = {
+			limit = {
+				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 90 }
+			}
+			set_variable = { name = colonial_empire_tier value = 5 }
+			set_variable = { name = colonial_empire_next_boundary value = 100 }
+		}
+		else_if = {
+			limit = {
+				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 65 }
+			}
+			set_variable = { name = colonial_empire_tier value = 4 }
+			set_variable = { name = colonial_empire_next_boundary value = 90 }
+		}
+		else_if = {
+			limit = {
+				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 40 }
+			}
+			set_variable = { name = colonial_empire_tier value = 3 }
+			set_variable = { name = colonial_empire_next_boundary value = 65 }
+		}
+		else_if = {
+			limit = {
+				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 20 }
+			}
+			set_variable = { name = colonial_empire_tier value = 2 }
+			set_variable = { name = colonial_empire_next_boundary value = 40 }
+		}
+		else = {
+			set_variable = { name = colonial_empire_tier value = 1 }
+			set_variable = { name = colonial_empire_next_boundary value = 20 }
+		}
+
+		# --- Bar value, bucketed to the nearest 5 --------------------------
+		# `scripted_bar_progress` is a TRIGGER only (engine docs: type
+		# "triggers", scope journal_entry) -- there is no script-value form, so
+		# script cannot read the bar as a number. This descending ladder is the
+		# only way to get the value into a variable, and 5-point buckets keep it
+		# to 21 comparisons. It exists for the history chart, which needs a
+		# number; the widget itself shows the exact live value through
+		# [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)].
+		# The chart's legend says "to the nearest 5" so the granularity is not
+		# passed off as precision.
+		if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 100 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 100 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 95 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 95 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 90 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 90 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 85 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 85 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 80 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 80 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 75 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 75 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 70 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 70 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 65 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 65 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 60 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 60 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 55 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 55 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 50 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 50 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 45 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 45 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 40 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 40 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 35 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 35 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 30 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 30 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 25 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 25 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 20 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 20 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 15 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 15 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 10 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 10 }
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 5 } }
+			set_variable = { name = colonial_empire_bar_bucket value = 5 }
+		}
+		else = {
+			set_variable = { name = colonial_empire_bar_bucket value = 0 }
+		}
+
+		# --- The three drift groups that iterate ---------------------------
+		# Snapshotted because the widget re-evaluates every frame:
+		#   overreach  -> walks every state twice (colonial + metropole counts)
+		#   gp         -> walks every_country twice (condemners + supporters)
+		#   acceptance -> walks every state x every pop
+		# The other six groups are read live; see the header.
+		set_variable = { name = colonial_empire_d_overreach value = colonial_stability_drift_overreach }
+		set_variable = { name = colonial_empire_d_gp value = colonial_stability_drift_gp }
+		set_variable = { name = colonial_empire_d_acceptance value = colonial_stability_drift_acceptance }
+
+		# Projected monthly change. Identical by construction to the sum the bar
+		# applies -- both are built from the same leaf script values. Feeds the
+		# panel headline and the signed history series.
+		set_variable = { name = colonial_empire_d_total value = colonial_stability_drift_total }
+
+		# --- Decolonization candidates -------------------------------------
+		# Counts only, plus the name of the state the player would be offered
+		# first. The three-candidate flood-fill preview stays inside the button
+		# actions, on click: running it here would walk it every month for every
+		# colonial country, and the confirmation event (decolonization_events.400
+		# / .401) already previews all three picks properly.
+		set_variable = { name = colonial_empire_eligible_count value = colonial_eligible_state_count }
+		set_variable = { name = colonial_empire_round_table_count value = colonial_round_table_state_count }
+
+		remove_variable = colonial_empire_largest_eligible_state
+		ordered_scope_state = {
+			limit = { is_decolonization_eligible_state = yes }
+			order_by = state_population
+			max = 1
+			save_temporary_scope_as = colonial_empire_largest_candidate
+			prev = {
+				set_variable = {
+					name = colonial_empire_largest_eligible_state
+					value = scope:colonial_empire_largest_candidate
+				}
+			}
+		}
+	}
+}

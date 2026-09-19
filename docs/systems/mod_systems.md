@@ -695,46 +695,66 @@ The decolonization system models the decline of colonial empires through a journ
 
 Three layers:
 1. **Gate & Progress Bar:** `je_colonial_empire` activates when a country has colonial states and `decolonization` tech. The `colonial_stability_bar` (0-100, starts at 50) tracks how stable the empire is. At 0 the empire collapses; at 100 it solidifies.
-2. **Player Interaction:** 8 scripted buttons (invest, garrison, assimilate, release, planned decolonization) let the player (and AI) manage colonies. Each button costs bureaucracy/authority and adjusts the stability bar.
-3. **Events:** 21 events fire from `decolonization_events_on_action` (monthly pulse), covering colonial negotiations, crackdowns, releases, GP stance choices, post-independence transitions, and the Suez Crisis model.
+2. **Player Interaction:** the **Colonial Stability widget** (`gui/journal_entry_widgets/colonial_empire_widget.gui`) is the human surface — conditions, the three programmes, the three decolonization decisions, and two history charts. The 9 scripted buttons behind it carry `is_ai = yes` and are the **AI's** only path in; both surfaces call the same `colonial_empire_possible_*` / `colonial_empire_effect_*` helpers. Full reference: `journal_entry_systems.md` § Colonial Stability Widget.
+3. **Events:** 21 events fire from `decolonization_events_on_action` (monthly pulse), covering colonial negotiations, crackdowns, releases, GP stance choices, post-independence transitions, and the Suez Crisis model. `decolonization_events.400` / `.401` are the confirmation popups the three decisions open — each previews candidates and offers a "Reconsider" option, so nothing is released by pressing a button.
 
 ### Files
 
 | File | Purpose |
 |---|---|
-| `common/journal_entries/je_colonial_empire.txt` | JE definition with stability bar, status_desc thresholds |
-| `common/scripted_progress_bars/extra_progress_bars.txt` | `colonial_stability_bar` monthly_progress formula |
-| `common/script_values/colonial_empire_values.txt` | Script values: colony counts, GP condemner/supporter counts, cost formulas |
-| `common/scripted_triggers/colonial_empire_triggers.txt` | Macro-region definitions, `is_overseas_colonial_state` |
-| `common/scripted_buttons/colonial_empire_buttons.txt` | 8 JE buttons for colonial policy management |
-| `common/scripted_effects/decolonization.txt` | `form_decolonized_country` effect |
+| `common/journal_entries/je_colonial_empire.txt` | JE definition, bar, widget mounts, monthly pulse, outcomes |
+| `common/scripted_progress_bars/extra_progress_bars.txt` | `colonial_stability_bar`; its `monthly_progress` consumes the 21 leaf script values |
+| `common/script_values/colonial_empire_values.txt` | Colony counts, `colonial_stability_term_*` leaves, `colonial_stability_drift_*` groups, cost and display values |
+| `common/scripted_triggers/colonial_empire_triggers.txt` | Macro-regions, `is_overseas_colonial_state`, the 9 `colonial_empire_possible_*` button gates |
+| `common/scripted_buttons/colonial_empire_buttons.txt` | 9 AI-only JE buttons; `possible` / `effect` delegate to the shared helpers |
+| `common/scripted_effects/decolonization.txt` | `form_decolonized_country`, JE cleanup, the 9 `colonial_empire_effect_*` button actions |
+| `common/scripted_effects/colonial_empire_display_effects.txt` | `colonial_empire_refresh_display` — the single site deriving all widget display state |
+| `common/scripted_guis/colonial_empire_sguis.txt` | 5 handlers backing the widget (2 guards, 1 text renderer, 2 op-coded actions) |
+| `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `var:colonial_empire_tier` |
+| `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
 | `common/scripted_effects/colonial_collapse_effects.txt` | AI country absorption for tiny post-colonial remnants |
+| `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |
+| `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | The four `country_colonial_*` aggregate modifier types |
 | `common/on_actions/extra_on_actions.txt` | `decolonization_events_on_action` wiring |
-| `events/decolonization_events.txt` | All 21 decolonization events |
+| `events/decolonization_events.txt` | All 21 decolonization events plus the `.400` / `.401` confirmations |
+| `events/te_debug_colonial_empire_events.txt` | Console harness: `event te_debug_colonial_empire.1` / `.2` |
 | `common/static_modifiers/extra_modifiers.txt` | 40+ decolonization modifiers |
 
 ### Stability Bar Formula (`colonial_stability_bar.monthly_progress`)
 
-**Downward pressure (decolonization):**
-- Base drift: **-1.0**/month
-- Imperial overstretch: **-0.15** × number of colonial states
-- Non-GP penalty: **-0.5** if not a great power
-- Era pressure: **-1.5** if `globalization` researched, else **-0.75** if `knowledge_economy` researched
-- GP condemnation: **-0.6** per GP with `gp_anti_colonial_stance`
-- Low acceptance states: **-0.4** per state
-- Wartime disruption: **-0.5** if at war
-- Negative event flag: **-1.0**
+**This table is the formula.** Every term is a named leaf script value in `common/script_values/colonial_empire_values.txt` (country scope), and the bar's `monthly_progress` is nothing but 21 unconditional `add = { desc = "<tooltip key>" value = owner.<leaf> }` lines. Each leaf returns 0 when its gate is false. The widget and the history charts read the **same** leaves through the nine `colonial_stability_drift_*` group sums, so there is exactly one place each number lives.
 
-**Upward pressure (stabilization):**
-- GP rank bonus: **+0.3**
-- GP support: **+0.3** per GP with `gp_pro_colonial_stance`
-- Development investment policy: **+0.8**
-- Military garrison policy: **+0.5**
-- Cultural assimilation policy: **+0.6**
-- Well-integrated states: **+0.5** per high-acceptance state
-- Positive event flag: **+1.0**
+To retune a term, change only its leaf. To add one: add a leaf, add it to its group, add one `add` line to the bar with a `desc` key, and add a row here.
 
-**Design intent:** A typical GP with 5 colonies nets approximately -0.5 to -1.0/month even with policies active. Only GPs with very few, well-integrated colonies and no GP condemnation can stabilize. Late-game techs (knowledge_economy, globalization) make holding colonies nearly impossible.
+| Leaf (`colonial_stability_term_…`) | Group | Gate | Value | Tooltip key |
+|---|---|---|---|---|
+| `_base` | base | — | **-0.5** | `colonial_base_drift_tt` |
+| `_laws` | laws | — | `modifier:country_colonial_stability_drift_add` | `colonial_law_aggregate_tt` |
+| `_ig_landowners` | igs | Landowners powerful | **+0.3** | `colonial_ig_landowners_strong_tt` |
+| `_ig_armed_forces` | igs | Armed Forces powerful | **+0.2** | `colonial_ig_armed_forces_strong_tt` |
+| `_ig_intelligentsia` | igs | Intelligentsia powerful | **-0.4** | `colonial_ig_intelligentsia_strong_tt` |
+| `_ig_unions` | igs | Trade Unions powerful | **-0.3** | `colonial_ig_unions_strong_tt` |
+| `_overreach` | overreach | `colonial_overreach_ratio > 0` | ratio × **-0.4** | `colonial_overreach_tt` |
+| `_gp_rank` | rank | great power | **+0.3** | `colonial_gp_rank_bonus_tt` |
+| `_non_gp` | rank | not a great power | **-0.5** | `colonial_non_gp_penalty_tt` |
+| `_gp_condemnation` | gp | condemners > 0 | count × **-0.6** | `colonial_gp_condemnation_tt` |
+| `_gp_high_pressure` | gp | condemners ≥ 4 | **-1.0** | `colonial_gp_high_pressure_tt` |
+| `_gp_extreme_pressure` | gp | condemners ≥ 6 | **-2.0** | `colonial_gp_extreme_pressure_tt` |
+| `_gp_support` | gp | supporters > 0 | count × **+0.3** | `colonial_gp_support_tt` |
+| `_garrison` | policies | Garrison active | `modifier:country_colonial_garrison_effectiveness_add` | `colonial_garrison_aggregate_tt` |
+| `_assim` | policies | Assimilation active | `modifier:country_colonial_assim_effectiveness_add` | `colonial_assim_aggregate_tt` |
+| `_invest` | policies | Investment active | `modifier:country_colonial_invest_effectiveness_add` | `colonial_invest_aggregate_tt` |
+| `_low_acceptance` | acceptance | low-acceptance colonies > 0 | count × **-0.4** | `colonial_low_acceptance_tt` |
+| `_high_acceptance` | acceptance | high-acceptance colonies > 0 | count × **+0.5** | `colonial_high_acceptance_tt` |
+| `_war` | domestic | at war | **-0.5** | `colonial_war_penalty_tt` |
+| `_revolution` | domestic | revolution | **-1.0** | `colonial_revolution_penalty_tt` |
+| `_turmoil` | domestic | `country_turmoil > 0.05` | turmoil × **-2.0** | `colonial_turmoil_penalty_tt` |
+
+**Contributions that are not rows above** reach the bar through `country_colonial_stability_drift_add` (the `_laws` leaf) and surface inside that line's own `GetValueWithBreakdownFor` breakdown: every contributing law (Colonial Affairs, Minority Rights, Citizenship, Distribution of Power, Free Speech, Internal Security), the era techs (`globalization` **-1.5**/mo, `knowledge_economy` **-0.75**/mo), and the timed `colonial_stability_positive_event` / `_negative_event` modifiers. Programme effectiveness likewise aggregates a `base_values` baseline plus per-law contributions.
+
+**Reading it in game:** hovering the bar shows all 21 terms with their current values — `GetPeriodicProgressBreakdown`, generated by the engine from the `desc` keys above. The widget shows the nine group sums and the projected total.
+
+**Design intent:** A typical GP with 5 colonies nets roughly -0.5 to -1.0/month even with programmes active. Only great powers with few, well-integrated colonies and little GP condemnation can stabilize. The era techs make holding colonies nearly impossible late.
 
 ### Events (1-21)
 
