@@ -715,6 +715,7 @@ Use a **bare `progressbar`**, not `white_progressbar_vertical`: that type inheri
 **Stack one plain `progresspie` per category instead.** Fill each one to the category's **cumulative** share and declare them largest first, so later, smaller layers draw on top. Slice *n* then shows between cum *n−1* and cum *n*. `gfx/FX/gui_progresspie.shader` draws frame 1 of the texture (× the widget colour) as the unfilled background and frame 2 (× `BarColor`) as the fill, so:
 - **Frame 1 must be transparent**, or each layer hides the ones below.
 - **Bake each category's colour into its own texture's frame 2.** This is how vanilla colours its progresspies: `main_hud/sidebar_progress.dds` vs `sidebar_progress_red.dds`, `round_progress_default` vs `round_progress_bad`. That avoids depending on which property maps to `BarColor`.
+- **Feed each layer a 0–1 fraction with `max = 1`.** Every vanilla progresspie is fed 0–1 (`window_component_library.gui` uses `value = 0.7`), and none sets `max` above 1. The first play-test (2026-09-19) fed 0–100 with `max = 100`, and every layer drew a full disc, so the top layer's colour covered the whole pie.
 - Compute the cumulative values in script values, not `.gui` arithmetic.
 - Hover is per widget rectangle, so there are no per-slice tooltips. Give the whole pie one tooltip and use a legend. The same textures (frame 2) make round legend swatches.
 
@@ -722,7 +723,7 @@ Use a **bare `progressbar`**, not `white_progressbar_vertical`: that type inheri
 progresspie = {
     size = { 100% 100% }
     min = 0
-    max = 100
+    max = 1                         # values are 0-1 fractions
     value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_15_display'))]"
     texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
     framesize = { 128 128 }
@@ -730,7 +731,7 @@ progresspie = {
 }
 ```
 
-Reference implementation: the Cultural Hegemony "Political Models of the World" section (`gui/journal_entry_widgets/cultural_hegemony_widget.gui`), with textures from `scripts/image_pipeline/gen_ch_model_pie_textures.py` (numpy only). **Status: proof of concept, not yet play-tested.** Record the in-game result here.
+Reference implementation: the Cultural Hegemony "Political Models of the World" section (`gui/journal_entry_widgets/cultural_hegemony_widget.gui`), with textures from `scripts/image_pipeline/gen_ch_model_pie_textures.py` (numpy only). **Status: proof of concept.** The first test drew a solid disc because of the 0–100 value range above. The fix (0–1 fractions) still needs an in-game retest; record the result here.
 
 ---
 

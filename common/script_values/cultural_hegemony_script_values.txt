@@ -736,7 +736,7 @@ ch_model_share_display = {
 #   share 15-75%  share / 50, floored at 0.3 so the weak fallback stays visible
 #   share > 75%   capped at 1.5
 # At a 50% share the multiplier is 1.0: the baseline then equals the weak event
-# modifier held constant, the lifetime average of the old decaying full one.
+# modifier held constant (half the full one).
 # The 15% floor is ch_model_pressure_min_share, which the baseline refresh's
 # trigger also reads.
 ch_model_pressure_min_share = 15
@@ -880,85 +880,102 @@ ch_model_share_fascist_display = {
 	}
 }
 
-# Cumulative shares in the pie's clockwise slice order. The widget stacks one
-# progresspie per model, filled to ch_model_pie_cum_<n>_display, largest first,
-# so slice n shows between cum_<n-1> and cum_<n>. The order is the CVD-safety
+# Cumulative shares in the pie's clockwise slice order, as 0-1 FRACTIONS: a
+# progresspie reads its value as a fraction of a full turn (every vanilla one is
+# fed 0-1; a 0-100 value with max = 100 drew every layer full). The widget stacks
+# one progresspie per model, filled to ch_model_pie_cum_<n>_display, largest
+# first, so slice n shows between cum_<n-1> and cum_<n>. The order is the CVD-safety
 # mechanism of the palette and is mirrored in
 # scripts/image_pipeline/gen_ch_model_pie_textures.py (MODELS) and in the
 # widget's layer order: change all three together.
 
 ch_model_pie_cum_1_display = {
 	value = ch_model_share_republican_display
+	divide = 100
 }
 
 ch_model_pie_cum_2_display = {
-	value = ch_model_pie_cum_1_display
-	add = ch_model_share_corporatist_display
+	value = ch_model_share_corporatist_display
+	divide = 100
+	add = ch_model_pie_cum_1_display
 }
 
 ch_model_pie_cum_3_display = {
-	value = ch_model_pie_cum_2_display
-	add = ch_model_share_anarchist_display
+	value = ch_model_share_anarchist_display
+	divide = 100
+	add = ch_model_pie_cum_2_display
 }
 
 ch_model_pie_cum_4_display = {
-	value = ch_model_pie_cum_3_display
-	add = ch_model_share_other_display
+	value = ch_model_share_other_display
+	divide = 100
+	add = ch_model_pie_cum_3_display
 }
 
 ch_model_pie_cum_5_display = {
-	value = ch_model_pie_cum_4_display
-	add = ch_model_share_royalist_absolutist_display
+	value = ch_model_share_royalist_absolutist_display
+	divide = 100
+	add = ch_model_pie_cum_4_display
 }
 
 ch_model_pie_cum_6_display = {
-	value = ch_model_pie_cum_5_display
-	add = ch_model_share_technocratic_display
+	value = ch_model_share_technocratic_display
+	divide = 100
+	add = ch_model_pie_cum_5_display
 }
 
 ch_model_pie_cum_7_display = {
-	value = ch_model_pie_cum_6_display
-	add = ch_model_share_religious_display
+	value = ch_model_share_religious_display
+	divide = 100
+	add = ch_model_pie_cum_6_display
 }
 
 ch_model_pie_cum_8_display = {
-	value = ch_model_pie_cum_7_display
-	add = ch_model_share_socialist_display
+	value = ch_model_share_socialist_display
+	divide = 100
+	add = ch_model_pie_cum_7_display
 }
 
 ch_model_pie_cum_9_display = {
-	value = ch_model_pie_cum_8_display
-	add = ch_model_share_military_junta_display
+	value = ch_model_share_military_junta_display
+	divide = 100
+	add = ch_model_pie_cum_8_display
 }
 
 ch_model_pie_cum_10_display = {
-	value = ch_model_pie_cum_9_display
-	add = ch_model_share_royalist_constitutional_display
+	value = ch_model_share_royalist_constitutional_display
+	divide = 100
+	add = ch_model_pie_cum_9_display
 }
 
 ch_model_pie_cum_11_display = {
-	value = ch_model_pie_cum_10_display
-	add = ch_model_share_communist_display
+	value = ch_model_share_communist_display
+	divide = 100
+	add = ch_model_pie_cum_10_display
 }
 
 ch_model_pie_cum_12_display = {
-	value = ch_model_pie_cum_11_display
-	add = ch_model_share_liberal_display
+	value = ch_model_share_liberal_display
+	divide = 100
+	add = ch_model_pie_cum_11_display
 }
 
 ch_model_pie_cum_13_display = {
-	value = ch_model_pie_cum_12_display
-	add = ch_model_share_reactionary_display
+	value = ch_model_share_reactionary_display
+	divide = 100
+	add = ch_model_pie_cum_12_display
 }
 
 ch_model_pie_cum_14_display = {
-	value = ch_model_pie_cum_13_display
-	add = ch_model_share_developmentalist_junta_display
+	value = ch_model_share_developmentalist_junta_display
+	divide = 100
+	add = ch_model_pie_cum_13_display
 }
 
 ch_model_pie_cum_15_display = {
-	value = ch_model_pie_cum_14_display
-	add = ch_model_share_fascist_display
+	value = ch_model_share_fascist_display
+	divide = 100
+	add = ch_model_pie_cum_14_display
 }
 
 

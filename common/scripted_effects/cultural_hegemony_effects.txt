@@ -1333,7 +1333,9 @@ ch_apply_hegemon_movement_pressure = {
 			limit = {
 				scope:cultural_hegemon = {
 					OR = {
-						has_law_or_variant = law_type:law_homesteading
+						# Homesteading is itself a variant (of Peasant Proprietorship),
+						# and has_law_or_variant only takes a parent law.
+						has_law = law_type:law_homesteading
 						has_law_or_variant = law_type:law_collectivized_agriculture
 					}
 				}

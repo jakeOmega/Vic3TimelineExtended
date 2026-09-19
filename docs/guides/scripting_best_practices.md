@@ -470,6 +470,8 @@ set_variable = { name = prior_shield value = var:new_multiplier }  # remember fo
 
 A classification or gate that asks "does this country run law X" should use `has_law_or_variant = law_type:X`. Vanilla ships **law variants** that replace a parent law for specific countries: Bakufu and Neo-Absolutism for Autocracy, Organic Regulation for Oligarchy, Shinsengumi for Secret Police, Colonial Administration for Monarchy, Terakoya for Private Schools, and Homesteading for Peasant Proprietorship. A plain `has_law` misses every one of them, silently. The cultural-hegemony model classifier used `has_law` throughout, so a Bakufu or Neo-Absolutist hegemon matched no autocracy branch until `ch_set_political_model` switched. Vanilla's own gates (`country_has_laws_in_need_of_critical_modernization`) use the variant form.
 
+**But the law you pass must be the parent.** Given a variant (e.g. `has_law_or_variant = law_type:law_homesteading`), the engine logs `Script system error! has_law_or_variant trigger [ Given law is a variant, we expect the parent ]` to `error.log` at runtime. `POST /reload` and every offline audit stay clean. To test one specific variant, use plain `has_law`. A law is a variant when its definition has a `parent = law_x` line.
+
 ## Industry-Ban Triggers for New Buildings
 
 Modded industrial / extraction buildings should declare their `possible` clause through one of two scripted_triggers in `common/scripted_triggers/misc_triggers.txt`, not by inlining the `has_law_or_variant` check:
