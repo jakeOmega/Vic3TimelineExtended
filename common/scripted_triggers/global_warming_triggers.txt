@@ -67,6 +67,18 @@ gw_is_market_leader = {
 	market_capital.owner = THIS
 }
 
+# Have the yearly emissions figures been taken yet? False on a brand-new game
+# before the first yearly state pulse and on a save upgraded mid-year, which is
+# when the widget shows "figures update each January" instead of a row of
+# misleading zeroes. Both halves are checked because the market snapshot and the
+# world re-base land on different pulses.
+gw_has_yearly_figures = {
+	has_global_variable = gw_g_global_emis
+	market_capital ?= {
+		owner ?= { has_variable = gw_disp_market_emis }
+	}
+}
+
 # At least one of the eight policies is in force. Drives the widget's
 # "no policies adopted yet" line.
 gw_any_policy_active = {

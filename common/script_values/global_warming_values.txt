@@ -1,0 +1,222 @@
+﻿# ============================================================================
+# GLOBAL WARMING — display-only script values
+# ============================================================================
+# Read by gui/journal_entry_widgets/global_warming_widget.gui, by
+# common/customizable_localization/global_warming_custom_loc.txt and by
+# je_global_warming's status/reason loc. Nothing here has a gameplay effect.
+#
+# WHY THIS FILE EXISTS: every value below is O(1). The figures the journal entry
+# used to show were computed live, in loc, every frame the panel was open --
+# `global_greenhouse_gas_emissions_script_value_display` iterates every state in
+# the world, `market_greenhouse_gas_emissions_script_value` runs three
+# `every_scope_building` sweeps across a whole market, and the eight
+# `gw_countries_with_*` values were an `every_country` sweep each. The heavy
+# work now happens once a year (per market leader, at the site that was already
+# computing it) and once a month (one country sweep for all eight counts); these
+# readers only fetch what was stored.
+#
+# EVERY READER IS GUARDED. The journal entry has `is_shown_when_inactive`, so
+# these are evaluated in the scope of countries that have never run a pulse, and
+# on saves upgraded mid-game. An unguarded `var:`/`global_var:` read there is the
+# "Failed to fetch variable" spam that gotcha #14 describes.
+#
+# FRESHNESS: the emissions figures are re-based each January (see
+# gw_rebase_annual_emissions_effect). `gw_has_yearly_figures` is what the widget
+# uses to show "figures update each January" instead of a misleading 0.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Emissions — all read from the yearly snapshots
+# ----------------------------------------------------------------------------
+
+# This country's MARKET's annual emissions. Stored on the market leader, because
+# the sweep that produces it is market-wide: a member reads its leader's copy.
+# There is no per-country emissions figure in this system -- emissions are a
+# property of a market's oil and coal consumption, not of one member.
+# Scope: country
+gw_market_emis_display = {
+	value = 0
+	market_capital ?= {
+		owner ?= {
+			if = {
+				limit = { has_variable = gw_disp_market_emis }
+				add = var:gw_disp_market_emis
+			}
+		}
+	}
+}
+
+# The negative part of the above: carbon captured by synthetic fuel plants.
+# Scope: country
+gw_capture_display = {
+	value = 0
+	market_capital ?= {
+		owner ?= {
+			if = {
+				limit = { has_variable = gw_disp_capture }
+				add = var:gw_disp_capture
+			}
+		}
+	}
+}
+
+# World annual emissions, measured as the change in the cumulative global
+# variable over the last calendar year rather than re-summed from every market.
+# Scope: any
+gw_global_emis_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_global_emis }
+		add = global_var:gw_g_global_emis
+	}
+}
+
+# This market's share of world annual emissions, in per cent. Clamped to 0-100
+# so the unsigned history chart has a fixed, honest scale; a market that is a
+# net carbon sink reads 0 here and shows its negative figure in the emissions
+# row instead.
+# Scope: country
+gw_share_pct_display = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = gw_g_global_emis
+			global_var:gw_g_global_emis > 0
+		}
+		add = gw_market_emis_display
+		divide = global_var:gw_g_global_emis
+		multiply = 100
+	}
+	min = 0
+	max = 100
+}
+
+# Temperature change implied by the last completed year of world emissions.
+# temperature_anomaly_display is cumulative/10000, so one year of emissions
+# moves it by that year's emissions / 10000.
+# Scope: any
+gw_yearly_change_display = {
+	value = gw_global_emis_display
+	divide = 10000
+}
+
+# Unsigned magnitude, for loc that supplies its own sign and colour through
+# gw_trend_prefix (customizable localization).
+# Scope: any
+gw_yearly_change_abs_display = {
+	value = gw_yearly_change_display
+	if = {
+		limit = { gw_yearly_change_display < 0 }
+		multiply = -1
+	}
+}
+
+# ----------------------------------------------------------------------------
+# This country's own policy position — live reads, no snapshot
+# ----------------------------------------------------------------------------
+
+# Emissions reduction in force for this market, in per cent (positive = a cut).
+# Live on purpose: one market_capital hop plus one modifier read is cheap, and a
+# variable written from a button tail would be a month stale because
+# add_modifier is not visible inside the effect block that applied it.
+# Scope: country
+gw_emissions_cut_pct_display = {
+	value = 1
+	subtract = gw_emission_multiplier_script_value
+	multiply = 100
+}
+
+# How many of the eight policies are in force for this country. Live: eight
+# journal-entry modifier lookups, and it must react to a click immediately.
+# Scope: country
+gw_policies_active_count_display = {
+	value = 0
+	if = { limit = { gw_policy_carbon_tax_active = yes } add = 1 }
+	if = { limit = { gw_policy_renewable_investment_active = yes } add = 1 }
+	if = { limit = { gw_policy_emission_standards_active = yes } add = 1 }
+	if = { limit = { gw_policy_climate_adaptation_active = yes } add = 1 }
+	if = { limit = { gw_policy_reforestation_active = yes } add = 1 }
+	if = { limit = { gw_policy_public_transit_active = yes } add = 1 }
+	if = { limit = { gw_policy_fossil_fuel_divestment_active = yes } add = 1 }
+	if = { limit = { gw_policy_green_building_codes_active = yes } add = 1 }
+}
+
+# The multiplier the JE's monthly pulse feeds to the `global_warming` modifier.
+# Shown beside [GetStaticModifier('global_warming').GetDesc] so the player can
+# read the per-unit penalty list and the scale it is multiplied by, without any
+# number being retyped here.
+# Scope: any
+gw_warming_penalty_scale_display = {
+	value = temperature_anomaly_display
+}
+
+# ----------------------------------------------------------------------------
+# World adoption counts — O(1) readers over the monthly global snapshot.
+# These replace the eight `gw_countries_with_*_script_value` definitions, each
+# of which was a full `every_country` sweep rendered live in the JE's reason
+# text. Do not reintroduce a sweeping version: one sweep now fills all eight.
+# Scope: any
+# ----------------------------------------------------------------------------
+gw_world_n_carbon_tax_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_carbon_tax }
+		add = global_var:gw_g_n_carbon_tax
+	}
+}
+
+gw_world_n_renewable_investment_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_renewable_investment }
+		add = global_var:gw_g_n_renewable_investment
+	}
+}
+
+gw_world_n_emission_standards_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_emission_standards }
+		add = global_var:gw_g_n_emission_standards
+	}
+}
+
+gw_world_n_climate_adaptation_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_climate_adaptation }
+		add = global_var:gw_g_n_climate_adaptation
+	}
+}
+
+gw_world_n_reforestation_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_reforestation }
+		add = global_var:gw_g_n_reforestation
+	}
+}
+
+gw_world_n_public_transit_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_public_transit }
+		add = global_var:gw_g_n_public_transit
+	}
+}
+
+gw_world_n_fossil_fuel_divestment_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_fossil_fuel_divestment }
+		add = global_var:gw_g_n_fossil_fuel_divestment
+	}
+}
+
+gw_world_n_green_building_codes_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_green_building_codes }
+		add = global_var:gw_g_n_green_building_codes
+	}
+}

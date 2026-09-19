@@ -157,3 +157,131 @@ gw_effect_remove_green_building_codes = {
 		je:je_global_warming = { remove_modifier = green_building_codes_modifier }
 	}
 }
+
+
+# ============================================================================
+# DISPLAY SNAPSHOTS
+# ============================================================================
+# The journal entry's figures used to be computed live in loc, every frame the
+# panel was open. These three effects move that work onto pulses that were
+# already doing it, so the widget only ever reads stored numbers.
+#
+# CADENCE IS DELIBERATE. Emissions are re-based once a year because that is when
+# the simulation actually moves them: `global_warming_update_on_action` runs on
+# on_yearly_pulse_state and is the only thing that changes
+# global_var:greenhouse_gas_emissions. Snapshotting monthly would multiply the
+# market sweep's cost by twelve to show a number that had not changed. The
+# widget and the docs say "re-based each January" rather than implying live data.
+# ============================================================================
+
+# Store this market's annual emissions on its LEADER, whose yearly pulse is
+# already evaluating the figure to accumulate the global total.
+#
+# The order matters: `market_greenhouse_gas_emissions_script_value` is evaluated
+# once, into the variable, and the global accumulation then reads the variable.
+# Variable writes ARE visible later in the same effect block (unlike
+# add_modifier), so this stores and accumulates exactly the same number the
+# on_action added before, with no second evaluation of the market-wide sweep.
+#
+# Scope: country (the market leader)
+gw_snapshot_market_emissions_effect = {
+	hidden_effect = {
+		set_variable = {
+			name = gw_disp_market_emis
+			value = market_greenhouse_gas_emissions_script_value
+		}
+		set_variable = {
+			name = gw_disp_capture
+			value = market_carbon_capture_script_value
+		}
+	}
+}
+
+# Re-base the annual world emissions figure each January, as the change in the
+# cumulative global variable since last January. O(1), and more truthful than
+# re-summing every market: it reports what actually accumulated rather than
+# re-estimating the current rate.
+#
+# `month = 0` is January (te_history_values.txt documents Jan = 0 ... Dec = 11).
+# Scope: any (called from the global monthly pulse)
+gw_rebase_annual_emissions_effect = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_global_variable = gw_g_emis_prev } }
+			set_global_variable = {
+				name = gw_g_emis_prev
+				value = 0
+			}
+		}
+		if = {
+			limit = {
+				month = 0
+				has_global_variable = greenhouse_gas_emissions
+			}
+			set_global_variable = {
+				name = gw_g_global_emis
+				value = global_var:greenhouse_gas_emissions
+			}
+			change_global_variable = {
+				name = gw_g_global_emis
+				subtract = global_var:gw_g_emis_prev
+			}
+			set_global_variable = {
+				name = gw_g_emis_prev
+				value = global_var:greenhouse_gas_emissions
+			}
+		}
+	}
+}
+
+# Count how many countries run each of the eight policies, in ONE country sweep
+# that fills all eight counters. Replaces eight separate sweeping script values
+# that were rendered live in the reason text.
+# Scope: any (called from the global monthly pulse)
+gw_refresh_global_counts_effect = {
+	hidden_effect = {
+		set_global_variable = { name = gw_g_n_carbon_tax value = 0 }
+		set_global_variable = { name = gw_g_n_renewable_investment value = 0 }
+		set_global_variable = { name = gw_g_n_emission_standards value = 0 }
+		set_global_variable = { name = gw_g_n_climate_adaptation value = 0 }
+		set_global_variable = { name = gw_g_n_reforestation value = 0 }
+		set_global_variable = { name = gw_g_n_public_transit value = 0 }
+		set_global_variable = { name = gw_g_n_fossil_fuel_divestment value = 0 }
+		set_global_variable = { name = gw_g_n_green_building_codes value = 0 }
+		every_country = {
+			limit = { has_journal_entry = je_global_warming }
+			if = {
+				limit = { gw_policy_carbon_tax_active = yes }
+				change_global_variable = { name = gw_g_n_carbon_tax add = 1 }
+			}
+			if = {
+				limit = { gw_policy_renewable_investment_active = yes }
+				change_global_variable = { name = gw_g_n_renewable_investment add = 1 }
+			}
+			if = {
+				limit = { gw_policy_emission_standards_active = yes }
+				change_global_variable = { name = gw_g_n_emission_standards add = 1 }
+			}
+			if = {
+				limit = { gw_policy_climate_adaptation_active = yes }
+				change_global_variable = { name = gw_g_n_climate_adaptation add = 1 }
+			}
+			if = {
+				limit = { gw_policy_reforestation_active = yes }
+				change_global_variable = { name = gw_g_n_reforestation add = 1 }
+			}
+			if = {
+				limit = { gw_policy_public_transit_active = yes }
+				change_global_variable = { name = gw_g_n_public_transit add = 1 }
+			}
+			if = {
+				limit = { gw_policy_fossil_fuel_divestment_active = yes }
+				change_global_variable = { name = gw_g_n_fossil_fuel_divestment add = 1 }
+			}
+			if = {
+				limit = { gw_policy_green_building_codes_active = yes }
+				change_global_variable = { name = gw_g_n_green_building_codes add = 1 }
+			}
+		}
+	}
+}
