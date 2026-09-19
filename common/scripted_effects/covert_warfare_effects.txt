@@ -526,6 +526,44 @@ covert_op_election_confidence_effect = {
 # covert_possible_* trigger (covert_warfare_triggers.txt).
 # Scope: country
 
+# Everything that must be true again once iw_funding_level has moved. The
+# monthly pulse recomputes all three of these from the variable, so this is the
+# pulse's work brought forward to the click; without it the panel's funding
+# numbers (read straight from the variable) would disagree with the modifiers
+# actually in force for up to a month.
+#   - covert_operation_funding_cost: the weekly expense, scaled by ops x level.
+#   - iw_funding_defense: the counter-intelligence capacity bonus. The original
+#     buttons did NOT refresh this one, so a click moved the advertised
+#     "+N counterintelligence IC" immediately while the modifier caught up at
+#     the next monthly pulse.
+#   - covert_ops_sync_all: each operation's stored detection display, because
+#     funding changes the odds.
+# Mirrors je_covert_warfare's on_monthly_pulse; keep the two in step.
+covert_refresh_funding_state = {
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+		je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
+	}
+	else_if = {
+		limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
+		je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+	}
+	if = {
+		limit = { covert_ops_funding_ci_mult >= 1 }
+		je:je_covert_warfare = { remove_modifier = iw_funding_defense }
+		je:je_covert_warfare = { add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult } }
+	}
+	else_if = {
+		limit = { je:je_covert_warfare = { has_modifier = iw_funding_defense } }
+		je:je_covert_warfare = { remove_modifier = iw_funding_defense }
+	}
+	covert_ops_sync_all = yes
+}
+
 covert_effect_increase_funding = {
 	custom_tooltip = iw_increase_funding_effect_tt
 	hidden_effect = {
@@ -537,43 +575,19 @@ covert_effect_increase_funding = {
 			change_variable = { name = iw_funding_level add = 1 }
 			clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
 		}
-		# Reapply cost modifier immediately
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level >= 1
-			}
-			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-			je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
-		}
-		else_if = {
-			limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-		}
-		# Refresh each operation's detection display (funding changes the odds)
-		covert_ops_sync_all = yes
+		covert_refresh_funding_state = yes
 	}
 }
 
+# Reaching level 0 stands every running operation down: each covert diplomatic
+# action's requirement_to_maintain needs iw_funding_level >= 1. The tooltip says
+# so through covert_decrease_funding_warning (customizable localization), which
+# only speaks up when there is actually something to lose.
 covert_effect_decrease_funding = {
 	custom_tooltip = iw_decrease_funding_effect_tt
 	hidden_effect = {
 		change_variable = { name = iw_funding_level subtract = 1 }
 		clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
-		# Reapply cost modifier immediately
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level >= 1
-			}
-			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-			je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
-		}
-		else_if = {
-			limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-			je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-		}
-		# Refresh each operation's detection display (funding changes the odds)
-		covert_ops_sync_all = yes
+		covert_refresh_funding_state = yes
 	}
 }
