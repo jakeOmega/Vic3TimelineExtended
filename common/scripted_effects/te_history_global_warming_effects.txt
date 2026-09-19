@@ -1,0 +1,50 @@
+﻿# ============================================================================
+# HISTORY STORE — global warming series
+# ============================================================================
+# The global-warming system's side of the generic store in te_history_effects.txt.
+# This is the whole per-system surface; nothing in common/ changes besides the
+# one call from je_global_warming's monthly pulse.
+#
+# Metrics (te_hist_v_<METRIC> on the month's sample container):
+#   gw_temp    temperature_anomaly_display   0..4   degrees C
+#   gw_share   gw_share_pct_display          0..100 per cent
+#
+# BOTH SERIES STEP ONCE A YEAR. Emissions only move when
+# global_warming_update_on_action runs, on on_yearly_pulse_state, and the world
+# figure is re-based each January, so the charts read as staircases rather than
+# curves. That is honest — it is the cadence the simulation actually runs at —
+# and the chart legends say so. They are still sampled monthly because the store
+# is month-indexed and a month's container is shared by every metric: adding
+# these two costs one `set_variable` each, not a new container.
+#
+# WHY TEMPERATURE IS STORED PER COUNTRY EVEN THOUGH IT IS GLOBAL.
+# te_history_record_global_sample exists and would store it once, but
+# te_history_chart's datamodel is hard-coded to
+# `JournalEntry.GetCountry.MakeScope.GetList('te_hist')` — the country list — so
+# charting the global list would mean editing shared infrastructure. Storing the
+# anomaly per tracked country instead costs one extra variable on a container
+# that already exists, and buys a shared x-axis with this country's own share
+# series. See docs/systems/mod_systems.md, "History Store and Charts".
+#
+# NO MARKERS. Policy adoption/repeal would be the natural marker, but the text
+# that explains a marker pip lives in te_history_marker_tooltip in the shared
+# common/scripted_guis/te_history_scripted_gui.txt, which this branch must not
+# edit. An unexplained pip is worse than none, so markers are a follow-up.
+#
+# te_history_record_sample already gates on te_history_country_is_tracked, so the
+# gate here is only the system's own (game rule + journal entry), exactly as
+# te_history_record_banking_effects.txt does it.
+# ============================================================================
+
+# One sample per metric per month, taken from je_global_warming's monthly pulse.
+# Scope: country
+te_history_record_global_warming_samples = {
+	if = {
+		limit = {
+			has_game_rule = global_warming_enabled
+			has_journal_entry = je_global_warming
+		}
+		te_history_record_sample = { METRIC = gw_temp  VALUE = temperature_anomaly_display }
+		te_history_record_sample = { METRIC = gw_share VALUE = gw_share_pct_display }
+	}
+}
