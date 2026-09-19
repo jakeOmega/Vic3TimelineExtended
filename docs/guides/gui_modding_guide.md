@@ -125,7 +125,7 @@ gui/
 | `background` | Background fill | Inside any widget, uses `texture` or `color` |
 | `progressbar` | Horizontal bar | `value`, `min`, `max` (float 0.0–1.0 or data-bound) |
 | `progresspie` | Circular progress | Same as progressbar but circular |
-| `piechart` | Pie chart | `datamodel` with `PieChart.GetSlices` |
+| `piechart` | Pie chart | `datamodel` + `item = { pieslice = { value color } }`; slice colour must come from an engine object's colour getter, so script data needs the stacked-`progresspie` pattern (see *Charting script-held data*) |
 | `video_icon` | Video playback | `video = "gfx/path.bk2"` |
 | `minimap` | Map preview | Engine-controlled |
 | `portrait_button` | Character portrait | `portrait_texture = "[Character.GetPortrait(...)]"` |
@@ -707,6 +707,31 @@ Use a **bare `progressbar`**, not `white_progressbar_vertical`: that type inheri
 **Bars that share the width.** An `hbox` of fixed width whose items are `size = { 0 100% }` + `layoutpolicy_horizontal = expanding` (+ a `maximumsize` cap) divides the width between the *visible* items — vanilla `levels_progressbar` (`gui/shared/progressbars.gui`, used by `country_panel.gui`). With `ignoreinvisible = yes` on the hbox, hiding out-of-range samples widens the remaining bars instead of leaving empty slots, which is how a 1 / 5 / 10-year range selector works without three separate layouts.
 
 **Per-bar tooltips.** Give the item widget a `tooltip = "<loc key>"`; the loc key reads the item's datacontext (`[ScriptContainer.GetVariableValue('x')|1]`) and can branch with `[SelectLocalization( ScriptContainer.HasVariable('x'), 'key_a', 'key_b' )]` — the way to show "not recorded" rather than a misleading zero.
+
+### Pie charts of script-held data (stacked `progresspie`)
+
+**`piechart` can't colour a slice from script.** Its `datamodel` can be a script list (the mod's trade-partner pies at `gui/market_panel.gui` do this), but every vanilla `pieslice` takes `color` from an engine object's getter: `LoyaltyType.GetColor`, `Culture.GetColor`, `PieTimerSlice.GetColor`. Nothing builds a colour from script numbers, and there is no `PieChart`/`PieSlice` data type.
+
+**Stack one plain `progresspie` per category instead.** Fill each one to the category's **cumulative** share and declare them largest first, so later, smaller layers draw on top. Slice *n* then shows between cum *n−1* and cum *n*. `gfx/FX/gui_progresspie.shader` draws frame 1 of the texture (× the widget colour) as the unfilled background and frame 2 (× `BarColor`) as the fill, so:
+- **Frame 1 must be transparent**, or each layer hides the ones below.
+- **Bake each category's colour into its own texture's frame 2.** This is how vanilla colours its progresspies: `main_hud/sidebar_progress.dds` vs `sidebar_progress_red.dds`, `round_progress_default` vs `round_progress_bad`. That avoids depending on which property maps to `BarColor`.
+- **Feed each layer a 0–1 fraction with `max = 1`.** Every vanilla progresspie is fed 0–1 (`window_component_library.gui` uses `value = 0.7`), and none sets `max` above 1. The first play-test (2026-09-19) fed 0–100 with `max = 100`, and every layer drew a full disc, so the top layer's colour covered the whole pie.
+- Compute the cumulative values in script values, not `.gui` arithmetic.
+- Hover is per widget rectangle, so there are no per-slice tooltips. Give the whole pie one tooltip and use a legend. The same textures (frame 2) make round legend swatches.
+
+```
+progresspie = {
+    size = { 100% 100% }
+    min = 0
+    max = 1                         # values are 0-1 fractions
+    value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_15_display'))]"
+    texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
+    framesize = { 128 128 }
+    frame = 2
+}
+```
+
+Reference implementation: the Cultural Hegemony "Political Models of the World" section (`gui/journal_entry_widgets/cultural_hegemony_widget.gui`), with textures from `scripts/image_pipeline/gen_ch_model_pie_textures.py` (numpy only). **Status: works in game (confirmed 2026-09-19).** Fifteen stacked layers render as correctly ordered, correctly coloured slices that match the legend. The first test drew a solid disc; the only fix needed was the 0–1 value range above. Reuse this pattern for any script-driven pie.
 
 ---
 

@@ -627,12 +627,33 @@
  cultural_hegemony.16.d:0 "The overwhelming cultural dominance of [SCOPE.sCountry('ch_hegemon').GetName] has created intense pressure on [ROOT.GetCountry.GetName] to align its institutions with foreign norms. Across the country, reformers and cosmopolitan elites point to [SCOPE.sCountry('ch_hegemon').GetAdjective] [SCOPE.sLaw('ch_pressure_law').GetName] as that nation's source of strength, demanding that we adopt the same. Traditionalists view this as capitulation to foreign influence."
  cultural_hegemony.16.f:0 "\"When a great nation speaks, smaller nations must decide whether to echo the words — or find their own voice and bear the consequences.\"\n\n\"And what is the consequence?\"\n\n\"Of echoing? Slow erosion of distinct identity. Of resisting? Steady friction with the great nation. Neither is an emergency. Both add up. The choice is which kind of slow loss the country prefers, and the choice is rarely made consciously.\""
  cultural_hegemony.16.t:0 "Hegemonic Convergence"
+ cultural_hegemony.17.a:0 "Let every capital hear how we govern."
+ cultural_hegemony.17.b:0 "A model is proved at home, not preached abroad."
+ cultural_hegemony.17.d:0 "Countries producing #v [ROOT.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|0]%#! of the world's culture now run their states on the same [ROOT.GetCountry.GetCustom('ch_country_model_text')] lines as [ROOT.GetCountry.GetName]. Delegations arrive every month to study our ministries, and the foreign ministry has drawn up a plan to fund cultural attachés, translated constitutions and friendly newspapers in every capital that will take them."
+ cultural_hegemony.17.f:0 "\"Twelve capitals have asked for copies of the civil code this year. Twelve. Last year it was three.\"\n\n\"And the other powers have noticed. Their papers call it meddling.\"\n\n\"Their papers call everything meddling. Ours used to, back when we were the ones doing the copying.\"\n\n\"So we send the attachés?\"\n\n\"We send the attachés, and a printing press with each of them. If the world wants to learn how we govern, it may as well learn it in our words.\""
+ cultural_hegemony.17.t:0 "Our Model Abroad"
+ cultural_hegemony.18.a:0 "We stand with [SCOPE.sCountry('ch_bloc_a').GetName]."
+ cultural_hegemony.18.b:0 "The future belongs to [SCOPE.sCountry('ch_bloc_b').GetName]."
+ cultural_hegemony.18.c:0 "We will be nobody's satellite."
+ cultural_hegemony.18.d:0 "The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. Both have sent envoys to [ROOT.GetCountry.GetName] with offers of scholarships, loans and friendship, and both expect an answer."
+ cultural_hegemony.18.f:0 "The editor keeps two wire baskets on the desk now. The one on the left fills with dispatches from [SCOPE.sCountry('ch_bloc_a').GetName]: speeches, exhibitions, the price of wheat, all set in a confident typeface the whole newsroom has learned to recognise. The one on the right fills just as fast from [SCOPE.sCountry('ch_bloc_b').GetName]. Each agency has offered its service free of charge for a year, and the editor has noticed that neither offer mentions the other. By noon the office boy has stopped asking which basket to empty first. He waits, pencil behind his ear, for the editor to point."
+ cultural_hegemony.18.t:0 "Between Two Suns"
+ cultural_hegemony.19.a:0 "Fashions change. Our principles do not."
+ cultural_hegemony.19.b:0 "Perhaps [SCOPE.sCountry('ch_new_hegemon').GetName] has something to teach us."
+ cultural_hegemony.19.d:0 "[SCOPE.sCountry('ch_new_hegemon').GetName], the world's leading cultural power, no longer governs the way we do. The [ROOT.GetCountry.GetCustom('ch_country_model_text')] model that set the fashion abroad has lost its most admired example, and our critics at home have been quick to say so."
+ cultural_hegemony.19.f:0 "\"A year ago every lecture hall in the capital wanted a speaker on how the great powers govern. I was turning invitations down.\"\n\n\"And now?\"\n\n\"Now they want a speaker on why it failed. Same halls, same students, the same questions turned inside out.\"\n\n\"It hasn't failed. We are still here, doing what we did last year.\"\n\n\"Try telling that to a twenty-year-old with a pamphlet from the new fashion in their pocket.\""
+ cultural_hegemony.19.t:0 "The Standard Falls"
  cultural_hegemony.2.a:0 "Embrace the cosmopolitan tide"
  cultural_hegemony.2.b:0 "Rally behind our own traditions"
  cultural_hegemony.2.c:0 "This is not worth our attention"
  cultural_hegemony.2.d:0 "Foreign films, music, and literature are increasingly dominating the cultural landscape of [ROOT.GetCountry.GetName]. Traditional values are being displaced by imported ideas, and the younger generation seems more interested in foreign trends than in their own heritage."
  cultural_hegemony.2.f:0 "The children sang along to foreign songs they barely understood, while their grandparents shook their heads and wondered when exactly the world had changed.\n\n\"It changed the year the radio became affordable,\" the village schoolmaster told them. \"You did not notice because it changed in the next room, not in this one. Now it has changed in this room too. The grandchildren are still the grandchildren. They simply sing different songs.\""
  cultural_hegemony.2.t:0 "Foreign Cultural Infiltration"
+ cultural_hegemony.20.a:0 "Close the border to their ideas, if not to their trade."
+ cultural_hegemony.20.b:0 "Let it come. A good idea is no threat to a good government."
+ cultural_hegemony.20.d:0 "[SCOPE.sCountry('ch_domino_country').GetName] has remade its government on the [SCOPE.sCountry('ch_domino_country').GetCustom('ch_country_model_text')] model, the model of [SCOPE.sCountry('cultural_hegemon').GetName], the world's leading cultural power. Its newspapers cross our border every morning, and our own reformers are already asking why we cannot do the same."
+ cultural_hegemony.20.f:0 "\"How many this week?\"\n\n\"Four crates of their newspapers, two of pamphlets, and a man with a trunk full of their new constitution, printed small enough to pass for a prayer book.\"\n\n\"Did you seize them?\"\n\n\"The newspapers, yes. Most of the pamphlets. The constitution I read on the night shift. Sergeant, have you read it?\"\n\n\"I have not, and neither have you. Put that in the report.\""
+ cultural_hegemony.20.t:0 "Across the Border"
  cultural_hegemony.3.a:0 "Leverage our narrative dominance"
  cultural_hegemony.3.b:0 "Promote a free and open press"
  cultural_hegemony.3.d:0 "The media apparatus of [ROOT.GetCountry.GetName] has achieved an unprecedented level of global reach. Our newspapers, radio broadcasts, and films shape the opinions of millions beyond our borders, granting us extraordinary influence over international discourse."
@@ -3756,6 +3777,44 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_DEBUG_CH
+#
+ te_debug_ch.1.a:0 "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running"
+ te_debug_ch.1.b:0 "B — Put us at rank 1 on the board"
+ te_debug_ch.1.c:0 "C — Fill the board with others and put us at rank 14 of 168"
+ te_debug_ch.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here."
+ te_debug_ch.1.d_option:0 "D — Empty board slot 5 (the annexed case)"
+ te_debug_ch.1.e:0 "E — Repeal the Ministry of Culture and watch all four programmes stop"
+ te_debug_ch.1.f:0 ""Every ministry keeps a drawer of numbers it would rather no one saw.""
+ te_debug_ch.1.g:0 "F — Recount now: leaderboard, political-model census and baseline movement pressure"
+ te_debug_ch.1.h:0 "G — Stage Our Model Abroad: make us rank 1 and fire it"
+ te_debug_ch.1.i:0 "H — Stage Rival Models, The Model Falters and Domino for us as a follower"
+ te_debug_ch.1.t:0 "Cultural Hegemony Test Console"
+
+#
+# TE_DEBUG_COLONIAL_EMPIRE
+#
+ te_debug_colonial_empire.1.a:0 "Solidified (95)"
+ te_debug_colonial_empire.1.b:0 "Stable (75)"
+ te_debug_colonial_empire.1.c:0 "Strained (50)"
+ te_debug_colonial_empire.1.d:0 "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session."
+ te_debug_colonial_empire.1.e:0 "Collapsing (10)"
+ te_debug_colonial_empire.1.f:0 "The cartographers await instruction."
+ te_debug_colonial_empire.1.opt_d:0 "Crumbling (30)"
+ te_debug_colonial_empire.1.opt_f:0 "Just refresh the panel (and log it)"
+ te_debug_colonial_empire.1.t:0 "TEST: Colonial Stability Bands"
+ te_debug_colonial_empire.2.a:0 "Every other great power condemns us"
+ te_debug_colonial_empire.2.b:0 "Two great powers back us instead"
+ te_debug_colonial_empire.2.c:0 "Clear every colonial stance"
+ te_debug_colonial_empire.2.d:0 "Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider."
+ te_debug_colonial_empire.2.e:0 "Open: Round Table Conference"
+ te_debug_colonial_empire.2.f:0 "The despatches are ready to send."
+ te_debug_colonial_empire.2.g:0 "Log the decolonization diagnostics"
+ te_debug_colonial_empire.2.opt_d:0 "Open: Release a Colonial Territory"
+ te_debug_colonial_empire.2.opt_f:0 "Open: Planned Full Decolonization"
+ te_debug_colonial_empire.2.t:0 "TEST: Pressure and Decolonization"
+
+#
 # TE_DEBUG_COVERT
 #
  te_debug_covert.1.a:0 "Funding 0 - Dormant"
@@ -3783,15 +3842,15 @@
  te_debug_gw.1.b:0 "Set warming to 1.0°C (Significant)"
  te_debug_gw.1.c:0 "Set warming to 2.0°C (Severe)"
  te_debug_gw.1.d:0 "Set warming to 3.2°C (Catastrophic)"
+ te_debug_gw.1.desc:0 "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\n\n#lore Setting the temperature will also fire the one-shot warming threshold events for every tier it crosses, which is deliberate: it exercises the real path.#!"
  te_debug_gw.1.e:0 "Cool the world back to 0.05°C (below the activation threshold)"
  te_debug_gw.1.f:0 "Bind us to an emissions-reduction treaty (locks repeals)"
+ te_debug_gw.1.flavor:0 "'The models are unambiguous, minister.'\n\n'Then get better models.'"
  te_debug_gw.1.g:0 "Release us from the emissions-reduction treaty"
  te_debug_gw.1.h:0 "Make us a market member under a great power that taxes carbon"
  te_debug_gw.1.i:0 "Recompute the yearly figures now"
  te_debug_gw.1.j:0 "Adopt all eight mitigation policies"
  te_debug_gw.1.k:0 "Repeal all eight mitigation policies"
- te_debug_gw.1.desc:0 "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\n\n#lore Setting the temperature will also fire the one-shot warming threshold events for every tier it crosses, which is deliberate: it exercises the real path.#!"
- te_debug_gw.1.flavor:0 "'The models are unambiguous, minister.'\n\n'Then get better models.'"
  te_debug_gw.1.t:0 "Climate Test Console"
 
 #
@@ -3801,8 +3860,8 @@
  te_debug_nuclear.1.b:0 "Cut funding to nothing"
  te_debug_nuclear.1.c:0 "Bring the next warhead to the brink of completion"
  te_debug_nuclear.1.d:0 "Put five warheads in the stockpile now"
- te_debug_nuclear.1.e:0 "Empty every arsenal in the world"
  te_debug_nuclear.1.desc:0 "Console-only shortcuts for testing the nuclear programme panel. None of these can happen in normal play.\n\nRun them as a great power that has researched $nuclear_weapons$, or the journal entry will not be active and the panels will correctly draw nothing.\n\nFunding to step 3 also arms the three strongest rival great powers, so the Nuclear Powers section has rows to draw. Bringing a warhead to the brink sets progress to the goal and lets the next weekly pulse finish it through the real code path, so the world-first check, the production rate change and the first-device year all happen for real — advance one week to see it."
+ te_debug_nuclear.1.e:0 "Empty every arsenal in the world"
  te_debug_nuclear.1.f:0 "'How long, then?'\n\n'That depends entirely on how much of the future you are willing to spend.'"
  te_debug_nuclear.1.t:0 "Nuclear Programme Test Console"
  te_debug_nuclear.2.a:0 "Freeze the programme, as a pause treaty would"
@@ -3814,7 +3873,7 @@
  te_debug_nuclear.2.t:0 "Nuclear Programme Blockers"
 
 #
-# TE_DEBUG_UN
+# TE_DEBUG_SPACE_RACE
 #
  te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
  te_debug_space_race.1.b:0 "Finish every running milestone on the next tick"
@@ -3827,25 +3886,10 @@
  te_debug_space_race.1.i:0 "Give 'the first' back on every milestone I have not won"
  te_debug_space_race.1.t:0 "Space Race Test Console"
  te_debug_space_race.1.z:0 "Close"
- te_debug_colonial_empire.1.a:0 "Solidified (95)"
- te_debug_colonial_empire.1.b:0 "Stable (75)"
- te_debug_colonial_empire.1.c:0 "Strained (50)"
- te_debug_colonial_empire.1.d:0 "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session."
- te_debug_colonial_empire.1.e:0 "Collapsing (10)"
- te_debug_colonial_empire.1.f:0 "The cartographers await instruction."
- te_debug_colonial_empire.1.opt_d:0 "Crumbling (30)"
- te_debug_colonial_empire.1.opt_f:0 "Just refresh the panel (and log it)"
- te_debug_colonial_empire.1.t:0 "TEST: Colonial Stability Bands"
- te_debug_colonial_empire.2.a:0 "Every other great power condemns us"
- te_debug_colonial_empire.2.b:0 "Two great powers back us instead"
- te_debug_colonial_empire.2.c:0 "Clear every colonial stance"
- te_debug_colonial_empire.2.d:0 "Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider."
- te_debug_colonial_empire.2.e:0 "Open: Round Table Conference"
- te_debug_colonial_empire.2.f:0 "The despatches are ready to send."
- te_debug_colonial_empire.2.g:0 "Log the decolonization diagnostics"
- te_debug_colonial_empire.2.opt_d:0 "Open: Release a Colonial Territory"
- te_debug_colonial_empire.2.opt_f:0 "Open: Planned Full Decolonization"
- te_debug_colonial_empire.2.t:0 "TEST: Pressure and Decolonization"
+
+#
+# TE_DEBUG_UN
+#
  te_debug_un.1.a:0 "Found the United Nations and seat the powers"
  te_debug_un.1.b:0 "Grant me a mandate against a neighbour"
  te_debug_un.1.c:0 "Set my standing to Exemplary (85)"
@@ -4613,13 +4657,3 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
-
-### Cultural Hegemony test console
- te_debug_ch.1.a:0 "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running"
- te_debug_ch.1.b:0 "B — Put us at rank 1 on the board"
- te_debug_ch.1.c:0 "C — Fill the board with others and put us at rank 14 of 168"
- te_debug_ch.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here."
- te_debug_ch.1.d_option:0 "D — Empty board slot 5 (the annexed case)"
- te_debug_ch.1.e:0 "E — Repeal the Ministry of Culture and watch all four programmes stop"
- te_debug_ch.1.f:0 ""Every ministry keeps a drawer of numbers it would rather no one saw.""
- te_debug_ch.1.t:0 "Cultural Hegemony Test Console"
