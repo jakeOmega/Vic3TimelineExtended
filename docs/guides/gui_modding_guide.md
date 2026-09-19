@@ -1495,6 +1495,20 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 20. **`JournalEntry.GetCountry.GetCustom('x')` works in JE widget loc** — confirmed in-game, alongside `.MakeScope.ScriptValue('x')` and `.MakeScope.Var('x')`.
 
+21. **A `scripted_progress_bar` already ships a full per-term breakdown tooltip — reuse it instead of mirroring the formula.** `gui/journal_entry.gui:260/281/303/…` renders every scripted bar with `tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"`, which the engine builds from the `desc =` key on each `add` in the bar's `weekly_progress` / `monthly_progress` / `yearly_progress` block. So a bar whose terms all carry a `desc` is *already* explaining itself to the player, and a widget can render the identical string — it cannot drift from the mechanic, because it is the mechanic. A JE widget reaches it the way vanilla does, through the entry's own datamodel:
+    ```
+    flowcontainer = {
+        datamodel = "[JournalEntry.GetScriptedProgressBars]"
+        item = {
+            textbox = {
+                text = "je_x_bar_headline"    # [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]
+                tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+            }
+        }
+    }
+    ```
+    `GetCurrentBarProgress` returns a **normalised 0–1 fraction**, not the bar's own units, so render it as a percentage (`|%0`) rather than trying to scale it — scaling would mean hard-coding the bar's `min_value`/`max_value` in the `.gui`. Keep the whole thing in one self-contained container: this chain is new to the mod (`colonial_empire_widget.gui` is the first user) and **not yet confirmed in-game**, so the fallback should be deleting one block. Note the complement: `scripted_bar_progress` is a trigger with no script-value form, so *script* cannot read the bar as a number — anything numeric the widget or a chart needs has to come from a script value the bar also consumes.
+
 ---
 
 ## Patterns from Workshop Mods
