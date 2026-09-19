@@ -3,9 +3,8 @@ Generate 25 new banking cycle events (events 21-45), their modifiers,
 scripted-effect entries, and localization.
 
 Writes patches/appends to existing mod files.
-Run: python gen_banking_events.py
 
-DO NOT RE-RUN.
+DO NOT RE-RUN. `main()` refuses to do anything without an explicit `--force`.
     This was a ONE-SHOT scaffolding script, not a regenerator: it is absent
     from POST_LOAD_GENERATORS and from docs/auto_generated_files.md, and it
     APPENDS to live mod files rather than rewriting them. Everything it emits
@@ -21,6 +20,7 @@ DO NOT RE-RUN.
 """
 
 import os
+import sys
 
 # Path constants — repo root is two levels above this script (scripts/generators/)
 MOD = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -2862,7 +2862,27 @@ def append_bom_safe(path, content):
     write_bom(path, existing + content)
 
 
+RERUN_REFUSAL = """\
+REFUSING TO RUN: gen_banking_events.py is a one-shot scaffolding script.
+
+It APPENDS to live mod files rather than rewriting them, it is absent from
+POST_LOAD_GENERATORS and from docs/auto_generated_files.md, and everything it
+once emitted has been hand-edited since. Running it now would duplicate ~25
+events, their modifiers and their localization keys on top of the edited
+originals, and organize_loc.py would then have to sort the duplicates.
+
+If you genuinely need the raw scaffolding text, read the module-level string
+constants instead of executing the script.
+
+Pass --force if you have read all of the above and still mean to append.
+"""
+
+
 def main():
+    if "--force" not in sys.argv[1:]:
+        print(RERUN_REFUSAL, file=sys.stderr)
+        return 1
+
     # 1. Append events to banking_cycle_events.txt
     print("Appending 25 new events to banking_cycle_events.txt...")
     append_bom_safe(EVENTS_FILE, EVENTS)
@@ -2914,6 +2934,8 @@ def main():
 
     print("\nAll files updated successfully!")
     print("Remember to run: python organize_loc.py")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -845,6 +845,12 @@ law_gold_standard = {
 		state_trade_advantage_mult = 0.1
 		state_tax_capacity_mult = 0.1
 		country_banking_random_momentum_mult = -0.1
+		# Convertibility credibility (§5.1, §21): a promise to redeem in gold is
+		# the strongest one a 19th-century sovereign can make, so lenders shave
+		# 1pp off the structural tier. Paid for by the loss of the dial's range
+		# (the target is clamped to the reference rate +/- 2) and by the
+		# deflation bias that comes with it.
+		country_credit_standing_add = -0.01
 	}
 
 	ai_enact_weight_modifier = {
@@ -2398,6 +2404,11 @@ law_central_bank_independence = {
 		country_banking_random_momentum_mult = -0.1
 		country_covert_defense_economic_add = 2
 		country_banking_lock_capital_controls_bool = yes
+		# Mandate credibility (§5.2, §21): a central bank the government cannot
+		# lean on is believed, so lenders shave 0.5pp off the structural tier.
+		# This is separate from - and stacks with - independence lowering the
+		# structural floor from 0.5pp to 0.25pp in te_monetary_update_premium.
+		country_credit_standing_add = -0.005
 	}
 }
 
