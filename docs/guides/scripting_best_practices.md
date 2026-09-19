@@ -886,6 +886,10 @@ The `desc` value is a loc key whose string explains what this term contributes. 
 
 Use the vanilla-proven iterator count instead: `any_in_list = { variable = X count >= N <cheap trigger> }` (`any_in_global_list` for globals); `count >= N` has hundreds of vanilla uses. "Is the list non-empty" is just `any_in_list = { variable = X exists = this }`. Write `N` as a literal and cross-reference it from the cap's script value, since `count` with a named script value is unproven.
 
+## `primary_cultures_percent_*` Take a `target_country` Block (1.14.3+)
+
+Since 1.14.3, `primary_cultures_percent_country` and `primary_cultures_percent_state` need to be told whose primary cultures to count: `primary_cultures_percent_country = { target_country = ROOT value < 0.5 }`, and in state scope `primary_cultures_percent_state = { target_country = owner value <= 0.9 }` (vanilla `common/decrees/00_decree.txt`). The old bare form `primary_cultures_percent_country < 0.5` still loads, but `debug.log` prints `PostValidate of trigger 'primary_cultures_percent_country' returned false at <file>:<line>`, so you cannot rely on what the trigger returns. `triggers.log` still shows the bare form, even in the 1.14.3 dump. What changed: vanilla 1.14.2 used the bare form and 1.14.3 rewrote every call site to the block form. The trigger loc also changed from `[COUNTRY.GetAdjective]` to `[TARGET_COUNTRY.GetAdjective]`. The script-value form takes the target as an argument: `"primary_cultures_percent_state(owner)"`. After a vanilla bump, diff vanilla's call sites of any trigger the mod uses. `triggers.log` examples can be out of date.
+
 ## `random_list` Requires Literal Integer Weights
 
 - `random_list` weight keys must be **literal integers**: `10 = { ... }`, `90 = { ... }`.
@@ -1297,7 +1301,7 @@ building_modifiers = {
   ```
   message_name = {
       type = country
-      texture = "gfx/interface/icons/event_icons/event_diplomacy.dds"
+      texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
       group = feed
       severity = neutral
   }
