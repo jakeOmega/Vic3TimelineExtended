@@ -1115,14 +1115,14 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
-Multi-stage competitive space race system with 8 milestones. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
+Multi-stage competitive space race system across nine journal entries — seven milestones with a bar, the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
 
 ### Key Mechanics
-- **8 Milestones:** Suborbital Flight → Orbital Flight → Moon Landing / Probe (parallel) → Moon Base / Mars Landing (parallel) → Mars Terraforming → Solar System Colonization
+- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing / Deep-Space Probe (parallel) → Moon Base / Mars Landing (parallel) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization (repeatable)
 - **"The First" Bonus:** Global flags track first achiever per milestone. First nation gets ~2× permanent rewards.
-- **Approach Choice:** Safe (slow, ~2-7% failure) vs Ambitious (fast, ~10-22% failure) via scripted buttons.
-- **Funding Levels:** 0-3 levels affecting progress speed and innovation drain.
-- **Failure:** Halves progress + cooldown period. Does NOT permanently block.
+- **Approach Choice:** Safe vs Ambitious, per entry. Base setback risk is 5–10% a month depending on the milestone (`sr_base_risk_<m>`); Safe halves it and Ambitious leaves it alone, through `country_space_race_risk_mult`. The roll and the panel's "Setback risk" figure read the same `sr_risk_pct_<m>`.
+- **Funding Levels:** 0 to `sr_max_funding_level` (base 3) affecting progress speed and innovation drain.
+- **Failure:** Multiplies progress down (×0.75 ambitious, ×0.85 safe) and starts a cooldown. The cooldown suppresses only the **roll** — progress keeps accruing at full rate while it runs. Does NOT permanently block.
 - **Moon Landing Site:** Shackleton Crater (high risk, science) vs Equatorial Plain (low risk, modest).
 - **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Space Mine + UN partnership + SpaceX company + funding + tech bonuses.
 - **Cross-System:** UN space partnership, SpaceX company, space elevator, space mine, and tourism all provide progress bonuses and/or reduce failure risk.
@@ -1136,13 +1136,56 @@ Multi-stage competitive space race system with 8 milestones. Great/Major Powers 
 | Moon Landing | space_exploration | Orbital complete |
 | Outer Solar System Probe | space_exploration | Orbital complete |
 | Moon Base | reusable_rocketry | Moon Landing complete |
-| Mars Landing | reusable_rocketry | Orbital complete |
-| Mars Terraforming | space_colonization | Mars Landing complete |
-| Solar System Colonization | space_colonization | Moon Base + Mars Landing complete |
+| Mars Landing | knowledge_economy | Orbital + Moon Landing complete |
+| Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
+| Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
+| Solar System Colonization | directed_energy_weapons | Moon Base + Mars Landing complete |
 
-### Buttons (4 per JE)
-- `sr_select_safe_approach` / `sr_select_ambitious_approach` — approach toggle
-- `sr_increase_funding` / `sr_decrease_funding` — funding level (0-3)
+Each entry additionally requires the matching `country_sr_*_program_bool` from the space programme's production method; losing it fires the entry's `fail`.
+
+### Buttons (4 per JE × 8 JEs = 32)
+Per milestone `<m>`: `sr_btn_safe_<m>` / `sr_btn_ambitious_<m>` (approach) and `sr_btn_fund_up_<m>` / `sr_btn_fund_down_<m>` (funding level, 0 to `sr_max_funding_level`). `je_space_race_interstellar_results` has none.
+
+All 32 carry `is_ai = yes` in their `visible`, so the vanilla grid shows a human nothing: the buttons exist for the AI, which picks approach and funding through their `ai_chance`. None of them holds a rule — `visible`, `possible` and `effect` all delegate to the shared helpers the widget's scripted GUIs also call, so the two surfaces cannot drift. Never delete a `scripted_button = …` line: those `ai_chance` blocks are the AI's only path into the space race.
+
+### Milestone Panel (journal-entry widget)
+One shared panel mounted on **all nine** entries in `custom_widget_container_2`, replacing the hidden button grid and the 44-branch `triggered_desc` chains (each `status_desc` is now one line).
+
+- **File:** `gui/journal_entry_widgets/space_race_widget.gui` — one `widget_je_sr_milestone_panel` type instanced by nine named widgets (`widget_je_space_race_<m>`). Vanilla precedent for several named widgets in one journal-entry widget file: `gui/journal_entry_widgets/ep2_japan_widgets.gui:501,550`, mounted by `00_meiji_restoration.txt:10,16`.
+- **Handlers:** `common/scripted_guis/space_race_sguis.txt` — eight `sr_milestone_<m>_sgui` (one per milestone with buttons) plus the display-only `sr_rivals_sgui`.
+- **Shared helpers:** `common/scripted_triggers/space_race_triggers.txt` (`sr_controls_shown`, `sr_solar_controls_shown`, `sr_possible_{safe,ambitious,fund_up,fund_down}`), `common/scripted_effects/space_race_effects.txt` (`sr_effect_{safe,ambitious,fund_up,fund_down}`). All parameterized on `$MILESTONE$`.
+- **Branching text:** `common/customizable_localization/space_race_custom_loc.txt` — `sr_<m>_profile` (the moved `triggered_desc` branches), `sr_<m>_pace` (one sentence explaining the pace figures), `sr_prog_<m>` (one word per programme-overview row). Every target key is plain text; the numbers all live in the outer widget loc keys.
+- **Display-only reads:** `sr_pace_rate_<m>` (the rate the pulse actually applies), `sr_risk_shown_<m>` (the roll's own value, forced to zero while the cooldown suppresses the roll), `sr_eta_months_<m>`, `sr_setbacks_<m>_value`, `sr_colony_count_value`, `sr_interstellar_months_left` — all in `space_race_values.txt`.
+
+Areas:
+1. **Readout** — progress against goal; pace, setback risk and lifetime setbacks; a rough estimate of months left; one sentence naming the state; the mission-profile flavour. The pace-and-estimate line is gated on the same `is_shown` as the controls, because solar colonization's entry stays alive with every colony claimed: there the rate falls back to the drift floor with no progress variable left to divide, and the estimate would read in the hundreds of months. The sentence below it still says the programme is not running. Its tooltip is the reward preview, built from `GetStaticModifier('sr_first_<m>').GetDesc` and `GetStaticModifier('sr_<m>').GetDesc` — never a typed number. Two exceptions: solar colonization has no `sr_first_*` / `sr_*` pair and uses `sr_solar_system_trade`; `interstellar_results` has no single modifier and describes the uncertainty in prose.
+2. **Controls** — Safe / Ambitious as a two-option selector where the option in force greys itself out through `is_valid`, and a funding stepper. The whole inset is gated on the scripted GUI's `is_shown`, which is also what keeps its `Var` read of `sr_funding_<m>` safe and what hides the controls when solar colonization drops into passive mode.
+3. **Who else is racing** (collapsed) — who is running a programme for this milestone and whether "the first" is still unclaimed. Built in script because `.gui` cannot list countries (gotchas #11, #15). It deliberately does **not** show rivals' progress. Its `limit` requires `sr_ai_should_participate = yes`, because a great power outside the top three can hold `sr_active_<m>` and never tick a month. **Solar colonization gets the participation list only** (`sr_rivals_participants_base`, not `sr_rivals_line_base`): it has no `sr_first_solar_colonization` reward and never writes a `sr_global_first_` flag, so there is no first to race for — the debug console's claim/release options leave it out for the same reason.
+4. **The programme so far** (collapsed) — all nine milestones as done / ours-and-first / under way / claimed by another / not begun. Restates no prerequisites; those are already legible in the journal list through `is_shown_when_inactive`.
+
+Op table (repeated in the `.gui` header and the sgui header — keep all three in step):
+
+| op | control |
+|---|---|
+| 0 | select the Safe approach |
+| 1 | select the Ambitious approach |
+| 2 | decrease this milestone's funding level |
+| 3 | increase this milestone's funding level |
+
+The milestone is **not** in the op code: it arrives through the panel's datacontext, which names one of the eight handlers.
+
+**Editing rules:** change an approach or funding rule in the **helper**, not in the button and not in the scripted GUI. Never re-derive a milestone's state in `.gui` or in localization — read `sr_<m>_last_status`, whose single derivation site is `sr_set_milestone_status_base`. Never put a scope expression in a customizable-localization target key (this repo has no precedent for one); put the numbers in the outer widget loc key, which is read in real GUI context. Expander state is per milestone and lives in `GetVariableSystem` (`sr_panel_rivals_<m>`, `sr_panel_programme_<m>`) — several milestone entries can be active at once, and collapsing a section must not touch the game.
+
+**Cost:** the two collapsible sections are the only expensive part, and both sit inside the container whose `visible` is their expander flag, so neither is evaluated while collapsed. `sr_rivals_sgui` walks every country once per frame while its section is open, which is why it is closed by default.
+
+Traced scenarios: fresh activation (no approach → drift rate, no risk); inactive entry with `is_shown_when_inactive` (root gated on `[JournalEntry.IsActive]`); either approach toggle; funding at each bound; a setback month (progress loss, counter, cooldown → shielded reading); a rival annexed or a rival that never ticks; an AI country; the programme's production method lost mid-way; an old save with neither display variable yet; solar colonization completing into passive mode; three milestones active at once; the read-only waiting entry.
+
+**Known behaviours the panel now makes visible** (existing mechanics, unchanged):
+- The failure cooldown suppresses only the **roll**. Progress is added before the check (`space_race_effects.txt:25`), so a programme inside its cooldown runs at full speed with zero chance of a setback. The panel says "shielded", not "paused".
+- With no approach selected the pulse adds a flat `sr_progress_drift` (0.5), not `sr_progress`. The panel quotes the drift rate in that state so the two agree.
+
+### Debug harness
+`event te_debug_space_race.1` (`events/te_debug_space_race_events.txt`, helpers in `common/scripted_effects/te_debug_space_race_effects.txt`) reaches every panel state: 90% / 100% progress, a forced setback with its cooldown, clearing the cooldown, seeding rival programmes, and claiming or releasing "the first". The rival flags are not backed by a journal entry, so the monthly cleanup wipes them — pause first.
 
 ### Events (34 total)
 - `.1`-`.9` — Milestone completion events (1 per milestone + notification)
@@ -1161,4 +1204,8 @@ Multi-stage competitive space race system with 8 milestones. Great/Major Powers 
 - Values: `common/script_values/space_race_values.txt`
 - Modifiers: `common/static_modifiers/space_race_modifiers.txt`
 - On Actions: `common/on_actions/space_race_on_actions.txt`
+- Widget: `gui/journal_entry_widgets/space_race_widget.gui`
+- Scripted GUIs: `common/scripted_guis/space_race_sguis.txt`
+- Customizable localization: `common/customizable_localization/space_race_custom_loc.txt`
+- Debug console: `events/te_debug_space_race_events.txt`, `common/scripted_effects/te_debug_space_race_effects.txt`
 - Localization: Organized into main loc files by `organize_loc.py` (events, JE labels, modifiers, etc.)

@@ -3758,6 +3758,17 @@
 #
 # TE_DEBUG_UN
 #
+ te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
+ te_debug_space_race.1.b:0 "Finish every running milestone on the next tick"
+ te_debug_space_race.1.c:0 "Force a setback now (progress loss, safety review, cooldown)"
+ te_debug_space_race.1.d:0 "Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\n\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel."
+ te_debug_space_race.1.e:0 "Clear the setback cooldown"
+ te_debug_space_race.1.f:0 "'What does the panel do if the programme is nine tenths done and on fire?'\n\n'Let us find out.'"
+ te_debug_space_race.1.g:0 "Put a rival programme in the other top powers"
+ te_debug_space_race.1.h:0 "Let another power claim 'the first' on every milestone I have not won"
+ te_debug_space_race.1.i:0 "Give 'the first' back on every milestone I have not won"
+ te_debug_space_race.1.t:0 "Space Race Test Console"
+ te_debug_space_race.1.z:0 "Close"
  te_debug_un.1.a:0 "Found the United Nations and seat the powers"
  te_debug_un.1.b:0 "Grant me a mandate against a neighbour"
  te_debug_un.1.c:0 "Set my standing to Exemplary (85)"
