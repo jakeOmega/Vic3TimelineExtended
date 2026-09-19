@@ -1,0 +1,212 @@
+﻿# ============================================================================
+# NUCLEAR PROGRAMME — customizable localization
+# ============================================================================
+# The branchy text that used to be spelled out on je_nuclear_program: its
+# eleven-line status_desc and the four-clause je_nuclear_program_reason wall.
+#
+# TWO RULES, both of which have bitten this repo:
+#
+# 1. CONTEXT. A target key reached from a journal entry's status_desc / desc is
+#    built in the ENTRY's script scope, where the country root is
+#    `ROOT.GetCountry`; a target key reached from a .gui `text =` / `tooltip =`
+#    is built in a GUI datacontext, where it is `JournalEntry.GetCountry`
+#    (gui_modding_guide.md gotcha #20). No root is right for both. So:
+#      * nuclear_program_status_line is called ONLY from
+#        je_nuclear_program_status_line, and its targets carry NO country
+#        accessor at all — every number in that line is appended by the calling
+#        key, not by the branch.
+#      * every other block here is called ONLY from
+#        gui/journal_entry_widgets/nuclear_program_widget.gui, so its targets may
+#        use JournalEntry.GetCountry. DO NOT call them from a desc.
+#
+# 2. GUARDS. je_nuclear_program carries is_shown_when_inactive, so these blocks
+#    are evaluated for countries whose entry never activated and which have none
+#    of the programme's variables. `random_valid = no` means every `text` trigger
+#    is evaluated until one matches, so an unguarded `var:` read in an early
+#    branch would log "Failed to fetch variable" on every frame for those
+#    countries (gotcha #14). Every variable read below is therefore paired with
+#    `has_variable`, and the two branches that describe a *deactivated* entry
+#    come first and test modifiers and a scripted trigger live — by then the
+#    weekly pulse has stopped and nuclear_program_last_status is stale.
+#
+# nuclear_program_last_status is written in exactly one place,
+# nuclear_program_refresh_state_effect. Nothing here re-derives it.
+#   0 authorised but unfunded   1 first device under development
+#   2 in series production      3 frozen by a pause treaty
+# ============================================================================
+
+# The journal entry's whole status line. Called from
+# je_nuclear_program_status_line only; accessor-free branches.
+nuclear_program_status_line = {
+	type = country
+	random_valid = no
+
+	# A disarmament settlement (or the UN's NPT modifier) makes the entry's
+	# `possible` fail, so the entry deactivates and the pulse stops: read the
+	# modifier, not the status code.
+	text = {
+		trigger = { modifier:country_nuclear_disarmament_bool = yes }
+		localization_key = nuclear_program_status_disarmed
+	}
+	# Deactivated for want of standing. Same scripted trigger the entry's
+	# `possible` asks, so the two can never disagree.
+	text = {
+		trigger = { nuclear_program_can_run_programme = no }
+		localization_key = nuclear_program_status_ineligible
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 3
+		}
+		localization_key = nuclear_program_status_paused
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 0
+		}
+		localization_key = nuclear_program_status_unfunded
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 1
+		}
+		localization_key = nuclear_program_status_developing
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 2
+		}
+		localization_key = nuclear_program_status_producing
+	}
+	# A save from before the status code existed, or the week between activation
+	# and the first refresh.
+	text = {
+		trigger = { always = yes }
+		localization_key = nuclear_program_status_generic
+	}
+}
+
+# ---------------------------------------------------------------------------
+# WIDGET-ONLY BLOCKS — targets below may use JournalEntry.GetCountry, so none of
+# them may ever be called from a status_desc, desc or scripted-button desc.
+# ---------------------------------------------------------------------------
+
+# What is setting the warhead production rate. Shown under the rate row.
+nuclear_program_rate_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 3
+		}
+		localization_key = nuclear_program_rate_note_paused
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding = 0
+		}
+		localization_key = nuclear_program_rate_note_unfunded
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_weapons_program_first_nuke_done
+			var:nuclear_weapons_program_first_nuke_done > 0
+		}
+		localization_key = nuclear_program_rate_note_series
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuclear_program_rate_note_prototype
+	}
+}
+
+# The foreign-assistance line, appended after the rate note. Separate block
+# because customizable localization picks exactly one branch, and assistance is
+# orthogonal to which phase the programme is in.
+nuclear_program_aid_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { modifier:country_receiving_nuclear_program_aid_bool = yes }
+		localization_key = nuclear_program_aid_note_active
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+# "Next warhead in" — the estimate, or a dash when nothing is accruing.
+# nuclear_program_display_months_to_next is 0 in exactly that case.
+nuclear_program_next_warhead = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding >= 1
+			NOT = { modifier:country_nuclear_program_pause_bool = yes }
+			NOT = { modifier:country_nuclear_disarmament_bool = yes }
+		}
+		localization_key = nuclear_program_next_warhead_estimate
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuclear_program_next_warhead_stalled
+	}
+}
+
+# Appended after the first-device year. Separate block for the same reason as
+# the assistance line: exactly one branch of a block can be chosen, and being
+# first in the world is orthogonal to whether the year was recorded.
+nuclear_program_world_first_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = is_world_first_nuclear_power }
+		localization_key = nuclear_program_world_first_note_active
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+# "First device" — the year, or that it predates the record, or that there is
+# none yet. nuclear_program_first_device_year is only written from the weekly
+# pulse's first-device branch, so a programme that finished its first device
+# before this panel shipped has the flag but not the year.
+nuclear_program_first_device = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nuclear_weapons_program_first_nuke_done
+			var:nuclear_weapons_program_first_nuke_done > 0
+			has_variable = nuclear_program_first_device_year
+		}
+		localization_key = nuclear_program_first_device_year_known
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_weapons_program_first_nuke_done
+			var:nuclear_weapons_program_first_nuke_done > 0
+		}
+		localization_key = nuclear_program_first_device_year_unknown
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuclear_program_first_device_none
+	}
+}

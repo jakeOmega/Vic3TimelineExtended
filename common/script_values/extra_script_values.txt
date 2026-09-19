@@ -502,6 +502,134 @@ nuclear_ai_desired_stockpile = {
 	round = yes
 }
 
+# ============================================================================
+# NUCLEAR PROGRAMME — display-only values for the journal-entry widget
+# ============================================================================
+# Read from gui/journal_entry_widgets/nuclear_program_widget.gui and from
+# common/customizable_localization/nuclear_program_custom_loc.txt, never from
+# game logic. Two rules they all follow:
+#
+#  * Every one starts at 0 and touches a variable only inside a `has_variable`
+#    guard. je_nuclear_program carries is_shown_when_inactive, so these are
+#    evaluated in the scope of countries whose entry never activated and which
+#    therefore have none of the programme's variables — the "Failed to fetch
+#    variable" trap in docs/guides/gui_modding_guide.md gotcha #14.
+#  * None of them re-states a rate or a threshold. They read the same script
+#    values and the same modifier the weekly pulse reads, so the number on
+#    screen and the number applied cannot drift apart.
+
+nuclear_program_display_stockpile = {
+	value = 0
+	if = {
+		limit = { has_variable = nuclear_weapon_stockpile }
+		add = var:nuclear_weapon_stockpile
+	}
+}
+
+nuclear_program_display_funding = {
+	value = 0
+	if = {
+		limit = { has_variable = nuclear_weapons_program_funding }
+		add = var:nuclear_weapons_program_funding
+	}
+}
+
+# Guarded twin of nuclear_weapons_program_current_cost: weekly innovation the
+# programme is spending right now.
+nuclear_program_display_weekly_cost = {
+	value = nuclear_program_display_funding
+	multiply = nuclear_weapon_program_funding_step
+}
+
+# Progress still to run before the next warhead, out of
+# nuclear_weapon_program_goal_value.
+nuclear_program_display_progress_remaining = {
+	value = nuclear_weapon_program_goal_value
+	if = {
+		limit = { has_variable = nuclear_weapon_program_progress }
+		subtract = var:nuclear_weapon_program_progress
+	}
+	min = 0
+}
+
+# Monthly progress exactly as je_nuclear_program's on_weekly_pulse computes it
+# before dividing by four: the base rate (funding, times ten once the first
+# device is done) scaled by whatever country_nuclear_program_progress_mult the
+# nuclear_program_aid treaty article is contributing.
+nuclear_program_display_monthly_progress = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nuclear_weapons_program_funding
+			has_variable = nuclear_weapons_program_first_nuke_done
+		}
+		add = nuclear_weapon_program_monthly_progress
+		multiply = {
+			value = 1
+			add = modifier:country_nuclear_program_progress_mult
+		}
+	}
+}
+
+# Divisor for the months estimate below, floored so the estimate can never ask
+# the engine to divide by zero. Never displayed.
+nuclear_program_display_weekly_progress_floor = {
+	value = nuclear_program_display_monthly_progress
+	divide = 4
+	min = 0.01
+}
+
+# Months until the next warhead at the current rate. Zero — which the panel
+# renders as a dash — whenever the programme is not gaining progress at all,
+# which is also the only case where the floor above would kick in.
+nuclear_program_display_months_to_next = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding >= 1
+			NOT = { modifier:country_nuclear_program_pause_bool = yes }
+			NOT = { modifier:country_nuclear_disarmament_bool = yes }
+		}
+		add = nuclear_program_display_progress_remaining
+		divide = nuclear_program_display_weekly_progress_floor
+		divide = 4
+	}
+	min = 0
+}
+
+# Calendar year of the first device. Written only by the weekly pulse's
+# first-device branch, so it is 0 both for a programme that has not got there
+# yet and for one that did so before this variable existed; the two are told
+# apart in nuclear_program_custom_loc.txt, which can test has_variable.
+nuclear_program_display_first_device_year = {
+	value = 0
+	if = {
+		limit = { has_variable = nuclear_program_first_device_year }
+		add = var:nuclear_program_first_device_year
+	}
+}
+
+# The foreign-assistance contribution to the rate, as a percentage, so the rate
+# tooltip can name it without re-stating the treaty article's value.
+nuclear_program_display_aid_bonus = {
+	value = modifier:country_nuclear_program_progress_mult
+	multiply = 100
+}
+
+# Delivery and home-defence ratings as percentages. The underlying modifier
+# types are script_only, so GetModifier.GetValueWithBreakdownFor on them is
+# unverified; these thin wrappers are the documented way to show the number.
+nuclear_program_display_attack_rating = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	multiply = 100
+}
+
+nuclear_program_display_defense_rating = {
+	value = modifier:country_nuclear_weapon_defense_chance_add
+	multiply = 100
+}
+
 nuclear_industrial_strike_killed_population = {
 	value = state_population
 	multiply = 0.1

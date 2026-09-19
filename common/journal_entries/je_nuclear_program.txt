@@ -15,6 +15,24 @@
 	scripted_button = increase_funding_nuclear_program
 	scripted_button = decrease_funding_nuclear_program
 
+	# The programme readout sits in container_3, immediately above the native
+	# progress bar, so the numbers that explain the bar are next to it; the
+	# deterrence and nuclear-powers sections sit in container_4, immediately
+	# below it. Panel order in gui/journal_entry.gui: status_desc(188),
+	# container_2(207), button grid(215), container_3(236), scripted
+	# bars(246), native bar(670), container_4(728), reason(742).
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_program_widget.gui"
+		name = "widget_je_nuclear_programme"
+		container = "custom_widget_container_3"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_program_widget.gui"
+		name = "widget_je_nuclear_deterrence"
+		container = "custom_widget_container_4"
+	}
+
 	current_value = {
 		value = root.var:nuclear_weapon_program_progress
 	}
@@ -220,53 +238,13 @@
 		}
 	}
 
-	status_desc = {
-		# Nuclear Powers leaderboard
-		triggered_desc = {
-			desc = je_nuclear_powers_header
-			trigger = { has_global_variable = nuke_rank_1 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_1_entry
-			trigger = { has_global_variable = nuke_rank_1 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_2_entry
-			trigger = { has_global_variable = nuke_rank_2 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_3_entry
-			trigger = { has_global_variable = nuke_rank_3 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_4_entry
-			trigger = { has_global_variable = nuke_rank_4 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_5_entry
-			trigger = { has_global_variable = nuke_rank_5 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_6_entry
-			trigger = { has_global_variable = nuke_rank_6 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_7_entry
-			trigger = { has_global_variable = nuke_rank_7 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_8_entry
-			trigger = { has_global_variable = nuke_rank_8 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_9_entry
-			trigger = { has_global_variable = nuke_rank_9 }
-		}
-		triggered_desc = {
-			desc = je_nuke_rank_10_entry
-			trigger = { has_global_variable = nuke_rank_10 }
-		}
-	}
+	# One line. Unlike the widget, status_desc is rendered by
+	# gui/journal_entry.gui:188 with no IsActive gate, so this is the only
+	# surface that can speak for a *deactivated* entry — the state a disarmament
+	# settlement puts the programme into. The eleven triggered_desc entries that
+	# used to live here were the global nuclear-powers leaderboard; it is now a
+	# collapsed section of the deterrence panel.
+	status_desc = je_nuclear_program_status_line
 
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes

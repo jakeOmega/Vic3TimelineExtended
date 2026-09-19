@@ -1,0 +1,224 @@
+﻿# ============================================================================
+# NUCLEAR PROGRAMME — scripted GUIs for gui/journal_entry_widgets/nuclear_program_widget.gui
+# ============================================================================
+# Two handlers, and that is deliberately all: the programme panel's rows are
+# ordinary localization reading display-only script values and
+# common/customizable_localization/nuclear_program_custom_loc.txt, which is
+# cheaper per frame than ExecuteTooltip and needs no handler at all. A scripted
+# GUI is used only where nothing else can do the job.
+#
+# ---- nuclear_program_funding_sgui — op table -------------------------------
+# Keep in step with the .gui header and docs/systems/journal_entry_systems.md.
+#   0   step programme funding DOWN   -> nuclear_program_effect_decrease_funding
+#   1   step programme funding UP     -> nuclear_program_effect_increase_funding
+#
+# Both ops delegate `is_valid` to the same scripted trigger and `effect` to the
+# same scripted effect that the journal entry's scripted buttons call, so the
+# panel and the AI's grid cannot drift apart. Neither carries a custom_tooltip:
+# IsValidTooltip renders the trigger's own clauses with a tick or a cross each
+# ("innovation above 100", "no disarmament settlement", "no pause treaty"), which
+# is both more informative than a hand-written sentence and impossible to let
+# drift away from the real condition.
+#
+# ---- nuclear_program_powers_sgui — op table --------------------------------
+#   op = leaderboard rank, 1 to 10.
+# One ExecuteTooltip per GUI row rather than one block listing all ten, because
+# a scope's own tooltip lines print before the lines produced inside nested
+# scope changes (gui_modding_guide.md gotcha #18) — separate rows make that
+# impossible. `is_shown` requires the rank's global to exist, so an empty slot
+# collapses instead of printing a placeholder. No flag icon in the row text: the
+# engine already prefixes a country-scope tooltip line with that country's flag
+# (gotcha #19).
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# THE FUNDING STEPPER
+# ---------------------------------------------------------------------------
+nuclear_program_funding_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	# Mirrors the two scripted buttons' `visible`, which is `always = yes` plus
+	# the `is_ai = yes` that hides the grid from humans. `has_journal_entry`
+	# stands in for that: it is also the cheap guard that keeps
+	# nuclear_program_possible_decrease_funding — which reads a variable that
+	# only an activated entry has created — from ever running too early.
+	is_shown = {
+		has_journal_entry = je_nuclear_program
+		OR = {
+			AND = {
+				exists = scope:op
+				scope:op = 0
+			}
+			scope:op = 1
+		}
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 0
+			}
+			nuclear_program_possible_decrease_funding = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			nuclear_program_possible_increase_funding = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	# The AI reaches the programme through the journal entry's scripted buttons
+	# and their ai_chance blocks, never through here.
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:op
+				scope:op = 0
+			}
+			nuclear_program_effect_decrease_funding = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			nuclear_program_effect_increase_funding = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE NUCLEAR POWERS LEADERBOARD — display only
+# ---------------------------------------------------------------------------
+# The nuke_rank_N globals hold *countries*, and the GUI chain
+# Var('x').GetCountry.GetName is recorded as not working in this mod
+# (gui_modding_guide.md gotcha #11), with no verified way to list countries in a
+# .gui at all (gotcha #15). So the row is entered in script and the line prints
+# [THIS.GetCountry.GetName], which is vanilla's own shape for this
+# (je_hispanoamerica_not_recognized_countries_sgui). The ranking itself is not
+# recomputed here: update_nuclear_powers_ranking already writes these globals
+# once a week from a single ordered pass, and this only renders them. Disclosure
+# is unchanged from the eleven triggered_desc lines this replaces — the top ten
+# nuclear powers and their stockpiles, nothing more.
+nuclear_program_powers_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		trigger_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 1
+			}
+			has_global_variable = nuke_rank_1
+			exists = global_var:nuke_rank_1
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			has_global_variable = nuke_rank_2
+			exists = global_var:nuke_rank_2
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			has_global_variable = nuke_rank_3
+			exists = global_var:nuke_rank_3
+		}
+		trigger_else_if = {
+			limit = { scope:op = 4 }
+			has_global_variable = nuke_rank_4
+			exists = global_var:nuke_rank_4
+		}
+		trigger_else_if = {
+			limit = { scope:op = 5 }
+			has_global_variable = nuke_rank_5
+			exists = global_var:nuke_rank_5
+		}
+		trigger_else_if = {
+			limit = { scope:op = 6 }
+			has_global_variable = nuke_rank_6
+			exists = global_var:nuke_rank_6
+		}
+		trigger_else_if = {
+			limit = { scope:op = 7 }
+			has_global_variable = nuke_rank_7
+			exists = global_var:nuke_rank_7
+		}
+		trigger_else_if = {
+			limit = { scope:op = 8 }
+			has_global_variable = nuke_rank_8
+			exists = global_var:nuke_rank_8
+		}
+		trigger_else_if = {
+			limit = { scope:op = 9 }
+			has_global_variable = nuke_rank_9
+			exists = global_var:nuke_rank_9
+		}
+		trigger_else_if = {
+			limit = { scope:op = 10 }
+			has_global_variable = nuke_rank_10
+			exists = global_var:nuke_rank_10
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:op
+				scope:op = 1
+			}
+			global_var:nuke_rank_1 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			global_var:nuke_rank_2 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			global_var:nuke_rank_3 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_3 }
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			global_var:nuke_rank_4 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_4 }
+		}
+		else_if = {
+			limit = { scope:op = 5 }
+			global_var:nuke_rank_5 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_5 }
+		}
+		else_if = {
+			limit = { scope:op = 6 }
+			global_var:nuke_rank_6 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_6 }
+		}
+		else_if = {
+			limit = { scope:op = 7 }
+			global_var:nuke_rank_7 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_7 }
+		}
+		else_if = {
+			limit = { scope:op = 8 }
+			global_var:nuke_rank_8 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_8 }
+		}
+		else_if = {
+			limit = { scope:op = 9 }
+			global_var:nuke_rank_9 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_9 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			global_var:nuke_rank_10 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_10 }
+		}
+	}
+}
