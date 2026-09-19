@@ -1493,7 +1493,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 19. **The engine already prefixes a country-scope tooltip line with that country's flag.** A `custom_tooltip` printed inside a country scope change gets a bullet and a flag for free, so adding `GetFlagTextIcon` inside that entry shows the flag twice. Lines printed at the *current* scope that merely reference a country through a saved scope (`SCOPE.sCountry('x')…`) get no automatic flag and still need the explicit one.
 
-20. **`JournalEntry.GetCountry.GetCustom('x')` works in JE widget loc** — confirmed in-game, alongside `.MakeScope.ScriptValue('x')` and `.MakeScope.Var('x')`.
+20. **`JournalEntry.GetCountry.GetCustom('x')` works in JE widget loc** — confirmed in-game, alongside `.MakeScope.ScriptValue('x')` and `.MakeScope.Var('x')`. **That root is for widget loc only:** a key rendered by the journal entry's own `status_desc` / `desc` / `progress_desc` is built in the entry's script scope, where the `JournalEntry` GUI datacontext need not exist, and the proven country root there is `ROOT.GetCountry…` (66 uses in `te_journal_entries_l_english.yml`). A key reachable from *both* contexts — typically a `customizable_localization` target, which either root can call — should carry **no** country accessor at all, because no single root is correct for both.
 
 ---
 
