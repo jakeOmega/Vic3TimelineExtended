@@ -54,13 +54,28 @@
 	}
 
 	immediate = {
-		set_variable = {
-			name = nuclear_weapon_stockpile
-			value = 0
+		# Runs on *every* activation, not just the first. The stockpile and the
+		# first-device flag are therefore created only if they are missing: a
+		# great power that drops below `possible` (losing the entry) and is later
+		# promoted again used to have its entire arsenal silently deleted here.
+		# Progress and funding are still zeroed unconditionally — the goal value
+		# is fixed at activation from current_value + goal_add_value, so a
+		# re-activation carrying leftover progress would give the native bar a
+		# non-zero baseline and a goal of 100 + that leftover, and the bar would
+		# read negative after the next warhead wrapped it.
+		if = {
+			limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+			set_variable = {
+				name = nuclear_weapon_stockpile
+				value = 0
+			}
 		}
-		set_variable = {
-			name = nuclear_weapons_program_first_nuke_done
-			value = 0
+		if = {
+			limit = { NOT = { has_variable = nuclear_weapons_program_first_nuke_done } }
+			set_variable = {
+				name = nuclear_weapons_program_first_nuke_done
+				value = 0
+			}
 		}
 		set_variable = {
 			name = nuclear_weapon_program_progress
