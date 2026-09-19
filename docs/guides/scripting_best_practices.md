@@ -1,4 +1,4 @@
-# Scripting Best Practices & Debugging
+﻿# Scripting Best Practices & Debugging
 
 Lessons learned from developing the Vic3TimelineExtended mod. Covers modifier validation, scope issues, debugging, and common engine quirks.
 
@@ -25,7 +25,7 @@ if = { limit = { b:building_$WONDER$.level = 5 b:building_$WONDER$.level < $MAX_
 
 Calling `generic_wonder_construction_base = { WONDER = solar_collector MAX_LEVEL = 10 }` resolves the guard to `b:building_solar_collector.level < 10`, which is valid engine syntax (also used in vanilla and `extra_buildings.txt` construction-site `possible` clauses). This lets one shared chain handle wonders capped at any level — branches with `level = N` where N ≥ MAX_LEVEL silently never match.
 
-The same trick works for `RISK = 5..10` in `sr_monthly_progress_update_effect` (`set_variable = { name = sr_base_risk value = $RISK$ }` becomes `value = 5`) and for `MAX_LEVEL` in similar bounded chains. Don't try to do arithmetic on placeholders — there's no `$N$+1`, only direct text substitution.
+The same trick works for `MAX_LEVEL` in similar bounded chains. Don't try to do arithmetic on placeholders — there's no `$N$+1`, only direct text substitution. A placeholder can also name a *script value* rather than a literal (`chance = sr_risk_pct_$MILESTONE$` in `sr_monthly_progress_update_effect`), which is how a number the engine rolls against can be shared with a GUI that needs to display it — a numeric parameter copied into a proxy variable one statement before it is used is readable by nothing else.
 
 ### Conventions
 

@@ -1,4 +1,4 @@
-# Key Mod Systems
+﻿# Key Mod Systems
 
 Reference for all major gameplay systems added by the Vic3TimelineExtended mod. Each section covers purpose, file locations, and key mechanics.
 
@@ -414,7 +414,7 @@ Suborbital Flight (rocketry tech)
 - **"The First" Bonus:** Global variables (`sr_global_first_*`) track first achiever. First nation gets ~2× rewards (prestige, innovation max, tech speed) permanently. Subsequent nations get smaller permanent modifiers.
 - **Approach Choice:** Safe (slow progress, ~2-7% failure/month) vs Ambitious (fast progress, ~10-22% failure/month). Selected via scripted buttons.
 - **Funding Levels:** 0 to `sr_max_funding_level` (base 3, increased by `country_space_race_max_funding_add` modifier from techs like `reusable_rocketry` +1, `space_colonization` +2). Each level costs innovation (-15/level via `sr_space_program_cost` consolidated modifier). Funding and approach are **per-JE** — you can fund moon landing heavily with safe approach while running a cheap ambitious probe.
-- **Consolidated Cost:** Single `sr_space_program_cost` modifier with `multiplier = sr_total_space_cost` (sum of all per-JE funding levels + approach overhead: safe=1, ambitious=2). Recalculated via `sr_recalculate_cost` whenever funding or approach changes.
+- **Per-JE Cost:** each active milestone's journal entry carries `sr_space_program_cost` with `multiplier = sr_<m>_cost` (that milestone's funding level + approach overhead: safe=1, ambitious=2, times an era factor from 1x for suborbital to 12x for the interstellar probe). Re-posted by `sr_recalculate_cost` whenever funding or approach changes. A single consolidated `sr_total_space_cost` script value used to exist for this and is gone — nothing read it after the per-JE split.
 - **Failure:** Reduces progress (50% for ambitious, 15% for safe), adds cooldown (6-24 months), applies decaying negative modifiers. Progress reduction happens inline in the monthly pulse. Cooldown is global (decremented once via `on_monthly_pulse_country`, not per-JE). Does NOT permanently block — just wastes time.
 - **Failure Flags:** When failure occurs, per-JE `sr_failed_<milestone>` boolean flags are set before firing failure events. `sr_temporary_safety_review_effect` checks all flags (using `if` not `else_if`) to apply a decaying safety-review modifier to every failed milestone that month.
 - **Moon Landing Site:** Special event (space_race_events.5) offers Shackleton Crater (high risk, science windfall) vs Equatorial Plain (low risk, modest rewards).
@@ -454,7 +454,8 @@ Suborbital Flight (rocketry tech)
 | `sr_safe_<m>` / `sr_ambitious_<m>` | Per-JE approach flags |
 | `sr_failed_<m>` | Per-JE failure flag (set in pulse, read by events) |
 | `sr_interstellar_transit_progress` | Interstellar probe transit progress (passive JE, not per-JE) |
-| `sr_funding_level` | **Proxy variable** — set from per-JE funding before script value evaluation in monthly pulse. Safe because script values evaluate immediately. |
+| `sr_<m>_last_status` | Widget display state, 0-4. Single derivation site: `sr_set_milestone_status_base`. Absent when the milestone is not running. |
+| `sr_<m>_setbacks` | Lifetime setback count for that milestone, shown by the widget. Incremented in `sr_count_setback_base`. |
 | `sr_failure_cooldown` | Global months until failure can occur again (decremented once/month via on_action) |
 | `sr_progress_boost` | **Proxy variable** — set before calling `sr_boost_active_milestones` |
 | `sr_moon_site_shackleton/equatorial` | Moon landing site choice |

@@ -189,38 +189,6 @@ sr_max_funding_level = {
 	add = modifier:country_space_race_max_funding_add
 }
 
-# Total space program cost (sum of all active per-JE funding + approach overhead)
-# Each unit = -15 innovation/week via sr_space_program_cost modifier
-sr_total_space_cost = {
-	value = 0
-	# Per-JE funding levels
-	if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital }
-	if = { limit = { has_variable = sr_funding_orbital } add = var:sr_funding_orbital }
-	if = { limit = { has_variable = sr_funding_moon_landing } add = var:sr_funding_moon_landing }
-	if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe }
-	if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
-	if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing }
-	if = { limit = { has_variable = sr_funding_interstellar_probe } add = var:sr_funding_interstellar_probe }
-	if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization }
-	# Per-JE approach overhead (safe = 1 unit, ambitious = 2 units)
-	if = { limit = { has_variable = sr_safe_suborbital } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_suborbital } add = 2 }
-	if = { limit = { has_variable = sr_safe_orbital } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_orbital } add = 2 }
-	if = { limit = { has_variable = sr_safe_moon_landing } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_moon_landing } add = 2 }
-	if = { limit = { has_variable = sr_safe_probe } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_probe } add = 2 }
-	if = { limit = { has_variable = sr_safe_moon_base } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_moon_base } add = 2 }
-	if = { limit = { has_variable = sr_safe_mars_landing } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_mars_landing } add = 2 }
-	if = { limit = { has_variable = sr_safe_interstellar_probe } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_interstellar_probe } add = 2 }
-	if = { limit = { has_variable = sr_safe_solar_colonization } add = 1 }
-	if = { limit = { has_variable = sr_ambitious_solar_colonization } add = 2 }
-}
-
 # Per-JE funding level values for JE-scoped sr_funding_progress modifier
 # Uses owner = { } wrapper for JE-to-country scope access
 sr_funding_suborbital_level = {
