@@ -139,3 +139,35 @@ ch_shown_global_media_campaign = {
 ch_shown_cultural_protectionism = {
 	NOT = { ch_active_cultural_protectionism = yes }
 }
+
+# ============================================================================
+# POLITICAL MODEL CLASSIFICATION
+# ============================================================================
+# Used by ch_set_political_model (common/scripted_effects/
+# cultural_hegemony_effects.txt), the single place that sorts a country into
+# the political-model family its culture exports.
+
+# ---- Regressive laws ----
+# Scope: country
+# True when the country keeps any law that marks an unreformed state. A military
+# junta only counts as developmentalist without these. Mirrors vanilla's
+# country_has_laws_in_need_of_critical_modernization
+# (game/common/scripted_triggers/00_ip4_victoria_scripted_triggers.txt) minus its
+# two taxation laws, which linger well into the mid-game, plus hereditary
+# bureaucrats, the mod's Feudal Contracts and the three slavery laws.
+ch_has_regressive_laws = {
+	OR = {
+		has_law_or_variant = law_type:law_isolationism
+		has_law_or_variant = law_type:law_extraction_economy
+		has_law_or_variant = law_type:law_traditionalism
+		has_law_or_variant = law_type:law_industry_banned
+		has_law_or_variant = law_type:law_serfdom
+		has_law_or_variant = law_type:law_peasant_levies
+		has_law_or_variant = law_type:law_guild_system
+		has_law_or_variant = law_type:law_hereditary_bureaucrats
+		has_law_or_variant = law_type:law_feudal_contracts
+		has_law_or_variant = law_type:law_slave_trade
+		has_law_or_variant = law_type:law_legacy_slavery
+		has_law_or_variant = law_type:law_debt_slavery
+	}
+}

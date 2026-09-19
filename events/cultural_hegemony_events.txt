@@ -724,8 +724,10 @@ cultural_hegemony.7 = {
 			}
 		}
 
-		# Full political movement pressure from hegemon's ideology
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
+		# Full political movement pressure from the hegemon's model: a 30-month
+		# non-decaying spike on top of the baseline (same lifetime total as the
+		# 60-month decaying modifier it replaced)
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
 
 		# Radicals among pops disturbed by foreign ideology
 		every_scope_state = {
@@ -823,7 +825,7 @@ cultural_hegemony.7 = {
 		}
 
 		# Reduced political movement pressure (weaker modifier, shorter duration)
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = yes }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 15 DECAYING = no MULT = 1 }
 
 		every_scope_state = {
 			limit = { state_population > 50000 }
@@ -851,7 +853,7 @@ cultural_hegemony.7 = {
 			} }
 
 		# Reduced political movement pressure (you're not suppressing, just redirecting)
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
 
 		ai_chance = {
 			base = 3
@@ -1534,7 +1536,7 @@ cultural_hegemony.15 = {
 		# Hegemon's ideology seeps through the education system
 		if = {
 			limit = { exists = scope:cultural_hegemon }
-			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 60 DECAYING = yes }
+			ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
 		}
 		every_scope_state = {
 			limit = { state_population > 50000 }

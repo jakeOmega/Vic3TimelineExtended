@@ -50,6 +50,7 @@
 ###   6 megaprojects                   7 pull modifiers      8 infamy
 ###   9 instability                    10 pull multiplier
 ###   11 "Rank N of M" line            12 exported-model block
+###   31-45 one "Political models" legend row each (op = 30 + ch_model code)
 ###
 ### ---- ch_board_is_us_sgui ----------------------------------------------------
 ###   op = board rank 1 to 10; drives that row's "us" marker and nothing else.
@@ -286,6 +287,52 @@ types cultural_hegemony_widget_types
 			using = fontsize_medium
 			block "row_text" {}
 			block "row_tooltip" {}
+		}
+	}
+
+	### One "Political models" legend row: the model's pie texture as its swatch
+	### (frame 2 is the coloured disc), its name and its share of world culture.
+	### Whether it shows is ch_show_sgui's decision (ops 31-45).
+	type ch_model_legend_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+		datacontext = "[GetScriptedGui('ch_show_sgui')]"
+
+		block "legend_visible" {}
+
+		icon = {
+			size = { 14 14 }
+			parentanchor = vcenter
+			framesize = { 128 128 }
+			frame = 2
+			block "legend_swatch" {}
+		}
+
+		widget = {
+			size = { 206 20 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 206
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "legend_label" {}
+			}
+		}
+
+		widget = {
+			size = { 56 20 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 56
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "legend_value" {}
+			}
 		}
 	}
 }
@@ -906,6 +953,352 @@ flowcontainer = {
 			align = left|nobaseline
 			using = fontsize_medium
 			margin_top = 4
+		}
+	}
+
+	### ---- Political models of the world ------------------------------------
+	### Every country's political model (ch_set_political_model) weighted by its
+	### cultural pull: each model's share of world culture, recounted with the
+	### leaderboard. The pie is fifteen stacked progresspies, one per model, each
+	### filled to the model's CUMULATIVE share (ch_model_pie_cum_<n>_display) and
+	### declared largest first, so the later, smaller layers draw on top and
+	### slice n shows between cum_<n-1> and cum_<n>. Each layer's colour is baked
+	### into its texture's fill frame, as vanilla colours its own progresspies
+	### (sidebar_progress / sidebar_progress_red); frame 1 is transparent so the
+	### layers below show through. Layer order, legend order, the script values'
+	### order and the texture generator's MODELS tuple are the same list:
+	### scripts/image_pipeline/gen_ch_model_pie_textures.py.
+	ch_section_header = {
+		blockoverride "left_text" {
+			text = "je_ch_widget_models_header"
+			using = elide_fontsize_min
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('ch_models_open')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('ch_models_open'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('ch_models_open')]"
+		}
+	}
+
+	ch_panel = {
+		visible = "[GetVariableSystem.Exists('ch_models_open')]"
+		datacontext = "[GetScriptedGui('ch_show_sgui')]"
+
+		### Before the first rebuild there is nothing to draw (op 12).
+		textbox = {
+			visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ) )]"
+			text = "je_ch_widget_models_pending"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 474 -1 }
+			maximumsize = { 474 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#lore"
+		}
+
+		textbox = {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+			text = "je_ch_widget_models_legend"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 474 -1 }
+			maximumsize = { 474 -1 }
+			align = left|nobaseline
+			using = fontsize_small
+			default_format = "#lore"
+			margin_bottom = 4
+		}
+
+		flowcontainer = {
+			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 12
+
+			widget = {
+				size = { 160 160 }
+				parentanchor = top
+				tooltip = "je_ch_widget_models_pie_tt"
+
+				icon = {
+					size = { 100% 100% }
+					texture = "gfx/interface/backgrounds/round_frame_dec.dds"
+				}
+
+				widget = {
+					size = { 75% 75% }
+					parentanchor = center
+					position = { 0 -1 }
+
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_15_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_14_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_13_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_12_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_11_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_10_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_9_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_8_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_7_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_6_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_5_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_4_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_3_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_2_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+					progresspie = {
+						size = { 100% 100% }
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('ch_model_pie_cum_1_display'))]"
+						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
+						framesize = { 128 128 }
+						frame = 2
+					}
+				}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+					blockoverride "legend_label" { text = "ch_model_republican" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_republican" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+					blockoverride "legend_label" { text = "ch_model_corporatist" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_corporatist" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+					blockoverride "legend_label" { text = "ch_model_anarchist" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_anarchist" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+					blockoverride "legend_label" { text = "ch_model_other" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_other" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+					blockoverride "legend_label" { text = "ch_model_royalist_absolutist" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_absolutist" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+					blockoverride "legend_label" { text = "ch_model_technocratic" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_technocratic" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+					blockoverride "legend_label" { text = "ch_model_religious" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_religious" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+					blockoverride "legend_label" { text = "ch_model_socialist" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_socialist" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+					blockoverride "legend_label" { text = "ch_model_military_junta" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_military_junta" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+					blockoverride "legend_label" { text = "ch_model_royalist_constitutional" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_constitutional" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+					blockoverride "legend_label" { text = "ch_model_communist" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_communist" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+					blockoverride "legend_label" { text = "ch_model_liberal" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_liberal" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+					blockoverride "legend_label" { text = "ch_model_reactionary" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_reactionary" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+					blockoverride "legend_label" { text = "ch_model_developmentalist_junta" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_developmentalist_junta" }
+				}
+				ch_model_legend_row = {
+					blockoverride "legend_visible" {
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+					}
+					blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+					blockoverride "legend_label" { text = "ch_model_fascist" }
+					blockoverride "legend_value" { text = "je_ch_widget_models_share_fascist" }
+				}
+			}
 		}
 	}
 
