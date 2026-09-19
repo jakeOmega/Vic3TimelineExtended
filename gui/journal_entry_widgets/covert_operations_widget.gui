@@ -1,12 +1,113 @@
 ﻿### Covert Warfare JE widgets
-### Lists every running covert operation. Each operation is a script container
-### referenced from the country's `iw_ops` variable list (see
-### common/scripted_effects/covert_warfare_effects.txt for its tags and variables).
-### Wired via `widget = { name = "widget_je_covert_operations" container = "custom_widget_container_2" }`
-### in je_covert_warfare, so the rows render directly under the status description.
+###
+### Two widgets, both mounted from je_covert_warfare:
+###   widget_je_covert_command_centre  custom_widget_container_1  (above status desc)
+###     Intelligence capacity, operation slots, the funding ladder and its
+###     stepper, the detection factors and the defensive side. Everything the
+###     journal entry used to say in 16 triggered_desc lines.
+###   widget_je_covert_operations      custom_widget_container_2  (below status desc)
+###     One row per running operation, from the operator's `iw_ops` variable
+###     list of script containers (see common/scripted_effects/covert_warfare_effects.txt
+###     for their tags and variables).
+###
+### SCRIPTED GUI OP CODES (common/scripted_guis/covert_warfare_sguis.txt):
+###     0  funding stepper minus   covert_possible/effect_decrease_funding
+###     1  funding stepper plus    covert_possible/effect_increase_funding
+### Both delegate to the same shared trigger and effect the journal entry's
+### scripted buttons call, so the grid and this widget cannot diverge.
+###
+### EDITING RULES
+### * Never compare a game number against a literal here. The phase lines read
+###   the stored `iw_phase` (1/2/3), written by covert_op_refresh_phase; the 6
+###   and 12 month thresholds live only in covert_op_is_established /
+###   covert_op_is_fully_operational.
+### * Every question that needs script asks it through an is_shown-only
+###   scripted GUI (covert_ops_dormant_sgui, covert_ops_phase_ready_sgui).
+### * Panel NUMBERS come from JournalEntry.GetCountry.MakeScope.ScriptValue, a
+###   proven read. GetModifier.GetValueWithBreakdownFor is used for hover
+###   breakdowns ONLY, so if that chain fails in-game the panel still reads
+###   correctly and only the tooltip is lost.
+### * Target country names go through the stored capital state
+###   (`iw_target_capital`), because Var().GetCountry.GetName renders blank in
+###   this mod — docs/guides/gui_modding_guide.md gotcha #11.
+### * Both roots are gated on [JournalEntry.IsActive]: the entry has
+###   is_shown_when_inactive, so without the gate every display read would run
+###   for countries that have none of these variables (gotcha #14).
 
 types covert_operations_widget_types
 {
+	### ---- COMMAND CENTRE BUILDING BLOCKS -------------------------------
+
+	### A section heading inside the command centre.
+	type covert_cc_header = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		margin_top = 4
+		block "header_text" {}
+	}
+
+	### One line of body text. `line_extra` exists so an instance can add a
+	### `visible` or a `tooltip` without needing a second type.
+	type covert_cc_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_small
+		block "line_text" {}
+		block "line_extra" {}
+	}
+
+	### The funding stepper: label, minus, current level, plus. Its datacontext
+	### is covert_funding_sgui, set on the container, so both buttons address
+	### their action by op code alone.
+	type covert_cc_funding_stepper = flowcontainer {
+		direction = horizontal
+		spacing = 3
+		datacontext = "[GetScriptedGui('covert_funding_sgui')]"
+
+		textbox = {
+			text = "je_iw_funding_stepper_label"
+			size = { 250 24 }
+			align = left|nobaseline
+			using = fontsize_small
+			parentanchor = vcenter
+			elide = right
+		}
+
+		button_icon_minus_action = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+			tooltip = "je_iw_funding_step_down_tooltip"
+		}
+
+		textbox = {
+			text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display')|0]"
+			size = { 140 24 }
+			align = center|nobaseline
+			using = fontsize_small
+			parentanchor = vcenter
+			elide = right
+		}
+
+		button_icon_plus_action = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			tooltip = "je_iw_funding_step_up_tooltip"
+		}
+	}
+
+	### ---- OPERATION ROW BUILDING BLOCKS --------------------------------
+
 	type widget_je_covert_operation_text = textbox {
 		autoresize = yes
 		multiline = yes
@@ -14,6 +115,17 @@ types covert_operations_widget_types
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
 		using = fontsize_large
+	}
+
+	### The phase, dormancy and detection lines, indented under the title.
+	type widget_je_covert_operation_detail = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 460 -1 }
+		maximumsize = { 460 -1 }
+		margin_left = 12
+		align = left|nobaseline
+		using = fontsize_small
 	}
 
 	type widget_je_covert_operation_row = flowcontainer {
@@ -65,29 +177,129 @@ types covert_operations_widget_types
 			text = "je_iw_op_row_destabilization"
 		}
 
-		# ---- Phase (months 0-5 / 6-11 / 12+) and detection risk ----
-		widget_je_covert_operation_text = {
-			visible = "[GreaterThanOrEqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)12')]"
-			text = "je_iw_op_row_phase_full"
+		# ---- Phase, and how long until the next one ----
+		# iw_phase is written by covert_op_refresh_phase, so the 6 / 12 month
+		# thresholds stay in script. Hidden entirely until every container in
+		# iw_ops carries it, which covers containers restored from a save made
+		# before this widget shipped — they get it at the first monthly pulse.
+		widget_je_covert_operation_detail = {
+			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)1') )]"
+			text = "je_iw_op_row_phase_prep"
 		}
-		widget_je_covert_operation_text = {
-			visible = "[And(GreaterThanOrEqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)6'), LessThan_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)12'))]"
+		widget_je_covert_operation_detail = {
+			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)2') )]"
 			text = "je_iw_op_row_phase_est"
 		}
-		widget_je_covert_operation_text = {
-			visible = "[LessThan_CFixedPoint(ScriptContainer.GetVariableValue('iw_duration'), '(CFixedPoint)6')]"
-			text = "je_iw_op_row_phase_prep"
+		widget_je_covert_operation_detail = {
+			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)3') )]"
+			text = "je_iw_op_row_phase_full"
+		}
+
+		# ---- Is it doing anything at all? ----
+		widget_je_covert_operation_detail = {
+			visible = "[GetScriptedGui('covert_ops_dormant_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "je_iw_op_row_dormant"
+		}
+
+		# ---- This operation's own monthly detection risk ----
+		widget_je_covert_operation_detail = {
+			text = "je_iw_op_row_detection"
 		}
 	}
 }
 
 
 ### WIDGETS
+
+### The command centre. Gated on IsActive: the journal entry is shown when
+### inactive, and none of these variables exist for a country whose entry never
+### activated (gotcha #14).
+flowcontainer = {
+	name = "widget_je_covert_command_centre"
+	direction = vertical
+	parentanchor = hcenter
+	spacing = 2
+	visible = "[JournalEntry.IsActive]"
+
+	### ---- INTELLIGENCE CAPACITY ----
+	covert_cc_header = {
+		blockoverride "header_text" { text = "je_iw_capacity_header" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_capacity_total" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_capacity_modifiers" }
+		blockoverride "line_extra" { tooltip = "je_iw_capacity_modifiers_tooltip" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_capacity_components" }
+	}
+
+	### ---- OPERATION SLOTS ----
+	covert_cc_header = {
+		blockoverride "header_text" { text = "je_iw_slots_header" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_slots_detail" }
+		blockoverride "line_extra" { tooltip = "je_iw_slots_detail_tooltip" }
+	}
+
+	### ---- FUNDING ----
+	covert_cc_header = {
+		blockoverride "header_text" { text = "je_iw_funding_header" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_funding_state" }
+	}
+	covert_cc_funding_stepper = { }
+	### The six-level ladder. One ExecuteTooltip call over constants and one
+	### country variable — no iteration — so it is cheap enough to leave open.
+	covert_cc_line = {
+		blockoverride "line_text" {
+			text = "[GetScriptedGui('covert_funding_ladder_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_funding_cost" }
+	}
+	### Funding 0 stands everything down. Said once, loudly, here.
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_funding_dormant_banner" }
+		blockoverride "line_extra" {
+			visible = "[GetScriptedGui('covert_ops_dormant_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+	}
+
+	### ---- DETECTION FACTORS ----
+	covert_cc_header = {
+		blockoverride "header_text" { text = "je_iw_detection_header" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_detection_factors" }
+		blockoverride "line_extra" { tooltip = "je_iw_detection_factors_tooltip" }
+	}
+
+	### ---- COVERT DEFENCE ----
+	covert_cc_header = {
+		blockoverride "header_text" { text = "je_iw_defense_header" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_defense_standing" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_defense_axes" }
+		blockoverride "line_extra" { tooltip = "je_iw_defense_axes_tooltip" }
+	}
+}
+
+### One row per running operation.
 flowcontainer = {
 	name = "widget_je_covert_operations"
 	direction = vertical
 	parentanchor = hcenter
 	spacing = 4
+	visible = "[JournalEntry.IsActive]"
 
 	datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_ops')]"
 

@@ -1,0 +1,215 @@
+﻿# ============================================================================
+# COVERT WARFARE — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGETS
+# ============================================================================
+# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Three kinds
+# of entry live here.
+#
+# 1. THE FUNDING CONTROL (covert_funding_sgui). The only handler that acts. It
+#    delegates to the same covert_possible_* trigger and covert_effect_*
+#    effect the journal entry's scripted buttons call, so the grid and the
+#    widget cannot diverge.
+#
+#      op | control            | delegates to
+#      ---+--------------------+------------------------------------------
+#       0 | funding stepper -  | covert_possible/effect_decrease_funding
+#       1 | funding stepper +  | covert_possible/effect_increase_funding
+#
+#    The op table is restated in the .gui header and in
+#    docs/systems/journal_entry_systems.md — keep all three in step.
+#
+# 2. A TOOLTIP BUILDER (covert_funding_ladder_sgui). It exists only so the .gui
+#    can call `[GetScriptedGui('…').ExecuteTooltip(GuiScope.SetRoot(
+#    JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
+#    ExecuteTooltip *renders* an effect without running it — vanilla's
+#    documented "Using SGUIs to build lists in loc" pattern; see
+#    game/common/scripted_guis/scripted_guis.md.
+#
+# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_ops_phase_ready_sgui).
+#    `.gui` has no way to ask script a question, so each of these is an
+#    is_shown-only entry read as `[GetScriptedGui('…').IsShown(…)]`. They exist
+#    so the widget never re-encodes a threshold or an existence check itself.
+#    See docs/guides/scripting_best_practices.md § "Asking Script a Yes/No
+#    Question From `.gui`".
+#
+# Every entry declares `ai_is_valid = { always = no }`: the AI's path into
+# covert funding is je_covert_warfare's monthly pulse, and it must never
+# double-dip through a widget handler.
+# ============================================================================
+
+# ---- THE FUNDING CONTROL ----------------------------------------------------
+# One handler behind both stepper buttons, parameterized by the op code above.
+# `is_valid` doubles as the "you are here" indicator: at level 0 the minus
+# button greys itself, at iw_funding_level_max the plus does, each with the
+# condition that failed as its tooltip.
+covert_funding_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			covert_possible_decrease_funding = yes
+		}
+		trigger_else = {
+			covert_possible_increase_funding = yes
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			covert_effect_decrease_funding = yes
+		}
+		else = {
+			covert_effect_increase_funding = yes
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- TOOLTIP BUILDER: the funding ladder -----------------------------------
+# Six rows, one per funding level, each carrying that level's detection
+# reduction and counterintelligence capacity from the covert_funding_*_at_N
+# script values — which are sums of the tuning constants, so the ladder cannot
+# drift from the detection formula. The row for the level in force is rendered
+# by its own _current key, which is both the highlight and the "you are here"
+# marker.
+#
+# Cheap enough to leave expanded: every line reads constants plus one country
+# variable, and there is no iteration.
+covert_funding_ladder_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = iw_funding_level }
+					var:iw_funding_level < 1
+				}
+			}
+			custom_tooltip_no_bullet = je_iw_ladder_row_0_current
+		}
+		else = {
+			custom_tooltip_no_bullet = je_iw_ladder_row_0
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level = 1
+			}
+			custom_tooltip_no_bullet = je_iw_ladder_row_1_current
+		}
+		else = {
+			custom_tooltip_no_bullet = je_iw_ladder_row_1
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level = 2
+			}
+			custom_tooltip_no_bullet = je_iw_ladder_row_2_current
+		}
+		else = {
+			custom_tooltip_no_bullet = je_iw_ladder_row_2
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level = 3
+			}
+			custom_tooltip_no_bullet = je_iw_ladder_row_3_current
+		}
+		else = {
+			custom_tooltip_no_bullet = je_iw_ladder_row_3
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level = 4
+			}
+			custom_tooltip_no_bullet = je_iw_ladder_row_4_current
+		}
+		else = {
+			custom_tooltip_no_bullet = je_iw_ladder_row_4
+		}
+		if = {
+			limit = {
+				has_variable = iw_funding_level
+				var:iw_funding_level >= 5
+			}
+			custom_tooltip_no_bullet = je_iw_ladder_row_5_current
+		}
+		else = {
+			custom_tooltip_no_bullet = je_iw_ladder_row_5
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- YES/NO: is every operation dormant? -----------------------------------
+# True while funding is 0. At that level nothing runs (the journal entry's pulse
+# skips covert_ops_apply_all_phase_effects and the detection roll) and no new
+# operation can be launched, so the panel says so once and every row repeats it.
+covert_ops_dormant_sgui = {
+	scope = country
+
+	is_shown = {
+		OR = {
+			NOT = { has_variable = iw_funding_level }
+			var:iw_funding_level < 1
+		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- YES/NO: do all operations carry their display phase yet? ---------------
+# iw_phase / iw_phase_months_left are written by covert_op_refresh_phase, which
+# is new. A save made before this widget shipped has containers without them
+# until the first monthly pulse after loading, and a .gui that reads a variable
+# that does not exist logs "Failed to fetch variable" every frame. The widget
+# hides the phase lines until this answers yes.
+covert_ops_phase_ready_sgui = {
+	scope = country
+
+	is_shown = {
+		OR = {
+			NOT = { has_variable_list = iw_ops }
+			NOT = {
+				any_in_list = {
+					variable = iw_ops
+					NOT = { has_variable = iw_phase }
+				}
+			}
+		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}

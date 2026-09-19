@@ -51,6 +51,10 @@ covert_op_create = {
 		scope:iw_new_op = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
+			# Initialise the display phase so the widget never reads a variable
+			# that does not exist yet; covert_op_refresh_phase derives it from
+			# then on.
+			covert_op_refresh_phase = yes
 		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 	}
@@ -242,8 +246,8 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
 }
 
-# Age every running operation by one month. A new operation starts at 0, so
-# its first pulse reads as month 1.
+# Age every running operation by one month, then restate its display phase.
+# A new operation starts at 0, so its first pulse reads as month 1.
 # Scope: country
 covert_ops_age_all_durations = {
 	if = {
@@ -251,7 +255,40 @@ covert_ops_age_all_durations = {
 		every_in_list = {
 			variable = iw_ops
 			change_variable = { name = iw_duration add = 1 }
+			covert_op_refresh_phase = yes
 		}
+	}
+}
+
+# THE one place the operation phase is turned into something a widget can read.
+# covert_op_is_established / covert_op_is_fully_operational stay the definition
+# of the thresholds; this only projects them onto two variables so the .gui
+# never has to compare iw_duration against a literal 6 or 12 (which would put
+# balance numbers outside script):
+#   iw_phase              1 preparatory, 2 establishing, 3 fully operational
+#   iw_phase_months_left  months until the next phase; 0 once fully operational
+# Called from covert_ops_age_all_durations (immediately after the +1, so the
+# numbers are never a month stale) and once from covert_op_create, so a
+# brand-new operation has both before its first pulse.
+# Scope: operation container
+covert_op_refresh_phase = {
+	if = {
+		limit = { covert_op_is_fully_operational = yes }
+		set_variable = { name = iw_phase value = 3 }
+		set_variable = { name = iw_phase_months_left value = 0 }
+	}
+	else_if = {
+		limit = { covert_op_is_established = yes }
+		set_variable = { name = iw_phase value = 2 }
+		set_variable = { name = iw_phase_months_left value = 12 }
+		change_variable = { name = iw_phase_months_left subtract = var:iw_duration }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = 12 }
+	}
+	else = {
+		set_variable = { name = iw_phase value = 1 }
+		set_variable = { name = iw_phase_months_left value = 6 }
+		change_variable = { name = iw_phase_months_left subtract = var:iw_duration }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = 6 }
 	}
 }
 

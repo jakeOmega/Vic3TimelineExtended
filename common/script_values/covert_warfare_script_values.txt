@@ -519,3 +519,105 @@ covert_operation_cost_at_next_down = {
 	min = 0
 	round = yes
 }
+
+# ============================================================================
+# SECTION 6: FUNDING LADDER DISPLAY VALUES (command-centre widget)
+# ============================================================================
+# One pair of numbers per funding level for the widget's funding ladder. Every
+# value here is a sum of the tuning constants in Section 1, so the ladder cannot
+# drift from the detection formula the way the hand-written "-3% … -19%" list
+# inside iw_increase_funding_effect_tt used to.
+
+# Cumulative detection reduction at each level; mirrors the subtract chain in
+# covert_operation_detection_chance.
+covert_funding_detect_reduction_at_1 = {
+	value = 0
+}
+
+covert_funding_detect_reduction_at_2 = {
+	value = covert_ops_detection_funding_2_reduction
+}
+
+covert_funding_detect_reduction_at_3 = {
+	value = covert_ops_detection_funding_2_reduction
+	add = covert_ops_detection_funding_3_reduction
+}
+
+covert_funding_detect_reduction_at_4 = {
+	value = covert_ops_detection_funding_2_reduction
+	add = covert_ops_detection_funding_3_reduction
+	add = covert_ops_detection_funding_4_reduction
+}
+
+covert_funding_detect_reduction_at_5 = {
+	value = covert_ops_detection_funding_2_reduction
+	add = covert_ops_detection_funding_3_reduction
+	add = covert_ops_detection_funding_4_reduction
+	add = covert_ops_detection_funding_5_reduction
+}
+
+# Counterintelligence capacity granted at each level: covert_ops_funding_ci_mult
+# (level - 1) times the country_intelligence_capacity_add the
+# iw_funding_defense static modifier carries per stack.
+covert_funding_ci_ic_at_1 = {
+	value = 0
+}
+
+covert_funding_ci_ic_at_2 = {
+	value = covert_ops_funding_defense_ic_per_level
+}
+
+covert_funding_ci_ic_at_3 = {
+	value = covert_ops_funding_defense_ic_per_level
+	multiply = 2
+}
+
+covert_funding_ci_ic_at_4 = {
+	value = covert_ops_funding_defense_ic_per_level
+	multiply = 3
+}
+
+covert_funding_ci_ic_at_5 = {
+	value = covert_ops_funding_defense_ic_per_level
+	multiply = 4
+}
+
+# The base monthly detection rate, for the detection-factors block. A thin
+# reader so the widget never types the constant.
+covert_detection_base_display = {
+	value = covert_ops_detection_base
+	round = yes
+}
+
+# Per-type operation cap. The widget reads it from JournalEntry.GetCountry,
+# where covert_ops_max_per_type's has_technology_researched checks resolve
+# without an owner = { } hop.
+covert_ops_max_per_type_display = {
+	value = covert_ops_max_per_type
+	round = yes
+}
+
+# Thin readers for the modifier-backed numbers the panel prints. Each one exists
+# so the widget can show the VALUE through the proven
+# MakeScope.ScriptValue path and keep GetModifier.GetValueWithBreakdownFor for
+# the row's tooltip only — if that chain ever fails in-game the panel still
+# reads correctly and only the hover breakdown is lost.
+intelligence_capacity_from_modifiers_display = {
+	value = intelligence_capacity_from_modifiers
+	round = yes
+}
+
+covert_defense_economic_display = {
+	value = modifier:country_covert_defense_economic_add
+	round = yes
+}
+
+covert_defense_military_display = {
+	value = modifier:country_covert_defense_military_add
+	round = yes
+}
+
+covert_defense_ideological_display = {
+	value = modifier:country_covert_defense_ideological_add
+	round = yes
+}

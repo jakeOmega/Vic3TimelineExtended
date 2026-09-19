@@ -1,8 +1,12 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Journal Entry (Command Center)
 # ============================================================================
-# Displays Intelligence Capacity, slot breakdown, funding level, detection
-# risk, and covert defense info; a custom widget lists running operations.
+# Two custom widgets carry the interface: widget_je_covert_command_centre shows
+# intelligence capacity, slots, the funding ladder and its stepper, detection
+# factors and covert defence; widget_je_covert_operations lists each running
+# operation. status_desc is left with the one thing that is genuinely prose —
+# the intelligence-standing verdict — plus the empty-state pointer.
+#
 # Operations are toggled via diplomatic actions (pact-based); each running
 # operation's state lives in a script container (covert_warfare_effects.txt).
 # ============================================================================
@@ -12,6 +16,16 @@ je_covert_warfare = {
 
 	group = je_group_covert_warfare
 
+	# The command centre carries everything status_desc used to say in prose.
+	# Its funding stepper calls the very shared trigger and effect the scripted
+	# buttons below call, so the two surfaces cannot diverge — which is why
+	# those buttons are hidden from humans with `visible = { is_ai = yes }`
+	# rather than deleted.
+	widget = {
+		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
+		name = "widget_je_covert_command_centre"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
 		name = "widget_je_covert_operations"
@@ -67,93 +81,13 @@ je_covert_warfare = {
 			}
 		}
 
-		desc = iw_separator
-		# ---- Intelligence Capacity Breakdown ----
-		triggered_desc = {
-			desc = je_iw_capacity_header
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_iw_capacity_modifiers
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_iw_capacity_literacy
-			trigger = { intelligence_capacity_from_literacy >= 1 }
-		}
-		triggered_desc = {
-			desc = je_iw_capacity_gdp
-			trigger = { intelligence_capacity_from_gdp >= 1 }
-		}
-
-		# ---- Operation Slots Breakdown ----
-		triggered_desc = {
-			desc = je_iw_slots_header
-			trigger = { always = yes }
-		}
-
-		# ---- Funding & Cost Info ----
-		first_valid = {
-			triggered_desc = {
-				desc = je_iw_funding_5
-				trigger = { has_variable = iw_funding_level var:iw_funding_level >= iw_funding_level_max }
-			}
-			triggered_desc = {
-				desc = je_iw_funding_4
-				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 4 }
-			}
-			triggered_desc = {
-				desc = je_iw_funding_3
-				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 3 }
-			}
-			triggered_desc = {
-				desc = je_iw_funding_2
-				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 2 }
-			}
-			triggered_desc = {
-				desc = je_iw_funding_1
-				trigger = { has_variable = iw_funding_level var:iw_funding_level >= 1 }
-			}
-			triggered_desc = {
-				desc = je_iw_funding_0
-				trigger = { always = yes }
-			}
-		}
-		triggered_desc = {
-			desc = je_iw_cost_info
-			trigger = {
-				covert_operations_active >= 1
-				has_variable = iw_funding_level
-				var:iw_funding_level >= 1
-			}
-		}
-
-		triggered_desc = {
-			desc = je_iw_detection_factors
-			trigger = { covert_operations_active >= 1 }
-		}
-
-		desc = iw_separator
-		# ---- Covert Defense Info ----
-		triggered_desc = {
-			desc = je_iw_defense_header
-			trigger = { always = yes }
-		}
-
-		desc = iw_separator
-		# ---- Active Operations ----
-		# Per-operation rows are drawn by widget_je_covert_operations (below the
-		# status description), which lists the country's iw_ops containers.
-		triggered_desc = {
-			desc = je_iw_ops_header
-			trigger = { always = yes }
-		}
-		# Phase explanation (shown if any operations active)
-		triggered_desc = {
-			desc = je_iw_phase_info
-			trigger = { covert_operations_active >= 1 }
-		}
-
+		# Everything else that used to live here — the capacity breakdown, the
+		# slot counts, the funding level and its cost, the detection factors and
+		# the defensive side — is drawn by widget_je_covert_command_centre
+		# (custom_widget_container_1, above this text). Per-operation rows come
+		# from widget_je_covert_operations (custom_widget_container_2, below).
+		# Only the empty state stays, because it tells the player where
+		# operations are actually launched.
 		triggered_desc = {
 			desc = je_iw_no_operations
 			trigger = {
